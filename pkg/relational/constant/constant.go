@@ -19,6 +19,8 @@ const (
 	LiteFileParameters   = "?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"
 	LiteMemoryParameters = "?_pragma=foreign_keys(1)"
 
+	LiteUniversalTable = "lite_universal_time"
+
 	PostgresAdministratorLocatorEnvironment = "POSTGRES_ADMINISTRATOR_LOCATOR"
 
 	PostgresLocatorEnvironment = "POSTGRES_LOCATOR"

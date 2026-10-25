@@ -15,10 +15,6 @@ const (
 
 	OllamaEmbedModel = "nomic-embed-text"
 
-	OllamaSystemRole    = "system"
-	OllamaUserRole      = "user"
-	OllamaAssistantRole = "assistant"
-
 	OllamaNotationFormat = "json"
 
 	OllamaContextSize = "num_ctx"

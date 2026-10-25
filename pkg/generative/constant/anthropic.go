@@ -6,9 +6,6 @@ const (
 	AnthropicTokenEnvironment = "ANTHROPIC_TOKEN"
 	AnthropicVocabularyLink   = "https://raw.githubusercontent.com/rohangpta/ctoc/main/vocab.json"
 
-	AnthropicRoleUser      = "user"
-	AnthropicRoleAssistant = "assistant"
-
 	ClaudeRecentMessageLimit = 50
 	ClaudePendingCallLimit   = 64
 

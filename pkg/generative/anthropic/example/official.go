@@ -2,8 +2,8 @@ package example
 
 import (
 	"context"
-	"github.com/anthropics/anthropic-sdk-go"
-	"github.com/anthropics/anthropic-sdk-go/option"
+	"github.com/anthropics/anthropic-sdk-go/v2"
+	"github.com/anthropics/anthropic-sdk-go/v2/option"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
@@ -21,16 +21,13 @@ func Official() {
 		anthropic.MessageNewParams{
 			MaxTokens: 1024,
 			Messages: []anthropic.MessageParam{
-				{
-					Role: anthropic.MessageParamRoleUser,
-					Content: []anthropic.ContentBlockParamUnion{
-						{
-							OfText: &anthropic.TextBlockParam{
-								Text: "Explain a cat in 10 words.",
-							},
+				anthropic.NewUserMessage(
+					anthropic.ContentBlockParamUnion{
+						OfText: &anthropic.TextBlockParam{
+							Text: "Explain a cat in 10 words.",
 						},
 					},
-				},
+				),
 			},
 			Model: anthropic.ModelClaudeSonnet5_5,
 		},

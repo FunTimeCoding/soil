@@ -2,7 +2,7 @@ package anthropic
 
 import (
 	"context"
-	"github.com/anthropics/anthropic-sdk-go"
+	"github.com/anthropics/anthropic-sdk-go/v2"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/message"
 	"github.com/funtimecoding/soil/pkg/generative/constant"

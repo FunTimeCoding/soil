@@ -9,8 +9,6 @@ const CoverageRecentWindow = 30 * 24 * time.Hour
 const CallsignReleaseWindow = 7 * 24 * time.Hour
 const CompleteTimeoutWindow = 30 * time.Minute
 const ChannelHold = 5 * time.Minute
-const TimestampLayout = "2006-01-02 15:04:05.999999999-07:00"
-const UniversalSuffix = "+00:00"
 
 var (
 	ReservedLabelKeys = []string{

@@ -52,15 +52,3 @@ func TestSessionKeyIsIdempotent(t *testing.T) {
 	assert.Integer(t, rows, s.QueueRows())
 	assert.Integer(t, 1, s.QueueRows())
 }
-
-func TestSessionKeyDeclinesOnUnnormalizedTimestamps(t *testing.T) {
-	s := store_tester.New(t)
-	s.AddSession("holder", "Jade", "Jade", "2026-09-01 10:00:00+00:00")
-	s.AddQueueRow("Jade", "a message", "2026-09-02 10:00:00+00:00")
-	s.AddQueueRow("Nobody", "unheld name", "2026-09-02 10:00:00+00:00")
-	s.SetStoredValue("holder", "2026-09-01 12:00:00+02:00")
-	assert.False(t, s.Store.UniversalTimestamps())
-	s.Store.BackfillSessionKey()
-	assert.String(t, "", s.SessionKeyFor("a message"))
-	assert.Integer(t, 2, s.QueueRows())
-}

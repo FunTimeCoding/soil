@@ -28,7 +28,6 @@ func New(
 	d *gorm.DB,
 	clock func() time.Time,
 ) *Store {
-	d.NowFunc = func() time.Time { return time.Now().UTC() }
 	migrateColumns(d)
 	errors.PanicOnError(
 		d.AutoMigrate(
@@ -54,7 +53,6 @@ func New(
 	)
 	migrateEventMetadata(d)
 	migrateLabelChange(d)
-	migrateTimestamps(d)
 	migrateConsumedAt(d)
 	migrateSessionKey(d)
 

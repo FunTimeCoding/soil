@@ -19,14 +19,6 @@ func migrateSessionKey(d *gorm.DB) {
 		return
 	}
 
-	if !timestampsNormalized(d) {
-		log.Print(
-			"session key migration declined: timestamps are not universal",
-		)
-
-		return
-	}
-
 	var attributed int64
 	var dropped int64
 

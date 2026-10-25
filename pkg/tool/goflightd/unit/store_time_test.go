@@ -17,11 +17,7 @@ func TestStoreRangeSpansTheFallBack(t *testing.T) {
 	s := store.New(lite.NewMemory())
 	defer s.Close()
 	s.MustCreateEvent(event.Event{Time: at, Process: "ensembled"})
-	events, f := s.EventsByTimeRange(
-		at.Add(-time.Hour),
-		at.Add(time.Hour),
-		100,
-	)
+	events, f := s.EventsByTimeRange(at.Add(-time.Hour), at.Add(time.Hour), 100)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 1, len(events))
 }

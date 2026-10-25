@@ -13,7 +13,7 @@ func (s *Store) SetCruise(
 	pace time.Duration,
 ) error {
 	v := cruise_setting.New(sessionIdentifier, mode, pace)
-	v.UpdatedAt = s.clock().UTC()
+	v.UpdatedAt = s.clock()
 
 	return s.database.Clauses(
 		clause.OnConflict{

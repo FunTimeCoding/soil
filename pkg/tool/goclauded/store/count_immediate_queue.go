@@ -21,6 +21,6 @@ func (s *Store) CountImmediateQueue(
 		true,
 	).Where(
 		"COALESCE(immediate_at, created_at) > ?",
-		since.UTC(),
+		since,
 	).Count(&result).Error
 }

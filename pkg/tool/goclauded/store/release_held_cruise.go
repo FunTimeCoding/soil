@@ -31,10 +31,7 @@ func (s *Store) ReleaseHeldCruise(
 		"identifier IN ?",
 		identifiers,
 	).Updates(
-		map[string]any{
-			constant.Immediate: true,
-			"immediate_at":     s.clock().UTC(),
-		},
+		map[string]any{constant.Immediate: true, "immediate_at": s.clock()},
 	)
 
 	return result.RowsAffected, result.Error

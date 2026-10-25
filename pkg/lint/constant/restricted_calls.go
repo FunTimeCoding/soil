@@ -13,6 +13,16 @@ var RestrictedCalls = []restriction.Restriction{
 		Message: "open raw sqlite through relational/lite/connection.New and postgres through relational (see doc/ai/spec/database.md)",
 	},
 	{
+		Package: "database/sql",
+		Symbol:  "OpenDB",
+		AllowedIn: []string{
+			"github.com/funtimecoding/soil/pkg/relational",
+			"github.com/funtimecoding/soil/pkg/relational/lite",
+			"github.com/funtimecoding/soil/pkg/relational/lite/connection",
+		},
+		Message: "open raw sqlite through relational/lite/connection.New and postgres through relational (see doc/ai/spec/database.md)",
+	},
+	{
 		Package: "gorm.io/gorm",
 		Symbol:  "Open",
 		AllowedIn: []string{

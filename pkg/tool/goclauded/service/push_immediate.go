@@ -19,7 +19,7 @@ func (s *Service) pushImmediate(e *queue.Entry) (bool, error) {
 	e.Immediate = recent < constant.ImmediateLimit
 
 	if e.Immediate {
-		e.ImmediateAt = new(s.clock().UTC())
+		e.ImmediateAt = new(s.clock())
 	}
 
 	return e.Immediate, s.pushEntry(e)

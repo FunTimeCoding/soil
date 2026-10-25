@@ -13,8 +13,8 @@ func (s *Store) DeleteQueueWindow(
 	result := s.database.Where(
 		"callsign = ? AND created_at >= ? AND created_at <= ?",
 		callsign,
-		from.UTC(),
-		to.UTC(),
+		from,
+		to,
 	).Delete(queue.Stub())
 
 	return result.RowsAffected, result.Error

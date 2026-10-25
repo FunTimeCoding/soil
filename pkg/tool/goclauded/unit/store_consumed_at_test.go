@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"testing"
+	"time"
 )
 
 func TestDrainStampsWhenTheEntryWasDelivered(t *testing.T) {
@@ -55,13 +56,12 @@ func TestPeekLeavesTheDeliveryStampUnset(t *testing.T) {
 }
 
 func TestDeliveryStampIsUniversal(t *testing.T) {
-	s := store_tester.New(t)
+	s := store_tester.NewInZone(t, time.FixedZone("", 2*60*60))
 	assert.FatalOnError(
 		t,
 		s.Store.PushQueue("holder", "Jade", constant.QueueMessage, "delivered"),
 	)
 	_, e := s.Store.DrainQueue("holder", "Jade")
 	assert.FatalOnError(t, e)
-	assert.True(t, s.Store.UniversalTimestamps())
 	assert.StringContains(t, "+00:00", s.ConsumedAt("delivered"))
 }

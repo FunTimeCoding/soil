@@ -172,18 +172,6 @@ func TestStatusLineWithoutModelScopeRecordsNoFable(t *testing.T) {
 	assert.Nil(t, snapshot)
 }
 
-func TestStatusLineStoresResetsAsUniversal(t *testing.T) {
-	s := base.New(t)
-	c := console_tester.New(t, s.Server)
-	c.Register("11111111-2222-3333-4444-555555555555")
-	c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
-	snapshot, e := s.Store.Store.LatestRateSnapshot()
-	assert.FatalOnError(t, e)
-	assert.FatalNotNil(t, snapshot)
-	assert.String(t, "+00:00", snapshot.FiveHourReset.Format("-07:00"))
-	assert.String(t, "+00:00", snapshot.SevenDayReset.Format("-07:00"))
-}
-
 func TestStatusLineLeavesMissingResetZero(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Server)

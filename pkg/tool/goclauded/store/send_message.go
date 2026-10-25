@@ -8,7 +8,7 @@ func (s *Store) SendMessage(
 	body string,
 ) (*message.Message, error) {
 	result := message.New(fromName, toName, body)
-	result.CreatedAt = s.clock().UTC()
+	result.CreatedAt = s.clock()
 
 	return result, s.database.Create(result).Error
 }

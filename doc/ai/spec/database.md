@@ -24,9 +24,9 @@ defaults and `--help` never touch the filesystem, and a custom
 
 ## Driver Rule
 
-Enforced by the goanalyze `restricted_call` analyzer: `gorm.Open`
-and `sql.Open` may only be called in the `relational` packages -
-services and tests go through the openers below.
+Enforced by the goanalyze `restricted_call` analyzer: `gorm.Open`,
+`sql.Open` and `sql.OpenDB` may only be called in the `relational`
+packages - services and tests go through the openers below.
 
 One sqlite driver per access style, both pure Go:
 
@@ -64,6 +64,28 @@ Six constructors, each returning what its consumer actually uses:
 
 A service that only speaks gorm receives only a mapper. Switching it
 to the full `Database` later is a one-line change at its edge.
+
+## Time
+
+Every sqlite opener connects through `go:pkg/relational/lite/zone`, so
+times are universal in storage and local in memory:
+
+- a `time.Time` bound to a statement - a model field, a `Where` value,
+  a raw `Exec` argument - is converted to UTC before the driver writes
+  it. The driver stores offset text and comparisons are string
+  comparisons, so mixed offsets sort wrongly: across the autumn
+  transition one wall-clock hour repeats under two offsets
+- a time read back arrives in `time.Local`, the way pgx delivers
+  postgres `timestamptz`
+- `connection.New`, and through it `lite.New`, rewrites offset text left
+  by older binaries once per database, then records
+  `lite_universal_time` so later starts skip the scan. The memory
+  openers skip it - a fresh database holds nothing to rewrite
+
+Hand a store `time.Time`, never preformatted text - a string passes
+the conversion untouched. Output that must not depend on the reader's
+zone - an API field, a hash input - converts explicitly with
+`.UTC().Format(...)`, because reads arrive local.
 
 ## Postgres Query Mode
 
