@@ -15,7 +15,7 @@ func (c *Client) CreateTab(l string) (*tab.Tab, error) {
 
 	var result *tab.Tab
 
-	if f := json.Unmarshal(r.Result, result); f != nil {
+	if f := json.Unmarshal(r.Result, &result); f != nil {
 		return tab.Stub(), fmt.Errorf("create tab: %w", f)
 	}
 
