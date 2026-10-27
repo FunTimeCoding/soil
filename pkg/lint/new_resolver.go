@@ -1,7 +1,6 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
@@ -18,7 +17,7 @@ func newResolver(
 	r.Registries = o.Registries
 	r.Exists = p.Exists
 	r.SiblingExists = p.SiblingExists
-	r.Ignored = git.IgnoreMatcher(p.Root)
+	r.Ignored = p.Ignored
 	r.Stdlib = stdlibMatcher()
 	r.Dependency = dependencyMatcher(p.Modules)
 	r.PrefixExists = p.PrefixExists

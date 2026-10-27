@@ -765,6 +765,14 @@ func TestPointersSiblingDead(t *testing.T) {
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
 }
 
+func TestPointersSiblingGitignored(t *testing.T) {
+	l := pointer_tester.Gitignored("../soil/tmp/harness")(
+		stringsConstant.UpperAlfa,
+		strings.NewReader("Harness at `../soil/tmp/harness/` today.\n"),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
 func TestPointersMultiple(t *testing.T) {
 	line := "Read `doc/ai/spec/ghost.md` and `pkg/gone`."
 	l := pointer_tester.Checker()(

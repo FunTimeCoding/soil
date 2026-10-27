@@ -11,7 +11,7 @@ func (r *Resolver) resolveSibling(
 ) *pointer.Resolution {
 	normalized := pointer.Normalize(candidate)
 
-	if r.SiblingExists(normalized) {
+	if r.SiblingExists(normalized) || r.Ignored(normalized) {
 		result := pointer.NewResolution(constant.VerdictLive)
 		result.Target = normalized
 
