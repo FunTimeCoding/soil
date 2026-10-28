@@ -52,7 +52,7 @@ require (
 	github.com/hetznercloud/hcloud-go/v2 v2.53.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgx/v5 v5.11.0
-	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.3
+	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.4
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
 	github.com/luthermonson/go-proxmox v0.8.2
 	github.com/mark3labs/mcp-go v1.3.0
