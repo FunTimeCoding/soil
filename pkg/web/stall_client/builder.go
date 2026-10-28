@@ -7,6 +7,7 @@ import (
 
 type Builder struct {
 	insecure bool
+	browser  bool
 	long     bool
 	timeout  time.Duration
 	verbose  bool

@@ -7,6 +7,7 @@ const (
 	Socket       = "ws"
 )
 
+const BrowserProtocol = "http/1.1"
 const (
 	InsecurePort = 80
 	SecurePort   = 443

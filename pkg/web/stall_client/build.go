@@ -13,13 +13,14 @@ import (
 )
 
 func (b *Builder) Build() *pool.Pool {
+	d := &net.Dialer{
+		Timeout:   constant.DialTimeout,
+		KeepAlive: constant.KeepAlive,
+	}
 	t := &http.Transport{
-		Proxy:             http.ProxyFromEnvironment,
-		ForceAttemptHTTP2: true,
-		DialContext: (&net.Dialer{
-			Timeout:   constant.DialTimeout,
-			KeepAlive: constant.KeepAlive,
-		}).DialContext,
+		Proxy:                 http.ProxyFromEnvironment,
+		ForceAttemptHTTP2:     true,
+		DialContext:           d.DialContext,
 		TLSHandshakeTimeout:   constant.HandshakeTimeout,
 		ResponseHeaderTimeout: constant.ResponseHeaderTimeout,
 		IdleConnTimeout:       constant.IdleTimeout,
@@ -32,6 +33,11 @@ func (b *Builder) Build() *pool.Pool {
 
 	if b.insecure {
 		t.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
+
+	if b.browser {
+		t.ForceAttemptHTTP2 = false
+		t.DialTLSContext = browserDial(d, b.insecure)
 	}
 
 	if b.long {

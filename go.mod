@@ -73,6 +73,7 @@ require (
 	github.com/prometheus/alertmanager v0.34.1
 	github.com/prometheus/client_golang v1.25.0
 	github.com/prometheus/common v0.72.1
+	github.com/refraction-networking/utls v1.8.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sashabaranov/go-openai v1.43.0
 	github.com/sergi/go-diff v1.4.0
@@ -122,6 +123,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
 	github.com/amikos-tech/chroma-go-local v0.3.4 // indirect
+	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/andybalholm/cascadia v1.3.5 // indirect
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/apenella/go-common-utils/data v0.0.0-20220913191136-86daaa87e7df // indirect
@@ -233,6 +235,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
+	github.com/klauspost/compress v1.20.3 // indirect
 	github.com/kr/fs v0.1.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/leodido/go-urn v1.5.0 // indirect

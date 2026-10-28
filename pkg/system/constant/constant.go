@@ -36,6 +36,7 @@ const (
 	FixturePath                 = "fixture"
 	HypertextPath               = "hypertext"
 	TestdataPath                = "testdata"
+	TestPath                    = "test"
 	IdeaPath                    = ".idea"
 	KubernetesConfigurationPath = ".kube/config"
 	LicensePath                 = "license"
