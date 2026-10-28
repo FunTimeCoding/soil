@@ -62,7 +62,7 @@ require (
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nwaples/rardecode/v2 v2.4.5
 	github.com/oapi-codegen/runtime v1.8.0
-	github.com/ollama/ollama v0.40.10
+	github.com/ollama/ollama v0.40.11
 	github.com/openai/openai-go/v3 v3.86.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
