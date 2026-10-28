@@ -7,7 +7,8 @@ import (
 
 func cachePath() string {
 	return filepath.Join(
-		system.StorageDirectory("tokenizer", false),
-		"anthropic.json",
+		system.StorageDirectory("soil", false),
+		"anthropic",
+		"tokenizer.json",
 	)
 }
