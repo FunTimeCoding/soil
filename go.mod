@@ -86,7 +86,7 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.7.1
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark/v2 v2.1.8
+	github.com/yuin/goldmark/v2 v2.1.9
 	gitlab.com/gitlab-org/api/client-go/v3 v3.33.0
 	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/crypto v0.58.0
