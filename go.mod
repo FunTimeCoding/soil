@@ -62,7 +62,7 @@ require (
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nwaples/rardecode/v2 v2.4.5
 	github.com/oapi-codegen/runtime v1.8.0
-	github.com/ollama/ollama v0.40.12
+	github.com/ollama/ollama v0.40.13
 	github.com/openai/openai-go/v3 v3.90.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
@@ -70,7 +70,7 @@ require (
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/ory/fosite v0.49.0
 	github.com/pkg/sftp v1.13.12
-	github.com/prometheus/alertmanager v0.34.1
+	github.com/prometheus/alertmanager v0.34.2
 	github.com/prometheus/client_golang v1.25.0
 	github.com/prometheus/common v0.73.0
 	github.com/refraction-networking/utls v1.8.2
@@ -328,14 +328,14 @@ require (
 	go.opentelemetry.io/contrib/samplers/jaegerremote v0.15.1 // indirect
 	go.opentelemetry.io/otel v1.47.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.44.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.44.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.45.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.45.0 // indirect
 	go.opentelemetry.io/otel/exporters/zipkin v1.21.0 // indirect
 	go.opentelemetry.io/otel/log v1.47.0 // indirect
 	go.opentelemetry.io/otel/metric v1.47.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.47.0 // indirect
 	go.opentelemetry.io/otel/trace v1.47.0 // indirect
-	go.opentelemetry.io/proto/otlp v1.10.0 // indirect
+	go.opentelemetry.io/proto/otlp v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
