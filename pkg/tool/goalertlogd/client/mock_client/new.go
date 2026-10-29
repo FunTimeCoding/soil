@@ -1,5 +1,10 @@
 package mock_client
 
+import "github.com/funtimecoding/soil/pkg/failure"
+
 func New() *Client {
-	return &Client{}
+	result := &Client{}
+	result.failures = failure.New(result.GetStatus)
+
+	return result
 }
