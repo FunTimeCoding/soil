@@ -8,11 +8,10 @@ import (
 )
 
 func Mount(
-	c chromium.ChromiumSource,
-	downloadDirectory string,
+	v chromium.Browser,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(c, downloadDirectory, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

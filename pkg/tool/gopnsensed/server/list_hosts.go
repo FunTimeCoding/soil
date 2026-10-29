@@ -16,7 +16,7 @@ func (s *Server) ListHosts(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Hosts(phrase)
+	result, e := s.service.Hosts(phrase)
 
 	if e != nil {
 		return server.ListHosts500JSONResponse(*s.answer(e)), nil

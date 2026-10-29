@@ -12,14 +12,10 @@ func (s *Server) DownloadFile(
 	_ mcp.CallToolRequest,
 	a argument.DownloadFile,
 ) (*mcp.CallToolResult, error) {
-	if a.Locator == "" {
-		return response.Fail("url is required")
-	}
-
-	v, e := s.client.DownloadFile(a.Locator, a.Path)
+	v, e := s.service.DownloadFile(a.Locator, a.Path)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

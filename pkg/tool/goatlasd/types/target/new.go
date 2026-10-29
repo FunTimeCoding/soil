@@ -1,10 +1,14 @@
 package target
 
-import "github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/face"
+)
 
 func New(
 	name string,
-	source face.OutpostSource,
+	c face.Client,
+	g *peer.Guard,
 ) *Target {
-	return &Target{Name: name, Source: source}
+	return &Target{Name: name, Client: c, Guard: g}
 }

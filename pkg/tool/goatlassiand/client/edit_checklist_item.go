@@ -1,24 +1,31 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) EditChecklistItem(
+	x context.Context,
 	key string,
 	index int,
 	text string,
-) *response.Response {
-	result, e := c.client.EditChecklistItem(
-		c.context,
+) ([]*client.ChecklistItem, error) {
+	r, e := c.client.EditChecklistItemWithResponse(
+		x,
 		key,
 		index,
 		client.ChecklistTextRequest{Text: text},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("edit checklist item", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

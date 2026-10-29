@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/port_forward_state"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -17,14 +16,9 @@ func (s *Server) StopPortForward(
 		return response.Fail("id is required")
 	}
 
-	v, okay := s.service.StopPortForward(a.Identifier)
-
-	if !okay {
-		return response.Fail("port forward not found: %s", a.Identifier)
+	if e := s.service.StopPortForward(a.Identifier); e != nil {
+		return s.captureDetail(e)
 	}
-
-	state := v.(*port_forward_state.PortForwardState)
-	close(state.Stop)
 
 	return response.Success("stopped port forward %s", a.Identifier)
 }

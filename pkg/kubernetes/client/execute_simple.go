@@ -6,10 +6,10 @@ func (c *Client) ExecuteSimple(
 	namespace string,
 	pod string,
 	command ...string,
-) (string, string) {
+) (string, string, error) {
 	stdout := &strings.Builder{}
 	stderr := &strings.Builder{}
-	c.Execute(stdout, stderr, namespace, pod, "", command...)
+	e := c.Execute(stdout, stderr, namespace, pod, "", command...)
 
-	return stdout.String(), stderr.String()
+	return stdout.String(), stderr.String(), e
 }

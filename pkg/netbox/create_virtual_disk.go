@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_disk"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -26,7 +27,7 @@ func (c *Client) CreateVirtualDisk(
 	).VirtualDiskRequest(*q).Execute()
 
 	if f != nil {
-		return nil, f
+		return nil, refusal.Classify(f)
 	}
 
 	return virtual_disk.New(result), nil

@@ -50,9 +50,21 @@ type Status struct {
 	Version string `json:"version"`
 }
 
+// Thread defines model for Thread.
+type Thread struct {
+	Replies []Post `json:"replies"`
+	Root    Post   `json:"root"`
+}
+
 // GetChannelPostsParams defines parameters for GetChannelPosts.
 type GetChannelPostsParams struct {
 	// Since Only posts created at or after this time.
+	Since time.Time `form:"since" json:"since"`
+}
+
+// GetUnresolvedThreadsParams defines parameters for GetUnresolvedThreads.
+type GetUnresolvedThreadsParams struct {
+	// Since Only threads whose root was created at or after this time.
 	Since time.Time `form:"since" json:"since"`
 }
 
@@ -61,6 +73,9 @@ type ServerInterface interface {
 	// GetChannelPosts Posts of a channel since a time, replies and attachment-only posts included, oldest first
 	// (GET /api/channel/{name}/posts)
 	GetChannelPosts(w http.ResponseWriter, r *http.Request, name string, params GetChannelPostsParams)
+	// GetUnresolvedThreads Threads started in a channel since a time whose root lacks the done reaction, oldest first
+	// (GET /api/channel/{name}/unresolved)
+	GetUnresolvedThreads(w http.ResponseWriter, r *http.Request, name string, params GetUnresolvedThreadsParams)
 	// GetPostReactions Emoji names of a post's reactions
 	// (GET /api/post/{identifier}/reactions)
 	GetPostReactions(w http.ResponseWriter, r *http.Request, identifier string)
@@ -114,6 +129,48 @@ func (siw *ServerInterfaceWrapper) GetChannelPosts(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetChannelPosts(w, r, name, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetUnresolvedThreads operation middleware
+func (siw *ServerInterfaceWrapper) GetUnresolvedThreads(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetUnresolvedThreadsParams
+
+	// ------------- Required query parameter "since" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "since", r.URL.Query(), &params.Since, runtime.BindQueryParameterOptions{Type: "string", Format: "date-time"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "since"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "since", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetUnresolvedThreads(w, r, name, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -311,6 +368,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/channel/{name}/posts", wrapper.GetChannelPosts)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/channel/{name}/unresolved", wrapper.GetUnresolvedThreads)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/post/{identifier}/reactions", wrapper.GetPostReactions)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/thread/{identifier}", wrapper.GetThread)
 
@@ -336,6 +394,20 @@ func (response GetChannelPosts200JSONResponse) VisitGetChannelPostsResponse(w ht
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetChannelPosts403JSONResponse Error
+
+func (response GetChannelPosts403JSONResponse) VisitGetChannelPostsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -368,6 +440,99 @@ func (response GetChannelPosts500JSONResponse) VisitGetChannelPostsResponse(w ht
 	return err
 }
 
+type GetChannelPosts503JSONResponse Error
+
+func (response GetChannelPosts503JSONResponse) VisitGetChannelPostsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUnresolvedThreadsRequestObject struct {
+	Name   string `json:"name"`
+	Params GetUnresolvedThreadsParams
+}
+
+type GetUnresolvedThreadsResponseObject interface {
+	VisitGetUnresolvedThreadsResponse(w http.ResponseWriter) error
+}
+
+type GetUnresolvedThreads200JSONResponse []Thread
+
+func (response GetUnresolvedThreads200JSONResponse) VisitGetUnresolvedThreadsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUnresolvedThreads403JSONResponse Error
+
+func (response GetUnresolvedThreads403JSONResponse) VisitGetUnresolvedThreadsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUnresolvedThreads404JSONResponse Error
+
+func (response GetUnresolvedThreads404JSONResponse) VisitGetUnresolvedThreadsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUnresolvedThreads500JSONResponse ErrorResponse
+
+func (response GetUnresolvedThreads500JSONResponse) VisitGetUnresolvedThreadsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUnresolvedThreads503JSONResponse Error
+
+func (response GetUnresolvedThreads503JSONResponse) VisitGetUnresolvedThreadsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetPostReactionsRequestObject struct {
 	Identifier string `json:"identifier"`
 }
@@ -386,6 +551,20 @@ func (response GetPostReactions200JSONResponse) VisitGetPostReactionsResponse(w 
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPostReactions403JSONResponse Error
+
+func (response GetPostReactions403JSONResponse) VisitGetPostReactionsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -414,6 +593,20 @@ func (response GetPostReactions500JSONResponse) VisitGetPostReactionsResponse(w 
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPostReactions503JSONResponse Error
+
+func (response GetPostReactions503JSONResponse) VisitGetPostReactionsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -461,6 +654,20 @@ func (response GetThread200JSONResponse) VisitGetThreadResponse(w http.ResponseW
 	return err
 }
 
+type GetThread403JSONResponse Error
+
+func (response GetThread403JSONResponse) VisitGetThreadResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetThread404JSONResponse Error
 
 func (response GetThread404JSONResponse) VisitGetThreadResponse(w http.ResponseWriter) error {
@@ -489,11 +696,28 @@ func (response GetThread500JSONResponse) VisitGetThreadResponse(w http.ResponseW
 	return err
 }
 
+type GetThread503JSONResponse Error
+
+func (response GetThread503JSONResponse) VisitGetThreadResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 	// GetChannelPosts Posts of a channel since a time, replies and attachment-only posts included, oldest first
 	// (GET /api/channel/{name}/posts)
 	GetChannelPosts(ctx context.Context, request GetChannelPostsRequestObject) (GetChannelPostsResponseObject, error)
+	// GetUnresolvedThreads Threads started in a channel since a time whose root lacks the done reaction, oldest first
+	// (GET /api/channel/{name}/unresolved)
+	GetUnresolvedThreads(ctx context.Context, request GetUnresolvedThreadsRequestObject) (GetUnresolvedThreadsResponseObject, error)
 	// GetPostReactions Emoji names of a post's reactions
 	// (GET /api/post/{identifier}/reactions)
 	GetPostReactions(ctx context.Context, request GetPostReactionsRequestObject) (GetPostReactionsResponseObject, error)
@@ -564,6 +788,33 @@ func (sh *strictHandler) GetChannelPosts(w http.ResponseWriter, r *http.Request,
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetChannelPostsResponseObject); ok {
 		if err := validResponse.VisitGetChannelPostsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetUnresolvedThreads operation middleware
+func (sh *strictHandler) GetUnresolvedThreads(w http.ResponseWriter, r *http.Request, name string, params GetUnresolvedThreadsParams) {
+	var request GetUnresolvedThreadsRequestObject
+
+	request.Name = name
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetUnresolvedThreads(ctx, request.(GetUnresolvedThreadsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetUnresolvedThreads")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetUnresolvedThreadsResponseObject); ok {
+		if err := validResponse.VisitGetUnresolvedThreadsResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -652,21 +903,24 @@ func (sh *strictHandler) GetThread(w http.ResponseWriter, r *http.Request, ident
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"5FVNj9s2EP0rBFugF8VymwQNdCvabZFDkYWTW7AIuNLI4kLkKMORA2Oh/14MKUvetdbeoB8I0JstDjlv",
-	"3rw3c69LdB168Bx0ca9D2YAz8ecVEZL86Ag7ILYQP8PhM+870IUOTNZv9TBkmuBzbwkqXXwcw26yQxje",
-	"3kHJesjSuxsIHfoAz38/07ADz59sBZ5tbeHZIBZuLuG6xsCncEoCw1B9MvGsRnLyS1eG4QVbBzo7BVrb",
-	"Nl22DC4s1jJ+MERmL//PVpVpByGYLSyeESIvHvQByBsHl3k6yn50bU6bHdOwxN17NtyHU/aeSJ/pHVCw",
-	"6C9DG5Ec4k+TywXra5SnKggl2Y7jy3pz9f6D+uX6rcIdkOIG1J+GGchhYFW2FjyrGklVBhx6VaIPvQMK",
-	"K+mp5VaybNFNd6ojHIX+cbWWQrADbzqrC/1ytV691JnuDDex+Nx0Ni8b4z20+b0UMuQdhmS0LcSmCVlG",
-	"8L6tdKH/AP41xV/HOHmMjAMGCrr4+LjAMVbJ0+qL5cb6WGaJvrbbnqBSDMZJPVbiBZnOxqYcmJ3JZuoh",
-	"GyfAYmMe53/n272KFalRH8qwQlKm5si4DUo8MgH43APtZwTB+vI8hOf4bbiRF9I4idT+tF5H56Jn8JFl",
-	"03WtLSPP+V1IspuTTC41bfuujjx/T1DrQn+Xz9MxH0djHueEJPV925pbkYnAPjG1CPMhX7GpKlYd+7S1",
-	"O/AjQ0OmX61ffRXucyDT8F7AMGkGRfy9r2Lq119J2cXU03xfgPC7sa1IE1UNXDZJQavo/NA7Z2g/cYW1",
-	"Mmq00EiciYRliqBrLQRlvKiOTdk48PwCZ01aX7Z9BVWmsK0gsKotSeuGLFlTovL7efYNOYEpBeRZhwqy",
-	"zRR4waISrOYUT1jxwfx9viH/MeFfWE+nLbxyeGfj3AmZAtfxXn1pIE0foVU1JiiP/j8UdmT6G1L1pKXH",
-	"yj7iLulbCPshzBdmhYZprT4lxnHx/k0hnCt8zLBQ8W9pb4ZDwHGR41kSNu+jSw+7cyqPGwJTPbDguVo/",
-	"xPBLjtsgctLgN2+7f3vfJMIOk/L/a8Wks8c+3IwLJHowhajbvbIcFC1o6GSLyGNAu4MKe2p1oRvmrsjz",
-	"FkvTNhi4ePP6zc96uBn+CgAA//8=",
+	"7FdNj9s2EP0rBFugF8VymwQNdCvabZFDkYWTnoJFMEuNLG4pUiFHXhgL//eCH/rYtfwRtAmctjdbGnLe",
+	"vHnzRD5wYZrWaNTkePHAnaixgfDzylpj/Y/WmhYtSQyPsX9M2xZ5wR1Zqdd8t8u4xY+dtFjy4n0Ku8n6",
+	"MHN7h4L4Lov7rtC1Rjs8f/+M4wY1fZAlapKVxLNBzKycw3VtHO3DERaBsPwA4V1lbON/8RIIn5FskGf7",
+	"QCup4mJJ2LjZWtIDsBa2/v/RqjLeoHOwxtl31hiafdE5tBoaPM3TJPtk2Zg2m9Iwx91bAurcPnsH0md8",
+	"g9ZJo09DS0j6+Lnk72qLUO4nt9gq+aQR31qseMG/yUfZ50nzeRDATG96gk+vfYI9LMwGHPvY/QKpK+N3",
+	"L9EJK1sKrPDV1dt37Kfr18xs0DKqkf0ORGgb44gJJVETq4xlJWBjNBNGu65B6xZej5KUz7I2zbCmnHBY",
+	"8O8XS1+YaVFDK3nBny+Wi+c84y1QHXjKoZW5qEFrVPmDb8Iub42LJrHGwIfnGjze1yUv+G9IP8f46xDn",
+	"N7PQIKF1vHj/tMAUy/zW7F5SLXUoUxhdyXVnsWSE0Ph6pI/3yHiWBNWrYiSbbIdZcq9ZUT3N/0arLQsV",
+	"saRtBsSMZVBRYFw65ud7APCxQ7sdETipxXEI53jF7sbvEK0wUPvDchlcx2hCHViGtlVSBJ7zOxdHZkwy",
+	"CBuUelMFnk/L9CbjulMKbr1MPOw90XthPuYrNJWFqkOf1nKDOjG0y/iL5fNPwn0MZPzwzGCYjIDFqnNe",
+	"IzX2MwBCoHOMTNRR1FcC9+LzgxsEbfxkdroMqV9+Yj9Pph4+nDMQfgWpPCeGVUiijvJOML5se6RjnYYN",
+	"yCCyRXBG1zUN2O2gJVMx6NuUhAVBUBlLjslA+6kkEHWDmp6ZcWalFqorscyYUSU6YpW0yYHnrKvTFp1R",
+	"GyyP+dcfQ1T8pHwdJkYRK7uvjUPmvznsHv4lrnZMh+mzf4Z3jX3tycoYgqgTWZJqJsn1qvvfzy7Vz1Lz",
+	"LtDRkl8wR2D90El9wNumU6pA/Olix41GZhGEz3vI0rzx5Q/jUX2X9yuOHsq82a6GwBOGdh1KHVIcMK5H",
+	"14Xz7esfc4UTt6n9Pl415k4Gl/aT37S0Zfc1Rq/2tLIaHNNGX+hZxkP8coMfNHBBUz+o/ALnfiKseJ7x",
+	"rfrOjZjH8XXDFfnQpKZL9N+ckmMFpwwzFf8Sdef6gGmR6V2cetqGU1l/lxzKi978yJ+O1Zo+3ifsaOVt",
+	"sv0qPOlz378iYZd9Roka+O861aT+y7KpVbpPBYuKKNntNh56Z0Zs7wTiN0O76Ye0s4oXvCZqizxXRoCq",
+	"jaPi1ctXP/Ldze6vAAAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

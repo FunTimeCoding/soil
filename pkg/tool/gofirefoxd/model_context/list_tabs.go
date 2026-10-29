@@ -12,10 +12,10 @@ func (s *Server) ListTabs(
 	_ mcp.CallToolRequest,
 	_ argument.ListTabs,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.Tabs()
+	v, e := s.service.Tabs()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

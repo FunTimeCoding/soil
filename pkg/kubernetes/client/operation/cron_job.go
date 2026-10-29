@@ -6,7 +6,7 @@ import (
 )
 
 func CronJob(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	namespace string,
 ) v1.CronJobInterface {
 	return c.BatchV1().CronJobs(namespace)

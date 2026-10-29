@@ -1,20 +1,20 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateCable(
+	x context.Context,
 	deviceA string,
 	interfaceA string,
 	deviceB string,
 	interfaceB string,
-) *response.Response {
-	result, e := c.client.CreateCable(
-		c.context,
+) (client.Cable, error) {
+	r, e := c.client.CreateCableWithResponse(
+		x,
 		client.CreateCableRequest{
 			DeviceA:    deviceA,
 			InterfaceA: interfaceA,
@@ -22,7 +22,18 @@ func (c *Client) CreateCable(
 			InterfaceB: interfaceB,
 		},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Cable{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Cable{}, refusal.New(
+			"create cable",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

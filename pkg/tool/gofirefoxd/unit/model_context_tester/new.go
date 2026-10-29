@@ -14,5 +14,7 @@ func New(t *testing.T) *Tester {
 		server:     s,
 		Client:     s.Connect(t),
 		MockClient: s.MockClient,
+		Reporter:   s.Reporter,
+		Directory:  s.Directory,
 	}
 }

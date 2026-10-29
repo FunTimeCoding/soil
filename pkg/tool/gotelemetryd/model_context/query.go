@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"encoding/json"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	markResponse "github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context/response"
@@ -27,7 +26,7 @@ func (s *Server) query(
 	events, e := s.service.Query(o)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.answer(e)
 	}
 
 	entries := make([]response.Event, len(events))

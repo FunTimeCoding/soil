@@ -16,7 +16,7 @@ func (s *Server) ListRules(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Rules(phrase)
+	result, e := s.service.Rules(phrase)
 
 	if e != nil {
 		return server.ListRules500JSONResponse(*s.answer(e)), nil

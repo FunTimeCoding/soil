@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -20,7 +21,12 @@ func New(t *testing.T) *Server {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gosublimed.Mount(c, memory.New(), mock_recorder.New(), g)
+			gosublimed.Mount(
+				service_tester.New(t, c),
+				memory.New(),
+				mock_recorder.New(),
+				g,
+			)
 		},
 	)
 	result := &Server{MockClient: c, Server: v}

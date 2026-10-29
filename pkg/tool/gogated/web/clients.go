@@ -11,7 +11,14 @@ func (s *Server) clients(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	clients := s.service.ListClients()
+	clients, e := s.service.ListClients()
+
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
 	s.view.RenderPage(
 		w,
 		constant.ClientsTitle,

@@ -3,13 +3,15 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/spf13/cobra"
 )
 
-func listTags(c *client.ClientWithResponses) *cobra.Command {
+func listTags(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-tags",
 		Short: "List all source type tags",
@@ -17,11 +19,10 @@ func listTags(c *client.ClientWithResponses) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.GetTagsWithResponse(context.Background())
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("list tags", r.HTTPResponse, r.Body)
+			tags, e := c.GetTags(context.Background())
+			t.EmitDone(e)
 
-			for _, v := range *r.JSON200 {
+			for _, v := range tags {
 				collection := ""
 
 				if v.Collection != nil {

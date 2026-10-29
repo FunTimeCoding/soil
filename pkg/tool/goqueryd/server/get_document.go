@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -11,6 +13,14 @@ func (s *Server) GetDocument(
 	r server.GetDocumentRequestObject,
 ) (server.GetDocumentResponseObject, error) {
 	document, _, e := s.service.GetDocument(r.Params.Path)
+
+	if validation.Is(e) {
+		return server.GetDocument400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if not_found.Is(e) {
+		return server.GetDocument404JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.GetDocument500JSONResponse(

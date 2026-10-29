@@ -10,7 +10,6 @@ import (
 
 func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	build := s.MustSearchKeyword(
 		"quasar",
 		10,
@@ -25,7 +24,6 @@ func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
 
 func TestAbsentValueMatchesNothing(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	assert.Count(
 		t,
 		0,
@@ -35,7 +33,6 @@ func TestAbsentValueMatchesNothing(t *testing.T) {
 
 func TestTwoFiltersNarrowTogether(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	results := s.MustSearchKeyword(
 		"quasar",
 		10,
@@ -52,7 +49,6 @@ func TestTwoFiltersNarrowTogether(t *testing.T) {
 
 func TestReplaceRemovesDroppedValues(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	s.SetMetadata(
 		"test",
 		"alfa.md",
@@ -69,7 +65,6 @@ func TestReplaceRemovesDroppedValues(t *testing.T) {
 
 func TestScalarKeyStaysScalar(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	filter := map[string]string{constant.FixtureAuthorKey: "one"}
 	results := s.EnrichResults(
 		s.MustSearchKeyword("quasar", 10, "", false, filter),
@@ -81,7 +76,6 @@ func TestScalarKeyStaysScalar(t *testing.T) {
 
 func TestResultCarriesEveryValue(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	two := map[string]string{constant.FixtureAuthorKey: "two"}
 	results := s.EnrichResults(
 		s.MustSearchKeyword("quasar", 10, "", false, two),
@@ -99,7 +93,6 @@ func TestResultCarriesEveryValue(t *testing.T) {
 
 func TestCollectionFacetsCountEachValue(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	facets := s.CollectionFacets("test", nil, 20, constant.FixtureTagKey)
 	tag := store_tester.FindFacet(facets, constant.FixtureTagKey)
 	assert.NotNil(t, tag)
@@ -110,7 +103,6 @@ func TestCollectionFacetsCountEachValue(t *testing.T) {
 
 func TestPanelQueryShape(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	filter := tagFilter(constant.FixtureBuildValue)
 	found := s.MustSearchKeyword("quasar", 10, "", false, filter)
 	unread := s.EnrichResults(
@@ -124,7 +116,6 @@ func TestPanelQueryShape(t *testing.T) {
 
 func TestRepeatedValueStoresOnce(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	defer s.Close()
 	s.SetMetadata(
 		"test",
 		"alfa.md",

@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/tunnel"
 	"github.com/funtimecoding/soil/pkg/netbox/tunnel_termination"
 	"github.com/netbox-community/go-netbox/v4"
@@ -25,7 +26,7 @@ func (c *Client) CreateTunnelTermination(
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return tunnel_termination.New(result), nil

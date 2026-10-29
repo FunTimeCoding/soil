@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 )
@@ -31,10 +31,14 @@ func (s *Server) PostEntry(
 		e.Timestamp = *r.Body.Timestamp
 	}
 
-	if f := s.store.Add(e); f != nil {
-		return server.PostEntry500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
-		), nil
+	f := s.service.Add(e)
+
+	if validation.Is(f) {
+		return server.PostEntry400JSONResponse{Error: f.Error()}, nil
+	}
+
+	if f != nil {
+		return server.PostEntry500JSONResponse(*s.answer(f)), nil
 	}
 
 	return server.PostEntry200JSONResponse(toResponse([]entry.Entry{*e})[0]), nil

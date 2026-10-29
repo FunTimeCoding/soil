@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -12,19 +13,10 @@ func (s *Server) Evaluate(
 	_ mcp.CallToolRequest,
 	a argument.Evaluate,
 ) (*mcp.CallToolResult, error) {
-	if a.Expression == "" {
-		return response.Fail("expression is required")
-	}
-
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	p := s.client.Page(t.Identifier)
-	var result any
-	e = p.EvaluatePromise(a.Expression, &result)
+	result, e := s.service.Evaluate(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
+		a.Expression,
+	)
 
 	if e != nil {
 		return s.captureDetail(e)

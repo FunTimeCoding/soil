@@ -13,7 +13,7 @@ func (s *Server) players(
 	r *http.Request,
 ) {
 	since := time.Now().AddDate(0, -1, 0)
-	rows := s.store.PlayerAttendance(since)
+	rows := s.service.PlayerAttendance(since)
 	s.view.RenderPage(
 		w,
 		constant.PlayersTitle,

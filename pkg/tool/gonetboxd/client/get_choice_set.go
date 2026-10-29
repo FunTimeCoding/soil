@@ -1,14 +1,28 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) GetChoiceSet(name string) *response.Response {
-	result, e := c.client.GetChoiceSet(c.context, name)
-	errors.PanicOnError(e)
+func (c *Client) GetChoiceSet(
+	x context.Context,
+	name string,
+) (client.ChoiceSet, error) {
+	r, e := c.client.GetChoiceSetWithResponse(x, name)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.ChoiceSet{}, e
+	}
+
+	if r.JSON200 == nil {
+		return client.ChoiceSet{}, refusal.New(
+			"get choice set",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON200, nil
 }

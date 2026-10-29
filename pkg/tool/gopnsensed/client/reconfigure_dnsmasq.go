@@ -1,14 +1,21 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
-func (c *Client) ReconfigureDnsmasq() *response.Response {
-	result, e := c.client.ReconfigureDnsmasq(c.context)
-	errors.PanicOnError(e)
+func (c *Client) ReconfigureDnsmasq(x context.Context) error {
+	r, e := c.client.ReconfigureDnsmasqWithResponse(x)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("reconfigure dnsmasq", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

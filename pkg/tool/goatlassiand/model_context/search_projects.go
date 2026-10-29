@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 	"github.com/mark3labs/mcp-go/mcp"
-	"strings"
 )
 
 func (s *Server) searchProjects(
@@ -21,50 +20,32 @@ func (s *Server) searchProjects(
 		return response.Fail("limit is required: %v", f)
 	}
 
-	query := r.GetString(generativeConstant.ParameterQuery, "")
-	includeDescriptions := r.GetBool(constant.IncludeDescriptions, false)
-	projects, h := s.jira.Projects()
+	matches, h := s.service.SearchProjects(
+		r.GetString(generativeConstant.ParameterQuery, ""),
+		int(limit),
+		r.GetBool(constant.IncludeDescriptions, false),
+	)
 
 	if h != nil {
-		return s.captureDetail(h)
+		return s.answer(h)
 	}
 
 	var result []*server.JiraProject
 
-	for _, p := range *projects {
-		if len(result) >= int(limit) {
-			break
+	for _, m := range matches {
+		if m.Detail != nil {
+			result = append(result, convert.JiraProject(m.Detail))
+
+			continue
 		}
 
-		if query != "" {
-			keyMatch := strings.EqualFold(p.Key, query)
-			nameMatch := strings.Contains(
-				strings.ToLower(p.Name),
-				strings.ToLower(query),
-			)
+		o := &server.JiraProject{Key: m.Key, Name: m.Name}
 
-			if !keyMatch && !nameMatch {
-				continue
-			}
+		if m.Type != "" {
+			o.Type = &m.Type
 		}
 
-		if includeDescriptions {
-			detail, i := s.jira.Project(p.Key)
-
-			if i != nil {
-				return s.captureFail(i, "project not found")
-			}
-
-			result = append(result, convert.JiraProject(detail))
-		} else {
-			o := &server.JiraProject{Key: p.Key, Name: p.Name}
-
-			if p.ProjectTypeKey != "" {
-				o.Type = &p.ProjectTypeKey
-			}
-
-			result = append(result, o)
-		}
+		result = append(result, o)
 	}
 
 	return response.SuccessAny(result)

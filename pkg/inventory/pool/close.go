@@ -1,6 +1,6 @@
 package pool
 
-import "github.com/funtimecoding/soil/pkg/inventory/face"
+import "github.com/funtimecoding/soil/pkg/face"
 
 func (p *Pool[T, P, C]) Close() {
 	p.mutex.Lock()

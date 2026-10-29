@@ -11,7 +11,7 @@ func (s *Server) listTags(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Tags()
+	result, e := s.service.Tags()
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -2,7 +2,10 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/edit_link_option"
 )
@@ -37,6 +40,18 @@ func (s *Server) EditLink(
 
 	if not_found.Is(e) {
 		return server.EditLink404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if validation.Is(e) {
+		return server.EditLink400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if forbidden.Is(e) {
+		return server.EditLink403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.EditLink503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

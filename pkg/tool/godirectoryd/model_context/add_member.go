@@ -15,7 +15,7 @@ func (s *Server) addMember(
 	result, e := s.service.AddMember(a.Name, a.Account)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

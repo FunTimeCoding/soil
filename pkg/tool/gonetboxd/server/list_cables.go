@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -10,7 +11,11 @@ func (s *Server) ListCables(
 	_ context.Context,
 	_ server.ListCablesRequestObject,
 ) (server.ListCablesResponseObject, error) {
-	cables, e := s.client.Cables()
+	cables, e := s.service.Cables()
+
+	if forbidden.Is(e) {
+		return server.ListCables403JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.ListCables500JSONResponse(*s.captureDetail(e)), nil

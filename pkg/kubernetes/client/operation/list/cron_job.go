@@ -3,8 +3,8 @@ package list
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	batch "k8s.io/api/batch/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,11 +12,11 @@ import (
 )
 
 func CronJob(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	x context.Context,
 	namespace string,
 	node string,
-) []batch.CronJob {
+) ([]batch.CronJob, error) {
 	var o meta.ListOptions
 
 	if node != constant.NodeAll {
@@ -24,7 +24,10 @@ func CronJob(
 	}
 
 	r, e := operation.CronJob(c, namespace).List(x, o)
-	errors.PanicOnError(e)
 
-	return r.Items
+	if e != nil {
+		return nil, refusal.Classify(e)
+	}
+
+	return r.Items, nil
 }

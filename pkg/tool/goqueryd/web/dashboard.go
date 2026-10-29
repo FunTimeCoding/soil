@@ -10,17 +10,12 @@ import (
 
 func (s *Server) dashboard(
 	w http.ResponseWriter,
-	_ *http.Request,
+	r *http.Request,
 ) {
 	status, e := s.service.Status()
 
 	if e != nil {
-		s.view.RenderPage(
-			w,
-			constant.DashboardTitle,
-			constant.DashboardPath,
-			html.P(gomponents.Text("Failed to load status.")),
-		)
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

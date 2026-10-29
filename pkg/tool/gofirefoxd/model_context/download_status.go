@@ -12,10 +12,10 @@ func (s *Server) DownloadStatus(
 	_ mcp.CallToolRequest,
 	a argument.DownloadStatus,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.DownloadStatus(int(a.DownloadIdentifier))
+	v, e := s.service.DownloadStatus(int(a.DownloadIdentifier))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

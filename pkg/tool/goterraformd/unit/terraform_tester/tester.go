@@ -2,17 +2,15 @@ package terraform_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/provision/store"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/runner"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
+	"github.com/funtimecoding/soil/pkg/provision/face"
 	"testing"
 )
 
 type Tester struct {
 	t        *testing.T
-	Runner   *runner.Runner
+	Service  face.Provision
 	Cluster  *mock_client.Client
 	Reporter *memory.Memory
-	store    *store.Store
 	log      string
 }

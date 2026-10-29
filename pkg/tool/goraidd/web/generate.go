@@ -2,12 +2,8 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"net/http"
-	"path/filepath"
-	"strings"
 )
 
 func (s *Server) generate(
@@ -15,16 +11,12 @@ func (s *Server) generate(
 	r *http.Request,
 ) {
 	errors.PanicOnError(r.ParseForm())
-	fileNames := r.Form["fileNames"]
-	var files []string
 
-	for _, fileName := range fileNames {
-		base := filepath.Base(fileName)
-		timestamp := strings.TrimSuffix(base, filepath.Ext(base))
-		notationName := join.Empty(timestamp, gw2Constant.DetailedWvWKillSuffix)
-		files = append(files, filepath.Join(s.elitePath, notationName))
+	if e := s.service.Generate(r.Context(), r.Form["fileNames"]); e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
 	}
 
-	s.parser.MustGenerate(files, nil)
 	http.Redirect(w, r, constant.ReportsPath, http.StatusSeeOther)
 }

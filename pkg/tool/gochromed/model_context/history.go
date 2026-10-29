@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
 )
@@ -14,13 +15,7 @@ func (s *Server) History(
 	_ mcp.CallToolRequest,
 	a argument.History,
 ) (*mcp.CallToolResult, error) {
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	h, e := s.client.Page(t.Identifier).History()
+	h, e := s.service.History(selector.New(a.TabIdentifier, a.Title, a.Locator))
 
 	if e != nil {
 		return s.captureDetail(e)

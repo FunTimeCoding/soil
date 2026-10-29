@@ -2,6 +2,7 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	kubernetesFace "github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/provision/client"
@@ -9,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
-	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/metric"
 	"github.com/prometheus/client_golang/prometheus"
@@ -23,7 +23,7 @@ func New(
 	r face.Reporter,
 	registry face.ProcessRegistry,
 	y *prometheus.Registry,
-	k terraformFace.Cluster,
+	k kubernetesFace.Client,
 ) *Runner {
 	result := &Runner{
 		store:          s,
@@ -46,7 +46,9 @@ func New(
 
 	for _, address := range o.Downstream {
 		host, port := network.SplitHostPort(address)
-		targets = append(targets, client.New(host, port, o.DownstreamToken))
+		c := client.New(host, port, o.DownstreamToken)
+		result.downstream = append(result.downstream, c)
+		targets = append(targets, c)
 	}
 
 	result.provision = runner.New(

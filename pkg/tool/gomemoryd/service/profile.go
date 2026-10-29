@@ -135,7 +135,13 @@ func (s *Service) Profile(
 					name = name[:i]
 				}
 
-				tokens := s.tokenizer.Count(format.Completion(name, r.Body))
+				body := ""
+
+				if r.Body != nil {
+					body = *r.Body
+				}
+
+				tokens := s.tokenizer.Count(format.Completion(name, body))
 
 				if remaining-tokens < 0 {
 					completionsTrimmed++
@@ -147,7 +153,7 @@ func (s *Service) Profile(
 				completionTokens += tokens
 				completions = append(
 					completions,
-					profile.NewCompletion(name, r.Body),
+					profile.NewCompletion(name, body),
 				)
 			}
 		}

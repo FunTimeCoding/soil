@@ -14,14 +14,11 @@ func NewWithResources(
 	configuration *rest.Config,
 	resources []*v1.APIResourceList,
 ) *Cluster {
-	result := &Cluster{
+	return &Cluster{
 		name:          name,
 		clientset:     clientset,
 		dynamic:       dynamic,
 		configuration: configuration,
 		resources:     resources,
 	}
-	result.discoveryOnce.Do(func() {})
-
-	return result
 }

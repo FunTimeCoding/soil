@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/power_port"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) PowerPorts() ([]*power_port.Port, error) {
@@ -11,7 +12,7 @@ func (c *Client) PowerPorts() ([]*power_port.Port, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return power_port.NewSlice(result.Results), nil

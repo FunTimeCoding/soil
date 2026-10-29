@@ -1,18 +1,27 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) SearchUsers(query string) *response.Response {
-	result, e := c.client.SearchUsers(
-		c.context,
+func (c *Client) SearchUsers(
+	x context.Context,
+	query string,
+) ([]*client.JiraUser, error) {
+	r, e := c.client.SearchUsersWithResponse(
+		x,
 		&client.SearchUsersParams{Query: query},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("search users", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

@@ -11,7 +11,7 @@ import (
 func Print(o *option.Event) {
 	k := client.NewEnvironment()
 	cleanup(k, o, 7*24*time.Hour)
-	events := k.EventsSimple(false, true)
+	events := k.MustEventsSimple(false, true)
 
 	if o.Notation {
 		printNotation(events, o)

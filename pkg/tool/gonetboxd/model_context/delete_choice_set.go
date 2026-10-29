@@ -18,7 +18,7 @@ func (s *Server) deleteChoiceSet(
 		return response.Fail("name is required: %v", e)
 	}
 
-	f := s.client.DeleteChoiceSet(name)
+	f := s.service.DeleteChoiceSet(name)
 
 	if not_found.Is(f) {
 		return response.Fail("%v", f)

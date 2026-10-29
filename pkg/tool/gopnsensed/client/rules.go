@@ -1,18 +1,27 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) Rules(query *string) *response.Response {
-	result, e := c.client.ListRules(
-		c.context,
-		&client.ListRulesParams{Query: query},
+func (c *Client) Rules(
+	x context.Context,
+	phrase string,
+) ([]client.Rule, error) {
+	r, e := c.client.ListRulesWithResponse(
+		x,
+		&client.ListRulesParams{Query: optional(phrase)},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("rules", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

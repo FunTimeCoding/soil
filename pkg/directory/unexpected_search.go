@@ -11,5 +11,5 @@ func unexpectedSearch(e error) error {
 		return not_found.Format("%s base missing", constant.Subject)
 	}
 
-	return e
+	return classify(e, constant.Subject)
 }

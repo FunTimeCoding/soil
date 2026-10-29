@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
 	soilWeb "github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -16,7 +15,7 @@ import (
 )
 
 func Mount(
-	s *store.Store,
+	v *service.Service,
 	u *web.Server,
 	r face.Reporter,
 	t face.Recorder,
@@ -24,7 +23,7 @@ func Mount(
 ) {
 	h := generated.HandlerFromMux(
 		generated.NewStrictHandler(
-			server.New(s, r),
+			server.New(v, r),
 			[]generated.StrictMiddlewareFunc{
 				soilWeb.RecordingMiddleware[generated.StrictHandlerFunc](
 					t,
@@ -36,6 +35,6 @@ func Mount(
 	)
 	g.TokenMount(webConstant.InterfacePath, h)
 	g.OpenMount(constant.IngestPattern, h)
-	model_context.New(service.New(s), r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 	u.Mount(g)
 }

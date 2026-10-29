@@ -12,7 +12,7 @@ func (s *Server) listSourceNat(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.SourceNatRules(
+	result, e := s.service.SourceNatRules(
 		r.GetString(constant.ParameterQuery, ""),
 	)
 

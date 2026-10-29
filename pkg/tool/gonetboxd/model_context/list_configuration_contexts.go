@@ -11,7 +11,7 @@ func (s *Server) listConfigurationContexts(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.ConfigurationContexts()
+	result, e := s.service.ConfigurationContexts()
 
 	if e != nil {
 		return s.captureFail(e, "configuration contexts not listed")

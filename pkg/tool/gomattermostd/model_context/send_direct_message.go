@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -20,24 +21,20 @@ func (s *Server) SendDirectMessage(
 		return response.Fail("message is required")
 	}
 
-	user, resp, e := s.client.Nested().GetUserByUsername(
-		s.client.Context(),
-		a.Username,
-		"",
-	)
+	user, e := s.service.UserByName(a.Username)
 
-	if e != nil {
-		if resp != nil && resp.StatusCode == 404 {
-			return response.Fail("user not found: %s", a.Username)
-		}
-
-		return s.captureDetail(e)
+	if not_found.Is(e) {
+		return response.Fail("user not found: %s", a.Username)
 	}
 
-	p, e := s.client.DirectMessage(user, a.Message)
+	if e != nil {
+		return s.answer(e)
+	}
+
+	p, e := s.service.DirectMessage(user, a.Message)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

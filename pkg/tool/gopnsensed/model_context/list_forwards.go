@@ -12,7 +12,7 @@ func (s *Server) listForwards(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.Forwards(r.GetString(constant.ParameterQuery, ""))
+	result, e := s.service.Forwards(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
 		return s.answer(e)

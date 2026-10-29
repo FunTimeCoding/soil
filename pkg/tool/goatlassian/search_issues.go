@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -25,7 +26,7 @@ func searchIssues(
 				l = &limit
 			}
 
-			t.Emit(c.SearchIssues(arguments[0], l))
+			t.EmitValue(c.SearchIssues(context.Background(), arguments[0], l))
 		},
 	}
 	result.Flags().IntVar(&limit, "limit", 0, "maximum number of results")

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
 	"github.com/funtimecoding/soil/pkg/provision/store"
+	"sync"
 )
 
 type Runner struct {
@@ -15,6 +16,9 @@ type Runner struct {
 	store         *store.Store
 	saltConnector func() *salt.Client
 	salt          *salt.Client
+	built         *salt.Client
+	mutex         sync.Mutex
+	closed        bool
 	connected     chan struct{}
 	logger        *logger.Logger
 	reporter      face.Reporter

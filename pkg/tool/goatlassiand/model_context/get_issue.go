@@ -22,10 +22,10 @@ func (s *Server) getIssue(
 		return response.Fail("key is required: %v", f)
 	}
 
-	i, g := s.jira.Issue(key)
+	i, g := s.service.Issue(key)
 
 	if g != nil {
-		return s.captureFail(g, "issue not found")
+		return s.answer(g)
 	}
 
 	includeCustom := r.GetBool(constant.CustomFields, false)
@@ -33,13 +33,12 @@ func (s *Server) getIssue(
 	var t *jira.MetaIssueType
 
 	if includeCustom {
-		p, h := s.jira.MetaProject(i.Raw.Fields.Project.Key)
+		var h error
+		t, h = s.service.IssueType(i)
 
 		if h != nil {
-			return s.captureFail(h, "project metadata not found")
+			return s.answerWith(h, "read project metadata")
 		}
-
-		t = p.GetIssueTypeWithName(i.Type)
 	}
 
 	result := convert.JiraIssueCustomFields(i, t, includeComments)

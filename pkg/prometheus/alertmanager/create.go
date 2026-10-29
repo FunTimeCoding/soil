@@ -2,6 +2,7 @@ package alertmanager
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/refusal"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/client/alert"
@@ -41,7 +42,7 @@ func (c *Client) Create(
 	result, e := c.client.Alert.PostAlerts(p)
 
 	if e != nil {
-		return e
+		return refusal.Classify(e)
 	}
 
 	if !result.IsSuccess() {

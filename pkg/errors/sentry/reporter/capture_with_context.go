@@ -7,6 +7,10 @@ func (r *Reporter) CaptureWithContext(
 	key string,
 	context map[string]any,
 ) string {
+	if r.echo {
+		r.print(e, key, context)
+	}
+
 	if r.hub == nil {
 		return ""
 	}

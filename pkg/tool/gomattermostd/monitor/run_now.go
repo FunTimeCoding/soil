@@ -1,5 +1,5 @@
 package monitor
 
-func (m *Monitor) RunNow() {
-	m.run()
+func (m *Monitor) RunNow() error {
+	return m.run()
 }

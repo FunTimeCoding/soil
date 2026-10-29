@@ -13,15 +13,7 @@ func (s *Server) SetVolume(
 	_ mcp.CallToolRequest,
 	a argument.SetVolume,
 ) (*mcp.CallToolResult, error) {
-	if a.SessionIdentifier == "" {
-		return response.Fail("session_id is required")
-	}
-
-	if a.Level < 0 || a.Level > 100 {
-		return response.Fail("level must be between 0 and 100")
-	}
-
-	e := s.client.SetVolume(a.SessionIdentifier, a.Level)
+	e := s.service.SetVolume(a.SessionIdentifier, a.Level)
 
 	if e != nil {
 		return s.answer(e)

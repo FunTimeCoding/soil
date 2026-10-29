@@ -28,6 +28,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/packages/{version}/{repository}/{architecture}/{file}:
+    post:
+      operationId: postPackage
+      parameters:
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: repository
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: architecture
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "201":
+          description: The package was stored, signed and indexed.
+        "400":
+          description: A path segment is not a bare name, or not an apk file.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to store, sign or index the package.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     Listing:
@@ -53,6 +99,12 @@ components:
         version:
           type: string
         architecture:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
           type: string
     ErrorResponse:
       type: object

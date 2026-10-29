@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/tag"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -12,7 +13,7 @@ func (c *Client) CreateTag(name string) (*tag.Tag, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	c.cache.Tags = nil

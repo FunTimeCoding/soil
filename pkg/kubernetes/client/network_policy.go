@@ -5,6 +5,9 @@ import (
 	"k8s.io/api/networking/v1"
 )
 
-func (c *Client) NetworkPolicy(namespace, name string) *v1.NetworkPolicy {
+func (c *Client) NetworkPolicy(
+	namespace string,
+	name string,
+) (*v1.NetworkPolicy, error) {
 	return get.NetworkPolicy(c.client, c.context, namespace, name)
 }

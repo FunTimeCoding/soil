@@ -27,7 +27,7 @@ func (s *Server) search(
 	)
 	o.Collection = q.GetString(constant.Collection, "")
 	o.Full = q.GetBool(constant.Full, false)
-	o.Mode = q.GetString(constant.Mode, "hybrid")
+	o.Mode = q.GetString(constant.Mode, constant.HybridMode)
 	o.Metadata = extractMetadata(q)
 	sourceType := q.GetString(constant.SourceType, "")
 

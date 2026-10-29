@@ -9,4 +9,5 @@ type Reaper struct {
 	reporter face.Reporter
 	owned    sync.Map
 	stop     chan struct{}
+	closing  sync.Once
 }

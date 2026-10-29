@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/site"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 	"github.com/netbox-community/go-netbox/v4"
@@ -65,7 +66,7 @@ func (c *Client) CreateDevice(
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return device.New(result), nil

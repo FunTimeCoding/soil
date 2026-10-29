@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -14,6 +16,14 @@ func (s *Server) DeleteBranch(
 
 	if not_found.Is(e) {
 		return server.DeleteBranch404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if forbidden.Is(e) {
+		return server.DeleteBranch403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.DeleteBranch503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

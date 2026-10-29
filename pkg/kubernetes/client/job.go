@@ -8,12 +8,12 @@ import (
 func (c *Client) Job(
 	namespace string,
 	name string,
-) *job.Job {
-	result := get.Job(c.client, c.context, namespace, name)
+) (*job.Job, error) {
+	result, e := get.Job(c.client, c.context, namespace, name)
 
-	if result == nil {
-		return nil
+	if e != nil {
+		return nil, e
 	}
 
-	return job.New(result, c.cluster)
+	return job.New(result, c.cluster), nil
 }

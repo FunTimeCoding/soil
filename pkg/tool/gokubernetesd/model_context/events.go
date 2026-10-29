@@ -33,7 +33,7 @@ func (s *Server) Events(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "list events")
+		return s.captureDetail(f)
 	}
 
 	return response.SuccessAny(result)

@@ -12,7 +12,7 @@ func (s *Server) bookmarks(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	result, e := s.client.Bookmarks()
+	result, e := s.service.Bookmarks()
 	errors.PanicOnError(e)
 	var content gomponents.Node
 

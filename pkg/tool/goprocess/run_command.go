@@ -1,11 +1,8 @@
 package goprocess
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
 	"github.com/spf13/cobra"
 	"strings"
 )
@@ -40,27 +37,10 @@ Commands:
 			m.SilenceUsage = true
 			procfilePath, e := m.Flags().GetString("file")
 			errors.PanicOnError(e)
-			command := arguments[0]
-			commandArguments := arguments[1:]
-			response, f := client.Send(
-				socket.Path(procfilePath),
-				command,
-				commandArguments,
-			)
+			c := client.NewLocal(procfilePath)
+			defer c.Close()
 
-			if f != nil {
-				return f
-			}
-
-			if strings.HasPrefix(response, "error:") {
-				return fmt.Errorf("%s", strings.TrimPrefix(response, "error: "))
-			}
-
-			if response != "ok" {
-				console.Line(response)
-			}
-
-			return nil
+			return Dispatch(c, arguments[0], arguments[1:])
 		},
 	}
 }

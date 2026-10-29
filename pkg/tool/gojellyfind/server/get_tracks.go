@@ -10,7 +10,7 @@ func (s *Server) GetTracks(
 	_ context.Context,
 	r server.GetTracksRequestObject,
 ) (server.GetTracksResponseObject, error) {
-	items, e := s.client.Tracks(r.Identifier)
+	items, e := s.service.Tracks(r.Identifier)
 
 	if validation.Is(e) {
 		return server.GetTracks400JSONResponse{Error: e.Error()}, nil

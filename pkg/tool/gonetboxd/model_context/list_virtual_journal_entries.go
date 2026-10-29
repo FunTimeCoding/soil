@@ -18,7 +18,7 @@ func (s *Server) listVirtualJournalEntries(
 		return response.Fail("virtual_machine is required: %v", f)
 	}
 
-	result, g := s.client.VirtualJournalEntries(
+	result, g := s.service.VirtualJournalEntries(
 		name,
 		int32(r.GetInt(generativeConstant.ParameterLimit, 0)),
 		int32(r.GetInt(generativeConstant.ParameterOffset, 0)),

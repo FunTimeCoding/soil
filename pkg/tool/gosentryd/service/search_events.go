@@ -14,11 +14,16 @@ func (s *Service) SearchEvents(
 		return nil, e
 	}
 
-	return s.client.SearchEvents(
-		s.organization,
-		query,
-		identifier,
-		limit,
-		cursor,
+	return guarded(
+		s.guard,
+		func() ([]response.EventRow, error) {
+			return s.client.SearchEvents(
+				s.organization,
+				query,
+				identifier,
+				limit,
+				cursor,
+			)
+		},
 	)
 }

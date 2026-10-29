@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/client"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
@@ -12,6 +13,10 @@ import (
 func (s *Service) RegisterClient(
 	r *register_client.Request,
 ) (*register_client.Response, error) {
+	if len(r.RedirectLocators) == 0 {
+		return nil, validation.New(constant.RedirectRequired)
+	}
+
 	clientIdentifier := uuid.New().String()
 	secret := uuid.New().String()
 	hash, e := bcrypt.GenerateFromPassword([]byte(secret), bcrypt.DefaultCost)

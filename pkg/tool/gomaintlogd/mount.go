@@ -5,7 +5,7 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/service"
 	maintenanceWeb "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -14,7 +14,7 @@ import (
 )
 
 func Mount(
-	s *store.Store,
+	s *service.Service,
 	v *maintenanceWeb.Server,
 	r face.Reporter,
 	t face.Recorder,

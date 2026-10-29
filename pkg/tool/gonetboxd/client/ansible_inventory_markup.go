@@ -1,15 +1,18 @@
 package client
 
 import (
-	"fmt"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/detail_error"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"net/http"
 )
 
-func (c *Client) AnsibleInventoryMarkup(field string) (string, error) {
-	result, e := c.client.GetAnsibleInventoryWithResponse(
-		c.context,
+func (c *Client) AnsibleInventoryMarkup(
+	x context.Context,
+	field string,
+) (string, error) {
+	r, e := c.client.GetAnsibleInventoryWithResponse(
+		x,
 		&client.GetAnsibleInventoryParams{Field: &field},
 	)
 
@@ -17,12 +20,9 @@ func (c *Client) AnsibleInventoryMarkup(field string) (string, error) {
 		return "", e
 	}
 
-	if result.StatusCode() != http.StatusOK {
-		return "", detail_error.New(
-			fmt.Sprintf("ansible inventory status: %d", result.StatusCode()),
-			result.Status(),
-		).WithBody(result.Body)
+	if r.StatusCode() != http.StatusOK {
+		return "", refusal.New("ansible inventory", r.HTTPResponse, r.Body)
 	}
 
-	return string(result.Body), nil
+	return string(r.Body), nil
 }

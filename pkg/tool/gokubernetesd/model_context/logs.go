@@ -2,15 +2,12 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"github.com/mark3labs/mcp-go/mcp"
-	"strings"
 )
 
 func (s *Server) Logs(
@@ -46,7 +43,7 @@ func (s *Server) Logs(
 		logs, f := s.service.LogsAll(x, cluster, q)
 
 		if f != nil {
-			return s.captureFail(f, "get logs")
+			return s.captureDetail(f)
 		}
 
 		var sections []string
@@ -64,17 +61,7 @@ func (s *Server) Logs(
 	result, f := s.service.Logs(x, cluster, q)
 
 	if f != nil {
-		var ap *ambiguous_pods.AmbiguousPods
-
-		if errors.As(f, &ap) {
-			return response.Fail(f.Error())
-		}
-
-		if strings.Contains(f.Error(), "a container name must be specified") {
-			return response.Fail(f.Error())
-		}
-
-		return s.captureFail(f, "get logs")
+		return s.captureDetail(f)
 	}
 
 	return response.Success(result)

@@ -11,5 +11,5 @@ func (s *Server) processStatus(
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {
-	return response.SuccessAny(s.supervisor.Statuses())
+	return response.SuccessAny(s.service.Statuses())
 }

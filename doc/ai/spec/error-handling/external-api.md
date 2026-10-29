@@ -100,6 +100,10 @@ a per-package sentinel for the same class:
   already in use, already queued, still running.
   `Exists(kind, identifier)` renders the standard
   "kind already exists: identifier" message.
+- `forbidden` - the daemon refuses the operation as it is
+  running: a write on a daemon started without `--arm`. Only
+  the operator can change it, by restarting the daemon, so the
+  caller is told and nothing is captured.
 - `validation` - a caller-shaped request error (`New`),
   answered as a tool failure or a 400 without a Sentry
   capture. Upstream data failing our own checks is not the
@@ -112,7 +116,9 @@ a per-package sentinel for the same class:
 - `unreachable` - a backing dependency is down or not connected.
 - `unavailable` - a peer guard's verdict that the peer is down;
   the guard has reported it, so a caller never does
-  (`infrastructure.md`, Peer Outages and Refusals).
+  (`infrastructure.md`, Peer Outages and Refusals). A client maps
+  its upstream's 503 to it; the guard takes it as an outage and
+  answers with its own verdict.
 - `timeout` - waiting ran out. `timeout.Is` also matches
   `context.DeadlineExceeded`.
 - `dropped` - the answer broke off mid-way: an unexpected EOF, a
@@ -140,10 +146,23 @@ once; a context without a session is a broken invariant, never a class.
 A driver's or library's own sentinel - `gorm.ErrRecordNotFound`,
 `proxmox.ErrNotFound`, a Kubernetes `IsNotFound` - is translated into
 its shared class at the call that knows what it was looking for, the
-store or client method, as `not_found.New(kind, identifier)`. No surface
-tests a driver sentinel, and no store returns one it did not receive:
-the surface sees only classes, and the message names the subject and the
-identifier instead of the driver's "record not found".
+store or client method, as `not_found.New(kind, identifier)`; so is a
+delete or update the driver reports as zero rows affected without an
+error. No surface tests a driver sentinel.
+
+A client classifies at its lowest layer, from the response status
+rather than the error a library decoded - a proxy's HTML 503 decodes to
+nothing. `go:pkg/web/refusal/Status` is the one table, applied by the
+requester's refusal (`request.WithRefusal`, or the client's default) or
+at each call site of a library that returns its response beside the
+error; a 401 is the daemon's own credential refused, a captured fault,
+never `forbidden`. A transport failure keeps its cause - the client
+returns the `connection.Failure` that `connection.Classify` builds,
+never an `unreachable` built from the error's text, so the guard, the
+Sentry fingerprint and the surface all read the same kind and host. An
+upstream client that no daemon of ours stands in front of has a
+`Reachable` of its own, one cheap authenticated call, so its guard's
+probe proves the token as well as the host.
 
 What an upstream answers is checked, not assumed - by a read through
 the deployed tool, a direct call with the daemon's own credentials, or
@@ -156,7 +175,10 @@ can mean different things per call:
   caller's - an invalid value passed straight through - that request
   carries its own refusal (`request.WithRefusal`) turning it into
   `validation` with the upstream's message; every other call keeps the
-  default.
+  default. A status the upstream sends for the caller's mistake and for
+  ours alike stays opt-in per call (Habitica's 400 on allocate); one
+  only the caller can cause is classified for every call (LinkAce's 400
+  and 422).
 - **An answer that means different things per call.** OPNsense answers
   a save that failed without validation details: on set that is an
   unknown identifier, `not_found`; on add it is a request missing its
@@ -166,11 +188,8 @@ can mean different things per call:
   client looks the link up first: the lookup's 404 is the caller's
   mistake, a 403 after it a real fault.
 - **An upstream in the tree.** One we own and that answers imprecisely
-  is fixed at its source rather than worked around in its client - the
-  iTerm bridge (`graft/py/iterm_bridge`) answers 404 for a missing
-  session, 422 for an unusable value, 503 for no window, 400 for a
-  malformed request and 500 for a failed call, and its client maps each
-  status the same way for every call.
+  is fixed at its source rather than worked around in its client (the
+  iTerm bridge, `graft/py/iterm_bridge`).
 
 ## Message format
 

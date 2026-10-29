@@ -6,16 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/raid_parser"
-	raid_parserConstant "github.com/funtimecoding/soil/pkg/raid_parser/constant"
-	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/web"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 )
 
@@ -25,42 +21,21 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(
-		relational.Open(l, o.PostgresLocator, o.LitePath),
-		o.LogCachePath,
-		o.ElitePath,
-		l,
-		r,
-	)
-	p := raid_parser.New(
-		locator.Environment(
-			raid_parserConstant.HostEnvironment,
-			raid_parserConstant.PortEnvironment,
-			raid_parserConstant.InsecureEnvironment,
-		),
-		environment.Required(raid_parserConstant.TokenEnvironment),
-	)
-	defer p.Close()
-	u := web.New(
-		s,
-		o.ElitePath,
-		o.OutputPath,
-		p,
-		authorizationClient(o).WithReporter(r),
-	)
-	lifecycle.New(l).WithWorker(s).WithServer(
+	v := service.New(o, l, r)
+	defer v.Close()
+	u := web.New(v, r)
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithWorker(worker.New(v, l, r)).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(
-					s,
-					o.OutputPath,
-					u,
-					r,
-					i.Recorder(),
-					guard.New(m, o.ServiceTokens),
-				)
+				Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()

@@ -16,10 +16,10 @@ func (s *Server) GetUserProfile(
 		return response.Fail("user_id is required")
 	}
 
-	u, e := s.client.User(a.UserIdentifier)
+	u, e := s.service.User(a.UserIdentifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

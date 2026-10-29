@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/tunnel_group"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -12,7 +13,7 @@ func (c *Client) CreateTunnelGroup(name string) (*tunnel_group.Group, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return tunnel_group.New(result), nil

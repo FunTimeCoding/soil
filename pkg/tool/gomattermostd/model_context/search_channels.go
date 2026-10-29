@@ -19,21 +19,16 @@ func (s *Server) SearchChannels(
 		return response.Fail("query is required")
 	}
 
-	me, e := s.client.Me()
+	me, e := s.service.Me()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
-	team := s.client.DefaultTeam()
-	channels, _, e := s.client.Nested().AutocompleteChannelsForTeamForSearch(
-		s.client.Context(),
-		team.Id,
-		a.Query,
-	)
+	channels, e := s.service.SearchChannels(a.Query)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	var rows []*mattermostResponse.ChannelMatch
@@ -47,7 +42,7 @@ func (s *Server) SearchChannels(
 
 			for _, p := range parts {
 				if p != me.Id {
-					other, f := s.client.User(p)
+					other, f := s.service.User(p)
 
 					if f == nil && other != nil {
 						displayName = other.Username

@@ -10,13 +10,13 @@ func (s *Server) ListServices(
 	_ context.Context,
 	r server.ListServicesRequestObject,
 ) (server.ListServicesResponseObject, error) {
-	origin := ""
+	var origin string
 
 	if r.Params.Origin != nil {
 		origin = *r.Params.Origin
 	}
 
 	return server.ListServices200JSONResponse(
-		convert.Services(s.service.Services(), origin),
+		convert.Services(s.service.Services(origin)),
 	), nil
 }

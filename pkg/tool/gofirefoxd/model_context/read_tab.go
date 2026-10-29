@@ -12,10 +12,10 @@ func (s *Server) ReadTab(
 	_ mcp.CallToolRequest,
 	a argument.ReadTab,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.ReadTab(int(a.TabIdentifier), bool(a.Raw))
+	v, e := s.service.ReadTab(int(a.TabIdentifier), bool(a.Raw))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

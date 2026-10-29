@@ -12,10 +12,8 @@ func (s *Server) CloseTab(
 	_ mcp.CallToolRequest,
 	a argument.CloseTab,
 ) (*mcp.CallToolResult, error) {
-	e := s.client.CloseTab(int(a.TabIdentifier))
-
-	if e != nil {
-		return s.captureDetail(e)
+	if e := s.service.CloseTab(int(a.TabIdentifier)); e != nil {
+		return s.answer(e)
 	}
 
 	return response.Success("tab closed")

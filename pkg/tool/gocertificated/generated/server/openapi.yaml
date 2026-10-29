@@ -37,6 +37,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthorityResponse"
+        "400":
+          description: The request carries a value that is not usable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The issuing authority does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "409":
           description: An authority of that name is already live.
           content:
@@ -139,6 +151,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CertificateResponse"
+        "404":
+          description: The issuing authority does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to issue the certificate.
           content:
@@ -219,6 +237,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CertificateResponse"
+        "404":
+          description: The issuing authority does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to sign the request.
           content:
@@ -256,6 +280,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: GitLab is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/root:
     get:
       operationId: getRoot
@@ -274,6 +304,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the root.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/revocation-list:
     get:
       operationId: getRevocationList

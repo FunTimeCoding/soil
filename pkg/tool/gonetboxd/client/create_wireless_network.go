@@ -1,18 +1,31 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) CreateWirelessNetwork(ssid string) *response.Response {
-	result, e := c.client.CreateWirelessNetwork(
-		c.context,
+func (c *Client) CreateWirelessNetwork(
+	x context.Context,
+	ssid string,
+) (client.WirelessNetwork, error) {
+	r, e := c.client.CreateWirelessNetworkWithResponse(
+		x,
 		client.CreateNameRequest{Name: ssid},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.WirelessNetwork{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.WirelessNetwork{}, refusal.New(
+			"create wireless network",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

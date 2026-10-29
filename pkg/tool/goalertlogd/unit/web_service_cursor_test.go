@@ -11,7 +11,7 @@ import (
 
 func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
 	o := web_service_tester.New(t)
-	createRecords(t, o.Store(), 10)
+	o.Seed(10)
 	r, e := o.Client.GetAlertsAfterWithResponse(
 		context.Background(),
 		&client.GetAlertsAfterParams{Identifier: 0},
@@ -24,7 +24,7 @@ func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
 
 func TestAlertsAfterCapsTheLimit(t *testing.T) {
 	o := web_service_tester.New(t)
-	createRecords(t, o.Store(), 30)
+	o.Seed(30)
 	r, e := o.Client.GetAlertsAfterWithResponse(
 		context.Background(),
 		&client.GetAlertsAfterParams{Identifier: 0, Limit: new(100)},

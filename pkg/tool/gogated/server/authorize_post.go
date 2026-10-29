@@ -2,6 +2,8 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
@@ -23,7 +25,13 @@ func (s *Server) authorizePost(
 
 	session, e := s.service.GetLoginSession(cookie.Value)
 
-	if e != nil || session == nil {
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
+	if session == nil {
 		http.Error(w, "invalid or expired login session", http.StatusBadRequest)
 
 		return
@@ -40,8 +48,26 @@ func (s *Server) authorizePost(
 
 	u, e := s.service.AuthenticateUser(mail, password, source)
 
-	if e != nil || u == nil {
-		s.renderLoginForm(w, rejectedMessage(source), source)
+	switch {
+	case unavailable.Is(e):
+		s.renderLoginForm(
+			w,
+			http.StatusServiceUnavailable,
+			constant.DirectoryAwayMessage,
+			source,
+		)
+
+		return
+	case conflict.Is(e):
+		s.renderLoginForm(w, http.StatusConflict, e.Error(), source)
+
+		return
+	case e != nil:
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	case u == nil:
+		s.renderLoginForm(w, http.StatusOK, rejectedMessage(source), source)
 
 		return
 	}
@@ -70,7 +96,7 @@ func (s *Server) authorizePost(
 	)
 
 	if e != nil {
-		http.Error(w, "session creation failed", http.StatusInternalServerError)
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

@@ -1,16 +1,19 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"net/http"
-	"path/filepath"
 )
 
 func (s *Server) reportDelete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	system.RemoveFile(filepath.Join(s.outputPath, r.PathValue("fileName")))
+	if e := s.service.DeleteReport(r.PathValue("fileName")); e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
 	http.Redirect(w, r, constant.ReportsPath, http.StatusSeeOther)
 }

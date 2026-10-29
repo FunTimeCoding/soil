@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/generated/client"
 	"time"
 )
 
@@ -13,17 +14,19 @@ func (c *Collector) Collect(
 	q context.Context,
 	s *gazetteer.Gazetteer,
 ) ([]*placement.Placement, error) {
-	processes, e := c.process.ListProcessesWithResponse(q)
+	var processes []client.Process
+	e := c.guard.Attempt(
+		q,
+		func(x context.Context) error {
+			var f error
+			processes, f = c.process.Processes(x)
+
+			return f
+		},
+	)
 
 	if e != nil {
 		return nil, e
-	}
-
-	if processes.JSON200 == nil {
-		return nil, unexpected.Format(
-			constant.ProcessStatusFormat,
-			processes.HTTPResponse.StatusCode,
-		)
 	}
 
 	where, okay := s.Resolve(c.place)
@@ -35,7 +38,7 @@ func (c *Collector) Collect(
 	var result []*placement.Placement
 	now := time.Now()
 
-	for _, p := range *processes.JSON200 {
+	for _, p := range processes {
 		if !p.Running {
 			continue
 		}

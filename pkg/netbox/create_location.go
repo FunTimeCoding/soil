@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/location"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -25,7 +26,7 @@ func (c *Client) CreateLocation(
 	).Execute()
 
 	if f != nil {
-		return nil, f
+		return nil, refusal.Classify(f)
 	}
 
 	return location.New(result), nil

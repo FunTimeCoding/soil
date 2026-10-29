@@ -22,11 +22,11 @@ func (s *Server) searchPage(
 	metadata := parseMetadataParams(r.URL.Query())
 
 	if mode == "" {
-		mode = "hybrid"
+		mode = constant.HybridMode
 	}
 
 	if query == "" {
-		s.renderSearchForm(w, collection)
+		s.renderSearchForm(w, r, collection)
 
 		return
 	}
@@ -52,8 +52,11 @@ func (s *Server) searchPage(
 		resultsContent = []gomponents.Node{
 			html.P(html.Em(gomponents.Text(e.Error()))),
 		}
+	} else if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
 	} else {
-		errors.PanicOnError(e)
 		results, facets := FilterSearchResults(outcome, metadata)
 		resultsContent = s.renderSearchResults(
 			results,
@@ -72,8 +75,15 @@ func (s *Server) searchPage(
 		return
 	}
 
+	status, f := s.service.Status()
+
+	if f != nil {
+		s.view.Answer(w, r, s.reporter, f)
+
+		return
+	}
+
 	var content []gomponents.Node
-	status := s.service.MustStatus()
 	content = append(
 		content,
 		html.H3(gomponents.Text(constant.SearchTitle)),

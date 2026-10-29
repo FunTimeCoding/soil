@@ -18,7 +18,7 @@ func (s *Server) deleteLink(
 	}
 
 	if e := s.service.DeleteLink(identifier); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success("link %s deleted", identifier)

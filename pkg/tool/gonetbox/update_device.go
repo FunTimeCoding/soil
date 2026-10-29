@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func updateDevice(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var location string
@@ -26,7 +27,7 @@ func updateDevice(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			body := generated.UpdateDeviceRequest{}
+			body := client.UpdateDeviceRequest{}
 
 			if location != "" {
 				body.Location = &location
@@ -53,7 +54,9 @@ func updateDevice(
 			}
 
 			body.CustomFields = customFields()
-			t.Emit(c.UpdateDevice(arguments[0], body))
+			t.EmitValue(
+				c.UpdateDevice(context.Background(), arguments[0], body),
+			)
 		},
 	}
 	customFields = customFieldFlag(result)

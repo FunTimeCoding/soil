@@ -12,7 +12,7 @@ func (s *Server) CreateTab(
 	_ mcp.CallToolRequest,
 	_ argument.CreateTab,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.CreateTab()
+	v, e := s.service.CreateTab()
 
 	if e != nil {
 		return s.answer(e)

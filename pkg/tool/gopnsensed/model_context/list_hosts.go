@@ -12,7 +12,7 @@ func (s *Server) listHosts(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.Hosts(r.GetString(constant.ParameterQuery, ""))
+	result, e := s.service.Hosts(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
 		return s.answer(e)

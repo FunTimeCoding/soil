@@ -18,7 +18,7 @@ func (s *Server) listDeviceJournalEntries(
 		return response.Fail("device is required: %v", f)
 	}
 
-	result, g := s.client.DeviceJournalEntries(
+	result, g := s.service.DeviceJournalEntries(
 		device,
 		int32(r.GetInt(generativeConstant.ParameterLimit, 0)),
 		int32(r.GetInt(generativeConstant.ParameterOffset, 0)),

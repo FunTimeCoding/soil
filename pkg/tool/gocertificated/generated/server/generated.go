@@ -732,6 +732,34 @@ func (response PostAuthority200JSONResponse) VisitPostAuthorityResponse(w http.R
 	return err
 }
 
+type PostAuthority400JSONResponse Error
+
+func (response PostAuthority400JSONResponse) VisitPostAuthorityResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostAuthority404JSONResponse Error
+
+func (response PostAuthority404JSONResponse) VisitPostAuthorityResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PostAuthority409JSONResponse Error
 
 func (response PostAuthority409JSONResponse) VisitPostAuthorityResponse(w http.ResponseWriter) error {
@@ -864,6 +892,20 @@ func (response PostCertificate200JSONResponse) VisitPostCertificateResponse(w ht
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostCertificate404JSONResponse Error
+
+func (response PostCertificate404JSONResponse) VisitPostCertificateResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -1052,6 +1094,20 @@ func (response PostPublication500JSONResponse) VisitPostPublicationResponse(w ht
 	return err
 }
 
+type PostPublication503JSONResponse Error
+
+func (response PostPublication503JSONResponse) VisitPostPublicationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetRevocationListRequestObject struct {
 	Params GetRevocationListParams
 }
@@ -1131,6 +1187,20 @@ func (response GetRoot404JSONResponse) VisitGetRootResponse(w http.ResponseWrite
 	return err
 }
 
+type GetRoot500JSONResponse ErrorResponse
+
+func (response GetRoot500JSONResponse) VisitGetRootResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PostSigningRequestRequestObject struct {
 	Body *PostSigningRequestJSONRequestBody
 }
@@ -1149,6 +1219,20 @@ func (response PostSigningRequest200JSONResponse) VisitPostSigningRequestRespons
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostSigningRequest404JSONResponse Error
+
+func (response PostSigningRequest404JSONResponse) VisitPostSigningRequestResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -1570,30 +1654,32 @@ func (sh *strictHandler) PostSigningRequest(w http.ResponseWriter, r *http.Reque
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"MvPKCDper/8KAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

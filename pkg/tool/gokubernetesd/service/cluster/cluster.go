@@ -13,7 +13,6 @@ type Cluster struct {
 	clientset     kubernetes.Interface
 	dynamic       dynamic.Interface
 	configuration *rest.Config
-	discoveryOnce sync.Once
+	mutex         sync.Mutex
 	resources     []*v1.APIResourceList
-	discoveryFail error
 }

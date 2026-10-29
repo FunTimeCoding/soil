@@ -1,6 +1,7 @@
 package mock_client
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
@@ -8,8 +9,11 @@ import (
 )
 
 func (c *Client) MustAlerts(
-	_ *advanced_option.Alert,
-	_ *alert_filter.Filter,
+	p *advanced_option.Alert,
+	f *alert_filter.Filter,
 ) ([]*alert.Alert, *statistic.Statistic) {
-	return c.alerts, statistic.New()
+	v, s, e := c.Alerts(p, f)
+	errors.PanicOnError(e)
+
+	return v, s
 }

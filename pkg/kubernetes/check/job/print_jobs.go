@@ -11,7 +11,7 @@ func printJobs(
 ) {
 	console.Format("Jobs in %s:\n", namespace)
 
-	for _, j := range k.Jobs(namespace) {
+	for _, j := range k.MustJobs(namespace) {
 		console.Format("  %s\n", j.Name)
 	}
 }

@@ -19,4 +19,5 @@ type Builder struct {
 	sendPing time.Duration
 	ping     time.Duration
 	observer prometheus.ObserverVec
+	socket   string
 }

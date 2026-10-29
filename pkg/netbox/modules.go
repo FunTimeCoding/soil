@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/module"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) Modules() ([]*module.Module, error) {
@@ -11,7 +12,7 @@ func (c *Client) Modules() ([]*module.Module, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return module.NewSlice(result.Results), nil

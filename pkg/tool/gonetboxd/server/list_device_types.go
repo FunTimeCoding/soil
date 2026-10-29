@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -9,7 +10,12 @@ func (s *Server) ListDeviceTypes(
 	_ context.Context,
 	_ server.ListDeviceTypesRequestObject,
 ) (server.ListDeviceTypesResponseObject, error) {
-	types, e := s.client.DeviceTypes()
+	types, e := s.service.DeviceTypes()
+
+	if forbidden.Is(e) {
+		return server.ListDeviceTypes403JSONResponse(*clientError(e)),
+			nil
+	}
 
 	if e != nil {
 		return server.ListDeviceTypes500JSONResponse(*s.captureDetail(e)), nil

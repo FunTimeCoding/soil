@@ -12,11 +12,7 @@ func (s *Server) CreateTab(
 	_ mcp.CallToolRequest,
 	a argument.CreateTab,
 ) (*mcp.CallToolResult, error) {
-	if a.Locator == "" {
-		return response.Fail("url is required")
-	}
-
-	identifier, e := s.client.CreateTab(a.Locator)
+	identifier, e := s.service.CreateTab(a.Locator)
 
 	if e != nil {
 		return s.captureDetail(e)

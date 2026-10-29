@@ -2,6 +2,7 @@ package reacher
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 )
 
@@ -13,11 +14,13 @@ func (r *Reacher) Triage(
 		return r.Succeed(name), nil
 	}
 
-	f := connection.Classify(e)
-
-	if f == nil {
-		return nil, e
+	if f := connection.Classify(e); f != nil {
+		return r.Outage(name, f.Reason, e), nil
 	}
 
-	return r.Outage(name, f.Reason, e), nil
+	if unavailable.Is(e) {
+		return r.Outage(name, e.Error(), e), nil
+	}
+
+	return nil, e
 }

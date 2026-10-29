@@ -12,10 +12,8 @@ func (s *Server) UngroupTab(
 	_ mcp.CallToolRequest,
 	a argument.UngroupTab,
 ) (*mcp.CallToolResult, error) {
-	e := s.client.UngroupTab(int(a.TabIdentifier))
-
-	if e != nil {
-		return s.captureDetail(e)
+	if e := s.service.UngroupTab(int(a.TabIdentifier)); e != nil {
+		return s.answer(e)
 	}
 
 	return response.Success("ungrouped")

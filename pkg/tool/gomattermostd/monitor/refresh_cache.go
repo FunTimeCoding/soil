@@ -5,11 +5,16 @@ import (
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
-func (m *Monitor) refreshCache() {
+func (m *Monitor) refreshCache() error {
 	var all []*model.ChannelWithTeamData
 
 	for offset := 0; ; offset += constant.MattermostMaxPerPage {
-		page := m.client.MustAllChannels(constant.MattermostMaxPerPage, offset)
+		page, e := m.client.AllChannels(constant.MattermostMaxPerPage, offset)
+
+		if e != nil {
+			return e
+		}
+
 		all = append(all, page...)
 
 		if len(page) < constant.MattermostMaxPerPage {
@@ -23,4 +28,6 @@ func (m *Monitor) refreshCache() {
 	for _, c := range all {
 		m.channelCache[c.Name] = &c.Channel
 	}
+
+	return nil
 }

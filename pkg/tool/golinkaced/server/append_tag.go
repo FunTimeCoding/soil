@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -14,6 +16,14 @@ func (s *Server) AppendTag(
 
 	if not_found.Is(f) {
 		return server.AppendTag404JSONResponse{Error: f.Error()}, nil
+	}
+
+	if forbidden.Is(f) {
+		return server.AppendTag403JSONResponse{Error: f.Error()}, nil
+	}
+
+	if unavailable.Is(f) {
+		return server.AppendTag503JSONResponse{Error: f.Error()}, nil
 	}
 
 	if f != nil {

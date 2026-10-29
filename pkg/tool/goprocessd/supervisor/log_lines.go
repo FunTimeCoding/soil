@@ -1,18 +1,13 @@
 package supervisor
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
-)
-
 func (s *Supervisor) LogLines(
 	name string,
 	all bool,
 ) ([]string, int, error) {
-	p := s.findProcess(name)
+	p, e := s.process(name)
 
-	if p == nil {
-		return nil, 0, validation.New(constant.UnknownProcess, name)
+	if e != nil {
+		return nil, 0, e
 	}
 
 	if all {

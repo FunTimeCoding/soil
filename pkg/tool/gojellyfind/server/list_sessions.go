@@ -9,7 +9,7 @@ func (s *Server) ListSessions(
 	_ context.Context,
 	_ server.ListSessionsRequestObject,
 ) (server.ListSessionsResponseObject, error) {
-	sessions, e := s.client.Sessions()
+	sessions, e := s.service.Sessions()
 
 	if e != nil {
 		return server.ListSessions500JSONResponse(*s.answer(e)), nil

@@ -16,7 +16,150 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Process"
+  /api/processes/{name}/start:
+    post:
+      operationId: startProcess
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      responses:
+        "204":
+          description: The process was started.
+        "404":
+          description: No process by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/processes/{name}/stop:
+    post:
+      operationId: stopProcess
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      responses:
+        "204":
+          description: The process was stopped.
+        "404":
+          description: No process by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The process did not stop.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/processes/{name}/restart:
+    post:
+      operationId: restartProcess
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      responses:
+        "204":
+          description: The process was restarted.
+        "404":
+          description: No process by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The process did not stop for its restart.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/processes/{name}/log:
+    get:
+      operationId: getLog
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      - name: all
+        in: query
+        description: Every retained line instead of the current generation.
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: Log lines and how many older lines the current generation leaves out.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Log"
+        "404":
+          description: No process by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: clearLog
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      responses:
+        "204":
+          description: The retained log was discarded.
+        "404":
+          description: No process by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/restart:
+    post:
+      operationId: restartAll
+      responses:
+        "200":
+          description: The restart wave started in the background.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wave"
+        "409":
+          description: A restart wave is already running.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/reload/procfile:
+    post:
+      operationId: reloadProcfile
+      responses:
+        "204":
+          description: The Procfile was re-read and processes started, stopped or restarted to match.
+        "400":
+          description: The Procfile does not parse.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The reload failed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/reload/environment:
+    post:
+      operationId: reloadEnvironment
+      responses:
+        "204":
+          description: The .envrc was re-evaluated for future restarts.
+        "500":
+          description: The .envrc did not evaluate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
+  parameters:
+    Name:
+      name: name
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
     Process:
       type: object
@@ -34,3 +177,39 @@ components:
         started:
           type: string
           format: date-time
+    Log:
+      type: object
+      required:
+      - lines
+      - older
+      properties:
+        lines:
+          type: array
+          items:
+            type: string
+        older:
+          type: integer
+    Wave:
+      type: object
+      required:
+      - count
+      properties:
+        count:
+          type: integer
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

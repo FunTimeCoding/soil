@@ -5,6 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/fill"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -13,45 +15,26 @@ func (s *Server) Fill(
 	_ mcp.CallToolRequest,
 	a argument.Fill,
 ) (*mcp.CallToolResult, error) {
-	if a.UID == "" {
-		return response.Fail("uid is required")
-	}
-
-	if a.Value == "" {
-		return response.Fail("value is required")
-	}
-
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	backendIdentifier, okay := s.resolveUID(t.Identifier, a.UID)
-
-	if !okay {
-		return response.Fail("uid %s not found - take a snapshot first", a.UID)
-	}
-
-	direct := a.Direct != nil && *a.Direct
-	p := s.client.Page(t.Identifier)
-	e = p.FillNode(backendIdentifier, a.Value, direct)
+	r := fill.New(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
+		a.UID,
+		a.Value,
+	)
+	r.Direct = a.Direct != nil && *a.Direct
+	r.Snapshot = a.Snapshot == nil || *a.Snapshot
+	v, e := s.service.Fill(r)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	if a.Snapshot != nil && !*a.Snapshot {
+	if !r.Snapshot {
 		return response.Success("filled %s", a.UID)
 	}
 
-	nodes, e := p.Snapshot()
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	s.cacheSnapshot(t.Identifier, nodes)
-
-	return response.Success("filled %s\n\n%s", a.UID, snapshot.Format(nodes, 0))
+	return response.Success(
+		"filled %s\n\n%s",
+		a.UID,
+		snapshot.Format(v.Nodes, 0),
+	)
 }

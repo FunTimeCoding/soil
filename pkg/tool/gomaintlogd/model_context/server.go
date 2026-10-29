@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/service"
 	"github.com/mark3labs/mcp-go/server"
 )
 
 type Server struct {
 	server   *server.MCPServer
-	store    *store.Store
+	service  *service.Service
 	reporter face.Reporter
 }

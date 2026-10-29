@@ -15,7 +15,7 @@ func (s *Server) logs(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	all := s.store.Fights()
+	all := s.service.Fights()
 	filtered := r.URL.Query().Has("start") || r.URL.Query().Has("end")
 	startValue := r.URL.Query().Get("start")
 	endValue := r.URL.Query().Get("end")

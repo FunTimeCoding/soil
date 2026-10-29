@@ -1,22 +1,30 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) DeleteHost(
+	x context.Context,
 	identifier string,
-	apply *bool,
-) *response.Response {
-	result, e := c.client.DeleteHost(
-		c.context,
+	apply bool,
+) error {
+	r, e := c.client.DeleteHostWithResponse(
+		x,
 		identifier,
-		&client.DeleteHostParams{Apply: apply},
+		&client.DeleteHostParams{Apply: &apply},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("delete host", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

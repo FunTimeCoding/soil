@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -14,6 +15,7 @@ import (
 func New(t *testing.T) *Server {
 	t.Helper()
 	c := mock_client.New()
+	v := service_tester.New(t, c)
 	r := memory.New()
 
 	return &Server{
@@ -22,7 +24,7 @@ func New(t *testing.T) *Server {
 		ContextServer: model_context_server.New(
 			t,
 			func(_ *http.ServeMux, g *guard.Mux) {
-				gosecretd.Mount(c, r, mock_recorder.New(), g)
+				gosecretd.Mount(v, r, mock_recorder.New(), g)
 			},
 		),
 	}

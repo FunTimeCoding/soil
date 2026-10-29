@@ -2,26 +2,24 @@ package service
 
 import "github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 
-func (s *Service) DirectoryAllows(identifier string) bool {
+func (s *Service) DirectoryAllows(identifier string) (bool, error) {
 	if s.directory == nil {
-		return true
+		return true, nil
 	}
 
 	row, e := s.store.UserByIdentifier(identifier)
 
-	if e != nil || row == nil {
-		return false
+	if e != nil {
+		return false, e
+	}
+
+	if row == nil {
+		return false, nil
 	}
 
 	if row.Source != constant.SourceDirectory {
-		return true
+		return true, nil
 	}
 
-	member, e := s.directory.InGroup(row.Account)
-
-	if e != nil {
-		return false
-	}
-
-	return member
+	return s.inGroup(row.Account)
 }

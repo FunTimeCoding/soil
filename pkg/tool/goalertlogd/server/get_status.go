@@ -10,21 +10,15 @@ func (s *Server) GetStatus(
 	_ context.Context,
 	_ server.GetStatusRequestObject,
 ) (server.GetStatusResponseObject, error) {
-	count, e := s.store.Count()
+	status, e := s.service.Status()
 
 	if e != nil {
 		return server.GetStatus500JSONResponse(*s.answer(e)), nil
 	}
 
-	latest, f := s.store.LatestIdentifier()
-
-	if f != nil {
-		return server.GetStatus500JSONResponse(*s.answer(f)), nil
-	}
-
 	result := server.GetStatus200JSONResponse{
-		TotalRecords:     count,
-		LatestIdentifier: int(latest),
+		TotalRecords:     status.Total,
+		LatestIdentifier: int(status.LatestIdentifier),
 	}
 	lastPoll := s.worker.LastPoll()
 

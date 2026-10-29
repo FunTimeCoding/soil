@@ -1,19 +1,26 @@
 package watcher
 
+import "github.com/funtimecoding/soil/pkg/chat/mattermost/post"
+
 func (w *Watcher) Index(root string) {
 	w.remember(root, root)
-	p, e := w.client.FindPost(root)
+	var replies []*post.Post
+	e := w.attempt(
+		func() error {
+			p, f := w.client.FindPost(root)
+
+			if f != nil {
+				return f
+			}
+
+			replies, f = w.client.Thread(p)
+
+			return f
+		},
+	)
 
 	if e != nil {
-		w.reporter.CaptureException(e)
-
-		return
-	}
-
-	replies, f := w.client.Thread(p)
-
-	if f != nil {
-		w.reporter.CaptureException(f)
+		w.report(e)
 
 		return
 	}

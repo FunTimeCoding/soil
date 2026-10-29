@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"io"
 	"k8s.io/api/core/v1"
@@ -55,14 +56,14 @@ func PodLogsString(
 	)
 
 	if e != nil {
-		return "", e
+		return "", refusal.Classify(e)
 	}
 
 	defer errors.LogClose(stream)
 	b, f := io.ReadAll(stream)
 
 	if f != nil {
-		return "", f
+		return "", refusal.Classify(f)
 	}
 
 	return string(b), nil

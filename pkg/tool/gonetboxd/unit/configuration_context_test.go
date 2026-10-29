@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"net/http"
 	"testing"
 )
@@ -14,7 +14,7 @@ import (
 func TestConfigurationContextRoundTrip(t *testing.T) {
 	x := context.Background()
 	r := memory.New()
-	c := newClient(t, newNetboxServer(t, mock_client.New(), r))
+	c := newClient(t, newNetboxServer(t, service_tester.NewSource(t), r))
 	created, e := c.CreateConfigurationContextWithResponse(
 		x,
 		client.CreateConfigurationContextRequest{
@@ -53,7 +53,7 @@ func TestConfigurationContextRoundTrip(t *testing.T) {
 
 func TestUnknownConfigurationContextIsNotFoundWithoutSentry(t *testing.T) {
 	r := memory.New()
-	c := newClient(t, newNetboxServer(t, mock_client.New(), r))
+	c := newClient(t, newNetboxServer(t, service_tester.NewSource(t), r))
 	response, e := c.UpdateConfigurationContextWithResponse(
 		context.Background(),
 		"alfa",
@@ -66,7 +66,9 @@ func TestUnknownConfigurationContextIsNotFoundWithoutSentry(t *testing.T) {
 }
 
 func TestConfigurationContextToolsKeepAssignmentOnPayloadUpdate(t *testing.T) {
-	m := newNetboxServer(t, mock_client.New(), memory.New()).Connect(t)
+	m := newNetboxServer(t, service_tester.NewSource(t), memory.New()).Connect(
+		t,
+	)
 	defer m.Close()
 	m.MustCallToolNotation(
 		constant.CreateConfigurationContext,
@@ -96,7 +98,9 @@ func TestConfigurationContextToolsKeepAssignmentOnPayloadUpdate(t *testing.T) {
 }
 
 func TestConfigurationContextToolRefusesMissingPayload(t *testing.T) {
-	m := newNetboxServer(t, mock_client.New(), memory.New()).Connect(t)
+	m := newNetboxServer(t, service_tester.NewSource(t), memory.New()).Connect(
+		t,
+	)
 	defer m.Close()
 	text, e := m.CallToolError(
 		constant.CreateConfigurationContext,

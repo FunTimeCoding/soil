@@ -6,7 +6,7 @@ import (
 )
 
 func Lease(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	namespace string,
 ) v1.LeaseInterface {
 	return c.CoordinationV1().Leases(namespace)

@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 )
@@ -14,9 +13,7 @@ func (s *Server) GetPublication(
 	result, e := s.service.Pending()
 
 	if e != nil {
-		return server.GetPublication500JSONResponse(
-			*s.captureFail(e, constant.QueryFail),
-		), nil
+		return server.GetPublication500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetPublication200JSONResponse(

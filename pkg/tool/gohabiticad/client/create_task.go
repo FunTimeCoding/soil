@@ -1,17 +1,17 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateTask(
+	x context.Context,
 	taskType string,
 	text string,
 	notes string,
-) *response.Response {
+) (*client.Task, error) {
 	body := client.CreateTaskJSONRequestBody{
 		Type: client.CreateTaskRequestType(taskType),
 		Text: text,
@@ -21,8 +21,15 @@ func (c *Client) CreateTask(
 		body.Notes = &notes
 	}
 
-	result, e := c.client.CreateTask(c.context, body)
-	errors.PanicOnError(e)
+	r, e := c.client.CreateTaskWithResponse(x, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON201 == nil {
+		return nil, refusal.New("create task", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON201, nil
 }

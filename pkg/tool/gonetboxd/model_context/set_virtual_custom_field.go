@@ -25,7 +25,7 @@ func (s *Server) setVirtualCustomField(
 		return response.Fail("field is required: %v", f)
 	}
 
-	result, g := s.client.SetVirtualMachineCustomFields(
+	result, g := s.service.SetVirtualMachineCustomFields(
 		name,
 		map[string]any{field: r.GetStringSlice(constant.Values, []string{})},
 	)

@@ -1,7 +1,11 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	sublime "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+)
 
 type Server struct {
-	client face.SublimeSource
+	service  sublime.Sublime
+	reporter face.Reporter
 }

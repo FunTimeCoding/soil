@@ -42,7 +42,7 @@ func (s *Server) entries(
 		}
 	}
 
-	entries, e := s.store.List(f)
+	entries, e := s.service.Entries(f)
 	errors.PanicOnError(e)
 	table := entriesTable(entries)
 

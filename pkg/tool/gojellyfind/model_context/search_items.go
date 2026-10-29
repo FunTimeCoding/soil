@@ -12,13 +12,11 @@ func (s *Server) SearchItems(
 	_ mcp.CallToolRequest,
 	a argument.SearchItems,
 ) (*mcp.CallToolResult, error) {
-	items, total, e := s.client.SearchItems(a.Q, a.Types, a.Page, a.PerPage)
+	result, e := s.service.SearchItems(a.Q, a.Types, a.Page, a.PerPage)
 
 	if e != nil {
 		return s.answer(e)
 	}
 
-	return response.SuccessAny(
-		map[string]any{"total": total, "page": max(a.Page, 1), "items": items},
-	)
+	return response.SuccessAny(result)
 }

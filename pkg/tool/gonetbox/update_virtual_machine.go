@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func updateVirtualMachine(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var platform string
@@ -26,7 +27,7 @@ func updateVirtualMachine(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			body := generated.UpdateVirtualMachineRequest{}
+			body := client.UpdateVirtualMachineRequest{}
 
 			if platform != "" {
 				body.Platform = &platform
@@ -53,7 +54,9 @@ func updateVirtualMachine(
 			}
 
 			body.CustomFields = customFields()
-			t.Emit(c.UpdateVirtualMachine(arguments[0], body))
+			t.EmitValue(
+				c.UpdateVirtualMachine(context.Background(), arguments[0], body),
+			)
 		},
 	}
 	customFields = customFieldFlag(result)

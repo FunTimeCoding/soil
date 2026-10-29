@@ -28,4 +28,8 @@ func (s *Service) collectWarnings(
 	s.checkStrictServer(v, path)
 	s.checkErrorHandling(v, path, configuration)
 	s.checkServerPatterns(v, path)
+
+	if configuration.Service {
+		s.checkServiceShape(v, path)
+	}
 }

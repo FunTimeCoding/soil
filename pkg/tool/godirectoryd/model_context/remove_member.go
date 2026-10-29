@@ -15,7 +15,7 @@ func (s *Server) removeMember(
 	result, e := s.service.RemoveMember(a.Name, a.Account)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

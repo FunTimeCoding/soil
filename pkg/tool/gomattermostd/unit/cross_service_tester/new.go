@@ -4,10 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
 	"net/http"
 	"testing"
@@ -22,10 +21,11 @@ func New(
 	t.Helper()
 	claude := base.New(t)
 	upstream := mattermost_client_tester.New(t, configure)
-	s := store.New(lite.NewMemory())
+	s := worker_tester.NewStore(t)
 	r := memory.New()
 	w := watcher.New(
 		upstream.Client,
+		worker_tester.NewGuard(t, upstream.Client, r),
 		s,
 		notifier.New(claude.Connector(t), "mattermost", r),
 		logger.New(t.Context()),
@@ -35,7 +35,6 @@ func New(
 	t.Cleanup(
 		func() {
 			w.Close()
-			s.Close()
 			claude.Close()
 		},
 	)

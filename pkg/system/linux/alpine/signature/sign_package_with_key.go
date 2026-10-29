@@ -2,21 +2,36 @@ package signature
 
 import (
 	"crypto/rsa"
-	"github.com/funtimecoding/soil/pkg/system"
+	"os"
 )
 
 func SignPackageWithKey(
 	apkPath string,
 	privateKey *rsa.PrivateKey,
 	keyName string,
-) {
-	unsigned := system.ReadBytesUnsafe(apkPath)
-	controlEnd := FindGzipBoundary(unsigned)
+) error {
+	unsigned, e := os.ReadFile(apkPath)
+
+	if e != nil {
+		return e
+	}
+
+	controlEnd, f := FindGzipBoundary(unsigned)
+
+	if f != nil {
+		return f
+	}
+
 	control := unsigned[:controlEnd]
 	packageContent := unsigned[controlEnd:]
-	signature := SignControl(control, privateKey)
-	signatureSegment := CreateSignatureSegment(signature, keyName)
-	signed := append(signatureSegment, control...)
+	signature, g := SignControl(control, privateKey)
+
+	if g != nil {
+		return g
+	}
+
+	signed := append(CreateSignatureSegment(signature, keyName), control...)
 	signed = append(signed, packageContent...)
-	system.WriteFile(apkPath, signed, 0644)
+
+	return os.WriteFile(apkPath, signed, 0o644)
 }

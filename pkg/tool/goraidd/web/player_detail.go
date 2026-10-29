@@ -12,7 +12,7 @@ func (s *Server) playerDetail(
 	r *http.Request,
 ) {
 	account := r.PathValue("account")
-	rows := s.store.PlayerDetail(account)
+	rows := s.service.PlayerDetail(account)
 	s.view.RenderPage(
 		w,
 		account,

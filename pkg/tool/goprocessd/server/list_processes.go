@@ -11,6 +11,6 @@ func (s *Server) ListProcesses(
 	_ server.ListProcessesRequestObject,
 ) (server.ListProcessesResponseObject, error) {
 	return server.ListProcesses200JSONResponse(
-		convert.ProcessSlice(s.supervisor.Statuses()),
+		convert.ProcessSlice(s.service.Statuses()),
 	), nil
 }

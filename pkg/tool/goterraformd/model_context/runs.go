@@ -15,7 +15,7 @@ func (s *Server) runs(
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	limit := r.GetInt(constant.Limit, 20)
-	result, e := s.store.Recent(limit)
+	result, e := s.service.Recent(limit)
 
 	if e != nil {
 		return s.captureFail(e, generativeConstant.RecentRunsFail)

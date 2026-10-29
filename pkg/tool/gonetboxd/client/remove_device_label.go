@@ -1,17 +1,17 @@
 package client
 
-import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
-)
+import "context"
 
 func (c *Client) RemoveDeviceLabel(
+	x context.Context,
 	device string,
 	key string,
-) *response.Response {
-	result, e := c.client.RemoveDeviceLabel(c.context, device, key)
-	errors.PanicOnError(e)
+) error {
+	r, e := c.client.RemoveDeviceLabelWithResponse(x, device, key)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	return noContent("remove device label", r.HTTPResponse, r.Body)
 }

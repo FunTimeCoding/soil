@@ -2,6 +2,8 @@ package job
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/filter"
 )
@@ -12,13 +14,15 @@ func printLog(
 	job string,
 ) {
 	console.Line("Fetch job log")
-	j := k.Job(namespace, job)
+	j, e := k.Job(namespace, job)
 
-	if j == nil {
+	if not_found.Is(e) {
 		console.Format("Not found: %s/%s\n", namespace, job)
 
 		return
 	}
+
+	errors.PanicOnError(e)
 
 	if len(j.Raw.Status.Conditions) > 0 {
 		for _, p := range j.Raw.Status.Conditions {
@@ -50,7 +54,7 @@ func printLog(
 	console.Format("Job name: %s\n", j.Name)
 	controller := string(j.Raw.UID)
 
-	for _, p := range k.Pods(
+	for _, p := range k.MustPods(
 		filter.New().AddNamespaces(namespace).AddNames(j.Name),
 	) {
 		if p.Label("batch.kubernetes.io/controller-uid") != controller {
@@ -58,7 +62,7 @@ func printLog(
 		}
 
 		console.Format("Pod: %s\n", p.Name)
-		log := k.Log(namespace, p.Name, "")
+		log := k.MustLog(namespace, p.Name, "")
 		console.Line("Log:")
 		console.Line(log)
 		console.Line("-----")

@@ -13,7 +13,7 @@ func (s *Service) ResolveUser(name string) (*jira.User, error) {
 		return nil, nil
 	}
 
-	users, e := s.jira.FindUsers(name)
+	users, e := s.SearchUsers(name)
 
 	if e != nil {
 		return nil, e

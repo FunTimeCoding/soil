@@ -9,7 +9,7 @@ func (s *Server) ListLibraries(
 	_ context.Context,
 	_ server.ListLibrariesRequestObject,
 ) (server.ListLibrariesResponseObject, error) {
-	libraries, e := s.client.Libraries()
+	libraries, e := s.service.Libraries()
 
 	if e != nil {
 		return server.ListLibraries500JSONResponse(*s.answer(e)), nil

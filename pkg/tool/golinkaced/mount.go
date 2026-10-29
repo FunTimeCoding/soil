@@ -2,7 +2,6 @@ package golinkaced
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	linkace "github.com/funtimecoding/soil/pkg/tool/golinkaced/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/server"
@@ -14,7 +13,6 @@ import (
 )
 
 func Mount(
-	c linkace.LinkAceSource,
 	s *service.Service,
 	r face.Reporter,
 	t face.Recorder,
@@ -24,7 +22,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(c, s, r),
+				server.New(s, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -32,5 +30,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, s, r, t).Mount(g)
+	model_context.New(s, r, t).Mount(g)
 }

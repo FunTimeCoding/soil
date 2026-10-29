@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -15,7 +16,7 @@ func (c *Client) updateDevice(
 	).PatchedWritableDeviceWithConfigContextRequest(*q).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return device.New(result), nil

@@ -22,7 +22,15 @@ func (s *Service) Publish() (string, []*change.Change, error) {
 		return "", nil, nil
 	}
 
-	commit, g := s.publisher.Commit(change, message(pending))
+	var commit string
+	g := s.attempt(
+		func() error {
+			var h error
+			commit, h = s.publisher.Commit(change, message(pending))
+
+			return h
+		},
+	)
 
 	if g != nil {
 		return "", nil, g

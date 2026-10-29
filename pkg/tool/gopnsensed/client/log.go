@@ -1,18 +1,30 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) Log(limit *int) *response.Response {
-	result, e := c.client.FirewallLog(
-		c.context,
-		&client.FirewallLogParams{Limit: limit},
-	)
-	errors.PanicOnError(e)
+func (c *Client) Log(
+	x context.Context,
+	limit int,
+) ([]client.LogEntry, error) {
+	params := &client.FirewallLogParams{}
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if limit > 0 {
+		params.Limit = &limit
+	}
+
+	r, e := c.client.FirewallLogWithResponse(x, params)
+
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("firewall log", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

@@ -8,9 +8,9 @@ import (
 )
 
 func (s *Server) entryMissing(w http.ResponseWriter) {
-	w.WriteHeader(http.StatusNotFound)
-	s.view.RenderPage(
+	s.view.RenderPageWithStatus(
 		w,
+		http.StatusNotFound,
 		constant.EntryTitle,
 		constant.EntriesPath,
 		html.H1(gomponents.Text(constant.EntryTitle)),

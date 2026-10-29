@@ -14,6 +14,7 @@ func New(
 	return &Client{
 		requester: requester.New(base).
 			WithAuthorizer(bearer.New(token)).
-			WithHeader(constant.Accept, constant.Object),
+			WithHeader(constant.Accept, constant.Object).
+			WithRefusal(classifyRefusal),
 	}
 }

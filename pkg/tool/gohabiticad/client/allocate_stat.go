@@ -1,18 +1,27 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) AllocateStat(stat string) *response.Response {
-	result, e := c.client.AllocateStat(
-		c.context,
+func (c *Client) AllocateStat(
+	x context.Context,
+	stat string,
+) (*client.Stats, error) {
+	r, e := c.client.AllocateStatWithResponse(
+		x,
 		client.AllocateStatParamsStat(stat),
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("allocate stat", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

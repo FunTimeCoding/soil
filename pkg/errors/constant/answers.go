@@ -11,6 +11,7 @@ const (
 	NotSelectedClass   = "not_selected"
 	NotFoundClass      = "not_found"
 	ConflictClass      = "conflict"
+	ForbiddenClass     = "forbidden"
 	UnavailableClass   = "unavailable"
 	UnreachableClass   = "unreachable"
 	TimeoutClass       = "timeout"
@@ -24,6 +25,7 @@ var Answers = map[string]*answer.Answer{
 	NotSelectedClass:   answer.NewUncaptured(http.StatusBadRequest),
 	NotFoundClass:      answer.NewUncaptured(http.StatusNotFound),
 	ConflictClass:      answer.NewUncaptured(http.StatusConflict),
+	ForbiddenClass:     answer.NewUncaptured(http.StatusForbidden),
 	UnavailableClass:   answer.NewUncaptured(http.StatusServiceUnavailable),
 	UnreachableClass:   answer.NewCaptured(http.StatusServiceUnavailable),
 	TimeoutClass:       answer.NewCaptured(http.StatusServiceUnavailable),

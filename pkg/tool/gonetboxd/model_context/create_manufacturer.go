@@ -18,7 +18,7 @@ func (s *Server) createManufacturer(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.CreateManufacturer(name)
+	result, g := s.service.CreateManufacturer(name)
 
 	if g != nil {
 		return s.captureFail(g, "manufacturer not created")

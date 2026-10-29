@@ -21,8 +21,7 @@ type Service struct {
 	client            face.ClaudeSource
 	memory            client.Client
 	memoryGuard       *peer.Guard
-	summaryIndexer    queryd.Indexer
-	completionIndexer queryd.Indexer
+	query             queryd.Client
 	search            *search_index.Index
 	searchIndexed     atomic.Int64
 	searchTotal       atomic.Int64

@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func listWirelessNetworks(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,7 +19,7 @@ func listWirelessNetworks(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.ListWirelessNetworks())
+			t.EmitValue(c.ListWirelessNetworks(context.Background()))
 		},
 	}
 }

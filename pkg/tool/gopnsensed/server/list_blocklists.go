@@ -16,7 +16,7 @@ func (s *Server) ListBlocklists(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Blocklists(phrase)
+	result, e := s.service.Blocklists(phrase)
 
 	if e != nil {
 		return server.ListBlocklists500JSONResponse(*s.answer(e)), nil

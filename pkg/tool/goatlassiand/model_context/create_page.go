@@ -37,20 +37,10 @@ func (s *Server) createPage(
 		return response.Fail("body is required: %v", g)
 	}
 
-	if draft {
-		result, h := s.confluence.CreateDraftPage(space, parent, title, body)
-
-		if h != nil {
-			return s.captureFail(h, "draft page not created")
-		}
-
-		return response.SuccessAny(result)
-	}
-
-	result, h := s.confluence.CreatePage(space, parent, title, body)
+	result, h := s.service.CreatePage(space, parent, title, body, draft)
 
 	if h != nil {
-		return s.captureFail(h, "page not created")
+		return s.answer(h)
 	}
 
 	return response.SuccessAny(result)

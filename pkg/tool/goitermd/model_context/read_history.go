@@ -12,13 +12,7 @@ func (s *Server) ReadHistory(
 	_ mcp.CallToolRequest,
 	a argument.ReadHistory,
 ) (*mcp.CallToolResult, error) {
-	count := int(a.Count)
-
-	if count <= 0 {
-		count = 50
-	}
-
-	v, e := s.client.ReadHistory(a.SessionIdentifier, count)
+	v, e := s.service.ReadHistory(a.SessionIdentifier, int(a.Count))
 
 	if e != nil {
 		return s.answer(e)

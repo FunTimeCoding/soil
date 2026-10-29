@@ -8,10 +8,10 @@ import (
 )
 
 func Mount(
-	c iterm.ItermSource,
+	v iterm.Iterm,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(c, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

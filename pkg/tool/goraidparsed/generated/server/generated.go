@@ -21,6 +21,11 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -242,6 +247,20 @@ func (response PostGenerate200JSONResponse) VisitPostGenerateResponse(w http.Res
 	return err
 }
 
+type PostGenerate404JSONResponse Error
+
+func (response PostGenerate404JSONResponse) VisitPostGenerateResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PostGenerate500JSONResponse ErrorResponse
 
 func (response PostGenerate500JSONResponse) VisitPostGenerateResponse(w http.ResponseWriter) error {
@@ -386,13 +405,14 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"tJRNb9QwEIb/ymrgGDYLiEuOIFRxQ9sjQsjEb9KpNrY7nqy0qvLfke2s+pGUXrq3aD6feWece2r9ELyD",
-	"00jNPcX2BoPJn99FvOwRg3cRyRDEB4gyshvJnT70FEANRRV2PU0V4Qinf9jCKXeMtaCpIsHdyAJLza+5",
-	"1krm7+qc6f/eotVU/goOYhR73I2IuiSzRjNv52UwSk02fFAeQNWStuNDSWPFEFcHmg1GxJwW7CX//6Av",
-	"aRiM3qx3ZPvNj04fOdkpesiif67xKGON5FqNjvFljpj9r+9pjlu2SIHsOp9LsB6Sr/di2AYjEZYqOkIi",
-	"e0cNfdzutruE5QOcCUwNfc6mKg+TOWoTuO5nATOwL6tO2EbZux+WGvrpo55lpsKKqF+9PaXY1jtFEdGE",
-	"cOA2J9a3MWGcbz19vRd01NC7+uEx1PNLqJ+f2/RUFJUR2VC0zfCfdrsLtJ+Xl/tbxFY4aBF0j+BFN2e5",
-	"7DaJ++UNIZ7+Cl4lYO82neFDJsnReZ0PV9ZjZZdX0HKndEE5n72ElVGuIUdusSm0ZYBp+hcAAP//",
+	"tJTPb9UwDMf/lcpwLK8FxqU3QGjiht6OCKHQuJ2n1zhz3Ceepv7vKEmr/WjHdthukWPHH39t5wZaHjw7",
+	"dBqguYHQXuJg0vGbCEs8eGGPooTJjItZTx6hgaBCrodpKkHweiRBC83P2e1XubjxnytsFaYyv7vH4NkF",
+	"fP77JeARnf4mi06pI3w2xEbkFtc5OhSjuMfrEYOuyazRxNuxDEahSYZ3SgNCuabt6JDDSHEImwXNBiNi",
+	"Tiv2HP9/0Mc09EYvtzOS/cqj0zuX5BR7lFX+9MadiC2SCzU6hsc5Qrp/uk+z3zpFdCTXcXqC9BDvehZD",
+	"1hsJaKGEI0ogdtDA+129qyMWe3TGEzTwMZnKVEziqIynqp8FTMCcWx2xjRK77xYa+MFBF5khs2LQL2xP",
+	"0bdlp5hFNN4fqE2B1VWIGMsOxdNbwQ4aeFPdLlk1b1j1cNym+6KojJgMWdsE/6GuXyH93LyU32Johbxm",
+	"QffoWbRY5LK7KO5ZffZiEPmL2cj82RXk/KhF3ILCMobCsRb4l4Imik8vKMX9D+lJHYhd0Rk6JD2Sdxqq",
+	"21nvcWOizlHztsArNvXBPm6UcoFypBaLTJsLmKZ/AQAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

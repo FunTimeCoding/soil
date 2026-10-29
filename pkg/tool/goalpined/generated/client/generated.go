@@ -22,6 +22,11 @@ type Entry struct {
 	Version      string `json:"version"`
 }
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -117,11 +122,29 @@ type ClientInterface interface {
 
 	// GetPackages performs a GET /api/packages (the `GetPackages` operationId) request.
 	GetPackages(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostPackageWithBody performs a POST /api/packages/{version}/{repository}/{architecture}/{file} (the `PostPackage` operationId) request,
+	// with any type of body and a specified content type.
+	PostPackageWithBody(ctx context.Context, version string, repository string, architecture string, file string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 // GetPackages performs a GET /api/packages (the `GetPackages` operationId) request.
 func (c *Client) GetPackages(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPackagesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostPackageWithBody performs a POST /api/packages/{version}/{repository}/{architecture}/{file} (the `PostPackage` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostPackageWithBody(ctx context.Context, version string, repository string, architecture string, file string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostPackageRequestWithBody(c.Server, version, repository, architecture, file, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -186,6 +209,63 @@ func NewGetPackagesRequest(server string, params *GetPackagesParams) (*http.Requ
 	return req, nil
 }
 
+// NewPostPackageRequestWithBody constructs an http.Request for the PostPackage method, with any body, and a specified content type
+func NewPostPackageRequestWithBody(server string, version string, repository string, architecture string, file string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "version", version, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "repository", repository, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam2 string
+
+	pathParam2, err = runtime.StyleParamWithOptions("simple", false, "architecture", architecture, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam3 string
+
+	pathParam3, err = runtime.StyleParamWithOptions("simple", false, "file", file, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/packages/%s/%s/%s/%s", pathParam0, pathParam1, pathParam2, pathParam3)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -234,6 +314,12 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetPackagesWithResponse(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*GetPackagesResponse, error)
+
+	// PostPackageWithBodyWithResponse performs a POST /api/packages/{version}/{repository}/{architecture}/{file} (the `PostPackage` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostPackageWithBodyWithResponse(ctx context.Context, version string, repository string, architecture string, file string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostPackageResponse, error)
 }
 
 type GetPackagesResponse struct {
@@ -284,6 +370,54 @@ func (r GetPackagesResponse) ContentType() string {
 	return ""
 }
 
+type PostPackageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostPackageResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostPackageResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostPackageResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostPackageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostPackageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostPackageResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 // GetPackagesWithResponse performs a GET /api/packages (the `GetPackages` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -293,6 +427,18 @@ func (c *ClientWithResponses) GetPackagesWithResponse(ctx context.Context, param
 		return nil, err
 	}
 	return ParseGetPackagesResponse(rsp)
+}
+
+// PostPackageWithBodyWithResponse performs a POST /api/packages/{version}/{repository}/{architecture}/{file} (the `PostPackage` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostPackageWithBodyWithResponse(ctx context.Context, version string, repository string, architecture string, file string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostPackageResponse, error) {
+	rsp, err := c.PostPackageWithBody(ctx, version, repository, architecture, file, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostPackageResponse(rsp)
 }
 
 // ParseGetPackagesResponse parses an HTTP response from a GetPackagesWithResponse call
@@ -315,6 +461,42 @@ func ParseGetPackagesResponse(rsp *http.Response) (*GetPackagesResponse, error) 
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostPackageResponse parses an HTTP response from a PostPackageWithResponse call
+func ParsePostPackageResponse(rsp *http.Response) (*PostPackageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostPackageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 201:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

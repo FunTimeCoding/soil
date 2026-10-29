@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func deleteChoiceSet(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,7 +19,7 @@ func deleteChoiceSet(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.DeleteChoiceSet(arguments[0]))
+			t.EmitDone(c.DeleteChoiceSet(context.Background(), arguments[0]))
 		},
 	}
 }

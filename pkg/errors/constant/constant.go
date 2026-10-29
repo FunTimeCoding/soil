@@ -13,6 +13,7 @@ const (
 	OrganizationEnvironment = "SENTRY_ORGANIZATION"
 	ProjectEnvironment      = "SENTRY_PROJECT"
 	LocatorEnvironment      = "SENTRY_LOCATOR"
+	PrintEnvironment        = "SENTRY_PRINT"
 
 	ErrorType = "error"
 

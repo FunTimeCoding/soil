@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"sync"
 	"time"
 )
 
@@ -20,4 +21,10 @@ type Guard struct {
 	wake     chan struct{}
 	context  context.Context
 	cancel   context.CancelFunc
+	clock    func() time.Time
+	mutex    sync.Mutex
+	served   bool
+	trying   bool
+	delay    time.Duration
+	retry    time.Time
 }

@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/power_outlet"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) PowerOutlets() ([]*power_outlet.Outlet, error) {
@@ -11,7 +12,7 @@ func (c *Client) PowerOutlets() ([]*power_outlet.Outlet, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return power_outlet.NewSlice(result.Results), nil

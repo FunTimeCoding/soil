@@ -1,18 +1,18 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateVirtualAddress(
+	x context.Context,
 	vmName string,
 	interfaceName string,
 	address string,
 	status string,
-) *response.Response {
+) (client.Address, error) {
 	body := client.CreateAddressRequest{
 		Interface: interfaceName,
 		Address:   address,
@@ -22,8 +22,19 @@ func (c *Client) CreateVirtualAddress(
 		body.Status = &status
 	}
 
-	result, e := c.client.CreateVirtualAddress(c.context, vmName, body)
-	errors.PanicOnError(e)
+	r, e := c.client.CreateVirtualAddressWithResponse(x, vmName, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Address{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Address{}, refusal.New(
+			"create virtual address",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

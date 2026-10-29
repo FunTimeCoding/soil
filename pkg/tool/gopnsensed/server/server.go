@@ -1,11 +1,11 @@
 package server
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/service"
 )
 
 type Server struct {
-	opnsense face.OpnsenseSource
-	reporter library.Reporter
+	service  *service.Service
+	reporter face.Reporter
 }

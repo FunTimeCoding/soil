@@ -25,9 +25,13 @@ func (s *Service) RemoveMember(
 		slices.Clone(current.Member),
 		func(m string) bool { return m == account },
 	)
-	f := s.directory.Modify(
-		s.groupName(name),
-		map[string][]string{constant.MemberAttribute: remaining},
+	f := s.attempt(
+		func() error {
+			return s.directory.Modify(
+				s.groupName(name),
+				map[string][]string{constant.MemberAttribute: remaining},
+			)
+		},
 	)
 
 	if f != nil {

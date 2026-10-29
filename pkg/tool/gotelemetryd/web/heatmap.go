@@ -30,7 +30,7 @@ func (s *Server) heatmap(
 	o := summary_option.New()
 	o.Since = since
 	o.GroupBy = groupBy
-	rows, queryError := s.store.Summary(o)
+	rows, queryError := s.service.Summary(o)
 	errors.PanicOnError(queryError)
 	showSurface := groupBy == "surface"
 	showKind := groupBy == "kind"

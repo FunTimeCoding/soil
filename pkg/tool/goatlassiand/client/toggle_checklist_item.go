@@ -1,17 +1,25 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) ToggleChecklistItem(
+	x context.Context,
 	key string,
 	index int,
-) *response.Response {
-	result, e := c.client.ToggleChecklistItem(c.context, key, index)
-	errors.PanicOnError(e)
+) ([]*client.ChecklistItem, error) {
+	r, e := c.client.ToggleChecklistItemWithResponse(x, key, index)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("toggle checklist item", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

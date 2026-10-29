@@ -24,7 +24,7 @@ func (s *Server) addDeviceTag(
 		return response.Fail("tag is required: %v", g)
 	}
 
-	result, h := s.client.AddTag(device, tag)
+	result, h := s.service.AddTag(device, tag)
 
 	if h != nil {
 		return s.captureFail(h, "tag not added to device")

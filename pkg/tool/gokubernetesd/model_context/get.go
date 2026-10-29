@@ -36,7 +36,7 @@ func (s *Server) Get(
 		)
 
 		if f != nil {
-			return s.captureFail(f, "get resource")
+			return s.captureDetail(f)
 		}
 
 		return s.formatMarkup(result.Object, result.Filtered)
@@ -55,7 +55,7 @@ func (s *Server) Get(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "list resources")
+		return s.captureDetail(f)
 	}
 
 	return response.SuccessAny(result)

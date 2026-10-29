@@ -1,18 +1,21 @@
 package gopnsense
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
 )
 
-func queryCommand(
+func queryCommand[T any](
 	use string,
 	short string,
-	call func(query *string) *response.Response,
+	call func(
+		x context.Context,
+		phrase string,
+	) ([]T, error),
 	t *terminal.Terminal,
 ) *cobra.Command {
-	var query string
+	var phrase string
 	result := &cobra.Command{
 		Use:   use,
 		Short: short,
@@ -20,16 +23,10 @@ func queryCommand(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			var q *string
-
-			if query != "" {
-				q = &query
-			}
-
-			t.Emit(call(q))
+			t.EmitValue(call(context.Background(), phrase))
 		},
 	}
-	result.Flags().StringVar(&query, "query", "", "search phrase")
+	result.Flags().StringVar(&phrase, "query", "", "search phrase")
 
 	return result
 }

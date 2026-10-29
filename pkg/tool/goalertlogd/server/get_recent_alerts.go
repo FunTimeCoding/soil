@@ -22,7 +22,7 @@ func (s *Server) GetRecentAlerts(
 		end = *r.Params.End
 	}
 
-	records, e := s.store.ByTimeRange(start, end)
+	records, e := s.service.RecentAlerts(start, end)
 
 	if e != nil {
 		return server.GetRecentAlerts500JSONResponse(*s.answer(e)), nil

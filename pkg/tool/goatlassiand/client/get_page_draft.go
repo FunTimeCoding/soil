@@ -1,14 +1,24 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) GetPageDraft(identifier string) *response.Response {
-	result, e := c.client.GetPageDraft(c.context, identifier)
-	errors.PanicOnError(e)
+func (c *Client) GetPageDraft(
+	x context.Context,
+	identifier string,
+) (*client.ConfluencePageDetail, error) {
+	r, e := c.client.GetPageDraftWithResponse(x, identifier)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("page draft", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

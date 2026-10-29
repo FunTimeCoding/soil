@@ -10,7 +10,7 @@ func Event() {
 	k := client.NewEnvironment()
 	f := constant.Format
 
-	for _, n := range k.EventsSimple(false, true) {
+	for _, n := range k.MustEventsSimple(false, true) {
 		console.Line(n.Format(f))
 	}
 }

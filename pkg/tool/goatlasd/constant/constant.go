@@ -18,9 +18,16 @@ const (
 	SourceLease      = "gopnsensed"
 	SourceOutpost    = "gooutpostd"
 
+	HostEnvironment     = "GOATLAS_HOST"
+	PortEnvironment     = "GOATLAS_PORT"
+	InsecureEnvironment = "GOATLAS_INSECURE"
+	TokenEnvironment    = "GOATLAS_TOKEN"
+
 	OutpostHostsEnvironment = "GOOUTPOST_HOSTS"
 
 	PlaceEnvironment = "PROCESS_PLACE"
+
+	GazetteerSource = "gazetteer"
 
 	KindService = "service"
 
@@ -51,16 +58,10 @@ const (
 	PlacementOrder = "place_name, scope, name"
 	SightingOrder  = "place_name, hostname, address"
 
-	DeviceStatusFormat         = "device list status: %d"
-	VirtualMachineStatusFormat = "virtual machine list status: %d"
-	ProcessStatusFormat        = "process list status: %d"
-	OutpostHostStatusFormat    = "outpost host status: %d"
-	OutpostServiceStatusFormat = "outpost service list status: %d"
-	OutpostTargetFailedFormat  = "outpost %s failed: %v\n"
-	OutpostEveryTargetFailed   = "every outpost failed: %s"
-	LeaseStatusFormat          = "lease list status: %d"
-	PhysicalStatusFormat       = "physical address list status: %d"
-	PlaceUnknownFormat         = "place not in the inventory: %s"
+	OutpostTargetFailedFormat = "outpost %s failed: %v\n"
+	OutpostEveryTargetFailed  = "every outpost failed: %s"
+	PlaceUnknownFormat        = "place not in the inventory: %s"
+	SourceAwayFormat          = "%s skipped: %v\n"
 
 	StartMessage = "start collect worker"
 	StopMessage  = "stop collect worker"

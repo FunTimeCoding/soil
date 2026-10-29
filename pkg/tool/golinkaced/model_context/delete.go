@@ -16,13 +16,13 @@ func (s *Server) Delete(
 
 	switch a.Type {
 	case "link":
-		e = s.client.DeleteLink(a.Identifier)
+		e = s.service.DeleteLink(a.Identifier)
 	case "list":
-		e = s.client.DeleteList(a.Identifier)
+		e = s.service.DeleteList(a.Identifier)
 	case "tag":
-		e = s.client.DeleteTag(a.Identifier)
+		e = s.service.DeleteTag(a.Identifier)
 	case "note":
-		e = s.client.DeleteNote(a.Identifier)
+		e = s.service.DeleteNote(a.Identifier)
 	case "branch":
 		e = s.service.DeleteBranch(a.Identifier)
 	default:

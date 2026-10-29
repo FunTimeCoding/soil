@@ -12,7 +12,7 @@ func (s *Server) listLeases(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.Leases(r.GetString(constant.ParameterQuery, ""))
+	result, e := s.service.Leases(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
 		return s.answer(e)

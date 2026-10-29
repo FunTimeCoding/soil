@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Client) Posts(h *model.Channel) (*model.PostList, error) {
-	result, _, e := c.client.GetPostsForChannel(
+	result, r, e := c.client.GetPostsForChannel(
 		c.context,
 		h.Id,
 		0,
@@ -16,5 +16,5 @@ func (c *Client) Posts(h *model.Channel) (*model.PostList, error) {
 		false,
 	)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

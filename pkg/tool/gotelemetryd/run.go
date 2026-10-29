@@ -6,11 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -22,21 +20,15 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
-	defer s.Close()
-	u := web.New(s)
+	v := service.New(o, l, r)
+	defer v.Close()
+	u := web.New(v)
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(
-					s,
-					u,
-					r,
-					store_recorder.New(s, r),
-					guard.New(m, o.ServiceTokens),
-				)
+				Mount(v, u, r, v, guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()

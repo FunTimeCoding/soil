@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -19,8 +20,7 @@ func TestGuard(t *testing.T) {
 			g *guard.Mux,
 		) {
 			gochromed.Mount(
-				mock_client.New(),
-				t.TempDir(),
+				service_tester.New(t, mock_client.New()),
 				memory.New(),
 				mock_recorder.New(),
 				g,

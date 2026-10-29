@@ -6,7 +6,7 @@ import (
 )
 
 func Event(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	namespace string,
 ) v1.EventInterface {
 	return c.EventsV1().Events(namespace)

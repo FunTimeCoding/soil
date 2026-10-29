@@ -17,10 +17,10 @@ func (s *Server) searchPages(
 		return response.Fail("query is required: %v", f)
 	}
 
-	result, g := s.confluence.Search(query)
+	result, g := s.service.SearchPages(query)
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(result)

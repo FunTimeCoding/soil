@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
 	"github.com/funtimecoding/soil/pkg/netbox/manufacturer"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -22,7 +23,7 @@ func (c *Client) CreateDeviceType(
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	c.cache.DeviceTypes = nil

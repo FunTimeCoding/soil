@@ -2,7 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/event/notifier"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/store"
 	"testing"
 )
@@ -12,8 +14,9 @@ func newStore(
 	n *notifier.Notifier,
 ) *store.Store {
 	t.Helper()
-	result := store.New(lite.NewMemory(), n)
-	t.Cleanup(result.Close)
+	m := lite.NewMemory()
+	t.Cleanup(func() { relational.CloseMapper(m) })
+	migrate.AutoMigrate(m)
 
-	return result
+	return store.New(m, n)
 }

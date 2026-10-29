@@ -1,6 +1,9 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"database/sql"
+	"github.com/funtimecoding/soil/pkg/errors"
+)
 
 func (s *Store) DeleteDocument(
 	collection string,
@@ -13,8 +16,12 @@ func (s *Store) DeleteDocument(
 		path,
 	).Scan(&hash)
 
-	if e != nil {
+	if e == sql.ErrNoRows {
 		return false, nil
+	}
+
+	if e != nil {
+		return false, e
 	}
 
 	_, e = s.database.Exec(

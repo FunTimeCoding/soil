@@ -14,7 +14,7 @@ func (c *Client) LatestPosts(
 		limit = constant.MattermostPerPage
 	}
 
-	page, _, e := c.client.GetPostsForChannel(
+	page, r, e := c.client.GetPostsForChannel(
 		c.context,
 		h.Id,
 		0,
@@ -25,7 +25,7 @@ func (c *Client) LatestPosts(
 	)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	result := post.NewSlice(post.FromList(page, true))

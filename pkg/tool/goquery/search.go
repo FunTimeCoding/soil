@@ -3,14 +3,17 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 	"strings"
 )
 
-func search(c *client.ClientWithResponses) *cobra.Command {
+func search(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var limit int
 	var collection string
 	var keywordOnly bool
@@ -53,10 +56,8 @@ func search(c *client.ClientWithResponses) *cobra.Command {
 				params.Metadata = &metadata
 			}
 
-			r, e := c.GetSearchWithResponse(context.Background(), params)
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("search", r.HTTPResponse, r.Body)
-			outcome := r.JSON200
+			outcome, e := c.GetSearch(context.Background(), params)
+			t.EmitDone(e)
 
 			for _, v := range outcome.Results {
 				console.Format("%.4f  %s  %s", v.Score, v.Path, v.Title)

@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
@@ -53,8 +52,8 @@ func (s *Server) add(
 		e.Timestamp = t
 	}
 
-	if h := s.store.Add(e); h != nil {
-		return s.captureFail(h, soil.UnexpectedError)
+	if h := s.service.Add(e); h != nil {
+		return s.answer(h)
 	}
 
 	return response.Success(

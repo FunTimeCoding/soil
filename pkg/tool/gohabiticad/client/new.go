@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -14,12 +13,12 @@ func New(
 	token string,
 ) *Client {
 	p := stall_client.New().Build()
-	c, e := client.NewClient(
+	c, e := client.NewClientWithResponses(
 		l.String(),
 		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)
 
-	return &Client{context: context.Background(), client: c, pool: p}
+	return &Client{client: c, base: l, token: token, pool: p}
 }

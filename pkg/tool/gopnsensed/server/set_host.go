@@ -12,7 +12,11 @@ func (s *Server) SetHost(
 	_ context.Context,
 	r server.SetHostRequestObject,
 ) (server.SetHostResponseObject, error) {
-	e := s.opnsense.SetHost(r.Identifier, convert.HostRequest(r.Body))
+	e := s.service.SetHost(
+		r.Identifier,
+		convert.HostRequest(r.Body),
+		apply(r.Params.Apply),
+	)
 
 	if validation.Is(e) {
 		return server.SetHost400JSONResponse{Error: e.Error()}, nil
@@ -24,12 +28,6 @@ func (s *Server) SetHost(
 
 	if e != nil {
 		return server.SetHost500JSONResponse(*s.answer(e)), nil
-	}
-
-	if apply(r.Params.Apply) {
-		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return server.SetHost500JSONResponse(*s.answer(f)), nil
-		}
 	}
 
 	return server.SetHost204Response{}, nil

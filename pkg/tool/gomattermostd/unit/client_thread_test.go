@@ -69,14 +69,8 @@ func TestThread(t *testing.T) {
 			)
 		},
 	)
-	result, e := r.Client.GetThreadWithResponse(context.Background(), "bravo")
-
-	if e != nil {
-		t.Fatal(e)
-	}
-
-	assert.Any(t, 200, result.StatusCode())
-	replies := *result.JSON200
+	replies, e := r.Client.GetThread(context.Background(), "bravo")
+	assert.FatalOnError(t, e)
 	assert.Any(t, 2, len(replies))
 	assert.Any(t, "charlie", replies[0].Identifier)
 	assert.Any(t, "foxtrot", replies[1].Identifier)

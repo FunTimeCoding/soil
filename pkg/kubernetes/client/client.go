@@ -13,7 +13,7 @@ type Client struct {
 	context       context.Context
 	cluster       string
 	configuration *rest.Config
-	client        *kubernetes.Clientset
+	client        kubernetes.Interface
 	metric        *versioned.Clientset
 	dynamic       dynamic.Interface
 	Verbose       bool

@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func getChoiceSet(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,7 +19,7 @@ func getChoiceSet(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.GetChoiceSet(arguments[0]))
+			t.EmitValue(c.GetChoiceSet(context.Background(), arguments[0]))
 		},
 	}
 }

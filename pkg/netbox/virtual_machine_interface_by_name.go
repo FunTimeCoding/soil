@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -15,7 +16,7 @@ func (c *Client) VirtualMachineInterfaceByName(
 	).VirtualMachineId([]int32{vm.Identifier}).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	for _, i := range result.Results {

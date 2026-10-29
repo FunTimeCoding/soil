@@ -7,7 +7,7 @@ func (s *Service) embedTexts(
 	texts []string,
 ) ([][]float32, error) {
 	var result [][]float32
-	e := s.guard.Do(
+	e := s.guard.Attempt(
 		x,
 		func(y context.Context) error {
 			var f error

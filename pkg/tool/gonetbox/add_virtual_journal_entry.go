@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func addVirtualJournalEntry(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var kind string
@@ -19,7 +20,14 @@ func addVirtualJournalEntry(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.AddVirtualJournalEntry(arguments[0], kind, arguments[1]))
+			t.EmitValue(
+				c.AddVirtualJournalEntry(
+					context.Background(),
+					arguments[0],
+					kind,
+					arguments[1],
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(

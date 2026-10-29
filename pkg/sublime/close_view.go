@@ -3,8 +3,6 @@ package sublime
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/system"
 	"net/http"
 )
 
@@ -28,11 +26,7 @@ func (c *Client) CloseView(identifier int) error {
 	defer errors.LogClose(r.Body)
 
 	if r.StatusCode != http.StatusOK {
-		return unexpected.Format(
-			"close view: %d: %s",
-			r.StatusCode,
-			system.ReadAll(r.Body),
-		)
+		return statusError("close view", r)
 	}
 
 	return nil

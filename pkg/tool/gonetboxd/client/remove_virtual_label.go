@@ -1,17 +1,17 @@
 package client
 
-import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
-)
+import "context"
 
 func (c *Client) RemoveVirtualLabel(
+	x context.Context,
 	machine string,
 	key string,
-) *response.Response {
-	result, e := c.client.RemoveVirtualLabel(c.context, machine, key)
-	errors.PanicOnError(e)
+) error {
+	r, e := c.client.RemoveVirtualLabelWithResponse(x, machine, key)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	return noContent("remove virtual label", r.HTTPResponse, r.Body)
 }

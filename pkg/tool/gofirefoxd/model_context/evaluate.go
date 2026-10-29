@@ -12,14 +12,10 @@ func (s *Server) Evaluate(
 	_ mcp.CallToolRequest,
 	a argument.Evaluate,
 ) (*mcp.CallToolResult, error) {
-	if a.Expression == "" {
-		return response.Fail("expression is required")
-	}
-
-	v, e := s.client.Evaluate(int(a.TabIdentifier), a.Expression)
+	v, e := s.service.Evaluate(int(a.TabIdentifier), a.Expression)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

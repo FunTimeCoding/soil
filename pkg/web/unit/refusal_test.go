@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
@@ -28,6 +29,16 @@ func TestANotFoundRefusalIsNotFound(t *testing.T) {
 	)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "fetch item: no such item", e.Error())
+}
+
+func TestAConflictRefusalIsAConflict(t *testing.T) {
+	e := refusal.New(
+		"unmute owner",
+		answered(http.StatusConflict),
+		[]byte(`{"error":"owner not muted: alfa"}`),
+	)
+	assert.True(t, conflict.Is(e))
+	assert.String(t, "unmute owner: owner not muted: alfa", e.Error())
 }
 
 func TestAnUnavailableRefusalIsUnavailable(t *testing.T) {

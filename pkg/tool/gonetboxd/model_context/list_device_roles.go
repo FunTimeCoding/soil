@@ -11,7 +11,7 @@ func (s *Server) listDeviceRoles(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.DeviceRoles()
+	result, e := s.service.DeviceRoles()
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -1,5 +1,18 @@
 package service
 
-func (s *Service) StopPortForward(identifier string) (any, bool) {
-	return s.portForwards.LoadAndDelete(identifier)
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
+
+func (s *Service) StopPortForward(identifier string) error {
+	s.mutex.Lock()
+	f, okay := s.portForwards[identifier]
+	delete(s.portForwards, identifier)
+	s.mutex.Unlock()
+
+	if !okay {
+		return not_found.New("port forward", identifier)
+	}
+
+	f.Stop()
+
+	return nil
 }

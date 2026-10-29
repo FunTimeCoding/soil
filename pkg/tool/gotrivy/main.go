@@ -17,11 +17,11 @@ func Main() {
 	k := client.NewEnvironment()
 	f := kubernetesConstant.Format
 
-	for _, j := range k.CronJobs(kubernetesConstant.TrivyNamespace) {
+	for _, j := range k.MustCronJobs(kubernetesConstant.TrivyNamespace) {
 		console.Format("CronJob: %s\n", j.Format(f))
 	}
 
-	for _, j := range k.Jobs(kubernetesConstant.TrivyNamespace) {
+	for _, j := range k.MustJobs(kubernetesConstant.TrivyNamespace) {
 		console.Format("Job: %s\n", j.Format(f))
 	}
 }

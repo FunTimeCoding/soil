@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/refusal"
 	raw "github.com/prometheus/alertmanager/api/v2/client/alert"
 )
 
@@ -30,7 +31,7 @@ func (c *Client) Alerts(
 	result, e := c.client.Alert.GetAlerts(a)
 
 	if e != nil {
-		return nil, nil, e
+		return nil, nil, refusal.Classify(e)
 	}
 
 	proc, g := c.processor(p)

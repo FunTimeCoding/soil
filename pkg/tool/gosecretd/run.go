@@ -7,9 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/openbao"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/watch"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -23,9 +23,10 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	c := openbao.NewEnvironment()
+	v := service.New(o)
+	defer v.Close()
 	m := metric.New()
-	lifecycle.New(l).WithWorker(watch.New(c, m.Registry(), l, r)).WithServer(
+	lifecycle.New(l).WithWorker(watch.New(v, m.Registry(), l, r)).WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,
@@ -38,7 +39,7 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(x *http.ServeMux) {
-				Mount(c, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+				Mount(v, r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

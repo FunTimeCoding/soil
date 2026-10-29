@@ -1,13 +1,13 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {
-	client   face.NetboxSource
+	service  *service.Service
 	view     *view.View
 	registry *registry.Registry
 }

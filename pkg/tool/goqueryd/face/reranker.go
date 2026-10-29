@@ -13,4 +13,5 @@ type Reranker interface {
 	) ([]*rerank_result.Result, error)
 	Name() string
 	SequenceLength() int
+	Close() error
 }

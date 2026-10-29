@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"compress/gzip"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"io"
-	"log"
 )
 
-func FindGzipBoundary(payload []byte) int {
+func FindGzipBoundary(payload []byte) (int, error) {
 	for i := constant.AlpineGzipMinimumSize; i < len(payload)-constant.AlpineGzipHeaderSize; i++ {
 		if payload[i] == 0x1f && payload[i+1] == 0x8b && payload[i+2] == 0x08 {
 			gz, e := gzip.NewReader(bytes.NewReader(payload[i:]))
@@ -26,11 +26,9 @@ func FindGzipBoundary(payload []byte) int {
 				continue
 			}
 
-			return i
+			return i, nil
 		}
 	}
 
-	log.Panicf("could not find second gzip stream")
-
-	return 0
+	return 0, validation.New("not an apk package: no second gzip stream")
 }

@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
 )
 
@@ -10,8 +9,12 @@ func (s *Server) GetViews(
 	_ context.Context,
 	_ server.GetViewsRequestObject,
 ) (server.GetViewsResponseObject, error) {
-	views, e := s.client.Views()
-	errors.PanicOnError(e)
+	views, e := s.service.Views()
+
+	if e != nil {
+		return server.GetViews500JSONResponse(*s.answer(e)), nil
+	}
+
 	result := make(server.GetViews200JSONResponse, 0, len(views))
 
 	for _, v := range views {

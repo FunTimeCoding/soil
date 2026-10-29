@@ -2,21 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/log/logger"
+	parser "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
 )
 
 func New(
-	parserPath string,
-	templatePath string,
-	outputPath string,
-	l *logger.Logger,
+	v parser.Generator,
 	r face.Reporter,
 ) *Server {
-	return &Server{
-		parserPath:   parserPath,
-		templatePath: templatePath,
-		outputPath:   outputPath,
-		logger:       l,
-		reporter:     r,
-	}
+	return &Server{service: v, reporter: r}
 }

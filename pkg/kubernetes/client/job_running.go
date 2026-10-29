@@ -1,14 +1,20 @@
 package client
 
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
+
 func (c *Client) JobRunning(
 	namespace string,
 	name string,
-) bool {
-	j := c.Job(namespace, name)
+) (bool, error) {
+	j, e := c.Job(namespace, name)
 
-	if j == nil {
-		return false
+	if not_found.Is(e) {
+		return false, nil
 	}
 
-	return j.Raw.Status.CompletionTime == nil && j.Raw.Status.Failed == 0
+	if e != nil {
+		return false, e
+	}
+
+	return j.Raw.Status.CompletionTime == nil && j.Raw.Status.Failed == 0, nil
 }

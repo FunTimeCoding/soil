@@ -7,5 +7,6 @@ import (
 
 type Client struct {
 	client openai.Client
+	model  string
 	pool   *pool.Pool
 }

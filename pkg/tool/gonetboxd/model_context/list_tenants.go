@@ -11,7 +11,7 @@ func (s *Server) listTenants(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Tenants()
+	result, e := s.service.Tenants()
 
 	if e != nil {
 		return s.captureDetail(e)

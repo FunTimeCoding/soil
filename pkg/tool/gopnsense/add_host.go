@@ -1,13 +1,14 @@
 package gopnsense
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	"github.com/spf13/cobra"
 )
 
 func addHost(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	f := &HostFlags{}
@@ -18,7 +19,9 @@ func addHost(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.AddHost(*hostRequest(f), &f.apply))
+			t.EmitValue(
+				c.AddHost(context.Background(), *hostRequest(f), f.apply),
+			)
 		},
 	}
 	registerHostFlags(result, f)

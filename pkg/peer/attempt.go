@@ -6,26 +6,30 @@ func (g *Guard) Attempt(
 	x context.Context,
 	call func(context.Context) error,
 ) error {
-	if e := g.Unavailable(); e != nil {
+	trial, e := g.admit()
+
+	if e != nil {
 		return e
 	}
 
-	e := call(x)
+	f := call(x)
 
 	if x.Err() != nil {
-		return e
+		g.abandon(trial)
+
+		return f
 	}
 
-	crossed, refused := g.reacher.Triage(g.name, e)
+	crossed, refused := g.settle(trial, f)
 
 	if crossed != nil {
 		g.logger.Plain("%s", crossed)
 	}
 
-	if f := g.Unavailable(); f != nil {
+	if h := g.Unavailable(); h != nil {
 		g.awaken()
 
-		return f
+		return h
 	}
 
 	return refused

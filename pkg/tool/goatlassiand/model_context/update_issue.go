@@ -53,7 +53,7 @@ func (s *Server) updateIssue(
 	)
 
 	if g != nil {
-		return s.failOrCapture(g, "issue not updated")
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(

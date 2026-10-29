@@ -2,19 +2,18 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/directory/mock_client"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/mock_directory"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/base"
 	"testing"
 )
 
 func TestLocalUserNeverReachesDirectory(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.SetFailure(unreachable.Format("directory down"))
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.Failure = directoryDown()
 	row, e := b.Service.AuthenticateUser(
 		constant.FixtureMail,
 		constant.FixturePassword,
@@ -26,10 +25,9 @@ func TestLocalUserNeverReachesDirectory(t *testing.T) {
 }
 
 func TestDirectoryUserShadowCreated(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	row, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
@@ -43,10 +41,9 @@ func TestDirectoryUserShadowCreated(t *testing.T) {
 }
 
 func TestDirectoryUserByAccount(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	row, e := b.Service.AuthenticateUser(
 		"member",
 		"secret",
@@ -58,10 +55,9 @@ func TestDirectoryUserByAccount(t *testing.T) {
 }
 
 func TestDirectoryUserReusesRow(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	first, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
@@ -78,10 +74,9 @@ func TestDirectoryUserReusesRow(t *testing.T) {
 }
 
 func TestDirectoryMailChangeKeepsIdentity(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	first, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
@@ -100,10 +95,9 @@ func TestDirectoryMailChangeKeepsIdentity(t *testing.T) {
 }
 
 func TestDirectoryUserOutsideGroupRefused(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-2", "outsider", "outsider@example.test", "secret", false)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-2", "outsider", "outsider@example.test", "secret", false)
 	row, e := b.Service.AuthenticateUser(
 		"outsider@example.test",
 		"secret",
@@ -117,10 +111,9 @@ func TestDirectoryUserOutsideGroupRefused(t *testing.T) {
 }
 
 func TestDirectoryWrongPasswordRefused(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	row, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"wrong",
@@ -134,10 +127,9 @@ func TestDirectoryWrongPasswordRefused(t *testing.T) {
 }
 
 func TestLocalSourceRejectsDirectoryUser(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	row, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
@@ -151,9 +143,8 @@ func TestLocalSourceRejectsDirectoryUser(t *testing.T) {
 }
 
 func TestDirectorySourceRejectsLocalUser(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
 	row, e := b.Service.AuthenticateUser(
 		constant.FixtureMail,
 		constant.FixturePassword,
@@ -167,10 +158,9 @@ func TestDirectorySourceRejectsLocalUser(t *testing.T) {
 }
 
 func TestDirectoryCollisionWithLocalMail(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-3", "collider", constant.FixtureMail, "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-3", "collider", constant.FixtureMail, "secret", true)
 	_, e := b.Service.AuthenticateUser(
 		"collider",
 		"secret",
@@ -180,17 +170,16 @@ func TestDirectoryCollisionWithLocalMail(t *testing.T) {
 }
 
 func TestDirectoryUnreachableRefuses(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
-	d.SetFailure(unreachable.Format("directory down"))
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
+	d.Failure = directoryDown()
 	_, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
 		constant.SourceDirectory,
 	)
-	assert.True(t, unreachable.Is(e))
+	assert.True(t, unavailable.Is(e))
 }
 
 func TestWithoutDirectoryIgnoresSource(t *testing.T) {

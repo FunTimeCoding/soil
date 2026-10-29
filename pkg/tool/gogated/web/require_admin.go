@@ -12,7 +12,7 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 		w http.ResponseWriter,
 		r *http.Request,
 	) {
-		subject := s.authorization.Subject(r)
+		subject := s.service.Subject(r)
 
 		if subject == "" {
 			http.Redirect(
@@ -29,7 +29,15 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		if s.service.UserMail(subject) != s.superUserMail {
+		administrator, e := s.service.IsAdministrator(subject)
+
+		if e != nil {
+			s.view.Answer(w, r, s.reporter, e)
+
+			return
+		}
+
+		if !administrator {
 			http.Error(w, "forbidden", http.StatusForbidden)
 
 			return

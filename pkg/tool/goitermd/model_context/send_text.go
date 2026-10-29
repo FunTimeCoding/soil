@@ -12,22 +12,12 @@ func (s *Server) SendText(
 	_ mcp.CallToolRequest,
 	a argument.SendText,
 ) (*mcp.CallToolResult, error) {
-	if a.Text == "" {
-		return response.Fail("text is required")
-	}
-
-	e := s.client.SendText(a.SessionIdentifier, a.Text)
-
-	if e != nil {
+	if e := s.service.SendText(
+		a.SessionIdentifier,
+		a.Text,
+		a.SendEnter,
+	); e != nil {
 		return s.answer(e)
-	}
-
-	if a.SendEnter {
-		f := s.client.SendKey(a.SessionIdentifier, "enter")
-
-		if f != nil {
-			return s.answer(f)
-		}
 	}
 
 	return response.Success("sent: %s", a.Text)

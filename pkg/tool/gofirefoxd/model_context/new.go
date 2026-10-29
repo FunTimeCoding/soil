@@ -4,20 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
-	firefox "github.com/funtimecoding/soil/pkg/tool/gofirefoxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/service"
 )
 
 func New(
-	c firefox.FirefoxSource,
-	downloadDirectory string,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server:            server.New(constant.Identity).WithRecorder(t).Server(),
-		client:            c,
-		downloadDirectory: downloadDirectory,
-		reporter:          r,
+		server:   server.New(constant.Identity).WithRecorder(t).Server(),
+		service:  v,
+		reporter: r,
 	}
 	result.register()
 

@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
@@ -29,12 +28,10 @@ func (s *Server) GetCertificates(
 		f.Limit = *r.Params.Limit
 	}
 
-	result, e := s.store.Certificates(f)
+	result, e := s.service.Certificates(f)
 
 	if e != nil {
-		return server.GetCertificates500JSONResponse(
-			*s.captureFail(e, constant.QueryFail),
-		), nil
+		return server.GetCertificates500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetCertificates200JSONResponse(

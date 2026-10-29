@@ -11,7 +11,7 @@ func (s *Server) listTunnelTerminations(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.TunnelTerminations()
+	result, e := s.service.TunnelTerminations()
 
 	if e != nil {
 		return s.captureDetail(e)

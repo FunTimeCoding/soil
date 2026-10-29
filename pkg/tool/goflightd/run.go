@@ -6,18 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/bluetooth"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/stream"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/wireless"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/janitor"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
-	"time"
 )
 
 func Run(
@@ -26,16 +21,19 @@ func Run(
 ) {
 	r := i.Reporter()
 	g := logger.New(context.Background())
-	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
-	defer s.Close()
+	v := service.New(o, g)
+	defer v.Close()
 	b := lifecycle.New(g).
-		WithWorker(stream.New(s, g, r, o.Predicate)).
-		WithWorker(bluetooth.New(s, g, r, 15*time.Second)).
-		WithWorker(janitor.New(s, g, r, time.Hour, 7*24*time.Hour))
-	w := wireless.New(s, g, r, 5*time.Second)
+		WithWorker(worker.New(v.CaptureStream, g, r, constant.StreamPause)).
+		WithWorker(
+			worker.NewEvery(v.SampleBluetooth, g, r, constant.BluetoothInterval),
+		).
+		WithWorker(worker.NewEvery(v.Prune, g, r, constant.PruneInterval))
 
-	if w.Probe() {
-		b.WithWorker(w)
+	if v.WirelessAvailable() {
+		b.WithWorker(
+			worker.NewEvery(v.SampleWireless, g, r, constant.WirelessInterval),
+		)
 	} else {
 		g.Structured(
 			"wireless collector disabled",
@@ -49,7 +47,7 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				Mount(v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

@@ -1,17 +1,25 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) DeleteComment(
+	x context.Context,
 	key string,
 	identifier string,
-) *response.Response {
-	result, e := c.client.DeleteComment(c.context, key, identifier)
-	errors.PanicOnError(e)
+) error {
+	r, e := c.client.DeleteCommentWithResponse(x, key, identifier)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("delete comment", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

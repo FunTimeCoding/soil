@@ -3,19 +3,17 @@ package gosaltd
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/provision"
-	"github.com/funtimecoding/soil/pkg/provision/store"
+	salt "github.com/funtimecoding/soil/pkg/tool/gosaltd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 )
 
 func Mount(
-	n *runner.Runner,
-	s *store.Store,
+	v salt.Salt,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	provision.Mount(n, r, t, g)
-	model_context.New(n, s, r, t).Mount(g)
+	provision.Mount(v, r, t, g)
+	model_context.New(v, r, t).Mount(g)
 }

@@ -13,5 +13,11 @@ func (s *Server) listClient(
 	_ mcp.CallToolRequest,
 	_ argument.Empty,
 ) (*mcp.CallToolResult, error) {
-	return response.SuccessAny(convert.Clients(s.service.ListClients()))
+	rows, e := s.service.ListClients()
+
+	if e != nil {
+		return s.answer(e)
+	}
+
+	return response.SuccessAny(convert.Clients(rows))
 }

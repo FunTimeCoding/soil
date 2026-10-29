@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -18,7 +19,8 @@ func (s *Server) alerts(
 		return
 	}
 
-	records := s.store.MustByName(name)
+	records, e := s.service.Alerts(name)
+	errors.PanicOnError(e)
 	s.view.RenderPage(
 		w,
 		name,

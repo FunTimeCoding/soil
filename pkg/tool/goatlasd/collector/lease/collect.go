@@ -2,7 +2,6 @@ package lease
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/sighting"
@@ -14,26 +13,25 @@ func (c *Collector) Collect(
 	q context.Context,
 	s *gazetteer.Gazetteer,
 ) ([]*sighting.Sighting, error) {
-	leases, e := c.opnsense.ListLeasesWithResponse(
+	var leases []client.Lease
+	e := c.guard.Attempt(
 		q,
-		&client.ListLeasesParams{},
+		func(x context.Context) error {
+			var f error
+			leases, f = c.opnsense.Leases(x, "")
+
+			return f
+		},
 	)
 
 	if e != nil {
 		return nil, e
 	}
 
-	if leases.JSON200 == nil {
-		return nil, unexpected.Format(
-			constant.LeaseStatusFormat,
-			leases.HTTPResponse.StatusCode,
-		)
-	}
-
 	var result []*sighting.Sighting
 	now := time.Now()
 
-	for _, l := range *leases.JSON200 {
+	for _, l := range leases {
 		where, _ := s.ResolveHost(l.Address, l.HardwareAddress)
 		result = append(
 			result,

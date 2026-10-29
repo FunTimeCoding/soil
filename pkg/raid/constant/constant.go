@@ -1,12 +1,6 @@
 package constant
 
 const (
-	HostEnvironment     = "GORAID_HOST"
-	PortEnvironment     = "GORAID_PORT"
-	InsecureEnvironment = "GORAID_INSECURE"
-	TokenEnvironment    = "GORAID_TOKEN"
-)
-const (
 	MinAllies   = 5
 	MinEnemies  = 5
 	MinDuration = 15000

@@ -7,5 +7,15 @@ func (s *Service) UpdateIssue(
 	status string,
 	assignedTo string,
 ) (*response.Issue, error) {
-	return s.client.UpdateIssue(s.organization, identifier, status, assignedTo)
+	return guarded(
+		s.guard,
+		func() (*response.Issue, error) {
+			return s.client.UpdateIssue(
+				s.organization,
+				identifier,
+				status,
+				assignedTo,
+			)
+		},
+	)
 }

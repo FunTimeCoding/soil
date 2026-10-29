@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
@@ -24,8 +25,9 @@ func editPage(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(
+			t.EmitValue(
 				c.EditPage(
+					context.Background(),
 					arguments[0],
 					old,
 					replacement,

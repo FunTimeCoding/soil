@@ -39,7 +39,7 @@ func (s *Server) getTopAlerts(
 		end = t
 	}
 
-	records, f := s.store.Top(n, start, end)
+	records, f := s.service.TopAlerts(n, start, end)
 
 	if f != nil {
 		return s.answer(f)

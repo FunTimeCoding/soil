@@ -1,12 +1,15 @@
 package netbox
 
-import "github.com/funtimecoding/soil/pkg/netbox/custom_link"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/custom_link"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
+)
 
 func (c *Client) CustomLinks() ([]*custom_link.Link, error) {
 	result, _, e := c.client.ExtrasAPI.ExtrasCustomLinksList(c.context).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return custom_link.NewSlice(result.Results), nil

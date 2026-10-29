@@ -8,7 +8,6 @@ import (
 
 func TestFindSimilarFiles(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	similar := s.MustFindSimilarFiles("test/alfaa.md", 5)
 	assert.Greater(t, 0, len(similar))
 	assert.String(t, "test/alfa.md", similar[0])
@@ -16,7 +15,6 @@ func TestFindSimilarFiles(t *testing.T) {
 
 func TestFindSimilarFilesNoMatch(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	similar := s.MustFindSimilarFiles("completely-unrelated-path", 5)
 	assert.Count(t, 0, similar)
 }

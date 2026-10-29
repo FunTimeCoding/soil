@@ -2,6 +2,7 @@ package web_interface_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
@@ -21,7 +22,7 @@ func (o *Tester) Submit(
 	)
 	assert.FatalOnError(o.t, e)
 	r.Header.Set(constant.ContentType, constant.FormEncoded)
-	r.AddCookie(o.Server.Authorization.SubjectCookie("tester"))
+	web.Bearer(r, generativeConstant.ModelContextTestToken)
 	result, e := o.Server.Client().Do(r)
 	assert.FatalOnError(o.t, e)
 

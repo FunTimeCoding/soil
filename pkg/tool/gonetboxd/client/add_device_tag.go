@@ -1,17 +1,29 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) AddDeviceTag(
+	x context.Context,
 	device string,
 	tag string,
-) *response.Response {
-	result, e := c.client.AddDeviceTag(c.context, device, tag)
-	errors.PanicOnError(e)
+) (client.Device, error) {
+	r, e := c.client.AddDeviceTagWithResponse(x, device, tag)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Device{}, e
+	}
+
+	if r.JSON200 == nil {
+		return client.Device{}, refusal.New(
+			"add device tag",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON200, nil
 }

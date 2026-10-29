@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
@@ -41,8 +42,9 @@ func createIssue(
 				}
 			}
 
-			t.Emit(
+			t.EmitValue(
 				c.CreateIssue(
+					context.Background(),
 					project,
 					issueType,
 					arguments[0],

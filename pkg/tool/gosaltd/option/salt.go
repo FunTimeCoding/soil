@@ -1,5 +1,7 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/provision/salt"
+
 type Salt struct {
 	Address         string
 	ServiceTokens   []string
@@ -8,4 +10,5 @@ type Salt struct {
 	SaltPath        string
 	PostgresLocator string
 	LitePath        string
+	Master          func() *salt.Client
 }

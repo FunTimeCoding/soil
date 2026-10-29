@@ -6,7 +6,15 @@ func (s *Server) logoutGet(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	if s.authenticatedSession(r) == nil {
+	row, e := s.authenticatedSession(r)
+
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
+	if row == nil {
 		s.renderLogoutForm(w, "You are already signed out.")
 
 		return

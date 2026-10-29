@@ -6,11 +6,11 @@ import (
 )
 
 func (c *Client) Team(name string) (*model.Team, error) {
-	result, _, e := c.client.GetTeamByName(
+	result, r, e := c.client.GetTeamByName(
 		c.context,
 		name,
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

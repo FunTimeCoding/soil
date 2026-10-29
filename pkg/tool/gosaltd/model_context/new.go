@@ -3,21 +3,18 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
-	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
+	salt "github.com/funtimecoding/soil/pkg/tool/gosaltd/face"
 )
 
 func New(
-	n *runner.Runner,
-	s *store.Store,
+	v salt.Salt,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		runner:   n,
-		store:    s,
+		service:  v,
 		reporter: r,
 	}
 	result.register()

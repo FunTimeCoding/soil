@@ -72,7 +72,7 @@ func TestSign(t *testing.T) {
 		)
 	}
 
-	signature.SignPackageWithKey(unsignedPath, privateKey, "test.rsa")
+	signature.MustSignPackageWithKey(unsignedPath, privateKey, "test.rsa")
 	signedSegments := package_server_tester.SplitArchive(unsignedPath)
 
 	if len(signedSegments) != 3 {

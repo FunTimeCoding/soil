@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ func listSpaces(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.ListSpaces())
+			t.EmitValue(c.ListSpaces(context.Background()))
 		},
 	}
 }

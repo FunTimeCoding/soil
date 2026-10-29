@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context/argument"
@@ -25,7 +24,7 @@ func (s *Server) issueCertificate(
 	result, key, e := s.service.IssueCertificate(b)
 
 	if e != nil {
-		return s.captureFail(e, constant.IssueFail)
+		return s.answer(e)
 	}
 
 	certificate := convert.Certificate(result)

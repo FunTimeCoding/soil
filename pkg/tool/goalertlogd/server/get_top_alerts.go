@@ -28,7 +28,7 @@ func (s *Server) GetTopAlerts(
 		end = *r.Params.End
 	}
 
-	records, e := s.store.Top(n, start, end)
+	records, e := s.service.TopAlerts(n, start, end)
 
 	if e != nil {
 		return server.GetTopAlerts500JSONResponse(*s.answer(e)), nil

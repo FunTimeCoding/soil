@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_device_context"
 )
 
@@ -11,7 +12,7 @@ func (c *Client) VirtualDeviceContexts() ([]*virtual_device_context.Context, err
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return virtual_device_context.NewSlice(result.Results), nil

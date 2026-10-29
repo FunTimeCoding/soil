@@ -29,7 +29,7 @@ func mountedClient(
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goqueryd.Mount(v, web.New(v), r, mock_recorder.New(), g)
+			goqueryd.Mount(v, web.New(v, r), r, mock_recorder.New(), g)
 		},
 	)
 	t.Cleanup(s.Close)

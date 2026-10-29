@@ -13,6 +13,7 @@ const (
 	ConfluenceNoSpace = "no space"
 
 	ConfluencePageType = "page"
+	ConfluencePageKind = "page"
 
 	ConfluenceWiki = "/wiki"
 	ConfluenceBase = "/wiki/api/v2"

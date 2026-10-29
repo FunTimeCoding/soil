@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -15,7 +17,15 @@ func (s *Server) GetTags(
 		page = int(*r.Params.Page)
 	}
 
-	v, e := s.client.TagsPage(page)
+	v, e := s.service.TagsPage(page)
+
+	if forbidden.Is(e) {
+		return server.GetTags403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.GetTags503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.GetTags500JSONResponse(*s.answer(e)), nil

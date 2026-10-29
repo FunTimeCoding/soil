@@ -2,52 +2,39 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/change"
 )
 
 func (s *Server) UpdateEntry(
 	_ context.Context,
 	r server.UpdateEntryRequestObject,
 ) (server.UpdateEntryResponseObject, error) {
-	e, f := s.store.Get(uint(r.Id))
+	c := change.New()
+	c.Action = &r.Body.Action
+	c.User = &r.Body.User
+	c.System = r.Body.System
+	c.Service = r.Body.Service
+	c.Description = r.Body.Description
+	c.Timestamp = r.Body.Timestamp
+	result, e := s.service.Update(uint(r.Id), c)
 
-	if f != nil {
-		if not_found.Is(f) {
-			return server.UpdateEntry404JSONResponse{Error: f.Error()}, nil
-		}
-
-		return server.UpdateEntry500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
-		), nil
+	if validation.Is(e) {
+		return server.UpdateEntry400JSONResponse{Error: e.Error()}, nil
 	}
 
-	e.Action = r.Body.Action
-	e.User = r.Body.User
-
-	if r.Body.System != nil {
-		e.System = *r.Body.System
+	if not_found.Is(e) {
+		return server.UpdateEntry404JSONResponse{Error: e.Error()}, nil
 	}
 
-	if r.Body.Service != nil {
-		e.Service = *r.Body.Service
+	if e != nil {
+		return server.UpdateEntry500JSONResponse(*s.answer(e)), nil
 	}
 
-	if r.Body.Description != nil {
-		e.Description = *r.Body.Description
-	}
-
-	if r.Body.Timestamp != nil {
-		e.Timestamp = *r.Body.Timestamp
-	}
-
-	if f = s.store.Update(e); f != nil {
-		return server.UpdateEntry500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
-		), nil
-	}
-
-	return server.UpdateEntry200JSONResponse(toResponse([]entry.Entry{*e})[0]), nil
+	return server.UpdateEntry200JSONResponse(
+		toResponse([]entry.Entry{*result})[0],
+	), nil
 }

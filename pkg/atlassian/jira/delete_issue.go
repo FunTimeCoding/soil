@@ -1,7 +1,7 @@
 package jira
 
 func (c *Client) DeleteIssue(key string) error {
-	_, e := c.client.Issue.Delete(key)
+	r, e := c.client.Issue.Delete(key)
 
-	return wrapError(e)
+	return WrapError(r, e)
 }

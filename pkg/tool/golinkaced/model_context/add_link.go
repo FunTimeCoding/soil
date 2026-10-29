@@ -24,7 +24,7 @@ func (s *Server) AddLink(
 		name = a.Link
 	}
 
-	result, f := s.client.CreateLink(a.Link, name, listIdentifier, a.Tags)
+	result, f := s.service.CreateLink(a.Link, name, listIdentifier, a.Tags)
 
 	if f != nil {
 		return s.answer(f)

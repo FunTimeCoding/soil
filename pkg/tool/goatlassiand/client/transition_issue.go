@@ -1,22 +1,30 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) TransitionIssue(
+	x context.Context,
 	key string,
 	transitionIdentifier string,
-) *response.Response {
-	result, e := c.client.TransitionIssue(
-		c.context,
+) error {
+	r, e := c.client.TransitionIssueWithResponse(
+		x,
 		key,
 		client.TransitionRequest{TransitionIdentifier: transitionIdentifier},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("transition issue", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

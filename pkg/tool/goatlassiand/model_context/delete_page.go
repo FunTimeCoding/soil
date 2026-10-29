@@ -20,14 +20,8 @@ func (s *Server) deletePage(
 
 	draft := r.GetBool(constant.Draft, false)
 
-	if draft {
-		if g := s.confluence.DeleteDraft(identifier); g != nil {
-			return s.captureFail(g, "draft page not deleted")
-		}
-	} else {
-		if g := s.confluence.Delete(identifier); g != nil {
-			return s.captureFail(g, "page not deleted")
-		}
+	if g := s.service.DeletePage(identifier, draft); g != nil {
+		return s.answer(g)
 	}
 
 	return response.Success("page deleted")

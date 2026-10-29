@@ -12,7 +12,7 @@ func (s *Server) SetTabColor(
 	_ mcp.CallToolRequest,
 	a argument.SetTabColor,
 ) (*mcp.CallToolResult, error) {
-	e := s.client.SetTabColor(
+	e := s.service.SetTabColor(
 		a.SessionIdentifier,
 		int(a.Red),
 		int(a.Green),

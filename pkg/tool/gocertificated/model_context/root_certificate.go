@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -13,14 +12,10 @@ func (s *Server) rootCertificate(
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {
-	result, e := s.store.Authority(constant.RootAuthority)
+	result, e := s.service.Authority(constant.RootAuthority)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
-	}
-
-	if result == nil {
-		return response.Fail("%s", constant.RootMissing)
+		return s.answer(e)
 	}
 
 	return response.Success("%s", result.Certificate)

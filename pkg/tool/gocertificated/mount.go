@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
 	certificateWeb "github.com/funtimecoding/soil/pkg/tool/gocertificated/web"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -15,7 +14,6 @@ import (
 )
 
 func Mount(
-	s *store.Store,
 	v *service.Service,
 	i *certificateWeb.Server,
 	r face.Reporter,
@@ -26,7 +24,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(s, v, r),
+				server.New(v, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -34,6 +32,6 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(s, v, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 	i.Mount(g)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Service) ReadChecklist(key string) ([]*checklist_item.Item, error) {
-	i, e := s.jira.Issue(key)
+	i, e := s.Issue(key)
 
 	if e != nil {
 		return nil, e

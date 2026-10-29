@@ -12,10 +12,10 @@ func (s *Server) CreateTab(
 	_ mcp.CallToolRequest,
 	a argument.CreateTab,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.CreateTab(a.Locator)
+	v, e := s.service.CreateTab(a.Locator)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

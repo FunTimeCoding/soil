@@ -6,16 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
-	"github.com/funtimecoding/soil/pkg/provision/store"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/runner"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/service"
 	"github.com/prometheus/client_golang/prometheus"
 	"os"
 	"path/filepath"
@@ -64,7 +62,6 @@ func build(
 		t:        t,
 		Cluster:  c,
 		Reporter: memory.New(),
-		store:    store.New(lite.NewMemory(), "terraform_runs"),
 		log:      filepath.Join(base, "calls.log"),
 	}
 	executable := filepath.Join(base, "recorder")
@@ -90,6 +87,8 @@ func build(
 	}
 
 	o := option.New()
+	o.LitePath = filepath.Join(base, "runs.db")
+	o.Cluster = func() face.Client { return c }
 	o.Repository = remote
 	o.ClonePath = clone
 	o.TerraformPath = "."
@@ -102,17 +101,20 @@ func build(
 		o.DownstreamToken = generativeConstant.ModelContextTestToken
 	}
 
-	result.Runner = runner.New(
+	v := service.New(
 		o,
-		result.store,
 		logger.New(context.Background()),
 		result.Reporter,
-		reaper.New(memory.New()),
 		prometheus.NewRegistry(),
-		c,
 	)
-	result.Runner.Start()
-	t.Cleanup(func() { result.Runner.Close() })
+	t.Cleanup(v.Close)
+
+	for _, w := range v.Workers() {
+		w.Start()
+		t.Cleanup(w.Close)
+	}
+
+	result.Service = v
 	result.waitForApply()
 
 	return result

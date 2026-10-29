@@ -18,7 +18,7 @@ func (s *Server) createSite(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.CreateSite(name)
+	result, g := s.service.CreateSite(name)
 
 	if g != nil {
 		return s.captureFail(g, "site not created")

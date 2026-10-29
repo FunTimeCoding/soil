@@ -19,7 +19,7 @@ func (s *Server) getConfigurationContext(
 		return response.Fail("name is required: %v", e)
 	}
 
-	result, f := s.client.ConfigurationContextByName(name)
+	result, f := s.service.ConfigurationContextByName(name)
 
 	if not_found.Is(f) {
 		return response.Fail("%v", f)

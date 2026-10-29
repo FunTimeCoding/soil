@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 )
 
@@ -12,39 +11,10 @@ func (s *Service) Logs(
 	clusterName string,
 	q request.Logs,
 ) (string, error) {
-	c, e := s.ClusterByName(clusterName)
-
-	if e != nil {
-		return "", e
-	}
-
-	pods, f := ResolvePods(x, c, q.Name, q.Namespace)
-
-	if f != nil {
-		return "", f
-	}
-
-	if len(pods) == 0 {
-		return "", not_found.Format(
-			"no pods found for %s in %s",
-			q.Name,
-			q.Namespace,
-		)
-	}
-
-	if len(pods) > 1 {
-		return "", ambiguous_pods.New(q.Name, pods)
-	}
-
-	return PodLogsString(
+	return guarded(
+		s,
 		x,
-		c,
-		pods[0],
-		q.Namespace,
-		q.Container,
-		q.Tail,
-		q.Since,
-		q.Previous,
-		q.Timestamps,
+		clusterName,
+		func(c *cluster.Cluster) (string, error) { return logsOn(x, c, q) },
 	)
 }

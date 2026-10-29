@@ -105,6 +105,10 @@ class BridgeHandler(BaseHTTPRequestHandler):
             self._error_response(404, error)
             return
 
+        if error == bridge_core.AMBIGUOUS_MATCH:
+            self._error_response(409, error)
+            return
+
         if error:
             self._error_response(400, error)
             return

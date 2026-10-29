@@ -1,15 +1,19 @@
 package goalpine
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goalpine/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/face"
 	"github.com/spf13/cobra"
+	"os"
+	"path/filepath"
 )
 
 func upload(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	result := &cobra.Command{
@@ -26,7 +30,19 @@ func upload(
 			cobra.CheckErr(f)
 			architecture, g := o.Flags().GetString(constant.ArchitectureFlag)
 			cobra.CheckErr(g)
-			t.Emit(c.Upload(arguments[0], version, repository, architecture))
+			body, h := os.Open(arguments[0])
+			cobra.CheckErr(h)
+			defer errors.LogClose(body)
+			t.EmitDone(
+				c.PostPackage(
+					context.Background(),
+					version,
+					repository,
+					architecture,
+					filepath.Base(arguments[0]),
+					body,
+				),
+			)
 		},
 	}
 	result.Flags().String(

@@ -19,10 +19,10 @@ func (s *Server) ListChannels(
 		limit = 100
 	}
 
-	page, e := s.client.AllChannels(limit, a.Page*limit)
+	page, e := s.service.AllChannels(limit, a.Page*limit)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	rows := make([]*mattermostResponse.Channel, len(page))

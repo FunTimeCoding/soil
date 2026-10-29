@@ -1,7 +1,7 @@
 package watch
 
 func (w *Watch) Poll() {
-	s, e := w.source.Health()
+	s, e := w.source.Status()
 
 	if e != nil {
 		w.reachable.Set(0)

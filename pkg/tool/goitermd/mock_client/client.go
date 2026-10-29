@@ -8,5 +8,6 @@ import (
 type Client struct {
 	sessions       []*session.Session
 	screens        map[string]*screen.Screen
+	keys           map[string][]string
 	nextIdentifier int
 }

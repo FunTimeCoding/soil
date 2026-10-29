@@ -10,10 +10,10 @@ func (c *Client) Me() (*model.User, error) {
 		return c.meCache, nil
 	}
 
-	result, _, e := c.client.GetMe(c.context, constant.MattermostEmptyEntityTag)
+	result, r, e := c.client.GetMe(c.context, constant.MattermostEmptyEntityTag)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	c.meCache = result

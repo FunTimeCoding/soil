@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -17,5 +18,5 @@ func (s *Server) FindProjects(
 		return s.answer(e)
 	}
 
-	return s.succeed(result)
+	return response.SuccessAny(result)
 }

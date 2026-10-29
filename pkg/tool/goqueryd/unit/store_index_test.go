@@ -13,14 +13,12 @@ import (
 
 func TestIndexNewDocuments(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	status := s.MustStatus()
 	assert.Integer(t, 5, status.TotalDocuments)
 }
 
 func TestIndexUnchanged(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	result := s.Index("test")
 	assert.Integer(t, 0, result.Indexed)
 	assert.Integer(t, 0, result.Updated)
@@ -29,7 +27,6 @@ func TestIndexUnchanged(t *testing.T) {
 
 func TestIndexUpdatedContent(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,
@@ -52,7 +49,6 @@ func TestIndexUpdatedContent(t *testing.T) {
 
 func TestIndexRemovedDocument(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(t, directory, "keep.md", "# Keep\n\nStays.\n")
 	store_tester.WriteFixture(
@@ -72,7 +68,6 @@ func TestIndexRemovedDocument(t *testing.T) {
 
 func TestIndexSkipsHiddenFiles(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,
@@ -93,7 +88,6 @@ func TestIndexSkipsHiddenFiles(t *testing.T) {
 
 func TestIndexSkipsGeneratedFiles(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,

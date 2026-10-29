@@ -2,18 +2,28 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
 
 func (s *Server) SearchUsers(
-	x context.Context,
+	_ context.Context,
 	r server.SearchUsersRequestObject,
 ) (server.SearchUsersResponseObject, error) {
-	users, _, e := s.jira.Nested().User.FindWithContext(x, r.Params.Query)
+	users, e := s.service.SearchUsers(r.Params.Query)
+
+	if forbidden.Is(e) {
+		return server.SearchUsers403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.SearchUsers503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
-		return server.SearchUsers500JSONResponse(*s.captureDetail(e)), nil
+		return server.SearchUsers500JSONResponse(*s.answer(e)), nil
 	}
 
 	var result server.SearchUsers200JSONResponse

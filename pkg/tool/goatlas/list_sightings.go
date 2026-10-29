@@ -2,14 +2,16 @@ package goatlas
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlas/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/spf13/cobra"
 )
 
-func listSightings(x *Context) *cobra.Command {
+func listSightings(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var unclaimed bool
 	var place string
 	result := &cobra.Command{
@@ -20,39 +22,7 @@ func listSightings(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			p := &client.ListSightingsParams{}
-
-			if unclaimed {
-				p.Unclaimed = &unclaimed
-			}
-
-			if place != "" {
-				p.Place = &place
-			}
-
-			r, e := x.Client.ListSightingsWithResponse(context.Background(), p)
-
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			for _, v := range *r.JSON200 {
-				fmt.Printf(
-					"%-16s %-24s %-12s %s\n",
-					v.Address,
-					sightingName(v),
-					sightingPlace(v),
-					time.FormatCompact(v.Seen),
-				)
-			}
+			t.EmitValue(c.ListSightings(context.Background(), place, unclaimed))
 		},
 	}
 	result.Flags().BoolVar(

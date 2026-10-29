@@ -1,7 +1,10 @@
 package ollama
 
-import "context"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/generative/ollama/refusal"
+)
 
 func (c *Client) Reachable(x context.Context) error {
-	return c.client.Heartbeat(x)
+	return refusal.Classify(c.client.Heartbeat(x))
 }

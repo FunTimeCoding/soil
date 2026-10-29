@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant_group"
 )
 
@@ -11,7 +12,7 @@ func (c *Client) TenantGroups() ([]*tenant_group.Group, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return tenant_group.NewSlice(result.Results), nil

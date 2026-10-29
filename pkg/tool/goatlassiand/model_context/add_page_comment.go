@@ -23,8 +23,8 @@ func (s *Server) addPageComment(
 		return response.Fail("body is required: %v", g)
 	}
 
-	if h := s.confluence.AddComment(identifier, body); h != nil {
-		return s.captureFail(h, "comment not added")
+	if h := s.service.AddPageComment(identifier, body); h != nil {
+		return s.answer(h)
 	}
 
 	return response.Success("comment added")

@@ -33,7 +33,7 @@ func (s *Server) createConfigurationContext(
 		a = configuration_assignment.New()
 	}
 
-	result, f := s.client.CreateConfigurationContext(
+	result, f := s.service.CreateConfigurationContext(
 		name,
 		int32(
 			r.GetInt(constant.Weight, int(constant.ConfigurationContextWeight)),

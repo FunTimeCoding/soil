@@ -18,7 +18,7 @@ func (s *Server) getRun(
 		return response.Fail("id is required")
 	}
 
-	result, e := s.store.Find(identifier)
+	result, e := s.service.Find(identifier)
 
 	if e != nil {
 		return s.captureFail(e, generativeConstant.RunLookupFail)

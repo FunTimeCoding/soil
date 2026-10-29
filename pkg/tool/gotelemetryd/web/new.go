@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(s *store.Store) *Server {
+func New(v *service.Service) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -27,7 +27,7 @@ func New(s *store.Store) *Server {
 	)
 
 	return &Server{
-		store:    s,
+		service:  v,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).

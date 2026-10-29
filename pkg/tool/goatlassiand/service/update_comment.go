@@ -7,5 +7,13 @@ func (s *Service) UpdateComment(
 	identifier string,
 	body string,
 ) error {
-	return s.jira.UpdateComment(key, &jira.Comment{ID: identifier, Body: body})
+	return attempt(
+		s.jiraGuard,
+		func() error {
+			return s.jira.UpdateComment(
+				key,
+				&jira.Comment{ID: identifier, Body: body},
+			)
+		},
+	)
 }

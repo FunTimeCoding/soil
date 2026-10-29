@@ -11,7 +11,7 @@ func (s *Server) cron(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.habitica.Cron()
+	result, e := s.service.Cron()
 
 	if e != nil {
 		return s.answer(e)

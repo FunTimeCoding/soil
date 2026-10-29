@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/constant"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"time"
 )
 
 func New(
@@ -29,5 +30,6 @@ func New(
 		wake:     make(chan struct{}, 1),
 		context:  x,
 		cancel:   cancel,
+		clock:    time.Now,
 	}
 }

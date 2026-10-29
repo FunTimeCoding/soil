@@ -11,7 +11,7 @@ func (s *Server) getGear(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.habitica.UserGear()
+	result, e := s.service.UserGear()
 
 	if e != nil {
 		return s.answer(e)

@@ -12,4 +12,5 @@ func TestGuard(t *testing.T) {
 	c.VerifyGuarded(t, "/api/user")
 	c.VerifyGuarded(t, "/api/group")
 	c.VerifyModelContext(t)
+	c.VerifySignIn(t)
 }

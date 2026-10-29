@@ -1,22 +1,33 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateCluster(
+	x context.Context,
 	name string,
 	clusterType string,
 	site string,
-) *response.Response {
-	result, e := c.client.CreateCluster(
-		c.context,
+) (client.Cluster, error) {
+	r, e := c.client.CreateClusterWithResponse(
+		x,
 		client.CreateClusterRequest{Name: name, Type: clusterType, Site: site},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Cluster{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Cluster{}, refusal.New(
+			"create cluster",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

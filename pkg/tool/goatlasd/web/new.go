@@ -2,8 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -12,10 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(
-	s *store.Store,
-	authorization *client.Client,
-) *Server {
+func New(v *service.Service) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -41,9 +37,8 @@ func New(
 	)
 
 	return &Server{
-		store:         s,
-		authorization: authorization,
-		palette:       r,
+		service: v,
+		palette: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTerritory).

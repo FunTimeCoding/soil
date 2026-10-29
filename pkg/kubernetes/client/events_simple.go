@@ -9,7 +9,7 @@ import (
 func (c *Client) EventsSimple(
 	normal bool,
 	warning bool,
-) []*event.Event {
+) ([]*event.Event, error) {
 	f := filter.New()
 
 	if warning && !normal {

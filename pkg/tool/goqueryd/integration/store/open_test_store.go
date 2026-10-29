@@ -5,17 +5,16 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/generative/ollama/reachable_skip"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
 func openTestStore(t *testing.T) (*store.Store, *ollama.Client) {
 	t.Helper()
 	o := ollama.NewEnvironment()
+	t.Cleanup(o.Close)
 	reachable_skip.Skip(t)
-	result := store.New(connection.NewMemory())
-	t.Cleanup(result.Close)
 
-	return result, o
+	return store_tester.OpenTestStore(t), o
 }

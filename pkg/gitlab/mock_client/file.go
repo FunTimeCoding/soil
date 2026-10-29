@@ -10,6 +10,10 @@ func (c *Client) File(
 	_ string,
 	name string,
 ) (*file.File, error) {
+	if c.failure != nil {
+		return nil, c.failure
+	}
+
 	f, exists := c.files[name]
 
 	if !exists {

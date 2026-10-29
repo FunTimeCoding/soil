@@ -40,6 +40,11 @@ func (b *Builder) Build() *pool.Pool {
 		t.DialTLSContext = browserDial(d, b.insecure)
 	}
 
+	if b.socket != "" {
+		t.Proxy = nil
+		t.DialContext = dialSocket(b.socket)
+	}
+
 	if b.long {
 		t.ResponseHeaderTimeout = constant.LongResponseHeaderTimeout
 	}

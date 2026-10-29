@@ -12,4 +12,5 @@ func TestGuard(t *testing.T) {
 	c.VerifyGuarded(t, "/api/certificates")
 	c.VerifyOpen(t, "/favicon.ico")
 	c.VerifyModelContext(t)
+	c.VerifySignIn(t)
 }

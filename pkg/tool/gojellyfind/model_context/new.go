@@ -8,13 +8,13 @@ import (
 )
 
 func New(
-	c jellyfin.JellyfinSource,
+	v jellyfin.Jellyfin,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		client:   c,
+		service:  v,
 		reporter: r,
 	}
 	result.register()

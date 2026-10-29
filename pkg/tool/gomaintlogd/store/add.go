@@ -10,7 +10,5 @@ func (s *Store) Add(v *entry.Entry) error {
 		return fmt.Errorf("create entry: %w", e)
 	}
 
-	s.notify()
-
 	return nil
 }

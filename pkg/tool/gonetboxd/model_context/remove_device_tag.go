@@ -24,7 +24,7 @@ func (s *Server) removeDeviceTag(
 		return response.Fail("tag is required: %v", g)
 	}
 
-	result, h := s.client.RemoveTag(device, tag)
+	result, h := s.service.RemoveTag(device, tag)
 
 	if h != nil {
 		return s.captureFail(h, "tag not removed from device")

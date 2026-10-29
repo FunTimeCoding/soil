@@ -10,7 +10,7 @@ func Namespace() {
 	k := client.NewEnvironment()
 	f := constant.Format
 
-	for _, n := range k.Namespaces(nil) {
+	for _, n := range k.MustNamespaces(nil) {
 		console.Line(n.Format(f))
 	}
 }

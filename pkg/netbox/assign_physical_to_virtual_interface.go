@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -19,7 +20,7 @@ func (c *Client) AssignPhysicalToVirtualInterface(
 	).MACAddressRequest(*q).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	c.cache.PhysicalAddresses = nil

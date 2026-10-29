@@ -1,19 +1,26 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/custom/certificate_request"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-func (c *Client) CertificateRequests() []certificate_request.CertificateRequest {
+func (c *Client) CertificateRequests() (
+	[]certificate_request.CertificateRequest,
+	error,
+) {
 	list, e := c.dynamic.Resource(constant.CertificateRequestGVR).List(
 		c.context,
 		v1.ListOptions{},
 	)
-	errors.PanicOnError(e)
+
+	if e != nil {
+		return nil, refusal.Classify(e)
+	}
+
 	var result []certificate_request.CertificateRequest
 
 	for _, item := range list.Items {
@@ -28,7 +35,10 @@ func (c *Client) CertificateRequests() []certificate_request.CertificateRequest 
 			constant.StatusField,
 			constant.ConditionsField,
 		)
-		errors.PanicOnError(f)
+
+		if f != nil {
+			return nil, f
+		}
 
 		for _, raw := range conditions {
 			o, isMap := raw.(map[string]any)
@@ -53,5 +63,5 @@ func (c *Client) CertificateRequests() []certificate_request.CertificateRequest 
 		result = append(result, request)
 	}
 
-	return result
+	return result, nil
 }

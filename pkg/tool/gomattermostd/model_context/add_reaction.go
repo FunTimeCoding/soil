@@ -20,16 +20,16 @@ func (s *Server) AddReaction(
 		return response.Fail("emoji_name is required")
 	}
 
-	p, e := s.client.FindPost(a.PostIdentifier)
+	p, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.captureFail(e, "post not found")
+		return s.answer(e)
 	}
 
-	e = s.client.React(p, a.EmojiName)
+	e = s.service.React(p, a.EmojiName)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createAddressRange(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var status string
@@ -20,8 +21,9 @@ func createAddressRange(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(
+			t.EmitValue(
 				c.CreateAddressRange(
+					context.Background(),
 					arguments[0],
 					arguments[1],
 					status,

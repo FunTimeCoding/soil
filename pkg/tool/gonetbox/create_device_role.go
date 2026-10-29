@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createDeviceRole(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var virtualMachine bool
@@ -19,7 +20,13 @@ func createDeviceRole(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.CreateDeviceRole(arguments[0], virtualMachine))
+			t.EmitValue(
+				c.CreateDeviceRole(
+					context.Background(),
+					arguments[0],
+					virtualMachine,
+				),
+			)
 		},
 	}
 	result.Flags().BoolVar(

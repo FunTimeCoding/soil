@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) InterfaceAddresses(interfaceIdentifier int32) ([]*internet_address.Address, error) {
@@ -13,7 +14,7 @@ func (c *Client) InterfaceAddresses(interfaceIdentifier int32) ([]*internet_addr
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return internet_address.NewSlice(result.Results), nil

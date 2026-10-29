@@ -6,23 +6,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/convert"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/store"
+	monitor "github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"net/http"
 )
 
 func Claims(
-	s *store.Store,
-	n face.EventNotifier,
+	v monitor.ClaimStream,
 	r face.Reporter,
 ) http.HandlerFunc {
 	return layout.HandleServerSideEvent(
-		n,
+		v,
 		func(
 			w http.ResponseWriter,
 			f http.Flusher,
 		) {
-			v, e := s.Claims()
+			claims, e := v.Claims()
 
 			if e != nil {
 				r.CaptureException(e)
@@ -33,7 +32,7 @@ func Claims(
 			if _, g := fmt.Fprintf(
 				w,
 				constant.EventFormat,
-				notation.Marshal(convert.Claims(v)),
+				notation.Marshal(convert.Claims(claims)),
 			); g != nil {
 				return
 			}

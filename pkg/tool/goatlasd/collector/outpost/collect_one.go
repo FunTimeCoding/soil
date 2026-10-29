@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/target"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/client"
 	"time"
 )
@@ -14,47 +14,42 @@ import (
 func collectOne(
 	q context.Context,
 	s *gazetteer.Gazetteer,
-	o face.OutpostSource,
+	t *target.Target,
 ) ([]*placement.Placement, error) {
-	host, e := o.GetHostWithResponse(q)
+	var host *client.Host
+	var services []client.Service
+	e := t.Guard.Attempt(
+		q,
+		func(x context.Context) error {
+			var f error
+
+			if host, f = t.Client.Host(x); f != nil {
+				return f
+			}
+
+			services, f = t.Client.Services(x, "")
+
+			return f
+		},
+	)
 
 	if e != nil {
 		return nil, e
 	}
 
-	if host.JSON200 == nil {
-		return nil, unexpected.Format(
-			constant.OutpostHostStatusFormat,
-			host.HTTPResponse.StatusCode,
-		)
-	}
-
-	where, okay := resolveHost(s, host.JSON200)
+	where, okay := resolveHost(s, host)
 
 	if !okay {
 		return nil, unexpected.Format(
 			constant.PlaceUnknownFormat,
-			host.JSON200.Hostname,
-		)
-	}
-
-	services, f := o.ListServicesWithResponse(q, &client.ListServicesParams{})
-
-	if f != nil {
-		return nil, f
-	}
-
-	if services.JSON200 == nil {
-		return nil, unexpected.Format(
-			constant.OutpostServiceStatusFormat,
-			services.HTTPResponse.StatusCode,
+			host.Hostname,
 		)
 	}
 
 	var result []*placement.Placement
 	now := time.Now()
 
-	for _, v := range *services.JSON200 {
+	for _, v := range services {
 		if !deployed(v) {
 			continue
 		}

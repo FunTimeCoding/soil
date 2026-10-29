@@ -20,6 +20,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenerateResponse"
+        "404":
+          description: An input file does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Report generation failed.
           content:
@@ -66,6 +72,13 @@ components:
       - status
       properties:
         status:
+          type: string
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
           type: string
     ErrorResponse:
       type: object

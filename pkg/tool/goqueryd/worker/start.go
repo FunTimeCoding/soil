@@ -6,11 +6,6 @@ func (w *Worker) Start() {
 	go func() {
 		t := time.NewTicker(w.interval)
 		defer t.Stop()
-
-		if w.service.Guard().Wait(w.context) != nil && w.context.Err() != nil {
-			return
-		}
-
 		w.recovery.Run(w.poll)
 
 		for {

@@ -9,13 +9,12 @@ import (
 
 func (s *Server) root(
 	w http.ResponseWriter,
-	_ *http.Request,
+	r *http.Request,
 ) {
-	result, e := s.store.Authority(constant.RootAuthority)
-	errors.PanicOnError(e)
+	result, e := s.service.Authority(constant.RootAuthority)
 
-	if result == nil {
-		http.Error(w, constant.RootMissing, http.StatusNotFound)
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

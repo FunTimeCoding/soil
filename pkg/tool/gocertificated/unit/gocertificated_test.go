@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/armor"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/authority"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
@@ -142,22 +143,21 @@ func TestKeyFileIsNotReadableByOthers(t *testing.T) {
 }
 
 func TestIntermediateInheritsRootUnderService(t *testing.T) {
-	s, _ := store_tester.NewChain(t)
-	defer s.Close()
-	c := s.MustAuthority(constant.FixtureClusterAuthority).Material().Certificate
+	cluster, e := store_tester.NewChain(t).Authority(
+		constant.FixtureClusterAuthority,
+	)
+	assert.FatalOnError(t, e)
+	c := cluster.Material().Certificate
 	assert.String(t, "Example Root CA", c.Issuer.CommonName)
 }
 
 func TestSecondRootConflicts(t *testing.T) {
-	s, v := store_tester.NewChain(t)
-	defer s.Close()
-	_, e := v.CreateAuthority(server_tester.RootBody())
+	_, e := store_tester.NewChain(t).CreateAuthority(server_tester.RootBody())
 	assert.True(t, conflict.Is(e))
 }
 
 func TestIssuedLeafVerifiesAgainstTheChain(t *testing.T) {
-	s, v := store_tester.NewChain(t)
-	defer s.Close()
+	v := store_tester.NewChain(t)
 	r, key, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureCommonName,
@@ -166,7 +166,7 @@ func TestIssuedLeafVerifiesAgainstTheChain(t *testing.T) {
 	)
 	assert.Nil(t, e)
 	assert.StringContains(t, "PRIVATE KEY", key)
-	root, cluster := store_tester.ChainOf(s)
+	root, cluster := store_tester.ChainOf(v)
 	assert.Nil(
 		t,
 		authority_tester.Verify(
@@ -178,8 +178,7 @@ func TestIssuedLeafVerifiesAgainstTheChain(t *testing.T) {
 }
 
 func TestIssuedLeafKeyIsNotStored(t *testing.T) {
-	s, v := store_tester.NewChain(t)
-	defer s.Close()
+	v := store_tester.NewChain(t)
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureCommonName,
@@ -187,12 +186,13 @@ func TestIssuedLeafKeyIsNotStored(t *testing.T) {
 		),
 	)
 	assert.Nil(t, e)
-	assert.String(t, "", s.MustBySerial(r.Serial).Key)
+	stored, f := v.BySerial(r.Serial)
+	assert.FatalOnError(t, f)
+	assert.String(t, "", stored.Key)
 }
 
 func TestForeignNameStillFailsThroughTheService(t *testing.T) {
-	s, v := store_tester.NewChain(t)
-	defer s.Close()
+	v := store_tester.NewChain(t)
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureImpostor,
@@ -200,7 +200,7 @@ func TestForeignNameStillFailsThroughTheService(t *testing.T) {
 		),
 	)
 	assert.Nil(t, e)
-	root, cluster := store_tester.ChainOf(s)
+	root, cluster := store_tester.ChainOf(v)
 	assert.Error(
 		t,
 		authority_tester.Verify(
@@ -212,8 +212,7 @@ func TestForeignNameStillFailsThroughTheService(t *testing.T) {
 }
 
 func TestSignedRequestVerifiesAndStoresNoKey(t *testing.T) {
-	s, v := store_tester.NewChain(t)
-	defer s.Close()
+	v := store_tester.NewChain(t)
 	r, e := v.SignRequest(
 		&server.SigningRequestBody{
 			Authority: constant.FixtureClusterAuthority,
@@ -225,7 +224,7 @@ func TestSignedRequestVerifiesAndStoresNoKey(t *testing.T) {
 	)
 	assert.Nil(t, e)
 	assert.String(t, "", r.Key)
-	root, cluster := store_tester.ChainOf(s)
+	root, cluster := store_tester.ChainOf(v)
 	assert.Nil(
 		t,
 		authority_tester.Verify(
@@ -237,8 +236,7 @@ func TestSignedRequestVerifiesAndStoresNoKey(t *testing.T) {
 }
 
 func TestRevocationListCarriesTheRevokedSerial(t *testing.T) {
-	s, v := store_tester.NewChain(t)
-	defer s.Close()
+	v := store_tester.NewChain(t)
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureCommonName,
@@ -246,7 +244,9 @@ func TestRevocationListCarriesTheRevokedSerial(t *testing.T) {
 		),
 	)
 	assert.Nil(t, e)
-	assert.Nil(t, s.Revoke(r.Serial, time.Now()))
+	revoked, h := v.Revoke(r.Serial)
+	assert.FatalOnError(t, h)
+	assert.NotNil(t, revoked)
 	b, f := v.RevocationList(constant.FixtureClusterAuthority)
 	assert.Nil(t, f)
 	block, _ := pem.Decode(b)
@@ -261,8 +261,7 @@ func TestRevocationListCarriesTheRevokedSerial(t *testing.T) {
 }
 
 func TestAuthorityRoundTripKeepsSigningKey(t *testing.T) {
-	s := store_tester.NewStore()
-	defer s.Close()
+	s := store_tester.NewStore(t)
 	root := authority_tester.NewRoot()
 	s.MustCreate(
 		*record.New(constant.KindRoot, constant.RootAuthority, root.Material()),
@@ -279,15 +278,13 @@ func TestAuthorityRoundTripKeepsSigningKey(t *testing.T) {
 	assert.Nil(t, authority_tester.Verify(restored, cluster, leaf.Certificate))
 }
 
-func TestMissingAuthorityIsNotAnError(t *testing.T) {
-	s := store_tester.NewStore()
-	defer s.Close()
-	assert.Nil(t, s.MustAuthority(constant.RootAuthority))
+func TestMissingAuthorityIsNotFound(t *testing.T) {
+	s := store_tester.NewStore(t)
+	_, e := s.Authority(constant.RootAuthority)
+	assert.True(t, not_found.Is(e))
 }
 
 func TestLeafKeyIsNotRetained(t *testing.T) {
-	s := store_tester.NewStore()
-	defer s.Close()
 	cluster := authority_tester.NewCluster(authority_tester.NewRoot())
 	leaf := authority_tester.NewLeaf(
 		cluster,
@@ -308,8 +305,7 @@ func TestAuthorityKeyIsRetained(t *testing.T) {
 }
 
 func TestRevokedAuthorityStopsResolving(t *testing.T) {
-	s := store_tester.NewStore()
-	defer s.Close()
+	s := store_tester.NewStore(t)
 	r := record.New(
 		constant.KindRoot,
 		constant.RootAuthority,
@@ -317,12 +313,12 @@ func TestRevokedAuthorityStopsResolving(t *testing.T) {
 	)
 	s.MustCreate(*r)
 	errors.PanicOnError(s.Revoke(r.Serial, time.Now()))
-	assert.Nil(t, s.MustAuthority(constant.RootAuthority))
+	_, e := s.Authority(constant.RootAuthority)
+	assert.True(t, not_found.Is(e))
 }
 
 func TestExpiringFindsOnlyPastTheHorizon(t *testing.T) {
-	s := store_tester.NewStore()
-	defer s.Close()
+	s := store_tester.NewStore(t)
 	cluster := authority_tester.NewCluster(authority_tester.NewRoot())
 	leaf := authority_tester.NewLeaf(
 		cluster,

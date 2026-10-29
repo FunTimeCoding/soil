@@ -11,42 +11,26 @@ func (c *Client) Events(
 	f *filter.Filter,
 	limit int,
 	fieldSelector string,
-) []*event.Event {
+) ([]*event.Event, error) {
+	namespaces := []string{v1.NamespaceAll}
+
+	if len(f.Namespaces) > 0 {
+		namespaces = f.Namespaces
+	}
+
 	var result []*event.Event
 
 	for _, l := range c.selectClients(f) {
-		if len(f.Namespaces) == 0 {
-			result = append(
-				result,
-				event.NewSlice(
-					list.Event(
-						l.client,
-						l.context,
-						v1.NamespaceAll,
-						limit,
-						fieldSelector,
-					),
-					l.cluster,
-				)...,
-			)
-		} else {
-			for _, n := range f.Namespaces {
-				result = append(
-					result,
-					event.NewSlice(
-						list.Event(
-							l.client,
-							l.context,
-							n,
-							limit,
-							fieldSelector,
-						),
-						l.cluster,
-					)...,
-				)
+		for _, n := range namespaces {
+			v, e := list.Event(l.client, l.context, n, limit, fieldSelector)
+
+			if e != nil {
+				return nil, e
 			}
+
+			result = append(result, event.NewSlice(v, l.cluster)...)
 		}
 	}
 
-	return event.Sort(result)
+	return event.Sort(result), nil
 }

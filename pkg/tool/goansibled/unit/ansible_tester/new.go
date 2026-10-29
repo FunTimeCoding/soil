@@ -7,15 +7,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/network"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
-	"github.com/funtimecoding/soil/pkg/provision/store"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/runner"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/service"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 	"net/http/httptest"
@@ -66,17 +63,9 @@ func New(
 	capture := filepath.Join(base, "capture")
 	system.EnsurePathExists(capture)
 	t.Setenv(constant.FixtureCaptureEnvironment, capture)
-	l := logger.New(context.Background())
-	result := &Tester{
-		t:        t,
-		Reporter: memory.New(),
-		Store: store.New(
-			lite.New(l, filepath.Join(base, "runs.db")),
-			"playbook_runs",
-		),
-		capture: capture,
-	}
+	result := &Tester{t: t, Reporter: memory.New(), capture: capture}
 	o := option.New()
+	o.LitePath = filepath.Join(base, "runs.db")
 	o.Repository = remote
 	o.ClonePath = clone
 	o.AnsiblePath = "."
@@ -90,15 +79,15 @@ func New(
 		o.InventoryToken = constant.FixtureToken
 	}
 
-	result.Runner = runner.New(
-		o,
-		result.Store,
-		l,
-		result.Reporter,
-		reaper.New(result.Reporter),
-	)
-	result.Runner.Start()
-	t.Cleanup(func() { result.Runner.Close() })
+	v := service.New(o, logger.New(context.Background()), result.Reporter)
+	t.Cleanup(v.Close)
+
+	for _, w := range v.Workers() {
+		w.Start()
+		t.Cleanup(w.Close)
+	}
+
+	result.Service = v
 
 	return result
 }

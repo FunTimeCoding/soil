@@ -4,25 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
-	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 )
 
 func New(
-	m mattermostFace.MattermostSource,
-	o *monitor.Monitor,
-	s *store.Store,
-	i mattermostFace.Indexer,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		client:   m,
-		monitor:  o,
-		store:    s,
-		indexer:  i,
+		service:  v,
 		reporter: r,
 	}
 	result.register()

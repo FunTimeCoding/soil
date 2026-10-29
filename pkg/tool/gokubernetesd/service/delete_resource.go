@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 )
 
 func (s *Service) DeleteResource(
@@ -12,29 +12,12 @@ func (s *Service) DeleteResource(
 	name string,
 	namespace string,
 ) error {
-	c, e := s.ClusterByName(clusterName)
-
-	if e != nil {
-		return e
-	}
-
-	gvr, namespaced, f := c.ResolveResource(resourceType)
-
-	if f != nil {
-		return f
-	}
-
-	if namespace == "" {
-		namespace = "default"
-	}
-
-	if namespaced {
-		return c.Dynamic().Resource(gvr).Namespace(namespace).Delete(
-			x,
-			name,
-			v1.DeleteOptions{},
-		)
-	}
-
-	return c.Dynamic().Resource(gvr).Delete(x, name, v1.DeleteOptions{})
+	return guardedError(
+		s,
+		x,
+		clusterName,
+		func(c *cluster.Cluster) error {
+			return deleteResourceOn(x, c, resourceType, name, namespace)
+		},
+	)
 }

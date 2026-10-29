@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/wireless_network"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -14,7 +15,7 @@ func (c *Client) CreateWirelessNetwork(
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return wireless_network.New(result), nil

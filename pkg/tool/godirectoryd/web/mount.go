@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	s.authorization.Mount(g)
+	s.service.Authorization().Mount(g)
 	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
 	g.Session(route.Get(webConstant.RootPattern), s.user)
 	g.Session(route.Post(constant.CreateUserPath), s.createUserSubmit)

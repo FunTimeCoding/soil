@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"net/http"
 	"time"
@@ -18,27 +19,46 @@ func (s *Server) authorizeGet(
 		return
 	}
 
-	row := s.authenticatedSession(r)
+	status := http.StatusOK
+	message := ""
+	row, e := s.authenticatedSession(r)
 
-	if row != nil && !requiresReauthentication(r, row.AuthenticatedAt) &&
-		s.service.DirectoryAllows(row.UserIdentifier) {
-		setAuthenticationCookie(w, row.Identifier)
-		s.issueCode(
-			w,
-			r,
-			authorizeRequest,
-			row.UserIdentifier,
-			row.AuthenticatedAt,
-			time.Now(),
-		)
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
+	}
+
+	if row != nil && !requiresReauthentication(r, row.AuthenticatedAt) {
+		allowed, f := s.service.DirectoryAllows(row.UserIdentifier)
+
+		switch {
+		case unavailable.Is(f):
+			status = http.StatusServiceUnavailable
+			message = constant.DirectoryAwayMessage
+		case f != nil:
+			s.view.Answer(w, r, s.reporter, f)
+
+			return
+		case allowed:
+			setAuthenticationCookie(w, row.Identifier)
+			s.issueCode(
+				w,
+				r,
+				authorizeRequest,
+				row.UserIdentifier,
+				row.AuthenticatedAt,
+				time.Now(),
+			)
+
+			return
+		}
 	}
 
 	sessionIdentifier, e := s.service.CreateLoginSession(r.URL.RawQuery)
 
 	if e != nil {
-		http.Error(w, "session creation failed", http.StatusInternalServerError)
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}
@@ -54,5 +74,5 @@ func (s *Server) authorizeGet(
 			SameSite: http.SameSiteLaxMode,
 		},
 	)
-	s.renderLoginForm(w, "", s.defaultSource())
+	s.renderLoginForm(w, status, message, s.defaultSource())
 }

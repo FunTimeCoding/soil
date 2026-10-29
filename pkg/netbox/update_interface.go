@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
 )
@@ -67,7 +68,7 @@ func (c *Client) UpdateInterface(
 	).WritableInterfaceRequest(*q).Execute()
 
 	if k != nil {
-		return nil, k
+		return nil, refusal.Classify(k)
 	}
 
 	return network.New(result), nil

@@ -7,6 +7,10 @@ import (
 )
 
 func (r *Reporter) RecoverFlush(v any) {
+	if v != nil && r.echo {
+		r.print(v, "", nil)
+	}
+
 	if r.hub != nil {
 		r.hub.Recover(v)
 		sentry.Flush(r.hub)

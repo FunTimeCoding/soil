@@ -15,7 +15,7 @@ func (s *Server) modifyUser(
 	result, e := s.service.ModifyUser(a.Account, a.Name, a.Surname, a.Mail)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

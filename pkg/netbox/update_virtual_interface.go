@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/integers64"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
@@ -51,7 +52,7 @@ func (c *Client) UpdateVirtualInterface(
 	).WritableVMInterfaceRequest(*q).Execute()
 
 	if k != nil {
-		return nil, k
+		return nil, refusal.Classify(k)
 	}
 
 	return result, nil

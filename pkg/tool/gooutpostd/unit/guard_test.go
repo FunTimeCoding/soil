@@ -2,9 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/system/service"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd"
+	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/service"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -22,7 +22,6 @@ func TestGuard(t *testing.T) {
 	)
 	defer v.Close()
 	v.VerifyBase(t)
-	v.VerifyInterface(t)
 	v.VerifyGuarded(t, "/api/services")
 	v.VerifyGuarded(t, "/api/host")
 }

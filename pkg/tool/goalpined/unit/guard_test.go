@@ -1,33 +1,13 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/package_server"
-	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	v := model_context_server.New(
-		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
-			goalpined.Mount(
-				package_server.New("test"),
-				memory.New(),
-				mock_recorder.New(),
-				g,
-			)
-		},
-	)
-	defer v.Close()
+	v := mountedUpload(t, service_tester.New(t).Service)
 	v.VerifyBase(t)
-	v.VerifyInterface(t)
+	v.VerifyGuarded(t, "/api/packages")
 	v.VerifyModelContext(t)
 }

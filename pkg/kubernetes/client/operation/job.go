@@ -6,7 +6,7 @@ import (
 )
 
 func Job(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	namespace string,
 ) v1.JobInterface {
 	return c.BatchV1().Jobs(namespace)

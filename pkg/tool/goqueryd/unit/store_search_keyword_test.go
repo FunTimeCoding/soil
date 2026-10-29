@@ -9,7 +9,6 @@ import (
 
 func TestSearchKeywordFindsDocument(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.Count(t, 1, results)
 	assert.String(t, "Search Pipeline", results[0].Title)
@@ -17,7 +16,6 @@ func TestSearchKeywordFindsDocument(t *testing.T) {
 
 func TestSearchKeywordRanking(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	results := s.MustSearchKeyword("documents", 10, "", false, nil)
 	assert.Greater(t, 0, results[0].Score)
 	assert.Greater(t, 1, len(results))
@@ -25,7 +23,6 @@ func TestSearchKeywordRanking(t *testing.T) {
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	first := t.TempDir()
 	second := t.TempDir()
 	store_tester.WriteFixture(
@@ -53,14 +50,12 @@ func TestSearchKeywordCollectionFilter(t *testing.T) {
 
 func TestSearchKeywordVirtualPath(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.String(t, "qmd://test/alfa.md", results[0].VirtualPath)
 }
 
 func TestSearchKeywordNegation(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	all := s.MustSearchKeyword("search documents", 10, "", false, nil)
 	negated := s.MustSearchKeyword("search -pipeline", 10, "", false, nil)
 	assert.Greater(t, len(negated), len(all))
@@ -68,7 +63,6 @@ func TestSearchKeywordNegation(t *testing.T) {
 
 func TestSearchKeywordQuotedPhrase(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,
@@ -91,7 +85,6 @@ func TestSearchKeywordQuotedPhrase(t *testing.T) {
 
 func TestSearchKeywordMetadataFilter(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,
@@ -123,7 +116,6 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 
 func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,
@@ -156,7 +148,6 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 
 func TestSearchKeywordSourceTypeFilterDeferred(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	store_tester.WriteFixture(
 		t,

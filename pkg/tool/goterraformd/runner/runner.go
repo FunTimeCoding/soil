@@ -2,11 +2,12 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	kubernetesFace "github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
-	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/metric"
 	"time"
 )
@@ -24,8 +25,9 @@ type Runner struct {
 	reporter       face.Reporter
 	registry       face.ProcessRegistry
 	metrics        *metric.Metric
-	kubernetes     terraformFace.Cluster
+	kubernetes     kubernetesFace.Client
 	stateNamespace string
 	stateLeaseName string
 	pending        *change.Change
+	downstream     []*client.Client
 }

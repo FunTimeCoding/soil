@@ -12,13 +12,7 @@ func (s *Server) SetTabTitle(
 	_ mcp.CallToolRequest,
 	a argument.SetTabTitle,
 ) (*mcp.CallToolResult, error) {
-	if a.Title == "" {
-		return response.Fail("title is required")
-	}
-
-	e := s.client.SetTabTitle(a.TabIdentifier, a.Title)
-
-	if e != nil {
+	if e := s.service.SetTabTitle(a.TabIdentifier, a.Title); e != nil {
 		return s.answer(e)
 	}
 

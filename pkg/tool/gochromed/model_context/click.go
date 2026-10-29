@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -13,45 +14,25 @@ func (s *Server) Click(
 	_ mcp.CallToolRequest,
 	a argument.Click,
 ) (*mcp.CallToolResult, error) {
-	if a.UID == "" {
-		return response.Fail("uid is required")
-	}
-
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	backendIdentifier, okay := s.resolveUID(t.Identifier, a.UID)
-
-	if !okay {
-		return response.Fail("uid %s not found - take a snapshot first", a.UID)
-	}
-
-	p := s.client.Page(t.Identifier)
-	e = p.ClickNode(backendIdentifier)
+	observe := a.Snapshot == nil || *a.Snapshot
+	v, e := s.service.Click(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
+		a.UID,
+		observe,
+	)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	if a.Snapshot != nil && !*a.Snapshot {
+	if !observe {
 		return response.Success("clicked %s", a.UID)
 	}
-
-	nodes, e := p.Snapshot()
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	s.cacheSnapshot(t.Identifier, nodes)
 
 	return response.Success(
 		"clicked %s\n\n%s%s",
 		a.UID,
-		snapshot.Format(nodes, 0),
-		s.frameHint(t.Identifier),
+		snapshot.Format(v.Nodes, 0),
+		frameHint(v.Frames),
 	)
 }

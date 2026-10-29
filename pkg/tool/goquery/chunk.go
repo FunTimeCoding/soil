@@ -4,13 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goquery/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/spf13/cobra"
 	"path/filepath"
 )
 
 func chunk(
-	c *client.ClientWithResponses,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var snapshot, compare, restructure bool
@@ -24,7 +24,7 @@ func chunk(
 		) {
 			path := arguments[0]
 			body := system.ReadFile(filepath.Dir(path), filepath.Base(path))
-			failed := printPreview(c, filepath.Base(path), body) > 0
+			failed := printPreview(c, t, filepath.Base(path), body) > 0
 
 			if snapshot {
 				system.SaveFile(snapshotPath(path, true), body)

@@ -66,8 +66,11 @@ never closes it.
   `WithHTTPClient`.
 - A function that would hand out a bare generated or SDK client takes an
   `*http.Client` from its caller instead, so the caller owns it.
-- `Run` and `main` build the outermost owners and `defer` their `Close()`.
-  A one-shot function owns a local pool for the length of its call.
+- A daemon's outermost owner is its service: it builds the clients from
+  factories on the option, and `Run` builds it and defers its `Close()`
+  (`service-tool.md`, Service). A CLI's `main` builds its clients itself
+  and defers their `Close()`. A one-shot function owns a local pool for
+  the length of its call.
 
 Closing drops idle connections only; a client closed twice, or used again
 after `Close`, simply dials again.

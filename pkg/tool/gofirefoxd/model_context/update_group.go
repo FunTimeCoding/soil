@@ -12,10 +12,12 @@ func (s *Server) UpdateGroup(
 	_ mcp.CallToolRequest,
 	a argument.UpdateGroup,
 ) (*mcp.CallToolResult, error) {
-	e := s.client.UpdateGroup(int(a.GroupIdentifier), a.Title, a.Color, nil)
-
-	if e != nil {
-		return s.captureDetail(e)
+	if e := s.service.UpdateGroup(
+		int(a.GroupIdentifier),
+		a.Title,
+		a.Color,
+	); e != nil {
+		return s.answer(e)
 	}
 
 	return response.Success("group updated")

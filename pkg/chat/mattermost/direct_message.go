@@ -12,10 +12,10 @@ func (c *Client) DirectMessage(
 		return nil, e
 	}
 
-	channel, _, e := c.client.CreateDirectChannel(c.context, me.Id, u.Id)
+	channel, r, e := c.client.CreateDirectChannel(c.context, me.Id, u.Id)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	return c.PostSimple(channel, text)

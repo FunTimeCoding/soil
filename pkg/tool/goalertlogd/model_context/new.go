@@ -4,19 +4,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 )
 
 func New(
-	s *store.Store,
+	v *service.Service,
 	p *worker.Worker,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		store:    s,
+		service:  v,
 		worker:   p,
 		reporter: r,
 	}

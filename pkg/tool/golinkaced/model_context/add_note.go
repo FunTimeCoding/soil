@@ -12,7 +12,7 @@ func (s *Server) AddNote(
 	_ mcp.CallToolRequest,
 	a argument.AddNote,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.CreateNote(a.LinkIdentifier, a.Text)
+	result, e := s.service.CreateNote(a.LinkIdentifier, a.Text)
 
 	if e != nil {
 		return s.answer(e)

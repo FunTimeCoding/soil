@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/mock_notifier"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	memoryMock "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
+	queryMock "github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
 	"testing"
 )
 
@@ -20,8 +20,8 @@ func New(t *testing.T) *Tester {
 	s := store_tester.New(t)
 	c := mock_client.New()
 	mc := memoryMock.New()
-	si := mock_indexer.New()
-	ci := mock_indexer.New()
+	q := queryMock.New()
+	t.Cleanup(q.Close)
 	n := mock_notifier.New()
 	x := search_index.New(connection.NewMemory())
 	r := memory.New()
@@ -34,8 +34,7 @@ func New(t *testing.T) *Tester {
 			s.Store,
 			c,
 			mc,
-			si,
-			ci,
+			q,
 			x,
 			n,
 			r,
@@ -43,14 +42,13 @@ func New(t *testing.T) *Tester {
 			s.Clock(),
 			logger.New(context.Background()),
 		),
-		Harbor:            harbor,
-		Client:            c,
-		SummaryIndexer:    si,
-		CompletionIndexer: ci,
-		Notifier:          n,
-		Memory:            mc,
-		Search:            x,
-		Reporter:          r,
+		Harbor:   harbor,
+		Client:   c,
+		Query:    q,
+		Notifier: n,
+		Memory:   mc,
+		Search:   x,
+		Reporter: r,
 	}
 	t.Cleanup(result.Service.Close)
 

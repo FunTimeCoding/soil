@@ -8,12 +8,12 @@ import (
 func (c *Client) CronJob(
 	namespace string,
 	name string,
-) *cron_job.Job {
-	result := get.CronJob(c.client, c.context, namespace, name)
+) (*cron_job.Job, error) {
+	result, e := get.CronJob(c.client, c.context, namespace, name)
 
-	if result == nil {
-		return nil
+	if e != nil {
+		return nil, e
 	}
 
-	return cron_job.New(result, c.cluster)
+	return cron_job.New(result, c.cluster), nil
 }

@@ -140,20 +140,21 @@ Reusable parameter names shared across multiple MCP tools (`query`, `limit`,
 ```go
 type Server struct {
     server   *server.MCPServer
-    store    *store.Store    // omit if no store
-    reporter face.Reporter
-    worker   *worker.Worker  // omit if no worker
+    service  face.Log
+    reporter soil.Reporter
 }
 ```
 
+The server takes the daemon's `*service.Service` and never closes it
+(`service-tool.md`, Service).
+
 `new.go` - create the MCPServer via the factory, register tools, return:
 ```go
-func New(s *store.Store, r face.Reporter, t face.Recorder, w *worker.Worker, version string) *Server {
+func New(v face.Log, r soil.Reporter, t soil.Recorder, version string) *Server {
     result := &Server{
-        server: mark.New(constant.Identity, version).WithRecorder(t).Server(),
-        store:    s,
+        server:   mark.New(constant.Identity, version).WithRecorder(t).Server(),
+        service:  v,
         reporter: r,
-        worker:   w,
     }
     result.register()
 
@@ -282,7 +283,7 @@ func (s *Server) getAlerts(
     _ mcp.CallToolRequest,
     a argument.GetAlerts,
 ) (*mcp.CallToolResult, error) {
-    result, e := s.store.ByName(a.Name, int(a.Limit))
+    result, e := s.service.ByName(a.Name, int(a.Limit))
 
     if e != nil {
         return s.answer(e)

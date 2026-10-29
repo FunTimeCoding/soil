@@ -2,9 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
@@ -97,12 +100,60 @@ func TestRefusalCarriesSentryDetail(t *testing.T) {
 	)
 	var out map[string]any
 	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
-	assert.True(t, unexpected.Is(e))
+	assert.True(t, forbidden.Is(e))
 	assert.StringContains(
 		t,
-		"status: 403: You do not have permission to perform this action.",
+		"You do not have permission to perform this action.",
 		e.Error(),
 	)
+}
+
+func TestARejectedQueryIsValidation(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusBadRequest,
+		`{"detail":"Invalid search query"}`,
+	)
+	var out map[string]any
+	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
+	assert.True(t, validation.Is(e))
+}
+
+func TestAnExpiredTokenIsForbidden(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusUnauthorized,
+		`{"detail":"Invalid token"}`,
+	)
+	var out map[string]any
+	e := newSentryClient(t, s.URL).Get("auth", nil, &out)
+	assert.True(t, forbidden.Is(e))
+}
+
+func TestAConflictingUpdateIsConflict(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusConflict,
+		`{"detail":"Issue is locked"}`,
+	)
+	var out map[string]any
+	e := newSentryClient(t, s.URL).Put(
+		"organizations/alfa/issues/7",
+		map[string]string{"status": "resolved"},
+		&out,
+	)
+	assert.True(t, conflict.Is(e))
+}
+
+func TestAnyOtherRefusalStaysUnexpected(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusInternalServerError,
+		`{"detail":"Internal error"}`,
+	)
+	var out map[string]any
+	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
+	assert.True(t, unexpected.Is(e))
 }
 
 func TestAnswerThatIsNotNotationIsUnexpected(t *testing.T) {

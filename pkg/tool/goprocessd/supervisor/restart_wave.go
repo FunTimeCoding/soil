@@ -2,7 +2,7 @@ package supervisor
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 )
 
@@ -13,7 +13,7 @@ func (s *Supervisor) RestartWave() (int, error) {
 	if s.waveActive {
 		s.waveMutex.Unlock()
 
-		return 0, validation.New(constant.WaveAlreadyRunning)
+		return 0, conflict.Format(constant.WaveAlreadyRunning)
 	}
 
 	s.waveActive = true

@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/power_panel"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) PowerPanels() ([]*power_panel.Panel, error) {
@@ -11,7 +12,7 @@ func (c *Client) PowerPanels() ([]*power_panel.Panel, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return power_panel.NewSlice(result.Results), nil

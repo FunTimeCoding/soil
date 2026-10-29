@@ -1,5 +1,10 @@
 package constant
 
+const (
+	SessionSample      = `{"timestamp":"2026-10-28 09:00:00.000000+0100","subsystem":"com.apple.ensemble","category":"session","eventMessage":"session started","processImagePath":"/usr/libexec/ensembled"}`
+	EmptyMessageSample = `{"timestamp":"2026-10-28 09:00:01.000000+0100","eventMessage":""}`
+)
+
 const WirelessSample = `
 ————————————————————————————————————
 NETWORK

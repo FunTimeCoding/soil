@@ -1,14 +1,16 @@
 package client
 
-import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
-)
+import "context"
 
-func (c *Client) DeleteConfigurationContext(name string) *response.Response {
-	result, e := c.client.DeleteConfigurationContext(c.context, name)
-	errors.PanicOnError(e)
+func (c *Client) DeleteConfigurationContext(
+	x context.Context,
+	name string,
+) error {
+	r, e := c.client.DeleteConfigurationContextWithResponse(x, name)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	return noContent("delete configuration context", r.HTTPResponse, r.Body)
 }

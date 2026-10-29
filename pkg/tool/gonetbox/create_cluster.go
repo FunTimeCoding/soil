@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createCluster(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var clusterType string
@@ -21,7 +22,14 @@ func createCluster(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.CreateCluster(arguments[0], clusterType, site))
+			t.EmitValue(
+				c.CreateCluster(
+					context.Background(),
+					arguments[0],
+					clusterType,
+					site,
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(

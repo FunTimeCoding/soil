@@ -2,12 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/store"
+	monitor "github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
 )
 
 func New(
-	s *store.Store,
+	v monitor.Claims,
 	r face.Reporter,
 ) *Server {
-	return &Server{store: s, reporter: r}
+	return &Server{service: v, reporter: r}
 }

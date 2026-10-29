@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"github.com/coder/websocket/wsjson"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/firefox/constant"
 	"github.com/funtimecoding/soil/pkg/firefox/types/message"
-	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"time"
 )
 
@@ -21,7 +20,7 @@ func (c *Client) send(
 	c.mutex.Unlock()
 
 	if connection == nil {
-		return message.NewReply(), unreachable.Format("extension not connected")
+		return message.NewReply(), unavailable.Format(constant.NotConnected)
 	}
 
 	identifier := int(c.identifier.Add(1))
@@ -38,7 +37,8 @@ func (c *Client) send(
 	e := wsjson.Write(
 		context.Background(),
 		connection,
-		message.NewRequest(method, parameters, identifier))
+		message.NewRequest(method, parameters, identifier),
+	)
 
 	if e != nil {
 		return message.NewReply(), fmt.Errorf("%s: %w", method, e)
@@ -47,7 +47,7 @@ func (c *Client) send(
 	select {
 	case r := <-channel:
 		if r.Error != "" {
-			return message.NewReply(), detail_error.New(r.Error, method)
+			return message.NewReply(), refusal(r.Error)
 		}
 
 		return r, nil

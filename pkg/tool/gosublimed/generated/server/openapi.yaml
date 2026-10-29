@@ -59,6 +59,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/View"
+        "404":
+          description: No view with this identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read view.
           content:
@@ -76,6 +82,12 @@ paths:
       responses:
         "204":
           description: View closed.
+        "404":
+          description: No view with this identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to close view.
           content:
@@ -104,6 +116,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/View"
+        "400":
+          description: The edit cannot apply - old_string missing or not in the buffer.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No view with this identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: old_string matches more than once; use replace_all.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit view.
           content:
@@ -128,6 +158,18 @@ paths:
       responses:
         "204":
           description: View saved.
+        "400":
+          description: The view cannot be saved as asked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No view with this identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to save view.
           content:
@@ -150,6 +192,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/View"
+        "400":
+          description: file_path missing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to open file.
           content:

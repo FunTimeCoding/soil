@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
 )
@@ -31,10 +30,8 @@ func (s *Server) PostEvent(
 		}
 	}
 
-	if f := s.store.Create(e); f != nil {
-		return server.PostEvent500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
-		), nil
+	if f := s.service.Create(e); f != nil {
+		return server.PostEvent500JSONResponse(*s.answer(f)), nil
 	}
 
 	return server.PostEvent200JSONResponse{Id: int(e.Identifier)}, nil

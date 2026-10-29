@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -20,7 +21,12 @@ func New(t *testing.T) *Server {
 			m *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goitermd.Mount(c, memory.New(), mock_recorder.New(), g)
+			goitermd.Mount(
+				service_tester.New(t, c),
+				memory.New(),
+				mock_recorder.New(),
+				g,
+			)
 		},
 	)
 	result := &Server{MockClient: c, Server: v}

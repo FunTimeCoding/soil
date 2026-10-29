@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 )
@@ -11,18 +11,14 @@ func (s *Server) GetCertificate(
 	_ context.Context,
 	r server.GetCertificateRequestObject,
 ) (server.GetCertificateResponseObject, error) {
-	result, e := s.store.BySerial(r.Serial)
+	result, e := s.service.BySerial(r.Serial)
 
-	if e != nil {
-		return server.GetCertificate500JSONResponse(
-			*s.captureFail(e, constant.QueryFail),
-		), nil
+	if not_found.Is(e) {
+		return server.GetCertificate404JSONResponse{Error: e.Error()}, nil
 	}
 
-	if result == nil {
-		return server.GetCertificate404JSONResponse(
-			*clientError(constant.CertificateMissing),
-		), nil
+	if e != nil {
+		return server.GetCertificate500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetCertificate200JSONResponse(

@@ -14,11 +14,16 @@ func (s *Service) SearchIssues(
 		return nil, e
 	}
 
-	return s.client.SearchIssues(
-		s.organization,
-		query,
-		identifier,
-		limit,
-		cursor,
+	return guarded(
+		s.guard,
+		func() ([]response.Issue, error) {
+			return s.client.SearchIssues(
+				s.organization,
+				query,
+				identifier,
+				limit,
+				cursor,
+			)
+		},
 	)
 }

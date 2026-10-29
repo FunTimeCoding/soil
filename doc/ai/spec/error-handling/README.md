@@ -115,6 +115,7 @@ message does not depend on it:
 | `validation`, `ambiguous`, `not_selected` | 400 `Error` | tool failure | no |
 | `not_found` | 404 `Error` | tool failure | no |
 | `conflict` | 409 `Error` | tool failure | no |
+| `forbidden` | 403 `Error` | tool failure | no |
 | `unavailable` | 503 `Error` | tool failure | no - the guard reports the outage |
 | `unreachable`, `timeout`, `dropped` | 503 `ErrorResponse` | captured | yes |
 | `not_configured` | 500 `ErrorResponse` | captured | yes |
@@ -136,11 +137,13 @@ row, `Reportable` its Sentry column, `Message` the text and `Capture` the
 REST answer. The `error_answer` analyzer and both surfaces' answers
 (`mcp.md`, `rest.md`) read the same table.
 
-`unavailable` is a guard's verdict that a peer is down, and the guard
-reports a lasting outage once (`infrastructure.md`, Peer Outages and
-Refusals). A transport failure that reaches a surface without a guard in
-front has nobody else to report it, so the surface captures it - and one
-that keeps arriving names a call path that wants a guard.
+`unavailable` is a guard's verdict that a peer is down, and the guard reports a
+lasting outage once (`infrastructure.md`, Peer Outages and Refusals). An
+upstream client maps its peer's 503 to `unavailable`, which becomes the guard's
+verdict once it reaches the guard; a caller without a guard in front receiving
+one captures it. A transport failure that reaches a surface without a guard in
+front has nobody else to report it, so the surface captures it - and one that
+keeps arriving names a call path that wants a guard.
 
 The last row is where every error starts. Classifying one moves it into a
 row above it - by a shared class from `pkg/errors` (`external-api.md`,
@@ -156,9 +159,9 @@ honours - and only once it has been seen enough to know what it means.
   answerWith on REST
 - [external-api.md](external-api.md) - default posture, sentinel
   classification, translating at the client boundary, message format
-- [infrastructure.md](infrastructure.md) - store method rule, web handler
-  panics, worker recovery, HTTP recovery, Sentry enrichment, external process,
-  self-healing
+- [infrastructure.md](infrastructure.md) - store methods, web handler
+  panics, worker and HTTP recovery, peers (required, probe route, outages,
+  guard), Sentry enrichment, external process, self-healing
 
 ## Deviations
 

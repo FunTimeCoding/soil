@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_chassis"
 )
 
@@ -11,7 +12,7 @@ func (c *Client) VirtualChassis() ([]*virtual_chassis.Chassis, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return virtual_chassis.NewSlice(result.Results), nil

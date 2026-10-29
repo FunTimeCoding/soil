@@ -1,11 +1,11 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
@@ -15,8 +15,8 @@ func rechunkService(
 	position int,
 ) (*service.Service, *store.Store) {
 	t.Helper()
-	s := store_tester.OpenTestStore(t)
-	t.Cleanup(s.Close)
+	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
+	s := store_tester.OpenFileStore(t, o.LitePath)
 	d := t.TempDir()
 	store_tester.WriteFixture(t, d, "alfa.md", "one two three\n")
 	s.AddCollection("test", d, constant.DefaultGlob)
@@ -29,5 +29,5 @@ func rechunkService(
 		"2024-01-01T00:00:00Z",
 	)
 
-	return newService(s, ollama.New(), mock_reranker.New()), s
+	return service_tester.New(t, o, memory.New()), s
 }

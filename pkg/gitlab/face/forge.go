@@ -1,6 +1,7 @@
 package face
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/branch"
 	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 	"github.com/funtimecoding/soil/pkg/gitlab/diff"
@@ -22,6 +23,7 @@ import (
 )
 
 type Forge interface {
+	Reachable(x context.Context) error
 	Project(identifier int64) (*project.Project, error)
 	Projects() ([]*project.Project, error)
 	MustProjects() []*project.Project

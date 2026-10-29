@@ -58,11 +58,15 @@ type Worker interface {
 }
 ```
 
-`Close` is the release, as for every other resource: a worker that starts
-goroutines or holds clients ends them there. It must be safe on a worker
-that was never started - the lifecycle closes everything registered, and
-tests close workers they only call into - so anything `Close` uses is
-created in the constructor, not in `Start`.
+`Close` is the release, as for every other resource: it ends what the
+worker started - goroutines, tickers, stop channels - and whatever the
+worker built. A service or client the worker was given belongs to
+whoever built it, and the worker never closes it. `Close` must be safe
+on a worker that was never started - the lifecycle closes everything
+registered, and tests close workers they only call into - so anything
+`Close` uses is created in the constructor, not in `Start`. It must also
+be safe twice: a worker the daemon's service builds is closed by the
+lifecycle and again by the service (`service-tool.md`, Service).
 
 ## Draining Workers
 
@@ -144,9 +148,10 @@ Close happens in reverse: the server shuts down before the worker closes.
 
 - **Sentry** - lives in `Main()`, not `Run()`. See `entrypoint.md`. The
   `recover()` defer in `Main()` catches panics from `Run()`.
-- **App-specific setup** - database connections, client construction,
-  configuration parsing. All happen before `lifecycle.New()`, and `Run`
-  closes what it built there.
+- **App-specific setup** - database connections and client construction
+  happen in the daemon's service, configuration parsing in `Main`. `Run`
+  builds the service before `lifecycle.New()`, registers the workers it
+  hands over, and defers its `Close` (`service-tool.md`, Service).
 
 ## Usage Pattern
 

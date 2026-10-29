@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -13,24 +14,17 @@ func (s *Server) Snapshot(
 	_ mcp.CallToolRequest,
 	a argument.Snapshot,
 ) (*mcp.CallToolResult, error) {
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
+	v, e := s.service.Snapshot(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
+	)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
-
-	p := s.client.Page(t.Identifier)
-	nodes, e := p.Snapshot()
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	s.cacheSnapshot(t.Identifier, nodes)
 
 	return response.Success(
 		"%s%s",
-		snapshot.Format(nodes, 0),
-		s.frameHint(t.Identifier),
+		snapshot.Format(v.Nodes, 0),
+		frameHint(v.Frames),
 	)
 }

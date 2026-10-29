@@ -1,47 +1,47 @@
 package gomattermost
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/argument"
 	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/text/template"
 	timeLibrary "github.com/funtimecoding/soil/pkg/time"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
-	"github.com/funtimecoding/soil/pkg/tool/common"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermost/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/client"
+	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
 	"time"
 )
 
 func Main() {
-	r := reporter.New(constant.Identity.Name()).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.NewCommandLine(constant.Identity)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Parse()
-	c := common.Mattermost()
+	n := terminal.New(s)
+	c := client.NewEnvironment()
 	defer c.Close()
 	t := timeLibrary.Midnight(time.Now())
 	console.Format(
 		"Unresolved threads since %s\n",
 		t.Format(timeConstant.DateMinute),
 	)
-	var relevant []*thread.Thread
+	relevant, e := c.GetUnresolvedThreads(
+		context.Background(),
+		environment.Required(chatConstant.MattermostChannelEnvironment),
+		&generated.GetUnresolvedThreadsParams{Since: t},
+	)
 
-	for _, p := range c.MustPostsSince(c.DefaultChannel(), t) {
-		if p.Raw.RootId != "" {
-			continue
-		}
+	if e != nil {
+		n.Exitln(e)
 
-		h := c.LoadThread(p)
-
-		if h.Resolved {
-			continue
-		}
-
-		relevant = append(relevant, h)
+		return
 	}
 
 	f := chatConstant.MattermostFormat
@@ -83,7 +83,7 @@ Next step: unclear
 	tem := template.New("simple", te)
 
 	for _, h := range relevant {
-		formatted := h.Format(f)
+		formatted := formatThread(f, h)
 		console.Line(formatted)
 		r := o.GenerateSimple(template.Execute(tem, formatted))
 		console.Format("%s\n", consoleConstant.Magenta("%s", r.Text))

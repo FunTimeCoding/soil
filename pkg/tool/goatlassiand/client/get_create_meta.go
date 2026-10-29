@@ -1,17 +1,17 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) GetCreateMeta(
+	x context.Context,
 	project string,
 	issueType string,
 	expand string,
-) *response.Response {
+) ([]*client.CreateMetaField, error) {
 	params := &client.GetCreateMetaParams{
 		Project:   project,
 		IssueType: issueType,
@@ -21,8 +21,15 @@ func (c *Client) GetCreateMeta(
 		params.Expand = &expand
 	}
 
-	result, e := c.client.GetCreateMeta(c.context, params)
-	errors.PanicOnError(e)
+	r, e := c.client.GetCreateMetaWithResponse(x, params)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("create meta", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

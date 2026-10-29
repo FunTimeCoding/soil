@@ -1,24 +1,32 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) DeletePage(
+	x context.Context,
 	identifier string,
 	draft bool,
-) *response.Response {
+) error {
 	params := &client.DeletePageParams{}
 
 	if draft {
 		params.Draft = &draft
 	}
 
-	result, e := c.client.DeletePage(c.context, identifier, params)
-	errors.PanicOnError(e)
+	r, e := c.client.DeletePageWithResponse(x, identifier, params)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("delete page", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

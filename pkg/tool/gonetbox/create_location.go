@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createLocation(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var site string
@@ -20,7 +21,9 @@ func createLocation(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.CreateLocation(arguments[0], site))
+			t.EmitValue(
+				c.CreateLocation(context.Background(), arguments[0], site),
+			)
 		},
 	}
 	result.Flags().StringVar(&site, "site", "", "site name (required)")

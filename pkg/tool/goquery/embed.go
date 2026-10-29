@@ -3,13 +3,15 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/spf13/cobra"
 )
 
-func embed(c *client.ClientWithResponses) *cobra.Command {
+func embed(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "embed",
 		Short: "Generate embeddings for indexed documents",
@@ -17,13 +19,12 @@ func embed(c *client.ClientWithResponses) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.PostEmbedWithResponse(context.Background())
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("embed", r.HTTPResponse, r.Body)
+			r, e := c.PostEmbed(context.Background())
+			t.EmitDone(e)
 			console.Format(
 				"Embedded %d documents (%d chunks)\n",
-				r.JSON200.Documents,
-				r.JSON200.Chunks,
+				r.Documents,
+				r.Chunks,
 			)
 		},
 	}

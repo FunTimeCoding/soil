@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/web/form"
@@ -22,6 +23,12 @@ func (s *Server) issueCertificateSubmit(
 	}
 	optionalList(&b.Host, r.PostFormValue(constant.HostParameter))
 	result, key, e := s.service.IssueCertificate(b)
+
+	if e != nil && classify.Reportable(e) {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
 
 	if e != nil {
 		form.Redirect(

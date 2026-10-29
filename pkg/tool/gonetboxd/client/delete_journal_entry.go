@@ -1,14 +1,16 @@
 package client
 
-import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
-)
+import "context"
 
-func (c *Client) DeleteJournalEntry(identifier int32) *response.Response {
-	result, e := c.client.DeleteJournalEntry(c.context, identifier)
-	errors.PanicOnError(e)
+func (c *Client) DeleteJournalEntry(
+	x context.Context,
+	identifier int32,
+) error {
+	r, e := c.client.DeleteJournalEntryWithResponse(x, identifier)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	return noContent("delete journal entry", r.HTTPResponse, r.Body)
 }

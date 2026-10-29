@@ -11,7 +11,7 @@ import (
 )
 
 func New(
-	s secret.SecretSource,
+	s secret.StatusSource,
 	y *prometheus.Registry,
 	l *logger.Logger,
 	r face.Reporter,

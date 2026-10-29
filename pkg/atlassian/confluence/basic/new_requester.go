@@ -1,6 +1,7 @@
 package basic
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/classify_refusal"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/requester"
@@ -14,5 +15,6 @@ func newRequester(
 ) *requester.Requester {
 	return requester.New(base).
 		WithAuthorizer(basic.New(user, token)).
-		WithHeader(constant.Accept, constant.Object)
+		WithHeader(constant.Accept, constant.Object).
+		WithRefusal(classify_refusal.Refusal)
 }

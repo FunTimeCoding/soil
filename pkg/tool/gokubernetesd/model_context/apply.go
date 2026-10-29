@@ -36,7 +36,7 @@ func (s *Server) Apply(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "apply resource")
+		return s.captureDetail(f)
 	}
 
 	prefix := "applied"

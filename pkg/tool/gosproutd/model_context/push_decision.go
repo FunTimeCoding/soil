@@ -21,7 +21,7 @@ func (s *Server) pushDecision(
 	)
 
 	if e != nil {
-		return response.Answer(s.reporter, e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

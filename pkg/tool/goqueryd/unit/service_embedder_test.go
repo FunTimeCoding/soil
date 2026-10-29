@@ -3,16 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
 func TestAPushIsEmbeddedWhileTheEmbedderAnswers(t *testing.T) {
-	m := new(FixedEmbedder)
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	m := newEmbedder(t)
+	v := newService(t, m, newReranker(t))
 	assert.String(
 		t,
 		"",
@@ -28,10 +25,9 @@ func TestAPushIsEmbeddedWhileTheEmbedderAnswers(t *testing.T) {
 }
 
 func TestAPushWhileTheEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
-	m := new(FixedEmbedder)
+	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	v := newService(t, m, newReranker(t))
 	warning := v.PushDocument(
 		t.Context(),
 		"notes",
@@ -54,10 +50,9 @@ func TestAPushWhileTheEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
 }
 
 func TestAHybridSearchFailsAtOnceWhileTheEmbedderIsDown(t *testing.T) {
-	m := new(FixedEmbedder)
+	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	v := newService(t, m, newReranker(t))
 	_, e := v.Search(t.Context(), search_option.New("zulu", 10))
 	assert.True(t, unavailable.Is(e))
 	_, f := v.Search(t.Context(), search_option.New("zulu", 10))
@@ -67,10 +62,9 @@ func TestAHybridSearchFailsAtOnceWhileTheEmbedderIsDown(t *testing.T) {
 }
 
 func TestAKeywordSearchNeedsNoEmbedder(t *testing.T) {
-	m := new(FixedEmbedder)
+	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	v := newService(t, m, newReranker(t))
 	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
 	o := search_option.New("zulu", 10)
 	o.Mode = "keyword"
@@ -80,10 +74,9 @@ func TestAKeywordSearchNeedsNoEmbedder(t *testing.T) {
 }
 
 func TestPendingDocumentsWaitWhileTheEmbedderIsDown(t *testing.T) {
-	m := new(FixedEmbedder)
+	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	v := newService(t, m, newReranker(t))
 	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
 	_, e := v.Embed(t.Context())
 	assert.True(t, unavailable.Is(e))

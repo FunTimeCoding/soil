@@ -1,19 +1,25 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/directory/types/search_record"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/types/user"
 )
 
 func (s *Service) Users() ([]*user.User, error) {
-	found, e := s.directory.Search(
-		constant.PersonFilter,
-		[]string{
-			constant.AccountAttribute,
-			constant.NameAttribute,
-			constant.SurnameAttribute,
-			constant.MailAttribute,
-			constant.UniqueAttribute,
+	found, e := guarded(
+		s.guard,
+		func() ([]*search_record.Record, error) {
+			return s.directory.Search(
+				constant.PersonFilter,
+				[]string{
+					constant.AccountAttribute,
+					constant.NameAttribute,
+					constant.SurnameAttribute,
+					constant.MailAttribute,
+					constant.UniqueAttribute,
+				},
+			)
 		},
 	)
 

@@ -27,7 +27,7 @@ func (s *Server) ListPlacements(
 		packageName = *r.Params.Package
 	}
 
-	v, e := s.store.MatchingPlacements(place, source, packageName)
+	v, e := s.service.MatchingPlacements(place, source, packageName)
 
 	if e != nil {
 		return server.ListPlacements500JSONResponse(

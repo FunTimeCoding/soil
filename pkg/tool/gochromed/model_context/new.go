@@ -8,19 +8,14 @@ import (
 )
 
 func New(
-	c chromium.ChromiumSource,
-	downloadDirectory string,
+	v chromium.Browser,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server: server.New(constant.Identity).WithRecorder(
-			t,
-		).Server(),
-		client:            c,
-		downloadDirectory: downloadDirectory,
-		snapshotCache:     make(map[string]map[string]int64),
-		reporter:          r,
+		server:   server.New(constant.Identity).WithRecorder(t).Server(),
+		service:  v,
+		reporter: r,
 	}
 	result.register()
 

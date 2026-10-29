@@ -1,7 +1,7 @@
 package worker_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/mock_client"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/types/notify_sink"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"

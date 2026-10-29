@@ -1,24 +1,35 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateDeviceRole(
+	x context.Context,
 	name string,
 	virtualMachine bool,
-) *response.Response {
-	result, e := c.client.CreateDeviceRole(
-		c.context,
+) (client.DeviceRole, error) {
+	r, e := c.client.CreateDeviceRoleWithResponse(
+		x,
 		client.CreateDeviceRoleRequest{
 			Name:           name,
 			VirtualMachine: &virtualMachine,
 		},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.DeviceRole{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.DeviceRole{}, refusal.New(
+			"create device role",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

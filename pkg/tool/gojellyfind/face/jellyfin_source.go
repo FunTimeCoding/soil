@@ -33,30 +33,4 @@ type JellyfinSource interface {
 		sessionIdentifier string,
 		level int,
 	) error
-	MustLibraries() []*library.Library
-	MustSearchItems(
-		term string,
-		types []string,
-		page int,
-		perPage int,
-	) ([]*item.Item, int)
-	MustItem(identifier string) *item.Item
-	MustEpisodes(seriesIdentifier string) []*item.Item
-	MustTracks(albumIdentifier string) []*item.Item
-	MustSessions() []*session.Session
-	MustPlay(
-		sessionIdentifier string,
-		itemIdentifiers []string,
-		playCommand string,
-		startPositionTicks int64,
-	)
-	MustPlaybackCommand(
-		sessionIdentifier string,
-		command string,
-		seekPositionTicks int64,
-	)
-	MustSetVolume(
-		sessionIdentifier string,
-		level int,
-	)
 }

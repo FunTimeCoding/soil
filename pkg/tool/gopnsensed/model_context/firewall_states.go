@@ -12,7 +12,7 @@ func (s *Server) firewallStates(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.States(r.GetString(constant.ParameterQuery, ""))
+	result, e := s.service.States(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
 		return s.answer(e)

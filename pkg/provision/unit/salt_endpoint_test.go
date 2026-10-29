@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/provision/salt/salt_tester"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,32 +13,32 @@ import (
 )
 
 func TestTheFirstCallLogsInAndSendsTheToken(t *testing.T) {
-	s := newSaltServer(t, "bravo")
+	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
-	assert.Integer(t, 0, s.logins)
+	assert.Integer(t, 0, s.Logins())
 	keys, e := c.ListKeys()
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"alfa"}, keys.Minions)
-	assert.Integer(t, 1, s.logins)
-	assert.Strings(t, []string{"token-1"}, s.seen)
+	assert.Integer(t, 1, s.Logins())
+	assert.Strings(t, []string{"token-1"}, s.Seen())
 }
 
 func TestExpiredTokenRenewsOnce(t *testing.T) {
-	s := newSaltServer(t, "bravo")
+	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
 	_, e := c.ListKeys()
 	assert.FatalOnError(t, e)
-	s.expire()
+	s.Expire()
 	_, f := c.ListKeys()
 	assert.FatalOnError(t, f)
-	assert.Integer(t, 2, s.logins)
-	assert.Strings(t, []string{"token-1", "token-1", "token-2"}, s.seen)
+	assert.Integer(t, 2, s.Logins())
+	assert.Strings(t, []string{"token-1", "token-1", "token-2"}, s.Seen())
 }
 
 func TestRefusalCarriesTheParagraph(t *testing.T) {
-	s := newSaltServer(t, "bravo")
+	s := salt_tester.New(t, "bravo")
 	_, e := newSaltClient(t, s.URL, "bravo").ListJobs()
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
@@ -48,7 +49,7 @@ func TestRefusalCarriesTheParagraph(t *testing.T) {
 }
 
 func TestAWrongPasswordIsRefusedWithTheReason(t *testing.T) {
-	s := newSaltServer(t, "bravo")
+	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "charlie")
 	defer c.Close()
 	e := c.Login(t.Context())
@@ -63,7 +64,7 @@ func TestAWrongPasswordIsRefusedWithTheReason(t *testing.T) {
 }
 
 func TestALoginNobodyAnswersIsAConnectionFailure(t *testing.T) {
-	s := newSaltServer(t, "bravo")
+	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
 	s.Close()

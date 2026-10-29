@@ -2,7 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
 )
 
@@ -16,7 +17,19 @@ func (s *Server) SaveView(
 		path = *r.Body.FilePath
 	}
 
-	errors.PanicOnError(s.client.SaveView(r.Id, path))
+	e := s.service.SaveView(r.Id, path)
+
+	if validation.Is(e) {
+		return server.SaveView400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if not_found.Is(e) {
+		return server.SaveView404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if e != nil {
+		return server.SaveView500JSONResponse(*s.answer(e)), nil
+	}
 
 	return server.SaveView204Response{}, nil
 }

@@ -36,7 +36,7 @@ func TestHostEventsReachingNoLiveHostSkipRun(t *testing.T) {
 		},
 	)
 	assert.Count(t, 0, runs)
-	recent, e := o.Store.Recent(10)
+	recent, e := o.Service.Recent(10)
 	errors.PanicOnError(e)
 	assert.Count(t, 1, recent)
 }

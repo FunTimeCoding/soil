@@ -6,19 +6,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/mock_outpost_source"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/gazetteer_tester"
 	"testing"
 )
 
 func TestOutpostPlacesTheDeployedService(t *testing.T) {
-	f := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	f.Add(
+	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
+	collector_tester.AddService(
+		f,
 		"goagentd.service",
 		systemConstant.ServiceOriginVendor,
 		"https://apt.example.test",
 	)
-	v, e := outpostCollector(f).Collect(
+	v, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -30,13 +31,14 @@ func TestOutpostPlacesTheDeployedService(t *testing.T) {
 }
 
 func TestOutpostRefusesTheBaseSystem(t *testing.T) {
-	f := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	f.Add(
+	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
+	collector_tester.AddService(
+		f,
 		"ssh.service",
 		systemConstant.ServiceOriginSystem,
 		"mirror+file:/etc/apt/mirrors/debian.list",
 	)
-	v, e := outpostCollector(f).Collect(
+	v, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -45,9 +47,14 @@ func TestOutpostRefusesTheBaseSystem(t *testing.T) {
 }
 
 func TestOutpostRefusesASynthesizedUnit(t *testing.T) {
-	f := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	f.Add("getty@tty1.service", systemConstant.ServiceOriginLocal, "")
-	v, e := outpostCollector(f).Collect(
+	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
+	collector_tester.AddService(
+		f,
+		"getty@tty1.service",
+		systemConstant.ServiceOriginLocal,
+		"",
+	)
+	v, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -56,13 +63,18 @@ func TestOutpostRefusesASynthesizedUnit(t *testing.T) {
 }
 
 func TestOutpostResolvesByHardwareAddress(t *testing.T) {
-	f := mock_outpost_source.New("nowhere", []string{"02:aa:bb:cc:dd:04"})
-	f.Add(
+	f := collector_tester.NewOutpost(
+		t,
+		"nowhere",
+		[]string{"02:aa:bb:cc:dd:04"},
+	)
+	collector_tester.AddService(
+		f,
 		"percona-postgresql.service",
 		systemConstant.ServiceOriginLocal,
 		"/run/systemd/generator/percona-postgresql.service",
 	)
-	v, e := outpostCollector(f).Collect(
+	v, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -72,9 +84,14 @@ func TestOutpostResolvesByHardwareAddress(t *testing.T) {
 }
 
 func TestOutpostRefusesAnUnknownHost(t *testing.T) {
-	f := mock_outpost_source.New("nowhere", nil)
-	f.Add("goagentd.service", systemConstant.ServiceOriginVendor, "x")
-	_, e := outpostCollector(f).Collect(
+	f := collector_tester.NewOutpost(t, "nowhere", nil)
+	collector_tester.AddService(
+		f,
+		"goagentd.service",
+		systemConstant.ServiceOriginVendor,
+		"x",
+	)
+	_, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -82,15 +99,16 @@ func TestOutpostRefusesAnUnknownHost(t *testing.T) {
 }
 
 func TestOutpostCarriesThePackageAndVersion(t *testing.T) {
-	f := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	f.AddPackage(
+	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
+	collector_tester.AddPackage(
+		f,
 		"goagentd.service",
 		systemConstant.ServiceOriginVendor,
 		"https://apt.example.test",
 		"goagentd",
 		"0.11.154",
 	)
-	v, e := outpostCollector(f).Collect(
+	v, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -101,13 +119,14 @@ func TestOutpostCarriesThePackageAndVersion(t *testing.T) {
 }
 
 func TestOutpostWithoutAPackageCarriesNone(t *testing.T) {
-	f := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	f.Add(
+	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
+	collector_tester.AddService(
+		f,
 		"goagentd.service",
 		systemConstant.ServiceOriginVendor,
 		"https://apt.example.test",
 	)
-	v, e := outpostCollector(f).Collect(
+	v, e := outpostCollector(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -118,17 +137,26 @@ func TestOutpostWithoutAPackageCarriesNone(t *testing.T) {
 }
 
 func TestOutpostCollectsPastAFailedTarget(t *testing.T) {
-	dead := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	dead.Fail(unexpected.Format("dial %s: refused", "alfa"))
-	alive := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	alive.AddPackage(
+	dead := collector_tester.NewOutpost(
+		t,
+		constant.FixtureVirtualMachineNode,
+		nil,
+	)
+	dead.Failure = unexpected.Format("dial %s: refused", "alfa")
+	alive := collector_tester.NewOutpost(
+		t,
+		constant.FixtureVirtualMachineNode,
+		nil,
+	)
+	collector_tester.AddPackage(
+		alive,
 		"goagentd.service",
 		systemConstant.ServiceOriginVendor,
 		"https://apt.example.test",
 		"goagentd",
 		"0.11.154",
 	)
-	v, e := outpostCollector(dead, alive).Collect(
+	v, e := outpostCollector(t, dead, alive).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -138,9 +166,13 @@ func TestOutpostCollectsPastAFailedTarget(t *testing.T) {
 }
 
 func TestOutpostFailsWhenEveryTargetFails(t *testing.T) {
-	dead := mock_outpost_source.New(constant.FixtureVirtualMachineNode, nil)
-	dead.Fail(unexpected.Format("dial %s: refused", "alfa"))
-	_, e := outpostCollector(dead).Collect(
+	dead := collector_tester.NewOutpost(
+		t,
+		constant.FixtureVirtualMachineNode,
+		nil,
+	)
+	dead.Failure = unexpected.Format("dial %s: refused", "alfa")
+	_, e := outpostCollector(t, dead).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)

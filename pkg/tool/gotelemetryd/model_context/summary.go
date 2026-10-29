@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	markResponse "github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context/response"
@@ -23,7 +22,7 @@ func (s *Server) summary(
 	rows, e := s.service.Summary(o)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.answer(e)
 	}
 
 	entries := make([]response.Summary, len(rows))

@@ -1,35 +1,18 @@
 package worker_tester
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/event/notifier"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"testing"
-	"time"
 )
 
 func New(t *testing.T) *Tester {
 	t.Helper()
-	s := store.New(lite.NewMemory())
-	t.Cleanup(s.Close)
-	c := mock_client.New()
-	w := worker.New(
-		c,
-		s,
-		notifier.New(),
-		logger.New(context.Background()),
-		memory.New(),
-		1*time.Minute,
-		30*24*time.Hour,
-		nil,
-	)
-	result := &Tester{t: t, Store: s, Worker: w, MockClient: c}
-	t.Cleanup(result.Worker.Close)
 
-	return result
+	return NewWith(
+		t,
+		service_tester.DatabasePath(t),
+		service_tester.NewAlertmanager(t),
+		constant.Retention,
+	)
 }

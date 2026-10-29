@@ -203,6 +203,12 @@ paths:
       responses:
         "204":
           description: Playback started.
+        "400":
+          description: The request is incomplete.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Session not found.
           content:
@@ -271,6 +277,12 @@ paths:
       responses:
         "204":
           description: Volume set.
+        "400":
+          description: The level is out of range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Session not found.
           content:

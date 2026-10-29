@@ -4,9 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
-	"github.com/funtimecoding/soil/pkg/raid"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goraid/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/client"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +14,7 @@ func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	t := terminal.New(s)
-	c := raid.NewEnvironment()
+	c := client.NewEnvironment()
 	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),

@@ -27,7 +27,7 @@ func (s *Server) addChecklistItem(
 	items, h := s.service.AddChecklistItem(key, text)
 
 	if h != nil {
-		return s.failOrCapture(h, "checklist not updated")
+		return s.answer(h)
 	}
 
 	return response.SuccessAny(items)

@@ -13,7 +13,7 @@ import (
 )
 
 func Mount(
-	c jellyfin.JellyfinSource,
+	v jellyfin.Jellyfin,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
@@ -22,7 +22,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(c, r),
+				server.New(v, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -30,5 +30,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

@@ -11,8 +11,9 @@ func (s *Service) pushCompletion(
 	body string,
 	metadata map[string][]string,
 ) error {
-	return s.completionIndexer.Push(
+	return s.pushDocument(
 		constant.CompletionCollection,
+		constant.CompletionSourceType,
 		fmt.Sprintf("%s/%d", slug, sequence),
 		body,
 		metadata,

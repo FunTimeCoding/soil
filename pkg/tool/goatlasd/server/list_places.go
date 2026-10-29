@@ -11,7 +11,7 @@ func (s *Server) ListPlaces(
 	_ context.Context,
 	_ server.ListPlacesRequestObject,
 ) (server.ListPlacesResponseObject, error) {
-	v, e := s.store.Places()
+	v, e := s.service.Places()
 
 	if e != nil {
 		return server.ListPlaces500JSONResponse(

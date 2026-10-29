@@ -1,7 +1,13 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/service"
+)
 
-func New(s *supervisor.Supervisor) *Server {
-	return &Server{supervisor: s}
+func New(
+	v *service.Service,
+	r face.Reporter,
+) *Server {
+	return &Server{service: v, reporter: r}
 }

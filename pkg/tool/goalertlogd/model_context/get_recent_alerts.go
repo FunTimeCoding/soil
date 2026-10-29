@@ -37,7 +37,7 @@ func (s *Server) getRecentAlerts(
 		end = t
 	}
 
-	records, f := s.store.ByTimeRange(start, end)
+	records, f := s.service.RecentAlerts(start, end)
 
 	if f != nil {
 		return s.answer(f)

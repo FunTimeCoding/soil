@@ -22,14 +22,21 @@ pkg/tool/go<tool>/
 │   └── new.go                      # Factory: New() *<Name>
 ├── unit/
 │   ├── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
-│   └── guard_test.go               # Guard battery over Mount - see testing.md
+│   ├── guard_test.go               # Guard battery over Mount - see testing.md
+│   └── service_tester/new.go       # Builds the service from an option with mocks - see testing.md
 ├── constant/
 │   └── constant.go                 # Tool constants (bucket names, identity)
+├── service/                        # The daemon's single owner - see Service
+│   ├── service.go                  # Service struct
+│   ├── new.go                      # New(o, ...) - builds everything from configuration
+│   ├── close.go                    # Close() - closes everything it built
+│   └── <operation>.go              # One file per operation the surfaces call
+├── face/                           # One full interface per client - see Service
+├── migrate/                        # AutoMigrate(d) - schema history, see database.md
 ├── store/                          # Persistence (if needed)
 │   ├── store.go                    # Store struct
 │   ├── record.go                   # Record type
-│   ├── new.go                      # Constructor: opens db, ensures bucket
-│   ├── close.go                    # Close()
+│   ├── new.go                      # Constructor: takes the mapper it is given
 │   └── <operation>.go              # One file per operation (save.go, resolve.go, by_name.go)
 ├── worker/                         # Background worker (if needed)
 │   ├── worker.go                   # Worker struct
@@ -101,16 +108,16 @@ rationale.
 func Run(o *option.Log, i face.Instrument) {
     r := i.Reporter()
     l := logger.New(context.Background())
-    s := store.New(o.LitePath)
-    defer s.Close()
+    v := service.New(o, l, r)
+    defer v.Close()
     lifecycle.New(l).
-        WithWorker(worker.New(client, s, l, r, 1*time.Minute)).
+        WithWorker(worker.New(v, l, r, 1*time.Minute)).
         WithServer(
             server.New(
                 constant.Identity,
                 o.Address,
                 func(m *http.ServeMux) {
-                    Mount(s, r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
+                    Mount(v, r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
         ).
@@ -120,45 +127,40 @@ func Run(o *option.Log, i face.Instrument) {
 
 ### Key conventions
 
-- Reporter pulled from the instrument first, then the logger,
-  threaded to workers and lifecycle
-- Reporter threaded to workers (for `recovery.New`) and recovery middleware
-- Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` -
-  add `.WithProtected()` for plain REST servers
-- Server address is `o.Address`, produced by `a.Address()` in
-  `Main()` - see Entry Point. Never format a listen address by hand;
-  surfaces without flags (examples, callback servers) use
-  `web.AddressPort`, which resolves the same `BIND_ADDRESS` >
-  loopback chain
-- The server callback builds one `guard.Mux`
-  (`guard.New(m, o.ServiceTokens)`) and hands it to the daemon's
-  `Mount()` - routes register there, never directly on the mux
-- `RunUntilSignal()` handles run, signal block, and reverse-order stop
-- Store closed via `defer` before lifecycle starts
-- Avoid declaring intermediate variables for lifecycle or generative server when
-  only used once
+- The reporter goes to the workers (`recovery.New`) and the recovery
+  middleware; add `.WithProtected()` to a plain REST server
+- The listen address is `o.Address` from `a.Address()`; a surface without
+  flags (examples, callback servers) uses `web.AddressPort`, the same
+  `BIND_ADDRESS` > loopback chain - never format one by hand
+- The server callback builds one `guard.Mux` and hands it to `Mount` -
+  routes register there, never on the mux. `guard.New` mounts
+  `route:/api/reachable` itself, the peer probe route
+  (`error-handling/infrastructure.md`, The probe route)
+- The service's `Close` is deferred before the lifecycle starts, so it
+  closes after every worker and server has
+- A service with peers is waited on next -
+  `errors.PanicOnError(v.Wait(context.Background()))` - and its
+  `Workers()` registered before the daemon's own, so the guards run
+  before anything calls through them
 
 ## Mount Function
 
 `mount.go` sits beside `run.go` and owns everything the daemon
 serves: the token-guarded REST tree, the MCP mount, and the web
-mount when present. Domain dependencies come first - through the
-daemon's `face/` interfaces where they exist - then reporter,
-recorder, version, and the `*guard.Mux` last:
+mount when present. The service comes first - then reporter, recorder,
+version, and the `*guard.Mux` last:
 
 ```go
 func Mount(
-    s *store.Store,
-    w *worker.Worker,
-    u *web.Server,
+    v log.Log,
     r face.Reporter,
     t face.Recorder,
     version string,
     g *guard.Mux,
 ) {
-    g.TokenMount(...)                                // REST - generated-api.md
-    model_context.New(s, w, r, t, version).Mount(g)  // MCP - model-context.md
-    u.Mount(g)                                       // web - HTML Web Package below
+    g.TokenMount(...)                             // REST - generated-api.md
+    model_context.New(v, r, t, version).Mount(g)  // MCP - model-context.md
+    web.New(v).Mount(g)                           // web - HTML Web Package below
 }
 ```
 
@@ -178,7 +180,7 @@ For manually registered routes without a spec, route functions live in
 the `server/` package. Each is a function returning `http.HandlerFunc`:
 
 ```go
-func Alerts(s *store.Store) http.HandlerFunc {
+func Alerts(v *service.Service) http.HandlerFunc {
     return func(
         w http.ResponseWriter,
         r *http.Request,
@@ -250,21 +252,21 @@ and `s.view.RenderFragment` for HTMX partials.
 
 ```go
 type Server struct {
-    store    *store.Store
+    service  *service.Service
     view     *view.View
-    registry *palette.Registry
+    registry *registry.Registry
 }
 
-func New(s *store.Store) *Server {
-    registry := palette.NewRegistry()
-    registry.Register(
-        palette.Command{Label: constant.DashboardTitle, Path: constant.DashboardPath, Category: "navigate"},
-        palette.Command{Label: constant.EntriesTitle, Path: constant.EntriesPath, Category: "navigate"},
+func New(v *service.Service) *Server {
+    r := registry.New()
+    r.Register(
+        palette.NewCommand(constant.DashboardTitle, constant.DashboardPath, webConstant.PaletteNavigate),
+        palette.NewCommand(constant.EntriesTitle, constant.EntriesPath, webConstant.PaletteNavigate),
     )
 
     return &Server{
-        store:    s,
-        registry: registry,
+        service:  v,
+        registry: r,
         view: view.New(
             layout.New(constant.Identity).
                 WithTheme(theme.Archive).
@@ -291,13 +293,11 @@ The strip is absent when the summary slice is nil or empty.
 SSE extension script and `hx-ext="sse"` + `sse-connect` attributes
 to `main`. The summary strip gets `sse-swap="summary_strip"`
 automatically. Services push updates via `layout.SummaryStripContent`
-with event name `layout.SummaryStrip`. Replaces manual
-`WithScript(web.ServerSide)` + wrapper div pattern.
+with event name `layout.SummaryStrip`.
 
 #### Handlers use the view
 
-Handlers use the view directly - no `pageLayout`, `renderPage`,
-`renderFragment`, `isHTMX`, or `navigationLink` wrapper functions:
+Handlers call the view directly, with no wrapper functions of their own:
 
 ```go
 func (s *Server) dashboard(w http.ResponseWriter, r *http.Request) {
@@ -311,16 +311,6 @@ func (s *Server) dashboard(w http.ResponseWriter, r *http.Request) {
     )
 }
 ```
-
-### Packages involved
-
-| Package | Location | Role |
-|---------|----------|------|
-| `layout` | `pkg/web/layout/` | Fluent HTML page builder. `New(identity)` + `With*` methods + `Render()`. Owns the full page skeleton (head, nav, main, footer). |
-| `layout/navigation_item` | `pkg/web/layout/navigation_item/` | `New(path, label)` / `NewExternal(path, label)` for nav links. Renders with active-state highlighting. |
-| `palette` | `pkg/web/palette/` | Command palette framework. `NewRegistry()`, `Register()`, `NewServe(registry)` handler. fzf-style fuzzy matching, highlighted results. Layout adds `⌘K` nav hint and `<dialog>` automatically via `WithCommandPalette`. |
-| `view` | `pkg/web/view/` | HTTP layer wrapping layout. `RenderPage`, `RenderFragment`, `IsExtendedRequest`. Clones the layout template per request. |
-| `theme/constant` | `pkg/web/constant/` (`theme_*.go`) | CSS palette constants (pico.css custom property overrides). |
 
 ### Page titles and paths
 
@@ -344,7 +334,6 @@ palette) are pico.css custom property overrides. Each service picks one in its
 downstream repos.
 
 Key conventions:
-- `Server` struct holds dependencies and a `*view.View`
 - `Mount()` takes a `guard.Mux` and registers all routes through its verbs using
   method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on
   non-SSO services; SSO services call `s.authorization.Mount(g)` first, which
@@ -362,27 +351,81 @@ Key conventions:
   `alertsTable()`, `addForm()`, `detailRow()`
 - Handler and builder names never collide because the handler is named after the
   route (`add`), not the component (`addForm`)
-- Methods that access server state (store, worker) stay as methods; pure
+- Methods that access server state (the service) stay as methods; pure
   renderers are standalone functions
+
+## Service
+
+Every daemon has one `service.Service`, even around a single client or
+none. It is the only owner `Run` holds: everything else in the daemon
+either is built by it or borrows from it.
+
+The service takes configuration - the option, a logger, a reporter, and
+a metric registry when its workers export gauges - and builds the rest:
+the database (`relational.Open`, `migrate.AutoMigrate`, then the store
+over it, `database.md`), its clients, pools, peer guards and workers.
+Its `Close` closes everything it built and nothing it was given. A
+service that owns nothing - a reader over the local system, paths and
+a logger - has no `Close`, and `Run` defers nothing.
+
+A service is never handed a finished client, in a parameter or an option
+function: whoever closes a handed client closes something it did not
+build. A client enters as a factory on the option - a function
+returning the client's face, set in `option.New()` to the real
+constructor, or set in `Main` when the environment decides whether
+there is one. The service calls it once and closes what it returns when
+that has a `Close`. A part the environment may leave out - a factory
+returning nil, a configuration that is off - the service builds only
+when present; its operations then answer `not_configured`, and a
+surface asks the service rather than testing a field for nil. A pooled
+client's factory takes the instance -
+`func(*instance.Instance) (face.<Name>Source, error)` - the build function
+`pool.New` takes. An option holds what `Main` decides once: addresses,
+tokens, a parsed inventory, and factories, which own nothing until the
+service calls them. Nothing live sits on an option.
+
+Workers the service builds reach the lifecycle through `Workers()`,
+which `Run` registers in order. The lifecycle closes them, and the
+service closes them again, so their `Close` is safe twice
+(`lifecycle.md`).
+
+A service with required peers has a `Wait` that waits on each required
+peer's guard in turn. `Run` calls it right after building the service and
+panics on its error, before the lifecycle starts, so the daemon serves only
+once every required peer answers; a peer only a worker reads is guarded and
+not waited on (`error-handling/infrastructure.md`, Required and guarded
+peers).
+
+The service validates. A surface parses its request into plain values,
+calls one operation, and answers the error's class
+(`error-handling/README.md`); a check that lived in a route moves into
+the service, where every surface shares it. A surface holds the service
+and nothing beside it - no client, store or guard of its own to reach
+around it. Collection belongs in the service too: a worker gets one
+operation per tick that returns its outcomes, and keeps only what is its
+own - the ticker, its gauges, its stop channel and the recovery around
+the tick.
+
+A face describes one client in full and its mock implements all of it: the
+upstream client's face is what the factory returns, the daemon client's is
+`face.Client` (`generated-api.md`). Code shared between daemons and tools
+takes a role interface - only the methods it calls, beside the full face
+(`FloatSource`), filled by the client, its mock or a service's guarded
+method through a function type beside it (`FloatSourceFunction`). No
+other face is partial or mirrors another; the service has none, and the
+surfaces, workers and tests take `*service.Service` (`testing.md`).
 
 ## Workers
 
-Workers implement `face.Worker` (`Start()` + `Close()`). See `lifecycle.md` for
-details.
+Workers implement `face.Worker` (`Start()` + `Close()`) and close only
+what they started or built - a service or client they were given
+belongs to whoever built it. See `lifecycle.md` for details.
 
 ## Daemon and CLI Split
 
-Long-running services come in pairs:
-
-| Binary | Package | Role |
-|--------|---------|------|
-| `go<tool>d` | `pkg/tool/go<tool>d/` | Daemon - lifecycle, store, HTTP server |
-| `go<tool>` | `pkg/tool/go<tool>/` | CLI - calls the daemon's REST API, prints output |
-
-After the standard entrypoint setup (see `entrypoint.md`), the CLI
-constructs the daemon's generated REST client once and hands it to
-its subcommands - see `generated-api.md` for the access pattern and
-when a hand-written `client/` wrapper is warranted instead.
+A daemon `go<tool>d` pairs with a CLI `go<tool>`, which talks to it
+through the daemon client in `<toold>/client/` - the one client other
+daemons use too (`generated-api.md`, The Daemon Client).
 
 ## External API Client
 
@@ -402,13 +445,10 @@ pkg/<domain>/
     └── constant.go                 # HostEnvironment, TokenEnvironment
 ```
 
-The daemon imports this client library. MCP-only services (without
-REST) import it directly into their `model_context/` handlers. Daemons
-with REST import it into both `model_context/` and `server/`.
-
-**`pkg/<domain>/` is client-only.** All server-side concerns (store,
-domain types, `model_context/`) belong in `pkg/tool/go<tool>d/`, not
-in the shared library.
+The daemon's service builds this client through its factory (Service); no
+surface imports it. **`pkg/<domain>/` is client-only.** All server-side concerns
+(store, domain types, `model_context/`) belong in `pkg/tool/go<tool>d/`, not in
+the shared library.
 
 ### Must and Non-Must Pattern
 
@@ -434,6 +474,14 @@ func (c *Client) MustLinks() []*link.Link {
 }
 ```
 
+A Must twin exists only where a caller panics. Its callers are counted
+by receiver, not by name - a `MustLinks` on another type is not a
+caller - and a twin with none is deleted before the client's full face
+is written, so the face carries no operation nobody calls. Every
+consumer of an upstream client moves onto its full face and mock in the
+change that writes them. A client that owns nothing - a connection per
+call - has no `Close`, and neither does its face.
+
 ### Find Pattern
 
 Lookups where absence is a valid outcome return the Find shape -
@@ -455,18 +503,8 @@ to the caller's choice of variant, not to the helper, and a plain
 signature that panics underneath breaks the MCP and REST callers
 the pair exists for.
 
-## Internal REST Client
-
-When a daemon exposes a REST API (via OpenAPI codegen), consumers
-that want domain methods instead of generated request objects -
-other daemons, test mocks, formatting layers - use a hand-written
-wrapper inside the daemon's tree at `<toold>/client/`, not at
-`pkg/<domain>/`. CLIs call the generated client directly. See
-`generated-api.md` for the full pattern.
-
-The distinction:
-- `pkg/<domain>/` - external API client, talks to a third-party service
-- `<toold>/client/` - internal REST client, talks to our own daemon
+`pkg/<domain>/` talks to the third-party service; `<toold>/client/` talks
+to our own daemon (`generated-api.md`, The Daemon Client).
 
 ## MCP Integration
 

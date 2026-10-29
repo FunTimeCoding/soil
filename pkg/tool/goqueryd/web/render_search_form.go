@@ -10,9 +10,17 @@ import (
 
 func (s *Server) renderSearchForm(
 	w http.ResponseWriter,
+	r *http.Request,
 	collection string,
 ) {
-	status := s.service.MustStatus()
+	status, e := s.service.Status()
+
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
 	s.view.RenderPage(
 		w,
 		constant.SearchTitle,

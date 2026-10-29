@@ -7,18 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/lease"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/migrate"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/netbox"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 )
 
@@ -28,27 +23,17 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	m := relational.Open(l, o.PostgresLocator, o.LitePath)
-	migrate.AutoMigrate(m)
-	s := store.New(m)
-	p := stall_client.New().Build()
-	defer p.Close()
-	n := netbox.NewEnvironment(p.Client())
 	e := metric.New()
-	u := web.New(s, authorizationClient(o).WithReporter(r))
-	lifecycle.New(l).WithWorker(
-		worker.New(
-			s,
-			collectors(n, l, p.Client()),
-			lease.NewOptional(p.Client()),
-			n,
-			o.Interval,
-			o.Retention,
-			l,
-			e.Registry(),
-			r,
-		),
-	).WithServer(
+	v := service.New(o, l, r)
+	defer v.Close()
+	u := web.New(v)
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithWorker(worker.New(v, o.Interval, l, e.Registry(), r)).WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,
@@ -61,7 +46,7 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(x *http.ServeMux) {
-				Mount(s, u, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+				Mount(v, u, r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
 		).WithMiddleware(u.Recovery(r)).WithProtected(),
 	).RunUntilSignal()

@@ -1,13 +1,14 @@
 package gohabitica
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/face"
 	"github.com/spf13/cobra"
 )
 
 func cron(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -17,7 +18,7 @@ func cron(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.Cron())
+			t.EmitValue(c.RunCron(context.Background()))
 		},
 	}
 }

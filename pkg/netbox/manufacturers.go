@@ -1,6 +1,9 @@
 package netbox
 
-import "github.com/funtimecoding/soil/pkg/netbox/manufacturer"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/manufacturer"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
+)
 
 func (c *Client) Manufacturers() ([]*manufacturer.Manufacturer, error) {
 	if len(c.cache.Manufacturers) != 0 {
@@ -10,7 +13,7 @@ func (c *Client) Manufacturers() ([]*manufacturer.Manufacturer, error) {
 	result, _, e := c.client.DcimAPI.DcimManufacturersList(c.context).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	c.cache.Manufacturers = manufacturer.NewSlice(result.Results)

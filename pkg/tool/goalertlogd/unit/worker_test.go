@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/worker_tester"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestPollSavesNewAlert(t *testing.T) {
 		),
 	)
 	o.Worker.Poll()
-	records := o.Store.MustByName("HighMemory")
+	records := o.Alerts("HighMemory")
 	assert.Count(t, 1, records)
 	assert.String(t, "abc123", records[0].Fingerprint)
 	assert.String(t, "critical", records[0].Severity)
@@ -34,7 +35,7 @@ func TestPollResolvesRemovedAlert(t *testing.T) {
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
 	o.Worker.Poll()
-	records := o.Store.MustByName("HighMemory")
+	records := o.Alerts("HighMemory")
 	assert.Count(t, 1, records)
 	assert.True(t, records[0].End != nil)
 }
@@ -47,7 +48,7 @@ func TestPollIgnoresDuplicateFiring(t *testing.T) {
 	o.Worker.Poll()
 	o.Worker.Poll()
 	o.Worker.Poll()
-	assert.Count(t, 1, o.Store.MustByName("HighMemory"))
+	assert.Count(t, 1, o.Alerts("HighMemory"))
 }
 
 func TestPollIgnoresDuplicateInResponse(t *testing.T) {
@@ -59,7 +60,7 @@ func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
-	assert.Count(t, 1, o.Store.MustByName("HighMemory"))
+	assert.Count(t, 1, o.Alerts("HighMemory"))
 }
 
 func TestRestartPollKeepsFiringOpen(t *testing.T) {
@@ -68,10 +69,10 @@ func TestRestartPollKeepsFiringOpen(t *testing.T) {
 		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
-	fresh := worker_tester.NewWithStore(t, o.Store, o.MockClient)
+	fresh := o.Restart()
 	fresh.Worker.Poll()
-	assert.Count(t, 1, o.Store.MustUnresolvedFingerprints())
-	records := o.Store.MustByName("HighMemory")
+	assert.Integer(t, 1, fresh.Firing())
+	records := fresh.Alerts("HighMemory")
 	assert.Count(t, 1, records)
 	assert.True(t, records[0].End == nil)
 }
@@ -83,23 +84,28 @@ func TestRestartPollResolvesGone(t *testing.T) {
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
-	fresh := worker_tester.NewWithStore(t, o.Store, o.MockClient)
+	fresh := o.Restart()
 	fresh.Worker.Poll()
-	assert.Count(t, 0, o.Store.MustUnresolvedFingerprints())
-	records := o.Store.MustByName("HighMemory")
+	assert.Integer(t, 0, fresh.Firing())
+	records := fresh.Alerts("HighMemory")
 	assert.Count(t, 1, records)
 	assert.True(t, records[0].End != nil)
 }
 
 func TestPollPrunesOldRecords(t *testing.T) {
-	o := worker_tester.NewWithZeroRetention(t)
+	o := worker_tester.NewWith(
+		t,
+		service_tester.DatabasePath(t),
+		service_tester.NewAlertmanager(t),
+		0,
+	)
 	o.MockClient.Add(
 		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
 	o.Worker.Poll()
-	assert.Count(t, 0, o.Store.MustByName("HighMemory"))
+	assert.Count(t, 0, o.Alerts("HighMemory"))
 }
 
 func TestPollTracksLastPollTime(t *testing.T) {

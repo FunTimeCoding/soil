@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/prometheus/client/refusing"
 	"github.com/prometheus/client_golang/api"
 	"github.com/prometheus/client_golang/api/prometheus/v1"
 	"net/http"
@@ -14,5 +15,5 @@ func New(
 	result, e := api.NewClient(api.Config{Address: locator, RoundTripper: r})
 	errors.PanicOnError(e)
 
-	return v1.NewAPI(result)
+	return v1.NewAPI(refusing.New(result))
 }

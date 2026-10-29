@@ -8,14 +8,12 @@ import (
 
 func TestListDocuments(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	entries := s.MustListDocuments("test")
 	assert.Count(t, 5, entries)
 }
 
 func TestListDocumentsEmptyCollection(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	entries := s.MustListDocuments("nonexistent")
 	assert.Count(t, 0, entries)
 }

@@ -23,3 +23,5 @@ const (
 
 	ListParameter = "list"
 )
+
+const LinkAcePeer = "linkace upstream"

@@ -23,8 +23,8 @@ func (s *Server) addIssueComment(
 		return response.Fail("body is required: %v", g)
 	}
 
-	if h := s.jira.Comment(key, body); h != nil {
-		return s.captureFail(h, "comment not added")
+	if h := s.service.Comment(key, body); h != nil {
+		return s.answer(h)
 	}
 
 	return response.Success("comment added")

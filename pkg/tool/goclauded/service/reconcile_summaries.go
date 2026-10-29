@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Service) ReconcileSummaries() []error {
-	existing, e := s.summaryIndexer.Existing(constant.SummaryCollection)
+	existing, e := s.indexed(constant.SummaryCollection)
 
 	if e != nil {
 		return []error{e}
@@ -32,12 +32,7 @@ func (s *Service) ReconcileSummaries() []error {
 			continue
 		}
 
-		if g := s.summaryIndexer.Push(
-			constant.SummaryCollection,
-			slug,
-			m.Body,
-			metadata,
-		); g != nil {
+		if g := s.pushSummary(slug, m.Body, metadata); g != nil {
 			failed = append(failed, g)
 
 			if connection.Classify(g) != nil {

@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -19,5 +20,9 @@ func (c *Client) CreateVirtualInterface(
 		c.context,
 	).WritableVMInterfaceRequest(*q).Execute()
 
-	return result, e
+	if e != nil {
+		return nil, refusal.Classify(e)
+	}
+
+	return result, nil
 }

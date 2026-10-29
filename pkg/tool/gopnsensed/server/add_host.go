@@ -11,7 +11,10 @@ func (s *Server) AddHost(
 	_ context.Context,
 	r server.AddHostRequestObject,
 ) (server.AddHostResponseObject, error) {
-	identifier, e := s.opnsense.AddHost(convert.HostRequest(r.Body))
+	identifier, e := s.service.AddHost(
+		convert.HostRequest(r.Body),
+		apply(r.Params.Apply),
+	)
 
 	if validation.Is(e) {
 		return server.AddHost400JSONResponse{Error: e.Error()}, nil
@@ -19,12 +22,6 @@ func (s *Server) AddHost(
 
 	if e != nil {
 		return server.AddHost500JSONResponse(*s.answer(e)), nil
-	}
-
-	if apply(r.Params.Apply) {
-		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return server.AddHost500JSONResponse(*s.answer(f)), nil
-		}
 	}
 
 	return server.AddHost200JSONResponse(*convert.Identifier(identifier)), nil

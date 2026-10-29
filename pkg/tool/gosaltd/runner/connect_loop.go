@@ -9,6 +9,7 @@ import (
 
 func (r *Runner) connectLoop(x context.Context) bool {
 	c := r.saltConnector()
+	r.keep(c)
 
 	if e := peer.Await(
 		x,

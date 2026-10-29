@@ -1,7 +1,13 @@
 package lease
 
-import "github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
+)
 
-func New(c face.LeaseSource) *Collector {
-	return &Collector{opnsense: c}
+func New(
+	c face.Client,
+	g *peer.Guard,
+) *Collector {
+	return &Collector{opnsense: c, guard: g}
 }

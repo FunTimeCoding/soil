@@ -11,7 +11,7 @@ func (s *Server) listSites(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Sites()
+	result, e := s.service.Sites()
 
 	if e != nil {
 		return s.captureDetail(e)

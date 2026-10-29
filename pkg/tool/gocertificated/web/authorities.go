@@ -12,7 +12,7 @@ func (s *Server) authorities(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	result, e := s.store.Authorities()
+	result, e := s.service.Authorities()
 	errors.PanicOnError(e)
 	s.view.RenderPage(
 		w,

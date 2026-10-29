@@ -11,7 +11,7 @@ func (s *Server) raids(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	rows := s.store.Raids()
+	rows := s.service.Raids()
 	s.view.RenderPage(
 		w,
 		constant.RaidsTitle,

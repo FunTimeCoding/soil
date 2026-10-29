@@ -11,7 +11,6 @@ func New(
 	env *environment.Environment,
 	procfilePath string,
 	envrcPath string,
-	socketPath string,
 ) *Supervisor {
 	maxNameWidth := 0
 
@@ -33,7 +32,6 @@ func New(
 		environment:  env,
 		procfilePath: procfilePath,
 		envrcPath:    envrcPath,
-		socketPath:   socketPath,
 		allDone:      make(chan struct{}, 1),
 	}
 }

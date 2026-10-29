@@ -13,7 +13,7 @@ func (s *Server) resolveList(value string) (int, error) {
 		return identifier, nil
 	}
 
-	l, f := s.client.ListByName(value)
+	l, f := s.service.ListByName(value)
 
 	if f != nil {
 		return 0, f

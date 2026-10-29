@@ -16,7 +16,7 @@ func (s *Server) ListLeases(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Leases(phrase)
+	result, e := s.service.Leases(phrase)
 
 	if e != nil {
 		return server.ListLeases500JSONResponse(*s.answer(e)), nil

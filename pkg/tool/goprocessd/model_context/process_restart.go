@@ -12,9 +12,9 @@ func (s *Server) processRestart(
 	_ mcp.CallToolRequest,
 	a argument.ProcessRestart,
 ) (*mcp.CallToolResult, error) {
-	if e := s.supervisor.Restart([]string{a.Name}); e != nil {
-		return s.captureFail(e, "restart failed")
+	if e := s.service.Restart(a.Name); e != nil {
+		return s.answer(e)
 	}
 
-	return response.SuccessAny(s.supervisor.Statuses())
+	return response.SuccessAny(s.service.Statuses())
 }

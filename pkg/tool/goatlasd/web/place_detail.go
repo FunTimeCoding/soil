@@ -26,9 +26,9 @@ func (s *Server) placeDetail(
 		return
 	}
 
-	placements, e := s.store.PlacePlacements(kind, name)
+	placements, e := s.service.PlacePlacements(kind, name)
 	errors.PanicOnError(e)
-	sightings, f := s.store.PlaceSightings(kind, name)
+	sightings, f := s.service.PlaceSightings(kind, name)
 	errors.PanicOnError(f)
 	s.view.RenderPageWithSummary(
 		w,

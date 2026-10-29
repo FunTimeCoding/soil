@@ -17,16 +17,16 @@ func (s *Server) GetThreadReplies(
 		return response.Fail("post_id is required")
 	}
 
-	parent, e := s.client.FindPost(a.PostIdentifier)
+	parent, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.captureFail(e, "post not found")
+		return s.answer(e)
 	}
 
-	replies, f := s.client.Thread(parent)
+	replies, f := s.service.Thread(parent)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.answer(f)
 	}
 
 	rows := make([]*mattermostResponse.Reply, len(replies))

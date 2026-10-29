@@ -2,19 +2,19 @@ package delete_operation
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
 func Event(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	x context.Context,
 	namespace string,
 	name string,
-) {
-	errors.PanicOnError(
+) error {
+	return refusal.Classify(
 		operation.Event(c, namespace).Delete(x, name, v1.DeleteOptions{}),
 	)
 }

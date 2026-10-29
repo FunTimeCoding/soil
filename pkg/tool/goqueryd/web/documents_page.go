@@ -43,12 +43,7 @@ func (s *Server) documentsPage(
 	)
 
 	if e != nil {
-		s.view.RenderPage(
-			w,
-			name,
-			constant.CollectionsPath,
-			html.P(gomponents.Textf("Failed to load documents: %s", e.Error())),
-		)
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

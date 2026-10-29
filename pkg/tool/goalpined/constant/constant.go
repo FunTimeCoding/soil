@@ -23,7 +23,7 @@ const (
 	TokenEnvironment        = "GOALPINE_TOKEN"
 	SignatureKeyEnvironment = "ALPINE_SIGNATURE_KEY"
 
-	RoutePrefix = "apk"
+	FixtureUploadPath = "/api/packages/v3.21/main/x86_64/a.apk"
 
 	PackageRoot  = "/apk"
 	KeyDirectory = "/key"

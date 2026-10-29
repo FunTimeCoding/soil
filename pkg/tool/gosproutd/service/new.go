@@ -1,13 +1,23 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/migrate"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
 )
 
 func New(
-	s *store.Store,
-	n face.EventNotifier,
+	o *option.Sprout,
+	l *logger.Logger,
 ) *Service {
-	return &Service{store: s, notifier: n}
+	d := lite.New(l, o.LitePath)
+	migrate.AutoMigrate(d)
+
+	return &Service{
+		database: d,
+		store:    store.New(d, o.Clock),
+		notifier: o.Notifier(),
+	}
 }

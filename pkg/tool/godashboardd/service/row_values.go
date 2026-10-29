@@ -2,12 +2,18 @@ package service
 
 import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 
-func (s *Service) rowValues(rows []*layout.Row) []string {
+func (s *Service) rowValues(rows []*layout.Row) ([]string, []error) {
 	var result []string
+	var failed []error
 
 	for _, v := range rows {
-		result = append(result, s.queryValue(v.Query))
+		value, e := s.queryValue(v.Query)
+		result = append(result, value)
+
+		if e != nil {
+			failed = append(failed, e)
+		}
 	}
 
-	return result
+	return result, failed
 }

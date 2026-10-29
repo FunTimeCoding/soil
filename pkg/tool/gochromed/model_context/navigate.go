@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -12,20 +13,10 @@ func (s *Server) Navigate(
 	_ mcp.CallToolRequest,
 	a argument.Navigate,
 ) (*mcp.CallToolResult, error) {
-	if a.Locator == "" {
-		return response.Fail("url is required")
-	}
-
-	t, e := s.resolveTab(a.TabIdentifier, "", "")
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	p := s.client.Page(t.Identifier)
-	e = p.Navigate(a.Locator)
-
-	if e != nil {
+	if e := s.service.Navigate(
+		selector.New(a.TabIdentifier, "", ""),
+		a.Locator,
+	); e != nil {
 		return s.captureDetail(e)
 	}
 

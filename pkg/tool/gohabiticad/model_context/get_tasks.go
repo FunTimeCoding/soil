@@ -13,7 +13,7 @@ func (s *Server) getTasks(
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	taskType := r.GetString(constant.TaskType, "")
-	result, e := s.habitica.Tasks(taskType)
+	result, e := s.service.Tasks(taskType)
 
 	if e != nil {
 		return s.answer(e)

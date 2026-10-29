@@ -8,11 +8,11 @@ import (
 
 func deleteOld(
 	c *client.Client,
-	e *event.Event,
+	v *event.Event,
 	age time.Duration,
 ) bool {
-	if e.Age() > age {
-		c.DeleteEventSimple(e)
+	if v.Age() > age {
+		c.MustDeleteEventSimple(v)
 
 		return true
 	}

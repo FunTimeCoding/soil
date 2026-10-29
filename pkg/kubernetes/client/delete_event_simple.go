@@ -5,10 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/event"
 )
 
-func (c *Client) DeleteEventSimple(e *event.Event) {
+func (c *Client) DeleteEventSimple(v *event.Event) error {
 	f := filter.New()
-	f.AddClusters(e.Cluster)
-	f.AddNamespaces(e.Namespace)
-	f.AddNames(e.Name)
-	c.DeleteEvent(f)
+	f.AddClusters(v.Cluster)
+	f.AddNamespaces(v.Namespace)
+	f.AddNames(v.Name)
+
+	return c.DeleteEvent(f)
 }

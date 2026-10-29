@@ -1,6 +1,9 @@
 package netbox
 
-import "github.com/funtimecoding/soil/pkg/netbox/cluster_group"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/cluster_group"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
+)
 
 func (c *Client) ClusterGroups() ([]*cluster_group.Group, error) {
 	result, _, e := c.client.VirtualizationAPI.VirtualizationClusterGroupsList(
@@ -8,7 +11,7 @@ func (c *Client) ClusterGroups() ([]*cluster_group.Group, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return cluster_group.NewSlice(result.Results), nil

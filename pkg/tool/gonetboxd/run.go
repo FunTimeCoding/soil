@@ -7,12 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/netbox"
-	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -25,14 +22,10 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
-	defer s.Close()
 	m := metric.New()
-	c := netbox.NewEnvironment(
-		netbox.WithRequestDuration(m.Upstream(constant.Identity)),
-	)
-	defer c.Close()
-	b := web.New(c)
+	v := service.New(o, l, m.Upstream(constant.Identity))
+	defer v.Close()
+	b := web.New(v)
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
@@ -45,15 +38,8 @@ func Run(
 		server.New(
 			constant.Identity,
 			o.Address,
-			func(m *http.ServeMux) {
-				Mount(
-					c,
-					service.New(c, s),
-					b,
-					r,
-					i.Recorder(),
-					guard.New(m, o.ServiceTokens),
-				)
+			func(x *http.ServeMux) {
+				Mount(v, b, r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
 		).WithMiddleware(b.Recovery(r)),
 	).RunUntilSignal()

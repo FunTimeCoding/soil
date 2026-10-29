@@ -11,6 +11,7 @@ import (
 
 func TestMigrationWidensExistingMetadataTable(t *testing.T) {
 	database := connection.NewMemory()
+	defer errors.PanicClose(database)
 
 	for _, s := range []string{
 		`CREATE TABLE document (
@@ -39,8 +40,7 @@ func TestMigrationWidensExistingMetadataTable(t *testing.T) {
 		errors.PanicOnError(e)
 	}
 
-	s := store.New(database)
-	defer s.Close()
+	s := store.New(database, constant.FixtureEmbedModel)
 	var key int
 	assert.FatalOnError(
 		t,

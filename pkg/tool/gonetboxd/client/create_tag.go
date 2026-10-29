@@ -1,18 +1,27 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) CreateTag(name string) *response.Response {
-	result, e := c.client.CreateTag(
-		c.context,
+func (c *Client) CreateTag(
+	x context.Context,
+	name string,
+) (client.Tag, error) {
+	r, e := c.client.CreateTagWithResponse(
+		x,
 		client.CreateNameRequest{Name: name},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Tag{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Tag{}, refusal.New("create tag", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON201, nil
 }

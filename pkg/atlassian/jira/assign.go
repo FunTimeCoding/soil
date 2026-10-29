@@ -6,7 +6,7 @@ func (c *Client) Assign(
 	key string,
 	u *jira.User,
 ) error {
-	_, e := c.client.Issue.UpdateAssigneeWithContext(c.context, key, u)
+	r, e := c.client.Issue.UpdateAssigneeWithContext(c.context, key, u)
 
-	return wrapError(e)
+	return WrapError(r, e)
 }

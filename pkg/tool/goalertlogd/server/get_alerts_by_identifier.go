@@ -18,7 +18,7 @@ func (s *Server) GetAlertsByIdentifier(
 		}
 	}
 
-	records, e := s.store.ByIdentifiers(identifiers)
+	records, e := s.service.AlertsByIdentifier(identifiers)
 
 	if e != nil {
 		return server.GetAlertsByIdentifier500JSONResponse(*s.answer(e)), nil

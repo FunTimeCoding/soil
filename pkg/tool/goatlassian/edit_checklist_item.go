@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -25,7 +26,14 @@ func editChecklistItem(
 				t.Exitf("invalid index: %s\n", arguments[1])
 			}
 
-			t.Emit(c.EditChecklistItem(arguments[0], index, arguments[2]))
+			t.EmitValue(
+				c.EditChecklistItem(
+					context.Background(),
+					arguments[0],
+					index,
+					arguments[2],
+				),
+			)
 		},
 	}
 }

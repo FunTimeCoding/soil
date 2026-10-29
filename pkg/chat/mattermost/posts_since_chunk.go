@@ -11,7 +11,7 @@ func (c *Client) postsSinceChunk(
 	h *model.Channel,
 	since time.Time,
 ) ([]*model.Post, error) {
-	list, _, e := c.client.GetPostsSince(
+	list, r, e := c.client.GetPostsSince(
 		c.context,
 		h.Id,
 		since.UnixMilli(),
@@ -19,7 +19,7 @@ func (c *Client) postsSinceChunk(
 	)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	return post.FromList(list, true), nil

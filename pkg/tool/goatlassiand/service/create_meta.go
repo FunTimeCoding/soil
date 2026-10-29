@@ -9,17 +9,22 @@ func (s *Service) CreateMeta(
 	project string,
 	issueType string,
 ) (*jira.MetaIssueType, error) {
-	p, e := s.jira.MetaProject(project)
+	return guarded(
+		s.jiraGuard,
+		func() (*jira.MetaIssueType, error) {
+			p, e := s.jira.MetaProject(project)
 
-	if e != nil {
-		return nil, fmt.Errorf("project metadata not found: %w", e)
-	}
+			if e != nil {
+				return nil, fmt.Errorf("read project metadata: %w", e)
+			}
 
-	t, f := s.jira.MetaIssueType(p, issueType)
+			t, f := s.jira.MetaIssueType(p, issueType)
 
-	if f != nil {
-		return nil, fmt.Errorf("issue type not found: %w", f)
-	}
+			if f != nil {
+				return nil, fmt.Errorf("read issue type: %w", f)
+			}
 
-	return t, nil
+			return t, nil
+		},
+	)
 }

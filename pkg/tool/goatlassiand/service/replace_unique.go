@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"strings"
 )
 
@@ -14,7 +14,7 @@ func ReplaceUnique(
 	count := strings.Count(content, oldText)
 
 	if count == 0 {
-		return "", not_found.Format(
+		return "", validation.New(
 			"old_text not found in page. Re-read the page with confluence_get_page and try again",
 		)
 	}

@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createDevice(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var role string
@@ -29,8 +30,15 @@ func createDevice(
 				assigned = &tenant
 			}
 
-			t.Emit(
-				c.CreateDevice(arguments[0], role, deviceType, site, assigned),
+			t.EmitValue(
+				c.CreateDevice(
+					context.Background(),
+					arguments[0],
+					role,
+					deviceType,
+					site,
+					assigned,
+				),
 			)
 		},
 	}

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/linkace/link"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/search_result"
 	"strings"
 )
@@ -13,7 +14,10 @@ func (s *Service) Search(
 	lower := strings.ToLower(query)
 
 	if entityType == "" || entityType == "link" {
-		links, e := s.client.Search(query)
+		links, e := guarded(
+			s.guard,
+			func() ([]*link.Link, error) { return s.client.Search(query) },
+		)
 
 		if e != nil {
 			return nil, e
@@ -23,7 +27,7 @@ func (s *Service) Search(
 	}
 
 	if entityType == "" || entityType == "list" {
-		all, e := s.client.Lists()
+		all, e := guarded(s.guard, s.client.Lists)
 
 		if e != nil {
 			return nil, e
@@ -37,7 +41,7 @@ func (s *Service) Search(
 	}
 
 	if entityType == "" || entityType == "tag" {
-		all, e := s.client.Tags()
+		all, e := guarded(s.guard, s.client.Tags)
 
 		if e != nil {
 			return nil, e

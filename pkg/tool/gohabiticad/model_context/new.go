@@ -4,17 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
-	habitica "github.com/funtimecoding/soil/pkg/tool/gohabiticad/face"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/service"
 )
 
 func New(
-	c habitica.HabiticaSource,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		habitica: c,
+		service:  v,
 		reporter: r,
 	}
 	result.register()

@@ -1,7 +1,7 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+import "github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
 
-func New(s face.SecretSource) *Service {
-	return &Service{source: s}
+func New(o *option.Secret) *Service {
+	return &Service{source: o.Source()}
 }

@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -10,7 +11,8 @@ import (
 
 func (s *Server) topTable() gomponents.Node {
 	now := time.Now()
-	records := s.store.MustTop(25, now.Add(-7*24*time.Hour), now)
+	records, e := s.service.TopAlerts(25, now.Add(-7*24*time.Hour), now)
+	errors.PanicOnError(e)
 
 	if len(records) == 0 {
 		return html.P(html.Em(gomponents.Text("No alerts in the last 7 days.")))

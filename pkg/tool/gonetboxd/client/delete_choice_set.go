@@ -1,14 +1,16 @@
 package client
 
-import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
-)
+import "context"
 
-func (c *Client) DeleteChoiceSet(name string) *response.Response {
-	result, e := c.client.DeleteChoiceSet(c.context, name)
-	errors.PanicOnError(e)
+func (c *Client) DeleteChoiceSet(
+	x context.Context,
+	name string,
+) error {
+	r, e := c.client.DeleteChoiceSetWithResponse(x, name)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	return noContent("delete choice set", r.HTTPResponse, r.Body)
 }

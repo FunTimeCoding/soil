@@ -3,13 +3,16 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func deleteCollection(c *client.ClientWithResponses) *cobra.Command {
+func deleteCollection(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete-collection [name]",
 		Short: "Delete a collection and all its documents",
@@ -18,12 +21,16 @@ func deleteCollection(c *client.ClientWithResponses) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := c.DeleteCollectionWithResponse(
+			deleted, e := c.DeleteCollection(
 				context.Background(),
 				&client.DeleteCollectionParams{Name: arguments[0]},
 			)
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("delete collection", r.HTTPResponse, r.Body)
+			t.EmitDone(e)
+
+			if !deleted {
+				t.Exitf("collection not found: %s\n", arguments[0])
+			}
+
 			console.Format("collection %s deleted\n", arguments[0])
 		},
 	}

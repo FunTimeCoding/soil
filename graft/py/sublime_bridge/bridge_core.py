@@ -1,5 +1,7 @@
 import sublime
 
+AMBIGUOUS_MATCH = "old_string matches multiple times; use replace_all"
+
 
 def list_views():
     result = []
@@ -35,7 +37,7 @@ def edit_view(view_id, old_string, new_string, replace_all):
         return None, "old_string not found in buffer"
 
     if not replace_all and len(view.find_all(old_string, sublime.LITERAL)) > 1:
-        return None, "old_string matches multiple times; use replace_all"
+        return None, AMBIGUOUS_MATCH
 
     view.run_command(
         "sublime_bridge_replace",

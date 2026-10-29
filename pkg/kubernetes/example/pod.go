@@ -10,7 +10,7 @@ func Pod() {
 	k := client.NewEnvironment()
 	f := constant.Format
 
-	for _, n := range k.Pods(nil) {
+	for _, n := range k.MustPods(nil) {
 		console.Line(n.Format(f))
 	}
 }

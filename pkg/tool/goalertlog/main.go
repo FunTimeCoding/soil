@@ -21,8 +21,11 @@ func Main() {
 		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(alerts(c, t))
+	o.AddCommand(alertsAfter(c, t))
+	o.AddCommand(alertsByIdentifier(c, t))
 	o.AddCommand(recent(c, t))
 	o.AddCommand(topAlerts(c, t))
+	o.AddCommand(status(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())

@@ -13,7 +13,7 @@ func (s *Server) ListTags(
 	a argument.ListTags,
 ) (*mcp.CallToolResult, error) {
 	p := pageFromOffset(a.Offset, a.Limit)
-	r, e := s.client.TagsPage(p)
+	r, e := s.service.TagsPage(p)
 
 	if e != nil {
 		return s.answer(e)

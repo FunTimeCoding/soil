@@ -11,12 +11,13 @@ func (s *Server) getStatus(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	totalRecords, e := s.store.Count()
+	status, e := s.service.Status()
 
 	if e != nil {
 		return s.answer(e)
 	}
 
+	totalRecords := status.Total
 	lastPoll := s.worker.LastPoll()
 
 	if lastPoll.IsZero() {

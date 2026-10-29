@@ -21,12 +21,10 @@ const (
 	ProcessRestart    = "process_restart"
 	ProcessRestartAll = "process_restart_all"
 	ProcessReload     = "process_reload"
-
-	ListCommand = "list"
 )
 
 const (
-	UnknownProcess     = "unknown process %s"
+	ProcessKind        = "managed process"
 	WaveAlreadyRunning = "restart wave already running"
 	ProcfileScope      = "procfile"
 	EnvironmentScope   = "environment"

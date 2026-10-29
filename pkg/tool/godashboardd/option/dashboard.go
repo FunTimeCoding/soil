@@ -1,6 +1,11 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+import (
+	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/face"
+	nextcloud "github.com/funtimecoding/soil/pkg/nextcloud/face"
+	metric "github.com/funtimecoding/soil/pkg/prometheus/face"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+)
 
 type Dashboard struct {
 	Address          string
@@ -13,4 +18,7 @@ type Dashboard struct {
 	EncryptionSecret string
 	PublicLocator    string
 	ServiceTokens    []string
+	Prometheus       func() metric.Client
+	Argocd           func() kubernetes.ArgocdClient
+	Usage            func() nextcloud.UsageClient
 }

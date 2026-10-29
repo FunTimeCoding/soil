@@ -1,14 +1,22 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/tool/gogated/model/user"
+import (
+	"errors"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/model/user"
+	"gorm.io/gorm"
+)
 
-func (s *Store) UserMail(identifier string) string {
+func (s *Store) UserMail(identifier string) (string, error) {
 	var row user.User
 	e := s.mapper.Where("identifier = ?", identifier).First(&row).Error
 
-	if e != nil {
-		return ""
+	if errors.Is(e, gorm.ErrRecordNotFound) {
+		return "", nil
 	}
 
-	return row.Mail
+	if e != nil {
+		return "", e
+	}
+
+	return row.Mail, nil
 }

@@ -14,7 +14,7 @@ func (s *Server) deleteUser(
 	a argument.Account,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.DeleteUser(a.Account); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("deleted user: %s", a.Account))

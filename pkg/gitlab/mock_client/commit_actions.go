@@ -12,6 +12,10 @@ func (c *Client) CommitActions(
 	message string,
 	v []*gitlab.CommitActionOptions,
 ) (*commit.Commit, error) {
+	if c.failure != nil {
+		return nil, c.failure
+	}
+
 	o := recorded_commit.New(branch, message)
 	o.Actions = v
 	c.commits = append(c.commits, o)

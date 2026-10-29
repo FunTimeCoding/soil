@@ -1,20 +1,20 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) EditPage(
+	x context.Context,
 	identifier string,
 	oldText string,
 	newText string,
 	title string,
 	message string,
 	draft bool,
-) *response.Response {
+) (*client.ConfluencePageDetail, error) {
 	body := client.EditPageJSONRequestBody{OldText: oldText, NewText: newText}
 
 	if title != "" {
@@ -29,8 +29,15 @@ func (c *Client) EditPage(
 		body.Draft = &draft
 	}
 
-	result, e := c.client.EditPage(c.context, identifier, body)
-	errors.PanicOnError(e)
+	r, e := c.client.EditPageWithResponse(x, identifier, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("edit page", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

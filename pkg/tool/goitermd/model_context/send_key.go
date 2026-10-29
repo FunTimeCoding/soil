@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/model_context/argument"
@@ -15,26 +14,12 @@ func (s *Server) SendKey(
 	_ mcp.CallToolRequest,
 	a argument.SendKey,
 ) (*mcp.CallToolResult, error) {
-	if len(a.Keys) == 0 {
-		return response.Fail("keys is required")
-	}
-
-	interval := time.Duration(a.Interval) * time.Second
-
-	if interval < time.Second {
-		interval = time.Second
-	}
-
-	for i, key := range a.Keys {
-		if i > 0 {
-			time.Sleep(interval)
-		}
-
-		e := s.client.SendKey(a.SessionIdentifier, key)
-
-		if e != nil {
-			return s.answer(fmt.Errorf("step %d: %w", i+1, e))
-		}
+	if e := s.service.SendKeys(
+		a.SessionIdentifier,
+		a.Keys,
+		time.Duration(a.Interval)*time.Second,
+	); e != nil {
+		return s.answer(e)
 	}
 
 	return response.Success("sent keys: %s", join.Comma(a.Keys))

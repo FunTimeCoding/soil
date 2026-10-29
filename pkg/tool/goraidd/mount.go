@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/server"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 	raidWeb "github.com/funtimecoding/soil/pkg/tool/goraidd/web"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -13,8 +13,7 @@ import (
 )
 
 func Mount(
-	s *store.Store,
-	outputPath string,
+	v *service.Service,
 	u *raidWeb.Server,
 	r face.Reporter,
 	t face.Recorder,
@@ -24,7 +23,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(s, outputPath, r),
+				server.New(v, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},

@@ -11,7 +11,7 @@ func (s *Server) getTags(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.habitica.Tags()
+	result, e := s.service.Tags()
 
 	if e != nil {
 		return s.answer(e)

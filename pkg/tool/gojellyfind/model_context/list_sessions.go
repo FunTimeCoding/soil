@@ -12,7 +12,7 @@ func (s *Server) ListSessions(
 	_ mcp.CallToolRequest,
 	_ argument.ListSessions,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Sessions()
+	result, e := s.service.Sessions()
 
 	if e != nil {
 		return s.answer(e)

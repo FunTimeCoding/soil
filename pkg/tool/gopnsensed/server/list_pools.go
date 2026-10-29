@@ -16,7 +16,7 @@ func (s *Server) ListPools(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Pools(phrase)
+	result, e := s.service.Pools(phrase)
 
 	if e != nil {
 		return server.ListPools500JSONResponse(*s.answer(e)), nil

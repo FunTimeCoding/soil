@@ -18,7 +18,7 @@ func (s *Server) createClusterType(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.CreateClusterType(name)
+	result, g := s.service.CreateClusterType(name)
 
 	if g != nil {
 		return s.captureFail(g, "cluster type not created")

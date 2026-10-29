@@ -12,11 +12,7 @@ func (s *Server) GetEpisodes(
 	_ mcp.CallToolRequest,
 	a argument.GetEpisodes,
 ) (*mcp.CallToolResult, error) {
-	if a.SeriesIdentifier == "" {
-		return response.Fail("series_id is required")
-	}
-
-	result, e := s.client.Episodes(a.SeriesIdentifier)
+	result, e := s.service.Episodes(a.SeriesIdentifier)
 
 	if e != nil {
 		return s.answer(e)

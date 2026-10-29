@@ -1,8 +1,8 @@
 package model_context_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/mock_client"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/base"
 	"testing"
 )

@@ -4,18 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/service"
 )
 
 func New(
-	s *supervisor.Supervisor,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server:     server.New(constant.Identity).WithRecorder(t).Server(),
-		supervisor: s,
-		reporter:   r,
+		server:   server.New(constant.Identity).WithRecorder(t).Server(),
+		service:  v,
+		reporter: r,
 	}
 	result.register()
 

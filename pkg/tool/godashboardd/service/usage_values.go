@@ -5,21 +5,21 @@ import (
 	"strconv"
 )
 
-func (s *Service) usageValues() []string {
+func (s *Service) usageValues() ([]string, error) {
+	pending := []string{constant.PendingValue, constant.PendingValue}
+
 	if s.usage == nil {
-		return []string{constant.PendingValue, constant.PendingValue}
+		return pending, nil
 	}
 
-	result, e := s.usage.Fetch()
+	result, e := guarded(s.usageGuard, s.usage.Fetch)
 
 	if e != nil {
-		s.logger.Plain("usage fetch failed: %v", e)
-
-		return []string{constant.PendingValue, constant.PendingValue}
+		return pending, e
 	}
 
 	return []string{
 		strconv.FormatInt(result.Files, 10),
 		strconv.FormatInt(result.Shares, 10),
-	}
+	}, nil
 }

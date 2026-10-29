@@ -2,8 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
@@ -64,10 +68,61 @@ func TestRefusalCarriesLinkAceMessage(t *testing.T) {
 	)
 	var out map[string]any
 	e := newClient(t, s.URL).Post("links", map[string]string{}, &out)
-	assert.True(t, unexpected.Is(e))
-	assert.StringContains(
+	assert.True(t, validation.Is(e))
+	assert.StringContains(t, "The url field is required.", e.Error())
+}
+
+func TestARefusedTokenIsForbidden(t *testing.T) {
+	s, _ := upstream_tester.New(
 		t,
-		"status: 422: The url field is required.",
-		e.Error(),
+		http.StatusUnauthorized,
+		`{"message":"Unauthenticated."}`,
 	)
+	var out map[string]any
+	e := newClient(t, s.URL).Get("lists", nil, &out)
+	assert.True(t, forbidden.Is(e))
+}
+
+func TestAForbiddenActionIsForbidden(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusForbidden,
+		`{"message":"This action is unauthorized."}`,
+	)
+	var out map[string]any
+	e := newClient(t, s.URL).Get("lists", nil, &out)
+	assert.True(t, forbidden.Is(e))
+}
+
+func TestAConflictIsConflict(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusConflict,
+		`{"message":"The tag already exists."}`,
+	)
+	var out map[string]any
+	e := newClient(t, s.URL).Post("tags", map[string]string{}, &out)
+	assert.True(t, conflict.Is(e))
+}
+
+func TestAMaintenanceAnswerIsUnavailable(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusServiceUnavailable,
+		`{"message":"Service Unavailable"}`,
+	)
+	var out map[string]any
+	e := newClient(t, s.URL).Post("lists", map[string]string{}, &out)
+	assert.True(t, unavailable.Is(e))
+}
+
+func TestAnyOtherRefusalStaysUnexpected(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusInternalServerError,
+		`{"message":"Server Error"}`,
+	)
+	var out map[string]any
+	e := newClient(t, s.URL).Get("lists", nil, &out)
+	assert.True(t, unexpected.Is(e))
 }

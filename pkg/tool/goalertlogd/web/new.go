@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -14,7 +14,7 @@ import (
 )
 
 func New(
-	s *store.Store,
+	v *service.Service,
 	p *worker.Worker,
 	n face.EventNotifier,
 ) *Server {
@@ -33,7 +33,7 @@ func New(
 	)
 
 	return &Server{
-		store:    s,
+		service:  v,
 		notifier: n,
 		worker:   p,
 		registry: r,

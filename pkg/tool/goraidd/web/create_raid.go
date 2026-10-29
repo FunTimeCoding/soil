@@ -12,7 +12,7 @@ func (s *Server) createRaid(
 ) {
 	errors.PanicOnError(r.ParseForm())
 	filenames := r.Form["fileNames"]
-	identifier := s.store.CreateRaid(filenames)
+	identifier := s.service.CreateRaid(filenames)
 	http.Redirect(
 		w,
 		r,

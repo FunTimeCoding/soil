@@ -43,9 +43,21 @@ type Status struct {
 	Version string `json:"version"`
 }
 
+// Thread defines model for Thread.
+type Thread struct {
+	Replies []Post `json:"replies"`
+	Root    Post   `json:"root"`
+}
+
 // GetChannelPostsParams defines parameters for GetChannelPosts.
 type GetChannelPostsParams struct {
 	// Since Only posts created at or after this time.
+	Since time.Time `form:"since" json:"since"`
+}
+
+// GetUnresolvedThreadsParams defines parameters for GetUnresolvedThreads.
+type GetUnresolvedThreadsParams struct {
+	// Since Only threads whose root was created at or after this time.
 	Since time.Time `form:"since" json:"since"`
 }
 
@@ -128,6 +140,11 @@ type ClientInterface interface {
 	// Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 	GetChannelPosts(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetUnresolvedThreads Threads started in a channel since a time whose root lacks the done reaction, oldest first
+	//
+	// Corresponds with GET /api/channel/{name}/unresolved (the `GetUnresolvedThreads` operationId).
+	GetUnresolvedThreads(ctx context.Context, name string, params *GetUnresolvedThreadsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetPostReactions Emoji names of a post's reactions
 	//
 	// Corresponds with GET /api/post/{identifier}/reactions (the `GetPostReactions` operationId).
@@ -149,6 +166,21 @@ type ClientInterface interface {
 // Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 func (c *Client) GetChannelPosts(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetChannelPostsRequest(c.Server, name, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetUnresolvedThreads Threads started in a channel since a time whose root lacks the done reaction, oldest first
+//
+// Corresponds with GET /api/channel/{name}/unresolved (the `GetUnresolvedThreads` operationId).
+func (c *Client) GetUnresolvedThreads(ctx context.Context, name string, params *GetUnresolvedThreadsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUnresolvedThreadsRequest(c.Server, name, params)
 	if err != nil {
 		return nil, err
 	}
@@ -221,6 +253,63 @@ func NewGetChannelPostsRequest(server string, name string, params *GetChannelPos
 	}
 
 	operationPath := fmt.Sprintf("/api/channel/%s/posts", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "since", params.Since, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetUnresolvedThreadsRequest constructs an http.Request for the GetUnresolvedThreads method
+func NewGetUnresolvedThreadsRequest(server string, name string, params *GetUnresolvedThreadsParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/channel/%s/unresolved", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -407,6 +496,13 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 	GetChannelPostsWithResponse(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*GetChannelPostsResponse, error)
 
+	// GetUnresolvedThreadsWithResponse Threads started in a channel since a time whose root lacks the done reaction, oldest first
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /api/channel/{name}/unresolved (the `GetUnresolvedThreads` operationId).
+	GetUnresolvedThreadsWithResponse(ctx context.Context, name string, params *GetUnresolvedThreadsParams, reqEditors ...RequestEditorFn) (*GetUnresolvedThreadsResponse, error)
+
 	// GetPostReactionsWithResponse Emoji names of a post's reactions
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -434,15 +530,24 @@ type GetChannelPostsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Post
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetChannelPostsResponse) GetJSON200() *[]*Post {
 	return r.JSON200
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetChannelPostsResponse) GetJSON403() *Error {
+	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -453,6 +558,11 @@ func (r GetChannelPostsResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetChannelPostsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetChannelPostsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -484,20 +594,98 @@ func (r GetChannelPostsResponse) ContentType() string {
 	return ""
 }
 
+type GetUnresolvedThreadsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]Thread
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetUnresolvedThreadsResponse) GetJSON200() *[]Thread {
+	return r.JSON200
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetUnresolvedThreadsResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetUnresolvedThreadsResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetUnresolvedThreadsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetUnresolvedThreadsResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r GetUnresolvedThreadsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUnresolvedThreadsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUnresolvedThreadsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetUnresolvedThreadsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetPostReactionsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]string
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetPostReactionsResponse) GetJSON200() *[]string {
 	return r.JSON200
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetPostReactionsResponse) GetJSON403() *Error {
+	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -508,6 +696,11 @@ func (r GetPostReactionsResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetPostReactionsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetPostReactionsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -585,15 +778,24 @@ type GetThreadResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Post
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetThreadResponse) GetJSON200() *[]*Post {
 	return r.JSON200
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetThreadResponse) GetJSON403() *Error {
+	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -604,6 +806,11 @@ func (r GetThreadResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetThreadResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetThreadResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -646,6 +853,19 @@ func (c *ClientWithResponses) GetChannelPostsWithResponse(ctx context.Context, n
 		return nil, err
 	}
 	return ParseGetChannelPostsResponse(rsp)
+}
+
+// GetUnresolvedThreadsWithResponse Threads started in a channel since a time whose root lacks the done reaction, oldest first
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /api/channel/{name}/unresolved (the `GetUnresolvedThreads` operationId).
+func (c *ClientWithResponses) GetUnresolvedThreadsWithResponse(ctx context.Context, name string, params *GetUnresolvedThreadsParams, reqEditors ...RequestEditorFn) (*GetUnresolvedThreadsResponse, error) {
+	rsp, err := c.GetUnresolvedThreads(ctx, name, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUnresolvedThreadsResponse(rsp)
 }
 
 // GetPostReactionsWithResponse Emoji names of a post's reactions
@@ -708,6 +928,13 @@ func ParseGetChannelPostsResponse(rsp *http.Response) (*GetChannelPostsResponse,
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -721,6 +948,67 @@ func ParseGetChannelPostsResponse(rsp *http.Response) (*GetChannelPostsResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUnresolvedThreadsResponse parses an HTTP response from a GetUnresolvedThreadsWithResponse call
+func ParseGetUnresolvedThreadsResponse(rsp *http.Response) (*GetUnresolvedThreadsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUnresolvedThreadsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Thread
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -748,6 +1036,13 @@ func ParseGetPostReactionsResponse(rsp *http.Response) (*GetPostReactionsRespons
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -761,6 +1056,13 @@ func ParseGetPostReactionsResponse(rsp *http.Response) (*GetPostReactionsRespons
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -814,6 +1116,13 @@ func ParseGetThreadResponse(rsp *http.Response) (*GetThreadResponse, error) {
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -827,6 +1136,13 @@ func ParseGetThreadResponse(rsp *http.Response) (*GetThreadResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

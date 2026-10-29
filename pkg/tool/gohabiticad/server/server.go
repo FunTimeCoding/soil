@@ -1,11 +1,11 @@
 package server
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/service"
 )
 
 type Server struct {
-	habitica face.HabiticaSource
-	reporter library.Reporter
+	service  *service.Service
+	reporter face.Reporter
 }

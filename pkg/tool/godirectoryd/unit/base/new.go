@@ -1,15 +1,12 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/directory"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd"
-	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/web"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -17,33 +14,18 @@ import (
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	v := service.New(
-		directory.New("directory.example.org", "dc=example,dc=org"),
-	)
-	authorization := client.New(
-		"https://gate.example.org",
-		"tester",
-		"tester-secret",
-		constant.SignInPath,
-		"https://directory.example.org/callback",
-		client.DeriveKey("tester-encryption-secret"),
-	)
+	m := memory.New()
+	v := service_tester.Shared(t, service_tester.NewSource(), m)
 	result := &Server{
-		Service:       v,
-		Authorization: authorization,
+		Service:  v,
+		Reporter: m,
 		Server: model_context_server.New(
 			t,
 			func(
 				_ *http.ServeMux,
 				g *guard.Mux,
 			) {
-				godirectoryd.Mount(
-					v,
-					web.New(v, authorization),
-					memory.New(),
-					mock_recorder.New(),
-					g,
-				)
+				godirectoryd.Mount(v, web.New(v), m, mock_recorder.New(), g)
 			},
 		),
 	}

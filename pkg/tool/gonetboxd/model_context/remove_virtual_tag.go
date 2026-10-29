@@ -24,7 +24,7 @@ func (s *Server) removeVirtualTag(
 		return response.Fail("tag is required: %v", g)
 	}
 
-	result, h := s.client.RemoveVirtualTag(name, tag)
+	result, h := s.service.RemoveVirtualTag(name, tag)
 
 	if h != nil {
 		return s.captureFail(h, "tag not removed from virtual machine")

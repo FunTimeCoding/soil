@@ -4,17 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
-	opnsense "github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/service"
 )
 
 func New(
-	c opnsense.OpnsenseSource,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		opnsense: c,
+		service:  v,
 		reporter: r,
 	}
 	result.register()

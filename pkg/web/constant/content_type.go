@@ -7,5 +7,6 @@ const (
 	Graphic     = "image/png"
 	Markdown    = "text/markdown"
 	Object      = "application/json"
+	Octets      = "application/octet-stream"
 	Text        = "text/plain"
 )

@@ -9,6 +9,7 @@ import (
 
 func (s *Server) renderLoginForm(
 	w http.ResponseWriter,
+	status int,
 	errorMessage string,
 	source string,
 ) {
@@ -73,5 +74,5 @@ func (s *Server) renderLoginForm(
 		html.Button(html.Type("submit"), gomponents.Text("Sign in")),
 	)
 	content = append(content, html.Form(form...))
-	s.view.RenderPage(w, "Sign in", "/authorize", content...)
+	s.view.RenderPageWithStatus(w, status, "Sign in", "/authorize", content...)
 }

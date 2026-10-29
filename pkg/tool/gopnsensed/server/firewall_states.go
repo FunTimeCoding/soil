@@ -16,7 +16,7 @@ func (s *Server) FirewallStates(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.States(phrase)
+	result, e := s.service.States(phrase)
 
 	if e != nil {
 		return server.FirewallStates500JSONResponse(*s.answer(e)), nil

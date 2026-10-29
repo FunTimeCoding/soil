@@ -18,6 +18,8 @@ func New(
 		service:  v,
 		interval: interval,
 		recovery: recovery.New(l, r),
+		reporter: r,
+		logger:   l,
 		stop:     make(chan struct{}),
 	}
 }

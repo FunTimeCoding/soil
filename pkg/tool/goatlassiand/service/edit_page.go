@@ -13,14 +13,7 @@ func (s *Service) EditPage(
 	message string,
 	draft bool,
 ) (*page.Page, error) {
-	var current *page.Page
-	var e error
-
-	if draft {
-		current, e = s.confluence.DraftPage(identifier)
-	} else {
-		current, e = s.confluence.Page(identifier)
-	}
+	current, e := s.Page(identifier, draft)
 
 	if e != nil {
 		return nil, e
@@ -43,12 +36,17 @@ func (s *Service) EditPage(
 		status = constant.ConfluenceDraftStatus
 	}
 
-	return s.confluence.PutPage(
-		identifier,
-		title,
-		page.ToStorage(newMarkdown),
-		current.Raw.Version.Number+1,
-		message,
-		status,
+	return guarded(
+		s.confluenceGuard,
+		func() (*page.Page, error) {
+			return s.confluence.PutPage(
+				identifier,
+				title,
+				page.ToStorage(newMarkdown),
+				current.Raw.Version.Number+1,
+				message,
+				status,
+			)
+		},
 	)
 }

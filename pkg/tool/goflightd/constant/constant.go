@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
 
 var Identity = identity.New(
 	"goflightd",
@@ -34,4 +37,12 @@ const (
 	Disconnected = "disconnected"
 
 	DateFormat = "2006-01-02T15:04:05Z07:00"
+
+	LabelRequired = "label is required"
+
+	StreamPause       = 5 * time.Second
+	BluetoothInterval = 15 * time.Second
+	WirelessInterval  = 5 * time.Second
+	PruneInterval     = time.Hour
+	Retention         = 7 * 24 * time.Hour
 )

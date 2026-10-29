@@ -12,14 +12,8 @@ func (s *Server) Navigate(
 	_ mcp.CallToolRequest,
 	a argument.Navigate,
 ) (*mcp.CallToolResult, error) {
-	if a.Locator == "" {
-		return response.Fail("url is required")
-	}
-
-	e := s.client.Navigate(int(a.TabIdentifier), a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
+	if e := s.service.Navigate(int(a.TabIdentifier), a.Locator); e != nil {
+		return s.answer(e)
 	}
 
 	return response.Success("navigated to %s", a.Locator)

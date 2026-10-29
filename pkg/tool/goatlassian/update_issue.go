@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
@@ -41,8 +42,9 @@ func updateIssue(
 				}
 			}
 
-			t.Emit(
+			t.EmitValue(
 				c.UpdateIssue(
+					context.Background(),
 					arguments[0],
 					summary,
 					description,

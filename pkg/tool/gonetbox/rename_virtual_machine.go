@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func renameVirtualMachine(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -19,10 +20,11 @@ func renameVirtualMachine(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(
+			t.EmitValue(
 				c.UpdateVirtualMachine(
+					context.Background(),
 					arguments[0],
-					generated.UpdateVirtualMachineRequest{Name: &arguments[1]},
+					client.UpdateVirtualMachineRequest{Name: &arguments[1]},
 				),
 			)
 		},

@@ -2,6 +2,7 @@ package godirectoryd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	directoryConstant "github.com/funtimecoding/soil/pkg/directory/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
@@ -30,5 +31,6 @@ func Main() {
 		webConstant.AuthorizationEncryptionSecretEnvironment,
 	)
 	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
+	o.Host = environment.Required(directoryConstant.HostEnvironment)
 	Run(o, i)
 }

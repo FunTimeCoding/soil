@@ -1,24 +1,31 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) ListPages(
+	x context.Context,
 	space string,
 	status string,
-) *response.Response {
+) ([]*client.ConfluencePage, error) {
 	params := &client.ListPagesParams{Space: space}
 
 	if status != "" {
 		params.Status = &status
 	}
 
-	result, e := c.client.ListPages(c.context, params)
-	errors.PanicOnError(e)
+	r, e := c.client.ListPagesWithResponse(x, params)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("pages", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

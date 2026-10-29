@@ -18,6 +18,18 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/User"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read the directory.
           content:
@@ -41,6 +53,24 @@ paths:
                 $ref: "#/components/schemas/User"
         "409":
           description: The account already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: The directory rejected the entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
           content:
             application/json:
               schema:
@@ -73,6 +103,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read the directory.
           content:
@@ -100,6 +142,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "400":
+          description: The directory rejected the entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update the user.
           content:
@@ -117,6 +177,18 @@ paths:
                 $ref: "#/components/schemas/Receipt"
         "404":
           description: No such account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
           content:
             application/json:
               schema:
@@ -155,6 +227,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "400":
+          description: The directory rejected the password.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to set the password.
           content:
@@ -175,6 +265,18 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Group"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read the directory.
           content:
@@ -198,6 +300,24 @@ paths:
                 $ref: "#/components/schemas/Group"
         "409":
           description: The group already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: The directory rejected the entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
           content:
             application/json:
               schema:
@@ -226,6 +346,18 @@ paths:
                 $ref: "#/components/schemas/Receipt"
         "404":
           description: No such group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
           content:
             application/json:
               schema:
@@ -270,6 +402,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add the member.
           content:
@@ -299,6 +443,18 @@ paths:
                 $ref: "#/components/schemas/Group"
         "404":
           description: No such group, or the account is not a member.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The directory refused the service account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The directory is unreachable.
           content:
             application/json:
               schema:

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/rejecting_host"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -21,7 +22,12 @@ func TestARejectedHostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gopnsensed.Mount(rejecting_host.New(), m, mock_recorder.New(), g)
+			gopnsensed.Mount(
+				service_tester.New(t, rejecting_host.New()),
+				m,
+				mock_recorder.New(),
+				g,
+			)
 		},
 	)
 	defer s.Close()

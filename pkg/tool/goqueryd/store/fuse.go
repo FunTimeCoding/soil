@@ -47,7 +47,7 @@ func fuse(
 		}
 
 		r.Score = score
-		r.Source = "hybrid"
+		r.Source = constant.HybridMode
 		s = append(s, result.Ranked{Search: r, Score: score})
 	}
 

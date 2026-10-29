@@ -20,22 +20,22 @@ func (s *Server) ReplyToThread(
 		return response.Fail("message is required")
 	}
 
-	ch, e := s.client.Channel(a.ChannelIdentifier)
+	ch, e := s.service.Channel(a.ChannelIdentifier)
 
 	if e != nil {
-		return s.captureFail(e, "channel not found")
+		return s.answerWith(e, "channel")
 	}
 
-	parent, e := s.client.FindPost(a.PostIdentifier)
+	parent, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.captureFail(e, "post not found")
+		return s.answerWith(e, "post")
 	}
 
-	p, e := s.client.Reply(ch, parent, a.Message)
+	p, e := s.service.Reply(ch, parent, a.Message)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	result := map[string]any{
@@ -49,7 +49,7 @@ func (s *Server) ReplyToThread(
 	if a.EmojiName != "" {
 		result["emoji_name"] = a.EmojiName
 
-		if f := s.client.React(parent, a.EmojiName); f != nil {
+		if f := s.service.React(parent, a.EmojiName); f != nil {
 			result["reaction_error"] = f.Error()
 		}
 	}

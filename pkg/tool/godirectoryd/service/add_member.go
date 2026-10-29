@@ -25,10 +25,14 @@ func (s *Service) AddMember(
 		return nil, conflict.Exists(constant.MemberAttribute, account)
 	}
 
-	g := s.directory.Modify(
-		s.groupName(name),
-		map[string][]string{
-			constant.MemberAttribute: append(current.Member, account),
+	g := s.attempt(
+		func() error {
+			return s.directory.Modify(
+				s.groupName(name),
+				map[string][]string{
+					constant.MemberAttribute: append(current.Member, account),
+				},
+			)
 		},
 	)
 

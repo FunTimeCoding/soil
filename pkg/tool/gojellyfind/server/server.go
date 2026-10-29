@@ -6,6 +6,6 @@ import (
 )
 
 type Server struct {
-	client   jellyfin.JellyfinSource
+	service  jellyfin.Jellyfin
 	reporter face.Reporter
 }

@@ -27,7 +27,7 @@ func (s *Server) Argocd(
 		)
 
 		if f != nil {
-			return s.captureFail(f, "get argocd application")
+			return s.captureDetail(f)
 		}
 
 		return s.formatMarkup(result.Application, result.Filtered)
@@ -36,7 +36,7 @@ func (s *Server) Argocd(
 	result, f := s.service.ArgocdApplications(x, cluster)
 
 	if f != nil {
-		return s.captureFail(f, "list argocd applications")
+		return s.captureDetail(f)
 	}
 
 	return response.SuccessAny(result)

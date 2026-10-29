@@ -1,16 +1,17 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
 func deleteAddress(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -23,7 +24,7 @@ func deleteAddress(
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			t.Emit(c.DeleteAddress(int32(identifier)))
+			t.EmitDone(c.DeleteAddress(context.Background(), int32(identifier)))
 			console.Line("address deleted")
 		},
 	}

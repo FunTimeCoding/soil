@@ -19,7 +19,7 @@ func (s *Server) createDeviceRole(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.CreateDeviceRole(
+	result, g := s.service.CreateDeviceRole(
 		name,
 		r.GetBool(constant.VirtualMachineRole, false),
 	)

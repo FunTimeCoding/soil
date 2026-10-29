@@ -23,7 +23,8 @@ func TestServiceCreateMemory(t *testing.T) {
 	assert.String(t, "retry policy", m.Name)
 	assert.String(t, "feedback", m.Type)
 	assert.Count(t, 1, o.Indexer.Pushed)
-	assert.String(t, "memory/1", o.Indexer.Pushed[0].Name)
+	assert.String(t, "memory/1", o.Indexer.Pushed[0].Path)
+	assert.String(t, "memory", *o.Indexer.Pushed[0].SourceType)
 }
 
 func TestServiceCreateMemoryWithExplicitType(t *testing.T) {
@@ -159,7 +160,7 @@ func TestServiceCreateRoutesCollectionByScope(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, o.Indexer.Pushed)
 	assert.String(t, "alfa", o.Indexer.Pushed[1].Collection)
-	scope := o.Indexer.Pushed[1].Metadata[constant.Scope]
+	scope := (*o.Indexer.Pushed[1].Metadata)[constant.Scope]
 	assert.Count(t, 1, scope)
 	assert.String(t, "alfa", scope[0])
 }

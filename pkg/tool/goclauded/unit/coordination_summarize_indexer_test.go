@@ -19,9 +19,11 @@ func TestSummarizePushesIndexer(t *testing.T) {
 		constant.Summarize,
 		map[string]any{constant.Body: "summary for indexing"},
 	)
-	assert.Count(t, 1, s.SummaryIndexer.Pushed)
-	assert.String(t, "test-session", s.SummaryIndexer.Pushed[0].Name)
-	assert.String(t, "summary for indexing", s.SummaryIndexer.Pushed[0].Body)
+	pushed := s.Pushed(constant.SummaryCollection)
+	assert.Count(t, 1, pushed)
+	assert.String(t, "test-session", pushed[0].Path)
+	assert.String(t, "summary for indexing", pushed[0].Body)
+	assert.String(t, "session-summary", *pushed[0].SourceType)
 }
 
 func TestSummarizeAmendPushesUpdatedBody(t *testing.T) {
@@ -40,10 +42,7 @@ func TestSummarizeAmendPushesUpdatedBody(t *testing.T) {
 		constant.Summarize,
 		map[string]any{constant.Body: "revised with more detail"},
 	)
-	assert.Count(t, 2, s.SummaryIndexer.Pushed)
-	assert.String(
-		t,
-		"revised with more detail",
-		s.SummaryIndexer.Pushed[1].Body,
-	)
+	pushed := s.Pushed(constant.SummaryCollection)
+	assert.Count(t, 2, pushed)
+	assert.String(t, "revised with more detail", pushed[1].Body)
 }

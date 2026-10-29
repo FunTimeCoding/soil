@@ -19,7 +19,7 @@ func (c *Client) AllChannels(
 
 	page := offset / limit
 	skip := offset % limit
-	result, _, e := c.client.GetAllChannels(
+	result, r, e := c.client.GetAllChannels(
 		c.context,
 		page,
 		limit,
@@ -27,7 +27,7 @@ func (c *Client) AllChannels(
 	)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	if skip == 0 {
@@ -39,7 +39,7 @@ func (c *Client) AllChannels(
 	}
 
 	result = result[skip:]
-	next, _, f := c.client.GetAllChannels(
+	next, s, f := c.client.GetAllChannels(
 		c.context,
 		page+1,
 		limit,
@@ -47,7 +47,7 @@ func (c *Client) AllChannels(
 	)
 
 	if f != nil {
-		return nil, wrapError(f)
+		return nil, wrapError(s, f)
 	}
 
 	result = append(result, next...)

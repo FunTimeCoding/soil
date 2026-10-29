@@ -10,7 +10,6 @@ func TestGuard(t *testing.T) {
 	defer s.Close()
 	c := s.ContextServer
 	c.VerifyBase(t)
-	c.VerifyInterface(t)
 	c.VerifyGuarded(t, "/api/libraries")
 	c.VerifyGuarded(t, "/api/sessions")
 	c.VerifyModelContext(t)

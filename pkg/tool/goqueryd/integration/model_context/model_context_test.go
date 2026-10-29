@@ -142,17 +142,17 @@ func TestMetadataFilterIncludes(t *testing.T) {
 	s.PushWithMetadata(
 		"notes",
 		"apple.md",
-		"# Apple\n\nA fruit document.\n",
+		"# Apple\n\nA fruit entry.\n",
 		map[string]string{"kind": "fruit"},
 	)
 	s.PushWithMetadata(
 		"notes",
 		"carrot.md",
-		"# Carrot\n\nA vegetable document.\n",
+		"# Carrot\n\nA vegetable entry.\n",
 		map[string]string{"kind": "vegetable"},
 	)
 	result := s.SearchKeywordWithMetadata(
-		"document",
+		"entry",
 		map[string]string{"kind": "fruit"},
 	)
 	assert.StringContains(t, "Apple", result)

@@ -3,13 +3,16 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func index(c *client.ClientWithResponses) *cobra.Command {
+func index(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var collection string
 	result := &cobra.Command{
 		Use:   "index",
@@ -24,11 +27,10 @@ func index(c *client.ClientWithResponses) *cobra.Command {
 				body.Collection = &collection
 			}
 
-			r, e := c.PostIndexWithResponse(context.Background(), body)
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("index", r.HTTPResponse, r.Body)
+			results, e := c.PostIndex(context.Background(), body)
+			t.EmitDone(e)
 
-			for _, v := range *r.JSON200 {
+			for _, v := range results {
 				console.Format(
 					"%s: indexed=%d updated=%d unchanged=%d removed=%d\n",
 					v.Collection,

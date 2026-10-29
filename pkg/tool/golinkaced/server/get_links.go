@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -16,7 +18,15 @@ func (s *Server) GetLinks(
 	}
 
 	if r.Params.List != nil {
-		links, e := s.client.LinksByList(int(*r.Params.List))
+		links, e := s.service.LinksByList(int(*r.Params.List))
+
+		if forbidden.Is(e) {
+			return server.GetLinks403JSONResponse{Error: e.Error()}, nil
+		}
+
+		if unavailable.Is(e) {
+			return server.GetLinks503JSONResponse{Error: e.Error()}, nil
+		}
 
 		if e != nil {
 			return server.GetLinks500JSONResponse(*s.answer(e)), nil
@@ -39,7 +49,15 @@ func (s *Server) GetLinks(
 		), nil
 	}
 
-	v, e := s.client.LinksPage(page)
+	v, e := s.service.LinksPage(page)
+
+	if forbidden.Is(e) {
+		return server.GetLinks403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.GetLinks503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.GetLinks500JSONResponse(*s.answer(e)), nil

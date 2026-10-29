@@ -20,6 +20,7 @@ func New(
 	configure(m)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)
+	result.server = s
 	result.Client = mattermost.New(
 		append(
 			[]mattermost.Option{

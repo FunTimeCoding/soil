@@ -12,7 +12,7 @@ func (s *Server) GetLogs(
 	_ context.Context,
 	r server.GetLogsRequestObject,
 ) (server.GetLogsResponseObject, error) {
-	all := s.store.Fights()
+	all := s.service.Fights()
 	var fights []fight.Fight
 
 	for _, f := range all {

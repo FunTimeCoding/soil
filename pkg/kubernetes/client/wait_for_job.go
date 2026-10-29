@@ -3,6 +3,7 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/job"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"time"
 )
@@ -19,10 +20,14 @@ func (c *Client) WaitForJob(
 			return timeout.Format("job timeout: %s", name)
 		}
 
-		j := c.Job(namespace, name)
+		j, e := c.Job(namespace, name)
 
-		if j == nil {
+		if not_found.Is(e) {
 			return nil
+		}
+
+		if e != nil {
+			return e
 		}
 
 		if j.Raw.Status.CompletionTime != nil {

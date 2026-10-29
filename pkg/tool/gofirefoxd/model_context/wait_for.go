@@ -12,10 +12,10 @@ func (s *Server) WaitFor(
 	_ mcp.CallToolRequest,
 	a argument.WaitFor,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.WaitFor(int(a.TabIdentifier), a.Selector, int(a.Timeout))
+	v, e := s.service.WaitFor(int(a.TabIdentifier), a.Selector, int(a.Timeout))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

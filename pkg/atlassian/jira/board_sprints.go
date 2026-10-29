@@ -6,10 +6,10 @@ import (
 )
 
 func (c *Client) BoardSprints(identifier int) ([]*jira.Sprint, error) {
-	v, _, e := c.client.Board.GetAllSprints(integers.ToString(identifier))
+	v, r, e := c.client.Board.GetAllSprints(integers.ToString(identifier))
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, WrapError(r, e)
 	}
 
 	var result []*jira.Sprint

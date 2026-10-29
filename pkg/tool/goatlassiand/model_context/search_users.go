@@ -18,10 +18,10 @@ func (s *Server) searchUsers(
 		return response.Fail("query is required: %v", f)
 	}
 
-	users, g := s.jira.FindUsers(query)
+	users, g := s.service.SearchUsers(query)
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(convert.JiraUsers(users))

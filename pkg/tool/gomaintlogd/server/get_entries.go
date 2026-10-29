@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/filter"
 )
@@ -37,12 +36,10 @@ func (s *Server) GetEntries(
 		f.Limit = *r.Params.Limit
 	}
 
-	entries, e := s.store.List(f)
+	entries, e := s.service.Entries(f)
 
 	if e != nil {
-		return server.GetEntries500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetEntries500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetEntries200JSONResponse(toResponse(entries)), nil

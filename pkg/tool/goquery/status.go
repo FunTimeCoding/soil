@@ -3,13 +3,15 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/spf13/cobra"
 )
 
-func status(c *client.ClientWithResponses) *cobra.Command {
+func status(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "status",
 		Short: "Show index status",
@@ -17,10 +19,8 @@ func status(c *client.ClientWithResponses) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.GetStatusWithResponse(context.Background())
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("status", r.HTTPResponse, r.Body)
-			s := r.JSON200
+			s, e := c.GetStatus(context.Background())
+			t.EmitDone(e)
 			console.Format(
 				"Documents: %d  Embeddings: %d  Pending: %d\n",
 				s.TotalDocuments,

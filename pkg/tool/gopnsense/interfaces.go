@@ -1,13 +1,14 @@
 package gopnsense
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	"github.com/spf13/cobra"
 )
 
 func interfaces(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -17,7 +18,7 @@ func interfaces(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.Interfaces())
+			t.EmitValue(c.Interfaces(context.Background()))
 		},
 	}
 }

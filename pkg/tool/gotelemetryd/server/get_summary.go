@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/summary_option"
 )
@@ -25,12 +24,10 @@ func (s *Server) GetSummary(
 		o.GroupBy = string(*r.Params.GroupBy)
 	}
 
-	rows, e := s.store.Summary(o)
+	rows, e := s.service.Summary(o)
 
 	if e != nil {
-		return server.GetSummary500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetSummary500JSONResponse(*s.answer(e)), nil
 	}
 
 	entries := make([]server.SummaryEntry, 0, len(rows))

@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/openai"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -28,7 +29,7 @@ func TestAnOpenAIServerThatListsItsModelsIsReachable(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	c := openai.NewBase(join.Empty(s.URL, "/v1"))
+	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
 	defer c.Close()
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	assert.String(t, "/v1/models", path)
@@ -40,7 +41,7 @@ func TestAnOpenAIServerThatRefusesIsNotReachable(t *testing.T) {
 		http.StatusUnauthorized,
 		`{"error":{"message":"bad key"}}`,
 	)
-	c := openai.NewBase(join.Empty(s.URL, "/v1"))
+	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
 	defer c.Close()
 	assert.NotNil(t, c.Reachable(t.Context()))
 }

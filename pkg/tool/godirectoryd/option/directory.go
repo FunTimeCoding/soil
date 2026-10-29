@@ -1,5 +1,7 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/directory/face"
+
 type Directory struct {
 	Address          string
 	ServiceTokens    []string
@@ -8,4 +10,6 @@ type Directory struct {
 	ClientSecret     string
 	EncryptionSecret string
 	PublicLocator    string
+	Host             string
+	Source           func() face.Client
 }

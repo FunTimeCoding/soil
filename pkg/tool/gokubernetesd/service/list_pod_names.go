@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -18,7 +19,7 @@ func ListPodNames(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	var result []string

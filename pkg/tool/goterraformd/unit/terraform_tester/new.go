@@ -1,8 +1,8 @@
 package terraform_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/mock_client"
 	"testing"
 )
 

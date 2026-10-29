@@ -24,10 +24,10 @@ func (s *Server) searchIssues(
 		return response.Fail("limit is required: %v", g)
 	}
 
-	result, h := s.jira.SearchLimit(int(limit), query)
+	result, h := s.service.SearchIssues(query, new(int(limit)))
 
 	if h != nil {
-		return s.captureDetail(h)
+		return s.answer(h)
 	}
 
 	return response.SuccessAny(convert.JiraIssues(result))

@@ -10,7 +10,6 @@ import (
 
 func TestContextHierarchicalResolution(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	s.AddContext("test", stringsConstant.Slash, "root context")
 	s.AddContext("test", "/tools/", "tools context")
 	root := s.ResolveContext("test", "alfa.md")
@@ -22,7 +21,6 @@ func TestContextHierarchicalResolution(t *testing.T) {
 
 func TestContextAttachedToSearchResults(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	s.AddContext("test", stringsConstant.Slash, "all documents")
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.Count(t, 1, results)
@@ -31,7 +29,6 @@ func TestContextAttachedToSearchResults(t *testing.T) {
 
 func TestContextAddOverwrites(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.AddContext("test", stringsConstant.Slash, "first")
@@ -43,7 +40,6 @@ func TestContextAddOverwrites(t *testing.T) {
 
 func TestContextRemove(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	directory := t.TempDir()
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.AddContext("test", stringsConstant.Slash, "to remove")
@@ -55,7 +51,6 @@ func TestContextRemove(t *testing.T) {
 
 func TestContextRemoveNotFound(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	removed := s.RemoveContext("nonexistent", stringsConstant.Slash)
 	assert.False(t, removed)
 }

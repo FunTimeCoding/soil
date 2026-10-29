@@ -1,14 +1,24 @@
 package worker
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service/outcome"
+	"time"
 )
 
-func (w *Worker) poll() {
-	x := context.Background()
-	s, e := gazetteer.Load(x, w.netbox)
-	errors.PanicOnError(e)
-	w.Collect(x, s)
+func (w *Worker) Poll() {
+	started := time.Now()
+	v, e := w.service.Collect(w.context)
+
+	if e != nil {
+		w.record(
+			outcome.Failed(constant.GazetteerSource, time.Since(started), e),
+		)
+
+		return
+	}
+
+	for _, o := range v {
+		w.record(o)
+	}
 }

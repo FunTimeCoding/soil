@@ -6,5 +6,10 @@ func (s *Service) Event(
 	project string,
 	identifier string,
 ) (*response.Event, error) {
-	return s.client.Event(s.organization, project, identifier)
+	return guarded(
+		s.guard,
+		func() (*response.Event, error) {
+			return s.client.Event(s.organization, project, identifier)
+		},
+	)
 }

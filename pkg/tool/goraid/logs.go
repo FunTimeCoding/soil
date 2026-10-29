@@ -1,14 +1,16 @@
 package goraid
 
 import (
-	"github.com/funtimecoding/soil/pkg/raid"
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/client"
 	"github.com/spf13/cobra"
 	"time"
 )
 
 func logs(
-	c *raid.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var offset int
@@ -51,7 +53,17 @@ func logs(
 				}
 			}
 
-			t.Emit(c.Logs(o, l, s, e))
+			t.EmitValue(
+				c.GetLogs(
+					context.Background(),
+					&client.GetLogsParams{
+						Offset: o,
+						Limit:  l,
+						Start:  s,
+						End:    e,
+					},
+				),
+			)
 		},
 	}
 	result.Flags().IntVar(&offset, "offset", 0, "offset into log list")

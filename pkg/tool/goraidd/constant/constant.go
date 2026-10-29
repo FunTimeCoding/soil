@@ -9,6 +9,13 @@ var Identity = identity.New(
 )
 
 const (
+	HostEnvironment     = "GORAID_HOST"
+	PortEnvironment     = "GORAID_PORT"
+	InsecureEnvironment = "GORAID_INSECURE"
+	TokenEnvironment    = "GORAID_TOKEN"
+)
+
+const (
 	LogsTitle    = "Logs"
 	LogsPath     = "/"
 	ReportsTitle = "Reports"

@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
@@ -13,6 +14,7 @@ func (r *Runner) renderInventory() (string, error) {
 	}
 
 	markup, e := r.inventory.AnsibleInventoryMarkup(
+		context.Background(),
 		gonetboxdConstant.AnsibleField,
 	)
 

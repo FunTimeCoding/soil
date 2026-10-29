@@ -29,7 +29,11 @@ func (s *Service) ModifyUser(
 		return s.User(account)
 	}
 
-	if e := s.directory.Modify(s.userName(account), attributes); e != nil {
+	if e := s.attempt(
+		func() error {
+			return s.directory.Modify(s.userName(account), attributes)
+		},
+	); e != nil {
 		return nil, e
 	}
 

@@ -6,7 +6,7 @@ import (
 )
 
 func Pod(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	namespace string,
 ) v1.PodInterface {
 	return c.CoreV1().Pods(namespace)

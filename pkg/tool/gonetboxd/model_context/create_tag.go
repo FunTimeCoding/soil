@@ -18,7 +18,7 @@ func (s *Server) createTag(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.CreateTag(name)
+	result, g := s.service.CreateTag(name)
 
 	if g != nil {
 		return s.captureFail(g, "tag not created")

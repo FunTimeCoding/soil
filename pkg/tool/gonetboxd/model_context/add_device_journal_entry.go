@@ -24,7 +24,7 @@ func (s *Server) addDeviceJournalEntry(
 	}
 
 	kind := r.GetString(constant.Kind, "")
-	result, h := s.client.AddDeviceJournalEntry(device, kind, comments)
+	result, h := s.service.AddDeviceJournalEntry(device, kind, comments)
 
 	if h != nil {
 		return s.captureFail(h, "journal entry not added to device")

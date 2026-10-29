@@ -10,9 +10,10 @@ import (
 func (s *Server) Mount(g *guard.Mux) {
 	g.WithSession(s.requireAdmin)
 	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
-	g.Open(route.Get(webConstant.SignInPath), s.authorization.SignIn)
-	g.Open(route.Get(webConstant.CallbackPath), s.authorization.Callback)
-	g.Open(route.Get(webConstant.SignOutPath), s.authorization.SignOut)
+	a := s.service.Authorization()
+	g.Open(route.Get(webConstant.SignInPath), a.SignIn)
+	g.Open(route.Get(webConstant.CallbackPath), a.Callback)
+	g.Open(route.Get(webConstant.SignOutPath), a.SignOut)
 	g.Session(route.Get(webConstant.RootPattern), s.clients)
 	g.Session(route.Get(constant.CreatePath), s.create)
 	g.Session(route.Post(constant.CreatePath), s.createSubmit)

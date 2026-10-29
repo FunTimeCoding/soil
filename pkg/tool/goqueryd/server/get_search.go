@@ -23,7 +23,7 @@ func (s *Server) GetSearch(
 		o.Collection = *r.Params.Collection
 	}
 
-	o.Mode = "hybrid"
+	o.Mode = constant.HybridMode
 
 	if r.Params.Mode != nil {
 		o.Mode = string(*r.Params.Mode)

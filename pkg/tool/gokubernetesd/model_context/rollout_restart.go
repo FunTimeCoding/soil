@@ -35,7 +35,7 @@ func (s *Server) RolloutRestart(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "rollout restart")
+		return s.captureDetail(f)
 	}
 
 	namespace := a.Namespace

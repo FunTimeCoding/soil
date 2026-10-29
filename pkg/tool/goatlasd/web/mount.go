@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	s.authorization.Mount(g)
+	s.service.Authorization().Mount(g)
 	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 	g.Session(route.Get(webConstant.PalettePath), s.palette.Serve())
 	g.Session(route.Get(webConstant.RootPattern), s.dashboard)

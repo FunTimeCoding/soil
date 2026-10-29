@@ -1,24 +1,32 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) UpdateComment(
+	x context.Context,
 	key string,
 	identifier string,
 	body string,
-) *response.Response {
-	result, e := c.client.UpdateComment(
-		c.context,
+) error {
+	r, e := c.client.UpdateCommentWithResponse(
+		x,
 		key,
 		identifier,
 		client.CommentRequest{Body: body},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("update comment", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

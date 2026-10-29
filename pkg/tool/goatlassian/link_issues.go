@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
@@ -20,7 +21,14 @@ func linkIssues(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.LinkIssues(arguments[0], arguments[1], linkType))
+			t.EmitDone(
+				c.LinkIssues(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+					linkType,
+				),
+			)
 			console.Format("linked %s to %s\n", arguments[0], arguments[1])
 		},
 	}

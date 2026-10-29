@@ -44,7 +44,7 @@ func TestEditCascadeSummaryPushesIndexer(t *testing.T) {
 		constant.Summarize,
 		map[string]any{constant.Body: "original"},
 	)
-	before := len(s.SummaryIndexer.Pushed)
+	before := len(s.Pushed(constant.SummaryCollection))
 	events := s.Store.Events(
 		event_query.New().Kind(constant.Summarize).SetLimit(1),
 	)
@@ -55,8 +55,9 @@ func TestEditCascadeSummaryPushesIndexer(t *testing.T) {
 			constant.Message:    "edited via cascade",
 		},
 	)
-	assert.Integer(t, before+1, len(s.SummaryIndexer.Pushed))
-	last := s.SummaryIndexer.Pushed[len(s.SummaryIndexer.Pushed)-1]
+	pushed := s.Pushed(constant.SummaryCollection)
+	assert.Integer(t, before+1, len(pushed))
+	last := pushed[len(pushed)-1]
 	assert.String(t, "edited via cascade", last.Body)
 }
 
@@ -100,7 +101,7 @@ func TestEditMomentNoCascade(t *testing.T) {
 		constant.Moment,
 		map[string]any{constant.Line: "something landed"},
 	)
-	before := len(s.SummaryIndexer.Pushed)
+	before := len(s.Pushed(constant.SummaryCollection))
 	events := s.Store.Events(
 		event_query.New().Kind(constant.Moment).SetLimit(1),
 	)
@@ -112,7 +113,7 @@ func TestEditMomentNoCascade(t *testing.T) {
 			constant.Message:    "revised moment",
 		},
 	)
-	assert.Integer(t, before, len(s.SummaryIndexer.Pushed))
+	assert.Integer(t, before, len(s.Pushed(constant.SummaryCollection)))
 	edited := s.Store.Events(
 		event_query.New().Kind(constant.Moment).SetLimit(1),
 	)

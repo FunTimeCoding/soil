@@ -1,13 +1,15 @@
 package goalertlog
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func alerts(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,7 +20,12 @@ func alerts(
 			_ *cobra.Command,
 			a []string,
 		) {
-			t.Emit(c.Alerts(a[0]))
+			t.EmitValue(
+				c.GetAlerts(
+					context.Background(),
+					&client.GetAlertsParams{Name: a[0]},
+				),
+			)
 		},
 	}
 }

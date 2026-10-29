@@ -3,7 +3,6 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -12,10 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(
-	v *service.Service,
-	authorization *client.Client,
-) *Server {
+func New(v *service.Service) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -36,9 +32,8 @@ func New(
 	)
 
 	return &Server{
-		service:       v,
-		authorization: authorization,
-		registry:      r,
+		service:  v,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemePhosphor).

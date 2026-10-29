@@ -2,21 +2,18 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/network"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/server"
-	"runtime"
 )
 
-func (*Server) GetHost(
+func (s *Server) GetHost(
 	_ context.Context,
 	_ server.GetHostRequestObject,
 ) (server.GetHostResponseObject, error) {
-	addresses := network.HardwareAddresses()
+	h := s.service.Host()
 
 	return server.GetHost200JSONResponse{
-		Hostname:          system.Hostname(),
-		Platform:          runtime.GOOS,
-		HardwareAddresses: &addresses,
+		Hostname:          h.Name,
+		Platform:          h.Platform,
+		HardwareAddresses: &h.HardwareAddresses,
 	}, nil
 }

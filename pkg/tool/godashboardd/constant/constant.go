@@ -37,6 +37,11 @@ const (
 	ArgocdWidget       = "argocd"
 	SecurePort         = 443
 	InsecurePort       = 80
+
+	PrometheusPeer = "prometheus"
+	ArgocdPeer     = "argocd"
+	NextcloudPeer  = "nextcloud"
+	RefreshFailed  = "refresh deferred: %v"
 )
 
 const ArgocdTokenEnvironment = "ARGOCD_TOKEN"

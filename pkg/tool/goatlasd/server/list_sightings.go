@@ -17,7 +17,7 @@ func (s *Server) ListSightings(
 		place = *r.Params.Place
 	}
 
-	v, e := s.store.MatchingSightings(
+	v, e := s.service.MatchingSightings(
 		place,
 		r.Params.Unclaimed != nil && *r.Params.Unclaimed,
 	)

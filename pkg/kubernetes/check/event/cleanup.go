@@ -16,18 +16,18 @@ func cleanup(
 		return
 	}
 
-	for _, e := range k.EventsSimple(true, false) {
-		if deleteOld(k, e, age) {
+	for _, v := range k.MustEventsSimple(true, false) {
+		if deleteOld(k, v, age) {
 			continue
 		}
 	}
 
-	for _, e := range k.EventsSimple(false, true) {
-		if deleteIrrelevant(k, e) {
+	for _, v := range k.MustEventsSimple(false, true) {
+		if deleteIrrelevant(k, v) {
 			continue
 		}
 
-		if deleteOld(k, e, age) {
+		if deleteOld(k, v, age) {
 			continue
 		}
 	}

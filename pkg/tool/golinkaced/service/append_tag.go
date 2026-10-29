@@ -12,7 +12,7 @@ func (s *Service) AppendTag(
 		return nil, e
 	}
 
-	existing, f := s.client.LinkByIdentifier(linkIdentifier)
+	existing, f := s.linkByIdentifier(linkIdentifier)
 
 	if f != nil {
 		return nil, f
@@ -26,7 +26,7 @@ func (s *Service) AppendTag(
 
 	ids := append(existing.TagIdentifiers, tagIdentifier)
 
-	return s.client.UpdateLink(
+	return s.updateLink(
 		linkIdentifier,
 		map[string]any{
 			"url":   existing.Link,

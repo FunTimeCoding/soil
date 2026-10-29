@@ -4,37 +4,34 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/metric"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
 
 func New(
-	a AlertSource,
-	s *store.Store,
+	v *service.Service,
 	n face.EventNotifier,
 	l *logger.Logger,
 	r face.Reporter,
 	interval time.Duration,
-	retention time.Duration,
 	y *prometheus.Registry,
 ) *Worker {
-	p := &Worker{
-		client:    a,
-		store:     s,
-		notifier:  n,
-		logger:    l,
-		recovery:  recovery.New(l, r),
-		interval:  interval,
-		retention: retention,
-		stop:      make(chan struct{}),
-		registry:  y,
+	result := &Worker{
+		service:  v,
+		notifier: n,
+		logger:   l,
+		reporter: r,
+		recovery: recovery.New(l, r),
+		interval: interval,
+		stop:     make(chan struct{}),
+		registry: y,
 	}
 
 	if y != nil {
-		p.metrics = metric.New(y)
+		result.metrics = metric.New(y)
 	}
 
-	return p
+	return result
 }

@@ -14,7 +14,7 @@ func (s *Server) sightings(
 ) {
 	unclaimed := r.URL.Query().Get(constant.UnclaimedParameter) ==
 		constant.UnclaimedValue
-	v, e := s.store.MatchingSightings("", unclaimed)
+	v, e := s.service.MatchingSightings("", unclaimed)
 	errors.PanicOnError(e)
 	s.view.RenderPageWithSummary(
 		w,

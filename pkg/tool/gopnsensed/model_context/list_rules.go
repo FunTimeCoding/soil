@@ -12,7 +12,7 @@ func (s *Server) listRules(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.Rules(r.GetString(constant.ParameterQuery, ""))
+	result, e := s.service.Rules(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
 		return s.answer(e)

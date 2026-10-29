@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/executor"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"io"
 	"k8s.io/api/core/v1"
@@ -17,7 +17,7 @@ func (c *Client) Execute(
 	pod string,
 	container string,
 	command ...string,
-) {
+) error {
 	r := c.client.CoreV1().RESTClient().Post().Resource(constant.PodsResource).Namespace(
 		namespace,
 	).Name(
@@ -34,7 +34,8 @@ func (c *Client) Execute(
 		},
 		scheme.ParameterCodec,
 	)
-	errors.PanicOnError(
+
+	return refusal.Classify(
 		executor.New(c.configuration, r).StreamWithContext(
 			c.context,
 			remotecommand.StreamOptions{Stdout: stdout, Stderr: stderr},

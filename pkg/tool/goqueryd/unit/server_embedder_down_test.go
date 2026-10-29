@@ -4,17 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"net/http"
 	"testing"
 )
 
 func TestASearchWhileTheEmbedderIsDownAnswers503WithoutAReport(t *testing.T) {
-	m := new(FixedEmbedder)
+	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	v := newService(t, m, newReranker(t))
 	r := memory.New()
 	c := mountedClient(t, v, r)
 	answer, e := c.GetSearchWithResponse(
@@ -29,10 +26,9 @@ func TestASearchWhileTheEmbedderIsDownAnswers503WithoutAReport(t *testing.T) {
 }
 
 func TestAPushWhileTheEmbedderIsDownAnswersItsWarning(t *testing.T) {
-	m := new(FixedEmbedder)
+	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(store_tester.OpenTestStore(t), m, mock_reranker.New())
-	defer v.Close()
+	v := newService(t, m, newReranker(t))
 	c := mountedClient(t, v, memory.New())
 	answer, e := c.PostDocumentWithResponse(
 		t.Context(),

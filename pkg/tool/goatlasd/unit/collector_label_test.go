@@ -3,14 +3,18 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/mock_inventory_source"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
 	"testing"
 )
 
 func TestLabelPlacesOnTheObjectCarryingIt(t *testing.T) {
-	f := mock_inventory_source.New()
-	f.AddDevice(72, "kilo", collector_tester.Labels("service.lighting", "mesh"))
+	f := collector_tester.NewNetbox(t)
+	collector_tester.AddDevice(
+		f,
+		72,
+		"kilo",
+		collector_tester.Labels("service.lighting", "mesh"),
+	)
 	v := collector_tester.CollectLabels(t, f)
 	assert.Count(t, 1, v)
 	assert.String(t, "lighting", v[0].Name)
@@ -20,8 +24,9 @@ func TestLabelPlacesOnTheObjectCarryingIt(t *testing.T) {
 }
 
 func TestLabelPlacesVirtualMachinesToo(t *testing.T) {
-	f := mock_inventory_source.New()
-	f.AddMachine(
+	f := collector_tester.NewNetbox(t)
+	collector_tester.AddMachine(
+		f,
 		2,
 		constant.FixtureVirtualMachineNode,
 		collector_tester.Labels("service.ingress", "front ingress"),
@@ -33,8 +38,9 @@ func TestLabelPlacesVirtualMachinesToo(t *testing.T) {
 }
 
 func TestLabelTakesOneRowPerResponsibility(t *testing.T) {
-	f := mock_inventory_source.New()
-	f.AddDevice(
+	f := collector_tester.NewNetbox(t)
+	collector_tester.AddDevice(
+		f,
 		72,
 		"kilo",
 		collector_tester.Labels(
@@ -51,8 +57,13 @@ func TestLabelTakesOneRowPerResponsibility(t *testing.T) {
 }
 
 func TestLabelSkipsObjectsWithoutServiceLabels(t *testing.T) {
-	f := mock_inventory_source.New()
-	f.AddDevice(41, "delta", collector_tester.Labels("owner", "admin"))
-	f.AddDevice(70, "lima", nil)
+	f := collector_tester.NewNetbox(t)
+	collector_tester.AddDevice(
+		f,
+		41,
+		"delta",
+		collector_tester.Labels("owner", "admin"),
+	)
+	collector_tester.AddDevice(f, 70, "lima", nil)
 	assert.Count(t, 0, collector_tester.CollectLabels(t, f))
 }

@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func removeDeviceLabel(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -19,7 +20,13 @@ func removeDeviceLabel(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.RemoveDeviceLabel(arguments[0], arguments[1]))
+			t.EmitDone(
+				c.RemoveDeviceLabel(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+				),
+			)
 			console.Line("label removed")
 		},
 	}

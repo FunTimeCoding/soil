@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/service"
 )
 
 type Server struct {
-	store    *store.Store
+	service  *service.Service
 	reporter face.Reporter
 }

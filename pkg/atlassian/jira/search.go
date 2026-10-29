@@ -36,7 +36,7 @@ func (c *Client) Search(
 		)
 
 		if e != nil {
-			return nil, wrapError(e)
+			return nil, WrapError(r, e)
 		}
 
 		result = append(result, issue.NewSlice(page, o)...)

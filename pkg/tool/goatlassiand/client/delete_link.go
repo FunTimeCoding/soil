@@ -1,14 +1,24 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
-func (c *Client) DeleteLink(identifier string) *response.Response {
-	result, e := c.client.DeleteLink(c.context, identifier)
-	errors.PanicOnError(e)
+func (c *Client) DeleteLink(
+	x context.Context,
+	identifier string,
+) error {
+	r, e := c.client.DeleteLinkWithResponse(x, identifier)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("delete link", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

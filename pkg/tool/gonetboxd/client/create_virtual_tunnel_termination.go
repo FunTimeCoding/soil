@@ -1,20 +1,20 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateVirtualTunnelTermination(
+	x context.Context,
 	vm string,
 	tunnel string,
 	interfaceName string,
 	role string,
-) *response.Response {
-	result, e := c.client.CreateVirtualTunnelTermination(
-		c.context,
+) (client.TunnelTermination, error) {
+	r, e := c.client.CreateVirtualTunnelTerminationWithResponse(
+		x,
 		vm,
 		client.CreateTunnelTerminationRequest{
 			Tunnel:    tunnel,
@@ -22,7 +22,18 @@ func (c *Client) CreateVirtualTunnelTermination(
 			Role:      role,
 		},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.TunnelTermination{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.TunnelTermination{}, refusal.New(
+			"create virtual tunnel termination",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/device_change"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/machine_change"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
@@ -11,7 +10,7 @@ import (
 )
 
 func TestUpdateDeviceAppliesOnlyGivenFields(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	v := device_change.New()
 	v.Status = new("active")
@@ -27,7 +26,7 @@ func TestUpdateDeviceAppliesOnlyGivenFields(t *testing.T) {
 }
 
 func TestUpdateDeviceRenamesLastAndReturnsTheRenamed(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	v := device_change.New()
 	v.Name = new("edge")
@@ -45,7 +44,7 @@ func TestUpdateDeviceRenamesLastAndReturnsTheRenamed(t *testing.T) {
 func TestUpdateDeviceRefusesUnknownDevice(t *testing.T) {
 	v := device_change.New()
 	v.Status = new("active")
-	_, e := service_tester.Service(t, mock_client.New()).UpdateDevice(
+	_, e := service_tester.Service(t, service_tester.NewSource(t)).UpdateDevice(
 		"missing",
 		v,
 	)
@@ -53,7 +52,7 @@ func TestUpdateDeviceRefusesUnknownDevice(t *testing.T) {
 }
 
 func TestUpdateVirtualMachineSetsRole(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedVirtualMachine("alfa")
 	v := machine_change.New()
 	v.Role = new("bravo")

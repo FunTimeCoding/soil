@@ -2,12 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/service"
+	secret "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
 )
 
 func New(
-	s *service.Service,
+	v secret.Secrets,
 	r face.Reporter,
 ) *Server {
-	return &Server{service: s, reporter: r}
+	return &Server{service: v, reporter: r}
 }

@@ -14,7 +14,7 @@ func (s *Server) deleteGroup(
 	a argument.Group,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.DeleteGroup(a.Name); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("deleted group: %s", a.Name))

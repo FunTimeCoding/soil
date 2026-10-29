@@ -1,24 +1,32 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) SetHost(
+	x context.Context,
 	identifier string,
-	body client.HostRequest,
-	apply *bool,
-) *response.Response {
-	result, e := c.client.SetHost(
-		c.context,
+	h client.HostRequest,
+	apply bool,
+) error {
+	r, e := c.client.SetHostWithResponse(
+		x,
 		identifier,
-		&client.SetHostParams{Apply: apply},
-		body,
+		&client.SetHostParams{Apply: &apply},
+		h,
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("set host", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

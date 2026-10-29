@@ -1,25 +1,33 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func (c *Client) LinkIssues(
+	x context.Context,
 	key string,
 	target string,
 	linkType string,
-) *response.Response {
+) error {
 	body := client.LinkIssuesJSONRequestBody{TargetKey: target}
 
 	if linkType != "" {
 		body.LinkType = &linkType
 	}
 
-	result, e := c.client.LinkIssues(c.context, key, body)
-	errors.PanicOnError(e)
+	r, e := c.client.LinkIssuesWithResponse(x, key, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	if r.StatusCode() != http.StatusNoContent {
+		return refusal.New("link issues", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

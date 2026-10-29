@@ -22,12 +22,6 @@ func (s *Server) register(
 		return
 	}
 
-	if len(body.RedirectLocators) == 0 {
-		http.Error(w, "redirect_locators required", http.StatusBadRequest)
-
-		return
-	}
-
 	grantTypes := body.GrantTypes
 
 	if len(grantTypes) == 0 {
@@ -57,7 +51,7 @@ func (s *Server) register(
 	)
 
 	if e != nil {
-		http.Error(w, "registration failed", http.StatusInternalServerError)
+		s.answer(w, e)
 
 		return
 	}

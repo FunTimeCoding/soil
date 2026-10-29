@@ -20,13 +20,6 @@ func (s *Server) MyThreads(
 		limit = 20
 	}
 
-	me, e := s.client.Me()
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	team := s.client.DefaultTeam()
 	opts := model.GetUserThreadsOpts{PageSize: uint64(limit), Extended: true}
 
 	if a.Since != "" {
@@ -39,15 +32,10 @@ func (s *Server) MyThreads(
 		opts.Since = uint64(since.UnixMilli())
 	}
 
-	threads, _, e := s.client.Nested().GetUserThreads(
-		s.client.Context(),
-		me.Id,
-		team.Id,
-		opts,
-	)
+	threads, e := s.service.UserThreads(opts)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	var rows []*mattermostResponse.Thread
@@ -69,17 +57,17 @@ func (s *Server) MyThreads(
 			r.Message = thread.Post.Message
 
 			if thread.Post.UserId != "" {
-				author, f := s.client.User(thread.Post.UserId)
+				author, f := s.service.User(thread.Post.UserId)
 
 				if f == nil {
 					r.Author = author.Username
 				}
 			}
 
-			ch, f := s.client.Channel(thread.Post.ChannelId)
+			ch, f := s.service.Channel(thread.Post.ChannelId)
 
 			if f == nil {
-				r.Channel = s.channelDisplayName(ch)
+				r.Channel = s.service.ChannelDisplayName(ch)
 			}
 		}
 

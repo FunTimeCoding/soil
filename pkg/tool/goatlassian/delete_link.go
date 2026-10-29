@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
@@ -19,7 +20,7 @@ func deleteLink(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.DeleteLink(arguments[0]))
+			t.EmitDone(c.DeleteLink(context.Background(), arguments[0]))
 			console.Format("deleted link %s\n", arguments[0])
 		},
 	}

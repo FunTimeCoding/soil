@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/inventory_item"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) InventoryItems() ([]*inventory_item.Item, error) {
@@ -11,7 +12,7 @@ func (c *Client) InventoryItems() ([]*inventory_item.Item, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return inventory_item.NewSlice(result.Results), nil

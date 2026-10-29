@@ -4,17 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/service"
+	secret "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
 )
 
 func New(
-	s *service.Service,
+	v secret.Secrets,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
 		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		service:  s,
+		service:  v,
 		reporter: r,
 	}
 	result.register()

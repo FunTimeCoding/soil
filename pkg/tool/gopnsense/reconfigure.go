@@ -1,13 +1,14 @@
 package gopnsense
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	"github.com/spf13/cobra"
 )
 
 func reconfigure(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -17,7 +18,7 @@ func reconfigure(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.ReconfigureDnsmasq())
+			t.EmitDone(c.ReconfigureDnsmasq(context.Background()))
 		},
 	}
 }

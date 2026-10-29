@@ -17,7 +17,7 @@ func (s *Server) deleteJournalEntry(
 		return response.Fail("identifier is required: %v", f)
 	}
 
-	if e := s.client.DeleteJournalEntry(int32(identifier)); e != nil {
+	if e := s.service.DeleteJournalEntry(int32(identifier)); e != nil {
 		return s.captureFail(e, "journal entry not deleted")
 	}
 

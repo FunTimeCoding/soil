@@ -9,7 +9,6 @@ import (
 
 func TestGetDocumentByRelativePath(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	d := s.MustGetDocument("test/alfa.md")
 	assert.NotNil(t, d)
 	assert.String(t, "Search Pipeline", d.Title)
@@ -18,7 +17,6 @@ func TestGetDocumentByRelativePath(t *testing.T) {
 
 func TestGetDocumentByVirtualPath(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	d := s.MustGetDocument("qmd://test/alfa.md")
 	assert.NotNil(t, d)
 	assert.String(t, "Search Pipeline", d.Title)
@@ -27,7 +25,6 @@ func TestGetDocumentByVirtualPath(t *testing.T) {
 
 func TestFindDocumentMissIsNotFound(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	d, found, e := s.FindDocument("test/nonexistent.md")
 	assert.FatalOnError(t, e)
 	assert.False(t, found)
@@ -36,7 +33,6 @@ func TestFindDocumentMissIsNotFound(t *testing.T) {
 
 func TestGetDocumentWithContext(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	s.AddContext("test", constant.Slash, "root context")
 	d := s.MustGetDocument("test/alfa.md")
 	assert.NotNil(t, d)

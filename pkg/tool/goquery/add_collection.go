@@ -3,13 +3,16 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func addCollection(c *client.ClientWithResponses) *cobra.Command {
+func addCollection(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var pattern string
 	result := &cobra.Command{
 		Use:   "add-collection [name] [path]",
@@ -28,9 +31,7 @@ func addCollection(c *client.ClientWithResponses) *cobra.Command {
 				body.Pattern = &pattern
 			}
 
-			r, e := c.PostCollectionWithResponse(context.Background(), body)
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("add collection", r.HTTPResponse, r.Body)
+			t.EmitDone(c.PostCollection(context.Background(), body))
 			console.Format("collection %s added\n", arguments[0])
 		},
 	}

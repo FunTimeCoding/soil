@@ -7,8 +7,9 @@ func (s *Service) pushSummary(
 	body string,
 	metadata map[string][]string,
 ) error {
-	return s.summaryIndexer.Push(
+	return s.pushDocument(
 		constant.SummaryCollection,
+		constant.SummarySourceType,
 		name,
 		body,
 		metadata,

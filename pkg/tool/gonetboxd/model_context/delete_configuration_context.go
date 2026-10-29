@@ -18,7 +18,7 @@ func (s *Server) deleteConfigurationContext(
 		return response.Fail("name is required: %v", e)
 	}
 
-	f := s.client.DeleteConfigurationContext(name)
+	f := s.service.DeleteConfigurationContext(name)
 
 	if not_found.Is(f) {
 		return response.Fail("%v", f)

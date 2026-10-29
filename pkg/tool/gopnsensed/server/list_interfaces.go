@@ -10,7 +10,7 @@ func (s *Server) ListInterfaces(
 	_ context.Context,
 	_ server.ListInterfacesRequestObject,
 ) (server.ListInterfacesResponseObject, error) {
-	result, e := s.opnsense.Interfaces()
+	result, e := s.service.Interfaces()
 
 	if e != nil {
 		return server.ListInterfaces500JSONResponse(*s.answer(e)), nil

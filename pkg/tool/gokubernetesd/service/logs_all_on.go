@@ -1,0 +1,62 @@
+package service
+
+import (
+	"context"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
+)
+
+func logsAllOn(
+	x context.Context,
+	c *cluster.Cluster,
+	q request.Logs,
+) ([]response.PodLog, error) {
+	pods, f := ResolvePods(x, c, q.Name, q.Namespace)
+
+	if f != nil {
+		return nil, f
+	}
+
+	if len(pods) == 0 {
+		return nil, not_found.Format(
+			"no pods found for %s in %s",
+			q.Name,
+			q.Namespace,
+		)
+	}
+
+	result := []response.PodLog{}
+
+	for _, pod := range pods {
+		content, g := PodLogsString(
+			x,
+			c,
+			pod,
+			q.Namespace,
+			q.Container,
+			q.Tail,
+			q.Since,
+			q.Previous,
+			q.Timestamps,
+		)
+
+		if g != nil {
+			result = append(
+				result,
+				response.PodLog{
+					Pod:     pod,
+					Content: fmt.Sprintf("error: %s", g),
+				},
+			)
+
+			continue
+		}
+
+		result = append(result, response.PodLog{Pod: pod, Content: content})
+	}
+
+	return result, nil
+}

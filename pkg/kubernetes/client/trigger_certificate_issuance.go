@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -11,16 +11,24 @@ import (
 func (c *Client) TriggerCertificateIssuance(
 	namespace string,
 	name string,
-) {
+) error {
 	resource := c.dynamic.Resource(constant.CertificateGVR).Namespace(namespace)
 	o, e := resource.Get(c.context, name, v1.GetOptions{})
-	errors.PanicOnError(e)
+
+	if e != nil {
+		return refusal.Classify(e)
+	}
+
 	existing, _, f := unstructured.NestedSlice(
 		o.Object,
 		constant.StatusField,
 		constant.ConditionsField,
 	)
-	errors.PanicOnError(f)
+
+	if f != nil {
+		return f
+	}
+
 	conditions := make([]any, 0, len(existing)+1)
 
 	for _, raw := range existing {
@@ -46,14 +54,17 @@ func (c *Client) TriggerCertificateIssuance(
 			),
 		},
 	)
-	errors.PanicOnError(
-		unstructured.SetNestedSlice(
-			o.Object,
-			conditions,
-			constant.StatusField,
-			constant.ConditionsField,
-		),
-	)
-	_, g := resource.UpdateStatus(c.context, o, v1.UpdateOptions{})
-	errors.PanicOnError(g)
+
+	if g := unstructured.SetNestedSlice(
+		o.Object,
+		conditions,
+		constant.StatusField,
+		constant.ConditionsField,
+	); g != nil {
+		return g
+	}
+
+	_, h := resource.UpdateStatus(c.context, o, v1.UpdateOptions{})
+
+	return refusal.Classify(h)
 }

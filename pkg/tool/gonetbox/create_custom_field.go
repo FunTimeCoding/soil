@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createCustomField(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var choiceSet string
@@ -21,7 +22,14 @@ func createCustomField(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.CreateCustomField(arguments[0], label, choiceSet))
+			t.EmitValue(
+				c.CreateCustomField(
+					context.Background(),
+					arguments[0],
+					label,
+					choiceSet,
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(

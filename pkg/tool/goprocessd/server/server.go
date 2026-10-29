@@ -1,7 +1,11 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/service"
+)
 
 type Server struct {
-	supervisor *supervisor.Supervisor
+	service  *service.Service
+	reporter face.Reporter
 }

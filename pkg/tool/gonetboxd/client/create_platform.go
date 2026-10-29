@@ -1,18 +1,31 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) CreatePlatform(name string) *response.Response {
-	result, e := c.client.CreatePlatform(
-		c.context,
+func (c *Client) CreatePlatform(
+	x context.Context,
+	name string,
+) (client.Platform, error) {
+	r, e := c.client.CreatePlatformWithResponse(
+		x,
 		client.CreateNameRequest{Name: name},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Platform{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Platform{}, refusal.New(
+			"create platform",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

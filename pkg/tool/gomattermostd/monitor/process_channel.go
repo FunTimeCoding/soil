@@ -1,37 +1,45 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/panics"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"time"
 )
 
-func (m *Monitor) processChannel(name string) {
+func (m *Monitor) processChannel(name string) error {
 	m.mutex.RLock()
 	c, okay := m.channelCache[name]
 	lastMilli := m.lastCheckMillisecond[name]
 	m.mutex.RUnlock()
 
 	if !okay {
-		panics.Print("name not found in channel cache: %s", name)
+		return not_found.New("channel", name)
 	}
 
-	posts := m.client.MustPostsSince(c, time.UnixMilli(lastMilli))
+	posts, e := m.client.PostsSince(c, time.UnixMilli(lastMilli))
+
+	if e != nil {
+		return e
+	}
+
 	m.mutex.Lock()
 	m.lastCheckMillisecond[name] = nowMilli()
 	m.mutex.Unlock()
 	relevant := findRelevantPosts(posts, m.configuration.Topics)
 
 	if len(relevant) == 0 {
-		return
+		return nil
 	}
 
 	message := buildNotification(relevant, name, m.username)
 
 	if message == "" {
-		return
+		return nil
 	}
 
-	m.client.MustPostSimple(m.notifyChannel, message)
+	if _, f := m.client.PostSimple(m.notifyChannel, message); f != nil {
+		return f
+	}
+
 	m.logger.Structured(
 		"channel_notify",
 		"channel",
@@ -39,4 +47,6 @@ func (m *Monitor) processChannel(name string) {
 		"count",
 		len(relevant),
 	)
+
+	return nil
 }

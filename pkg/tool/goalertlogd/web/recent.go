@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
@@ -30,7 +31,9 @@ func (s *Server) recent(
 		}
 	}
 
-	table := recentTable(s.store.MustByTimeRange(start, end))
+	records, e := s.service.RecentAlerts(start, end)
+	errors.PanicOnError(e)
+	table := recentTable(records)
 
 	if s.view.IsExtendedRequest(r) {
 		s.view.RenderFragment(w, table)

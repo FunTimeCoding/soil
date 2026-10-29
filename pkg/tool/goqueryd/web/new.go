@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
@@ -12,7 +13,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(s *service.Service) *Server {
+func New(
+	s *service.Service,
+	f face.Reporter,
+) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -36,6 +40,7 @@ func New(s *service.Service) *Server {
 		service:  s,
 		registry: r,
 		cache:    search_cache.New(10),
+		reporter: f,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSlate).

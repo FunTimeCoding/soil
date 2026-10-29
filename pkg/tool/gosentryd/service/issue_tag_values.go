@@ -7,5 +7,15 @@ func (s *Service) IssueTagValues(
 	tag string,
 	limit int,
 ) ([]response.TagValue, error) {
-	return s.client.IssueTagValues(s.organization, identifier, tag, limit)
+	return guarded(
+		s.guard,
+		func() ([]response.TagValue, error) {
+			return s.client.IssueTagValues(
+				s.organization,
+				identifier,
+				tag,
+				limit,
+			)
+		},
+	)
 }

@@ -4,7 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
+	monitorOption "github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 )
@@ -21,5 +23,7 @@ func Main() {
 	o.ServiceTokens = web.ServiceTokens()
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.Connector = connector.NewOptional
+	o.Monitor = monitorOption.NewEnvironment()
 	Run(o, s)
 }

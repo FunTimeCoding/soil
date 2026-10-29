@@ -3,6 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -22,21 +23,17 @@ func (s *Server) get(
 
 	document, similar, f := s.service.GetDocument(path)
 
+	if not_found.Is(f) && len(similar) > 0 {
+		return response.Fail(
+			"%v\n\nDid you mean:\n%s",
+			f,
+			fmt.Sprintf("  %s", strings.Join(similar, "\n  ")),
+		)
+	}
+
 	if f != nil {
-		return s.captureFail(f, "document lookup failed")
+		return s.captureDetail(f)
 	}
 
-	if document != nil {
-		return response.Success(notation.MarshalIndent(document))
-	}
-
-	if len(similar) == 0 {
-		return response.Fail("document not found: %s", path)
-	}
-
-	return response.Fail(
-		"document not found: %s\n\nDid you mean:\n%s",
-		path,
-		fmt.Sprintf("  %s", strings.Join(similar, "\n  ")),
-	)
+	return response.Success(notation.MarshalIndent(document))
 }

@@ -1,18 +1,23 @@
 package service
 
 import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"time"
 )
 
-func (s *Service) queryValue(q string) string {
-	result, e := s.prometheus.Query(q, time.Now())
+func (s *Service) queryValue(q string) (string, error) {
+	r, e := guarded(
+		s.prometheusGuard,
+		func() (*query_result.Result, error) {
+			return s.prometheus.Query(q, time.Now())
+		},
+	)
 
 	if e != nil {
-		s.logger.Plain("query failed: %s: %v", q, e)
-
-		return constant.PendingValue
+		return constant.PendingValue, fmt.Errorf("query %s: %w", q, e)
 	}
 
-	return formatValue(result.Value)
+	return formatValue(r.Value), nil
 }

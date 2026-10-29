@@ -32,6 +32,8 @@ const (
 	JiraIssue  = "/issue"
 	JiraSearch = "/search/jql"
 
+	JiraLinkTypes = "rest/api/2/issueLinkType"
+
 	JiraServiceDesk = "/rest/servicedeskapi"
 	JiraRequest     = "/request"
 

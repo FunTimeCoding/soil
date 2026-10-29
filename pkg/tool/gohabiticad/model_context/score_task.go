@@ -20,7 +20,7 @@ func (s *Server) scoreTask(
 	}
 
 	direction := r.GetString(constant.Direction, "up")
-	result, g := s.habitica.Score(identifier, direction)
+	result, g := s.service.Score(identifier, direction)
 
 	if g != nil {
 		return s.answer(g)

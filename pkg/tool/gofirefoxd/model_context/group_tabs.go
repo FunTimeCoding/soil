@@ -12,11 +12,7 @@ func (s *Server) GroupTabs(
 	_ mcp.CallToolRequest,
 	a argument.GroupTabs,
 ) (*mcp.CallToolResult, error) {
-	if len(a.TabIdentifiers) == 0 {
-		return response.Fail("tab_ids is required")
-	}
-
-	groupIdentifier, e := s.client.GroupTabs(
+	groupIdentifier, e := s.service.GroupTabs(
 		a.TabIdentifiers,
 		int(a.GroupIdentifier),
 		a.Title,
@@ -24,7 +20,7 @@ func (s *Server) GroupTabs(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success("grouped into group %d", groupIdentifier)

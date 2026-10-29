@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/service"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"path/filepath"
@@ -14,26 +14,26 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	base := t.TempDir()
-	s := supervisor.New(
-		nil,
-		environment.New(nil),
-		filepath.Join(base, "Procfile"),
-		filepath.Join(base, ".envrc"),
-		filepath.Join(base, "control.sock"),
-	)
+	o := option.New()
+	o.ProcfilePath = writeProcfile(t, "alfa: sleep 60\n")
+	o.EnvrcPath = filepath.Join(filepath.Dir(o.ProcfilePath), ".envrc")
 	v := model_context_server.New(
 		t,
 		func(
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goprocessd.Mount(s, memory.New(), mock_recorder.New(), g)
+			goprocessd.Mount(
+				service.New(o),
+				memory.New(),
+				mock_recorder.New(),
+				g,
+			)
 		},
 	)
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
-	v.VerifyInterface(t)
 	v.VerifyGuarded(t, "/api/processes")
+	v.VerifyGuarded(t, "/api/processes/alfa/log")
 }

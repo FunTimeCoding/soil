@@ -129,10 +129,9 @@ o.PostgresLocator = a.GetString(argument.Postgres)
 o.LitePath = a.GetString(argument.Lite)
 ```
 
-And in `Run()`:
+And in the daemon's `service.New(o, l)`:
 
 ```go
-l := logger.New(context.Background())
 m := relational.Open(l, o.PostgresLocator, o.LitePath)
 migrate.AutoMigrate(m)
 s := store.New(m)
@@ -150,7 +149,9 @@ openers are silent - test noise is not essential logging.
 ## Store Shape
 
 Backend resolution happens at the edge; the store is backend-agnostic
-and takes the mapper it is given. Migration lives beside it, in the
+and takes the mapper it is given. Whoever opens the mapper - the
+daemon's service - closes it with `relational.CloseMapper`; the store
+borrows it and has no `Close`. Migration lives beside it, in the
 daemon's `<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)` that `Run`
 calls before building the store, so schema history - renames, drops,
 backfills - stays out of the store:

@@ -26,10 +26,10 @@ func (s *Service) UpdateIssue(
 		return nil, not_selected.Format("no fields to update")
 	}
 
-	before, e := s.jira.Issue(key)
+	before, e := s.Issue(key)
 
 	if e != nil {
-		return nil, fmt.Errorf("issue not found: %w", e)
+		return nil, fmt.Errorf("read issue before update: %w", e)
 	}
 
 	raw := issue.Raw(key)
@@ -70,7 +70,10 @@ func (s *Service) UpdateIssue(
 		len(fields) > 0
 
 	if hasFieldChanges {
-		if h := s.jira.UpdateNative(raw); h != nil {
+		if h := attempt(
+			s.jiraGuard,
+			func() error { return s.jira.UpdateNative(raw) },
+		); h != nil {
 			return nil, h
 		}
 	}
@@ -82,15 +85,18 @@ func (s *Service) UpdateIssue(
 			return nil, i
 		}
 
-		if j := s.jira.Assign(key, user); j != nil {
+		if j := attempt(
+			s.jiraGuard,
+			func() error { return s.jira.Assign(key, user) },
+		); j != nil {
 			return nil, j
 		}
 	}
 
-	after, k := s.jira.Issue(key)
+	after, k := s.Issue(key)
 
 	if k != nil {
-		return nil, fmt.Errorf("issue updated but retrieval failed: %w", k)
+		return nil, fmt.Errorf("read issue after update: %w", k)
 	}
 
 	return issue_update.New(before, after, customFieldNames), nil

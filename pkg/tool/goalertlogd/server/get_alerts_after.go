@@ -16,7 +16,10 @@ func (s *Server) GetAlertsAfter(
 		limit = min(max(*r.Params.Limit, 1), constant.PageMaximum)
 	}
 
-	records, e := s.store.After(uint(max(r.Params.Identifier, 0)), limit)
+	records, e := s.service.AlertsAfter(
+		uint(max(r.Params.Identifier, 0)),
+		limit,
+	)
 
 	if e != nil {
 		return server.GetAlertsAfter500JSONResponse(*s.answer(e)), nil

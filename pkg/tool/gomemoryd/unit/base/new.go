@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -18,8 +18,8 @@ import (
 func New(t *testing.T) *Server {
 	t.Helper()
 	s := store.New(connection.NewMemory())
-	i := mock_indexer.New()
-	v := service.New(s, i, i, i)
+	i := mock_client.New()
+	v := service.New(s, i)
 	r := memory.New()
 	result := &Server{
 		t:       t,

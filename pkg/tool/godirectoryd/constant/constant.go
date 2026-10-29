@@ -73,3 +73,5 @@ const (
 	PasswordField = "password"
 	GroupField    = "group"
 )
+
+const DirectoryPeer = "directory upstream"

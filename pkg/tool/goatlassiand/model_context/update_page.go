@@ -33,7 +33,7 @@ func (s *Server) updatePage(
 	result, i := s.service.UpdatePage(identifier, title, body, message)
 
 	if i != nil {
-		return s.captureFail(i, "page not updated")
+		return s.answer(i)
 	}
 
 	return response.SuccessAny(result)

@@ -20,24 +20,14 @@ func (s *Server) UnsubscribeThread(
 		return response.Fail("callsign is required")
 	}
 
-	count, e := s.store.Delete(a.Callsign, a.Root)
+	removed, e := s.service.Unsubscribe(a.Callsign, a.Root)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
-	if count == 0 {
+	if !removed {
 		return response.Success("no such subscription")
-	}
-
-	remaining, f := s.store.ByRoot(a.Root)
-
-	if f != nil {
-		return s.captureDetail(f)
-	}
-
-	if len(remaining) == 0 {
-		s.indexer.Forget(a.Root)
 	}
 
 	return response.Success("unsubscribed")

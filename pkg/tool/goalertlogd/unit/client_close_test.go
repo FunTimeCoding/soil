@@ -5,6 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/client"
+	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net"
 	"net/http"
@@ -21,6 +23,7 @@ func TestClientCloseDropsIdleConnections(t *testing.T) {
 				w http.ResponseWriter,
 				_ *http.Request,
 			) {
+				w.Header().Set(webConstant.ContentType, webConstant.Object)
 				_, e := w.Write([]byte("[]"))
 				errors.PanicOnError(e)
 			},
@@ -43,8 +46,11 @@ func TestClientCloseDropsIdleConnections(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	c.Alerts("HighMemory")
+	p := &generated.GetAlertsParams{Name: "HighMemory"}
+	_, f := c.GetAlerts(t.Context(), p)
+	assert.FatalOnError(t, f)
 	c.Close()
-	c.Alerts("HighMemory")
+	_, g := c.GetAlerts(t.Context(), p)
+	assert.FatalOnError(t, g)
 	assert.Integer(t, int64(2), opened.Load())
 }

@@ -14,7 +14,7 @@ func (s *Server) setPassword(
 	a argument.SetPassword,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.SetPassword(a.Account, a.Password); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("password set: %s", a.Account))

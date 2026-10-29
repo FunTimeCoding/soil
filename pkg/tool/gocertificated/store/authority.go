@@ -1,6 +1,10 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
+)
 
 func (s *Store) Authority(name string) (*record.Record, error) {
 	var result []record.Record
@@ -9,8 +13,12 @@ func (s *Store) Authority(name string) (*record.Record, error) {
 		Limit(1).
 		Find(&result).Error
 
-	if e != nil || len(result) == 0 {
+	if e != nil {
 		return nil, e
+	}
+
+	if len(result) == 0 {
+		return nil, not_found.New(constant.AuthorityParameter, name)
 	}
 
 	return &result[0], nil

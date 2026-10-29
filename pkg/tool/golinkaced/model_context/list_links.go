@@ -14,7 +14,7 @@ func (s *Server) ListLinks(
 	p := pageFromOffset(a.Offset, a.Limit)
 
 	if a.List > 0 {
-		r, e := s.client.LinksByListPage(a.List, p)
+		r, e := s.service.LinksByListPage(a.List, p)
 
 		if e != nil {
 			return s.answer(e)
@@ -23,7 +23,7 @@ func (s *Server) ListLinks(
 		return s.linkPage(r.Items, r.Total, a.Limit, a.Offset)
 	}
 
-	r, e := s.client.LinksPage(p)
+	r, e := s.service.LinksPage(p)
 
 	if e != nil {
 		return s.answer(e)

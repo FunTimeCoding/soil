@@ -12,19 +12,7 @@ func (s *Server) Play(
 	_ mcp.CallToolRequest,
 	a argument.Play,
 ) (*mcp.CallToolResult, error) {
-	if a.SessionIdentifier == "" {
-		return response.Fail("session_id is required")
-	}
-
-	if len(a.ItemIDs) == 0 {
-		return response.Fail("item_ids is required")
-	}
-
-	if a.PlayCommand == "" {
-		a.PlayCommand = "PlayNow"
-	}
-
-	e := s.client.Play(
+	e := s.service.Play(
 		a.SessionIdentifier,
 		a.ItemIDs,
 		a.PlayCommand,

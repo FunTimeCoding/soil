@@ -8,6 +8,6 @@ import (
 
 type Server struct {
 	server   *server.MCPServer
-	client   sublime.SublimeSource
+	service  sublime.Sublime
 	reporter face.Reporter
 }

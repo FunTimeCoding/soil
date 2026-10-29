@@ -9,10 +9,10 @@ import (
 
 func deleteIrrelevant(
 	c *client.Client,
-	e *event.Event,
+	v *event.Event,
 ) bool {
-	if slices.Contains(constant.IrrelevantEventReason, e.Reason) {
-		c.DeleteEventSimple(e)
+	if slices.Contains(constant.IrrelevantEventReason, v.Reason) {
+		c.MustDeleteEventSimple(v)
 
 		return true
 	}

@@ -15,13 +15,13 @@ func (c *Client) SearchLimit(
 		query = fmt.Sprintf(query, a...)
 	}
 
-	page, _, e := c.client.Issue.SearchV2JQL(
+	page, r, e := c.client.Issue.SearchV2JQL(
 		query,
 		&jira.SearchOptionsV2{Fields: []string{"*all"}, MaxResults: limit},
 	)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, WrapError(r, e)
 	}
 
 	o, f := c.IssueOption()

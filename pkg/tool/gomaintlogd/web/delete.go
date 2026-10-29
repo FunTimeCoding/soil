@@ -1,9 +1,6 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -12,12 +9,17 @@ func (s *Server) delete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	errors.PanicOnError(
-		s.store.Delete(
-			strings.MustToUnsignedInteger(
-				r.URL.Query().Get(constant.Identifier),
-			),
-		),
-	)
+	identifier, e := identifierFromQuery(r)
+
+	if e == nil {
+		e = s.service.Delete(identifier)
+	}
+
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
 	s.view.RenderStatus(w, "Deleted entry", webConstant.LayoutStatusSuccess)
 }

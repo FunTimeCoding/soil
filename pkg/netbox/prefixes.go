@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/prefix"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) Prefixes() ([]*prefix.Prefix, error) {
@@ -15,7 +16,7 @@ func (c *Client) Prefixes() ([]*prefix.Prefix, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	c.cache.Prefixes = prefix.NewSlice(result.Results)

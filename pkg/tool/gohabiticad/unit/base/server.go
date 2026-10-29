@@ -2,7 +2,7 @@ package base
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/mock_client"
+	"github.com/funtimecoding/soil/pkg/habitica/mock_client"
 )
 
 type Server struct {

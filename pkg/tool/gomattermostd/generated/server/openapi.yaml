@@ -43,6 +43,17 @@ components:
             type: string
       required: [identifier, username, message, created_at]
 
+    Thread:
+      type: object
+      properties:
+        root:
+          $ref: "#/components/schemas/Post"
+        replies:
+          type: array
+          items:
+            $ref: "#/components/schemas/Post"
+      required: [root, replies]
+
     Error:
       type: object
       required: [error]
@@ -101,14 +112,78 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Post"
+        '403':
+          description: Mattermost refused the daemon access to the channel.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         '404':
           description: Channel not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        '503':
+          description: Mattermost is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         '500':
           description: Failed to fetch posts.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/channel/{name}/unresolved:
+    get:
+      operationId: getUnresolvedThreads
+      summary: Threads started in a channel since a time whose root lacks the done reaction, oldest first
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Channel name within the configured team.
+      - name: since
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        description: Only threads whose root was created at or after this time.
+      responses:
+        '200':
+          description: Unresolved threads, each root with its replies.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Thread"
+        '403':
+          description: Mattermost refused the daemon access to the channel.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '404':
+          description: Channel not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '503':
+          description: Mattermost is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: Failed to fetch threads.
           content:
             application/json:
               schema:
@@ -134,8 +209,20 @@ paths:
                 type: array
                 items:
                   type: string
+        '403':
+          description: Mattermost refused the daemon access to the post.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         '404':
           description: Post not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '503':
+          description: Mattermost is unavailable.
           content:
             application/json:
               schema:
@@ -169,8 +256,20 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Post"
+        '403':
+          description: Mattermost refused the daemon access to the thread.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         '404':
           description: Post not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '503':
+          description: Mattermost is unavailable.
           content:
             application/json:
               schema:

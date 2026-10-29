@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/server"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"testing"
@@ -26,7 +27,7 @@ func TestRunLifecycle(t *testing.T) {
 			func(m *http.ServeMux) {
 				generated.HandlerFromMux(
 					generated.NewStrictHandler(
-						server.New("", "", t.TempDir(), nil, memory.New()),
+						server.New(service_tester.New(t), memory.New()),
 						nil,
 					),
 					m,

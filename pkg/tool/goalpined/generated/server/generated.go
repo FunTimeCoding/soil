@@ -13,6 +13,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"path"
@@ -27,6 +28,11 @@ type Entry struct {
 	Architecture string `json:"architecture"`
 	Name         string `json:"name"`
 	Version      string `json:"version"`
+}
+
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
 }
 
 // ErrorResponse defines model for ErrorResponse.
@@ -53,6 +59,9 @@ type ServerInterface interface {
 
 	// (GET /api/packages)
 	GetPackages(w http.ResponseWriter, r *http.Request, params GetPackagesParams)
+
+	// (POST /api/packages/{version}/{repository}/{architecture}/{file})
+	PostPackage(w http.ResponseWriter, r *http.Request, version string, repository string, architecture string, file string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -88,6 +97,59 @@ func (siw *ServerInterfaceWrapper) GetPackages(w http.ResponseWriter, r *http.Re
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetPackages(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostPackage operation middleware
+func (siw *ServerInterfaceWrapper) PostPackage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "version" -------------
+	var version string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "version", r.PathValue("version"), &version, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "version", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "repository" -------------
+	var repository string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "repository", r.PathValue("repository"), &repository, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "repository", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "architecture" -------------
+	var architecture string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "architecture", r.PathValue("architecture"), &architecture, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "architecture", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "file" -------------
+	var file string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "file", r.PathValue("file"), &file, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "file", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostPackage(w, r, version, repository, architecture, file)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -218,6 +280,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/packages", wrapper.GetPackages)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/packages/{version}/{repository}/{architecture}/{file}", wrapper.PostPackage)
 
 	return m
 }
@@ -258,11 +321,62 @@ func (response GetPackages500JSONResponse) VisitGetPackagesResponse(w http.Respo
 	return err
 }
 
+type PostPackageRequestObject struct {
+	Version      string `json:"version"`
+	Repository   string `json:"repository"`
+	Architecture string `json:"architecture"`
+	File         string `json:"file"`
+	Body         io.Reader
+}
+
+type PostPackageResponseObject interface {
+	VisitPostPackageResponse(w http.ResponseWriter) error
+}
+
+type PostPackage201Response struct {
+}
+
+func (response PostPackage201Response) VisitPostPackageResponse(w http.ResponseWriter) error {
+	w.WriteHeader(201)
+	return nil
+}
+
+type PostPackage400JSONResponse Error
+
+func (response PostPackage400JSONResponse) VisitPostPackageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostPackage500JSONResponse ErrorResponse
+
+func (response PostPackage500JSONResponse) VisitPostPackageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
 	// (GET /api/packages)
 	GetPackages(ctx context.Context, request GetPackagesRequestObject) (GetPackagesResponseObject, error)
+
+	// (POST /api/packages/{version}/{repository}/{architecture}/{file})
+	PostPackage(ctx context.Context, request PostPackageRequestObject) (PostPackageResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -330,19 +444,53 @@ func (sh *strictHandler) GetPackages(w http.ResponseWriter, r *http.Request, par
 	}
 }
 
+// PostPackage operation middleware
+func (sh *strictHandler) PostPackage(w http.ResponseWriter, r *http.Request, version string, repository string, architecture string, file string) {
+	var request PostPackageRequestObject
+
+	request.Version = version
+	request.Repository = repository
+	request.Architecture = architecture
+	request.File = file
+
+	request.Body = r.Body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostPackage(ctx, request.(PostPackageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostPackage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostPackageResponseObject); ok {
+		if err := validResponse.VisitPostPackageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"nFPBbtswDP0VQdvRiLMNu/jeDQN2GHotikG1XhJ2tqRSTLEg8L8PlJombYxt6cmSSD4+vkfvbR/HFAOC",
-	"ZNvtbe43GF05XgXhnR4SxwQWQnl23G9I0MuWoXfZJdjOZmEKazs1NrhxPvAIzhTDTGxqLONhSwxvu5uK",
-	"cMxvXva8bQ7l8e4evSj0FXPka+QUQ8Y5Z2h4lhMeEeQneQShFYH/Ta5izVTO8fpOWRTkchWT63+5dU0m",
-	"wVgO7xkr29l37dG09smxtto1PZNwzK7cGSlmkljNfLsrRztOEF95c8L7XA4FpLCKpRXJoLF1dEOiAH/i",
-	"d2c/LJaLpZKLCcElsp39VJ4UXzZFi9Ylak9VWkP0oyo7oRi+edvZr5AfhxwtZjdCwNl2N3tL2uthizJH",
-	"XdvD7lVV50S51fnropW2H5dL/fQxCEJh4FIaqC8c2vtcpT3i/ZeZh705s1M19Mg9U5Kq1fWzGYaCx28z",
-	"1NrcmFhy3DDszIoGAcObu515Es3oqAtt8fnCEf66hi/+xBm+XxwN8EaiYThvZAPDr0ZYaN00TX8CAAD/",
-	"/w==",
+	"xJRNb9s8DMe/iqDnOXpxupeLbxvQDQN2KIrdimJQLCZha0sqxXQLDH/3gVJd58UN2nXATnZk8k/qzx/T",
+	"6dq3wTtwHHXV6VivoTXp9dwxbeUlkA9AjJCODdVrZKh5QyC/eRtAVzoyoVvpvtDOtNMf7oEiejfxrS80",
+	"wd0GCayurrLCGF/s17wuhnS/uIGaRfqcyNNxrzAcn66Xw57UvYQYvIvwfP1Cwz04/oEWHOMS4dlNTGRO",
+	"9fUNI4vIy6cTTH1rVjkYGdr08j/BUlf6v3KEoXwgocwY9I9NGCKTfhMEH5F9huTPpz2OeUfxYOY7fR/b",
+	"IYLolj6VQm7k28qbJqADu8NRpc9m89lcmvMBnAmoK/0uHYk+r5MXpQlY7rq0ApaHuGwYvftqdaW/AF8M",
+	"MZJMpgUGirq66jRKrbsNpHvkdRiYzq5OmXIt98+gpbJv53N51N4xuNSBCaHBOvVQ3sRs7aj3rGEO3ByN",
+	"Uzy0EGvCwNmry8dhKHQWfqkm58ZC+RRjmmarltgwEFi12KoH05RcdSYlPrzwCicx3NvEiX4/G2zAKvaK",
+	"wFjFa1B0cIWZ5PXF/ojL7oGPvuzGhL7sdgHsy26JDfRp4XycAOLCx4GIJ4AQwkYedqkfdoFpA6cQKSaV",
+	"9rbmtWIHW/daOTHtRTLXORgif/J2e4IeXzPwm8gEpt2naOmpNawrvUBnkimHRfrDjvqj3TuTxz5g39fw",
+	"iPhPE1VkT2ALFXHlwCrjbKYMbIL//d+Gfwr6j0r8VhFWLThWGJXzrIxaGMp7WChP+cwpE25lX//pbibT",
+	"smfSWf5n4dHZvKJ9/zsAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

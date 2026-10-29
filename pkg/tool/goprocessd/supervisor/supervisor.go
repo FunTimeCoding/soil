@@ -12,7 +12,6 @@ type Supervisor struct {
 	environment  *environment.Environment
 	procfilePath string
 	envrcPath    string
-	socketPath   string
 	running      int
 	waveActive   bool
 	countMutex   sync.Mutex

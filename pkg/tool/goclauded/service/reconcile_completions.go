@@ -11,7 +11,7 @@ import (
 
 func (s *Service) ReconcileCompletions() []error {
 	s.backfillCompletionSequences()
-	existing, e := s.completionIndexer.Existing(constant.CompletionCollection)
+	existing, e := s.indexed(constant.CompletionCollection)
 
 	if e != nil {
 		return []error{e}
@@ -39,8 +39,9 @@ func (s *Service) ReconcileCompletions() []error {
 
 		metadata["created_at"] = []string{c.CreatedAt.Format(time.RFC3339)}
 
-		if g := s.completionIndexer.Push(
+		if g := s.pushDocument(
 			constant.CompletionCollection,
+			constant.CompletionSourceType,
 			name,
 			c.Summary,
 			metadata,

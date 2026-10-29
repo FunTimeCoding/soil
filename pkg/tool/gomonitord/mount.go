@@ -3,9 +3,9 @@ package gomonitord
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	monitor "github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/stream"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -15,8 +15,7 @@ import (
 )
 
 func Mount(
-	s *store.Store,
-	n face.EventNotifier,
+	v monitor.Monitor,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
@@ -25,7 +24,7 @@ func Mount(
 		webConstant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(s, r),
+				server.New(v, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -33,5 +32,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	g.Token(route.Get(constant.StreamPath), stream.Claims(s, n, r))
+	g.Token(route.Get(constant.StreamPath), stream.Claims(v, r))
 }

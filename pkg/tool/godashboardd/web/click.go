@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"io"
 	"net/http"
 )
@@ -12,14 +13,19 @@ func (s *Server) click(
 ) {
 	b, e := io.ReadAll(q.Body)
 	errors.PanicOnError(e)
-	label := string(b)
+	f := s.service.Click(string(b))
 
-	if !s.labels[label] {
-		w.WriteHeader(http.StatusBadRequest)
+	if validation.Is(f) {
+		http.Error(w, f.Error(), http.StatusBadRequest)
 
 		return
 	}
 
-	errors.PanicOnError(s.store.Create(label))
+	if f != nil {
+		s.view.Answer(w, q, s.reporter, f)
+
+		return
+	}
+
 	w.WriteHeader(http.StatusNoContent)
 }

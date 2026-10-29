@@ -1,27 +1,19 @@
 package supervisor
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
-)
-
-func (s *Supervisor) Restart(names []string) error {
+func (s *Supervisor) Restart(name string) error {
 	s.commandMutex.Lock()
 	defer s.commandMutex.Unlock()
+	p, e := s.process(name)
 
-	for _, name := range names {
-		p := s.findProcess(name)
-
-		if p == nil {
-			return validation.New(constant.UnknownProcess, name)
-		}
-
-		if e := p.Stop(); e != nil {
-			return e
-		}
-
-		s.spawn(p)
+	if e != nil {
+		return e
 	}
+
+	if f := p.Stop(); f != nil {
+		return f
+	}
+
+	s.spawn(p)
 
 	return nil
 }

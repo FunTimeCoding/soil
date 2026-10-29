@@ -7,6 +7,13 @@ func (c *Client) ExecuteStandard(
 	pod string,
 	container string,
 	command ...string,
-) {
-	c.Execute(os.Stdout, os.Stderr, namespace, pod, container, command...)
+) error {
+	return c.Execute(
+		os.Stdout,
+		os.Stderr,
+		namespace,
+		pod,
+		container,
+		command...,
+	)
 }

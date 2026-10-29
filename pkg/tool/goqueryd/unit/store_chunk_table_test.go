@@ -7,7 +7,7 @@ import (
 )
 
 func TestTableOverAllowanceSplitsBetweenRows(t *testing.T) {
-	chunks := tableChunks(40)
+	chunks := tableChunks(t, 40)
 	assert.Count(t, 5, chunks)
 	assert.String(
 		t,
@@ -18,7 +18,7 @@ func TestTableOverAllowanceSplitsBetweenRows(t *testing.T) {
 }
 
 func TestTablePiecesCoverTheSourceContiguously(t *testing.T) {
-	chunks := tableChunks(40)
+	chunks := tableChunks(t, 40)
 
 	for i := 1; i < 4; i++ {
 		assert.Integer(
@@ -36,7 +36,7 @@ func TestTablePiecesCoverTheSourceContiguously(t *testing.T) {
 }
 
 func TestTableThatTipsItsWindowOverLeavesTheText(t *testing.T) {
-	chunks := tableChunks(50)
+	chunks := tableChunks(t, 50)
 	assert.Count(t, 4, chunks)
 	assert.String(
 		t,
@@ -48,7 +48,7 @@ func TestTableThatTipsItsWindowOverLeavesTheText(t *testing.T) {
 }
 
 func TestTableWithinAllowanceStaysInTheText(t *testing.T) {
-	chunks := tableChunks(100)
+	chunks := tableChunks(t, 100)
 	assert.Count(t, 1, chunks)
 	assert.String(
 		t,

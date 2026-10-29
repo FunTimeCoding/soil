@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
@@ -19,17 +18,10 @@ func (s *Server) getPage(
 		return response.Fail("identifier is required: %v", f)
 	}
 
-	var result *page.Page
-	var g error
-
-	if r.GetBool(constant.Draft, false) {
-		result, g = s.confluence.DraftPage(identifier)
-	} else {
-		result, g = s.confluence.Page(identifier)
-	}
+	result, g := s.service.Page(identifier, r.GetBool(constant.Draft, false))
 
 	if g != nil {
-		return s.captureFail(g, "page not found")
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(result)

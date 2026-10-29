@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/internet_address_range"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) InternetAddressRanges() ([]*internet_address_range.Range, error) {
@@ -11,7 +12,7 @@ func (c *Client) InternetAddressRanges() ([]*internet_address_range.Range, error
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return internet_address_range.NewSlice(result.Results), nil

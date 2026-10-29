@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -31,7 +32,7 @@ func (c *Client) RemoveVirtualTag(
 	).PatchedWritableVirtualMachineWithConfigContextRequest(*q).Execute()
 
 	if g != nil {
-		return nil, g
+		return nil, refusal.Classify(g)
 	}
 
 	return virtual_machine.New(result), nil

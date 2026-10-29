@@ -2,7 +2,7 @@ package godirectoryd
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/directory"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -22,9 +22,17 @@ func Run(
 	r := i.Reporter()
 	t := i.Recorder()
 	l := logger.New(context.Background())
-	s := service.New(directory.NewEnvironment())
-	u := web.New(s, authorizationClient(o).WithReporter(r))
-	lifecycle.New(l).WithServer(
+	s := service.New(o, l, r)
+	defer s.Close()
+	errors.PanicOnError(s.Wait(context.Background()))
+	u := web.New(s)
+	c := lifecycle.New(l)
+
+	for _, w := range s.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

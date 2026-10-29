@@ -1,26 +1,37 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateInterface(
+	x context.Context,
 	device string,
 	name string,
 	interfaceType string,
 	physicalAddress string,
-) *response.Response {
+) (client.Interface, error) {
 	body := client.CreateInterfaceRequest{Name: name, Type: interfaceType}
 
 	if physicalAddress != "" {
 		body.PhysicalAddress = &physicalAddress
 	}
 
-	result, e := c.client.CreateInterface(c.context, device, body)
-	errors.PanicOnError(e)
+	r, e := c.client.CreateInterfaceWithResponse(x, device, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Interface{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Interface{}, refusal.New(
+			"create interface",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

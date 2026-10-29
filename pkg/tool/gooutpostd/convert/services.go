@@ -5,17 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/server"
 )
 
-func Services(
-	v []*service.Service,
-	origin string,
-) []server.Service {
+func Services(v []*service.Service) []server.Service {
 	result := make([]server.Service, 0, len(v))
 
 	for _, s := range v {
-		if origin != "" && s.Origin != origin {
-			continue
-		}
-
 		result = append(result, Service(s))
 	}
 

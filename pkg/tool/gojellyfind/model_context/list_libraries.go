@@ -12,7 +12,7 @@ func (s *Server) ListLibraries(
 	_ mcp.CallToolRequest,
 	_ argument.ListLibraries,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Libraries()
+	result, e := s.service.Libraries()
 
 	if e != nil {
 		return s.answer(e)

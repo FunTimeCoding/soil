@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -21,39 +20,27 @@ func (s *Server) SubscribeThread(
 		return response.Fail("callsign is required")
 	}
 
-	p, e := s.client.FindPost(a.Root)
+	p, e := s.service.FindPost(a.Root)
 
 	if e != nil {
-		return s.captureFail(e, "post not found")
+		return s.answer(e)
 	}
 
-	root := p.Id
-
-	if p.RootId != "" {
-		root = p.RootId
-	}
-
-	existing, f := s.store.ByRoot(root)
+	v, existing, f := s.service.Subscribe(p, a.Callsign, a.Alias)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.answer(f)
 	}
 
-	for _, v := range existing {
-		if v.Callsign == a.Callsign {
-			return response.Success("already subscribed")
-		}
+	if existing {
+		return response.Success("already subscribed")
 	}
-
-	if g := s.store.Create(
-		subscription.New(a.Callsign, root, p.ChannelId, a.Alias),
-	); g != nil {
-		return s.captureDetail(g)
-	}
-
-	s.indexer.Index(root)
 
 	return response.SuccessAny(
-		map[string]any{"root": root, "channel": p.ChannelId, "alias": a.Alias},
+		map[string]any{
+			"root":    v.RootIdentifier,
+			"channel": v.ChannelIdentifier,
+			"alias":   v.Alias,
+		},
 	)
 }

@@ -7,9 +7,7 @@ import (
 
 func New(
 	s *store.Store,
-	i face.Indexer,
-	r face.Searcher,
-	l face.Lister,
+	q face.Client,
 ) *Service {
-	return &Service{store: s, indexer: i, searcher: r, lister: l}
+	return &Service{store: s, query: q}
 }

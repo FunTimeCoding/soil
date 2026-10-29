@@ -2,11 +2,15 @@ package goatlas
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/spf13/cobra"
 )
 
-func listPlaces(x *Context) *cobra.Command {
+func listPlaces(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-places",
 		Short: "List devices and virtual machines by how much they carry",
@@ -15,23 +19,7 @@ func listPlaces(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := x.Client.ListPlacesWithResponse(context.Background())
-
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			for _, v := range *r.JSON200 {
-				fmt.Printf("%-12s %4d  %s\n", v.Name, v.Count, v.Kind)
-			}
+			t.EmitValue(c.ListPlaces(context.Background()))
 		},
 	}
 }

@@ -2,16 +2,23 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/mock_pod_source"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
 	"testing"
 )
 
 func TestKubernetesPlacesOneRowPerNode(t *testing.T) {
-	f := mock_pod_source.New()
-	f.Add("alloy-a", "alloy", "delta", map[string]string{"app": "alloy"})
-	f.Add(
+	f := mock_client.New()
+	collector_tester.AddPod(
+		f,
+		"alloy-a",
+		"alloy",
+		"delta",
+		map[string]string{"app": "alloy"},
+	)
+	collector_tester.AddPod(
+		f,
 		"alloy-b",
 		"alloy",
 		constant.FixtureVirtualMachineNode,
@@ -25,26 +32,56 @@ func TestKubernetesPlacesOneRowPerNode(t *testing.T) {
 }
 
 func TestKubernetesCollapsesReplicasOnOneNode(t *testing.T) {
-	f := mock_pod_source.New()
+	f := mock_client.New()
 	labels := map[string]string{"app": constant.FixtureService}
-	f.Add("relay-1", constant.FixtureScope, "delta", labels)
-	f.Add("relay-2", constant.FixtureScope, "delta", labels)
+	collector_tester.AddPod(
+		f,
+		"relay-1",
+		constant.FixtureScope,
+		"delta",
+		labels,
+	)
+	collector_tester.AddPod(
+		f,
+		"relay-2",
+		constant.FixtureScope,
+		"delta",
+		labels,
+	)
 	v := collector_tester.CollectPods(t, f)
 	assert.Count(t, 1, v)
 	assert.String(t, "relay", v[0].Name)
 }
 
 func TestKubernetesSeparatesEqualNamesByNamespace(t *testing.T) {
-	f := mock_pod_source.New()
-	f.Add("redis-1", "storage", "delta", map[string]string{"app": "redis"})
-	f.Add("redis-2", "media", "delta", map[string]string{"app": "redis"})
+	f := mock_client.New()
+	collector_tester.AddPod(
+		f,
+		"redis-1",
+		"storage",
+		"delta",
+		map[string]string{"app": "redis"},
+	)
+	collector_tester.AddPod(
+		f,
+		"redis-2",
+		"media",
+		"delta",
+		map[string]string{"app": "redis"},
+	)
 	v := collector_tester.CollectPods(t, f)
 	assert.Count(t, 2, v)
 }
 
 func TestKubernetesLeavesUnknownNodeUnplaced(t *testing.T) {
-	f := mock_pod_source.New()
-	f.Add("stray", "default", "hotel", map[string]string{"app": "stray"})
+	f := mock_client.New()
+	collector_tester.AddPod(
+		f,
+		"stray",
+		"default",
+		"hotel",
+		map[string]string{"app": "stray"},
+	)
 	v := collector_tester.CollectPods(t, f)
 	assert.Count(t, 1, v)
 	assert.String(t, "", v[0].PlaceKind)
@@ -52,8 +89,9 @@ func TestKubernetesLeavesUnknownNodeUnplaced(t *testing.T) {
 }
 
 func TestKubernetesCarriesSourceAndKind(t *testing.T) {
-	f := mock_pod_source.New()
-	f.Add(
+	f := mock_client.New()
+	collector_tester.AddPod(
+		f,
 		"relay-1",
 		constant.FixtureScope,
 		"delta",

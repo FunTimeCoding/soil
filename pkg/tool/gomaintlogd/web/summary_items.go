@@ -1,7 +1,13 @@
 package web
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors"
+)
 
 func (s *Server) summaryItems() []string {
-	return []string{fmt.Sprintf("%d entries", s.store.Count())}
+	count, e := s.service.Count()
+	errors.PanicOnError(e)
+
+	return []string{fmt.Sprintf("%d entries", count)}
 }

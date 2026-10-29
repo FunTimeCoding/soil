@@ -9,7 +9,7 @@ import (
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/package_server"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -22,13 +22,13 @@ func Run(
 	r := i.Reporter()
 	t := i.Recorder()
 	l := logger.New(context.Background())
-	s := package_server.NewEnvironment()
+	v := service.New(o)
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(s, r, t, guard.New(m, o.ServiceTokens))
+				Mount(v, r, t, guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).WithServer(
@@ -38,7 +38,7 @@ func Run(
 			func(m *http.ServeMux) {
 				m.Handle(
 					stringsConstant.Slash,
-					http.FileServer(http.Dir(constant.PackageRoot)),
+					http.FileServer(http.Dir(o.PackageRoot)),
 				)
 			},
 		),

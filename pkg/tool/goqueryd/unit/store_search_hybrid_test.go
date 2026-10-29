@@ -11,7 +11,6 @@ import (
 
 func TestSearchHybridFusesKeywordAndVectorResults(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
-	defer s.Close()
 	d := t.TempDir()
 	store_tester.WriteFixture(t, d, "alfa.md", "# Alfa\n\nzulu appears here.\n")
 	store_tester.WriteFixture(

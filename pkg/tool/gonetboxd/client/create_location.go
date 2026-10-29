@@ -1,21 +1,32 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateLocation(
+	x context.Context,
 	name string,
 	site string,
-) *response.Response {
-	result, e := c.client.CreateLocation(
-		c.context,
+) (client.Location, error) {
+	r, e := c.client.CreateLocationWithResponse(
+		x,
 		client.CreateLocationRequest{Name: name, Site: site},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Location{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Location{}, refusal.New(
+			"create location",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

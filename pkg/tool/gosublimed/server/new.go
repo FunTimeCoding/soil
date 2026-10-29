@@ -1,7 +1,13 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	sublime "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+)
 
-func New(c face.SublimeSource) *Server {
-	return &Server{client: c}
+func New(
+	v sublime.Sublime,
+	r face.Reporter,
+) *Server {
+	return &Server{service: v, reporter: r}
 }

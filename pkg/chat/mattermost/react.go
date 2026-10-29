@@ -12,10 +12,10 @@ func (c *Client) React(
 		return e
 	}
 
-	_, _, e = c.client.SaveReaction(
+	_, r, f := c.client.SaveReaction(
 		c.context,
 		&model.Reaction{UserId: me.Id, PostId: p.Id, EmojiName: emoji},
 	)
 
-	return wrapError(e)
+	return wrapError(r, f)
 }

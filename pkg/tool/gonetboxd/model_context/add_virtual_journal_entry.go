@@ -24,7 +24,7 @@ func (s *Server) addVirtualJournalEntry(
 	}
 
 	kind := r.GetString(constant.Kind, "")
-	result, h := s.client.AddVirtualJournalEntry(name, kind, comments)
+	result, h := s.service.AddVirtualJournalEntry(name, kind, comments)
 
 	if h != nil {
 		return s.captureFail(h, "journal entry not added to virtual machine")

@@ -5,7 +5,7 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/server"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	alertWeb "github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -15,7 +15,7 @@ import (
 )
 
 func Mount(
-	s *store.Store,
+	v *service.Service,
 	w *worker.Worker,
 	u *alertWeb.Server,
 	r face.Reporter,
@@ -26,7 +26,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(s, w, r),
+				server.New(v, w, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -34,6 +34,6 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(s, w, r, t).Mount(g)
+	model_context.New(v, w, r, t).Mount(g)
 	u.Mount(g)
 }

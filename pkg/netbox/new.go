@@ -18,6 +18,7 @@ func New(
 	result := &Client{
 		context: context.Background(),
 		client:  netbox.NewAPIClientFor(l.String(), token),
+		base:    l,
 		cache:   cache.New(),
 	}
 

@@ -12,7 +12,7 @@ func (s *Server) ReadScreen(
 	_ mcp.CallToolRequest,
 	a argument.ReadScreen,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.client.ReadScreen(a.SessionIdentifier)
+	v, e := s.service.ReadScreen(a.SessionIdentifier)
 
 	if e != nil {
 		return s.answer(e)

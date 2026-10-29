@@ -14,7 +14,7 @@ func (s *Server) ListTabs(
 	_ mcp.CallToolRequest,
 	_ argument.ListTabs,
 ) (*mcp.CallToolResult, error) {
-	tabs, e := s.client.Tabs()
+	tabs, e := s.service.Tabs()
 
 	if e != nil {
 		return s.captureDetail(e)

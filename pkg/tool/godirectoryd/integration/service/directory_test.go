@@ -17,7 +17,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestUserLifecycle(t *testing.T) {
-	s := stack()
+	s := stack(t)
 	created, e := s.CreateUser(
 		"lifecycle",
 		"Lifecycle Person",
@@ -43,7 +43,7 @@ func TestUserLifecycle(t *testing.T) {
 }
 
 func TestCreateUserDuplicateConflicts(t *testing.T) {
-	s := stack()
+	s := stack(t)
 	_, e := s.CreateUser("twice", "Twice", "Person", "", "")
 	assert.FatalOnError(t, e)
 
@@ -53,7 +53,7 @@ func TestCreateUserDuplicateConflicts(t *testing.T) {
 }
 
 func TestSetPasswordThenAuthenticate(t *testing.T) {
-	s := stack()
+	s := stack(t)
 	_, e := s.CreateUser("rotate", "Rotate", "Person", "", "firstpassword")
 	assert.FatalOnError(t, e)
 
@@ -68,7 +68,7 @@ func TestSetPasswordThenAuthenticate(t *testing.T) {
 }
 
 func TestGroupLifecycle(t *testing.T) {
-	s := stack()
+	s := stack(t)
 	created, e := s.CreateGroup("editors")
 	assert.FatalOnError(t, e)
 	assert.String(t, "editors", created.Name)
@@ -91,7 +91,7 @@ func TestGroupLifecycle(t *testing.T) {
 }
 
 func TestAddMemberUnknownUser(t *testing.T) {
-	s := stack()
+	s := stack(t)
 	_, e := s.CreateGroup("empty")
 	assert.FatalOnError(t, e)
 
@@ -101,7 +101,7 @@ func TestAddMemberUnknownUser(t *testing.T) {
 }
 
 func TestGroupNumberIncrements(t *testing.T) {
-	s := stack()
+	s := stack(t)
 	first, e := s.CreateGroup("alfa")
 	assert.FatalOnError(t, e)
 

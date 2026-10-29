@@ -2,17 +2,16 @@ package gofirefoxd
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	firefox "github.com/funtimecoding/soil/pkg/tool/gofirefoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/model_context"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/service"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 )
 
 func Mount(
-	c firefox.FirefoxSource,
-	downloadDirectory string,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(c, downloadDirectory, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

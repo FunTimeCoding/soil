@@ -1,33 +1,21 @@
 package label
 
 import (
-	"context"
 	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/place"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"time"
 )
 
-func (c *Collector) virtualPlacements(
-	q context.Context,
+func virtualPlacements(
+	machines []*client.VirtualMachine,
 	seenAt time.Time,
-) ([]*placement.Placement, error) {
+) []*placement.Placement {
 	var result []*placement.Placement
-	machines, e := c.netbox.ListVirtualMachinesWithResponse(q)
 
-	if e != nil {
-		return nil, e
-	}
-
-	if machines.JSON200 == nil {
-		return nil, statusFail(
-			constant.VirtualMachineStatusFormat,
-			machines.HTTPResponse.StatusCode,
-		)
-	}
-
-	for _, m := range *machines.JSON200 {
+	for _, m := range machines {
 		for _, name := range ServiceNames(m.Labels) {
 			result = append(
 				result,
@@ -47,5 +35,5 @@ func (c *Collector) virtualPlacements(
 		}
 	}
 
-	return result, nil
+	return result
 }

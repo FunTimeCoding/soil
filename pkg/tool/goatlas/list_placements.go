@@ -2,16 +2,19 @@ package goatlas
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlas/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/spf13/cobra"
 )
 
-func listPlacements(x *Context) *cobra.Command {
+func listPlacements(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var place string
 	var source string
+	var packageName string
 	result := &cobra.Command{
 		Use:   "list-placements",
 		Short: "List placements, newest attestation per line",
@@ -20,39 +23,14 @@ func listPlacements(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			p := &client.ListPlacementsParams{}
-
-			if place != "" {
-				p.Place = &place
-			}
-
-			if source != "" {
-				p.Source = &source
-			}
-
-			r, e := x.Client.ListPlacementsWithResponse(context.Background(), p)
-
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			for _, v := range *r.JSON200 {
-				fmt.Printf(
-					"%-12s %-28s %-12s %s\n",
-					placeName(v),
-					qualifiedName(v),
-					v.Source,
-					time.FormatCompact(v.Seen),
-				)
-			}
+			t.EmitValue(
+				c.ListPlacements(
+					context.Background(),
+					place,
+					source,
+					packageName,
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(
@@ -66,6 +44,12 @@ func listPlacements(x *Context) *cobra.Command {
 		constant.SourceArgument,
 		"",
 		constant.SourceUsage,
+	)
+	result.Flags().StringVar(
+		&packageName,
+		constant.PackageArgument,
+		"",
+		constant.PackageUsage,
 	)
 
 	return result

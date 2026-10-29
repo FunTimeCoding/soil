@@ -10,7 +10,7 @@ func (s *Server) DeleteHost(
 	_ context.Context,
 	r server.DeleteHostRequestObject,
 ) (server.DeleteHostResponseObject, error) {
-	e := s.opnsense.DeleteHost(r.Identifier)
+	e := s.service.DeleteHost(r.Identifier, apply(r.Params.Apply))
 
 	if not_found.Is(e) {
 		return server.DeleteHost404JSONResponse{Error: e.Error()}, nil
@@ -18,12 +18,6 @@ func (s *Server) DeleteHost(
 
 	if e != nil {
 		return server.DeleteHost500JSONResponse(*s.answer(e)), nil
-	}
-
-	if apply(r.Params.Apply) {
-		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return server.DeleteHost500JSONResponse(*s.answer(f)), nil
-		}
 	}
 
 	return server.DeleteHost204Response{}, nil

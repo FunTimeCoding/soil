@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 )
 
@@ -11,7 +12,7 @@ func (c *Client) VirtualMachines() ([]*virtual_machine.Machine, error) {
 	).Limit(constant.PageLimit).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return virtual_machine.NewSlice(result.Results), nil

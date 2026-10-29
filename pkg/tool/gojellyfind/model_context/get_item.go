@@ -12,11 +12,7 @@ func (s *Server) GetItem(
 	_ mcp.CallToolRequest,
 	a argument.GetItem,
 ) (*mcp.CallToolResult, error) {
-	if a.Identifier == "" {
-		return response.Fail("id is required")
-	}
-
-	result, e := s.client.Item(a.Identifier)
+	result, e := s.service.Item(a.Identifier)
 
 	if e != nil {
 		return s.answer(e)

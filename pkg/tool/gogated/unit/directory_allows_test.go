@@ -2,46 +2,42 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/directory/mock_client"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/mock_directory"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/base"
 	"testing"
 )
 
 func TestAllowsWithoutDirectory(t *testing.T) {
-	b := base.New(t)
-	assert.True(t, b.Service.DirectoryAllows("anything"))
+	assert.True(t, allows(t, base.New(t), "anything"))
 }
 
 func TestAllowsLocalUser(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
 	row, e := b.Store.UserByMail(constant.FixtureMail)
 	assert.FatalOnError(t, e)
-	assert.True(t, b.Service.DirectoryAllows(row.Identifier))
+	assert.True(t, allows(t, b, row.Identifier))
 }
 
 func TestAllowsDirectoryMember(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
+	b := base.NewWith(t, d)
 	row, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
-	assert.True(t, b.Service.DirectoryAllows(row.Identifier))
+	assert.True(t, allows(t, b, row.Identifier))
 }
 
 func TestRevokesAfterGroupRemoval(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+	d := mock_client.New("")
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
+	b := base.NewWith(t, d)
 	row, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
@@ -49,27 +45,27 @@ func TestRevokesAfterGroupRemoval(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	d.SetMember("member", false)
-	assert.False(t, b.Service.DirectoryAllows(row.Identifier))
+	assert.False(t, allows(t, b, row.Identifier))
 }
 
-func TestRevokesWhenDirectoryUnreachable(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	d.Add("unique-1", "member", "member@example.test", "secret", true)
-	b.Service.WithDirectory(d)
+func TestAnUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
+	d := mock_client.New("")
+	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
+	b := base.NewWith(t, d)
 	row, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
-	d.SetFailure(unreachable.Format("directory down"))
-	assert.False(t, b.Service.DirectoryAllows(row.Identifier))
+	d.Failure = directoryDown()
+	allowed, f := b.Service.DirectoryAllows(row.Identifier)
+	assert.False(t, allowed)
+	assert.True(t, unavailable.Is(f))
 }
 
 func TestAllowsUnknownIdentifierRefused(t *testing.T) {
-	b := base.New(t)
-	d := mock_directory.New()
-	b.Service.WithDirectory(d)
-	assert.False(t, b.Service.DirectoryAllows("missing"))
+	d := mock_client.New("")
+	b := base.NewWith(t, d)
+	assert.False(t, allows(t, b, "missing"))
 }

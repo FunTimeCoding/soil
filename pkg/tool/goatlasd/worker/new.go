@@ -3,41 +3,31 @@ package worker
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	soilFace "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/lease"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/metric"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
 
 func New(
-	s *store.Store,
-	collectors []face.Collector,
-	d *lease.Collector,
-	n *client.ClientWithResponses,
+	v *service.Service,
 	interval time.Duration,
-	retention time.Duration,
 	l *logger.Logger,
 	y *prometheus.Registry,
-	r soilFace.Reporter,
+	r face.Reporter,
 ) *Worker {
 	x, cancel := context.WithCancel(context.Background())
 
 	return &Worker{
-		context:    x,
-		cancel:     cancel,
-		store:      s,
-		collectors: collectors,
-		lease:      d,
-		netbox:     n,
-		interval:   interval,
-		retention:  retention,
-		logger:     l,
-		metric:     metric.New(y),
-		recovery:   recovery.New(l, r),
+		context:  x,
+		cancel:   cancel,
+		service:  v,
+		interval: interval,
+		logger:   l,
+		reporter: r,
+		metric:   metric.New(y),
+		recovery: recovery.New(l, r),
 	}
 }

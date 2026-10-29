@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -137,10 +138,6 @@ func TestRefusalCarriesTheOldMessage(t *testing.T) {
 	)
 	var out map[string]any
 	e := newConfluenceClient(t, s.URL).GetPath(constant.ConfluenceUser, &out)
-	assert.True(t, unexpected.Is(e))
-	assert.StringContains(
-		t,
-		"status: 403: Not permitted to use confluence",
-		e.Error(),
-	)
+	assert.True(t, forbidden.Is(e))
+	assert.StringContains(t, "Not permitted to use confluence", e.Error())
 }

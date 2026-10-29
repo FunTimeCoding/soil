@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -25,7 +26,15 @@ func updatePage(
 				m = &message
 			}
 
-			t.Emit(c.UpdatePage(arguments[0], arguments[1], arguments[2], m))
+			t.EmitValue(
+				c.UpdatePage(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+					arguments[2],
+					m,
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(&message, "message", "", "version comment")

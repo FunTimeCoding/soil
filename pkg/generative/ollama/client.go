@@ -12,5 +12,6 @@ type Client struct {
 	host    string
 	port    int
 	secure  bool
+	model   string
 	pool    *pool.Pool
 }

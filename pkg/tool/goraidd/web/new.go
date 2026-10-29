@@ -1,10 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/raid_parser"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -14,11 +13,8 @@ import (
 )
 
 func New(
-	s *store.Store,
-	elitePath string,
-	outputPath string,
-	p *raid_parser.Client,
-	authorization *client.Client,
+	v *service.Service,
+	f face.Reporter,
 ) *Server {
 	r := registry.New()
 	r.Register(
@@ -50,12 +46,9 @@ func New(
 	)
 
 	return &Server{
-		store:         s,
-		elitePath:     elitePath,
-		outputPath:    outputPath,
-		parser:        p,
-		authorization: authorization,
-		registry:      r,
+		service:  v,
+		reporter: f,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTyria).

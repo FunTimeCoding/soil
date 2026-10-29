@@ -16,7 +16,7 @@ func (s *Server) ListForwards(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Forwards(phrase)
+	result, e := s.service.Forwards(phrase)
 
 	if e != nil {
 		return server.ListForwards500JSONResponse(*s.answer(e)), nil

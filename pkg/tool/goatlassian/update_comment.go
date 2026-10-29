@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
@@ -19,7 +20,14 @@ func updateComment(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.UpdateComment(arguments[0], arguments[1], arguments[2]))
+			t.EmitDone(
+				c.UpdateComment(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+					arguments[2],
+				),
+			)
 			console.Format("updated comment %s\n", arguments[1])
 		},
 	}

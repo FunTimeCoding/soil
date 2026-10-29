@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/dropped"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
@@ -28,6 +29,8 @@ func Class(e error) string {
 		return constant.NotSelectedClass
 	case conflict.Is(e):
 		return constant.ConflictClass
+	case forbidden.Is(e):
+		return constant.ForbiddenClass
 	case validation.Is(e):
 		return constant.ValidationClass
 	case timeout.Is(e):

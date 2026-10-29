@@ -4,15 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/service_tester"
 	"testing"
 )
 
 func TestUpdateIssueChangesTheStoredStatus(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.AddIssue("100", "41", constant.UnresolvedStatus)
-	s := service_tester.Service(c)
+	s := service_tester.Service(t, c)
 	_, e := s.UpdateIssue("100", constant.ResolvedStatus, "")
 	assert.FatalOnError(t, e)
 	issue, f := s.Issue("100")
@@ -21,10 +20,10 @@ func TestUpdateIssueChangesTheStoredStatus(t *testing.T) {
 }
 
 func TestDeletedIssueIsNotFound(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.AddIssue("100", "41", constant.UnresolvedStatus)
 	c.AddIssue("200", "41", constant.UnresolvedStatus)
-	s := service_tester.Service(c)
+	s := service_tester.Service(t, c)
 	assert.FatalOnError(t, s.DeleteIssue("100"))
 	_, e := s.Issue("100")
 	assert.True(t, not_found.Is(e))
@@ -35,7 +34,7 @@ func TestDeletedIssueIsNotFound(t *testing.T) {
 }
 
 func TestUpdatingAMissingIssueIsNotFound(t *testing.T) {
-	_, e := service_tester.Service(mock_client.New()).UpdateIssue(
+	_, e := service_tester.Service(t, service_tester.NewSource(t)).UpdateIssue(
 		"999",
 		constant.ResolvedStatus,
 		"",

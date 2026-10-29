@@ -19,9 +19,11 @@ func TestCompletePushesIndexer(t *testing.T) {
 		constant.Complete,
 		map[string]any{constant.Message: "built the thing"},
 	)
-	assert.Count(t, 1, s.CompletionIndexer.Pushed)
-	assert.String(t, "test-completion/1", s.CompletionIndexer.Pushed[0].Name)
-	assert.String(t, "built the thing", s.CompletionIndexer.Pushed[0].Body)
+	pushed := s.Pushed(constant.CompletionCollection)
+	assert.Count(t, 1, pushed)
+	assert.String(t, "test-completion/1", pushed[0].Path)
+	assert.String(t, "built the thing", pushed[0].Body)
+	assert.String(t, "session-completion", *pushed[0].SourceType)
 }
 
 func TestCompleteWithoutSlugSkipsPush(t *testing.T) {
@@ -32,5 +34,5 @@ func TestCompleteWithoutSlugSkipsPush(t *testing.T) {
 		constant.Complete,
 		map[string]any{constant.Message: "completed without slug"},
 	)
-	assert.Count(t, 0, s.CompletionIndexer.Pushed)
+	assert.Count(t, 0, s.Pushed(constant.CompletionCollection))
 }

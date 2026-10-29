@@ -10,7 +10,7 @@ func (s *Server) GetItem(
 	_ context.Context,
 	r server.GetItemRequestObject,
 ) (server.GetItemResponseObject, error) {
-	v, e := s.client.Item(r.Identifier)
+	v, e := s.service.Item(r.Identifier)
 
 	if not_found.Is(e) {
 		return server.GetItem404JSONResponse{Error: e.Error()}, nil

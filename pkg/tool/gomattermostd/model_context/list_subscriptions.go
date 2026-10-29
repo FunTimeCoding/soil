@@ -17,10 +17,10 @@ func (s *Server) ListSubscriptions(
 		return response.Fail("callsign is required")
 	}
 
-	result, e := s.store.ByCallsign(a.Callsign)
+	result, e := s.service.Subscriptions(a.Callsign)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	rows := make([]*mattermostResponse.Subscription, len(result))

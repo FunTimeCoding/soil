@@ -10,7 +10,7 @@ func (o *Tester) waitForApply() {
 	deadline := time.Now().Add(10 * time.Second)
 
 	for time.Now().Before(deadline) {
-		runs, e := o.store.Recent(1)
+		runs, e := o.Service.Recent(1)
 
 		if e == nil &&
 			len(runs) == 1 &&

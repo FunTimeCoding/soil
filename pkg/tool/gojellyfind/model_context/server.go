@@ -8,6 +8,6 @@ import (
 
 type Server struct {
 	server   *server.MCPServer
-	client   jellyfin.JellyfinSource
+	service  jellyfin.Jellyfin
 	reporter face.Reporter
 }

@@ -11,6 +11,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -19,7 +20,25 @@ import (
 	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/oapi-codegen/runtime"
 )
+
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Error           string `json:"error"`
+	EventIdentifier string `json:"event_identifier"`
+}
+
+// Log defines model for Log.
+type Log struct {
+	Lines []string `json:"lines"`
+	Older int      `json:"older"`
+}
 
 // Process defines model for Process.
 type Process struct {
@@ -29,11 +48,49 @@ type Process struct {
 	Started *time.Time `json:"started,omitempty"`
 }
 
+// Wave defines model for Wave.
+type Wave struct {
+	Count int `json:"count"`
+}
+
+// Name defines model for Name.
+type Name = string
+
+// GetLogParams defines parameters for GetLog.
+type GetLogParams struct {
+	// All Every retained line instead of the current generation.
+	All *bool `form:"all,omitempty" json:"all,omitempty"`
+}
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
 	// (GET /api/processes)
 	ListProcesses(w http.ResponseWriter, r *http.Request)
+
+	// (DELETE /api/processes/{name}/log)
+	ClearLog(w http.ResponseWriter, r *http.Request, name Name)
+
+	// (GET /api/processes/{name}/log)
+	GetLog(w http.ResponseWriter, r *http.Request, name Name, params GetLogParams)
+
+	// (POST /api/processes/{name}/restart)
+	RestartProcess(w http.ResponseWriter, r *http.Request, name Name)
+
+	// (POST /api/processes/{name}/start)
+	StartProcess(w http.ResponseWriter, r *http.Request, name Name)
+
+	// (POST /api/processes/{name}/stop)
+	StopProcess(w http.ResponseWriter, r *http.Request, name Name)
+
+	// (POST /api/reload/environment)
+	ReloadEnvironment(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/reload/procfile)
+	ReloadProcfile(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/restart)
+	RestartAll(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -50,6 +107,194 @@ func (siw *ServerInterfaceWrapper) ListProcesses(w http.ResponseWriter, r *http.
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.ListProcesses(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ClearLog operation middleware
+func (siw *ServerInterfaceWrapper) ClearLog(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name Name
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ClearLog(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetLog operation middleware
+func (siw *ServerInterfaceWrapper) GetLog(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name Name
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetLogParams
+
+	// ------------- Optional query parameter "all" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "all", r.URL.Query(), &params.All, runtime.BindQueryParameterOptions{Type: "boolean", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "all"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "all", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetLog(w, r, name, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// RestartProcess operation middleware
+func (siw *ServerInterfaceWrapper) RestartProcess(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name Name
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.RestartProcess(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// StartProcess operation middleware
+func (siw *ServerInterfaceWrapper) StartProcess(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name Name
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.StartProcess(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// StopProcess operation middleware
+func (siw *ServerInterfaceWrapper) StopProcess(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name Name
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.StopProcess(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ReloadEnvironment operation middleware
+func (siw *ServerInterfaceWrapper) ReloadEnvironment(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ReloadEnvironment(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ReloadProcfile operation middleware
+func (siw *ServerInterfaceWrapper) ReloadProcfile(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ReloadProcfile(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// RestartAll operation middleware
+func (siw *ServerInterfaceWrapper) RestartAll(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.RestartAll(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -180,6 +425,14 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/processes", wrapper.ListProcesses)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/processes/{name}/start", wrapper.StartProcess)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/processes/{name}/stop", wrapper.StopProcess)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/processes/{name}/restart", wrapper.RestartProcess)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/processes/{name}/log", wrapper.ClearLog)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/processes/{name}/log", wrapper.GetLog)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/restart", wrapper.RestartAll)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/reload/procfile", wrapper.ReloadProcfile)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/reload/environment", wrapper.ReloadEnvironment)
 
 	return m
 }
@@ -205,11 +458,327 @@ func (response ListProcesses200JSONResponse) VisitListProcessesResponse(w http.R
 	return err
 }
 
+type ClearLogRequestObject struct {
+	Name Name `json:"name"`
+}
+
+type ClearLogResponseObject interface {
+	VisitClearLogResponse(w http.ResponseWriter) error
+}
+
+type ClearLog204Response struct {
+}
+
+func (response ClearLog204Response) VisitClearLogResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type ClearLog404JSONResponse Error
+
+func (response ClearLog404JSONResponse) VisitClearLogResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLogRequestObject struct {
+	Name   Name `json:"name"`
+	Params GetLogParams
+}
+
+type GetLogResponseObject interface {
+	VisitGetLogResponse(w http.ResponseWriter) error
+}
+
+type GetLog200JSONResponse Log
+
+func (response GetLog200JSONResponse) VisitGetLogResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLog404JSONResponse Error
+
+func (response GetLog404JSONResponse) VisitGetLogResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestartProcessRequestObject struct {
+	Name Name `json:"name"`
+}
+
+type RestartProcessResponseObject interface {
+	VisitRestartProcessResponse(w http.ResponseWriter) error
+}
+
+type RestartProcess204Response struct {
+}
+
+func (response RestartProcess204Response) VisitRestartProcessResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type RestartProcess404JSONResponse Error
+
+func (response RestartProcess404JSONResponse) VisitRestartProcessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestartProcess500JSONResponse ErrorResponse
+
+func (response RestartProcess500JSONResponse) VisitRestartProcessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartProcessRequestObject struct {
+	Name Name `json:"name"`
+}
+
+type StartProcessResponseObject interface {
+	VisitStartProcessResponse(w http.ResponseWriter) error
+}
+
+type StartProcess204Response struct {
+}
+
+func (response StartProcess204Response) VisitStartProcessResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type StartProcess404JSONResponse Error
+
+func (response StartProcess404JSONResponse) VisitStartProcessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopProcessRequestObject struct {
+	Name Name `json:"name"`
+}
+
+type StopProcessResponseObject interface {
+	VisitStopProcessResponse(w http.ResponseWriter) error
+}
+
+type StopProcess204Response struct {
+}
+
+func (response StopProcess204Response) VisitStopProcessResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type StopProcess404JSONResponse Error
+
+func (response StopProcess404JSONResponse) VisitStopProcessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopProcess500JSONResponse ErrorResponse
+
+func (response StopProcess500JSONResponse) VisitStopProcessResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReloadEnvironmentRequestObject struct {
+}
+
+type ReloadEnvironmentResponseObject interface {
+	VisitReloadEnvironmentResponse(w http.ResponseWriter) error
+}
+
+type ReloadEnvironment204Response struct {
+}
+
+func (response ReloadEnvironment204Response) VisitReloadEnvironmentResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type ReloadEnvironment500JSONResponse ErrorResponse
+
+func (response ReloadEnvironment500JSONResponse) VisitReloadEnvironmentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReloadProcfileRequestObject struct {
+}
+
+type ReloadProcfileResponseObject interface {
+	VisitReloadProcfileResponse(w http.ResponseWriter) error
+}
+
+type ReloadProcfile204Response struct {
+}
+
+func (response ReloadProcfile204Response) VisitReloadProcfileResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type ReloadProcfile400JSONResponse Error
+
+func (response ReloadProcfile400JSONResponse) VisitReloadProcfileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ReloadProcfile500JSONResponse ErrorResponse
+
+func (response ReloadProcfile500JSONResponse) VisitReloadProcfileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestartAllRequestObject struct {
+}
+
+type RestartAllResponseObject interface {
+	VisitRestartAllResponse(w http.ResponseWriter) error
+}
+
+type RestartAll200JSONResponse Wave
+
+func (response RestartAll200JSONResponse) VisitRestartAllResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestartAll409JSONResponse Error
+
+func (response RestartAll409JSONResponse) VisitRestartAllResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
 	// (GET /api/processes)
 	ListProcesses(ctx context.Context, request ListProcessesRequestObject) (ListProcessesResponseObject, error)
+
+	// (DELETE /api/processes/{name}/log)
+	ClearLog(ctx context.Context, request ClearLogRequestObject) (ClearLogResponseObject, error)
+
+	// (GET /api/processes/{name}/log)
+	GetLog(ctx context.Context, request GetLogRequestObject) (GetLogResponseObject, error)
+
+	// (POST /api/processes/{name}/restart)
+	RestartProcess(ctx context.Context, request RestartProcessRequestObject) (RestartProcessResponseObject, error)
+
+	// (POST /api/processes/{name}/start)
+	StartProcess(ctx context.Context, request StartProcessRequestObject) (StartProcessResponseObject, error)
+
+	// (POST /api/processes/{name}/stop)
+	StopProcess(ctx context.Context, request StopProcessRequestObject) (StopProcessResponseObject, error)
+
+	// (POST /api/reload/environment)
+	ReloadEnvironment(ctx context.Context, request ReloadEnvironmentRequestObject) (ReloadEnvironmentResponseObject, error)
+
+	// (POST /api/reload/procfile)
+	ReloadProcfile(ctx context.Context, request ReloadProcfileRequestObject) (ReloadProcfileResponseObject, error)
+
+	// (POST /api/restart)
+	RestartAll(ctx context.Context, request RestartAllRequestObject) (RestartAllResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -275,17 +844,229 @@ func (sh *strictHandler) ListProcesses(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ClearLog operation middleware
+func (sh *strictHandler) ClearLog(w http.ResponseWriter, r *http.Request, name Name) {
+	var request ClearLogRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ClearLog(ctx, request.(ClearLogRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ClearLog")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ClearLogResponseObject); ok {
+		if err := validResponse.VisitClearLogResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetLog operation middleware
+func (sh *strictHandler) GetLog(w http.ResponseWriter, r *http.Request, name Name, params GetLogParams) {
+	var request GetLogRequestObject
+
+	request.Name = name
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetLog(ctx, request.(GetLogRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetLog")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetLogResponseObject); ok {
+		if err := validResponse.VisitGetLogResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// RestartProcess operation middleware
+func (sh *strictHandler) RestartProcess(w http.ResponseWriter, r *http.Request, name Name) {
+	var request RestartProcessRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.RestartProcess(ctx, request.(RestartProcessRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "RestartProcess")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(RestartProcessResponseObject); ok {
+		if err := validResponse.VisitRestartProcessResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// StartProcess operation middleware
+func (sh *strictHandler) StartProcess(w http.ResponseWriter, r *http.Request, name Name) {
+	var request StartProcessRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.StartProcess(ctx, request.(StartProcessRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "StartProcess")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(StartProcessResponseObject); ok {
+		if err := validResponse.VisitStartProcessResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// StopProcess operation middleware
+func (sh *strictHandler) StopProcess(w http.ResponseWriter, r *http.Request, name Name) {
+	var request StopProcessRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.StopProcess(ctx, request.(StopProcessRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "StopProcess")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(StopProcessResponseObject); ok {
+		if err := validResponse.VisitStopProcessResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ReloadEnvironment operation middleware
+func (sh *strictHandler) ReloadEnvironment(w http.ResponseWriter, r *http.Request) {
+	var request ReloadEnvironmentRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ReloadEnvironment(ctx, request.(ReloadEnvironmentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ReloadEnvironment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReloadEnvironmentResponseObject); ok {
+		if err := validResponse.VisitReloadEnvironmentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ReloadProcfile operation middleware
+func (sh *strictHandler) ReloadProcfile(w http.ResponseWriter, r *http.Request) {
+	var request ReloadProcfileRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ReloadProcfile(ctx, request.(ReloadProcfileRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ReloadProcfile")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReloadProcfileResponseObject); ok {
+		if err := validResponse.VisitReloadProcfileResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// RestartAll operation middleware
+func (sh *strictHandler) RestartAll(w http.ResponseWriter, r *http.Request) {
+	var request RestartAllRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.RestartAll(ctx, request.(RestartAllRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "RestartAll")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(RestartAllResponseObject); ok {
+		if err := validResponse.VisitRestartAllResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"bJFBb6NADIX/ysi7Rzaw7Y17D5V6yL3qYQImOGI8U4+TKor475UHQqSqJx6Yz35+vkEXQ4qMrBnaG+Ru",
-	"xOCL3EvsMBeZJCYUJSxvXQzBc29SrwmhhaxCfIS5AvYBfy3Imdnko3aIcULPVszqRbF0HKIEr9BC7xX/",
-	"KQWE6mc3a4efZxJD3peZ1WbrMetjI+PhhJ3CbCjxEIsN0slqx5iWTQ29oGSKDC383zW7xszFhOwTQQvP",
-	"5VMFyetYkqh9onqll2yOqPawuLxS5NceWnijrPvtLzOfU+SVeGqaJVRW5AL7lCbqCl6fspm538UUKYYC",
-	"/hUcoIU/9eOC9Xq++n67eUvAi/jrEkCPuRNKuuz5ckG5unUJR+x0RGf8QBM6z737GlFHFEfq5Mx5Z13m",
-	"ef4OAAD//w==",
+	"7FdNj9s2EP0rBNujYrlteqhvQbEoCiyCIC3QQxAUs+LYZipxmOFIC2Oh/16QlPwRcx2jyGL30JNtcki+",
+	"efPekH7QDXWeHDoJevWgPTB0KMjp11voMH5ap1fag2x1pV0ayx+VZvzcW0ajV8I9Vjo0W+wgrpGdj3FB",
+	"2LqNHsdxnkw73zATpwOZPLJYTMM4D3+5+vikD1PYx2oOo7tP2Igeq7zvewyeXMDr9680Dujkb2vQiV1b",
+	"vBpEYWUJ1y1tztG01uUvVrALRVjTADDDLv6m1pxgs05wg3wGLm89x5cQvWNqMIRzVA11HThThOMmQZxN",
+	"cO9c/HqYuyNqEVycDAIsmHZcE3cgeqUNCL4Sm0R0medJaTOsw1mlrP6CAUsp9U6uYC3Hne8b46xbU9rC",
+	"ShvnNuQzgxHSgBwsRZf8sFgulqlSHh14q1f6pzRUJQMlODV4W0+rM8ANJngRM4gl97vRK31rg7zbR0Wk",
+	"WdZpxY/LZc7MCebcwPvWNml5/SlEMA9HdtxL7HvGtV7p7+qD8evJmPWsiTPhRQIMhoatl5znzYC8U1MS",
+	"yjolW1Rx/dq2qMAZdb9F2SIrK4p7FxZxl7H6Ivn6IZZ3rNvsD4MtCp5T8WuLwNFD1UmH+lBO5xBSpw42",
+	"fjwj73U+7TijP7eoGAWsQ6Na2qh7CMrY0AAbNItIyuu87mrSL3GdO2CB2be0p/Vup2QLoiJHixxbVMpv",
+	"KP+dnOqhWNoDFdahsi4IglG0ToVuemZ0ojboJhwLXeVr4nOPvDvcE9C2unAt7LtDoTbLb8ZxJKXA8C1t",
+	"UlYh6XRL96oDt1OpV04T5SRVizBgUNTLy9DDo35iTE03tUIKBcm8zwGz45/YV3MC0VITtJdhqUr//A31",
+	"dvr6KAA55sJYoxyJCkJerSk2yj05l4v7ldL+8UyFfUFlvUge+UvckX8W6sj7/x1x5IiTIjK2BKZGN1gm",
+	"102oHmtsMfbmKPTagizQDdxMPeoVDtD2IGiSN9e99IyzPcPz8DQBnGmaEZao8tNL7Gs8zS+2q0naP/Em",
+	"mji+CuI1ujfa3AeqWdWK+ND0lZDqQJrtpPXl02v9BLYhDIk9DxyeSe+5RmoNtk2eP67eddf2m/SqerJ3",
+	"U/oX9Sj4hEDdw4Bzqef3/x00/2yYejd3sl+evrpvThHZoKCNotyp6X9iJngc/w0AAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"testing"
@@ -8,8 +9,8 @@ import (
 
 func newStore(t *testing.T) *store.Store {
 	t.Helper()
-	result := store.New(lite.NewMemory())
-	t.Cleanup(result.Close)
+	d := lite.NewMemory()
+	t.Cleanup(func() { relational.CloseMapper(d) })
 
-	return result
+	return store.New(d)
 }

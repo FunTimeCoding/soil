@@ -10,7 +10,7 @@ func (c *Client) ChannelUsers(h *model.Channel) ([]*model.User, error) {
 	var page int
 
 	for {
-		users, _, e := c.client.GetUsersInChannel(
+		users, r, e := c.client.GetUsersInChannel(
 			c.context,
 			h.Id,
 			page,
@@ -19,7 +19,7 @@ func (c *Client) ChannelUsers(h *model.Channel) ([]*model.User, error) {
 		)
 
 		if e != nil {
-			return nil, wrapError(e)
+			return nil, wrapError(r, e)
 		}
 
 		if len(users) == 0 {

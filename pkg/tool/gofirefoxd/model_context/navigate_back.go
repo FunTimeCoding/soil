@@ -12,10 +12,8 @@ func (s *Server) NavigateBack(
 	_ mcp.CallToolRequest,
 	a argument.NavigateBack,
 ) (*mcp.CallToolResult, error) {
-	e := s.client.NavigateBack(int(a.TabIdentifier))
-
-	if e != nil {
-		return s.captureDetail(e)
+	if e := s.service.NavigateBack(int(a.TabIdentifier)); e != nil {
+		return s.answer(e)
 	}
 
 	return response.Success("navigated back")

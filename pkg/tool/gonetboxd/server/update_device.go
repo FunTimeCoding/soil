@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/device_change"
@@ -30,6 +32,14 @@ func (s *Server) UpdateDevice(
 
 	if not_found.Is(e) {
 		return server.UpdateDevice404JSONResponse(*clientError(e)), nil
+	}
+
+	if validation.Is(e) {
+		return server.UpdateDevice400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.UpdateDevice403JSONResponse(*clientError(e)), nil
 	}
 
 	if e != nil {

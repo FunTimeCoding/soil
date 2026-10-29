@@ -1,7 +1,11 @@
 package mock_recorder
 
-import "github.com/funtimecoding/soil/pkg/telemetry/record"
+import (
+	"github.com/funtimecoding/soil/pkg/telemetry/record"
+	"sync"
+)
 
 type Recorder struct {
-	Calls []*record.Record
+	mutex sync.Mutex
+	calls []*record.Record
 }

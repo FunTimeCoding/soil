@@ -11,7 +11,7 @@ func (s *Server) listTunnelGroups(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.TunnelGroups()
+	result, e := s.service.TunnelGroups()
 
 	if e != nil {
 		return s.captureDetail(e)

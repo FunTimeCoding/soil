@@ -41,6 +41,11 @@ body - declares a 404; one whose upstream rejects a caller's value
 declares a 400. Listing, searching and creating have nothing of the
 caller's to miss, so an upstream 404 there stays a captured 500.
 
+Classifying an upstream client lands in one change with the spec's
+response for each new class and a handler branch for each: a class
+the client starts returning before its operation declares it reaches
+the 500 as a missing branch.
+
 ## Captured answers
 
 Everything else answers 500 - or the status its class names, such as
@@ -66,7 +71,7 @@ func (s *Server) answer(e error) *server.ErrorResponse {
 ```
 
 ```go
-records, e := s.store.ByName(r.Params.Name)
+records, e := s.service.ByName(r.Params.Name)
 
 if e != nil {
     return server.GetAlerts500JSONResponse(*s.answer(e)), nil

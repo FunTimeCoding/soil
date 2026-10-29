@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
 	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mattermost/mattermost/server/public/model"
 )
 
 func (s *Server) GetChannelHistory(
@@ -26,22 +25,10 @@ func (s *Server) GetChannelHistory(
 		limit = 30
 	}
 
-	var ch *model.Channel
+	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
 
-	if a.ChannelName != "" {
-		var e error
-		ch, e = s.client.TeamChannel(a.ChannelName)
-
-		if e != nil {
-			return s.captureFail(e, "channel not found")
-		}
-	} else {
-		var e error
-		ch, e = s.client.Channel(a.ChannelIdentifier)
-
-		if e != nil {
-			return s.captureFail(e, "channel not found")
-		}
+	if e != nil {
+		return s.answer(e)
 	}
 
 	var posts []*post.Post
@@ -55,10 +42,10 @@ func (s *Server) GetChannelHistory(
 			return response.Fail("invalid since format: %v", f)
 		}
 
-		posts, g = s.client.PostsSince(ch, since)
+		posts, g = s.service.PostsSince(ch, since)
 
 		if g != nil {
-			return s.captureDetail(g)
+			return s.answer(g)
 		}
 
 		if len(posts) > limit {
@@ -66,10 +53,10 @@ func (s *Server) GetChannelHistory(
 			posts = posts[truncated:]
 		}
 	} else {
-		posts, g = s.client.LatestPosts(ch, limit)
+		posts, g = s.service.LatestPosts(ch, limit)
 
 		if g != nil {
-			return s.captureDetail(g)
+			return s.answer(g)
 		}
 	}
 

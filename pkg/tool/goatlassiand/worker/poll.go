@@ -1,40 +1,42 @@
 package worker
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"slices"
 )
 
 func (w *Worker) Poll() {
-	closed := w.closedStatus()
-	issues, e := w.client.Search(constant.PlateQuery, closed)
-	errors.PanicOnError(e)
-	watchedIssues, f := w.client.Search(constant.WatchedIssuesQuery, closed)
-	errors.PanicOnError(f)
-	newest := w.fetchNewest(closed)
-	favorites, g := w.confluence.Favorites()
-	errors.PanicOnError(g)
-	watched, h := w.confluence.Watched()
-	errors.PanicOnError(h)
+	p, e := w.service.Plate()
+
+	if e != nil {
+		if classify.Reportable(e) {
+			w.reporter.CaptureException(e)
+		} else {
+			w.logger.Plain(constant.PlateDeferred, e)
+		}
+
+		return
+	}
+
 	w.mutex.Lock()
 	previous := w.issues
 	previousWatchedIssues := w.watchedIssues
 	previousNewest := w.newest
 	previousFavorites := w.favorites
 	previousWatched := w.watched
-	w.issues = issues
-	w.watchedIssues = watchedIssues
-	w.newest = newest
-	w.favorites = favorites
-	w.watched = watched
+	w.issues = p.Issues
+	w.watchedIssues = p.WatchedIssues
+	w.newest = p.Newest
+	w.favorites = p.Favorites
+	w.watched = p.Watched
 	w.mutex.Unlock()
 
-	if !slices.EqualFunc(previous, issues, sameIssue) ||
-		!slices.EqualFunc(previousWatchedIssues, watchedIssues, sameIssue) ||
-		!slices.EqualFunc(previousNewest, newest, sameIssue) ||
-		!slices.EqualFunc(previousFavorites, favorites, samePage) ||
-		!slices.EqualFunc(previousWatched, watched, samePage) {
+	if !slices.EqualFunc(previous, p.Issues, sameIssue) ||
+		!slices.EqualFunc(previousWatchedIssues, p.WatchedIssues, sameIssue) ||
+		!slices.EqualFunc(previousNewest, p.Newest, sameIssue) ||
+		!slices.EqualFunc(previousFavorites, p.Favorites, samePage) ||
+		!slices.EqualFunc(previousWatched, p.Watched, samePage) {
 		w.notifier.Notify()
 	}
 }

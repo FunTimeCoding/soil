@@ -4,13 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
 
 func TestCreateDeviceWithTenantAndTags(t *testing.T) {
-	c := deviceCatalog()
+	c := deviceCatalog(t)
 	c.SeedTenant("acme")
 	d, e := service_tester.Service(t, c).CreateDevice(
 		"core",
@@ -26,7 +25,7 @@ func TestCreateDeviceWithTenantAndTags(t *testing.T) {
 }
 
 func TestCreateDeviceWithoutTenant(t *testing.T) {
-	d, e := service_tester.Service(t, deviceCatalog()).CreateDevice(
+	d, e := service_tester.Service(t, deviceCatalog(t)).CreateDevice(
 		"core",
 		"server",
 		"r640",
@@ -39,7 +38,7 @@ func TestCreateDeviceWithoutTenant(t *testing.T) {
 }
 
 func TestCreateDeviceRefusesUnknownRoleBeforeCreating(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDeviceType("r640")
 	c.SeedSite("home")
 	s := service_tester.Service(t, c)
@@ -52,7 +51,7 @@ func TestCreateDeviceRefusesUnknownRoleBeforeCreating(t *testing.T) {
 }
 
 func TestCreateInterfaceAttachesPhysicalAddress(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	s := service_tester.Service(t, c)
 	i, e := s.CreateInterface("core", "eno1", "1000base-t", "02:00:00:00:00:01")
@@ -66,7 +65,7 @@ func TestCreateInterfaceAttachesPhysicalAddress(t *testing.T) {
 }
 
 func TestCreateInterfaceWithoutPhysicalAddress(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	_, e := service_tester.Service(t, c).CreateInterface(
 		"core",
@@ -79,7 +78,7 @@ func TestCreateInterfaceWithoutPhysicalAddress(t *testing.T) {
 }
 
 func TestCreateInterfaceRefusesBadPhysicalAddressBeforeCreating(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	s := service_tester.Service(t, c)
 	_, e := s.CreateInterface("core", "eno1", "1000base-t", "nonsense")
@@ -90,7 +89,7 @@ func TestCreateInterfaceRefusesBadPhysicalAddressBeforeCreating(t *testing.T) {
 }
 
 func TestCreateCableResolvesBothEnds(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedInterface(c.SeedDevice("core"), "eno1")
 	c.SeedInterface(c.SeedDevice("edge"), "eno2")
 	created, e := service_tester.Service(t, c).CreateCable(
@@ -105,7 +104,7 @@ func TestCreateCableResolvesBothEnds(t *testing.T) {
 }
 
 func TestCreateCableRefusesUnknownInterface(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedInterface(c.SeedDevice("core"), "eno1")
 	c.SeedDevice("edge")
 	_, e := service_tester.Service(t, c).CreateCable(

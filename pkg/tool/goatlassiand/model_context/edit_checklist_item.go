@@ -33,7 +33,7 @@ func (s *Server) editChecklistItem(
 	items, i := s.service.EditChecklistItem(key, int(index), text)
 
 	if i != nil {
-		return s.failOrCapture(i, "checklist not updated")
+		return s.answer(i)
 	}
 
 	return response.SuccessAny(items)

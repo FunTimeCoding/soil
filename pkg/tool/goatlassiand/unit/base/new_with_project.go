@@ -2,16 +2,13 @@ package base
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client/mock_jira"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/web"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -24,35 +21,30 @@ func NewWithProject(
 	project []string,
 ) *Server {
 	t.Helper()
-	c := mock_client.New()
-	var j *jira.Client
-	var f *confluence.Client
-	v := model_context_server.New(
+	c := service_tester.NewConfluence(t)
+	v := service_tester.NewService(t, service_tester.NewJira(t), c, project)
+	k := worker.New(
+		v,
+		constant.PollInterval,
+		logger.New(context.Background()),
+		memory.New(),
+	)
+	s := model_context_server.New(
 		t,
 		func(
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
 			goatlassiand.Mount(
-				mock_jira.New(),
-				c,
-				web.New(
-					worker.New(
-						j,
-						f,
-						project,
-						constant.PollInterval,
-						logger.New(context.Background()),
-						memory.New(),
-					),
-				),
+				v,
+				web.New(k),
 				memory.New(),
 				mock_recorder.New(),
 				g,
 			)
 		},
 	)
-	result := &Server{MockClient: c, Server: v}
+	result := &Server{MockClient: c, Server: s}
 	t.Cleanup(result.Close)
 
 	return result

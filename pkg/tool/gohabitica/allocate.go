@@ -1,13 +1,14 @@
 package gohabitica
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/face"
 	"github.com/spf13/cobra"
 )
 
 func allocate(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,7 +19,7 @@ func allocate(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.AllocateStat(arguments[0]))
+			t.EmitValue(c.AllocateStat(context.Background(), arguments[0]))
 		},
 	}
 }

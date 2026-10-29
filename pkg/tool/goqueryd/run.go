@@ -2,20 +2,13 @@ package goqueryd
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -29,24 +22,16 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(connection.New(l, o.LitePath))
-	defer s.Close()
-	a, e := rerank.NewEnvironment()
-	errors.PanicOnError(e)
-	defer errors.LogClose(a)
-	v := service.New(
-		s,
-		embed.NewEnvironment(),
-		a,
-		environment.Required(generativeConstant.EmbedTargetEnvironment),
-		l,
-		r,
-	)
+	v := service.New(o, l, r)
 	defer v.Close()
-	u := web.New(v)
-	lifecycle.New(l).WithWorker(v.Guard()).WithWorker(
-		worker.New(v, 10*time.Minute, l, r),
-	).WithServer(
+	u := web.New(v, r)
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithWorker(worker.New(v, 10*time.Minute, l, r)).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

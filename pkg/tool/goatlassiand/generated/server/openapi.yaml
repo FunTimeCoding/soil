@@ -31,6 +31,24 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JiraIssue"
+        "400":
+          description: Jira rejected the query.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not read what the query names.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to search issues.
           content:
@@ -66,6 +84,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not read the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get issue.
           content:
@@ -93,6 +123,24 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JiraTransition"
+        "403":
+          description: The service account may not read the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Issue not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get transitions.
           content:
@@ -118,6 +166,30 @@ paths:
       responses:
         "204":
           description: Transition applied.
+        "400":
+          description: The transition is not valid for the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not transition the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Issue not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to transition issue.
           content:
@@ -143,6 +215,30 @@ paths:
       responses:
         "204":
           description: Comment added.
+        "400":
+          description: The comment is not usable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not comment on the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Issue not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add comment.
           content:
@@ -163,6 +259,18 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JiraProject"
+        "403":
+          description: The service account may not list projects.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list projects.
           content:
@@ -193,6 +301,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Project, field or user not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not create issues in the project.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
           content:
             application/json:
               schema:
@@ -238,6 +358,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update issue.
           content:
@@ -277,6 +409,24 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/CreateMetaField"
+        "403":
+          description: The service account may not read the project.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Project or issue type not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get create metadata.
           content:
@@ -304,6 +454,18 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JiraUser"
+        "403":
+          description: The service account may not browse users.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to search users.
           content:
@@ -329,6 +491,30 @@ paths:
       responses:
         "204":
           description: Issues linked.
+        "400":
+          description: The link type is not usable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not link the issues.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: An issue was not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to link issues.
           content:
@@ -348,6 +534,24 @@ paths:
       responses:
         "204":
           description: Link deleted.
+        "403":
+          description: The service account may not delete the link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete link.
           content:
@@ -366,6 +570,18 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/LinkType"
+        "403":
+          description: The service account may not read link types.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get link types.
           content:
@@ -397,6 +613,30 @@ paths:
       responses:
         "204":
           description: Comment updated.
+        "400":
+          description: The comment is not usable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not edit the comment.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Issue or comment not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update comment.
           content:
@@ -421,6 +661,24 @@ paths:
       responses:
         "204":
           description: Comment deleted.
+        "403":
+          description: The service account may not delete the comment.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Issue or comment not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete comment.
           content:
@@ -448,6 +706,24 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ChecklistItem"
+        "403":
+          description: The service account may not read the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Issue not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read checklist.
           content:
@@ -488,6 +764,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Checklist field not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
           content:
             application/json:
               schema:
@@ -543,6 +831,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit checklist item.
           content:
@@ -583,6 +883,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Checklist item not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
           content:
             application/json:
               schema:
@@ -632,6 +944,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Jira is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to toggle checklist item.
           content:
@@ -652,6 +976,18 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ConfluenceSpace"
+        "403":
+          description: The service account may not list spaces.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list spaces.
           content:
@@ -679,6 +1015,18 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ConfluencePage"
+        "403":
+          description: The service account may not search pages.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to search pages.
           content:
@@ -701,6 +1049,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConfluencePageDetail"
+        "403":
+          description: The service account may not create pages in the space.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Space or parent page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create page.
           content:
@@ -726,6 +1092,18 @@ paths:
                 $ref: "#/components/schemas/ConfluencePageDetail"
         "404":
           description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not read the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
           content:
             application/json:
               schema:
@@ -764,6 +1142,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update page.
           content:
@@ -788,6 +1178,24 @@ paths:
       responses:
         "204":
           description: Page deleted.
+        "403":
+          description: The service account may not delete the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete page.
           content:
@@ -815,6 +1223,24 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ConfluencePage"
+        "403":
+          description: The service account may not read the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get children.
           content:
@@ -840,6 +1266,24 @@ paths:
       responses:
         "204":
           description: Comment added.
+        "403":
+          description: The service account may not comment on the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add comment.
           content:
@@ -863,6 +1307,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConfluencePageDetail"
+        "403":
+          description: The service account may not read the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get page draft.
           content:
@@ -894,6 +1356,24 @@ paths:
                 $ref: "#/components/schemas/ConfluencePageDetail"
         "400":
           description: Invalid status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
           content:
             application/json:
               schema:
@@ -933,6 +1413,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The service account may not update the page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Page not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit page.
           content:
@@ -966,6 +1464,24 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ConfluencePage"
+        "403":
+          description: The service account may not read the space.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Space not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Confluence is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list pages.
           content:

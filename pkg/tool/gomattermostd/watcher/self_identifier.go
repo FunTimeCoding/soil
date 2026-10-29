@@ -1,12 +1,22 @@
 package watcher
 
+import "github.com/mattermost/mattermost/server/public/model"
+
 func (w *Watcher) selfIdentifier() string {
 	w.once.Do(
 		func() {
-			result, e := w.client.Me()
+			var result *model.User
+			e := w.attempt(
+				func() error {
+					var f error
+					result, f = w.client.Me()
+
+					return f
+				},
+			)
 
 			if e != nil {
-				w.reporter.CaptureException(e)
+				w.report(e)
 
 				return
 			}

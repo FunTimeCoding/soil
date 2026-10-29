@@ -13,15 +13,7 @@ func (s *Server) PlaybackCommand(
 	_ mcp.CallToolRequest,
 	a argument.PlaybackCommand,
 ) (*mcp.CallToolResult, error) {
-	if a.SessionIdentifier == "" {
-		return response.Fail("session_id is required")
-	}
-
-	if a.Command == "" {
-		return response.Fail("command is required")
-	}
-
-	e := s.client.PlaybackCommand(
+	e := s.service.PlaybackCommand(
 		a.SessionIdentifier,
 		a.Command,
 		a.SeekPositionTicks,

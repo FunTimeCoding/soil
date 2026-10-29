@@ -15,12 +15,12 @@ func (s *Server) processReload(
 ) (*mcp.CallToolResult, error) {
 	switch a.Scope {
 	case constant.ProcfileScope:
-		if e := s.supervisor.ReloadProcfile(); e != nil {
-			return s.captureFail(e, "reload procfile failed")
+		if e := s.service.ReloadProcfile(); e != nil {
+			return s.answer(e)
 		}
 	case constant.EnvironmentScope:
-		if e := s.supervisor.ReloadEnvironment(); e != nil {
-			return s.captureFail(e, "reload environment failed")
+		if e := s.service.ReloadEnvironment(); e != nil {
+			return s.answer(e)
 		}
 	default:
 		return response.Fail(
@@ -30,5 +30,5 @@ func (s *Server) processReload(
 		)
 	}
 
-	return response.SuccessAny(s.supervisor.Statuses())
+	return response.SuccessAny(s.service.Statuses())
 }

@@ -18,10 +18,10 @@ func (s *Server) listPages(
 	}
 
 	status := r.GetString(constant.PageStatus, "")
-	result, g := s.confluence.PagesBySpace(space, status)
+	result, g := s.service.Pages(space, status)
 
 	if g != nil {
-		return s.captureFail(g, "pages not listed")
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(result)

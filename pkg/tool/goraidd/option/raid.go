@@ -1,5 +1,7 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+
 type Raid struct {
 	Address          string
 	PostgresLocator  string
@@ -13,4 +15,5 @@ type Raid struct {
 	EncryptionSecret string
 	PublicLocator    string
 	ServiceTokens    []string
+	Parser           func() face.Client
 }

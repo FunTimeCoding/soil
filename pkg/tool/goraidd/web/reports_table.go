@@ -2,13 +2,12 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/service/report"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
-	"os"
 )
 
-func reportsTable(v []os.DirEntry) gomponents.Node {
+func reportsTable(v []*report.Report) gomponents.Node {
 	if len(v) == 0 {
 		return html.P(html.Em(gomponents.Text("No reports generated yet.")))
 	}
@@ -24,26 +23,23 @@ func reportsTable(v []os.DirEntry) gomponents.Node {
 		html.TBody(
 			gomponents.Map(
 				v,
-				func(d os.DirEntry) gomponents.Node {
-					i, e := d.Info()
-					errors.PanicOnError(e)
-
+				func(d *report.Report) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(
-								html.Href(fmt.Sprintf("/reports/%s", d.Name())),
-								gomponents.Text(d.Name()),
+								html.Href(fmt.Sprintf("/reports/%s", d.Name)),
+								gomponents.Text(d.Name),
 							),
 						),
 						html.Td(
 							html.Class("report-size"),
-							gomponents.Text(formatSize(i.Size())),
+							gomponents.Text(formatSize(d.Size)),
 						),
 						html.Td(
 							html.Form(
 								html.Method("post"),
 								html.Action(
-									fmt.Sprintf("/reports/%s/delete", d.Name()),
+									fmt.Sprintf("/reports/%s/delete", d.Name),
 								),
 								html.Button(
 									html.Type("submit"),

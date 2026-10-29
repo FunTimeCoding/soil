@@ -8,18 +8,12 @@ import (
 
 func (s *Server) authenticatedSession(
 	r *http.Request,
-) *authentication_session.AuthenticationSession {
+) (*authentication_session.AuthenticationSession, error) {
 	cookie, e := r.Cookie(constant.AuthenticationCookieName)
 
 	if e != nil {
-		return nil
+		return nil, nil
 	}
 
-	row, e := s.service.GetAuthenticationSession(cookie.Value)
-
-	if e != nil {
-		return nil
-	}
-
-	return row
+	return s.service.GetAuthenticationSession(cookie.Value)
 }

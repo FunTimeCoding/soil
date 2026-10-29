@@ -1,10 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/preview_chunk"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
@@ -14,12 +11,8 @@ func windowPreview(
 	body string,
 ) *preview_chunk.Chunk {
 	t.Helper()
-	r := mock_reranker.New()
+	r := newReranker(t)
 	r.SetAllowance(allowance)
 
-	return newService(
-		store_tester.OpenTestStore(t),
-		ollama.New(),
-		r,
-	).Preview("lines.md", body).Chunks[0]
+	return newService(t, newEmbedder(t), r).Preview("lines.md", body).Chunks[0]
 }

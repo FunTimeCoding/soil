@@ -1,13 +1,13 @@
 package server
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/service"
 )
 
 func New(
-	c face.OpnsenseSource,
-	r library.Reporter,
+	v *service.Service,
+	r face.Reporter,
 ) *Server {
-	return &Server{opnsense: c, reporter: r}
+	return &Server{service: v, reporter: r}
 }

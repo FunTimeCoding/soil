@@ -10,6 +10,7 @@ const (
 	SearchPath       = "/search"
 	FaviconPath      = "/favicon.ico"
 	HealthPath       = "/health"
+	ReachablePath    = "/api/reachable"
 	VersionPath      = "/version"
 	LoginPath        = "/login"
 	LogoutPath       = "/logout"

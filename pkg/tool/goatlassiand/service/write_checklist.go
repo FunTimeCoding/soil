@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
@@ -12,7 +13,7 @@ func (s *Service) WriteChecklist(
 	key string,
 	items []*checklist_item.Item,
 ) error {
-	m, e := s.jira.FieldMap()
+	m, e := guarded[*field_map.Map](s.jiraGuard, s.jira.FieldMap)
 
 	if e != nil {
 		return e
@@ -28,5 +29,8 @@ func (s *Service) WriteChecklist(
 	raw.Fields.Unknowns = make(tcontainer.MarshalMap)
 	raw.Fields.Unknowns.Set(field.Key, checklist_item.Format(items))
 
-	return s.jira.UpdateNative(raw)
+	return attempt(
+		s.jiraGuard,
+		func() error { return s.jira.UpdateNative(raw) },
+	)
 }

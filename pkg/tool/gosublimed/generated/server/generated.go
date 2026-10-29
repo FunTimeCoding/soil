@@ -35,6 +35,11 @@ type EditViewRequest struct {
 	ReplaceAll *bool  `json:"replace_all,omitempty"`
 }
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -408,6 +413,20 @@ func (response OpenFile200JSONResponse) VisitOpenFileResponse(w http.ResponseWri
 	return err
 }
 
+type OpenFile400JSONResponse Error
+
+func (response OpenFile400JSONResponse) VisitOpenFileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type OpenFile500JSONResponse ErrorResponse
 
 func (response OpenFile500JSONResponse) VisitOpenFileResponse(w http.ResponseWriter) error {
@@ -509,6 +528,20 @@ func (response CloseView204Response) VisitCloseViewResponse(w http.ResponseWrite
 	return nil
 }
 
+type CloseView404JSONResponse Error
+
+func (response CloseView404JSONResponse) VisitCloseViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CloseView500JSONResponse ErrorResponse
 
 func (response CloseView500JSONResponse) VisitCloseViewResponse(w http.ResponseWriter) error {
@@ -541,6 +574,20 @@ func (response GetView200JSONResponse) VisitGetViewResponse(w http.ResponseWrite
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetView404JSONResponse Error
+
+func (response GetView404JSONResponse) VisitGetViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -582,6 +629,48 @@ func (response EditView200JSONResponse) VisitEditViewResponse(w http.ResponseWri
 	return err
 }
 
+type EditView400JSONResponse Error
+
+func (response EditView400JSONResponse) VisitEditViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditView404JSONResponse Error
+
+func (response EditView404JSONResponse) VisitEditViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditView409JSONResponse Error
+
+func (response EditView409JSONResponse) VisitEditViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type EditView500JSONResponse ErrorResponse
 
 func (response EditView500JSONResponse) VisitEditViewResponse(w http.ResponseWriter) error {
@@ -611,6 +700,34 @@ type SaveView204Response struct {
 func (response SaveView204Response) VisitSaveViewResponse(w http.ResponseWriter) error {
 	w.WriteHeader(204)
 	return nil
+}
+
+type SaveView400JSONResponse Error
+
+func (response SaveView400JSONResponse) VisitSaveViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SaveView404JSONResponse Error
+
+func (response SaveView404JSONResponse) VisitSaveViewResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type SaveView500JSONResponse ErrorResponse
@@ -900,18 +1017,20 @@ func (sh *strictHandler) SaveView(w http.ResponseWriter, r *http.Request, id int
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

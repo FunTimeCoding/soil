@@ -15,7 +15,7 @@ func (s *Server) listUser(
 	result, e := s.service.Users()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

@@ -3,12 +3,17 @@ package client_tester
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/mattermost/mattermost/server/public/model"
 	"net/http"
 	"net/http/httptest"
@@ -37,20 +42,27 @@ func New(
 		mattermost.WithTeam("tango"),
 	)
 	m := http.NewServeMux()
-	generated.HandlerFromMux(
-		generated.NewStrictHandler(
-			server.New(upstream.Client, memory.New()),
-			nil,
+	guard.New(m, []string{constant.ModelContextTestToken}).TokenMount(
+		webConstant.InterfacePath,
+		generated.HandlerFromMux(
+			generated.NewStrictHandler(
+				server.New(
+					service_tester.Service(t, upstream.Client, nil, nil),
+					memory.New(),
+				),
+				nil,
+			),
+			http.NewServeMux(),
 		),
-		m,
 	)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)
-	c, e := client.NewClientWithResponses(
-		s.URL,
-		client.WithHTTPClient(s.Client()),
+	host, port := network.SplitHostPort(s.Listener.Addr().String())
+	c := client.New(
+		locator.New(host).Port(port).Insecure(),
+		constant.ModelContextTestToken,
 	)
-	errors.PanicOnError(e)
+	t.Cleanup(c.Close)
 
 	return &Tester{t: t, Client: c}
 }

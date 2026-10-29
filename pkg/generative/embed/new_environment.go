@@ -17,10 +17,14 @@ func NewEnvironment() face.ReachableEmbedder {
 	target := environment.Required(constant.EmbedTargetEnvironment)
 	u, e := url.Parse(target)
 	errors.PanicOnError(e)
+	model := ModelEnvironment()
 
 	switch u.Scheme {
 	case constant.OllamaScheme:
-		options := []ollama.Option{ollama.WithHost(u.Hostname())}
+		options := []ollama.Option{
+			ollama.WithHost(u.Hostname()),
+			ollama.WithEmbedModel(model),
+		}
 
 		if u.Port() != "" {
 			options = append(
@@ -37,7 +41,7 @@ func NewEnvironment() face.ReachableEmbedder {
 			l.Port(strings.MustToInteger(u.Port()))
 		}
 
-		return openai.NewBase(l.String())
+		return openai.NewBase(l.String(), model)
 	}
 
 	panic(fmt.Sprintf("unknown embed target scheme: %s", u.Scheme))

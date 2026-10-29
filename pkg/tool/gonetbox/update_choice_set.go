@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func updateChoiceSet(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var choices []string
@@ -19,7 +20,9 @@ func updateChoiceSet(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.UpdateChoiceSet(arguments[0], choices))
+			t.EmitValue(
+				c.UpdateChoiceSet(context.Background(), arguments[0], choices),
+			)
 		},
 	}
 	result.Flags().StringSliceVar(

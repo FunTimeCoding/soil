@@ -10,5 +10,5 @@ func (s *Server) playbooks(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	return response.SuccessAny(s.runner.Playbooks())
+	return response.SuccessAny(s.service.Playbooks())
 }

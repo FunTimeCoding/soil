@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/directory/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/go-ldap/ldap/v3"
 )
 
@@ -22,27 +22,21 @@ func (c *Client) connect() (*ldap.Conn, error) {
 	}
 
 	address := fmt.Sprintf("%s://%s:%d", scheme, c.host, c.port)
-	connection, f := ldap.DialURL(address, ldap.DialWithTLSConfig(transport))
+	link, f := ldap.DialURL(address, ldap.DialWithTLSConfig(transport))
 
 	if f != nil {
-		return nil, unreachable.Format(
-			"%s dial %s: %s",
-			constant.Subject,
-			address,
-			f,
-		)
+		if g := connection.Classify(f); g != nil {
+			return nil, g
+		}
+
+		return nil, fmt.Errorf("%s dial %s: %w", constant.Subject, address, f)
 	}
 
-	if e = connection.Bind(c.bind, c.password); e != nil {
-		errors.LogClose(connection)
+	if g := link.Bind(c.bind, c.password); g != nil {
+		errors.LogClose(link)
 
-		return nil, unreachable.Format(
-			"%s service bind %s: %s",
-			constant.Subject,
-			c.bind,
-			e,
-		)
+		return nil, classify(g, c.bind)
 	}
 
-	return connection, nil
+	return link, nil
 }

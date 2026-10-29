@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
@@ -15,13 +16,8 @@ func (s *Server) documentDetailPage(
 	path := r.PathValue(constant.Path)
 	document, suggestions, e := s.service.GetDocument(path)
 
-	if e != nil {
-		s.view.RenderPage(
-			w,
-			"Error",
-			webConstant.SearchPath,
-			html.P(gomponents.Textf("Failed to load document: %s", e.Error())),
-		)
+	if e != nil && !not_found.Is(e) {
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

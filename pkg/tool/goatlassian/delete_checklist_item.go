@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -25,7 +26,9 @@ func deleteChecklistItem(
 				t.Exitf("invalid index: %s\n", arguments[1])
 			}
 
-			t.Emit(c.DeleteChecklistItem(arguments[0], index))
+			t.EmitValue(
+				c.DeleteChecklistItem(context.Background(), arguments[0], index),
+			)
 		},
 	}
 }

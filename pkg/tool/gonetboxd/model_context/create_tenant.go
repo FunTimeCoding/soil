@@ -18,7 +18,7 @@ func (s *Server) createTenant(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.CreateTenant(name)
+	result, g := s.service.CreateTenant(name)
 
 	if g != nil {
 		return s.captureFail(g, "tenant not created")

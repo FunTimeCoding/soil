@@ -12,14 +12,10 @@ func (s *Server) Click(
 	_ mcp.CallToolRequest,
 	a argument.Click,
 ) (*mcp.CallToolResult, error) {
-	if a.Selector == "" {
-		return response.Fail("selector is required")
-	}
-
-	v, e := s.client.Click(int(a.TabIdentifier), a.Selector)
+	v, e := s.service.Click(int(a.TabIdentifier), a.Selector)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(v)

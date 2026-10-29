@@ -33,3 +33,4 @@ const (
 )
 
 const IncludeMuted = "include_muted"
+const ClusterPeer = "kubernetes"

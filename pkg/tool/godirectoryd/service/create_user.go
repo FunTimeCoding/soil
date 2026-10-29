@@ -27,7 +27,9 @@ func (s *Service) CreateUser(
 		attributes[constant.PasswordAttribute] = []string{password}
 	}
 
-	if e := s.directory.Add(s.userName(account), attributes); e != nil {
+	if e := s.attempt(
+		func() error { return s.directory.Add(s.userName(account), attributes) },
+	); e != nil {
 		return nil, e
 	}
 

@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func deleteConfigurationContext(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,7 +19,9 @@ func deleteConfigurationContext(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.DeleteConfigurationContext(arguments[0]))
+			t.EmitDone(
+				c.DeleteConfigurationContext(context.Background(), arguments[0]),
+			)
 		},
 	}
 }

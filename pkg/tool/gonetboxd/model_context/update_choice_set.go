@@ -20,7 +20,7 @@ func (s *Server) updateChoiceSet(
 		return response.Fail("name is required: %v", e)
 	}
 
-	result, f := s.client.SetChoiceSetChoices(
+	result, f := s.service.SetChoiceSetChoices(
 		name,
 		r.GetStringSlice(constant.Choices, []string{}),
 	)

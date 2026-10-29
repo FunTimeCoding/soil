@@ -27,7 +27,7 @@ func (s *Server) linkIssues(
 	linkType := r.GetString(constant.LinkType, "Relates")
 
 	if h := s.service.LinkIssues(key, target, linkType); h != nil {
-		return s.captureDetail(h)
+		return s.answer(h)
 	}
 
 	return response.Success("%s %s %s", key, linkType, target)

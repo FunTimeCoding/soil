@@ -16,7 +16,7 @@ func (s *Server) ListAliases(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.Aliases(phrase)
+	result, e := s.service.Aliases(phrase)
 
 	if e != nil {
 		return server.ListAliases500JSONResponse(*s.answer(e)), nil

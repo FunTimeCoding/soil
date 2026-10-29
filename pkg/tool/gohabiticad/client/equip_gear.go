@@ -1,14 +1,24 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) EquipGear(key string) *response.Response {
-	result, e := c.client.EquipGear(c.context, key)
-	errors.PanicOnError(e)
+func (c *Client) EquipGear(
+	x context.Context,
+	key string,
+) (*client.GearResult, error) {
+	r, e := c.client.EquipGearWithResponse(x, key)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("equip gear", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

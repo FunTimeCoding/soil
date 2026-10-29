@@ -26,7 +26,7 @@ const (
 	DeleteIssue       = "delete_issue"
 )
 
-const SinceFormat = "15:04:05"
+const SentryPeer = "sentry upstream"
 const (
 	UnresolvedStatus = "unresolved"
 	ResolvedStatus   = "resolved"

@@ -21,17 +21,10 @@ func (s *Server) MyChannels(
 		limit = 30
 	}
 
-	me, e := s.client.Me()
+	channels, e := s.service.MyChannels()
 
 	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	team := s.client.DefaultTeam()
-	channels, e := s.client.Channels(team, me)
-
-	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	sort.Slice(
@@ -92,7 +85,7 @@ func (s *Server) MyChannels(
 			typeName = "group_dm"
 		}
 
-		displayName := s.channelDisplayName(c)
+		displayName := s.service.ChannelDisplayName(c)
 		rows[i] = mattermostResponse.NewJoinedChannel(
 			c.Id,
 			c.Name,

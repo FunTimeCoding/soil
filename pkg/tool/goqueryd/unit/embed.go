@@ -10,6 +10,10 @@ func (f *FixedEmbedder) Embed(
 	defer f.mutex.Unlock()
 	f.calls++
 
+	if f.embedding != nil {
+		return nil, f.embedding
+	}
+
 	if f.failure != nil {
 		return nil, f.failure
 	}

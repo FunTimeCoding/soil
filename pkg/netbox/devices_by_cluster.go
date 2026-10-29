@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) DevicesByCluster(s string) ([]*device.Device, error) {
@@ -31,7 +32,7 @@ func (c *Client) DevicesByCluster(s string) ([]*device.Device, error) {
 	).Execute()
 
 	if f != nil {
-		return nil, f
+		return nil, refusal.Classify(f)
 	}
 
 	return device.NewSlice(result.Results), nil

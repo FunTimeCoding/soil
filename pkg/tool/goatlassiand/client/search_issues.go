@@ -1,21 +1,28 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) SearchIssues(
+	x context.Context,
 	query string,
 	limit *int,
-) *response.Response {
-	result, e := c.client.SearchIssues(
-		c.context,
+) ([]*client.JiraIssue, error) {
+	r, e := c.client.SearchIssuesWithResponse(
+		x,
 		&client.SearchIssuesParams{Query: query, Limit: limit},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("search issues", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

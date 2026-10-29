@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"io"
 	"net/http"
@@ -59,13 +59,7 @@ func (c *Client) rawRequest(
 	}
 
 	if r.StatusCode >= http.StatusBadRequest {
-		return unexpected.Format(
-			"%s %s: %d %s",
-			method,
-			path,
-			r.StatusCode,
-			content,
-		)
+		return refusal.Response(r.StatusCode, content)
 	}
 
 	if result == nil || len(content) == 0 {

@@ -10,7 +10,9 @@ func (s *Server) Monitoring(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	s.monitor.RunNow()
+	if e := s.service.RunMonitor(); e != nil {
+		return s.answer(e)
+	}
 
 	return response.SuccessAny(
 		map[string]any{"message": "Topic monitoring executed successfully"},

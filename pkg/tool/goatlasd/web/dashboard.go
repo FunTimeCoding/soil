@@ -13,9 +13,9 @@ func (s *Server) dashboard(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	places, e := s.store.Places()
+	places, e := s.service.Places()
 	errors.PanicOnError(e)
-	unclaimed, f := s.store.MatchingSightings("", true)
+	unclaimed, f := s.service.MatchingSightings("", true)
 	errors.PanicOnError(f)
 	s.view.RenderPageWithSummary(
 		w,

@@ -11,7 +11,7 @@ func (s *Server) listChoiceSets(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.ChoiceSets()
+	result, e := s.service.ChoiceSets()
 
 	if e != nil {
 		return s.captureFail(e, "choice sets not listed")

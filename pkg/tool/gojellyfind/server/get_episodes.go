@@ -11,7 +11,7 @@ func (s *Server) GetEpisodes(
 	_ context.Context,
 	r server.GetEpisodesRequestObject,
 ) (server.GetEpisodesResponseObject, error) {
-	items, e := s.client.Episodes(r.Identifier)
+	items, e := s.service.Episodes(r.Identifier)
 
 	if validation.Is(e) {
 		return server.GetEpisodes400JSONResponse{Error: e.Error()}, nil

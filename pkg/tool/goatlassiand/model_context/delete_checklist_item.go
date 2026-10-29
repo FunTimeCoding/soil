@@ -27,7 +27,7 @@ func (s *Server) deleteChecklistItem(
 	items, h := s.service.DeleteChecklistItem(key, int(index))
 
 	if h != nil {
-		return s.failOrCapture(h, "checklist not updated")
+		return s.answer(h)
 	}
 
 	return response.SuccessAny(items)

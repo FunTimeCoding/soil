@@ -6,10 +6,10 @@ import (
 )
 
 func (c *Client) CreateNative(i *jira.Issue) (*issue.Issue, error) {
-	result, _, e := c.client.Issue.CreateWithContext(c.context, i)
+	result, r, e := c.client.Issue.CreateWithContext(c.context, i)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, WrapError(r, e)
 	}
 
 	v, f := c.Issue(result.Key)

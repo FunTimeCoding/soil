@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -9,7 +10,11 @@ func (s *Server) ListClusters(
 	_ context.Context,
 	_ server.ListClustersRequestObject,
 ) (server.ListClustersResponseObject, error) {
-	clusters, e := s.client.Clusters()
+	clusters, e := s.service.Clusters()
+
+	if forbidden.Is(e) {
+		return server.ListClusters403JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.ListClusters500JSONResponse(*s.captureDetail(e)), nil

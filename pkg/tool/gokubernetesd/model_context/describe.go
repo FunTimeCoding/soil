@@ -39,7 +39,7 @@ func (s *Server) Describe(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "describe resource")
+		return s.captureDetail(f)
 	}
 
 	m := map[string]any{"resource": result.Resource, "events": result.Events}

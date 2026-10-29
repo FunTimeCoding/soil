@@ -20,11 +20,12 @@ func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 	)
 	assert.Any(t, "alfa", result[constant.ParameterRoot])
 	assert.Any(t, "bravo", result["channel"])
-	stored := r.Server.Store.MustByCallsign("kilo")
+	stored, e := r.Server.Service.Subscriptions("kilo")
+	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(stored))
 	assert.String(t, "papa", stored[0].Alias)
 	assert.String(t, "bravo", stored[0].ChannelIdentifier)
-	assert.Strings(t, []string{"alfa"}, r.Server.Indexer.Indexed())
+	assert.True(t, r.Server.Service.Watching("alfa"))
 }
 
 func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
@@ -37,11 +38,9 @@ func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
 		},
 	)
 	assert.Any(t, "alfa", result[constant.ParameterRoot])
-	assert.String(
-		t,
-		"alfa",
-		r.Server.Store.MustByCallsign("kilo")[0].RootIdentifier,
-	)
+	stored, e := r.Server.Service.Subscriptions("kilo")
+	assert.FatalOnError(t, e)
+	assert.String(t, "alfa", stored[0].RootIdentifier)
 }
 
 func TestSubscribeThreadIsIdempotent(t *testing.T) {
@@ -52,7 +51,9 @@ func TestSubscribeThreadIsIdempotent(t *testing.T) {
 	}
 	r.Client.MustCallTool(constant.SubscribeThread, arguments)
 	r.Client.MustCallTool(constant.SubscribeThread, arguments)
-	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("kilo")))
+	stored, e := r.Server.Service.Subscriptions("kilo")
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 1, len(stored))
 }
 
 func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
@@ -105,7 +106,7 @@ func TestUnsubscribeThreadForgetsWhenLastSubscriberLeaves(t *testing.T) {
 			constant.ParameterCallsign: "kilo",
 		},
 	)
-	assert.Integer(t, 0, len(r.Server.Indexer.Forgotten()))
+	assert.True(t, r.Server.Service.Watching("alfa"))
 	r.Client.MustCallTool(
 		constant.UnsubscribeThread,
 		map[string]any{
@@ -113,8 +114,10 @@ func TestUnsubscribeThreadForgetsWhenLastSubscriberLeaves(t *testing.T) {
 			constant.ParameterCallsign: "lima",
 		},
 	)
-	assert.Strings(t, []string{"alfa"}, r.Server.Indexer.Forgotten())
-	assert.Integer(t, 0, len(r.Server.Store.MustAll()))
+	assert.False(t, r.Server.Service.Watching("alfa"))
+	lima, e := r.Server.Service.Subscriptions("lima")
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 0, len(lima))
 }
 
 func TestListSubscriptionsReturnsLabels(t *testing.T) {

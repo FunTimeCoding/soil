@@ -2,11 +2,10 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/apply_result"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/yaml"
 )
@@ -16,23 +15,15 @@ func (s *Service) ApplyResource(
 	clusterName string,
 	q request.Apply,
 ) (*apply_result.Result, error) {
-	c, e := s.ClusterByName(clusterName)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var object map[string]any
-	f := yaml.Unmarshal([]byte(q.Manifest), &object)
 
-	if f != nil {
-		return nil, validation.New("invalid YAML: %s", f)
+	if e := yaml.Unmarshal([]byte(q.Manifest), &object); e != nil {
+		return nil, validation.New("invalid YAML: %s", e)
 	}
 
 	resource := &unstructured.Unstructured{Object: object}
-	kind := resource.GetKind()
 
-	if kind == "" {
+	if resource.GetKind() == "" {
 		return nil, validation.New("manifest must include kind")
 	}
 
@@ -40,107 +31,16 @@ func (s *Service) ApplyResource(
 		return nil, validation.New("manifest must include apiVersion")
 	}
 
-	name := resource.GetName()
-
-	if name == "" {
+	if resource.GetName() == "" {
 		return nil, validation.New("manifest must include metadata.name")
 	}
 
-	gvr, namespaced, g := c.ResolveResource(kind)
-
-	if g != nil {
-		return nil, g
-	}
-
-	namespace := q.Namespace
-
-	if namespace == "" {
-		namespace = resource.GetNamespace()
-	}
-
-	if namespace == "" {
-		namespace = "default"
-	}
-
-	options := v1.CreateOptions{}
-
-	if q.DryRun {
-		options.DryRun = []string{v1.DryRunAll}
-	}
-
-	if !q.Override {
-		var existing *unstructured.Unstructured
-		var h error
-
-		if namespaced {
-			existing, h = c.Dynamic().Resource(gvr).Namespace(namespace).Get(
-				x,
-				name,
-				v1.GetOptions{},
-			)
-		} else {
-			existing, h = c.Dynamic().Resource(gvr).Get(
-				x,
-				name,
-				v1.GetOptions{},
-			)
-		}
-
-		if h == nil && existing != nil {
-			return nil, conflict.Format(
-				"%s/%s already exists in %s - pass override: true to update",
-				kind,
-				name,
-				namespace,
-			)
-		}
-	}
-
-	var h error
-
-	if q.Override {
-		updateOptions := v1.UpdateOptions{}
-
-		if q.DryRun {
-			updateOptions.DryRun = []string{v1.DryRunAll}
-		}
-
-		if namespaced {
-			_, h = c.Dynamic().Resource(gvr).Namespace(namespace).Update(
-				x,
-				resource,
-				updateOptions,
-			)
-		} else {
-			_, h = c.Dynamic().Resource(gvr).Update(x, resource, updateOptions)
-		}
-
-		if h != nil {
-			if namespaced {
-				_, h = c.Dynamic().Resource(gvr).Namespace(namespace).Create(
-					x,
-					resource,
-					options,
-				)
-			} else {
-				_, h = c.Dynamic().Resource(gvr).Create(x, resource, options)
-			}
-		}
-	} else {
-		if namespaced {
-			_, h = c.Dynamic().Resource(gvr).Namespace(namespace).Create(
-				x,
-				resource,
-				options,
-			)
-		} else {
-			_, h = c.Dynamic().Resource(gvr).Create(x, resource, options)
-		}
-	}
-
-	if h != nil {
-		return nil, h
-	}
-
-	return apply_result.New(kind, name, namespace), nil
+	return guarded(
+		s,
+		x,
+		clusterName,
+		func(c *cluster.Cluster) (*apply_result.Result, error) {
+			return applyResourceOn(x, c, q, resource)
+		},
+	)
 }

@@ -9,6 +9,8 @@ func (m *Memory) CaptureWithContext(
 ) string {
 	v := reported_event.New(e)
 	v.Context = context
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
 	m.events = append(m.events, v)
 
 	return ""

@@ -1,6 +1,7 @@
 package service_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -12,5 +13,6 @@ func (t *Tester) IndexFixtures() {
 		fixture.Path(systemConstant.SearchPath),
 		constant.DefaultGlob,
 	)
-	t.Service.Index("test")
+	_, e := t.Service.IndexCollections("test")
+	assert.FatalOnError(t.t, e)
 }

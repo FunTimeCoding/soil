@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -9,7 +11,15 @@ func (s *Server) CreateTag(
 	_ context.Context,
 	r server.CreateTagRequestObject,
 ) (server.CreateTagResponseObject, error) {
-	t, e := s.client.CreateTag(r.Body.Name)
+	t, e := s.service.CreateTag(r.Body.Name)
+
+	if validation.Is(e) {
+		return server.CreateTag400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.CreateTag403JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.CreateTag500JSONResponse(*s.captureDetail(e)), nil

@@ -42,7 +42,7 @@ func TestGetPathJoinsTheHost(t *testing.T) {
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		newJiraClient(t, s.URL).GetPath("rest/api/2/issueLinkType", &out),
+		newJiraClient(t, s.URL).GetPath(constant.JiraLinkTypes, &out),
 	)
 	assert.String(t, "/rest/api/2/issueLinkType", last().URL.Path)
 }

@@ -7,7 +7,7 @@ import (
 
 func (c *Client) ReadHistory(
 	identifier string,
-	_ int,
+	count int,
 ) (*history.History, error) {
 	if _, okay := c.screens[identifier]; !okay {
 		return history.Stub(), not_found.Format(
@@ -18,6 +18,7 @@ func (c *Client) ReadHistory(
 
 	result := history.Stub()
 	result.Identifier = identifier
+	result.TotalScrollback = count
 
 	return result, nil
 }

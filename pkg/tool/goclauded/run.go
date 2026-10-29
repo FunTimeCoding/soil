@@ -2,6 +2,7 @@ package goclauded
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
@@ -10,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -26,10 +28,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/watcher"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
-	memory "github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
 	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
@@ -52,10 +53,18 @@ func Run(
 	sweep.Run(h)
 	p := stall_client.New().Build()
 	defer p.Close()
-	memoryClient := memory.Wait(l, p.Client())
-	queryClient := connect.Wait(l, p.Client())
-	summaryIdx := indexer.New(queryClient, constant.SummarySourceType)
-	completionIdx := indexer.New(queryClient, constant.CompletionSourceType)
+	memoryClient := connect.Wait(l, p.Client())
+	q := client.NewEnvironment()
+	defer q.Close()
+	errors.PanicOnError(
+		peer.Await(
+			context.Background(),
+			l,
+			queryConstant.Identity.Name(),
+			q.Address(),
+			q.Reachable,
+		),
+	)
 	x := search_index.New(
 		connection.New(
 			l,
@@ -66,8 +75,7 @@ func Run(
 		s,
 		transcript_cache.New(claude.New()),
 		memoryClient,
-		summaryIdx,
-		completionIdx,
+		q,
 		x,
 		n,
 		r,

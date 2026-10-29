@@ -1,0 +1,7 @@
+package closing_source
+
+import "github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_source"
+
+func New() *Client {
+	return &Client{Client: mock_source.New()}
+}

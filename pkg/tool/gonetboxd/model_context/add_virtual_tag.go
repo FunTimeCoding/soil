@@ -24,7 +24,7 @@ func (s *Server) addVirtualTag(
 		return response.Fail("tag is required: %v", g)
 	}
 
-	result, h := s.client.AddVirtualTag(name, tag)
+	result, h := s.service.AddVirtualTag(name, tag)
 
 	if h != nil {
 		return s.captureFail(h, "tag not added to virtual machine")

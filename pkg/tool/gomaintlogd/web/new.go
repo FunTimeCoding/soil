@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -13,8 +13,8 @@ import (
 )
 
 func New(
-	s *store.Store,
-	n face.EventNotifier,
+	v *service.Service,
+	f face.Reporter,
 ) *Server {
 	r := registry.New()
 	r.Register(
@@ -36,8 +36,8 @@ func New(
 	)
 
 	return &Server{
-		store:    s,
-		notifier: n,
+		service:  v,
+		reporter: f,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).

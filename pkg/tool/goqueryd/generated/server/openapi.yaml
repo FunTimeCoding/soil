@@ -386,6 +386,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SearchResult"
+        "400":
+          description: Path is not a collection/path reference.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No active document at the path.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get document.
           content:

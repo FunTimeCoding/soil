@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func (s *Service) argocdValues() []string {
+func (s *Service) argocdValues() ([]string, error) {
 	pending := []string{
 		constant.PendingValue,
 		constant.PendingValue,
@@ -15,15 +15,13 @@ func (s *Service) argocdValues() []string {
 	}
 
 	if s.argocd == nil {
-		return pending
+		return pending, nil
 	}
 
-	applications, e := s.argocd.Applications()
+	applications, e := guarded(s.argocdGuard, s.argocd.Applications)
 
 	if e != nil {
-		s.logger.Plain("applications fetch failed: %v", e)
-
-		return pending
+		return pending, e
 	}
 
 	var outOfSync, degraded, missing int
@@ -47,5 +45,5 @@ func (s *Service) argocdValues() []string {
 		strconv.Itoa(outOfSync),
 		strconv.Itoa(degraded),
 		strconv.Itoa(missing),
-	}
+	}, nil
 }

@@ -45,7 +45,7 @@ func (s *Server) Patch(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "patch resource")
+		return s.captureDetail(f)
 	}
 
 	namespace := a.Namespace

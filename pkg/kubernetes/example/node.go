@@ -10,7 +10,7 @@ func Node() {
 	k := client.NewEnvironment()
 	f := constant.Format
 
-	for _, n := range k.Nodes() {
+	for _, n := range k.MustNodes() {
 		console.Line(n.Format(f))
 	}
 }

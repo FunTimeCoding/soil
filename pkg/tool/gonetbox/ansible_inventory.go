@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func ansibleInventory(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var field string
@@ -20,7 +21,15 @@ func ansibleInventory(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.AnsibleInventory(field))
+			markup, e := c.AnsibleInventoryMarkup(context.Background(), field)
+
+			if e != nil {
+				t.Exitln(e)
+
+				return
+			}
+
+			t.Line(markup)
 		},
 	}
 	result.Flags().StringVar(

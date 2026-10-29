@@ -14,14 +14,14 @@ func (s *Server) dashboard(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	authority, e := s.store.Authorities()
+	authority, e := s.service.Authorities()
 	errors.PanicOnError(e)
 	pending, f := s.service.Pending()
 	errors.PanicOnError(f)
 	horizon := filter.New()
 	horizon.Before = new(time.Now().AddDate(0, 0, constant.ExpiryHorizonDay))
 	horizon.Revoked = new(false)
-	expiring, g := s.store.Certificates(horizon)
+	expiring, g := s.service.Certificates(horizon)
 	errors.PanicOnError(g)
 	s.view.RenderPage(
 		w,

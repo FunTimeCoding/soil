@@ -10,14 +10,14 @@ func (c *Client) User(identifier string) (*model.User, error) {
 		return c.user.ByIdentifier(identifier), nil
 	}
 
-	result, _, e := c.client.GetUser(
+	result, r, e := c.client.GetUser(
 		c.context,
 		identifier,
 		constant.MattermostEmptyEntityTag,
 	)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	c.user.Add(result)

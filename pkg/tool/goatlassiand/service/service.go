@@ -1,8 +1,15 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goatlassiand/face"
+import (
+	confluence "github.com/funtimecoding/soil/pkg/atlassian/confluence/face"
+	jira "github.com/funtimecoding/soil/pkg/atlassian/jira/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 type Service struct {
-	jira       face.JiraSource
-	confluence face.ConfluenceSource
+	jira            jira.Client
+	confluence      confluence.Client
+	jiraGuard       *peer.Guard
+	confluenceGuard *peer.Guard
+	project         []string
 }

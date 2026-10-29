@@ -2,13 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 )
 
 func New(
-	s *store.Store,
-	outputPath string,
+	v *service.Service,
 	r face.Reporter,
 ) *Server {
-	return &Server{store: s, outputPath: outputPath, reporter: r}
+	return &Server{service: v, reporter: r}
 }

@@ -9,12 +9,12 @@ func (c *Client) ChannelByName(
 	t *model.Team,
 	name string,
 ) (*model.Channel, error) {
-	result, _, e := c.client.GetChannelByName(
+	result, r, e := c.client.GetChannelByName(
 		c.context,
 		name,
 		t.Id,
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

@@ -2,9 +2,8 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -13,14 +12,7 @@ func (s *Server) firewallLog(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.Log(
-		int(
-			r.GetFloat(
-				generativeConstant.ParameterLimit,
-				constant.DefaultLogLimit,
-			),
-		),
-	)
+	result, e := s.service.Log(int(r.GetFloat(constant.ParameterLimit, 0)))
 
 	if e != nil {
 		return s.answer(e)

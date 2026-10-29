@@ -1,11 +1,10 @@
 package tester
 
-import "github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
+import "github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
 
 type Tester struct {
-	Server       *supervisor.Supervisor
+	Client       *client.Client
 	Directory    string
-	SocketPath   string
 	ProcfilePath string
 	EnvrcPath    string
 }

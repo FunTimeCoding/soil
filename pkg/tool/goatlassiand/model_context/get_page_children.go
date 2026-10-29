@@ -17,10 +17,10 @@ func (s *Server) getPageChildren(
 		return response.Fail("identifier is required: %v", f)
 	}
 
-	result, g := s.confluence.ChildPagesByIdentifier(identifier)
+	result, g := s.service.PageChildren(identifier)
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(result)

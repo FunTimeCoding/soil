@@ -1,11 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -17,11 +15,10 @@ import (
 )
 
 func New(
-	b *board.Board,
 	v *service.Service,
-	c *store.Store,
-	authorization *client.Client,
+	f face.Reporter,
 ) *Server {
+	b := v.Board()
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -40,22 +37,18 @@ func New(
 			webConstant.PaletteAction,
 		),
 	)
-	labels := map[string]bool{}
 
 	for _, entry := range b.Entries() {
-		labels[entry.Label] = true
 		r.Register(
 			palette.NewCommand(entry.Label, entry.Link, webConstant.PaletteLink),
 		)
 	}
 
 	return &Server{
-		board:         b,
-		service:       v,
-		store:         c,
-		authorization: authorization,
-		labels:        labels,
-		registry:      r,
+		board:    b,
+		service:  v,
+		reporter: f,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSentinel).

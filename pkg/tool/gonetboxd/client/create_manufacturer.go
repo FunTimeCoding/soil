@@ -1,18 +1,31 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) CreateManufacturer(name string) *response.Response {
-	result, e := c.client.CreateManufacturer(
-		c.context,
+func (c *Client) CreateManufacturer(
+	x context.Context,
+	name string,
+) (client.Manufacturer, error) {
+	r, e := c.client.CreateManufacturerWithResponse(
+		x,
 		client.CreateNameRequest{Name: name},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Manufacturer{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Manufacturer{}, refusal.New(
+			"create manufacturer",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

@@ -28,6 +28,7 @@ const (
 	SerialBase = 16
 )
 
+const ForgePeer = "gitlab forge"
 const (
 	RootAuthority  = "root"
 	PublishBranch  = "main"
@@ -120,20 +121,6 @@ const (
 	CountryLabel      = "country"
 	ProvinceLabel     = "province"
 	OrganizationLabel = "organization"
-)
-
-const (
-	QueryFail           = "Failed to query"
-	CreateAuthorityFail = "Failed to create the authority"
-	IssueFail           = "Failed to issue the certificate"
-	SignFail            = "Failed to sign the request"
-	RevokeFail          = "Failed to revoke the certificate"
-	PublishFail         = "Failed to publish"
-	RevocationListFail  = "Failed to build the revocation list"
-	AuthorityMissing    = "No live authority of that name"
-	CertificateMissing  = "No certificate with that serial"
-	AuthorityLive       = "An authority of that name is already live"
-	RootMissing         = "No root exists yet"
 )
 
 const (

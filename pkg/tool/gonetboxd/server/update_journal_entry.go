@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -21,13 +23,22 @@ func (s *Server) UpdateJournalEntry(
 		comments = *r.Body.Comments
 	}
 
-	result, e := s.client.UpdateJournalEntry(r.Identifier, kind, comments)
+	result, e := s.service.UpdateJournalEntry(r.Identifier, kind, comments)
+
+	if validation.Is(e) {
+		return server.UpdateJournalEntry400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.UpdateJournalEntry403JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.UpdateJournalEntry500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.UpdateJournalEntry200JSONResponse(
-		*convert.JournalEntry(result),
-	), nil
+			*convert.JournalEntry(result),
+		),
+		nil
 }

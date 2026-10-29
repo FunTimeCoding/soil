@@ -2,7 +2,7 @@ package openai
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/openai/refusal"
 	"github.com/openai/openai-go/v3"
 )
 
@@ -13,13 +13,13 @@ func (c *Client) Embed(
 	response, e := c.client.Embeddings.New(
 		x,
 		openai.EmbeddingNewParams{
-			Model: constant.OpenAIEmbedModel,
+			Model: c.model,
 			Input: openai.EmbeddingNewParamsInputUnion{OfArrayOfStrings: v},
 		},
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	result := make([][]float32, len(response.Data))

@@ -2,12 +2,10 @@ package model_context
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
-	"os"
-	"path/filepath"
 )
 
 func (s *Server) ReadBody(
@@ -15,29 +13,15 @@ func (s *Server) ReadBody(
 	_ mcp.CallToolRequest,
 	a argument.ReadBody,
 ) (*mcp.CallToolResult, error) {
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	body, e := s.client.Page(t.Identifier).Body()
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	path := filepath.Join(
-		s.downloadDirectory,
-		fmt.Sprintf("chrome_%s.html", t.Identifier),
+	v, e := s.service.ReadBody(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
 	)
-	e = os.WriteFile(path, []byte(body), 0644)
 
 	if e != nil {
-		return s.captureFail(e, "file write failed")
+		return s.captureDetail(e)
 	}
 
 	return response.SuccessAny(
-		map[string]any{"path": path, "tab": t.Title, "size": len(body)},
+		map[string]any{"path": v.Path, "tab": v.Title, "size": v.Size},
 	)
 }

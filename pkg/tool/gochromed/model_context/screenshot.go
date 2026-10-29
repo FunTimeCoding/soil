@@ -2,12 +2,10 @@ package model_context
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
-	"os"
-	"path/filepath"
 )
 
 func (s *Server) Screenshot(
@@ -15,30 +13,15 @@ func (s *Server) Screenshot(
 	_ mcp.CallToolRequest,
 	a argument.Screenshot,
 ) (*mcp.CallToolResult, error) {
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	p := s.client.Page(t.Identifier)
-	b, e := p.Screenshot()
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	path := filepath.Join(
-		s.downloadDirectory,
-		fmt.Sprintf("chrome_%s.png", t.Identifier),
+	v, e := s.service.Screenshot(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
 	)
-	e = os.WriteFile(path, b, 0644)
 
 	if e != nil {
-		return s.captureFail(e, "file write failed")
+		return s.captureDetail(e)
 	}
 
 	return response.SuccessAny(
-		map[string]any{"path": path, "tab": t.Title, "size": len(b)},
+		map[string]any{"path": v.Path, "tab": v.Title, "size": v.Size},
 	)
 }

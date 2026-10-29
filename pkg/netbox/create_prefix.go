@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/prefix"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/site"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -28,7 +29,7 @@ func (c *Client) CreatePrefix(
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return prefix.New(result), nil

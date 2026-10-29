@@ -29,19 +29,23 @@ func (s *Server) SearchItems(
 		perPage = *r.Params.PerPage
 	}
 
-	items, total, e := s.client.SearchItems(r.Params.Q, types, page, perPage)
+	result, e := s.service.SearchItems(r.Params.Q, types, page, perPage)
 
 	if e != nil {
 		return server.SearchItems500JSONResponse(*s.answer(e)), nil
 	}
 
-	rows := make([]server.Item, 0, len(items))
+	rows := make([]server.Item, 0, len(result.Items))
 
-	for _, v := range items {
+	for _, v := range result.Items {
 		rows = append(rows, *convertItem(v))
 	}
 
 	return server.SearchItems200JSONResponse(
-		server.SearchResult{Total: total, Page: max(page, 1), Items: rows},
+		server.SearchResult{
+			Total: result.Total,
+			Page:  result.Page,
+			Items: rows,
+		},
 	), nil
 }

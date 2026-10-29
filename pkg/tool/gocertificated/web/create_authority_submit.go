@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/web/form"
@@ -31,8 +32,15 @@ func (s *Server) createAuthoritySubmit(
 		&b.PermittedAddress,
 		r.PostFormValue(constant.AddressParameter),
 	)
+	_, e := s.service.CreateAuthority(b)
 
-	if _, e := s.service.CreateAuthority(b); e != nil {
+	if e != nil && classify.Reportable(e) {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
+	if e != nil {
 		form.Redirect(w, r, constant.CreateAuthorityPath, e.Error(), r.PostForm)
 
 		return

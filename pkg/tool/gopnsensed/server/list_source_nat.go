@@ -16,7 +16,7 @@ func (s *Server) ListSourceNat(
 		phrase = *r.Params.Query
 	}
 
-	result, e := s.opnsense.SourceNatRules(phrase)
+	result, e := s.service.SourceNatRules(phrase)
 
 	if e != nil {
 		return server.ListSourceNat500JSONResponse(*s.answer(e)), nil

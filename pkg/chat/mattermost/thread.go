@@ -11,7 +11,7 @@ func (c *Client) Thread(p *model.Post) ([]*post.Post, error) {
 		return []*post.Post{}, nil
 	}
 
-	list, _, e := c.client.GetPostThread(
+	list, r, e := c.client.GetPostThread(
 		c.context,
 		p.Id,
 		constant.MattermostEmptyEntityTag,
@@ -19,7 +19,7 @@ func (c *Client) Thread(p *model.Post) ([]*post.Post, error) {
 	)
 
 	if e != nil {
-		return nil, wrapError(e)
+		return nil, wrapError(r, e)
 	}
 
 	var posts []*model.Post

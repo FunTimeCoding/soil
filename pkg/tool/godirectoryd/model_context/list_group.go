@@ -15,7 +15,7 @@ func (s *Server) listGroup(
 	result, e := s.service.Groups()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

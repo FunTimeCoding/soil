@@ -18,7 +18,7 @@ func (s *Server) allocateStat(
 		return response.Fail("stat is required: %v", f)
 	}
 
-	result, g := s.habitica.Allocate(stat)
+	result, g := s.service.Allocate(stat)
 
 	if g != nil {
 		return s.answer(g)

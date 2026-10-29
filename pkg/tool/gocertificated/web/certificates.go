@@ -13,7 +13,7 @@ func (s *Server) certificates(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	result, e := s.store.Certificates(filter.New())
+	result, e := s.service.Certificates(filter.New())
 	errors.PanicOnError(e)
 	s.view.RenderPage(
 		w,

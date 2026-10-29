@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -18,7 +19,13 @@ func addIssueComment(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.AddIssueComment(arguments[0], arguments[1]))
+			t.EmitDone(
+				c.AddIssueComment(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+				),
+			)
 		},
 	}
 }

@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -9,7 +11,15 @@ func (s *Server) CreateSite(
 	_ context.Context,
 	r server.CreateSiteRequestObject,
 ) (server.CreateSiteResponseObject, error) {
-	i, e := s.client.CreateSite(r.Body.Name)
+	i, e := s.service.CreateSite(r.Body.Name)
+
+	if validation.Is(e) {
+		return server.CreateSite400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.CreateSite403JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.CreateSite500JSONResponse(*s.captureDetail(e)), nil

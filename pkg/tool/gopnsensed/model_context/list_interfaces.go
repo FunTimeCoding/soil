@@ -11,7 +11,7 @@ func (s *Server) listInterfaces(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.opnsense.Interfaces()
+	result, e := s.service.Interfaces()
 
 	if e != nil {
 		return s.answer(e)

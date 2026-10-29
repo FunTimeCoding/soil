@@ -7,11 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/store"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -24,16 +22,22 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := service.New(
-		store.New(relational.Open(l, o.PostgresLocator, o.LitePath)),
-	)
+	s := service.New(o, l, r)
 
 	if !s.HasClusters() {
+		s.Close()
 		errors.Println("no kubernetes clusters available")
 		os.Exit(1)
 	}
 
-	lifecycle.New(l).WithServer(
+	defer s.Close()
+	c := lifecycle.New(l)
+
+	for _, w := range s.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

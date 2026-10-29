@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -16,6 +18,14 @@ func (s *Server) Search(
 	}
 
 	v, e := s.service.Search(r.Params.Query, entityType)
+
+	if forbidden.Is(e) {
+		return server.Search403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.Search503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.Search500JSONResponse(*s.answer(e)), nil

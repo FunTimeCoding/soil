@@ -9,6 +9,7 @@ import (
 
 func Target() {
 	e := embed.NewEnvironment()
+	defer e.Close()
 	result, f := e.Embed(
 		context.Background(),
 		[]string{"What are embeddings?", "A second document."},

@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/time"
 )
 
@@ -12,9 +13,12 @@ func (s *Server) summaryItems() []string {
 		last = time.FormatCompact(v)
 	}
 
+	status, e := s.service.Status()
+	errors.PanicOnError(e)
+
 	return []string{
-		fmt.Sprintf("%d records", s.store.MustCount()),
-		fmt.Sprintf("%d firing", s.worker.FiringCount()),
+		fmt.Sprintf("%d records", status.Total),
+		fmt.Sprintf("%d firing", status.Firing),
 		fmt.Sprintf("polled %s", last),
 	}
 }

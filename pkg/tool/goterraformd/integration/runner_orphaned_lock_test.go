@@ -3,8 +3,8 @@ package integration
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/terraform_tester"
 	"testing"
 	"time"

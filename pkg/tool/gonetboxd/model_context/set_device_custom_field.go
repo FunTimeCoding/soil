@@ -25,7 +25,7 @@ func (s *Server) setDeviceCustomField(
 		return response.Fail("field is required: %v", f)
 	}
 
-	result, g := s.client.SetDeviceCustomFields(
+	result, g := s.service.SetDeviceCustomFields(
 		name,
 		map[string]any{field: r.GetStringSlice(constant.Values, []string{})},
 	)

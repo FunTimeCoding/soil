@@ -72,21 +72,16 @@ func TestChannelPosts(t *testing.T) {
 			)
 		},
 	)
-	result, e := r.Client.GetChannelPostsWithResponse(
+	posts, e := r.Client.GetChannelPosts(
 		context.Background(),
 		"alfa",
 		&client.GetChannelPostsParams{Since: time.UnixMilli(1000)},
 	)
-
-	if e != nil {
-		t.Fatal(e)
-	}
-
-	assert.Any(t, 200, result.StatusCode())
-	posts := *result.JSON200
+	assert.FatalOnError(t, e)
 	assert.Any(t, 3, len(posts))
 	assert.Any(t, "bravo", posts[0].Identifier)
 	assert.Any(t, "echo", posts[0].Username)
+	assert.True(t, posts[0].Root == nil)
 	assert.Any(t, "charlie", posts[1].Identifier)
 	assert.Any(t, "bravo", *posts[1].Root)
 	assert.Any(t, "foxtrot", posts[2].Identifier)

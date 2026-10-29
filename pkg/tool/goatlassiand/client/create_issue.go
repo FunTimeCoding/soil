@@ -1,13 +1,13 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateIssue(
+	x context.Context,
 	project string,
 	issueType string,
 	summary string,
@@ -15,7 +15,7 @@ func (c *Client) CreateIssue(
 	assignee string,
 	labels []string,
 	fields map[string]any,
-) *response.Response {
+) (*client.JiraIssue, error) {
 	body := client.CreateIssueJSONRequestBody{
 		Project:   project,
 		IssueType: issueType,
@@ -38,8 +38,15 @@ func (c *Client) CreateIssue(
 		body.AdditionalFields = &fields
 	}
 
-	result, e := c.client.CreateIssue(c.context, body)
-	errors.PanicOnError(e)
+	r, e := c.client.CreateIssueWithResponse(x, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON201 == nil {
+		return nil, refusal.New("create issue", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON201, nil
 }

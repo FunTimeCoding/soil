@@ -1,11 +1,15 @@
 package tester
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
+	"net/http"
 	"os"
 	"path/filepath"
 	"testing"
@@ -19,34 +23,33 @@ func New(
 ) *Tester {
 	t.Helper()
 	directory := t.TempDir()
-	procfilePath := filepath.Join(directory, "Procfile")
-	envrcPath := filepath.Join(directory, ".envrc")
-	socketPath := fmt.Sprintf(
-		"/tmp/goprocessd-test-%d.sock",
-		time.Now().UnixNano(),
-	)
+	o := option.New()
+	o.ProcfilePath = filepath.Join(directory, "Procfile")
+	o.EnvrcPath = filepath.Join(directory, ".envrc")
 	errors.PanicOnError(
-		os.WriteFile(procfilePath, []byte(procfileContent), 0644),
+		os.WriteFile(o.ProcfilePath, []byte(procfileContent), 0644),
 	)
-	errors.PanicOnError(os.WriteFile(envrcPath, []byte(envrcContent), 0755))
-	entries, e := procfile.Parse(procfilePath)
-	errors.PanicOnError(e)
-	env := environment.New(os.Environ())
-	errors.PanicOnError(env.Load(envrcPath))
-	s := supervisor.New(entries, env, procfilePath, envrcPath, socketPath)
-	go func() { errors.PanicOnError(s.Run()) }()
+	errors.PanicOnError(os.WriteFile(o.EnvrcPath, []byte(envrcContent), 0755))
+	v := service.New(o)
+	m := http.NewServeMux()
+	goprocessd.MountLocal(v, memory.New(), mock_recorder.New(), m)
+	l := socket.Listen(socket.Path(o.ProcfilePath))
+	h := &http.Server{Handler: m}
+	go func() { errors.PanicOnUnclean(h.Serve(l)) }()
+	go func() { errors.PanicOnError(v.Run()) }()
 	time.Sleep(100 * time.Millisecond)
+	c := client.NewLocal(o.ProcfilePath)
 	t.Cleanup(
 		func() {
-			errors.LogOnError(os.Remove(socketPath))
+			c.Close()
+			errors.LogOnError(h.Close())
 		},
 	)
 
 	return &Tester{
-		Server:       s,
+		Client:       c,
 		Directory:    directory,
-		SocketPath:   socketPath,
-		ProcfilePath: procfilePath,
-		EnvrcPath:    envrcPath,
+		ProcfilePath: o.ProcfilePath,
+		EnvrcPath:    o.EnvrcPath,
 	}
 }

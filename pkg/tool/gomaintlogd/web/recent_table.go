@@ -9,7 +9,7 @@ import (
 func (s *Server) recentTable() gomponents.Node {
 	f := filter.New()
 	f.Limit = 50
-	entries, e := s.store.List(f)
+	entries, e := s.service.Entries(f)
 	errors.PanicOnError(e)
 
 	return entriesTable(entries)

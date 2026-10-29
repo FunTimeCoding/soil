@@ -14,11 +14,11 @@ func (s *Server) deleteClient(
 	a argument.Identifier,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.service.Client(a.Identifier); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	if e := s.service.DeleteClient(a.Identifier); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("deleted client: %s", a.Identifier))

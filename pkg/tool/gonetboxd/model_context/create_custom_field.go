@@ -26,7 +26,7 @@ func (s *Server) createCustomField(
 		return response.Fail("choice_set is required: %v", f)
 	}
 
-	result, g := s.client.CreateSelectionField(
+	result, g := s.service.CreateSelectionField(
 		name,
 		r.GetString(constant.Label, ""),
 		set,

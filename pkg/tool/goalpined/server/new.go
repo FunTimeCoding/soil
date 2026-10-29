@@ -1,7 +1,13 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/face"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/service"
+)
 
-func New(r face.Reporter) *Server {
-	return &Server{reporter: r}
+func New(
+	v *service.Service,
+	r face.Reporter,
+) *Server {
+	return &Server{service: v, reporter: r}
 }

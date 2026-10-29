@@ -9,7 +9,7 @@ func (s *Service) EditLink(
 	identifier int,
 	o edit_link_option.Option,
 ) (*link.Link, error) {
-	existing, e := s.client.LinkByIdentifier(identifier)
+	existing, e := s.linkByIdentifier(identifier)
 
 	if e != nil {
 		return nil, e
@@ -113,5 +113,5 @@ func (s *Service) EditLink(
 		patch["lists"] = lists
 	}
 
-	return s.client.UpdateLink(identifier, patch)
+	return s.updateLink(identifier, patch)
 }

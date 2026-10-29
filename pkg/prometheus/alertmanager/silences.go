@@ -1,6 +1,7 @@
 package alertmanager
 
 import (
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/refusal"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
 	rawSilence "github.com/prometheus/alertmanager/api/v2/client/silence"
 )
@@ -10,7 +11,7 @@ func (c *Client) Silences(expired bool) ([]*silence.Silence, error) {
 	response, e := c.client.Silence.GetSilences(p)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	var result []*silence.Silence

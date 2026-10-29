@@ -3,8 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/server"
 )
 
@@ -18,10 +19,16 @@ func (s *Server) DeleteUserAccount(
 		return server.DeleteUserAccount404JSONResponse{Error: e.Error()}, nil
 	}
 
+	if forbidden.Is(e) {
+		return server.DeleteUserAccount403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.DeleteUserAccount503JSONResponse{Error: e.Error()}, nil
+	}
+
 	if e != nil {
-		return server.DeleteUserAccount500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.DeleteUserAccount500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.DeleteUserAccount200JSONResponse{

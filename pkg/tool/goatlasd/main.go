@@ -45,5 +45,6 @@ func Main() {
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.Interval = a.GetDuration(argumentConstant.Interval)
 	o.Retention = a.GetDuration(constant.RetentionArgument)
+	peers(o)
 	Run(o, s)
 }

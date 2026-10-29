@@ -18,7 +18,7 @@ func (s *Server) listAddresses(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.DeviceAddresses(name)
+	result, g := s.service.DeviceAddresses(name)
 
 	if g != nil {
 		return s.captureFail(g, "addresses not retrieved")

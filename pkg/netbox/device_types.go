@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) DeviceTypes() ([]*device_type.Type, error) {
@@ -15,7 +16,7 @@ func (c *Client) DeviceTypes() ([]*device_type.Type, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	c.cache.DeviceTypes = device_type.NewSlice(result.Results)

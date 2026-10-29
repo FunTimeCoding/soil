@@ -5,6 +5,6 @@ import (
 	"k8s.io/api/networking/v1"
 )
 
-func (c *Client) UpdateNetworkPolicy(np *v1.NetworkPolicy) {
-	update_operation.NetworkPolicy(c.client, c.context, np)
+func (c *Client) UpdateNetworkPolicy(np *v1.NetworkPolicy) error {
+	return update_operation.NetworkPolicy(c.client, c.context, np)
 }

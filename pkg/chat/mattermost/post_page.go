@@ -11,7 +11,7 @@ func (c *Client) postPage(
 	collapsed bool,
 ) (*model.PostList, error) {
 	if anchor == "" {
-		page, _, e := c.client.GetPostsForChannel(
+		page, r, e := c.client.GetPostsForChannel(
 			c.context,
 			h.Id,
 			0,
@@ -21,10 +21,10 @@ func (c *Client) postPage(
 			false,
 		)
 
-		return page, wrapError(e)
+		return page, wrapError(r, e)
 	}
 
-	page, _, e := c.client.GetPostsBefore(
+	page, r, e := c.client.GetPostsBefore(
 		c.context,
 		h.Id,
 		anchor,
@@ -35,5 +35,5 @@ func (c *Client) postPage(
 		false,
 	)
 
-	return page, wrapError(e)
+	return page, wrapError(r, e)
 }

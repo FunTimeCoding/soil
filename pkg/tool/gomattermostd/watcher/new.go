@@ -1,18 +1,20 @@
 package watcher
 
 import (
+	mattermostFace "github.com/funtimecoding/soil/pkg/chat/mattermost/face"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
-	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"time"
 )
 
 func New(
-	c mattermostFace.ChatSource,
+	c mattermostFace.Client,
+	g *peer.Guard,
 	s *store.Store,
 	n *notifier.Notifier,
 	l *logger.Logger,
@@ -21,6 +23,7 @@ func New(
 ) *Watcher {
 	return &Watcher{
 		client:   c,
+		guard:    g,
 		store:    s,
 		notifier: n,
 		logger:   l,

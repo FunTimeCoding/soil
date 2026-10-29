@@ -6,11 +6,11 @@ import (
 )
 
 func (c *Client) FindPost(identifier string) (*model.Post, error) {
-	result, _, e := c.client.GetPost(
+	result, r, e := c.client.GetPost(
 		c.context,
 		identifier,
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

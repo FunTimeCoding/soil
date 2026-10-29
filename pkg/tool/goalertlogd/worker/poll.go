@@ -1,9 +1,8 @@
 package worker
 
 import (
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"time"
 )
 
@@ -21,63 +20,25 @@ func (w *Worker) Poll() {
 			w.metrics.PollDuration.Observe(time.Since(start).Seconds())
 		}
 	}()
-	alerts, _ := w.client.MustAlerts(advanced_option.New(), nil)
-	open := make(map[string]bool)
+	o, e := w.service.Record(start)
 
-	for _, fingerprint := range w.store.MustUnresolvedFingerprints() {
-		open[fingerprint] = true
+	if e != nil {
+		if classify.Reportable(e) {
+			w.reporter.CaptureException(e)
+		} else {
+			w.logger.Plain(constant.RecordDeferred, e)
+		}
+
+		return
 	}
 
-	current := make(map[string]bool)
-
-	for _, a := range alerts {
-		if a.State != constant.ActiveState {
-			continue
-		}
-
-		current[a.Fingerprint] = true
-
-		if open[a.Fingerprint] {
-			continue
-		}
-
-		labels := make(map[string]string)
-
-		for k, v := range a.Labels {
-			labels[k] = v
-		}
-
-		w.store.MustCreate(
-			record.Record{
-				Fingerprint: a.Fingerprint,
-				Name:        a.Name,
-				Severity:    a.Severity,
-				Summary:     a.Summary,
-				Labels:      labels,
-				Start:       time.Now(),
-			},
-		)
-		open[a.Fingerprint] = true
-
-		if w.metrics != nil {
-			w.metrics.AlertsTotal.Inc()
-		}
-	}
-
-	for fingerprint := range open {
-		if current[fingerprint] {
-			continue
-		}
-
-		w.store.MustResolve(fingerprint)
-	}
-
-	if pruned := w.store.MustPrune(time.Now().Add(-w.retention)); pruned > 0 {
-		w.logger.Structured("pruned records", "count", pruned)
+	if o.Pruned > 0 {
+		w.logger.Structured("pruned records", "count", o.Pruned)
 	}
 
 	if w.metrics != nil {
-		w.metrics.AlertsFiring.Set(float64(w.store.MustUnresolvedCount()))
-		w.metrics.RecordsTotal.Set(float64(w.store.MustCount()))
+		w.metrics.AlertsTotal.Add(float64(o.Created))
+		w.metrics.AlertsFiring.Set(float64(o.Firing))
+		w.metrics.RecordsTotal.Set(float64(o.Total))
 	}
 }

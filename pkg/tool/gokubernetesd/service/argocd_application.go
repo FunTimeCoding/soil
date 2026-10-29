@@ -2,11 +2,8 @@ package service
 
 import (
 	"context"
-	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/argocd_detail"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 )
 
 func (s *Service) ArgocdApplication(
@@ -15,31 +12,12 @@ func (s *Service) ArgocdApplication(
 	name string,
 	unfiltered bool,
 ) (*argocd_detail.Detail, error) {
-	c, e := s.ClusterByName(clusterName)
-
-	if e != nil {
-		return nil, e
-	}
-
-	app, f := c.Dynamic().Resource(constant.ArgocdApplicationGVR).Namespace(
-		constant.Argocd,
-	).Get(x, name, v1.GetOptions{})
-
-	if f != nil {
-		return nil, f
-	}
-
-	filtered := resource.FilterObject(app.Object, unfiltered)
-	syncStatus := resource.ExtractNestedString(
-		app.Object,
-		"status",
-		"sync",
-		"status",
+	return guarded(
+		s,
+		x,
+		clusterName,
+		func(c *cluster.Cluster) (*argocd_detail.Detail, error) {
+			return argocdApplicationOn(x, c, name, unfiltered)
+		},
 	)
-
-	if syncStatus == kubernetesConstant.ArgocdSyncSynced && !unfiltered {
-		resource.StripArgocdNoise(filtered.Object, &filtered.Filtered)
-	}
-
-	return argocd_detail.New(filtered.Object, filtered.Filtered), nil
 }

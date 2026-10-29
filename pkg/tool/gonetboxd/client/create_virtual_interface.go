@@ -1,22 +1,33 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateVirtualInterface(
+	x context.Context,
 	vmName string,
 	name string,
-) *response.Response {
-	result, e := c.client.CreateVirtualInterface(
-		c.context,
+) (client.VirtualInterface, error) {
+	r, e := c.client.CreateVirtualInterfaceWithResponse(
+		x,
 		vmName,
 		client.CreateVirtualInterfaceRequest{Name: name},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.VirtualInterface{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.VirtualInterface{}, refusal.New(
+			"create virtual interface",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

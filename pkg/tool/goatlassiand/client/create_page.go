@@ -1,20 +1,20 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreatePage(
+	x context.Context,
 	spaceIdentifier string,
 	parentIdentifier string,
 	title string,
 	body string,
-) *response.Response {
-	result, e := c.client.CreatePage(
-		c.context,
+) (*client.ConfluencePageDetail, error) {
+	r, e := c.client.CreatePageWithResponse(
+		x,
 		client.CreatePageJSONRequestBody{
 			SpaceIdentifier:  spaceIdentifier,
 			ParentIdentifier: parentIdentifier,
@@ -22,7 +22,14 @@ func (c *Client) CreatePage(
 			Body:             body,
 		},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON201 == nil {
+		return nil, refusal.New("create page", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON201, nil
 }

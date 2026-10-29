@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context/argument"
@@ -35,10 +34,10 @@ func (s *Server) listCertificates(
 		f.Before = &before
 	}
 
-	result, e := s.store.Certificates(f)
+	result, e := s.service.Certificates(f)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.Certificates(result))

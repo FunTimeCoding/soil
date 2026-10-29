@@ -1,6 +1,9 @@
 package netbox
 
-import "github.com/funtimecoding/soil/pkg/netbox/wireless_network_group"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
+	"github.com/funtimecoding/soil/pkg/netbox/wireless_network_group"
+)
 
 func (c *Client) WirelessNetworkGroups() ([]*wireless_network_group.Group, error) {
 	result, _, e := c.client.WirelessAPI.WirelessWirelessLanGroupsList(
@@ -8,7 +11,7 @@ func (c *Client) WirelessNetworkGroups() ([]*wireless_network_group.Group, error
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return wireless_network_group.NewSlice(result.Results), nil

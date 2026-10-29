@@ -1,8 +1,12 @@
 package target
 
-import "github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/face"
+)
 
 type Target struct {
 	Name   string
-	Source face.OutpostSource
+	Client face.Client
+	Guard  *peer.Guard
 }

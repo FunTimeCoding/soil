@@ -7,7 +7,7 @@ func (s *Service) resolveProject(slug string) (string, error) {
 		return "", nil
 	}
 
-	projects, e := s.client.OrganizationProjects(s.organization)
+	projects, e := s.Projects()
 
 	if e != nil {
 		return "", e

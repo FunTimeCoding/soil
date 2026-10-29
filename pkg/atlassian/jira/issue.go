@@ -12,10 +12,10 @@ func (c *Client) Issue(key string) (*issue.Issue, error) {
 		return nil, e
 	}
 
-	result, _, f := c.client.Issue.Get(key, &jira.GetQueryOptions{})
+	result, r, f := c.client.Issue.Get(key, &jira.GetQueryOptions{})
 
 	if f != nil {
-		return nil, wrapError(f)
+		return nil, WrapError(r, f)
 	}
 
 	return issue.New(result, o), nil

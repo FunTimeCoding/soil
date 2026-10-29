@@ -2,8 +2,10 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -20,7 +22,20 @@ func (s *Server) addSubmit(
 	e.System = r.FormValue(constant.System)
 	e.Service = r.FormValue(constant.Service)
 	e.Description = r.FormValue(constant.Description)
-	errors.PanicOnError(s.store.Add(e))
+	f := s.service.Add(e)
+
+	if validation.Is(f) {
+		s.view.RenderFragment(w, html.Div(layout.Alert(f.Error()), addForm()))
+
+		return
+	}
+
+	if f != nil {
+		s.view.Answer(w, r, s.reporter, f)
+
+		return
+	}
+
 	s.view.RenderFragment(
 		w,
 		html.Div(

@@ -1,5 +1,5 @@
 package reaper
 
 func (r *Reaper) Close() {
-	close(r.stop)
+	r.closing.Do(func() { close(r.stop) })
 }

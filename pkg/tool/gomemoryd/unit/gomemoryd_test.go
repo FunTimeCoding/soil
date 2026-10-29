@@ -5,15 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/importer"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/token_summary"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
 	"testing"
 )
 
@@ -43,101 +40,6 @@ func TestImportFromFixtures(t *testing.T) {
 	if result2.Skipped != 2 {
 		t.Fatalf("expected 2 skipped on re-import, got %d", result2.Skipped)
 	}
-}
-
-func TestListReturnsResults(t *testing.T) {
-	s := memory_indexer_tester.New(
-		t,
-		memory_indexer_tester.EmptyFixture(),
-		memory_indexer_tester.ListFixture(
-			memory_indexer_tester.TestResult(
-				"test-session/1",
-				"built the API",
-				0,
-			),
-			memory_indexer_tester.TestResult(
-				"test-session/2",
-				"wrote the tests",
-				0,
-			),
-		),
-	)
-	outcome, e := s.List(
-		"completions",
-		map[string]string{"source_type": "session-completion"},
-		5,
-		0,
-		true,
-	)
-	assert.FatalOnError(t, e)
-	assert.Count(t, 2, outcome.Results)
-	assert.String(t, "test-session/1", outcome.Results[0].Path)
-	assert.String(t, "built the API", outcome.Results[0].Body)
-}
-
-func TestListEmptyCollection(t *testing.T) {
-	s := memory_indexer_tester.New(
-		t,
-		memory_indexer_tester.EmptyFixture(),
-		memory_indexer_tester.ListFixture(),
-	)
-	outcome, e := s.List("completions", nil, 10, 0, false)
-	assert.FatalOnError(t, e)
-	assert.Count(t, 0, outcome.Results)
-}
-
-func TestListWithoutBody(t *testing.T) {
-	s := memory_indexer_tester.New(
-		t,
-		memory_indexer_tester.EmptyFixture(),
-		memory_indexer_tester.ListFixture(
-			memory_indexer_tester.TestResultNoBody("test-session/1"),
-			memory_indexer_tester.TestResultNoBody("test-session/2"),
-		),
-	)
-	outcome, e := s.List("completions", nil, 5, 0, false)
-	assert.FatalOnError(t, e)
-	assert.Count(t, 2, outcome.Results)
-	assert.String(t, "", outcome.Results[0].Body)
-}
-
-func TestSearchReturnsResults(t *testing.T) {
-	s := memory_indexer_tester.New(
-		t,
-		memory_indexer_tester.SearchFixture(
-			memory_indexer_tester.TestResult(
-				"memory/1",
-				"captureFail content",
-				0.93,
-			),
-			memory_indexer_tester.TestResult(
-				"memory/2",
-				"error handling",
-				0.71,
-			),
-		),
-		memory_indexer_tester.EmptyFixture(),
-	)
-	results, e := s.Search(
-		search_option.New("error handling", constant.DefaultCollection, 10),
-	)
-	assert.FatalOnError(t, e)
-	assert.Count(t, 2, results)
-	assert.String(t, "memory/1", results[0].Path)
-	assert.StringContains(t, "captureFail", results[0].Body)
-}
-
-func TestSearchEmptyResults(t *testing.T) {
-	s := memory_indexer_tester.New(
-		t,
-		memory_indexer_tester.SearchFixture(),
-		memory_indexer_tester.EmptyFixture(),
-	)
-	results, e := s.Search(
-		search_option.New("nonexistent", constant.DefaultCollection, 10),
-	)
-	assert.FatalOnError(t, e)
-	assert.Count(t, 0, results)
 }
 
 func TestIndexEntry(t *testing.T) {

@@ -20,6 +20,8 @@ func New(
 	return &Worker{
 		service:  v,
 		interval: interval,
+		logger:   l,
+		reporter: r,
 		recovery: recovery.New(l, r),
 		context:  x,
 		cancel:   cancel,

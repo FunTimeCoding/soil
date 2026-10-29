@@ -1,18 +1,27 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) SearchPages(query string) *response.Response {
-	result, e := c.client.SearchPages(
-		c.context,
+func (c *Client) SearchPages(
+	x context.Context,
+	query string,
+) ([]*client.ConfluencePage, error) {
+	r, e := c.client.SearchPagesWithResponse(
+		x,
 		&client.SearchPagesParams{Query: query},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("search pages", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

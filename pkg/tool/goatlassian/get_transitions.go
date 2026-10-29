@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -18,7 +19,7 @@ func getTransitions(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.GetTransitions(arguments[0]))
+			t.EmitValue(c.GetTransitions(context.Background(), arguments[0]))
 		},
 	}
 }

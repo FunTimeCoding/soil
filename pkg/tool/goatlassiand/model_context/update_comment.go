@@ -30,7 +30,7 @@ func (s *Server) updateComment(
 	}
 
 	if e := s.service.UpdateComment(key, identifier, body); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success("comment %s updated", identifier)

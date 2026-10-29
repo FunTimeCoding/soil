@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 )
 
@@ -13,7 +14,7 @@ func (c *Client) VirtualMachineInterfaces(
 	).VirtualMachineId([]int32{m.Identifier}).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return network.NewVirtualSlice(result.Results), nil

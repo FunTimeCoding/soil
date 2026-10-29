@@ -18,7 +18,7 @@ func (s *Server) getAlerts(
 		return response.Fail("name is required: %v", f)
 	}
 
-	records, g := s.store.ByName(name)
+	records, g := s.service.Alerts(name)
 
 	if g != nil {
 		return s.answer(g)

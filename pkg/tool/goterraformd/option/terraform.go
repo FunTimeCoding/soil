@@ -1,5 +1,7 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/kubernetes/face"
+
 type Terraform struct {
 	Address         string
 	ServiceTokens   []string
@@ -16,4 +18,5 @@ type Terraform struct {
 	StateLease      string
 	Downstream      []string
 	DownstreamToken string
+	Cluster         func() face.Client
 }

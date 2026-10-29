@@ -1,5 +1,7 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/gitlab/face"
+
 type Certificate struct {
 	Address            string
 	ServiceTokens      []string
@@ -15,4 +17,5 @@ type Certificate struct {
 	ClientSecret       string
 	EncryptionSecret   string
 	PublicLocator      string
+	Forge              func() face.Forge
 }

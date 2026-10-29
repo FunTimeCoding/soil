@@ -17,7 +17,7 @@ func (c *Collector) Collect(
 	var failed []string
 
 	for _, t := range c.targets {
-		v, e := collectOne(q, s, t.Source)
+		v, e := collectOne(q, s, t)
 
 		if e != nil {
 			failed = append(failed, t.Name)

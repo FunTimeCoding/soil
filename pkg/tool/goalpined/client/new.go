@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -13,20 +12,13 @@ func New(
 	l *locator.Locator,
 	token string,
 ) *Client {
-	base := l.String()
 	p := stall_client.New().Build()
 	c, e := client.NewClientWithResponses(
-		base,
+		l.String(),
 		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)
 
-	return &Client{
-		context: context.Background(),
-		client:  c,
-		pool:    p,
-		base:    base,
-		token:   token,
-	}
+	return &Client{client: c, base: l, token: token, pool: p}
 }

@@ -21,6 +21,11 @@ func Main() {
 		"Print compliance tables instead of lint-style concerns",
 	)
 	a.Boolean(argumentConstant.Web, false, "Print what each web frontend uses")
+	a.Boolean(
+		constant.ServiceFlag,
+		false,
+		"Include the service shape rule (default on where strata/tool/goaudit.yaml sets service: true)",
+	)
 	a.Parse()
 	roots := a.Positionals()
 
@@ -50,5 +55,6 @@ func Main() {
 	o.Roots = roots
 	o.Table = a.GetBoolean(argumentConstant.Table)
 	o.Web = a.GetBoolean(argumentConstant.Web)
+	o.Service = a.GetBoolean(constant.ServiceFlag)
 	Run(o)
 }

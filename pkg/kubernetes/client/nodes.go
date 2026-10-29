@@ -5,15 +5,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/node"
 )
 
-func (c *Client) Nodes() []*node.Node {
+func (c *Client) Nodes() ([]*node.Node, error) {
 	var result []*node.Node
 
 	for _, l := range c.selectClients(nil) {
-		result = append(
-			result,
-			node.NewSlice(list.Node(l.client, l.context), l.cluster)...,
-		)
+		v, e := list.Node(l.client, l.context)
+
+		if e != nil {
+			return nil, e
+		}
+
+		result = append(result, node.NewSlice(v, l.cluster)...)
 	}
 
-	return result
+	return result, nil
 }

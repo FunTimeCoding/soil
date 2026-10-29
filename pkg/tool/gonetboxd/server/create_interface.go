@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -20,6 +22,14 @@ func (s *Server) CreateInterface(
 
 	if not_found.Is(e) {
 		return server.CreateInterface404JSONResponse(*clientError(e)), nil
+	}
+
+	if validation.Is(e) {
+		return server.CreateInterface400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.CreateInterface403JSONResponse(*clientError(e)), nil
 	}
 
 	if e != nil {

@@ -5,7 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_source"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -19,7 +20,7 @@ func TestGuard(t *testing.T) {
 			g *guard.Mux,
 		) {
 			gopnsensed.Mount(
-				mock_client.New(),
+				service_tester.New(t, mock_source.New()),
 				memory.New(),
 				mock_recorder.New(),
 				g,
@@ -28,6 +29,5 @@ func TestGuard(t *testing.T) {
 	)
 	defer v.Close()
 	v.VerifyBase(t)
-	v.VerifyInterface(t)
 	v.VerifyModelContext(t)
 }

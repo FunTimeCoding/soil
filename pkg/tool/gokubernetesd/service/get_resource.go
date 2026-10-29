@@ -2,11 +2,9 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource/filter_result"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
 func (s *Service) GetResource(
@@ -14,40 +12,12 @@ func (s *Service) GetResource(
 	clusterName string,
 	q request.Get,
 ) (*filter_result.FilterResult, error) {
-	c, e := s.ClusterByName(clusterName)
-
-	if e != nil {
-		return nil, e
-	}
-
-	gvr, namespaced, f := c.ResolveResource(q.ResourceType)
-
-	if f != nil {
-		return nil, f
-	}
-
-	namespace := q.Namespace
-
-	if namespace == "" {
-		namespace = "default"
-	}
-
-	var result *unstructured.Unstructured
-	var g error
-
-	if namespaced {
-		result, g = c.Dynamic().Resource(gvr).Namespace(namespace).Get(
-			x,
-			q.Name,
-			v1.GetOptions{},
-		)
-	} else {
-		result, g = c.Dynamic().Resource(gvr).Get(x, q.Name, v1.GetOptions{})
-	}
-
-	if g != nil {
-		return nil, g
-	}
-
-	return resource.FilterObject(result.Object, q.Unfiltered), nil
+	return guarded(
+		s,
+		x,
+		clusterName,
+		func(c *cluster.Cluster) (*filter_result.FilterResult, error) {
+			return getResourceOn(x, c, q)
+		},
+	)
 }

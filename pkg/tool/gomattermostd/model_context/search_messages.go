@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
 	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
@@ -18,23 +17,10 @@ func (s *Server) SearchMessages(
 		return response.Fail("terms is required")
 	}
 
-	team := s.client.DefaultTeam()
-	list, _, e := s.client.Nested().SearchPosts(
-		s.client.Context(),
-		team.Id,
-		a.Terms,
-		false,
-	)
+	posts, e := s.service.SearchPosts(a.Terms)
 
 	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	posts := post.NewSlice(post.FromList(list, true))
-	g := s.client.Enrich(posts)
-
-	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(e)
 	}
 
 	var rows []*mattermostResponse.MessageMatch
@@ -51,10 +37,10 @@ func (s *Server) SearchMessages(
 		}
 
 		if p.Raw.ChannelId != "" {
-			ch, f := s.client.Channel(p.Raw.ChannelId)
+			ch, f := s.service.Channel(p.Raw.ChannelId)
 
 			if f == nil {
-				r.Channel = s.channelDisplayName(ch)
+				r.Channel = s.service.ChannelDisplayName(ch)
 			}
 		}
 

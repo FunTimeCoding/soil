@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/console_server_port"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) ConsoleServerPorts() ([]*console_server_port.Port, error) {
@@ -11,7 +12,7 @@ func (c *Client) ConsoleServerPorts() ([]*console_server_port.Port, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return console_server_port.NewSlice(result.Results), nil

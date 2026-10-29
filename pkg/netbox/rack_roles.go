@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/rack_role"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) RackRoles() ([]*rack_role.Role, error) {
@@ -11,7 +12,7 @@ func (c *Client) RackRoles() ([]*rack_role.Role, error) {
 	).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return rack_role.NewSlice(result.Results), nil

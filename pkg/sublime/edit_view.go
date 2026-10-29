@@ -5,9 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -50,11 +48,7 @@ func (c *Client) EditView(
 	defer errors.LogClose(r.Body)
 
 	if r.StatusCode != http.StatusOK {
-		return view.Stub(), unexpected.Format(
-			"edit view: %d: %s",
-			r.StatusCode,
-			system.ReadAll(r.Body),
-		)
+		return view.Stub(), statusError("edit view", r)
 	}
 
 	var result *view.View

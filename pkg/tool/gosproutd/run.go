@@ -2,21 +2,17 @@ package gosproutd
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/watcher"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
-	"time"
 )
 
 func Run(
@@ -25,10 +21,9 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(lite.New(l, o.LitePath), time.Now)
-	defer s.Close()
-	v := service.New(s, notifier.New())
-	w := watcher.New(v, l, r, o.SeedDirectory)
+	v := service.New(o, l)
+	defer v.Close()
+	w := worker.New(v, l, r, o.SeedDirectory)
 	u := web.New(v)
 	lifecycle.New(l).WithWorker(w).WithServer(
 		server.New(

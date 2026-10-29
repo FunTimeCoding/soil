@@ -25,6 +25,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Device"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list devices.
           content:
@@ -48,6 +54,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Device not found.
           content:
@@ -82,6 +94,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -115,6 +139,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Interface"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -148,6 +178,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Address"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -183,6 +219,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Address"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -209,6 +257,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Site"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list sites.
           content:
@@ -230,6 +284,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Site"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create site.
           content:
@@ -250,6 +316,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Tenant"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list tenants.
           content:
@@ -271,6 +343,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tenant"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create tenant.
           content:
@@ -291,6 +375,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/DeviceRole"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list device roles.
           content:
@@ -312,6 +402,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeviceRole"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create device role.
           content:
@@ -332,6 +434,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Manufacturer"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list manufacturers.
           content:
@@ -353,6 +461,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Manufacturer"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create manufacturer.
           content:
@@ -373,6 +493,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/DeviceType"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list device types.
           content:
@@ -394,6 +520,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeviceType"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create device type.
           content:
@@ -423,6 +561,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Interface"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -464,6 +614,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PhysicalAddress"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -488,6 +650,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PhysicalAddressOwner"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list hardware addresses.
           content:
@@ -510,6 +678,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create device.
           content:
@@ -530,6 +710,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ClusterType"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list cluster types.
           content:
@@ -551,6 +737,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ClusterType"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create cluster type.
           content:
@@ -571,6 +769,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Cluster"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list clusters.
           content:
@@ -592,6 +796,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Cluster"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create cluster.
           content:
@@ -612,6 +828,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/VirtualMachine"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list virtual machines.
           content:
@@ -633,6 +855,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create virtual machine.
           content:
@@ -656,6 +890,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -690,6 +930,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -723,6 +975,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Interface"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -756,6 +1014,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Address"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -797,6 +1061,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PhysicalAddress"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -832,6 +1108,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualInterface"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -867,6 +1155,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Address"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -893,6 +1193,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ConfigurationContext"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list configuration contexts.
           content:
@@ -914,6 +1220,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConfigurationContext"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: An assigned role, cluster, platform, site, tenant or tag does not exist.
           content:
@@ -943,6 +1261,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConfigurationContext"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: No configuration context by that name.
           content:
@@ -977,6 +1301,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConfigurationContext"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The configuration context, or an assigned object, does not exist.
           content:
@@ -1001,8 +1337,26 @@ paths:
       responses:
         "204":
           description: Configuration context deleted.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: No configuration context by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -1030,6 +1384,12 @@ paths:
             text/plain:
               schema:
                 type: string
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to build the inventory.
           content:
@@ -1050,6 +1410,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/ChoiceSet"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list choice sets.
           content:
@@ -1071,6 +1437,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ChoiceSet"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create choice set.
           content:
@@ -1094,6 +1472,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ChoiceSet"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: No choice set by that name.
           content:
@@ -1128,6 +1512,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ChoiceSet"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: No choice set by that name.
           content:
@@ -1152,8 +1548,26 @@ paths:
       responses:
         "204":
           description: Choice set deleted.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: No choice set by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -1178,6 +1592,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/CustomField"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list custom fields.
           content:
@@ -1199,6 +1619,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CustomField"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The choice set does not exist.
           content:
@@ -1224,8 +1656,26 @@ paths:
       responses:
         "204":
           description: Custom field deleted.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: No custom field by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -1250,6 +1700,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Tag"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list tags.
           content:
@@ -1271,6 +1727,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tag"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create tag.
           content:
@@ -1296,6 +1764,12 @@ paths:
                 type: array
                 items:
                   type: string
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1331,6 +1805,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1365,8 +1851,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -1391,6 +1895,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Prefix"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list prefixes.
           content:
@@ -1412,6 +1922,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Prefix"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create prefix.
           content:
@@ -1432,6 +1954,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/AddressRange"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list address ranges.
           content:
@@ -1453,6 +1981,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AddressRange"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create address range.
           content:
@@ -1473,6 +2013,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Location"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list locations.
           content:
@@ -1494,6 +2040,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Location"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create location.
           content:
@@ -1514,6 +2072,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Platform"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list platforms.
           content:
@@ -1535,6 +2099,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Platform"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create platform.
           content:
@@ -1555,6 +2131,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/WirelessNetwork"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list wireless networks.
           content:
@@ -1576,6 +2158,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WirelessNetwork"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create wireless network.
           content:
@@ -1603,6 +2197,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/VirtualDisk"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1637,6 +2237,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualDisk"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1663,6 +2275,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/TunnelGroup"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list tunnel groups.
           content:
@@ -1684,6 +2302,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TunnelGroup"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create tunnel group.
           content:
@@ -1704,6 +2334,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Tunnel"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list tunnels.
           content:
@@ -1725,6 +2361,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tunnel"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create tunnel.
           content:
@@ -1745,6 +2393,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Cable"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list cables.
           content:
@@ -1766,6 +2420,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Cable"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create cable.
           content:
@@ -1786,6 +2452,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/TunnelTermination"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list tunnel terminations.
           content:
@@ -1815,6 +2487,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TunnelTermination"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1850,6 +2534,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TunnelTermination"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1885,6 +2581,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1919,8 +2627,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -1952,6 +2678,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Label"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -1993,6 +2725,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Label"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2023,8 +2767,26 @@ paths:
       responses:
         "204":
           description: Label removed.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -2056,6 +2818,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Label"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2097,6 +2865,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Label"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2127,8 +2907,26 @@ paths:
       responses:
         "204":
           description: Label removed.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
           content:
             application/json:
               schema:
@@ -2172,6 +2970,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JournalEntry"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2206,6 +3010,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JournalEntry"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2251,6 +3067,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JournalEntry"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2285,6 +3107,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JournalEntry"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: The named object does not exist.
           content:
@@ -2321,6 +3155,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JournalEntry"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update journal entry.
           content:
@@ -2340,6 +3186,24 @@ paths:
       responses:
         "204":
           description: Journal entry deleted.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete journal entry.
           content:
@@ -2360,6 +3224,24 @@ paths:
       responses:
         "204":
           description: Address deleted.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The NetBox token lacks permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete address.
           content:

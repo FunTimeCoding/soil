@@ -1,22 +1,29 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) AddHost(
-	body client.HostRequest,
-	apply *bool,
-) *response.Response {
-	result, e := c.client.AddHost(
-		c.context,
-		&client.AddHostParams{Apply: apply},
-		body,
+	x context.Context,
+	h client.HostRequest,
+	apply bool,
+) (*client.Identifier, error) {
+	r, e := c.client.AddHostWithResponse(
+		x,
+		&client.AddHostParams{Apply: &apply},
+		h,
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("add host", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

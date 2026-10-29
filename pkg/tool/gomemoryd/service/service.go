@@ -8,9 +8,7 @@ import (
 
 type Service struct {
 	store         *store.Store
-	indexer       face.Indexer
-	searcher      face.Searcher
-	lister        face.Lister
+	query         face.Client
 	tokenizer     *tokenizer.Encoder
 	hiddenTag     string
 	referenceRoot string

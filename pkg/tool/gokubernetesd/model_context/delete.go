@@ -35,7 +35,7 @@ func (s *Server) Delete(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "delete resource")
+		return s.captureDetail(f)
 	}
 
 	namespace := a.Namespace

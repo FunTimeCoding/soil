@@ -21,7 +21,7 @@ func (w *Watcher) recordPost(v *model.WebSocketEvent) {
 		root = p.Id
 	}
 
-	if !w.watching(root) {
+	if !w.WatchingRoot(root) {
 		return
 	}
 

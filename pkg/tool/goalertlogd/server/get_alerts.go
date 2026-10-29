@@ -9,7 +9,7 @@ func (s *Server) GetAlerts(
 	_ context.Context,
 	r server.GetAlertsRequestObject,
 ) (server.GetAlertsResponseObject, error) {
-	records, e := s.store.ByName(r.Params.Name)
+	records, e := s.service.Alerts(r.Params.Name)
 
 	if e != nil {
 		return server.GetAlerts500JSONResponse(*s.answer(e)), nil

@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createVirtualTunnelTermination(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var tunnel string
@@ -22,8 +23,9 @@ func createVirtualTunnelTermination(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(
+			t.EmitValue(
 				c.CreateVirtualTunnelTermination(
+					context.Background(),
 					arguments[0],
 					tunnel,
 					interfaceName,

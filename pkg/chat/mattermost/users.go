@@ -9,12 +9,12 @@ func (c *Client) Users(
 	page int,
 	perPage int,
 ) ([]*model.User, error) {
-	result, _, e := c.client.GetUsers(
+	result, r, e := c.client.GetUsers(
 		c.context,
 		page,
 		perPage,
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

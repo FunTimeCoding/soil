@@ -1,14 +1,16 @@
 package client
 
-import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
-)
+import "context"
 
-func (c *Client) DeleteCustomField(name string) *response.Response {
-	result, e := c.client.DeleteCustomField(c.context, name)
-	errors.PanicOnError(e)
+func (c *Client) DeleteCustomField(
+	x context.Context,
+	name string,
+) error {
+	r, e := c.client.DeleteCustomFieldWithResponse(x, name)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return e
+	}
+
+	return noContent("delete custom field", r.HTTPResponse, r.Body)
 }

@@ -10,14 +10,13 @@ import (
 )
 
 func Mount(
-	v *server.Server,
+	v *service.Service,
 	administration *web.Server,
-	s *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	v.Mount(g)
+	server.New(v, r).Mount(g)
 	administration.Mount(g)
-	model_context.New(s, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

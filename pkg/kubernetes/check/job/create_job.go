@@ -13,7 +13,7 @@ func createJob(
 	name string,
 ) *v1.Job {
 	console.Format("Create job %s in %s from %s\n", name, namespace, cron)
-	result := k.CreateJobFromCron(namespace, cron, name)
+	result := k.MustCreateJobFromCron(namespace, cron, name)
 	console.Format("  %s\n", result.Name)
 
 	return result

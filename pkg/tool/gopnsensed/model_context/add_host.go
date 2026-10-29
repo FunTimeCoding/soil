@@ -11,16 +11,13 @@ func (s *Server) addHost(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	identifier, e := s.opnsense.AddHost(hostRequest(r))
+	identifier, e := s.service.AddHost(
+		hostRequest(r),
+		r.GetBool(constant.ParameterApply, true),
+	)
 
 	if e != nil {
 		return s.answer(e)
-	}
-
-	if r.GetBool(constant.ParameterApply, true) {
-		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return s.answer(f)
-		}
 	}
 
 	return response.Success(identifier)

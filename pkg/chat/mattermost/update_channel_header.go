@@ -30,7 +30,7 @@ func (c *Client) UpdateChannelHeader(
 	}
 
 	h.Header = strings.Join(header, separator)
-	result, _, e := c.client.UpdateChannel(c.context, h)
+	result, r, e := c.client.UpdateChannel(c.context, h)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

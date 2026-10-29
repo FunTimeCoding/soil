@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
 
 var Identity = identity.New(
 	"goalertlogd",
@@ -8,6 +11,16 @@ var Identity = identity.New(
 	"goalertlogd",
 ).WithInstructions(
 	"Alert lifecycle tracker - query active, recent, and top alerts. Tracks when alerts start, end, and recur.",
+)
+
+const (
+	PollInterval = time.Minute
+	Retention    = 30 * 24 * time.Hour
+)
+
+const (
+	AlertmanagerPeer = "alertmanager upstream"
+	RecordDeferred   = "alert recording skipped: %v"
 )
 
 const (

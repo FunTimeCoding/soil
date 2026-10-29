@@ -21,6 +21,10 @@ func Main() {
 		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(entries(c, t))
+	o.AddCommand(add(c, t))
+	o.AddCommand(update(c, t))
+	o.AddCommand(remove(c, t))
+	o.AddCommand(status(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())

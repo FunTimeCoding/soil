@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -17,10 +19,18 @@ func (s *Server) AddDeviceJournalEntry(
 		kind = *r.Body.Kind
 	}
 
-	result, e := s.client.AddDeviceJournalEntry(r.Name, kind, r.Body.Comments)
+	result, e := s.service.AddDeviceJournalEntry(r.Name, kind, r.Body.Comments)
 
 	if not_found.Is(e) {
 		return server.AddDeviceJournalEntry404JSONResponse(*clientError(e)), nil
+	}
+
+	if validation.Is(e) {
+		return server.AddDeviceJournalEntry400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.AddDeviceJournalEntry403JSONResponse(*clientError(e)), nil
 	}
 
 	if e != nil {
@@ -28,6 +38,7 @@ func (s *Server) AddDeviceJournalEntry(
 	}
 
 	return server.AddDeviceJournalEntry201JSONResponse(
-		*convert.JournalEntry(result),
-	), nil
+			*convert.JournalEntry(result),
+		),
+		nil
 }

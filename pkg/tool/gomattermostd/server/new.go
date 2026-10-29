@@ -2,12 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	mattermost "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 )
 
 func New(
-	c mattermost.MattermostSource,
+	v *service.Service,
 	r face.Reporter,
 ) *Server {
-	return &Server{client: c, reporter: r}
+	return &Server{service: v, reporter: r}
 }

@@ -12,10 +12,10 @@ func (c *Client) SaveNative(i *jira.Issue) (*issue.Issue, error) {
 		return nil, e
 	}
 
-	result, _, f := c.client.Issue.UpdateWithContext(c.context, i)
+	result, r, f := c.client.Issue.UpdateWithContext(c.context, i)
 
 	if f != nil {
-		return nil, wrapError(f)
+		return nil, WrapError(r, f)
 	}
 
 	return c.enrichOne(issue.New(result, o)), nil

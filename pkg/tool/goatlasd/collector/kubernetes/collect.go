@@ -2,6 +2,7 @@ package kubernetes
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/pod"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
@@ -10,14 +11,29 @@ import (
 )
 
 func (c *Collector) Collect(
-	_ context.Context,
+	q context.Context,
 	s *gazetteer.Gazetteer,
 ) ([]*placement.Placement, error) {
+	var pods []*pod.Pod
+	e := c.guard.Attempt(
+		q,
+		func(context.Context) error {
+			var f error
+			pods, f = c.kubernetes.Pods(nil)
+
+			return f
+		},
+	)
+
+	if e != nil {
+		return nil, e
+	}
+
 	var result []*placement.Placement
 	seen := map[kubernetes_key.Key]bool{}
 	now := time.Now()
 
-	for _, p := range c.kubernetes.Pods(nil) {
+	for _, p := range pods {
 		node := p.Raw.Spec.NodeName
 		k := kubernetes_key.Key{
 			Scope: p.Raw.Namespace,

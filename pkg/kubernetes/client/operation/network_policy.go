@@ -6,7 +6,7 @@ import (
 )
 
 func NetworkPolicy(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	namespace string,
 ) v1.NetworkPolicyInterface {
 	return c.NetworkingV1().NetworkPolicies(namespace)

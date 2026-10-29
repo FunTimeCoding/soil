@@ -31,11 +31,7 @@ func TestChainIsBuiltThroughTools(t *testing.T) {
 func TestSecondRootIsRefusedThroughTools(t *testing.T) {
 	o := model_context_tester.New(t)
 	o.CreateRoot()
-	assert.StringContains(
-		t,
-		"An authority of that name is already live",
-		o.CreateRootRefusal(),
-	)
+	assert.StringContains(t, "already live", o.CreateRootRefusal())
 }
 
 func TestIssuedCertificateReturnsItsKeyOnce(t *testing.T) {

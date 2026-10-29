@@ -13,7 +13,7 @@ func (s *Server) placements(
 	r *http.Request,
 ) {
 	name := r.URL.Query().Get(constant.SearchParameter)
-	v, e := s.store.SearchPlacements(name)
+	v, e := s.service.SearchPlacements(name)
 	errors.PanicOnError(e)
 	s.view.RenderPageWithSummary(
 		w,

@@ -1,6 +1,7 @@
 package alertmanager
 
 import (
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/refusal"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	library "github.com/funtimecoding/soil/pkg/time"
@@ -40,7 +41,7 @@ func (c *Client) PostSilence(
 	r, e := c.client.Silence.PostSilences(p)
 
 	if e != nil {
-		return "", e
+		return "", refusal.Classify(e)
 	}
 
 	return r.Payload.SilenceID, nil

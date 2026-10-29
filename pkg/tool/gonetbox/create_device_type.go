@@ -1,14 +1,15 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func createDeviceType(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var manufacturer string
@@ -20,7 +21,13 @@ func createDeviceType(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.CreateDeviceType(arguments[0], manufacturer))
+			t.EmitValue(
+				c.CreateDeviceType(
+					context.Background(),
+					arguments[0],
+					manufacturer,
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(

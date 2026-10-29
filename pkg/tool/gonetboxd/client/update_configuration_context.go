@@ -1,18 +1,29 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) UpdateConfigurationContext(
+	x context.Context,
 	name string,
 	body client.UpdateConfigurationContextRequest,
-) *response.Response {
-	result, e := c.client.UpdateConfigurationContext(c.context, name, body)
-	errors.PanicOnError(e)
+) (client.ConfigurationContext, error) {
+	r, e := c.client.UpdateConfigurationContextWithResponse(x, name, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.ConfigurationContext{}, e
+	}
+
+	if r.JSON200 == nil {
+		return client.ConfigurationContext{}, refusal.New(
+			"update configuration context",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON200, nil
 }

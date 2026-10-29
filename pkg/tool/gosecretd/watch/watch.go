@@ -8,7 +8,7 @@ import (
 )
 
 type Watch struct {
-	source    face.SecretSource
+	source    face.StatusSource
 	sealed    prometheus.Gauge
 	reachable prometheus.Gauge
 	recovery  *recovery.Recovery

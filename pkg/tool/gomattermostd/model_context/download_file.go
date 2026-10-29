@@ -18,19 +18,16 @@ func (s *Server) DownloadFile(
 		return response.Fail("file_id is required")
 	}
 
-	i, _, e := s.client.Nested().GetFileInfo(
-		s.client.Context(),
-		a.FileIdentifier,
-	)
+	i, e := s.service.FileInformation(a.FileIdentifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "file information")
 	}
 
-	b, _, e := s.client.Nested().GetFile(s.client.Context(), a.FileIdentifier)
+	b, e := s.service.File(a.FileIdentifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "file content")
 	}
 
 	path := a.Path
@@ -42,7 +39,7 @@ func (s *Server) DownloadFile(
 	e = os.WriteFile(path, b, 0644)
 
 	if e != nil {
-		return s.captureFail(e, "file write failed")
+		return s.answerWith(e, "write file")
 	}
 
 	return response.SuccessAny(

@@ -1,24 +1,35 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) SetDeviceLabel(
+	x context.Context,
 	device string,
 	key string,
 	value string,
-) *response.Response {
-	result, e := c.client.SetDeviceLabel(
-		c.context,
+) (client.Label, error) {
+	r, e := c.client.SetDeviceLabelWithResponse(
+		x,
 		device,
 		key,
 		client.SetDeviceLabelJSONRequestBody{Value: value},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Label{}, e
+	}
+
+	if r.JSON200 == nil {
+		return client.Label{}, refusal.New(
+			"set device label",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON200, nil
 }

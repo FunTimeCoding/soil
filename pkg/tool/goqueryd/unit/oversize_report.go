@@ -2,10 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/oversize"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
@@ -15,8 +15,10 @@ func oversizeReport(
 	collection string,
 ) *oversize.Report {
 	t.Helper()
-	s := store_tester.OpenTestStore(t)
-	t.Cleanup(s.Close)
+	a := newReranker(t)
+	a.SetAllowance(5)
+	o := service_tester.NewOption(t, newEmbedder(t), a)
+	s := store_tester.OpenFileStore(t, o.LitePath)
 	d := t.TempDir()
 	store_tester.WriteFixture(t, d, "alfa.md", "one two three\n")
 	store_tester.WriteFixture(
@@ -33,9 +35,7 @@ func oversizeReport(
 	)
 	s.AddCollection("test", d, constant.DefaultGlob)
 	s.Index("test")
-	a := mock_reranker.New()
-	a.SetAllowance(5)
-	result, e := newService(s, ollama.New(), a).Oversize(collection)
+	result, e := service_tester.New(t, o, memory.New()).Oversize(collection)
 	assert.FatalOnError(t, e)
 
 	return result

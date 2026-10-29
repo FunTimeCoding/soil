@@ -18,7 +18,7 @@ func (s *Server) createTunnelGroup(
 		return response.Fail("name is required: %v", e)
 	}
 
-	g, f := s.client.CreateTunnelGroup(name)
+	g, f := s.service.CreateTunnelGroup(name)
 
 	if f != nil {
 		return s.captureDetail(f)

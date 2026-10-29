@@ -11,7 +11,7 @@ func (s *Server) listClusterTypes(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.ClusterTypes()
+	result, e := s.service.ClusterTypes()
 
 	if e != nil {
 		return s.captureDetail(e)

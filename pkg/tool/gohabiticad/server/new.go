@@ -1,13 +1,13 @@
 package server
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/service"
 )
 
 func New(
-	c face.HabiticaSource,
-	r library.Reporter,
+	v *service.Service,
+	r face.Reporter,
 ) *Server {
-	return &Server{habitica: c, reporter: r}
+	return &Server{service: v, reporter: r}
 }

@@ -1,7 +1,7 @@
 package jira
 
 func (c *Client) DeleteLink(identifier string) error {
-	_, e := c.client.Issue.DeleteLinkWithContext(c.context, identifier)
+	r, e := c.client.Issue.DeleteLinkWithContext(c.context, identifier)
 
-	return wrapError(e)
+	return WrapError(r, e)
 }

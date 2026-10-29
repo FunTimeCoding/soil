@@ -1,15 +1,16 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
 func createVirtualDisk(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -22,7 +23,14 @@ func createVirtualDisk(
 		) {
 			size, e := strconv.Atoi(arguments[2])
 			errors.PanicOnError(e)
-			t.Emit(c.CreateVirtualDisk(arguments[0], arguments[1], int32(size)))
+			t.EmitValue(
+				c.CreateVirtualDisk(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+					int32(size),
+				),
+			)
 		},
 	}
 }

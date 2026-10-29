@@ -3,14 +3,17 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 	"strings"
 )
 
-func list(c *client.ClientWithResponses) *cobra.Command {
+func list(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var limit int
 	var offset int
 	var detail bool
@@ -48,10 +51,8 @@ func list(c *client.ClientWithResponses) *cobra.Command {
 				params.Metadata = &metadata
 			}
 
-			r, e := c.GetListWithResponse(context.Background(), params)
-			errors.PanicOnError(e)
-			refusal.PanicOnFailure("list documents", r.HTTPResponse, r.Body)
-			outcome := r.JSON200
+			outcome, e := c.GetList(context.Background(), params)
+			t.EmitDone(e)
 
 			for _, v := range outcome.Results {
 				console.Format("%s  %s", v.Path, v.Title)

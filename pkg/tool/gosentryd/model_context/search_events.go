@@ -23,5 +23,5 @@ func (s *Server) SearchEvents(
 		return s.answer(e)
 	}
 
-	return s.succeed(result)
+	return response.SuccessAny(result)
 }

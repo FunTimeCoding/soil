@@ -26,7 +26,12 @@ func Main() {
 	o.AddCommand(queryCommand("rules", "List firewall rules", c.Rules, t))
 	o.AddCommand(queryCommand("aliases", "List firewall aliases", c.Aliases, t))
 	o.AddCommand(
-		queryCommand("source-nat", "List source NAT rules", c.SourceNat, t),
+		queryCommand(
+			"source-nat",
+			"List source NAT rules",
+			c.SourceNatRules,
+			t,
+		),
 	)
 	o.AddCommand(
 		queryCommand("forwards", "List Unbound query forwards", c.Forwards, t),

@@ -4,16 +4,13 @@ import (
 	"crypto"
 	"crypto/rsa"
 	"crypto/sha1"
-	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func SignControl(
 	b []byte,
 	k *rsa.PrivateKey,
-) []byte {
+) ([]byte, error) {
 	h := sha1.Sum(b)
-	result, e := rsa.SignPKCS1v15(nil, k, crypto.SHA1, h[:])
-	errors.PanicOnError(e)
 
-	return result
+	return rsa.SignPKCS1v15(nil, k, crypto.SHA1, h[:])
 }

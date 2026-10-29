@@ -18,16 +18,10 @@ func (s *Server) equipGear(
 		return response.Fail("key is required: %v", f)
 	}
 
-	e := s.habitica.Equip(key)
+	result, e := s.service.Equip(key)
 
 	if e != nil {
 		return s.answer(e)
-	}
-
-	result, g := s.habitica.UserGear()
-
-	if g != nil {
-		return s.answer(g)
 	}
 
 	return response.SuccessAny(convert.Gear(result))

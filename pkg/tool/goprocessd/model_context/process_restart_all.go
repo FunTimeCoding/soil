@@ -11,10 +11,10 @@ func (s *Server) processRestartAll(
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {
-	count, e := s.supervisor.RestartWave()
+	count, e := s.service.RestartAll()
 
 	if e != nil {
-		return s.captureFail(e, "restart wave failed")
+		return s.answer(e)
 	}
 
 	return response.Success(

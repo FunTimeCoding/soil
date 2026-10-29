@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mattermost/mattermost/server/public/model"
 )
 
 func (s *Server) PostMessage(
@@ -21,28 +20,16 @@ func (s *Server) PostMessage(
 		return response.Fail("channel_id or channel_name is required")
 	}
 
-	var ch *model.Channel
-
-	if a.ChannelName != "" {
-		var e error
-		ch, e = s.client.TeamChannel(a.ChannelName)
-
-		if e != nil {
-			return s.captureFail(e, "channel not found")
-		}
-	} else {
-		var e error
-		ch, e = s.client.Channel(a.ChannelIdentifier)
-
-		if e != nil {
-			return s.captureFail(e, "channel not found")
-		}
-	}
-
-	p, e := s.client.PostSimple(ch, a.Message)
+	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
+	}
+
+	p, e := s.service.PostSimple(ch, a.Message)
+
+	if e != nil {
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

@@ -20,10 +20,14 @@ pkg/tool/go<tool>d/
 │       ├── openapi.yaml   # Hand-written spec
 │       ├── config.yaml    # oapi-codegen server config
 │       └── generated.go   # Generated: ServerInterface, HandlerFromMux, types
-├── client/                # Domain wrapper for CLI (imports generated/client/)
-│   ├── client.go          # Client struct (wraps generated client)
+├── client/                # The daemon's one client - its CLI and other daemons
+│   ├── client.go          # Client struct (wraps the generated client)
 │   ├── new.go             # New(locator, token) *Client
-│   └── <operation>.go     # One file per operation
+│   ├── new_environment.go # NewEnvironment() - the tool's env family
+│   ├── reachable.go       # Reachable(x) - the peer probe
+│   ├── close.go           # Close() - the client's own pool
+│   ├── <operation>.go     # One file per operation
+│   └── mock_client/       # face.Client for tests
 ├── server/                # REST implementation (imports generated/server/)
 │   ├── server.go          # Server struct (holds dependencies)
 │   ├── new.go             # New(dep) *Server
@@ -80,11 +84,13 @@ header.
 
 ## Implementing the Server
 
-`server/server.go` - plain struct, no embedding:
+`server/server.go` - plain struct, no embedding, holding the daemon's
+service as `*service.Service`; the service has no face
+(`service-tool.md`, Service):
 ```go
 type Server struct {
-    store    *store.Store
-    reporter face.Reporter
+    service  *service.Service
+    reporter soil.Reporter
 }
 ```
 
@@ -97,7 +103,7 @@ func (s *Server) PostDeploy(
     _ context.Context,
     r server.PostDeployRequestObject,
 ) (server.PostDeployResponseObject, error) {
-    result, e := s.store.TriggerTargets(r.Body.Targets)
+    result, e := s.service.TriggerTargets(r.Body.Targets)
 
     if e != nil {
         return server.PostDeploy500JSONResponse(*s.answer(e)), nil
@@ -123,166 +129,71 @@ func (s *Server) GetIssue(
     r server.GetIssueRequestObject,
 ) (server.GetIssueResponseObject, error) {
     return server.GetIssue200JSONResponse(
-        convert.JiraIssue(s.store.Issue(r.Key)),
+        convert.JiraIssue(s.service.Issue(r.Key)),
     ), nil
 }
 ```
 
-## CLI Access
+## The Daemon Client
 
-Multi-command CLIs call the generated client directly. `Main()`
-constructs it once and hands it to every subcommand. The locator
-resolves through the tool's environment family via
-`locator.Environment` - `GO<TOOL>_HOST` falling back to localhost,
-`GO<TOOL>_PORT` optional, `GO<TOOL>_INSECURE` switching to http -
-and every client authenticates with the daemon's token
-(`GO<TOOL>_TOKEN`, the `TokenEnvironment` constant beside the
-others) via `web.BearerEditor`:
+A daemon has one client, `client/`, and everything that talks to the
+daemon uses it: its own CLI, other daemons, and tests through
+`client/mock_client`. A second shape - a CLI on the generated client, a
+wrapper that relays raw bodies - is a second client in waiting. The
+external API client a daemon uses toward its upstream is a different
+thing, at `pkg/<domain>/` (`service-tool.md`).
 
-```go
-v, e := client.NewClientWithResponses(
-    locator.Environment(
-        constant.HostEnvironment,
-        constant.PortEnvironment,
-        constant.InsecureEnvironment,
-    ).String(),
-    client.WithRequestEditorFn(
-        web.BearerEditor(environment.Required(constant.TokenEnvironment)),
-    ),
-)
-errors.PanicOnError(e)
-o.AddCommand(listItems(v))
-```
+`client.Client` is the struct, the package's one receiver: it wraps the
+generated client on a pool it owns, which `Close` closes. `New(locator,
+token)` builds it; `NewEnvironment()` resolves the tool's env family -
+`GO<TOOL>_HOST` falling back to localhost, `GO<TOOL>_PORT` optional,
+`GO<TOOL>_INSECURE` switching to http, `GO<TOOL>_TOKEN` required - with
+`locator.Environment`.
 
-Each subcommand builds its typed request and prints the response - a
-hand-written pass-through method per operation would add code without
-behavior. Don't write wrapper methods just to hide generated types
-from the CLI.
+The interface is `face.Client` - the operations, `face.Reachable` and
+`Close` - which `client/mock_client` implements too.
 
-### Reading a response
-
-oapi-codegen generates two methods per operation. The plain one
-(`GetItems`) answers the raw `*http.Response` and fails only on
-transport, so a 500 or a 503 arrives as if it were the answer. Every
-response is read in one of two shapes, and a caller that reads the body
-without either is the bug this section exists for.
-
-A pass-through command that prints the daemon's answer as it came keeps
-the plain call and relays the status with the body as a
-`go:pkg/console/response/Response`, and `terminal.Emit` exits with the body on
-any status from 400 - gonetbox's commands are the shape.
-
-Everything that uses the answer - a typed CLI command, the `client/`
-wrapper, a daemon calling another - calls the `…WithResponse` method,
-which parses the body by status into `JSON200`, `JSON404`, `JSON503`.
-It takes the status it expects and turns every other into an error with
-`go:pkg/web/refusal/New`, which reads the body's reason the way the
-requester does, makes a 404 a `not_found` and a 503 an `unavailable`;
-a command that panics on any failure says it in one line with
-`refusal.PanicOnFailure`. A declared status the caller acts on
-differently - a 404 that means "nothing here yet", a 409 to report as a
-conflict - is matched before that:
+Each operation takes a context, calls the `…WithResponse` method, and
+returns typed values and a classified error, never a raw body. The plain
+generated method fails only on transport, so a 500 or 503 would arrive as
+if it were the answer. The operation takes the status it expects and turns
+every other into an error with `go:pkg/web/refusal/New`, which reads the
+body's reason and makes a 400 a `validation`, a 403 a `forbidden`, a 404 a
+`not_found` and a 503 an `unavailable`; a status the caller acts on
+differently - a 404 meaning "nothing here yet" - is matched before it. An
+operation answering 204 returns only the error:
 
 ```go
-r, e := v.GetItemsWithResponse(context.Background(), &client.GetItemsParams{})
-errors.PanicOnError(e)
-
-if r.JSON200 == nil {
-    errors.PanicOnError(refusal.New("list items", r.HTTPResponse, r.Body))
-}
-```
-
-## Client Wrapper
-
-The `client/` package wraps the generated REST client with a clean
-interface independent of generated types. This is the internal REST
-client - it talks to our own daemon, not to a third-party service.
-It earns its existence when there is a consumer the raw generated
-client doesn't serve well:
-
-- **Daemon-to-daemon calls** - a service layer in one daemon calling
-  another daemon wants domain methods, not request objects
-- **Test mocks** - a `mock_client/` next to the wrapper lets
-  consumers test without a live daemon
-- **Domain formatting** - when responses should flow back into
-  domain entities with `Format()` support (the daemon bridge
-  factory pattern - see `entity-wrapper.md`)
-
-For services with a third-party upstream, the external API client lives
-at `pkg/<domain>/` (see `service-tool.md`). The `client/` wrapper and
-the external API client serve different consumers - `client/` talks to
-our own daemon, `pkg/<domain>/` is for the daemon (and MCP-only
-services) talking to the upstream.
-
-### Construction
-
-`client/client.go`:
-```go
-type Client struct {
-    context context.Context
-    client  *generated.ClientWithResponses
-}
-```
-
-`client/new.go` - takes the daemon locator and token; the
-`NewEnvironment()` wrapper builds both from the tool's env family:
-```go
-func New(
-    l *locator.Locator,
-    token string,
-) *Client {
-    c, e := generated.NewClientWithResponses(
-        l.String(),
-        generated.WithRequestEditorFn(web.BearerEditor(token)),
-    )
-    errors.PanicOnError(e)
-    return &Client{context: context.Background(), client: c}
-}
-```
-
-`client/new_environment.go`:
-```go
-func NewEnvironment() *Client {
-    return New(
-        locator.Environment(
-            constant.HostEnvironment,
-            constant.PortEnvironment,
-            constant.InsecureEnvironment,
-        ),
-        environment.Required(constant.TokenEnvironment),
-    )
-}
-```
-
-### Operations
-
-`client/<operation>.go` returns the error, since a daemon and the CLI
-both call it and each decides what a failure means:
-```go
-func (c *Client) Alerts() ([]generated.Alert, error) {
-    r, e := c.client.GetAlertsWithResponse(
-        c.context,
-        &generated.GetAlertsParams{},
-    )
+func (c *Client) Items(x context.Context) ([]generated.Item, error) {
+    r, e := c.client.GetItemsWithResponse(x, &generated.GetItemsParams{})
 
     if e != nil {
         return nil, e
     }
 
     if r.JSON200 == nil {
-        return nil, refusal.New("alerts", r.HTTPResponse, r.Body)
+        return nil, refusal.New("items", r.HTTPResponse, r.Body)
     }
 
     return *r.JSON200, nil
 }
 ```
 
+`Reachable` calls `route:/api/reachable` through
+`go:pkg/web/reachable_probe/Reach` - the probe a peer's start-up wait and
+guard use (`error-handling/infrastructure.md`, The probe route).
+
+The CLI builds the client once in `Main()`, defers its `Close`, and hands
+it to every subcommand. A subcommand prints what an operation returned
+with `terminal.EmitValue(value, error)` - the value as compact JSON, or
+the classified error as its exit - and an operation answering 204 with
+`terminal.EmitDone(error)`.
+
 ## Mounting
 
 Every guarded daemon has a top-level `mount.go` beside `run.go`.
-`Mount(...)` takes the domain dependencies (through the daemon's
-`face/` interfaces where they exist), the reporter, the recorder,
-the version, and a `*guard.Mux` last. It wraps the server in
+`Mount(...)` takes the daemon's `*service.Service`, the reporter,
+the recorder, the version, and a `*guard.Mux` last. It wraps the server in
 `NewStrictHandler` with the generic recording middleware, builds
 the tree on a fresh sub-mux via `HandlerFromMux`, and token-mounts
 it at the `route:/api/` prefix (`webConstant.InterfacePath`):
@@ -297,9 +208,9 @@ import (
 )
 
 func Mount(
-    s *store.Store,
-    r face.Reporter,
-    t face.Recorder,
+    v *service.Service,
+    r soil.Reporter,
+    t soil.Recorder,
     version string,
     g *guard.Mux,
 ) {
@@ -307,7 +218,7 @@ func Mount(
         webConstant.InterfacePath,
         generated.HandlerFromMux(
             generated.NewStrictHandler(
-                server.New(s, r),
+                server.New(v, r),
                 []generated.StrictMiddlewareFunc{
                     web.RecordingMiddleware[generated.StrictHandlerFunc](t),
                 },
@@ -315,7 +226,7 @@ func Mount(
             http.NewServeMux(),
         ),
     )
-    model_context.New(s, r, t, version).Mount(g)
+    model_context.New(v, r, t, version).Mount(g)
 }
 ```
 
@@ -335,26 +246,11 @@ conflict on the same mux.
 
 ### The mux in run.go
 
-run.go builds exactly one `guard.Mux` per lifecycle server and
-hands it to `Mount` - service tokens thread main - option - run
-via `web.ServiceTokens()`:
-
-```go
-lifecycle.New(l).WithServer(
-    server.New(
-        constant.Identity,
-        o.Address,
-        func(m *http.ServeMux) {
-            Mount(s, r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
-        },
-    ).WithMiddleware(web.RecoveryMiddleware(r)),
-)
-```
-
-`Mount` is the production surface the guard battery starts (see
-`testing.md`). Everything the daemon serves belongs inside it - a
-route registered directly in the run.go callback escapes both the
-guard and the battery.
+run.go builds one `guard.Mux` per lifecycle server from the service
+tokens `Main` read with `web.ServiceTokens()`, and hands it to `Mount`
+(`service-tool.md`, Run Function). `Mount` is the production surface
+the guard battery starts (`testing.md`); a route registered in the
+run.go callback escapes both the guard and the battery.
 
 ## OpenAPI Spec Patterns
 
@@ -426,9 +322,8 @@ marshaling (the type alias loses its custom MarshalJSON) - use a
 
 - Don't put hand-written code in `generated/` - that's machine output
 - Don't edit `generated.go` - regenerate from the spec instead
-- Don't write a `client/` wrapper just to hide generated types from
-  the CLI - wrappers exist for daemon-to-daemon consumers, mocks,
-  and domain formatting
+- Don't call the generated client outside `client/` - the CLI and other
+  daemons go through the daemon client
 - Don't manually register routes that the spec already defines -
   let `HandlerFromMux` do it
 - Don't register routes in the run.go callback - everything the

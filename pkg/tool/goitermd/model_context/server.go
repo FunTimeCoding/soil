@@ -8,6 +8,6 @@ import (
 
 type Server struct {
 	server   *server.MCPServer
-	client   iterm.ItermSource
+	service  iterm.Iterm
 	reporter face.Reporter
 }

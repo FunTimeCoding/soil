@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -12,13 +13,11 @@ func (s *Server) CloseTab(
 	_ mcp.CallToolRequest,
 	a argument.CloseTab,
 ) (*mcp.CallToolResult, error) {
-	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
+	t, e := s.service.CloseTab(
+		selector.New(a.TabIdentifier, a.Title, a.Locator),
+	)
 
 	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	if e = s.client.CloseTab(t.Identifier); e != nil {
 		return s.captureDetail(e)
 	}
 

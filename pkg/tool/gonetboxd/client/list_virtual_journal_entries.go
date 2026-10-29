@@ -1,17 +1,17 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) ListVirtualJournalEntries(
+	x context.Context,
 	machine string,
 	limit int32,
 	offset int32,
-) *response.Response {
+) ([]*client.JournalEntry, error) {
 	p := &client.ListVirtualJournalEntriesParams{}
 
 	if limit > 0 {
@@ -22,8 +22,19 @@ func (c *Client) ListVirtualJournalEntries(
 		p.Offset = &offset
 	}
 
-	result, e := c.client.ListVirtualJournalEntries(c.context, machine, p)
-	errors.PanicOnError(e)
+	r, e := c.client.ListVirtualJournalEntriesWithResponse(x, machine, p)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New(
+			"list virtual journal entries",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON200, nil
 }

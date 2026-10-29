@@ -1,9 +1,22 @@
 package monitor
 
-func (m *Monitor) run() {
-	m.refreshCache()
+import "context"
 
-	for _, name := range m.configuration.Channels {
-		m.processChannel(name)
-	}
+func (m *Monitor) run() error {
+	return m.guard.Attempt(
+		context.Background(),
+		func(context.Context) error {
+			if e := m.refreshCache(); e != nil {
+				return e
+			}
+
+			for _, name := range m.configuration.Channels {
+				if f := m.processChannel(name); f != nil {
+					return f
+				}
+			}
+
+			return nil
+		},
+	)
 }

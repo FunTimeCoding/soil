@@ -22,7 +22,7 @@ func (s *Server) entryPage(
 		return
 	}
 
-	e, f := s.store.Get(identifier)
+	e, f := s.service.Entry(identifier)
 
 	if not_found.Is(f) {
 		s.entryMissing(w)

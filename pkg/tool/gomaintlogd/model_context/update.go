@@ -2,11 +2,10 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/change"
 	"github.com/mark3labs/mcp-go/mcp"
 	"time"
 )
@@ -21,52 +20,46 @@ func (s *Server) update(
 		return response.Fail("id is required")
 	}
 
-	e, f := s.store.Get(uint(identifier))
-
-	if f != nil {
-		if not_found.Is(f) {
-			return response.Fail("%s", f)
-		}
-
-		return s.captureFail(f, soil.UnexpectedError)
-	}
+	c := change.New()
 
 	if v := r.GetString(constant.Action, ""); v != "" {
-		e.Action = v
+		c.Action = &v
 	}
 
 	if v := r.GetString(constant.User, ""); v != "" {
-		e.User = v
+		c.User = &v
 	}
 
 	if v := r.GetString(constant.System, ""); v != "" {
-		e.System = v
+		c.System = &v
 	}
 
 	if v := r.GetString(constant.Service, ""); v != "" {
-		e.Service = v
+		c.Service = &v
 	}
 
 	if v := r.GetString(constant.Description, ""); v != "" {
-		e.Description = v
+		c.Description = &v
 	}
 
 	if stamp := r.GetString(constant.Timestamp, ""); stamp != "" {
-		t, g := time.Parse(time.RFC3339, stamp)
+		t, e := time.Parse(time.RFC3339, stamp)
 
-		if g != nil {
-			return response.Fail("invalid timestamp format: %v", g)
+		if e != nil {
+			return response.Fail("invalid timestamp format: %v", e)
 		}
 
-		e.Timestamp = t
+		c.Timestamp = &t
 	}
 
-	if g := s.store.Update(e); g != nil {
-		return s.captureFail(g, soil.UnexpectedError)
+	result, f := s.service.Update(uint(identifier), c)
+
+	if f != nil {
+		return s.answer(f)
 	}
 
 	return response.Success(
 		"Entry updated successfully:\n%s",
-		notation.MarshalIndent(e),
+		notation.MarshalIndent(result),
 	)
 }

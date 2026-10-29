@@ -24,4 +24,5 @@ type Client struct {
 	assignedRequests  []*merge_request.Request
 	reviewingRequests []*merge_request.Request
 	registries        []*registry_repository.Repository
+	failure           error
 }

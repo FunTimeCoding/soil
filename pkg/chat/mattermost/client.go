@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/user_map"
 	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/mattermost/mattermost/server/public/model"
+	"sync"
 	"time"
 )
 
@@ -21,6 +22,8 @@ type Client struct {
 	channel     *model.Channel
 	webSocket   *model.WebSocketClient
 	stopPing    chan struct{}
+	closed      bool
+	socketMutex sync.Mutex
 	meCache     *model.User
 	user        *user_map.Map
 	verbose     bool

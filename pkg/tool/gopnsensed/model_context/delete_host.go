@@ -13,16 +13,12 @@ func (s *Server) deleteHost(
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := r.GetString(generativeConstant.ParameterIdentifier, "")
-	e := s.opnsense.DeleteHost(identifier)
 
-	if e != nil {
+	if e := s.service.DeleteHost(
+		identifier,
+		r.GetBool(constant.ParameterApply, true),
+	); e != nil {
 		return s.answer(e)
-	}
-
-	if r.GetBool(constant.ParameterApply, true) {
-		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return s.answer(f)
-		}
 	}
 
 	return response.Success(identifier)

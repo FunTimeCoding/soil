@@ -17,22 +17,15 @@ func (s *Server) SearchUsers(
 		return response.Fail("query is required")
 	}
 
-	team := s.client.DefaultTeam()
-	autocomplete, _, e := s.client.Nested().AutocompleteUsersInTeam(
-		s.client.Context(),
-		team.Id,
-		a.Query,
-		20,
-		"",
-	)
+	users, e := s.service.SearchUsers(a.Query, 20)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	var rows []*mattermostResponse.UserMatch
 
-	for _, u := range autocomplete.Users {
+	for _, u := range users {
 		rows = append(
 			rows,
 			mattermostResponse.NewUserMatch(

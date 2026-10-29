@@ -1,13 +1,14 @@
 package goraid
 
 import (
-	"github.com/funtimecoding/soil/pkg/raid"
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/face"
 	"github.com/spf13/cobra"
 )
 
 func reports(
-	c *raid.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -17,7 +18,7 @@ func reports(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.Emit(c.Reports())
+			t.EmitValue(c.GetReports(context.Background()))
 		},
 	}
 }

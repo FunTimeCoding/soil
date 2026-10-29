@@ -9,7 +9,7 @@ func (c *Client) Channels(
 	t *model.Team,
 	u *model.User,
 ) ([]*model.Channel, error) {
-	result, _, e := c.client.GetChannelsForTeamForUser(
+	result, r, e := c.client.GetChannelsForTeamForUser(
 		c.context,
 		t.Id,
 		u.Id,
@@ -17,5 +17,5 @@ func (c *Client) Channels(
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, wrapError(e)
+	return result, wrapError(r, e)
 }

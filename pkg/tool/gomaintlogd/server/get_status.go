@@ -9,5 +9,11 @@ func (s *Server) GetStatus(
 	_ context.Context,
 	_ server.GetStatusRequestObject,
 ) (server.GetStatusResponseObject, error) {
-	return server.GetStatus200JSONResponse{TotalEntries: s.store.Count()}, nil
+	count, e := s.service.Count()
+
+	if e != nil {
+		return server.GetStatus500JSONResponse(*s.answer(e)), nil
+	}
+
+	return server.GetStatus200JSONResponse{TotalEntries: count}, nil
 }

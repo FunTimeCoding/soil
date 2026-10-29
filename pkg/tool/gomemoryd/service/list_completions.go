@@ -1,14 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+)
 
-func (s *Service) ListCompletions() ([]face.SearchResult, error) {
-	outcome, e := s.lister.List(
-		"completions",
-		map[string]string{"source_type": "session-completion"},
-		20,
-		0,
-		true,
+func (s *Service) ListCompletions() ([]client.SearchResult, error) {
+	limit := 20
+	outcome, e := s.query.GetList(
+		context.Background(),
+		&client.GetListParams{
+			Collection: "completions",
+			Metadata:   &map[string]string{"source_type": "session-completion"},
+			Limit:      &limit,
+			Full:       new(true),
+		},
 	)
 
 	if e != nil {
@@ -16,7 +22,7 @@ func (s *Service) ListCompletions() ([]face.SearchResult, error) {
 	}
 
 	seen := map[string]bool{}
-	var filtered []face.SearchResult
+	var filtered []client.SearchResult
 
 	for _, r := range outcome.Results {
 		slug := sessionSlug(r.Path)

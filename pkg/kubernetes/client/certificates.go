@@ -1,19 +1,23 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/custom/certificate"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-func (c *Client) Certificates() []certificate.Certificate {
+func (c *Client) Certificates() ([]certificate.Certificate, error) {
 	list, e := c.dynamic.Resource(constant.CertificateGVR).List(
 		c.context,
 		v1.ListOptions{},
 	)
-	errors.PanicOnError(e)
+
+	if e != nil {
+		return nil, refusal.Classify(e)
+	}
+
 	var result []certificate.Certificate
 
 	for _, item := range list.Items {
@@ -23,7 +27,11 @@ func (c *Client) Certificates() []certificate.Certificate {
 			constant.IssuerReferenceField,
 			constant.IssuerReferenceName,
 		)
-		errors.PanicOnError(f)
+
+		if f != nil {
+			return nil, f
+		}
+
 		r := certificate.Certificate{
 			Name:      item.GetName(),
 			Namespace: item.GetNamespace(),
@@ -34,7 +42,10 @@ func (c *Client) Certificates() []certificate.Certificate {
 			constant.StatusField,
 			constant.ConditionsField,
 		)
-		errors.PanicOnError(g)
+
+		if g != nil {
+			return nil, g
+		}
 
 		for _, raw := range conditions {
 			o, isMap := raw.(map[string]any)
@@ -56,5 +67,5 @@ func (c *Client) Certificates() []certificate.Certificate {
 		result = append(result, r)
 	}
 
-	return result
+	return result, nil
 }

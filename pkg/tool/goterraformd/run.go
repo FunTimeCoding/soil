@@ -3,18 +3,13 @@ package goterraformd
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/kubernetes/client"
-	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/provision/store"
-	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/runner"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -27,22 +22,16 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(
-		relational.Open(l, o.PostgresLocator, o.LitePath),
-		"terraform_runs",
-	)
-	p := reaper.New(r)
 	m := metric.New()
-	n := runner.New(
-		o,
-		s,
-		l,
-		r,
-		p,
-		m.Registry(),
-		client.NewInCluster(kubernetesConstant.InCluster),
-	)
-	lifecycle.New(l).WithWorker(p).WithWorker(n).WithServer(
+	v := service.New(o, l, r, m.Registry())
+	defer v.Close()
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,
@@ -54,8 +43,8 @@ func Run(
 		server.New(
 			constant.Identity,
 			o.Address,
-			func(m *http.ServeMux) {
-				Mount(n, s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			func(x *http.ServeMux) {
+				Mount(v, r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

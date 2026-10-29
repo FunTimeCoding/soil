@@ -1,14 +1,24 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) ListVirtualDisks(machine string) *response.Response {
-	result, e := c.client.ListVirtualDisks(c.context, machine)
-	errors.PanicOnError(e)
+func (c *Client) ListVirtualDisks(
+	x context.Context,
+	machine string,
+) ([]*client.VirtualDisk, error) {
+	r, e := c.client.ListVirtualDisksWithResponse(x, machine)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("list virtual disks", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

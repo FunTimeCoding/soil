@@ -6,7 +6,10 @@ import (
 	"github.com/openai/openai-go/v3/option"
 )
 
-func NewBase(base string) *Client {
+func NewBase(
+	base string,
+	model string,
+) *Client {
 	p := stall_client.New().Long().Build()
 
 	return &Client{
@@ -14,7 +17,9 @@ func NewBase(base string) *Client {
 			option.WithBaseURL(base),
 			option.WithAPIKey("none"),
 			option.WithHTTPClient(p.Client()),
+			option.WithMaxRetries(0),
 		),
-		pool: p,
+		model: model,
+		pool:  p,
 	}
 }

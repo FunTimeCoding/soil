@@ -25,7 +25,7 @@ func (s *Server) triggerRun(
 		request.Response = make(chan *trigger.Result, 1)
 	}
 
-	e := s.runner.Trigger(request)
+	e := s.service.Trigger(request)
 
 	if e != nil {
 		return response.Answer(s.reporter, e)

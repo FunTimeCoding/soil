@@ -8,13 +8,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/service_tester"
 	"github.com/mark3labs/mcp-go/mcp"
 	"testing"
 )
 
 func TestAnUnknownItemIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	m := memory.New()
-	s := model_context.New(mock_client.New(), m, mock_recorder.New())
+	s := model_context.New(
+		service_tester.New(t, mock_client.New()),
+		m,
+		mock_recorder.New(),
+	)
 	r, e := s.GetItem(
 		context.Background(),
 		mcp.CallToolRequest{},

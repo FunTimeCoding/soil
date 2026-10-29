@@ -3,7 +3,6 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/model/client"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -14,19 +13,10 @@ func (s *Server) clientDetail(
 	r *http.Request,
 ) {
 	identifier := r.PathValue("identifier")
-	clients := s.service.ListClients()
-	var found *client.Client
+	found, e := s.service.Client(identifier)
 
-	for _, c := range clients {
-		if c.Identifier == identifier {
-			found = c
-
-			break
-		}
-	}
-
-	if found == nil {
-		http.NotFound(w, r)
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

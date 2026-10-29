@@ -17,7 +17,7 @@ func (s *Server) PlaybackCommand(
 		seek = *r.Body.SeekPositionTicks
 	}
 
-	e := s.client.PlaybackCommand(r.Identifier, r.Body.Command, seek)
+	e := s.service.PlaybackCommand(r.Identifier, r.Body.Command, seek)
 
 	if validation.Is(e) {
 		return server.PlaybackCommand400JSONResponse{Error: e.Error()}, nil

@@ -11,7 +11,7 @@ func (s *Server) listManufacturers(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Manufacturers()
+	result, e := s.service.Manufacturers()
 
 	if e != nil {
 		return s.captureDetail(e)

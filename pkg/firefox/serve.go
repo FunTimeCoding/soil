@@ -25,16 +25,33 @@ func (c *Client) ServeHTTP(
 	}
 
 	connection.SetReadLimit(constant.ReadLimit)
-	log.Printf("firefox bridge: extension connected")
 	c.mutex.Lock()
+
+	if c.closed {
+		c.mutex.Unlock()
+		errors.LogOnError(connection.CloseNow())
+
+		return
+	}
+
 	c.connection = connection
 	c.mutex.Unlock()
+	log.Printf("firefox bridge: extension connected")
 
 	defer func() {
 		c.mutex.Lock()
-		c.connection = nil
+
+		if c.connection == connection {
+			c.connection = nil
+		}
+
+		closed := c.closed
 		c.mutex.Unlock()
-		errors.LogOnError(connection.CloseNow())
+
+		if !closed {
+			errors.LogOnError(connection.CloseNow())
+		}
+
 		log.Printf("firefox bridge: extension disconnected")
 	}()
 	c.readLoop(connection)

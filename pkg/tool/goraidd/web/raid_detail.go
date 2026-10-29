@@ -15,8 +15,8 @@ func (s *Server) raidDetail(
 ) {
 	identifier, e := strconv.Atoi(r.PathValue("id"))
 	errors.PanicOnError(e)
-	fights := s.store.RaidFights(identifier)
-	players := s.store.RaidPlayerStats(identifier)
+	fights := s.service.RaidFights(identifier)
+	players := s.service.RaidPlayerStats(identifier)
 	s.view.RenderPage(
 		w,
 		"Raid",

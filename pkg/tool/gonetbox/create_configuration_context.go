@@ -1,16 +1,17 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func createConfigurationContext(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var payload string
@@ -25,7 +26,7 @@ func createConfigurationContext(
 		_ *cobra.Command,
 		arguments []string,
 	) {
-		body := generated.CreateConfigurationContextRequest{
+		body := client.CreateConfigurationContextRequest{
 			Name:       arguments[0],
 			Assignment: assignment(),
 		}
@@ -35,7 +36,7 @@ func createConfigurationContext(
 			body.Weight = &weight
 		}
 
-		t.Emit(c.CreateConfigurationContext(body))
+		t.EmitValue(c.CreateConfigurationContext(context.Background(), body))
 	}
 	result.Flags().StringVar(
 		&payload,

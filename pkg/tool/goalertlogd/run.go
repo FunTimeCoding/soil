@@ -8,17 +8,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
-	"time"
 )
 
 func Run(
@@ -28,21 +25,18 @@ func Run(
 	r := i.Reporter()
 	g := logger.New(context.Background())
 	m := metric.New()
-	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
-	defer s.Close()
+	v := service.New(o, g, r)
+	defer v.Close()
 	events := notifier.New()
-	w := worker.New(
-		alertmanager.NewEnvironment(),
-		s,
-		events,
-		g,
-		r,
-		1*time.Minute,
-		30*24*time.Hour,
-		m.Registry(),
-	)
-	u := web.New(s, w, events)
-	lifecycle.New(g).WithWorker(w).WithServer(
+	w := worker.New(v, events, g, r, constant.PollInterval, m.Registry())
+	u := web.New(v, w, events)
+	c := lifecycle.New(g)
+
+	for _, x := range v.Workers() {
+		c.WithWorker(x)
+	}
+
+	c.WithWorker(w).WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,
@@ -54,8 +48,8 @@ func Run(
 		server.New(
 			constant.Identity,
 			o.Address,
-			func(m *http.ServeMux) {
-				Mount(s, w, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			func(x *http.ServeMux) {
+				Mount(v, w, u, r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
 		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()

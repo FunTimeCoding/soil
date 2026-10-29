@@ -3,8 +3,11 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
@@ -59,16 +62,24 @@ func (s *Server) UpdateIssue(
 		fields,
 	)
 
+	if validation.Is(e) || ambiguous.Is(e) || not_selected.Is(e) {
+		return server.UpdateIssue400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if forbidden.Is(e) {
+		return server.UpdateIssue403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if not_found.Is(e) {
+		return server.UpdateIssue404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.UpdateIssue503JSONResponse{Error: e.Error()}, nil
+	}
+
 	if e != nil {
-		if not_found.Is(e) {
-			return server.UpdateIssue404JSONResponse(*clientError(e)), nil
-		}
-
-		if ambiguous.Is(e) || not_selected.Is(e) {
-			return server.UpdateIssue400JSONResponse(*clientError(e)), nil
-		}
-
-		return server.UpdateIssue500JSONResponse(*s.captureDetail(e)), nil
+		return server.UpdateIssue500JSONResponse(*s.answer(e)), nil
 	}
 
 	diff := convert.JiraIssueDiff(

@@ -1,7 +1,7 @@
 package rejecting_host
 
-import "github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_client"
+import "github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_source"
 
 type Client struct {
-	*mock_client.Client
+	*mock_source.Client
 }

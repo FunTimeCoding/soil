@@ -6,8 +6,15 @@ import (
 )
 
 const (
-	HostEnvironment = "FIREFOX_HOST"
-	DefaultHost     = "127.0.0.1:6125"
+	DefaultHost = "127.0.0.1:6125"
+
+	SelectorRequired   = "selector is required"
+	ExpressionRequired = "expression is required"
+	LocatorRequired    = "url is required"
+	TabsRequired       = "tab_ids is required"
+	MatchedNothing     = "selector matched nothing: "
+	NotFoundInTime     = "selector not found within timeout: "
+	NotConnected       = "extension not connected"
 
 	NoTitle   = "untitled"
 	NoLocator = "about:blank"

@@ -3,13 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
 
 func TestDeviceCarriesItsLabels(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	s := service_tester.Service(t, c)
 	_, e := s.SetDeviceLabel("core", "rack", "a1")
@@ -23,7 +22,7 @@ func TestDeviceCarriesItsLabels(t *testing.T) {
 }
 
 func TestDevicesGroupLabelsByDevice(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	core := c.SeedDevice("core")
 	edge := c.SeedDevice("edge")
 	s := service_tester.Service(t, c)
@@ -38,7 +37,7 @@ func TestDevicesGroupLabelsByDevice(t *testing.T) {
 }
 
 func TestDevicesQueryNarrows(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	c.SeedDevice("edge")
 	devices, _, e := service_tester.Service(t, c).Devices("ed")
@@ -48,7 +47,7 @@ func TestDevicesQueryNarrows(t *testing.T) {
 }
 
 func TestRemoveDeviceLabel(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	s := service_tester.Service(t, c)
 	_, e := s.SetDeviceLabel("core", "rack", "a1")
@@ -60,7 +59,7 @@ func TestRemoveDeviceLabel(t *testing.T) {
 }
 
 func TestDeviceLabelRefusesUnknownDevice(t *testing.T) {
-	_, e := service_tester.Service(t, mock_client.New()).SetDeviceLabel(
+	_, e := service_tester.Service(t, service_tester.NewSource(t)).SetDeviceLabel(
 		"missing",
 		"rack",
 		"a1",
@@ -70,7 +69,7 @@ func TestDeviceLabelRefusesUnknownDevice(t *testing.T) {
 }
 
 func TestVirtualMachineCarriesItsLabels(t *testing.T) {
-	c := mock_client.New()
+	c := service_tester.NewSource(t)
 	c.SeedVirtualMachine("alfa")
 	s := service_tester.Service(t, c)
 	_, e := s.SetVirtualLabel("alfa", "owner", "ops")

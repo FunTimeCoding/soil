@@ -10,17 +10,12 @@ import (
 
 func (s *Server) collectionsPage(
 	w http.ResponseWriter,
-	_ *http.Request,
+	r *http.Request,
 ) {
 	status, e := s.service.Status()
 
 	if e != nil {
-		s.view.RenderPage(
-			w,
-			constant.CollectionsTitle,
-			constant.CollectionsPath,
-			html.P(gomponents.Text("Failed to load collections.")),
-		)
+		s.view.Answer(w, r, s.reporter, e)
 
 		return
 	}

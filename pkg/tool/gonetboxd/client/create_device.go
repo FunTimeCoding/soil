@@ -1,21 +1,21 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateDevice(
+	x context.Context,
 	name string,
 	role string,
 	deviceType string,
 	site string,
 	tenant *string,
-) *response.Response {
-	result, e := c.client.CreateDevice(
-		c.context,
+) (client.Device, error) {
+	r, e := c.client.CreateDeviceWithResponse(
+		x,
 		client.CreateDeviceRequest{
 			Name:   name,
 			Role:   role,
@@ -24,7 +24,18 @@ func (c *Client) CreateDevice(
 			Tenant: tenant,
 		},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.Device{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.Device{}, refusal.New(
+			"create device",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

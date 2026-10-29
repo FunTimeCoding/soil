@@ -1,7 +1,6 @@
 package label
 
 import (
-	"context"
 	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
@@ -10,28 +9,13 @@ import (
 	"time"
 )
 
-func (c *Collector) devicePlacements(
-	q context.Context,
+func devicePlacements(
+	devices []*client.Device,
 	seenAt time.Time,
-) ([]*placement.Placement, error) {
+) []*placement.Placement {
 	var result []*placement.Placement
-	devices, e := c.netbox.ListDevicesWithResponse(
-		q,
-		&client.ListDevicesParams{},
-	)
 
-	if e != nil {
-		return nil, e
-	}
-
-	if devices.JSON200 == nil {
-		return nil, statusFail(
-			constant.DeviceStatusFormat,
-			devices.HTTPResponse.StatusCode,
-		)
-	}
-
-	for _, d := range *devices.JSON200 {
+	for _, d := range devices {
 		for _, name := range ServiceNames(d.Labels) {
 			result = append(
 				result,
@@ -51,5 +35,5 @@ func (c *Collector) devicePlacements(
 		}
 	}
 
-	return result, nil
+	return result
 }

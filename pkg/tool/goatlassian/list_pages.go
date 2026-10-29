@@ -1,6 +1,7 @@
 package goatlassian
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -19,7 +20,7 @@ func listPages(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.ListPages(arguments[0], status))
+			t.EmitValue(c.ListPages(context.Background(), arguments[0], status))
 		},
 	}
 	result.Flags().StringVar(&status, "status", "", "page status filter")

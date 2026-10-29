@@ -17,10 +17,10 @@ func (s *Server) getPageDraft(
 		return response.Fail("identifier is required: %v", f)
 	}
 
-	result, g := s.confluence.DraftOverlay(identifier)
+	result, g := s.service.PageDraft(identifier)
 
 	if g != nil {
-		return s.captureFail(g, "page draft not found")
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(result)

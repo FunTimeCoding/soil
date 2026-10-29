@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
-	"strings"
 )
 
 func (s *Server) editPage(
@@ -44,11 +43,7 @@ func (s *Server) editPage(
 	)
 
 	if i != nil {
-		if strings.Contains(i.Error(), constant.OldText) {
-			return response.Fail("%s", i)
-		}
-
-		return s.captureFail(i, "page not updated")
+		return s.answer(i)
 	}
 
 	return response.SuccessAny(result)

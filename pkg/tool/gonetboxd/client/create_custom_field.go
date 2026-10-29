@@ -1,25 +1,36 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateCustomField(
+	x context.Context,
 	name string,
 	label string,
 	choiceSet string,
-) *response.Response {
+) (client.CustomField, error) {
 	body := client.CreateCustomFieldRequest{Name: name, ChoiceSet: choiceSet}
 
 	if label != "" {
 		body.Label = &label
 	}
 
-	result, e := c.client.CreateCustomField(c.context, body)
-	errors.PanicOnError(e)
+	r, e := c.client.CreateCustomFieldWithResponse(x, body)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.CustomField{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.CustomField{}, refusal.New(
+			"create custom field",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

@@ -30,7 +30,7 @@ func (s *Server) Top(
 		result, f := s.service.TopNodes(x, cluster)
 
 		if f != nil {
-			return s.captureFail(f, "top nodes")
+			return s.captureDetail(f)
 		}
 
 		return response.SuccessAny(result)
@@ -39,7 +39,7 @@ func (s *Server) Top(
 			result, f := s.service.TopPodContainers(x, cluster, q)
 
 			if f != nil {
-				return s.captureFail(f, "top pod containers")
+				return s.captureDetail(f)
 			}
 
 			return response.SuccessAny(result)
@@ -48,7 +48,7 @@ func (s *Server) Top(
 		result, f := s.service.TopPods(x, cluster, q)
 
 		if f != nil {
-			return s.captureFail(f, "top pods")
+			return s.captureDetail(f)
 		}
 
 		return response.SuccessAny(result)

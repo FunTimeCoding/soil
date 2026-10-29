@@ -1,17 +1,29 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) RemoveVirtualTag(
+	x context.Context,
 	name string,
 	tag string,
-) *response.Response {
-	result, e := c.client.RemoveVirtualTag(c.context, name, tag)
-	errors.PanicOnError(e)
+) (client.VirtualMachine, error) {
+	r, e := c.client.RemoveVirtualTagWithResponse(x, name, tag)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.VirtualMachine{}, e
+	}
+
+	if r.JSON200 == nil {
+		return client.VirtualMachine{}, refusal.New(
+			"remove virtual tag",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON200, nil
 }

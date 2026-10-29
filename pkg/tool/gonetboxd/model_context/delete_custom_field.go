@@ -18,7 +18,7 @@ func (s *Server) deleteCustomField(
 		return response.Fail("name is required: %v", e)
 	}
 
-	f := s.client.DeleteCustomField(name)
+	f := s.service.DeleteCustomField(name)
 
 	if not_found.Is(f) {
 		return response.Fail("%v", f)

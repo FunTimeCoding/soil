@@ -24,6 +24,7 @@ func (t *Tester) holdSocket(
 	}
 
 	defer errors.LogClose(c)
+	defer t.release()
 	t.accept(c)
 	inner := c.PingHandler()
 	c.SetPingHandler(

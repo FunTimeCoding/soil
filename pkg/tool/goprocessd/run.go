@@ -8,48 +8,39 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
-	"os"
 )
 
 func Run(
 	o *option.Option,
 	i face.Instrument,
 ) {
-	entries, e := procfile.Parse(o.ProcfilePath)
-	errors.PanicOnError(e)
-	env := environment.New(os.Environ())
-
-	if f := env.Load(o.EnvrcPath); f != nil {
-		errors.Printf("warning: %s\n", f)
-	}
-
-	s := supervisor.New(
-		entries,
-		env,
-		o.ProcfilePath,
-		o.EnvrcPath,
-		socket.Path(o.ProcfilePath),
-	)
+	v := service.New(o)
 	r := i.Reporter()
+	t := i.Recorder()
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				Mount(v, r, t, guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			"",
+			func(m *http.ServeMux) { MountLocal(v, r, t, m) },
+		).WithListener(socket.Listen(socket.Path(o.ProcfilePath))).
+			WithMiddleware(web.RecoveryMiddleware(r)),
 	)
 	l.Run()
 
 	defer l.Close()
-	errors.PanicOnError(s.Run())
+	errors.PanicOnError(v.Run())
 }

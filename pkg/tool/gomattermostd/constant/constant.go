@@ -48,6 +48,7 @@ const (
 	DigestIndent     = "    "
 	LabelPrefix      = 8
 
+	MattermostPeer = "mattermost upstream"
 	ReconnectDelay = 2 * time.Second
 	DebounceWindow = 30 * time.Second
 	PurgeWindow    = 7 * 24 * time.Hour

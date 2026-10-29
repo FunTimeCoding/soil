@@ -12,11 +12,7 @@ func (s *Server) GetTracks(
 	_ mcp.CallToolRequest,
 	a argument.GetTracks,
 ) (*mcp.CallToolResult, error) {
-	if a.AlbumIdentifier == "" {
-		return response.Fail("album_id is required")
-	}
-
-	result, e := s.client.Tracks(a.AlbumIdentifier)
+	result, e := s.service.Tracks(a.AlbumIdentifier)
 
 	if e != nil {
 		return s.answer(e)

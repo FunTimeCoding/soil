@@ -70,7 +70,7 @@ func TestIngestOperationNotRecorded(t *testing.T) {
 	assert.Integer(t, http.StatusOK, summary.StatusCode())
 	summaryRecorded := false
 
-	for _, r := range o.Recorder.Calls {
+	for _, r := range o.Recorder.Records() {
 		if r.Tool == constant.IngestOperation {
 			t.Fatalf("ingest operation recorded: %s", r.Tool)
 		}

@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/andygrunwald/go-jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 
@@ -13,7 +14,7 @@ func (s *Service) applyFields(
 		return nil, nil
 	}
 
-	fieldMap, e := s.jira.FieldMap()
+	fieldMap, e := guarded[*field_map.Map](s.jiraGuard, s.jira.FieldMap)
 
 	if e != nil {
 		return nil, e

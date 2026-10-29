@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
@@ -18,7 +20,7 @@ func (s *Server) CreateConfigurationContext(
 		weight = *r.Body.Weight
 	}
 
-	result, e := s.client.CreateConfigurationContext(
+	result, e := s.service.CreateConfigurationContext(
 		r.Body.Name,
 		weight,
 		r.Body.Payload,
@@ -26,18 +28,27 @@ func (s *Server) CreateConfigurationContext(
 	)
 
 	if not_found.Is(e) {
-		return server.CreateConfigurationContext404JSONResponse(
-			*clientError(e),
-		), nil
+		return server.CreateConfigurationContext404JSONResponse(*clientError(e)),
+			nil
+	}
+
+	if validation.Is(e) {
+		return server.CreateConfigurationContext400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.CreateConfigurationContext403JSONResponse(*clientError(e)), nil
 	}
 
 	if e != nil {
 		return server.CreateConfigurationContext500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+				*s.captureDetail(e),
+			),
+			nil
 	}
 
 	return server.CreateConfigurationContext201JSONResponse(
-		*convert.ConfigurationContext(result),
-	), nil
+			*convert.ConfigurationContext(result),
+		),
+		nil
 }

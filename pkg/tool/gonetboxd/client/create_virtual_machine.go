@@ -1,21 +1,32 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateVirtualMachine(
+	x context.Context,
 	name string,
 	cluster string,
-) *response.Response {
-	result, e := c.client.CreateVirtualMachine(
-		c.context,
+) (client.VirtualMachine, error) {
+	r, e := c.client.CreateVirtualMachineWithResponse(
+		x,
 		client.CreateVirtualMachineRequest{Name: name, Cluster: cluster},
 	)
-	errors.PanicOnError(e)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return client.VirtualMachine{}, e
+	}
+
+	if r.JSON201 == nil {
+		return client.VirtualMachine{}, refusal.New(
+			"create virtual machine",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return *r.JSON201, nil
 }

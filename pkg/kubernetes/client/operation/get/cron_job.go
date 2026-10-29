@@ -2,30 +2,24 @@ package get
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	batch "k8s.io/api/batch/v1"
-	kubernetesError "k8s.io/apimachinery/pkg/api/errors"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
 func CronJob(
-	c *kubernetes.Clientset,
+	c kubernetes.Interface,
 	x context.Context,
 	namespace string,
 	name string,
-) *batch.CronJob {
-	var o meta.GetOptions
-	result, e := operation.CronJob(c, namespace).Get(x, name, o)
+) (*batch.CronJob, error) {
+	result, e := operation.CronJob(c, namespace).Get(x, name, meta.GetOptions{})
 
 	if e != nil {
-		if kubernetesError.IsNotFound(e) {
-			return nil
-		}
+		return nil, refusal.Classify(e)
 	}
 
-	errors.PanicOnError(e)
-
-	return result
+	return result, nil
 }

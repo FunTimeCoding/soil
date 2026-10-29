@@ -4,6 +4,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/service_tester"
@@ -165,7 +166,7 @@ func TestGetDocumentNotFoundWithSuggestions(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
 	document, similar, e := s.Service.GetDocument("test/alfaa.md")
-	assert.FatalOnError(t, e)
+	assert.True(t, not_found.Is(e))
 	assert.Nil(t, document)
 	assert.Greater(t, 0, len(similar))
 }
@@ -176,7 +177,7 @@ func TestGetDocumentNotFoundNoSuggestions(t *testing.T) {
 	document, similar, e := s.Service.GetDocument(
 		"test/completely-unrelated.md",
 	)
-	assert.FatalOnError(t, e)
+	assert.True(t, not_found.Is(e))
 	assert.Nil(t, document)
 	assert.Count(t, 0, similar)
 }

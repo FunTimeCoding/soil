@@ -64,7 +64,7 @@ func (s *Server) createIssue(
 	)
 
 	if i != nil {
-		return s.failOrCapture(i, "issue not created")
+		return s.answer(i)
 	}
 
 	return response.SuccessAny(convert.JiraIssue(created))

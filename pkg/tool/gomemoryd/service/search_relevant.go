@@ -1,9 +1,11 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
+	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
 func (s *Service) SearchRelevant(
@@ -11,9 +13,19 @@ func (s *Service) SearchRelevant(
 	limit int,
 	exclude []string,
 ) ([]record.SearchResult, error) {
-	o := search_option.New(query, constant.DefaultCollection, limit)
-	o.Exclude = exclude
-	results, e := s.searcher.Search(o)
+	p := &client.GetSearchParams{
+		Query:      query,
+		Collection: new(constant.DefaultCollection),
+		Limit:      &limit,
+		Full:       new(true),
+		Mode:       new(client.GetSearchParamsMode(queryConstant.HybridMode)),
+	}
+
+	if len(exclude) > 0 {
+		p.Exclude = &exclude
+	}
+
+	outcome, e := s.query.GetSearch(context.Background(), p)
 
 	if e != nil {
 		return nil, e
@@ -21,7 +33,7 @@ func (s *Service) SearchRelevant(
 
 	var matches []record.SearchResult
 
-	for _, r := range results {
+	for _, r := range outcome.Results {
 		identifier, f := extractIdentifier(r.Path)
 
 		if f != nil {
@@ -43,7 +55,7 @@ func (s *Service) SearchRelevant(
 				Description: m.Description,
 				Type:        m.Type,
 				UpdatedAt:   m.UpdatedAt,
-				Rank:        r.Score,
+				Rank:        float64(r.Score),
 				Tags:        m.Tags,
 				Metadata:    m.Metadata,
 			},

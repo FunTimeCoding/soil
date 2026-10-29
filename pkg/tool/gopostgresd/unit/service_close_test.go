@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/inventory/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"testing"
 )

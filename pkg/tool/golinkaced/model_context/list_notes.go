@@ -13,7 +13,7 @@ func (s *Server) ListNotes(
 	a argument.ListNotes,
 ) (*mcp.CallToolResult, error) {
 	p := pageFromOffset(a.Offset, a.Limit)
-	r, e := s.client.NotesByLinkPage(a.LinkIdentifier, p)
+	r, e := s.service.NotesByLinkPage(a.LinkIdentifier, p)
 
 	if e != nil {
 		return s.answer(e)

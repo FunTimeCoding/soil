@@ -1,19 +1,15 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/raid_parser"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {
-	store         *store.Store
-	elitePath     string
-	outputPath    string
-	parser        *raid_parser.Client
-	authorization *client.Client
-	view          *view.View
-	registry      *registry.Registry
+	service  *service.Service
+	reporter face.Reporter
+	view     *view.View
+	registry *registry.Registry
 }

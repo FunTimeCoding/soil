@@ -2,33 +2,33 @@ package goalpined
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goalpined/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/package_server"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/server"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/service"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
 func Mount(
-	p *package_server.Server,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	inner := http.NewServeMux()
-	p.Mount(inner)
-	generated.HandlerFromMux(
-		generated.NewStrictHandler(
-			server.New(r),
-			[]generated.StrictMiddlewareFunc{
-				web.RecordingMiddleware[generated.StrictHandlerFunc](t),
-			},
+	g.TokenMount(
+		constant.InterfacePath,
+		generated.HandlerFromMux(
+			generated.NewStrictHandler(
+				server.New(v, r),
+				[]generated.StrictMiddlewareFunc{
+					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
+				},
+			),
+			http.NewServeMux(),
 		),
-		inner,
 	)
-	g.TokenMount(constant.Slash, inner)
-	model_context.New(r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

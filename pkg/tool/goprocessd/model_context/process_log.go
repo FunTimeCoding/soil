@@ -12,10 +12,10 @@ func (s *Server) processLog(
 	_ mcp.CallToolRequest,
 	a argument.ProcessLog,
 ) (*mcp.CallToolResult, error) {
-	lines, older, e := s.supervisor.LogLines(a.Name, a.All)
+	lines, older, e := s.service.Log(a.Name, a.All)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(map[string]any{"lines": lines, "older": older})

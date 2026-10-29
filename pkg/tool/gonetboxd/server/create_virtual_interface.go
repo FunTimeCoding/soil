@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -17,11 +19,20 @@ func (s *Server) CreateVirtualInterface(
 		return server.CreateVirtualInterface404JSONResponse(*clientError(e)), nil
 	}
 
+	if validation.Is(e) {
+		return server.CreateVirtualInterface400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.CreateVirtualInterface403JSONResponse(*clientError(e)), nil
+	}
+
 	if e != nil {
 		return server.CreateVirtualInterface500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.CreateVirtualInterface201JSONResponse(
-		*convert.VirtualInterface(i),
-	), nil
+			*convert.VirtualInterface(i),
+		),
+		nil
 }

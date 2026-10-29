@@ -26,6 +26,10 @@ func New(o ...Option) *Client {
 		result.port = constant.OllamaPort
 	}
 
+	if result.model == "" {
+		result.model = constant.OllamaEmbedModel
+	}
+
 	var scheme string
 
 	if result.secure {

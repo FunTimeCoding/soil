@@ -6,8 +6,8 @@ import (
 )
 
 func New(
-	c jellyfin.JellyfinSource,
+	v jellyfin.Jellyfin,
 	r face.Reporter,
 ) *Server {
-	return &Server{client: c, reporter: r}
+	return &Server{service: v, reporter: r}
 }

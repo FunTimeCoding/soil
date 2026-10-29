@@ -1,14 +1,24 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) GetChecklist(key string) *response.Response {
-	result, e := c.client.GetChecklist(c.context, key)
-	errors.PanicOnError(e)
+func (c *Client) GetChecklist(
+	x context.Context,
+	key string,
+) ([]*client.ChecklistItem, error) {
+	r, e := c.client.GetChecklistWithResponse(x, key)
 
-	return response.New(web.ReadString(result), result.StatusCode)
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("checklist", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

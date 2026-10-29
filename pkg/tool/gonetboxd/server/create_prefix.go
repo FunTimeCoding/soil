@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -23,6 +25,14 @@ func (s *Server) CreatePrefix(
 	}
 
 	p, e := s.service.CreatePrefix(r.Body.Prefix, site, description)
+
+	if validation.Is(e) {
+		return server.CreatePrefix400JSONResponse(*clientError(e)), nil
+	}
+
+	if forbidden.Is(e) {
+		return server.CreatePrefix403JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.CreatePrefix500JSONResponse(*s.captureDetail(e)), nil

@@ -293,7 +293,8 @@ func TestDeleteDraftWithoutDraftFlagFails(t *testing.T) {
 		constant.ConfluenceDeletePage,
 		map[string]any{"identifier": "1"},
 	)
-	assert.StringContains(t, "not deleted", result)
+	assert.StringContains(t, "page not found: 1", result)
+	assert.StringNotContains(t, "event_identifier", result)
 }
 
 func TestToolCount(t *testing.T) {

@@ -2,30 +2,19 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
-func (s *Server) frameHint(identifier string) string {
-	tabs, e := s.client.Tabs()
-
-	if e != nil {
+func frameHint(frames []*tab.Tab) string {
+	if len(frames) == 0 {
 		return ""
 	}
 
 	var lines []string
 
-	for _, t := range tabs {
-		if t.Type != constant.IframeTabType ||
-			t.ParentIdentifier != identifier {
-			continue
-		}
-
+	for _, t := range frames {
 		lines = append(lines, fmt.Sprintf("  %s %s", t.Identifier, t.Locator))
-	}
-
-	if len(lines) == 0 {
-		return ""
 	}
 
 	return fmt.Sprintf(

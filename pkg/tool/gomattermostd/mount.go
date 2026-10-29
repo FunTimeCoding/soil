@@ -2,12 +2,10 @@ package gomattermostd
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -15,10 +13,7 @@ import (
 )
 
 func Mount(
-	c mattermostFace.MattermostSource,
-	m *monitor.Monitor,
-	d *store.Store,
-	i mattermostFace.Indexer,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
@@ -27,7 +22,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(c, r),
+				server.New(v, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -35,5 +30,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, m, d, i, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 }

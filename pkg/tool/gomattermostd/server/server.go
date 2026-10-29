@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	mattermost "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 )
 
 type Server struct {
-	client   mattermost.MattermostSource
+	service  *service.Service
 	reporter face.Reporter
 }

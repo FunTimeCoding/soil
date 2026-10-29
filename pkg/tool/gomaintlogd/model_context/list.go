@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -54,10 +53,10 @@ func (s *Server) list(
 		filter.Limit = int(l)
 	}
 
-	entries, e := s.store.List(filter)
+	entries, e := s.service.Entries(filter)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.answer(e)
 	}
 
 	return response.Success(

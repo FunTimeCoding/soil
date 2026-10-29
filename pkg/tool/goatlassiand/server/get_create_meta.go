@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 	"strings"
@@ -21,8 +24,20 @@ func (s *Server) GetCreateMeta(
 
 	t, e := s.service.CreateMeta(r.Params.Project, r.Params.IssueType)
 
+	if forbidden.Is(e) {
+		return server.GetCreateMeta403JSONResponse{Error: e.Error()}, nil
+	}
+
+	if not_found.Is(e) {
+		return server.GetCreateMeta404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.GetCreateMeta503JSONResponse{Error: e.Error()}, nil
+	}
+
 	if e != nil {
-		return server.GetCreateMeta500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetCreateMeta500JSONResponse(*s.answer(e)), nil
 	}
 
 	var result server.GetCreateMeta200JSONResponse

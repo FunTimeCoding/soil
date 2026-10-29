@@ -4,5 +4,8 @@ func (s *Service) DeleteComment(
 	key string,
 	identifier string,
 ) error {
-	return s.jira.DeleteComment(key, identifier)
+	return attempt(
+		s.jiraGuard,
+		func() error { return s.jira.DeleteComment(key, identifier) },
+	)
 }

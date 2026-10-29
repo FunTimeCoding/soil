@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -12,7 +13,7 @@ func (c *Client) CreateClusterType(name string) (*cluster_type.Type, error) {
 	).ClusterTypeRequest(*q).Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return cluster_type.New(result), nil

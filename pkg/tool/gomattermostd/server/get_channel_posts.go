@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 )
 
@@ -9,18 +12,22 @@ func (s *Server) GetChannelPosts(
 	_ context.Context,
 	r server.GetChannelPostsRequestObject,
 ) (server.GetChannelPostsResponseObject, error) {
-	channel, e := s.client.TeamChannel(r.Name)
+	posts, e := s.service.ChannelPosts(r.Name, r.Params.Since)
 
-	if e != nil {
-		return server.GetChannelPosts404JSONResponse(
-			*clientError("channel not found"),
-		), nil
+	if forbidden.Is(e) {
+		return server.GetChannelPosts403JSONResponse{Error: e.Error()}, nil
 	}
 
-	posts, f := s.client.PostsSince(channel, r.Params.Since)
+	if not_found.Is(e) {
+		return server.GetChannelPosts404JSONResponse{Error: e.Error()}, nil
+	}
 
-	if f != nil {
-		return server.GetChannelPosts500JSONResponse(*s.captureDetail(f)), nil
+	if unavailable.Is(e) {
+		return server.GetChannelPosts503JSONResponse{Error: e.Error()}, nil
+	}
+
+	if e != nil {
+		return server.GetChannelPosts500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetChannelPosts200JSONResponse(convertPosts(posts)), nil

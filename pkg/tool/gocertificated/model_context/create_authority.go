@@ -2,9 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context/argument"
@@ -29,12 +27,8 @@ func (s *Server) createAuthority(
 	optionalNumber(&b.ValidYear, a.ValidYear)
 	result, e := s.service.CreateAuthority(b)
 
-	if conflict.Is(e) {
-		return response.Fail("%s", constant.AuthorityLive)
-	}
-
 	if e != nil {
-		return s.captureFail(e, constant.CreateAuthorityFail)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.Authority(result))

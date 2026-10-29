@@ -5,17 +5,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/process"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/mock_process_source"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/gazetteer_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/peer_tester"
 	"testing"
 )
 
 func TestProcessPlacesOnlyRunningEntries(t *testing.T) {
-	f := mock_process_source.New()
-	f.Add("gosublimed", true)
-	f.Add("goflightd", false)
-	f.Add("goqueryd", true)
-	v, e := process.New(f, "delta").Collect(
+	f := collector_tester.NewProcess(t)
+	collector_tester.AddProcess(f, "gosublimed", true)
+	collector_tester.AddProcess(f, "goflightd", false)
+	collector_tester.AddProcess(f, "goqueryd", true)
+	v, e := process.New(f, peer_tester.NewGuard(t, f), "delta").Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -26,12 +27,13 @@ func TestProcessPlacesOnlyRunningEntries(t *testing.T) {
 }
 
 func TestProcessPlacesOnTheConfiguredMachine(t *testing.T) {
-	f := mock_process_source.New()
-	f.Add("gosublimed", true)
-	v, e := process.New(f, constant.FixtureVirtualMachineNode).Collect(
-		context.Background(),
-		gazetteer_tester.NewGazetteer(),
-	)
+	f := collector_tester.NewProcess(t)
+	collector_tester.AddProcess(f, "gosublimed", true)
+	v, e := process.New(
+		f,
+		peer_tester.NewGuard(t, f),
+		constant.FixtureVirtualMachineNode,
+	).Collect(context.Background(), gazetteer_tester.NewGazetteer())
 	assert.FatalOnError(t, e)
 	assert.String(t, "echo", v[0].PlaceName)
 	assert.String(t, "virtualization.virtualmachine", v[0].PlaceKind)
@@ -39,9 +41,9 @@ func TestProcessPlacesOnTheConfiguredMachine(t *testing.T) {
 }
 
 func TestProcessRefusesAnUnknownMachine(t *testing.T) {
-	f := mock_process_source.New()
-	f.Add("gosublimed", true)
-	_, e := process.New(f, "nowhere").Collect(
+	f := collector_tester.NewProcess(t)
+	collector_tester.AddProcess(f, "gosublimed", true)
+	_, e := process.New(f, peer_tester.NewGuard(t, f), "nowhere").Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -49,9 +51,9 @@ func TestProcessRefusesAnUnknownMachine(t *testing.T) {
 }
 
 func TestProcessCarriesNoScope(t *testing.T) {
-	f := mock_process_source.New()
-	f.Add("gosublimed", true)
-	v, e := process.New(f, "delta").Collect(
+	f := collector_tester.NewProcess(t)
+	collector_tester.AddProcess(f, "gosublimed", true)
+	v, e := process.New(f, peer_tester.NewGuard(t, f), "delta").Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)

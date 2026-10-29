@@ -1,13 +1,15 @@
 package goalpine
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/face"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func packages(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -18,13 +20,13 @@ func packages(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			name := ""
+			p := &client.GetPackagesParams{}
 
 			if len(arguments) > 0 {
-				name = arguments[0]
+				p.Name = &arguments[0]
 			}
 
-			t.Emit(c.Packages(name))
+			t.EmitValue(c.GetPackages(context.Background(), p))
 		},
 	}
 }

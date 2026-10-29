@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
 	"github.com/funtimecoding/soil/pkg/web/form"
@@ -29,21 +30,6 @@ func (s *Server) createSubmit(
 		}
 	}
 
-	if len(redirectLocators) == 0 {
-		preserve := url.Values{}
-		preserve.Set("redirect_locators", rawLocators)
-		preserve.Set("scopes", scopes)
-		form.Redirect(
-			w,
-			r,
-			constant.CreatePath,
-			"At least one redirect locator is required.",
-			preserve,
-		)
-
-		return
-	}
-
 	var scopeSlice []string
 
 	if scopes != "" {
@@ -53,6 +39,16 @@ func (s *Server) createSubmit(
 	result, e := s.service.RegisterClient(
 		register_client.NewFleetRequest(redirectLocators, scopeSlice),
 	)
+
+	if validation.Is(e) {
+		preserve := url.Values{}
+		preserve.Set("redirect_locators", rawLocators)
+		preserve.Set("scopes", scopes)
+		form.Redirect(w, r, constant.CreatePath, e.Error(), preserve)
+
+		return
+	}
+
 	errors.PanicOnError(e)
 	s.view.RenderPage(
 		w,

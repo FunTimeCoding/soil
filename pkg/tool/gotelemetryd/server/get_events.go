@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 )
@@ -46,12 +45,10 @@ func (s *Server) GetEvents(
 		o.Offset = *r.Params.Offset
 	}
 
-	events, e := s.store.Recent(o)
+	events, e := s.service.Query(o)
 
 	if e != nil {
-		return server.GetEvents500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetEvents500JSONResponse(*s.answer(e)), nil
 	}
 
 	entries := make([]server.EventEntry, 0, len(events))

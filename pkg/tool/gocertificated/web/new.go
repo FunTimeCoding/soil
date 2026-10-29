@@ -1,10 +1,9 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -14,9 +13,8 @@ import (
 )
 
 func New(
-	s *store.Store,
 	v *service.Service,
-	authorization *client.Client,
+	f face.Reporter,
 ) *Server {
 	r := registry.New()
 	r.Register(
@@ -58,10 +56,9 @@ func New(
 	)
 
 	return &Server{
-		store:         s,
-		service:       v,
-		authorization: authorization,
-		registry:      r,
+		service:  v,
+		reporter: f,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSentinel).

@@ -25,10 +25,10 @@ func (s *Server) GetUsers(
 		page = 0
 	}
 
-	users, e := s.client.Users(page, limit)
+	users, e := s.service.Users(page, limit)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	rows := make([]*mattermostResponse.User, len(users))

@@ -1,22 +1,20 @@
 package cross_service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
-	soilWeb "github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 	"testing"
 )
@@ -25,17 +23,12 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	q := base.New(t)
 	q.SkipUnreachable(t)
-	c, e := client.NewClientWithResponses(
-		q.Address(webConstant.RootPath),
-		client.WithHTTPClient(q.Client()),
-		client.WithRequestEditorFn(
-			soilWeb.BearerEditor(constant.ModelContextTestToken),
-		),
+	c := client.New(
+		locator.New(webConstant.Localhost).Insecure().Port(q.Port),
+		constant.ModelContextTestToken,
 	)
-	errors.PanicOnError(e)
-	i := memory_indexer.New(c)
 	s := store.New(connection.NewMemory())
-	v := service.New(s, i, i, i)
+	v := service.New(s, c)
 	r := memory.New()
 	memoryServer := model_context_server.New(
 		t,
@@ -54,6 +47,7 @@ func New(t *testing.T) *Tester {
 			memoryClient.Close()
 			memoryServer.Close()
 			s.Close()
+			c.Close()
 			q.Close()
 		},
 	)

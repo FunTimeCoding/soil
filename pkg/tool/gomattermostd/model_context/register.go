@@ -314,11 +314,11 @@ func (s *Server) register() {
 		mcp.NewTypedToolHandler(s.GetUserProfile),
 	)
 
-	if s.indexer != nil {
+	if s.service.Subscribing() {
 		s.registerSubscription()
 	}
 
-	if s.monitor != nil {
+	if s.service.Monitoring() {
 		s.server.AddTool(
 			mcp.NewTool(
 				constant.RunMonitoring,

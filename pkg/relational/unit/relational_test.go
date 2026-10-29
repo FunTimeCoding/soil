@@ -67,19 +67,19 @@ func TestNewMemoryIsolatesCalls(t *testing.T) {
 func TestNewCreatesParentDirectory(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "nested", soil.TestDatabase)
 	m := lite.New(logger.New(context.Background()), path)
-	defer closeMapper(m)
+	defer relational.CloseMapper(m)
 	assert.True(t, system.FileExists(path))
 }
 
 func TestNewMemoryPinsPool(t *testing.T) {
 	m := lite.NewMemory()
-	defer closeMapper(m)
+	defer relational.CloseMapper(m)
 	assert.Integer(t, 1, m.ConnPool.(*sql.DB).Stats().MaxOpenConnections)
 }
 
 func TestNewMemoryEnforcesForeignKeys(t *testing.T) {
 	m := lite.NewMemory()
-	defer closeMapper(m)
+	defer relational.CloseMapper(m)
 	var enabled int
 	libraryErrors.PanicOnError(
 		m.Raw("PRAGMA foreign_keys").Scan(&enabled).Error,

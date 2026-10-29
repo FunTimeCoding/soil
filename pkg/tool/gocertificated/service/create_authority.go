@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/authority"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
@@ -13,14 +14,14 @@ import (
 func (s *Service) CreateAuthority(
 	b *server.AuthorityBody,
 ) (*record.Record, error) {
-	live, e := s.store.Authority(b.Name)
+	_, e := s.store.Authority(b.Name)
 
-	if e != nil {
-		return nil, e
+	if e == nil {
+		return nil, conflict.Format("authority already live: %s", b.Name)
 	}
 
-	if live != nil {
-		return nil, conflict.Format("authority already live: %s", b.Name)
+	if !not_found.Is(e) {
+		return nil, e
 	}
 
 	kind := constant.CertificateKind(b.Kind)

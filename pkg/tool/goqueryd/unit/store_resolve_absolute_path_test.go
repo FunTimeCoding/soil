@@ -8,7 +8,6 @@ import (
 
 func TestResolveAbsolutePath(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	defer s.Close()
 	path := s.ResolveAbsolutePath("test", "alfa.md")
 	assert.StringContains(t, "alfa.md", path)
 	assert.StringContains(t, "/", path)

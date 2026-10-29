@@ -2,10 +2,11 @@ package model_context
 
 import (
 	"context"
+	"errors"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mattermost/mattermost/server/public/model"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -25,68 +26,39 @@ func (s *Server) UploadFile(
 
 	b, e := os.ReadFile(a.Path)
 
-	if e != nil {
-		return s.captureFail(e, "file read failed")
+	if errors.Is(e, fs.ErrNotExist) {
+		return response.Fail("no such file: %s", a.Path)
 	}
-
-	var ch *model.Channel
-
-	if a.ChannelName != "" {
-		ch, e = s.client.TeamChannel(a.ChannelName)
-
-		if e != nil {
-			return s.captureFail(e, "channel not found")
-		}
-	} else {
-		ch, e = s.client.Channel(a.ChannelIdentifier)
-
-		if e != nil {
-			return s.captureFail(e, "channel not found")
-		}
-	}
-
-	upload, _, e := s.client.Nested().UploadFile(
-		s.client.Context(),
-		b,
-		ch.Id,
-		filepath.Base(a.Path),
-	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "read file")
 	}
 
-	if len(upload.FileInfos) == 0 {
-		return response.Fail("upload returned no file info")
+	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
+
+	if e != nil {
+		return s.answerWith(e, "channel")
 	}
 
-	fileIdentifier := upload.FileInfos[0].Id
+	name := filepath.Base(a.Path)
 	message := a.Message
 
 	if message == "" {
-		message = filepath.Base(a.Path)
+		message = name
 	}
 
-	p, e := s.client.Post(
-		&model.Post{
-			ChannelId: ch.Id,
-			Message:   message,
-			FileIds:   []string{fileIdentifier},
-		},
-	)
+	p, f, e := s.service.UploadAndPost(ch, name, b, message)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
-
-	channelName := s.channelDisplayName(ch)
 
 	return response.SuccessAny(
 		map[string]any{
 			"post_id":   p.Id,
-			"file_id":   fileIdentifier,
-			"file_name": filepath.Base(a.Path),
-			"channel":   channelName,
+			"file_id":   f.Id,
+			"file_name": name,
+			"channel":   s.service.ChannelDisplayName(ch),
 			"message":   message,
 			"create_at": formatMilli(p.CreateAt),
 		},

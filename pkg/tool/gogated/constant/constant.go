@@ -44,8 +44,13 @@ const (
 	AccountLabel             = "Mail or account"
 	LocalRejectedMessage     = "No local account with those credentials"
 	DirectoryRejectedMessage = "The directory rejected those credentials"
+	DirectoryAwayMessage     = "The directory can't be reached right now. Try again shortly, or sign in with a local account."
 
 	LoginSessionTimeToLive = 5 * time.Minute
+	CleanInterval          = time.Minute
+	DirectoryPeer          = "directory"
+	RedirectRequired       = "at least one redirect locator is required"
+	CleanFailed            = "clean deferred: %v"
 
 	AuthenticationIdleTimeToLive     = 7 * 24 * time.Hour
 	AuthenticationAbsoluteTimeToLive = 30 * 24 * time.Hour
@@ -89,6 +94,8 @@ const InlineCSS = `
 const (
 	FixtureSecret   = "test-secret-at-least-32-bytes!xy"
 	FixtureIssuer   = "http://localhost"
-	FixtureMail     = "admin@test.internal"
-	FixturePassword = "password"
+	FixtureMail        = "admin@test.internal"
+	FixturePassword    = "password"
+	FixtureAdminClient = "gogated-admin"
+	FixtureAdminSecret = "admin-secret"
 )

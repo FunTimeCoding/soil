@@ -13,12 +13,16 @@ func (s *Service) CreateGroup(name string) (*group.Group, error) {
 		return nil, e
 	}
 
-	f := s.directory.Add(
-		s.groupName(name),
-		map[string][]string{
-			constant.ClassAttribute:       {constant.GroupClass},
-			constant.NameAttribute:        {name},
-			constant.GroupNumberAttribute: {strconv.Itoa(number)},
+	f := s.attempt(
+		func() error {
+			return s.directory.Add(
+				s.groupName(name),
+				map[string][]string{
+					constant.ClassAttribute:       {constant.GroupClass},
+					constant.NameAttribute:        {name},
+					constant.GroupNumberAttribute: {strconv.Itoa(number)},
+				},
+			)
 		},
 	)
 

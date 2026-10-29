@@ -2,20 +2,19 @@ package worker
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/github"
+	soil "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/face"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
 
 func New(
-	client *github.Client,
-	owner string,
+	v face.Latest,
 	interval time.Duration,
 	y *prometheus.Registry,
 	l *logger.Logger,
-	r face.Reporter,
+	r soil.Reporter,
 ) *Worker {
 	g := prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
@@ -27,8 +26,7 @@ func New(
 	y.MustRegister(g)
 
 	return &Worker{
-		client:   client,
-		owner:    owner,
+		service:  v,
 		interval: interval,
 		gauge:    g,
 		recovery: recovery.New(l, r),

@@ -17,10 +17,10 @@ func (s *Server) getTransitions(
 		return response.Fail("key is required: %v", f)
 	}
 
-	result, g := s.jira.Transitions(key)
+	result, g := s.service.Transitions(key)
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(result)

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/trivago/tgo/tcontainer"
 )
@@ -16,7 +17,7 @@ func (s *Service) CreateIssue(
 ) (*issue.Issue, error) {
 	raw := issue.RawStub()
 	raw.Fields.Unknowns = make(tcontainer.MarshalMap)
-	reporter, e := s.jira.User()
+	reporter, e := guarded[*jira.User](s.jiraGuard, s.jira.User)
 
 	if e != nil {
 		return nil, e
@@ -33,7 +34,10 @@ func (s *Service) CreateIssue(
 		return nil, f
 	}
 
-	created, g := s.jira.CreateNative(raw)
+	created, g := guarded(
+		s.jiraGuard,
+		func() (*issue.Issue, error) { return s.jira.CreateNative(raw) },
+	)
 
 	if g != nil {
 		return nil, g
@@ -49,9 +53,12 @@ func (s *Service) CreateIssue(
 		return nil, h
 	}
 
-	if i := s.jira.Assign(created.Key, user); i != nil {
+	if i := attempt(
+		s.jiraGuard,
+		func() error { return s.jira.Assign(created.Key, user) },
+	); i != nil {
 		return nil, i
 	}
 
-	return s.jira.Issue(created.Key)
+	return s.Issue(created.Key)
 }

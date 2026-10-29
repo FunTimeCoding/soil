@@ -1,13 +1,14 @@
 package gonetbox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
 func listVirtualJournalEntries(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var limit int32
@@ -20,7 +21,14 @@ func listVirtualJournalEntries(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			t.Emit(c.ListVirtualJournalEntries(arguments[0], limit, offset))
+			t.EmitValue(
+				c.ListVirtualJournalEntries(
+					context.Background(),
+					arguments[0],
+					limit,
+					offset,
+				),
+			)
 		},
 	}
 	result.Flags().Int32Var(

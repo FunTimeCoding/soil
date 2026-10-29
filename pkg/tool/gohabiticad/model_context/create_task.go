@@ -29,7 +29,7 @@ func (s *Server) createTask(
 	body.Type = taskType
 	body.Text = text
 	body.Notes = r.GetString(constant.Notes, "")
-	result, h := s.habitica.CreateTask(body)
+	result, h := s.service.CreateTask(body)
 
 	if h != nil {
 		return s.answer(h)

@@ -2,15 +2,13 @@ package gomaintlogd
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -22,10 +20,9 @@ func Run(
 ) {
 	r := i.Reporter()
 	g := logger.New(context.Background())
-	events := notifier.New()
-	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath), events)
+	s := service.New(o, g)
 	defer s.Close()
-	v := web.New(s, events)
+	v := web.New(s, r)
 	lifecycle.New(g).WithServer(
 		server.New(
 			constant.Identity,

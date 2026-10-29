@@ -32,7 +32,7 @@ func (s *Server) Certificates(
 		)
 
 		if f != nil {
-			return s.captureFail(f, "get certificate")
+			return s.captureDetail(f)
 		}
 
 		m := map[string]any{"certificate": result.Certificate}
@@ -47,7 +47,7 @@ func (s *Server) Certificates(
 	result, f := s.service.Certificates(x, cluster)
 
 	if f != nil {
-		return s.captureFail(f, "list certificates")
+		return s.captureDetail(f)
 	}
 
 	return response.SuccessAny(result)

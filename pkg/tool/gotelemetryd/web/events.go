@@ -34,7 +34,7 @@ func (s *Server) events(
 	o.Kind = r.URL.Query().Get(constant.Kind)
 	o.Limit = limit + 1
 	o.Offset = offset
-	entries, queryError := s.store.Recent(o)
+	entries, queryError := s.service.Query(o)
 	errors.PanicOnError(queryError)
 	hasMore := len(entries) > limit
 
