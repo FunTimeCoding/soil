@@ -236,7 +236,7 @@ func TestUpdateMemoryRequiresIdentifier(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "input schema validation failed", result)
-	assert.StringContains(t, "Missing:[memory_id]", result)
+	assert.StringContains(t, "missing property 'memory_id'", result)
 }
 
 func TestUpdateMemoryWithWrongParameterName(t *testing.T) {
@@ -259,8 +259,8 @@ func TestUpdateMemoryWithWrongParameterName(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "input schema validation failed", result)
-	assert.StringContains(t, "Missing:[memory_id]", result)
-	assert.StringContains(t, "Properties:[id]", result)
+	assert.StringContains(t, "missing property 'memory_id'", result)
+	assert.StringContains(t, "additional properties 'id' not allowed", result)
 	m, e := s.Store().GetMemory(1)
 	assert.FatalOnError(t, e)
 	assert.String(t, "original", m.Content)

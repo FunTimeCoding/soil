@@ -176,7 +176,7 @@ func TestRenameSymbolMissingParams(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "input schema validation failed", e.Error())
-	assert.StringContains(t, "Missing:[package_path]", e.Error())
+	assert.StringContains(t, "missing property 'package_path'", e.Error())
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {

@@ -59,7 +59,7 @@ func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	assert.StringContains(
 		t,
-		"Missing:[callsign]",
+		"missing property 'callsign'",
 		r.Client.MustCallToolError(
 			constant.SubscribeThread,
 			map[string]any{constant.ParameterRoot: "alfa"},
