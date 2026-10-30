@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/rack"
 	"github.com/funtimecoding/soil/pkg/netbox/site"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/netbox/virtual_disk"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 )
 
@@ -25,6 +26,7 @@ type Client struct {
 	racks      []*rack.Rack
 	tenants    []*tenant.Tenant
 	interfaces map[int32][]*network.Interface
+	disks      map[int32][]*virtual_disk.Disk
 	contexts   []*configuration_context.Context
 	sets       []*choice_set.Set
 	fields     []*custom_field.Field

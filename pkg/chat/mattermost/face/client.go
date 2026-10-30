@@ -29,6 +29,10 @@ type Client interface {
 	DefaultChannel() *model.Channel
 	DefaultTeam() *model.Team
 	DeletePost(p *model.Post) error
+	EditPost(
+		p *model.Post,
+		message string,
+	) (*model.Post, error)
 	DirectMessage(
 		u *model.User,
 		text string,
@@ -64,6 +68,10 @@ type Client interface {
 	) []*model.Channel
 	MustConfiguration() map[string]string
 	MustDeletePost(p *model.Post)
+	MustEditPost(
+		p *model.Post,
+		message string,
+	) *model.Post
 	MustDirectMessage(
 		u *model.User,
 		text string,
