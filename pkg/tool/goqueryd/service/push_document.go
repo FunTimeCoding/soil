@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"time"
 )
 
@@ -40,22 +40,14 @@ func (s *Service) PushDocument(
 		return ""
 	}
 
-	chunks := chunk.Document(body, path, s.reranker)
-	texts := make([]string, len(chunks))
+	_, e := s.embedDocument(x, hash, path, body)
 
-	for i, c := range chunks {
-		texts[i] = c.Text
-	}
-
-	embeddings, e := s.embedTexts(x, texts)
-
-	if e != nil {
+	switch {
+	case e == nil:
+		return ""
+	case validation.Is(e):
+		return fmt.Sprintf(constant.EmbeddingRefused, e)
+	default:
 		return fmt.Sprintf(constant.EmbeddingPending, e)
 	}
-
-	for i, embedding := range embeddings {
-		s.store.InsertEmbedding(hash, i, chunks[i].Position, embedding, now)
-	}
-
-	return ""
 }

@@ -7,8 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
 	"net/http"
 	"testing"
@@ -69,16 +71,18 @@ func TestTheWorkerLeavesAQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
 		service_tester.NewOption(t, m, newReranker(t)),
 		r,
 	)
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
+	directory := t.TempDir()
+	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nzulu.\n")
+	v.AddCollection("notes", directory, constant.DefaultGlob)
 	w := worker.New(v, 5*time.Millisecond, l, r)
 	w.Start()
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)
 
-	for time.Now().Before(deadline) && m.Calls() < 3 {
+	for time.Now().Before(deadline) && v.MustStatus().FailedEmbeddings == 0 {
 		time.Sleep(time.Millisecond)
 	}
 
-	assert.True(t, m.Calls() >= 3)
+	assert.Integer(t, 1, v.MustStatus().FailedEmbeddings)
 	assert.Count(t, 0, r.Events())
 }

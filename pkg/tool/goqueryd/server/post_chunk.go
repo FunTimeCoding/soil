@@ -18,11 +18,12 @@ func (s *Server) PostChunk(
 			FirstLine:  c.FirstLine,
 			LastLine:   c.LastLine,
 			Bytes:      c.Bytes,
-			Tokens:     c.Tokens,
-			Piece:      c.Piece,
-			CutChecked: c.CutChecked,
-			CutLevel:   c.CutLevel,
-			CutLines:   lines(c.CutLines),
+			Tokens:      c.Tokens,
+			EmbedTokens: c.EmbedTokens,
+			Piece:       c.Piece,
+			CutChecked:  c.CutChecked,
+			CutLevel:    c.CutLevel,
+			CutLines:    lines(c.CutLines),
 		}
 	}
 
@@ -33,10 +34,11 @@ func (s *Server) PostChunk(
 	}
 
 	return server.PostChunk200JSONResponse{
-		Model:     p.Model,
-		Window:    p.Window,
-		Allowance: p.Allowance,
-		Chunks:    chunks,
-		Sections:  sections,
+		Model:          p.Model,
+		Window:         p.Window,
+		Allowance:      p.Allowance,
+		EmbedAllowance: p.EmbedAllowance,
+		Chunks:         chunks,
+		Sections:       sections,
 	}, nil
 }

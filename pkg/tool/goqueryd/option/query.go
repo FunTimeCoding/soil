@@ -13,4 +13,5 @@ type Query struct {
 	EmbedModel    string
 	Embedder      func() face.ReachableEmbedder
 	Reranker      func() queryd.Reranker
+	EmbedCounter  func() queryd.EmbedCounter
 }

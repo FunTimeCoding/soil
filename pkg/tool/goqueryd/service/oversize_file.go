@@ -10,13 +10,15 @@ import (
 func (s *Service) oversizeFile(
 	d *record.DocumentBody,
 	allowance int,
+	embedAllowance int,
 ) *oversize_file.File {
 	var result *oversize_file.File
 
 	for i, c := range chunk.Document(d.Body, d.Path, s.reranker) {
 		tokens := s.reranker.Count(c.Text)
+		embedTokens := s.counter.Count(c.Text)
 
-		if tokens <= allowance {
+		if tokens <= allowance && embedTokens <= embedAllowance {
 			continue
 		}
 
@@ -25,7 +27,9 @@ func (s *Service) oversizeFile(
 		}
 
 		first, last := lineRange(d.Body, c)
-		result.Add(oversize_chunk.New(i, first, last, len(c.Text), tokens))
+		result.Add(
+			oversize_chunk.New(i, first, last, len(c.Text), tokens, embedTokens),
+		)
 	}
 
 	return result

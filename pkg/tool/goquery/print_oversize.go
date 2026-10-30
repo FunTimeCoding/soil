@@ -7,6 +7,7 @@ import (
 
 func printOversize(r *client.OversizeReport) {
 	chunks := 0
+	embed := 0
 
 	for _, f := range r.Files {
 		console.Format(
@@ -20,14 +21,19 @@ func printOversize(r *client.OversizeReport) {
 
 		for _, c := range f.Chunks {
 			console.Format(
-				"  chunk %d  lines %d-%d  %d B  %d tokens  over by %d\n",
+				"  chunk %d  lines %d-%d  %d B  %d tokens  embed %d/%d\n",
 				c.Index,
 				c.FirstLine,
 				c.LastLine,
 				c.Bytes,
 				c.Tokens,
-				c.Tokens-r.Allowance,
+				c.EmbedTokens,
+				r.EmbedAllowance,
 			)
+
+			if c.EmbedTokens > r.EmbedAllowance {
+				embed++
+			}
 		}
 
 		chunks += len(f.Chunks)
@@ -40,5 +46,10 @@ func printOversize(r *client.OversizeReport) {
 		r.Allowance,
 		r.Model,
 		r.Window,
+	)
+	console.Format(
+		"%d chunks over the embedder's %d tokens\n",
+		embed,
+		r.EmbedAllowance,
 	)
 }

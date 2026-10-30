@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/tokenizer"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/rerank_session"
 )
 
@@ -22,7 +23,7 @@ func New(
 	}
 
 	path := join.Join(directory, constant.RerankTokenizerFile)
-	tokenizer, e := tokenizers.FromFile(
+	padded, e := tokenizers.FromFile(
 		path,
 		tokenizers.WithTruncation(
 			uintptr(sequenceLength),
@@ -42,10 +43,10 @@ func New(
 		return nil, fmt.Errorf("load tokenizer: %w", e)
 	}
 
-	counter, f := newCounter(path)
+	counter, f := tokenizer.NewCounter(path)
 
 	if f != nil {
-		errors.PanicOnError(tokenizer.Close())
+		errors.PanicOnError(padded.Close())
 
 		return nil, fmt.Errorf("load counter: %w", f)
 	}
@@ -53,7 +54,7 @@ func New(
 	result := &Reranker{
 		name:           name,
 		sequenceLength: sequenceLength,
-		tokenizer:      tokenizer,
+		tokenizer:      padded,
 		counter:        counter,
 	}
 

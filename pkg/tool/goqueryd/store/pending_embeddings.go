@@ -11,8 +11,9 @@ func (s *Store) PendingEmbeddings() []record.PendingDocument {
 		SELECT d.hash, c.body, MIN(d.path) AS path
 		FROM document d
 		JOIN content c ON d.hash = c.hash
-		LEFT JOIN embedding e ON e.hash = d.hash AND e.sequence = 0
-		WHERE d.active = 1 AND e.hash IS NULL
+		WHERE d.active = 1
+		AND NOT EXISTS (SELECT 1 FROM embedding e WHERE e.hash = d.hash)
+		AND NOT EXISTS (SELECT 1 FROM embedding_failure f WHERE f.hash = d.hash)
 		GROUP BY d.hash
 	`,
 	)

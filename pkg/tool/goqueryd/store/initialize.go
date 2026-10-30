@@ -81,6 +81,14 @@ func initialize(database *sql.DB) {
 			embedded_at TEXT NOT NULL,
 			PRIMARY KEY (hash, sequence)
 		)`,
+		`CREATE TABLE IF NOT EXISTS embedding_failure (
+			hash      TEXT NOT NULL,
+			sequence  INTEGER NOT NULL,
+			position  INTEGER NOT NULL,
+			reason    TEXT NOT NULL,
+			failed_at TEXT NOT NULL,
+			PRIMARY KEY (hash, sequence)
+		)`,
 		`CREATE TABLE IF NOT EXISTS source_type_tag (
 			collection  TEXT NOT NULL DEFAULT '',
 			path_prefix TEXT NOT NULL,

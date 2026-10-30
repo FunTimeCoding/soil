@@ -43,11 +43,12 @@ func (e GetSearchParamsMode) Valid() bool {
 
 // ChunkPreview defines model for ChunkPreview.
 type ChunkPreview struct {
-	Allowance int              `json:"allowance"`
-	Chunks    []PreviewChunk   `json:"chunks"`
-	Model     string           `json:"model"`
-	Sections  []PreviewSection `json:"sections"`
-	Window    int              `json:"window"`
+	Allowance      int              `json:"allowance"`
+	Chunks         []PreviewChunk   `json:"chunks"`
+	EmbedAllowance int              `json:"embed_allowance"`
+	Model          string           `json:"model"`
+	Sections       []PreviewSection `json:"sections"`
+	Window         int              `json:"window"`
 }
 
 // CollectionStatus defines model for CollectionStatus.
@@ -89,6 +90,22 @@ type Facet struct {
 	Values   *map[string]int `json:"values,omitempty"`
 }
 
+// FailedChunk defines model for FailedChunk.
+type FailedChunk struct {
+	Bytes      int    `json:"bytes"`
+	Collection string `json:"collection"`
+	FirstLine  int    `json:"first_line"`
+	Index      int    `json:"index"`
+	LastLine   int    `json:"last_line"`
+	Path       string `json:"path"`
+	Reason     string `json:"reason"`
+}
+
+// FailedReport defines model for FailedReport.
+type FailedReport struct {
+	Chunks []FailedChunk `json:"chunks"`
+}
+
 // IndexResult defines model for IndexResult.
 type IndexResult struct {
 	Collection string `json:"collection"`
@@ -106,11 +123,12 @@ type ListOutcome struct {
 
 // OversizeChunk defines model for OversizeChunk.
 type OversizeChunk struct {
-	Bytes     int `json:"bytes"`
-	FirstLine int `json:"first_line"`
-	Index     int `json:"index"`
-	LastLine  int `json:"last_line"`
-	Tokens    int `json:"tokens"`
+	Bytes       int `json:"bytes"`
+	EmbedTokens int `json:"embed_tokens"`
+	FirstLine   int `json:"first_line"`
+	Index       int `json:"index"`
+	LastLine    int `json:"last_line"`
+	Tokens      int `json:"tokens"`
 }
 
 // OversizeFile defines model for OversizeFile.
@@ -123,10 +141,11 @@ type OversizeFile struct {
 
 // OversizeReport defines model for OversizeReport.
 type OversizeReport struct {
-	Allowance int            `json:"allowance"`
-	Files     []OversizeFile `json:"files"`
-	Model     string         `json:"model"`
-	Window    int            `json:"window"`
+	Allowance      int            `json:"allowance"`
+	EmbedAllowance int            `json:"embed_allowance"`
+	Files          []OversizeFile `json:"files"`
+	Model          string         `json:"model"`
+	Window         int            `json:"window"`
 }
 
 // PreviewBlock defines model for PreviewBlock.
@@ -139,15 +158,16 @@ type PreviewBlock struct {
 
 // PreviewChunk defines model for PreviewChunk.
 type PreviewChunk struct {
-	Bytes      int   `json:"bytes"`
-	CutChecked bool  `json:"cut_checked"`
-	CutLevel   int   `json:"cut_level"`
-	CutLines   []int `json:"cut_lines"`
-	FirstLine  int   `json:"first_line"`
-	Index      int   `json:"index"`
-	LastLine   int   `json:"last_line"`
-	Piece      bool  `json:"piece"`
-	Tokens     int   `json:"tokens"`
+	Bytes       int   `json:"bytes"`
+	CutChecked  bool  `json:"cut_checked"`
+	CutLevel    int   `json:"cut_level"`
+	CutLines    []int `json:"cut_lines"`
+	EmbedTokens int   `json:"embed_tokens"`
+	FirstLine   int   `json:"first_line"`
+	Index       int   `json:"index"`
+	LastLine    int   `json:"last_line"`
+	Piece       bool  `json:"piece"`
+	Tokens      int   `json:"tokens"`
 }
 
 // PreviewSection defines model for PreviewSection.
@@ -204,6 +224,7 @@ type SourceTypeTag struct {
 // Status defines model for Status.
 type Status struct {
 	Collections       []CollectionStatus `json:"collections"`
+	FailedEmbeddings  int                `json:"failed_embeddings"`
 	PendingEmbeddings int                `json:"pending_embeddings"`
 	TotalDocuments    int                `json:"total_documents"`
 	TotalEmbeddings   int                `json:"total_embeddings"`
@@ -258,6 +279,11 @@ type PostDocumentJSONBody struct {
 	Metadata   *map[string][]string `json:"metadata,omitempty"`
 	Path       string               `json:"path"`
 	SourceType *string              `json:"source_type,omitempty"`
+}
+
+// GetFailedParams defines parameters for GetFailed.
+type GetFailedParams struct {
+	Collection *string `form:"collection,omitempty" json:"collection,omitempty"`
 }
 
 // PostIndexJSONBody defines parameters for PostIndex.
@@ -364,6 +390,9 @@ type ServerInterface interface {
 
 	// (POST /api/embed)
 	PostEmbed(w http.ResponseWriter, r *http.Request)
+
+	// (GET /api/failed)
+	GetFailed(w http.ResponseWriter, r *http.Request, params GetFailedParams)
 
 	// (POST /api/index)
 	PostIndex(w http.ResponseWriter, r *http.Request)
@@ -638,6 +667,39 @@ func (siw *ServerInterfaceWrapper) PostEmbed(w http.ResponseWriter, r *http.Requ
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostEmbed(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetFailed operation middleware
+func (siw *ServerInterfaceWrapper) GetFailed(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetFailedParams
+
+	// ------------- Optional query parameter "collection" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "collection", r.URL.Query(), &params.Collection, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "collection"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "collection", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetFailed(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1188,6 +1250,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/list", wrapper.GetList)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/oversize", wrapper.GetOversize)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/failed", wrapper.GetFailed)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/chunk", wrapper.PostChunk)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/rechunk", wrapper.PostRechunk)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/index", wrapper.PostIndex)
@@ -1584,6 +1647,42 @@ func (response PostEmbed503JSONResponse) VisitPostEmbedResponse(w http.ResponseW
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetFailedRequestObject struct {
+	Params GetFailedParams
+}
+
+type GetFailedResponseObject interface {
+	VisitGetFailedResponse(w http.ResponseWriter) error
+}
+
+type GetFailed200JSONResponse FailedReport
+
+func (response GetFailed200JSONResponse) VisitGetFailedResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetFailed500JSONResponse ErrorResponse
+
+func (response GetFailed500JSONResponse) VisitGetFailedResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -1986,6 +2085,9 @@ type StrictServerInterface interface {
 	// (POST /api/embed)
 	PostEmbed(ctx context.Context, request PostEmbedRequestObject) (PostEmbedResponseObject, error)
 
+	// (GET /api/failed)
+	GetFailed(ctx context.Context, request GetFailedRequestObject) (GetFailedResponseObject, error)
+
 	// (POST /api/index)
 	PostIndex(ctx context.Context, request PostIndexRequestObject) (PostIndexResponseObject, error)
 
@@ -2332,6 +2434,32 @@ func (sh *strictHandler) PostEmbed(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetFailed operation middleware
+func (sh *strictHandler) GetFailed(w http.ResponseWriter, r *http.Request, params GetFailedParams) {
+	var request GetFailedRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetFailed(ctx, request.(GetFailedRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetFailed")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetFailedResponseObject); ok {
+		if err := validResponse.VisitGetFailedResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // PostIndex operation middleware
 func (sh *strictHandler) PostIndex(w http.ResponseWriter, r *http.Request) {
 	var request PostIndexRequestObject
@@ -2604,42 +2732,43 @@ func (sh *strictHandler) GetTags(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"/w==",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -1,8 +1,8 @@
-package store
+package strings
 
 import "unicode/utf8"
 
-func alignRuneStart(
+func AlignRuneStart(
 	body string,
 	index int,
 ) int {

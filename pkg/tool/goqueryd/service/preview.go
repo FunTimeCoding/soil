@@ -16,6 +16,7 @@ func (s *Service) Preview(
 		s.reranker.Name(),
 		s.reranker.SequenceLength(),
 		s.reranker.Allowance(),
+		s.counter.Allowance(),
 	)
 	source := strings.HasSuffix(path, constant.GoExtension)
 
@@ -28,6 +29,7 @@ func (s *Service) Preview(
 			last,
 			len(c.Text),
 			s.reranker.Count(c.Text),
+			s.counter.Count(c.Text),
 			piece,
 		)
 

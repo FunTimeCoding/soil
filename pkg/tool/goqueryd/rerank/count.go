@@ -3,13 +3,14 @@ package rerank
 import (
 	"github.com/amikos-tech/pure-tokenizers"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/tokenizer"
 )
 
 func (r *Reranker) Count(text string) int {
 	r.counterMutex.Lock()
 	defer r.counterMutex.Unlock()
 	result, e := r.counter.Encode(
-		valid(text),
+		tokenizer.Valid(text),
 		tokenizers.WithAddSpecialTokens(),
 	)
 	errors.PanicOnError(e)

@@ -36,11 +36,12 @@ func (e GetSearchParamsMode) Valid() bool {
 
 // ChunkPreview defines model for ChunkPreview.
 type ChunkPreview struct {
-	Allowance int              `json:"allowance"`
-	Chunks    []PreviewChunk   `json:"chunks"`
-	Model     string           `json:"model"`
-	Sections  []PreviewSection `json:"sections"`
-	Window    int              `json:"window"`
+	Allowance      int              `json:"allowance"`
+	Chunks         []PreviewChunk   `json:"chunks"`
+	EmbedAllowance int              `json:"embed_allowance"`
+	Model          string           `json:"model"`
+	Sections       []PreviewSection `json:"sections"`
+	Window         int              `json:"window"`
 }
 
 // CollectionStatus defines model for CollectionStatus.
@@ -82,6 +83,22 @@ type Facet struct {
 	Values   *map[string]int `json:"values,omitempty"`
 }
 
+// FailedChunk defines model for FailedChunk.
+type FailedChunk struct {
+	Bytes      int    `json:"bytes"`
+	Collection string `json:"collection"`
+	FirstLine  int    `json:"first_line"`
+	Index      int    `json:"index"`
+	LastLine   int    `json:"last_line"`
+	Path       string `json:"path"`
+	Reason     string `json:"reason"`
+}
+
+// FailedReport defines model for FailedReport.
+type FailedReport struct {
+	Chunks []FailedChunk `json:"chunks"`
+}
+
 // IndexResult defines model for IndexResult.
 type IndexResult struct {
 	Collection string `json:"collection"`
@@ -99,11 +116,12 @@ type ListOutcome struct {
 
 // OversizeChunk defines model for OversizeChunk.
 type OversizeChunk struct {
-	Bytes     int `json:"bytes"`
-	FirstLine int `json:"first_line"`
-	Index     int `json:"index"`
-	LastLine  int `json:"last_line"`
-	Tokens    int `json:"tokens"`
+	Bytes       int `json:"bytes"`
+	EmbedTokens int `json:"embed_tokens"`
+	FirstLine   int `json:"first_line"`
+	Index       int `json:"index"`
+	LastLine    int `json:"last_line"`
+	Tokens      int `json:"tokens"`
 }
 
 // OversizeFile defines model for OversizeFile.
@@ -116,10 +134,11 @@ type OversizeFile struct {
 
 // OversizeReport defines model for OversizeReport.
 type OversizeReport struct {
-	Allowance int            `json:"allowance"`
-	Files     []OversizeFile `json:"files"`
-	Model     string         `json:"model"`
-	Window    int            `json:"window"`
+	Allowance      int            `json:"allowance"`
+	EmbedAllowance int            `json:"embed_allowance"`
+	Files          []OversizeFile `json:"files"`
+	Model          string         `json:"model"`
+	Window         int            `json:"window"`
 }
 
 // PreviewBlock defines model for PreviewBlock.
@@ -132,15 +151,16 @@ type PreviewBlock struct {
 
 // PreviewChunk defines model for PreviewChunk.
 type PreviewChunk struct {
-	Bytes      int   `json:"bytes"`
-	CutChecked bool  `json:"cut_checked"`
-	CutLevel   int   `json:"cut_level"`
-	CutLines   []int `json:"cut_lines"`
-	FirstLine  int   `json:"first_line"`
-	Index      int   `json:"index"`
-	LastLine   int   `json:"last_line"`
-	Piece      bool  `json:"piece"`
-	Tokens     int   `json:"tokens"`
+	Bytes       int   `json:"bytes"`
+	CutChecked  bool  `json:"cut_checked"`
+	CutLevel    int   `json:"cut_level"`
+	CutLines    []int `json:"cut_lines"`
+	EmbedTokens int   `json:"embed_tokens"`
+	FirstLine   int   `json:"first_line"`
+	Index       int   `json:"index"`
+	LastLine    int   `json:"last_line"`
+	Piece       bool  `json:"piece"`
+	Tokens      int   `json:"tokens"`
 }
 
 // PreviewSection defines model for PreviewSection.
@@ -197,6 +217,7 @@ type SourceTypeTag struct {
 // Status defines model for Status.
 type Status struct {
 	Collections       []CollectionStatus `json:"collections"`
+	FailedEmbeddings  int                `json:"failed_embeddings"`
 	PendingEmbeddings int                `json:"pending_embeddings"`
 	TotalDocuments    int                `json:"total_documents"`
 	TotalEmbeddings   int                `json:"total_embeddings"`
@@ -251,6 +272,11 @@ type PostDocumentJSONBody struct {
 	Metadata   *map[string][]string `json:"metadata,omitempty"`
 	Path       string               `json:"path"`
 	SourceType *string              `json:"source_type,omitempty"`
+}
+
+// GetFailedParams defines parameters for GetFailed.
+type GetFailedParams struct {
+	Collection *string `form:"collection,omitempty" json:"collection,omitempty"`
 }
 
 // PostIndexJSONBody defines parameters for PostIndex.
@@ -448,6 +474,9 @@ type ClientInterface interface {
 
 	// PostEmbed performs a POST /api/embed (the `PostEmbed` operationId) request.
 	PostEmbed(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetFailed performs a GET /api/failed (the `GetFailed` operationId) request.
+	GetFailed(ctx context.Context, params *GetFailedParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostIndexWithBody performs a POST /api/index (the `PostIndex` operationId) request,
 	// with any type of body and a specified content type.
@@ -670,6 +699,19 @@ func (c *Client) PostDocument(ctx context.Context, body PostDocumentJSONRequestB
 // PostEmbed performs a POST /api/embed (the `PostEmbed` operationId) request.
 func (c *Client) PostEmbed(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostEmbedRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetFailed performs a GET /api/failed (the `GetFailed` operationId) request.
+func (c *Client) GetFailed(ctx context.Context, params *GetFailedParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetFailedRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1263,6 +1305,60 @@ func NewPostEmbedRequest(server string) (*http.Request, error) {
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetFailedRequest constructs an http.Request for the GetFailed method
+func NewGetFailedRequest(server string, params *GetFailedParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/failed")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Collection != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "collection", *params.Collection, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -1967,6 +2063,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	PostEmbedWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostEmbedResponse, error)
 
+	// GetFailedWithResponse performs a GET /api/failed (the `GetFailed` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetFailedWithResponse(ctx context.Context, params *GetFailedParams, reqEditors ...RequestEditorFn) (*GetFailedResponse, error)
+
 	// PostIndexWithBodyWithResponse performs a POST /api/index (the `PostIndex` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -2514,6 +2615,54 @@ func (r PostEmbedResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostEmbedResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetFailedResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *FailedReport
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetFailedResponse) GetJSON200() *FailedReport {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetFailedResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetFailedResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetFailedResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetFailedResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetFailedResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -3154,6 +3303,17 @@ func (c *ClientWithResponses) PostEmbedWithResponse(ctx context.Context, reqEdit
 	return ParsePostEmbedResponse(rsp)
 }
 
+// GetFailedWithResponse performs a GET /api/failed (the `GetFailed` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetFailedWithResponse(ctx context.Context, params *GetFailedParams, reqEditors ...RequestEditorFn) (*GetFailedResponse, error) {
+	rsp, err := c.GetFailed(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetFailedResponse(rsp)
+}
+
 // PostIndexWithBodyWithResponse performs a POST /api/index (the `PostIndex` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -3622,6 +3782,39 @@ func ParsePostEmbedResponse(rsp *http.Response) (*PostEmbedResponse, error) {
 			return nil, err
 		}
 		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetFailedResponse parses an HTTP response from a GetFailedWithResponse call
+func ParseGetFailedResponse(rsp *http.Response) (*GetFailedResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetFailedResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest FailedReport
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
 
 	}
 

@@ -9,6 +9,11 @@ import (
 func (w *Worker) poll() {
 	_, e := w.service.IndexCollections("")
 	errors.PanicOnError(e)
+
+	if pruned := w.service.Prune(); pruned > 0 {
+		w.logger.Plain(constant.PrunedContent, pruned)
+	}
+
 	f := w.service.EmbedPending(w.context)
 
 	switch {

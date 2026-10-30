@@ -22,10 +22,11 @@ func status(
 			s, e := c.GetStatus(context.Background())
 			t.EmitDone(e)
 			console.Format(
-				"Documents: %d  Embeddings: %d  Pending: %d\n",
+				"Documents: %d  Embeddings: %d  Pending: %d  Failed: %d\n",
 				s.TotalDocuments,
 				s.TotalEmbeddings,
 				s.PendingEmbeddings,
+				s.FailedEmbeddings,
 			)
 
 			for _, v := range s.Collections {

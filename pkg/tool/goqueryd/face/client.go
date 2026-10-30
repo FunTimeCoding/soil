@@ -19,6 +19,10 @@ type Client interface {
 		x context.Context,
 		p *client.GetOversizeParams,
 	) (*client.OversizeReport, error)
+	GetFailed(
+		x context.Context,
+		p *client.GetFailedParams,
+	) (*client.FailedReport, error)
 	PostChunk(
 		x context.Context,
 		b client.PostChunkJSONRequestBody,

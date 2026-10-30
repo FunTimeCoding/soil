@@ -90,4 +90,7 @@ const (
 	AptlyInsecureEnvironment = "APTLY_INSECURE"
 	AptlyUsernameEnvironment = "APTLY_USERNAME"
 	AptlyPasswordEnvironment = "APTLY_PASSWORD"
+
+	AptlyForceReplaceParameter = "forceReplace"
+	AptlyForceReplaceValue     = "1"
 )

@@ -3,6 +3,7 @@ package rerank
 import (
 	"fmt"
 	"github.com/amikos-tech/pure-tokenizers"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/tokenizer"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/rerank_result"
 )
 
@@ -21,7 +22,7 @@ func (r *Reranker) Rank(
 
 	for i := range queries {
 		queries[i] = query
-		texts[i] = valid(documents[i])
+		texts[i] = tokenizer.Valid(documents[i])
 	}
 
 	encodings, e := r.tokenizer.EncodePairs(

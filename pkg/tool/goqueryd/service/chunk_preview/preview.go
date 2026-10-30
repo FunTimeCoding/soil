@@ -6,9 +6,10 @@ import (
 )
 
 type Preview struct {
-	Model     string
-	Window    int
-	Allowance int
-	Chunks    []*preview_chunk.Chunk
-	Sections  []*preview_section.Section
+	Model          string
+	Window         int
+	Allowance      int
+	EmbedAllowance int
+	Chunks         []*preview_chunk.Chunk
+	Sections       []*preview_section.Section
 }

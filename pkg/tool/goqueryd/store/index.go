@@ -52,7 +52,7 @@ func (s *Store) Index(collection string) *index.Index {
 
 	for _, active := range s.activeDocumentPaths(collection) {
 		if !seen[active] {
-			s.deactivateDocument(collection, active)
+			s.removeDocument(collection, active)
 			r.Removed++
 		}
 	}

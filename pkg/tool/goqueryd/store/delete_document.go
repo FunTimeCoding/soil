@@ -43,8 +43,7 @@ func (s *Store) DeleteDocument(
 	)
 
 	if otherRefs == 0 {
-		_, e = s.database.Exec("DELETE FROM embedding WHERE hash = ?", hash)
-		errors.PanicOnError(e)
+		errors.PanicOnError(s.DeleteEmbeddings(hash))
 		_, e = s.database.Exec("DELETE FROM content WHERE hash = ?", hash)
 		errors.PanicOnError(e)
 	}

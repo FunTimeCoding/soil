@@ -18,6 +18,7 @@ func TestDirectoryContent(t *testing.T) {
 			"directory",
 			"hypertext",
 			"license",
+			"limit",
 			"markdown",
 			"memory",
 			"notation",

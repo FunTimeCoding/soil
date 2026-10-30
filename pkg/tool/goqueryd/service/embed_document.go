@@ -2,16 +2,18 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/record"
 	"time"
 )
 
 func (s *Service) embedDocument(
 	x context.Context,
-	p record.PendingDocument,
+	hash string,
+	path string,
+	body string,
 ) (int, error) {
-	chunks := chunk.Document(p.Body, p.Path, s.reranker)
+	chunks := chunk.Document(body, path, s.reranker)
 	texts := make([]string, len(chunks))
 
 	for i, c := range chunks {
@@ -21,13 +23,17 @@ func (s *Service) embedDocument(
 	embeddings, e := s.embedTexts(x, texts)
 
 	if e != nil {
-		return 0, e
+		if !validation.Is(e) {
+			return 0, e
+		}
+
+		return s.embedEach(x, hash, chunks)
 	}
 
 	now := time.Now().UTC().Format(time.RFC3339)
 
 	for i, embedding := range embeddings {
-		s.store.InsertEmbedding(p.Hash, i, chunks[i].Position, embedding, now)
+		s.store.InsertEmbedding(hash, i, chunks[i].Position, embedding, now)
 	}
 
 	return len(chunks), nil

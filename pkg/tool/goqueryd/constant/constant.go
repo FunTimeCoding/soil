@@ -36,7 +36,9 @@ const (
 	DocumentKind      = "document"
 	HybridMode        = "hybrid"
 	EmbeddingPending  = "stored; embedding pending: %v"
+	EmbeddingRefused  = "stored; refused chunks skipped: %v"
 	EmbeddingDeferred = "pending embeddings wait: %v"
+	PrunedContent     = "pruned %d unreferenced contents"
 
 	Metadata    = "metadata"
 	Collection  = "collection"

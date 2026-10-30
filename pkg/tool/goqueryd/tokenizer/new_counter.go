@@ -1,4 +1,4 @@
-package rerank
+package tokenizer
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func newCounter(path string) (*tokenizers.Tokenizer, error) {
+func NewCounter(path string) (*tokenizers.Tokenizer, error) {
 	b, e := os.ReadFile(path)
 
 	if e != nil {

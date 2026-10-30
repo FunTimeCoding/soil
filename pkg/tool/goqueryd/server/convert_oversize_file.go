@@ -14,7 +14,8 @@ func convertOversizeFile(f *oversize_file.File) server.OversizeFile {
 			FirstLine: c.FirstLine,
 			LastLine:  c.LastLine,
 			Bytes:     c.Bytes,
-			Tokens:    c.Tokens,
+			Tokens:      c.Tokens,
+			EmbedTokens: c.EmbedTokens,
 		}
 	}
 

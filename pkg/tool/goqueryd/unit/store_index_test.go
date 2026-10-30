@@ -66,6 +66,24 @@ func TestIndexRemovedDocument(t *testing.T) {
 	assert.Integer(t, 1, status.TotalDocuments)
 }
 
+func TestARemovedDocumentLeavesNothingBehind(t *testing.T) {
+	s := store_tester.OpenTestStore(t)
+	directory := t.TempDir()
+	store_tester.WriteFixture(t, directory, "keep.md", "# Keep\n\nStays.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"remove.md",
+		"# Remove\n\nGoes away.\n",
+	)
+	s.AddCollection("test", directory, constant.DefaultGlob)
+	s.Index("test")
+	errors.PanicOnError(os.Remove(filepath.Join(directory, "remove.md")))
+	s.Index("test")
+	assert.Integer(t, 1, int(s.Prune()))
+	assert.Integer(t, 1, s.ContentCount())
+}
+
 func TestIndexSkipsHiddenFiles(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
 	directory := t.TempDir()

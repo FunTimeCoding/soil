@@ -38,6 +38,10 @@ func (s *Server) dashboard(
 					html.Td(html.Strong(gomponents.Text("Pending"))),
 					html.Td(gomponents.Textf("%d", status.PendingEmbeddings)),
 				),
+				html.Tr(
+					html.Td(html.Strong(gomponents.Text("Failed"))),
+					html.Td(gomponents.Textf("%d", status.FailedEmbeddings)),
+				),
 			),
 		),
 	)

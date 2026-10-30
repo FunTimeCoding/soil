@@ -9,6 +9,8 @@ const (
 	RerankModelFile            = "model.onnx"
 	RerankTokenizerFile        = "tokenizer.json"
 	RerankQueryReserve         = 32
+	EmbedTokenizerEnvironment  = "EMBED_TOKENIZER"
+	EmbedWindow                = 2048
 	NoChunkPosition            = -1
 	MockRerankerName           = "mock"
 )

@@ -6,12 +6,14 @@ func New(
 	lastLine int,
 	bytes int,
 	tokens int,
+	embedTokens int,
 ) *Chunk {
 	return &Chunk{
-		Index:     index,
-		FirstLine: firstLine,
-		LastLine:  lastLine,
-		Bytes:     bytes,
-		Tokens:    tokens,
+		Index:       index,
+		FirstLine:   firstLine,
+		LastLine:    lastLine,
+		Bytes:       bytes,
+		Tokens:      tokens,
+		EmbedTokens: embedTokens,
 	}
 }

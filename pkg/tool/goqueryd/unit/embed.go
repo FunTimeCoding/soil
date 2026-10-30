@@ -1,6 +1,10 @@
 package unit
 
-import "context"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"strings"
+)
 
 func (f *FixedEmbedder) Embed(
 	_ context.Context,
@@ -16,6 +20,14 @@ func (f *FixedEmbedder) Embed(
 
 	if f.failure != nil {
 		return nil, f.failure
+	}
+
+	for _, s := range v {
+		if f.refused != "" && strings.Contains(s, f.refused) {
+			return nil, validation.New(
+				"ollama: the input length exceeds the context length",
+			)
+		}
 	}
 
 	result := make([][]float32, len(v))

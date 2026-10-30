@@ -2,12 +2,12 @@ package store
 
 import "github.com/funtimecoding/soil/pkg/errors"
 
-func (s *Store) deactivateDocument(
+func (s *Store) removeDocument(
 	collection string,
 	path string,
 ) {
 	_, e := s.database.Exec(
-		"UPDATE document SET active = 0 WHERE collection = ? AND path = ? AND active = 1",
+		"DELETE FROM document WHERE collection = ? AND path = ?",
 		collection,
 		path,
 	)

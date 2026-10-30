@@ -1,6 +1,9 @@
 package chunk
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+)
 
 func chunkMarkdown(content string) []Chunk {
 	points := scanBreakPoints(content)
@@ -15,6 +18,7 @@ func chunkMarkdown(content string) []Chunk {
 			target = len(content)
 		}
 
+		target = strings.AlignRuneStart(content, target)
 		end := target
 
 		if end < len(content) {
@@ -42,7 +46,7 @@ func chunkMarkdown(content string) []Chunk {
 			break
 		}
 
-		next := end - constant.ChunkOverlap
+		next := strings.AlignRuneStart(content, end-constant.ChunkOverlap)
 
 		if len(result) > 0 && next <= result[len(result)-1].Position {
 			next = end

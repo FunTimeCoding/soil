@@ -40,8 +40,7 @@ func (s *Store) DeleteCollection(name string) bool {
 	errors.PanicOnError(e)
 
 	for _, hash := range orphanedHashes {
-		_, e = s.database.Exec("DELETE FROM embedding WHERE hash = ?", hash)
-		errors.PanicOnError(e)
+		errors.PanicOnError(s.DeleteEmbeddings(hash))
 		_, e = s.database.Exec("DELETE FROM content WHERE hash = ?", hash)
 		errors.PanicOnError(e)
 	}

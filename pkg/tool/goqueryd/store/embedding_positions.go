@@ -4,7 +4,9 @@ import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) EmbeddingPositions() (map[string]map[int]int, error) {
 	rows, e := s.database.Query(
-		"SELECT hash, sequence, position FROM embedding",
+		`SELECT hash, sequence, position FROM embedding
+		UNION ALL
+		SELECT hash, sequence, position FROM embedding_failure`,
 	)
 
 	if e != nil {

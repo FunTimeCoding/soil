@@ -1,0 +1,218 @@
+ALFA(1)                      General Commands Manual                     ALFA(1)
+
+NAME
+       alfa - copy bravo archives between hosts
+
+SYNOPSIS
+       alfa [-0aAbBcCdDeEfFgGhHiIkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ] [-j jobs]
+            [-k key] [-o file] [-p port] [-r retries] [-t timeout]
+            [--exclude=pattern] [--include=pattern] [--since=time]
+            [--until=time] [--level=0..9] [--format=plain|table|tree]
+            source ... destination
+
+       alfa --list [-l] [-h] [--format=plain|table|tree] source
+
+       alfa --verify [-q] [-v] [--level=0..9] archive ...
+
+DESCRIPTION
+       alfa copies bravo archives from one or more sources to a destination.
+       A source or destination is either a local path or host.example:path,
+       in which case alfa connects to the host and copies over the network.
+
+       Only archives that differ between source and destination are copied.
+       Two archives are the same when their size, modification time and
+       checksum agree. With -c, the checksum alone decides.
+
+       alfa never deletes anything at the destination unless -d is given.
+
+OPTIONS
+       -0     Separate names with a zero byte instead of a newline, for use
+              with other tools that read zero-separated lists.
+
+       -a     Archive mode; the same as -rlptgoD. Recurse into directories,
+              copy links as links, keep permissions, times, group, owner and
+              device files.
+
+       -A     Keep access control lists. Implies -p.
+
+       -b     Make a backup of every file at the destination before it is
+              replaced. The backup takes the suffix given by --suffix, or ~
+              when none is given.
+
+       -B     Set the block size used by the delta algorithm. The default is
+              chosen from the size of each archive.
+
+       -c     Skip on checksum, not on modification time and size.
+
+       -C     Ignore files in the same way a version control system would.
+
+       -d     Delete files at the destination that do not exist at the
+              source. Combined with -n, lists what would be deleted.
+
+       -D     The same as --devices --specials.
+
+       -e command
+              Choose the remote shell used to reach a host. The default is
+              read from ALFA_SHELL.
+
+       -E     Keep the executable bit.
+
+       -f rule
+              Add a filter rule. Rules are read in order; the first rule that
+              matches a name decides.
+
+       -F     The same as -f ': /.alfa-filter'. Given twice, also excludes the
+              filter files themselves.
+
+       -g     Keep the group.
+
+       -h     Print sizes in a human readable form: K, M, G, T.
+
+       -H     Keep hard links.
+
+       -i     Print a change summary for every file: ><cd+++++++++ and the like.
+
+       -I     Do not skip files that match in size and time.
+
+       -j jobs
+              Copy up to jobs archives at the same time. The default is 1.
+
+       -k key Read the key used to reach a host from key.
+
+       -K     Treat a symbolic link to a directory at the destination as the
+              directory.
+
+       -l     Copy symbolic links as symbolic links.
+
+       -L     Copy the file a symbolic link points to, not the link.
+
+       -m     Prune empty directories.
+
+       -M option
+              Pass option to the remote side only.
+
+       -n     Show what would be copied, copy nothing.
+
+       -o file
+              Write the log to file instead of the standard error.
+
+       -O     Do not keep the modification time of directories.
+
+       -p port
+              Connect to port on the host. The default is 873.
+
+       -P     The same as --partial --progress.
+
+       -q     Print errors only.
+
+       -r retries
+              Retry a failed archive up to retries times. The default is 3.
+
+       -R     Use relative path names.
+
+       -s     Do not let the remote shell split arguments.
+
+       -S     Handle sparse files efficiently.
+
+       -t timeout
+              Give up on a host after timeout seconds without a reply.
+
+       -T directory
+              Create temporary files in directory.
+
+       -u     Skip files that are newer at the destination.
+
+       -U     Keep access times.
+
+       -v     Print more about what is being done. Given twice, prints more.
+
+       -W     Copy whole files, without the delta algorithm.
+
+       -x     Do not cross file system boundaries.
+
+       -X     Keep extended attributes.
+
+       -y     Look for a similar file at the destination to base the delta on.
+
+       -z     Compress data on the network.
+
+       --exclude=pattern
+              Exclude names matching pattern. May be given more than once.
+
+       --include=pattern
+              Include names matching pattern even when an earlier rule
+              excludes them.
+
+       --since=time, --until=time
+              Copy only archives modified inside the window. time is either
+              an RFC 3339 timestamp or a duration such as 36h.
+
+       --level=0..9
+              Compression level for -z. 0 stores, 9 compresses hardest.
+
+       --format=plain|table|tree
+              Choose the shape of --list output.
+
+       --list Print the archives at source and exit.
+
+       --verify
+              Read every archive given and check its checksum.
+
+EXIT STATUS
+       0      Success.
+       1      Syntax or usage error.
+       2      Protocol incompatibility.
+       3      Errors selecting input or output files.
+       5      Error starting the client-server protocol.
+       10     Error in socket input or output.
+       11     Error in file input or output.
+       12     Error in the data stream.
+       20     Interrupted by a signal.
+       23     Partial transfer due to an error.
+       24     Partial transfer because source files vanished.
+       30     Timeout in data send or receive.
+       35     Timeout waiting for a daemon connection.
+
+ENVIRONMENT
+       ALFA_SHELL
+              The remote shell used when -e is not given.
+
+       ALFA_PASSWORD_FILE
+              A file holding the password for a host, read when -k is not
+              given.
+
+       ALFA_PARTIAL_DIRECTORY
+              Where partial files are kept when --partial is given.
+
+FILES
+       /etc/alfa.conf
+              The system configuration.
+
+       ~/.config/alfa/hosts
+              One host per line: name, port and key, separated by spaces.
+
+EXAMPLES
+       Copy a directory to a host, keeping everything:
+
+              alfa -avz archive/ host.example:/srv/archive/
+
+       Show what would be deleted at the destination:
+
+              alfa -avn -d archive/ host.example:/srv/archive/
+
+       Copy only last week's archives, four at a time:
+
+              alfa -a -j 4 --since=168h archive/ server.test:/srv/archive/
+
+       List a host's archives as a table, with human readable sizes:
+
+              alfa --list -lh --format=table host.example:/srv/archive/
+
+       Verify every archive in a directory, quietly:
+
+              alfa --verify -q archive/*.bravo
+
+SEE ALSO
+       bravo(1), charlie(1), bravo(5), alfa.conf(5)
+
+ALFA 3.4                          2026-10-30                          ALFA(1)

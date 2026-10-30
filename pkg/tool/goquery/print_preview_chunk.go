@@ -9,27 +9,48 @@ import (
 func printPreviewChunk(
 	k client.PreviewChunk,
 	allowance int,
+	embedAllowance int,
 ) int {
 	console.Format(
-		"  chunk %d  lines %d-%d  %d B  %d tokens",
+		"  chunk %d  lines %d-%d  %d B  %d tokens  embed %d",
 		k.Index,
 		k.FirstLine,
 		k.LastLine,
 		k.Bytes,
 		k.Tokens,
+		k.EmbedTokens,
 	)
 
 	if k.Piece {
 		console.Format("  table piece")
 	}
 
-	if k.Tokens <= allowance {
+	over := k.Tokens > allowance
+	embedOver := k.EmbedTokens > embedAllowance
+
+	if !over && !embedOver {
 		console.Line()
 
 		return 0
 	}
 
-	console.Format("  OVER by %d\n", k.Tokens-allowance)
+	if over {
+		console.Format("  OVER by %d", k.Tokens-allowance)
+	}
+
+	console.Line()
+
+	if embedOver {
+		console.Format(
+			"      embedder: over its %d tokens by %d, refused when embedded\n",
+			embedAllowance,
+			k.EmbedTokens-embedAllowance,
+		)
+	}
+
+	if !over {
+		return 1
+	}
 
 	switch {
 	case k.CutLevel > 0:

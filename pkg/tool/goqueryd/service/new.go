@@ -24,5 +24,6 @@ func New(
 		embedder: m,
 		guard:    peer.New(constant.EmbedderPeer, o.EmbedTarget, m, l, r),
 		reranker: o.Reranker(),
+		counter:  o.EmbedCounter(),
 	}
 }

@@ -15,5 +15,6 @@ type Service struct {
 	embedder  face.ReachableEmbedder
 	guard     *peer.Guard
 	reranker  queryd.Reranker
+	counter   queryd.EmbedCounter
 	closeOnce sync.Once
 }

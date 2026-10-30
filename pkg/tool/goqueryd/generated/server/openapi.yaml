@@ -158,6 +158,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/failed:
+    get:
+      operationId: getFailed
+      parameters:
+      - name: collection
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Chunks the embedder refused, one per document path.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailedReport"
+        "500":
+          description: Failed to list refused chunks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/chunk:
     post:
       operationId: postChunk
@@ -652,7 +673,7 @@ components:
             $ref: "#/components/schemas/Facet"
     Status:
       type: object
-      required: [collections, total_documents, total_embeddings, pending_embeddings]
+      required: [collections, total_documents, total_embeddings, pending_embeddings, failed_embeddings]
       properties:
         collections:
           type: array
@@ -664,15 +685,19 @@ components:
           type: integer
         pending_embeddings:
           type: integer
+        failed_embeddings:
+          type: integer
     OversizeReport:
       type: object
-      required: [model, window, allowance, files]
+      required: [model, window, allowance, embed_allowance, files]
       properties:
         model:
           type: string
         window:
           type: integer
         allowance:
+          type: integer
+        embed_allowance:
           type: integer
         files:
           type: array
@@ -694,7 +719,7 @@ components:
             $ref: "#/components/schemas/OversizeChunk"
     OversizeChunk:
       type: object
-      required: [index, first_line, last_line, bytes, tokens]
+      required: [index, first_line, last_line, bytes, tokens, embed_tokens]
       properties:
         index:
           type: integer
@@ -706,15 +731,45 @@ components:
           type: integer
         tokens:
           type: integer
+        embed_tokens:
+          type: integer
+    FailedReport:
+      type: object
+      required: [chunks]
+      properties:
+        chunks:
+          type: array
+          items:
+            $ref: "#/components/schemas/FailedChunk"
+    FailedChunk:
+      type: object
+      required: [collection, path, index, first_line, last_line, bytes, reason]
+      properties:
+        collection:
+          type: string
+        path:
+          type: string
+        index:
+          type: integer
+        first_line:
+          type: integer
+        last_line:
+          type: integer
+        bytes:
+          type: integer
+        reason:
+          type: string
     ChunkPreview:
       type: object
-      required: [model, window, allowance, chunks, sections]
+      required: [model, window, allowance, embed_allowance, chunks, sections]
       properties:
         model:
           type: string
         window:
           type: integer
         allowance:
+          type: integer
+        embed_allowance:
           type: integer
         chunks:
           type: array
@@ -726,7 +781,7 @@ components:
             $ref: "#/components/schemas/PreviewSection"
     PreviewChunk:
       type: object
-      required: [index, first_line, last_line, bytes, tokens, piece, cut_checked, cut_level, cut_lines]
+      required: [index, first_line, last_line, bytes, tokens, embed_tokens, piece, cut_checked, cut_level, cut_lines]
       properties:
         index:
           type: integer
@@ -737,6 +792,8 @@ components:
         bytes:
           type: integer
         tokens:
+          type: integer
+        embed_tokens:
           type: integer
         piece:
           type: boolean

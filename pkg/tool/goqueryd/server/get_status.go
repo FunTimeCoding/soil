@@ -34,5 +34,6 @@ func (s *Server) GetStatus(
 		TotalDocuments:    status.TotalDocuments,
 		TotalEmbeddings:   status.TotalEmbeddings,
 		PendingEmbeddings: status.PendingEmbeddings,
+		FailedEmbeddings:  status.FailedEmbeddings,
 	}, nil
 }

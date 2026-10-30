@@ -8,6 +8,7 @@ func (s *Service) Close() {
 			s.guard.Close()
 			s.embedder.Close()
 			errors.LogClose(s.reranker)
+			errors.LogClose(s.counter)
 			errors.PanicClose(s.database)
 		},
 	)

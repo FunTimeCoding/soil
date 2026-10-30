@@ -24,16 +24,17 @@ func printPreview(
 	over := 0
 
 	for _, k := range p.Chunks {
-		over += printPreviewChunk(k, p.Allowance)
+		over += printPreviewChunk(k, p.Allowance, p.EmbedAllowance)
 	}
 
 	console.Format(
-		"\n%d chunks, %d over %d tokens (%s, window %d)\n",
+		"\n%d chunks, %d over %d tokens (%s, window %d) or the embedder's %d\n",
 		len(p.Chunks),
 		over,
 		p.Allowance,
 		p.Model,
 		p.Window,
+		p.EmbedAllowance,
 	)
 
 	return over

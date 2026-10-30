@@ -7,6 +7,15 @@ import (
 	"testing"
 )
 
+func TestAlignRuneStart(t *testing.T) {
+	assert.Integer(t, 0, strings.AlignRuneStart("aあb", 0))
+	assert.Integer(t, 1, strings.AlignRuneStart("aあb", 1))
+	assert.Integer(t, 1, strings.AlignRuneStart("aあb", 2))
+	assert.Integer(t, 1, strings.AlignRuneStart("aあb", 3))
+	assert.Integer(t, 4, strings.AlignRuneStart("aあb", 4))
+	assert.Integer(t, 5, strings.AlignRuneStart("aあb", 5))
+}
+
 func TestContainsLower(t *testing.T) {
 	assert.True(t, strings.ContainsLower("TestFixture", "fixture"))
 	assert.False(t, strings.ContainsLower("TestFixture", "other"))

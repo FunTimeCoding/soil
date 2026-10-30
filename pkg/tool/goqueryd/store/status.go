@@ -44,7 +44,12 @@ func (s *Store) Status() (*status.Status, error) {
 		return nil, e
 	}
 
-	row := s.database.QueryRow("SELECT COUNT(*) FROM embedding")
+	row := s.database.QueryRow(
+		`SELECT COUNT(*) FROM embedding e
+		WHERE EXISTS (
+			SELECT 1 FROM document d WHERE d.hash = e.hash AND d.active = 1
+		)`,
+	)
 
 	if e := row.Scan(&r.TotalEmbeddings); e != nil {
 		return nil, e
@@ -53,12 +58,24 @@ func (s *Store) Status() (*status.Status, error) {
 	row = s.database.QueryRow(
 		`
 		SELECT COUNT(DISTINCT d.hash) FROM document d
-		LEFT JOIN embedding e ON e.hash = d.hash
-		WHERE d.active = 1 AND e.hash IS NULL
+		WHERE d.active = 1
+		AND NOT EXISTS (SELECT 1 FROM embedding e WHERE e.hash = d.hash)
+		AND NOT EXISTS (SELECT 1 FROM embedding_failure f WHERE f.hash = d.hash)
 	`,
 	)
 
 	if e := row.Scan(&r.PendingEmbeddings); e != nil {
+		return nil, e
+	}
+
+	row = s.database.QueryRow(
+		`SELECT COUNT(*) FROM embedding_failure f
+		WHERE EXISTS (
+			SELECT 1 FROM document d WHERE d.hash = f.hash AND d.active = 1
+		)`,
+	)
+
+	if e := row.Scan(&r.FailedEmbeddings); e != nil {
 		return nil, e
 	}
 

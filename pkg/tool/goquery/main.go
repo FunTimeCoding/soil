@@ -14,7 +14,7 @@ func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	t := terminal.New(s)
-	c := client.NewEnvironment()
+	c := client.NewLongEnvironment()
 	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
@@ -33,6 +33,7 @@ func Main() {
 	o.AddCommand(removeContext(c, t))
 	o.AddCommand(status(c, t))
 	o.AddCommand(oversize(c, t))
+	o.AddCommand(failed(c, t))
 	o.AddCommand(chunk(c, t))
 	o.AddCommand(rechunk(c, t))
 	argument.CobraInstrument(o, s)

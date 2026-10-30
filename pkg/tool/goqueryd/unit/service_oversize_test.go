@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"math"
 	"testing"
 )
 
@@ -23,6 +24,14 @@ func TestOversizeChunkCarriesLinesBytesAndTokens(t *testing.T) {
 	assert.Integer(t, 4, c.LastLine)
 	assert.Integer(t, 49, c.Bytes)
 	assert.Integer(t, 10, c.Tokens)
+}
+
+func TestOversizeListsAChunkOverTheEmbedderAlone(t *testing.T) {
+	r := oversizeReportWithin(t, "", math.MaxInt, 8)
+	assert.Integer(t, 8, r.EmbedAllowance)
+	assert.Count(t, 1, r.Files)
+	assert.String(t, "bravo.md", r.Files[0].Path)
+	assert.Integer(t, 10, r.Files[0].Chunks[0].EmbedTokens)
 }
 
 func TestOversizeCollectionFilterExcludesOtherCollections(t *testing.T) {

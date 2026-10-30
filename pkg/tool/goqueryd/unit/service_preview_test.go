@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"math"
 	"strings"
 	"testing"
 )
@@ -21,6 +22,19 @@ func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
 	assert.True(t, p.Chunks[2].Piece)
 	assert.Integer(t, 11, p.Chunks[2].FirstLine)
 	assert.Integer(t, 12, p.Chunks[2].LastLine)
+}
+
+func TestPreviewCountsEachWindowForTheEmbedder(t *testing.T) {
+	r := newReranker(t)
+	r.SetAllowance(40)
+	p := newService(t, newEmbedder(t), r).Preview(
+		"alfa.md",
+		"# Alfa\n\none two three four\n",
+	)
+	assert.Integer(t, 40, p.Allowance)
+	assert.Integer(t, math.MaxInt, p.EmbedAllowance)
+	assert.Count(t, 1, p.Chunks)
+	assert.Integer(t, 6, p.Chunks[0].EmbedTokens)
 }
 
 func TestPreviewNamesTheLinesWhereAHeadingFixesAWindow(t *testing.T) {
