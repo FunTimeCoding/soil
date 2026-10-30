@@ -59,6 +59,8 @@ Read the relevant spec before working in that area.
 - `strata/container/` - Containerfiles, one directory per image
 - `graft/` - code in languages other than Go, one directory per language
 - `doc/ai/runbook/` - operational runbooks backing the skills
+- `doc/ai/seed/` - seeds for work in progress across sessions (daemon
+  ownership: census, order, craft)
 
 ## Claude Code plugin
 

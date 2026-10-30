@@ -19,7 +19,6 @@ Ollama
 Opsgenie
 Reitzel
 alice
-coolify
 funtimecoding
 grafana
 habitica
@@ -28,7 +27,6 @@ homeassistant
 jdoe
 jellyfin
 kaos
-karakeep
 kestra
 linkace
 linkwarden
@@ -36,12 +34,10 @@ mattermost
 netbox
 openvex
 osquery
-qdrant
 technitium
 trivy
 
 # Go
-GOFLAGS
 GOPROXY
 errcheck
 goanalyze
@@ -60,6 +56,8 @@ alertlog
 exitf
 ghjob
 ghpr
+goagent
+goagentd
 goalert
 goalertlog
 goalertlogd
@@ -67,9 +65,11 @@ goalertmanagerd
 goalpine
 goalpined
 goansibled
+goatlasd
 goatlassian
 goatlassiand
 goaudit
+gobandd
 gobuild
 gocertificated
 gochk
@@ -78,12 +78,15 @@ goclaude
 goclauded
 goclean
 gocontainer
+godashboardd
 godockerhub
 godownload
 goexample
 gofile
+gofirefoxd
 gofix
 goflightd
+gogated
 gogenie
 goghjob
 goghpr
@@ -96,8 +99,10 @@ gohabiticad
 gohw
 goimage
 goitermd
+gojellyfind
 gojira
 gokevt
+gokubernetesd
 golint
 goloki
 gomaintlog
@@ -111,6 +116,7 @@ gomonitor
 gomonitord
 gonetbox
 gonetboxd
+gooutpostd
 gopackageapk
 gopackagedeb
 gopnsense
@@ -130,9 +136,12 @@ goraidparsed
 gosalt
 gosaltd
 gosecret
+gosecretd
 gosentry
 gosentryd
 gosilence
+gosourced
+gosproutd
 gosublime
 gosublimed
 gotelemetry
@@ -194,12 +203,6 @@ sigs
 # HTML
 DOCTYPE
 tbody
-
-# JavaScript
-onclose
-onerror
-onmessage
-onopen
 
 # Task
 cmds
@@ -290,10 +293,6 @@ autobump
 livecheck
 oldnames
 pkgutil
-
-# libvirt
-libvirt
-virt
 
 # QEMU
 chardev
