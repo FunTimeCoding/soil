@@ -47,7 +47,7 @@ require (
 	github.com/google/licensecheck v0.3.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gpustack/gguf-parser-go v0.27.0
+	github.com/gpustack/gguf-parser-go v0.28.1
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20261015192556-fcf0a80b71e9
 	github.com/hetznercloud/hcloud-go/v2 v2.53.0
 	github.com/hupe1980/go-tiktoken v0.0.10
@@ -55,8 +55,9 @@ require (
 	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.4
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
 	github.com/luthermonson/go-proxmox v0.8.2
-	github.com/mark3labs/mcp-go v1.4.0
+	github.com/mark3labs/mcp-go v1.5.0
 	github.com/mattermost/mattermost/server/public v0.6.0
+	github.com/mattn/go-isatty v0.0.24
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/muesli/termenv v0.16.0
 	github.com/netbox-community/go-netbox/v4 v4.3.0
@@ -72,7 +73,7 @@ require (
 	github.com/pkg/sftp v1.13.12
 	github.com/prometheus/alertmanager v0.34.2
 	github.com/prometheus/client_golang v1.25.0
-	github.com/prometheus/common v0.73.0
+	github.com/prometheus/common v0.73.1
 	github.com/refraction-networking/utls v1.8.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sashabaranov/go-openai v1.43.0
@@ -87,8 +88,8 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.7.1
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark/v2 v2.1.9
-	gitlab.com/gitlab-org/api/client-go/v3 v3.39.2
+	github.com/yuin/goldmark/v2 v2.1.12
+	gitlab.com/gitlab-org/api/client-go/v3 v3.40.0
 	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/crypto v0.58.0
 	golang.org/x/mod v0.42.0
@@ -220,7 +221,6 @@ require (
 	github.com/hashicorp/go-secure-stdlib/parseutil v0.2.0 // indirect
 	github.com/hashicorp/go-secure-stdlib/strutil v0.1.2 // indirect
 	github.com/hashicorp/go-sockaddr v1.0.7 // indirect
-	github.com/hashicorp/go-uuid v1.0.3 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-7 // indirect
 	github.com/hashicorp/yamux v0.1.2 // indirect
 	github.com/henvic/httpretty v0.1.4 // indirect
@@ -249,7 +249,6 @@ require (
 	github.com/mattermost/ldap v0.0.0-20231116144001-0f480c025956 // indirect
 	github.com/mattermost/logr/v2 v2.0.22 // indirect
 	github.com/mattn/go-colorable v0.1.16 // indirect
-	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/mattn/go-runewidth v0.0.30 // indirect
 	github.com/mattn/goveralls v0.0.12 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -271,7 +270,7 @@ require (
 	github.com/ory/go-convenience v0.1.0 // indirect
 	github.com/ory/x v0.0.665 // indirect
 	github.com/package-url/packageurl-go v0.1.7 // indirect
-	github.com/pandatix/go-abnf v0.5.1 // indirect
+	github.com/pandatix/go-abnf v0.5.3 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
