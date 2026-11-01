@@ -25,12 +25,19 @@ func (s *Service) SearchRelevant(
 		p.Exclude = &exclude
 	}
 
-	outcome, e := s.query.GetSearch(context.Background(), p)
+	var outcome *client.SearchOutcome
 
-	if e != nil {
+	if e := s.guard.Attempt(
+		context.Background(),
+		func(x context.Context) error {
+			var f error
+			outcome, f = s.query.GetSearch(x, p)
+
+			return f
+		},
+	); e != nil {
 		return nil, e
 	}
-
 	var matches []record.SearchResult
 
 	for _, r := range outcome.Results {

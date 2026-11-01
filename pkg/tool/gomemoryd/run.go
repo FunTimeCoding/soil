@@ -2,18 +2,15 @@ package gomemoryd
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -24,22 +21,18 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l)
+	v := service.New(o, l, r)
 	defer v.Close()
-	errors.PanicOnError(v.Wait(context.Background()))
-	index := reacher.New(r)
+	u := web.New(v, r)
+	c := lifecycle.New(l)
 
-	for _, f := range reconcileMemories(v) {
-		index.Handle(
-			queryConstant.Identity.Name(),
-			f,
-			func(x *edge.Edge) { l.Plain("reconcile: %s", x) },
-			func(g error) { r.CaptureException(g) },
-		)
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
 	}
 
-	u := web.New(v, r)
-	lifecycle.New(l).WithServer(
+	c.WithWorker(
+		worker.New(v.Reconcile, l, r, constant.ReconcileInterval),
+	).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

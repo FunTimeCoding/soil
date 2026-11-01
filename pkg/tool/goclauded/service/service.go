@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
+	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"sync"
 	"sync/atomic"
@@ -19,7 +19,7 @@ import (
 type Service struct {
 	store             *store.Store
 	client            face.ClaudeSource
-	memory            client.Client
+	memory            memoryd.Client
 	memoryGuard       *peer.Guard
 	query             queryd.Client
 	search            *search_index.Index
@@ -34,6 +34,7 @@ type Service struct {
 	browser           *chromium.Client
 	browserMutex      sync.Mutex
 	lastMemoryPoll    string
+	usageUnreadable   bool
 	done              chan struct{}
 	doneOnce          sync.Once
 }

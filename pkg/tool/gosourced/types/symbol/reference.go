@@ -7,5 +7,9 @@ import (
 )
 
 func (s *Symbol) Reference() string {
-	return join.Empty(strconv.Quote(s.Path), constant.MemberSeparator, s.Name)
+	return join.Empty(
+		strconv.Quote(s.Path),
+		constant.ReferenceSeparator,
+		s.Name,
+	)
 }

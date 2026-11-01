@@ -18,13 +18,13 @@ func TestRevisionQualifiesImportedAndOwnReferences(t *testing.T) {
 			),
 		},
 	)
-	run := revisionSymbol(t, r,"bravo bravo Run")
+	run := revisionSymbol(t, r, "bravo bravo Run")
 	assert.String(
 		t,
-		"func Run(count int) int {\n\ttotal := \"example.org/alfa/charlie\".Sum(count, \"example.org/alfa/bravo\".Limit)\n\treturn \"example.org/delta/go-echo/v2\".Clamp(total)\n}",
+		"func Run ( count int ) int { total := \"example.org/alfa/charlie\" . Sum ( count , \"example.org/alfa/bravo\" . Limit ) return \"example.org/delta/go-echo/v2\" . Clamp ( total ) }",
 		run.Body,
 	)
-	assert.String(t, "func Run(count int) int", run.Signature)
+	assert.String(t, "func Run ( count int ) int", run.Signature)
 	assert.String(t, "bravo/bravo.go", run.File)
 	assert.Integer(t, 10, run.Line)
 }
@@ -40,13 +40,13 @@ func TestRevisionKeepsLocalsUnqualified(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"func Next(count int) int {\n\treturn count + 1\n}",
-		revisionSymbol(t, r,". alfa Next").Body,
+		"func Next ( count int ) int { return count + 1 }",
+		revisionSymbol(t, r, ". alfa Next").Body,
 	)
 	assert.String(
 		t,
-		"func Last() int {\n\treturn \"example.org/alfa\".count\n}",
-		revisionSymbol(t, r,". alfa Last").Body,
+		"func Last ( ) int { return \"example.org/alfa\" . count }",
+		revisionSymbol(t, r, ". alfa Last").Body,
 	)
 }
 
@@ -64,11 +64,11 @@ func TestRevisionKeysMethodsByReceiver(t *testing.T) {
 		[]string{". alfa Tank", ". alfa Tank.Fill"},
 		revisionKeys(r),
 	)
-	fill := revisionSymbol(t, r,". alfa Tank.Fill")
+	fill := revisionSymbol(t, r, ". alfa Tank.Fill")
 	assert.String(t, "method", fill.Kind)
 	assert.String(
 		t,
-		"func (t *\"example.org/alfa\".Tank) Fill(amount int)",
+		"func ( t * \"example.org/alfa\" . Tank ) Fill ( amount int )",
 		fill.Signature,
 	)
 }
@@ -84,8 +84,8 @@ func TestRevisionCountsIotaPositions(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"const Busy \"example.org/alfa\".Mode = iota // iota 1",
-		revisionSymbol(t, r,". alfa Busy").Body,
+		"const Busy \"example.org/alfa\" . Mode = iota // iota 1",
+		revisionSymbol(t, r, ". alfa Busy").Body,
 	)
 }
 

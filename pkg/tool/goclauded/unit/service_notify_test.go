@@ -36,6 +36,7 @@ func TestReleaseNotifies(t *testing.T) {
 func TestSendNotifies(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Store.EnsureSession("session-1")
+	s.Store.EnsureSession("session-2")
 	s.Notifier.Reset()
 	s.Send(r.Callsign, "", "hello")
 	assert.True(t, s.Notifier.Notified == 1)

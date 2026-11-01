@@ -7,5 +7,7 @@ func (s *Service) syncIndexByIdentifier(identifier int64) error {
 		return e
 	}
 
-	return s.syncIndex(m)
+	s.index(m)
+
+	return nil
 }

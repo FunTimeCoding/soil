@@ -12,7 +12,3 @@ func TestCloseClosesTheQueryClient(t *testing.T) {
 	o.Service.Close()
 	assert.Integer(t, 1, o.Indexer.Closed)
 }
-
-func TestWaitAnswersOnceQueryAnswers(t *testing.T) {
-	assert.FatalOnError(t, service_tester.New(t).Service.Wait(t.Context()))
-}

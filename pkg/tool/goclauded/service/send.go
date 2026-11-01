@@ -2,51 +2,54 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"strings"
 )
 
 func (s *Service) Send(
 	name string,
-	to string,
+	to []string,
 	body string,
 	d constant.Delivery,
-) (bool, error) {
-	var holder *session.Session
-
-	if to != "" {
-		found, e := s.store.SessionByCallsign(to)
-
-		if e != nil {
-			return false, e
-		}
-
-		if found == nil {
-			return false, not_found.New(constant.Callsign, to)
-		}
-
-		holder = found
-	}
-
-	m, e := s.store.SendMessage(name, to, body)
+) ([]string, error) {
+	holders, e := s.recipients(name, to)
 
 	if e != nil {
-		return false, e
+		return nil, e
+	}
+
+	if len(to) == 0 {
+		d = constant.DeliveryQueued
+	}
+
+	m, f := s.store.SendMessage(name, strings.Join(to, ", "), body)
+
+	if f != nil {
+		return nil, f
 	}
 
 	formatted := fmt.Sprintf("%s: %s", name, body)
+	var held []string
 
-	if holder == nil {
-		template := queue.NewBroadcast(constant.QueueMessage, formatted)
-		template.MessageIdentifier = new(m.Identifier)
+	for _, h := range holders {
+		entry := queue.New(
+			h.Identifier,
+			h.CallsignValue(),
+			constant.QueueMessage,
+			formatted,
+		)
+		entry.MessageIdentifier = new(m.Identifier)
+		delivered, g := s.pushDelivery(entry, d)
 
-		return false, s.pushEntryBroadcast(template)
+		if g != nil {
+			return nil, g
+		}
+
+		if d != constant.DeliveryQueued && !delivered {
+			held = append(held, h.CallsignValue())
+		}
 	}
 
-	entry := queue.New(holder.Identifier, to, constant.QueueMessage, formatted)
-	entry.MessageIdentifier = new(m.Identifier)
-
-	return s.pushDelivery(entry, d)
+	return held, nil
 }

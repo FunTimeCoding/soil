@@ -53,7 +53,15 @@ components:
       - entries
       - from_unparsed
       - to_unparsed
+      - modules
       properties:
+        modules:
+          description: >-
+            Required modules from the inventory that changed version between
+            the two revisions and were compared with it.
+          type: array
+          items:
+            $ref: "#/components/schemas/ModuleRange"
         counts:
           type: array
           items:
@@ -70,6 +78,20 @@ components:
           type: array
           items:
             type: string
+    ModuleRange:
+      type: object
+      required:
+      - name
+      - from
+      - to
+      properties:
+        name:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+          description: The staged index when empty.
     ClassCount:
       type: object
       required:

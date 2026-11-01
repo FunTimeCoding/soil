@@ -14,7 +14,7 @@ func (s *Service) saveImpression(
 	return s.memoryGuard.Attempt(
 		x,
 		func(y context.Context) error {
-			return s.memory.SaveImpression(y, content, source, capturedAt)
+			return s.memory.PostImpressions(y, content, source, capturedAt)
 		},
 	)
 }

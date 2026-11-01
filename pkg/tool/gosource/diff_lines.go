@@ -16,6 +16,19 @@ func DiffLines(r client.DiffResponse) []string {
 
 	result := []string{join.Space(counts...)}
 
+	for _, m := range r.Modules {
+		to := m.To
+
+		if to == "" {
+			to = constant.StagedLabel
+		}
+
+		result = append(
+			result,
+			join.Space(constant.ModuleLabel, m.Name, m.From, to),
+		)
+	}
+
 	for _, file := range r.FromUnparsed {
 		result = append(
 			result,

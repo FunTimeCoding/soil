@@ -18,7 +18,7 @@ func (s *Service) redactLoads(
 		x,
 		func(y context.Context) error {
 			var f error
-			redacted, f = s.memory.RedactedMemories(y)
+			redacted, f = s.memory.GetRedactedMemories(y)
 
 			return f
 		},

@@ -16,15 +16,25 @@ func Dump() {
 		return
 	}
 
-	console.Format(
-		"Session %d%%  resets %s\n",
-		r.SessionPercent,
-		r.SessionReset,
-	)
+	if r.SessionSeen {
+		console.Format(
+			"Session %d%%  resets %s\n",
+			r.SessionPercent,
+			r.SessionReset,
+		)
+	}
+
 	console.Format(
 		"Weekly  %d%%  resets %s\n",
 		r.WeeklyAllPercent,
 		r.WeeklyAllReset,
 	)
-	console.Format("Fable   %d%%  resets %s\n", r.FablePercent, r.FableReset)
+
+	if r.FableSeen {
+		console.Format(
+			"Fable   %d%%  resets %s\n",
+			r.FablePercent,
+			r.FableReset,
+		)
+	}
 }

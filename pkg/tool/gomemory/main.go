@@ -7,24 +7,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gomemory/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/spf13/cobra"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
-	p := stall_client.New().Build()
-	defer p.Close()
 	t := terminal.New(s)
 	var host string
 	var port int
-	var l *client.Client
+	var l face.Client
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
@@ -32,18 +29,16 @@ func Main() {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			base := locator.New(host).Port(port).Insecure().String()
-			c, e := client.NewClient(
-				base,
-				client.WithHTTPClient(p.Client()),
-				client.WithRequestEditorFn(
-					web.BearerEditor(
-						t.Required(gomemorydConstant.TokenEnvironment),
-					),
-				),
+			l = client.New(
+				locator.New(host).Port(port).Insecure(),
+				t.Required(gomemorydConstant.TokenEnvironment),
 			)
-			errors.PanicOnError(e)
-			l = c
+		},
+		PersistentPostRun: func(
+			_ *cobra.Command,
+			_ []string,
+		) {
+			l.Close()
 		},
 	}
 	o.PersistentFlags().StringVar(

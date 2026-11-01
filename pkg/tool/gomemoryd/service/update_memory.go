@@ -32,10 +32,7 @@ func (s *Service) UpdateMemory(
 		return nil, nil, e
 	}
 
-	if e = s.syncIndex(m); e != nil {
-		return nil, nil, e
-	}
-
+	s.index(m)
 	citing, e := s.reindexRewritten(rewritten)
 
 	if e != nil {

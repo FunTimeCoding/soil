@@ -29,7 +29,7 @@ func (s *Server) GetProfile(
 		s.visibleSearchResults(result.Relevant),
 		result.Impressions,
 		result.Completions,
-	)
+	).WithNotice(result.Notice)
 	response := server.GetProfile200JSONResponse{
 		Text:   visible.Text,
 		Always: make([]server.ProfileMemory, 0, len(visible.Always)),

@@ -145,7 +145,17 @@ through `Handle`, an ended `Serve` through `Fail` - and reopens on the
 guard's backoff (`ProbeMinimum` to `ProbeMaximum`, back to the minimum once
 a session ran), each session under recovery. A peer answering the dial
 with an HTTP status maps it through `refusal.New`, so its 503 is an outage
-and anything else a refusal.
+and anything else a refusal; a local device that is absent answers
+`unavailable` itself, since its error carries no transport class.
+
+Edges are logged and refusals captured unless `WithReport` hands both to
+the caller - a terminal UI shows them on screen, where log lines would tear
+the display; a lasting outage and a panic still reach the reporter.
+`Unavailable` is the hold's verdict for the surfaces: nil while a session
+serves, the outage's start and reason while down. A type that is already a
+worker, with a `Close` of its own, is held through `hold/adapter`, which
+builds a `face.Connection` from three functions. `Done` closes when the loop
+has stopped, for a consumer that must close a channel the session feeds.
 
 ## Sentry Enrichment Providers
 

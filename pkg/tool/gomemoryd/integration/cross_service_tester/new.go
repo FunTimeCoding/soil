@@ -33,8 +33,8 @@ func New(t *testing.T) *Tester {
 			constant.ModelContextTestToken,
 		)
 	}
-	v := service.New(o, logger.New(t.Context()))
 	r := memory.New()
+	v := service.New(o, logger.New(t.Context()), r)
 	memoryServer := model_context_server.New(
 		t,
 		func(

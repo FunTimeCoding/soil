@@ -36,12 +36,18 @@ func (s *Server) PostSessionContext(
 		}
 	}
 
-	if r.Body.FiveHourPercent == nil || r.Body.SevenDayPercent == nil {
+	if r.Body.SevenDayPercent == nil {
 		return server.PostSessionContext200Response{}, nil
 	}
 
+	fiveHour := 0
+
+	if r.Body.FiveHourPercent != nil {
+		fiveHour = *r.Body.FiveHourPercent
+	}
+
 	if e := s.service.RecordRateLimits(
-		*r.Body.FiveHourPercent,
+		fiveHour,
 		*r.Body.SevenDayPercent,
 		epochTime(r.Body.FiveHourReset),
 		epochTime(r.Body.SevenDayReset),

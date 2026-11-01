@@ -1,5 +1,7 @@
 package service
 
+import "context"
+
 func (s *Service) ForgetMemory(
 	identifier int64,
 	source string,
@@ -14,5 +16,7 @@ func (s *Service) ForgetMemory(
 		return e
 	}
 
-	return s.unindex(m.Scope, identifier)
+	s.report(s.unindex(context.Background(), m.Scope, identifier))
+
+	return nil
 }

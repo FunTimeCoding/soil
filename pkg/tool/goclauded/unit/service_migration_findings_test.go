@@ -28,7 +28,7 @@ func TestFindingsAreSilentWhenEveryRowCarriesItsSession(t *testing.T) {
 	r := s.Check("session-1")
 	_, e := s.Service.Send(
 		r.Callsign,
-		r.Callsign,
+		[]string{r.Callsign},
 		"hello",
 		constant.DeliveryQueued,
 	)

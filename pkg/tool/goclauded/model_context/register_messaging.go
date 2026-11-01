@@ -10,11 +10,14 @@ func (s *Server) registerMessaging() {
 		mcp.NewTool(
 			constant.Send,
 			mcp.WithDescription(
-				"Send a message to another session by name, or broadcast to all. Use for coordination: build warnings, scope handoffs, questions.",
+				"Send a message to sessions by name, or broadcast to every session seen in the last hour except your own and those labelled broadcast=off. Use for coordination: build warnings, scope handoffs, questions.",
 			),
-			mcp.WithString(
+			mcp.WithArray(
 				constant.To,
-				mcp.Description("Recipient name (omit to broadcast to all)"),
+				mcp.WithStringItems(),
+				mcp.Description(
+					"Recipient names - a named session is reached even when labelled broadcast=off (omit to broadcast)",
+				),
 			),
 			mcp.WithString(
 				constant.Body,

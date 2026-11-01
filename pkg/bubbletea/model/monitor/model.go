@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
 	"github.com/funtimecoding/soil/pkg/bubbletea/types/modal"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
+	"github.com/funtimecoding/soil/pkg/peer/hold"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
 	"time"
 )
@@ -21,6 +22,7 @@ type Model struct {
 	second         int
 	connect        bool
 	monitor        *client.Client
+	hold           *hold.Hold
 	updates        chan claim.Message
 	claims         map[string][]string
 	claimError     error

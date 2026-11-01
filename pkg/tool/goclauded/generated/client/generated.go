@@ -408,7 +408,7 @@ type SendRequest struct {
 
 	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
 	Delivery *Delivery `json:"delivery,omitempty"`
-	To       *string   `json:"to,omitempty"`
+	To       *[]string `json:"to,omitempty"`
 }
 
 // SessionDetail defines model for SessionDetail.

@@ -12,7 +12,7 @@ import (
 func Parse(markup string) *Usage {
 	document := hypertext.Document(strings.NewReader(markup))
 	result := New(0, "", 0, "", 0, "")
-	found := map[string]bool{}
+	weekSeen := false
 	document.Find("div[role='meter']").Each(
 		func(
 			_ int,
@@ -27,30 +27,26 @@ func Parse(markup string) *Usage {
 				return
 			}
 
-			label := strings.TrimSpace(span.Text())
 			reset := resetText(span.Parent().Next().Text())
 
-			switch label {
+			switch accessibleText(span) {
 			case constant.UsageMeterSession:
 				result.SessionPercent = percent
 				result.SessionReset = reset
+				result.SessionSeen = true
 			case constant.UsageMeterWeek:
 				result.WeeklyAllPercent = percent
 				result.WeeklyAllReset = reset
-			case constant.UsageMeterFableWeek:
+				weekSeen = true
+			case constant.UsageMeterFableWeek, constant.UsageMeterFable:
 				result.FablePercent = percent
 				result.FableReset = reset
-			default:
-				return
+				result.FableSeen = true
 			}
-
-			found[label] = true
 		},
 	)
 
-	if !found[constant.UsageMeterSession] ||
-		!found[constant.UsageMeterWeek] ||
-		!found[constant.UsageMeterFableWeek] {
+	if !weekSeen {
 		return nil
 	}
 

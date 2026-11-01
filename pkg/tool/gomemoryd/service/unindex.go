@@ -6,16 +6,22 @@ import (
 )
 
 func (s *Service) unindex(
+	x context.Context,
 	scope string,
 	identifier int64,
 ) error {
-	_, e := s.query.DeleteDocument(
-		context.Background(),
-		&client.DeleteDocumentParams{
-			Collection: ScopeCollection(scope),
-			Path:       memoryPath(identifier),
+	return s.guard.Attempt(
+		x,
+		func(y context.Context) error {
+			_, e := s.query.DeleteDocument(
+				y,
+				&client.DeleteDocumentParams{
+					Collection: ScopeCollection(scope),
+					Path:       memoryPath(identifier),
+				},
+			)
+
+			return e
 		},
 	)
-
-	return e
 }

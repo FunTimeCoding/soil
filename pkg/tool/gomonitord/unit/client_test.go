@@ -2,8 +2,10 @@ package unit
 
 import (
 	"context"
-	"errors"
+	standard "errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
@@ -25,8 +27,11 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 	t.Cleanup(cancel)
 	events := make(chan []generated.Claim, 8)
 	ended := make(chan error, 1)
+	b, e := c.Listen(x)
+	assert.FatalOnError(t, e)
+	defer errors.LogClose(b)
 	go func() {
-		ended <- c.Stream(x, func(v []generated.Claim) { events <- v })
+		ended <- client.ReadClaims(b, func(v []generated.Claim) { events <- v })
 	}()
 	assert.Count(t, 0, nextEvent(t, events))
 	assert.FatalOnError(t, c.ClaimItem("jira-ABC-1", "alfa@host.example"))
@@ -36,10 +41,10 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 	assert.FatalOnError(t, c.Release("jira-ABC-1", "alfa@host.example"))
 	assert.Count(t, 0, nextEvent(t, events))
 	cancel()
-	assert.True(t, errors.Is(streamEnd(t, ended), context.Canceled))
+	assert.True(t, standard.Is(streamEnd(t, ended), context.Canceled))
 }
 
-func TestStreamReportsAnUnreachableDaemon(t *testing.T) {
+func TestListenReportsAnUnreachableDaemon(t *testing.T) {
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(1).Insecure(),
 		generativeConstant.ModelContextTestToken,
@@ -47,5 +52,17 @@ func TestStreamReportsAnUnreachableDaemon(t *testing.T) {
 	defer c.Close()
 	x, cancel := context.WithTimeout(context.Background(), time.Second)
 	t.Cleanup(cancel)
-	assert.True(t, c.Stream(x, func([]generated.Claim) {}) != nil)
+	_, e := c.Listen(x)
+	assert.True(t, connection.Classify(e) != nil)
+}
+
+func TestListenRefusesAnUnknownToken(t *testing.T) {
+	s := base.New(t)
+	c := client.New(
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		"bogus",
+	)
+	defer c.Close()
+	_, e := c.Listen(context.Background())
+	assert.StringContains(t, "stream status: 401", e.Error())
 }

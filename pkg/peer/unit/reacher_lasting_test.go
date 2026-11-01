@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/peer/constant"
 	"github.com/funtimecoding/soil/pkg/peer/outage"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
@@ -44,10 +45,19 @@ func TestAnOutageTheCallerNamesLastsLikeAnyOther(t *testing.T) {
 	c := fake_clock.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
-	assert.NotNil(t, r.Outage("serial", "not connected", os.ErrNotExist))
+	assert.NotNil(
+		t,
+		r.Outage("serial", constant.NotConnectedReason, os.ErrNotExist),
+	)
 	c.Advance(5 * time.Minute)
-	assert.Nil(t, r.Outage("serial", "not connected", os.ErrNotExist))
-	assert.Nil(t, r.Outage("serial", "not connected", os.ErrNotExist))
+	assert.Nil(
+		t,
+		r.Outage("serial", constant.NotConnectedReason, os.ErrNotExist),
+	)
+	assert.Nil(
+		t,
+		r.Outage("serial", constant.NotConnectedReason, os.ErrNotExist),
+	)
 	assert.Count(t, 1, m.Events())
 	assert.String(
 		t,

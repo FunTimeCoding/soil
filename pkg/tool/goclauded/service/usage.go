@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 	"time"
 )
@@ -17,8 +18,9 @@ func (s *Service) Usage() *usage_result.Result {
 	var fableResetAt time.Time
 	updated := rate.CreatedAt
 	fable, f := s.store.LatestFableSnapshot()
+	windowStart := rate.SevenDayReset.Add(-constant.SevenDayWindow)
 
-	if f == nil && fable != nil {
+	if f == nil && fable != nil && fable.CreatedAt.After(windowStart) {
 		fablePercent = fable.Percent
 		fableReset = fable.Reset
 

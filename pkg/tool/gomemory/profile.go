@@ -3,14 +3,14 @@ package gomemory
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func profile(
-	l **client.Client,
+	l *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var topic string
@@ -33,20 +33,17 @@ func profile(
 			}
 
 			r, e := (*l).GetProfile(context.Background(), params)
-			errors.PanicOnError(e)
-			parsed, f := client.ParseGetProfileResponse(r)
-			errors.PanicOnError(f)
 
-			if parsed.JSON200 == nil {
-				t.Reject(parsed.Status(), parsed.Body)
+			if e != nil {
+				t.Exitln(e)
 
 				return
 			}
 
-			fmt.Print(parsed.JSON200.Text)
+			fmt.Print(r.Text)
 
-			if parsed.JSON200.Detail != nil {
-				fmt.Print(budgetTable(parsed.JSON200.Detail, parsed.JSON200))
+			if r.Detail != nil {
+				fmt.Print(budgetTable(r.Detail, r))
 			}
 		},
 	}

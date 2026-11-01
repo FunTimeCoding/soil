@@ -27,18 +27,27 @@ func (s *Server) tokenUsage(
 		return response.Success("No usage data yet.")
 	}
 
-	lines := []string{
-		fmt.Sprintf(
-			"Session  %2d%%   resets %s",
-			result.FiveHourPercent,
-			result.FiveHourResetText(),
-		),
+	var lines []string
+
+	if result.HasSession() {
+		lines = append(
+			lines,
+			fmt.Sprintf(
+				"Session  %2d%%   resets %s",
+				result.FiveHourPercent,
+				result.FiveHourResetText(),
+			),
+		)
+	}
+
+	lines = append(
+		lines,
 		fmt.Sprintf(
 			"Weekly   %2d%%   resets %s",
 			result.SevenDayPercent,
 			result.SevenDayResetText(),
 		),
-	}
+	)
 
 	if result.HasFable() {
 		lines = append(

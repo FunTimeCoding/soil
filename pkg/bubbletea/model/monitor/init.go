@@ -10,7 +10,7 @@ func (m *Model) Init() tea.Cmd {
 	result := []tea.Cmd{tick.Command()}
 
 	if m.monitor != nil {
-		go claim.Watch(m.monitor, m.updates)
+		m.hold.Start()
 		result = append(result, claim.Wait(m.updates))
 	}
 

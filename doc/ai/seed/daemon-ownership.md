@@ -17,8 +17,8 @@ seed of its own and follows this one for everything else.
 
 ## Where the work stopped
 
-Twenty-two soil daemons meet every row of the target (Census); gomemoryd with
-goclauded is under way, B next (Order).
+Twenty-three soil daemons meet every row of the target (Census); goclauded is
+next (Order).
 
 ## Working model
 
@@ -131,6 +131,13 @@ At the target, with what each is the reference for:
   launch returns is remembered and kills on attach - the tests calling
   `Interrupt` right after `Run` reach that window. Its own transport
   classifier went; `pkg/errors/connection` does that job for every client
+- gomemoryd - a store that is the truth and a peer that is its projection:
+  writes save and answer success whatever goqueryd does, a worker reconciles
+  every memory, forgotten ones included, through the guard and once at start,
+  and goqueryd's hash dedup and idempotent delete keep that cheap; profile
+  leaves goqueryd's tiers out with a notice rather than failing. A daemon
+  client moved three consumers off the generated client, one of them a CLI
+  in another repository
 
 Beside them, upstream faces now full and home: Prometheus, Alertmanager,
 Argo CD (`ArgocdClient` in the kubernetes face) and Nextcloud usage
@@ -147,34 +154,20 @@ gobandd, gogitlabd, gopostgresd, goprometheusd, goproxmoxd, gosourced.
 Sized by a re-survey (`goaudit --service` hits, each read).
 Leaks first - a client opened and never closed - then shape.
 
-1. gomemoryd with goclauded, which consumes its client. A is in: the
-   service builds the database, the store over it and goqueryd's client from
-   the option, and `Run` holds only the service. Left:
-   - B - goqueryd is called unguarded from indexing, unindexing, search and
-     profile's completions (the last swallowing its failure); a write saves,
-     then answers the index's failure, so a retry saves a duplicate. Decided:
-     the store is the truth - a write answers success whether goqueryd is
-     there or not, and what failed to index is caught up once goqueryd
-     answers again; goqueryd is guarded and not waited on, and the start-up
-     reconcile and its hand-held reacher go
-   - C - `RestClient` beside a six-method `client.Client` interface, no
-     face, against thirteen spec operations; the gomemory CLI reaches the
-     daemon through the generated client directly
-   - `importer.Import` has no caller but its test
-2. goclauded - `Run` builds about fifteen things: store, pool, the goqueryd
+1. goclauded - `Run` builds about fifteen things: store, pool, the goqueryd
    client, search index, five tickers, gauge, watcher; finished clients
-   handed to `service.New`; the largest of all
-3. The faces and clients off the full shape, the peers off the start-up
+   handed to `service.New`; the largest of all. It waits on gomemoryd
+   through `connect.Wait` and closes the client in `Run`
+2. The faces and clients off the full shape, the peers off the start-up
    shape
-4. The goaudit rule, once a sound check replaces `run_builds_client`
-5. The analyzer gaps, once the findings they raise are few, each with a
+3. The goaudit rule, once a sound check replaces `run_builds_client`
+4. The analyzer gaps, once the findings they raise are few, each with a
    case in the `unclosed_resource` testdata
 
 ## Off the full shape
 
-- Daemon clients: `RestClient` beside a `client.Client` interface, no face -
-  gomemoryd. No `<path>/client/` package - most daemons, many rightly; which
-  have a consumer reaching them another way is unsurveyed. gokubernetesd
+- Daemon clients: no `<path>/client/` package - most daemons, many rightly;
+  which have a consumer reaching them another way is unsurveyed. gokubernetesd
   serves MCP only
 - Faces mirroring the service: gosublimed, goitermd, gojellyfind, gochromed,
   gosecretd, gogithubd; goproxmoxd's `face.Service` and `mock_service`
@@ -195,11 +188,16 @@ Leaks first - a client opened and never closed - then shape.
   does not classify its peer's 503 - checked against GitLab's own status
   table first; pkg/chat/mattermost's `New` panics and dials, so
   gomattermostd's start-up wait never retries
-- Peers off the start-up shape: goclauded and gomemoryd wait on goqueryd in
-  `Run` but call it unguarded; gomemoryd's `Reachable` probes
-  `route:/api/versions`, not `route:/api/reachable`
+- Peers off the start-up shape: goclauded waits on goqueryd in `Run` but
+  calls it unguarded
+- Untested or unused: gomemoryd's profile search branch has no failure test
+  of its own - goqueryd's mock fails every method at once, so completions
+  fail first; gomemoryd's `importer.Import` has no caller but its test
 - Workers whose `Close` is not safe twice, against `service-tool.md`
-  (Workers): godashboardd's worker closes its stop channel bare
+  (Workers): godashboardd's worker closes its stop channel bare;
+  `github.com/funtimecoding/soil/pkg/ticker`'s `Close` panics before `Start`
+  and on a second call, so every worker built on it is unsafe twice - its
+  users unsurveyed
 - Web submits showing `e.Error()` through `form.Redirect` without a class
   check, so an unexpected failure reads as a form refusal: godirectoryd's
 - Untested wiring: gogated's admin pages - a served test needs a signed-in
@@ -400,7 +398,11 @@ Testing:
   `net.OpError` classifies only around a real errno
   (`os.NewSyscallError("connect", syscall.ECONNREFUSED)`); one wrapping a
   plain error answers 500. A guard's outage report waits out `Lasting`, so a
-  fast test counts the peer's calls instead of the reporter's events
+  fast test counts the peer's calls instead of the reporter's events. A
+  guard comes back only through its probe loop, on a real timer from
+  `ProbeMinimum` that no option reaches, so a test that needs the peer back -
+  nothing lost across a failed tick - fails it with a fault the guard passes
+  through untouched, and leaves the outage to the next-call test
 - A mock answering `nil, nil` where the client never does hides a nil
   dereference; an unseeded query answers an empty result. A double replaced
   by a shared mock keeps its old default by seeding it: a query double

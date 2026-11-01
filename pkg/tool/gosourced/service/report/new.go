@@ -13,6 +13,8 @@ func New(
 	after := byKey(to.Symbols)
 	pairs := samePairs(before, after)
 	pairs = append(pairs, namePairs(before, after)...)
+	pairs = append(pairs, receiverPairs(before, after, pairs)...)
+	pairs = append(pairs, packagePairs(before, after, pairs)...)
 	pairs = append(pairs, shapePairs(before, after, moves(pairs))...)
 	mapping := moves(pairs)
 	var result []*entry.Entry

@@ -20,6 +20,7 @@ func New(t *testing.T) *Tester {
 	s := store_tester.New(t)
 	c := mock_client.New()
 	mc := memoryMock.New()
+	t.Cleanup(mc.Close)
 	q := queryMock.New()
 	t.Cleanup(q.Close)
 	n := mock_notifier.New()

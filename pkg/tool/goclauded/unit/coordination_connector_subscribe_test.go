@@ -1,11 +1,18 @@
 package unit
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
+	"time"
 )
 
 func TestConnectorSubscribeDeliversParsedEvents(t *testing.T) {
@@ -15,6 +22,8 @@ func TestConnectorSubscribeDeliversParsedEvents(t *testing.T) {
 	events, stop := s.Connector(t).Subscribe(
 		"consumer",
 		[]string{constant.Announce},
+		logger.New(context.Background()),
+		memory.New(),
 	)
 	defer stop()
 	e := fixture.NextStreamEvent(t, events)
@@ -34,6 +43,8 @@ func TestConnectorSubscribeFiltersKinds(t *testing.T) {
 	events, stop := s.Connector(t).Subscribe(
 		"consumer",
 		[]string{constant.Label},
+		logger.New(context.Background()),
+		memory.New(),
 	)
 	defer stop()
 	e := fixture.NextStreamEvent(t, events)
@@ -48,6 +59,8 @@ func TestConnectorSubscribeResumesAfterStop(t *testing.T) {
 	first, stop := s.Connector(t).Subscribe(
 		"consumer",
 		[]string{constant.Announce},
+		logger.New(context.Background()),
+		memory.New(),
 	)
 	fixture.NextStreamEvent(t, first)
 	stop()
@@ -55,8 +68,44 @@ func TestConnectorSubscribeResumesAfterStop(t *testing.T) {
 	second, halt := s.Connector(t).Subscribe(
 		"consumer",
 		[]string{constant.Announce},
+		logger.New(context.Background()),
+		memory.New(),
 	)
 	defer halt()
 	e := fixture.NextStreamEvent(t, second)
 	assert.String(t, "later topic", e.Metadata[constant.Topic])
+}
+
+func TestConnectorSubscribeClosesItsChannelOnStop(t *testing.T) {
+	s := base.New(t)
+	events, stop := s.Connector(t).Subscribe(
+		"consumer",
+		[]string{constant.Announce},
+		logger.New(context.Background()),
+		memory.New(),
+	)
+	stop()
+
+	for range events {
+	}
+}
+
+func TestConnectorSubscribeReportsARefusedTokenOnce(t *testing.T) {
+	s := base.New(t)
+	c := connector.New(
+		locator.New(webConstant.Localhost).Insecure().Port(s.Port).String(),
+		false,
+		"bogus",
+	)
+	defer c.Close()
+	r := memory.New()
+	_, stop := c.Subscribe(
+		"consumer",
+		[]string{constant.Announce},
+		logger.New(context.Background()),
+		r,
+	)
+	defer stop()
+	time.Sleep(200 * time.Millisecond)
+	assert.Count(t, 1, r.Events())
 }

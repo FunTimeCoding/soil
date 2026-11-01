@@ -46,11 +46,15 @@ func usage(c *command_context.Context) *cobra.Command {
 				fableResetAt,
 				j.LastUpdated,
 			)
-			console.Format(
-				"Session  %2d%%   resets %s\n",
-				r.FiveHourPercent,
-				r.FiveHourResetText(),
-			)
+
+			if r.HasSession() {
+				console.Format(
+					"Session  %2d%%   resets %s\n",
+					r.FiveHourPercent,
+					r.FiveHourResetText(),
+				)
+			}
+
 			console.Format(
 				"Weekly   %2d%%   resets %s\n",
 				r.SevenDayPercent,

@@ -26,9 +26,9 @@ func New(t *testing.T) *Server {
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "memory.db")
 	o.Query = func() face.Client { return i }
-	v := service.New(o, l)
-	d := connection.New(l, o.LitePath)
 	r := memory.New()
+	v := service.New(o, l, r)
+	d := connection.New(l, o.LitePath)
 	result := &Server{
 		t:        t,
 		database: d,

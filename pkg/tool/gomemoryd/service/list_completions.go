@@ -7,20 +7,29 @@ import (
 
 func (s *Service) ListCompletions() ([]client.SearchResult, error) {
 	limit := 20
-	outcome, e := s.query.GetList(
-		context.Background(),
-		&client.GetListParams{
-			Collection: "completions",
-			Metadata:   &map[string]string{"source_type": "session-completion"},
-			Limit:      &limit,
-			Full:       new(true),
-		},
-	)
+	var outcome *client.ListOutcome
 
-	if e != nil {
+	if e := s.guard.Attempt(
+		context.Background(),
+		func(x context.Context) error {
+			var f error
+			outcome, f = s.query.GetList(
+				x,
+				&client.GetListParams{
+					Collection: "completions",
+					Metadata: &map[string]string{
+						"source_type": "session-completion",
+					},
+					Limit: &limit,
+					Full:  new(true),
+				},
+			)
+
+			return f
+		},
+	); e != nil {
 		return nil, e
 	}
-
 	seen := map[string]bool{}
 	var filtered []client.SearchResult
 

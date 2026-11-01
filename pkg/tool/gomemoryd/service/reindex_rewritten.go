@@ -12,10 +12,7 @@ func (s *Service) reindexRewritten(identifiers []int64) ([]*record.Memory, error
 			return nil, e
 		}
 
-		if e = s.syncIndex(m); e != nil {
-			return nil, e
-		}
-
+		s.index(m)
 		result = append(result, m)
 	}
 

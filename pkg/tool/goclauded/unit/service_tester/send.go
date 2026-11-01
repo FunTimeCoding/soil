@@ -10,6 +10,6 @@ func (o *Tester) Send(
 	to string,
 	body string,
 ) {
-	_, e := o.Service.Send(name, to, body, constant.DeliveryQueued)
+	_, e := o.Service.Send(name, addressed(to), body, constant.DeliveryQueued)
 	assert.FatalOnError(o.t, e)
 }

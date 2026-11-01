@@ -2,7 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -10,24 +11,22 @@ func (s *Server) PostSend(
 	_ context.Context,
 	r server.PostSendRequestObject,
 ) (server.PostSendResponseObject, error) {
-	var to string
+	var to []string
 
 	if r.Body.To != nil {
 		to = *r.Body.To
 	}
 
-	delivered, e := s.service.Send(
-		r.Body.Callsign,
-		to,
-		r.Body.Body,
-		toDelivery(r.Body.Delivery),
-	)
+	d := toDelivery(r.Body.Delivery)
+	held, e := s.service.Send(r.Body.Callsign, to, r.Body.Body, d)
 
 	if e != nil {
 		return server.PostSend500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
-	return server.PostSend200JSONResponse{Immediate: delivered}, nil
+	return server.PostSend200JSONResponse{
+		Immediate: len(to) > 0 && d != constant.DeliveryQueued && len(held) == 0,
+	}, nil
 }

@@ -10,6 +10,11 @@ func (o *Tester) SendImmediate(
 	to string,
 	body string,
 ) {
-	_, e := o.Service.Send(name, to, body, constant.DeliveryImmediate)
+	_, e := o.Service.Send(
+		name,
+		addressed(to),
+		body,
+		constant.DeliveryImmediate,
+	)
 	assert.FatalOnError(o.t, e)
 }

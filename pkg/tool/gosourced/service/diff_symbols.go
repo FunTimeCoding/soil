@@ -35,5 +35,11 @@ func (s *Service) DiffSymbols(
 		return nil, f
 	}
 
-	return report.New(revision.New(before), revision.New(after)), nil
+	ranges := s.companions(name, before, after, to)
+
+	if len(ranges) == 0 {
+		return report.New(revision.New(before), revision.New(after)), nil
+	}
+
+	return s.crossReport(before, after, ranges)
 }

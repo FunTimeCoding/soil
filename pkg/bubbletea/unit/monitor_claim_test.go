@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -18,7 +19,7 @@ import (
 func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	s := base.New(t)
 	connectTo(t, s.Port)
-	m := monitor.New(true)
+	m := monitor.New(true, memory.New())
 	defer m.Close()
 	owner := fmt.Sprintf(
 		monitorConstant.OwnerFormat,

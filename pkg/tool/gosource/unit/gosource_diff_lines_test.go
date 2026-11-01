@@ -12,6 +12,8 @@ func TestDiffLinesPrintOneLinePerEntry(t *testing.T) {
 		t,
 		[]string{
 			"counts unchanged 40 moved 1 removed 1",
+			"module lima v0.1.0 v0.2.0",
+			"module mike v0.3.0 staged",
 			"unparsed to broken.go",
 			"moved bravo bravo New (bravo/new.go:5) <- alfa alfa New (alfa/new.go:5)",
 			"removed . alfa Echo (alfa.go:3)",
@@ -22,6 +24,10 @@ func TestDiffLinesPrintOneLinePerEntry(t *testing.T) {
 					{Class: "unchanged", Count: 40},
 					{Class: "moved", Count: 1},
 					{Class: "removed", Count: 1},
+				},
+				Modules: []client.ModuleRange{
+					{Name: "lima", From: "v0.1.0", To: "v0.2.0"},
+					{Name: "mike", From: "v0.3.0", To: ""},
 				},
 				Entries: []client.Entry{
 					{

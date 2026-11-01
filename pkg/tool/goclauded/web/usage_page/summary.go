@@ -10,11 +10,17 @@ func Summary(result *usage_result.Result) []string {
 		return nil
 	}
 
-	items := []string{
-		fmt.Sprintf("Session %d%%", result.FiveHourPercent),
-		fmt.Sprintf("resets %s", result.FiveHourResetText()),
-		fmt.Sprintf("Weekly %d%%", result.SevenDayPercent),
+	var items []string
+
+	if result.HasSession() {
+		items = append(
+			items,
+			fmt.Sprintf("Session %d%%", result.FiveHourPercent),
+			fmt.Sprintf("resets %s", result.FiveHourResetText()),
+		)
 	}
+
+	items = append(items, fmt.Sprintf("Weekly %d%%", result.SevenDayPercent))
 
 	if result.HasFable() {
 		items = append(items, fmt.Sprintf("Fable %d%%", result.FablePercent))

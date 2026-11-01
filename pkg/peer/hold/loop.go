@@ -3,6 +3,7 @@ package hold
 import "time"
 
 func (h *Hold) loop() {
+	defer close(h.done)
 	delay := h.minimum
 
 	for h.context.Err() == nil {

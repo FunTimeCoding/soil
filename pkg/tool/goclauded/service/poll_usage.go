@@ -16,19 +16,7 @@ func (s *Service) PollUsage() {
 	browser := site.Attach(s.usageBrowser())
 	browser.ClickRefresh()
 	time.Sleep(2 * time.Second)
-	result := browser.ReadUsage()
-
-	if result == nil {
-		return
-	}
-
-	if e := s.RecordFable(
-		result.FablePercent,
-		result.FableReset,
-		nil,
-	); e != nil {
-		s.logger.Structured("fable snapshot failed", "error", e)
-	}
-
-	s.notifier.Notify()
+	browser.OpenWeek()
+	time.Sleep(time.Second)
+	s.RecordUsagePage(browser.ReadUsage())
 }

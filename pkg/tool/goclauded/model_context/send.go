@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"fmt"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
@@ -32,7 +31,7 @@ func (s *Server) send(
 		return response.Fail("body is required: %v", e)
 	}
 
-	to := q.GetString(constant.To, "")
+	to := q.GetStringSlice(constant.To, nil)
 	d := constant.Delivery(
 		q.GetString(constant.DeliveryParameter, string(constant.DeliveryQueued)),
 	)
@@ -43,7 +42,7 @@ func (s *Server) send(
 		return response.Fail("delivery must be queued, immediate or cruise")
 	}
 
-	delivered, f := s.service.Send(c.Callsign, to, body, d)
+	held, f := s.service.Send(c.Callsign, to, body, d)
 
 	if f != nil {
 		if not_found.Is(f) {
@@ -53,27 +52,5 @@ func (s *Server) send(
 		return s.captureFail(f, soil.UnexpectedError)
 	}
 
-	if to == "" {
-		return response.Success("Broadcast sent")
-	}
-
-	if d == constant.DeliveryImmediate && !delivered {
-		return response.Success(
-			fmt.Sprintf(
-				"Sent to %s, deferred to their next prompt - immediate delivery is rate limited for that session right now",
-				to,
-			),
-		)
-	}
-
-	if d == constant.DeliveryCruise && !delivered {
-		return response.Success(
-			fmt.Sprintf(
-				"Sent to %s, held for their cruise setting - it wakes them when the setting allows, or arrives with their next prompt",
-				to,
-			),
-		)
-	}
-
-	return response.Success(fmt.Sprintf("Sent to %s", to))
+	return response.Success(sent(to, held, d))
 }

@@ -53,7 +53,8 @@ func Run(
 	sweep.Run(h)
 	p := stall_client.New().Build()
 	defer p.Close()
-	memoryClient := connect.Wait(l, p.Client())
+	memoryClient := connect.Wait(l)
+	defer memoryClient.Close()
 	q := client.NewEnvironment()
 	defer q.Close()
 	errors.PanicOnError(

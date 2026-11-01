@@ -45,7 +45,7 @@ func TestBroadcastIsNeverImmediate(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
-	s.SendImmediate(r2.Callsign, "", "broadcast")
+	s.SendImmediate(r2.Callsign, "", "hotel")
 	drained, e := s.Service.DrainImmediateQueue("session-1", r1.Callsign)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, drained)

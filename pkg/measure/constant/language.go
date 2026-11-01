@@ -23,6 +23,9 @@ var (
 	GoModule = language.New("Go Module").
 			WithFilename(go_modConstant.ModFile, go_modConstant.SumFile).
 			WithLineComment(stringsConstant.DoubleSlash)
+)
+
+var (
 	C = language.New("C").
 		WithExtension(".c", ".h").
 		WithLineComment(stringsConstant.DoubleSlash).
@@ -49,6 +52,32 @@ var (
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble).
 		WithNested()
+	Swift = language.New("Swift").
+		WithExtension(".swift").
+		WithLineComment(stringsConstant.DoubleSlash).
+		WithBlockComment(BlockOpenC, BlockCloseC).
+		WithQuote(QuoteDouble).
+		WithNested()
+	Scala = language.New("Scala").
+		WithExtension(".scala", ".sc").
+		WithLineComment(stringsConstant.DoubleSlash).
+		WithBlockComment(BlockOpenC, BlockCloseC).
+		WithQuote(QuoteDouble).
+		WithNested()
+	Groovy = language.New("Groovy").
+		WithExtension(".groovy", ".gradle").
+		WithFilename("Jenkinsfile").
+		WithLineComment(stringsConstant.DoubleSlash).
+		WithBlockComment(BlockOpenC, BlockCloseC).
+		WithQuote(QuoteDouble, QuoteSingle)
+	CSharp = language.New("C#").
+		WithExtension(".cs").
+		WithLineComment(stringsConstant.DoubleSlash).
+		WithBlockComment(BlockOpenC, BlockCloseC).
+		WithQuote(QuoteDouble)
+)
+
+var (
 	JavaScript = language.New("JavaScript").
 			WithExtension(".js", ".mjs", ".cjs", ".jsx").
 			WithShebang("node").
@@ -73,38 +102,6 @@ var (
 		WithLineComment(stringsConstant.DoubleSlash, stringsConstant.Hash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble, QuoteSingle)
-	Swift = language.New("Swift").
-		WithExtension(".swift").
-		WithLineComment(stringsConstant.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble).
-		WithNested()
-	Scala = language.New("Scala").
-		WithExtension(".scala", ".sc").
-		WithLineComment(stringsConstant.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble).
-		WithNested()
-	Groovy = language.New("Groovy").
-		WithExtension(".groovy", ".gradle").
-		WithFilename("Jenkinsfile").
-		WithLineComment(stringsConstant.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble, QuoteSingle)
-	CSharp = language.New("C#").
-		WithExtension(".cs").
-		WithLineComment(stringsConstant.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble)
-	Protobuf = language.New("Protocol Buffers").
-			WithExtension(".proto").
-			WithLineComment(stringsConstant.DoubleSlash).
-			WithBlockComment(BlockOpenC, BlockCloseC)
-	Terraform = language.New("Terraform").
-			WithExtension(".tf", ".tfvars", ".hcl").
-			WithLineComment(stringsConstant.Hash, stringsConstant.DoubleSlash).
-			WithBlockComment(BlockOpenC, BlockCloseC).
-			WithQuote(QuoteDouble)
 	CSS = language.New("CSS").
 		WithExtension(".css").
 		WithBlockComment(BlockOpenC, BlockCloseC)
@@ -116,7 +113,21 @@ var (
 		WithExtension(".scss", ".sass").
 		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC)
+)
 
+var (
+	Protobuf = language.New("Protocol Buffers").
+			WithExtension(".proto").
+			WithLineComment(stringsConstant.DoubleSlash).
+			WithBlockComment(BlockOpenC, BlockCloseC)
+	Terraform = language.New("Terraform").
+			WithExtension(".tf", ".tfvars", ".hcl").
+			WithLineComment(stringsConstant.Hash, stringsConstant.DoubleSlash).
+			WithBlockComment(BlockOpenC, BlockCloseC).
+			WithQuote(QuoteDouble)
+)
+
+var (
 	Shell = language.New("Shell").
 		WithExtension(".sh", ".bash", ".zsh", ".ksh").
 		WithFilename(
@@ -162,6 +173,15 @@ var (
 		WithShebang("perl").
 		WithLineComment(stringsConstant.Hash).
 		WithBlockComment("=pod", "=cut")
+	R = language.New("R").
+		WithExtension(".r", ".R").
+		WithLineComment(stringsConstant.Hash)
+	Elixir = language.New("Elixir").
+		WithExtension(".ex", ".exs").
+		WithLineComment(stringsConstant.Hash)
+)
+
+var (
 	Makefile = language.New("Makefile").
 			WithExtension(".mk").
 			WithFilename("Makefile", "makefile", "GNUmakefile").
@@ -203,13 +223,9 @@ var (
 			"chefignore",
 		).
 		WithLineComment(stringsConstant.Hash)
-	R = language.New("R").
-		WithExtension(".r", ".R").
-		WithLineComment(stringsConstant.Hash)
-	Elixir = language.New("Elixir").
-		WithExtension(".ex", ".exs").
-		WithLineComment(stringsConstant.Hash)
+)
 
+var (
 	Lua = language.New("Lua").
 		WithExtension(".lua").
 		WithShebang("lua").
@@ -232,7 +248,9 @@ var (
 		WithBlockComment("{-", "-}").
 		WithQuote(QuoteDouble).
 		WithNested()
+)
 
+var (
 	Lisp = language.New("Lisp").
 		WithExtension(
 			".lisp",
@@ -250,7 +268,9 @@ var (
 			WithExtension(".asm", ".s", ".S").
 			WithLineComment(stringsConstant.Semicolon, stringsConstant.Hash).
 			WithBlockComment(BlockOpenC, BlockCloseC)
+)
 
+var (
 	Erlang = language.New("Erlang").
 		WithExtension(".erl", ".hrl").
 		WithLineComment("%")
@@ -261,7 +281,9 @@ var (
 		WithExtension(".pro", ".P").
 		WithLineComment("%").
 		WithBlockComment(BlockOpenC, BlockCloseC)
+)
 
+var (
 	Hypertext = language.New("HTML").
 			WithExtension(soil.HypertextExtension, ".htm", ".xhtml").
 			WithBlockComment(BlockOpenHypertext, BlockCloseHypertext)
@@ -288,7 +310,9 @@ var (
 			WithExtension(".tmpl", ".tpl", ".gotmpl").
 			WithBlockComment("{{/*", "*/}}").
 			WithBlockComment(BlockOpenHypertext, BlockCloseHypertext)
+)
 
+var (
 	Notation = language.New("JSON").
 			WithExtension(".json", ".jsonl", ".geojson", ".webmanifest")
 	CSV = language.New("CSV").
@@ -298,7 +322,9 @@ var (
 			WithFilename("LICENSE", "COPYING", "AUTHORS", "CHANGELOG", "NOTICE")
 	OpenSSH = language.New("OpenSSH Key").
 		WithExtension(".pub")
+)
 
+var (
 	Languages = []*language.Language{
 		GoTest,
 		Go,

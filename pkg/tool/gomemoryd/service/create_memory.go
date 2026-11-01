@@ -33,9 +33,7 @@ func (s *Service) CreateMemory(o *save_option.Option) (*record.Memory, error) {
 		return nil, e
 	}
 
-	if e = s.syncIndex(m); e != nil {
-		return nil, e
-	}
+	s.index(m)
 
 	return m, nil
 }

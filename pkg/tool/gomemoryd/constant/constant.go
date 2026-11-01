@@ -13,6 +13,7 @@ var Identity = identity.New(
 	"Persistent memory across Claude Code sessions. Call profile on your first turn to load memories. Read the gomemoryd://guide/memory-workflow resource for the memory lifecycle, tags, search, and profile tiers.",
 )
 
+const ReconcileInterval = 10 * time.Minute
 const (
 	HostEnvironment      = "GOMEMORY_HOST"
 	TokenEnvironment     = "GOMEMORY_TOKEN"

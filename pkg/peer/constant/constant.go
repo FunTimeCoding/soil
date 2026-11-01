@@ -12,7 +12,8 @@ const (
 	DownState   = "down"
 	UpState     = "up"
 
-	ClosedReason = "connection closed"
+	ClosedReason       = "connection closed"
+	NotConnectedReason = "not connected"
 )
 
 const (

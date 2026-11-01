@@ -22,7 +22,7 @@ func (s *Service) FetchVersions(
 		x,
 		func(y context.Context) error {
 			var f error
-			versions, f = s.memory.VersionsSince(y, since, limit)
+			versions, f = s.memory.GetVersions(y, since, limit)
 
 			return f
 		},

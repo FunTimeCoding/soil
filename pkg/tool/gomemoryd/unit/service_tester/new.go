@@ -1,6 +1,7 @@
 package service_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
@@ -17,8 +18,9 @@ func New(t *testing.T) *Tester {
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "memory.db")
 	o.Query = func() face.Client { return q }
-	result := service.New(o, logger.New(t.Context()))
+	r := memory.New()
+	result := service.New(o, logger.New(t.Context()), r)
 	t.Cleanup(result.Close)
 
-	return &Tester{t: t, Service: result, Indexer: q}
+	return &Tester{t: t, Service: result, Indexer: q, Reporter: r}
 }

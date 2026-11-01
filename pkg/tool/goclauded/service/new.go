@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
+	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"time"
 )
@@ -17,7 +17,7 @@ import (
 func New(
 	s *store.Store,
 	c face.ClaudeSource,
-	m client.Client,
+	m memoryd.Client,
 	q queryd.Client,
 	x *search_index.Index,
 	n face.Notifier,

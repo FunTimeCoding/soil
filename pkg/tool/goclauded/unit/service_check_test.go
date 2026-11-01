@@ -24,10 +24,10 @@ func TestCheckNoChanges(t *testing.T) {
 
 func TestCheckWithMessage(t *testing.T) {
 	s := service_tester.New(t)
-	r1 := s.Check("session-1")
-	s.Store.EnsureSession("session-2")
+	s.Check("session-1")
+	r2 := s.Store.EnsureSession("session-2")
 	s.Store.Advance(time.Second)
-	s.Send(r1.Callsign, "", "broadcast")
+	s.Send(r2.Callsign, "", "golf")
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
 	messages := fixture.EntriesByKind(r.Entries, constant.QueueMessage)

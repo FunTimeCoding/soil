@@ -26,7 +26,10 @@ type DiffResponse struct {
 	Counts       []ClassCount `json:"counts"`
 	Entries      []Entry      `json:"entries"`
 	FromUnparsed []string     `json:"from_unparsed"`
-	ToUnparsed   []string     `json:"to_unparsed"`
+
+	// Modules Required modules from the inventory that changed version between the two revisions and were compared with it.
+	Modules    []ModuleRange `json:"modules"`
+	ToUnparsed []string      `json:"to_unparsed"`
 }
 
 // Entry defines model for Entry.
@@ -52,6 +55,15 @@ type Location struct {
 	File string `json:"file"`
 	Key  string `json:"key"`
 	Line int    `json:"line"`
+}
+
+// ModuleRange defines model for ModuleRange.
+type ModuleRange struct {
+	From string `json:"from"`
+	Name string `json:"name"`
+
+	// To The staged index when empty.
+	To string `json:"to"`
 }
 
 // GetDiffParams defines parameters for GetDiff.

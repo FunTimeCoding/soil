@@ -15,5 +15,5 @@ func render(
 	var b bytes.Buffer
 	errors.PanicOnError(printer.Fprint(&b, s, n))
 
-	return b.String()
+	return tokenText(b.Bytes())
 }

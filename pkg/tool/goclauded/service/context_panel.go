@@ -19,11 +19,14 @@ func (s *Service) ContextPanel(
 		func(y context.Context) error {
 			var f error
 
-			if statistics, f = s.memory.Statistics(y); f != nil {
+			if statistics, f = s.memory.GetStatistics(y); f != nil {
 				return f
 			}
 
-			relations, f = s.memory.Relations(y)
+			relations, f = s.memory.GetRelations(
+				y,
+				&client.GetRelationsParams{},
+			)
 
 			return f
 		},

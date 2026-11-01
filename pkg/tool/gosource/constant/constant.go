@@ -20,4 +20,6 @@ const (
 	FromSide      = "from"
 	ToSide        = "to"
 	SourceArrow   = "<-"
+	ModuleLabel   = "module"
+	StagedLabel   = "staged"
 )

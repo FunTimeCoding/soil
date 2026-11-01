@@ -2,12 +2,12 @@ package hub
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/face"
 	"github.com/funtimecoding/soil/pkg/github/image"
 )
 
 func Image(
-	c *github.Client,
+	c face.Client,
 	namespace string,
 	repository string,
 ) {

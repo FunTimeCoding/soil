@@ -1391,7 +1391,9 @@ components:
         callsign:
           type: string
         to:
-          type: string
+          type: array
+          items:
+            type: string
         body:
           type: string
         delivery:

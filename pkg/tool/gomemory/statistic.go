@@ -3,14 +3,14 @@ package gomemory
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func statistic(
-	l **client.Client,
+	l *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var scope string
@@ -28,17 +28,14 @@ func statistic(
 			}
 
 			r, e := (*l).GetTokens(context.Background(), params)
-			errors.PanicOnError(e)
-			parsed, f := client.ParseGetTokensResponse(r)
-			errors.PanicOnError(f)
 
-			if parsed.JSON200 == nil {
-				t.Reject(parsed.Status(), parsed.Body)
+			if e != nil {
+				t.Exitln(e)
 
 				return
 			}
 
-			fmt.Print(statisticTable(parsed.JSON200))
+			fmt.Print(statisticTable(r))
 		},
 	}
 	c.Flags().StringVar(&scope, "scope", "", "memory scope")

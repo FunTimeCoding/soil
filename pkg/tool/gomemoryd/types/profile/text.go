@@ -9,6 +9,10 @@ import (
 func Text(result *Result) string {
 	var section []string
 
+	if result.Notice != "" {
+		section = append(section, result.Notice)
+	}
+
 	if len(result.Always) > 0 {
 		body := make([]string, 0, len(result.Always))
 

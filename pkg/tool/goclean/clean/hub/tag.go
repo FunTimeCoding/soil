@@ -3,13 +3,13 @@ package hub
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/face"
 	"github.com/funtimecoding/soil/pkg/github/tag"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Tag(
-	c *github.Client,
+	c face.Client,
 	namespace string,
 	repository string,
 ) {

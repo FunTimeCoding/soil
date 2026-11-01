@@ -120,6 +120,7 @@ func (s *Service) Profile(
 		index = append(index, m)
 	}
 
+	notice := ""
 	completionsTrimmed := 0
 	completionTokens := 0
 	var completions []*profile.Completion
@@ -127,7 +128,9 @@ func (s *Service) Profile(
 	if scope == "" {
 		results, g := s.ListCompletions()
 
-		if g == nil {
+		if n := s.queryNotice(g); n != "" {
+			notice = n
+		} else {
 			for _, r := range results {
 				name := r.Path
 
@@ -196,8 +199,8 @@ func (s *Service) Profile(
 
 		found, g := s.SearchRelevant(topic, 20, exclude)
 
-		if g != nil {
-			return nil, nil, fmt.Errorf("search relevant memories: %w", g)
+		if n := s.queryNotice(g); n != "" {
+			notice = n
 		}
 
 		for i := range found {
@@ -221,7 +224,7 @@ func (s *Service) Profile(
 		relevant,
 		impressions,
 		completions,
-	)
+	).WithNotice(notice)
 
 	if !detail {
 		return result, nil, nil

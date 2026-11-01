@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
 	"github.com/funtimecoding/soil/pkg/bubbletea/style"
 	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
@@ -21,7 +22,7 @@ func TestStyle(t *testing.T) {
 
 func TestConstructors(t *testing.T) {
 	assert.NotNil(t, fetch.Command())
-	assert.NotNil(t, monitor.New(false))
+	assert.NotNil(t, monitor.New(false, memory.New()))
 	assert.NotNil(t, tick.Command())
 	assert.NotNil(t, toast.New(0, stringsConstant.UpperAlfa))
 	assert.NotNil(t, item.New(true))

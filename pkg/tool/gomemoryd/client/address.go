@@ -1,5 +1,5 @@
 package client
 
-func (c *RestClient) Address() string {
-	return c.address
+func (c *Client) Address() string {
+	return c.base.String()
 }

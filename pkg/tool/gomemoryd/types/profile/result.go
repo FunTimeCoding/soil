@@ -8,5 +8,6 @@ type Result struct {
 	Index       []record.MemorySummary `json:"index"`
 	Impressions []record.Impression    `json:"impressions,omitempty"`
 	Completions []*Completion          `json:"completions,omitempty"`
+	Notice      string                 `json:"notice,omitempty"`
 	Text        string                 `json:"-"`
 }

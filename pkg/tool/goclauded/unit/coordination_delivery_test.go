@@ -20,7 +20,7 @@ func TestCheckContextCutsALongMessage(t *testing.T) {
 	a.MustCallTool(
 		constant.Send,
 		map[string]any{
-			constant.To:   b.Name(),
+			constant.To:   []string{b.Name()},
 			constant.Body: strings.Repeat("a", 5000),
 		},
 	)
@@ -39,7 +39,10 @@ func TestCheckPreviewRendersWithoutConsuming(t *testing.T) {
 	b.CheckLive()
 	a.MustCallTool(
 		constant.Send,
-		map[string]any{constant.To: b.Name(), constant.Body: "look at this"},
+		map[string]any{
+			constant.To:   []string{b.Name()},
+			constant.Body: "look at this",
+		},
 	)
 	preview, e := b.RestClient.GetCheckWithResponse(
 		b.Context,

@@ -48,10 +48,8 @@ const (
 	DigestIndent     = "    "
 	LabelPrefix      = 8
 
-	MattermostPeer     = "mattermost upstream"
-	EventChannelClosed = "event channel closed"
-	PingTimeout        = "ping timeout"
-	DebounceWindow     = 30 * time.Second
+	MattermostPeer = "mattermost upstream"
+	DebounceWindow = 30 * time.Second
 	PurgeWindow    = 7 * 24 * time.Hour
 	PurgeInterval  = time.Hour
 

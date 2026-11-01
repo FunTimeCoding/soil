@@ -36,6 +36,9 @@ const (
 	MattermostKeepAlive  = 25 * time.Second
 	MattermostPingWait   = time.Second
 
+	MattermostEventChannelClosed = "event channel closed"
+	MattermostPingTimeout        = "ping timeout"
+
 	MattermostPostField     = "post"
 	MattermostReactionField = "reaction"
 

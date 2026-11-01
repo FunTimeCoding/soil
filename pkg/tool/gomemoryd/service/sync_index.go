@@ -7,23 +7,32 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
-func (s *Service) syncIndex(m *record.Memory) error {
+func (s *Service) syncIndex(
+	x context.Context,
+	m *record.Memory,
+) error {
 	if !s.indexable(m) {
-		return s.unindex(m.Scope, m.Identifier)
+		return s.unindex(x, m.Scope, m.Identifier)
 	}
 
 	metadata := pushMetadata(m)
 	sourceType := constant.MemorySourceType
-	_, e := s.query.PostDocument(
-		context.Background(),
-		client.PostDocumentJSONRequestBody{
-			Collection: ScopeCollection(m.Scope),
-			Path:       memoryPath(m.Identifier),
-			Body:       m.Content,
-			SourceType: &sourceType,
-			Metadata:   &metadata,
+
+	return s.guard.Attempt(
+		x,
+		func(y context.Context) error {
+			_, e := s.query.PostDocument(
+				y,
+				client.PostDocumentJSONRequestBody{
+					Collection: ScopeCollection(m.Scope),
+					Path:       memoryPath(m.Identifier),
+					Body:       m.Content,
+					SourceType: &sourceType,
+					Metadata:   &metadata,
+				},
+			)
+
+			return e
 		},
 	)
-
-	return e
 }

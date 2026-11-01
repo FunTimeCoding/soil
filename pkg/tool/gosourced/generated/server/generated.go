@@ -33,7 +33,10 @@ type DiffResponse struct {
 	Counts       []ClassCount `json:"counts"`
 	Entries      []Entry      `json:"entries"`
 	FromUnparsed []string     `json:"from_unparsed"`
-	ToUnparsed   []string     `json:"to_unparsed"`
+
+	// Modules Required modules from the inventory that changed version between the two revisions and were compared with it.
+	Modules    []ModuleRange `json:"modules"`
+	ToUnparsed []string      `json:"to_unparsed"`
 }
 
 // Entry defines model for Entry.
@@ -59,6 +62,15 @@ type Location struct {
 	File string `json:"file"`
 	Key  string `json:"key"`
 	Line int    `json:"line"`
+}
+
+// ModuleRange defines model for ModuleRange.
+type ModuleRange struct {
+	From string `json:"from"`
+	Name string `json:"name"`
+
+	// To The staged index when empty.
+	To string `json:"to"`
 }
 
 // GetDiffParams defines parameters for GetDiff.
@@ -399,17 +411,18 @@ func (sh *strictHandler) GetDiff(w http.ResponseWriter, r *http.Request, params 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"rFVRb9MwEP4r1sFj1BYYL3lD2wRISEgDnqZpcpNL6y05e+fLSjXlv6Nz0nVts6nA3hzb9933ff7sPEDh",
-	"m+AJSSLkDxCLJTY2DU9rG+Opb0n0K7APyOIwrRW6pgNZB4QcorCjBXQZFJuCYcWR4AIZui4DxrvWMZaQ",
-	"Xw4Im/1X2Wa/n99gIYp05qrqAmPwFHGEgdalkRNs0uAtYwU5vJluJU0HPdMnYrrHXpbZrvUbSXjAPQrt",
-	"nITXY0AV++a6pWA5qswncAdG7ZeK/6fCfVt7W7aS9jntNhrzvRf3F0euDXTB1vX3CvLLl7375gsrzhN0",
-	"VxlQW9d2XiPkwi0mF14HaTRto2qZPR+qxc30nto93H7bs7jPx/c5/AzwHkmuXYkkrnJ4NImRyjFej6Yd",
-	"UKpcjaOMbnE9Ol87wiNuupZnPfpQc8hLaxxV6fDFiRKBhY++5SJl9h45JtLwbjKbzLS7D0g2OMjhQ5rK",
-	"IFhZJiVTG9y0dFWlHwtMz5EqTcK/lpDDZxR9XlIR2wYFOaa8Oe1x1yIrZ7KNEml82SbyW1WasWx4LEcP",
-	"6AFKjAW70HsNF3jvVIERbzTKltHovcnMl/NPZ2a1RDLYBFlPIBslkS7Zf7cUnxlZooliF1gaRyX+PqK5",
-	"+BdbX6k1fdKT/+9ns/6JJsH+Z2BDqF0fvOlN7NO3xXvpku/8BVJOdlX+WDdzXxs9bTNHWSFSUigrb3hw",
-	"IE40MCezk1dj1b8aI3R+0S35FZk+M8bzI4nE4eMrOrP7woxw+bnErQWm8G1dGvJi5jpty4nWdF33JwAA",
-	"//8=",
+	"rFVNb9s4EP0rxOweBdu7m73oViRBW6BFgbQ9BUFASyOLiTRUyFFcI9B/L4ai4y/acNvcJJLz5s2brxco",
+	"bNtZQmIP+Qv4osZWh8/LRnt/aXti+euc7dCxwXBXyJ188KpDyMGzM7SAIYNibRBvDDEu0MEwZODwqTcO",
+	"S8hvI8L6/V22fm/nD1iwIF2ZqrpB31nymGAgduHLMLbh42+HFeTw13QT0jTGM90KZnj1pZ3TK/lHYhdx",
+	"z0K7JnarFFDlbHvfU6edlzC34A6E2jdtbdk3I4cSfeFMx8YS5HATVVPxhRInimtUhp6R2LqV4lqzKmpN",
+	"CyzVMzpvLKk58hKRwlNeWuXw2ciFV5pKtUSHSmLTgr00XCvDE8jOU+Bz4HIjDlPBsP0tFfZrZMzxJj/7",
+	"Au862miYKqcxZ79QyeJKLnTTfKkgvz0tyCdb6JCw4S4D6ptGzxuEnF2PQY+3QUo2UTJa56w7jBbXx3vR",
+	"7uGOz47iHu/KY/gZoJTqvSmR2FQGzyaRsEzxehXtgFJlGkwyesRV8rwxhGcMMDHPRvRok+K13SeH1GKF",
+	"HVAg3aY5j3W0Ox++1ag8a+l8QyX+UMsaSWHb8Ura+bTIwVOs9QB/GISYGKqCZzYsasLCetu7IjRdHDeQ",
+	"wz+T2WQmNG2HpDsDOfwXjjLoNNch5qnuzLQ0VSU/CwyrQjQJ2ftYQg7vkWX0ByOnW2R0PjSNER9PPToR",
+	"fpQodjxsByWNksVFlqyywwE7zkXFdj0Qw4zN1Ifrd1d7cqZIRPX+0CXbLIzqE7lMOWd70vWdSDO2a9D/",
+	"39lsXJ/EOC5q3XWNGbtn+uDHFtrgnZpUOxs61MlulF9X7dw2SrJ9fBlNpGAuZhdvxmocfQk63+mR7JLi",
+	"HlXWvZIIHP5/Q2V2x2SCizTtZh8Xtm9KRZbVXI51ORGbYRh+BgAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

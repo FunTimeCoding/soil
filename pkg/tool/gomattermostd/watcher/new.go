@@ -2,6 +2,7 @@ package watcher
 
 import (
 	mattermostFace "github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/socket"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
@@ -9,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher/socket"
 	"time"
 )
 

@@ -2,22 +2,20 @@ package gomemory
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
-	"io"
-	"net/http"
 	"os"
 	"text/tabwriter"
 )
 
 func relations(
-	l **client.Client,
+	l *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var relationType string
@@ -44,20 +42,14 @@ func relations(
 				params.Scope = &scope
 			}
 
-			r, e := (*l).GetRelations(context.Background(), params)
-			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
-			body, e := io.ReadAll(r.Body)
-			errors.PanicOnError(e)
+			rows, e := (*l).GetRelations(context.Background(), params)
 
-			if r.StatusCode >= http.StatusBadRequest {
-				t.Reject(r.Status, body)
+			if e != nil {
+				t.Exitln(e)
 
 				return
 			}
 
-			var rows []client.Relation
-			errors.PanicOnError(json.Unmarshal(body, &rows))
 			w := tabwriter.NewWriter(os.Stdout, 0, 4, 2, ' ', 0)
 			_, e = fmt.Fprintln(w, "SOURCE\tSCOPE\tTYPE\tTARGET\tSCOPE")
 			errors.PanicOnError(e)

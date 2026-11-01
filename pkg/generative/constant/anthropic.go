@@ -19,6 +19,7 @@ const (
 	UsageMeterSession   = "Current session"
 	UsageMeterWeek      = "This week"
 	UsageMeterFableWeek = "Fable this week"
+	UsageMeterFable     = "Fable"
 	UsageResetMarker    = "Resets "
 	UsageScopeFable     = "Fable"
 

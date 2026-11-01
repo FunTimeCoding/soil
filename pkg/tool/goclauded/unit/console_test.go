@@ -189,7 +189,7 @@ func TestStatusLineLeavesMissingResetZero(t *testing.T) {
 	assert.False(t, snapshot.SevenDayReset.IsZero())
 }
 
-func TestStatusLineSkipsSnapshotWhenWindowMissing(t *testing.T) {
+func TestStatusLineRecordsWeekWithoutFiveHour(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Server)
 	c.Register("11111111-2222-3333-4444-555555555555")
@@ -202,6 +202,28 @@ func TestStatusLineSkipsSnapshotWhenWindowMissing(t *testing.T) {
 		"",
 	)
 	assert.StringNotContains(t, "five_hour", body)
+	c.StatusLine([]byte(body))
+	snapshot, e := s.Store.Store.LatestRateSnapshot()
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, snapshot)
+	assert.Integer(t, 1, snapshot.SevenDayPercent)
+	assert.Integer(t, 0, snapshot.FiveHourPercent)
+	assert.True(t, snapshot.FiveHourReset.IsZero())
+}
+
+func TestStatusLineSkipsSnapshotWithoutSevenDay(t *testing.T) {
+	s := base.New(t)
+	c := console_tester.New(t, s.Server)
+	c.Register("11111111-2222-3333-4444-555555555555")
+	body := strings.ReplaceAll(
+		fixture.Read("claude", "status-line.json"),
+		`"seven_day": {
+      "used_percentage": 1,
+      "resets_at": 1700006400
+    },`,
+		"",
+	)
+	assert.StringNotContains(t, "seven_day", body)
 	c.StatusLine([]byte(body))
 	snapshot, e := s.Store.Store.LatestRateSnapshot()
 	assert.FatalOnError(t, e)

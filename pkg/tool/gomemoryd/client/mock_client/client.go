@@ -11,4 +11,5 @@ type Client struct {
 	Stats       *client.Statistics
 	Edges       []client.Relation
 	Failure     error
+	Closed      int
 }

@@ -15,24 +15,24 @@ func TestImmediateIsRateLimitedToTheSlowPath(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 
 	for range constant.ImmediateLimit {
-		delivered, e := s.Service.Send(
+		held, e := s.Service.Send(
 			r2.Callsign,
-			r1.Callsign,
+			[]string{r1.Callsign},
 			"burst",
 			constant.DeliveryImmediate,
 		)
 		assert.FatalOnError(t, e)
-		assert.True(t, delivered)
+		assert.Count(t, 0, held)
 	}
 
-	delivered, e := s.Service.Send(
+	held, e := s.Service.Send(
 		r2.Callsign,
-		r1.Callsign,
+		[]string{r1.Callsign},
 		"over",
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, e)
-	assert.False(t, delivered)
+	assert.Count(t, 1, held)
 	drained, f := s.Service.DrainImmediateQueue("session-1", r1.Callsign)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 6, drained)
@@ -52,7 +52,7 @@ func TestImmediateRecoversAfterTheWindow(t *testing.T) {
 	for range constant.ImmediateLimit {
 		_, e := s.Service.Send(
 			r2.Callsign,
-			r1.Callsign,
+			[]string{r1.Callsign},
 			"burst",
 			constant.DeliveryImmediate,
 		)
@@ -61,19 +61,19 @@ func TestImmediateRecoversAfterTheWindow(t *testing.T) {
 
 	blocked, e := s.Service.Send(
 		r2.Callsign,
-		r1.Callsign,
+		[]string{r1.Callsign},
 		"over",
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, e)
-	assert.False(t, blocked)
+	assert.Count(t, 1, blocked)
 	s.Store.Advance(constant.ImmediateWindow + time.Minute)
 	allowed, f := s.Service.Send(
 		r2.Callsign,
-		r1.Callsign,
+		[]string{r1.Callsign},
 		"later",
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, f)
-	assert.True(t, allowed)
+	assert.Count(t, 0, allowed)
 }

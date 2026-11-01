@@ -12,6 +12,14 @@ func diffResponse(r *report.Report) server.DiffResponse {
 		Entries:      []server.Entry{},
 		FromUnparsed: append([]string{}, r.FromUnparsed...),
 		ToUnparsed:   append([]string{}, r.ToUnparsed...),
+		Modules:      []server.ModuleRange{},
+	}
+
+	for _, m := range r.Modules {
+		result.Modules = append(
+			result.Modules,
+			server.ModuleRange{Name: m.Name, From: m.From, To: m.To},
+		)
 	}
 
 	for _, class := range constant.Classes {

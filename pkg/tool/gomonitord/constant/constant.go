@@ -17,5 +17,7 @@ const (
 	StreamPath          = "/stream/claims"
 	EventFormat         = "data: %s\n\n"
 	EventPrefix         = "data: "
+	StreamOperation     = "stream"
+	StreamEnded         = "stream ended"
 	ClaimRequiredText   = "item and owner are required"
 )

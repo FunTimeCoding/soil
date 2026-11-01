@@ -239,6 +239,14 @@ func TestSevenDayResetText(t *testing.T) {
 	assert.String(t, "Wed 21:00", result(time.Now()).SevenDayResetText())
 }
 
+func TestHasSession(t *testing.T) {
+	assert.True(t, result(time.Now()).HasSession())
+}
+
+func TestHasNoSessionWithoutReset(t *testing.T) {
+	assert.False(t, result(time.Time{}).HasSession())
+}
+
 func TestHasFable(t *testing.T) {
 	assert.True(t, result(time.Now()).HasFable())
 }

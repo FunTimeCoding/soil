@@ -117,9 +117,10 @@ var Classes = []string{
 }
 
 var QualifiedReference = regexp.MustCompile(
-	`"(?:[^"\\]|\\.)*"\.[A-Za-z_][A-Za-z0-9_]*`,
+	`"(?:[^"\\]|\\.)*" \. [A-Za-z_][A-Za-z0-9_]*`,
 )
 
+const ReferenceSeparator = " . "
 const (
 	OperationWrite         = "write"
 	OperationRemove        = "remove"

@@ -14,7 +14,7 @@ func (s *Service) PollMemory() {
 		context.Background(),
 		func(x context.Context) error {
 			var e error
-			versions, e = s.memory.VersionsSince(x, s.lastMemoryPoll, 50)
+			versions, e = s.memory.GetVersions(x, s.lastMemoryPoll, 50)
 
 			return e
 		},
