@@ -3,6 +3,7 @@ package goclauded
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -26,5 +27,6 @@ func Main() {
 	o.SessionExportPath = environment.Required(
 		constant.SessionExportPathEnvironment,
 	)
+	o.Harbor = claude.New().Base()
 	Run(o, s)
 }

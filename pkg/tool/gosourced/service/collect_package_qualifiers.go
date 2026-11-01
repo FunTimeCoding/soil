@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"go/token"
 	"go/types"
@@ -36,14 +35,7 @@ func collectPackageQualifiers(
 
 				if shadow != nil &&
 					shadow.Parent() != types.Universe {
-					position := set.Position(ident.Pos())
-
-					return nil, fmt.Sprintf(
-						"%s is taken at %s:%d",
-						newName,
-						position.Filename,
-						position.Line,
-					)
+					return nil, takenAt(set, newName, ident.Pos())
 				}
 			}
 

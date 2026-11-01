@@ -11,7 +11,7 @@ func TestResolveCallerDatabaseError(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
-	s.Store.Store.Close()
+	s.Service.Close()
 	result := a.MustCallToolError(constant.SessionStatus, nil)
 	assert.StringContains(t, "unexpected error", result)
 }

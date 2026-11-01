@@ -25,6 +25,14 @@ paths:
         description: Revision to compare to, the staged index when empty.
         schema:
           type: string
+      - name: text
+        in: query
+        required: false
+        description: >-
+          Include each changed symbol's text - a line diff of the declaration,
+          the whole declaration when added, its first line when removed.
+        schema:
+          type: boolean
       responses:
         "200":
           description: Symbol diff between the two revisions.
@@ -117,6 +125,10 @@ components:
           nullable: true
           allOf:
           - $ref: "#/components/schemas/Location"
+        text:
+          type: array
+          items:
+            type: string
     Location:
       type: object
       required:

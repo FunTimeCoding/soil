@@ -55,6 +55,7 @@ const (
 
 const (
 	RunningStatus   = "running"
+	StoppedStatus   = "stopped"
 	OnlineStatus    = "online"
 	AvailableStatus = "available"
 )

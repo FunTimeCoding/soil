@@ -3,11 +3,11 @@ package goclaude
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 )
 
 func RunStatusLine(
-	c *client.ClientWithResponses,
+	c face.Client,
 	body []byte,
 ) string {
 	input := parseStatusLineInput(body)

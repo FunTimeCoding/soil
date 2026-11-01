@@ -20,8 +20,6 @@ func Mount(
 	u *web.Server,
 	l *logger.Logger,
 	r face.Reporter,
-	harborPath string,
-	sessionExportPath string,
 	hold time.Duration,
 	t face.Recorder,
 	g *guard.Mux,
@@ -30,7 +28,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(v, l, r, harborPath, sessionExportPath, hold),
+				server.New(v, l, r, hold),
 				[]generated.StrictMiddlewareFunc{
 					soilWeb.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},

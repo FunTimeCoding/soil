@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"go/ast"
@@ -117,6 +118,13 @@ func (s *Service) moveSymbolsThrough(
 		return failValidation(r, message)
 	}
 
+	references := make(map[*relocation.Entry][]resolve_reference.Reference)
+
+	for _, entry := range entries {
+		references[entry] = resolve.FindAllReferences(all, entry.Object)
+	}
+
+	flipReferenced(entries, references)
 	target := findPackage(all, targetPackagePath)
 
 	if target == nil && !create {
@@ -234,7 +242,7 @@ func (s *Service) moveSymbolsThrough(
 	renames := make(map[*ast.Ident]string)
 
 	for _, entry := range entries {
-		for _, f := range resolve.FindAllReferences(all, entry.Object) {
+		for _, f := range references[entry] {
 			if insideMoved(entries, f.Ident.Pos()) {
 				if entry.Flipped {
 					renames[f.Ident] = entry.NewName
@@ -262,10 +270,7 @@ func (s *Service) moveSymbolsThrough(
 	)
 
 	if qualifications == nil {
-		return failValidation(
-			r,
-			fmt.Sprintf("no available import name in %s", blocked),
-		)
+		return failValidation(r, blocked)
 	}
 
 	plan := relocation.NewPlan()

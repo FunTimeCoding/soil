@@ -10,6 +10,9 @@ type Symbol struct {
 	Variant   string
 	File      string
 	Line      int
+	Start     int
+	End       int
+	Text      string
 	Signature string
 	Body      string
 	Shape     string

@@ -2,14 +2,15 @@ package goclaude
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func RunTurnEnd(
-	c *client.ClientWithResponses,
+	c face.Client,
 	session string,
 ) {
-	if _, e := c.PostTurnEndWithResponse(
+	if e := c.PostTurnEnd(
 		context.Background(),
 		client.PostTurnEndJSONRequestBody{Session: session},
 	); e != nil {

@@ -220,6 +220,24 @@ type NodeStatus struct {
 	Uptime         *int        `json:"uptime,omitempty"`
 }
 
+// ReconcileChange defines model for ReconcileChange.
+type ReconcileChange struct {
+	From string `json:"from"`
+	Name string `json:"name"`
+	Node string `json:"node"`
+	To   string `json:"to"`
+}
+
+// ReconcilePlan defines model for ReconcilePlan.
+type ReconcilePlan struct {
+	// Ambiguous Guests netbox holds more than one virtual machine of the name for; never written, since a write by name cannot say which.
+	Ambiguous  []string          `json:"ambiguous"`
+	Changes    []ReconcileChange `json:"changes"`
+	Hypervisor string            `json:"hypervisor"`
+	Unknown    []string          `json:"unknown"`
+	Written    bool              `json:"written"`
+}
+
 // Snapshot defines model for Snapshot.
 type Snapshot struct {
 	Description *string `json:"description,omitempty"`
@@ -553,6 +571,18 @@ type DownloadLocatorParams struct {
 	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
 }
 
+// ReconcileParams defines parameters for Reconcile.
+type ReconcileParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Full Also record stopped guests as offline.
+	Full *bool `form:"full,omitempty" json:"full,omitempty"`
+
+	// Write Write the changes; without it the answer only lists them.
+	Write *bool `form:"write,omitempty" json:"write,omitempty"`
+}
+
 // ListSnippetsParams defines parameters for ListSnippets.
 type ListSnippetsParams struct {
 	// Instance Proxmox instance name. Optional when only one instance is configured.
@@ -693,6 +723,9 @@ type ServerInterface interface {
 
 	// (POST /api/nodes/{name}/storages/{storage}/download)
 	DownloadLocator(w http.ResponseWriter, r *http.Request, name string, storage string, params DownloadLocatorParams)
+
+	// (POST /api/reconcile)
+	Reconcile(w http.ResponseWriter, r *http.Request, params ReconcileParams)
 
 	// (GET /api/snippets)
 	ListSnippets(w http.ResponseWriter, r *http.Request, params ListSnippetsParams)
@@ -2311,6 +2344,65 @@ func (siw *ServerInterfaceWrapper) DownloadLocator(w http.ResponseWriter, r *htt
 	handler.ServeHTTP(w, r)
 }
 
+// Reconcile operation middleware
+func (siw *ServerInterfaceWrapper) Reconcile(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ReconcileParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "full" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "full", r.URL.Query(), &params.Full, runtime.BindQueryParameterOptions{Type: "boolean", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "full"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "full", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "write" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "write", r.URL.Query(), &params.Write, runtime.BindQueryParameterOptions{Type: "boolean", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "write"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "write", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.Reconcile(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListSnippets operation middleware
 func (siw *ServerInterfaceWrapper) ListSnippets(w http.ResponseWriter, r *http.Request) {
 
@@ -2594,6 +2686,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/snapshots", wrapper.CreateMachineSnapshot)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/snapshots/{name}/rollback", wrapper.RollbackMachineSnapshot)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/machines/{identifier}/snapshots/{name}", wrapper.DeleteMachineSnapshot)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/reconcile", wrapper.Reconcile)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/start", wrapper.StartMachine)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/stop", wrapper.StopMachine)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/shutdown", wrapper.ShutdownMachine)
@@ -4612,6 +4705,84 @@ func (response DownloadLocator500JSONResponse) VisitDownloadLocatorResponse(w ht
 	return err
 }
 
+type ReconcileRequestObject struct {
+	Params ReconcileParams
+}
+
+type ReconcileResponseObject interface {
+	VisitReconcileResponse(w http.ResponseWriter) error
+}
+
+type Reconcile200JSONResponse ReconcilePlan
+
+func (response Reconcile200JSONResponse) VisitReconcileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type Reconcile400JSONResponse Error
+
+func (response Reconcile400JSONResponse) VisitReconcileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type Reconcile404JSONResponse Error
+
+func (response Reconcile404JSONResponse) VisitReconcileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type Reconcile500JSONResponse ErrorResponse
+
+func (response Reconcile500JSONResponse) VisitReconcileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type Reconcile503JSONResponse Error
+
+func (response Reconcile503JSONResponse) VisitReconcileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListSnippetsRequestObject struct {
 	Params ListSnippetsParams
 }
@@ -4966,6 +5137,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/nodes/{name}/storages/{storage}/download)
 	DownloadLocator(ctx context.Context, request DownloadLocatorRequestObject) (DownloadLocatorResponseObject, error)
+
+	// (POST /api/reconcile)
+	Reconcile(ctx context.Context, request ReconcileRequestObject) (ReconcileResponseObject, error)
 
 	// (GET /api/snippets)
 	ListSnippets(ctx context.Context, request ListSnippetsRequestObject) (ListSnippetsResponseObject, error)
@@ -5896,6 +6070,32 @@ func (sh *strictHandler) DownloadLocator(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// Reconcile operation middleware
+func (sh *strictHandler) Reconcile(w http.ResponseWriter, r *http.Request, params ReconcileParams) {
+	var request ReconcileRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.Reconcile(ctx, request.(ReconcileRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "Reconcile")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ReconcileResponseObject); ok {
+		if err := validResponse.VisitReconcileResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListSnippets operation middleware
 func (sh *strictHandler) ListSnippets(w http.ResponseWriter, r *http.Request, params ListSnippetsParams) {
 	var request ListSnippetsRequestObject
@@ -6014,50 +6214,57 @@ func (sh *strictHandler) GetSnippet(w http.ResponseWriter, r *http.Request, name
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7F1Rb+O4Ef4rhNpHNw6u2wLN2zXptkF3t4tk71DgsAhoaWzzLJFakrLjBv7vhShSkm1Sph0nsWK+JdaI",
-	"HHLmmxkOOeJTFLMsZxSoFNHVU5RjjjOQwNV/t1RITGMo/05AxJzkkjAaXUVfOXvM2CMimgJRnMEF+o96",
-	"jlO0mAJFjKZLxCg0VESgmNExmRQckotoEJGysR8F8GU0iMo2oqvIUEeDSMRTyHDZvVzm5TMhOaGTaLVa",
-	"mYeK0euUUfiM4ymhcAc/ChBSjYazHLgkoIjGRZq2mhoxlgKm0cp0vNXJIKKwuE2ASjImwFUbjGdYKibl",
-	"Xz9EA/MKoRImwMt3BMW5mDJpbVBIxvHE1tlqEHH4URAOSXT1W8XS97p9NvodYlm2cM2oxIRW7KwPMM4L",
-	"0Wq5xRPZdxAZfrwhYuZP/Rkyf+L7Bc49qd2iYQk4phjLtXloHkk8sT8ockmqfnaytCGn1swOPIR2AxKT",
-	"dFt0mMdTK2cx4+AQqlvca1i1NDplQjontr+6kkHG+NI+Je9EjzhgudPQ4QlQabd0I06SiX28ccJZZn9C",
-	"vmIhFownjse/iEpZ9tTeb+pHy2sJEbPbLGdcOh/fk/+BQ/nLp04zO4jgUXJsF98U82SBOTzgJOEgxHHw",
-	"QfJr5fOsrR1XZxkdMeYQPRPO+RZQ2p8blmFiNxhCTP8NS+HCCXd06cDJpqsrR+Ov9KJILTq/t1Sc8HYD",
-	"08bcDXAyh+TnRmHW+TpApSwaRB8KAQ+jpetxE6btGEwTWq0ZnC0urUNlC5oynHxiMZaMO81PzKhcN0DN",
-	"SMckBadap1XDu4dhemi117xtY/0fnDNLwATm5+7uKjJnu3cgckYF+Lc/iGAOVD5Y5d7JhOVNG18mcHeF",
-	"G2UAYLcsdtnYgtMqjLB2r7FqjVDX4JmwYpRCg09aZKNdwc0h8ckeEYc35fuIKLSoXIrS7cCfLctdgWri",
-	"H1eeVNh6BCUCuWB89pDAnMTaxUnI1B9/5DCOrqI/DJu1+1Avhodfqvdu1GtKs6qWMed42R07dMQHLJ6B",
-	"dMjwJLVaRVW3dMwsaQAO4CkdySROPWkLAYnvgLb41VKzhPKxJHOwR1ddEQUuJOsIzKplwFfGpXCE9Ikr",
-	"oM8ykyvaejjBEhZ4aQ9xxjh2anqGKxxuK5BdIzd1QrX93T2vGg1bs9uxGvKL26gE7hxYxhJI9/Gyg2ie",
-	"YmpDmW9y6IsG96FeN9nLIF5X7fbNtHYYrMPtkg6JdNsu2dzXXR8qoRlwCumvwIXLZ5Yh+s9zMOvf2ms4",
-	"wNV4hmYp2uVgWqZ1NSiH8Zixxy5+OGPyI0lBLIWshOffvNDJH/83Ggn62N37Vq52XSK7IhOnduWYuxY/",
-	"JWdC4iw/WMG+d4zBuR7bI6a3t0/yHGS1Cj9o0bfXosI05MGKPRPQAe85SwsfVjRdJ5w1L+7A+fXm41bj",
-	"ykvsg0jo1NnxNFDN0t7y2Gi+a66bdN4e4dFcC8bDV3RJCygepZDsuXMkppi7XtonrJSumHyfeNNTimqS",
-	"r6upsOuU6ew5WrU3DG3MfsNi5lI4icXsNtndvKazNf9Lnnjk2TsWxwmkIB3J7R2e5aCMcFfi152F3Rj3",
-	"SoW01ZpJEpmWzyZMu/gkGkRz4+ajny4uLy5VxzlQnJPoKvqz+ql0gHKq+hvinAxjs/OlfpqA4rGcRFxO",
-	"QCmm6BMR8rohG6xtQv9md/4NybDepF4NNnepP5JUAkejJSpXvWaPOiMSjRlHOE3V78K1Ea0T0+5N6O+l",
-	"QlXJPzW8ny4vN2w/zvOUxGqsw99FJfGmPa8VfbPhuxWzrTbVKfr032vUTPlF+cqHPZnq4qXKo1r6vaVz",
-	"nJIEMY4yIgShE9SISLPx4TXYMMcRWCnjgiaq778cewrqlK+VBwmc4hQJ4HPgSCVuL0rK1WATE8OnJp+x",
-	"cgLkn9Dg45jwqBtFDRc1FkoYt85ktNMujRGVvIA2QDyc0SYTXxpk3ucAiUBFjlLGZkVenSKZUbagbwZR",
-	"L2TqINCiDM0UJ4rm7BDZTEAfITkU00ImbKGYyfWmyTo47zXFCyP09iYg018jWuFhp04a8SJCiSRYQhIA",
-	"2jOA6uyHZ3h5X5MHP3p6oW6djvOIdGtJqlheTqGJewOGTwvDA4frrPJ4W9gM0DwAmipF8XeWLI8m8M28",
-	"8mo9f1LOy+rNXLhhDsVKh4Lb7qvbHj6Var6qtlxMzmzdTNyo39+/mah1WpkKe+96U8Dd71aS72yi+nr6",
-	"Kj06Z5PAOBK1Mr0H8zDkLE1HOJ651+F3miLYiWAnOu2EUZSw5n8XlsIccnNk58rHITXXx9RcKbkQ2PcP",
-	"jyzvgiPLAxp7iUaW5wGNp4pGc1r5T63TytZkeFWu9i9NbqrWtoDoU+z/nOr9LQjpozatsHqAFlMSTxEF",
-	"SNTkwyMREi1BOnv2A/gWnl8SXxvlgRbhfpsC0lJDckoEyvRUJOpVgSR7PdSVzNRSZu1VDiICsUIiNkYc",
-	"0wmc15mOj5ikkCDJtFTUfoOW2hoQzeR1b0fd1lSvsauyUQzosbfyc5q2vtOBNvG/PmStr90j/myIwumu",
-	"jdPrulTSQyq/Ei4LnBoDEU539WmXy8j5cP1/oW0e6yclXnmvx1bhb5l7EySc655PP043GvO0dbaxe3/n",
-	"+QBxBpXvb0m41d8dZGwOaMxZhuK0EKVjrDw4wjRBWAgWq1wn4iBYwWO3X8wLPrH2Xh8pf8MV6ec6OD7P",
-	"PR4z/nUL8OHyb6/XNRGIF5QSOjkt7+s6Oh0My4nkmtY/NdEJ7rM8Km3H9ulEt1hW36hbR9haqVQA2Rse",
-	"2LIWrb1yJL9WCtqh44XiNfjv/kTwwzhl+pNO9mVu6xOsxzQD9yparbOiwRr4rqktn8Q98WV9yXEwCT0y",
-	"CRwEdBy+uCsfh8igF1u9Zk6VSAMG+4NB/wrFgMReITHUJvYall51iXqAL1KVGLD5hrWIWikCYnu3Q/sS",
-	"ZQMhlRVqDwPIT8ote9cdvk+zEGqIQq3hMUxAb+qH/MzBHnWGwS4EuxBqC9+vZfCoKwwJtX4l1M60orDP",
-	"4frOasKAwZ5h8DzrCHuBQVUu05mv/qIonlnD8NKZW3UJimeVkylt0pVCoaDgVNXSLND0vVg71NQQHdEr",
-	"NKb5SKui18GCvljKAw6aFNWXGgnEqNrMKAVwdtio5N0bXDS3bLjOwbfuH3rPsNjlGfQUuCRezeO5HkHv",
-	"ndKrK0u6ncG9ITp7Z2Cu0fHZ0a5I0QjHM6DJebuCHoZJBhnDJ/3XatjicxdWruv7lU8XMdupa62yHZ3o",
-	"uThZZLbvXvIAqSY32NSjC/DsJTwTfbu6O921cf96QOfLnT9xXHV/YsVUhktUvnue+9D9wL6o7mncEaca",
-	"ohNPr7UvnfQ6G6nI0ZikTUZhyoQMutqjw5Faiqf3+Rrr7bSvbact19J2ICF8vqYPttr7gODzoWE5hdPY",
-	"zL7k1nYFK2ZM53pi7tStvyttHNS7bePdHy+prXvVW9Dv07Luq9X/AwAA//8=",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

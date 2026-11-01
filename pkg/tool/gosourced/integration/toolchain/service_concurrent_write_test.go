@@ -115,10 +115,6 @@ func TestRenameCommitsWhenNothingChanged(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func IsGenerated(",
-		service_tester.ReadFixtureFile(
-			t,
-			d,
-			"pkg/target/is_generated_header.go",
-		),
+		service_tester.ReadFixtureFile(t, d, "pkg/target/is_generated.go"),
 	)
 }

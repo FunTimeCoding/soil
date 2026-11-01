@@ -16,7 +16,7 @@ func TestRestSearchConversations(t *testing.T) {
 	s.Service.PopulateCache()
 	s.Service.BackfillSessions()
 	s.Service.CheckConsistency()
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	r, e := s.RESTClient(t).GetSessionsSearchWithResponse(
 		context.Background(),
 		&client.GetSessionsSearchParams{Query: "login bug"},
@@ -45,7 +45,7 @@ func TestRestSessionWindow(t *testing.T) {
 		),
 		0644,
 	)
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	c := s.RESTClient(t)
 	r, e := c.GetSessionWindowWithResponse(
 		context.Background(),

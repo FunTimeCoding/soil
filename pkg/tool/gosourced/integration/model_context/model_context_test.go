@@ -107,7 +107,7 @@ func TestRenameSymbol(t *testing.T) {
 	)
 	assert.StringContains(t, "IsGeneratedHeader → IsGenerated", result)
 	helper, e := os.ReadFile(
-		filepath.Join(o.Directory, "pkg/target/is_generated_header.go"),
+		filepath.Join(o.Directory, "pkg/target/is_generated.go"),
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "func IsGenerated(", string(helper))

@@ -11,16 +11,7 @@ func New(
 	s *service.Service,
 	l *logger.Logger,
 	r face.Reporter,
-	harborPath string,
-	sessionExportPath string,
 	hold time.Duration,
 ) *Server {
-	return &Server{
-		service:           s,
-		logger:            l,
-		reporter:          r,
-		harborPath:        harborPath,
-		sessionExportPath: sessionExportPath,
-		hold:              hold,
-	}
+	return &Server{service: s, logger: l, reporter: r, hold: hold}
 }

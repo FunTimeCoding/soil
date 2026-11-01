@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -17,16 +16,14 @@ func sessionSweep(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().PostSweepWithResponse(
-				context.Background(),
-			)
-			errors.PanicOnError(e)
+			r, e := c.Client().PostSweep(context.Background())
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
 
-			r := response.JSON200
 			console.Format(
 				"sweep: %d copied, %d updated, %d skipped\n",
 				r.Copied,

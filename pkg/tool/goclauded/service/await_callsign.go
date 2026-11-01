@@ -33,7 +33,7 @@ func (s *Service) AwaitCallsign(
 			return "", nil
 		case <-x.Done():
 			return "", nil
-		case <-s.done:
+		case <-s.stop.Done():
 			return "", nil
 		}
 	}

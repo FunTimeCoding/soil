@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -21,7 +20,7 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			identifier := resolveSession(c.Client(), arguments[0])
+			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
 				console.Format("session not found: %s\n", arguments[0])
@@ -29,7 +28,7 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			response, e := c.Client().GetSessionToolContextWithResponse(
+			response, e := c.Client().GetSessionToolContext(
 				context.Background(),
 				identifier,
 				&client.GetSessionToolContextParams{
@@ -37,13 +36,14 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 					Surround: &surround,
 				},
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
 
-			results := response.JSON200.Results
+			results := response.Results
 
 			if len(results) == 0 {
 				console.Format("no tool calls matching %q\n", arguments[1])

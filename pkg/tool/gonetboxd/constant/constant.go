@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
 
 var Identity = identity.New(
 	"gonetboxd",
@@ -139,4 +142,24 @@ const (
 	TokenEnvironment    = "GONETBOX_TOKEN"
 	PortEnvironment     = "GONETBOX_PORT"
 	InsecureEnvironment = "GONETBOX_INSECURE"
+
+	PowerIntentEnvironment = "GONETBOX_POWER_INTENT"
+)
+
+const (
+	IntentInterval = time.Minute
+
+	StatusMetric = "netbox_status"
+	StatusHelp   = "A device or virtual machine's netbox status, 1 for the status it holds"
+	KindLabel    = "kind"
+	NameLabel    = "name"
+	StatusLabel  = "status"
+	DeviceKind   = "device"
+	MachineKind  = "virtual_machine"
+)
+
+const ScopeNameKey = "name"
+const (
+	StatusActive  = "active"
+	StatusOffline = "offline"
 )

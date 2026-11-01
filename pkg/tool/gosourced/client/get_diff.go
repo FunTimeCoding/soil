@@ -8,20 +8,8 @@ import (
 
 func (c *Client) GetDiff(
 	x context.Context,
-	module string,
-	from string,
-	to string,
+	p *client.GetDiffParams,
 ) (client.DiffResponse, error) {
-	p := &client.GetDiffParams{Module: module}
-
-	if from != "" {
-		p.From = &from
-	}
-
-	if to != "" {
-		p.To = &to
-	}
-
 	r, e := c.client.GetDiffWithResponse(x, p)
 
 	if e != nil {

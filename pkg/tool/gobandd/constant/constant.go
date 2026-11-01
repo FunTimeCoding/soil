@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/identity/paragraph"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
+	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 )
 
 var Identity = identity.New(
@@ -39,6 +40,10 @@ const (
 )
 
 var Operations = []string{OperationStart, OperationShutdown, OperationReboot}
+var IntentStatus = map[string]string{
+	OperationStart:    netbox.StatusActive,
+	OperationShutdown: netbox.StatusOffline,
+}
 
 const ForceParameter = "force"
 const GracefulRefusal = "LMS on the host registers it; force cuts power instead"

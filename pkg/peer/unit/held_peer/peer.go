@@ -8,4 +8,5 @@ type Peer struct {
 	opened  int
 	closed  int
 	end     chan error
+	served  chan struct{}
 }

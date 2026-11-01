@@ -29,5 +29,7 @@ func (s *Service) Power(
 		return "", h
 	}
 
+	s.recordIntent(instance, operation)
+
 	return band.PowerStateName(state), nil
 }

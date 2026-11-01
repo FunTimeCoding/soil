@@ -10,6 +10,7 @@ import (
 
 func TestProjectsWithoutASearchListsEveryProject(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedProject(1, "group", "app")
 	c.SeedProject(2, "group", "web")
 	projects, e := service_tester.Single(c).Projects(
@@ -22,6 +23,7 @@ func TestProjectsWithoutASearchListsEveryProject(t *testing.T) {
 
 func TestProjectsWithASearchNarrows(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedProject(1, "group", "app")
 	c.SeedProject(2, "group", "web")
 	projects, e := service_tester.Single(c).Projects(

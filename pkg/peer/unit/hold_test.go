@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer/hold/adapter"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/peer/unit/held_peer"
-	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -25,10 +24,9 @@ func TestAHeldConnectionReopensAfterItDrops(t *testing.T) {
 	)
 	h.Start()
 	defer h.Close()
-	time.Sleep(20 * time.Millisecond)
-	assert.Integer(t, 1, p.Opens())
+	await(t, p.Served())
 	p.End(errors.New("event channel closed"))
-	time.Sleep(50 * time.Millisecond)
+	await(t, p.Served())
 	assert.Integer(t, 2, p.Opens())
 	assert.Integer(t, 1, p.Closes())
 	assert.Count(t, 0, r.Events())
@@ -44,7 +42,7 @@ func TestAHeldConnectionWaitsOutAnOutage(t *testing.T) {
 	)
 	h.Start()
 	defer h.Close()
-	time.Sleep(100 * time.Millisecond)
+	await(t, p.Served())
 	assert.Integer(t, 4, p.Opens())
 	assert.Count(t, 0, r.Events())
 }
@@ -65,7 +63,7 @@ func TestAHeldConnectionReportsARefusalOnce(t *testing.T) {
 	).WithBackoff(time.Millisecond, 4*time.Millisecond)
 	h.Start()
 	defer h.Close()
-	time.Sleep(100 * time.Millisecond)
+	await(t, p.Served())
 	assert.Integer(t, 4, p.Opens())
 	assert.Count(t, 1, r.Events())
 }
@@ -74,53 +72,67 @@ func TestAHeldConnectionReportsWhereItIsTold(t *testing.T) {
 	p := held_peer.New()
 	p.Refuse(errors.New("authentication invalid"), refusedConnection())
 	r := memory.New()
-	var crossed atomic.Int32
-	var refused atomic.Int32
+	crossed := make(chan *edge.Edge, 4)
+	refused := make(chan error, 4)
 	h := hold.New(
 		"quebec",
 		p,
 		logger.New(context.Background()),
 		r,
 	).WithBackoff(time.Millisecond, 4*time.Millisecond).WithReport(
-		func(*edge.Edge) { crossed.Add(1) },
-		func(error) { refused.Add(1) },
+		func(x *edge.Edge) { crossed <- x },
+		func(e error) { refused <- e },
 	)
 	h.Start()
 	defer h.Close()
-	time.Sleep(50 * time.Millisecond)
-	assert.Integer(t, 1, int(refused.Load()))
-	assert.Integer(t, 2, int(crossed.Load()))
+	await(t, p.Served())
+	assert.Count(t, 1, refused)
+	assert.Count(t, 2, crossed)
+	assert.True(t, (<-crossed).Down)
+	assert.False(t, (<-crossed).Down)
 	assert.Count(t, 0, r.Events())
 }
 
 func TestAHeldConnectionIsUnavailableUntilItServes(t *testing.T) {
 	p := held_peer.New()
 	p.Refuse(refusedConnection())
+	crossed := make(chan *edge.Edge, 4)
 	h := hold.New(
 		"romeo",
 		p,
 		logger.New(context.Background()),
 		memory.New(),
-	).WithBackoff(20*time.Millisecond, 40*time.Millisecond)
+	).WithBackoff(time.Hour, time.Hour).WithReport(
+		func(x *edge.Edge) { crossed <- x },
+		func(error) {},
+	)
 	e := h.Unavailable()
 	assert.True(t, unavailable.Is(e))
 	assert.StringContains(t, "not connected", e.Error())
 	h.Start()
 	defer h.Close()
-	time.Sleep(10 * time.Millisecond)
+	assert.True(t, await(t, crossed).Down)
 	assert.StringContains(t, "romeo unreachable since", h.Unavailable().Error())
-	time.Sleep(50 * time.Millisecond)
+}
+
+func TestAServingHoldIsAvailable(t *testing.T) {
+	p := held_peer.New()
+	h := hold.New("tango", p, logger.New(context.Background()), memory.New())
+	h.Start()
+	defer h.Close()
+	await(t, p.Served())
 	assert.Nil(t, h.Unavailable())
 }
 
 func TestAnAdapterHoldsThreeFunctions(t *testing.T) {
-	var opened, closed atomic.Int32
+	opened := make(chan struct{}, 4)
+	closed := make(chan struct{}, 4)
 	end := make(chan error, 1)
 	h := hold.New(
 		"sierra",
 		adapter.New(
 			func(context.Context) error {
-				opened.Add(1)
+				opened <- struct{}{}
 
 				return nil
 			},
@@ -132,18 +144,17 @@ func TestAnAdapterHoldsThreeFunctions(t *testing.T) {
 					return nil
 				}
 			},
-			func() { closed.Add(1) },
+			func() { closed <- struct{}{} },
 		),
 		logger.New(context.Background()),
 		memory.New(),
 	).WithBackoff(time.Millisecond, 4*time.Millisecond)
 	h.Start()
 	defer h.Close()
-	time.Sleep(20 * time.Millisecond)
+	await(t, opened)
 	end <- errors.New("device disconnected")
-	time.Sleep(50 * time.Millisecond)
-	assert.Integer(t, 2, int(opened.Load()))
-	assert.Integer(t, 1, int(closed.Load()))
+	await(t, closed)
+	await(t, opened)
 }
 
 func TestClosingAHeldConnectionEndsItWithoutReopening(t *testing.T) {
@@ -155,10 +166,9 @@ func TestClosingAHeldConnectionEndsItWithoutReopening(t *testing.T) {
 		memory.New(),
 	).WithBackoff(time.Millisecond, 4*time.Millisecond)
 	h.Start()
-	time.Sleep(20 * time.Millisecond)
+	await(t, p.Served())
 	h.Close()
-	<-h.Done()
-	time.Sleep(20 * time.Millisecond)
+	await(t, h.Done())
 	assert.Integer(t, 1, p.Opens())
 	assert.Integer(t, 2, p.Closes())
 }

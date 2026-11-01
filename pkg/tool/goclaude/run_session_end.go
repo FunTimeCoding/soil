@@ -2,11 +2,12 @@ package goclaude
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func RunSessionEnd(
-	c *client.ClientWithResponses,
+	c face.Client,
 	session string,
 	reason string,
 ) {
@@ -16,10 +17,7 @@ func RunSessionEnd(
 		body.Reason = &reason
 	}
 
-	if _, e := c.PostSessionEndWithResponse(
-		context.Background(),
-		body,
-	); e != nil {
+	if e := c.PostSessionEnd(context.Background(), body); e != nil {
 		return
 	}
 }

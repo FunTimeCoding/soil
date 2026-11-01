@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
-	"unicode"
 )
 
 func buildMoveEntries(
@@ -57,14 +56,6 @@ func buildMoveEntries(
 			}
 		}
 
-		newName := symbol
-		flipped := false
-
-		if unicode.IsLower(rune(symbol[0])) {
-			newName = FlipName(symbol)
-			flipped = true
-		}
-
 		node := ast.Node(declaration)
 
 		if spec != nil {
@@ -74,13 +65,12 @@ func buildMoveEntries(
 		name := targetFile
 
 		if name == "" {
-			name = fmt.Sprintf("%s.go", camel.ToSnake(newName))
+			name = fmt.Sprintf("%s.go", camel.ToSnake(symbol))
 		}
 
 		entry := relocation.NewEntry()
 		entry.Symbol = symbol
-		entry.NewName = newName
-		entry.Flipped = flipped
+		entry.NewName = symbol
 		entry.Object = o
 		entry.File = file
 		entry.Declaration = declaration

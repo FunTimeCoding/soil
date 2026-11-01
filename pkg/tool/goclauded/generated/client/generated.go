@@ -629,8 +629,8 @@ type GetSessionsSearchParams struct {
 	Limit *int      `form:"limit,omitempty" json:"limit,omitempty"`
 }
 
-// DeleteSessionByIdParams defines parameters for DeleteSessionById.
-type DeleteSessionByIdParams struct {
+// DeleteSessionByIdentifierParams defines parameters for DeleteSessionByIdentifier.
+type DeleteSessionByIdentifierParams struct {
 	Confirm *string `form:"confirm,omitempty" json:"confirm,omitempty"`
 }
 
@@ -864,8 +864,8 @@ type ClientInterface interface {
 	// GetSessionsSearch performs a GET /api/sessions/search (the `GetSessionsSearch` operationId) request.
 	GetSessionsSearch(ctx context.Context, params *GetSessionsSearchParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteSessionById performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
-	DeleteSessionById(ctx context.Context, identifier string, params *DeleteSessionByIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// DeleteSessionByIdentifier performs a DELETE /api/sessions/{identifier} (the `DeleteSessionByIdentifier` operationId) request.
+	DeleteSessionByIdentifier(ctx context.Context, identifier string, params *DeleteSessionByIdentifierParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostSessionContextWithBody performs a POST /api/sessions/{identifier}/context (the `PostSessionContext` operationId) request,
 	// with any type of body and a specified content type.
@@ -1338,9 +1338,9 @@ func (c *Client) GetSessionsSearch(ctx context.Context, params *GetSessionsSearc
 	return c.Client.Do(req)
 }
 
-// DeleteSessionById performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
-func (c *Client) DeleteSessionById(ctx context.Context, identifier string, params *DeleteSessionByIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteSessionByIdRequest(c.Server, identifier, params)
+// DeleteSessionByIdentifier performs a DELETE /api/sessions/{identifier} (the `DeleteSessionByIdentifier` operationId) request.
+func (c *Client) DeleteSessionByIdentifier(ctx context.Context, identifier string, params *DeleteSessionByIdentifierParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteSessionByIdentifierRequest(c.Server, identifier, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2705,8 +2705,8 @@ func NewGetSessionsSearchRequest(server string, params *GetSessionsSearchParams)
 	return req, nil
 }
 
-// NewDeleteSessionByIdRequest constructs an http.Request for the DeleteSessionById method
-func NewDeleteSessionByIdRequest(server string, identifier string, params *DeleteSessionByIdParams) (*http.Request, error) {
+// NewDeleteSessionByIdentifierRequest constructs an http.Request for the DeleteSessionByIdentifier method
+func NewDeleteSessionByIdentifierRequest(server string, identifier string, params *DeleteSessionByIdentifierParams) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -3718,10 +3718,10 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetSessionsSearchWithResponse(ctx context.Context, params *GetSessionsSearchParams, reqEditors ...RequestEditorFn) (*GetSessionsSearchResponse, error)
 
-	// DeleteSessionByIdWithResponse performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
+	// DeleteSessionByIdentifierWithResponse performs a DELETE /api/sessions/{identifier} (the `DeleteSessionByIdentifier` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
-	DeleteSessionByIdWithResponse(ctx context.Context, identifier string, params *DeleteSessionByIdParams, reqEditors ...RequestEditorFn) (*DeleteSessionByIdResponse, error)
+	DeleteSessionByIdentifierWithResponse(ctx context.Context, identifier string, params *DeleteSessionByIdentifierParams, reqEditors ...RequestEditorFn) (*DeleteSessionByIdentifierResponse, error)
 
 	// PostSessionContextWithBodyWithResponse performs a POST /api/sessions/{identifier}/context (the `PostSessionContext` operationId) request,
 	// with any type of body and a specified content type.
@@ -4902,7 +4902,7 @@ func (r GetSessionsSearchResponse) ContentType() string {
 	return ""
 }
 
-type DeleteSessionByIdResponse struct {
+type DeleteSessionByIdentifierResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
@@ -4914,27 +4914,27 @@ type DeleteSessionByIdResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r DeleteSessionByIdResponse) GetJSON200() *DeleteReceiptResponse {
+func (r DeleteSessionByIdentifierResponse) GetJSON200() *DeleteReceiptResponse {
 	return r.JSON200
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r DeleteSessionByIdResponse) GetJSON409() *Error {
+func (r DeleteSessionByIdentifierResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
-func (r DeleteSessionByIdResponse) GetJSON500() *ErrorResponse {
+func (r DeleteSessionByIdentifierResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
 }
 
 // GetBody returns the raw response body bytes
-func (r DeleteSessionByIdResponse) GetBody() []byte {
+func (r DeleteSessionByIdentifierResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteSessionByIdResponse) Status() string {
+func (r DeleteSessionByIdentifierResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -4942,7 +4942,7 @@ func (r DeleteSessionByIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteSessionByIdResponse) StatusCode() int {
+func (r DeleteSessionByIdentifierResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -4950,7 +4950,7 @@ func (r DeleteSessionByIdResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r DeleteSessionByIdResponse) ContentType() string {
+func (r DeleteSessionByIdentifierResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -6168,15 +6168,15 @@ func (c *ClientWithResponses) GetSessionsSearchWithResponse(ctx context.Context,
 	return ParseGetSessionsSearchResponse(rsp)
 }
 
-// DeleteSessionByIdWithResponse performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
+// DeleteSessionByIdentifierWithResponse performs a DELETE /api/sessions/{identifier} (the `DeleteSessionByIdentifier` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) DeleteSessionByIdWithResponse(ctx context.Context, identifier string, params *DeleteSessionByIdParams, reqEditors ...RequestEditorFn) (*DeleteSessionByIdResponse, error) {
-	rsp, err := c.DeleteSessionById(ctx, identifier, params, reqEditors...)
+func (c *ClientWithResponses) DeleteSessionByIdentifierWithResponse(ctx context.Context, identifier string, params *DeleteSessionByIdentifierParams, reqEditors ...RequestEditorFn) (*DeleteSessionByIdentifierResponse, error) {
+	rsp, err := c.DeleteSessionByIdentifier(ctx, identifier, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteSessionByIdResponse(rsp)
+	return ParseDeleteSessionByIdentifierResponse(rsp)
 }
 
 // PostSessionContextWithBodyWithResponse performs a POST /api/sessions/{identifier}/context (the `PostSessionContext` operationId) request,
@@ -7183,15 +7183,15 @@ func ParseGetSessionsSearchResponse(rsp *http.Response) (*GetSessionsSearchRespo
 	return response, nil
 }
 
-// ParseDeleteSessionByIdResponse parses an HTTP response from a DeleteSessionByIdWithResponse call
-func ParseDeleteSessionByIdResponse(rsp *http.Response) (*DeleteSessionByIdResponse, error) {
+// ParseDeleteSessionByIdentifierResponse parses an HTTP response from a DeleteSessionByIdentifierWithResponse call
+func ParseDeleteSessionByIdentifierResponse(rsp *http.Response) (*DeleteSessionByIdentifierResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteSessionByIdResponse{
+	response := &DeleteSessionByIdentifierResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

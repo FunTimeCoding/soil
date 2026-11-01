@@ -7,3 +7,5 @@ var Identity = identity.New(
 	"Proxmox hypervisor CLI",
 	"goproxmox [command]",
 )
+
+const YesArgument = "yes"

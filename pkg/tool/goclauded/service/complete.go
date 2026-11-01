@@ -51,6 +51,7 @@ func (s *Service) Complete(
 	}
 
 	metadata["created_at"] = []string{c.CreatedAt.Format(time.RFC3339)}
+	s.report(s.pushCompletion(slug, c.Sequence, message, metadata))
 
-	return s.pushCompletion(slug, c.Sequence, message, metadata)
+	return nil
 }

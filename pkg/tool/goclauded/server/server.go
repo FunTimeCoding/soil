@@ -8,10 +8,8 @@ import (
 )
 
 type Server struct {
-	service           *service.Service
-	logger            *logger.Logger
-	reporter          face.Reporter
-	harborPath        string
-	sessionExportPath string
-	hold              time.Duration
+	service  *service.Service
+	logger   *logger.Logger
+	reporter face.Reporter
+	hold     time.Duration
 }

@@ -9,9 +9,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 )
 

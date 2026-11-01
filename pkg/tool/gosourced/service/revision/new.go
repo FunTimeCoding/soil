@@ -48,6 +48,7 @@ func New(files map[string][]byte) *Revision {
 	}
 
 	distinguish(result.Symbols)
+	attachText(result.Symbols, files)
 
 	return result
 }

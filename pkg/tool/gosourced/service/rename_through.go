@@ -86,6 +86,19 @@ func (s *Service) renameThrough(
 	}
 
 	references := resolve.FindAllReferences(all, declaration)
+
+	if receiver == "" {
+		if taken := checkRenameScope(
+			all,
+			set,
+			p.PkgPath,
+			newName,
+			references,
+		); taken != "" {
+			return failValidation(r, taken)
+		}
+	}
+
 	unexporting := unicode.IsUpper(rune(oldName[0])) && unicode.IsLower(
 		rune(newName[0]),
 	)
@@ -154,6 +167,8 @@ func (s *Service) renameThrough(
 	if e != nil {
 		return nil, e
 	}
+
+	renameFollow(set, all, declaration, newName, out, r)
 
 	return r, nil
 }

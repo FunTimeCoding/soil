@@ -1,5 +1,7 @@
 package service
 
+import netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+
 func (s *Service) StopContainer(
 	instance string,
 	identifier int,
@@ -22,6 +24,8 @@ func (s *Service) StopContainer(
 	if e != nil {
 		return "", e
 	}
+
+	s.recordGuest(container.Name, netbox.StatusOffline)
 
 	return string(task.UPID), nil
 }

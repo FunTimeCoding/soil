@@ -32,6 +32,7 @@ func valueSymbols(
 			continue
 		}
 
+		start, end := span(s, v)
 		q.qualify(v, localNames(v))
 		rendered := &ast.ValueSpec{
 			Names:  v.Names,
@@ -56,7 +57,10 @@ func valueSymbols(
 			shape = join.Empty(shape, position)
 		}
 
-		result = append(result, specSymbols(s, f, v, kind, body, shape)...)
+		for _, entry := range specSymbols(s, f, v, kind, body, shape) {
+			entry.Start, entry.End = start, end
+			result = append(result, entry)
+		}
 	}
 
 	return result

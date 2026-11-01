@@ -34,7 +34,7 @@ func (s *Service) AwaitImmediateQueue(
 			return nil, nil
 		case <-x.Done():
 			return nil, nil
-		case <-s.done:
+		case <-s.stop.Done():
 			return nil, nil
 		}
 	}

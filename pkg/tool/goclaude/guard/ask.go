@@ -2,19 +2,29 @@ package guard
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"slices"
 	"strings"
 )
 
 func (c *GitCall) Ask() string {
-	if !slices.Contains(constant.GitTreeWriters, c.subcommand) {
+	if !slices.Contains(constant.GitTreeWriters, c.subcommand) ||
+		c.readsOnly() {
 		return ""
+	}
+
+	name := c.subcommand
+	arguments := c.arguments
+
+	if v := c.stashVerb(); v != "" {
+		name = join.Space(c.subcommand, v)
+		arguments = arguments[1:]
 	}
 
 	var paths []string
 
-	for _, w := range c.arguments {
+	for _, w := range arguments {
 		value, _ := literalWord(w)
 
 		if !strings.HasPrefix(value, "-") {
@@ -28,5 +38,5 @@ func (c *GitCall) Ask() string {
 		target = strings.Join(paths, " ")
 	}
 
-	return fmt.Sprintf(constant.GitAskReason, c.subcommand, target)
+	return fmt.Sprintf(constant.GitAskReason, name, target)
 }

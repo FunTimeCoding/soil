@@ -7,14 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assistant/unit/fake_assistant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"sync/atomic"
 	"time"
 )
 
 func listener(
 	f *fake_assistant.Server,
 	r *memory.Memory,
-	received *atomic.Int32,
+	received chan *message.Message,
 ) *assistant.Client {
 	return assistant.New(
 		f.Host(),
@@ -24,7 +23,7 @@ func listener(
 		assistant.WithSubscriber(
 			func(m *message.Message) {
 				if m.Event != nil {
-					received.Add(1)
+					received <- m
 				}
 			},
 		),

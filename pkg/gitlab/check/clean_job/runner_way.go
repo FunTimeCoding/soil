@@ -3,13 +3,13 @@ package clean_job
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 )
 
 func RunnerWay(
-	g *gitlab.Client,
+	g face.Forge,
 	r *runner.Runner,
 	f *option.Format,
 ) {

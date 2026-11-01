@@ -1,6 +1,7 @@
 package store_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"testing"
@@ -13,12 +14,12 @@ func NewInZone(
 ) *Tester {
 	t.Helper()
 	now := time.Now().In(zone)
-	result := &Tester{
+	d := lite.NewMemory()
+	t.Cleanup(func() { relational.CloseMapper(d) })
+
+	return &Tester{
 		t:     t,
-		Store: store.New(lite.NewMemory(), func() time.Time { return now }),
+		Store: store.New(d, func() time.Time { return now }),
 		now:   &now,
 	}
-	t.Cleanup(result.Store.Close)
-
-	return result
 }

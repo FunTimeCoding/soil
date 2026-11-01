@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/device_change"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/machine_change"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
@@ -13,7 +14,7 @@ func TestUpdateDeviceAppliesOnlyGivenFields(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	v := device_change.New()
-	v.Status = new("active")
+	v.Status = new(constant.StatusActive)
 	v.Serial = new("S1")
 	d, e := service_tester.Service(t, c).UpdateDevice("core", v)
 	assert.FatalOnError(t, e)
@@ -30,7 +31,7 @@ func TestUpdateDeviceRenamesLastAndReturnsTheRenamed(t *testing.T) {
 	c.SeedDevice("core")
 	v := device_change.New()
 	v.Name = new("edge")
-	v.Status = new("offline")
+	v.Status = new(constant.StatusOffline)
 	d, e := service_tester.Service(t, c).UpdateDevice("core", v)
 	assert.FatalOnError(t, e)
 	assert.String(t, "edge", d.Name)
@@ -43,7 +44,7 @@ func TestUpdateDeviceRenamesLastAndReturnsTheRenamed(t *testing.T) {
 
 func TestUpdateDeviceRefusesUnknownDevice(t *testing.T) {
 	v := device_change.New()
-	v.Status = new("active")
+	v.Status = new(constant.StatusActive)
 	_, e := service_tester.Service(t, service_tester.NewSource(t)).UpdateDevice(
 		"missing",
 		v,

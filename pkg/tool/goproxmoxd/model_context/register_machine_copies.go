@@ -34,7 +34,7 @@ func (s *Server) registerMachineCopies() {
 				),
 			),
 			mcp.WithBoolean(
-				"full",
+				constant.FullParameter,
 				mcp.Description(
 					"Full clone instead of linked clone (default false)",
 				),

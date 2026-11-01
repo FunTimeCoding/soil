@@ -31,6 +31,7 @@ func functionSymbol(
 		position.Filename,
 		position.Line,
 	)
+	result.Start, result.End = span(s, d)
 	q.qualify(d, localNames(d))
 	result.Body = render(s, d)
 	result.Shape = anonymous(s, d, d.Name)

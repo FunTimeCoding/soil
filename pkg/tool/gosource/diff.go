@@ -16,6 +16,7 @@ func diff(
 	var module string
 	var from string
 	var to string
+	var text bool
 	result := &cobra.Command{
 		Use:   "diff",
 		Short: "Compare two revisions symbol by symbol, one line per change",
@@ -24,7 +25,10 @@ func diff(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.GetDiff(context.Background(), module, from, to)
+			r, e := c.GetDiff(
+				context.Background(),
+				diffParameters(module, from, to, text),
+			)
 
 			if e != nil {
 				t.EmitDone(e)
@@ -54,6 +58,12 @@ func diff(
 		constant.ToFlag,
 		"",
 		"revision to compare to, the staged index when empty",
+	)
+	result.Flags().BoolVar(
+		&text,
+		constant.TextFlag,
+		false,
+		"print each changed symbol's text under its line",
 	)
 	errors.PanicOnError(result.MarkFlagRequired(constant.ModuleFlag))
 

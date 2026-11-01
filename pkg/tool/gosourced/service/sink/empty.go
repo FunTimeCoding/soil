@@ -1,5 +1,5 @@
 package sink
 
 func (s *Sink) Empty() bool {
-	return len(s.operations) == 0
+	return len(s.rewrites) == 0 && len(s.operations) == 0
 }

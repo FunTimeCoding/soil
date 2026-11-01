@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"github.com/funtimecoding/soil/pkg/chromium"
 	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -8,19 +9,26 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+	"gorm.io/gorm"
 	"sync"
 	"sync/atomic"
 	"time"
 )
 
 type Service struct {
+	database          *gorm.DB
+	searchDatabase    *sql.DB
+	exportPath        string
+	closeOnce         sync.Once
 	store             *store.Store
 	client            face.ClaudeSource
 	memory            memoryd.Client
 	memoryGuard       *peer.Guard
+	queryGuard        *peer.Guard
 	query             queryd.Client
 	search            *search_index.Index
 	searchIndexed     atomic.Int64
@@ -35,6 +43,5 @@ type Service struct {
 	browserMutex      sync.Mutex
 	lastMemoryPoll    string
 	usageUnreadable   bool
-	done              chan struct{}
-	doneOnce          sync.Once
+	stop              *stopper.Stopper
 }

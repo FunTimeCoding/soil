@@ -11,6 +11,7 @@ import (
 
 func TestTheJobViewTakesTheRequestedJobAndItsTrace(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedJob(1, "compile", "kilo", constant.JobSuccess)
 	c.SeedJob(2, "verify", "lima", constant.JobFail)
 	c.SeedTrace(1, "juliett")
@@ -25,6 +26,7 @@ func TestTheJobViewTakesTheRequestedJobAndItsTrace(t *testing.T) {
 
 func TestTheJobViewPrefersARunningJobThenAFailedOne(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedJob(1, "compile", "kilo", constant.JobSuccess)
 	c.SeedJob(2, "verify", "lima", constant.JobFail)
 	s := service_tester.Single(c)

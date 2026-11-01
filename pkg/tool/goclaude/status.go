@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -17,27 +16,21 @@ func status(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().GetStatusWithResponse(
-				context.Background(),
-			)
-			errors.PanicOnError(e)
+			r, e := c.Client().GetStatus(context.Background())
 
-			if response.JSON200 == nil {
-				console.Format(
-					"unexpected response: %s\n",
-					response.HTTPResponse.Status,
-				)
+			if e != nil {
+				c.Terminal().Exitln(e)
 
 				return
 			}
 
-			if len(response.JSON200.Findings) == 0 {
+			if len(r.Findings) == 0 {
 				console.Line("nothing inconsistent")
 
 				return
 			}
 
-			for _, i := range response.JSON200.Findings {
+			for _, i := range r.Findings {
 				if i.Subject == nil {
 					console.Format("%-24s %s\n", i.Kind, i.Detail)
 

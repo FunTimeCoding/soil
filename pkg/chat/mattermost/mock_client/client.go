@@ -8,6 +8,7 @@ import (
 type Client struct {
 	Failure error
 	Closed  int
+	Posted  []*model.Post
 	me      *model.User
 	post    map[string]*model.Post
 	thread  map[string][]*post.Post

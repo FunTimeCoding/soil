@@ -10,6 +10,8 @@ const (
 	GitHiddenMessage     = "git inside a shell string or eval that cannot be read before it runs - run git directly, with every path written out"
 	EvalCommand          = "eval"
 	GitTagSubcommand     = "tag"
+	GitStashSubcommand   = "stash"
+	GitMoveSubcommand    = "mv"
 
 	PreToolUseEvent = "PreToolUse"
 	AskDecision     = "ask"
@@ -37,6 +39,21 @@ var (
 		"stash",
 		"update-index",
 	}
+	GitStashVerbs = []string{
+		"apply",
+		"branch",
+		"clear",
+		"create",
+		"drop",
+		"list",
+		"pop",
+		"push",
+		"save",
+		"show",
+		"store",
+	}
+	GitStashReadVerbs   = []string{"list", "show"}
+	GitDryRunOptions    = []string{"-n", "--dry-run"}
 	GitOptionsWithValue = []string{"-C", "-c"}
 	GitTagListOptions   = []string{"-l", "--list", "-v", "--verify"}
 	GitTagReadOptions   = []string{

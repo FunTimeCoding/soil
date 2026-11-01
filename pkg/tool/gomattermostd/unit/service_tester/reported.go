@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/face"
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 	"path/filepath"
@@ -14,7 +14,7 @@ import (
 func Reported(
 	t *testing.T,
 	c face.Client,
-	k *connector.Client,
+	k goclauded.Client,
 	configure func(*option.Mattermost),
 	r soilFace.Reporter,
 ) *service.Service {
@@ -22,7 +22,7 @@ func Reported(
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "mattermost.db")
 	o.Mattermost = func() face.Client { return c }
-	o.Connector = func() *connector.Client { return k }
+	o.Connector = func() goclauded.Client { return k }
 
 	if configure != nil {
 		configure(o)

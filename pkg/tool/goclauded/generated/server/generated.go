@@ -635,8 +635,8 @@ type GetSessionsSearchParams struct {
 	Limit *int      `form:"limit,omitempty" json:"limit,omitempty"`
 }
 
-// DeleteSessionByIdParams defines parameters for DeleteSessionById.
-type DeleteSessionByIdParams struct {
+// DeleteSessionByIdentifierParams defines parameters for DeleteSessionByIdentifier.
+type DeleteSessionByIdentifierParams struct {
 	Confirm *string `form:"confirm,omitempty" json:"confirm,omitempty"`
 }
 
@@ -765,7 +765,7 @@ type ServerInterface interface {
 	GetSessionsSearch(w http.ResponseWriter, r *http.Request, params GetSessionsSearchParams)
 
 	// (DELETE /api/sessions/{identifier})
-	DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdParams)
+	DeleteSessionByIdentifier(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdentifierParams)
 
 	// (POST /api/sessions/{identifier}/context)
 	PostSessionContext(w http.ResponseWriter, r *http.Request, identifier string)
@@ -1451,8 +1451,8 @@ func (siw *ServerInterfaceWrapper) GetSessionsSearch(w http.ResponseWriter, r *h
 	handler.ServeHTTP(w, r)
 }
 
-// DeleteSessionById operation middleware
-func (siw *ServerInterfaceWrapper) DeleteSessionById(w http.ResponseWriter, r *http.Request) {
+// DeleteSessionByIdentifier operation middleware
+func (siw *ServerInterfaceWrapper) DeleteSessionByIdentifier(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -1467,7 +1467,7 @@ func (siw *ServerInterfaceWrapper) DeleteSessionById(w http.ResponseWriter, r *h
 	}
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params DeleteSessionByIdParams
+	var params DeleteSessionByIdentifierParams
 
 	// ------------- Optional query parameter "confirm" -------------
 
@@ -1483,7 +1483,7 @@ func (siw *ServerInterfaceWrapper) DeleteSessionById(w http.ResponseWriter, r *h
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteSessionById(w, r, identifier, params)
+		siw.Handler.DeleteSessionByIdentifier(w, r, identifier, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -2145,7 +2145,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/search", wrapper.GetSessionsSearch)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/bash-dump", wrapper.GetSessionsBashDump)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/export", wrapper.PostSessionsExport)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/sessions/{identifier}", wrapper.DeleteSessionById)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/sessions/{identifier}", wrapper.DeleteSessionByIdentifier)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/detail", wrapper.GetSessionDetail)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/peek", wrapper.GetSessionPeek)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/messages", wrapper.GetSessionMessages)
@@ -3020,18 +3020,18 @@ func (response GetSessionsSearch500JSONResponse) VisitGetSessionsSearchResponse(
 	return err
 }
 
-type DeleteSessionByIdRequestObject struct {
+type DeleteSessionByIdentifierRequestObject struct {
 	Identifier string `json:"identifier"`
-	Params     DeleteSessionByIdParams
+	Params     DeleteSessionByIdentifierParams
 }
 
-type DeleteSessionByIdResponseObject interface {
-	VisitDeleteSessionByIdResponse(w http.ResponseWriter) error
+type DeleteSessionByIdentifierResponseObject interface {
+	VisitDeleteSessionByIdentifierResponse(w http.ResponseWriter) error
 }
 
-type DeleteSessionById200JSONResponse DeleteReceiptResponse
+type DeleteSessionByIdentifier200JSONResponse DeleteReceiptResponse
 
-func (response DeleteSessionById200JSONResponse) VisitDeleteSessionByIdResponse(w http.ResponseWriter) error {
+func (response DeleteSessionByIdentifier200JSONResponse) VisitDeleteSessionByIdentifierResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3043,9 +3043,9 @@ func (response DeleteSessionById200JSONResponse) VisitDeleteSessionByIdResponse(
 	return err
 }
 
-type DeleteSessionById409JSONResponse Error
+type DeleteSessionByIdentifier409JSONResponse Error
 
-func (response DeleteSessionById409JSONResponse) VisitDeleteSessionByIdResponse(w http.ResponseWriter) error {
+func (response DeleteSessionByIdentifier409JSONResponse) VisitDeleteSessionByIdentifierResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3057,9 +3057,9 @@ func (response DeleteSessionById409JSONResponse) VisitDeleteSessionByIdResponse(
 	return err
 }
 
-type DeleteSessionById500JSONResponse ErrorResponse
+type DeleteSessionByIdentifier500JSONResponse ErrorResponse
 
-func (response DeleteSessionById500JSONResponse) VisitDeleteSessionByIdResponse(w http.ResponseWriter) error {
+func (response DeleteSessionByIdentifier500JSONResponse) VisitDeleteSessionByIdentifierResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3872,7 +3872,7 @@ type StrictServerInterface interface {
 	GetSessionsSearch(ctx context.Context, request GetSessionsSearchRequestObject) (GetSessionsSearchResponseObject, error)
 
 	// (DELETE /api/sessions/{identifier})
-	DeleteSessionById(ctx context.Context, request DeleteSessionByIdRequestObject) (DeleteSessionByIdResponseObject, error)
+	DeleteSessionByIdentifier(ctx context.Context, request DeleteSessionByIdentifierRequestObject) (DeleteSessionByIdentifierResponseObject, error)
 
 	// (POST /api/sessions/{identifier}/context)
 	PostSessionContext(ctx context.Context, request PostSessionContextRequestObject) (PostSessionContextResponseObject, error)
@@ -4569,26 +4569,26 @@ func (sh *strictHandler) GetSessionsSearch(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-// DeleteSessionById operation middleware
-func (sh *strictHandler) DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdParams) {
-	var request DeleteSessionByIdRequestObject
+// DeleteSessionByIdentifier operation middleware
+func (sh *strictHandler) DeleteSessionByIdentifier(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdentifierParams) {
+	var request DeleteSessionByIdentifierRequestObject
 
 	request.Identifier = identifier
 	request.Params = params
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
-		return sh.ssi.DeleteSessionById(ctx, request.(DeleteSessionByIdRequestObject))
+		return sh.ssi.DeleteSessionByIdentifier(ctx, request.(DeleteSessionByIdentifierRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "DeleteSessionById")
+		handler = middleware(handler, "DeleteSessionByIdentifier")
 	}
 
 	response, err := handler(r.Context(), w, r, request)
 
 	if err != nil {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
-	} else if validResponse, ok := response.(DeleteSessionByIdResponseObject); ok {
-		if err := validResponse.VisitDeleteSessionByIdResponse(w); err != nil {
+	} else if validResponse, ok := response.(DeleteSessionByIdentifierResponseObject); ok {
+		if err := validResponse.VisitDeleteSessionByIdentifierResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -5156,20 +5156,20 @@ var swaggerSpec = []string{
 	"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",
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

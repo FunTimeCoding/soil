@@ -13,6 +13,7 @@ import (
 )
 
 type Client struct {
+	Closed            int
 	files             map[string]*file.File
 	commits           []*recorded_commit.Commit
 	branches          []*branch.Branch

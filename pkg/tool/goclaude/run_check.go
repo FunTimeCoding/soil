@@ -2,14 +2,15 @@ package goclaude
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func RunCheck(
-	c *client.ClientWithResponses,
+	c face.Client,
 	session string,
 ) string {
-	response, e := c.GetCheckWithResponse(
+	r, e := c.GetCheck(
 		context.Background(),
 		&client.GetCheckParams{Session: session},
 	)
@@ -18,13 +19,9 @@ func RunCheck(
 		return ""
 	}
 
-	if response.JSON200 == nil {
+	if !r.Changed {
 		return ""
 	}
 
-	if !response.JSON200.Changed {
-		return ""
-	}
-
-	return response.JSON200.Context
+	return r.Context
 }

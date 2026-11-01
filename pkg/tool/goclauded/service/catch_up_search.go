@@ -1,21 +1,19 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
 )
 
-func (s *Service) CatchUpSearch() {
+func (s *Service) CatchUpSearch(x context.Context) []error {
 	entries, e := os.ReadDir(s.harbor)
 
 	if e != nil {
-		s.reporter.CaptureException(e)
-
-		return
+		return []error{e}
 	}
 
 	var files []os.FileInfo
@@ -44,6 +42,10 @@ func (s *Service) CatchUpSearch() {
 	s.searchTotal.Store(int64(len(files)))
 
 	for _, i := range files {
+		if x.Err() != nil {
+			return nil
+		}
+
 		identifier := strings.TrimSuffix(
 			i.Name(),
 			constant.NotationLogExtension,
@@ -53,13 +55,19 @@ func (s *Service) CatchUpSearch() {
 		s.searchIndexed.Add(1)
 	}
 
-	indexed, e := s.search.Sessions()
-	errors.PanicOnError(e)
+	indexed, f := s.search.Sessions()
+
+	if f != nil {
+		return []error{f}
+	}
 
 	for _, identifier := range indexed {
 		if !present[identifier] {
-			_, f := s.search.DeleteSession(identifier)
-			errors.PanicOnError(f)
+			if _, g := s.search.DeleteSession(identifier); g != nil {
+				return []error{g}
+			}
 		}
 	}
+
+	return nil
 }

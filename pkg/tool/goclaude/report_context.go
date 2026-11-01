@@ -2,11 +2,12 @@ package goclaude
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func reportContext(
-	c *client.ClientWithResponses,
+	c face.Client,
 	input *StatusLineInput,
 ) {
 	if input.SessionIdentifier == "" {
@@ -44,7 +45,7 @@ func reportContext(
 		body.FableReset = fableResetEpoch(f.ResetsAt)
 	}
 
-	if _, e := c.PostSessionContextWithResponse(
+	if e := c.PostSessionContext(
 		context.Background(),
 		input.SessionIdentifier,
 		body,

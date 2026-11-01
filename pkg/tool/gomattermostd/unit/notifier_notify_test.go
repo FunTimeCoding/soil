@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"net/http"
@@ -36,7 +36,7 @@ func TestNotifierNotifySkipsEmptyCallsign(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	c := connector.New(s.URL, false, "")
+	c := client.New(s.URL, false, "")
 	defer c.Close()
 	r := memory.New()
 	notifier.New(c, "mattermost", r).Notify("", "first message")
@@ -56,7 +56,7 @@ func TestNotifierNotifyCapturesFailureStatus(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	c := connector.New(s.URL, false, "")
+	c := client.New(s.URL, false, "")
 	defer c.Close()
 	r := memory.New()
 	notifier.New(c, "mattermost", r).Notify("kilo", "first message")

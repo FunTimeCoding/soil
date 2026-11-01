@@ -43,6 +43,7 @@ type DiffResponse struct {
 type Entry struct {
 	Class string    `json:"class"`
 	From  *Location `json:"from,omitempty"`
+	Text  *[]string `json:"text,omitempty"`
 	To    *Location `json:"to,omitempty"`
 }
 
@@ -82,6 +83,9 @@ type GetDiffParams struct {
 
 	// To Revision to compare to, the staged index when empty.
 	To *string `form:"to,omitempty" json:"to,omitempty"`
+
+	// Text Include each changed symbol's text - a line diff of the declaration, the whole declaration when added, its first line when removed.
+	Text *bool `form:"text,omitempty" json:"text,omitempty"`
 }
 
 // ServerInterface represents all server handlers.
@@ -144,6 +148,19 @@ func (siw *ServerInterfaceWrapper) GetDiff(w http.ResponseWriter, r *http.Reques
 			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "to"})
 		} else {
 			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "to", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "text" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "text", r.URL.Query(), &params.Text, runtime.BindQueryParameterOptions{Type: "boolean", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "text"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "text", Err: err})
 		}
 		return
 	}
@@ -411,18 +428,20 @@ func (sh *strictHandler) GetDiff(w http.ResponseWriter, r *http.Request, params 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"rFVNb9s4EP0rxOweBdu7m73oViRBW6BFgbQ9BUFASyOLiTRUyFFcI9B/L4ai4y/acNvcJJLz5s2brxco",
-	"bNtZQmIP+Qv4osZWh8/LRnt/aXti+euc7dCxwXBXyJ188KpDyMGzM7SAIYNibRBvDDEu0MEwZODwqTcO",
-	"S8hvI8L6/V22fm/nD1iwIF2ZqrpB31nymGAgduHLMLbh42+HFeTw13QT0jTGM90KZnj1pZ3TK/lHYhdx",
-	"z0K7JnarFFDlbHvfU6edlzC34A6E2jdtbdk3I4cSfeFMx8YS5HATVVPxhRInimtUhp6R2LqV4lqzKmpN",
-	"CyzVMzpvLKk58hKRwlNeWuXw2ciFV5pKtUSHSmLTgr00XCvDE8jOU+Bz4HIjDlPBsP0tFfZrZMzxJj/7",
-	"Au862miYKqcxZ79QyeJKLnTTfKkgvz0tyCdb6JCw4S4D6ptGzxuEnF2PQY+3QUo2UTJa56w7jBbXx3vR",
-	"7uGOz47iHu/KY/gZoJTqvSmR2FQGzyaRsEzxehXtgFJlGkwyesRV8rwxhGcMMDHPRvRok+K13SeH1GKF",
-	"HVAg3aY5j3W0Ox++1ag8a+l8QyX+UMsaSWHb8Ura+bTIwVOs9QB/GISYGKqCZzYsasLCetu7IjRdHDeQ",
-	"wz+T2WQmNG2HpDsDOfwXjjLoNNch5qnuzLQ0VSU/CwyrQjQJ2ftYQg7vkWX0ByOnW2R0PjSNER9PPToR",
-	"fpQodjxsByWNksVFlqyywwE7zkXFdj0Qw4zN1Ifrd1d7cqZIRPX+0CXbLIzqE7lMOWd70vWdSDO2a9D/",
-	"39lsXJ/EOC5q3XWNGbtn+uDHFtrgnZpUOxs61MlulF9X7dw2SrJ9fBlNpGAuZhdvxmocfQk63+mR7JLi",
-	"HlXWvZIIHP5/Q2V2x2SCizTtZh8Xtm9KRZbVXI51ORGbYRh+BgAA//8=",
+	"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",
+	"AAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

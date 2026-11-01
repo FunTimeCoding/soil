@@ -3,7 +3,7 @@ package option
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/face"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
 )
@@ -13,7 +13,7 @@ func New() *Mattermost {
 		Mattermost: func() face.Client {
 			return mattermost.NewEnvironment()
 		},
-		Connector:      func() *connector.Client { return nil },
+		Connector:      func() goclauded.Client { return nil },
 		Monitor:        option.New(),
 		DebounceWindow: constant.DebounceWindow,
 		PurgeWindow:    constant.PurgeWindow,

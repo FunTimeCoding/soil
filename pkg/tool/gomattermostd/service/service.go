@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/face"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/sweeper"
@@ -17,7 +17,7 @@ type Service struct {
 	store      *store.Store
 	mattermost face.Client
 	guard      *peer.Guard
-	connector  *connector.Client
+	connector  goclauded.Client
 	watcher    *watcher.Watcher
 	sweeper    *sweeper.Sweeper
 	monitor    *monitor.Monitor

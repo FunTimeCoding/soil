@@ -2,13 +2,13 @@ package common
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"os"
 )
 
 func FindProjectOrExit(
-	c *gitlab.Client,
+	c face.Forge,
 	owner string,
 	repository string,
 ) *project.Project {

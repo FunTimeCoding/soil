@@ -11,6 +11,7 @@ import (
 
 func TestDeleteRegistryPathRemovesThePathAndItsCache(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedRegistryRepository(7, 1, "group/app")
 	c.SeedRegistryRepository(7, 2, "group/app/cache")
 	c.SeedRegistryRepository(7, 3, "group/other")
@@ -27,6 +28,7 @@ func TestDeleteRegistryPathRemovesThePathAndItsCache(t *testing.T) {
 
 func TestDeleteRegistryPathWithoutACacheDeletesWhatExists(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedRegistryRepository(7, 1, "group/app")
 	deleted, e := service_tester.Single(c).DeleteRegistryPath(
 		constant.FixtureInstance,
@@ -39,6 +41,7 @@ func TestDeleteRegistryPathWithoutACacheDeletesWhatExists(t *testing.T) {
 
 func TestDeleteRegistryPathRefusesWhenNothingMatches(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedRegistryRepository(7, 1, "group/app")
 	s := service_tester.Single(c)
 	defer s.Close()
@@ -52,6 +55,7 @@ func TestDeleteRegistryPathRefusesWhenNothingMatches(t *testing.T) {
 
 func TestDeleteRegistryPathStaysInsideItsProject(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.SeedRegistryRepository(7, 1, "group/app")
 	c.SeedRegistryRepository(8, 2, "group/app")
 	s := service_tester.Single(c)

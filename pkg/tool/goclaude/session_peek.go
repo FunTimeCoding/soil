@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/spf13/cobra"
@@ -18,7 +17,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			identifier := resolveSession(c.Client(), arguments[0])
+			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
 				console.Format("session not found: %s\n", arguments[0])
@@ -26,17 +25,14 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			response, e := c.Client().GetSessionPeekWithResponse(
-				context.Background(),
-				identifier,
-			)
-			errors.PanicOnError(e)
+			p, e := c.Client().GetSessionPeek(context.Background(), identifier)
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
 
-			p := response.JSON200
 			lines := p.LineCount
 			total := len(p.Entries)
 			console.Format(

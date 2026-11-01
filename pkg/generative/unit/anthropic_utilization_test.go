@@ -12,6 +12,7 @@ func TestUtilizationParse(t *testing.T) {
 		[]byte(fixture.Read("claude", "utilization.json")),
 	)
 	assert.NotNil(t, result)
+	assert.True(t, result.SessionSeen)
 	assert.Integer(t, 4, result.SessionPercent)
 	assert.String(
 		t,
@@ -38,6 +39,24 @@ func TestUtilizationParseUnusedFable(t *testing.T) {
 	assert.Integer(t, 0, result.FablePercent)
 	assert.True(t, result.FableSeen)
 	assert.True(t, result.FableReset.IsZero())
+}
+
+func TestUtilizationParseWeekWithoutSession(t *testing.T) {
+	result := utilization.Parse(
+		[]byte(fixture.Read("claude", "utilization-week.json")),
+	)
+	assert.FatalNotNil(t, result)
+	assert.False(t, result.SessionSeen)
+	assert.True(t, result.SessionReset.IsZero())
+	assert.Integer(t, 26, result.WeeklyPercent)
+	assert.String(
+		t,
+		"2026-11-04T18:59:59Z",
+		result.WeeklyReset.UTC().Format("2006-01-02T15:04:05Z"),
+	)
+	assert.True(t, result.FableSeen)
+	assert.Integer(t, 2, result.FablePercent)
+	assert.False(t, result.FableReset.IsZero())
 }
 
 func TestUtilizationParseEmpty(t *testing.T) {

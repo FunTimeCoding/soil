@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/token"
 )
@@ -57,7 +58,15 @@ func planQualifications(
 		)
 
 		if q.Name == nil {
-			return nil, filename
+			return nil, fmt.Sprintf("no available import name in %s", filename)
+		}
+
+		if !q.Name.Imported {
+			continue
+		}
+
+		if at := shadowedSite(q, targetPackagePath); at != token.NoPos {
+			return nil, takenAt(fileSet, q.Name.Local, at)
 		}
 	}
 

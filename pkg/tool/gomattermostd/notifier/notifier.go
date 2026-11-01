@@ -2,11 +2,11 @@ package notifier
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 )
 
 type Notifier struct {
-	connector *connector.Client
+	connector goclauded.Client
 	source    string
 	reporter  face.Reporter
 }

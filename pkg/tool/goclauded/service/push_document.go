@@ -12,16 +12,21 @@ func (s *Service) pushDocument(
 	body string,
 	metadata map[string][]string,
 ) error {
-	_, e := s.query.PostDocument(
+	return s.queryGuard.Attempt(
 		context.Background(),
-		client.PostDocumentJSONRequestBody{
-			Collection: collection,
-			Path:       path,
-			Body:       body,
-			SourceType: &sourceType,
-			Metadata:   &metadata,
+		func(x context.Context) error {
+			_, e := s.query.PostDocument(
+				x,
+				client.PostDocumentJSONRequestBody{
+					Collection: collection,
+					Path:       path,
+					Body:       body,
+					SourceType: &sourceType,
+					Metadata:   &metadata,
+				},
+			)
+
+			return e
 		},
 	)
-
-	return e
 }

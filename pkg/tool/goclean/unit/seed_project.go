@@ -5,10 +5,13 @@ import (
 	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/constant"
+	"testing"
 )
 
-func seedProject() *mock_client.Client {
+func seedProject(t *testing.T) *mock_client.Client {
+	t.Helper()
 	c := mock_client.New()
+	t.Cleanup(c.Close)
 	c.SeedBranch(gitConstant.MainBranch, constant.FixtureMainHash)
 	c.SeedPipeline(
 		1,

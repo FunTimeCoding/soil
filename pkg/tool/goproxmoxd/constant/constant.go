@@ -7,7 +7,10 @@ import (
 	"time"
 )
 
-const PollInterval = 30 * time.Second
+const (
+	PollInterval      = 30 * time.Second
+	ReconcileInterval = time.Hour
+)
 const (
 	FloorTitle = "Floor"
 	FloorPath  = "/"
@@ -47,6 +50,7 @@ const (
 	StopMachine               = "stop_machine"
 	ShutdownMachine           = "shutdown_machine"
 	ResetMachine              = "reset_machine"
+	Reconcile                 = "reconcile"
 	ListMachineSnapshots      = "list_machine_snapshots"
 	CreateMachineSnapshot     = "create_machine_snapshot"
 	RollbackMachineSnapshot   = "rollback_machine_snapshot"

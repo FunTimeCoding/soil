@@ -1,11 +1,15 @@
 package command_context
 
-import "github.com/funtimecoding/soil/pkg/web/locator"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
+	"github.com/funtimecoding/soil/pkg/web/locator"
+)
 
 func (c *Context) Initialize(
 	host string,
 	port int,
 	insecure bool,
+	untrusted bool,
 	token string,
 ) {
 	l := locator.New(host)
@@ -18,6 +22,6 @@ func (c *Context) Initialize(
 		l.Insecure()
 	}
 
-	c.client = connect(l.String(), c.pool.Client(), token)
-	c.longClient = connect(l.String(), c.longPool.Client(), token)
+	c.client = client.New(l.String(), untrusted, token)
+	c.longClient = client.NewLong(l.String(), untrusted, token)
 }

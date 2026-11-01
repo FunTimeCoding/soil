@@ -1,11 +1,13 @@
 package face
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/intent"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -163,4 +165,10 @@ type Service interface {
 		node string,
 		name string,
 	) (string, error)
+	Reconcile(
+		x context.Context,
+		hypervisor string,
+		full bool,
+		write bool,
+	) (*intent.Plan, error)
 }

@@ -11,7 +11,7 @@ import (
 func TestSearchConversationsTool(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "searching")
 	result := a.MustCallTool(
@@ -29,7 +29,7 @@ func TestSearchConversationsTool(t *testing.T) {
 func TestSearchConversationsToolKinds(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "searching")
 	result := a.MustCallTool(
@@ -49,7 +49,7 @@ func TestSearchConversationsToolKinds(t *testing.T) {
 func TestReadConversationTool(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "reading")
 	result := a.MustCallTool(
@@ -72,7 +72,7 @@ func TestReadConversationTool(t *testing.T) {
 func TestReadConversationToolUnknownBlock(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "reading")
 	message, e := a.CallToolError(

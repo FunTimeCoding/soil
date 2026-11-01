@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -19,17 +18,16 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().GetSessionsHeatmapWithResponse(
+			h, e := c.Client().GetSessionsHeatmap(
 				context.Background(),
 				&client.GetSessionsHeatmapParams{Bash: &bash},
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
-
-			h := response.JSON200
 
 			if len(h.Entries) == 0 {
 				console.Line("no tool calls found")

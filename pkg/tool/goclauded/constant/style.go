@@ -1,10 +1,20 @@
 package constant
 
+import "github.com/funtimecoding/soil/pkg/strings/join"
+
 const InlineStyle = `
 	pre { white-space: pre-wrap; word-break: break-word; }
 	.detail-head { display: grid; grid-template-columns: minmax(0, 36rem) minmax(0, 1fr); gap: 2rem; align-items: start; }
 `
-const ConversationStyle = `
+
+var ConversationStyle = join.Empty(
+	ConversationLayoutStyle,
+	ConversationMessageStyle,
+	ConversationSearchStyle,
+	ConversationHitStyle,
+)
+
+const ConversationLayoutStyle = `
 	html, body {
 		height: 100%;
 		margin: 0;
@@ -49,7 +59,9 @@ const ConversationStyle = `
 	.rename-icon:hover {
 		opacity: 1 !important;
 	}
-	.panel {
+`
+
+const ConversationMessageStyle = `	.panel {
 		overflow-y: auto;
 		padding: 1rem 2rem;
 	}
@@ -84,7 +96,9 @@ const ConversationStyle = `
 		white-space: pre-wrap;
 		word-wrap: break-word;
 	}
-	.search-form {
+`
+
+const ConversationSearchStyle = `	.search-form {
 		margin-bottom: 0.5rem;
 	}
 	.search-input {
@@ -136,7 +150,9 @@ const ConversationStyle = `
 		margin-right: 0.4rem;
 		text-transform: uppercase;
 	}
-	.message-tool {
+`
+
+const ConversationHitStyle = `	.message-tool {
 		border-left: 3px solid var(--pico-muted-color);
 		font-size: 0.9rem;
 	}

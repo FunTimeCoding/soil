@@ -68,17 +68,17 @@ func (s *Service) transact(
 		r.AddConcern(c)
 	}
 
+	outs := s.retargetDocuments(
+		directory,
+		append([]*sink.Sink{out}, captures...),
+		r,
+	)
+
 	if dryRun {
 		r.MarkPlanned()
 
 		return r, nil
 	}
 
-	return s.commit(
-		directory,
-		before,
-		roots,
-		append([]*sink.Sink{out}, captures...),
-		r,
-	)
+	return s.commit(directory, before, roots, outs, r)
 }

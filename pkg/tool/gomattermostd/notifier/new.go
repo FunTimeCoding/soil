@@ -2,11 +2,11 @@ package notifier
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 )
 
 func New(
-	c *connector.Client,
+	c goclauded.Client,
 	source string,
 	r face.Reporter,
 ) *Notifier {

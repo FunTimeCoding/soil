@@ -1,7 +1,7 @@
 package goaptly
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly/face"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goaptly/constant"
 	"github.com/spf13/cobra"
@@ -10,7 +10,7 @@ import (
 )
 
 func upload(
-	c *aptly.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	result := &cobra.Command{

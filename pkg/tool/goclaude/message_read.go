@@ -2,7 +2,6 @@ package goclaude
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
@@ -27,7 +26,13 @@ func messageRead(c *command_context.Context) *cobra.Command {
 			}
 
 			text, e := ReadMessages(c.Client(), identifiers)
-			errors.PanicOnError(e)
+
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
+			}
+
 			console.Format("%s\n", text)
 		},
 	}

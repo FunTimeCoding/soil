@@ -56,6 +56,8 @@ const (
 	ConcernConcurrentWrite = "concurrent_write"
 	ConcernRenamed         = "renamed"
 	ConcernMoved           = "moved"
+	ConcernRetargeted      = "retargeted"
+	ConcernReferenceLeft   = "reference_left"
 )
 
 const (
@@ -121,6 +123,7 @@ var QualifiedReference = regexp.MustCompile(
 )
 
 const ReferenceSeparator = " . "
+const TextContext = 2
 const (
 	OperationWrite         = "write"
 	OperationRemove        = "remove"

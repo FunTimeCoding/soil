@@ -11,5 +11,6 @@ type Netbox struct {
 	ServiceTokens   []string
 	LitePath        string
 	PostgresLocator string
+	PowerIntent     bool
 	Source          func(prometheus.ObserverVec) face.Client
 }

@@ -31,7 +31,13 @@ func (s *Service) commit(
 		s.beforeCommit()
 	}
 
-	if changed := before.Changed(roots...); len(changed) > 0 {
+	changed := before.Changed(roots...)
+
+	for _, out := range outs {
+		changed = append(changed, out.Stale()...)
+	}
+
+	if len(changed) > 0 {
 		refused := output.NewResultsWithDirectory(directory)
 
 		for _, path := range changed {

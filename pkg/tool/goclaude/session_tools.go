@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +16,7 @@ func sessionTools(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			identifier := resolveSession(c.Client(), arguments[0])
+			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
 				console.Format("session not found: %s\n", arguments[0])
@@ -25,17 +24,13 @@ func sessionTools(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			response, e := c.Client().GetSessionToolsWithResponse(
-				context.Background(),
-				identifier,
-			)
-			errors.PanicOnError(e)
+			t, e := c.Client().GetSessionTools(context.Background(), identifier)
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
-
-			t := response.JSON200
 
 			if len(t.Counts) == 0 {
 				console.Line("no tool calls found")

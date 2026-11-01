@@ -9,6 +9,7 @@ func (s *Server) accept(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
+	signal(s.dialed)
 	s.mutex.Lock()
 
 	if s.refusal > 0 {

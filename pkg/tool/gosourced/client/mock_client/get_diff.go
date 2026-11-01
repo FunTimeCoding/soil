@@ -7,13 +7,11 @@ import (
 
 func (c *Client) GetDiff(
 	_ context.Context,
-	module string,
-	_ string,
-	_ string,
+	p *client.GetDiffParams,
 ) (client.DiffResponse, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
-	c.Asked = append(c.Asked, module)
+	c.Asked = append(c.Asked, p.Module)
 
 	if c.Failure != nil {
 		return client.DiffResponse{}, c.Failure

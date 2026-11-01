@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/report"
 )
 
-func diffResponse(r *report.Report) server.DiffResponse {
+func diffResponse(
+	r *report.Report,
+	withText bool,
+) server.DiffResponse {
 	result := server.DiffResponse{
 		Counts:       []server.ClassCount{},
 		Entries:      []server.Entry{},
@@ -34,14 +37,17 @@ func diffResponse(r *report.Report) server.DiffResponse {
 			continue
 		}
 
-		result.Entries = append(
-			result.Entries,
-			server.Entry{
-				Class: e.Class,
-				From:  location(e.From),
-				To:    location(e.To),
-			},
-		)
+		v := server.Entry{
+			Class: e.Class,
+			From:  location(e.From),
+			To:    location(e.To),
+		}
+
+		if withText {
+			v.Text = entryText(e)
+		}
+
+		result.Entries = append(result.Entries, v)
 	}
 
 	return result

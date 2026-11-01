@@ -13,7 +13,6 @@ import (
 	"go/types"
 	"golang.org/x/tools/go/packages"
 	"path"
-	"unicode"
 )
 
 func (s *Service) extractTypeThrough(
@@ -100,23 +99,9 @@ func (s *Service) extractTypeThrough(
 	}
 
 	memberNames := typeMemberNames(typeObject)
+	flipReferenced(entries, references)
 
 	for _, entry := range entries {
-		if !unicode.IsLower(rune(entry.Symbol[0])) {
-			continue
-		}
-
-		for _, f := range references[entry] {
-			if insideMoved(entries, f.Ident.Pos()) {
-				continue
-			}
-
-			entry.Flipped = true
-			entry.NewName = FlipName(entry.Symbol)
-
-			break
-		}
-
 		if !entry.Flipped {
 			continue
 		}
@@ -225,10 +210,7 @@ func (s *Service) extractTypeThrough(
 	)
 
 	if qualifications == nil {
-		return failValidation(
-			r,
-			fmt.Sprintf("no available import name in %s", blocked),
-		)
+		return failValidation(r, blocked)
 	}
 
 	for _, field := range fields {

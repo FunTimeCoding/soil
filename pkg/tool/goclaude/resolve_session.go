@@ -3,30 +3,38 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func resolveSession(
-	c *client.ClientWithResponses,
+	c *command_context.Context,
 	query string,
 ) string {
-	response, e := c.GetResolveWithResponse(
+	r, matches, e := c.Client().GetResolve(
 		context.Background(),
 		&client.GetResolveParams{Query: query},
 	)
 
-	if e != nil {
+	if not_found.Is(e) {
 		return ""
 	}
 
-	if response.StatusCode() == 409 && response.JSON409 != nil {
+	if e != nil {
+		c.Terminal().Exitln(e)
+
+		return ""
+	}
+
+	if len(matches) > 0 {
 		console.Format(
 			"ambiguous: %q matches %d sessions\n",
 			query,
-			len(response.JSON409.Matches),
+			len(matches),
 		)
 
-		for _, m := range response.JSON409.Matches {
+		for _, m := range matches {
 			name := ""
 
 			if m.Name != nil {
@@ -51,9 +59,5 @@ func resolveSession(
 		return ""
 	}
 
-	if response.JSON200 == nil {
-		return ""
-	}
-
-	return response.JSON200.Identifier
+	return r.Identifier
 }

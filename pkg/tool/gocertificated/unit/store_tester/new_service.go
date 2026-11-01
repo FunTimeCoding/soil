@@ -11,6 +11,7 @@ import (
 func NewService(t *testing.T) *service.Service {
 	t.Helper()
 	f := mock_client.New()
+	t.Cleanup(f.Close)
 	result := service.New(
 		NewOption(t, f),
 		logger.New(t.Context()),

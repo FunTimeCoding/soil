@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
@@ -18,11 +19,9 @@ func seedLegacyChange(
 ) string {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "goclauded.sqlite")
-	s := store.New(
-		lite.New(logger.New(context.Background()), path),
-		func() time.Time { return time.Now().UTC() },
-	)
-	defer s.Close()
+	d := lite.New(logger.New(context.Background()), path)
+	defer relational.CloseMapper(d)
+	s := store.New(d, func() time.Time { return time.Now().UTC() })
 	_, e := s.EnsureSession("session-1")
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(

@@ -172,7 +172,7 @@ func TestBatchDependencyTogether(t *testing.T) {
 		"pkg/target/constant/constant.go",
 	)
 	assertFormatted(t, moved)
-	assert.StringContains(t, "Composed = Prefix + \"bravo\"", moved)
+	assert.StringContains(t, "composed = prefix + \"bravo\"", moved)
 }
 
 func TestBatchMultiName(t *testing.T) {

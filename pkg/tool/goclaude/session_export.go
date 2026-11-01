@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -19,16 +18,15 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 			arguments []string,
 		) {
 			if all {
-				response, e := c.Client().PostSessionsExportWithResponse(
-					context.Background(),
-				)
-				errors.PanicOnError(e)
+				r, e := c.Client().PostSessionsExport(context.Background())
 
-				if response.JSON200 == nil {
-					c.Terminal().Reject(response.Status(), response.Body)
+				if e != nil {
+					c.Terminal().Exitln(e)
+
+					return
 				}
 
-				for _, path := range response.JSON200.Paths {
+				for _, path := range r.Paths {
 					console.Format("exported: %s\n", path)
 				}
 
@@ -41,7 +39,7 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			identifier := resolveSession(c.Client(), arguments[0])
+			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
 				console.Format("session not found: %s\n", arguments[0])
@@ -49,17 +47,18 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			response, e := c.Client().PostSessionExportWithResponse(
+			r, e := c.Client().PostSessionExport(
 				context.Background(),
 				identifier,
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
 
-			for _, path := range response.JSON200.Paths {
+			for _, path := range r.Paths {
 				console.Format("exported: %s\n", path)
 			}
 		},

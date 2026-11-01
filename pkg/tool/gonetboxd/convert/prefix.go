@@ -2,6 +2,7 @@ package convert
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/prefix"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -13,7 +14,8 @@ func Prefix(p *prefix.Prefix) *server.Prefix {
 	}
 
 	if scope, okay := p.Raw.GetScope().(map[string]any); okay {
-		if name, found := scope["name"].(string); found && name != "" {
+		if name, found := scope[constant.ScopeNameKey].(string); found &&
+			name != "" {
 			result.Site = &name
 		}
 	}

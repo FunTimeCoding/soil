@@ -14,4 +14,6 @@ type Server struct {
 	subscription int
 	socket       *websocket.Conn
 	identifier   uint64
+	dialed       chan struct{}
+	subscribed   chan struct{}
 }

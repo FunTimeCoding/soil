@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -23,5 +24,6 @@ func Main() {
 	o.ServiceTokens = web.ServiceTokens()
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.PowerIntent = environment.Exists(constant.PowerIntentEnvironment)
 	Run(o, s)
 }

@@ -1,7 +1,6 @@
 package constant
 
-const (
-	BaseStyle = `
+const BaseStyle = `
 :root {
 	--pico-h1-color: var(--pico-color);
 	--pico-h2-color: var(--pico-color);
@@ -15,7 +14,8 @@ a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 .time-cell { white-space: nowrap; }
 `
-	IndicatorStyle = `
+
+const IndicatorStyle = `
 .htmx-request { opacity: 0.55; pointer-events: none; }
 .htmx-indicator { opacity: 0; transition: opacity 150ms ease-in; }
 .htmx-request .htmx-indicator,
@@ -33,7 +33,8 @@ a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 }
 @keyframes indicator-spin { to { transform: rotate(360deg); } }
 `
-	NotificationStyle = `
+
+const NotificationStyle = `
 #notifications:empty { display: none; }
 #notifications { margin-bottom: 1rem; }
 .notification-error {
@@ -78,7 +79,8 @@ a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 	border-color: var(--pico-ins-color);
 }
 `
-	PaletteStyle = `
+
+const PaletteStyle = `
 .palette-dialog {
 	position: fixed;
 	top: 15vh;
@@ -162,7 +164,8 @@ a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 	color: var(--pico-muted-color);
 }
 `
-	ConnectionStyle = `
+
+const ConnectionStyle = `
 .connection-dot {
 	display: inline-block;
 	width: 8px;
@@ -174,4 +177,3 @@ a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 .connection-dot.connected { background: #2ecc40; }
 .connection-dot.disconnected { background: #ff4136; }
 `
-)

@@ -1,5 +1,7 @@
 package service
 
+import netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+
 func (s *Service) ShutdownMachine(
 	instance string,
 	identifier int,
@@ -22,6 +24,8 @@ func (s *Service) ShutdownMachine(
 	if e != nil {
 		return "", e
 	}
+
+	s.recordGuest(vm.Name, netbox.StatusOffline)
 
 	return string(task.UPID), nil
 }

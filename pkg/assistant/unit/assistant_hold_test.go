@@ -2,44 +2,41 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assistant/message"
 	"github.com/funtimecoding/soil/pkg/assistant/unit/fake_assistant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"sync/atomic"
 	"testing"
-	"time"
 )
 
 func TestAStartingHomeAssistantIsWaitedOut(t *testing.T) {
 	f := fake_assistant.New(t)
 	f.Refuse(2)
 	r := memory.New()
-	var received atomic.Int32
-	c := listener(f, r, &received)
+	received := make(chan *message.Message, 8)
+	c := listener(f, r, received)
 	c.Start()
 	defer c.Close()
-	time.Sleep(100 * time.Millisecond)
-	assert.Integer(t, 1, f.Subscriptions())
+	await(t, f.Subscribed())
 	f.Emit("state_changed")
-	time.Sleep(50 * time.Millisecond)
-	assert.Integer(t, 1, int(received.Load()))
+	assert.String(t, "state_changed", await(t, received).Event.Type)
 	assert.Count(t, 0, r.Events())
 }
 
 func TestARestartedHomeAssistantIsSubscribedAgain(t *testing.T) {
 	f := fake_assistant.New(t)
 	r := memory.New()
-	var received atomic.Int32
-	c := listener(f, r, &received)
+	received := make(chan *message.Message, 8)
+	c := listener(f, r, received)
 	c.Start()
 	defer c.Close()
-	time.Sleep(50 * time.Millisecond)
+	await(t, f.Subscribed())
 	f.Emit("state_changed")
+	await(t, received)
 	f.Restart()
-	time.Sleep(100 * time.Millisecond)
+	await(t, f.Subscribed())
+	f.Emit("call_service")
+	assert.String(t, "call_service", await(t, received).Event.Type)
 	assert.Integer(t, 2, f.Subscriptions())
-	f.Emit("state_changed")
-	time.Sleep(50 * time.Millisecond)
-	assert.Integer(t, 2, int(received.Load()))
 	assert.Count(t, 0, r.Events())
 }
 
@@ -47,11 +44,13 @@ func TestARefusedTokenIsReportedOnce(t *testing.T) {
 	f := fake_assistant.New(t)
 	f.RefuseToken()
 	r := memory.New()
-	var received atomic.Int32
-	c := listener(f, r, &received)
+	received := make(chan *message.Message, 8)
+	c := listener(f, r, received)
 	c.Start()
 	defer c.Close()
-	time.Sleep(100 * time.Millisecond)
+	await(t, f.Dialed())
+	await(t, f.Dialed())
+	await(t, f.Dialed())
 	assert.Integer(t, 0, f.Subscriptions())
 	assert.Count(t, 1, r.Events())
 }

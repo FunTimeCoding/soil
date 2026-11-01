@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -17,16 +16,15 @@ func sessionBashDump(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().GetSessionsBashDumpWithResponse(
-				context.Background(),
-			)
-			errors.PanicOnError(e)
+			r, e := c.Client().GetSessionsBashDump(context.Background())
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
 
-			for _, command := range response.JSON200.Commands {
+			for _, command := range r.Commands {
 				console.Line(command)
 			}
 		},

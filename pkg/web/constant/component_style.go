@@ -1,6 +1,19 @@
 package constant
 
-const ComponentStyle = `
+import "github.com/funtimecoding/soil/pkg/strings/join"
+
+var ComponentStyle = join.Empty(
+	ComponentBaseStyle,
+	ComponentTileStyle,
+	ComponentEntryStyle,
+	ComponentFieldStyle,
+	ComponentBadgeStyle,
+	ComponentCardStyle,
+	ComponentCardVariantStyle,
+	ComponentPagerStyle,
+)
+
+const ComponentBaseStyle = `
 :where(:root) { --okay: var(--pico-ins-color); --warn: #e8c547; --bad: var(--pico-del-color); --conflict: #f012be; --quiet: var(--pico-muted-color); --busy: #4c9aff; }
 :where(form).action { display: inline-block; margin: 0; }
 :where(form.action) [type=submit] { width: auto; margin: 0; }
@@ -10,7 +23,9 @@ const ComponentStyle = `
 :where(table).facts { max-width: 36rem; }
 :where(table).facts th { text-align: left; font-weight: 400; color: var(--pico-muted-color); width: 14rem; }
 :where(table).facts tr.section th { font-weight: 600; color: var(--pico-color); padding-top: 0.9rem; }
-:where(.tile-grid) { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; margin: 1rem 0 1.5rem; }
+`
+
+const ComponentTileStyle = `:where(.tile-grid) { display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: 1rem; margin: 1rem 0 1.5rem; }
 :where(.tile) { border: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); padding: 1.25rem; transition: border-color 0.2s; background: var(--pico-card-background-color); }
 :where(.tile:hover) { border-color: var(--pico-primary); }
 :where(.dial) { position: relative; width: 15rem; height: 15rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--dial-background); }
@@ -23,7 +38,9 @@ const ComponentStyle = `
 :where(.dial-tick) { position: absolute; right: 0.55rem; top: -0.25rem; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--dial-color); opacity: 0.8; }
 :where(.dial [title]) { cursor: help; }
 :where(.status-dot) { display: inline-block; width: 0.65rem; height: 0.65rem; border-radius: 50%; vertical-align: middle; background: var(--dot-color, var(--pico-muted-color)); }
-:where(form).entry.inline { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: end; }
+`
+
+const ComponentEntryStyle = `:where(form).entry.inline { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: end; }
 :where(form).entry.inline label { margin: 0; }
 :where(form).entry.inline :is(input:not([type=checkbox]), select, textarea) { margin: 0; width: auto; }
 :where(form).entry.inline [type=submit] { width: auto; margin: 0; padding: 0.35rem 0.7rem; font-size: 0.85rem; }
@@ -40,7 +57,9 @@ const ComponentStyle = `
 :where(form).entry.record.inline label:has(> .entry-label) { flex: 1; padding: 0; border: none; }
 :where(form).entry.record.inline :is(input:not([type=checkbox]), select, textarea) { width: 100%; }
 :where(form).entry.record.inline .entry-buttons { margin-top: 0; }
-:where(.field-row) { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); }
+`
+
+const ComponentFieldStyle = `:where(.field-row) { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 0.5rem; border-bottom: 1px solid var(--pico-muted-border-color); border-radius: var(--pico-border-radius); }
 :where(.field-row:last-child) { border-bottom: none; }
 :where(.field-row.field-unset) { border-left: 3px solid var(--pico-muted-border-color); background: color-mix(in srgb, var(--pico-background-color) 95%, var(--pico-muted-color)); }
 :where(.field-label) { font-weight: 600; min-width: 14rem; font-size: 0.95rem; }
@@ -50,7 +69,9 @@ const ComponentStyle = `
 :where(.cluster) { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
 .field-actions :is(button, [role=button]), .card-task .card-footer :is([type=submit], [role=button]) { padding: 0.35rem 0.7rem; font-size: 0.85rem; margin: 0; }
 .field-note { color: var(--pico-secondary); font-style: italic; }
-:where(.badge) { --badge-color: var(--pico-primary); display: inline-block; padding: 0.15rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 1rem; white-space: nowrap; background: color-mix(in srgb, var(--badge-color) 20%, var(--pico-background-color)); color: var(--badge-color); }
+`
+
+const ComponentBadgeStyle = `:where(.badge) { --badge-color: var(--pico-primary); display: inline-block; padding: 0.15rem 0.5rem; font-size: 0.75rem; font-weight: 600; border-radius: 1rem; white-space: nowrap; background: color-mix(in srgb, var(--badge-color) 20%, var(--pico-background-color)); color: var(--badge-color); }
 :where(.badge.quiet) { --badge-color: var(--pico-muted-color); font-weight: 400; }
 .chip { display: inline-block; font-size: 0.75rem; line-height: 1.4; border: 1px solid var(--chip-color, var(--pico-muted-border-color)); border-radius: 0.5rem; padding: 0 0.4rem; margin: 0 0.15rem 0.15rem 0; color: var(--chip-color, inherit); text-decoration: none; }
 .chip.toggle { --chip-color: var(--pico-secondary); width: auto; background: transparent; padding: 0.15rem 0.5rem; cursor: pointer; }
@@ -66,7 +87,9 @@ progress.meter-bar { width: var(--meter-width, 100%); height: var(--meter-height
 .meter progress.meter-bar { margin: 0; flex: 0 1 var(--meter-width, 100%); min-width: min(4rem, var(--meter-width, 4rem)); }
 :where(.meter-gauge) { flex: none; height: var(--meter-height, 18px); width: var(--meter-width, 4rem); border-radius: 9px; background: var(--meter-track, var(--pico-muted-border-color)); overflow: hidden; }
 :where(.meter-gauge-fill) { height: 100%; width: var(--meter-share); border-radius: 9px; background: var(--meter-color, var(--pico-primary)); transition: width 0.3s; }
-.card { position: relative; display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; align-content: start; align-items: start; margin: 0; padding: 1rem 1.1rem; border: 1px solid var(--pico-muted-border-color); border-top: 3px solid var(--card-accent, var(--pico-primary)); border-radius: var(--pico-border-radius); transition: border-color 0.15s, transform 0.15s; }
+`
+
+const ComponentCardStyle = `.card { position: relative; display: grid; grid-template-columns: auto 1fr; column-gap: 0.9rem; align-content: start; align-items: start; margin: 0; padding: 1rem 1.1rem; border: 1px solid var(--pico-muted-border-color); border-top: 3px solid var(--card-accent, var(--pico-primary)); border-radius: var(--pico-border-radius); transition: border-color 0.15s, transform 0.15s; }
 .card:not(:has(> .card-visual)), .card-art, .card-full { grid-template-columns: 1fr; }
 .card-body { display: flex; flex-direction: column; min-width: 0; }
 .card:hover, .card:focus-within { border-color: var(--card-accent, var(--pico-primary)); transform: translateY(-2px); }
@@ -86,7 +109,9 @@ progress.meter-bar { width: var(--meter-width, 100%); height: var(--meter-height
 .card:hover .card-footer, .card:focus-within .card-footer { opacity: 1; }
 .card-footer [role=button] { width: auto; margin: 0; padding: 0.2rem 0.5rem; font-size: 0.8rem; }
 .card-task .card-footer { flex-wrap: wrap; opacity: 1; }
-.card-compact { padding: 0.6rem 0.8rem; }
+`
+
+const ComponentCardVariantStyle = `.card-compact { padding: 0.6rem 0.8rem; }
 .card-compact .card-visual { width: 2rem; height: 2rem; font-size: 1.1rem; }
 .card-hero { padding: 1.4rem 1.6rem; }
 .card-hero .card-visual { width: 5rem; height: 5rem; font-size: 2.8rem; }
@@ -104,7 +129,9 @@ progress.meter-bar { width: var(--meter-width, 100%); height: var(--meter-height
 .card-full :is(.card-subtitle, .card-meta) { color: var(--card-art-ink-soft); }
 .card-art .card-fallback { background: color-mix(in srgb, var(--card-accent, var(--pico-primary)) 22%, var(--pico-card-background-color)); }
 .card-face .card-visual img { transform: scale(1.6); transform-origin: 50% 28%; }
-:where(.badge-row) { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0 1rem; }
+`
+
+const ComponentPagerStyle = `:where(.badge-row) { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0 1rem; }
 .pager { display: flex; align-items: center; gap: 0.75rem; }
 :where(.pager-position) { color: var(--pico-muted-color); font-variant-numeric: tabular-nums; }
 `

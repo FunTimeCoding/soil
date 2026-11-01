@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/client"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/face"
+	generated "github.com/funtimecoding/soil/pkg/tool/gosourced/generated/client"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
@@ -16,28 +17,45 @@ func TestTheClientReadsADiff(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, diffService(r.Clone), constant.ModelContextTestToken)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
-	d, e := c.GetDiff(t.Context(), "echo", "", "")
+	d, e := c.GetDiff(t.Context(), &generated.GetDiffParams{Module: "echo"})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(d.Entries))
 	assert.String(t, "body", d.Entries[0].Class)
 	assert.String(t, ". alfa Bravo", d.Entries[0].To.Key)
 	assert.String(t, "alfa.go", d.Entries[0].To.File)
 	assert.Integer(t, 3, d.Entries[0].To.Line)
+	assert.Nil(t, d.Entries[0].Text)
 	assert.String(t, "unchanged", d.Counts[0].Class)
 	assert.Integer(t, 1, d.Counts[0].Count)
+}
+
+func TestTheClientReadsTheTextOfAChange(t *testing.T) {
+	r := diffRepository(t)
+	c := mountedClient(t, diffService(r.Clone), constant.ModelContextTestToken)
+	d, e := c.GetDiff(
+		t.Context(),
+		&generated.GetDiffParams{Module: "echo", Text: new(true)},
+	)
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, d.Entries[0].Text)
+	assert.Strings(
+		t,
+		[]string{" func Bravo() int {", "-\treturn 1", "+\treturn 2", " }"},
+		*d.Entries[0].Text,
+	)
 }
 
 func TestTheClientHearsAnUnknownModule(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, diffService(r.Clone), constant.ModelContextTestToken)
-	_, e := c.GetDiff(t.Context(), "golf", "", "")
+	_, e := c.GetDiff(t.Context(), &generated.GetDiffParams{Module: "golf"})
 	assert.True(t, not_found.Is(e))
 }
 
 func TestARefusedTokenIsAnError(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, diffService(r.Clone), "hotel-wrong")
-	_, e := c.GetDiff(t.Context(), "echo", "", "")
+	_, e := c.GetDiff(t.Context(), &generated.GetDiffParams{Module: "echo"})
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "diff status: 401", e.Error())
 	assert.NotNil(t, c.Reachable(t.Context()))

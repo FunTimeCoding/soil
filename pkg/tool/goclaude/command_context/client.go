@@ -1,7 +1,7 @@
 package command_context
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 
-func (c *Context) Client() *client.ClientWithResponses {
+func (c *Context) Client() face.Client {
 	return c.client
 }

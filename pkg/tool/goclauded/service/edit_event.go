@@ -25,9 +25,7 @@ func (s *Service) EditEvent(
 		}
 
 		if slug != "" {
-			if g := s.pushSummary(slug, message, metadata); g != nil {
-				return edited, g
-			}
+			s.report(s.pushSummary(slug, message, metadata))
 		}
 	case constant.Complete:
 		topic := edited.Metadata[constant.Topic]
@@ -46,14 +44,7 @@ func (s *Service) EditEvent(
 			c, f := s.store.CompletionByTopic(edited.SessionIdentifier, topic)
 
 			if f == nil && c != nil {
-				if g := s.pushCompletion(
-					slug,
-					c.Sequence,
-					message,
-					metadata,
-				); g != nil {
-					return edited, g
-				}
+				s.report(s.pushCompletion(slug, c.Sequence, message, metadata))
 			}
 		}
 	}

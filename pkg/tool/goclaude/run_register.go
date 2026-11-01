@@ -2,14 +2,15 @@ package goclaude
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func RunRegister(
-	c *client.ClientWithResponses,
+	c face.Client,
 	session string,
 ) string {
-	response, e := c.PostRegisterWithResponse(
+	r, e := c.PostRegister(
 		context.Background(),
 		client.PostRegisterJSONRequestBody{Session: session},
 	)
@@ -18,9 +19,5 @@ func RunRegister(
 		return ""
 	}
 
-	if response.JSON200 == nil {
-		return ""
-	}
-
-	return response.JSON200.Callsign
+	return r.Callsign
 }

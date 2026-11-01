@@ -1,12 +1,21 @@
 package service
 
-func (s *Service) Close() {
-	s.doneOnce.Do(func() { close(s.done) })
-	s.memoryGuard.Close()
-	s.browserMutex.Lock()
-	defer s.browserMutex.Unlock()
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/relational"
+)
 
-	if s.browser != nil {
-		s.browser.Close()
-	}
+func (s *Service) Close() {
+	s.closeOnce.Do(
+		func() {
+			s.stop.Close()
+			s.memoryGuard.Close()
+			s.queryGuard.Close()
+			s.closeBrowser()
+			s.memory.Close()
+			s.query.Close()
+			errors.PanicClose(s.searchDatabase)
+			relational.CloseMapper(s.database)
+		},
+	)
 }

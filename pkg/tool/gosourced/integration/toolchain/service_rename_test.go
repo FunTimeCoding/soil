@@ -27,7 +27,7 @@ func TestRenameFunction(t *testing.T) {
 	declaration := service_tester.ReadFixtureFile(
 		t,
 		d,
-		"pkg/target/is_generated_header.go",
+		"pkg/target/is_generated.go",
 	)
 	assert.StringContains(t, "func IsGenerated(", declaration)
 	inPackage := service_tester.ReadFixtureFile(t, d, "pkg/target/check.go")
@@ -55,7 +55,7 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 	declaration := service_tester.ReadFixtureFile(
 		t,
 		d,
-		"pkg/target/is_generated.go",
+		"pkg/target/was_generated.go",
 	)
 	assert.StringContains(t, "func WasGenerated(", declaration)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
@@ -79,7 +79,11 @@ func TestRenameMethod(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 3)
-	method := service_tester.ReadFixtureFile(t, d, "pkg/target/find_by_name.go")
+	method := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/lookup_by_name.go",
+	)
 	assert.StringContains(t, "func (s *Store) LookupByName(", method)
 	inPackage := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
 	assert.StringContains(t, "v.LookupByName(\"test\")", inPackage)
@@ -120,7 +124,7 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 	declaration := service_tester.ReadFixtureFile(
 		t,
 		d,
-		"pkg/target/is_generated.go",
+		"pkg/target/was_generated.go",
 	)
 	assert.StringContains(t, "func wasGenerated(", declaration)
 }

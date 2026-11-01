@@ -170,20 +170,22 @@ constructors:
   gates on that:
 
 ```go
-if claude := connector.NewOptional(); claude != nil {
+if claude := client.NewOptional(); claude != nil {
     // construct and register the feature
 }
 ```
 
 The nil propagates as the feature's own absence rather than a
-separate flag - a nil connector means no worker, no store, and the
+separate flag - a nil client means no worker, no store, and the
 tools it serves never register. One judgment, made where the
 knowledge lives, instead of every consumer testing a variable
-itself.
+itself. Where consumers hold the client's face, `NewOptional` returns
+the face: a nil `*Client` stored in an interface is not a nil
+interface, and every `!= nil` downstream would pass.
 
 Each package names its own discriminator: the variable that carries
-no sensible default. For `connector` that is the token, since host
-and port fall back to localhost.
+no sensible default. For goclauded's client that is the token, since
+host and port fall back to localhost.
 
 Offer `NewOptional` from a package whose consumers are not all
 known. A program that controls its own deployment can require

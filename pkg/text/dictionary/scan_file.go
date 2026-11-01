@@ -29,7 +29,9 @@ func ScanFile(
 	tokenize(strings.ToLower(raw), token)
 	tokenize(
 		strings.ToLower(
-			splitDigit(strings.ReplaceAll(library.SplitCase(raw), "_", " ")),
+			splitDigit(
+				strings.ReplaceAll(library.SplitCase(raw), "_", constant.Space),
+			),
 		),
 		token,
 	)

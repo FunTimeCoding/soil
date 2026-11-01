@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/reconciler"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
@@ -28,7 +29,19 @@ func Run(
 	m := metric.New()
 	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
 	b := web.New(v, k)
-	lifecycle.New(l).WithWorker(k).WithServer(
+	c := lifecycle.New(l).WithWorker(k)
+
+	if o.Netbox != nil {
+		v.WithNetbox(o.Netbox(), l, r)
+
+		for _, w := range v.Workers() {
+			c.WithWorker(w)
+		}
+
+		c.WithWorker(reconciler.New(v, constant.ReconcileInterval, l, r))
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,

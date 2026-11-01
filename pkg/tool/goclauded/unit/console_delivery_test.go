@@ -12,7 +12,7 @@ import (
 
 func TestCheckCutsALongMessageThroughTheHook(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Server)
+	c := console_tester.New(t, s.Connector(t))
 	receiver := c.Register("session-1")
 	sender := c.Register("session-2")
 	c.Check("session-1")
@@ -25,7 +25,7 @@ func TestCheckCutsALongMessageThroughTheHook(t *testing.T) {
 
 func TestReadMessagesThroughTheCommandLine(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Server)
+	c := console_tester.New(t, s.Connector(t))
 	m := s.Store.SendMessage("Ash", "Cedar", "an answer")
 	output := c.ReadMessages(int(m.Identifier), 999)
 	assert.StringContains(

@@ -42,11 +42,14 @@ func Utilization() {
 		return
 	}
 
-	console.Format(
-		"Session %d%%  resets %s\n",
-		r.SessionPercent,
-		r.SessionReset.Local().Format(time.RFC3339),
-	)
+	if r.SessionSeen {
+		console.Format(
+			"Session %d%%  resets %s\n",
+			r.SessionPercent,
+			r.SessionReset.Local().Format(time.RFC3339),
+		)
+	}
+
 	console.Format(
 		"Weekly  %d%%  resets %s\n",
 		r.WeeklyPercent,

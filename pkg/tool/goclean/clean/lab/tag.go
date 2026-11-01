@@ -3,13 +3,13 @@ package lab
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 )
 
 func Tag(
-	c *gitlab.Client,
+	c face.Forge,
 	p *project.Project,
 ) {
 	tags := c.MustTags(p.Identifier)

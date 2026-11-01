@@ -6,6 +6,7 @@ func (s *Server) register() {
 	s.registerStorage()
 	s.registerMachines()
 	s.registerMachinePower()
+	s.registerIntent()
 	s.registerMachineSnapshots()
 	s.registerMachineConfiguration()
 	s.registerMachineCopies()

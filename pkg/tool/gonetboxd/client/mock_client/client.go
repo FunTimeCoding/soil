@@ -8,4 +8,6 @@ type Client struct {
 	PhysicalAddressList []client.PhysicalAddressOwner
 	Failure             error
 	Closed              int
+	Updated             map[string]client.UpdateDeviceRequest
+	UpdatedMachines     map[string]client.UpdateVirtualMachineRequest
 }

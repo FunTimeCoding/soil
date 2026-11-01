@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/channel"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func PollChannel(
-	c *client.ClientWithResponses,
+	c face.Client,
 	s *channel.Server,
 	callsign string,
 	failures int,
@@ -17,12 +18,12 @@ func PollChannel(
 	stalled := map[string]string{
 		constant.ChannelKindMeta: constant.ChannelStalledKind,
 	}
-	response, e := c.GetChannelWithResponse(
+	r, e := c.GetChannel(
 		context.Background(),
 		&client.GetChannelParams{Callsign: callsign},
 	)
 
-	if e != nil || response.JSON200 == nil {
+	if e != nil {
 		failures++
 
 		if failures == constant.ChannelStallThreshold {
@@ -39,7 +40,7 @@ func PollChannel(
 		s.Push(constant.ChannelResumedMessage, stalled)
 	}
 
-	for _, entry := range response.JSON200.Entries {
+	for _, entry := range r.Entries {
 		s.Push(
 			entry.Body,
 			map[string]string{constant.ChannelKindMeta: entry.Kind},

@@ -17,8 +17,8 @@ seed of its own and follows this one for everything else.
 
 ## Where the work stopped
 
-Twenty-three soil daemons meet every row of the target (Census); goclauded is
-next (Order).
+The daemons listed at the target in Census meet every row of it; goclauded's
+three loops are in, its `Run`-built parts left (Order).
 
 ## Working model
 
@@ -66,7 +66,7 @@ every consuming repository building and tested.
 | Daemon client | `client.Client` struct; `face.Client` in full, `Close` included; `<path>/client/mock_client` in full; a coverage test against the embedded spec; the CLI on `EmitValue` | gonetboxd, gohabiticad, gomaintlogd |
 | Upstream client | errors classified, a transport failure keeping its cause; `Must<Name>` twins only where a caller panics; a full face in `<domain>/face/` and a full mock beside the client; every consumer on them | pkg/kubernetes, pkg/linkace, pkg/chat/mattermost, pkg/prometheus |
 | Peers | every peer guarded; the service holds the full face beside its guard and runs each call through `Attempt` in the operation - `guarded[T]` and `attempt` helpers, no adapter types; waited on in `Run` only when a surface has no answer without it | gosentryd, golinkaced (surface peers), goatlasd (worker peers), gomattermostd (both) |
-| Worker | one service operation per tick that returns outcomes and an error; the worker keeps the ticker, the gauges and recovery | goatlasd, goalertlogd |
+| Worker | one service operation per tick that returns outcomes and an error; the worker keeps the ticker, the gauges and recovery | goatlasd, goalertlogd, `github.com/funtimecoding/soil/pkg/worker` |
 | Outlier transport | one API on two listeners, one client with two constructors | goprocessd |
 
 A daemon is done when it meets every row that applies to it. The service has
@@ -114,7 +114,10 @@ At the target, with what each is the reference for:
   returning `face.Stream`, its mock beside
   `github.com/funtimecoding/soil/pkg/system/run/stream`), so tests drive
   every tick; four worker packages folded into one context-cancelled worker
-  type over a tick, the stream's tick blocking until its command ends and
+  type over a tick - since lifted into the shared
+  `github.com/funtimecoding/soil/pkg/worker`, whose `Close` waits for a
+  running tick and whose once form runs start-up work - the stream's tick
+  blocking until its command ends and
   killed on cancel; deduplication as service state, remembered only after
   the write succeeds
 - gofirefoxd - a peer that dials in: the client is the bridge's WebSocket
@@ -140,9 +143,14 @@ At the target, with what each is the reference for:
   in another repository
 
 Beside them, upstream faces now full and home: Prometheus, Alertmanager,
-Argo CD (`ArgocdClient` in the kubernetes face) and Nextcloud usage
-(`UsageClient`); the Ollama and OpenAI embedder clients classify in their
-own `refusal` packages.
+Argo CD (`ArgocdClient` in the kubernetes face), Nextcloud usage
+(`UsageClient`), GitHub, GitLab (`Forge`) and aptly (`face.Client` beside the
+`Repository` role); the Ollama and OpenAI embedder clients classify in their
+own `refusal` packages. GitHub's and GitLab's faces and trivial mocks were
+generated from the client's AST, after a by-receiver count across both
+repositories and every tag - one counting calls through the face and inside
+the package too, or a twin only the face or the package itself calls reads as
+dead - removed the Must twins nobody called (8 and 31).
 
 Ownership done, other rows open: gochromed, gosecretd, gomonitord,
 gogithubd, gooutpostd, goraidparsed, goansibled, gosaltd, goterraformd,
@@ -154,12 +162,38 @@ gobandd, gogitlabd, gopostgresd, goprometheusd, goproxmoxd, gosourced.
 Sized by a re-survey (`goaudit --service` hits, each read).
 Leaks first - a client opened and never closed - then shape.
 
-1. goclauded - `Run` builds about fifteen things: store, pool, the goqueryd
-   client, search index, five tickers, gauge, watcher; finished clients
-   handed to `service.New`; the largest of all. It waits on gomemoryd
-   through `connect.Wait` and closes the client in `Run`
-2. The faces and clients off the full shape, the peers off the start-up
-   shape
+1. goclauded - A and B are in: the service builds the database (the store
+   borrowing it), the search index's connection and both peer clients from
+   the option and closes them; both peers guarded, neither waited on; writes
+   that push to goqueryd save and answer success, a worker reconciling
+   summaries and completions every ten minutes; the start-up warm and search
+   catch-up run as once-workers on `github.com/funtimecoding/soil/pkg/worker`,
+   the catch-up stopping between files on cancel; a stopper part, registered
+   last, releases held channel polls before the servers stop. C's first
+   change is in: `connector` renamed `client`, one method per operation
+   under its own name with a context and classified refusals (the label and
+   pulse helpers and `Subscribe` beside them, the label claim's refusal read
+   as `conflict`), `face.Client` and a stateful mock beside the client, a
+   coverage test, every daemon consumer on the face; `NewOptional` answers
+   the face, so an absent goclauded is a nil interface rather than a nil
+   pointer inside one. The operation `deleteSessionById` became
+   `deleteSessionByIdentifier`. C's second change is in: the goclaude CLI
+   holds two clients, `New` and `NewLong` for the channel's held polls, and
+   answers a refusal with `Exitln`, its hooks staying silent. The first
+   change's generated methods took the 200 body as the only success, so the
+   two operations that also answer 204 for "nothing yet" - `getUsage` and
+   `getChannelCallsign` - failed on it, and the callsign wait gave up after
+   three released holds; they return the Find shape now. `getResolve`'s 409
+   carries the ambiguous matches, which the client returns beside the result
+   instead of refusing. A generated method checks every 2xx its operation
+   declares, and every non-2xx body the caller reads. Left:
+   - the test base's `Connector` helper keeps its old name; gosourced could
+     not rename it while consumers changed underneath
+   - the tickers, gauge and watcher built in `Run` - goaudit's remaining
+     hits, the plumbing and own-worker false positives
+   - `Usage` answers a store failure as no data (204), the swallow B was
+     meant to end
+2. The faces and clients off the full shape
 3. The goaudit rule, once a sound check replaces `run_builds_client`
 4. The analyzer gaps, once the findings they raise are few, each with a
    case in the `unclosed_resource` testdata
@@ -171,7 +205,7 @@ Leaks first - a client opened and never closed - then shape.
   serves MCP only
 - Faces mirroring the service: gosublimed, goitermd, gojellyfind, gochromed,
   gosecretd, gogithubd; goproxmoxd's `face.Service` and `mock_service`
-- Faces narrowed to one consumer: gomonitord, goclauded
+- Faces narrowed to one consumer: gomonitord
 - Upstream faces or mocks kept in the consuming daemon: gopnsensed's
   `face.OpnsenseSource` and `mock_source`; goproxmoxd's upstream
   `mock_client` colliding with the daemon client's
@@ -188,8 +222,6 @@ Leaks first - a client opened and never closed - then shape.
   does not classify its peer's 503 - checked against GitLab's own status
   table first; pkg/chat/mattermost's `New` panics and dials, so
   gomattermostd's start-up wait never retries
-- Peers off the start-up shape: goclauded waits on goqueryd in `Run` but
-  calls it unguarded
 - Untested or unused: gomemoryd's profile search branch has no failure test
   of its own - goqueryd's mock fails every method at once, so completions
   fail first; gomemoryd's `importer.Import` has no caller but its test
@@ -198,6 +230,30 @@ Leaks first - a client opened and never closed - then shape.
   `github.com/funtimecoding/soil/pkg/ticker`'s `Close` panics before `Start`
   and on a second call, so every worker built on it is unsafe twice - its
   users unsurveyed
+- Clocks carrying the daemon's work instead of calling one operation:
+  gomattermostd's sweeper prunes, forgets and notifies itself, its
+  `release` repeating the tail of `Unsubscribe`, and its monitor is a cron
+  poll posting over the client. Consumers in other repositories carry the
+  same drift under their own seeds
+- `Close` not waiting for work in flight, which then runs on what the
+  service closes next: gomattermostd's sweeper, its monitor (`cron.Stop`'s
+  context dropped) and its watcher, where an event in flight can `Record`
+  after the timer sweep and flush later into a closed store.
+  `github.com/funtimecoding/soil/pkg/peer/hold`'s `Close` never waits on
+  `Done`, so every connection on it leaves its callback running; waiting
+  needs a started flag, or a never-started hold hangs its `Close`
+- `github.com/funtimecoding/soil/pkg/provision/runner` takes `Trigger` and
+  `Sync` after `Close`: once its loop has drained, a request still fits the
+  buffered channel and nobody answers - REST answers 202 for a run that
+  never happens, a synchronous MCP trigger and `Sync` block forever, and
+  the same before `Start`. goagentd's `Begin` refusing `unavailable` once
+  closed is the shape. When `Finished` is still open after the interrupt
+  margin, the service closes the database under the apply's last write.
+  goansibled's inventory client, gosaltd's salt client and goterraformd's
+  downstream clients are built by the runner and closed before the drain -
+  latent while each `Close` only drops idle connections
+- gosaltd's runner writes the salt client in its loop while the service
+  reads it from handlers through `SaltClient()` with no lock - a data race
 - Web submits showing `e.Error()` through `form.Redirect` without a class
   check, so an unexpected failure reads as a form refusal: godirectoryd's
 - Untested wiring: gogated's admin pages - a served test needs a signed-in
@@ -273,9 +329,13 @@ Building:
 - Closing a leak alone, with a service that only embeds the client, is not a
   conversion. Hold each owned thing in one field; the same guard in two
   fields reads to the analyzer as an owner never closed
-- The service never holds its daemon's own worker: `Run` builds the worker
-  over the service, and `Workers()` hands out peer guards only - the other
-  way round is an import cycle
+- Who builds a worker follows what it is, not who calls whom: most parts
+  call both ways - a runner the service launches into reports back to it.
+  A clock is built by `Run` over one operation per tick; a part holding
+  state or a connection is the service's, reaching back through function
+  values it was given, since holding `*service.Service` is what makes the
+  import cycle; neither carries the work (`service-tool.md`, Service and
+  Workers)
 - An option's defaults reach every test built from it; a test service drops
   what production configures (collections) rather than letting it report. A
   part one mode never uses is optional, nil in that mode, or building it
@@ -472,8 +532,8 @@ The analyzer misses four shapes, so a clean lint is not a clean tree:
 - An owner captured by a closure - `escapes.go` treats any function literal
   referencing the owner as a hand-off; no hit remains
 - An owner built inline as another constructor's argument -
-  `store.New(lite.New(...))` - is never assigned; goclauded's `Run` and the
-  telegram environment are live hits
+  `store.New(lite.New(...))` - is never assigned; the telegram environment is
+  a live hit
 - An owner built in `Main` and handed to `Run` crosses a function boundary
   the analyzer does not follow; no hit remains
 

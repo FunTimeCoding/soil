@@ -2,15 +2,15 @@ package lab
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/image"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"strings"
 )
 
 func Registry(
-	c *gitlab.Client,
+	c face.Forge,
 	p *project.Project,
 ) {
 	for _, r := range c.MustRegistryRepositories(p.Identifier, false) {

@@ -70,7 +70,7 @@ func TestAwaitImmediateQueueReleasesWhenTheServiceStops(t *testing.T) {
 		)
 	}()
 	s.AwaitSubscribers(1)
-	s.Service.Close()
+	s.Service.Stopper().Close()
 
 	select {
 	case drained := <-result:
@@ -78,4 +78,6 @@ func TestAwaitImmediateQueueReleasesWhenTheServiceStops(t *testing.T) {
 	case <-time.After(time.Second):
 		t.Fatal("await did not release when the service stopped")
 	}
+
+	assert.String(t, r1.Callsign, s.Check("session-1").Callsign)
 }

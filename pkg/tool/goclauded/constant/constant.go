@@ -11,6 +11,7 @@ const SevenDayWindow = 7 * 24 * time.Hour
 const UsagePageUnreadable = "usage page carries no weekly meter"
 const CompleteTimeoutWindow = 30 * time.Minute
 const ChannelHold = 5 * time.Minute
+const ReconcileInterval = 10 * time.Minute
 const RosterStaleAfter = 45 * time.Minute
 const (
 	PageSize        = 20
@@ -50,6 +51,7 @@ var (
 
 const (
 	MemoryPeer            = "memory"
+	QueryPeer             = "query"
 	MemoryLoadsHidden     = "%v; loads hidden"
 	MemoryUnreachableKind = "memory_unreachable"
 	ImpressionContext     = "impression"
@@ -61,6 +63,7 @@ const (
 const (
 	SessionExportPathEnvironment = "SESSION_EXPORT_PATH"
 	MonitorUsageEnvironment      = "CLAUDE_MONITOR_USAGE"
+	UsageEndpointEnvironment     = "CLAUDE_USAGE_ENDPOINT"
 	CoverageRootEnvironment      = "CLAUDE_COVERAGE_ROOT"
 )
 

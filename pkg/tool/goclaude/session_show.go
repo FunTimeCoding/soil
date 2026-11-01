@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
@@ -19,7 +18,7 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			identifier := resolveSession(c.Client(), arguments[0])
+			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
 				console.Format("session not found: %s\n", arguments[0])
@@ -27,17 +26,17 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			response, e := c.Client().GetSessionDetailWithResponse(
+			d, e := c.Client().GetSessionDetail(
 				context.Background(),
 				identifier,
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON200 == nil {
+			if e != nil {
+				c.Terminal().Exitln(e)
+
 				return
 			}
 
-			d := response.JSON200
 			console.Format("Identifier: %s\n", d.Identifier)
 
 			if d.Name != nil {

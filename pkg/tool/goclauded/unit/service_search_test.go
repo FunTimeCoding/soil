@@ -25,12 +25,12 @@ func TestCatchUpSearchIndexesAndDropsVanished(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("alfa", "alfa-slug")
 	s.WriteSessionFile("bravo", "bravo-slug")
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	r, e := s.Search.Search("login bug", nil, 20)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, len(r))
 	system.Remove(filepath.Join(s.Harbor, "bravo.jsonl"))
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	r, e = s.Search.Search("login bug", nil, 20)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(r))
@@ -50,7 +50,7 @@ func TestReadConversationTruncatesLongBlocks(t *testing.T) {
 		),
 		0644,
 	)
-	s.Service.CatchUpSearch()
+	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
 	blocks, e := s.Service.ReadConversation("long", "w1", 0)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(blocks))

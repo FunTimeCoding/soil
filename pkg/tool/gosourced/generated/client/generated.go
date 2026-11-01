@@ -36,6 +36,7 @@ type DiffResponse struct {
 type Entry struct {
 	Class string    `json:"class"`
 	From  *Location `json:"from,omitempty"`
+	Text  *[]string `json:"text,omitempty"`
 	To    *Location `json:"to,omitempty"`
 }
 
@@ -75,6 +76,9 @@ type GetDiffParams struct {
 
 	// To Revision to compare to, the staged index when empty.
 	To *string `form:"to,omitempty" json:"to,omitempty"`
+
+	// Text Include each changed symbol's text - a line diff of the declaration, the whole declaration when added, its first line when removed.
+	Text *bool `form:"text,omitempty" json:"text,omitempty"`
 }
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
@@ -219,6 +223,18 @@ func NewGetDiffRequest(server string, params *GetDiffParams) (*http.Request, err
 		if params.To != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "to", *params.To, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Text != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "text", *params.Text, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
 				return nil, err
 			} else {
 				for _, qp := range strings.Split(queryFrag, "&") {

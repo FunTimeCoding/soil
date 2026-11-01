@@ -504,7 +504,7 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
   /api/sessions/{identifier}:
     delete:
-      operationId: deleteSessionById
+      operationId: deleteSessionByIdentifier
       parameters:
       - name: identifier
         in: path

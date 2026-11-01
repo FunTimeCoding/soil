@@ -19,6 +19,6 @@ func (s *Server) PostSessionExport(
 	}
 
 	return server.PostSessionExport200JSONResponse{
-		Paths: []string{s.exportSession(e, s.sessionExportPath)},
+		Paths: []string{s.service.ExportSession(e)},
 	}, nil
 }

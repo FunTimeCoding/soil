@@ -45,6 +45,14 @@ func DiffLines(r client.DiffResponse) []string {
 
 	for _, e := range r.Entries {
 		result = append(result, entryLine(e))
+
+		if e.Text == nil {
+			continue
+		}
+
+		for _, l := range *e.Text {
+			result = append(result, join.Empty(constant.TextIndent, l))
+		}
 	}
 
 	return result

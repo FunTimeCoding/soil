@@ -10,8 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 )
 

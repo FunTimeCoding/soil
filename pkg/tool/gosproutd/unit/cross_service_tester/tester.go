@@ -1,7 +1,7 @@
 package cross_service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"testing"
@@ -10,7 +10,7 @@ import (
 
 type Tester struct {
 	Service     *service.Service
-	Coordinator *connector.Client
+	Coordinator *client.Client
 	Goclauded   *base.Server
 	now         *time.Time
 	t           *testing.T

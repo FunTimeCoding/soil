@@ -2,7 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,7 +13,7 @@ func stubServer(
 	t *testing.T,
 	body string,
 	statuses ...int,
-) *client.ClientWithResponses {
+) face.Client {
 	t.Helper()
 	call := 0
 	s := httptest.NewServer(
@@ -42,11 +43,8 @@ func stubServer(
 		),
 	)
 	t.Cleanup(s.Close)
-	c, e := client.NewClientWithResponses(
-		s.URL,
-		client.WithHTTPClient(s.Client()),
-	)
-	assert.FatalOnError(t, e)
+	result := client.New(s.URL, false, "")
+	t.Cleanup(result.Close)
 
-	return c
+	return result
 }

@@ -23,6 +23,7 @@ func typeSymbol(
 		position.Filename,
 		position.Line,
 	)
+	result.Start, result.End = span(s, t)
 	q.qualify(t, localNames(t))
 	declaration := &ast.GenDecl{Tok: token.TYPE, Specs: []ast.Spec{t}}
 	result.Body = render(s, declaration)

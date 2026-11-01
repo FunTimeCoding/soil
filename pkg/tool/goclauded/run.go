@@ -2,40 +2,24 @@ package goclauded
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/ticker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/watcher"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
-	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/web/stall_client"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
-	"path/filepath"
 	"time"
 )
 
@@ -46,97 +30,49 @@ func Run(
 	r := i.Reporter()
 	start := time.Now()
 	l := logger.New(context.Background())
-	n := notifier.New()
-	s := store.New(lite.New(l, o.LitePath), universal)
-	defer s.Close()
-	h := claude.New().Base()
-	sweep.Run(h)
-	p := stall_client.New().Build()
-	defer p.Close()
-	memoryClient := connect.Wait(l)
-	defer memoryClient.Close()
-	q := client.NewEnvironment()
-	defer q.Close()
-	errors.PanicOnError(
-		peer.Await(
-			context.Background(),
-			l,
-			queryConstant.Identity.Name(),
-			q.Address(),
-			q.Reachable,
-		),
-	)
-	x := search_index.New(
-		connection.New(
-			l,
-			filepath.Join(filepath.Dir(o.LitePath), constant.SearchIndexFile),
-		),
-	)
-	v := service.New(
-		s,
-		transcript_cache.New(claude.New()),
-		memoryClient,
-		q,
-		x,
-		n,
-		r,
-		h,
-		universal,
-		l,
-	)
+	v := service.New(o, l, r)
 	defer v.Close()
+	v.Sweep()
 	v.ClearBindings()
-	index := reacher.New(r)
-
-	for _, f := range append(v.ReconcileSummaries(), v.ReconcileCompletions()...) {
-		index.Handle(
-			queryConstant.Identity.Name(),
-			f,
-			func(x *edge.Edge) { l.Plain("reconcile: %s", x) },
-			func(g error) { r.CaptureException(g) },
-		)
-	}
-
 	v.PopulateCache()
 	v.BackfillSessions()
 	v.CheckConsistency()
 	l.Structured("started", "elapsed", time.Since(start).Seconds())
-	go warm(v)
 	rec := recovery.New(l, r)
-	go rec.Run(v.CatchUpSearch)
-	timeoutTicker := ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)
-	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
-	impressionTicker := ticker.New(30*time.Second, v.DeliverImpressions, rec)
 	m := metric.New()
 	findingGauge := gauge.New(v, l, m.Registry())
 	findingGauge.Poll()
-	gaugeTicker := ticker.New(5*time.Minute, findingGauge.Poll, rec)
-	cruiseTicker := ticker.New(constant.CruiseInterval, v.ReleaseCruise, rec)
-	w := watcher.New(v, l, r, h)
-	address := o.Address
 	t := i.Recorder()
 	u := web.New(v, r)
-	setup := func(m *http.ServeMux) {
-		Mount(
-			v,
-			u,
-			l,
-			r,
-			h,
-			o.SessionExportPath,
-			constant.ChannelHold,
-			t,
-			guard.New(m, o.ServiceTokens),
-		)
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
 	}
-	middleware := u.Recovery(r)
-	srv := server.New(constant.Identity, address, setup).
-		WithMiddleware(middleware).
-		WithProfiling().
-		WithDefaultCertificate()
-	b := lifecycle.New(l).
-		WithWorker(w).
-		WithServer(srv).
+
+	c.WithWorker(worker.NewOnce(v.Warm, l, r)).
+		WithWorker(worker.NewOnce(v.CatchUpSearch, l, r)).
+		WithWorker(worker.New(v.Reconcile, l, r, constant.ReconcileInterval)).
+		WithWorker(watcher.New(v, l, r, o.Harbor)).
+		WithServer(
+			server.New(
+				constant.Identity,
+				o.Address,
+				func(x *http.ServeMux) {
+					Mount(
+						v,
+						u,
+						l,
+						r,
+						constant.ChannelHold,
+						t,
+						guard.New(x, o.ServiceTokens),
+					)
+				},
+			).WithMiddleware(u.Recovery(r)).
+				WithProfiling().
+				WithDefaultCertificate(),
+		).
 		WithServer(
 			server.New(
 				constant.Identity,
@@ -146,21 +82,20 @@ func Run(
 				},
 			),
 		).
-		WithWorker(timeoutTicker).
-		WithWorker(v.MemoryGuard()).
-		WithWorker(memoryTicker).
-		WithWorker(impressionTicker).
-		WithWorker(gaugeTicker).
-		WithWorker(cruiseTicker).
-		WithWorker(v)
+		WithWorker(ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)).
+		WithWorker(ticker.New(30*time.Second, v.PollMemory, rec)).
+		WithWorker(ticker.New(30*time.Second, v.DeliverImpressions, rec)).
+		WithWorker(ticker.New(5*time.Minute, findingGauge.Poll, rec)).
+		WithWorker(ticker.New(constant.CruiseInterval, v.ReleaseCruise, rec))
 
-	if environment.Exists(constant.MonitorUsageEnvironment) {
-		b.WithWorker(ticker.New(time.Minute, v.PollUsage, rec))
+	if environment.Exists(constant.MonitorUsageEnvironment) &&
+		!environment.Exists(constant.UsageEndpointEnvironment) {
+		c.WithWorker(ticker.New(time.Minute, v.PollUsage, rec))
 	}
 
 	if v.UtilizationFallback() {
-		b.WithWorker(ticker.New(5*time.Minute, v.PollUtilization, rec))
+		c.WithWorker(ticker.New(5*time.Minute, v.PollUtilization, rec))
 	}
 
-	b.RunUntilSignal()
+	c.WithWorker(v.Stopper()).RunUntilSignal()
 }

@@ -11,6 +11,10 @@ func LocalTaken(
 	file *ast.File,
 	name string,
 ) bool {
+	if p.Types.Scope().Lookup(name) != nil {
+		return true
+	}
+
 	for ident, o := range p.TypesInfo.Defs {
 		if o == nil || ident.Name != name {
 			continue

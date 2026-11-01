@@ -31,5 +31,7 @@ func (s *Service) Summarize(
 		return nil
 	}
 
-	return s.pushSummary(slug, body, metadata)
+	s.report(s.pushSummary(slug, body, metadata))
+
+	return nil
 }

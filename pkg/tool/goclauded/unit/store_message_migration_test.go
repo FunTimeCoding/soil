@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
@@ -15,7 +16,7 @@ func TestMigrateDropsMessageReadAndKeepsTheRow(t *testing.T) {
 	path := seedLegacyMessage(t)
 	d := lite.New(logger.New(context.Background()), path)
 	s := store.New(d, func() time.Time { return time.Now().UTC() })
-	defer s.Close()
+	defer relational.CloseMapper(d)
 	assert.Integer(t, 0, columnCount(t, d, constant.MessageTable, "read"))
 	found, e := s.MessagesByIdentifiers([]uint{1})
 	assert.FatalOnError(t, e)
@@ -28,7 +29,7 @@ func TestMigrateAddsMessageIdentifierToQueue(t *testing.T) {
 	path := seedLegacyMessage(t)
 	d := lite.New(logger.New(context.Background()), path)
 	s := store.New(d, func() time.Time { return time.Now().UTC() })
-	defer s.Close()
+	defer relational.CloseMapper(d)
 	assert.Integer(t, 1, columnCount(t, d, "queue", "message_identifier"))
 	drained, e := s.DrainQueue("session-1", "Cedar")
 	assert.FatalOnError(t, e)
@@ -40,11 +41,12 @@ func TestMigrateAddsMessageIdentifierToQueue(t *testing.T) {
 func TestMigrateMessageIsIdempotent(t *testing.T) {
 	path := seedLegacyMessage(t)
 	clock := func() time.Time { return time.Now().UTC() }
-	first := store.New(lite.New(logger.New(context.Background()), path), clock)
-	first.Close()
+	first := lite.New(logger.New(context.Background()), path)
+	store.New(first, clock)
+	relational.CloseMapper(first)
 	d := lite.New(logger.New(context.Background()), path)
 	s := store.New(d, clock)
-	defer s.Close()
+	defer relational.CloseMapper(d)
 	assert.Integer(t, 0, columnCount(t, d, constant.MessageTable, "read"))
 	found, e := s.MessagesByIdentifiers([]uint{1})
 	assert.FatalOnError(t, e)

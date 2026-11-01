@@ -12,7 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/snapshot"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/mock_system"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/worker"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 	"testing"
 	"time"

@@ -363,10 +363,11 @@ either is built by it or borrows from it.
 The service takes configuration - the option, a logger, a reporter, and
 a metric registry when its workers export gauges - and builds the rest:
 the database (`relational.Open`, `migrate.AutoMigrate`, then the store
-over it, `database.md`), its clients, pools, peer guards and workers.
-Its `Close` closes everything it built and nothing it was given. A
-service that owns nothing - a reader over the local system, paths and
-a logger - has no `Close`, and `Run` defers nothing.
+over it, `database.md`), its clients, pools, peer guards and the parts
+that hold state or a connection. Its `Close` closes everything it built
+and nothing it was given. A service that owns nothing - a reader over
+the local system, paths and a logger - has no `Close`, and `Run` defers
+nothing.
 
 A service is never handed a finished client, in a parameter or an option
 function: whoever closes a handed client closes something it did not
@@ -384,10 +385,15 @@ client's factory takes the instance -
 tokens, a parsed inventory, and factories, which own nothing until the
 service calls them. Nothing live sits on an option.
 
-Workers the service builds reach the lifecycle through `Workers()`,
+A part that holds state or a connection - a peer guard, a runner the
+service launches work into, a socket, a cache the service reads - is
+built by the service and reaches the lifecycle through `Workers()`,
 which `Run` registers in order. The lifecycle closes them, and the
 service closes them again, so their `Close` is safe twice
-(`lifecycle.md`).
+(`lifecycle.md`). Such a part reaches back into the service only
+through function values the service passes it at construction, never
+`*service.Service`: the service holds the part, so the part holding
+the service is an import cycle.
 
 A service with required peers has a `Wait` that waits on each required
 peer's guard in turn. `Run` calls it right after building the service and
@@ -401,10 +407,9 @@ calls one operation, and answers the error's class
 (`error-handling/README.md`); a check that lived in a route moves into
 the service, where every surface shares it. A surface holds the service
 and nothing beside it - no client, store or guard of its own to reach
-around it. Collection belongs in the service too: a worker gets one
-operation per tick that returns its outcomes, and keeps only what is its
-own - the ticker, its gauges, its stop channel and the recovery around
-the tick.
+around it. The daemon's work belongs in the service too, never in a
+worker or a part: a tick or an event calls one operation that returns
+its outcomes.
 
 A face describes one client in full and its mock implements all of it: the
 upstream client's face is what the factory returns, the daemon client's is
@@ -413,13 +418,22 @@ takes a role interface - only the methods it calls, beside the full face
 (`FloatSource`), filled by the client, its mock or a service's guarded
 method through a function type beside it (`FloatSourceFunction`). No
 other face is partial or mirrors another; the service has none, and the
-surfaces, workers and tests take `*service.Service` (`testing.md`).
+surfaces, clocks and tests take `*service.Service` (`testing.md`).
 
 ## Workers
 
 Workers implement `face.Worker` (`Start()` + `Close()`) and close only
 what they started or built - a service or client they were given
 belongs to whoever built it. See `lifecycle.md` for details.
+
+A worker that holds nothing but time is a clock. `Run` builds it over
+one service operation per tick - goclauded's
+`worker.New(v.Reconcile, l, r, constant.ReconcileInterval)` on
+`pkg/worker` - and it keeps only what is its own: the ticker, its
+gauges, its stop channel and the recovery around the tick. Its `Close`
+waits for a tick in flight, so nothing the service closes next is
+still in use. The service never holds a clock; it hands out only the
+parts that hold state or a connection (Service).
 
 ## Daemon and CLI Split
 

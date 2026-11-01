@@ -2,8 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -19,35 +17,25 @@ func sessionDelete(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			parameters := &client.DeleteSessionByIdParams{}
+			parameters := &client.DeleteSessionByIdentifierParams{}
 
 			if confirm != "" {
 				parameters.Confirm = &confirm
 			}
 
-			response, e := c.Client().DeleteSessionByIdWithResponse(
+			r, e := c.Client().DeleteSessionByIdentifier(
 				context.Background(),
 				arguments[0],
 				parameters,
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON409 != nil {
-				console.Format("refused: %s\n", response.JSON409.Error)
-
-				return
-			}
-
-			if response.JSON200 == nil {
-				console.Format(
-					"unexpected response: %s\n",
-					response.HTTPResponse.Status,
-				)
+			if e != nil {
+				c.Terminal().Exitln(e)
 
 				return
 			}
 
-			printDeleteReceipt(response.JSON200)
+			printDeleteReceipt(r)
 		},
 	}
 	result.Flags().StringVar(

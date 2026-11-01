@@ -45,6 +45,7 @@ func (s *Server) converse(
 	s.identifier = b.Identifier
 	s.subscription++
 	s.mutex.Unlock()
+	signal(s.subscribed)
 
 	for {
 		var m message.Message

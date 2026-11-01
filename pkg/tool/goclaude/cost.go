@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -20,17 +19,16 @@ func cost(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().GetCostWithResponse(
+			r, e := c.Client().GetCost(
 				context.Background(),
 				&client.GetCostParams{Days: &days},
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON200 == nil {
+			if e != nil {
+				c.Terminal().Exitln(e)
+
 				return
 			}
-
-			r := response.JSON200
 
 			if r.Models == nil || len(*r.Models) == 0 {
 				console.Format("No token usage in the last %d day(s).\n", days)

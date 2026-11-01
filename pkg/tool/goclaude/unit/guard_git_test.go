@@ -129,6 +129,38 @@ func TestQuestionAsksForALiteralGitTreeWriter(t *testing.T) {
 	)
 }
 
+func TestGitStashReadsPassUnasked(t *testing.T) {
+	assert.String(t, "", guard.Verdict("darwin", "git stash list"))
+	assert.String(t, "", guard.Question("git stash list"))
+	assert.String(t, "", guard.Question("git -C ../soil stash list | head -1"))
+	assert.String(t, "", guard.Question("git stash show -p stash@{1}"))
+	assert.String(t, "", guard.Verdict("darwin", "git stash show \"$ref\""))
+	assert.String(t, "", guard.Question("git stash show \"$ref\""))
+}
+
+func TestQuestionNamesTheGitStashVerb(t *testing.T) {
+	assert.String(
+		t,
+		"git stash pop rewrites the shared index or work tree: everything it covers",
+		guard.Question("git stash pop"),
+	)
+	assert.String(
+		t,
+		"git stash push rewrites the shared index or work tree: pkg/a.go",
+		guard.Question("git stash push -- pkg/a.go"),
+	)
+}
+
+func TestGitMoveDryRunPassesUnasked(t *testing.T) {
+	assert.String(t, "", guard.Question("git mv -n pkg/a.go pkg/b.go"))
+	assert.String(t, "", guard.Question("git mv --dry-run pkg/a.go pkg/b.go"))
+	assert.String(
+		t,
+		"git mv rewrites the shared index or work tree: pkg/b.go",
+		guard.Question("git mv -- -n pkg/b.go"),
+	)
+}
+
 func TestVerdictReadsGitInsideAShellString(t *testing.T) {
 	assert.String(
 		t,

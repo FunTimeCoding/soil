@@ -533,6 +533,59 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/reconcile:
+    post:
+      operationId: reconcile
+      description: >-
+        Compare one hypervisor's guests with the power intent netbox records.
+        Running guests recorded offline become active; with full, stopped guests
+        recorded active become offline. Guests netbox does not know are listed,
+        never created. Nothing is written unless write is set.
+      parameters:
+      - $ref: "#/components/parameters/Instance"
+      - name: full
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Also record stopped guests as offline.
+      - name: write
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Write the changes; without it the answer only lists them.
+      responses:
+        "200":
+          description: The changes, written or proposed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReconcilePlan"
+        "400":
+          description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: Netbox is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/machines/{identifier}/start:
     post:
       operationId: startMachine
@@ -1743,6 +1796,41 @@ components:
       - taskId
       properties:
         taskId:
+          type: string
+    ReconcilePlan:
+      type: object
+      required: [hypervisor, written, changes, unknown, ambiguous]
+      properties:
+        ambiguous:
+          type: array
+          items:
+            type: string
+          description: >-
+            Guests netbox holds more than one virtual machine of the name for;
+            never written, since a write by name cannot say which.
+        hypervisor:
+          type: string
+        written:
+          type: boolean
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReconcileChange"
+        unknown:
+          type: array
+          items:
+            type: string
+    ReconcileChange:
+      type: object
+      required: [name, node, from, to]
+      properties:
+        name:
+          type: string
+        node:
+          type: string
+        from:
+          type: string
+        to:
           type: string
     Network:
       type: object

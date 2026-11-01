@@ -80,7 +80,11 @@ func TestRenameProductionSymbolRewritesTestFile(t *testing.T) {
 	r, e := s.Rename(d, "example/pkg/target", "Compute", "Calculate", "", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	declaration := service_tester.ReadFixtureFile(t, d, "pkg/target/compute.go")
+	declaration := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/calculate.go",
+	)
 	assert.StringContains(t, "func Calculate(", declaration)
 	inTest := service_tester.ReadFixtureFile(t, d, "pkg/target/compute_test.go")
 	assert.StringContains(t, "Calculate()", inTest)

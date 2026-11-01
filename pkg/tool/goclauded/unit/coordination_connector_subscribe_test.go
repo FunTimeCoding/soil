@@ -5,14 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
-	"time"
 )
 
 func TestConnectorSubscribeDeliversParsedEvents(t *testing.T) {
@@ -92,7 +91,7 @@ func TestConnectorSubscribeClosesItsChannelOnStop(t *testing.T) {
 
 func TestConnectorSubscribeReportsARefusedTokenOnce(t *testing.T) {
 	s := base.New(t)
-	c := connector.New(
+	c := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port).String(),
 		false,
 		"bogus",
@@ -106,6 +105,6 @@ func TestConnectorSubscribeReportsARefusedTokenOnce(t *testing.T) {
 		r,
 	)
 	defer stop()
-	time.Sleep(200 * time.Millisecond)
+	awaitEvents(t, r, 1)
 	assert.Count(t, 1, r.Events())
 }

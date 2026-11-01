@@ -24,5 +24,7 @@ func (s *Server) GetDiff(
 		return server.GetDiff500JSONResponse(*s.answer(e)), nil
 	}
 
-	return server.GetDiff200JSONResponse(diffResponse(result)), nil
+	withText := r.Params.Text != nil && *r.Params.Text
+
+	return server.GetDiff200JSONResponse(diffResponse(result, withText)), nil
 }

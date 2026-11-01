@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"testing"
 )
@@ -16,11 +16,7 @@ func TestConnectorReachesTheServer(t *testing.T) {
 
 func TestConnectorReachableRefusesAWrongToken(t *testing.T) {
 	s := base.New(t)
-	c := connector.New(
-		fmt.Sprintf("http://localhost:%d", s.Port),
-		false,
-		"wrong",
-	)
+	c := client.New(fmt.Sprintf("http://localhost:%d", s.Port), false, "wrong")
 	defer c.Close()
 	assert.Error(t, c.Reachable(context.Background()))
 }

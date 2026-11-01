@@ -2,13 +2,13 @@ package lab
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 )
 
 func Package(
-	c *gitlab.Client,
+	c face.Forge,
 	p *project.Project,
 ) {
 	projectPackages := c.MustPackages(p.Identifier, false)

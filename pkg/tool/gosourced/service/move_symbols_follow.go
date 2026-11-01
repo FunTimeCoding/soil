@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -78,10 +77,7 @@ func (s *Service) moveSymbolsFollow(
 	)
 
 	if qualifications == nil {
-		return failValidation(
-			r,
-			fmt.Sprintf("no available import name in %s", blocked),
-		)
+		return failValidation(r, blocked)
 	}
 
 	decorations := decoration.NewSet()

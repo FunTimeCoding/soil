@@ -214,6 +214,24 @@ type NodeStatus struct {
 	Uptime         *int        `json:"uptime,omitempty"`
 }
 
+// ReconcileChange defines model for ReconcileChange.
+type ReconcileChange struct {
+	From string `json:"from"`
+	Name string `json:"name"`
+	Node string `json:"node"`
+	To   string `json:"to"`
+}
+
+// ReconcilePlan defines model for ReconcilePlan.
+type ReconcilePlan struct {
+	// Ambiguous Guests netbox holds more than one virtual machine of the name for; never written, since a write by name cannot say which.
+	Ambiguous  []string          `json:"ambiguous"`
+	Changes    []ReconcileChange `json:"changes"`
+	Hypervisor string            `json:"hypervisor"`
+	Unknown    []string          `json:"unknown"`
+	Written    bool              `json:"written"`
+}
+
 // Snapshot defines model for Snapshot.
 type Snapshot struct {
 	Description *string `json:"description,omitempty"`
@@ -547,6 +565,18 @@ type DownloadLocatorParams struct {
 	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
 }
 
+// ReconcileParams defines parameters for Reconcile.
+type ReconcileParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Full Also record stopped guests as offline.
+	Full *bool `form:"full,omitempty" json:"full,omitempty"`
+
+	// Write Write the changes; without it the answer only lists them.
+	Write *bool `form:"write,omitempty" json:"write,omitempty"`
+}
+
 // ListSnippetsParams defines parameters for ListSnippets.
 type ListSnippetsParams struct {
 	// Instance Proxmox instance name. Optional when only one instance is configured.
@@ -788,6 +818,11 @@ type ClientInterface interface {
 	// DownloadLocator performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
 	// Takes a body of the `application/json` content type.
 	DownloadLocator(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// Reconcile performs a POST /api/reconcile (the `Reconcile` operationId) request.
+	//
+	// Compare one hypervisor's guests with the power intent netbox records. Running guests recorded offline become active; with full, stopped guests recorded active become offline. Guests netbox does not know are listed, never created. Nothing is written unless write is set.
+	Reconcile(ctx context.Context, params *ReconcileParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListSnippets performs a GET /api/snippets (the `ListSnippets` operationId) request.
 	ListSnippets(ctx context.Context, params *ListSnippetsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1290,6 +1325,21 @@ func (c *Client) DownloadLocatorWithBody(ctx context.Context, name string, stora
 // Takes a body of the `application/json` content type.
 func (c *Client) DownloadLocator(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDownloadLocatorRequest(c.Server, name, storage, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// Reconcile performs a POST /api/reconcile (the `Reconcile` operationId) request.
+//
+// Compare one hypervisor's guests with the power intent netbox records. Running guests recorded offline become active; with full, stopped guests recorded active become offline. Guests netbox does not know are listed, never created. Nothing is written unless write is set.
+func (c *Client) Reconcile(ctx context.Context, params *ReconcileParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewReconcileRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -3593,6 +3643,84 @@ func NewDownloadLocatorRequestWithBody(server string, name string, storage strin
 	return req, nil
 }
 
+// NewReconcileRequest constructs an http.Request for the Reconcile method
+func NewReconcileRequest(server string, params *ReconcileParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/reconcile")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Full != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "full", *params.Full, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Write != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "write", *params.Write, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListSnippetsRequest constructs an http.Request for the ListSnippets method
 func NewListSnippetsRequest(server string, params *ListSnippetsParams) (*http.Request, error) {
 	var err error
@@ -4064,6 +4192,13 @@ type ClientWithResponsesInterface interface {
 	// DownloadLocatorWithResponse performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	DownloadLocatorWithResponse(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*DownloadLocatorResponse, error)
+
+	// ReconcileWithResponse performs a POST /api/reconcile (the `Reconcile` operationId) request.
+	//
+	// Compare one hypervisor's guests with the power intent netbox records. Running guests recorded offline become active; with full, stopped guests recorded active become offline. Guests netbox does not know are listed, never created. Nothing is written unless write is set.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ReconcileWithResponse(ctx context.Context, params *ReconcileParams, reqEditors ...RequestEditorFn) (*ReconcileResponse, error)
 
 	// ListSnippetsWithResponse performs a GET /api/snippets (the `ListSnippets` operationId) request.
 	//
@@ -5999,6 +6134,75 @@ func (r DownloadLocatorResponse) ContentType() string {
 	return ""
 }
 
+type ReconcileResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ReconcilePlan
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ReconcileResponse) GetJSON200() *ReconcilePlan {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ReconcileResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ReconcileResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ReconcileResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ReconcileResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r ReconcileResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ReconcileResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ReconcileResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ReconcileResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListSnippetsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -6652,6 +6856,19 @@ func (c *ClientWithResponses) DownloadLocatorWithResponse(ctx context.Context, n
 		return nil, err
 	}
 	return ParseDownloadLocatorResponse(rsp)
+}
+
+// ReconcileWithResponse performs a POST /api/reconcile (the `Reconcile` operationId) request.
+//
+// Compare one hypervisor's guests with the power intent netbox records. Running guests recorded offline become active; with full, stopped guests recorded active become offline. Guests netbox does not know are listed, never created. Nothing is written unless write is set.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ReconcileWithResponse(ctx context.Context, params *ReconcileParams, reqEditors ...RequestEditorFn) (*ReconcileResponse, error) {
+	rsp, err := c.Reconcile(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseReconcileResponse(rsp)
 }
 
 // ListSnippetsWithResponse performs a GET /api/snippets (the `ListSnippets` operationId) request.
@@ -8146,6 +8363,60 @@ func ParseDownloadLocatorResponse(rsp *http.Response) (*DownloadLocatorResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseReconcileResponse parses an HTTP response from a ReconcileWithResponse call
+func ParseReconcileResponse(rsp *http.Response) (*ReconcileResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ReconcileResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ReconcilePlan
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

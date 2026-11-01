@@ -13,16 +13,24 @@ func (s *Service) indexed(collection string) (map[string]string, error) {
 	for {
 		limit := queryConstant.ListPage
 		page := offset
-		outcome, e := s.query.GetList(
-			context.Background(),
-			&client.GetListParams{
-				Collection: collection,
-				Limit:      &limit,
-				Offset:     &page,
-			},
-		)
+		var outcome *client.ListOutcome
 
-		if e != nil {
+		if e := s.queryGuard.Attempt(
+			context.Background(),
+			func(x context.Context) error {
+				var f error
+				outcome, f = s.query.GetList(
+					x,
+					&client.GetListParams{
+						Collection: collection,
+						Limit:      &limit,
+						Offset:     &page,
+					},
+				)
+
+				return f
+			},
+		); e != nil {
 			return nil, e
 		}
 

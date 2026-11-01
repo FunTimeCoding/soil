@@ -1,0 +1,40 @@
+{
+  "five_hour": null,
+  "seven_day": {
+    "utilization": 26.0,
+    "resets_at": "2026-11-04T18:59:59.871420+00:00"
+  },
+  "limits": [
+    {
+      "kind": "weekly_all",
+      "group": "weekly",
+      "percent": 26,
+      "severity": "normal",
+      "resets_at": "2026-11-04T18:59:59.871420+00:00",
+      "scope": null,
+      "is_active": true
+    },
+    {
+      "kind": "weekly_scoped",
+      "group": "weekly",
+      "percent": 2,
+      "severity": "normal",
+      "resets_at": "2026-11-04T18:59:59.871541+00:00",
+      "scope": {
+        "model": {
+          "id": null,
+          "display_name": "Fable"
+        },
+        "surface": null
+      },
+      "is_active": false
+    }
+  ],
+  "weekly_scoped_shares": [
+    {
+      "limit_index": 1,
+      "used_percent_of_weekly": 1,
+      "allowance_percent_of_weekly": 50
+    }
+  ]
+}

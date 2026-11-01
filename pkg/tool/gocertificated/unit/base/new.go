@@ -18,6 +18,7 @@ import (
 func New(t *testing.T) *Server {
 	t.Helper()
 	f := mock_client.New()
+	t.Cleanup(f.Close)
 	r := memory.New()
 	v := service.New(store_tester.NewOption(t, f), logger.New(t.Context()), r)
 	result := &Server{

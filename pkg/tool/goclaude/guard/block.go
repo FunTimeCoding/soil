@@ -15,7 +15,7 @@ func (c *GitCall) Block() string {
 		return fmt.Sprintf(constant.GitUnreadableMessage, "subcommand")
 	}
 
-	if c.listsTags() {
+	if c.listsTags() || c.readsOnly() {
 		return ""
 	}
 

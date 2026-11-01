@@ -8,9 +8,7 @@ import (
 type Client interface {
 	GetDiff(
 		x context.Context,
-		module string,
-		from string,
-		to string,
+		p *client.GetDiffParams,
 	) (client.DiffResponse, error)
 	Reachable(x context.Context) error
 	Close()

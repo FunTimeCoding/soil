@@ -3,10 +3,11 @@ package sink
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"os"
+	"slices"
 )
 
 func (s *Sink) Commit() error {
-	for _, o := range s.operations {
+	for _, o := range slices.Concat(s.rewrites, s.operations) {
 		var e error
 
 		switch o.Kind {

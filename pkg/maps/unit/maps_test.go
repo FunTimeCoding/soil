@@ -35,6 +35,31 @@ func TestStringKeys(t *testing.T) {
 	)
 }
 
+func TestJoin(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{"Alfa", "Bravo"},
+		maps.StringKeys(
+			maps.Join(
+				map[string]int{constant.UpperAlfa: 0},
+				map[string]int{constant.UpperBravo: 1},
+			),
+		),
+	)
+}
+
+func TestJoinLaterPartWins(t *testing.T) {
+	assert.MapValue(
+		t,
+		1,
+		maps.Join(
+			map[string]any{constant.UpperAlfa: 0},
+			map[string]any{constant.UpperAlfa: 1},
+		),
+		"Alfa",
+	)
+}
+
 func TestToMarkup(t *testing.T) {
 	assert.String(
 		t,

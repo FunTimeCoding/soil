@@ -1,10 +1,14 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
+)
 
 type Proxmox struct {
 	Address       string
 	ServiceTokens []string
 	MetricAddress string
 	Inventory     *instance.Inventory
+	Netbox        func() face.Client
 }

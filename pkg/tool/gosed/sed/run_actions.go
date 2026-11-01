@@ -1,15 +1,15 @@
 package sed
 
 import (
-	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/strings/base64"
 	"github.com/funtimecoding/soil/pkg/tool/gosed/sed/option"
-	upstream "gitlab.com/gitlab-org/api/client-go/v3"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"log"
 )
 
 func runActions(
-	c *gitlab.Client,
+	c face.Forge,
 	project int64,
 	o *option.Sed,
 ) {
@@ -30,8 +30,8 @@ func runActions(
 		grouped[a.Path] = append(grouped[a.Path], a)
 	}
 
-	var commitActions []*upstream.CommitActionOptions
-	update := upstream.FileUpdate
+	var commitActions []*gitlab.CommitActionOptions
+	update := gitlab.FileUpdate
 
 	for _, path := range order {
 		f := c.MustFile(project, o.Branch, path)
@@ -48,7 +48,7 @@ func runActions(
 
 		commitActions = append(
 			commitActions,
-			&upstream.CommitActionOptions{
+			&gitlab.CommitActionOptions{
 				Action:   &update,
 				FilePath: new(path),
 				Content:  new(replaceLines(base64.Decode(f.Content), replaces)),

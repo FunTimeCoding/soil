@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -26,7 +27,13 @@ func Run(
 	v := service.New(o, l, m.Upstream(constant.Identity))
 	defer v.Close()
 	b := web.New(v)
-	lifecycle.New(l).WithServer(
+	c := lifecycle.New(l)
+
+	if o.PowerIntent {
+		c.WithWorker(worker.New(v, constant.IntentInterval, l, m.Registry(), r))
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,

@@ -35,8 +35,6 @@ func NewWithHold(
 					web.New(s.Service, r),
 					l,
 					r,
-					t.TempDir(),
-					t.TempDir(),
 					hold,
 					mock_recorder.New(),
 					g,

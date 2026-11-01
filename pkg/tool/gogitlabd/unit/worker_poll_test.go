@@ -9,8 +9,8 @@ import (
 )
 
 func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
-	alfa := seededForge(1, "app")
-	bravo := seededForge(2, "web")
+	alfa := seededForge(t, 1, "app")
+	bravo := seededForge(t, 2, "web")
 	r := memory.New()
 	w := newWorker(t, alfa, bravo, r)
 	defer w.Close()
@@ -31,12 +31,12 @@ func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
 }
 
 func TestRequestsCarryTheirInstance(t *testing.T) {
-	alfa := seededForge(1, "app")
+	alfa := seededForge(t, 1, "app")
 	alfa.SetMergeRequests(
 		[]*merge_request.Request{newRequest(1, 1, "alfa change", 1)},
 		nil,
 	)
-	bravo := seededForge(2, "web")
+	bravo := seededForge(t, 2, "web")
 	bravo.SetMergeRequests(
 		nil,
 		[]*merge_request.Request{newRequest(2, 1, "bravo change", 2)},

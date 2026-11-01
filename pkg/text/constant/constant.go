@@ -10,6 +10,13 @@ const (
 	WikiPathEnvironment = "WIKI_PATH"
 )
 
+const (
+	DiffEqual  = " "
+	DiffDelete = "-"
+	DiffInsert = "+"
+	DiffGap    = "@@"
+)
+
 var (
 	DictionarySkip   = map[string]bool{".git": true, "tmp": true}
 	DictionaryPrefix = map[string]bool{

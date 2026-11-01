@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -25,17 +24,14 @@ func sessionBackfill(c *command_context.Context) *cobra.Command {
 				parameters.Cold = new(true)
 			}
 
-			response, e := c.Client().PostBackfillWithResponse(
-				context.Background(),
-				parameters,
-			)
-			errors.PanicOnError(e)
+			r, e := c.Client().PostBackfill(context.Background(), parameters)
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
 			}
 
-			r := response.JSON200
 			console.Format(
 				"backfill: %d enriched, %d skipped\n",
 				r.Enriched,

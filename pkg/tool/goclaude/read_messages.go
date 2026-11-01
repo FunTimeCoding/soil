@@ -4,14 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func ReadMessages(
-	c *client.ClientWithResponses,
+	c face.Client,
 	identifiers []int,
 ) (string, error) {
-	response, e := c.GetMessagesWithResponse(
+	r, e := c.GetMessages(
 		context.Background(),
 		&client.GetMessagesParams{Identifier: identifiers},
 	)
@@ -20,17 +21,9 @@ func ReadMessages(
 		return "", e
 	}
 
-	if response.JSON200 == nil {
-		return "", fmt.Errorf(
-			"%s: %s",
-			response.Status(),
-			string(response.Body),
-		)
-	}
-
 	var lines []string
 
-	for _, m := range response.JSON200.Messages {
+	for _, m := range r.Messages {
 		lines = append(
 			lines,
 			fmt.Sprintf(
@@ -45,7 +38,7 @@ func ReadMessages(
 		)
 	}
 
-	for _, i := range response.JSON200.Missing {
+	for _, i := range r.Missing {
 		lines = append(lines, fmt.Sprintf("No message with identifier: %d", i))
 	}
 

@@ -3,28 +3,28 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
-	"net/http"
 	"time"
 )
 
 func AwaitCallsign(
-	c *client.ClientWithResponses,
+	c face.Client,
 	session string,
 	since time.Time,
 	interval time.Duration,
 ) string {
 	for failures := 0; failures < constant.ChannelCallsignAttempts; {
-		response, e := c.GetChannelCallsignWithResponse(
+		r, found, e := c.GetChannelCallsign(
 			context.Background(),
 			&client.GetChannelCallsignParams{Session: session, Since: since},
 		)
 
-		if e == nil && response.JSON200 != nil {
-			return response.JSON200.Callsign
+		if e == nil && found {
+			return r.Callsign
 		}
 
-		if e == nil && response.StatusCode() == http.StatusNoContent {
+		if e == nil {
 			continue
 		}
 

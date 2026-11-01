@@ -12,6 +12,7 @@ const (
 	ModuleFlag = "module"
 	FromFlag   = "from"
 	ToFlag     = "to"
+	TextFlag   = "text"
 )
 
 const (
@@ -22,4 +23,5 @@ const (
 	SourceArrow   = "<-"
 	ModuleLabel   = "module"
 	StagedLabel   = "staged"
+	TextIndent    = "    "
 )

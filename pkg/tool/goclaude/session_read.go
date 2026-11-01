@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -19,7 +18,7 @@ func sessionRead(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			identifier := resolveSession(c.Client(), arguments[0])
+			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
 				console.Format("session not found: %s\n", arguments[0])
@@ -33,24 +32,19 @@ func sessionRead(c *command_context.Context) *cobra.Command {
 				parameters.Count = &count
 			}
 
-			response, e := c.Client().GetSessionWindowWithResponse(
+			r, e := c.Client().GetSessionWindow(
 				context.Background(),
 				identifier,
 				parameters,
 			)
-			errors.PanicOnError(e)
 
-			if response.JSON404 != nil {
-				console.Format("%s\n", response.JSON404.Error)
+			if e != nil {
+				c.Terminal().Exitln(e)
 
 				return
 			}
 
-			if response.JSON200 == nil {
-				c.Terminal().Reject(response.Status(), response.Body)
-			}
-
-			for _, b := range response.JSON200.Blocks {
+			for _, b := range r.Blocks {
 				marker := ""
 
 				if b.Identifier == arguments[1] {

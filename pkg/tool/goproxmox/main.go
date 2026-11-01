@@ -46,6 +46,7 @@ func Main() {
 	o.AddCommand(stopMachine(c))
 	o.AddCommand(shutdownMachine(c))
 	o.AddCommand(resetMachine(c))
+	o.AddCommand(reconcile(c))
 	o.AddCommand(listSnapshots(c))
 	o.AddCommand(createSnapshot(c))
 	o.AddCommand(rollbackSnapshot(c))

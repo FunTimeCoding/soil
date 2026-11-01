@@ -20,10 +20,11 @@ func Parse(body []byte) *Result {
 		case "session":
 			result.SessionPercent = l.Percent
 			result.SessionReset = resetTime(l.ResetsAt)
-			found = true
+			result.SessionSeen = true
 		case constant.AnthropicLimitWeekly:
 			result.WeeklyPercent = l.Percent
 			result.WeeklyReset = resetTime(l.ResetsAt)
+			found = true
 		case constant.AnthropicLimitWeeklyScoped:
 			if !fableScoped(l.Scope) {
 				continue

@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
@@ -20,16 +19,20 @@ func usage(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().GetUsageWithResponse(context.Background())
-			errors.PanicOnError(e)
+			j, found, e := c.Client().GetUsage(context.Background())
 
-			if response.StatusCode() == 204 || response.JSON200 == nil {
+			if e != nil {
+				c.Terminal().Exitln(e)
+
+				return
+			}
+
+			if !found {
 				console.Line("No usage data yet.")
 
 				return
 			}
 
-			j := response.JSON200
 			var fableResetAt time.Time
 
 			if j.FableResetAt != nil {

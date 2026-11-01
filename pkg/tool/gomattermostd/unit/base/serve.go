@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -16,7 +16,7 @@ import (
 func serve(
 	t *testing.T,
 	configure func(*http.ServeMux),
-	k *connector.Client,
+	k face.Client,
 ) *Server {
 	t.Helper()
 	upstream := mattermost_client_tester.New(t, configure)
