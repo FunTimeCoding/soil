@@ -14,7 +14,9 @@ const (
 	WrapsCondition    = "wraps"
 	DirectivePrefix   = "//go:"
 	ByValueDirective  = "//goanalyze:by-value"
+)
 
+const (
 	FrontMatterDelimiterKey  = "front_matter_delimiter"
 	FrontMatterDelimiterText = "No front matter delimiter"
 
@@ -84,17 +86,23 @@ const (
 
 	AbsolutePointerKey  = "absolute_pointer"
 	AbsolutePointerText = "Absolute path reference"
+)
 
+const (
 	AssertPackageName  = "assert"
 	AssertHelperPrefix = "assert"
 	AssertTestingType  = "*testing.T"
 	TesterSuffix       = "_tester"
 
 	ExpectedParameterPrefix = "expect"
+)
 
+const (
 	MaxLineLength = 80
 	TabWidth      = 4
+)
 
+const (
 	ConcernLine    = "line"
 	ConcernFile    = "file"
 	ConcernPackage = "package"

@@ -7,17 +7,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
 	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -29,24 +24,9 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(connection.New(l, o.LitePath))
-	defer s.Close()
-	q := client.NewEnvironment()
-	defer q.Close()
-	errors.PanicOnError(
-		peer.Await(
-			context.Background(),
-			l,
-			queryConstant.Identity.Name(),
-			q.Address(),
-			q.Reachable,
-		),
-	)
-	v := service.New(s, q).WithHiddenTag(
-		environment.Fallback(constant.HiddenTagEnvironment, ""),
-	).WithReferenceRoot(
-		environment.Fallback(constant.ReferenceRootEnvironment, ""),
-	)
+	v := service.New(o, l)
+	defer v.Close()
+	errors.PanicOnError(v.Wait(context.Background()))
 	index := reacher.New(r)
 
 	for _, f := range reconcileMemories(v) {

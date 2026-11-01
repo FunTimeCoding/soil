@@ -161,7 +161,8 @@ honours - and only once it has been seen enough to know what it means.
   classification, translating at the client boundary, message format
 - [infrastructure.md](infrastructure.md) - store methods, web handler
   panics, worker and HTTP recovery, peers (required, probe route, outages,
-  guard), Sentry enrichment, external process, self-healing
+  guard, held connections), Sentry enrichment, external process,
+  self-healing
 
 ## Deviations
 

@@ -17,8 +17,8 @@ seed of its own and follows this one for everything else.
 
 ## Where the work stopped
 
-Twenty-one soil daemons meet every row of the target (Census); goagentd is
-next (Order).
+Twenty-two soil daemons meet every row of the target (Census); gomemoryd with
+goclauded is under way, B next (Order).
 
 ## Working model
 
@@ -123,6 +123,14 @@ At the target, with what each is the reference for:
   so no guard - its absence answers `unavailable`, unreported. The
   extension's refusals classified by the fixed text `bridge.js` throws;
   tests drive a real client through a fake extension over WebSocket
+- goagentd - a process the daemon owns: the runner is the service's one
+  worker and a `face.Drainer`, so shutdown waits out the grace period and
+  then kills the agent; it launches through an option factory returning
+  `face.Stream` with the stderr writer passed in, so tests drive every branch
+  on `mock_stream` without shelling out. An interrupt arriving before the
+  launch returns is remembered and kills on attach - the tests calling
+  `Interrupt` right after `Run` reach that window. Its own transport
+  classifier went; `pkg/errors/connection` does that job for every client
 
 Beside them, upstream faces now full and home: Prometheus, Alertmanager,
 Argo CD (`ArgocdClient` in the kubernetes face) and Nextcloud usage
@@ -136,26 +144,30 @@ gobandd, gogitlabd, gopostgresd, goprometheusd, goproxmoxd, gosourced.
 
 ## Order
 
-Sized by the re-survey of 2026-10-26 (`goaudit --service` hits, each read).
+Sized by a re-survey (`goaudit --service` hits, each read).
 Leaks first - a client opened and never closed - then shape.
 
-1. goagentd, a small one, missed by the 2026-10-26 re-survey: no service;
-   `Run` builds a runner that starts a `claude --print` process in a
-   goroutine nothing can stop, so shutdown leaves it running; the checks
-   (intent required, already running) sit in the REST handler; a daemon
-   client without a face or mock, consumed by the goagent CLI and goatlasd
-2. gomemoryd with goclauded, which consumes its client: `Run` builds the
-   store and the goqueryd client, waits on goqueryd and then calls it
-   unguarded, and reconciles with a hand-held reacher; `RestClient` without
-   a face; finished clients handed to `service.New`. REST and MCP already
-   answer by class
-3. goclauded - `Run` builds about fifteen things: store, pool, the goqueryd
+1. gomemoryd with goclauded, which consumes its client. A is in: the
+   service builds the database, the store over it and goqueryd's client from
+   the option, and `Run` holds only the service. Left:
+   - B - goqueryd is called unguarded from indexing, unindexing, search and
+     profile's completions (the last swallowing its failure); a write saves,
+     then answers the index's failure, so a retry saves a duplicate. Decided:
+     the store is the truth - a write answers success whether goqueryd is
+     there or not, and what failed to index is caught up once goqueryd
+     answers again; goqueryd is guarded and not waited on, and the start-up
+     reconcile and its hand-held reacher go
+   - C - `RestClient` beside a six-method `client.Client` interface, no
+     face, against thirteen spec operations; the gomemory CLI reaches the
+     daemon through the generated client directly
+   - `importer.Import` has no caller but its test
+2. goclauded - `Run` builds about fifteen things: store, pool, the goqueryd
    client, search index, five tickers, gauge, watcher; finished clients
    handed to `service.New`; the largest of all
-4. The faces and clients off the full shape, the peers off the start-up
+3. The faces and clients off the full shape, the peers off the start-up
    shape
-5. The goaudit rule, once a sound check replaces `run_builds_client`
-6. The analyzer gaps, once the findings they raise are few, each with a
+4. The goaudit rule, once a sound check replaces `run_builds_client`
+5. The analyzer gaps, once the findings they raise are few, each with a
    case in the `unclosed_resource` testdata
 
 ## Off the full shape
@@ -202,14 +214,13 @@ Leaks first - a client opened and never closed - then shape.
 
 ## Ports
 
-The role interface and its function type are in `service-tool.md`
-(Service); a function type goes in a subpackage where the interface's
-package already has a receiver type. Decided 2026-10-27 over three
-alternatives: functions name no client; a generated guarded decorator over
-the full face is bloat - about 30 guarded calls across the consumers, never
-more than two per peer, against ~37 and ~32 methods kept in step; the guard
-held outside the shared code sees a failure only after it gave up, and
-cannot hold calls off.
+The role interface and its function type are in `service-tool.md` (Service); a
+function type goes in a subpackage where the interface's package already has a
+receiver type. Decided over three alternatives: functions name no client; a
+generated guarded decorator over the full face is bloat - about 30 guarded calls
+across the consumers, never more than two per peer, against ~37 and ~32 methods
+kept in step; the guard held outside the shared code sees a failure only after
+it gave up, and cannot hold calls off.
 
 ## Spec contradiction
 
@@ -475,7 +486,7 @@ configuration.
 |---|---|
 | `missing_service` | sound |
 | `service_not_closed` | sound |
-| `run_builds_client` | most hits real on the 2026-10-26 count; false positives are a daemon's own workers (`watch.New` in gosecretd and kind) and plumbing (`notifier.New`, `reacher.New`); it knows a worker by its package being named `worker`, so a second ticker takes the same type over a tick function (goflightd) rather than a package of its own |
+| `run_builds_client` | most hits real on the re-survey's count; false positives are a daemon's own workers (`watch.New` in gosecretd and kind) and plumbing (`notifier.New`, `reacher.New`); it knows a worker by its package being named `worker`, so a second ticker takes the same type over a tick function (goflightd) rather than a package of its own |
 
 It does not see a client built inside the `Mount` closure or a worker
 `Close` unsafe twice. The candidate replacement is

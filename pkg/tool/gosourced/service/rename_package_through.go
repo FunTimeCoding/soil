@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"go/ast"
@@ -130,7 +131,7 @@ func (s *Service) renamePackageThrough(
 	out.Rename(sourceDirectory, moveDirectory)
 	r.AddConcern(
 		concern.NewFile(
-			"moved",
+			constant.ConcernMoved,
 			fmt.Sprintf("%s → %s", packagePath, targetPackagePath),
 			moveDirectory,
 			true,

@@ -14,3 +14,15 @@ const (
 	InsecureEnvironment = "GOAGENT_INSECURE"
 	TokenEnvironment    = "GOAGENT_TOKEN"
 )
+
+const (
+	Program   = "claude"
+	PrintFlag = "--print"
+)
+
+const (
+	IntentRequired = "intent is required"
+	AlreadyRunning = "agent already running"
+	ShuttingDown   = "runner is shutting down"
+	Unfinished     = "agent stopped before it finished"
+)

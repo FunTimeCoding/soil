@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strings"
@@ -18,7 +19,7 @@ func (s *Service) subtreeLoad(
 	prefix := join.Empty(packagePath, "/")
 	inside := func(p string) bool {
 		return p == packagePath || strings.HasPrefix(p, prefix) ||
-			p == join.Empty(packagePath, "_test")
+			p == join.Empty(packagePath, constant.TestClauseSuffix)
 	}
 	var patterns []string
 	own := false

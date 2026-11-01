@@ -1,50 +1,72 @@
 package unit
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/system/run/stream/mock_stream"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
-	"net"
-	"net/url"
-	"os"
-	"syscall"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/client/mock_client"
+	agent "github.com/funtimecoding/soil/pkg/tool/goagentd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
-func TestUnreachable(t *testing.T) {
-	refused := &url.Error{
-		Op:  "Get",
-		URL: "http://host.example:8080/status",
-		Err: &net.OpError{
-			Op:  "dial",
-			Net: "tcp",
-			Err: os.NewSyscallError("connect", syscall.ECONNREFUSED),
-		},
+func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
+	s := mock_stream.New([]string{"lima"}, true, nil)
+	defer s.Close()
+	v := service_tester.New(t, service_tester.Fixed(s))
+	c := mountedClient(t, v, constant.ModelContextTestToken)
+	assert.FatalOnError(t, c.Reachable(t.Context()))
+	assert.True(t, validation.Is(c.PostRun(t.Context(), "")))
+	assert.FatalOnError(t, c.PostRun(t.Context(), "mike"))
+	assert.True(t, conflict.Is(c.PostRun(t.Context(), "november")))
+	running, e := c.GetStatus(t.Context())
+	assert.FatalOnError(t, e)
+	assert.String(t, "running", running.State)
+	v.Workers()[0].(face.Drainer).Interrupt()
+	service_tester.AwaitDone(t, v)
+	done, f := c.GetStatus(t.Context())
+	assert.FatalOnError(t, f)
+	assert.String(t, "done", done.State)
+	assert.String(t, "lima", *done.Result)
+}
+
+func TestTheClientHearsAClosingRunner(t *testing.T) {
+	v := service_tester.New(
+		t,
+		service_tester.Fixed(mock_stream.New(nil, false, nil)),
+	)
+	c := mountedClient(t, v, constant.ModelContextTestToken)
+	v.Close()
+	assert.True(t, unavailable.Is(c.PostRun(t.Context(), "oscar")))
+}
+
+func TestARefusedTokenIsAnError(t *testing.T) {
+	v := service_tester.New(
+		t,
+		service_tester.Fixed(mock_stream.New(nil, false, nil)),
+	)
+	c := mountedClient(t, v, "papa-wrong")
+	_, e := c.GetStatus(t.Context())
+	assert.True(t, unexpected.Is(e))
+	assert.StringContains(t, "status status: 401", e.Error())
+	assert.NotNil(t, c.Reachable(t.Context()))
+}
+
+func TestTheClientAndItsMockKeepTheFace(t *testing.T) {
+	r := client.New(locator.New("localhost").Insecure(), "quebec")
+	m := mock_client.New()
+	clients := []agent.Client{r, m}
+
+	for _, c := range clients {
+		c.Close()
 	}
-	assert.True(t, client.Unreachable(refused))
-	assert.True(
-		t,
-		client.Unreachable(
-			&net.DNSError{
-				Err:        "no such host",
-				Name:       "host.example",
-				IsNotFound: true,
-			},
-		),
-	)
-	assert.True(
-		t,
-		client.Unreachable(
-			&url.Error{
-				Op:  "Get",
-				URL: "http://host.example:8080/status",
-				Err: &net.OpError{
-					Op:  "dial",
-					Net: "tcp",
-					Err: os.NewSyscallError("connect", syscall.EHOSTUNREACH),
-				},
-			},
-		),
-	)
-	assert.False(t, client.Unreachable(errors.New("unexpected")))
+
+	assert.Integer(t, 1, m.Closed)
 }

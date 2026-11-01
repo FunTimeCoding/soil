@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 )
 
 func moduleRenamed(
@@ -12,7 +13,7 @@ func moduleRenamed(
 	breakages int,
 ) *concern.Concern {
 	return concern.NewFile(
-		"renamed",
+		constant.ConcernRenamed,
 		fmt.Sprintf(
 			"%s → %s, %d symbols checked, %d broken",
 			modulePath,

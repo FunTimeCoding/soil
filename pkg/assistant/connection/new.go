@@ -1,18 +1,14 @@
 package connection
 
-import "context"
-
 func New(
 	host string,
 	token string,
+	s Subscriber,
 ) *Connection {
-	x, cancel := context.WithCancel(context.Background())
-
 	return &Connection{
 		host:        host,
 		token:       token,
+		subscriber:  s,
 		subscribers: make(map[uint64]Subscriber),
-		context:     x,
-		cancel:      cancel,
 	}
 }

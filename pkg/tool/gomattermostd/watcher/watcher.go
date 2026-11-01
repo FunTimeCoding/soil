@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/hold"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
@@ -20,14 +20,12 @@ type Watcher struct {
 	notifier *notifier.Notifier
 	logger   *logger.Logger
 	reporter face.Reporter
-	reacher  *reacher.Reacher
-	host     string
+	hold     *hold.Hold
 	window   time.Duration
 	self     string
 	index    map[string]string
 	buffer   map[string][]*event.Event
 	timer    map[string]*time.Timer
-	done     chan struct{}
 	running  bool
 	once     sync.Once
 	mutex    sync.Mutex

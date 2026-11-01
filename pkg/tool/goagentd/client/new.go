@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,17 +9,16 @@ import (
 )
 
 func New(
-	host string,
-	port int,
+	l *locator.Locator,
 	token string,
 ) *Client {
 	p := stall_client.New().Build()
 	c, e := client.NewClientWithResponses(
-		locator.New(host).Port(port).Insecure().String(),
+		l.String(),
 		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)
 
-	return &Client{context: context.Background(), client: c, pool: p}
+	return &Client{client: c, base: l, token: token, pool: p}
 }

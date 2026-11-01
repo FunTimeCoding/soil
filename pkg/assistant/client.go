@@ -1,14 +1,14 @@
 package assistant
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/assistant/connection"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/peer/hold"
 )
 
 type Client struct {
 	connection *connection.Connection
+	hold       *hold.Hold
 	recovery   *recovery.Recovery
-	context    context.Context
 	subscriber connection.Subscriber
 }

@@ -228,7 +228,7 @@ func extractToFileThrough(
 		out.Rename(fullPath, renamePath)
 		r.AddConcern(
 			concern.NewFile(
-				"renamed",
+				constant.ConcernRenamed,
 				fmt.Sprintf(
 					"%s → %s",
 					filepath.Base(fullPath),

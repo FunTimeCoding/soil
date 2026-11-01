@@ -98,3 +98,4 @@ const (
 )
 
 const NotClean = "not_clean"
+const RevisionKind = "revision"

@@ -20,7 +20,7 @@ func (s *Server) registerConstructors() {
 				),
 			),
 			mcp.WithString(
-				"type",
+				constant.ParameterType,
 				mcp.Required(),
 				mcp.Description("Exported struct type name, e.g. Shape."),
 			),

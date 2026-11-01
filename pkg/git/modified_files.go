@@ -2,7 +2,6 @@ package git
 
 import (
 	"github.com/go-git/go-git/v5"
-	"path/filepath"
 	"sort"
 )
 
@@ -25,22 +24,10 @@ func ModifiedFiles(path string) ([]string, error) {
 		return nil, g
 	}
 
-	directory, h := filepath.EvalSymlinks(path)
+	scope, h := worktreeScope(r, path)
 
 	if h != nil {
 		return nil, h
-	}
-
-	root, i := filepath.EvalSymlinks(t.Filesystem.Root())
-
-	if i != nil {
-		return nil, i
-	}
-
-	scope, j := filepath.Rel(root, directory)
-
-	if j != nil {
-		return nil, j
 	}
 
 	var result []string
@@ -51,7 +38,7 @@ func ModifiedFiles(path string) ([]string, error) {
 			continue
 		}
 
-		if relative, inside := scoped(file, filepath.ToSlash(scope)); inside {
+		if relative, inside := scoped(file, scope); inside {
 			result = append(result, relative)
 		}
 	}

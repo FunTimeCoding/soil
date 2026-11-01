@@ -54,7 +54,7 @@ func (s *Server) registerSearch() {
 				),
 			),
 			mcp.WithString(
-				"type",
+				constant.ParameterType,
 				mcp.Required(),
 				mcp.Description("Struct type name, e.g. Shape."),
 			),

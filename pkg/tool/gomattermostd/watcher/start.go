@@ -10,7 +10,6 @@ func (w *Watcher) Start() {
 	}
 
 	w.running = true
-	w.done = make(chan struct{})
 	w.mutex.Unlock()
 	w.selfIdentifier()
 	subscriptions, e := w.store.All()
@@ -23,6 +22,6 @@ func (w *Watcher) Start() {
 		w.Index(v.RootIdentifier)
 	}
 
-	go w.listen()
+	w.hold.Start()
 	w.logger.Structured("watcher_start", "subscriptions", len(subscriptions))
 }

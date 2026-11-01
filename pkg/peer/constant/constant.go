@@ -11,6 +11,8 @@ const (
 	SinceKey    = "since"
 	DownState   = "down"
 	UpState     = "up"
+
+	ClosedReason = "connection closed"
 )
 
 const (

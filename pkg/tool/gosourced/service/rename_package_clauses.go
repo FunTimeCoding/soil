@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"
@@ -15,7 +16,7 @@ func renamePackageClauses(
 	oldName string,
 	modified map[string]*ast.File,
 ) {
-	testName := join.Empty(oldName, "_test")
+	testName := join.Empty(oldName, constant.TestClauseSuffix)
 
 	for _, loaded := range all {
 		for _, file := range loaded.Syntax {

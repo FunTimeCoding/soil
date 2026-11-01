@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/importer"
@@ -15,8 +16,9 @@ import (
 )
 
 func TestImportFromFixtures(t *testing.T) {
-	s := store.New(connection.NewMemory())
-	defer s.Close()
+	d := connection.NewMemory()
+	defer errors.PanicClose(d)
+	s := store.New(d)
 	result, e := importer.Import(s, fixture.Path(systemConstant.MemoryPath))
 
 	if e != nil {

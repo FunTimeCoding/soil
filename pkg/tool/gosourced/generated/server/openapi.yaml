@@ -1,0 +1,127 @@
+---
+openapi: "3.0.0"
+info:
+  title: gosourced
+  version: 1.0.0
+paths:
+  /api/diff:
+    get:
+      operationId: getDiff
+      parameters:
+      - name: module
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        description: Revision to compare from, HEAD when empty.
+        schema:
+          type: string
+      - name: to
+        in: query
+        required: false
+        description: Revision to compare to, the staged index when empty.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Symbol diff between the two revisions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiffResponse"
+        "404":
+          description: Unknown module or revision.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The revisions could not be read.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    DiffResponse:
+      type: object
+      required:
+      - counts
+      - entries
+      - from_unparsed
+      - to_unparsed
+      properties:
+        counts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClassCount"
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/Entry"
+        from_unparsed:
+          type: array
+          items:
+            type: string
+        to_unparsed:
+          type: array
+          items:
+            type: string
+    ClassCount:
+      type: object
+      required:
+      - class
+      - count
+      properties:
+        class:
+          type: string
+        count:
+          type: integer
+    Entry:
+      type: object
+      required:
+      - class
+      properties:
+        class:
+          type: string
+        from:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/Location"
+        to:
+          nullable: true
+          allOf:
+          - $ref: "#/components/schemas/Location"
+    Location:
+      type: object
+      required:
+      - key
+      - file
+      - line
+      properties:
+        key:
+          type: string
+        file:
+          type: string
+        line:
+          type: integer
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

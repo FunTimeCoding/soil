@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/token"
 )
@@ -21,7 +22,7 @@ func decorateQualifiers(
 		position := set.Position(f.Ident.Pos())
 		r.AddConcern(
 			concern.NewLine(
-				"renamed",
+				constant.ConcernRenamed,
 				fmt.Sprintf("%s → %s", oldName, newName),
 				position.Filename,
 				position.Line,

@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goagentd/runner"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -19,13 +19,21 @@ func Run(
 	i face.Instrument,
 ) {
 	r := i.Reporter()
-	n := runner.New(o.Workspace)
-	lifecycle.New(logger.New(context.Background())).WithServer(
+	l := logger.New(context.Background())
+	v := service.New(o, l, r)
+	defer v.Close()
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(n, i.Recorder(), guard.New(m, o.ServiceTokens))
+				Mount(v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)).WithProtected(),
 	).RunUntilSignal()

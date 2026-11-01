@@ -1,5 +1,7 @@
 package constant
 
+import "time"
+
 const (
 	HostEnvironment  = "HOME_ASSISTANT_HOST"
 	TokenEnvironment = "HOME_ASSISTANT_TOKEN"
@@ -17,4 +19,12 @@ const (
 	Subscribe              = "subscribe_events"
 )
 
-const Path = "/api/websocket"
+const (
+	Path = "/api/websocket"
+	Port = "8123"
+)
+
+const (
+	ConnectOperation = "connect"
+	PingInterval     = 30 * time.Second
+)

@@ -131,9 +131,21 @@ recovery, and reporting what `classify.Reportable` admits - calls
 through `Attempt`. `Do` is `Attempt` that also reports each distinct
 refusal itself, once per reason, without seeing its class, so a quiet
 `not_found` or `validation` reaches Sentry; it is for a caller that
-reports nothing itself. A long-lived connection beside the guarded
-calls, such as a WebSocket, keeps its own reacher: the guard's probe
-cannot tell whether it reconnected.
+reports nothing itself.
+
+### Held connections
+
+A long-lived connection - a WebSocket, an event stream - is held by
+`go:pkg/peer/hold/Hold` rather than guarded: there are no calls to fail
+fast, and the guard's probe cannot tell whether it reconnected. The
+connection is a `face.Connection`: `Open` dials, authenticates and
+subscribes, `Serve` reads until the connection ends and says why, `Close`
+releases it. The hold runs one loop with its own reacher - a failed `Open`
+through `Handle`, an ended `Serve` through `Fail` - and reopens on the
+guard's backoff (`ProbeMinimum` to `ProbeMaximum`, back to the minimum once
+a session ran), each session under recovery. A peer answering the dial
+with an HTTP status maps it through `refusal.New`, so its 503 is an outage
+and anything else a refusal.
 
 ## Sentry Enrichment Providers
 

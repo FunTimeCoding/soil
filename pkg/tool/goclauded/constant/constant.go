@@ -16,11 +16,11 @@ const (
 	Page            = "page"
 	Active          = "active"
 
-	EventKind    = "history event"
-	ActivityPath = "/activity"
+	EventKind       = "history event"
+	ActivityPath    = "/activity"
 	ActiveLabel     = "active"
 	DetailHeadClass = "detail-head"
-	IdleLabel    = "idle"
+	IdleLabel       = "idle"
 
 	EditAction   = "edit"
 	PulseAction  = "pulse"
@@ -54,11 +54,15 @@ const (
 	ImpressionSource      = "source"
 	ImpressionContent     = "content"
 	ImpressionCapturedAt  = "captured_at"
+)
 
+const (
 	SessionExportPathEnvironment = "SESSION_EXPORT_PATH"
 	MonitorUsageEnvironment      = "CLAUDE_MONITOR_USAGE"
 	CoverageRootEnvironment      = "CLAUDE_COVERAGE_ROOT"
+)
 
+const (
 	SessionName = "name"
 	SessionKind = "session"
 	Callsign    = "callsign"
@@ -67,7 +71,9 @@ const (
 	To          = "to"
 	Body        = "body"
 	Immediate   = "immediate"
+)
 
+const (
 	Announce      = "announce"
 	Complete      = "complete"
 	Update        = "update"
@@ -87,12 +93,16 @@ const (
 	Moment        = "moment"
 	TokenUsage    = "token_usage"
 	Description   = "description"
+)
 
+const (
 	Usage             = "usage"
 	Activity          = "activity"
 	InactivityTimeout = "inactivity_timeout"
 	CompleteTimeout   = "complete_timeout"
+)
 
+const (
 	EventSummary = "summary"
 	EventSession = "session"
 
@@ -100,7 +110,9 @@ const (
 	CompletionCollection = "completions"
 	SummarySourceType    = "session-summary"
 	CompletionSourceType = "session-completion"
+)
 
+const (
 	SessionTable         = "session"
 	SummaryTable         = "summary"
 	LabelTable           = "label"
@@ -113,7 +125,9 @@ const (
 	ModelColumn          = "model"
 	ContextPercentColumn = "context_percent"
 	ContextWindowColumn  = "context_window"
+)
 
+const (
 	Pulse        = "pulse"
 	Label        = "label"
 	Key          = "key"
@@ -123,7 +137,9 @@ const (
 	UnsetMarker  = "(unset)"
 	ChangeArrow  = "→"
 	LegacyChange = "change"
+)
 
+const (
 	Subscription          = "subscription"
 	EventIdentifierColumn = "event_identifier"
 	LastSeenColumn        = "last_seen"
@@ -152,7 +168,9 @@ const (
 	Line                   = "line"
 	Message                = "message"
 	Identifier             = "identifier"
+)
 
+const (
 	QueueSessionAnnounce = "session_announce"
 	QueueSessionRelease  = "session_release"
 	QueueSessionComplete = "session_complete"
@@ -167,7 +185,9 @@ const (
 
 	ImmediateLimit  = 6
 	ImmediateWindow = 5 * time.Minute
+)
 
+const (
 	AutocompleteOff = "off"
 
 	DashboardTitle     = "Dashboard"
@@ -187,7 +207,9 @@ const (
 	UsageChart         = "usage_chart"
 	StatusTitle        = "Status"
 	StatusPath         = "/status"
+)
 
+const (
 	ModelContextServersFile = ".mcp.json"
 
 	FixtureTopic  = "topic"

@@ -1,17 +1,16 @@
 package goagent
 
 import (
-	"fmt"
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/face"
 	"github.com/spf13/cobra"
-	"net/http"
 	"os"
 )
 
 func submit(
-	newClient func() *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -24,16 +23,7 @@ func submit(
 		) {
 			content, e := os.ReadFile(arguments[0])
 			errors.PanicOnError(e)
-			code := newClient().Submit(string(content))
-
-			switch code {
-			case http.StatusAccepted:
-				fmt.Println("intent submitted")
-			case http.StatusConflict:
-				t.Exitln("already running")
-			default:
-				t.Exitf("submit failed (%d)\n", code)
-			}
+			t.EmitDone(c.PostRun(context.Background(), string(content)))
 		},
 	}
 }

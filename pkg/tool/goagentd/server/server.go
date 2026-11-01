@@ -1,7 +1,11 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/goagentd/runner"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/service"
+)
 
 type Server struct {
-	runner *runner.Runner
+	service  *service.Service
+	reporter face.Reporter
 }

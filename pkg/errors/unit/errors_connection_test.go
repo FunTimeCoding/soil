@@ -50,6 +50,22 @@ func TestConnectionUnknownHostIsUnreachable(t *testing.T) {
 	assert.String(t, "bravo.example: unknown host", f.Error())
 }
 
+func TestConnectionNoRouteIsUnreachable(t *testing.T) {
+	f := connection.Classify(
+		&url.Error{
+			Op:  "Get",
+			URL: "http://charlie.example:8080/api/status",
+			Err: &net.OpError{
+				Op:  "dial",
+				Net: "tcp",
+				Err: os.NewSyscallError("connect", syscall.EHOSTUNREACH),
+			},
+		},
+	)
+	assert.True(t, unreachable.Is(f))
+	assert.String(t, "charlie.example:8080: no route to host", f.Error())
+}
+
 func TestConnectionDeadlineIsTimeout(t *testing.T) {
 	f := connection.Classify(
 		&url.Error{

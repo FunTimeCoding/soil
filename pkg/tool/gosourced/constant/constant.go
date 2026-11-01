@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"regexp"
+)
 
 var Identity = identity.New(
 	"gosourced",
@@ -8,6 +11,13 @@ var Identity = identity.New(
 	"gosourced",
 ).WithInstructions(
 	"Go source transformation daemon. AST-based rewriting for visibility changes, imports, package moves, and symbol renames. Multi-module - call list_modules and use_module before other operations.",
+)
+
+const (
+	HostEnvironment     = "GOSOURCE_HOST"
+	PortEnvironment     = "GOSOURCE_PORT"
+	InsecureEnvironment = "GOSOURCE_INSECURE"
+	TokenEnvironment    = "GOSOURCE_TOKEN"
 )
 
 const (
@@ -44,6 +54,8 @@ const (
 	ConcernUnusedParameter = "unused_parameter"
 	ConcernWrittenOnly     = "written_only"
 	ConcernConcurrentWrite = "concurrent_write"
+	ConcernRenamed         = "renamed"
+	ConcernMoved           = "moved"
 )
 
 const (
@@ -51,11 +63,61 @@ const (
 	MemberSeparator = "."
 	StandalonePath  = "standalone"
 	ParameterModule = "module"
+	ParameterType   = "type"
+	FieldSeparator  = " "
 	ModuleKind      = "module"
 	ModuleQualifier = "module"
 	MissingPackage  = "missing"
 	ConcernMissing  = "missing"
 	ConcernChanged  = "changed"
+)
+
+const (
+	SymbolFunction = "function"
+	SymbolMethod   = "method"
+	SymbolType     = "type"
+	SymbolConstant = "constant"
+	SymbolVariable = "variable"
+)
+
+const (
+	IotaName          = "iota"
+	BlankName         = "_"
+	DotName           = "."
+	TestClauseSuffix  = "_test"
+	VersionPrefix     = "v"
+	ToolPrefix        = "go-"
+	ToolSuffix        = "-go"
+	IotaMarker        = " // iota "
+	VariantSeparator  = "@"
+	OrdinalSeparator  = "#"
+	KeySeparator      = " "
+)
+
+const (
+	ClassUnchanged    = "unchanged"
+	ClassMoved        = "moved"
+	ClassRenamed      = "renamed"
+	ClassMovedChanged = "moved-changed"
+	ClassSignature    = "signature"
+	ClassBody         = "body"
+	ClassAdded        = "added"
+	ClassRemoved      = "removed"
+)
+
+var Classes = []string{
+	ClassUnchanged,
+	ClassMoved,
+	ClassRenamed,
+	ClassMovedChanged,
+	ClassSignature,
+	ClassBody,
+	ClassAdded,
+	ClassRemoved,
+}
+
+var QualifiedReference = regexp.MustCompile(
+	`"(?:[^"\\]|\\.)*"\.[A-Za-z_][A-Za-z0-9_]*`,
 )
 
 const (

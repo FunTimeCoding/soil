@@ -1,7 +1,13 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/goagentd/runner"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/service"
+)
 
-func New(runner *runner.Runner) *Server {
-	return &Server{runner: runner}
+func New(
+	v *service.Service,
+	r face.Reporter,
+) *Server {
+	return &Server{service: v, reporter: r}
 }

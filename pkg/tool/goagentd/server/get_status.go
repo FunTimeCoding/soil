@@ -9,7 +9,7 @@ func (s *Server) GetStatus(
 	_ context.Context,
 	_ server.GetStatusRequestObject,
 ) (server.GetStatusResponseObject, error) {
-	status := s.runner.Status()
+	status := s.service.Status()
 
 	return server.GetStatus200JSONResponse{
 		State:  string(status.State),

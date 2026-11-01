@@ -28,6 +28,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "500":
+          description: The run could not be started.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: The runner is shutting down.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/status:
     get:
       operationId: getStatus
@@ -62,4 +74,14 @@ components:
       - error
       properties:
         error:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
           type: string

@@ -4,18 +4,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
+	"path/filepath"
 	"testing"
 )
 
@@ -23,12 +25,15 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	q := base.New(t)
 	q.SkipUnreachable(t)
-	c := client.New(
-		locator.New(webConstant.Localhost).Insecure().Port(q.Port),
-		constant.ModelContextTestToken,
-	)
-	s := store.New(connection.NewMemory())
-	v := service.New(s, c)
+	o := option.New()
+	o.LitePath = filepath.Join(t.TempDir(), "memory.db")
+	o.Query = func() face.Client {
+		return client.New(
+			locator.New(webConstant.Localhost).Insecure().Port(q.Port),
+			constant.ModelContextTestToken,
+		)
+	}
+	v := service.New(o, logger.New(t.Context()))
 	r := memory.New()
 	memoryServer := model_context_server.New(
 		t,
@@ -46,8 +51,7 @@ func New(t *testing.T) *Tester {
 			queryClient.Close()
 			memoryClient.Close()
 			memoryServer.Close()
-			s.Close()
-			c.Close()
+			v.Close()
 			q.Close()
 		},
 	)
@@ -56,7 +60,6 @@ func New(t *testing.T) *Tester {
 		t:            t,
 		QueryClient:  queryClient,
 		MemoryClient: memoryClient,
-		MemoryStore:  s,
 		QueryServer:  q,
 	}
 }

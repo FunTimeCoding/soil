@@ -1,14 +1,16 @@
 package goagent
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
-	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
+	"context"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/face"
 	"github.com/spf13/cobra"
 )
 
-func status(newClient func() *client.Client) *cobra.Command {
+func status(
+	c face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "status",
 		Short: "Check runner state",
@@ -17,27 +19,7 @@ func status(newClient func() *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			s, e := newClient().Status()
-
-			if unreachable.Is(e) {
-				fmt.Println("runner unreachable")
-
-				return
-			}
-
-			errors.PanicOnError(e)
-
-			if s == nil {
-				fmt.Println("no response from runner")
-
-				return
-			}
-
-			fmt.Printf("state: %s\n", s.State)
-
-			if s.Result != nil && *s.Result != "" {
-				fmt.Printf("\n%s\n", *s.Result)
-			}
+			t.EmitValue(c.GetStatus(context.Background()))
 		},
 	}
 }

@@ -139,7 +139,7 @@ func (s *Service) renameThrough(
 		d.Name = newName
 		r.AddConcern(
 			concern.NewLine(
-				"renamed",
+				constant.ConcernRenamed,
 				fmt.Sprintf("%s → %s", oldName, newName),
 				position.Filename,
 				position.Line,

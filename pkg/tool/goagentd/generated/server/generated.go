@@ -25,6 +25,12 @@ type Error struct {
 	Error string `json:"error"`
 }
 
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Error           string `json:"error"`
+	EventIdentifier string `json:"event_identifier"`
+}
+
 // RunRequest defines model for RunRequest.
 type RunRequest struct {
 	Intent string `json:"intent"`
@@ -256,6 +262,34 @@ func (response PostRun409JSONResponse) VisitPostRunResponse(w http.ResponseWrite
 	return err
 }
 
+type PostRun500JSONResponse ErrorResponse
+
+func (response PostRun500JSONResponse) VisitPostRunResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostRun503JSONResponse Error
+
+func (response PostRun503JSONResponse) VisitPostRunResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetStatusRequestObject struct {
 }
 
@@ -386,13 +420,14 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"tFPBbhQxDP2VyHAc7QyFC3MDVKHe0HJEHMLEnaaatVPbqVhV8+8oyZZSdqVetqeJPI7f83svDzDxLjEh",
-	"mcL4ADrd4M7X46UISzkk4YRiEWsZH8u2TwgjqEmkGda1A8G7HAUDjD8ObT+7xzb+dYuTwdrBNtMW7zKq",
-	"HQ+PZEj28vRD36nx381b1i1qYlI8hhDUvJyC6EDNG74M3tqOsUtfpGuuE6It5d/MfkayAB3co2hkghHe",
-	"bYbNUAA5IfkUYYT3tdRB8nZTafY+xV4y1QW4aVXW8BaZrgKM8I3VtpmgkUO1zxz2pW3ivyr6lJY41Tv9",
-	"rTI9WVxObwWvYYQ3/VMG+kMA+n9cWp8LYJKxFprCle3FcFE+AXWSmKyteVVpOD9NmAyD8xQc/sYpl/9O",
-	"zYth2BQdPgzD2Yi32FbOz+lc7pLtHYuLdO+XGFwL0YHAx9cn8MlJJhfV+UXQh72L5JLwLKi6KRfWrtmu",
-	"NcIFZ8YTxn9FayGHIxfOJ+N/z+jEOl+ySPFXMhGKq6+ietxeWNtoXf8EAAD//w==",
+	"tJRBb9s8DIb/isDvOxqx166H+bYNxdDbkO02DIMqsY4Kh1IpKltQ+L8Pktx2WTy0h/RkgabJ531N6h6M",
+	"3wZPSBKhv4doNrjV5XjJ7DkfAvuALA5LGB/Csg8IPURhRwNMUwOMd8kxWui/zWnfm4c0f32LRmBqat01",
+	"xuAp4svrN4A7JPnhLJK4G4cvhlj4colrnWiNdwmjHEM5EiR5vuGct1T+i2hJ8d+6GWMaZVF4FC34fPOa",
+	"dtw75zm68aWCkzG/G7wekMRCAzvk6DxBD29W3arLDX1A0sFBD+cl1EDQsimYrQ6u5URFgK9eZRlanKcr",
+	"Cz189lHWiaDCYZQP3u5zmvGPLuoQRmfKN+1t9PQ0evn0P+MN9PBf+zSb7TyY7R9/aTo0QDhhCVSHC+1Z",
+	"d5YfFqNhF6TKvCoYShuDQdAqTVbhLzQpv1dRNAvaVfbhbdedDLyuU2E+xLncBtkrz8rRTo/OqjpEM8C7",
+	"1wd4rziRclHpkVHbvXKkAvuBMcZCcXFqGx63YIHm6wYLj/FptIq8qGs8+CkX3fnrezJTEHI2Jm6SiKNB",
+	"Wf+TVjl/auomxLLVuc2AC7vwCaXuPRwN5uks/etmWVDzMTHnkZ8VlYuijH29dKqiafodAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

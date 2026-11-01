@@ -11,5 +11,6 @@ func TestGuard(t *testing.T) {
 	defer s.Close()
 	c := s.Server
 	c.VerifyBase(t)
+	c.VerifyGuarded(t, "/api/diff")
 	c.VerifyModelContext(t)
 }

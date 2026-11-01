@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/ast"
 	"go/token"
 	"strings"
@@ -27,5 +28,10 @@ func collapsedSource(
 		"}",
 		" )",
 		")",
-	).Replace(strings.Join(strings.Fields(string(content[start:end])), " "))
+	).Replace(
+		strings.Join(
+			strings.Fields(string(content[start:end])),
+			constant.FieldSeparator,
+		),
+	)
 }

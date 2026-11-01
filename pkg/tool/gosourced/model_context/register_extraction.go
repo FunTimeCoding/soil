@@ -20,7 +20,7 @@ func (s *Server) registerExtraction() {
 				),
 			),
 			mcp.WithString(
-				"type",
+				constant.ParameterType,
 				mcp.Required(),
 				mcp.Description("Named type to extract, e.g. Store."),
 			),

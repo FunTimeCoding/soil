@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/ast"
 	"go/token"
 	"maps"
@@ -20,19 +21,19 @@ func reportClauses(
 	oldName string,
 	newName string,
 ) {
-	testOld := join.Empty(oldName, "_test")
+	testOld := join.Empty(oldName, constant.TestClauseSuffix)
 
 	for _, filename := range slices.Sorted(maps.Keys(modified)) {
 		file := modified[filename]
 		to := newName
 
 		if file.Name.Name == testOld {
-			to = join.Empty(newName, "_test")
+			to = join.Empty(newName, constant.TestClauseSuffix)
 		}
 
 		r.AddConcern(
 			concern.NewLine(
-				"renamed",
+				constant.ConcernRenamed,
 				fmt.Sprintf("package %s → %s", file.Name.Name, to),
 				filepath.Join(directory, filepath.Base(filename)),
 				set.Position(file.Name.Pos()).Line,

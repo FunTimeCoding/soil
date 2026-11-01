@@ -184,7 +184,7 @@ func executeMove(
 		for _, entry := range groups[name] {
 			r.AddConcern(
 				concern.NewFile(
-					"moved",
+					constant.ConcernMoved,
 					fmt.Sprintf(
 						"%s → %s.%s",
 						entry.Symbol,
