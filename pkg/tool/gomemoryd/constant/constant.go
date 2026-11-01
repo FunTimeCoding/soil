@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
 
 var Identity = identity.New(
 	"gomemoryd",
@@ -73,6 +76,9 @@ const (
 	SearchTitle      = "Search"
 	Identifier       = "identifier"
 	Query            = "query"
+	Page             = "page"
+	DetailHeadClass  = "detail-head"
+	Days             = "days"
 
 	ProfileBudget = 15000
 
@@ -87,6 +93,7 @@ const (
 	FixtureContent = "content"
 )
 
+var MemoryTypes = []string{"feedback", "user", "project", "reference"}
 var RelationTypes = []string{
 	"affinity",
 	"informs",
@@ -96,12 +103,19 @@ var RelationTypes = []string{
 	"deep-dive",
 }
 
+var ImpressionWindows = []int{2, 7, 30}
+
 const (
-	SearchResultsMark   = "search-results"
-	SearchIndicatorMark = "search-indicator"
-	SearchControlMark   = "search-input"
-	SearchPlaceholder   = "search memories..."
-	SearchIndicatorText = "searching"
-	PrefixMark          = "*"
-	SearchLimit         = 20
+	DefaultImpressionDays     = 7
+	MemoryPageLimit           = 20
+	DashboardVersionLimit     = 10
+	DashboardVersionWindow    = 7 * 24 * time.Hour
+	DashboardImpressionWindow = 48 * time.Hour
+)
+
+const (
+	SearchResultsMark = "search-results"
+	SearchPlaceholder = "search memories..."
+	PrefixMark        = "*"
+	SearchLimit       = 20
 )

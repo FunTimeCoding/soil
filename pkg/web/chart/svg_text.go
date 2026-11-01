@@ -2,6 +2,7 @@ package chart
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 )
 
@@ -12,7 +13,7 @@ func svgText(
 	value string,
 ) gomponents.Node {
 	return gomponents.El(
-		"text",
+		constant.ChartTextElement,
 		gomponents.Attr("x", fmt.Sprintf("%.1f", x)),
 		gomponents.Attr("y", fmt.Sprintf("%.1f", y)),
 		gomponents.Attr("class", class),

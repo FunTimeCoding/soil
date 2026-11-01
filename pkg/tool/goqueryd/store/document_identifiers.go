@@ -21,8 +21,7 @@ func (s *Store) documentIdentifiers(keys []record.DocumentKey) map[record.Docume
 		fmt.Sprintf(
 			`SELECT collection, path, identifier
 			FROM document
-			WHERE active = 1
-			AND (%s)`,
+			WHERE %s`,
 			orPairs(len(keys)),
 		),
 		arguments...,

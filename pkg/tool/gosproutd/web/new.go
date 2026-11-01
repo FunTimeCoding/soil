@@ -1,6 +1,8 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -13,7 +15,10 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func New(s *service.Service) *Server {
+func New(
+	s *service.Service,
+	f face.Reporter,
+) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -30,11 +35,14 @@ func New(s *service.Service) *Server {
 
 	return &Server{
 		service:  s,
+		reporter: f,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSprout).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(

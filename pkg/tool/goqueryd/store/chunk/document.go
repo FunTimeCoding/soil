@@ -16,7 +16,7 @@ func Document(
 		return chunkText(content, c)
 	}
 
-	if len(content) <= constant.ChunkSize {
+	if len(content) <= constant.ChunkSize && c.Count(content) <= c.Allowance() {
 		return []Chunk{{Text: content, Position: 0, Length: len(content)}}
 	}
 

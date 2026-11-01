@@ -58,7 +58,7 @@ func Run(
 		)
 	}
 
-	u := web.New(v)
+	u := web.New(v, r)
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,

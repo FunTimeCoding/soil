@@ -7,6 +7,7 @@ type FixedEmbedder struct {
 	failure   error
 	embedding error
 	refused   string
+	inputs    []string
 	calls     int
 	closed    int
 }

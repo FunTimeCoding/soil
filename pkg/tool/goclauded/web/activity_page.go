@@ -1,16 +1,21 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"net/http"
 )
 
 func (s *Server) activityPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	errors.PanicOnError(
-		s.activitySection(r.Context(), r.URL.Query()[constant.Kind]).Render(w),
-	)
+	n, e := s.activity(q.Context(), q.URL.Query()[constant.Kind])
+
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
+
+		return
+	}
+
+	s.view.RenderFragment(w, n)
 }

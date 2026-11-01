@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web/board_page"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"net/http"
 )
@@ -12,20 +13,16 @@ func (s *Server) event() http.HandlerFunc {
 			w http.ResponseWriter,
 			f http.Flusher,
 		) {
-			values := s.service.Values()
+			p := board_page.New(s.board, s.service.Values())
 
 			for _, v := range s.board.Entries() {
-				labels := rowLabels(v)
+				rows := p.Rows(v)
 
-				if len(labels) == 0 {
+				if rows == nil {
 					continue
 				}
 
-				layout.PushEvent(
-					w,
-					eventName(v.Label),
-					rowSpans(labels, values[v.Label]),
-				)
+				layout.PushEvent(w, board_page.EventName(v.Label), rows)
 			}
 
 			f.Flush()

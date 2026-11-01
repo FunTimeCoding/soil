@@ -12,7 +12,7 @@ func (s *Store) FindSimilarFiles(
 	limit int,
 ) ([]string, error) {
 	rows, e := s.database.Query(
-		"SELECT collection || '/' || path FROM document WHERE active = 1",
+		"SELECT collection || '/' || path FROM document",
 	)
 
 	if e != nil {

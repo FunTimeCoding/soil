@@ -3,9 +3,7 @@ package store
 import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) Prune() int64 {
-	_, e := s.database.Exec("DELETE FROM document WHERE active = 0")
-	errors.PanicOnError(e)
-	_, e = s.database.Exec(
+	_, e := s.database.Exec(
 		`DELETE FROM embedding
 		WHERE NOT EXISTS (SELECT 1 FROM document d WHERE d.hash = embedding.hash)`,
 	)

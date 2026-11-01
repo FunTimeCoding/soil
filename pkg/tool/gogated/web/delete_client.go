@@ -10,7 +10,8 @@ func (s *Server) deleteClient(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	identifier := r.PathValue("identifier")
-	errors.PanicOnError(s.service.DeleteClient(identifier))
+	errors.PanicOnError(
+		s.service.DeleteClient(r.PathValue(constant.IdentifierParameter)),
+	)
 	http.Redirect(w, r, constant.ClientsPath, http.StatusFound)
 }

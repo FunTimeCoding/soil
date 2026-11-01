@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
@@ -32,7 +33,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeForge).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(

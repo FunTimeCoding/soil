@@ -27,6 +27,13 @@ const (
 
 	RenovatePrefix = "renovate/"
 
+	DetailMark         = "pipeline-detail"
+	LogMark            = "log-pane"
+	LogClass           = "log-pane"
+	ReferenceClass     = "reference"
+	ReferenceParameter = "reference"
+	BoardClass         = "board-table"
+
 	BoardEvent    = "board"
 	SummaryEvent  = "summary"
 	PipelineEvent = "pipeline_strip"

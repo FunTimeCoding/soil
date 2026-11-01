@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/web/report_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -16,7 +17,7 @@ func (s *Server) reports(
 	errors.PanicOnError(e)
 
 	if s.view.IsExtendedRequest(r) {
-		s.view.RenderFragment(w, reportsTable(reports))
+		s.view.RenderFragment(w, report_page.Table(reports))
 
 		return
 	}
@@ -26,6 +27,6 @@ func (s *Server) reports(
 		constant.ReportsTitle,
 		constant.ReportsPath,
 		html.H1(gomponents.Text("Generated Reports")),
-		reportsTable(reports),
+		report_page.Table(reports),
 	)
 }

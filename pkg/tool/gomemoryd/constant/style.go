@@ -2,12 +2,6 @@ package constant
 
 const InlineStyle = `
 	pre { white-space: pre-wrap; word-break: break-word; }
-	.tag-pip {
-		font-size: 0.75rem;
-		padding: 0.1rem 0.4rem;
-		border-radius: 4px;
-		border: 1px solid var(--pico-muted-border-color);
-		margin-right: 0.25rem;
-	}
 	table { margin-bottom: 0; }
+	.detail-head { display: grid; grid-template-columns: minmax(0, 36rem) minmax(0, 1fr); gap: 2rem; align-items: start; }
 `

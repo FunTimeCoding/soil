@@ -5,9 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/web/client_page"
 	"github.com/funtimecoding/soil/pkg/web/form"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
 	"net/http"
 	"net/url"
 	"strings"
@@ -18,8 +17,8 @@ func (s *Server) createSubmit(
 	r *http.Request,
 ) {
 	errors.PanicOnError(r.ParseForm())
-	rawLocators := r.FormValue("redirect_locators")
-	scopes := r.FormValue("scopes")
+	rawLocators := r.FormValue(constant.LocatorsField)
+	scopes := r.FormValue(constant.ScopesField)
 	var redirectLocators []string
 
 	for _, line := range strings.Split(rawLocators, "\n") {
@@ -42,8 +41,8 @@ func (s *Server) createSubmit(
 
 	if validation.Is(e) {
 		preserve := url.Values{}
-		preserve.Set("redirect_locators", rawLocators)
-		preserve.Set("scopes", scopes)
+		preserve.Set(constant.LocatorsField, rawLocators)
+		preserve.Set(constant.ScopesField, scopes)
 		form.Redirect(w, r, constant.CreatePath, e.Error(), preserve)
 
 		return
@@ -54,7 +53,6 @@ func (s *Server) createSubmit(
 		w,
 		"Client Created",
 		constant.CreatePath,
-		html.H1(gomponents.Text("Client Created")),
-		createResult(result.ClientIdentifier, result.ClientSecret),
+		client_page.Created(result.ClientIdentifier, result.ClientSecret),
 	)
 }

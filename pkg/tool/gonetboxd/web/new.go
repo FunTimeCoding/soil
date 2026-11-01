@@ -27,6 +27,7 @@ func New(v *service.Service) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeAmethyst).
+				WithStyle(webConstant.ComponentStyle).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(

@@ -40,7 +40,7 @@ func (s *Store) ListDocuments(
 		arguments = append(arguments, joinArguments...)
 	}
 
-	parts = append(parts, `WHERE d.collection = ? AND d.active = 1`)
+	parts = append(parts, `WHERE d.collection = ?`)
 	arguments = append(arguments, collection)
 	parts = append(parts, `ORDER BY d.modified_at DESC`)
 

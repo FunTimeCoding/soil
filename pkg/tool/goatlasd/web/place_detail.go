@@ -3,8 +3,8 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/component"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/place_page"
 	"net/http"
 )
 
@@ -12,16 +12,11 @@ func (s *Server) placeDetail(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	kind := placeKind(r.PathValue(constant.KindParameter))
+	kind := component.PlaceKind(r.PathValue(constant.KindParameter))
 	name := r.PathValue(constant.NameParameter)
 
 	if kind == "" {
-		s.view.RenderPage(
-			w,
-			name,
-			constant.PlacesPath,
-			html.P(html.Em(gomponents.Text(constant.PlaceUnknown))),
-		)
+		s.view.RenderPage(w, name, constant.PlacesPath, place_page.Unknown())
 
 		return
 	}
@@ -33,24 +28,8 @@ func (s *Server) placeDetail(
 	s.view.RenderPageWithSummary(
 		w,
 		name,
-		placeLocator(kind, name),
-		[]string{
-			placeLabel(kind),
-			Counted(
-				len(placements),
-				constant.PlacementWord,
-				constant.PlacementsWord,
-			),
-			Counted(
-				len(sightings),
-				constant.SightingWord,
-				constant.SightingsWord,
-			),
-		},
-		html.H1(gomponents.Text(name)),
-		html.H2(gomponents.Text(constant.CarriesHeading)),
-		placementTable(placements, false, constant.NothingCarried),
-		html.H2(gomponents.Text(constant.NetworkHeading)),
-		sightingTable(sightings, constant.NothingSeen),
+		component.PlaceLocator(kind, name),
+		place_page.Summary(kind, len(placements), len(sightings)),
+		place_page.Detail(name, placements, sightings),
 	)
 }

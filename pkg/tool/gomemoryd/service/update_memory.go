@@ -9,6 +9,10 @@ func (s *Service) UpdateMemory(
 	identifier int64,
 	o *save_option.Option,
 ) (*record.Memory, []*record.Memory, error) {
+	if e := checkDescription(o.Description); e != nil {
+		return nil, nil, e
+	}
+
 	existing, e := s.store.GetMemory(identifier)
 
 	if e != nil {

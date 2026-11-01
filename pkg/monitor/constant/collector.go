@@ -9,17 +9,17 @@ import (
 
 var (
 	DefaultWeights = helper.SeverityWeights(3, 2, 1)
+	DefaultSource  = source.New(1, 0, 0, 0, 0, DefaultWeights)
+)
+var MonitorCollector = collector.New(
+	"undefined",
+	"monitor",
+	"undefined",
+	0,
+	DefaultSource,
+)
 
-	DefaultSource = source.New(1, 0, 0, 0, 0, DefaultWeights)
-
-	MonitorCollector = collector.New(
-		"undefined",
-		"monitor",
-		"undefined",
-		0,
-		DefaultSource,
-	)
-
+var (
 	GoBrew = collector.New(
 		"gobrew",
 		"brew",
@@ -146,23 +146,23 @@ var (
 		10*time.Minute,
 		DefaultSource,
 	)
-
-	Collectors = []*collector.Collector{
-		GoBrew,
-		GoAlert,
-		GoContainer,
-		GoFile,
-		GoGenie,
-		GoGitHubJob,
-		GoGitLab,
-		GoGitStatus,
-		GoImage,
-		GoJira,
-		GoKevt,
-		GoLicense,
-		GoSentry,
-		GoSilence,
-		GoVersion,
-		GoVolume,
-	}
 )
+
+var Collectors = []*collector.Collector{
+	GoBrew,
+	GoAlert,
+	GoContainer,
+	GoFile,
+	GoGenie,
+	GoGitHubJob,
+	GoGitLab,
+	GoGitStatus,
+	GoImage,
+	GoJira,
+	GoKevt,
+	GoLicense,
+	GoSentry,
+	GoSilence,
+	GoVersion,
+	GoVolume,
+}

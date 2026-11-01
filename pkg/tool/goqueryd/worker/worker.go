@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"time"
 )
@@ -14,6 +15,7 @@ type Worker struct {
 	interval time.Duration
 	logger   *logger.Logger
 	reporter face.Reporter
+	metric   *metric.Metric
 	recovery *recovery.Recovery
 	context  context.Context
 	cancel   context.CancelFunc

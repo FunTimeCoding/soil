@@ -5,9 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/web/certificate_page"
 	"github.com/funtimecoding/soil/pkg/web/form"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
 	"net/http"
 )
 
@@ -46,17 +45,6 @@ func (s *Server) issueCertificateSubmit(
 		w,
 		constant.IssueCertificateTitle,
 		constant.IssueCertificatePath,
-		html.H1(gomponents.Text(constant.IssueCertificateTitle)),
-		html.P(
-			html.Strong(
-				gomponents.Text(
-					"This key is shown once and is not stored. Copy it now.",
-				),
-			),
-		),
-		html.H2(gomponents.Text("Certificate")),
-		html.Pre(html.Code(gomponents.Text(result.Certificate))),
-		html.H2(gomponents.Text("Private key")),
-		html.Pre(html.Code(gomponents.Text(key))),
+		certificate_page.Issued(result.Certificate, key),
 	)
 }

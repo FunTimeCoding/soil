@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -27,7 +28,9 @@ func New(k *worker.Worker) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeAtlas).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(

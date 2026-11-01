@@ -1,3 +1,6 @@
 package constant
 
-const SearchInputType = "search"
+const (
+	SearchInputType = "search"
+	TextInputType   = "text"
+)

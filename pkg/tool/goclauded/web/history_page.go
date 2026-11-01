@@ -1,9 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/history_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -12,58 +12,43 @@ import (
 
 func (s *Server) historyPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	page := 1
+	page, e := strconv.Atoi(q.URL.Query().Get(constant.Page))
 
-	if v := r.URL.Query().Get("page"); v != "" {
-		if n, e := strconv.Atoi(v); e == nil && n > 0 {
-			page = n
-		}
+	if e != nil || page < 1 {
+		page = 1
 	}
 
-	kinds := r.URL.Query()[constant.Kind]
-	limit := 10
-	offset := (page - 1) * limit
-	a := argument.Timeline{Kinds: kinds, Limit: limit + 1, Offset: offset}
-	entries, e := s.service.Timeline(r.Context(), a)
-	errors.PanicOnError(e)
-	hasMore := len(entries) > limit
+	kinds := q.URL.Query()[constant.Kind]
+	entries, f := s.service.Timeline(
+		q.Context(),
+		argument.Timeline{
+			Kinds:  kinds,
+			Limit:  constant.HistoryPageSize + 1,
+			Offset: (page - 1) * constant.HistoryPageSize,
+		},
+	)
 
-	if hasMore {
-		entries = entries[:limit]
-	}
-
-	table := s.historyTable(entries)
-	isHTMX := r.Header.Get("HX-Request") == "true"
-
-	if isHTMX {
-		navigation := historyNavigation(page, hasMore, kinds)
-		errors.PanicOnError(
-			gomponents.Group([]gomponents.Node{table, navigation}).Render(w),
-		)
+	if f != nil {
+		s.view.Answer(w, q, s.reporter, f)
 
 		return
 	}
 
-	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(constant.HistoryTitle)),
-		historyFilters(kinds),
-	)
-	content = append(
-		content,
-		html.Div(
-			html.ID("history-content"),
-			table,
-			historyNavigation(page, hasMore, kinds),
-		),
-	)
+	more := len(entries) > constant.HistoryPageSize
+
+	if more {
+		entries = entries[:constant.HistoryPageSize]
+	}
+
 	s.view.RenderPage(
 		w,
 		constant.HistoryTitle,
 		constant.HistoryPath,
-		content...,
+		html.H3(gomponents.Text(constant.HistoryTitle)),
+		history_page.Filters(kinds),
+		history_page.Table(entries, true),
+		history_page.Pages(kinds, page, more),
 	)
 }

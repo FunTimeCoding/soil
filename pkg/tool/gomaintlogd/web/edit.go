@@ -1,6 +1,9 @@
 package web
 
-import "net/http"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web/entry_page"
+	"net/http"
+)
 
 func (s *Server) edit(
 	w http.ResponseWriter,
@@ -14,5 +17,5 @@ func (s *Server) edit(
 		return
 	}
 
-	s.view.RenderFragment(w, editForm(e, ""))
+	s.view.RenderFragment(w, entry_page.EditRow(e, ""))
 }

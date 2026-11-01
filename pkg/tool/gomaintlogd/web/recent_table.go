@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/filter"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web/entry_page"
 	"maragu.dev/gomponents"
 )
 
@@ -12,5 +13,5 @@ func (s *Server) recentTable() gomponents.Node {
 	entries, e := s.service.Entries(f)
 	errors.PanicOnError(e)
 
-	return entriesTable(entries)
+	return entry_page.Table(entries)
 }

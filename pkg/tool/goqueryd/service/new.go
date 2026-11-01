@@ -15,10 +15,12 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 ) *Service {
+	model := embedModelByName(o.EmbedModel)
 	d := connection.New(l, o.LitePath)
 	m := o.Embedder()
 
 	return &Service{
+		model:    model,
 		database: d,
 		store:    store.New(d, o.EmbedModel),
 		embedder: m,

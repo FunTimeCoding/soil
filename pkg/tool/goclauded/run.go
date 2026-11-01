@@ -114,7 +114,7 @@ func Run(
 	w := watcher.New(v, l, r, h)
 	address := o.Address
 	t := i.Recorder()
-	u := web.New(v)
+	u := web.New(v, r)
 	setup := func(m *http.ServeMux) {
 		Mount(
 			v,

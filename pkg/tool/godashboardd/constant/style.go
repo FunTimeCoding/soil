@@ -1,7 +1,7 @@
 package constant
 
 const InlineStyle = `
-.board-grid { display: grid; gap: 0.75rem; align-items: start; }
+.board-grid { display: grid; grid-template-columns: repeat(var(--board-columns), 1fr); gap: 0.75rem; align-items: start; }
 .board-tail { margin-top: 2.5rem; }
 .board-column { display: flex; flex-direction: column; gap: 0.75rem; }
 .board-section { margin: 0; padding: 0.75rem 1rem; }

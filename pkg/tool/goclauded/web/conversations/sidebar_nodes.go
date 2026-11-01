@@ -24,7 +24,7 @@ func (s *Server) sidebarNodes(skip int) []gomponents.Node {
 	var result []gomponents.Node
 
 	for _, e := range sessions {
-		result = append(result, entry(e))
+		result = append(result, sidebarEntry(e))
 	}
 
 	if hasMore {

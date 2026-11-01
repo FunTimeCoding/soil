@@ -33,7 +33,7 @@ func (s *Service) Search(
 			o.Metadata,
 		)
 	} else {
-		vectors, e := s.embedTexts(x, []string{o.Query})
+		vectors, e := s.embedTexts(x, []string{s.asQuery(o.Query)})
 
 		if e != nil {
 			return nil, e

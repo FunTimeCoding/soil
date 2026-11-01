@@ -30,7 +30,10 @@ direction, and the criteria for introducing them.
 | `pkg/web/layout/navigation_item/` | `New(path, label)` / `NewExternal(path, label)` for nav links. |
 | `pkg/web/palette/` | Command palette. `NewRegistry()`, `Register()`, `NewServe(registry)`. fzf-style fuzzy matching. |
 | `pkg/web/view/` | HTTP layer wrapping layout. `RenderPage`, `RenderFragment`, `IsExtendedRequest`. |
-| `pkg/web/constant/` | CSS palette constants (pico.css overrides, `palette.go`). Downstream repos can define additional palettes. |
+| `pkg/web/component/` | Shared UI parts, one package each (`action`, `entry`, `table`, `card`, ...). Classes, no inline styles. |
+| `pkg/web/constant/` | CSS palette constants (pico.css overrides, `palette.go`) and the parts' `ComponentStyle`, joined ahead of a daemon's own style. Downstream repos can define additional palettes. |
+| `pkg/web/style_sheet/` | Parses a stylesheet constant into rules, for tests and style tools. |
+| `pkg/web/unit/markup_tester/` | CSS-selector asserts over rendered markup, with specificity computed for `:where` and `:is`. |
 
 ## Dependency Direction
 

@@ -108,6 +108,10 @@ const (
 
 	PlateClean = "All clean."
 
+	IssueTableClass = "issue-table"
+	PageTableClass  = "pages-table"
+	StatusClass     = "status"
+
 	PlateQuery         = "(assignee = currentUser() OR reporter = currentUser()) AND statusCategory != Done AND status NOT IN (%s) ORDER BY updated DESC"
 	WatchedIssuesQuery = "issue in watchedIssues() AND statusCategory != Done AND status NOT IN (%s) ORDER BY updated DESC"
 	NewestQuery        = "project in (%s) AND statusCategory != Done AND status NOT IN (%s) ORDER BY created DESC"

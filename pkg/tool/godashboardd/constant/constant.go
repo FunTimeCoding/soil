@@ -30,6 +30,8 @@ const (
 	RowEventPrefix    = "rows-"
 	LabelAttribute    = "data-label"
 
+	BoardColumnsVariable = "--board-columns"
+
 	LabelColumn = "label"
 
 	DefaultTailColumns = 4

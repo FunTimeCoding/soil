@@ -8,3 +8,5 @@ const (
 	ChartMarginTop    = 14.0
 	ChartMarginBottom = 26.0
 )
+
+const ChartTextElement = "text"

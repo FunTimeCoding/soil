@@ -28,6 +28,12 @@ const (
 	SerialBase = 16
 )
 
+const (
+	LiveState    = "live"
+	ExpiredState = "expired"
+	RevokedState = "revoked"
+)
+
 const ForgePeer = "gitlab forge"
 const (
 	RootAuthority  = "root"

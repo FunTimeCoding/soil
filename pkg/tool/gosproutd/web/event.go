@@ -2,6 +2,9 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/counter_page"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/seed_page"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/session_page"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"net/http"
 )
@@ -12,21 +15,31 @@ func (s *Server) event() http.HandlerFunc {
 		func(
 			w http.ResponseWriter,
 			f http.Flusher,
-			r *http.Request,
+			q *http.Request,
 		) {
-			layout.PushEvent(w, constant.Seeds, s.seedTable())
-			layout.PushEvent(w, constant.SeedsRecent, s.recentSeedTable())
-			layout.PushEvent(w, constant.SessionsEvent, s.sessionTable())
-			layout.PushEvent(w, constant.CounterEvent, s.tallyTable())
+			layout.PushEvent(
+				w,
+				constant.Seeds,
+				seed_page.Priority(s.service.Seeds()),
+			)
+			layout.PushEvent(
+				w,
+				constant.SeedsRecent,
+				seed_page.Recent(s.service.RecentSeeds()),
+			)
+			layout.PushEvent(
+				w,
+				constant.SessionsEvent,
+				session_page.List(s.service.Sessions()),
+			)
+			layout.PushEvent(
+				w,
+				constant.CounterEvent,
+				counter_page.Table(s.service.Tallies()),
+			)
 
-			if name := r.URL.Query().Get(
-				constant.SessionParameter,
-			); name != "" {
-				layout.PushEvent(
-					w,
-					constant.DecisionEvent,
-					s.decisionTable(name),
-				)
+			if name := q.URL.Query().Get(constant.SessionParameter); name != "" {
+				pushDecisions(w, s.service.Decisions(name))
 			}
 
 			f.Flush()

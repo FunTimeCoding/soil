@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) activeDocumentPaths(collection string) []string {
 	rows, e := s.database.Query(
-		"SELECT path FROM document WHERE collection = ? AND active = 1",
+		"SELECT path FROM document WHERE collection = ?",
 		collection,
 	)
 	errors.PanicOnError(e)

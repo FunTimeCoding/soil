@@ -3,10 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"testing"
 )
 
@@ -34,6 +37,30 @@ func TestARefusedDocumentDoesNotHoldBackThePendingOnes(t *testing.T) {
 	assert.Integer(t, 0, s.PendingEmbeddings)
 	assert.Integer(t, 1, s.FailedEmbeddings)
 	assert.Integer(t, 3, s.TotalEmbeddings)
+}
+
+func TestAChunkOverTheEmbedderWindowNeverReachesTheEmbedder(t *testing.T) {
+	m := newEmbedder(t)
+	c := newReranker(t)
+	c.SetAllowance(300)
+	o := service_tester.NewOption(t, m, newReranker(t))
+	o.EmbedCounter = func() face.EmbedCounter { return c }
+	v := service_tester.New(t, o, memory.New())
+	v.PushDocument(
+		t.Context(),
+		"manual",
+		"manual.txt",
+		fixture.Read(systemConstant.LimitPath, "manual.txt"),
+		nil,
+	)
+	assert.Integer(t, 1, m.Calls())
+	s := v.MustStatus()
+	assert.Integer(t, 1, s.TotalEmbeddings)
+	assert.Integer(t, 2, s.FailedEmbeddings)
+	failed, e := v.Failed("")
+	assert.FatalOnError(t, e)
+	assert.StringContains(t, "over the embedder's window", failed[0].Reason)
+	assert.StringContains(t, "tokens against 300", failed[0].Reason)
 }
 
 func TestARecordedRefusalIsNotRetried(t *testing.T) {

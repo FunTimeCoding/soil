@@ -72,4 +72,20 @@ const (
 	KindParameter  = "kind"
 
 	StateColumn = "state"
+
+	DecisionKind       = "decision"
+	DecisionMarkPrefix = "decision-"
+	ReorderPath        = "/reorder"
+	ItemParameter      = "item"
+
+	SeedTableClass   = "seed-table"
+	SeedPathClass    = "seed-path"
+	SeedOrderMark    = "seed-order"
+	DragHandleClass  = "drag-handle"
+	CounterNoteClass = "counter-note"
+
+	StatusPart  = "status"
+	ChoicePart  = "choices"
+	DismissPart = "dismiss"
+	ThreadPart  = "thread"
 )

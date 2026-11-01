@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/coverage_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -23,23 +24,11 @@ func (s *Server) coveragePage(
 			return servers[i].CallsTotal < servers[j].CallsTotal
 		},
 	)
-	content := []gomponents.Node{
-		html.H3(gomponents.Text(constant.CoverageTitle)),
-		coverageTable(servers),
-	}
-
-	for _, e := range servers {
-		if len(e.Tools) == 0 {
-			continue
-		}
-
-		content = append(content, coverageDetail(e))
-	}
-
 	s.view.RenderPage(
 		w,
 		constant.CoverageTitle,
 		constant.CoveragePath,
-		content...,
+		html.H3(gomponents.Text(constant.CoverageTitle)),
+		coverage_page.Region(servers),
 	)
 }

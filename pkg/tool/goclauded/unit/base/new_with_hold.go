@@ -29,11 +29,12 @@ func NewWithHold(
 				_ *http.ServeMux,
 				g *guard.Mux,
 			) {
+				r := memory.New()
 				goclauded.Mount(
 					s.Service,
-					web.New(s.Service),
+					web.New(s.Service, r),
 					l,
-					memory.New(),
+					r,
 					t.TempDir(),
 					t.TempDir(),
 					hold,

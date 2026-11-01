@@ -8,30 +8,6 @@ import (
 	"testing"
 )
 
-func TestMoveUpNotifies(t *testing.T) {
-	s := service_tester.New(t)
-	s.Service.Sync(
-		[]discovered_file.File{
-			{
-				Name:        constant.LowerAlfa,
-				Path:        "alfa.md",
-				ContentHash: "a",
-				Content:     "a",
-			},
-			{
-				Name:        constant.LowerBravo,
-				Path:        "bravo.md",
-				ContentHash: "b",
-				Content:     "b",
-			},
-		},
-	)
-	s.Notifier.Reset()
-	s.Service.MoveUp(s.Service.Seeds()[1].Identifier)
-	assert.True(t, s.Notifier.Notified > 0)
-	assert.String(t, "bravo", s.Service.Seeds()[0].Name)
-}
-
 func TestSetPositionNotifies(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(

@@ -2,7 +2,7 @@ package constant
 
 const SortableScript = `
 htmx.onLoad(function(content) {
-	var sortables = content.querySelectorAll(".sortable");
+	var sortables = content.querySelectorAll("#seed-order");
 	for (var i = 0; i < sortables.length; i++) {
 		var sortable = sortables[i];
 		var instance = new Sortable(sortable, {

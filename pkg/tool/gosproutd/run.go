@@ -24,7 +24,7 @@ func Run(
 	v := service.New(o, l)
 	defer v.Close()
 	w := worker.New(v, l, r, o.SeedDirectory)
-	u := web.New(v)
+	u := web.New(v, r)
 	lifecycle.New(l).WithWorker(w).WithServer(
 		server.New(
 			constant.Identity,

@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
@@ -40,7 +41,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSentinel).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(

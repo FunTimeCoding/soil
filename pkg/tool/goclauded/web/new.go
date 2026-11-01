@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
@@ -13,7 +14,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(s *service.Service) *Server {
+func New(
+	s *service.Service,
+	f face.Reporter,
+) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -60,6 +64,7 @@ func New(s *service.Service) *Server {
 
 	return &Server{
 		service:       s,
+		reporter:      f,
 		notifier:      s.Notifier(),
 		conversations: conversations.New(s),
 		registry:      r,
@@ -67,7 +72,11 @@ func New(s *service.Service) *Server {
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeHearth).
 				WithStyle(
-					join.Empty(constant.InlineStyle, webConstant.ChartStyle),
+					join.Empty(
+						webConstant.ComponentStyle,
+						constant.InlineStyle,
+						webConstant.ChartStyle,
+					),
 				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithLiveEndpoint(webConstant.LivePath).

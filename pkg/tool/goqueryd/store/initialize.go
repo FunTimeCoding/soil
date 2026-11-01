@@ -7,6 +7,7 @@ import (
 )
 
 func initialize(database *sql.DB) {
+	migrateDocumentActive(database)
 	statements := []string{
 		`CREATE TABLE IF NOT EXISTS collection (
 			name    TEXT PRIMARY KEY,
@@ -27,18 +28,17 @@ func initialize(database *sql.DB) {
 			hash        TEXT NOT NULL REFERENCES content(hash),
 			created_at  TEXT NOT NULL,
 			modified_at TEXT NOT NULL,
-			active      INTEGER NOT NULL DEFAULT 1,
 			UNIQUE(collection, path)
 		)`,
-		"CREATE INDEX IF NOT EXISTS idx_document_collection ON document(collection, active)",
+		"CREATE INDEX IF NOT EXISTS idx_document_collection ON document(collection)",
 		"CREATE INDEX IF NOT EXISTS idx_document_hash ON document(hash)",
-		"CREATE INDEX IF NOT EXISTS idx_document_path ON document(path, active)",
+		"CREATE INDEX IF NOT EXISTS idx_document_path ON document(path)",
 		`CREATE VIRTUAL TABLE IF NOT EXISTS document_full_text_search USING fts5(
 			filepath, title, body,
 			tokenize='porter unicode61'
 		)`,
 		`CREATE TRIGGER IF NOT EXISTS document_after_insert
-		AFTER INSERT ON document WHEN new.active = 1
+		AFTER INSERT ON document
 		BEGIN
 			INSERT INTO document_full_text_search(rowid, filepath, title, body)
 			SELECT new.identifier, new.collection || '/' || new.path, new.title,
@@ -55,8 +55,7 @@ func initialize(database *sql.DB) {
 			DELETE FROM document_full_text_search WHERE rowid = old.identifier;
 			INSERT INTO document_full_text_search(rowid, filepath, title, body)
 			SELECT new.identifier, new.collection || '/' || new.path, new.title,
-				(SELECT body FROM content WHERE hash = new.hash)
-			WHERE new.active = 1;
+				(SELECT body FROM content WHERE hash = new.hash);
 		END`,
 		`CREATE TABLE IF NOT EXISTS document_metadata (
 			document_identifier INTEGER NOT NULL

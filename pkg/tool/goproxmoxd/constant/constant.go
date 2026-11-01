@@ -17,7 +17,11 @@ const (
 
 	StorageWarnRatio = 0.8
 
-	ReleaseClass = "release"
+	ReleaseClass    = "release"
+	NodeHeaderClass = "node-header"
+	FloorTableClass = "floor-table"
+	StoppedClass    = "stopped"
+	LoadClass       = "load"
 )
 
 var Identity = identity.New(

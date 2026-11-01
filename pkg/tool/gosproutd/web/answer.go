@@ -2,42 +2,35 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/decision_page"
 	"net/http"
 )
 
 func (s *Server) answer(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	identifier, okay := decisionIdentifier(w, r)
+	d, okay := s.decisionIdentifier(w, q)
 
 	if !okay {
 		return
 	}
 
-	if e := r.ParseForm(); e != nil {
-		http.Error(w, "invalid form", http.StatusBadRequest)
-
-		return
-	}
-
-	kind := constant.AnswerKindChoice
-	value := r.URL.Query().Get(constant.ValueParameter)
-
-	if value == "" {
-		value = r.FormValue(constant.ValueParameter)
-		kind = constant.AnswerKind(r.FormValue(constant.KindParameter))
-	}
+	value := q.FormValue(constant.ValueParameter)
 
 	if value == "" {
 		s.view.RenderFragment(
 			w,
-			decisionRowOpen(s.service.Decision(identifier)),
+			decision_page.Hero(d, "Write an answer first.", ""),
 		)
 
 		return
 	}
 
-	s.service.Answer(identifier, kind, value)
-	s.view.RenderFragment(w, decisionRow(s.service.Decision(identifier)))
+	s.service.Answer(
+		d.Identifier,
+		constant.AnswerKind(q.FormValue(constant.KindParameter)),
+		value,
+	)
+	s.renderCard(w, q, d.Identifier)
 }

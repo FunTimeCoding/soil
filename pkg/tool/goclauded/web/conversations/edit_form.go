@@ -1,11 +1,11 @@
 package conversations
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/web/component/entry"
+	"github.com/funtimecoding/soil/pkg/web/component/load"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -30,54 +30,27 @@ func (s *Server) editForm(
 		description = e.Description
 	}
 
-	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, webConstant.MarkupUnicode)
 	errors.PanicOnError(
-		html.Div(
-			html.Class("edit-panel"),
-			html.H4(gomponents.Text("Edit Session")),
-			html.Form(
-				extended.Post(
-					fmt.Sprintf("/conversations/%s/edit", identifier),
-				),
-				extended.Target("#panel"),
-				html.Div(
-					html.Class("edit-field"),
-					html.Label(
-						gomponents.Attr("for", constant.Alias),
-						gomponents.Text("Name"),
-					),
-					html.Input(
-						html.Type("text"),
-						html.Name(constant.Alias),
-						html.Value(alias),
-						gomponents.Attr("autofocus", ""),
-					),
-				),
-				html.Div(
-					html.Class("edit-field"),
-					html.Label(
-						gomponents.Attr("for", constant.Description),
-						gomponents.Text("Description"),
-					),
-					html.Textarea(
-						html.Name(constant.Description),
-						html.Rows("3"),
-						gomponents.Text(description),
-					),
-				),
-				html.Div(
-					html.Class("edit-actions"),
-					html.Button(html.Type("submit"), gomponents.Text("Save")),
-					html.Button(
-						html.Type("button"),
-						extended.Get(
-							fmt.Sprintf("/conversations/%s", identifier),
-						),
-						extended.Target("#panel"),
-						gomponents.Text("Cancel"),
-					),
-				),
-			),
+		gomponents.Group(
+			[]gomponents.Node{
+				html.H4(gomponents.Text("Edit Session")),
+				entry.New(editPath(identifier), "Save").
+					Swap("#panel", webConstant.SwapInner).
+					Record().
+					Text(constant.Alias, "Name", alias).
+					Focus().
+					TextArea(constant.Description, "Description", description).
+					Lines("3").
+					Beside(
+						load.New(panelPath(identifier), "Cancel").
+							Swap("#panel", webConstant.SwapInner).
+							Button().
+							Class("outline secondary").
+							Node(),
+					).
+					Node(),
+			},
 		).Render(w),
 	)
 }

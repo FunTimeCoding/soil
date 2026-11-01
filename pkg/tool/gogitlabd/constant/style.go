@@ -14,12 +14,8 @@ const InlineStyle = `
 	gap: 0.75rem;
 }
 .detail-header h3 { margin-bottom: 0.5rem; }
-.detail-header .delete {
-	margin-left: auto;
-	margin-bottom: 0;
-	padding: 0.25rem 0.8rem;
-	font-size: 0.85rem;
-	width: auto;
+.detail-header .delete { margin-left: auto; }
+.detail-header .delete [type=submit] {
 	background: transparent;
 	border-color: var(--pico-del-color);
 	color: var(--pico-del-color);
@@ -54,13 +50,7 @@ const InlineStyle = `
 	align-items: center;
 	margin-bottom: 0.5rem;
 }
-.log-header .retry {
-	margin-left: auto;
-	margin-bottom: 0;
-	padding: 0.25rem 0.8rem;
-	font-size: 0.85rem;
-	width: auto;
-}
+.log-header .retry { margin-left: auto; }
 .log-pane pre {
 	max-height: 70vh;
 	overflow-y: auto;

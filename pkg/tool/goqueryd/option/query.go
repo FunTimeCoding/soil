@@ -7,6 +7,7 @@ import (
 
 type Query struct {
 	Address       string
+	MetricAddress string
 	ServiceTokens []string
 	LitePath      string
 	EmbedTarget   string

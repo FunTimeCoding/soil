@@ -1,29 +1,25 @@
 package web
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
 	"net/http"
 )
 
 func (s *Server) sessionEditForm(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	identifier := r.PathValue(constant.Identifier)
-	e, found, f := s.service.FindSession(identifier)
-	errors.PanicOnError(f)
+	identifier := q.PathValue(constant.Identifier)
+	found, okay, e := s.service.FindSession(identifier)
 
-	if !found {
-		s.view.RenderPage(
-			w,
-			"Session Not Found",
-			constant.SessionsPath,
-			html.P(gomponents.Text("Session not found.")),
-		)
+	if e == nil && !okay {
+		e = not_found.New(constant.SessionKind, identifier)
+	}
+
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
 
 		return
 	}
@@ -32,46 +28,6 @@ func (s *Server) sessionEditForm(
 		w,
 		"Edit Session",
 		constant.SessionsPath,
-		html.H3(gomponents.Text("Edit Session")),
-		html.Form(
-			gomponents.Attr("method", "POST"),
-			gomponents.Attr(
-				"action",
-				fmt.Sprintf("/sessions/%s/edit", identifier),
-			),
-			html.Div(
-				html.Label(
-					gomponents.Attr("for", constant.Alias),
-					gomponents.Text("Name"),
-				),
-				html.Input(
-					html.Type("text"),
-					html.Name(constant.Alias),
-					html.Value(e.AliasValue()),
-				),
-			),
-			html.Div(
-				html.Label(
-					gomponents.Attr("for", constant.Description),
-					gomponents.Text("Description"),
-				),
-				html.Textarea(
-					html.Name(constant.Description),
-					html.Rows("3"),
-					gomponents.Text(e.Description),
-				),
-			),
-			html.Div(
-				html.Button(html.Type("submit"), gomponents.Text("Save")),
-				gomponents.Text(" "),
-				html.A(
-					gomponents.Attr(
-						"href",
-						fmt.Sprintf("/sessions/%s", identifier),
-					),
-					gomponents.Text("Cancel"),
-				),
-			),
-		),
+		session_page.EditForm(found),
 	)
 }

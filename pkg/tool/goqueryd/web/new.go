@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
@@ -44,7 +45,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSlate).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(

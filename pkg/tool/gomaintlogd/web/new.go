@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -42,7 +43,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeArchive).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(

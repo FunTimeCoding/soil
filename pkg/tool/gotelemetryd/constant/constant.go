@@ -37,6 +37,12 @@ const (
 	EventsTitle  = "Events"
 	EventsPath   = "/events"
 
+	WindowParameter = "window"
+	GroupParameter  = "group"
+	PageParameter   = "page"
+	DefaultWindow   = "24h"
+	EventPageSize   = 50
+
 	IngestPattern   = "POST /api/events"
 	IngestOperation = "PostEvent"
 )

@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/web/plate_page"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
@@ -23,7 +24,10 @@ func (s *Server) plate(
 			content,
 			html.Div(
 				extended.StreamSwap(constant.NewestEvent),
-				issuesSection(constant.NewestTitle, s.worker.Newest()),
+				plate_page.IssuesSection(
+					constant.NewestTitle,
+					s.worker.Newest(),
+				),
 			),
 		)
 	}
@@ -40,22 +44,28 @@ func (s *Server) plate(
 		content,
 		html.Div(
 			extended.StreamSwap(constant.PlateEvent),
-			plateSection(issues),
+			plate_page.PlateSection(issues),
 		),
 		html.Div(
 			extended.StreamSwap(constant.WatchedIssuesEvent),
-			issuesSection(
+			plate_page.IssuesSection(
 				constant.WatchedIssuesTitle,
 				s.worker.WatchedIssues(),
 			),
 		),
 		html.Div(
 			extended.StreamSwap(constant.FavoritesEvent),
-			pagesSection(constant.FavoritesTitle, s.worker.Favorites()),
+			plate_page.PagesSection(
+				constant.FavoritesTitle,
+				s.worker.Favorites(),
+			),
 		),
 		html.Div(
 			extended.StreamSwap(constant.WatchedPagesEvent),
-			pagesSection(constant.WatchedPagesTitle, s.worker.Watched()),
+			plate_page.PagesSection(
+				constant.WatchedPagesTitle,
+				s.worker.Watched(),
+			),
 		),
 	)
 	s.view.RenderLivePageWithSummary(
@@ -63,7 +73,7 @@ func (s *Server) plate(
 		constant.PlateTitle,
 		constant.PlatePath,
 		subscription.Query(events...),
-		summary(issues),
+		plate_page.Summary(issues),
 		content...,
 	)
 }

@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
@@ -32,7 +33,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTanuki).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(

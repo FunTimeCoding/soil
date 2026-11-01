@@ -10,7 +10,10 @@ func (s *Server) deleteSession(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	identifier := r.PathValue("identifier")
-	errors.PanicOnError(s.service.DeleteAuthenticationSession(identifier))
+	errors.PanicOnError(
+		s.service.DeleteAuthenticationSession(
+			r.PathValue(constant.IdentifierParameter),
+		),
+	)
 	http.Redirect(w, r, constant.SessionsPath, http.StatusFound)
 }

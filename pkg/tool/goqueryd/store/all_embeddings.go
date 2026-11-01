@@ -21,7 +21,7 @@ func (s *Store) allEmbeddings(
 			e.position,
 			e.vector
 		FROM embedding e
-		JOIN document d ON d.hash = e.hash AND d.active = 1
+		JOIN document d ON d.hash = e.hash
 		JOIN content ON content.hash = d.hash`
 	var arguments []any
 	joins, joinArguments := metadataJoins(metadata)

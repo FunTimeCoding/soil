@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"testing"
 	"time"
@@ -48,7 +49,7 @@ func TestTheWorkerReportsAnUnexpectedEmbeddingFailure(t *testing.T) {
 	)
 	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
 	assert.Count(t, 0, r.Events())
-	w := worker.New(v, time.Hour, l, r)
+	w := worker.New(v, time.Hour, l, prometheus.NewRegistry(), r)
 	w.Start()
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)
@@ -74,7 +75,7 @@ func TestTheWorkerLeavesAQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
 	directory := t.TempDir()
 	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("notes", directory, constant.DefaultGlob)
-	w := worker.New(v, 5*time.Millisecond, l, r)
+	w := worker.New(v, 5*time.Millisecond, l, prometheus.NewRegistry(), r)
 	w.Start()
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)

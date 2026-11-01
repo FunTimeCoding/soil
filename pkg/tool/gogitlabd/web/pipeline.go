@@ -5,6 +5,7 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web/pipeline_page"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"net/http"
 )
@@ -24,7 +25,7 @@ func (s *Server) pipeline(
 	project := queryInteger(r, argumentConstant.Project)
 	pipeline := queryInteger(r, argumentConstant.Pipeline)
 	requested := queryInteger(r, argumentConstant.Job)
-	detail := s.pipelineDetail(instance, project, pipeline, requested)
+	detail := s.detailRegion(instance, project, pipeline, requested)
 
 	if s.view.IsExtendedRequest(r) {
 		s.view.RenderFragment(w, detail)
@@ -39,7 +40,7 @@ func (s *Server) pipeline(
 		join.Ampersand(
 			[]string{
 				subscription.Query(constant.PipelineEvent),
-				pipelineQuery(instance, project, pipeline),
+				pipeline_page.Query(instance, project, pipeline),
 			},
 		),
 		detail,

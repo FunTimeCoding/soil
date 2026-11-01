@@ -45,4 +45,14 @@ const (
 	EventSummary = "summary"
 	EventRecent  = "recent"
 	RecentMark   = "recent-table"
+	EntriesMark  = "entries-table"
+	AddFormMark  = "add-form"
+	DetailPrefix = "detail-"
+	RowPrefix    = "row-"
+	FilterFormat = "2006-01-02T15:04"
+
+	ClickableRowClass  = "clickable-row"
+	DetailRowClass     = "detail-row"
+	DetailContentClass = "detail-content"
+	DetailActionsClass = "detail-actions"
 )

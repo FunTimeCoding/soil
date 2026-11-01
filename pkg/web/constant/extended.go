@@ -15,6 +15,7 @@ const (
 	ExtendedSync         = "hx-sync"
 	ExtendedOnPrefix     = "hx-on:"
 	ExtendedAfterRequest = "hx-on::after-request"
+	ExtendedPreserve     = "hx-preserve"
 	ServerSideConnect    = "sse-connect"
 	ServerSideSwap       = "sse-swap"
 )

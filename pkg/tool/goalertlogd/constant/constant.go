@@ -53,4 +53,10 @@ const (
 	EventSummary = "summary"
 	EventTop     = "top"
 	TopMark      = "top-table"
+	RecentMark   = "recent-table"
+
+	AlertsPath    = "/alerts"
+	NameParameter = "name"
+	NameColumn    = "name"
+	FilterFormat  = "2006-01-02T15:04"
 )

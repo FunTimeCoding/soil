@@ -1,273 +1,37 @@
 package web
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/strings/shorten"
-	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/web/extended"
-	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
+	"github.com/funtimecoding/soil/pkg/web/form"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
 	"net/http"
+	"net/url"
 )
 
 func (s *Server) sessionDetailPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	d, e := s.service.SessionDetail(r.PathValue(constant.Identifier))
+	v, e := s.service.SessionView(q.Context(), q.PathValue(constant.Identifier))
 
-	if not_found.Is(e) {
-		s.view.RenderPage(
-			w,
-			"Session Not Found",
-			constant.SessionsPath,
-			html.P(gomponents.Text("Session not found.")),
-		)
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
 
 		return
 	}
 
-	errors.PanicOnError(e)
-	title := shorten.Prefix(d.Identifier, 8)
-
-	if d.Alias != "" {
-		title = d.Alias
-	} else if d.Slug != "" {
-		title = d.Slug
-	}
-
-	var content []gomponents.Node
-	content = append(content, html.H3(gomponents.Text(title)))
-	labels, labelError := s.service.LabelsBySession(d.Identifier)
-	errors.PanicOnError(labelError)
-
-	if len(labels) > 0 {
-		content = append(content, labelPips(labels))
-	}
-
-	var identity []gomponents.Node
-
-	if d.Session != nil && d.Session.Name != "" {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Name"))),
-				html.Td(gomponents.Text(d.Session.Name)),
-			),
-		)
-	}
-
-	if d.Session != nil && d.Session.Callsign != nil {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Callsign"))),
-				html.Td(gomponents.Text(*d.Session.Callsign)),
-			),
-		)
-	}
-
-	if d.Alias != "" {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Alias"))),
-				html.Td(gomponents.Text(d.Alias)),
-			),
-		)
-	}
-
-	if d.Description != "" {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Description"))),
-				html.Td(gomponents.Text(d.Description)),
-			),
-		)
-	}
-
-	if d.Slug != "" {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Slug"))),
-				html.Td(html.Small(gomponents.Text(d.Slug))),
-			),
-		)
-	}
-
-	identity = append(
-		identity,
-		html.Tr(
-			html.Td(html.Strong(gomponents.Text("Identifier"))),
-			html.Td(html.Small(gomponents.Text(d.Identifier))),
-		),
-	)
-
-	if d.Created != "" {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Created"))),
-				html.Td(gomponents.Text(d.Created)),
-			),
-		)
-	}
-
-	if d.TurnCount > 0 {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Turns"))),
-				html.Td(gomponents.Textf("%d", d.TurnCount)),
-			),
-		)
-	}
-
-	if d.Cost > 0 {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Cost"))),
-				html.Td(gomponents.Textf("$%.2f", d.Cost)),
-			),
-		)
-	}
-
-	if d.Session != nil {
-		identity = append(
-			identity,
-			html.Tr(
-				html.Td(html.Strong(gomponents.Text("Last Seen"))),
-				html.Td(gomponents.Text(time.Relative(d.Session.LastSeen))),
-			),
-		)
-	}
-
-	content = append(content, html.Table(html.TBody(identity...)))
-
-	if len(d.Usage) > 0 {
-		content = append(
-			content,
-			html.H4(gomponents.Text("Token Usage")),
-			usageTable(d.Usage),
-		)
-	}
-
-	if len(d.Completions) > 0 {
-		content = append(content, html.H4(gomponents.Text("Completions")))
-		var rows []gomponents.Node
-
-		for _, c := range d.Completions {
-			rows = append(
-				rows,
-				html.Tr(
-					layout.TimeCell(c.CreatedAt),
-					html.Td(gomponents.Textf("[%s]", c.Kind)),
-					html.Td(gomponents.Text(c.Topic)),
-					html.Td(html.Small(gomponents.Text(c.Summary))),
-				),
-			)
-		}
-
-		content = append(
-			content,
-			html.Table(
-				html.THead(
-					html.Tr(
-						html.Th(gomponents.Text("Time")),
-						html.Th(gomponents.Text("Kind")),
-						html.Th(gomponents.Text("Topic")),
-						html.Th(gomponents.Text("Summary")),
-					),
-				),
-				html.TBody(rows...),
-			),
-		)
-	}
-
-	loads, loadError := s.service.ContextLoadsBySession(
-		r.Context(),
-		d.Identifier,
-	)
-
-	if unavailable.Is(loadError) {
-		content = append(content, contextLoadHidden(loadError)...)
-	} else {
-		errors.PanicOnError(loadError)
-		content = append(content, contextLoadSection(loads)...)
-	}
-
-	if d.Summary != "" {
-		content = append(
-			content,
-			html.H4(gomponents.Text("Summary")),
-			html.Pre(gomponents.Text(d.Summary)),
-		)
-	}
-
-	content = append(
-		content,
-		html.Div(
-			extended.StreamSwap(constant.Pulse),
-			s.pulseSection(d.Identifier),
-		),
-		s.cruiseForm(d.Identifier),
-	)
-	content = append(
-		content,
-		html.P(
-			gomponents.Text("Delete confirmation: "),
-			html.Code(gomponents.Text(s.service.DeleteHash(d.Identifier))),
-		),
-	)
-	content = append(
-		content,
-		html.P(
-			html.A(
-				gomponents.Attr(
-					"href",
-					fmt.Sprintf("/sessions/%s/edit", d.Identifier),
-				),
-				gomponents.Text("Edit"),
-			),
-			gomponents.Text(stringsConstant.SpacedMiddot),
-			html.A(
-				gomponents.Attr(
-					"href",
-					fmt.Sprintf("/conversations/%s", d.Identifier),
-				),
-				gomponents.Text("View conversation"),
-			),
-			gomponents.Text(stringsConstant.SpacedMiddot),
-			html.A(
-				extended.Post(fmt.Sprintf("/sessions/%s/delete", d.Identifier)),
-				extended.Confirm("Delete this session and all its data?"),
-				html.Style("color: var(--pico-del-color); cursor: pointer"),
-				gomponents.Text("Delete"),
-			),
-		),
-	)
+	p := session_page.New(v)
 	s.view.RenderLivePage(
 		w,
-		title,
+		p.Title(),
 		constant.SessionsPath,
 		join.Empty(
 			subscription.Query(constant.Pulse),
 			"&",
-			constant.EventSession,
-			"=",
-			d.Identifier,
+			url.Values{constant.EventSession: {v.Detail.Identifier}}.Encode(),
 		),
-		content...,
+		p.Detail(form.Failed(q, constant.CruiseAction)),
 	)
 }

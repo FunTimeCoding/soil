@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/raid/model/player_fight_statistic"
 	"github.com/funtimecoding/soil/pkg/raid/model/raid"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
 	"time"
 )
@@ -19,7 +20,7 @@ func (s *Store) PlayerAttendance(since time.Time) []record.Attendance {
 	errors.PanicOnError(
 		s.mapper.Model(player_fight_statistic.New()).
 			Select(
-				"account",
+				constant.AccountColumn,
 				"string_agg(DISTINCT name, ', ' ORDER BY name) as characters",
 				"count(DISTINCT fights.raid_id) as fights",
 			).
@@ -28,7 +29,7 @@ func (s *Store) PlayerAttendance(since time.Time) []record.Attendance {
 			).
 			Where("fights.raid_id IS NOT NULL").
 			Where("fights.timestamp >= ?", since).
-			Group("account").
+			Group(constant.AccountColumn).
 			Order("fights DESC").
 			Find(&rows).Error,
 	)

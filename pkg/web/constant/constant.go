@@ -16,6 +16,7 @@ const (
 	FormSubmit = "submit"
 
 	ErrorParameter = "error"
+	FormParameter  = "form"
 	CodeParameter  = "code"
 
 	Extended   = "https://unpkg.com/htmx.org@2.0.4"

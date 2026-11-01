@@ -1,6 +1,7 @@
 connection:
   prometheus: {host: prometheus.example, secure: true}
   nextcloud: {host: nextcloud.example, secure: true}
+  argocd: {host: argocd.example, secure: true}
 
 top:
   - name: monitoring
@@ -24,6 +25,10 @@ top:
             link: https://nextcloud.example
             icon: nextcloud.png
             widget: nextcloud
+          - label: Argo CD
+            link: https://argocd.example
+            icon: argo-cd.png
+            widget: argocd
 
 tail:
   columns: 2

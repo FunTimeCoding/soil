@@ -5,8 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web/entry_page"
 	"net/http"
 )
 
@@ -34,14 +33,7 @@ func (s *Server) entryPage(
 	s.view.RenderPage(
 		w,
 		constant.EntryTitle,
-		entryLocator(identifier),
-		html.H1(gomponents.Textf("%s %d", constant.EntryTitle, e.Identifier)),
-		html.Div(html.Class("detail-content"), entryFields(e)),
-		html.A(
-			gomponents.Attr("role", "button"),
-			html.Class("outline secondary"),
-			html.Href(constant.EntriesPath),
-			gomponents.Text(constant.EntriesTitle),
-		),
+		entry_page.Locator(identifier),
+		entry_page.Permalink(e),
 	)
 }

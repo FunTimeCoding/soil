@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
+	"github.com/funtimecoding/soil/pkg/web/component/load"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -17,7 +17,6 @@ func (s *Server) editSubmit(
 	r *http.Request,
 ) {
 	identifier := r.PathValue(constant.Identifier)
-	errors.PanicOnError(r.ParseForm())
 	alias := r.FormValue(constant.Alias)
 	description := r.FormValue(constant.Description)
 	session := s.service.Resolve(identifier)
@@ -30,19 +29,16 @@ func (s *Server) editSubmit(
 	a.Alias = &alias
 	a.Description = &description
 	errors.PanicOnError(s.service.EditSession(session.Identifier, a))
-	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, webConstant.MarkupUnicode)
 	w.Header().Set("HX-Trigger", "session-edited")
 	errors.PanicOnError(
-		html.Div(
-			html.Class("edit-panel"),
-			html.P(gomponents.Text(fmt.Sprintf("Saved: %s", alias))),
-			html.P(
-				html.A(
-					extended.Get(fmt.Sprintf("/conversations/%s", identifier)),
-					extended.Target("#panel"),
-					gomponents.Text("View conversation"),
-				),
-			),
+		gomponents.Group(
+			[]gomponents.Node{
+				html.P(gomponents.Text(fmt.Sprintf("Saved: %s", alias))),
+				load.New(panelPath(identifier), "View conversation").
+					Swap("#panel", webConstant.SwapInner).
+					Node(),
+			},
 		).Render(w),
 	)
 }

@@ -1,6 +1,8 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -11,7 +13,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(s *service.Service) *Server {
+func New(
+	s *service.Service,
+	f face.Reporter,
+) *Server {
 	r := registry.New()
 	search := palette.NewCommand(
 		"Search memories",
@@ -50,11 +55,14 @@ func New(s *service.Service) *Server {
 
 	return &Server{
 		service:  s,
+		reporter: f,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeCortex).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(

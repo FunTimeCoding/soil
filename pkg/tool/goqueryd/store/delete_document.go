@@ -11,7 +11,7 @@ func (s *Store) DeleteDocument(
 ) (bool, error) {
 	var hash string
 	e := s.database.QueryRow(
-		"SELECT hash FROM document WHERE collection = ? AND path = ? AND active = 1",
+		"SELECT hash FROM document WHERE collection = ? AND path = ?",
 		collection,
 		path,
 	).Scan(&hash)

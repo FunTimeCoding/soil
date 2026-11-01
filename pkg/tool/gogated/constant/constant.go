@@ -65,6 +65,12 @@ const (
 	LogoutPath               = "/logout"
 	SignOutTitle             = "Sign out"
 	WarningClass             = "warning"
+	ClientsPrefix            = "/clients/"
+	DeleteSuffix             = "/delete"
+	IdentifierParameter      = "identifier"
+	IdentifierPattern        = "{identifier}"
+	LocatorsField            = "redirect_locators"
+	ScopesField              = "scopes"
 
 	GrantAuthorizationCode      = "authorization_code"
 	GrantRefreshToken           = "refresh_token"
@@ -84,16 +90,14 @@ const (
 	ChallengeMethodS256         = "S256"
 )
 
-const InlineCSS = `
-.credential-card { background: var(--pico-card-background-color); border: 1px solid var(--pico-primary); border-radius: var(--pico-border-radius); padding: 1.5rem; margin: 1rem 0; }
-.credential-card code { word-break: break-all; }
-.credential-card p { margin-bottom: 0.5rem; }
+const InlineStyle = `
 .warning { color: var(--pico-del-color); font-weight: bold; }
+.facts code { word-break: break-all; }
 `
 
 const (
-	FixtureSecret   = "test-secret-at-least-32-bytes!xy"
-	FixtureIssuer   = "http://localhost"
+	FixtureSecret      = "test-secret-at-least-32-bytes!xy"
+	FixtureIssuer      = "http://localhost"
 	FixtureMail        = "admin@test.internal"
 	FixturePassword    = "password"
 	FixtureAdminClient = "gogated-admin"

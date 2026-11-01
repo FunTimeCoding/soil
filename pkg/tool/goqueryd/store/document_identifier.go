@@ -6,7 +6,7 @@ func (s *Store) documentIdentifier(
 ) int {
 	var identifier int
 	e := s.database.QueryRow(
-		"SELECT identifier FROM document WHERE collection = ? AND path = ? AND active = 1",
+		"SELECT identifier FROM document WHERE collection = ? AND path = ?",
 		collection,
 		path,
 	).Scan(&identifier)

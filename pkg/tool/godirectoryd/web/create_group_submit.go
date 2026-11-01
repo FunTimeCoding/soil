@@ -16,7 +16,14 @@ func (s *Server) createGroupSubmit(
 	_, e := s.service.CreateGroup(r.FormValue(constant.NameField))
 
 	if e != nil {
-		form.Redirect(w, r, constant.GroupPath, e.Error(), url.Values{})
+		form.RedirectFor(
+			w,
+			r,
+			constant.GroupPath,
+			constant.CreateGroupForm,
+			e.Error(),
+			url.Values{constant.NameField: {r.FormValue(constant.NameField)}},
+		)
 
 		return
 	}

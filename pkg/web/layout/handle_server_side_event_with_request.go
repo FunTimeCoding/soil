@@ -32,7 +32,7 @@ func HandleServerSideEventWithRequest(
 		}
 
 		w.Header().Set(constant.ContentType, "text/event-stream")
-		w.Header().Set("Cache-Control", "no-cache")
+		w.Header().Set(constant.CacheControlHeader, constant.RevalidateCache)
 		w.Header().Set("Connection", "keep-alive")
 		flusher.Flush()
 		subscription := n.Subscribe()

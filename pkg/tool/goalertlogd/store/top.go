@@ -2,6 +2,7 @@ package store
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
 	"time"
@@ -27,7 +28,7 @@ func (s *Store) Top(
 			),
 		).
 		Where("started_at >= ? AND started_at < ?", start, end).
-		Group("name").
+		Group(constant.NameColumn).
 		Order("count DESC, name")
 
 	if n > 0 {

@@ -38,7 +38,6 @@ const (
 	EmbeddingPending  = "stored; embedding pending: %v"
 	EmbeddingRefused  = "stored; refused chunks skipped: %v"
 	EmbeddingDeferred = "pending embeddings wait: %v"
-	PrunedContent     = "pruned %d unreferenced contents"
 
 	Metadata    = "metadata"
 	Collection  = "collection"
@@ -65,7 +64,11 @@ const (
 	SearchTitle      = "Search"
 	CollectionsTitle = "Collections"
 	CollectionsPath  = "/collections"
+	DocumentsPath    = "/documents"
 	Identifier       = "identifier"
+	Page             = "page"
+	DocumentPageSize = 20
+	SearchPageSize   = 20
 
 	FixtureAuthorKey  = "author"
 	FixtureTagKey     = "tag"

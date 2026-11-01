@@ -43,7 +43,7 @@ func (s *Store) FindDocument(reference string) (*result.Document, bool, error) {
 		`SELECT d.collection, d.path, d.title, d.hash, c.body
 		FROM document d
 		JOIN content c ON c.hash = d.hash
-		WHERE d.collection = ? AND d.path = ? AND d.active = 1`,
+		WHERE d.collection = ? AND d.path = ?`,
 		collection,
 		path,
 	)

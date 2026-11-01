@@ -19,7 +19,7 @@ func NewOption(
 	result := option.New()
 	result.LitePath = filepath.Join(t.TempDir(), "goqueryd.db")
 	result.EmbedTarget = constant.FixtureEmbedTarget
-	result.EmbedModel = constant.FixtureEmbedModel
+	result.EmbedModel = constant.NomicEmbedText.Name
 	result.Embedder = func() face.ReachableEmbedder { return m }
 	result.Reranker = func() queryd.Reranker { return a }
 	result.EmbedCounter = func() queryd.EmbedCounter { return mock_reranker.New() }

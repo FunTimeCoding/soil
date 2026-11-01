@@ -9,7 +9,7 @@ func (s *Server) reportDelete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	if e := s.service.DeleteReport(r.PathValue("fileName")); e != nil {
+	if e := s.service.DeleteReport(r.PathValue(constant.FileNameParameter)); e != nil {
 		s.view.Answer(w, r, s.reporter, e)
 
 		return

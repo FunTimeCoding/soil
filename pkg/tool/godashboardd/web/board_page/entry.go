@@ -1,0 +1,32 @@
+package board_page
+
+import (
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+	"maragu.dev/gomponents"
+	"maragu.dev/gomponents/html"
+)
+
+func (p *Page) entry(v *layout.Entry) gomponents.Node {
+	nodes := []gomponents.Node{
+		html.A(
+			html.Href(v.Link),
+			html.Target("_blank"),
+			html.Class("board-entry-link"),
+			gomponents.Attr(constant.LabelAttribute, v.Label),
+			html.Img(
+				html.Src(iconLink(v.Icon)),
+				html.Class("board-icon"),
+				html.Alt(v.Label),
+				html.Loading("lazy"),
+			),
+			html.Span(gomponents.Text(v.Label)),
+		),
+	}
+
+	if strip := p.strip(v); strip != nil {
+		nodes = append(nodes, strip)
+	}
+
+	return html.Div(gomponents.Group(nodes))
+}

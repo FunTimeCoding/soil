@@ -12,18 +12,18 @@ func (s *Server) Mount(g *guard.Mux) {
 	s.service.Authorization().Mount(g)
 	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
 	g.Session(route.Get(webConstant.RootPattern), s.logs)
-	g.Session(route.Post("/generate"), s.generate)
+	g.Session(route.Post(constant.GeneratePath), s.generate)
 	g.Session(route.Get(constant.ReportsPath), s.reports)
 	g.Session(route.Get(constant.ReportsPath, "/{fileName}"), s.reportDownload)
 	g.Session(
-		route.Post(constant.ReportsPath, "/{fileName}/delete"),
+		route.Post(constant.ReportsPath, "/{fileName}", constant.DeleteSuffix),
 		s.reportDelete,
 	)
 	g.Session(route.Get(constant.RaidsPath), s.raids)
 	g.Session(route.Get(constant.RaidsPath, "/{id}"), s.raidDetail)
-	g.Session(route.Post(constant.RaidsPath, "/create"), s.createRaid)
+	g.Session(route.Post(constant.CreateRaidPath), s.createRaid)
 	g.Session(route.Get(constant.PlayersPath), s.players)
 	g.Session(route.Get(constant.PlayersPath, "/{account}"), s.playerDetail)
 	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
-	g.OpenMount(route.Get("/static/"), http.FileServerFS(staticFiles))
+	g.OpenMount(route.Get(constant.StaticPath), http.FileServerFS(staticFiles))
 }

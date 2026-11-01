@@ -3,6 +3,8 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/component"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/placement_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -20,10 +22,14 @@ func (s *Server) placements(
 		constant.PlacementsTitle,
 		constant.PlacementsPath,
 		[]string{
-			Counted(len(v), constant.PlacementWord, constant.PlacementsWord),
+			component.Counted(
+				len(v),
+				constant.PlacementWord,
+				constant.PlacementsWord,
+			),
 		},
 		html.H1(gomponents.Text(constant.PlacementsTitle)),
-		searchForm(name),
-		placementTable(v, true, constant.NothingMatched),
+		placement_page.Search(name),
+		component.PlacementTable(v, true, constant.NothingMatched),
 	)
 }

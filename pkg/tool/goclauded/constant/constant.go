@@ -9,6 +9,24 @@ const CoverageRecentWindow = 30 * 24 * time.Hour
 const CallsignReleaseWindow = 7 * 24 * time.Hour
 const CompleteTimeoutWindow = 30 * time.Minute
 const ChannelHold = 5 * time.Minute
+const RosterStaleAfter = 45 * time.Minute
+const (
+	PageSize        = 20
+	HistoryPageSize = 10
+	Page            = "page"
+	Active          = "active"
+
+	EventKind    = "history event"
+	ActivityPath = "/activity"
+	ActiveLabel     = "active"
+	DetailHeadClass = "detail-head"
+	IdleLabel    = "idle"
+
+	EditAction   = "edit"
+	PulseAction  = "pulse"
+	CruiseAction = "cruise"
+	DeleteAction = "delete"
+)
 
 var (
 	ReservedLabelKeys = []string{

@@ -1,42 +1,20 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
-	"strconv"
 )
 
 func (s *Server) historyEditSubmit(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	identifier, e := strconv.Atoi(r.PathValue(constant.Identifier))
+	e, okay := s.historyEvent(w, q)
 
-	if e != nil || identifier <= 0 {
+	if !okay {
 		return
 	}
 
-	errors.PanicOnError(r.ParseForm())
-	body := r.FormValue(constant.Body)
-	s.service.MustEditEvent(uint(identifier), body)
-	event := s.service.GetEvent(uint(identifier))
-
-	if event == nil {
-		return
-	}
-
-	entry := timeline.FromEvent(
-		event.Identifier,
-		event.SessionIdentifier,
-		event.Kind,
-		event.Actor,
-		event.Metadata,
-		event.CreatedAt,
-	)
-	entry.Full = true
-	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
-	errors.PanicOnError(timelineRow(entry).Render(w))
+	s.service.MustEditEvent(e.Identifier, q.FormValue(constant.Body))
+	s.historyRow(w, q)
 }

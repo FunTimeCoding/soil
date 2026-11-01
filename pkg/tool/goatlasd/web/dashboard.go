@@ -3,6 +3,8 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/component"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/place_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -22,10 +24,7 @@ func (s *Server) dashboard(
 		constant.DashboardTitle,
 		webConstant.RootPath,
 		s.summaryItems(places, len(unclaimed)),
-		html.Div(
-			html.Class(constant.CardGridClass),
-			gomponents.Map(places, placeCard),
-		),
+		place_page.Cards(places),
 		html.H2(gomponents.Text(constant.UnclaimedHeading)),
 		html.P(
 			html.Small(
@@ -35,6 +34,6 @@ func (s *Server) dashboard(
 				),
 			),
 		),
-		sightingTable(unclaimed, constant.NothingUnclaimed),
+		component.SightingTable(unclaimed, constant.NothingUnclaimed),
 	)
 }

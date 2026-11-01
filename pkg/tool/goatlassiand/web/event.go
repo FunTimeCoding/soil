@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/web/plate_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
@@ -23,7 +24,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					webConstant.LayoutSummaryStrip,
-					layout.SummaryStripContent(summary(issues)),
+					layout.SummaryStripContent(plate_page.Summary(issues)),
 				)
 			}
 
@@ -31,19 +32,26 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.NewestEvent,
-					issuesSection(constant.NewestTitle, s.worker.Newest()),
+					plate_page.IssuesSection(
+						constant.NewestTitle,
+						s.worker.Newest(),
+					),
 				)
 			}
 
 			if subs.Has(constant.PlateEvent) {
-				layout.PushEvent(w, constant.PlateEvent, plateSection(issues))
+				layout.PushEvent(
+					w,
+					constant.PlateEvent,
+					plate_page.PlateSection(issues),
+				)
 			}
 
 			if subs.Has(constant.WatchedIssuesEvent) {
 				layout.PushEvent(
 					w,
 					constant.WatchedIssuesEvent,
-					issuesSection(
+					plate_page.IssuesSection(
 						constant.WatchedIssuesTitle,
 						s.worker.WatchedIssues(),
 					),
@@ -54,7 +62,10 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.FavoritesEvent,
-					pagesSection(constant.FavoritesTitle, s.worker.Favorites()),
+					plate_page.PagesSection(
+						constant.FavoritesTitle,
+						s.worker.Favorites(),
+					),
 				)
 			}
 
@@ -62,7 +73,10 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.WatchedPagesEvent,
-					pagesSection(constant.WatchedPagesTitle, s.worker.Watched()),
+					plate_page.PagesSection(
+						constant.WatchedPagesTitle,
+						s.worker.Watched(),
+					),
 				)
 			}
 

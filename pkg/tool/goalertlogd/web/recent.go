@@ -3,8 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/extended"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web/alert_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -20,20 +19,20 @@ func (s *Server) recent(
 	end := now
 
 	if v := r.URL.Query().Get(constant.Start); v != "" {
-		if t, e := time.Parse("2006-01-02T15:04", v); e == nil {
+		if t, e := time.Parse(constant.FilterFormat, v); e == nil {
 			start = t
 		}
 	}
 
 	if v := r.URL.Query().Get(constant.End); v != "" {
-		if t, e := time.Parse("2006-01-02T15:04", v); e == nil {
+		if t, e := time.Parse(constant.FilterFormat, v); e == nil {
 			end = t
 		}
 	}
 
 	records, e := s.service.RecentAlerts(start, end)
 	errors.PanicOnError(e)
-	table := recentTable(records)
+	table := alert_page.Recent(records)
 
 	if s.view.IsExtendedRequest(r) {
 		s.view.RenderFragment(w, table)
@@ -46,35 +45,7 @@ func (s *Server) recent(
 		constant.RecentTitle,
 		constant.RecentPath,
 		html.H1(gomponents.Text("Recent Alerts")),
-		html.Form(
-			html.Class("filter-form"),
-			extended.Get(constant.RecentPath),
-			extended.Target("#recent-table"),
-			extended.Swap(webConstant.SwapInner),
-			html.Div(
-				html.Class("grid"),
-				html.Label(
-					gomponents.Text("Start"),
-					html.Input(
-						html.Type("datetime-local"),
-						html.Name(constant.Start),
-						html.Value(start.Format("2006-01-02T15:04")),
-					),
-				),
-				html.Label(
-					gomponents.Text("End"),
-					html.Input(
-						html.Type("datetime-local"),
-						html.Name(constant.End),
-						html.Value(end.Format("2006-01-02T15:04")),
-					),
-				),
-				html.Label(
-					gomponents.Raw("&nbsp;"),
-					html.Button(html.Type("submit"), gomponents.Text("Filter")),
-				),
-			),
-		),
-		html.Div(html.ID("recent-table"), table),
+		alert_page.Filter(start, end),
+		html.Div(html.ID(constant.RecentMark), table),
 	)
 }

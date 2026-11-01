@@ -1,11 +1,8 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -14,85 +11,45 @@ import (
 
 func (s *Server) searchPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	query := r.URL.Query().Get("query")
-	collection := r.URL.Query().Get(constant.Collection)
-	mode := r.URL.Query().Get(constant.Mode)
-	metadata := parseMetadataParams(r.URL.Query())
+	values := q.URL.Query()
+	query := values.Get(webConstant.ParameterQuery)
+	collection := values.Get(constant.Collection)
+	status, e := s.service.Status()
 
-	if mode == "" {
-		mode = constant.HybridMode
-	}
-
-	if query == "" {
-		s.renderSearchForm(w, r, collection)
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
 
 		return
 	}
 
-	key := search_cache.Key(query, collection, mode)
-	outcome := s.cache.Get(key)
-	var e error
-
-	if outcome == nil {
-		o := search_option.New(query, 20)
-		o.Collection = collection
-		o.Mode = mode
-		outcome, e = s.service.Search(r.Context(), o)
-
-		if e == nil {
-			s.cache.Put(key, outcome)
-		}
+	content := []gomponents.Node{
+		html.H3(gomponents.Text(constant.SearchTitle)),
+		search_page.Form(query, collection, status.Collections),
 	}
 
-	var resultsContent []gomponents.Node
-
-	if unavailable.Is(e) {
-		resultsContent = []gomponents.Node{
-			html.P(html.Em(gomponents.Text(e.Error()))),
-		}
-	} else if e != nil {
-		s.view.Answer(w, r, s.reporter, e)
-
-		return
-	} else {
-		results, facets := FilterSearchResults(outcome, metadata)
-		resultsContent = s.renderSearchResults(
-			results,
-			facets,
+	if query != "" {
+		results, f := s.searchResults(
+			q,
 			query,
 			collection,
-			metadata,
+			values.Get(constant.Mode),
 		)
+
+		if f != nil {
+			s.view.Answer(w, q, s.reporter, f)
+
+			return
+		}
+
+		content = append(content, results)
 	}
 
-	isHTMX := r.Header.Get("HX-Request") == "true"
-
-	if isHTMX {
-		errors.PanicOnError(gomponents.Group(resultsContent).Render(w))
-
-		return
-	}
-
-	status, f := s.service.Status()
-
-	if f != nil {
-		s.view.Answer(w, r, s.reporter, f)
-
-		return
-	}
-
-	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(constant.SearchTitle)),
-		searchForm(query, collection, status.Collections),
-		html.Div(html.ID("search-results"), gomponents.Group(resultsContent)),
-	)
 	s.view.RenderPage(
 		w,
 		constant.SearchTitle,
 		webConstant.SearchPath,
-		content...)
+		content...,
+	)
 }

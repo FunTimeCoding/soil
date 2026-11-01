@@ -20,6 +20,7 @@ func Main() {
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
 	}
+	o.AddCommand(publish(c, t))
 	o.AddCommand(upload(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)

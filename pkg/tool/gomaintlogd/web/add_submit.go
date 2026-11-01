@@ -1,14 +1,15 @@
 package web
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
-	"github.com/funtimecoding/soil/pkg/web/layout"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web/entry_page"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
+	"net/url"
 )
 
 func (s *Server) addSubmit(
@@ -25,7 +26,7 @@ func (s *Server) addSubmit(
 	f := s.service.Add(e)
 
 	if validation.Is(f) {
-		s.view.RenderFragment(w, html.Div(layout.Alert(f.Error()), addForm()))
+		s.view.RenderFragment(w, entry_page.AddForm(r.PostForm, f.Error()))
 
 		return
 	}
@@ -36,14 +37,10 @@ func (s *Server) addSubmit(
 		return
 	}
 
-	s.view.RenderFragment(
+	s.view.RenderFragmentWithStatus(
 		w,
-		html.Div(
-			html.Div(
-				html.Class("success"),
-				gomponents.Textf("Entry added: %s by %s", e.Action, e.User),
-			),
-			addForm(),
-		),
+		entry_page.AddForm(url.Values{}, ""),
+		fmt.Sprintf("Entry added: %s by %s", e.Action, e.User),
+		webConstant.LayoutStatusSuccess,
 	)
 }

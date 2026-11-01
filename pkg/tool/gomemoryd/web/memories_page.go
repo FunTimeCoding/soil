@@ -1,188 +1,40 @@
 package web
 
 import (
-	"fmt"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
-	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/web/layout"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web/memory_page"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func (s *Server) memoriesPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	tag := r.URL.Query().Get(constant.Tag)
-	memoryType := r.URL.Query().Get(constant.Type)
-	scope := r.URL.Query().Get(constant.Scope)
-	listScope := constant.AllScope
-
-	if scope == constant.DefaultScope {
-		listScope = ""
-	} else if scope != "" {
-		listScope = scope
-	}
-
-	page := 1
-
-	if v := r.URL.Query().Get("page"); v != "" {
-		if n, e := strconv.Atoi(v); e == nil && n > 0 {
-			page = n
-		}
-	}
-
-	memories, e := s.service.ListMemories(memoryType, tag, listScope, true)
-	hidden := s.service.HiddenTag()
-	visible := memories[:0]
-
-	for _, m := range memories {
-		if hiddenTagged(m.Tags, hidden) {
-			continue
-		}
-
-		visible = append(visible, m)
-	}
-
-	memories = visible
+	values := q.URL.Query()
+	page, e := strconv.Atoi(values.Get(constant.Page))
 
 	if e != nil {
-		s.view.RenderPage(
-			w,
-			constant.MemoriesTitle,
-			constant.MemoriesPath,
-			html.P(gomponents.Text("Failed to load memories.")),
-		)
+		page = 1
+	}
+
+	l, f := s.service.MemoryList(
+		values.Get(constant.Type),
+		values.Get(constant.Tag),
+		values.Get(constant.Scope),
+		page,
+	)
+
+	if f != nil {
+		s.view.Answer(w, q, s.reporter, f)
 
 		return
 	}
 
-	limit := 20
-	offset := (page - 1) * limit
-	total := len(memories)
-
-	if offset >= total {
-		memories = nil
-	} else {
-		end := offset + limit
-
-		if end > total {
-			end = total
-		}
-
-		memories = memories[offset:end]
-	}
-
-	var content []gomponents.Node
-	content = append(content, html.H3(gomponents.Text(constant.MemoriesTitle)))
-	content = append(content, s.scopeFilter(scope, tag, memoryType)...)
-
-	if tag != "" || memoryType != "" {
-		var filters []gomponents.Node
-
-		if tag != "" {
-			filters = append(filters, gomponents.Textf("tag: %s", tag))
-		}
-
-		if memoryType != "" {
-			if len(filters) > 0 {
-				filters = append(
-					filters,
-					gomponents.Text(stringsConstant.SpacedMiddot),
-				)
-			}
-
-			filters = append(filters, gomponents.Textf("type: %s", memoryType))
-		}
-
-		filters = append(
-			filters,
-			gomponents.Text(stringsConstant.SpacedMiddot),
-			html.A(
-				gomponents.Attr("href", constant.MemoriesPath),
-				gomponents.Text("clear"),
-			),
-		)
-		content = append(content, html.P(gomponents.Group(filters)))
-	}
-
-	if len(memories) == 0 {
-		content = append(content, html.P(gomponents.Text("No memories.")))
-	} else {
-		var rows []gomponents.Node
-
-		for _, m := range memories {
-			var pips []gomponents.Node
-
-			for _, t := range m.Tags {
-				pips = append(
-					pips,
-					html.A(
-						gomponents.Attr(
-							"href",
-							fmt.Sprintf(
-								"%s?%s=%s",
-								constant.MemoriesPath,
-								constant.Tag,
-								t,
-							),
-						),
-						html.Class("tag-pip"),
-						gomponents.Text(t),
-					),
-					gomponents.Text(" "),
-				)
-			}
-
-			rows = append(
-				rows,
-				html.Tr(
-					html.Td(
-						html.A(
-							gomponents.Attr(
-								"href",
-								fmt.Sprintf("/memories/%d", m.Identifier),
-							),
-							gomponents.Text(m.Name),
-						),
-					),
-					html.Td(html.Small(gomponents.Text(m.Description))),
-					html.Td(gomponents.Text(m.Type)),
-					html.Td(gomponents.Group(pips)),
-					layout.TimeCell(library.Parse(time.RFC3339, m.UpdatedAt)),
-				),
-			)
-		}
-
-		content = append(
-			content,
-			html.Table(
-				html.THead(
-					html.Tr(
-						html.Th(gomponents.Text("Name")),
-						html.Th(gomponents.Text("Description")),
-						html.Th(gomponents.Text("Type")),
-						html.Th(gomponents.Text("Tags")),
-						html.Th(gomponents.Text("Updated")),
-					),
-				),
-				html.TBody(rows...),
-			),
-		)
-	}
-
-	content = append(
-		content,
-		paginationLinks(page, offset, limit, total, tag, memoryType, scope)...,
-	)
 	s.view.RenderPage(
 		w,
 		constant.MemoriesTitle,
 		constant.MemoriesPath,
-		content...,
+		memory_page.List(l),
 	)
 }

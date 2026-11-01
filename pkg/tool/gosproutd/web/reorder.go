@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"net/http"
 	"strconv"
 )
@@ -15,7 +16,7 @@ func (s *Server) reorder(
 		return
 	}
 
-	values := r.Form["item"]
+	values := r.Form[constant.ItemParameter]
 	var identifiers []uint
 
 	for _, v := range values {

@@ -12,6 +12,10 @@ func (s *Service) CreateMemory(o *save_option.Option) (*record.Memory, error) {
 		return nil, validation.New("scope name is reserved: %s", o.Scope)
 	}
 
+	if e := checkDescription(o.Description); e != nil {
+		return nil, e
+	}
+
 	if o.Type == "" {
 		o.Type = "feedback"
 	}

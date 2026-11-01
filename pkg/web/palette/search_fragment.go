@@ -15,7 +15,7 @@ func SearchFragment(
 		html.Class("palette-body"),
 		html.Input(
 			html.ID("palette-search-input"),
-			html.Type("text"),
+			html.Type(constant.TextInputType),
 			html.Class("palette-input"),
 			gomponents.Attr("placeholder", placeholder),
 			gomponents.Attr("autocomplete", "off"),

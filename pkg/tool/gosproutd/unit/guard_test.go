@@ -21,7 +21,8 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gosproutd.Mount(s, web.New(s), memory.New(), mock_recorder.New(), g)
+			r := memory.New()
+			gosproutd.Mount(s, web.New(s, r), r, mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()

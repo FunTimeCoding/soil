@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web/pipeline_page"
 	"net/http"
 )
 
@@ -18,13 +19,12 @@ func (s *Server) job(
 		return
 	}
 
-	project := queryInteger(r, constant.Project)
-	pipeline := queryInteger(r, constant.Pipeline)
-	requested := queryInteger(r, constant.Job)
-	jobs, e := s.service.PipelineJobs(instance, project, pipeline)
-	errors.PanicOnError(e)
-	s.view.RenderFragment(
-		w,
-		s.logPane(instance, project, pipeline, selectJob(jobs, requested)),
+	v, f := s.service.JobView(
+		instance,
+		queryInteger(r, constant.Project),
+		queryInteger(r, constant.Pipeline),
+		queryInteger(r, constant.Job),
 	)
+	errors.PanicOnError(f)
+	s.view.RenderFragment(w, pipeline_page.New(v).LogPane())
 }

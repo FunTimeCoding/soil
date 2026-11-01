@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -52,7 +53,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSentinel).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(

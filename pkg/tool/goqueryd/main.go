@@ -17,10 +17,12 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
+	a.Metric()
 	a.Lite()
 	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
+	o.MetricAddress = a.MetricAddress()
 	o.ServiceTokens = web.ServiceTokens()
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.EmbedTarget = environment.Required(

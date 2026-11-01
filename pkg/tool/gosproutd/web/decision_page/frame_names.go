@@ -1,0 +1,16 @@
+package decision_page
+
+import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/decision"
+)
+
+func frameNames(d *decision.Decision) string {
+	var result []string
+
+	for _, v := range d.Frames {
+		result = append(result, v.Name)
+	}
+
+	return join.Middot(result)
+}

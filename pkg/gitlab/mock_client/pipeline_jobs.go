@@ -6,5 +6,5 @@ func (c *Client) PipelineJobs(
 	_ int64,
 	_ int64,
 ) ([]*job.Job, error) {
-	return nil, nil
+	return c.jobs, nil
 }

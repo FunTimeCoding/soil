@@ -3,82 +3,40 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/document_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
 	"net/http"
 )
 
 func (s *Server) documentDetailPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	path := r.PathValue(constant.Path)
+	path := q.PathValue(constant.Path)
 	document, suggestions, e := s.service.GetDocument(path)
 
-	if e != nil && !not_found.Is(e) {
-		s.view.Answer(w, r, s.reporter, e)
-
-		return
-	}
-
-	if document == nil {
-		var content []gomponents.Node
-		content = append(
-			content,
-			html.H3(gomponents.Text("Not Found")),
-			html.P(gomponents.Textf("No document at: %s", path)),
+	if not_found.Is(e) {
+		s.view.RenderPageWithStatus(
+			w,
+			http.StatusNotFound,
+			"Not Found",
+			webConstant.SearchPath,
+			document_page.Missing(path, suggestions),
 		)
 
-		if len(suggestions) > 0 {
-			content = append(content, html.P(gomponents.Text("Did you mean:")))
-			var items []gomponents.Node
+		return
+	}
 
-			for _, suggestion := range suggestions {
-				items = append(items, html.Li(gomponents.Text(suggestion)))
-			}
-
-			content = append(content, html.Ul(items...))
-		}
-
-		s.view.RenderPage(w, "Not Found", webConstant.SearchPath, content...)
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
 
 		return
 	}
 
-	var content []gomponents.Node
-	content = append(content, html.H3(gomponents.Text(document.Title)))
-	content = append(
-		content,
-		html.Table(
-			html.TBody(
-				html.Tr(
-					html.Td(html.Strong(gomponents.Text("Collection"))),
-					html.Td(gomponents.Text(document.Collection)),
-				),
-				html.Tr(
-					html.Td(html.Strong(gomponents.Text("Path"))),
-					html.Td(gomponents.Text(document.Path)),
-				),
-				html.Tr(
-					html.Td(html.Strong(gomponents.Text("Virtual Path"))),
-					html.Td(html.Small(gomponents.Text(document.VirtualPath))),
-				),
-				html.Tr(
-					html.Td(html.Strong(gomponents.Text("File"))),
-					html.Td(html.Small(gomponents.Text(document.FilePath))),
-				),
-				html.Tr(
-					html.Td(html.Strong(gomponents.Text("Hash"))),
-					html.Td(html.Small(gomponents.Text(document.Hash[:16]))),
-				),
-			),
-		),
+	s.view.RenderPage(
+		w,
+		document.Title,
+		constant.CollectionsPath,
+		document_page.Detail(document),
 	)
-	content = append(
-		content,
-		html.H4(gomponents.Text("Body")),
-		html.Pre(gomponents.Text(document.Body)),
-	)
-	s.view.RenderPage(w, document.Title, constant.CollectionsPath, content...)
 }

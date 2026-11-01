@@ -2,8 +2,8 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web/alert_page"
 	"net/http"
 )
 
@@ -11,7 +11,7 @@ func (s *Server) alerts(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	name := r.URL.Query().Get("name")
+	name := r.URL.Query().Get(constant.NameParameter)
 
 	if name == "" {
 		http.Error(w, "missing name parameter", http.StatusBadRequest)
@@ -21,12 +21,5 @@ func (s *Server) alerts(
 
 	records, e := s.service.Alerts(name)
 	errors.PanicOnError(e)
-	s.view.RenderPage(
-		w,
-		name,
-		"",
-		html.H1(gomponents.Textf("Alert: %s", name)),
-		html.P(gomponents.Textf("%d occurrences", len(records))),
-		alertsTable(records),
-	)
+	s.view.RenderPage(w, name, "", alert_page.Occurrences(name, records))
 }

@@ -3,9 +3,11 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/web/report_page"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
@@ -25,8 +27,8 @@ func deleteReport(
 		nil,
 	)
 	assert.FatalOnError(t, e)
-	q.URL.Opaque = join.Empty("/reports/", name, "/delete")
-	web.Bearer(q, constant.ModelContextTestToken)
+	q.URL.Opaque = join.Empty(report_page.Path(name), constant.DeleteSuffix)
+	web.Bearer(q, generativeConstant.ModelContextTestToken)
 	r, f := v.Halting().Do(q)
 	assert.FatalOnError(t, f)
 	defer errors.LogClose(r.Body)

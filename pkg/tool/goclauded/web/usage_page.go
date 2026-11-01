@@ -1,9 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/usage_page"
 	"github.com/funtimecoding/soil/pkg/web/extended"
+	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -17,9 +18,12 @@ func (s *Server) usagePage(
 		w,
 		constant.UsageTitle,
 		constant.UsagePath,
-		join.Empty("subscribe=", constant.Usage),
+		subscription.Query(constant.Usage),
 		html.H3(gomponents.Text(constant.UsageTitle)),
-		html.Div(extended.StreamSwap(constant.UsageChart), s.usageChart()),
-		s.usageNote(),
+		html.Div(
+			extended.StreamSwap(constant.UsageChart),
+			usage_page.Chart(s.service.UsageWindow()),
+		),
+		usage_page.Note(s.service.Usage(), s.service.UtilizationCredential()),
 	)
 }

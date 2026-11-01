@@ -10,7 +10,12 @@ const (
 	RerankTokenizerFile        = "tokenizer.json"
 	RerankQueryReserve         = 32
 	EmbedTokenizerEnvironment  = "EMBED_TOKENIZER"
+	EmbedTokenizerDefault      = "~/.local/share/soil/nomic-embed-text/tokenizer.json"
+	EmbedTokenizerSource       = "https://huggingface.co/nomic-ai/nomic-embed-text-v1.5/resolve/main/tokenizer.json"
+	EmbedTokenizerUnset        = "%s not set - fetch nomic's tokenizer: curl -L --create-dirs -o %s %s"
+	EmbedTokenizerUnreadable   = "%s: %w - fetch nomic's tokenizer: curl -L --create-dirs -o %s %s"
 	EmbedWindow                = 2048
+	EmbedOverWindow            = "over the embedder's window: %d tokens against %d"
 	NoChunkPosition            = -1
 	MockRerankerName           = "mock"
 )

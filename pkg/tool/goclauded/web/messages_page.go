@@ -1,8 +1,8 @@
 package web
 
 import (
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/message_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -11,90 +11,29 @@ import (
 
 func (s *Server) messagesPage(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	page := 1
+	page, e := strconv.Atoi(q.URL.Query().Get(constant.Page))
 
-	if v := r.URL.Query().Get("page"); v != "" {
-		if n, e := strconv.Atoi(v); e == nil && n > 0 {
-			page = n
-		}
+	if e != nil || page < 1 {
+		page = 1
 	}
 
-	limit := 20
-	skip := (page - 1) * limit
-	messages := s.service.AllMessages(limit+1, skip)
-	hasMore := len(messages) > limit
+	messages := s.service.AllMessages(
+		constant.PageSize+1,
+		(page-1)*constant.PageSize,
+	)
+	more := len(messages) > constant.PageSize
 
-	if hasMore {
-		messages = messages[:limit]
-	}
-
-	var rows []gomponents.Node
-
-	for i := range messages {
-		rows = append(rows, messageRow(&messages[i]))
-	}
-
-	var content []gomponents.Node
-	content = append(content, html.H3(gomponents.Text(constant.MessagesTitle)))
-
-	if len(rows) == 0 {
-		content = append(content, html.P(gomponents.Text("No messages.")))
-	} else {
-		content = append(
-			content,
-			html.Table(
-				html.THead(
-					html.Tr(
-						html.Th(gomponents.Text("Time")),
-						html.Th(gomponents.Text("From")),
-						html.Th(gomponents.Text("To")),
-						html.Th(gomponents.Text("Message")),
-					),
-				),
-				html.TBody(rows...),
-			),
-		)
-	}
-
-	var navigation []gomponents.Node
-
-	if page > 1 {
-		navigation = append(
-			navigation,
-			html.A(
-				gomponents.Attr("href", messagePaginationLink(page-1)),
-				gomponents.Text("← Newer"),
-			),
-		)
-	}
-
-	if hasMore {
-		if len(navigation) > 0 {
-			navigation = append(
-				navigation,
-				gomponents.Text(stringsConstant.SpacedMiddot),
-			)
-		}
-
-		navigation = append(
-			navigation,
-			html.A(
-				gomponents.Attr("href", messagePaginationLink(page+1)),
-				gomponents.Text("Older →"),
-			),
-		)
-	}
-
-	if len(navigation) > 0 {
-		content = append(content, html.P(gomponents.Group(navigation)))
+	if more {
+		messages = messages[:constant.PageSize]
 	}
 
 	s.view.RenderPage(
 		w,
 		constant.MessagesTitle,
 		constant.MessagesPath,
-		content...,
+		html.H3(gomponents.Text(constant.MessagesTitle)),
+		message_page.List(messages, page, more),
 	)
 }

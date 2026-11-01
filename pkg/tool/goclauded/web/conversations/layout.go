@@ -22,6 +22,7 @@ func layout(content ...gomponents.Node) gomponents.Node {
 				html.Link(html.Rel("stylesheet"), html.Href(webConstant.Pico)),
 				html.Script(html.Src(webConstant.Extended)),
 				html.StyleEl(gomponents.Raw(webConstant.ThemeHearth)),
+				html.StyleEl(gomponents.Raw(webConstant.ComponentStyle)),
 				html.StyleEl(gomponents.Raw(constant.ConversationStyle)),
 			),
 			html.Body(

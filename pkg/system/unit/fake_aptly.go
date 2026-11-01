@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly"
+	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -13,15 +14,24 @@ import (
 
 func fakeAptly(
 	t *testing.T,
+	status int,
 	body string,
-	query *url.Values,
+	seen *aptlySeen,
 ) *aptly.Client {
 	t.Helper()
 	s := httptest.NewServer(
 		http.HandlerFunc(
 			func(w http.ResponseWriter, r *http.Request) {
-				*query = r.URL.Query()
+				b, e := io.ReadAll(r.Body)
+				errors.PanicOnError(e)
+				*seen = aptlySeen{
+					Method: r.Method,
+					Path:   r.URL.Path,
+					Query:  r.URL.Query(),
+					Body:   string(b),
+				}
 				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(status)
 				_, f := w.Write([]byte(body))
 				errors.PanicOnError(f)
 			},

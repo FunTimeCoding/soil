@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/change"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web/entry_page"
 	"net/http"
 	"time"
 )
@@ -36,13 +37,13 @@ func (s *Server) editSubmit(
 	c.Description = &description
 
 	if v := r.FormValue(constant.Timestamp); v != "" {
-		t, g := time.Parse("2006-01-02T15:04", v)
+		t, g := time.Parse(constant.FilterFormat, v)
 
 		if g != nil {
 			c.Apply(e)
 			s.view.RenderFragment(
 				w,
-				editForm(e, fmt.Sprintf("invalid timestamp: %s", v)),
+				entry_page.EditRow(e, fmt.Sprintf("invalid timestamp: %s", v)),
 			)
 
 			return
@@ -55,7 +56,7 @@ func (s *Server) editSubmit(
 
 	if validation.Is(g) {
 		c.Apply(e)
-		s.view.RenderFragment(w, editForm(e, g.Error()))
+		s.view.RenderFragment(w, entry_page.EditRow(e, g.Error()))
 
 		return
 	}
@@ -66,5 +67,5 @@ func (s *Server) editSubmit(
 		return
 	}
 
-	s.view.RenderFragment(w, detailRow(result))
+	s.view.RenderFragment(w, entry_page.Detail(result))
 }

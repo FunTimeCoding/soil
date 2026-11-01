@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web/heatmap_page"
 	"net/http"
 )
 
@@ -21,6 +22,6 @@ func (s *Server) heatmap(
 		w,
 		constant.HeatmapTitle,
 		constant.HeatmapPath,
-		heatmapTable(summaries),
+		heatmap_page.Table(summaries),
 	)
 }

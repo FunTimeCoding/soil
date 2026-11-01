@@ -43,7 +43,7 @@ func (s *Store) CollectionFacets(
 		i++
 	}
 
-	parts = append(parts, `WHERE d.collection = ? AND d.active = 1`)
+	parts = append(parts, `WHERE d.collection = ?`)
 	arguments = append(arguments, collection)
 
 	if len(keys) > 0 {

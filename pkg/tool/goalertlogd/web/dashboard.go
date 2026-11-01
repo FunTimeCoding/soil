@@ -14,7 +14,7 @@ func (s *Server) dashboard(
 	r *http.Request,
 ) {
 	if s.view.IsExtendedRequest(r) {
-		s.view.RenderFragment(w, s.topTable())
+		s.view.RenderFragment(w, s.topRegion())
 
 		return
 	}
@@ -24,12 +24,12 @@ func (s *Server) dashboard(
 		constant.DashboardTitle,
 		constant.DashboardPath,
 		subscription.Query(constant.EventSummary, constant.EventTop),
-		s.summaryItems(),
+		s.summary(),
 		html.H2(gomponents.Text("Top 25 Noisy Alerts (Last 7 Days)")),
 		html.Div(
 			html.ID(constant.TopMark),
 			extended.StreamSwap(constant.EventTop),
-			s.topTable(),
+			s.topRegion(),
 		),
 	)
 }

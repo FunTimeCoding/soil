@@ -48,10 +48,8 @@ func (s *Store) SearchKeyword(
 		arguments = append(arguments, joinArguments...)
 	}
 
-	sql = join.Empty(sql, ` WHERE d.active = 1`)
-
 	if collection != "" {
-		sql = join.Empty(sql, " AND d.collection = ?")
+		sql = join.Empty(sql, " WHERE d.collection = ?")
 		arguments = append(arguments, collection)
 	}
 

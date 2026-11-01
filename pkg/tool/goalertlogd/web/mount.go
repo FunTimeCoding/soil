@@ -12,6 +12,6 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(webConstant.PalettePath), s.registry.Serve())
 	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
 	g.Open(route.Get(constant.RecentPath), s.recent)
-	g.Open(route.Get("/alerts"), s.alerts)
+	g.Open(route.Get(constant.AlertsPath), s.alerts)
 	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

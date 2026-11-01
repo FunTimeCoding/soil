@@ -25,6 +25,6 @@ func (s *Server) retry(
 	errors.PanicOnError(e)
 	s.view.RenderFragment(
 		w,
-		s.pipelineDetail(instance, project, pipeline, replacement.Identifier),
+		s.detailRegion(instance, project, pipeline, replacement.Identifier),
 	)
 }

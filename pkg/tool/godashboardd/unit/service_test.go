@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/argocd/mock_client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
@@ -69,6 +70,28 @@ func TestARefreshFillsEachPanel(t *testing.T) {
 	assert.String(t, "7", values["Prometheus"][0])
 	assert.String(t, "12", values["Nextcloud"][0])
 	assert.String(t, "3", values["Nextcloud"][1])
+}
+
+func TestEveryRowLabelGetsAValue(t *testing.T) {
+	v := service_tester.New(
+		t,
+		service_tester.NewOption(
+			t,
+			service_tester.FixtureBoard(),
+			newPrometheus(t),
+			mock_client.New(),
+			newUsage(t),
+		),
+		memory.New(),
+	)
+	assert.Count(t, 0, v.Refresh())
+	values := v.Values()
+
+	for _, e := range service_tester.FixtureBoard().Entries() {
+		assert.Integer(t, len(e.RowLabels()), len(values[e.Label]))
+	}
+
+	assert.Count(t, 4, values["Argo CD"])
 }
 
 func TestAFailingPanelIsReportedAndShownPending(t *testing.T) {

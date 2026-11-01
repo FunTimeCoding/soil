@@ -7,7 +7,7 @@ func (s *Store) findActiveDocument(
 	path string,
 ) *record.ActiveDocument {
 	row := s.database.QueryRow(
-		"SELECT identifier, hash, title FROM document WHERE collection = ? AND path = ? AND active = 1",
+		"SELECT identifier, hash, title FROM document WHERE collection = ? AND path = ?",
 		collection,
 		path,
 	)

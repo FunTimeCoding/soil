@@ -17,7 +17,7 @@ func (s *Server) paletteMemoriesSearch(
 	var items []palette.SearchItem
 
 	if query != "" {
-		results, e := s.service.SearchMemories(
+		results, e := s.service.VisibleSearchResults(
 			fmt.Sprintf("%s*", query),
 			10,
 			"",
@@ -25,13 +25,8 @@ func (s *Server) paletteMemoriesSearch(
 			constant.AllScope,
 		)
 		errors.PanicOnError(e)
-		hidden := s.service.HiddenTag()
 
 		for _, m := range results {
-			if hiddenTagged(m.Tags, hidden) {
-				continue
-			}
-
 			items = append(
 				items,
 				palette.SearchItem{

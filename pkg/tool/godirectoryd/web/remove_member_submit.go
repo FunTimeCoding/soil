@@ -19,7 +19,17 @@ func (s *Server) removeMemberSubmit(
 	)
 
 	if e != nil {
-		form.Redirect(w, r, constant.GroupPath, e.Error(), url.Values{})
+		form.RedirectFor(
+			w,
+			r,
+			constant.GroupPath,
+			constant.MemberForm,
+			e.Error(),
+			url.Values{
+				constant.GroupField:   {r.FormValue(constant.GroupField)},
+				constant.AccountField: {r.FormValue(constant.AccountField)},
+			},
+		)
 
 		return
 	}

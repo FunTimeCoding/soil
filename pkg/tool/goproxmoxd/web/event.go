@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/web/floor_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
@@ -23,7 +24,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					webConstant.LayoutSummaryStrip,
-					layout.SummaryStripContent(summary(*snapshot)),
+					layout.SummaryStripContent(floor_page.Summary(*snapshot)),
 				)
 			}
 
@@ -31,7 +32,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.FloorEvent,
-					s.floorSections(*snapshot),
+					floor_page.Region(*snapshot, s.guestLinks(*snapshot)),
 				)
 			}
 

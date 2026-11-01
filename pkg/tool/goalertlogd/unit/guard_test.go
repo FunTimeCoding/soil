@@ -13,6 +13,6 @@ func TestGuard(t *testing.T) {
 	c.VerifyGuarded(t, "/api/alerts")
 	c.VerifyGuarded(t, "/api/status")
 	c.VerifyOpen(t, constant.DashboardPath)
-	c.VerifyOpen(t, "/alerts")
+	c.VerifyOpen(t, constant.AlertsPath)
 	c.VerifyModelContext(t)
 }

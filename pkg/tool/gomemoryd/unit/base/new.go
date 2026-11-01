@@ -24,6 +24,7 @@ func New(t *testing.T) *Server {
 	result := &Server{
 		t:       t,
 		store:   s,
+		service: v,
 		indexer: i,
 		Server: model_context_server.New(
 			t,
@@ -31,7 +32,7 @@ func New(t *testing.T) *Server {
 				_ *http.ServeMux,
 				g *guard.Mux,
 			) {
-				gomemoryd.Mount(v, web.New(v), r, mock_recorder.New(), g)
+				gomemoryd.Mount(v, web.New(v, r), r, mock_recorder.New(), g)
 			},
 		),
 	}

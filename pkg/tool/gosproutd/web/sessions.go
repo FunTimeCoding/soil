@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/session_page"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -17,6 +18,9 @@ func (s *Server) sessions(
 		constant.SessionsTitle,
 		constant.SessionsPath,
 		html.H3(gomponents.Text(constant.SessionsTitle)),
-		html.Div(extended.StreamSwap(constant.SessionsEvent), s.sessionTable()),
+		html.Div(
+			extended.StreamSwap(constant.SessionsEvent),
+			session_page.List(s.service.Sessions()),
+		),
 	)
 }

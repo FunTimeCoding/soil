@@ -17,10 +17,11 @@ func (s *Server) setPasswordSubmit(
 	e := s.service.SetPassword(account, r.FormValue(constant.PasswordField))
 
 	if e != nil {
-		form.Redirect(
+		form.RedirectFor(
 			w,
 			r,
 			constant.UserPath,
+			constant.PasswordForm,
 			e.Error(),
 			url.Values{constant.AccountField: {account}},
 		)

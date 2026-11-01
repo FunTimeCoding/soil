@@ -10,6 +10,7 @@ import (
 
 type Server struct {
 	service       *service.Service
+	reporter      face.Reporter
 	notifier      face.EventNotifier
 	conversations *conversations.Server
 	view          *view.View

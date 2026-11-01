@@ -19,19 +19,19 @@ func TestEveryManualChunkFitsTheEmbedder(t *testing.T) {
 	)
 }
 
-func TestTheEmbedderRefusesTheDenseChunk(t *testing.T) {
+func TestTheOllamaClientRefusesTheDenseChunk(t *testing.T) {
 	assertRefused(
 		t,
-		newEmbedder(t),
+		newOllamaEmbedder(t),
 		"dense.md",
 		fixture.Read(systemConstant.LimitPath, "dense.md"),
 	)
 }
 
-func TestTheEmbedderRefusesTheGoDeclaration(t *testing.T) {
+func TestTheOllamaClientRefusesTheGoDeclaration(t *testing.T) {
 	assertRefused(
 		t,
-		newEmbedder(t),
+		newOllamaEmbedder(t),
 		"table.go",
 		join.Empty(
 			"package alfa\n\nvar table = []int{\n",

@@ -43,7 +43,7 @@ func (s *Server) trigger(
 		html.Div(html.ID(constant.SelectionMark)),
 		html.Input(
 			html.ID("term-input"),
-			html.Type("text"),
+			html.Type(constant.TextInputType),
 			html.Name(constant.TermField),
 			extended.Get(constant.EchoPath),
 			extended.Trigger(constant.TriggerType),

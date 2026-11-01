@@ -62,6 +62,7 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSentinel).
+				WithStyle(webConstant.ComponentStyle).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(

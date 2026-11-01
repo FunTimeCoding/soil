@@ -24,5 +24,5 @@ func TestLoad(t *testing.T) {
 	assert.Integer(t, 2, b.Tail.Columns)
 	assert.Integer(t, 2, len(b.Tail.Sections))
 	assert.String(t, "", b.Tail.Sections[1].Name)
-	assert.Integer(t, 6, len(b.Entries()))
+	assert.Integer(t, 7, len(b.Entries()))
 }

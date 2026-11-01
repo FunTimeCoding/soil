@@ -15,7 +15,7 @@ func commandPalette(endpoint string) gomponents.Node {
 			html.Class("palette-body"),
 			html.Input(
 				html.ID("palette-input"),
-				html.Type("text"),
+				html.Type(constant.TextInputType),
 				html.Class("palette-input"),
 				gomponents.Attr("placeholder", "Type a command..."),
 				gomponents.Attr("autocomplete", "off"),

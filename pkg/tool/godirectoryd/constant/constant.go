@@ -62,9 +62,10 @@ const (
 	AddMemberPath    = "/group/member/add"
 	RemoveMemberPath = "/group/member/remove"
 
-	TextInputType     = "text"
-	MailInputType     = "email"
-	PasswordInputType = "password"
+	CreateUserForm  = "create-user"
+	PasswordForm    = "set-password"
+	CreateGroupForm = "create-group"
+	MemberForm      = "membership"
 
 	AccountField  = "account"
 	NameField     = "name"

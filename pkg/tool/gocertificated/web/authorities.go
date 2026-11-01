@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/web/authority_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -25,6 +26,6 @@ func (s *Server) authorities(
 				gomponents.Text(constant.CreateAuthorityTitle),
 			),
 		),
-		authoritiesTable(result),
+		authority_page.Table(result),
 	)
 }

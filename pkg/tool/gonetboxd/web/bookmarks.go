@@ -3,8 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web/bookmark_page"
 	"net/http"
 )
 
@@ -14,19 +13,11 @@ func (s *Server) bookmarks(
 ) {
 	result, e := s.service.Bookmarks()
 	errors.PanicOnError(e)
-	var content gomponents.Node
-
-	if len(result) == 0 {
-		content = html.P(gomponents.Text(constant.BookmarkNone))
-	} else {
-		content = bookmarkTable(result)
-	}
-
 	s.view.RenderPageWithSummary(
 		w,
 		constant.BookmarkTitle,
 		constant.BookmarkPath,
-		summary(result),
-		content,
+		bookmark_page.Summary(result),
+		bookmark_page.Table(result),
 	)
 }

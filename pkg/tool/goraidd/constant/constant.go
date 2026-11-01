@@ -25,6 +25,23 @@ const (
 	PlayersTitle = "Players"
 	PlayersPath  = "/players"
 
+	GeneratePath   = "/generate"
+	CreateRaidPath = "/raids/create"
+	StaticPath     = "/static/"
+	DeleteSuffix   = "/delete"
+
+	FileNameField       = "fileNames"
+	FileNameParameter   = "fileName"
+	IdentifierParameter = "id"
+	AccountParameter    = "account"
+	AccountColumn       = "account"
+	OffsetParameter     = "offset"
+	StartParameter      = "start"
+	EndParameter        = "end"
+	FilterFormat        = "2006-01-02T15:04"
+
+	ReportSizeClass = "report-size"
+
 	PageSize = 50
 
 	EnrichCutoffDays     = 14

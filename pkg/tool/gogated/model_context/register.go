@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -44,7 +45,7 @@ func (s *Server) register() {
 				"Change a registered client. Omitted fields are left untouched. Use this to conform a client created through RFC 7591 registration, whose protocol defaults differ from this fleet's.",
 			),
 			mcp.WithString(
-				"identifier",
+				generativeConstant.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Client identifier"),
 			),
@@ -81,7 +82,7 @@ func (s *Server) register() {
 				"Remove a registered client permanently. The relying party can no longer sign anyone in.",
 			),
 			mcp.WithString(
-				"identifier",
+				generativeConstant.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Client identifier"),
 			),

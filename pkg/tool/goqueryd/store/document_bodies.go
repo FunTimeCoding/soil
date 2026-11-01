@@ -10,12 +10,11 @@ func (s *Store) DocumentBodies(collection string) ([]*record.DocumentBody, error
 	sql := `
 		SELECT d.collection, d.path, d.hash, c.body
 		FROM document d
-		JOIN content c ON d.hash = c.hash
-		WHERE d.active = 1`
+		JOIN content c ON d.hash = c.hash`
 	var arguments []any
 
 	if collection != "" {
-		sql = join.Empty(sql, " AND d.collection = ?")
+		sql = join.Empty(sql, " WHERE d.collection = ?")
 		arguments = append(arguments, collection)
 	}
 

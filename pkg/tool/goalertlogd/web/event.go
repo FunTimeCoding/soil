@@ -22,12 +22,12 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					webConstant.LayoutSummaryStrip,
-					layout.SummaryStripContent(s.summaryItems()),
+					layout.SummaryStripContent(s.summary()),
 				)
 			}
 
 			if subs.Has(constant.EventTop) {
-				layout.PushEvent(w, constant.EventTop, s.topTable())
+				layout.PushEvent(w, constant.EventTop, s.topRegion())
 			}
 
 			f.Flush()

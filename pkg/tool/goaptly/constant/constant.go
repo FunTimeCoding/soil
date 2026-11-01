@@ -9,8 +9,10 @@ var Identity = identity.New(
 )
 
 const (
-	RepositoryFlag = "repository"
-	ForceFlag      = "force"
+	RepositoryFlag     = "repository"
+	ForceFlag          = "force"
+	DistributionFlag   = "distribution"
+	PassphraseFileFlag = "passphrase-file"
 
 	DefaultRepository = "rolling"
 )

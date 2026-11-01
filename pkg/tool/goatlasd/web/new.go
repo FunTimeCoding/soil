@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -42,7 +43,9 @@ func New(v *service.Service) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTerritory).
-				WithStyle(constant.InlineStyle).
+				WithStyle(
+					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
+				).
 				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(

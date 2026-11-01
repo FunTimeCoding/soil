@@ -12,7 +12,7 @@ func (s *Store) Status() (*status.Status, error) {
 		SELECT c.name, c.path, c.pattern, c.type,
 			COUNT(d.identifier) AS document_count
 		FROM collection c
-		LEFT JOIN document d ON d.collection = c.name AND d.active = 1
+		LEFT JOIN document d ON d.collection = c.name
 		GROUP BY c.name
 	`,
 	)
@@ -46,9 +46,7 @@ func (s *Store) Status() (*status.Status, error) {
 
 	row := s.database.QueryRow(
 		`SELECT COUNT(*) FROM embedding e
-		WHERE EXISTS (
-			SELECT 1 FROM document d WHERE d.hash = e.hash AND d.active = 1
-		)`,
+		WHERE EXISTS (SELECT 1 FROM document d WHERE d.hash = e.hash)`,
 	)
 
 	if e := row.Scan(&r.TotalEmbeddings); e != nil {
@@ -58,8 +56,7 @@ func (s *Store) Status() (*status.Status, error) {
 	row = s.database.QueryRow(
 		`
 		SELECT COUNT(DISTINCT d.hash) FROM document d
-		WHERE d.active = 1
-		AND NOT EXISTS (SELECT 1 FROM embedding e WHERE e.hash = d.hash)
+		WHERE NOT EXISTS (SELECT 1 FROM embedding e WHERE e.hash = d.hash)
 		AND NOT EXISTS (SELECT 1 FROM embedding_failure f WHERE f.hash = d.hash)
 	`,
 	)
@@ -70,9 +67,7 @@ func (s *Store) Status() (*status.Status, error) {
 
 	row = s.database.QueryRow(
 		`SELECT COUNT(*) FROM embedding_failure f
-		WHERE EXISTS (
-			SELECT 1 FROM document d WHERE d.hash = f.hash AND d.active = 1
-		)`,
+		WHERE EXISTS (SELECT 1 FROM document d WHERE d.hash = f.hash)`,
 	)
 
 	if e := row.Scan(&r.FailedEmbeddings); e != nil {

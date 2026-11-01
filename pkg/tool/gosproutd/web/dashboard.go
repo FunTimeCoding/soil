@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/seed_page"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -10,15 +11,16 @@ import (
 
 func (s *Server) dashboard(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	modified := r.URL.Query().Get(constant.SortParameter) == constant.SortModified
+	modified := q.URL.Query().Get(constant.SortParameter) ==
+		constant.SortModified
 	event := constant.Seeds
-	table := s.seedTable()
+	table := seed_page.Priority(s.service.Seeds())
 
 	if modified {
 		event = constant.SeedsRecent
-		table = s.recentSeedTable()
+		table = seed_page.Recent(s.service.RecentSeeds())
 	}
 
 	s.view.RenderPage(
@@ -26,7 +28,7 @@ func (s *Server) dashboard(
 		constant.DashboardTitle,
 		constant.DashboardPath,
 		html.H3(gomponents.Text(constant.SeedsTitle)),
-		sortLinks(modified),
+		seed_page.Views(modified),
 		html.Div(extended.StreamSwap(event), table),
 	)
 }

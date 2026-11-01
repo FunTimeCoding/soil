@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/usage_page"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
@@ -11,8 +12,24 @@ import (
 
 func (s *Server) dashboard(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
+	roster, e := s.roster()
+
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
+
+		return
+	}
+
+	activity, f := s.activity(q.Context(), nil)
+
+	if f != nil {
+		s.view.Answer(w, q, s.reporter, f)
+
+		return
+	}
+
 	s.view.RenderLivePageWithSummary(
 		w,
 		constant.DashboardTitle,
@@ -22,13 +39,10 @@ func (s *Server) dashboard(
 			constant.Activity,
 			constant.EventSummary,
 		),
-		s.usageSummary(),
+		usage_page.Summary(s.service.Usage()),
 		html.H3(gomponents.Text("Roster")),
-		html.Div(extended.StreamSwap(constant.Roster), s.rosterSection()),
+		html.Div(extended.StreamSwap(constant.Roster), roster),
 		html.H3(gomponents.Text("Recent Activity")),
-		html.Div(
-			extended.StreamSwap(constant.Activity),
-			s.activitySection(r.Context(), nil),
-		),
+		html.Div(extended.StreamSwap(constant.Activity), activity),
 	)
 }

@@ -4,6 +4,8 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web/board_page"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web/pipeline_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
@@ -20,12 +22,13 @@ func (s *Server) event() http.HandlerFunc {
 		) {
 			subs := subscription.Parse(r)
 			entries := s.worker.Entries()
+			multiple := s.multiple()
 
 			if subs.Has(constant.SummaryEvent) {
 				layout.PushEvent(
 					w,
 					webConstant.LayoutSummaryStrip,
-					layout.SummaryStripContent(summary(entries)),
+					layout.SummaryStripContent(board_page.Summary(entries)),
 				)
 			}
 
@@ -33,12 +36,16 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.RequestEvent,
-					s.requestSection(s.worker.Requests()),
+					board_page.Requests(s.worker.Requests(), multiple),
 				)
 			}
 
 			if subs.Has(constant.BoardEvent) {
-				layout.PushEvent(w, constant.BoardEvent, s.boardTable(entries))
+				layout.PushEvent(
+					w,
+					constant.BoardEvent,
+					board_page.Table(entries, multiple),
+				)
 			}
 
 			if subs.Has(constant.PipelineEvent) {
@@ -47,22 +54,12 @@ func (s *Server) event() http.HandlerFunc {
 				instance, g := s.queryInstance(r)
 
 				if g == nil && project != 0 && pipeline != 0 {
-					jobs, e := s.service.PipelineJobs(
-						instance,
-						project,
-						pipeline,
-					)
+					v, e := s.service.JobView(instance, project, pipeline, 0)
 					errors.PanicOnError(e)
 					layout.PushEvent(
 						w,
 						constant.PipelineEvent,
-						stageStrip(
-							instance,
-							project,
-							pipeline,
-							jobs,
-							selectJob(jobs, 0),
-						),
+						pipeline_page.New(v).StageStrip(),
 					)
 				}
 			}

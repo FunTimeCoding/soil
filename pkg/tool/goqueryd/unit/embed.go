@@ -13,6 +13,7 @@ func (f *FixedEmbedder) Embed(
 	f.mutex.Lock()
 	defer f.mutex.Unlock()
 	f.calls++
+	f.inputs = append(f.inputs, v...)
 
 	if f.embedding != nil {
 		return nil, f.embedding

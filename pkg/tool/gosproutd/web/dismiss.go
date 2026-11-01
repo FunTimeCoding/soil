@@ -1,31 +1,37 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"net/http"
 )
 
 func (s *Server) dismiss(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	identifier, okay := decisionIdentifier(w, r)
+	d, okay := s.decisionIdentifier(w, q)
 
 	if !okay {
 		return
 	}
 
-	state := constant.State(r.URL.Query().Get(constant.StateParameter))
+	state := constant.State(q.FormValue(constant.StateParameter))
 
 	switch state {
 	case constant.StateDeclined, constant.StateIrrelevant,
 		constant.StatePostponed:
-		s.service.Dismiss(identifier, state)
+		s.service.Dismiss(d.Identifier, state)
 	default:
-		http.Error(w, "invalid state", http.StatusBadRequest)
+		s.view.Answer(
+			w,
+			q,
+			s.reporter,
+			validation.New("invalid state: %s", state),
+		)
 
 		return
 	}
 
-	s.view.RenderFragment(w, decisionRow(s.service.Decision(identifier)))
+	s.renderCard(w, q, d.Identifier)
 }

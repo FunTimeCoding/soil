@@ -10,7 +10,7 @@ func (s *Store) Failures(collection string) ([]*record.Failure, error) {
 	sql := `
 		SELECT d.collection, d.path, c.body, f.sequence, f.reason
 		FROM embedding_failure f
-		JOIN document d ON d.hash = f.hash AND d.active = 1
+		JOIN document d ON d.hash = f.hash
 		JOIN content c ON c.hash = f.hash`
 	var arguments []any
 

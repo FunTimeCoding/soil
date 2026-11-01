@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/session_page"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -12,12 +13,12 @@ import (
 
 func (s *Server) sessionDetail(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	name := r.URL.Query().Get(constant.SessionParameter)
+	name := q.URL.Query().Get(constant.SessionParameter)
 
 	if name == "" {
-		http.Redirect(w, r, constant.SessionsPath, http.StatusSeeOther)
+		http.Redirect(w, q, constant.SessionsPath, http.StatusSeeOther)
 
 		return
 	}
@@ -30,7 +31,7 @@ func (s *Server) sessionDetail(
 		html.H3(gomponents.Text(name)),
 		html.Div(
 			extended.StreamSwap(constant.DecisionEvent),
-			s.decisionTable(name),
+			session_page.Grid(s.service.Decisions(name)),
 		),
 	)
 }

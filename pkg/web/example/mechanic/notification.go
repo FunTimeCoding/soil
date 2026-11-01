@@ -22,10 +22,10 @@ func (s *Server) notification(
 			extended.Post(constant.OutOfBandPath),
 			extended.Target(selector(constant.ReceiptMark)),
 			extended.Swap(constant.SwapInner),
-			extended.AfterRequest("this.reset()"),
+			extended.AfterRequest(constant.EntryResetScript),
 			html.Input(
 				html.ID("note-input"),
-				html.Type("text"),
+				html.Type(constant.TextInputType),
 				html.Name(constant.TermField),
 			),
 			html.Button(html.ID("receipt-post"), gomponents.Text("Send")),

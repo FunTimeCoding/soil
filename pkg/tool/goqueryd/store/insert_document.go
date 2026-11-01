@@ -10,13 +10,12 @@ func (s *Store) InsertDocument(
 	now string,
 ) {
 	_, e := s.database.Exec(
-		`INSERT INTO document (collection, path, title, hash, created_at, modified_at, active)
-		VALUES (?, ?, ?, ?, ?, ?, 1)
+		`INSERT INTO document (collection, path, title, hash, created_at, modified_at)
+		VALUES (?, ?, ?, ?, ?, ?)
 		ON CONFLICT(collection, path) DO UPDATE SET
 			title = excluded.title,
 			hash = excluded.hash,
-			modified_at = excluded.modified_at,
-			active = 1`,
+			modified_at = excluded.modified_at`,
 		collection,
 		path,
 		title,

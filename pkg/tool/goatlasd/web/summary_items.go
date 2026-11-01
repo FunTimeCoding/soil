@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store/result"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web/component"
 )
 
 func (*Server) summaryItems(
@@ -17,8 +18,12 @@ func (*Server) summaryItems(
 	}
 
 	return []string{
-		Counted(len(places), constant.PlaceWord, constant.PlacesWord),
-		Counted(placements, constant.PlacementWord, constant.PlacementsWord),
+		component.Counted(len(places), constant.PlaceWord, constant.PlacesWord),
+		component.Counted(
+			placements,
+			constant.PlacementWord,
+			constant.PlacementsWord,
+		),
 		fmt.Sprintf(constant.UnclaimedSummary, unclaimed),
 	}
 }

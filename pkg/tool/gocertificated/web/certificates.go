@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/web/certificate_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -26,6 +27,6 @@ func (s *Server) certificates(
 				gomponents.Text(constant.IssueCertificateTitle),
 			),
 		),
-		certificatesTable(result),
+		certificate_page.Table(result),
 	)
 }

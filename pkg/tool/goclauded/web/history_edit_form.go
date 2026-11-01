@@ -1,67 +1,19 @@
 package web
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/extended"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/history_page"
 	"net/http"
-	"strconv"
 )
 
 func (s *Server) historyEditForm(
 	w http.ResponseWriter,
-	r *http.Request,
+	q *http.Request,
 ) {
-	identifier, e := strconv.Atoi(r.PathValue(constant.Identifier))
+	e, okay := s.historyEvent(w, q)
 
-	if e != nil || identifier <= 0 {
+	if !okay {
 		return
 	}
 
-	event := s.service.GetEvent(uint(identifier))
-
-	if event == nil {
-		return
-	}
-
-	editValue := editableValue(event.Kind, event.Metadata)
-	textareaIdentifier := fmt.Sprintf("edit-body-%d", identifier)
-	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
-	errors.PanicOnError(
-		gomponents.Group(
-			[]gomponents.Node{
-				html.Td(
-					gomponents.Text(event.CreatedAt.Local().Format("15:04")),
-				),
-				html.Td(
-					html.Textarea(
-						html.ID(textareaIdentifier),
-						html.Name(constant.Body),
-						html.Rows("3"),
-						html.Style("width: 100%"),
-						gomponents.Text(editValue),
-					),
-					html.Div(
-						html.Button(
-							extended.Post(
-								fmt.Sprintf("/history/%d/edit", identifier),
-							),
-							extended.Target(
-								fmt.Sprintf("#event-%d", identifier),
-							),
-							extended.Swap("outerHTML"),
-							extended.Include(
-								fmt.Sprintf("#%s", textareaIdentifier),
-							),
-							gomponents.Text("Save"),
-						),
-					),
-				),
-			},
-		).Render(w),
-	)
+	s.view.RenderFragment(w, history_page.EditRow(e))
 }
