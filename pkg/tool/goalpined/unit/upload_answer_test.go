@@ -16,7 +16,7 @@ import (
 func TestABodyThatIsNotAPackageIsRefusedQuietly(t *testing.T) {
 	o := service_tester.New(t)
 	r := memory.New()
-	v := mountedReported(t, o.Service, r)
+	v := mountedReported(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusBadRequest,
@@ -39,7 +39,7 @@ func TestAMissingSignatureKeyIsCaptured(t *testing.T) {
 		os.Remove(filepath.Join(o.KeyDirectory, o.SignatureKey)),
 	)
 	r := memory.New()
-	v := mountedReported(t, o.Service, r)
+	v := mountedReported(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusInternalServerError,
@@ -57,7 +57,7 @@ func TestAFailedIndexIsCaptured(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = errors.Format("index packages", "apk")
 	r := memory.New()
-	v := mountedReported(t, o.Service, r)
+	v := mountedReported(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusInternalServerError,

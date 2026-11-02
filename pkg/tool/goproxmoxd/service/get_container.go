@@ -7,7 +7,7 @@ func (s *Service) GetContainer(
 	identifier int,
 	node string,
 ) (*proxmox.Container, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return nil, clientFail

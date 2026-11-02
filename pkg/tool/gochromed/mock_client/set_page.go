@@ -6,5 +6,7 @@ func (c *Client) SetPage(
 	identifier string,
 	p face.Page,
 ) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
 	c.pages[identifier] = p
 }

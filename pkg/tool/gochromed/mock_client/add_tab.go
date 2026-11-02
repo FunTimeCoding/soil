@@ -10,6 +10,8 @@ func (c *Client) AddTab(
 	title string,
 	locator string,
 ) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
 	t := tab.Tab{
 		Identifier: identifier,
 		Title:      title,

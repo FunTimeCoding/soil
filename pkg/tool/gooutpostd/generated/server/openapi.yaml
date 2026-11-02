@@ -23,6 +23,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Service"
+        "500":
+          description: Failed to list the services this host carries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/host:
     get:
       operationId: getHost
@@ -71,3 +77,11 @@ components:
           type: array
           items:
             type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

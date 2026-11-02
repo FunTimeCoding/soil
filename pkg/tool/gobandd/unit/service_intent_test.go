@@ -6,10 +6,8 @@ import (
 	band "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
@@ -44,14 +42,12 @@ func TestARebootRecordsNothing(t *testing.T) {
 }
 
 func TestAPowerActionWithoutTheSwitchRecordsNothing(t *testing.T) {
-	engine := mock_client.New()
+	v, engines := service_tester.New(t, memory.New(), "alfa")
+	engine := engines["alfa"]
 	engine.SetPower(band.PowerOn, runningStates()...)
-	v := service.New(alfaOption(), logger.New(t.Context()), memory.New())
-	defer v.Close()
-	v.Pool().Set("alfa", engine)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
-	assert.Count(t, 0, v.Workers())
+	assert.Integers(t, []int{12}, engine.Requested())
 }
 
 func TestAFailedRecordIsReportedAndNeverHoldsPowerBack(t *testing.T) {

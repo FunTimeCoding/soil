@@ -8,7 +8,7 @@ import (
 )
 
 func Package(
-	c face.Forge,
+	c face.GitLabClient,
 	p *project.Project,
 ) {
 	projectPackages := c.MustPackages(p.Identifier, false)

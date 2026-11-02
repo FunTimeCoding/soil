@@ -3,10 +3,12 @@ package service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
+	sshMock "github.com/funtimecoding/soil/pkg/ssh/mock_client"
 	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
 	"testing"
 )
@@ -19,12 +21,18 @@ func IntentService(
 ) (*service.Service, *netbox.Client) {
 	t.Helper()
 	n := netbox.New()
+	t.Cleanup(n.Close)
 	n.VirtualMachineList = append(n.VirtualMachineList, machines...)
-	o := containerOption()
-	o.Netbox = func() face.Client { return n }
-	result := service.New(o, logger.New(t.Context()), r)
-	result.Pool().Set("test", c)
-	t.Cleanup(result.Close)
+	g := peer.New(
+		constant.Identity.Name(),
+		n.Address(),
+		n,
+		logger.New(t.Context()),
+		r,
+	)
+	t.Cleanup(g.Close)
+	h := sshMock.New()
+	t.Cleanup(h.Close)
 
-	return result, n
+	return newService(t, c, h, r).WithNetbox(n, g), n
 }

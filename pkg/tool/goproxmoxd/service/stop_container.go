@@ -7,7 +7,7 @@ func (s *Service) StopContainer(
 	identifier int,
 	node string,
 ) (string, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return "", clientFail

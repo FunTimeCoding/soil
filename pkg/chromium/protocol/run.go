@@ -13,14 +13,22 @@ func run[T any](
 	p *Protocol,
 	a chromedp.Action[T],
 ) (T, error) {
+	x, f := p.target()
+
+	if f != nil {
+		var zero T
+
+		return zero, f
+	}
+
 	if p.timeout <= 0 {
-		return chromedp.Run(p.context, a)
+		return chromedp.Run(x, a)
 	}
 
 	var result T
 	done := make(chan error, 1)
 	go func() {
-		v, e := chromedp.Run(p.context, a)
+		v, e := chromedp.Run(x, a)
 		result = v
 		done <- e
 	}()

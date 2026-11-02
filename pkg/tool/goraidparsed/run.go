@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -20,13 +20,13 @@ func Run(
 ) {
 	r := s.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l)
+	d := daemon.New(o, l)
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, s.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

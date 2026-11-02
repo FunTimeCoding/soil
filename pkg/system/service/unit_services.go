@@ -5,18 +5,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/types/service"
 )
 
-func (c *Client) unitServices() []*service.Service {
-	units := ParseUnits(
-		output(
-			constant.Systemctl,
-			constant.SystemctlList,
-			constant.SystemctlServiceType,
-			constant.SystemctlAll,
-			constant.SystemctlNoLegend,
-			constant.SystemctlNoPager,
-			constant.SystemctlPlain,
-		),
+func (c *Client) unitServices() ([]*service.Service, error) {
+	list, e := listing(
+		constant.Systemctl,
+		constant.SystemctlList,
+		constant.SystemctlServiceType,
+		constant.SystemctlAll,
+		constant.SystemctlNoLegend,
+		constant.SystemctlNoPager,
+		constant.SystemctlPlain,
 	)
+
+	if e != nil {
+		return nil, e
+	}
+
+	units := ParseUnits(list)
 	path := unitPaths()
 	owner := ParseSearch(
 		output(
@@ -59,5 +63,5 @@ func (c *Client) unitServices() []*service.Service {
 		)
 	}
 
-	return result
+	return result, nil
 }

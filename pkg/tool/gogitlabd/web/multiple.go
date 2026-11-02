@@ -1,5 +1,5 @@
 package web
 
 func (s *Server) multiple() bool {
-	return len(s.service.Inventory().Instances) > 1
+	return len(s.inventory.Instances) > 1
 }

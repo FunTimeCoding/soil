@@ -1,17 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/pipeline_detail"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/pipeline_detail"
+)
 
 func (s *Service) CancelPipeline(
 	instance string,
 	project int64,
 	identifier int64,
 ) (*pipeline_detail.Detail, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.CancelPipeline(project, identifier)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) (*pipeline_detail.Detail, error) {
+			return c.CancelPipeline(project, identifier)
+		},
+	)
 }

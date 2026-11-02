@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/session_detail"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/session_detail"
 )
 
 func (s *Service) SessionDetail(query string) (*session_detail.Detail, error) {

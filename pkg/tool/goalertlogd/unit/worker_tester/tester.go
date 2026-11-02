@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	"github.com/prometheus/client_golang/prometheus"
 	"testing"
 )
 
@@ -13,6 +14,7 @@ type Tester struct {
 	Worker     *worker.Worker
 	MockClient *mock_client.Client
 	Reporter   *memory.Memory
+	Registry   *prometheus.Registry
 	Path       string
 	t          *testing.T
 }

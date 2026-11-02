@@ -9,10 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/mock_system"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -28,8 +26,8 @@ func New(t *testing.T) *Server {
 	o := NewOption(t, s)
 	l := logger.New(t.Context())
 	r := memory.New()
-	v := service.New(o, l)
-	t.Cleanup(v.Close)
+	d := daemon.New(o, l, r)
+	t.Cleanup(d.Close)
 	m := lite.New(l, o.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(m) })
 	h := model_context_server.New(
@@ -38,7 +36,7 @@ func New(t *testing.T) *Server {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goflightd.Mount(v, r, mock_recorder.New(), g)
+			d.Mount(r, mock_recorder.New(), g)
 		},
 	)
 	t.Cleanup(h.Close)
@@ -52,8 +50,7 @@ func New(t *testing.T) *Server {
 	assert.FatalOnError(t, e)
 
 	return &Server{
-		Store:    store.New(m),
-		Service:  v,
+		Mapper:   m,
 		System:   s,
 		Reporter: r,
 		Client:   c,

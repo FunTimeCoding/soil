@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 )
 
 func (s *Service) Silences(
@@ -15,7 +15,7 @@ func (s *Service) Silences(
 		s,
 		x,
 		instance,
-		func(c face.Client) ([]*silence.Silence, error) {
+		func(c face.AlertmanagerClient) ([]*silence.Silence, error) {
 			return c.Silences(expired)
 		},
 	)

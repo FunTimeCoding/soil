@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/commit"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+)
 
 func (s *Service) ListCommits(
 	instance string,
@@ -8,11 +11,11 @@ func (s *Service) ListCommits(
 	reference string,
 	limit int64,
 ) ([]*commit.Commit, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.ListCommits(project, reference, limit)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*commit.Commit, error) {
+			return c.ListCommits(project, reference, limit)
+		},
+	)
 }

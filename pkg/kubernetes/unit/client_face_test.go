@@ -16,7 +16,7 @@ func TestTheClientAndItsMockShareTheFace(t *testing.T) {
 		constant.InCluster,
 	)
 	assert.FatalOnError(t, e)
-	faces := []face.Client{c, mock_client.New()}
+	faces := []face.KubernetesClient{c, mock_client.New()}
 	assert.Count(t, 2, faces)
 }
 

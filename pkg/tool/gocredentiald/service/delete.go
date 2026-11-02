@@ -8,7 +8,11 @@ import (
 func (s *Service) Delete(identifier string) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	s.refresh()
+
+	if e := s.writable(); e != nil {
+		return e
+	}
+
 	entry, group := s.client.EntryByIdentifier(identifier)
 
 	if entry == nil {

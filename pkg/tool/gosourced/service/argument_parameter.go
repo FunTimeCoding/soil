@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 
 func argumentParameter(
 	t *removal.Target,

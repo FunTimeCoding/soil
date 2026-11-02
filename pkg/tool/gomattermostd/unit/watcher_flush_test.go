@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/cross_service_tester"
 	"testing"
@@ -49,8 +50,8 @@ func TestARootInsideItsWindowWaitsForCloseToFlush(t *testing.T) {
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Start()
 	pushReply(r, asked)
-	assert.Count(t, 0, r.Service.FlushDue())
+	time.Sleep(10 * constant.FixtureFlushInterval)
 	assert.Count(t, 0, r.Goclauded.Store.PendingNotifications("kilo-session"))
-	r.Service.Close()
+	r.Daemon.Close()
 	assert.Count(t, 1, r.Goclauded.Store.PendingNotifications("kilo-session"))
 }

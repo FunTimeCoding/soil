@@ -13,6 +13,7 @@ type Stack struct {
 	Client  *chromium.Client
 	Site    *httptest.Server
 	Port    int
+	profile string
 	process *process.Process
 	pool    *pool.Pool
 }

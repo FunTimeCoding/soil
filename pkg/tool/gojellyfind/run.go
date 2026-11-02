@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/option"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -19,14 +19,14 @@ func Run(
 	i face.Instrument,
 ) {
 	r := i.Reporter()
-	v := service.New(o)
-	defer v.Close()
+	d := daemon.New(o)
+	defer d.Close()
 	lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

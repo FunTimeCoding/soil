@@ -15,5 +15,5 @@ func newHubClient(
 
 	return hub.NewWithBase(
 		upstream_tester.Locator(t, server).Base(constant.BasePath),
-	)
+	).WithBackoff(0)
 }

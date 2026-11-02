@@ -14,7 +14,15 @@ func (s *Service) checkServiceMount(
 		return
 	}
 
-	if !v.Has(filepath.Join(path, constant.MountFileName)) {
+	owner := path
+
+	if daemon := filepath.Join(path, constant.DaemonDirectory); v.DirectoryExists(
+		daemon,
+	) {
+		owner = daemon
+	}
+
+	if !v.Has(filepath.Join(owner, constant.MountFileName)) {
 		s.addConcern(
 			constant.MissingServiceMountKey,
 			constant.MissingServiceMountText,

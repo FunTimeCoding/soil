@@ -12,7 +12,7 @@ func (s *Service) DeriveHardwareAddress(
 		return "", nil, e
 	}
 
-	c, f := s.Client(instance)
+	c, f := s.client(instance)
 
 	if f != nil {
 		return "", nil, f

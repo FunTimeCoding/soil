@@ -11,8 +11,7 @@ import (
 )
 
 func TestHiddenDetailReadsLikeAMissingOne(t *testing.T) {
-	s := base.New(t)
-	s.Service().WithHiddenTag("private")
+	s := base.NewHidden(t, "private")
 	o := save_option.New()
 	o.Name = "zulu"
 	o.Content = "zulu content"

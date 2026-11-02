@@ -6,5 +6,5 @@ func NewIdentifier(
 	c *chromium.Client,
 	identifier string,
 ) *Protocol {
-	return &Protocol{client: c, context: c.TargetContext(identifier)}
+	return &Protocol{client: c, identifier: identifier}
 }

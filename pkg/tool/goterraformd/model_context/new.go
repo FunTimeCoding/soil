@@ -3,12 +3,12 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
-	provision "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/service"
 )
 
 func New(
-	v provision.Provision,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

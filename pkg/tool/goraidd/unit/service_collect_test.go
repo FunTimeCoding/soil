@@ -1,12 +1,14 @@
 package unit
 
 import (
+	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/gw2/log_manager/log"
 	"github.com/funtimecoding/soil/pkg/gw2/log_manager/response"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
+	"io/fs"
 	"testing"
 )
 
@@ -35,5 +37,7 @@ func TestARecordedFightIsNotCountedAsNewAgain(t *testing.T) {
 func TestTheServiceStartsWithoutALogCache(t *testing.T) {
 	s := service_tester.New(t, t.TempDir(), t.TempDir())
 	assert.Count(t, 0, s.Fights())
-	assert.Panic(t, s.SyncLogCache)
+	failures := s.SyncLogCache()
+	assert.Count(t, 1, failures)
+	assert.True(t, errors.Is(failures[0], fs.ErrNotExist))
 }

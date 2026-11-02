@@ -1,16 +1,14 @@
 package watch
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/soil/pkg/ticker"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+	"github.com/funtimecoding/soil/pkg/openbao/status"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Watch struct {
-	source    face.StatusSource
+	status    func() (*status.Status, error)
 	sealed    prometheus.Gauge
 	reachable prometheus.Gauge
-	recovery  *recovery.Recovery
-	ticker    *ticker.Ticker
+	clock     *worker.Worker
 }

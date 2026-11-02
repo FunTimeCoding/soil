@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+	"github.com/funtimecoding/soil/pkg/chat/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
@@ -9,7 +9,7 @@ import (
 )
 
 func New(
-	c face.Client,
+	c face.MattermostClient,
 	g *peer.Guard,
 	o *option.Monitor,
 	l *logger.Logger,

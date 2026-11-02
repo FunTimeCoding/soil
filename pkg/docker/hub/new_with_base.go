@@ -11,6 +11,6 @@ func NewWithBase(base *locator.Locator) *Client {
 		requester: requester.New(base).WithHeader(
 			constant.Accept,
 			constant.Object,
-		),
+		).WithRefusal(classifyRefusal),
 	}
 }

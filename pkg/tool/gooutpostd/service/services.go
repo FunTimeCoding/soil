@@ -2,10 +2,16 @@ package service
 
 import "github.com/funtimecoding/soil/pkg/system/types/service"
 
-func (s *Service) Services(origin string) []*service.Service {
+func (s *Service) Services(origin string) ([]*service.Service, error) {
+	all, e := s.reader.Services()
+
+	if e != nil {
+		return nil, e
+	}
+
 	var result []*service.Service
 
-	for _, v := range s.reader.Services() {
+	for _, v := range all {
 		if origin != "" && v.Origin != origin {
 			continue
 		}
@@ -13,5 +19,5 @@ func (s *Service) Services(origin string) []*service.Service {
 		result = append(result, v)
 	}
 
-	return result
+	return result, nil
 }

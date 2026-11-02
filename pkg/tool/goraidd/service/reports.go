@@ -3,7 +3,7 @@ package service
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/service/report"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/types/report"
 	"strings"
 )
 

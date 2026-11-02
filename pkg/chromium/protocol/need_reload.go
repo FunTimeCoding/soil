@@ -11,7 +11,13 @@ import (
 )
 
 func (p *Protocol) NeedReload(locator string) bool {
-	attach, cancelAttach := context.WithTimeout(p.context, 1*time.Second)
+	x, f := p.target()
+
+	if f != nil {
+		return true
+	}
+
+	attach, cancelAttach := context.WithTimeout(x, 1*time.Second)
 	defer cancelAttach()
 
 	if e := chromedp.Do(attach); e != nil {
@@ -22,7 +28,7 @@ func (p *Protocol) NeedReload(locator string) bool {
 		}
 	}
 
-	resource, cancelResource := context.WithTimeout(p.context, 1*time.Second)
+	resource, cancelResource := context.WithTimeout(x, 1*time.Second)
 	defer cancelResource()
 
 	if e := chromedp.Do(

@@ -11,7 +11,11 @@ func (s *Service) Move(
 ) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	s.refresh()
+
+	if e := s.writable(); e != nil {
+		return e
+	}
+
 	entry, source := s.client.EntryByIdentifier(identifier)
 
 	if entry == nil {

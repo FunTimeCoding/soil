@@ -9,7 +9,7 @@ import (
 )
 
 func Tag(
-	c face.Forge,
+	c face.GitLabClient,
 	p *project.Project,
 ) {
 	tags := c.MustTags(p.Identifier)

@@ -46,9 +46,9 @@ func TestEntryWithoutActionIsAnsweredBadRequest(t *testing.T) {
 
 func TestStatusFaultIsCaptured(t *testing.T) {
 	m := memory.New()
-	v := service_tester.Service(t)
-	s := server.New(v, m)
-	v.Close()
+	o := service_tester.New(t)
+	s := server.New(o.Service, m)
+	o.Close()
 	r, e := s.GetStatus(
 		context.Background(),
 		generated.GetStatusRequestObject{},

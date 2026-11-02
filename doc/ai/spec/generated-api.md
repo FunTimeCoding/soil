@@ -90,12 +90,14 @@ header.
 
 ## Implementing the Server
 
-`server/server.go` - plain struct, no embedding, holding the daemon's
-service as `*service.Service`; the service has no face
-(`service-tool.md`, Service):
+`server/server.go` - plain struct, no embedding, holding the services its
+operations call - `*service.Service` for a daemon with one set, one field
+per `<noun>.Service` for several - and never the daemon; no service has a
+face (`service-tool.md`, Services):
 ```go
 type Server struct {
-    service  *service.Service
+    book     *book.Service
+    loan     *loan.Service
     reporter soil.Reporter
 }
 ```
@@ -197,9 +199,10 @@ the classified error as its exit - and an operation answering 204 with
 
 ## Mounting
 
-Every guarded daemon has a top-level `mount.go` beside `run.go`.
-`Mount(...)` takes the daemon's `*service.Service`, the reporter,
-the recorder, the version, and a `*guard.Mux` last. It wraps the server in
+Every guarded daemon has `daemon/mount.go`. `Mount(...)` is the daemon's
+method: it hands each surface the services that surface calls, and takes
+the reporter, the recorder, the version, and a `*guard.Mux` last. It wraps
+the server in
 `NewStrictHandler` with the generic recording middleware, builds
 the tree on a fresh sub-mux via `HandlerFromMux`, and token-mounts
 it at the `route:/api/` prefix (`webConstant.InterfacePath`):
@@ -213,8 +216,7 @@ import (
     "github.com/funtimecoding/soil/pkg/web/guard"
 )
 
-func Mount(
-    v *service.Service,
+func (d *Daemon) Mount(
     r soil.Reporter,
     t soil.Recorder,
     version string,
@@ -224,7 +226,7 @@ func Mount(
         webConstant.InterfacePath,
         generated.HandlerFromMux(
             generated.NewStrictHandler(
-                server.New(v, r),
+                server.New(d.book, d.loan, r),
                 []generated.StrictMiddlewareFunc{
                     web.RecordingMiddleware[generated.StrictHandlerFunc](t),
                 },
@@ -232,7 +234,7 @@ func Mount(
             http.NewServeMux(),
         ),
     )
-    model_context.New(v, r, t, version).Mount(g)
+    model_context.New(d.book, d.loan, r, t, version).Mount(g)
 }
 ```
 
@@ -253,7 +255,7 @@ conflict on the same mux.
 ### The mux in run.go
 
 run.go builds one `guard.Mux` per lifecycle server from the service
-tokens `Main` read with `web.ServiceTokens()`, and hands it to `Mount`
+tokens `Main` read with `web.ServiceTokens()`, and hands it to `d.Mount`
 (`service-tool.md`, Run Function). `Mount` is the production surface
 the guard battery starts (`testing.md`); a route registered in the
 run.go callback escapes both the guard and the battery.

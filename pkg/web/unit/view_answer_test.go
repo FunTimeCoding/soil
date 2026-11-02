@@ -25,7 +25,7 @@ func TestAQuietPanicRendersWithoutAReport(t *testing.T) {
 		recorder,
 		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
 	)
-	assert.Integer(t, http.StatusInternalServerError, recorder.Code)
+	assert.Integer(t, http.StatusServiceUnavailable, recorder.Code)
 	assert.StringContains(t, "goalfa unreachable", recorder.Body.String())
 	assert.Count(t, 0, r.Events())
 }

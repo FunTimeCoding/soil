@@ -55,15 +55,25 @@ func TestAnUnavailableRefusalIsUnavailable(t *testing.T) {
 	)
 }
 
+func TestAProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
+	e := refusal.New(
+		"list items",
+		answered(http.StatusBadGateway),
+		[]byte(`{"error":"no healthy upstream"}`),
+	)
+	assert.True(t, unavailable.Is(e))
+	assert.String(t, "list items: no healthy upstream", e.Error())
+}
+
 func TestASuccessIsNoRefusal(t *testing.T) {
 	refusal.PanicOnFailure("notify", answered(http.StatusNoContent), nil)
 	assert.PanicContains(
 		t,
-		"notify status: 502",
+		"notify status: 500",
 		func() {
 			refusal.PanicOnFailure(
 				"notify",
-				answered(http.StatusBadGateway),
+				answered(http.StatusInternalServerError),
 				nil,
 			)
 		},

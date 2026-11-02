@@ -24,7 +24,7 @@ func (s *Server) CreatePipeline(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	vars := make([]*gitlab.PipelineVariableOptions, 0, len(a.Variables))
@@ -38,7 +38,7 @@ func (s *Server) CreatePipeline(
 	v, e := s.service.CreatePipeline(instance, project, a.Reference, vars)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	return response.SuccessAny(v)

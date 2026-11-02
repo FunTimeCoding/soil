@@ -13,5 +13,5 @@ type Option struct {
 	AdminClientIdentifier string
 	AdminClientSecret     string
 	ServiceTokens         []string
-	Directory             func() face.Client
+	Directory             func() face.DirectoryClient
 }

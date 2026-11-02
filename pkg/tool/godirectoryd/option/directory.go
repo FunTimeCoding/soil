@@ -11,5 +11,5 @@ type Directory struct {
 	EncryptionSecret string
 	PublicLocator    string
 	Host             string
-	Source           func() face.Client
+	Source           func() face.DirectoryClient
 }

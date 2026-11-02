@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
 )
 
 func (s *Service) ApplyPattern(

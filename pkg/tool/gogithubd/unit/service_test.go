@@ -13,7 +13,7 @@ func TestLatestKeepsTheNewestCompletedRun(t *testing.T) {
 	s.AddRun("bravo", workflowRun(1, "main", "completed", "failure"))
 	s.AddRun("bravo", workflowRun(3, "main", "completed", "success"))
 	s.AddRun("bravo", workflowRun(2, "main", "completed", "failure"))
-	v, e := service_tester.New(t, s).Latest()
+	v, e := service_tester.New(s).Latest()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(v))
 	assert.String(
@@ -31,7 +31,7 @@ func TestLatestSkipsARunInProgress(t *testing.T) {
 	s := mock_source.New()
 	s.AddRun("bravo", workflowRun(1, "main", "completed", "success"))
 	s.AddRun("bravo", workflowRun(2, "main", "in_progress", ""))
-	v, e := service_tester.New(t, s).Latest()
+	v, e := service_tester.New(s).Latest()
 	assert.FatalOnError(t, e)
 	assert.Integer(
 		t,
@@ -49,7 +49,7 @@ func TestLatestKeepsBranchesApart(t *testing.T) {
 	s.AddRun("bravo", workflowRun(1, "main", "completed", "success"))
 	s.AddRun("bravo", workflowRun(2, "feature", "completed", "failure"))
 	s.AddRun("charlie", workflowRun(3, "main", "completed", "success"))
-	v, e := service_tester.New(t, s).Latest()
+	v, e := service_tester.New(s).Latest()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 3, len(v))
 }

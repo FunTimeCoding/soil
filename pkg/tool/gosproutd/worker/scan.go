@@ -19,5 +19,5 @@ func (w *Watcher) scan() {
 		)
 	}
 
-	w.service.Sync(files)
+	w.sync(files)
 }

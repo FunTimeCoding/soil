@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/format"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
 	"slices"

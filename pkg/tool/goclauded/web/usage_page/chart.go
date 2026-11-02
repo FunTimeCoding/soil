@@ -1,7 +1,7 @@
 package usage_page
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/usage_window"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/usage_window"
 	"github.com/funtimecoding/soil/pkg/web/chart"
 	"github.com/funtimecoding/soil/pkg/web/chart/series"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"

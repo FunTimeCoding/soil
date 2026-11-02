@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

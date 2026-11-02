@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline_detail"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
@@ -11,11 +12,11 @@ func (s *Service) CreatePipeline(
 	reference string,
 	v []*gitlab.PipelineVariableOptions,
 ) (*pipeline_detail.Detail, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.CreatePipeline(project, reference, v)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) (*pipeline_detail.Detail, error) {
+			return c.CreatePipeline(project, reference, v)
+		},
+	)
 }

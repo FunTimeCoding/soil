@@ -7,29 +7,21 @@ import (
 	"path/filepath"
 )
 
-func DeleteSource(sessionIdentifier string) []string {
+func DeleteSource(
+	directories []string,
+	sessionIdentifier string,
+) []string {
 	var result []string
-	base := sourcePath()
-	entries, e := os.ReadDir(base)
-
-	if e != nil {
-		return result
-	}
-
 	target := join.Empty(sessionIdentifier, constant.NotationLogExtension)
 
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-
-		path := filepath.Join(base, entry.Name(), target)
+	for _, d := range directories {
+		path := filepath.Join(d, target)
 
 		if f := os.Remove(path); f == nil {
 			result = append(result, path)
 		}
 
-		directory := filepath.Join(base, entry.Name(), sessionIdentifier)
+		directory := filepath.Join(d, sessionIdentifier)
 
 		if _, f := os.Stat(directory); f != nil {
 			continue

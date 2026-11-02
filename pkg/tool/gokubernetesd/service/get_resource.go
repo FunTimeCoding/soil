@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource/filter_result"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/filter_result"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 )
 
 func (s *Service) GetResource(

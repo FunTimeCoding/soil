@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	"github.com/prometheus/alertmanager/api/v2/models"
 )
 
@@ -14,7 +14,7 @@ func (s *Service) Status(
 		s,
 		x,
 		instance,
-		func(c face.Client) (*models.AlertmanagerStatus, error) {
+		func(c face.AlertmanagerClient) (*models.AlertmanagerStatus, error) {
 			return c.Status()
 		},
 	)

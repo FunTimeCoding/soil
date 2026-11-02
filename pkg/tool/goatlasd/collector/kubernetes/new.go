@@ -6,7 +6,7 @@ import (
 )
 
 func New(
-	c face.Client,
+	c face.KubernetesClient,
 	g *peer.Guard,
 ) *Collector {
 	return &Collector{kubernetes: c, guard: g}

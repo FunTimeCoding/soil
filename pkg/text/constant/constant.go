@@ -44,11 +44,18 @@ var (
 	}
 )
 
-var Inflections = map[string][]string{
-	"ies": {"y"},
-	"es":  {""},
-	"s":   {""},
-	"ed":  {"", "e"},
-	"ing": {"", "e"},
-	"er":  {"", "e"},
-}
+var (
+	Inflections = map[string][]string{
+		"ies":  {"y"},
+		"es":   {""},
+		"s":    {""},
+		"ed":   {"", "e"},
+		"ied":  {"y"},
+		"ing":  {"", "e"},
+		"er":   {"", "e"},
+		"ier":  {"y"},
+		"est":  {"", "e"},
+		"iest": {"y"},
+	}
+	Doubling = map[string]bool{"ed": true, "ing": true, "er": true, "est": true}
+)

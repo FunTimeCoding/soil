@@ -7,7 +7,7 @@ import (
 )
 
 func Image(
-	c face.Client,
+	c face.GitHubClient,
 	namespace string,
 	repository string,
 ) {

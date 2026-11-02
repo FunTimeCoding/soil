@@ -2,8 +2,8 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument/edit_session"
 )
 
 func (s *Store) EditSession(

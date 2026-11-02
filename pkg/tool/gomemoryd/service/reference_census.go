@@ -8,7 +8,7 @@ import (
 
 func (s *Service) ReferenceCensus() ([]*reference.Report, error) {
 	if s.referenceRoot == "" {
-		return nil, nil
+		return nil, unrooted()
 	}
 
 	memories, e := s.ListMemoriesWithContent("", constant.AllScope)

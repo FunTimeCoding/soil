@@ -17,5 +17,5 @@ type Runner struct {
 	logger      *logger.Logger
 	reporter    face.Reporter
 	registry    face.ProcessRegistry
-	inventory   netbox.Client
+	inventory   netbox.InventoryMarkup
 }

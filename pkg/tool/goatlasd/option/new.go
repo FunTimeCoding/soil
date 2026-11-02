@@ -13,7 +13,7 @@ func New() *Atlas {
 		Netbox: func() netbox.Client {
 			return netboxClient.NewEnvironment()
 		},
-		Kubernetes: func() kubernetes.Client {
+		Kubernetes: func() kubernetes.KubernetesClient {
 			if c, e := kubernetesClient.TryInCluster(
 				kubernetesConstant.InCluster,
 			); e == nil {

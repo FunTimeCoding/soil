@@ -8,7 +8,7 @@ import (
 )
 
 func BookmarkFile() {
-	b := brave.Bookmark(constant.DefaultProfile)
+	b := brave.MustBookmark(constant.DefaultProfile)
 	f := constant.Format
 	var all []*file.Node
 	file.Walk(

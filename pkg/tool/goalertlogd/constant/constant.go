@@ -20,7 +20,6 @@ const (
 
 const (
 	AlertmanagerPeer = "alertmanager upstream"
-	RecordDeferred   = "alert recording skipped: %v"
 )
 
 const (

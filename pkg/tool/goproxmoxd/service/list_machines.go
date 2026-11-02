@@ -6,7 +6,7 @@ func (s *Service) ListMachines(
 	instance string,
 	node string,
 ) (proxmox.VirtualMachines, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return nil, clientFail

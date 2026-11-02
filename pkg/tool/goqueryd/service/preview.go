@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/chunk_preview"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/preview_chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/chunk_preview"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/preview_chunk"
 	"strings"
 )
 

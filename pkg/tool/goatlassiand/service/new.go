@@ -1,26 +1,27 @@
 package service
 
 import (
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/face"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/option"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/plate"
 )
 
 func New(
-	o *option.Atlassian,
-	l *logger.Logger,
-	r face.Reporter,
+	j atlassian.JiraClient,
+	c atlassian.ConfluenceClient,
+	jiraGuard *peer.Guard,
+	confluenceGuard *peer.Guard,
+	project []string,
+	n face.EventNotifier,
 ) *Service {
-	j := o.Jira()
-	c := o.Confluence()
-
 	return &Service{
 		jira:            j,
 		confluence:      c,
-		jiraGuard:       peer.New(constant.JiraPeer, "", j, l, r),
-		confluenceGuard: peer.New(constant.ConfluencePeer, "", c, l, r),
-		project:         o.Project,
+		jiraGuard:       jiraGuard,
+		confluenceGuard: confluenceGuard,
+		project:         project,
+		notifier:        n,
+		current:         plate.New(),
 	}
 }

@@ -24,3 +24,20 @@ func TestClosingASocketThatNeverOpenedIsQuiet(t *testing.T) {
 	defer m.Close()
 	socket.New(m, func(*model.WebSocketEvent) {}).Close()
 }
+
+func TestAMockWithoutASocketRefusesToOpenOne(t *testing.T) {
+	m := mock_client.New("alfa")
+	defer m.Close()
+	s := socket.New(m, func(*model.WebSocketEvent) {})
+	defer s.Close()
+	assert.True(t, unavailable.Is(s.Open(context.Background())))
+	assert.True(t, m.WebSocket() == nil)
+}
+
+func TestAClosedMockRefusesTheSocket(t *testing.T) {
+	m := mock_client.New("alfa")
+	m.Close()
+	e := m.RefreshSocket(context.Background())
+	assert.Error(t, e)
+	assert.False(t, unavailable.Is(e))
+}

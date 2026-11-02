@@ -5,13 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/service_tester"
 	"testing"
 )
 
 func TestAStartedMachineIsRecordedActive(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.AddNode("test")
 	c.AddMachine("test", 101, "alfa")
 	v, n := service_tester.IntentService(t, c, memory.New())
@@ -22,6 +23,7 @@ func TestAStartedMachineIsRecordedActive(t *testing.T) {
 
 func TestAShutDownContainerIsRecordedOffline(t *testing.T) {
 	c := mock_client.New()
+	defer c.Close()
 	c.AddNode("test")
 	c.AddContainer("test", 201, "bravo")
 	v, n := service_tester.IntentService(t, c, memory.New())
@@ -32,6 +34,7 @@ func TestAShutDownContainerIsRecordedOffline(t *testing.T) {
 
 func TestAnUpwardReconcileOnlyPromotes(t *testing.T) {
 	c, machines := reconcileFloor()
+	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	p, e := v.Reconcile(context.Background(), "test", false, false)
 	assert.FatalOnError(t, e)
@@ -46,6 +49,7 @@ func TestAnUpwardReconcileOnlyPromotes(t *testing.T) {
 
 func TestAFullReconcileAlsoDemotesAndWrites(t *testing.T) {
 	c, machines := reconcileFloor()
+	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	p, e := v.Reconcile(context.Background(), "test", true, true)
 	assert.FatalOnError(t, e)
@@ -62,7 +66,8 @@ func TestAFullReconcileAlsoDemotesAndWrites(t *testing.T) {
 
 func TestAReconcileWithoutTheSwitchIsNotConfigured(t *testing.T) {
 	c, _ := reconcileFloor()
-	_, e := service_tester.ContainerService(c).Reconcile(
+	defer c.Close()
+	_, e := service_tester.ContainerService(t, c).Reconcile(
 		context.Background(),
 		"test",
 		true,

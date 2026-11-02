@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 )
 
 func (s *Service) ClusterByName(name string) (*cluster.Cluster, error) {

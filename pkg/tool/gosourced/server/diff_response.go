@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/report"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/report"
 )
 
 func diffResponse(

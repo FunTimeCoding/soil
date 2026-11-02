@@ -3,7 +3,7 @@ package profile
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/format"
 )
 
 func Text(result *Result) string {

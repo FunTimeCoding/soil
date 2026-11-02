@@ -3,7 +3,7 @@ package session_page
 import (
 	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/enriched_session"
 	"github.com/funtimecoding/soil/pkg/web/component/badge"
 	"github.com/funtimecoding/soil/pkg/web/component/chip"
 	"github.com/funtimecoding/soil/pkg/web/component/table"

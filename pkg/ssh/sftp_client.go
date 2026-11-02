@@ -1,18 +1,28 @@
 package ssh
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/pkg/sftp"
-)
+import "github.com/pkg/sftp"
 
-func (c *Client) sftpClient() *sftp.Client {
+func (c *Client) sftpClient() (*sftp.Client, error) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	if c.sftp != nil {
-		return c.sftp
+		return c.sftp, nil
 	}
 
-	result, e := sftp.NewClient(c.dialed())
-	errors.PanicOnError(e)
+	d, e := c.dialed()
+
+	if e != nil {
+		return nil, e
+	}
+
+	result, f := sftp.NewClient(d)
+
+	if f != nil {
+		return nil, c.refused("open sftp on", c.host, f)
+	}
+
 	c.sftp = result
 
-	return c.sftp
+	return c.sftp, nil
 }

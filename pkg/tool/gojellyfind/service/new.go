@@ -1,7 +1,7 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gojellyfind/option"
+import "github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
 
-func New(o *option.Jellyfin) *Service {
-	return &Service{source: o.Source()}
+func New(c face.JellyfinSource) *Service {
+	return &Service{source: c}
 }

@@ -34,6 +34,11 @@ const (
 	RoleKind      = "role"
 )
 
+const (
+	ReasonMissing = "does not exist"
+	ReasonLocked  = "is locked"
+)
+
 const LocalPrefix byte = 0x02
 const (
 	MaximumInstance = 255

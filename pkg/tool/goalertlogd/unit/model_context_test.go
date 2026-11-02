@@ -14,6 +14,7 @@ func TestModelContext(t *testing.T) {
 	assert.Count(t, 4, c.ListTools())
 	status := c.MustCallTool(constant.GetStatus, map[string]any{})
 	assert.StringContains(t, "2", status)
+	assert.StringContains(t, "Last poll: 20", status)
 	alerts := c.MustCallTool(
 		constant.GetAlerts,
 		map[string]any{generativeConstant.ParameterName: "HighMemory"},

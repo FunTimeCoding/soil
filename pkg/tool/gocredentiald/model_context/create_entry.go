@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -23,7 +22,7 @@ func (s *Server) createEntry(
 	identifier, e := s.service.Create(a.Group, a.Title, fields)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("created %s", identifier))

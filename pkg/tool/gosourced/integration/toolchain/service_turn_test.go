@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/turn"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )

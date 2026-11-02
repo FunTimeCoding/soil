@@ -8,9 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -20,15 +19,13 @@ func Run(
 	i face.Instrument,
 ) {
 	r := i.Reporter()
-	t := i.Recorder()
 	l := logger.New(context.Background())
-	s := service.New(o, l, r)
-	defer s.Close()
-	errors.PanicOnError(s.Wait(context.Background()))
-	u := web.New(s)
+	d := daemon.New(o, l, r)
+	defer d.Close()
+	errors.PanicOnError(d.Wait(context.Background()))
 	c := lifecycle.New(l)
 
-	for _, w := range s.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
 	}
 
@@ -37,8 +34,8 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(s, u, r, t, guard.New(m, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
-		).WithMiddleware(u.Recovery(r)),
+		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()
 }

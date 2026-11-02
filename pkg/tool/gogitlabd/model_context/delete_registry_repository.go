@@ -24,7 +24,7 @@ func (s *Server) DeleteRegistryRepository(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	deleted, e := s.service.DeleteRegistryPath(instance, project, a.Path)
@@ -34,7 +34,7 @@ func (s *Server) DeleteRegistryRepository(
 	}
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	return response.SuccessAny(deleted)

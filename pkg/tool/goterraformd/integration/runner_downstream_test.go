@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/client/mock_client"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
-	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/terraform_tester"
 	"testing"
@@ -16,7 +15,7 @@ import (
 func TestApplySendsHostEventsDownstream(t *testing.T) {
 	d := mock_client.New("alfa:8080")
 	defer d.Close()
-	terraform_tester.NewWithDownstream(
+	terraform_tester.NewServedWithDownstream(
 		t,
 		kubernetesMock.New(),
 		constant.FixturePlan,
@@ -43,19 +42,15 @@ func TestARestartingDownstreamIsHeldOffAndNotCaptured(t *testing.T) {
 	d := mock_client.New("alfa:8080")
 	defer d.Close()
 	d.Fail(d.PostTrigger, unavailable.Format(provisionConstant.RunnerStopped))
-	s := terraform_tester.NewWithDownstream(
+	s := terraform_tester.NewServedWithDownstream(
 		t,
 		kubernetesMock.New(),
 		constant.FixturePlan,
 		d,
 	)
 	waitForCalls(t, d, 1)
-	response := make(chan *trigger.Result, 1)
-	assert.FatalOnError(
-		t,
-		s.Service.Trigger(trigger.Request{Response: response}),
-	)
-	assert.FatalOnError(t, (<-response).Error)
+	s.TriggerServed()
+	s.WaitForRuns(2)
 	assert.Integer(t, 1, d.Calls())
 	assert.Count(t, 0, s.Reporter.Events())
 }

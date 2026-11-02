@@ -6,10 +6,9 @@ import (
 	"sync"
 )
 
-type Pool[T any, P face.Entry[T], C any] struct {
+type Pool[T any, P face.Entry[T], C comparable] struct {
 	inventory *inventory.Inventory[T, P]
 	build     func(*T) (C, error)
 	clients   map[string]C
-	built     map[string]bool
 	mutex     sync.Mutex
 }

@@ -8,19 +8,20 @@ import (
 )
 
 func TestServiceNotifiesOnAdd(t *testing.T) {
-	s := service_tester.Service(t)
-	c := s.Notifier().Subscribe()
-	defer s.Notifier().Unsubscribe(c)
-	assert.FatalOnError(t, s.Add(sample()))
+	o := service_tester.New(t)
+	c := o.Notifier.Subscribe()
+	defer o.Notifier.Unsubscribe(c)
+	assert.FatalOnError(t, o.Service.Add(sample()))
 	assert.True(t, fired(c))
 }
 
 func TestServiceNotifiesOnUpdateAndDelete(t *testing.T) {
-	s := service_tester.Service(t)
+	o := service_tester.New(t)
+	s := o.Service
 	v := sample()
 	assert.FatalOnError(t, s.Add(v))
-	c := s.Notifier().Subscribe()
-	defer s.Notifier().Unsubscribe(c)
+	c := o.Notifier.Subscribe()
+	defer o.Notifier.Unsubscribe(c)
 	user := "bob"
 	h := change.New()
 	h.User = &user
@@ -33,10 +34,10 @@ func TestServiceNotifiesOnUpdateAndDelete(t *testing.T) {
 }
 
 func TestServiceFailedWriteDoesNotNotify(t *testing.T) {
-	s := service_tester.Service(t)
-	c := s.Notifier().Subscribe()
-	defer s.Notifier().Unsubscribe(c)
-	s.Close()
-	assert.Error(t, s.Add(sample()))
+	o := service_tester.New(t)
+	c := o.Notifier.Subscribe()
+	defer o.Notifier.Unsubscribe(c)
+	o.Close()
+	assert.Error(t, o.Service.Add(sample()))
 	assert.False(t, fired(c))
 }

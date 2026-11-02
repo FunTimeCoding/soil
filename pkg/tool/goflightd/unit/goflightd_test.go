@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/mark"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/snapshot"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/service_tester"
 	"testing"
 	"time"
 )
@@ -44,7 +44,7 @@ func TestWirelessParseSkipsPreamble(t *testing.T) {
 }
 
 func TestStoreRoundTrip(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	now := time.Now()
 	assert.FatalOnError(
 		t,
@@ -100,7 +100,7 @@ func TestStoreRoundTrip(t *testing.T) {
 }
 
 func TestStoreMarks(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	assert.FatalOnError(
 		t,
 		s.Store.CreateMark(mark.New(time.Now().Add(-time.Minute), "broke", "")),

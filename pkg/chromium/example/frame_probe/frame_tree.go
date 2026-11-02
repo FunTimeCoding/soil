@@ -12,12 +12,10 @@ func frameTree(
 	c *chromium.Client,
 	identifier string,
 ) *page.FrameTree {
-	result, e := chromedp.Call(
-		c.AcquireTarget(identifier),
-		page.GetFrameTree,
-		cdp.Empty{},
-	)
+	x, e := c.AcquireTarget(identifier)
 	errors.PanicOnError(e)
+	result, f := chromedp.Call(x, page.GetFrameTree, cdp.Empty{})
+	errors.PanicOnError(f)
 
 	return result.FrameTree
 }

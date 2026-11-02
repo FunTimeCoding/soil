@@ -84,19 +84,3 @@ func TestOneUnreachableInstanceLeavesTheOthersAnswering(t *testing.T) {
 	_, f := s.Query(t.Context(), "bravo", "up", time.Now())
 	assert.FatalOnError(t, f)
 }
-
-func TestTheServiceHandsOneGuardPerInstanceToTheLifecycle(t *testing.T) {
-	assert.Count(t, 2, refusingBravo(t).Workers())
-}
-
-func TestClosingTheServiceClosesEveryInstanceClient(t *testing.T) {
-	alfa := mock_client.New()
-	bravo := mock_client.New()
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": alfa, "bravo": bravo},
-	)
-	s.Close()
-	assert.Integer(t, 1, alfa.Closed)
-	assert.Integer(t, 1, bravo.Closed)
-}

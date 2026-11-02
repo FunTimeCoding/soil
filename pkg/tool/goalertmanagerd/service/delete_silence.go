@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 )
 
 func (s *Service) DeleteSilence(
@@ -14,7 +14,7 @@ func (s *Service) DeleteSilence(
 		s,
 		x,
 		instance,
-		func(c face.Client) (struct{}, error) {
+		func(c face.AlertmanagerClient) (struct{}, error) {
 			return struct{}{}, c.DeleteSilence(identifier)
 		},
 	)

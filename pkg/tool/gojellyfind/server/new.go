@@ -2,11 +2,11 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	jellyfin "github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/service"
 )
 
 func New(
-	v jellyfin.Jellyfin,
+	v *service.Service,
 	r face.Reporter,
 ) *Server {
 	return &Server{service: v, reporter: r}

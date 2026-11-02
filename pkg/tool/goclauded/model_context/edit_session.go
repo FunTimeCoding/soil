@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument/edit_session"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 )

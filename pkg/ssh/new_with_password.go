@@ -11,13 +11,10 @@ func NewWithPassword(
 	password string,
 	secure bool,
 ) *Client {
-	return &Client{
-		user:   user,
-		host:   host,
-		secure: secure,
-		authenticate: func() (ssh.AuthMethod, io.Closer, error) {
-			return ssh.Password(password), nil, nil
-		},
-		Panic: true,
+	result := New(user, host, secure)
+	result.authenticate = func() (ssh.AuthMethod, io.Closer, error) {
+		return ssh.Password(password), nil, nil
 	}
+
+	return result
 }

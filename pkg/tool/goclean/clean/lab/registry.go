@@ -10,7 +10,7 @@ import (
 )
 
 func Registry(
-	c face.Forge,
+	c face.GitLabClient,
 	p *project.Project,
 ) {
 	for _, r := range c.MustRegistryRepositories(p.Identifier, false) {

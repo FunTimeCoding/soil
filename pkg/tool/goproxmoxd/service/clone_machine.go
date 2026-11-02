@@ -8,7 +8,7 @@ func (s *Service) CloneMachine(
 	node string,
 	options *proxmox.VirtualMachineCloneOptions,
 ) (int, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return 0, clientFail

@@ -1,29 +1,29 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/migrate"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store"
+	"time"
 )
 
 func New(
-	o *option.Flight,
+	s *store.Store,
 	l *logger.Logger,
+	predicate string,
+	retention time.Duration,
+	clock func() time.Time,
+	command func(s ...string) (string, error),
+	stream func(s ...string) face.Stream,
 ) *Service {
-	d := relational.Open(l, o.PostgresLocator, o.LitePath)
-	migrate.AutoMigrate(d)
-
 	return &Service{
-		database:  d,
-		store:     store.New(d),
+		store:     s,
 		logger:    l,
-		predicate: o.Predicate,
-		retention: o.Retention,
-		clock:     o.Clock,
-		command:   o.Command,
-		stream:    o.Stream,
+		predicate: predicate,
+		retention: retention,
+		clock:     clock,
+		command:   command,
+		stream:    stream,
 		last:      make(map[string]string),
 	}
 }

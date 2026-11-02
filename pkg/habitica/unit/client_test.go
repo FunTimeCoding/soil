@@ -16,7 +16,7 @@ func TestTheHabiticaClientAndItsMockShareTheFace(t *testing.T) {
 	defer c.Close()
 	m := mock_client.New()
 	defer m.Close()
-	faces := []face.Client{c, m}
+	faces := []face.HabiticaClient{c, m}
 	assert.Count(t, 2, faces)
 }
 

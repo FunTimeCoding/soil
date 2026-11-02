@@ -14,7 +14,7 @@ func mountedClient(
 	o *service_tester.Tester,
 ) *client.Client {
 	t.Helper()
-	v := mountedUpload(t, o.Service)
+	v := mountedUpload(t, o.Option)
 	result := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(v.Port),
 		constant.ModelContextTestToken,

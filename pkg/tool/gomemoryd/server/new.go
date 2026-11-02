@@ -7,7 +7,8 @@ import (
 
 func New(
 	s *service.Service,
+	hiddenTag string,
 	r face.Reporter,
 ) *Server {
-	return &Server{service: s, reporter: r}
+	return &Server{service: s, hiddenTag: hiddenTag, reporter: r}
 }

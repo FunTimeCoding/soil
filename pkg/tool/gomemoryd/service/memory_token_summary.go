@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/format"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/token_summary"
 	"slices"
 )
@@ -20,7 +20,7 @@ func (s *Service) MemoryTokenSummary(
 		return nil, fmt.Errorf("load memories: %w", e)
 	}
 
-	hiddenTag := s.HiddenTag()
+	hiddenTag := s.hiddenTag
 	statistic := make([]*token_summary.Statistic, 0, len(memories))
 	blocks := make([]int, 0, len(memories))
 	descriptions := make([]int, 0, len(memories))

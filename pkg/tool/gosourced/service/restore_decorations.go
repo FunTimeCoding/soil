@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"sort"
 )
 

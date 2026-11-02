@@ -13,4 +13,6 @@ type Server struct {
 	valid    string
 	seen     []string
 	answers  map[string]string
+	hold     chan struct{}
+	holding  chan struct{}
 }

@@ -11,7 +11,7 @@ import (
 func (s *Server) Mount(g *guard.Mux) {
 	g.WithSession(s.requireAdmin)
 	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
-	a := s.service.Authorization()
+	a := s.authorization
 	g.Open(route.Get(webConstant.SignInPath), a.SignIn)
 	g.Open(route.Get(webConstant.CallbackPath), a.Callback)
 	g.Open(route.Get(webConstant.SignOutPath), a.SignOut)

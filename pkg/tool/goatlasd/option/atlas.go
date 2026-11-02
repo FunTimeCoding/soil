@@ -25,7 +25,7 @@ type Atlas struct {
 	ProcessPlace     string
 	OutpostHosts     []string
 	Netbox           func() netbox.Client
-	Kubernetes       func() kubernetes.Client
+	Kubernetes       func() kubernetes.KubernetesClient
 	Lease            func() opnsense.Client
 	Process          func() process.Client
 	Outpost          func(host string) outpost.Client

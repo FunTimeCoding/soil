@@ -8,8 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -23,11 +23,11 @@ func Run(
 	r := i.Reporter()
 	l := logger.New(context.Background())
 	m := metric.New()
-	v := service.New(o, l, r, m.Registry())
-	defer v.Close()
+	d := daemon.New(o, l, r, m.Registry())
+	defer d.Close()
 	c := lifecycle.New(l)
 
-	for _, w := range v.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
 	}
 
@@ -44,7 +44,7 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(x *http.ServeMux) {
-				Mount(v, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

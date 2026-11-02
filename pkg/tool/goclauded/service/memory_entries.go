@@ -2,7 +2,7 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory_payload"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/memory_payload"
 )
 
 func memoryEntries(body string) []memory_payload.Entry {

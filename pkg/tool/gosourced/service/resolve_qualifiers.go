@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/match"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/match"
 	"go/ast"
 )
 

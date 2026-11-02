@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -18,8 +18,7 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gosentryd.Mount(
-				service_tester.Service(t, service_tester.NewSource(t)),
+			daemon_tester.New(t, service_tester.NewSource(t)).Mount(
 				memory.New(),
 				mock_recorder.New(),
 				g,

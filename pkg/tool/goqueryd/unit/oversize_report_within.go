@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/oversize"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/oversize"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"

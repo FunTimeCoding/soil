@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/caller_left"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/caller_left"
 )
 
 func theirs(

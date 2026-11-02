@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 )
 
 func (s *Service) MovePackage(

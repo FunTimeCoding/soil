@@ -12,7 +12,7 @@ import (
 
 func TestAnUploadCannotLeaveThePackageRoot(t *testing.T) {
 	o := service_tester.New(t)
-	v := mountedUpload(t, o.Service)
+	v := mountedUpload(t, o.Option)
 	body := service_tester.PackageBytes(t)
 	escape := filepath.Join(filepath.Dir(o.PackageRoot), "etc")
 
@@ -31,7 +31,7 @@ func TestAnUploadCannotLeaveThePackageRoot(t *testing.T) {
 
 func TestAnUploadIsStoredSignedAndIndexed(t *testing.T) {
 	o := service_tester.New(t)
-	v := mountedUpload(t, o.Service)
+	v := mountedUpload(t, o.Option)
 	assert.Integer(
 		t,
 		http.StatusCreated,
@@ -50,7 +50,7 @@ func TestAnUploadIsStoredSignedAndIndexed(t *testing.T) {
 
 func TestAnUploadMustBeAnApk(t *testing.T) {
 	o := service_tester.New(t)
-	v := mountedUpload(t, o.Service)
+	v := mountedUpload(t, o.Option)
 	assert.Integer(
 		t,
 		http.StatusBadRequest,

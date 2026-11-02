@@ -6,7 +6,7 @@ import (
 )
 
 func NewEnvironment() *Client {
-	return New(
+	return MustNew(
 		environment.Required(constant.DatabaseEnvironment),
 		environment.Required(constant.PasswordEnvironment),
 	)

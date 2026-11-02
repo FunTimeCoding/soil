@@ -1,13 +1,19 @@
 package ssh
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"io/fs"
-)
+import "io/fs"
 
-func (c *Client) ListDirectory(path string) []fs.FileInfo {
-	entries, e := c.sftpClient().ReadDir(path)
-	errors.PanicOnError(e)
+func (c *Client) ListDirectory(path string) ([]fs.FileInfo, error) {
+	s, e := c.sftpClient()
 
-	return entries
+	if e != nil {
+		return nil, e
+	}
+
+	result, e := s.ReadDir(path)
+
+	if e != nil {
+		return nil, c.refused("list directory", path, e)
+	}
+
+	return result, nil
 }

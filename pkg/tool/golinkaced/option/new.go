@@ -7,7 +7,7 @@ import (
 
 func New() *LinkAce {
 	return &LinkAce{
-		Source: func() face.Client {
+		Source: func() face.LinkAceClient {
 			return linkace.NewEnvironment()
 		},
 	}

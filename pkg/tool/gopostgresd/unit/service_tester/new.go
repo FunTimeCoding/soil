@@ -3,12 +3,14 @@ package service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/inventory"
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/postgres/face"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/postgres/mock_client"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/peered"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service"
 	"testing"
 )
@@ -29,13 +31,26 @@ func New(
 		)
 	}
 
-	o := option.New()
-	o.Inventory = inventory.New[instance.Instance](instances...)
-	o.Client = func(i *instance.Instance) (face.Client, error) {
-		return clients[i.Name], nil
-	}
-	result := service.New(o, logger.New(t.Context()), memory.New())
-	t.Cleanup(result.Close)
+	l := logger.New(t.Context())
+	r := memory.New()
+	p := pool.New(
+		inventory.New[instance.Instance](instances...),
+		func(i *instance.Instance) (*peered.Peered, error) {
+			c := clients[i.Name]
 
-	return result, clients
+			return peered.New(
+				c,
+				peer.New(
+					join.Colon(constant.InstancePeer, i.Name),
+					i.Host,
+					c,
+					l,
+					r,
+				),
+			), nil
+		},
+	)
+	t.Cleanup(p.Close)
+
+	return service.New(p), clients
 }

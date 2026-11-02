@@ -2,17 +2,23 @@ package service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/service"
+	"path/filepath"
 	"testing"
 )
 
-func New(t *testing.T) *service.Service {
+func New(
+	t *testing.T,
+	p face.TopStatsParser,
+) (*service.Service, string) {
 	t.Helper()
-	o := option.New()
-	o.ParserPath = t.TempDir()
-	o.TemplatePath = t.TempDir()
-	o.OutputPath = t.TempDir()
+	output := t.TempDir()
 
-	return service.New(o, logger.New(t.Context()))
+	return service.New(
+		p,
+		filepath.Join(t.TempDir(), "TW5_Top_Stat_Parse.html"),
+		output,
+		logger.New(t.Context()),
+	), output
 }

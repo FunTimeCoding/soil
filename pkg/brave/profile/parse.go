@@ -1,18 +1,27 @@
 package profile
 
 import (
+	"encoding/base64"
 	"github.com/funtimecoding/soil/pkg/brave/helper"
-	"github.com/funtimecoding/soil/pkg/strings/base64"
-	"github.com/funtimecoding/soil/pkg/system/join"
+	"path/filepath"
 )
 
 func Parse(
 	base string,
 	profile string,
 	s string,
-) *Profile {
-	_, mail, _, _ := helper.ParseAccounts([]byte(base64.Decode(s)))
-	path := join.Absolute(base, profile)
+) (*Profile, error) {
+	b, e := base64.StdEncoding.DecodeString(s)
 
-	return &Profile{Profile: profile, Path: path, Email: mail}
+	if e != nil {
+		return nil, e
+	}
+
+	_, mail, _, _ := helper.ParseAccounts(b)
+
+	return &Profile{
+		Profile: profile,
+		Path:    filepath.Join(base, profile),
+		Email:   mail,
+	}, nil
 }

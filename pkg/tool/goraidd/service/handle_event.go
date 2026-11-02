@@ -7,17 +7,23 @@ import (
 	"strings"
 )
 
-func (s *Service) HandleEvent(v fsnotify.Event) {
+func (s *Service) HandleEvent(v fsnotify.Event) []error {
 	if !v.Has(fsnotify.Create) && !v.Has(fsnotify.Write) {
-		return
+		return nil
 	}
+
+	var result []error
 
 	if filepath.Base(v.Name) == constant.LogFile {
 		s.logger.Structured("log_cache_sync")
-		s.SyncLogCache()
+		result = append(result, s.SyncLogCache()...)
 	}
 
 	if strings.HasSuffix(v.Name, constant.DetailedWvWKillSuffix) {
-		s.EnrichFile(filepath.Dir(v.Name), filepath.Base(v.Name))
+		if e := s.EnrichFile(filepath.Dir(v.Name), filepath.Base(v.Name)); e != nil {
+			result = append(result, e)
+		}
 	}
+
+	return result
 }

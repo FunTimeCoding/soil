@@ -24,17 +24,9 @@ func Check(
 				continue
 			}
 
-			call := forwardedCall(f)
+			call := forwards(f)
 
-			if call == nil || call.Ellipsis.IsValid() {
-				continue
-			}
-
-			if !plainCallee(call.Fun) {
-				continue
-			}
-
-			if !forwardsParameters(f, call) {
+			if call == nil {
 				continue
 			}
 

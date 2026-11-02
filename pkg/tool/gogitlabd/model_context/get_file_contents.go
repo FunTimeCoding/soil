@@ -23,13 +23,13 @@ func (s *Server) GetFileContents(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	v, e := s.service.File(instance, project, a.Reference, a.Path)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	return response.SuccessAny(v)

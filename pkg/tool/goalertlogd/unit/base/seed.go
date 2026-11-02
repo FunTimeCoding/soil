@@ -18,5 +18,5 @@ func (s *Server) Seed(count int) {
 		)
 	}
 
-	s.Worker.Poll()
+	s.Clock.Poll()
 }

@@ -13,7 +13,7 @@ func (s *Service) PollUsage() {
 		return
 	}
 
-	browser := site.Attach(s.usageBrowser())
+	browser := site.Attach(s.browser)
 	browser.ClickRefresh()
 	time.Sleep(2 * time.Second)
 	browser.OpenWeek()

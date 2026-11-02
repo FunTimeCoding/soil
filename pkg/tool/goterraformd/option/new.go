@@ -13,7 +13,7 @@ import (
 func New() *Terraform {
 	result := &Terraform{
 		Executable: constant.Command,
-		Cluster: func() face.Client {
+		Cluster: func() face.KubernetesClient {
 			return client.NewInCluster(kubernetesConstant.InCluster)
 		},
 	}

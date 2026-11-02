@@ -6,12 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/metric"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/outcome"
+	"sync"
 	"time"
 )
 
 type Worker struct {
-	service  *service.Service
+	collect  func(context.Context) ([]*outcome.Outcome, error)
 	interval time.Duration
 	logger   *logger.Logger
 	reporter face.Reporter
@@ -19,4 +20,6 @@ type Worker struct {
 	recovery *recovery.Recovery
 	cancel   context.CancelFunc
 	context  context.Context
+	started  sync.Once
+	done     chan struct{}
 }

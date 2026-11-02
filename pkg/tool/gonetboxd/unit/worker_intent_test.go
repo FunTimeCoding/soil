@@ -23,7 +23,7 @@ func TestTheWorkerExportsEachObjectsStatus(t *testing.T) {
 	c.SeedVirtualMachine("charlie").Status = "offline"
 	y := prometheus.NewRegistry()
 	w := worker.New(
-		service_tester.Service(t, c),
+		service_tester.Service(t, c).Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		y,
@@ -55,7 +55,7 @@ func TestAChangedStatusLeavesNoStaleSeries(t *testing.T) {
 	d.Status = "offline"
 	y := prometheus.NewRegistry()
 	w := worker.New(
-		service_tester.Service(t, c),
+		service_tester.Service(t, c).Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		y,
@@ -86,7 +86,7 @@ func TestAnUnavailableNetboxIsOnlyLogged(t *testing.T) {
 	c.Failure = unavailable.Format("netbox restarting")
 	r := memory.New()
 	w := worker.New(
-		service_tester.Service(t, c),
+		service_tester.Service(t, c).Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		prometheus.NewRegistry(),
@@ -105,7 +105,7 @@ func TestAQuietFailureIsOnlyLogged(t *testing.T) {
 	c.Failure = not_found.Format("no devices endpoint")
 	r := memory.New()
 	w := worker.New(
-		service_tester.Service(t, c),
+		service_tester.Service(t, c).Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		prometheus.NewRegistry(),

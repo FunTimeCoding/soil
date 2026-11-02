@@ -3,42 +3,37 @@ package worker
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"time"
 )
 
 func (w *Worker) run() {
-	w.recovery.Run(w.service.SyncLogCache)
-	w.recovery.Run(w.service.EnrichExisting)
-	w.recovery.Run(w.service.Cleanup)
+	for _, p := range w.prepare {
+		w.recovery.Run(func() { w.report(p()) })
+	}
+
 	v, e := fsnotify.NewWatcher()
 	errors.PanicOnError(e)
 	defer func() { errors.PanicOnError(v.Close()) }()
-	paths := w.service.WatchedPaths()
 
 	if w.context.Err() != nil {
 		return
 	}
 
-	for _, p := range paths {
+	for _, p := range w.paths {
 		errors.PanicOnError(v.Add(p))
 	}
 
-	w.logger.Structured("watcher_start", "paths", paths)
-	cleanup := time.NewTicker(24 * time.Hour)
-	defer cleanup.Stop()
+	w.logger.Structured("watcher_start", "paths", w.paths)
 
 	for {
 		select {
 		case <-w.context.Done():
 			return
-		case <-cleanup.C:
-			w.recovery.Run(w.service.Cleanup)
 		case event, okay := <-v.Events:
 			if !okay {
 				return
 			}
 
-			w.recovery.Run(func() { w.service.HandleEvent(event) })
+			w.recovery.Run(func() { w.report(w.handle(event)) })
 		case f, okay := <-v.Errors:
 			if !okay {
 				return

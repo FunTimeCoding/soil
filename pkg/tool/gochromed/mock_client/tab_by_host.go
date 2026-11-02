@@ -6,6 +6,9 @@ import (
 )
 
 func (c *Client) TabByHost(s string) (*tab.Tab, error) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	for _, t := range c.tabs {
 		if strings.Contains(t.Locator, s) {
 			return t, nil

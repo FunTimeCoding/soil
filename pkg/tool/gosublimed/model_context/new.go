@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
-	sublime "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/service"
 )
 
 func New(
-	v sublime.Sublime,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

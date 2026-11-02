@@ -19,8 +19,9 @@ func NewOnFile(
 	t.Cleanup(func() { relational.CloseMapper(d) })
 
 	return &Tester{
-		t:     t,
-		Store: store.New(d, func() time.Time { return now }),
-		now:   &now,
+		t:      t,
+		mapper: d,
+		Store:  store.New(d, func() time.Time { return now }),
+		now:    &now,
 	}
 }

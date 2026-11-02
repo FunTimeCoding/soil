@@ -1,7 +1,7 @@
 package toolchain
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
 	"sort"
 )
 

@@ -2,6 +2,7 @@ package process
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/log"
+	"os"
 	"sync"
 )
 
@@ -15,7 +16,7 @@ func New(
 		Name:       name,
 		Command:    command,
 		ColorIndex: colorIndex,
-		logger:     log.New(name, colorIndex, maxNameWidth),
+		logger:     log.New(os.Stdout, name, colorIndex, maxNameWidth),
 	}
 	p.condition = sync.NewCond(&p.mutex)
 

@@ -1,15 +1,16 @@
 package service
 
+import "github.com/funtimecoding/soil/pkg/gitlab/face"
+
 func (s *Service) DeleteProjectVariable(
 	instance string,
 	project int64,
 	key string,
 ) error {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return e
-	}
-
-	return c.DeleteProjectVariable(project, key)
+	return s.attempt(
+		instance,
+		func(c face.GitLabClient) error {
+			return c.DeleteProjectVariable(project, key)
+		},
+	)
 }

@@ -9,7 +9,7 @@ import (
 func (o *Tester) IssueLeaf() {
 	o.t.Helper()
 	host := []string{constant.FixtureHost}
-	_, _, e := o.Server.Service.IssueCertificate(
+	_, _, e := o.Service.IssueCertificate(
 		&server.CertificateBody{
 			Authority:  constant.FixtureClusterAuthority,
 			Kind:       server.LeafKind(constant.KindServer),

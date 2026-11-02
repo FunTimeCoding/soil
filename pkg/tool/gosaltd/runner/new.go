@@ -21,13 +21,14 @@ func New(
 	c *salt.Client,
 ) *Runner {
 	result := &Runner{
-		store:     s,
-		salt:      c,
-		connected: make(chan struct{}),
-		logger:    l,
-		reporter:  r,
-		recovery:  recovery.New(l, r),
-		reacher:   reacher.New(r),
+		store:           s,
+		salt:            c,
+		connected:       make(chan struct{}),
+		keySyncInterval: o.KeySyncInterval,
+		logger:          l,
+		reporter:        r,
+		recovery:        recovery.New(l, r),
+		reacher:         reacher.New(r),
 	}
 	result.provision = runner.New(
 		runner_option.Option{

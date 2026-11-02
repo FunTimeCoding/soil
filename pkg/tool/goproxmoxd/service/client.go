@@ -1,7 +1,7 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+import "github.com/funtimecoding/soil/pkg/proxmox/face"
 
-func (s *Service) Client(instance string) (face.ProxmoxClient, error) {
+func (s *Service) client(instance string) (face.ProxmoxClient, error) {
 	return s.pool.Client(instance)
 }

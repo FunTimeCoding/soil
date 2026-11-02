@@ -1,10 +1,7 @@
 package base
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/brave/constant"
 	"github.com/funtimecoding/soil/pkg/chromium"
-	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"net/http/httptest"
@@ -13,26 +10,16 @@ import (
 
 func New(t *testing.T) *Stack {
 	t.Helper()
-	port := freePort(t)
 	result := &Stack{
-		T:    t,
-		Site: httptest.NewServer(http.HandlerFunc(serve)),
-		Port: port,
-		pool: stall_client.New().Build(),
-		process: run.New().Open(
-			constant.BravePath,
-			"--headless=new",
-			fmt.Sprintf("--remote-debugging-port=%d", port),
-			fmt.Sprintf("--user-data-dir=%s", t.TempDir()),
-			"--no-first-run",
-			"--no-default-browser-check",
-			"--disable-gpu",
-			"about:blank",
-		),
+		T:       t,
+		Site:    httptest.NewServer(http.HandlerFunc(serve)),
+		Port:    freePort(t),
+		profile: t.TempDir(),
+		pool:    stall_client.New().Build(),
 	}
 	t.Cleanup(result.Close)
-	waitReady(t, result.pool.Client(), port)
-	result.Client = chromium.New("localhost", port)
+	result.Start()
+	result.Client = chromium.New("localhost", result.Port)
 
 	return result
 }

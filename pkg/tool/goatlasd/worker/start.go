@@ -6,19 +6,24 @@ import (
 )
 
 func (w *Worker) Start() {
-	w.logger.Plain(constant.StartMessage)
-	go func() {
-		t := time.NewTicker(w.interval)
-		defer t.Stop()
-		w.recovery.Run(w.Poll)
-
-		for {
-			select {
-			case <-w.context.Done():
-				return
-			case <-t.C:
+	w.started.Do(
+		func() {
+			w.logger.Plain(constant.StartMessage)
+			go func() {
+				defer close(w.done)
+				t := time.NewTicker(w.interval)
+				defer t.Stop()
 				w.recovery.Run(w.Poll)
-			}
-		}
-	}()
+
+				for {
+					select {
+					case <-w.context.Done():
+						return
+					case <-t.C:
+						w.recovery.Run(w.Poll)
+					}
+				}
+			}()
+		},
+	)
 }

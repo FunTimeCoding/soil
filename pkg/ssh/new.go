@@ -1,5 +1,7 @@
 package ssh
 
+import "github.com/funtimecoding/soil/pkg/ssh/constant"
+
 func New(
 	user string,
 	host string,
@@ -8,6 +10,7 @@ func New(
 	return &Client{
 		user:         user,
 		host:         host,
+		port:         constant.Port,
 		secure:       secure,
 		authenticate: agentAuthentication,
 		Panic:        true,

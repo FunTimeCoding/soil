@@ -1,6 +1,9 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/provision/salt"
+import (
+	"github.com/funtimecoding/soil/pkg/provision/salt"
+	"time"
+)
 
 type Salt struct {
 	Address         string
@@ -10,5 +13,6 @@ type Salt struct {
 	SaltPath        string
 	PostgresLocator string
 	LitePath        string
+	KeySyncInterval time.Duration
 	Master          func() *salt.Client
 }

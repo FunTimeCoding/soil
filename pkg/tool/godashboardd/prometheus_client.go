@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/connection"
 )
 
-func prometheusClient(b *board.Board) func() face.Client {
-	return func() face.Client {
+func prometheusClient(b *board.Board) func() face.PrometheusClient {
+	return func() face.PrometheusClient {
 		return prometheus.New(
 			b.Connection.Prometheus.Host,
 			connection.Port(b.Connection.Prometheus),

@@ -3,17 +3,19 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/system/types/service"
 	"path/filepath"
 	"strings"
 )
 
-func (c *Client) launchServices() []*service.Service {
-	r := run.New()
-	r.Panic = false
-	r.Start(constant.Launchctl, constant.LaunchctlList)
-	loaded := ParseLaunchctl(r.OutputString)
+func (c *Client) launchServices() ([]*service.Service, error) {
+	list, e := listing(constant.Launchctl, constant.LaunchctlList)
+
+	if e != nil {
+		return nil, e
+	}
+
+	loaded := ParseLaunchctl(list)
 	var result []*service.Service
 
 	for _, directory := range []string{
@@ -54,5 +56,5 @@ func (c *Client) launchServices() []*service.Service {
 		}
 	}
 
-	return result
+	return result, nil
 }

@@ -1,17 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/discussion"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/discussion"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+)
 
 func (s *Service) MergeRequestDiscussions(
 	instance string,
 	project int64,
 	identifier int64,
 ) ([]*discussion.Discussion, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.MergeRequestDiscussions(project, identifier)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*discussion.Discussion, error) {
+			return c.MergeRequestDiscussions(project, identifier)
+		},
+	)
 }

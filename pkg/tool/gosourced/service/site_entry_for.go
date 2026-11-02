@@ -3,8 +3,8 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern_site"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/location"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/pattern_site"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result/location"
 	"go/ast"
 	"go/token"
 	"os"

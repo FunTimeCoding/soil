@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/receipt"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/deletion"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/deletion"
 )
 
 func (s *Service) deleteCounts(r *session.Session) (*receipt.Receipt, error) {

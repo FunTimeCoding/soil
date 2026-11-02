@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/service/report"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/types/report"
 	"github.com/funtimecoding/soil/pkg/web/component/action"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"maragu.dev/gomponents"

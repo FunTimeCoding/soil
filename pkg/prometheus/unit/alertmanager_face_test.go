@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	"testing"
 )
 
@@ -13,6 +13,6 @@ func TestTheAlertmanagerClientAndItsMockShareTheFace(t *testing.T) {
 	t.Cleanup(c.Close)
 	m := mock_client.New()
 	t.Cleanup(m.Close)
-	faces := []face.Client{c, m}
+	faces := []face.AlertmanagerClient{c, m}
 	assert.Count(t, 2, faces)
 }

@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -26,16 +26,18 @@ func (s *Server) CreateSnippet(
 		return server.CreateSnippet500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
-	c, e := s.service.SSHClient(instance)
+	volume, e := s.service.CreateSnippet(instance, r.Body.Name, r.Body.Content)
+
+	if validation.Is(e) {
+		return server.CreateSnippet400JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.CreateSnippet500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	c.WriteFile(snippetPath(r.Body.Name), []byte(r.Body.Content))
-
 	return server.CreateSnippet200JSONResponse{
-		Volume: fmt.Sprintf("local:snippets/%s", r.Body.Name),
+		Volume: volume,
 		Status: "created",
 	}, nil
 }

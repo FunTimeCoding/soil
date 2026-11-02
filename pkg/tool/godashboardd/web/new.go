@@ -3,8 +3,10 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -17,9 +19,11 @@ import (
 
 func New(
 	v *service.Service,
+	b *board.Board,
+	a *client.Client,
+	n face.EventNotifier,
 	f face.Reporter,
 ) *Server {
-	b := v.Board()
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -46,10 +50,12 @@ func New(
 	}
 
 	return &Server{
-		board:    b,
-		service:  v,
-		reporter: f,
-		registry: r,
+		board:         b,
+		service:       v,
+		authorization: a,
+		notifier:      n,
+		reporter:      f,
+		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeSentinel).

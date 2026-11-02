@@ -29,7 +29,7 @@ func NewOption(
 	result.ClientSecret = "tester-secret"
 	result.EncryptionSecret = "tester-encryption-secret"
 	result.PublicLocator = "https://dashboard.example.org"
-	result.Prometheus = func() metric.Client { return p }
+	result.Prometheus = func() metric.PrometheusClient { return p }
 
 	if a != nil {
 		result.Argocd = func() kubernetes.ArgocdClient { return a }

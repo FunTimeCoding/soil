@@ -1,12 +1,17 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goalpined/option"
+import "github.com/funtimecoding/soil/pkg/tool/goalpined/face"
 
-func New(o *option.Alpine) *Service {
+func New(
+	packageRoot string,
+	keyDirectory string,
+	signatureKey string,
+	i face.Indexer,
+) *Service {
 	return &Service{
-		packageRoot:  o.PackageRoot,
-		keyDirectory: o.KeyDirectory,
-		signatureKey: o.SignatureKey,
-		indexer:      o.Indexer(),
+		packageRoot:  packageRoot,
+		keyDirectory: keyDirectory,
+		signatureKey: signatureKey,
+		indexer:      i,
 	}
 }

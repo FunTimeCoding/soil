@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/constant"
-	jellyfin "github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/service"
 )
 
 func New(
-	v jellyfin.Jellyfin,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

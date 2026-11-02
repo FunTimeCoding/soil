@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
-	chromium "github.com/funtimecoding/soil/pkg/tool/gochromed/face"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/service"
 )
 
 func New(
-	v chromium.Browser,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

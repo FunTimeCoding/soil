@@ -17,7 +17,7 @@ func (s *Service) QueryRange(
 		s,
 		x,
 		instance,
-		func(c face.Client) (*query_result.Result, error) {
+		func(c face.PrometheusClient) (*query_result.Result, error) {
 			return c.QueryRange(query, r)
 		},
 	)

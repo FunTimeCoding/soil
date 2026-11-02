@@ -11,15 +11,15 @@ import (
 )
 
 func TestTheSecondPageOfACollectionLoads(t *testing.T) {
-	s, v := servedWeb(t)
+	s, c := servedWeb(t)
 
 	for i := range 21 {
-		v.PushDocument(
-			t.Context(),
+		pushDocument(
+			t,
+			c,
 			"pushed",
 			fmt.Sprintf("note-%02d.md", i),
 			fmt.Sprintf("# Note %02d\n\nbody", i),
-			nil,
 		)
 	}
 
@@ -33,8 +33,8 @@ func TestTheSecondPageOfACollectionLoads(t *testing.T) {
 }
 
 func TestAMissingDocumentIsNotFoundWithLinkedSuggestions(t *testing.T) {
-	s, v := servedWeb(t)
-	v.PushDocument(t.Context(), "pushed", "alfa.md", "# Alfa\n\nbody", nil)
+	s, c := servedWeb(t)
+	pushDocument(t, c, "pushed", "alfa.md", "# Alfa\n\nbody")
 	status, page := servedPage(t, s, document_page.Path("pushed/alfa"))
 	assert.Integer(t, http.StatusNotFound, status)
 	assert.StringContains(t, `<a href="/documents/pushed/alfa.md">`, page)

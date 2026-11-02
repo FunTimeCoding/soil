@@ -18,7 +18,7 @@ type Dashboard struct {
 	EncryptionSecret string
 	PublicLocator    string
 	ServiceTokens    []string
-	Prometheus       func() metric.Client
+	Prometheus       func() metric.PrometheusClient
 	Argocd           func() kubernetes.ArgocdClient
 	Usage            func() nextcloud.UsageClient
 }

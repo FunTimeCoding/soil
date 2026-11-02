@@ -1,15 +1,7 @@
 package supervisor
 
-func (s *Supervisor) Start(name string) error {
-	s.commandMutex.Lock()
-	defer s.commandMutex.Unlock()
-	p, e := s.process(name)
-
-	if e != nil {
-		return e
+func (s *Supervisor) Start() {
+	for _, p := range s.snapshotProcesses() {
+		s.spawn(p)
 	}
-
-	s.spawn(p)
-
-	return nil
 }

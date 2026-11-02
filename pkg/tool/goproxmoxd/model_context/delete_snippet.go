@@ -12,23 +12,15 @@ func (s *Server) DeleteSnippet(
 	_ mcp.CallToolRequest,
 	a argument.DeleteSnippet,
 ) (*mcp.CallToolResult, error) {
-	if a.Name == "" {
-		return response.Fail("name is required")
-	}
-
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	c, e := s.service.SSHClient(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
+	if f := s.service.DeleteSnippet(instance, a.Name); f != nil {
+		return s.captureDetail(f)
 	}
-
-	c.RemoveFile(snippetPath(a.Name))
 
 	return response.Success("deleted")
 }

@@ -1,16 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/variable"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/variable"
+)
 
 func (s *Service) Variables(
 	instance string,
 	project int64,
 ) ([]*variable.Variable, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.Variables(project)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*variable.Variable, error) {
+			return c.Variables(project)
+		},
+	)
 }

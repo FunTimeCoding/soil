@@ -3,11 +3,12 @@ package worker_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_service"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_snippet"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
@@ -20,7 +21,10 @@ func NewPollWorker(
 	y := prometheus.NewRegistry()
 
 	return worker.New(
-		mock_service.New(name, c, mock_snippet.New()),
+		func(string) (face.ProxmoxClient, error) { return c, nil },
+		inventory.New[instance.Instance](
+			instance.Instance{Name: name, Host: "mock"},
+		),
 		time.Minute,
 		y,
 		logger.New(context.Background()),

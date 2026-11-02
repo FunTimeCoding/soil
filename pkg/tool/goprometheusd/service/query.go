@@ -17,7 +17,7 @@ func (s *Service) Query(
 		s,
 		x,
 		instance,
-		func(c face.Client) (*query_result.Result, error) {
+		func(c face.PrometheusClient) (*query_result.Result, error) {
 			return c.Query(query, t)
 		},
 	)

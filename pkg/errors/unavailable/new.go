@@ -17,5 +17,7 @@ func New(
 			since.Format(time.DateTime),
 			reason,
 		),
+		Since:  since,
+		Reason: reason,
 	}
 }

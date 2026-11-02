@@ -1,11 +1,14 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gochromed/option"
+import "github.com/funtimecoding/soil/pkg/tool/gochromed/face"
 
-func New(o *option.Chrome) *Service {
+func New(
+	c face.ChromiumSource,
+	downloadDirectory string,
+) *Service {
 	return &Service{
-		source:            o.Source(),
-		downloadDirectory: o.DownloadDirectory,
+		source:            c,
+		downloadDirectory: downloadDirectory,
 		snapshotCache:     make(map[string]map[string]int64),
 	}
 }

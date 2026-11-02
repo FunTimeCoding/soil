@@ -11,7 +11,7 @@ import (
 
 func TestAQuietClassIsAnsweredWithoutACaptureOverModelContext(t *testing.T) {
 	m := memory.New()
-	service_tester.Connect(t, service_tester.NewSource(), m).MustCallToolError(
+	servedTools(t, service_tester.NewSource(), m).MustCallToolError(
 		constant.DeleteUser,
 		map[string]any{"account": "ghost"},
 	)
@@ -22,9 +22,6 @@ func TestAnUnclassifiedFailureIsCapturedOverModelContext(t *testing.T) {
 	c := service_tester.NewSource()
 	c.Failure = errors.New("directory answered nonsense")
 	m := memory.New()
-	service_tester.Connect(t, c, m).MustCallToolError(
-		constant.ListUser,
-		map[string]any{},
-	)
+	servedTools(t, c, m).MustCallToolError(constant.ListUser, map[string]any{})
 	assert.Count(t, 1, m.Events())
 }

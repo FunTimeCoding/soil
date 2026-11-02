@@ -3,14 +3,22 @@ package brave
 import (
 	"github.com/funtimecoding/soil/pkg/brave/bookmark"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
-	"github.com/funtimecoding/soil/pkg/system"
+	"os"
+	"path/filepath"
 )
 
-func Bookmark(profile string) *bookmark.File {
-	return bookmark.Parse(
-		system.ReadFile(
-			MustProfileByName(profile).Path,
-			constant.BookmarksFile,
-		),
-	)
+func Bookmark(profile string) (*bookmark.File, error) {
+	p, e := ProfileByName(profile)
+
+	if e != nil {
+		return nil, e
+	}
+
+	b, f := os.ReadFile(filepath.Join(p.Path, constant.BookmarksFile))
+
+	if f != nil {
+		return nil, f
+	}
+
+	return bookmark.Parse(b)
 }

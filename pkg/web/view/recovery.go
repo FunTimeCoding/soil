@@ -23,7 +23,7 @@ func (v *View) Recovery(r face.Reporter) func(http.Handler) http.Handler {
 					v.renderFailure(
 						w,
 						q,
-						http.StatusInternalServerError,
+						statusOf(caught),
 						layout.ErrorItem(report(r, caught)),
 					)
 				}()

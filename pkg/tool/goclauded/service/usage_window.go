@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/service/usage_window"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/types/usage_window"
 
 func (s *Service) UsageWindow() *usage_window.Window {
 	latest, e := s.store.LatestRateSnapshot()

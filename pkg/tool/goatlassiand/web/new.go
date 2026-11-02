@@ -1,9 +1,10 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -12,7 +13,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(k *worker.Worker) *Server {
+func New(
+	v *service.Service,
+	n face.EventNotifier,
+) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -23,7 +27,8 @@ func New(k *worker.Worker) *Server {
 	)
 
 	return &Server{
-		worker:   k,
+		service:  v,
+		notifier: n,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).

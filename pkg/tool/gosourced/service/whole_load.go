@@ -9,13 +9,26 @@ import (
 func wholeLoad(
 	directory string,
 	w *index.Workspace,
-	packagePath string,
+	packagePaths ...string,
 ) ([]*packages.Package, *token.FileSet, error) {
 	patterns := []string{"./..."}
+	var reachable []string
 
-	if w.Reaches(packagePath) {
-		patterns = append(patterns, packagePath)
+	for _, p := range packagePaths {
+		if p == "" {
+			continue
+		}
+
+		reachable = append(reachable, p)
+
+		if w.Reaches(p) {
+			patterns = append(patterns, p)
+		}
 	}
 
-	return loadPackages(directory, patterns...)
+	return loadAround(
+		directory,
+		reachedPaths(w.Graph(), reachable),
+		patterns...,
+	)
 }

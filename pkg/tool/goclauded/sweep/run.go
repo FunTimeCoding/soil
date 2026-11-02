@@ -6,9 +6,12 @@ import (
 	"path/filepath"
 )
 
-func Run(harbor string) *Result {
+func Run(
+	directories []string,
+	harbor string,
+) *Result {
 	system.MakeDirectory(harbor)
-	sources := collectSources()
+	sources := collectSources(directories)
 	r := &Result{}
 
 	for _, source := range sources {

@@ -1,19 +1,24 @@
 package watcher
 
 import (
+	"context"
 	"github.com/fsnotify/fsnotify"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	"sync"
 )
 
 type Watcher struct {
-	service  *service.Service
-	recovery *recovery.Recovery
-	reporter face.Reporter
-	logger   *logger.Logger
-	harbor   string
-	changed  map[string]string
-	notifier *fsnotify.Watcher
+	context     context.Context
+	cancel      context.CancelFunc
+	rescan      func(context.Context) []error
+	sync        func(string, string)
+	directories func() []string
+	recovery    *recovery.Recovery
+	reporter    face.Reporter
+	harbor      string
+	changed     map[string]string
+	notifier    *fsnotify.Watcher
+	started     sync.Once
+	done        chan struct{}
 }

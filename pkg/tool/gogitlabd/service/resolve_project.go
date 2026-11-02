@@ -1,14 +1,16 @@
 package service
 
+import "github.com/funtimecoding/soil/pkg/gitlab/face"
+
 func (s *Service) ResolveProject(
 	instance string,
 	identifier string,
 ) (int64, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return 0, e
-	}
-
-	return c.ResolveProject(identifier)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) (int64, error) {
+			return c.ResolveProject(identifier)
+		},
+	)
 }

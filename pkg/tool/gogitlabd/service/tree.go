@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/tree"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/tree"
+)
 
 func (s *Service) Tree(
 	instance string,
@@ -10,11 +13,11 @@ func (s *Service) Tree(
 	recursive bool,
 	limit int64,
 ) ([]*tree.Node, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.Tree(project, path, reference, recursive, limit)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*tree.Node, error) {
+			return c.Tree(project, path, reference, recursive, limit)
+		},
+	)
 }

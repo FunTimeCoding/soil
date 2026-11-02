@@ -39,7 +39,7 @@ migrate.AutoMigrate(m)
 s := store.New(m)
 ```
 
-The store borrows the mapper, so the test closes it, as the service does
+The store borrows the mapper, so the test closes it, as the daemon does
 in production (`database.md`). Raw `go:database/sql` stores use
 `store.New(connection.NewMemory())` the same way. Use the file openers
 with `t.TempDir()` only when the test genuinely needs a file on disk. Never call
@@ -60,42 +60,44 @@ c.Remove("fp1")
 // ... exercise code again, assert resolution ...
 ```
 
-A mock reaches the service the way the real client does: through the factory on
-the option (`service-tool.md`, Service). `<path>/unit/service_tester` creates
-the mock, builds the option with the factory returning it, builds the service
-and closes it on cleanup, and returns both; a pooled client's factory answers
-per instance, so a pooled tester takes the instance names and returns one mock
-per name -
-`New(t, names...) (*service.Service, map[string]*mock_client.Client)`. The
-service closes the mock it was handed through the factory, so no caller holds
-one it never closes - data the mock should carry before the service starts goes
-in as values, not as a mock the caller built. A guarded service's test shares
-one reporter between the guard and the caller, so the events it counts are the
-ones the daemon would send. Tests of the service, its workers and the mount all
-go through it:
+A mock reaches a service the way the real client does: the daemon builds
+the client from the factory on the option and hands it to the services that
+use it (`service-tool.md`, The daemon). Tests come in two kinds.
+
+A service test stands in for the daemon: `<path>/unit/<noun>_tester` builds
+the store over a mapper, the mock, and the service from those parts with the
+services it was built with, closes what it built on cleanup, and returns
+the service and the mock:
 
 ```go
-func New(t *testing.T) (*service.Service, *mock_client.Client) {
+func New(t *testing.T) (*loan.Service, *mock_client.Client) {
     t.Helper()
+    m := lite.NewMemory()
+    t.Cleanup(func() { relational.CloseMapper(m) })
+    migrate.AutoMigrate(m)
     c := mock_client.New()
-    o := option.New()
-    o.LitePath = filepath.Join(t.TempDir(), "daemon.db")
-    o.Source = func() face.AlertSource { return c }
-    result := service.New(o, logger.New(t.Context()))
-    t.Cleanup(result.Close)
+    t.Cleanup(c.Close)
+    s := catalog.New(m)
 
-    return result, c
+    return loan.New(s, member.New(member_store.New(m)), c, time.Now), c
 }
 ```
 
-A service built from the option opens its database from `LitePath`, so
-service-level tests run on a file in `t.TempDir()`; store tests keep the
-in-memory mapper. A fake upstream - an HTTP server answering the
-client's real requests with their content type - stays for testing a
-client's own wire handling, in the client's package. That package's
-test also holds the client and its mock to the face, both in one
-`[]face.Client`, and a daemon client's to its embedded spec
-(`GetSpec`), failing on any operation the client lacks.
+A surface test builds the daemon from the option - the factory returning the
+mock, `LitePath` a file in `t.TempDir()` - closes it on cleanup, and goes served
+through `Mount`. The daemon closes the mock it was handed through the factory,
+so no caller holds one it never closes - data the mock should carry before the
+daemon starts goes in as values, not as a mock the caller built. A pooled
+client's factory answers per instance, so a pooled tester takes the instance
+names and returns one mock per name. A served test reading the store beside the
+daemon opens its own connection on the option's `LitePath`. Nothing builds a
+surface over hand-wired services. A guarded service's test shares one reporter
+between the guard and the caller, so the events it counts are the ones the
+daemon would send. A fake upstream - an HTTP server answering the client's real
+requests with their content type - stays for testing a client's own wire
+handling, in the client's package. That package's test also holds the client and
+its mock to the face, both in one `[]face.Client`, and a daemon client's to its
+embedded spec (`GetSpec`), failing on any operation the client lacks.
 
 ## Poll Cycle Testing
 

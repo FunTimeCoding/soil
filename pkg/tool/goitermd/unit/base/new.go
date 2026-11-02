@@ -4,9 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -15,18 +14,14 @@ import (
 func New(t *testing.T) *Server {
 	t.Helper()
 	c := mock_client.New()
+	d := daemon_tester.New(t, c)
 	v := model_context_server.New(
 		t,
 		func(
 			m *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goitermd.Mount(
-				service_tester.New(t, c),
-				memory.New(),
-				mock_recorder.New(),
-				g,
-			)
+			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	result := &Server{MockClient: c, Server: v}

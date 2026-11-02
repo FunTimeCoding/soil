@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strconv"

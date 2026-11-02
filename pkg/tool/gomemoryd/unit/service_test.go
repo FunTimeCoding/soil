@@ -60,8 +60,7 @@ func TestServiceForgetMemory(t *testing.T) {
 }
 
 func TestHiddenTagLeavesIndex(t *testing.T) {
-	o := service_tester.New(t)
-	o.Service.WithHiddenTag("private")
+	o := service_tester.NewHidden(t, "private")
 	p := save_option.New()
 	p.Name = "delta"
 	p.Content = "quiet content"

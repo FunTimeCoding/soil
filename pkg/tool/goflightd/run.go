@@ -7,11 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 )
 
@@ -20,34 +19,21 @@ func Run(
 	i face.Instrument,
 ) {
 	r := i.Reporter()
-	g := logger.New(context.Background())
-	v := service.New(o, g)
-	defer v.Close()
-	b := lifecycle.New(g).
-		WithWorker(worker.New(v.CaptureStream, g, r, constant.StreamPause)).
-		WithWorker(
-			worker.NewEvery(v.SampleBluetooth, g, r, constant.BluetoothInterval),
-		).
-		WithWorker(worker.NewEvery(v.Prune, g, r, constant.PruneInterval))
+	l := logger.New(context.Background())
+	d := daemon.New(o, l, r)
+	defer d.Close()
+	c := lifecycle.New(l)
 
-	if v.WirelessAvailable() {
-		b.WithWorker(
-			worker.NewEvery(v.SampleWireless, g, r, constant.WirelessInterval),
-		)
-	} else {
-		g.Structured(
-			"wireless collector disabled",
-			"reason",
-			"wdutil requires passwordless sudo",
-		)
+	for _, w := range d.Workers() {
+		c.WithWorker(w)
 	}
 
-	b.WithServer(
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

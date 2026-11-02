@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/counting_mattermost"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"testing"
 )
@@ -28,9 +29,14 @@ func TestAMattermostOutageAtPollIsLeftToTheGuard(t *testing.T) {
 
 func TestThePollInitializesOnceMattermostAnswers(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
-	s := monitorService(t, m)
+	c := counting_mattermost.New(m)
+	defer c.Close()
+	s := monitorService(t, c)
 	m.Failure = fault()
 	assert.Count(t, 1, s.PollMonitor())
 	m.Failure = nil
 	assert.Count(t, 0, s.PollMonitor())
+	assert.Count(t, 0, s.PollMonitor())
+	assert.Integer(t, 2, c.Mes())
+	assert.Integer(t, 1, c.TeamChannels())
 }

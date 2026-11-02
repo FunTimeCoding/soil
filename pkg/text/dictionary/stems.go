@@ -22,9 +22,15 @@ func Stems(word string) []string {
 				result = append(result, b)
 			}
 		}
+
+		if n := len(stem); constant.Doubling[suffix] &&
+			n > constant.MinimumStem &&
+			stem[n-1] == stem[n-2] {
+			result = append(result, stem[:n-1])
+		}
 	}
 
 	slices.Sort(result)
 
-	return result
+	return slices.Compact(result)
 }

@@ -9,10 +9,10 @@ import (
 type Client interface {
 	face.Reachable
 	Address() string
-	Services(
+	ListServices(
 		x context.Context,
 		origin string,
 	) ([]client.Service, error)
-	Host(x context.Context) (*client.Host, error)
+	GetHost(x context.Context) (*client.Host, error)
 	Close()
 }

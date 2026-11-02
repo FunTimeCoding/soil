@@ -1,7 +1,13 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goitermd/option"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/face"
+	"time"
+)
 
-func New(o *option.Iterm) *Service {
-	return &Service{source: o.Source(), keyInterval: o.KeyInterval}
+func New(
+	c face.ItermSource,
+	keyInterval time.Duration,
+) *Service {
+	return &Service{source: c, keyInterval: keyInterval}
 }

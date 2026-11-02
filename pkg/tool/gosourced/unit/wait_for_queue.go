@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/turn"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
 	"testing"
 	"time"
 )

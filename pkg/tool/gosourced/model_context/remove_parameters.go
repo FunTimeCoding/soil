@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

@@ -8,7 +8,7 @@ import (
 )
 
 func FindProjectOrExit(
-	c face.Forge,
+	c face.GitLabClient,
 	owner string,
 	repository string,
 ) *project.Project {

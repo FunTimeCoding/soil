@@ -6,6 +6,6 @@ import (
 )
 
 type Collector struct {
-	kubernetes face.Client
+	kubernetes face.KubernetesClient
 	guard      *peer.Guard
 }

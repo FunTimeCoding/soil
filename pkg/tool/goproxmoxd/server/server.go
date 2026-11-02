@@ -2,10 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	proxFace "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
 type Server struct {
-	service  proxFace.Service
-	reporter face.Reporter
+	service   *service.Service
+	inventory *instance.Inventory
+	reporter  face.Reporter
 }

@@ -14,20 +14,18 @@ func (s *Server) plate(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	issues := s.worker.Issues()
+	p := s.service.CurrentPlate()
+	issues := p.Issues
 	var events []string
 	var content []gomponents.Node
 
-	if s.worker.HasProject() {
+	if s.service.HasProject() {
 		events = append(events, constant.NewestEvent)
 		content = append(
 			content,
 			html.Div(
 				extended.StreamSwap(constant.NewestEvent),
-				plate_page.IssuesSection(
-					constant.NewestTitle,
-					s.worker.Newest(),
-				),
+				plate_page.IssuesSection(constant.NewestTitle, p.Newest),
 			),
 		)
 	}
@@ -50,22 +48,16 @@ func (s *Server) plate(
 			extended.StreamSwap(constant.WatchedIssuesEvent),
 			plate_page.IssuesSection(
 				constant.WatchedIssuesTitle,
-				s.worker.WatchedIssues(),
+				p.WatchedIssues,
 			),
 		),
 		html.Div(
 			extended.StreamSwap(constant.FavoritesEvent),
-			plate_page.PagesSection(
-				constant.FavoritesTitle,
-				s.worker.Favorites(),
-			),
+			plate_page.PagesSection(constant.FavoritesTitle, p.Favorites),
 		),
 		html.Div(
 			extended.StreamSwap(constant.WatchedPagesEvent),
-			plate_page.PagesSection(
-				constant.WatchedPagesTitle,
-				s.worker.Watched(),
-			),
+			plate_page.PagesSection(constant.WatchedPagesTitle, p.Watched),
 		),
 	)
 	s.view.RenderLivePageWithSummary(

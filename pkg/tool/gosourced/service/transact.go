@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/turn"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
 )
 
 func (s *Service) transact(

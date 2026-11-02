@@ -13,7 +13,9 @@ import (
 )
 
 func (c *Client) RunCommand(o *command.Command) *result.Result {
-	s := secure_shell.Session(c.dialed())
+	d, e := c.dialed()
+	errors.PanicOnError(e)
+	s := secure_shell.Session(d)
 	defer secure_shell.CloseSession(s)
 	stdout, stderr := secure_shell.SessionBuffers(s)
 
@@ -39,7 +41,7 @@ func (c *Client) RunCommand(o *command.Command) *result.Result {
 		text = o.Command
 	}
 
-	e := s.Run(text)
+	e = s.Run(text)
 	r := result.New(
 		trim.NewLine(stdout.String()),
 		trim.NewLine(stderr.String()),

@@ -1,10 +1,11 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -15,10 +16,11 @@ import (
 
 func New(
 	v *service.Service,
-	k *worker.Worker,
+	i *instance.Inventory,
+	r face.Reporter,
 ) *Server {
-	r := registry.New()
-	r.Register(
+	g := registry.New()
+	g.Register(
 		palette.NewCommand(
 			constant.BoardTitle,
 			constant.BoardPath,
@@ -27,9 +29,10 @@ func New(
 	)
 
 	return &Server{
-		service:  v,
-		worker:   k,
-		registry: r,
+		service:   v,
+		inventory: i,
+		reporter:  r,
+		registry:  g,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTanuki).

@@ -1,5 +1,5 @@
 package option
 
 func New() *Band {
-	return &Band{}
+	return &Band{Engine: BuildEngine}
 }

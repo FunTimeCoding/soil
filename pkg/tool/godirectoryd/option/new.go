@@ -7,7 +7,7 @@ import (
 
 func New() *Directory {
 	return &Directory{
-		Source: func() face.Client {
+		Source: func() face.DirectoryClient {
 			return directory.NewEnvironment()
 		},
 	}

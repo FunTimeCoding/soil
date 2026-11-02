@@ -20,7 +20,7 @@ func (s *Server) GetStatus(
 		TotalRecords:     status.Total,
 		LatestIdentifier: int(status.LatestIdentifier),
 	}
-	lastPoll := s.worker.LastPoll()
+	lastPoll := s.service.LastPoll()
 
 	if !lastPoll.IsZero() {
 		result.LastPoll = new(lastPoll.Format(constant.DateFormat))

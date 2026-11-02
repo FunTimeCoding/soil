@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -20,9 +21,9 @@ func TestTheClientListsLogsAndReports(t *testing.T) {
 	)
 	output := t.TempDir()
 	system.WriteFile(filepath.Join(output, "hotel.html"), []byte("h"), 0o600)
-	v := service_tester.New(t, cache, output)
-	v.SyncLogCache()
-	c := mountedClient(t, v, constant.ModelContextTestToken)
+	o := service_tester.NewOption(t, cache, output, service_tester.NewParser(t))
+	service_tester.NewService(t, o, memory.New()).SyncLogCache()
+	c := mountedClient(t, o, constant.ModelContextTestToken)
 	logs, e := c.GetLogs(t.Context(), &client.GetLogsParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, logs.Total)
@@ -34,8 +35,13 @@ func TestTheClientListsLogsAndReports(t *testing.T) {
 }
 
 func TestARefusedTokenIsAnError(t *testing.T) {
-	v := service_tester.New(t, t.TempDir(), t.TempDir())
-	c := mountedClient(t, v, "india-wrong")
+	o := service_tester.NewOption(
+		t,
+		t.TempDir(),
+		t.TempDir(),
+		service_tester.NewParser(t),
+	)
+	c := mountedClient(t, o, "india-wrong")
 	_, e := c.GetReports(t.Context())
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "reports status: 401", e.Error())

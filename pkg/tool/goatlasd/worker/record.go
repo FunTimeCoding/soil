@@ -3,7 +3,7 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service/outcome"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/outcome"
 )
 
 func (w *Worker) record(o *outcome.Outcome) {

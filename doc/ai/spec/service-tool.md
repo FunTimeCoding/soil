@@ -15,39 +15,46 @@ cmd/go<tool>/
 
 pkg/tool/go<tool>/
 ├── main.go                         # Main(): register flags, parse, build option, call Run()
-├── run.go                          # Run(o, i): wiring, lifecycle, signal block
-├── mount.go                        # Mount(deps..., g *guard.Mux) - the served surface
+├── run.go                          # Run(o, i): builds the daemon, wires lifecycle, signal block
 ├── option/
 │   ├── <name>.go                   # Option struct (named after tool/domain, not "Option")
 │   └── new.go                      # Factory: New() *<Name>
+├── daemon/                         # The one owner - see The daemon
+│   ├── daemon.go                   # Daemon struct
+│   ├── new.go                      # New(o, l, r) - builds everything from configuration
+│   ├── mount.go                    # Mount(...) - hands each surface the services it calls
+│   ├── workers.go                  # Workers() - guards first, then clocks
+│   └── close.go                    # Close() - closes everything it built
+├── service/                        # The use cases - see Services
+│   ├── service.go                  # one set: Service struct, its code here
+│   ├── new.go
+│   └── <operation>.go              # One file per operation the surfaces call
+├── store/                          # Persistence (if needed) - see Stores
+│   ├── store.go                    # one store: Store struct
+│   ├── new.go                      # Constructor: takes the mapper it is given
+│   └── <operation>.go              # One file per operation (save.go, resolve.go, by_name.go)
+├── face/                           # One full interface per client - see The daemon
+├── migrate/                        # AutoMigrate(d) - schema history, see database.md
+├── constant/
+│   └── constant.go                 # Tool constants (bucket names, identity)
 ├── unit/
 │   ├── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
 │   ├── guard_test.go               # Guard battery over Mount - see testing.md
-│   └── service_tester/new.go       # Builds the service from an option with mocks - see testing.md
-├── constant/
-│   └── constant.go                 # Tool constants (bucket names, identity)
-├── service/                        # The daemon's single owner - see Service
-│   ├── service.go                  # Service struct
-│   ├── new.go                      # New(o, ...) - builds everything from configuration
-│   ├── close.go                    # Close() - closes everything it built
-│   └── <operation>.go              # One file per operation the surfaces call
-├── face/                           # One full interface per client - see Service
-├── migrate/                        # AutoMigrate(d) - schema history, see database.md
-├── store/                          # Persistence (if needed)
-│   ├── store.go                    # Store struct
-│   ├── record.go                   # Record type
-│   ├── new.go                      # Constructor: takes the mapper it is given
-│   └── <operation>.go              # One file per operation (save.go, resolve.go, by_name.go)
-├── worker/                         # Background worker (if needed)
-│   ├── worker.go                   # Worker struct
-│   ├── new.go                      # Constructor
-│   ├── start.go                    # Start() - goroutine with ticker
-│   ├── close.go                    # Close()
-│   └── poll.go                     # Poll() - single cycle logic
+│   └── <noun>_tester/new.go        # Builds one service from its parts - see testing.md
 └── server/                         # REST implementation (or manual routes)
     ├── <operation>.go              # Route function returning http.HandlerFunc
     └── response.go                 # Response struct (if needed)
 ```
+
+A daemon with one set of use cases keeps them in `service/` as
+`service.Service`. One with several - a library daemon's books, loans and
+members - splits by noun: `<path>/service/book/`, `<path>/service/loan/`,
+`<path>/service/member/`, each a `book.Service`, `loan.Service`,
+`member.Service`,
+and `service/` holds only those directories. A store splits the same way
+only along consistency boundaries (`store/<aggregate>/`, see Stores). Split
+by what each set touches, not by kind of operation: a package per noun
+stays small; a package per concern moves the bulk down a level.
 
 ## Entry Point
 
@@ -98,69 +105,72 @@ travel via environment, not argv.
 
 ## Run Function
 
-`Run(o, i)` constructs components and wires lifecycle. It receives
-the instrument from `Main()` as `face.Instrument` - not on the
-option struct - and pulls the reporter and recorder where it wires
-them (see `entrypoint.md`). See `pillars.md` for the full wiring
-rationale.
+`Run(o, i)` builds the daemon and wires lifecycle. It receives the
+instrument from `Main()` as `face.Instrument` - not on the option struct -
+and pulls the reporter and recorder where it wires them (see
+`entrypoint.md`). See `pillars.md` for the full wiring rationale.
 
 ```go
-func Run(o *option.Log, i face.Instrument) {
+func Run(o *option.Library, i face.Instrument) {
     r := i.Reporter()
     l := logger.New(context.Background())
-    v := service.New(o, l, r)
-    defer v.Close()
-    lifecycle.New(l).
-        WithWorker(worker.New(v, l, r, 1*time.Minute)).
-        WithServer(
-            server.New(
-                constant.Identity,
-                o.Address,
-                func(m *http.ServeMux) {
-                    Mount(v, r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
-                },
-            ).WithMiddleware(web.RecoveryMiddleware(r)),
-        ).
-        RunUntilSignal()
+    d := daemon.New(o, l, r)
+    defer d.Close()
+    errors.PanicOnError(d.Wait(context.Background()))
+    c := lifecycle.New(l)
+
+    for _, w := range d.Workers() {
+        c.WithWorker(w)
+    }
+
+    c.WithServer(
+        server.New(
+            constant.Identity,
+            o.Address,
+            func(m *http.ServeMux) {
+                d.Mount(r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
+            },
+        ).WithMiddleware(web.RecoveryMiddleware(r)),
+    ).RunUntilSignal()
 }
 ```
 
 ### Key conventions
 
-- The reporter goes to the workers (`recovery.New`) and the recovery
-  middleware; add `.WithProtected()` to a plain REST server
+- `Run` holds the daemon and nothing else: it builds no client, no service
+  and no clock
+- The reporter goes to the recovery middleware; add `.WithProtected()` to a
+  plain REST server
 - The listen address is `o.Address` from `a.Address()`; a surface without
   flags (examples, callback servers) uses `web.AddressPort`, the same
   `BIND_ADDRESS` > loopback chain - never format one by hand
-- The server callback builds one `guard.Mux` and hands it to `Mount` -
+- The server callback builds one `guard.Mux` and hands it to `d.Mount` -
   routes register there, never on the mux. `guard.New` mounts
   `route:/api/reachable` itself, the peer probe route
   (`error-handling/infrastructure.md`, The probe route)
-- The service's `Close` is deferred before the lifecycle starts, so it
+- The daemon's `Close` is deferred before the lifecycle starts, so it
   closes after every worker and server has
-- A service with peers is waited on next -
-  `errors.PanicOnError(v.Wait(context.Background()))` - and its
-  `Workers()` registered before the daemon's own, so the guards run
-  before anything calls through them
+- A daemon with required peers is waited on next, before the lifecycle
+  starts; its `Workers()` are registered in the order it returns them,
+  guards first
 
 ## Mount Function
 
-`mount.go` sits beside `run.go` and owns everything the daemon
-serves: the token-guarded REST tree, the MCP mount, and the web
-mount when present. The service comes first - then reporter, recorder,
-version, and the `*guard.Mux` last:
+`Mount` is the daemon's method, in `daemon/mount.go`, and owns everything
+the daemon serves: the token-guarded REST tree, the MCP mount, and the web
+mount when present. It hands each surface the services that surface calls -
+then reporter, recorder, version, and the `*guard.Mux` last:
 
 ```go
-func Mount(
-    v log.Log,
+func (d *Daemon) Mount(
     r face.Reporter,
     t face.Recorder,
     version string,
     g *guard.Mux,
 ) {
-    g.TokenMount(...)                             // REST - generated-api.md
-    model_context.New(v, r, t, version).Mount(g)  // MCP - model-context.md
-    web.New(v).Mount(g)                           // web - HTML Web Package below
+    g.TokenMount(...)                                         // REST - generated-api.md
+    model_context.New(d.book, d.loan, r, t, version).Mount(g) // MCP - model-context.md
+    web.New(d.book, d.loan, d.member).Mount(g)                // web - HTML Web Package below
 }
 ```
 
@@ -220,15 +230,23 @@ pkg/tool/go<tool>d/web/
 ### Recovery
 
 A web service wires the layout-aware recovery middleware instead of
-the generic one: construct the web server before `lifecycle.New`,
-mount with `w.Mount`, and pass `w.Recovery(r)` to `WithMiddleware`.
-Panics then render into the page layout (notification item with the
-Sentry event ID; fragment form for HTMX requests) instead of a
-plain-text 500. The `recovery.go` delegate is two lines:
+the generic one. The daemon builds its web surface in `New`, `Mount`
+mounts it beside the other surfaces, and the daemon hands its recovery
+out - `Run` passes `d.Recovery(r)` to `WithMiddleware`, which is
+evaluated before the mount callback runs, and still holds only the
+daemon. Panics then render into the page layout (notification item with
+the Sentry event ID; fragment form for HTMX requests) instead of a
+plain-text 500. Both delegates are two lines:
 
 ```go
+// web/recovery.go
 func (s *Server) Recovery(r face.Reporter) func(http.Handler) http.Handler {
     return s.view.Recovery(r)
+}
+
+// daemon/recovery.go
+func (d *Daemon) Recovery(r face.Reporter) func(http.Handler) http.Handler {
+    return d.web.Recovery(r)
 }
 ```
 
@@ -246,7 +264,7 @@ mapping stays in the service, next to the sentinel.
 ### View and Layout
 
 The `Server` holds a `*view.View` constructed in `New`. The view wraps
-a `*layout.Page` template configured with the service's identity, theme,
+a `*layout.Page` template configured with the daemon's identity, theme,
 style, and navigation items. Handlers call `s.view.RenderPage` for full pages
 and `s.view.RenderFragment` for HTMX partials.
 
@@ -351,74 +369,135 @@ Key conventions:
   `alertsTable()`, `addForm()`, `detailRow()`
 - Handler and builder names never collide because the handler is named after the
   route (`add`), not the component (`addForm`)
-- Methods that access server state (the service) stay as methods; pure
+- Methods that access server state (its services) stay as methods; pure
   renderers are standalone functions
 
-## Service
+## The daemon
 
-Every daemon has one `service.Service`, even around a single client or
-none. It is the only owner `Run` holds: everything else in the daemon
-either is built by it or borrows from it.
+Every daemon has one `daemon.Daemon`, small ones included. It is the only
+owner `Run` holds: it builds everything else and closes what it built. It
+does no work of its own.
 
-The service takes configuration - the option, a logger, a reporter, and
-a metric registry when its workers export gauges - and builds the rest:
-the database (`relational.Open`, `migrate.AutoMigrate`, then the store
-over it, `database.md`), its clients, pools, peer guards and the parts
-that hold state or a connection. Its `Close` closes everything it built
-and nothing it was given. A service that owns nothing - a reader over
-the local system, paths and a logger - has no `Close`, and `Run` defers
+The daemon takes configuration - the option, a logger, a reporter, and a
+metric registry when its workers export gauges - and builds the rest: the
+database (`relational.Open`, `migrate.AutoMigrate`, then each store over
+it, `database.md`), its clients, pools and peer guards, then each service
+from the parts that service uses. Its `Close` closes everything it built
+and nothing it was given. A daemon that owns nothing - a reader over the
+local system, paths and a logger - has no `Close`, and `Run` defers
 nothing.
 
-A service is never handed a finished client, in a parameter or an option
+A daemon is never handed a finished client, in a parameter or an option
 function: whoever closes a handed client closes something it did not
-build. A client enters as a factory on the option - a function
-returning the client's face, set in `option.New()` to the real
-constructor, or set in `Main` when the environment decides whether
-there is one. The service calls it once and closes what it returns when
-that has a `Close`. A part the environment may leave out - a factory
-returning nil, a configuration that is off - the service builds only
-when present; its operations then answer `not_configured`, and a
-surface asks the service rather than testing a field for nil. A pooled
-client's factory takes the instance -
-`func(*instance.Instance) (face.<Name>Source, error)` - the build function
-`pool.New` takes. An option holds what `Main` decides once: addresses,
-tokens, a parsed inventory, and factories, which own nothing until the
-service calls them. Nothing live sits on an option.
+build. A client enters as a factory on the option - a function returning
+the client's face, set in `option.New()` to the real constructor, or set
+in `Main` when the environment decides whether there is one. The daemon
+calls it once and closes what it returns when that has a `Close`. A client
+the environment may leave out - a factory returning nil, a configuration
+that is off - the daemon builds only when present; the services that use
+it then answer `not_configured`, and a surface asks the service rather
+than testing a field for nil. A pooled client's factory takes the
+instance - `func(*instance.Instance) (face.<Name>Source, error)` - the
+build function `pool.New` takes. An option holds what `Main` decides once:
+addresses, tokens, a parsed inventory, and factories, which own nothing
+until the daemon calls them. Nothing live sits on an option.
 
-A part that holds state or a connection - a peer guard, a runner the
-service launches work into, a socket, a cache the service reads - is
-built by the service and reaches the lifecycle through `Workers()`,
-which `Run` registers in order. The lifecycle closes them, and the
-service closes them again, so their `Close` is safe twice
-(`lifecycle.md`). Such a part reaches back into the service only
-through function values the service passes it at construction, never
-`*service.Service`: the service holds the part, so the part holding
-the service is an import cycle.
-
-A service with required peers has a `Wait` that waits on each required
-peer's guard in turn. `Run` calls it right after building the service and
-panics on its error, before the lifecycle starts, so the daemon serves only
-once every required peer answers; a peer only a worker reads is guarded and
-not waited on (`error-handling/infrastructure.md`, Required and guarded
-peers).
-
-The service validates. A surface parses its request into plain values,
-calls one operation, and answers the error's class
-(`error-handling/README.md`); a check that lived in a route moves into
-the service, where every surface shares it. A surface holds the service
-and nothing beside it - no client, store or guard of its own to reach
-around it. The daemon's work belongs in the service too, never in a
-worker or a part: a tick or an event calls one operation that returns
-its outcomes.
+A daemon with required peers has a `Wait` that waits on each required
+peer's guard in turn. `Run` calls it right after building the daemon and
+panics on its error, before the lifecycle starts, so the daemon serves
+only once every required peer answers; a peer only a clock reads is
+guarded and not waited on (`error-handling/infrastructure.md`, Required
+and guarded peers).
 
 A face describes one client in full and its mock implements all of it: the
 upstream client's face is what the factory returns, the daemon client's is
 `face.Client` (`generated-api.md`). Code shared between daemons and tools
 takes a role interface - only the methods it calls, beside the full face
 (`FloatSource`), filled by the client, its mock or a service's guarded
-method through a function type beside it (`FloatSourceFunction`). No
-other face is partial or mirrors another; the service has none, and the
-surfaces, clocks and tests take `*service.Service` (`testing.md`).
+method through a function type in a sub-package of the face
+(`float_source_function.FloatSourceFunction`). No other
+face is partial or mirrors another; neither the daemon nor a service has
+one.
+
+## Services
+
+The use cases live in services. A service holds only what the daemon built
+it with - the stores, clients, guards and clock it uses, and the other
+services it calls - and never the daemon: the daemon holds the service, so
+the service holding the daemon is an import cycle. A service calling
+another is built with it as a constructor parameter, so the daemon builds
+them in dependency order and the calls between services run one way:
+
+```go
+// daemon/new.go
+m := member.New(s.member)
+b := book.New(s.catalog, o.Random)
+l := loan.New(s.catalog, m, b, d.clock)
+```
+
+State only one service uses - a waiter map, a cache it reads, who is
+watching - is that service's own field. A view gathering several services -
+a member's page with their loans and holds - is a service of its own, built
+with the services it reads, named for what it shows.
+
+The service validates. A surface parses its request into plain values,
+calls one operation, and answers the error's class
+(`error-handling/README.md`); a check that lived in a route moves into the
+service, where every surface shares it. A surface holds the services it
+calls and nothing beside them - no client, store or guard of its own to
+reach around them, and never the daemon. The daemon keeps no method that
+only forwards to a service: each surface is handed the service itself. The
+daemon's work belongs in a service, never in a worker or the daemon: a tick
+or an event calls one operation that returns its outcomes.
+
+A service test builds that service from its parts and the services it was
+built with; a surface test goes served through `Mount` (`testing.md`).
+Nothing builds a surface over hand-wired services.
+
+## Stores
+
+A store borrows the mapper the daemon opened and has no `Close`
+(`database.md`, Store Shape). One store serves a daemon whose tables
+commit independently. Where some tables must commit together and others
+never do, the store splits along those consistency boundaries - one store
+per aggregate, `store/<aggregate>/` - and a transaction never spans two.
+Tables one service owns outright get its own store; tables several services
+write in one transaction stay one store, shared by every service writing
+them.
+
+A sequence that must commit together runs through the store's
+`Atomically`. The store opens, commits and rolls back; the service names
+the steps and passes each the transaction's store:
+
+```go
+// store/catalog/atomically.go
+func (s *Store) Atomically(apply func(*Store) error) error {
+    return s.mapper.Transaction(
+        func(t *gorm.DB) error {
+            return apply(New(t))
+        },
+    )
+}
+
+// service/loan/return.go
+func (s *Service) Return(identifier int) error {
+    return s.catalog.Atomically(
+        func(t *catalog.Store) error {
+            if e := s.close(t, identifier, s.clock()); e != nil {
+                return e
+            }
+
+            return s.restock(t, identifier)
+        },
+    )
+}
+```
+
+A step inside reads the store it was passed, never the service's own
+field. No service imports the mapper's package or opens a transaction
+itself, and nothing calls a peer between `Atomically`'s open and commit:
+what a sequence reads from a peer it reads before, and what it tells a
+peer it tells after the commit.
 
 ## Workers
 
@@ -426,14 +505,35 @@ Workers implement `face.Worker` (`Start()` + `Close()`) and close only
 what they started or built - a service or client they were given
 belongs to whoever built it. See `lifecycle.md` for details.
 
-A worker that holds nothing but time is a clock. `Run` builds it over
+A worker that holds state or a connection - a peer guard, a runner a
+service launches work into, a socket - is built by the daemon and reaches
+back only through function values it was given at construction, never the
+daemon: the daemon holds the worker, so the worker holding the daemon is an
+import cycle.
+
+A worker that holds nothing but time is a clock. The daemon builds it over
 one service operation per tick - goclauded's
 `worker.New(v.Reconcile, l, r, constant.ReconcileInterval)` on
-`pkg/worker` - and it keeps only what is its own: the ticker, its
-gauges, its stop channel and the recovery around the tick. Its `Close`
-waits for a tick in flight, so nothing the service closes next is
-still in use. The service never holds a clock; it hands out only the
-parts that hold state or a connection (Service).
+`pkg/worker` - and it keeps only what is its own: the ticker, its gauges,
+its stop channel and the recovery around the tick. Its `Close` waits for a
+tick in flight, so nothing the daemon closes next is still in use. No
+service holds a clock.
+
+The daemon hands its workers out through `Workers()`, guards first, so
+they run before anything calls through them, then its clocks:
+
+```go
+// daemon/workers.go
+func (d *Daemon) Workers() []face.Worker {
+    return []face.Worker{
+        d.catalogGuard,
+        worker.New(d.loan.Remind, d.logger, d.reporter, constant.RemindInterval),
+    }
+}
+```
+
+The lifecycle closes them, and the daemon closes what it built again, so
+their `Close` is safe twice (`lifecycle.md`).
 
 ## Daemon and CLI Split
 
@@ -459,7 +559,7 @@ pkg/<domain>/
     └── constant.go                 # HostEnvironment, TokenEnvironment
 ```
 
-The daemon's service builds this client through its factory (Service); no
+The daemon builds this client through its factory (The daemon); no
 surface imports it. **`pkg/<domain>/` is client-only.** All server-side concerns
 (store, domain types, `model_context/`) belong in `pkg/tool/go<tool>d/`, not in
 the shared library.

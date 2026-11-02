@@ -11,7 +11,7 @@ import (
 
 func NewOption(
 	t *testing.T,
-	f face.Forge,
+	f face.GitLabClient,
 ) *option.Certificate {
 	t.Helper()
 	o := option.New()
@@ -26,7 +26,7 @@ func NewOption(
 	o.ClientSecret = "tester-secret"
 	o.EncryptionSecret = "tester-encryption-secret"
 	o.PublicLocator = "https://certificate.example.org"
-	o.Forge = func() face.Forge { return f }
+	o.Forge = func() face.GitLabClient { return f }
 
 	return o
 }

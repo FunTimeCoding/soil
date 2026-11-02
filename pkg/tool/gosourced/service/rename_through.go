@@ -1,26 +1,21 @@
 package service
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
-	"unicode"
 )
 
 func (s *Service) renameThrough(
 	directory string,
 	packagePath string,
-	oldName string,
-	newName string,
-	receiver string,
+	renames []*symbol_rename.Rename,
 	out *sink.Sink,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
@@ -29,13 +24,22 @@ func (s *Service) renameThrough(
 		packagePath,
 		"",
 		func(loaded []*packages.Package, _ *token.FileSet) []types.Object {
-			d, _, f := findDeclaration(loaded, packagePath, oldName, receiver)
+			var result []types.Object
 
-			if f != nil {
-				return nil
+			for _, n := range renames {
+				d, _, f := findDeclaration(
+					loaded,
+					packagePath,
+					n.OldName,
+					n.Receiver,
+				)
+
+				if f == nil {
+					result = append(result, d)
+				}
 			}
 
-			return []types.Object{d}
+			return result
 		},
 	)
 
@@ -43,124 +47,24 @@ func (s *Service) renameThrough(
 		return nil, e
 	}
 
-	declaration, p, e := findDeclaration(all, packagePath, oldName, receiver)
+	var planned []*plannedRename
 
-	if e != nil {
-		r.AddConcern(
-			concern.NewFile(constant.ConcernValidation, e.Error(), "", false),
-		)
-
-		return r, nil
+	for _, n := range renames {
+		if p := s.checkRename(directory, all, set, packagePath, n, r); p != nil {
+			planned = append(planned, p)
+		}
 	}
-
-	if v, okay := declaration.(*types.Var); okay && v.Embedded() {
-		r.AddConcern(
-			concern.NewFile(
-				constant.ConcernValidation,
-				fmt.Sprintf(
-					"%s is an embedded field of %s - rename the type instead",
-					oldName,
-					receiver,
-				),
-				"",
-				false,
-			),
-		)
-
-		return r, nil
-	}
-
-	e = checkCollision(p, newName, receiver)
-
-	if e != nil {
-		r.AddConcern(
-			concern.NewFile(constant.ConcernValidation, e.Error(), "", false),
-		)
-
-		return r, nil
-	}
-
-	s.checkRenamedMethod(directory, all, set, declaration, r)
 
 	if hasUnfixed(r) {
 		return r, nil
 	}
 
-	references := resolve.FindAllReferences(all, declaration)
-
-	if receiver == "" {
-		if taken := checkRenameScope(
-			all,
-			set,
-			p.PkgPath,
-			newName,
-			references,
-		); taken != "" {
-			return failValidation(r, taken)
-		}
-	}
-
-	unexporting := unicode.IsUpper(rune(oldName[0])) && unicode.IsLower(
-		rune(newName[0]),
-	)
-
-	if unexporting {
-		for _, f := range references {
-			if f.Package.PkgPath != p.PkgPath {
-				position := set.Position(f.Ident.Pos())
-				r.AddConcern(
-					concern.NewLine(
-						"cross-package",
-						fmt.Sprintf(
-							"%s.%s would lose access",
-							f.Package.PkgPath,
-							oldName,
-						),
-						position.Filename,
-						position.Line,
-						"",
-						false,
-					),
-				)
-			}
-		}
-
-		if hasUnfixed(r) {
-			return r, nil
-		}
-	}
-
 	decorations := decoration.NewSet()
 
-	for _, f := range references {
-		position := set.Position(f.Ident.Pos())
-		owner, file := findOwningFile(all, f.Ident.Pos())
-
-		if file == nil {
-			continue
+	for _, p := range planned {
+		if f := renameReferences(decorations, all, set, p, r); f != nil {
+			return nil, f
 		}
-
-		if _, g := decorations.DecorateFile(set, owner, file); g != nil {
-			return nil, g
-		}
-
-		d := decorations.DecoratedIdent(owner, f.Ident)
-
-		if d == nil {
-			continue
-		}
-
-		d.Name = newName
-		r.AddConcern(
-			concern.NewLine(
-				constant.ConcernRenamed,
-				fmt.Sprintf("%s → %s", oldName, newName),
-				position.Filename,
-				position.Line,
-				"",
-				true,
-			),
-		)
 	}
 
 	e = restoreDecorations(decorations, resolve.NewNames(all), nil, out)
@@ -169,14 +73,16 @@ func (s *Service) renameThrough(
 		return nil, e
 	}
 
-	renameFollow(set, all, declaration, newName, out, r)
-	declaring := filepath.Dir(set.Position(declaration.Pos()).Filename)
-	out.Resymbol(
-		declaring,
-		memberName(receiver, oldName),
-		declaring,
-		memberName(receiver, newName),
-	)
+	for _, p := range planned {
+		renameFollow(set, all, p.Declaration, p.Rename.NewName, out, r)
+		declaring := filepath.Dir(set.Position(p.Declaration.Pos()).Filename)
+		out.Resymbol(
+			declaring,
+			memberName(p.Rename.Receiver, p.Rename.OldName),
+			declaring,
+			memberName(p.Rename.Receiver, p.Rename.NewName),
+		)
+	}
 
 	return r, nil
 }

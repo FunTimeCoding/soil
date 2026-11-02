@@ -12,7 +12,7 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 		w http.ResponseWriter,
 		r *http.Request,
 	) {
-		subject := s.service.Subject(r)
+		subject := s.authorization.Subject(r)
 
 		if subject == "" {
 			http.Redirect(

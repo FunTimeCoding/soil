@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -20,11 +20,11 @@ func Run(
 ) {
 	r := s.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l, r)
-	defer v.Close()
+	d := daemon.New(o, l, r)
+	defer d.Close()
 	c := lifecycle.New(l)
 
-	for _, w := range v.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
 	}
 
@@ -33,7 +33,7 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, s.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

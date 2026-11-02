@@ -2,8 +2,9 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/system"
-	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/types/report"
 	"os"
 	"path/filepath"
@@ -14,6 +15,10 @@ func (s *Service) Generate(
 	files []string,
 	date time.Time,
 ) (*report.Report, error) {
+	if len(files) == 0 {
+		return nil, validation.New(constant.NoFiles)
+	}
+
 	s.logger.Structured("generate_request", "files", files)
 	workdir, e := os.MkdirTemp("", "goraidparsed-")
 
@@ -27,26 +32,13 @@ func (s *Service) Generate(
 		return nil, f
 	}
 
-	if f := s.python(
-		filepath.Join(s.parserPath, "TW5_parse_top_stats_detailed.py"),
-		workdir,
-		"-d",
-		date.Format("2006-01-02T15:04:05"),
-	); f != nil {
+	if f := s.parser.Parse(workdir, date); f != nil {
 		return nil, fmt.Errorf("parse: %w", f)
 	}
 
 	tidCount := countTiddlers(workdir)
 
-	if f := s.python(
-		filepath.Join(s.parserPath, "tiddler_import.py"),
-		"--html",
-		s.templatePath,
-		"--logfolder",
-		workdir,
-		"--download",
-		workdir,
-	); f != nil {
+	if f := s.parser.Import(s.templatePath, workdir); f != nil {
 		return nil, fmt.Errorf("generate tiddlers: %w", f)
 	}
 
@@ -58,7 +50,7 @@ func (s *Service) Generate(
 
 	path := filepath.Join(
 		s.outputPath,
-		fmt.Sprintf("ONYX Log %s.html", date.Format(timeConstant.DateYear)),
+		fmt.Sprintf(constant.ReportName, date.Format(constant.ReportTime)),
 	)
 	system.Move(source, path)
 

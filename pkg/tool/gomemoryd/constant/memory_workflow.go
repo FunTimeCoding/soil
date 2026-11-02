@@ -83,9 +83,11 @@ not as a path. When gomemoryd knows the checkout, save_memory and
 update_memory list what does not resolve after saving: dead
 paths, missing memories, and paths left bare in prose. The save
 is never refused. check_references lists the same for every
-memory that is not document-sourced. After moving or renaming a
-path or symbol by hand, retarget_references rewrites the memories
-that cite it (dry_run first); gosourced's own moves do it already.
+memory that is not document-sourced. After moving a path by hand,
+gosourced's retarget_references fixes the docs and the memories in
+one call (dry_run first); this server's retarget_references is the
+memories-only half, and also takes symbol moves. gosourced's own
+moves and renames do both already.
 
 Point at the section a rule lives in, not only its file:
 path#heading-slug, checked like the path. When several references

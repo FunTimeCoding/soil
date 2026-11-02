@@ -24,13 +24,13 @@ func (s *Server) ListPipelineJobs(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	v, e := s.service.PipelineJobs(instance, project, a.Pipeline)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	if a.Raw {

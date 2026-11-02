@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service/outcome"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/outcome"
 	"time"
 )
 

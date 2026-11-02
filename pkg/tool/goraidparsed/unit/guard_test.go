@@ -1,31 +1,11 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fake_parser"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	v := model_context_server.New(
-		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
-			goraidparsed.Mount(
-				service_tester.New(t),
-				memory.New(),
-				mock_recorder.New(),
-				g,
-			)
-		},
-	)
-	defer v.Close()
+	v := mounted(t, fake_parser.New(0, nil))
 	v.VerifyBase(t)
 }

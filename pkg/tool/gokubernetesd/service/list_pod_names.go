@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

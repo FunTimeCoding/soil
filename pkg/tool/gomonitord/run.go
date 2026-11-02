@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/option"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -20,14 +20,14 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l)
-	defer v.Close()
+	d := daemon.New(o, l)
+	defer d.Close()
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

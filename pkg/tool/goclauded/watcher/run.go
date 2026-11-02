@@ -2,15 +2,11 @@ package watcher
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"time"
 )
 
 func (w *Watcher) run() {
-	n, e := fsnotify.NewWatcher()
-	errors.PanicOnError(e)
-	w.notifier = n
-	w.addDirectories(n)
+	defer close(w.done)
 	ticker := time.NewTicker(10 * time.Minute)
 	defer ticker.Stop()
 	debounce := time.NewTimer(0)
@@ -18,14 +14,16 @@ func (w *Watcher) run() {
 
 	for {
 		select {
+		case <-w.context.Done():
+			return
 		case <-ticker.C:
 			w.recovery.Run(
 				func() {
-					w.addDirectories(n)
+					w.addDirectories()
 					w.scan()
 				},
 			)
-		case v, okay := <-n.Events:
+		case v, okay := <-w.notifier.Events:
 			if !okay {
 				return
 			}
@@ -40,7 +38,7 @@ func (w *Watcher) run() {
 			if len(w.changed) > 0 {
 				w.recovery.Run(w.scanChanged)
 			}
-		case f, okay := <-n.Errors:
+		case f, okay := <-w.notifier.Errors:
 			if !okay {
 				return
 			}

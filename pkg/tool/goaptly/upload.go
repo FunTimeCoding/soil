@@ -10,7 +10,7 @@ import (
 )
 
 func upload(
-	c face.Client,
+	c face.AptlyClient,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	result := &cobra.Command{

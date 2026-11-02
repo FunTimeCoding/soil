@@ -19,13 +19,13 @@ func (s *Server) ListProjectVariables(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	v, e := s.service.Variables(instance, project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	return response.SuccessAny(v)

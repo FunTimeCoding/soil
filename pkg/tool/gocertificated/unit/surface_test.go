@@ -83,7 +83,7 @@ func TestFirstPublishWritesBothRootFilesInOneCommit(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	o.Publish()
-	commit := o.Server.Forge.Commits()
+	commit := o.Forge.Commits()
 	assert.Integer(t, 1, len(commit))
 	assert.Strings(
 		t,
@@ -99,23 +99,15 @@ func TestMissingFileIsCreatedNotUpdated(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	o.Publish()
-	assert.String(
-		t,
-		"create",
-		string(*o.Server.Forge.Commits()[0].Actions[0].Action),
-	)
+	assert.String(t, "create", string(*o.Forge.Commits()[0].Actions[0].Action))
 }
 
 func TestExistingFileIsUpdatedNotCreated(t *testing.T) {
 	o := publish_tester.New(t)
-	o.Server.Forge.SeedFile("certificate/root/certificate.pem", "stale")
+	o.Forge.SeedFile("certificate/root/certificate.pem", "stale")
 	o.CreateRoot()
 	o.Publish()
-	assert.String(
-		t,
-		"update",
-		string(*o.Server.Forge.Commits()[0].Actions[0].Action),
-	)
+	assert.String(t, "update", string(*o.Forge.Commits()[0].Actions[0].Action))
 }
 
 func TestSecondPublishOnlyCarriesTheNewAuthority(t *testing.T) {
@@ -124,7 +116,7 @@ func TestSecondPublishOnlyCarriesTheNewAuthority(t *testing.T) {
 	o.Publish()
 	o.CreateCluster()
 	o.Publish()
-	commit := o.Server.Forge.Commits()
+	commit := o.Forge.Commits()
 	assert.Integer(t, 2, len(commit))
 	assert.Strings(
 		t,
@@ -143,7 +135,7 @@ func TestPublishWithNothingPendingWritesNoCommit(t *testing.T) {
 	o.CreateRoot()
 	o.Publish()
 	o.Publish()
-	assert.Integer(t, 1, len(o.Server.Forge.Commits()))
+	assert.Integer(t, 1, len(o.Forge.Commits()))
 }
 
 func TestLeafCertificatesAreNeverPublished(t *testing.T) {
@@ -152,7 +144,7 @@ func TestLeafCertificatesAreNeverPublished(t *testing.T) {
 	o.CreateCluster()
 	o.IssueLeaf()
 	o.Publish()
-	commit := o.Server.Forge.Commits()
+	commit := o.Forge.Commits()
 	assert.Integer(t, 1, len(commit))
 	assert.Integer(t, 6, len(commit[0].Actions))
 }
@@ -167,7 +159,7 @@ func TestOnlyTheNamedAuthorityBecomesASecret(t *testing.T) {
 			"certificate/root/certificate.pem",
 			"certificate/root/key.pem",
 		},
-		publish_tester.Paths(o.Server.Forge.Commits()[0].Actions),
+		publish_tester.Paths(o.Forge.Commits()[0].Actions),
 	)
 }
 
@@ -186,7 +178,7 @@ func TestClusterAuthorityDeliversTheSecretPair(t *testing.T) {
 			"manifest/authority-secret.yaml",
 			"manifest/authority-secret.decoded.txt",
 		},
-		publish_tester.Paths(o.Server.Forge.Commits()[0].Actions),
+		publish_tester.Paths(o.Forge.Commits()[0].Actions),
 	)
 }
 
@@ -196,7 +188,7 @@ func TestDeliveredSecretIsATlsManifest(t *testing.T) {
 	o.CreateCluster()
 	o.Publish()
 	manifest := publish_tester.Content(
-		o.Server.Forge.Commits()[0].Actions,
+		o.Forge.Commits()[0].Actions,
 		constant.FixtureSecretPath,
 	)
 	assert.StringContains(t, "kubernetes.io/tls", manifest)
@@ -210,7 +202,7 @@ func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 	o.CreateRoot()
 	o.CreateCluster()
 	o.Publish()
-	action := o.Server.Forge.Commits()[0].Actions
+	action := o.Forge.Commits()[0].Actions
 	directory := t.TempDir()
 	manifest := filepath.Join(directory, "authority-secret.yaml")
 	write(

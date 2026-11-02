@@ -13,7 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"go/ast"
 	"go/parser"
 	"go/token"

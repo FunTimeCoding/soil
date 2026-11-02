@@ -16,19 +16,23 @@ import (
 
 func TestAFailedFormKeepsItsAlertAndValuesAtTheForm(t *testing.T) {
 	s := base.New(t)
-	_, e := s.Service.CreateGroup("alfa")
-	assert.FatalOnError(t, e)
-	q := web.NewPost(
-		s.Address(constant.CreateGroupPath),
-		url.Values{constant.NameField: {"alfa"}}.Encode(),
-	)
-	q.Header.Set(webConstant.ContentType, webConstant.FormEncoded)
-	web.Bearer(q, generativeConstant.ModelContextTestToken)
-	r, f := s.Halting().Do(q)
-	assert.FatalOnError(t, f)
-	errors.PanicClose(r.Body)
-	assert.Integer(t, http.StatusSeeOther, r.StatusCode)
-	page := web.NewGet(s.Address(r.Header.Get("Location")))
+	var location string
+
+	for range 2 {
+		q := web.NewPost(
+			s.Address(constant.CreateGroupPath),
+			url.Values{constant.NameField: {"alfa"}}.Encode(),
+		)
+		q.Header.Set(webConstant.ContentType, webConstant.FormEncoded)
+		web.Bearer(q, generativeConstant.ModelContextTestToken)
+		r, f := s.Halting().Do(q)
+		assert.FatalOnError(t, f)
+		errors.PanicClose(r.Body)
+		assert.Integer(t, http.StatusSeeOther, r.StatusCode)
+		location = r.Header.Get("Location")
+	}
+
+	page := web.NewGet(s.Address(location))
 	web.Bearer(page, generativeConstant.ModelContextTestToken)
 	g, h := s.Halting().Do(page)
 	assert.FatalOnError(t, h)

@@ -1,7 +1,7 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+	chat "github.com/funtimecoding/soil/pkg/chat/face"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
@@ -11,7 +11,7 @@ import (
 
 func Service(
 	t *testing.T,
-	c face.Client,
+	c chat.MattermostClient,
 	k goclauded.Client,
 	configure func(*option.Mattermost),
 ) *service.Service {

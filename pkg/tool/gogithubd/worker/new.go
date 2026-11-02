@@ -1,20 +1,22 @@
 package worker
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	soil "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/github/run"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/gogithubd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/types/run_key"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
 
 func New(
-	v face.Latest,
+	latest func() (map[run_key.Key]*run.Run, error),
+	owner string,
 	interval time.Duration,
-	y *prometheus.Registry,
 	l *logger.Logger,
-	r soil.Reporter,
+	y *prometheus.Registry,
+	r face.Reporter,
 ) *Worker {
 	g := prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
@@ -24,12 +26,8 @@ func New(
 		[]string{"owner", "repo", "workflow", "branch", "conclusion"},
 	)
 	y.MustRegister(g)
+	result := &Worker{latest: latest, owner: owner, gauge: g}
+	result.clock = worker.NewEvery(result.tick, l, r, interval)
 
-	return &Worker{
-		service:  v,
-		interval: interval,
-		gauge:    g,
-		recovery: recovery.New(l, r),
-		stop:     make(chan struct{}),
-	}
+	return result
 }

@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -19,14 +19,14 @@ func Run(
 	s face.Instrument,
 ) {
 	r := s.Reporter()
-	v := service.New(o)
-	defer v.Close()
+	d := daemon.New(o)
+	defer d.Close()
 	lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, s.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

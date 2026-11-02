@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Service) UtilizationCredential() *credential.Credential {
-	if !s.UtilizationFallback() {
+	if !s.utilizationFallback {
 		return nil
 	}
 

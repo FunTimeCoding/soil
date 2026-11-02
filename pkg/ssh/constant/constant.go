@@ -2,6 +2,7 @@ package constant
 
 const (
 	SocketEnvironment = "SSH_AUTH_SOCK"
+	Port              = 22
 
 	Command                  = "ssh"
 	LocalPortForwardArgument = "-L"

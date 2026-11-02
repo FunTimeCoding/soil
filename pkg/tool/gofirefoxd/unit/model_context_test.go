@@ -2,20 +2,13 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/firefox/tab"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/model_context_tester"
 	"testing"
 )
 
-func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
+func TestModelContextTabs(t *testing.T) {
+	o := newTabbed(t)
 	assert.Count(t, 16, o.Client.ListTools())
-	b := tab.New()
-	b.Identifier = 100
-	b.Locator = "https://example.com"
-	b.Title = "Example"
-	o.MockClient.AddTab(b)
 	assert.StringContains(
 		t,
 		"Example",
@@ -36,6 +29,15 @@ func TestModelContext(t *testing.T) {
 	)
 	assert.StringContains(
 		t,
+		"closed",
+		o.Client.MustCallTool(constant.CloseTab, map[string]any{"tab_id": 100}),
+	)
+}
+
+func TestModelContextNavigation(t *testing.T) {
+	o := newTabbed(t)
+	assert.StringContains(
+		t,
 		"navigated to",
 		o.Client.MustCallTool(
 			constant.Navigate,
@@ -50,6 +52,18 @@ func TestModelContext(t *testing.T) {
 			map[string]any{"tab_id": 100},
 		),
 	)
+	assert.StringContains(
+		t,
+		"tab_id",
+		o.Client.MustCallTool(
+			constant.WaitFor,
+			map[string]any{"tab_id": 100, "selector": "#results"},
+		),
+	)
+}
+
+func TestModelContextGroups(t *testing.T) {
+	o := newTabbed(t)
 	assert.StringContains(
 		t,
 		"grouped into group",
@@ -78,14 +92,10 @@ func TestModelContext(t *testing.T) {
 			map[string]any{"tab_id": 100},
 		),
 	)
-	assert.StringContains(
-		t,
-		"tab_id",
-		o.Client.MustCallTool(
-			constant.WaitFor,
-			map[string]any{"tab_id": 100, "selector": "#results"},
-		),
-	)
+}
+
+func TestModelContextPage(t *testing.T) {
+	o := newTabbed(t)
 	assert.StringContains(
 		t,
 		"document.title",
@@ -122,6 +132,10 @@ func TestModelContext(t *testing.T) {
 			map[string]any{"tab_id": 100},
 		),
 	)
+}
+
+func TestModelContextDownloads(t *testing.T) {
+	o := newTabbed(t)
 	assert.StringContains(
 		t,
 		"download_id",
@@ -134,10 +148,5 @@ func TestModelContext(t *testing.T) {
 		t,
 		"in_progress",
 		o.Client.MustCallTool(constant.DownloadStatus, map[string]any{}),
-	)
-	assert.StringContains(
-		t,
-		"closed",
-		o.Client.MustCallTool(constant.CloseTab, map[string]any{"tab_id": 100}),
 	)
 }

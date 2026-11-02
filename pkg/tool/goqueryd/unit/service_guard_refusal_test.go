@@ -22,12 +22,7 @@ func TestARefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
 	m := newEmbedder(t)
 	m.FailEmbedding(errors.New("embedder exploded"))
 	r := memory.New()
-	v := service_tester.New(
-		t,
-		service_tester.NewOption(t, m, newReranker(t)),
-		r,
-	)
-	c := mountedClient(t, v, r)
+	c := mountedClient(t, service_tester.NewOption(t, m, newReranker(t)), r)
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},
@@ -49,7 +44,7 @@ func TestTheWorkerReportsAnUnexpectedEmbeddingFailure(t *testing.T) {
 	)
 	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
 	assert.Count(t, 0, r.Events())
-	w := worker.New(v, time.Hour, l, prometheus.NewRegistry(), r)
+	w := worker.New(v.Maintain, time.Hour, l, prometheus.NewRegistry(), r)
 	w.Start()
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)
@@ -75,7 +70,13 @@ func TestTheWorkerLeavesAQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
 	directory := t.TempDir()
 	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("notes", directory, constant.DefaultGlob)
-	w := worker.New(v, 5*time.Millisecond, l, prometheus.NewRegistry(), r)
+	w := worker.New(
+		v.Maintain,
+		5*time.Millisecond,
+		l,
+		prometheus.NewRegistry(),
+		r,
+	)
 	w.Start()
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)

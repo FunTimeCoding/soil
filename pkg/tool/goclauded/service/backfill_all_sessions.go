@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/backfill_result"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/backfill_result"
 )
 
 func (s *Service) BackfillAllSessions() *backfill_result.Result {

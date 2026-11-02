@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/index/xref"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/location"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result/location"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"

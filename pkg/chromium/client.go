@@ -16,4 +16,6 @@ type Client struct {
 	cancel          context.CancelFunc
 	targets         map[string]context.Context
 	mutex           sync.Mutex
+	connecting      sync.Mutex
+	listening       bool
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/token"
@@ -12,8 +13,14 @@ func (s *Service) subtreeLoad(
 	directory string,
 	packagePath string,
 ) ([]*packages.Package, *token.FileSet, error) {
+	g := s.workspace(directory).Graph()
+	reached := reachedPaths(
+		g,
+		[]string{join.Empty(packagePath, go_modConstant.RecursivePattern)},
+	)
+
 	if s.full {
-		return loadPackages(directory, "./...")
+		return loadAround(directory, reached, "./...")
 	}
 
 	prefix := join.Empty(packagePath, "/")
@@ -24,7 +31,7 @@ func (s *Service) subtreeLoad(
 	var patterns []string
 	own := false
 
-	for path, u := range s.workspace(directory).Graph().Units {
+	for path, u := range g.Units {
 		if inside(path) {
 			own = true
 			patterns = append(patterns, u.Directory)
@@ -42,7 +49,7 @@ func (s *Service) subtreeLoad(
 	}
 
 	if !own {
-		return loadPackages(directory, "./...")
+		return loadAround(directory, reached, "./...")
 	}
 
 	return loadPackages(directory, patterns...)

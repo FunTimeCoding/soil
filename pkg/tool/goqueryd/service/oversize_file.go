@@ -1,10 +1,10 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/oversize_chunk"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/oversize_file"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/oversize_chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/oversize_file"
 )
 
 func (s *Service) oversizeFile(

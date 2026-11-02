@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/index/xref"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/references"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result/references"
 	"path/filepath"
 )
 

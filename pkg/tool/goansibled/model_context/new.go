@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
-	ansible "github.com/funtimecoding/soil/pkg/tool/goansibled/face"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/service"
 )
 
 func New(
-	v ansible.Ansible,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

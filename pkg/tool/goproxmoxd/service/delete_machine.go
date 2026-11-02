@@ -11,7 +11,7 @@ func (s *Service) DeleteMachine(
 	node string,
 	purge bool,
 ) error {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return clientFail

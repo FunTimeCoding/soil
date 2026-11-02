@@ -12,7 +12,7 @@ import (
 func TestTheClientAndItsMockKeepTheForge(t *testing.T) {
 	r := client_tester.New(t, func(*http.ServeMux) {})
 	m := mock_client.New()
-	forges := []face.Forge{r.Client, m}
+	forges := []face.GitLabClient{r.Client, m}
 	m.Close()
 	assert.Count(t, 2, forges)
 	assert.Integer(t, 1, m.Closed)

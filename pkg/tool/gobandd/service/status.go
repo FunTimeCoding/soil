@@ -1,32 +1,32 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/face"
+	"github.com/funtimecoding/soil/pkg/band/face"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/types/status"
 )
 
 func (s *Service) Status(instance string) (*status.Status, error) {
-	c, e := s.pool.Client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.BandClient) (*status.Status, error) {
+			result := status.New(instance)
 
-	if e != nil {
-		return nil, e
-	}
+			for _, read := range []func(face.BandClient, *status.Status) error{
+				readHost,
+				readSetup,
+				readScreen,
+				readRedirection,
+				readScreenService,
+				readConsent,
+				readPower,
+			} {
+				if e := read(c, result); e != nil {
+					return nil, e
+				}
+			}
 
-	result := status.New(instance)
-
-	for _, read := range []func(face.Engine, *status.Status) error{
-		readHost,
-		readSetup,
-		readScreen,
-		readRedirection,
-		readScreenService,
-		readConsent,
-		readPower,
-	} {
-		if f := read(c, result); f != nil {
-			return nil, f
-		}
-	}
-
-	return result, nil
+			return result, nil
+		},
+	)
 }

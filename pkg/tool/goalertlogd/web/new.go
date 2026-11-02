@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -16,7 +15,6 @@ import (
 
 func New(
 	v *service.Service,
-	p *worker.Worker,
 	n face.EventNotifier,
 ) *Server {
 	r := registry.New()
@@ -36,7 +34,6 @@ func New(
 	return &Server{
 		service:  v,
 		notifier: n,
-		worker:   p,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).

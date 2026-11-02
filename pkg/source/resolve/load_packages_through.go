@@ -1,7 +1,6 @@
 package resolve
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"go/token"
 	"golang.org/x/tools/go/packages"
@@ -12,19 +11,10 @@ func LoadPackagesThrough(
 	overlay map[string][]byte,
 	patterns ...string,
 ) ([]*packages.Package, *token.FileSet, error) {
-	set := token.NewFileSet()
-	c := &packages.Config{
-		Mode:       packages.LoadSyntax | packages.NeedModule,
-		Fset:       set,
-		Dir:        directory,
-		Tests:      true,
-		BuildFlags: BuildFlags(directory),
-		Overlay:    overlay,
-	}
-	result, e := packages.Load(c, patterns...)
+	result, set, e := LoadPackagesUnchecked(directory, overlay, patterns...)
 
 	if e != nil {
-		return nil, nil, fmt.Errorf("load packages: %w", e)
+		return nil, nil, e
 	}
 
 	for _, p := range result {

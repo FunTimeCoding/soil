@@ -8,10 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -24,13 +22,12 @@ func Run(
 	r := i.Reporter()
 	l := logger.New(context.Background())
 	m := metric.New()
-	v := service.New(o, l, m.Upstream(constant.Identity))
-	defer v.Close()
-	b := web.New(v)
+	d := daemon.New(o, l, r, m)
+	defer d.Close()
 	c := lifecycle.New(l)
 
-	if o.PowerIntent {
-		c.WithWorker(worker.New(v, constant.IntentInterval, l, m.Registry(), r))
+	for _, w := range d.Workers() {
+		c.WithWorker(w)
 	}
 
 	c.WithServer(
@@ -46,8 +43,8 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(x *http.ServeMux) {
-				Mount(v, b, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
-		).WithMiddleware(b.Recovery(r)),
+		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()
 }

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
 	kubernetesErrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"

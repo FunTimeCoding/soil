@@ -14,7 +14,7 @@ func Status(
 	reason string,
 ) error {
 	switch status {
-	case http.StatusBadRequest:
+	case http.StatusBadRequest, http.StatusUnprocessableEntity:
 		return validation.New("%s", reason)
 	case http.StatusForbidden:
 		return forbidden.Format("%s", reason)
@@ -22,7 +22,11 @@ func Status(
 		return not_found.Format("%s", reason)
 	case http.StatusConflict:
 		return conflict.Format("%s", reason)
-	case http.StatusServiceUnavailable:
+	case http.StatusTooManyRequests,
+		http.StatusBadGateway,
+		http.StatusServiceUnavailable,
+		http.StatusGatewayTimeout:
+
 		return unavailable.Format("%s", reason)
 	default:
 		return nil

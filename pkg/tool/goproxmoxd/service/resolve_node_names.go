@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+import "github.com/funtimecoding/soil/pkg/proxmox/face"
 
 func (s *Service) resolveNodeNames(
 	c face.ProxmoxClient,

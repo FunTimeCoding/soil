@@ -90,6 +90,7 @@ require (
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.13
 	gitlab.com/gitlab-org/api/client-go/v3 v3.40.0
+	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/crypto v0.58.0
 	golang.org/x/mod v0.42.0

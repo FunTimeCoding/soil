@@ -1,7 +1,7 @@
 package reconciler
 
 func (r *Reconciler) Reconcile() {
-	for _, hypervisor := range r.service.Inventory().Names() {
+	for _, hypervisor := range r.inventory.Names() {
 		p, e := r.service.Reconcile(r.context, hypervisor, false, true)
 
 		if e != nil {

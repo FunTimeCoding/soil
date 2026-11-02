@@ -10,7 +10,7 @@ import (
 
 func TestTheAptlyClientAndItsMockKeepTheFace(t *testing.T) {
 	m := mock_client.New()
-	clients := []face.Client{
+	clients := []face.AptlyClient{
 		aptly.New("aptly.example", 8080, true, "alfa", "bravo"),
 		m,
 	}

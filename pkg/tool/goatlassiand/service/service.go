@@ -1,15 +1,20 @@
 package service
 
 import (
-	confluence "github.com/funtimecoding/soil/pkg/atlassian/confluence/face"
-	jira "github.com/funtimecoding/soil/pkg/atlassian/jira/face"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/plate"
+	"sync"
 )
 
 type Service struct {
-	jira            jira.Client
-	confluence      confluence.Client
+	jira            atlassian.JiraClient
+	confluence      atlassian.ConfluenceClient
 	jiraGuard       *peer.Guard
 	confluenceGuard *peer.Guard
 	project         []string
+	notifier        face.EventNotifier
+	mutex           sync.RWMutex
+	current         *plate.Plate
 }

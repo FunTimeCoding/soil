@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"regexp"
+	"time"
 )
 
 var Identity = identity.New(
@@ -58,6 +59,7 @@ const (
 	ListPage         = 500
 	DefaultGlob      = "**/*.md"
 	RrfK             = 60
+	MaintainInterval = 10 * time.Minute
 
 	DashboardTitle   = "Dashboard"
 	DashboardPath    = "/"

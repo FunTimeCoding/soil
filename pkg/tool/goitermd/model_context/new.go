@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
-	iterm "github.com/funtimecoding/soil/pkg/tool/goitermd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/service"
 )
 
 func New(
-	v iterm.Iterm,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

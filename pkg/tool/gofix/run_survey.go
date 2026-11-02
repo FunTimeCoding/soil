@@ -41,8 +41,10 @@ func runSurvey(
 			}
 
 			for _, s := range segment.Segments(i.Name) {
-				if known[s] || slices.ContainsFunc(
-					dictionary.Stems(s),
+				base := dictionary.TrimDigits(s)
+
+				if known[base] || slices.ContainsFunc(
+					dictionary.Stems(base),
 					func(b string) bool { return known[b] },
 				) {
 					continue

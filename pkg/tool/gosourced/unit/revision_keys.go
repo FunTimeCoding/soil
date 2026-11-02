@@ -1,6 +1,6 @@
 package unit
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/service/revision"
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/revision"
 
 func revisionKeys(r *revision.Revision) []string {
 	var result []string

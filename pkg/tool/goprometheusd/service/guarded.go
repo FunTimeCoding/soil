@@ -9,7 +9,7 @@ func guarded[T any](
 	s *Service,
 	x context.Context,
 	instance string,
-	f func(face.Client) (T, error),
+	f func(face.PrometheusClient) (T, error),
 ) (T, error) {
 	var result T
 	p, e := s.pool.Client(instance)

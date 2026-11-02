@@ -17,7 +17,7 @@ func TestAnInterruptBeforeTheLaunchKillsTheAgent(t *testing.T) {
 	s := mock_stream.New(nil, true, nil)
 	launching := make(chan struct{})
 	release := make(chan struct{})
-	v := service_tester.New(
+	o := service_tester.New(
 		t,
 		func(
 			string,
@@ -30,38 +30,38 @@ func TestAnInterruptBeforeTheLaunchKillsTheAgent(t *testing.T) {
 			return s
 		},
 	)
-	assert.FatalOnError(t, v.Run("romeo"))
+	assert.FatalOnError(t, o.Service.Run("romeo"))
 	<-launching
-	v.Workers()[0].(face.Drainer).Interrupt()
+	o.Runner.Interrupt()
 	close(release)
-	service_tester.AwaitDone(t, v)
+	service_tester.AwaitDone(t, o.Service)
 	assert.Integer(t, 1, s.Killed())
 }
 
 func TestAnAgentAlreadyGoneIsNotReported(t *testing.T) {
 	r := memory.New()
-	v := service_tester.NewWith(
+	o := service_tester.NewWith(
 		t,
 		service_tester.Fixed(stubborn_stream.New(os.ErrProcessDone)),
 		r,
 	)
-	assert.FatalOnError(t, v.Run("sierra"))
-	v.Workers()[0].(face.Drainer).Interrupt()
-	service_tester.AwaitDone(t, v)
+	assert.FatalOnError(t, o.Service.Run("sierra"))
+	o.Runner.Interrupt()
+	service_tester.AwaitDone(t, o.Service)
 	assert.Count(t, 0, r.Events())
 }
 
 func TestAKillThatFailsIsReported(t *testing.T) {
 	r := memory.New()
-	v := service_tester.NewWith(
+	o := service_tester.NewWith(
 		t,
 		service_tester.Fixed(
 			stubborn_stream.New(errors.New("operation not permitted")),
 		),
 		r,
 	)
-	assert.FatalOnError(t, v.Run("tango"))
-	v.Workers()[0].(face.Drainer).Interrupt()
-	service_tester.AwaitDone(t, v)
+	assert.FatalOnError(t, o.Service.Run("tango"))
+	o.Runner.Interrupt()
+	service_tester.AwaitDone(t, o.Service)
 	assert.Count(t, 1, r.Events())
 }

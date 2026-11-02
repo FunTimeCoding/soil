@@ -32,7 +32,7 @@ func scanService(
 	s.ConstantFile = !s.ConstantDirectory && v.Has(
 		filepath.Join(path, constant.ConstantFileName),
 	)
-	s.Worker = v.DirectoryExists(filepath.Join(path, "worker"))
+	s.Worker = v.DirectoryExists(filepath.Join(path, constant.WorkerDirectory))
 	s.IntegrationTests = v.DirectoryExists(
 		filepath.Join(path, constant.IntegrationDirectory),
 	)

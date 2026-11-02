@@ -11,7 +11,7 @@ func (s *Server) ListInstances(
 ) (server.ListInstancesResponseObject, error) {
 	var result server.ListInstances200JSONResponse
 
-	for _, i := range s.service.Inventory().Instances {
+	for _, i := range s.inventory.Instances {
 		result = append(
 			result,
 			server.InstanceDetail{Name: i.Name, Host: i.Host},

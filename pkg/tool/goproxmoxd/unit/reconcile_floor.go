@@ -2,9 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
 	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
 )
 
 func reconcileFloor() (*mock_client.Client, []*client.VirtualMachine) {

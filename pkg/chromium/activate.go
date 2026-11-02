@@ -27,11 +27,9 @@ func (c *Client) Activate(targetIdentifier string) {
 	errors.PanicOnError(e)
 	console.Format("    ActivateTarget took %v\n", time.Since(t1))
 	t2 := time.Now()
-	_, e = chromedp.Call(
-		c.TargetContext(targetIdentifier),
-		page.Reload,
-		page.ReloadParams{},
-	)
+	x, e := c.TargetContext(targetIdentifier)
+	errors.PanicOnError(e)
+	_, e = chromedp.Call(x, page.Reload, page.ReloadParams{})
 	console.Format("    Reload took %v (error: %v)\n", time.Since(t2), e)
 	errors.PanicOnError(e)
 	console.Format("    Complete after: %v\n", time.Since(start))

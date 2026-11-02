@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument/edit_session"
 	"github.com/funtimecoding/soil/pkg/web/component/load"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"

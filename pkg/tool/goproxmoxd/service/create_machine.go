@@ -20,7 +20,7 @@ func (s *Service) CreateMachine(
 		)
 	}
 
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return 0, clientFail

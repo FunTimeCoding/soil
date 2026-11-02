@@ -3,8 +3,8 @@ package service
 import (
 	"fmt"
 	"github.com/dave/dst"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"os"
 	"path/filepath"
 )

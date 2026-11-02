@@ -2,11 +2,11 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	sublime "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/service"
 )
 
 func New(
-	v sublime.Sublime,
+	v *service.Service,
 	r face.Reporter,
 ) *Server {
 	return &Server{service: v, reporter: r}

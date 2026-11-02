@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/types/import_entry"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"strings"
 )
 

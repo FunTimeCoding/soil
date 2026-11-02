@@ -1,15 +1,10 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/inventory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
-	prometheusFace "github.com/funtimecoding/soil/pkg/prometheus/face"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	prometheusMock "github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/types/instance"
 	"maps"
@@ -32,16 +27,14 @@ func New(
 		instances = append(instances, i)
 	}
 
-	o := option.New()
-	o.Inventory = inventory.New[instance.Instance](instances...)
-	o.Alertmanager = func(i *instance.Instance) (face.Client, error) {
-		return alertmanagers[i.Name], nil
-	}
-	o.Prometheus = func(i *instance.Instance) (prometheusFace.Client, error) {
-		return prometheuses[i.Name], nil
-	}
-	result := service.New(o, logger.New(t.Context()), memory.New())
-	t.Cleanup(result.Close)
-
-	return result
+	return pooled(
+		t,
+		instances,
+		func(i *instance.Instance) face.AlertmanagerClient {
+			return alertmanagers[i.Name]
+		},
+		func(i *instance.Instance) face.PrometheusClient {
+			return prometheuses[i.Name]
+		},
+	)
 }

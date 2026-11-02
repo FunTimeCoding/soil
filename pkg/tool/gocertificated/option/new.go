@@ -7,6 +7,6 @@ import (
 
 func New() *Certificate {
 	return &Certificate{
-		Forge: func() face.Forge { return gitlab.NewEnvironment() },
+		Forge: func() face.GitLabClient { return gitlab.NewEnvironment() },
 	}
 }

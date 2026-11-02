@@ -1,13 +1,17 @@
 package base
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"testing"
 )
@@ -15,8 +19,16 @@ import (
 func New(t *testing.T) *Server {
 	t.Helper()
 	c := mock_client.New()
-	v := service_tester.New(t, c)
+	o := option.New()
+	o.Source = func() face.SecretSource { return c }
 	r := memory.New()
+	d := daemon.New(
+		o,
+		logger.New(context.Background()),
+		r,
+		prometheus.NewRegistry(),
+	)
+	t.Cleanup(d.Close)
 
 	return &Server{
 		MockClient: c,
@@ -24,7 +36,7 @@ func New(t *testing.T) *Server {
 		ContextServer: model_context_server.New(
 			t,
 			func(_ *http.ServeMux, g *guard.Mux) {
-				gosecretd.Mount(v, r, mock_recorder.New(), g)
+				d.Mount(r, mock_recorder.New(), g)
 			},
 		),
 	}

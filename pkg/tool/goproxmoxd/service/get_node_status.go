@@ -6,7 +6,7 @@ func (s *Service) GetNodeStatus(
 	instance string,
 	node string,
 ) (*node_status.Status, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return nil, clientFail

@@ -1,23 +1,22 @@
 package watch
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/ticker"
+	"github.com/funtimecoding/soil/pkg/openbao/status"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
-	secret "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 func New(
-	s secret.StatusSource,
+	s func() (*status.Status, error),
 	y *prometheus.Registry,
 	l *logger.Logger,
 	r face.Reporter,
 ) *Watch {
 	result := &Watch{
-		source: s,
+		status: s,
 		sealed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: constant.SealedGauge,
@@ -30,14 +29,9 @@ func New(
 				Help: constant.ReachableHelp,
 			},
 		),
-		recovery: recovery.New(l, r),
 	}
 	y.MustRegister(result.sealed, result.reachable)
-	result.ticker = ticker.New(
-		constant.WatchInterval,
-		result.Poll,
-		result.recovery,
-	)
+	result.clock = worker.NewEvery(result.tick, l, r, constant.WatchInterval)
 
 	return result
 }

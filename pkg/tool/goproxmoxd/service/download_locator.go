@@ -8,7 +8,7 @@ func (s *Service) DownloadLocator(
 	filename string,
 	l string,
 ) error {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return clientFail

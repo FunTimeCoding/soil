@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+	"github.com/funtimecoding/soil/pkg/chat/face"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client"
 	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
 	"net/http"
@@ -11,6 +11,6 @@ import (
 
 func TestTheClientAndItsMockShareTheFace(t *testing.T) {
 	r := mattermost_client_tester.New(t, func(_ *http.ServeMux) {})
-	faces := []face.Client{r.Client, mock_client.New("me")}
+	faces := []face.MattermostClient{r.Client, mock_client.New("me")}
 	assert.Count(t, 2, faces)
 }

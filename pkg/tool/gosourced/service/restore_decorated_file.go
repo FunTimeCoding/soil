@@ -6,7 +6,7 @@ import (
 	"github.com/dave/dst/decorator"
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 )
 
 func restoreDecoratedFile(

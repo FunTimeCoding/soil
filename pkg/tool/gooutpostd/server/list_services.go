@@ -16,7 +16,11 @@ func (s *Server) ListServices(
 		origin = *r.Params.Origin
 	}
 
-	return server.ListServices200JSONResponse(
-		convert.Services(s.service.Services(origin)),
-	), nil
+	v, e := s.service.Services(origin)
+
+	if e != nil {
+		return server.ListServices500JSONResponse(*s.answer(e)), nil
+	}
+
+	return server.ListServices200JSONResponse(convert.Services(v)), nil
 }

@@ -12,23 +12,17 @@ func (s *Server) GetSnippet(
 	_ mcp.CallToolRequest,
 	a argument.GetSnippet,
 ) (*mcp.CallToolResult, error) {
-	if a.Name == "" {
-		return response.Fail("name is required")
-	}
-
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	c, e := s.service.SSHClient(instance)
+	b, e := s.service.GetSnippet(instance, a.Name)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
-
-	b := c.ReadFile(snippetPath(a.Name))
 
 	return response.SuccessAny(
 		map[string]string{"name": a.Name, "content": string(b)},

@@ -8,7 +8,7 @@ import (
 )
 
 func collect(
-	c face.Client,
+	c face.GitHubClient,
 	o *option.Job,
 ) []*run.Run {
 	return monitor.OnlyConcerns(

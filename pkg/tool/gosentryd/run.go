@@ -8,8 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -21,12 +21,12 @@ func Run(
 ) {
 	r := s.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l, r)
-	defer v.Close()
-	errors.PanicOnError(v.Wait(context.Background()))
+	d := daemon.New(o, l, r)
+	defer d.Close()
+	errors.PanicOnError(d.Wait(context.Background()))
 	c := lifecycle.New(l)
 
-	for _, w := range v.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
 	}
 
@@ -35,7 +35,7 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, s.Recorder(), guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

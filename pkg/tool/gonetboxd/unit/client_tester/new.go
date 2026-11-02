@@ -3,13 +3,14 @@ package client_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/netbox/face"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
@@ -19,14 +20,18 @@ import (
 
 func New(
 	t *testing.T,
-	s face.Client,
+	s face.NetBoxClient,
 ) *client.Client {
 	t.Helper()
-	v := service_tester.Service(t, s)
+	d := daemon.New(
+		service_tester.NewOption(t, s),
+		logger.New(t.Context()),
+		memory.New(),
+		metric.New(),
+	)
+	t.Cleanup(d.Close)
 	m := http.NewServeMux()
-	gonetboxd.Mount(
-		v,
-		web.New(v),
+	d.Mount(
 		memory.New(),
 		mock_recorder.New(),
 		guard.New(m, []string{constant.ModelContextTestToken}),

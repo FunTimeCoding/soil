@@ -1,6 +1,6 @@
 package unit
 
-import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/port_forward"
+import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd/port_forward"
 
 func stopped(f *port_forward.Forward) bool {
 	select {

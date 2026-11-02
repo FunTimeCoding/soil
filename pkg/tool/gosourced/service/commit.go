@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/snapshot"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"slices"
 )
 
@@ -13,6 +13,7 @@ func (s *Service) commit(
 	directory string,
 	before *snapshot.Snapshot,
 	roots []string,
+	packagePaths []string,
 	outs []*sink.Sink,
 	r *output.Results,
 ) (*output.Results, error) {
@@ -31,7 +32,12 @@ func (s *Service) commit(
 		s.beforeCommit()
 	}
 
-	changed := before.Changed(roots...)
+	changed := s.reachedChanges(
+		roots,
+		packagePaths,
+		outs,
+		before.Changed(roots...),
+	)
 
 	for _, out := range outs {
 		changed = append(changed, out.Stale()...)

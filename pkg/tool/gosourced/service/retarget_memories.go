@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/types/symbol_move"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/retarget_report"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 )
 
 func (s *Service) retargetMemories(

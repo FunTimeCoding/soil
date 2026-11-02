@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/apply_result"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/apply_result"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )

@@ -14,5 +14,5 @@ func TestTheClientAndItsMockShareTheFace(t *testing.T) {
 	t.Cleanup(c.Close)
 	m := mock_client.New()
 	t.Cleanup(m.Close)
-	assert.Count(t, 2, []face.Client{c, m})
+	assert.Count(t, 2, []face.PostgresClient{c, m})
 }

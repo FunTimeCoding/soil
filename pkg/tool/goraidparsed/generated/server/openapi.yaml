@@ -20,6 +20,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenerateResponse"
+        "400":
+          description: No files to parse.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: An input file does not exist.
           content:

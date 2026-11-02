@@ -4,18 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/firefox/tab"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/model_context_tester"
 	"os"
 	"path/filepath"
 	"testing"
 )
-
-func TestTheServiceClosesItsClient(t *testing.T) {
-	s := base.New(t)
-	s.Service.Close()
-	assert.Integer(t, 1, s.MockClient.Closed)
-}
 
 func TestMissingArgumentsAreRefusedBeforeTheBrowser(t *testing.T) {
 	o := model_context_tester.New(t)

@@ -1,7 +1,7 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosublimed/option"
+import "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
 
-func New(o *option.Sublime) *Service {
-	return &Service{source: o.Source()}
+func New(c face.SublimeSource) *Service {
+	return &Service{source: c}
 }

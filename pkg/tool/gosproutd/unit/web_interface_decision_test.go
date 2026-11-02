@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/decision_page"
 	"net/http"
 	"net/url"
@@ -14,22 +13,20 @@ import (
 )
 
 func TestAnUnknownDecisionIsNotFound(t *testing.T) {
-	s := webServer(t, service_tester.New(t).Service)
+	s, _ := webServer(t)
 	status, _ := sendForm(t, s, decision_page.Path(999, true), nil)
 	assert.Integer(t, http.StatusNotFound, status)
 }
 
 func TestAnOverlongReplyAlertsAtTheForm(t *testing.T) {
-	v := service_tester.New(t).Service
-	d, e := v.PushDecision(
+	s, seed := webServer(t)
+	d := seed.PushDecision(
 		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
 		nil,
 	)
-	assert.FatalOnError(t, e)
-	s := webServer(t, v)
 	status, page := sendForm(
 		t,
 		s,

@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
@@ -10,42 +11,45 @@ func (s *Service) DeleteRegistryPath(
 	project int64,
 	path string,
 ) ([]string, error) {
-	c, e := s.pool.Client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]string, error) {
+			list, e := c.RegistryRepositories(project, false)
 
-	if e != nil {
-		return nil, e
-	}
-
-	list, f := c.RegistryRepositories(project, false)
-
-	if f != nil {
-		return nil, f
-	}
-
-	var deleted []string
-
-	for _, target := range []string{path, join.Slash([]string{path, "cache"})} {
-		for _, repository := range list {
-			if repository.Path != target {
-				continue
+			if e != nil {
+				return nil, e
 			}
 
-			if g := c.DeleteRegistryRepository(
-				project,
-				repository.Identifier,
-			); g != nil {
-				return deleted, g
+			var deleted []string
+
+			for _, target := range []string{
+				path,
+				join.Slash([]string{path, "cache"}),
+			} {
+				for _, repository := range list {
+					if repository.Path != target {
+						continue
+					}
+
+					if f := c.DeleteRegistryRepository(
+						project,
+						repository.Identifier,
+					); f != nil {
+						return deleted, f
+					}
+
+					deleted = append(deleted, target)
+
+					break
+				}
 			}
 
-			deleted = append(deleted, target)
+			if len(deleted) == 0 {
+				return nil, not_found.New("registry repository", path)
+			}
 
-			break
-		}
-	}
-
-	if len(deleted) == 0 {
-		return nil, not_found.New("registry repository", path)
-	}
-
-	return deleted, nil
+			return deleted, nil
+		},
+	)
 }

@@ -8,8 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -22,13 +22,13 @@ func Run(
 	r := i.Reporter()
 	t := i.Recorder()
 	l := logger.New(context.Background())
-	v := service.New(o)
+	d := daemon.New(o)
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, r, t, guard.New(m, o.ServiceTokens))
+				d.Mount(r, t, guard.New(m, o.ServiceTokens))
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).WithServer(

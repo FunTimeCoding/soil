@@ -1,12 +1,17 @@
 package gauge
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/classify"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+)
 
 func (g *Gauge) Poll() {
-	findings, e := g.service.Findings()
+	findings, e := g.findings()
 
 	if e != nil {
-		g.logger.Structured("finding_gauge_failed", "reason", e.Error())
+		if classify.Reportable(e) {
+			g.reporter.CaptureException(e)
+		}
 
 		return
 	}
@@ -18,6 +23,6 @@ func (g *Gauge) Poll() {
 	}
 
 	for _, kind := range constant.FindingKinds {
-		g.findings.WithLabelValues(kind).Set(counts[kind])
+		g.gauge.WithLabelValues(kind).Set(counts[kind])
 	}
 }

@@ -33,13 +33,13 @@ func (s *Service) censusPackages(
 	}
 
 	if s.full {
-		return loadPackages(directory, whole...)
+		return loadAround(directory, reachedPaths(g, packagePaths), whole...)
 	}
 
 	patterns = slices.Compact(slices.Sorted(slices.Values(patterns)))
 
 	if 2*len(patterns) > len(g.Units) {
-		return loadPackages(directory, whole...)
+		return loadAround(directory, reachedPaths(g, packagePaths), whole...)
 	}
 
 	if len(patterns) == 0 {

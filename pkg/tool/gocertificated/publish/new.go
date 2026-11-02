@@ -3,7 +3,7 @@ package publish
 import "github.com/funtimecoding/soil/pkg/gitlab/face"
 
 func New(
-	f face.Forge,
+	f face.GitLabClient,
 	project int64,
 	branch string,
 	authorityDirectory string,

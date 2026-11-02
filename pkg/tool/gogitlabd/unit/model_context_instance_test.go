@@ -2,27 +2,24 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
 	"testing"
 )
 
 func TestModelContextWorksOnTheSelectedInstance(t *testing.T) {
-	alfa := mock_client.New()
-	alfa.SeedProject(1, "group", "app")
-	bravo := mock_client.New()
-	bravo.SeedProject(2, "group", "web")
-	v := startServer(
+	r := memory.New()
+	d, clients := daemon_tester.New(
 		t,
-		service_tester.Service(
-			map[string]*mock_client.Client{
-				constant.FixtureInstance:      alfa,
-				constant.FixtureOtherInstance: bravo,
-			},
-		),
+		r,
+		constant.FixtureInstance,
+		constant.FixtureOtherInstance,
 	)
+	clients[constant.FixtureInstance].SeedProject(1, "group", "app")
+	clients[constant.FixtureOtherInstance].SeedProject(2, "group", "web")
+	v := startServer(t, d, r)
 	defer v.Close()
 	c := v.Connect(t)
 	defer c.Close()

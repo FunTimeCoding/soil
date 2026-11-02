@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 
 func sinkFor(
 	outs []*sink.Sink,

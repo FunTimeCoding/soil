@@ -6,14 +6,17 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
-func (c *Client) AcquireTarget(identifier string) context.Context {
-	c.reconnectIfNeeded()
+func (c *Client) AcquireTarget(identifier string) (context.Context, error) {
+	if e := c.ready(); e != nil {
+		return nil, e
+	}
+
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
 	if x, okay := c.targets[identifier]; okay {
 		if x.Err() == nil {
-			return x
+			return x, nil
 		}
 
 		delete(c.targets, identifier)
@@ -25,5 +28,5 @@ func (c *Client) AcquireTarget(identifier string) context.Context {
 	)
 	c.targets[identifier] = x
 
-	return x
+	return x, nil
 }

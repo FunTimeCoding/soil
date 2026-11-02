@@ -1,7 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
+import "github.com/funtimecoding/soil/pkg/tool/gogithubd/face"
 
-func New(o *option.Exporter) *Service {
-	return &Service{source: o.Source(), owner: o.Owner}
+func New(
+	s face.RunSource,
+	owner string,
+) *Service {
+	return &Service{source: s, owner: owner}
 }

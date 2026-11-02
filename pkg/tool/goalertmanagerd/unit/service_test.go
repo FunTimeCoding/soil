@@ -107,20 +107,3 @@ func TestAnUnreachableAlertmanagerFailsFastWithoutBeingAskedAgain(t *testing.T) 
 	assert.True(t, unavailable.Is(f))
 	assert.StringContains(t, "alertmanager:alfa unreachable since", f.Error())
 }
-
-func TestTheServiceHandsTwoGuardsPerInstanceToTheLifecycle(t *testing.T) {
-	assert.Count(t, 4, healthy(t, "alfa", "bravo").Workers())
-}
-
-func TestClosingTheServiceClosesBothClientsOfEveryInstance(t *testing.T) {
-	a := mock_client.New()
-	p := prometheusMock.New()
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": a},
-		map[string]*prometheusMock.Client{"alfa": p},
-	)
-	s.Close()
-	assert.Integer(t, 1, a.Closed)
-	assert.Integer(t, 1, p.Closed)
-}

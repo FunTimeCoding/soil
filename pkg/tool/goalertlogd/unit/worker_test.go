@@ -110,7 +110,21 @@ func TestPollPrunesOldRecords(t *testing.T) {
 
 func TestPollTracksLastPollTime(t *testing.T) {
 	o := worker_tester.New(t)
-	assert.True(t, o.Worker.LastPoll().IsZero())
+	assert.True(t, o.Service.LastPoll().IsZero())
 	o.Worker.Poll()
-	assert.False(t, o.Worker.LastPoll().IsZero())
+	assert.False(t, o.Service.LastPoll().IsZero())
+}
+
+func TestAPollSetsTheGauges(t *testing.T) {
+	o := worker_tester.New(t)
+	o.MockClient.Add(
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+	)
+	o.MockClient.Add(
+		alert.NewBasic("def456", "DiskFull", constant.WarningSeverity, ""),
+	)
+	o.Worker.Poll()
+	assert.Float(t, 2, o.Gauge("alertlog_alerts_firing"))
+	assert.Float(t, 2, o.Gauge("alertlog_records_total"))
+	assert.True(t, o.Gauge("alertlog_last_poll_timestamp_seconds") > 0)
 }

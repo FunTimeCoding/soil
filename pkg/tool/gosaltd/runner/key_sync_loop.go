@@ -1,18 +1,17 @@
 package runner
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
-	"time"
-)
+import "time"
 
 func (r *Runner) keySyncLoop() {
+	defer r.keySyncing.Done()
+
 	select {
 	case <-r.connected:
 	case <-r.provision.Done():
 		return
 	}
 
-	ticker := time.NewTicker(constant.KeySyncInterval)
+	ticker := time.NewTicker(r.keySyncInterval)
 	defer ticker.Stop()
 
 	for {

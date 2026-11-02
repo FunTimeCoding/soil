@@ -1,7 +1,15 @@
 package ssh
 
-import "github.com/funtimecoding/soil/pkg/errors"
+func (c *Client) RemoveFile(path string) error {
+	s, e := c.sftpClient()
 
-func (c *Client) RemoveFile(path string) {
-	errors.PanicOnError(c.sftpClient().Remove(path))
+	if e != nil {
+		return e
+	}
+
+	if f := s.Remove(path); f != nil {
+		return c.refused("remove", path, f)
+	}
+
+	return nil
 }

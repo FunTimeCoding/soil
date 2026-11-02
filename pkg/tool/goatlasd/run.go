@@ -8,10 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -24,16 +22,15 @@ func Run(
 	r := i.Reporter()
 	l := logger.New(context.Background())
 	e := metric.New()
-	v := service.New(o, l, r)
-	defer v.Close()
-	u := web.New(v)
+	d := daemon.New(o, l, r, e.Registry())
+	defer d.Close()
 	c := lifecycle.New(l)
 
-	for _, w := range v.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
 	}
 
-	c.WithWorker(worker.New(v, o.Interval, l, e.Registry(), r)).WithServer(
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,
@@ -46,8 +43,8 @@ func Run(
 			constant.Identity,
 			o.Address,
 			func(x *http.ServeMux) {
-				Mount(v, u, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(x, o.ServiceTokens))
 			},
-		).WithMiddleware(u.Recovery(r)).WithProtected(),
+		).WithMiddleware(d.Recovery(r)).WithProtected(),
 	).RunUntilSignal()
 }

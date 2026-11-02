@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument/edit_session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
 	"net/http"
 )

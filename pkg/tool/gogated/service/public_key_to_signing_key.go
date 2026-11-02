@@ -4,7 +4,7 @@ import (
 	"crypto/rsa"
 	"encoding/base64"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service/response"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/response"
 	"math/big"
 )
 

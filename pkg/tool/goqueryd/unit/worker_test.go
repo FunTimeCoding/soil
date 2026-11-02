@@ -21,7 +21,7 @@ func TestTheWorkerIndexesWhileTheEmbedderIsDown(t *testing.T) {
 	v.AddCollection("test", d, constant.DefaultGlob)
 	r := memory.New()
 	w := worker.New(
-		v,
+		v.Maintain,
 		time.Hour,
 		logger.New(t.Context()),
 		prometheus.NewRegistry(),
@@ -44,7 +44,13 @@ func TestTheWorkerCountsWhatItPrunes(t *testing.T) {
 	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
 	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nyankee.\n", nil)
 	g := prometheus.NewRegistry()
-	w := worker.New(v, time.Hour, logger.New(t.Context()), g, memory.New())
+	w := worker.New(
+		v.Maintain,
+		time.Hour,
+		logger.New(t.Context()),
+		g,
+		memory.New(),
+	)
 	w.Start()
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)
@@ -54,8 +60,4 @@ func TestTheWorkerCountsWhatItPrunes(t *testing.T) {
 	}
 
 	assert.Float(t, 1, prunedContents(g))
-}
-
-func TestTheServiceHandsOutItsEmbedderGuard(t *testing.T) {
-	assert.Count(t, 1, newService(t, newEmbedder(t), newReranker(t)).Workers())
 }

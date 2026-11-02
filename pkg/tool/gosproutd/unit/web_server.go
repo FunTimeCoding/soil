@@ -2,32 +2,37 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
+	"time"
 )
 
-func webServer(
-	t *testing.T,
-	s *service.Service,
-) *model_context_server.Server {
+func webServer(t *testing.T) (*model_context_server.Server, *store.Store) {
 	t.Helper()
+	l := logger.New(t.Context())
+	o := store_tester.NewOption(t, time.Now, notifier.New())
+	r := memory.New()
+	d := daemon.New(o, l, r)
+	t.Cleanup(d.Close)
 	result := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
-			r := memory.New()
-			gosproutd.Mount(s, web.New(s, r), r, mock_recorder.New(), g)
+		func(_ *http.ServeMux, g *guard.Mux) {
+			d.Mount(r, mock_recorder.New(), g)
 		},
 	)
 	t.Cleanup(result.Close)
+	m := lite.New(l, o.LitePath)
+	t.Cleanup(func() { relational.CloseMapper(m) })
 
-	return result
+	return result, store.New(m, time.Now)
 }

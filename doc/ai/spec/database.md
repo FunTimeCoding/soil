@@ -149,12 +149,14 @@ openers are silent - test noise is not essential logging.
 ## Store Shape
 
 Backend resolution happens at the edge; the store is backend-agnostic
-and takes the mapper it is given. Whoever opens the mapper - the
-daemon's service - closes it with `relational.CloseMapper`; the store
-borrows it and has no `Close`. Migration lives beside it, in the
-daemon's `<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)` that `Run`
-calls before building the store, so schema history - renames, drops,
-backfills - stays out of the store:
+and takes the mapper it is given. Whoever opens the mapper - the daemon -
+closes it with `relational.CloseMapper`; each store borrows it and has no
+`Close`. A daemon whose tables must commit together in some places and
+never in others has one store per consistency boundary, and a transaction
+never spans two (`service-tool.md`, Stores). Migration lives beside them,
+in the daemon's `<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)`
+that the daemon calls before building its stores, so schema history -
+renames, drops, backfills - stays out of the store:
 
 ```go
 func AutoMigrate(d *gorm.DB) {

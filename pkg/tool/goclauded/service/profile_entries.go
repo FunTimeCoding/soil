@@ -3,7 +3,7 @@ package service
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory_payload"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/memory_payload"
 )
 
 func profileEntries(body string) map[string][]memory_payload.Entry {

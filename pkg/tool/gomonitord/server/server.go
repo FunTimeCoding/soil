@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	monitor "github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/service"
 )
 
 type Server struct {
-	service  monitor.Claims
+	service  *service.Service
 	reporter face.Reporter
 }

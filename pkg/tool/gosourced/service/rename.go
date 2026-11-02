@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 )
 
 func (s *Service) Rename(
@@ -15,20 +15,11 @@ func (s *Service) Rename(
 	receiver string,
 	dryRun bool,
 ) (*output.Results, error) {
-	return s.transact(
+	return s.RenameSymbols(
 		x,
 		directory,
-		[]string{packagePath},
+		packagePath,
+		[]*symbol_rename.Rename{symbol_rename.New(oldName, newName, receiver)},
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
-			return s.renameThrough(
-				d,
-				packagePath,
-				oldName,
-				newName,
-				receiver,
-				out,
-			)
-		},
 	)
 }

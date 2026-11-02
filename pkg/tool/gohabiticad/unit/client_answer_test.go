@@ -27,11 +27,7 @@ func TestTheClientReadsTasksAndTags(t *testing.T) {
 	g.Identifier = "tag-1"
 	g.Name = "deploy"
 	m.AddTag(g)
-	c := client_tester.New(
-		t,
-		service_tester.Service(t, m),
-		constant.ModelContextTestToken,
-	)
+	c := client_tester.New(t, m, constant.ModelContextTestToken)
 	all, e := c.GetTasks(t.Context(), "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, all)
@@ -48,7 +44,7 @@ func TestTheClientReadsTasksAndTags(t *testing.T) {
 func TestTheClientCreatesATask(t *testing.T) {
 	c := client_tester.New(
 		t,
-		service_tester.Service(t, service_tester.NewSource(t)),
+		service_tester.NewSource(t),
 		constant.ModelContextTestToken,
 	)
 	v, e := c.CreateTask(t.Context(), "todo", "Ship loop C", "")
@@ -59,11 +55,7 @@ func TestTheClientCreatesATask(t *testing.T) {
 func TestTheClientAnswersARefusedStatAsValidation(t *testing.T) {
 	m := service_tester.NewSource(t)
 	m.Failure = validation.New("%q is not a valid Stat.", "per")
-	c := client_tester.New(
-		t,
-		service_tester.Service(t, m),
-		constant.ModelContextTestToken,
-	)
+	c := client_tester.New(t, m, constant.ModelContextTestToken)
 	_, e := c.AllocateStat(t.Context(), "per")
 	assert.True(t, validation.Is(e))
 }
@@ -71,18 +63,14 @@ func TestTheClientAnswersARefusedStatAsValidation(t *testing.T) {
 func TestTheClientReachesTheDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
-		service_tester.Service(t, service_tester.NewSource(t)),
+		service_tester.NewSource(t),
 		constant.ModelContextTestToken,
 	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
 func TestTheClientRefusesAWrongToken(t *testing.T) {
-	c := client_tester.New(
-		t,
-		service_tester.Service(t, service_tester.NewSource(t)),
-		"wrong",
-	)
+	c := client_tester.New(t, service_tester.NewSource(t), "wrong")
 	assert.Error(t, c.Reachable(t.Context()))
 	_, e := c.GetTags(t.Context())
 	assert.Error(t, e)

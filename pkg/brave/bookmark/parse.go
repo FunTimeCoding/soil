@@ -2,9 +2,12 @@ package bookmark
 
 import "github.com/funtimecoding/soil/pkg/notation"
 
-func Parse(s string) *File {
+func Parse(b []byte) (*File, error) {
 	result := &File{}
-	notation.MustDecode(s, result, false)
 
-	return result
+	if e := notation.DecodeBytes(b, result); e != nil {
+		return nil, e
+	}
+
+	return result, nil
 }

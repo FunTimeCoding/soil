@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/token"
 )
 

@@ -1,13 +1,15 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/service"
 	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {
-	worker   *worker.Worker
+	service  *service.Service
+	notifier face.EventNotifier
 	view     *view.View
 	registry *registry.Registry
 }

@@ -16,7 +16,7 @@ func Run(o *option.Audit) {
 	configuration := audit_configuration.Load(
 		system.FirstFile(constant.ConfigurationPaths...),
 	)
-	configuration.Service = configuration.Service || o.Service
+	configuration.Daemon = configuration.Daemon || o.Daemon
 	failed := false
 
 	for _, root := range o.Roots {

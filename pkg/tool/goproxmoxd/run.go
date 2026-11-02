@@ -8,11 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/reconciler"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/web"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -24,21 +21,13 @@ func Run(
 ) {
 	r := s.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l, r)
-	defer v.Close()
 	m := metric.New()
-	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
-	b := web.New(v, k)
+	d := daemon.New(o, l, r, m.Registry())
+	defer d.Close()
 	c := lifecycle.New(l)
 
-	for _, w := range v.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
-	}
-
-	c.WithWorker(k)
-
-	if o.Netbox != nil {
-		c.WithWorker(reconciler.New(v, constant.ReconcileInterval, l, r))
 	}
 
 	c.WithServer(
@@ -53,9 +42,9 @@ func Run(
 		server.New(
 			constant.Identity,
 			o.Address,
-			func(m *http.ServeMux) {
-				Mount(v, b, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+			func(x *http.ServeMux) {
+				d.Mount(r, s.Recorder(), guard.New(x, o.ServiceTokens))
 			},
-		).WithMiddleware(b.Recovery(r)),
+		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()
 }

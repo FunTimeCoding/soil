@@ -11,7 +11,7 @@ import (
 
 func TestAStoreFaultCarriesItsOwnText(t *testing.T) {
 	o := web_service_tester.New(t)
-	o.Service().Close()
+	o.Daemon().Close()
 	r, e := o.Client.GetAlertsWithResponse(
 		context.Background(),
 		&client.GetAlertsParams{Name: "HighMemory"},

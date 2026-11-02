@@ -1,7 +1,7 @@
 package watcher
 
 import (
-	mattermostFace "github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+	chat "github.com/funtimecoding/soil/pkg/chat/face"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
@@ -13,7 +13,7 @@ import (
 )
 
 type Watcher struct {
-	client   mattermostFace.Client
+	client   chat.MattermostClient
 	guard    *peer.Guard
 	store    *store.Store
 	logger   *logger.Logger

@@ -15,7 +15,7 @@ func BookmarkSearch() {
 	a.ParseSimple()
 	search := a.RequiredPositional(0, "NAME")
 	bookmarkType := a.GetString(argumentConstant.Type)
-	b := brave.Bookmark(constant.DefaultProfile)
+	b := brave.MustBookmark(constant.DefaultProfile)
 	f := constant.Format
 	root := node.New(b.Root.Bar)
 	results := node.FindAllByNameAndType(root, search, bookmarkType)

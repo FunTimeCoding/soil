@@ -2,7 +2,6 @@ package cross_service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/event/notifier"
-	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
@@ -15,14 +14,9 @@ func New(t *testing.T) *Tester {
 	coordinator := base.New(t)
 	now := time.Now().UTC()
 	v := service.New(
-		store_tester.NewOption(
-			t,
-			func() time.Time { return now },
-			notifier.New(),
-		),
-		logger.New(t.Context()),
+		store_tester.NewStore(t, func() time.Time { return now }),
+		notifier.New(),
 	)
-	t.Cleanup(v.Close)
 
 	return &Tester{
 		t:           t,

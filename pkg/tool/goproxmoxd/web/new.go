@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -14,7 +14,7 @@ import (
 )
 
 func New(
-	v face.Service,
+	i *instance.Inventory,
 	k *worker.Worker,
 ) *Server {
 	r := registry.New()
@@ -27,8 +27,8 @@ func New(
 	)
 
 	return &Server{
-		service:  v,
-		worker:   k,
+		inventory: i,
+		worker:    k,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"database/sql"
 	"github.com/funtimecoding/soil/pkg/chromium"
 	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -13,35 +12,31 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
-	"gorm.io/gorm"
-	"sync"
 	"sync/atomic"
 	"time"
 )
 
 type Service struct {
-	database          *gorm.DB
-	searchDatabase    *sql.DB
-	exportPath        string
-	closeOnce         sync.Once
-	store             *store.Store
-	client            face.ClaudeSource
-	memory            memoryd.Client
-	memoryGuard       *peer.Guard
-	queryGuard        *peer.Guard
-	query             queryd.Client
-	search            *search_index.Index
-	searchIndexed     atomic.Int64
-	searchTotal       atomic.Int64
-	notifier          face.Notifier
-	reporter          library.Reporter
-	clock             func() time.Time
-	logger            *logger.Logger
-	harbor            string
+	exportPath          string
+	store               *store.Store
+	client              face.ClaudeSource
+	memory              memoryd.Client
+	memoryGuard         *peer.Guard
+	queryGuard          *peer.Guard
+	query               queryd.Client
+	search              *search_index.Index
+	searchIndexed       atomic.Int64
+	searchTotal         atomic.Int64
+	notifier            face.Notifier
+	reporter            library.Reporter
+	clock               func() time.Time
+	logger              *logger.Logger
+	harbor              string
+	sources             func() []string
 	cache             *session_cache.Cache
-	browser           *chromium.Client
-	browserMutex      sync.Mutex
-	lastMemoryPoll    string
-	usageUnreadable   bool
-	stop              *stopper.Stopper
+	browser             *chromium.Client
+	utilizationFallback bool
+	lastMemoryPoll      string
+	usageUnreadable     bool
+	stop                *stopper.Stopper
 }

@@ -14,7 +14,7 @@ func (s *Service) Series(
 		s,
 		x,
 		instance,
-		func(c face.Client) (v1.TSDBResult, error) {
+		func(c face.PrometheusClient) (v1.TSDBResult, error) {
 			return c.Series()
 		},
 	)

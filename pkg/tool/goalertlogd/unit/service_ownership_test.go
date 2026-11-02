@@ -4,27 +4,103 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
+	toolConstant "github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	"go.uber.org/goleak"
 	"testing"
 	"time"
 )
 
-func TestTheServiceClosesWhatItBuilt(t *testing.T) {
+func TestTheDaemonClosesWhatItBuilt(t *testing.T) {
 	c := service_tester.NewAlertmanager(t)
-	v := service.New(
+	d := service_tester.NewDaemon(
+		t,
 		service_tester.NewOption(service_tester.DatabasePath(t), c),
-		logger.New(t.Context()),
 		memory.New(),
 	)
-	v.Close()
-	v.Close()
+	d.Close()
+	d.Close()
 	assert.Integer(t, 1, c.Closed)
-	_, e := v.Status()
-	assert.StringContains(t, "database is closed", e.Error())
+}
+
+func TestTheDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
+	workers := service_tester.NewDaemon(
+		t,
+		service_tester.NewOption(
+			service_tester.DatabasePath(t),
+			service_tester.NewAlertmanager(t),
+		),
+		memory.New(),
+	).Workers()
+	assert.Count(t, 2, workers)
+	_, guard := workers[0].(*peer.Guard)
+	assert.True(t, guard)
+	_, clock := workers[1].(*worker.Worker)
+	assert.True(t, clock)
+}
+
+func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+	o := service_tester.NewOption(
+		service_tester.DatabasePath(t),
+		service_tester.NewAlertmanager(t),
+	)
+	before := goleak.IgnoreCurrent()
+	d := service_tester.NewDaemon(t, o, memory.New())
+	workers := d.Workers()
+
+	for _, w := range workers {
+		w.Start()
+	}
+
+	for _, w := range workers {
+		w.Close()
+	}
+
+	d.Close()
+	goleak.VerifyNone(t, before)
+}
+
+func TestARecordStampsTheLastPollAndNotifies(t *testing.T) {
+	n := notifier.New()
+	changes := n.Subscribe()
+	defer n.Unsubscribe(changes)
+	v := service_tester.NewServiceWith(
+		t,
+		service_tester.DatabasePath(t),
+		service_tester.NewAlertmanager(t),
+		toolConstant.Retention,
+		n,
+	)
+	assert.True(t, v.LastPoll().IsZero())
+	now := time.Date(2026, time.November, 2, 6, 0, 0, 0, time.UTC)
+	_, e := v.Record(now)
+	assert.FatalOnError(t, e)
+	assert.True(t, v.LastPoll().Equal(now))
+	assert.Integer(t, 1, len(changes))
+}
+
+func TestAFailedRecordStillStampsAndNotifies(t *testing.T) {
+	c := service_tester.NewAlertmanager(t)
+	c.Fail(errors.Format("alertmanager refused", "test"))
+	n := notifier.New()
+	changes := n.Subscribe()
+	defer n.Unsubscribe(changes)
+	v := service_tester.NewServiceWith(
+		t,
+		service_tester.DatabasePath(t),
+		c,
+		toolConstant.Retention,
+		n,
+	)
+	_, e := v.Record(time.Now())
+	assert.NotNil(t, e)
+	assert.False(t, v.LastPoll().IsZero())
+	assert.Integer(t, 1, len(changes))
 }
 
 func TestARecordReportsWhatItChanged(t *testing.T) {

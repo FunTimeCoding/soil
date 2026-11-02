@@ -5,35 +5,46 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/types/report"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fixed_generator"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fake_parser"
+	"path/filepath"
+	"strings"
 	"testing"
 )
 
 func TestGenerateReturnsTheReport(t *testing.T) {
-	c := mountedClient(t, fixed_generator.New(report.New("bravo.html", 2), nil))
-	result, e := c.PostGenerate(t.Context(), []string{"charlie.json"}, nil)
+	c := mountedClient(t, fake_parser.New(2, nil))
+	result, e := c.PostGenerate(
+		t.Context(),
+		[]string{inputFile(t, "charlie.zevtc")},
+		nil,
+	)
 	assert.FatalOnError(t, e)
-	assert.String(t, "bravo.html", result.Path)
+	assert.True(t, strings.HasPrefix(filepath.Base(result.Path), "ONYX Log "))
 	assert.Integer(t, 2, result.TidCount)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
 func TestAMissingInputFileIsNotFound(t *testing.T) {
-	c := mountedClient(
-		t,
-		fixed_generator.New(nil, not_found.New("input file", "delta.json")),
-	)
-	_, e := c.PostGenerate(t.Context(), []string{"delta.json"}, nil)
+	c := mountedClient(t, fake_parser.New(1, nil))
+	absent := filepath.Join(t.TempDir(), "delta.zevtc")
+	_, e := c.PostGenerate(t.Context(), []string{absent}, nil)
 	assert.True(t, not_found.Is(e))
-	assert.StringContains(t, "delta.json", e.Error())
+	assert.StringContains(t, "delta.zevtc", e.Error())
+}
+
+func TestNoFilesAreTheCallersMistake(t *testing.T) {
+	c := mountedClient(t, fake_parser.New(1, nil))
+	_, e := c.PostGenerate(t.Context(), []string{}, nil)
+	assert.True(t, validation.Is(e))
 }
 
 func TestAFailedGenerateIsUnexpected(t *testing.T) {
-	c := mountedClient(
-		t,
-		fixed_generator.New(nil, errors.New("echo parse failed")),
+	c := mountedClient(t, fake_parser.New(0, errors.New("echo parse failed")))
+	_, e := c.PostGenerate(
+		t.Context(),
+		[]string{inputFile(t, "echo.zevtc")},
+		nil,
 	)
-	_, e := c.PostGenerate(t.Context(), []string{"charlie.json"}, nil)
 	assert.True(t, unexpected.Is(e))
 }

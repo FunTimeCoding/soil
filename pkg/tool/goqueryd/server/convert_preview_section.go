@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/preview_section"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/preview_section"
 )
 
 func convertPreviewSection(x *preview_section.Section) server.PreviewSection {

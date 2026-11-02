@@ -14,7 +14,7 @@ func (o *Tester) CreateCluster() {
 		constant.FixtureLocalDomain,
 	}
 	address := []string{constant.FixtureAddress}
-	_, e := o.Server.Service.CreateAuthority(
+	_, e := o.Service.CreateAuthority(
 		&server.AuthorityBody{
 			Name:             constant.FixtureClusterAuthority,
 			Kind:             server.AuthorityKind(constant.KindIntermediate),

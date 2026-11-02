@@ -24,7 +24,7 @@ type Runner struct {
 	reporter       face.Reporter
 	registry       face.ProcessRegistry
 	metrics        *metric.Metric
-	kubernetes     kubernetesFace.Client
+	kubernetes     kubernetesFace.KubernetesClient
 	stateNamespace string
 	stateLeaseName string
 	pending        *change.Change

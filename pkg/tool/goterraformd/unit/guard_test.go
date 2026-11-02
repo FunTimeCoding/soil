@@ -7,9 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/service"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
@@ -20,21 +19,21 @@ import (
 func TestGuard(t *testing.T) {
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
-	o.Cluster = func() face.Client { return mock_client.New() }
-	s := service.New(
+	o.Cluster = func() face.KubernetesClient { return mock_client.New() }
+	d := daemon.New(
 		o,
 		logger.New(t.Context()),
 		memory.New(),
 		prometheus.NewRegistry(),
 	)
-	t.Cleanup(s.Close)
+	t.Cleanup(d.Close)
 	v := model_context_server.New(
 		t,
 		func(
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goterraformd.Mount(s, memory.New(), mock_recorder.New(), g)
+			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()

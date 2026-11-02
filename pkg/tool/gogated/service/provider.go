@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"crypto/rsa"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/option"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/store"
 	"github.com/ory/fosite"
 	"github.com/ory/fosite/compose"
@@ -12,16 +11,17 @@ import (
 )
 
 func provider(
-	o *option.Option,
+	secret string,
+	issuer string,
 	s *store.Store,
 	signingKey *rsa.PrivateKey,
 ) fosite.OAuth2Provider {
 	c := &fosite.Config{
-		GlobalSecret:          []byte(o.Secret),
+		GlobalSecret:          []byte(secret),
 		AccessTokenLifespan:   time.Hour,
 		RefreshTokenLifespan:  30 * 24 * time.Hour,
 		AuthorizeCodeLifespan: 10 * time.Minute,
-		IDTokenIssuer:         o.Issuer,
+		IDTokenIssuer:         issuer,
 		EnforcePKCE:           true,
 		ScopeStrategy:         fosite.WildcardScopeStrategy,
 	}

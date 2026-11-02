@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/recovering_clientset"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,7 +30,13 @@ func TestOneUnreachableClusterLeavesTheOthersAnswering(t *testing.T) {
 	up := service_tester.New(t)
 	s := service_tester.NewService(
 		t,
-		map[string]*cluster.Cluster{"test": down.Cluster, "lima": up.Cluster},
+		service_tester.NewOption(
+			t,
+			map[string]*cluster.Cluster{
+				"test": down.Cluster,
+				"lima": up.Cluster,
+			},
+		),
 	)
 	list := request.List{ResourceType: "pod", Namespace: "default"}
 	_, e := s.ListResources(t.Context(), "test", list)
@@ -61,13 +67,4 @@ func TestAClusterThatFailsDiscoveryRecoversOnTheNextCall(t *testing.T) {
 	_, namespaced, f := c.ResolveResource("pod")
 	assert.FatalOnError(t, f)
 	assert.True(t, namespaced)
-}
-
-func TestTheServiceHandsOneGuardPerClusterToTheLifecycle(t *testing.T) {
-	a := service_tester.New(t)
-	s := service_tester.NewService(
-		t,
-		map[string]*cluster.Cluster{"test": a.Cluster, "november": a.Cluster},
-	)
-	assert.Count(t, 2, s.Workers())
 }

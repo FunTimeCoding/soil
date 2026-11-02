@@ -24,9 +24,9 @@ func TestTheMockAnswersWhatTheServerAnswers(t *testing.T) {
 		)
 	}
 
-	s.Worker.Poll()
+	s.Clock.Poll()
 	s.MockClient.Remove("fp1")
-	s.Worker.Poll()
+	s.Clock.Poll()
 	c := s.AlertClient(t)
 	m := mirrorAlerts(t, c)
 	defer m.Close()

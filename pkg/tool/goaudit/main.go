@@ -22,9 +22,9 @@ func Main() {
 	)
 	a.Boolean(argumentConstant.Web, false, "Print what each web frontend uses")
 	a.Boolean(
-		constant.ServiceFlag,
+		constant.DaemonFlag,
 		false,
-		"Include the service shape rule (default on where strata/tool/goaudit.yaml sets service: true)",
+		"Report lifecycle daemons without daemon/ (default on where strata/tool/goaudit.yaml sets daemon: true)",
 	)
 	a.Parse()
 	roots := a.Positionals()
@@ -55,6 +55,6 @@ func Main() {
 	o.Roots = roots
 	o.Table = a.GetBoolean(argumentConstant.Table)
 	o.Web = a.GetBoolean(argumentConstant.Web)
-	o.Service = a.GetBoolean(constant.ServiceFlag)
+	o.Daemon = a.GetBoolean(constant.DaemonFlag)
 	Run(o)
 }

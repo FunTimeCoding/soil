@@ -1,26 +1,29 @@
 package unit
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"net/http"
 	"testing"
 )
 
 func TestAnUnknownMemoryIsAnsweredNotFound(t *testing.T) {
-	m := memory.New()
-	r, e := server.New(service_tester.New(t).Service, m).DeleteMemory(
-		context.Background(),
-		generated.DeleteMemoryRequestObject{Identifier: 999},
+	s := base.New(t)
+	c, e := client.NewClientWithResponses(
+		s.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.Client()),
+		client.WithRequestEditorFn(
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
+		),
 	)
 	assert.FatalOnError(t, e)
-	assert.Any(
-		t,
-		generated.DeleteMemory404JSONResponse{Error: "memory not found: 999"},
-		r,
-	)
-	assert.Count(t, 0, m.Events())
+	r, f := c.DeleteMemoryWithResponse(t.Context(), 999, nil)
+	assert.FatalOnError(t, f)
+	assert.Integer(t, http.StatusNotFound, r.StatusCode())
+	assert.String(t, "memory not found: 999", r.JSON404.Error)
+	assert.Count(t, 0, s.Reporter.Events())
 }

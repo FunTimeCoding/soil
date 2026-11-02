@@ -52,7 +52,8 @@ func TestClientCloseAfterAcquireOnBusyPageKeepsTabOpen(t *testing.T) {
 func TestClientCloseLeavesAcquiredContextUncancelled(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
-	x := s.Client.TargetContext(identifier)
+	x, f := s.Client.TargetContext(identifier)
+	assert.FatalOnError(t, f)
 	assert.StringContains(t, "quiet", s.Body(identifier))
 	s.Client.Close()
 	assert.Nil(t, x.Err())
@@ -167,7 +168,9 @@ func TestSharedClientReuseKeepsTab(t *testing.T) {
 func TestCancelDerivedTargetContextKeepsTab(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
-	x, cancel := context.WithCancel(s.Client.TargetContext(identifier))
+	target, f := s.Client.TargetContext(identifier)
+	assert.FatalOnError(t, f)
+	x, cancel := context.WithCancel(target)
 	body, e := chromedp.Run(x, chromedp.OuterHTML(constant.BodySelector))
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "quiet", body)
@@ -210,10 +213,9 @@ func TestTargetCachePrunesOnDestroy(t *testing.T) {
 func TestFirstCallUnderDerivedDeadlineStrandsTarget(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
-	x, cancel := context.WithTimeout(
-		s.Client.TargetContext(identifier),
-		constant.FixtureEventTimeout,
-	)
+	target, f := s.Client.TargetContext(identifier)
+	assert.FatalOnError(t, f)
+	x, cancel := context.WithTimeout(target, constant.FixtureEventTimeout)
 	_, e := chromedp.Run(x, chromedp.Evaluate[int](constant.FixtureSum))
 	assert.FatalOnError(t, e)
 	cancel()

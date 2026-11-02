@@ -11,7 +11,7 @@ func (s *Service) UpdateMachine(
 	instance string,
 	a *update_machine.Machine,
 ) error {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return clientFail

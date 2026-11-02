@@ -47,4 +47,7 @@ const (
 	EnrichCutoffDays     = 14
 	FileDateLayout       = "20060102"
 	FileDatePrefixLength = 8
+
+	CleanupHour   = 5
+	CleanupMinute = 0
 )

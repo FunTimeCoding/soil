@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/report"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/report"
 )
 
 func reportLines(r *report.Report) []string {

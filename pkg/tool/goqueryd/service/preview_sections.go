@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/preview_block"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/preview_section"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/section/parser"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/preview_block"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/preview_section"
 )
 
 func (s *Service) previewSections(body string) []*preview_section.Section {

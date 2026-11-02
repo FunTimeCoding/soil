@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -16,13 +15,12 @@ func (t *Tester) Mounted(
 ) (*model_context_client.Client, *memory.Memory) {
 	t.t.Helper()
 	r := memory.New()
+	t.Option.ReadOnly = readOnly
+	d := NewDaemon(t.t, t.Option, r)
 	v := model_context_server.New(
 		t.t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
-			gokubernetesd.Mount(t.Service, readOnly, r, mock_recorder.New(), g)
+		func(_ *http.ServeMux, g *guard.Mux) {
+			d.Mount(r, mock_recorder.New(), g)
 		},
 	)
 	t.t.Cleanup(v.Close)

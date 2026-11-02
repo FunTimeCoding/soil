@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/literal"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern_site"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/location"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/literal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/pattern_site"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result/location"
 	"go/token"
 	"os"
 )

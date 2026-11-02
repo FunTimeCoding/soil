@@ -14,6 +14,8 @@ const (
 	WrapsCondition    = "wraps"
 	DirectivePrefix   = "//go:"
 	ByValueDirective  = "//goanalyze:by-value"
+	DaemonPackage     = "daemon"
+	ServiceDirectory  = "service"
 )
 
 const (

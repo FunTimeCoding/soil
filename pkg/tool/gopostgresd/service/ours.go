@@ -2,10 +2,10 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/caller_left"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/caller_left"
 )
 
 func ours(

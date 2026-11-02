@@ -14,7 +14,7 @@ import (
 
 func Pipeline(
 	o *option.Clean,
-	c face.Forge,
+	c face.GitLabClient,
 	p *project.Project,
 ) {
 	branches := c.MustBranches(p.Identifier)

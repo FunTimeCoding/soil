@@ -6,6 +6,6 @@ import (
 )
 
 type Service struct {
-	client face.Client
+	client face.HabiticaClient
 	guard  *peer.Guard
 }

@@ -32,6 +32,7 @@ const (
 	ListCalls            = "list_calls"
 	ChangeVisibility     = "change_visibility"
 	RenameSymbol         = "rename_symbol"
+	RenameSymbols        = "rename_symbols"
 	MoveSymbol           = "move_symbol"
 	MoveSymbols          = "move_symbols"
 	ExtractType          = "extract_type"
@@ -42,6 +43,7 @@ const (
 	ExtractToFile        = "extract_to_file"
 	AddImport            = "add_import"
 	RemoveImport         = "remove_import"
+	RetargetReferences   = "retarget_references"
 	RemoveParameters     = "remove_parameters"
 )
 

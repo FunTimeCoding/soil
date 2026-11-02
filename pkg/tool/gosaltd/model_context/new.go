@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
-	salt "github.com/funtimecoding/soil/pkg/tool/gosaltd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/service"
 )
 
 func New(
-	v salt.Salt,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

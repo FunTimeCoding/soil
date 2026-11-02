@@ -26,8 +26,8 @@ func New(t *testing.T) *Tester {
 		t:        t,
 		server:   s,
 		Client:   c,
-		Recorder: s.Recorder,
-		Service:  s.Service,
+		Store:    s.Store,
+		Daemon:   s.Daemon,
 		Reporter: s.Reporter,
 	}
 }

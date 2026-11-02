@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) listenTargets() error {
-	return c.Watch(
+	return c.subscribe(
 		func(e *event.Event) {
 			if e.Kind != constant.EventKindDestroyed {
 				return

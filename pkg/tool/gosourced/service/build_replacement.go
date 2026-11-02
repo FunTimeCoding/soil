@@ -6,8 +6,8 @@ import (
 	"github.com/dave/dst/decorator"
 	"github.com/dave/dst/dstutil"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/match"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/match"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 )

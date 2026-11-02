@@ -3,8 +3,8 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory_payload"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/memory_payload"
 	"strconv"
 )
 

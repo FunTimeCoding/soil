@@ -11,14 +11,15 @@ import (
 
 func (s *Server) event() http.HandlerFunc {
 	return layout.HandleServerSideEventWithRequest(
-		s.worker.Notifier(),
+		s.notifier,
 		func(
 			w http.ResponseWriter,
 			f http.Flusher,
 			r *http.Request,
 		) {
 			subs := subscription.Parse(r)
-			issues := s.worker.Issues()
+			p := s.service.CurrentPlate()
+			issues := p.Issues
 
 			if subs.Has(constant.SummaryEvent) {
 				layout.PushEvent(
@@ -32,10 +33,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.NewestEvent,
-					plate_page.IssuesSection(
-						constant.NewestTitle,
-						s.worker.Newest(),
-					),
+					plate_page.IssuesSection(constant.NewestTitle, p.Newest),
 				)
 			}
 
@@ -53,7 +51,7 @@ func (s *Server) event() http.HandlerFunc {
 					constant.WatchedIssuesEvent,
 					plate_page.IssuesSection(
 						constant.WatchedIssuesTitle,
-						s.worker.WatchedIssues(),
+						p.WatchedIssues,
 					),
 				)
 			}
@@ -64,7 +62,7 @@ func (s *Server) event() http.HandlerFunc {
 					constant.FavoritesEvent,
 					plate_page.PagesSection(
 						constant.FavoritesTitle,
-						s.worker.Favorites(),
+						p.Favorites,
 					),
 				)
 			}
@@ -75,7 +73,7 @@ func (s *Server) event() http.HandlerFunc {
 					constant.WatchedPagesEvent,
 					plate_page.PagesSection(
 						constant.WatchedPagesTitle,
-						s.worker.Watched(),
+						p.Watched,
 					),
 				)
 			}

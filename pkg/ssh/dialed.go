@@ -1,14 +1,14 @@
 package ssh
 
 import (
+	"fmt"
 	"golang.org/x/crypto/ssh"
-	"log"
 )
 
-func (c *Client) dialed() *ssh.Client {
+func (c *Client) dialed() (*ssh.Client, error) {
 	if c.client == nil {
-		log.Panicf("client not dialed: %s", c.host)
+		return nil, fmt.Errorf("client not dialed: %s", c.host)
 	}
 
-	return c.client
+	return c.client, nil
 }

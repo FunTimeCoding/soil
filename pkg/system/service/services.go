@@ -6,7 +6,7 @@ import (
 	"runtime"
 )
 
-func (c *Client) Services() []*service.Service {
+func (c *Client) Services() ([]*service.Service, error) {
 	if runtime.GOOS == constant.Darwin {
 		return c.launchServices()
 	}

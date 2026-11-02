@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/token"
 	"sort"
 )

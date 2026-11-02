@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/history_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"

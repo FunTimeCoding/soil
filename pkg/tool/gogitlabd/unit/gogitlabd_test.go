@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/response"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 	"testing"
 )
@@ -123,7 +123,7 @@ func TestModelContextResponseJobOmitsProjectAndRaw(t *testing.T) {
 }
 
 func TestMergeRequestsUnionKeepsBothRoles(t *testing.T) {
-	r := worker.MergeRequests(
+	r := service.MergeRequests(
 		[]*merge_request.Request{newRequest(1, 10, "assigned", 1)},
 		[]*merge_request.Request{newRequest(2, 20, "reviewing", 2)},
 	)
@@ -131,7 +131,7 @@ func TestMergeRequestsUnionKeepsBothRoles(t *testing.T) {
 }
 
 func TestMergeRequestsDeduplicatesAcrossRoles(t *testing.T) {
-	r := worker.MergeRequests(
+	r := service.MergeRequests(
 		[]*merge_request.Request{newRequest(1, 10, "both", 1)},
 		[]*merge_request.Request{newRequest(1, 10, "both", 1)},
 	)
@@ -139,7 +139,7 @@ func TestMergeRequestsDeduplicatesAcrossRoles(t *testing.T) {
 }
 
 func TestMergeRequestsSeparatesSameIdentifierInDifferentProjects(t *testing.T) {
-	r := worker.MergeRequests(
+	r := service.MergeRequests(
 		[]*merge_request.Request{newRequest(1, 10, "first", 1)},
 		[]*merge_request.Request{newRequest(2, 10, "second", 2)},
 	)
@@ -147,7 +147,7 @@ func TestMergeRequestsSeparatesSameIdentifierInDifferentProjects(t *testing.T) {
 }
 
 func TestMergeRequestsNewestFirst(t *testing.T) {
-	r := worker.MergeRequests(
+	r := service.MergeRequests(
 		[]*merge_request.Request{
 			newRequest(1, 10, "older", 9),
 			newRequest(1, 11, "newest", 1),
@@ -159,7 +159,7 @@ func TestMergeRequestsNewestFirst(t *testing.T) {
 }
 
 func TestMergeRequestsCapsAtThree(t *testing.T) {
-	r := worker.MergeRequests(
+	r := service.MergeRequests(
 		[]*merge_request.Request{
 			newRequest(1, 10, "one", 1),
 			newRequest(1, 11, "two", 2),

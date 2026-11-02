@@ -1,16 +1,15 @@
 package worker
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/soil/pkg/tool/gogithubd/face"
+	"github.com/funtimecoding/soil/pkg/github/run"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/types/run_key"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
-	"time"
 )
 
 type Worker struct {
-	service  face.Latest
-	interval time.Duration
-	gauge    *prometheus.GaugeVec
-	recovery *recovery.Recovery
-	stop     chan struct{}
+	latest func() (map[run_key.Key]*run.Run, error)
+	owner  string
+	gauge  *prometheus.GaugeVec
+	clock  *worker.Worker
 }

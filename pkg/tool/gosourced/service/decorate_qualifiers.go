@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"go/token"
 )
 

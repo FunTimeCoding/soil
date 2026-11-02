@@ -34,8 +34,39 @@ func TestStems(t *testing.T) {
 	assert.Strings(t, []string{"read", "reade"}, dictionary.Stems("reading"))
 	assert.Strings(t, []string{"test", "teste"}, dictionary.Stems("tester"))
 	assert.Strings(t, []string{"alfa"}, dictionary.Stems("alfas"))
+	assert.Strings(
+		t,
+		[]string{"drop", "dropp", "droppe"},
+		dictionary.Stems("dropped"),
+	)
+	assert.Strings(
+		t,
+		[]string{"embed", "embedd", "embedde"},
+		dictionary.Stems("embedding"),
+	)
+	assert.Strings(t, []string{"new", "newe"}, dictionary.Stems("newest"))
+	assert.Strings(
+		t,
+		[]string{"verifi", "verifie", "verify"},
+		dictionary.Stems("verified"),
+	)
+	assert.Strings(
+		t,
+		[]string{"heavi", "heavie", "heavy"},
+		dictionary.Stems("heavier"),
+	)
+	assert.Strings(t, []string{"add", "adde"}, dictionary.Stems("added"))
 	assert.Strings(t, nil, dictionary.Stems("as"))
 	assert.Strings(t, nil, dictionary.Stems("ids"))
+}
+
+func TestTrimDigits(t *testing.T) {
+	assert.String(t, "user", dictionary.TrimDigits("user2"))
+	assert.String(t, "arm", dictionary.TrimDigits("arm64"))
+	assert.String(t, "zulu", dictionary.TrimDigits("zulu2"))
+	assert.String(t, "x7", dictionary.TrimDigits("x7"))
+	assert.String(t, "ab12", dictionary.TrimDigits("ab12"))
+	assert.String(t, "alfa", dictionary.TrimDigits("alfa"))
 }
 
 func TestMerge(t *testing.T) {

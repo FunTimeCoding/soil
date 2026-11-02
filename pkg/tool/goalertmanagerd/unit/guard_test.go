@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -17,12 +16,7 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goalertmanagerd.Mount(
-				healthy(t),
-				memory.New(),
-				mock_recorder.New(),
-				g,
-			)
+			healthyDaemon(t).Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()

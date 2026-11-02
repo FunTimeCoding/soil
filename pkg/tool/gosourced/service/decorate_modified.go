@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"

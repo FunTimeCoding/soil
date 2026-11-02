@@ -8,9 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gogithubd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gogithubd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -22,9 +21,15 @@ func Run(
 	r := i.Reporter()
 	l := logger.New(context.Background())
 	m := metric.New()
-	v := service.New(o)
-	defer v.Close()
-	lifecycle.New(l).WithServer(
+	d := daemon.New(o, l, r, m)
+	defer d.Close()
+	c := lifecycle.New(l)
+
+	for _, w := range d.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.MetricAddress,
@@ -32,7 +37,5 @@ func Run(
 				x.Handle(webConstant.MetricsPath, m.Exporter())
 			},
 		).WithVerbose(o.Verbose),
-	).WithWorker(
-		worker.New(v, constant.PollInterval, m.Registry(), l, r),
 	).RunUntilSignal()
 }

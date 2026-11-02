@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service/response"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/response"
 	"testing"
 )
 

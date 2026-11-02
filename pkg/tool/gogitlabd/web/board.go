@@ -14,7 +14,7 @@ func (s *Server) board(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	entries := s.worker.Entries()
+	entries := s.service.Entries()
 	multiple := s.multiple()
 	s.view.RenderLivePageWithSummary(
 		w,
@@ -28,7 +28,7 @@ func (s *Server) board(
 		board_page.Summary(entries),
 		html.Div(
 			extended.StreamSwap(constant.RequestEvent),
-			board_page.Requests(s.worker.Requests(), multiple),
+			board_page.Requests(s.service.Requests(), multiple),
 		),
 		html.H3(gomponents.Text(constant.BoardTitle)),
 		html.Div(

@@ -11,7 +11,7 @@ func (o *Tester) CreateRoot() {
 	country := constant.FixtureCountry
 	province := constant.FixtureProvince
 	organization := constant.FixtureOrganization
-	_, e := o.Server.Service.CreateAuthority(
+	_, e := o.Service.CreateAuthority(
 		&server.AuthorityBody{
 			Name:         constant.RootAuthority,
 			Kind:         server.AuthorityKind(constant.KindRoot),

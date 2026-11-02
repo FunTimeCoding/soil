@@ -20,12 +20,10 @@ func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 	)
 	assert.Any(t, "alfa", result[constant.ParameterRoot])
 	assert.Any(t, "bravo", result["channel"])
-	stored, e := r.Server.Service.Subscriptions("kilo")
-	assert.FatalOnError(t, e)
+	stored := r.Server.Store.MustByCallsign("kilo")
 	assert.Integer(t, 1, len(stored))
 	assert.String(t, "papa", stored[0].Alias)
 	assert.String(t, "bravo", stored[0].ChannelIdentifier)
-	assert.True(t, r.Server.Service.Watching("alfa"))
 }
 
 func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
@@ -38,8 +36,7 @@ func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
 		},
 	)
 	assert.Any(t, "alfa", result[constant.ParameterRoot])
-	stored, e := r.Server.Service.Subscriptions("kilo")
-	assert.FatalOnError(t, e)
+	stored := r.Server.Store.MustByCallsign("kilo")
 	assert.String(t, "alfa", stored[0].RootIdentifier)
 }
 
@@ -51,9 +48,7 @@ func TestSubscribeThreadIsIdempotent(t *testing.T) {
 	}
 	r.Client.MustCallTool(constant.SubscribeThread, arguments)
 	r.Client.MustCallTool(constant.SubscribeThread, arguments)
-	stored, e := r.Server.Service.Subscriptions("kilo")
-	assert.FatalOnError(t, e)
-	assert.Integer(t, 1, len(stored))
+	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("kilo")))
 }
 
 func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
@@ -83,7 +78,7 @@ func TestSubscribeThreadRejectsEmptyCallsign(t *testing.T) {
 	)
 }
 
-func TestUnsubscribeThreadForgetsWhenLastSubscriberLeaves(t *testing.T) {
+func TestUnsubscribeThreadRemovesEachSubscription(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	r.Client.MustCallTool(
 		constant.SubscribeThread,
@@ -106,7 +101,8 @@ func TestUnsubscribeThreadForgetsWhenLastSubscriberLeaves(t *testing.T) {
 			constant.ParameterCallsign: "kilo",
 		},
 	)
-	assert.True(t, r.Server.Service.Watching("alfa"))
+	assert.Integer(t, 0, len(r.Server.Store.MustByCallsign("kilo")))
+	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("lima")))
 	r.Client.MustCallTool(
 		constant.UnsubscribeThread,
 		map[string]any{
@@ -114,10 +110,7 @@ func TestUnsubscribeThreadForgetsWhenLastSubscriberLeaves(t *testing.T) {
 			constant.ParameterCallsign: "lima",
 		},
 	)
-	assert.False(t, r.Server.Service.Watching("alfa"))
-	lima, e := r.Server.Service.Subscriptions("lima")
-	assert.FatalOnError(t, e)
-	assert.Integer(t, 0, len(lima))
+	assert.Integer(t, 0, len(r.Server.Store.MustByCallsign("lima")))
 }
 
 func TestListSubscriptionsReturnsLabels(t *testing.T) {

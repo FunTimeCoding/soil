@@ -1,9 +1,9 @@
 package mattermost_notifier
 
-import "github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+import "github.com/funtimecoding/soil/pkg/chat/face"
 
 func New(
-	m face.Client,
+	m face.MattermostClient,
 	channel string,
 	prefix string,
 ) *Notifier {

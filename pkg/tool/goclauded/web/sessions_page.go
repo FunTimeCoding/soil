@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/enriched_session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"

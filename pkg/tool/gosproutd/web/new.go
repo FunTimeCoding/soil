@@ -17,6 +17,7 @@ import (
 
 func New(
 	s *service.Service,
+	n face.EventNotifier,
 	f face.Reporter,
 ) *Server {
 	r := registry.New()
@@ -35,6 +36,7 @@ func New(
 
 	return &Server{
 		service:  s,
+		notifier: n,
 		reporter: f,
 		registry: r,
 		view: view.New(

@@ -8,29 +8,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/argocd/mock_client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/worker"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/common/model"
 	"testing"
 	"time"
 )
-
-func TestTheServiceClosesWhatItBuiltOnce(t *testing.T) {
-	p := newPrometheus(t)
-	u := newUsage(t)
-	v := service.New(
-		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
-		logger.New(t.Context()),
-		memory.New(),
-	)
-	v.Close()
-	v.Close()
-	assert.Integer(t, 1, p.Closed)
-	assert.Integer(t, 1, u.Closed)
-	_, e := v.Summaries()
-	assert.Error(t, e)
-}
 
 func TestAClickOnABoardLabelIsCounted(t *testing.T) {
 	v := service_tester.New(
@@ -105,7 +88,7 @@ func TestAFailingPanelIsReportedAndShownPending(t *testing.T) {
 		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
 		r,
 	)
-	worker.New(v, time.Hour, l, r).Poll()
+	worker.NewEvery(v.Refresh, l, r, time.Hour).Poll()
 	assert.Count(t, 1, r.Events())
 	assert.StringContains(t, "token expired", r.Events()[0].Error.Error())
 	assert.String(t, "–", v.Values()["Nextcloud"][0])

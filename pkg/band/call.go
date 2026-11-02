@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/band/response"
 	"github.com/funtimecoding/soil/pkg/digest"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"io"
 	"net/http"
@@ -34,7 +33,7 @@ func (c *Client) call(
 	challenge, f := c.client.Do(first)
 
 	if f != nil {
-		return nil, f
+		return nil, transport(f)
 	}
 
 	if challenge.StatusCode == http.StatusOK {
@@ -46,10 +45,10 @@ func (c *Client) call(
 	}
 
 	if challenge.StatusCode != http.StatusUnauthorized {
-		return nil, unexpected.Format(
-			"band %s: expected digest challenge, got %s",
+		return nil, refused(
 			resource,
-			challenge.Status,
+			challenge.StatusCode,
+			join.Space("expected digest challenge, got", challenge.Status),
 		)
 	}
 
@@ -77,7 +76,7 @@ func (c *Client) call(
 	r, h := c.client.Do(second)
 
 	if h != nil {
-		return nil, h
+		return nil, transport(h)
 	}
 
 	body, i := io.ReadAll(r.Body)
@@ -94,14 +93,10 @@ func (c *Client) call(
 		var fault response.Fault
 
 		if xml.Unmarshal(body, &fault) == nil && fault.Text != "" {
-			return nil, unexpected.Format(
-				"band %s: fault %s",
-				resource,
-				fault.Text,
-			)
+			return nil, faulted(resource, fault)
 		}
 
-		return nil, unexpected.Format("band %s: %s", resource, r.Status)
+		return nil, refused(resource, r.StatusCode, r.Status)
 	}
 
 	return body, nil

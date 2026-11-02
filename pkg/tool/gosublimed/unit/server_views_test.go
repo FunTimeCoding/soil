@@ -3,68 +3,43 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generated "github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/server"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
+	"net/http"
 	"testing"
 )
 
 func TestViewLifecycle(t *testing.T) {
-	s := server.New(service_tester.New(t, mock_client.New()), memory.New())
-	created, e := s.CreateView(
+	c := restClient(t)
+	created, e := c.CreateViewWithResponse(
 		context.Background(),
-		generated.CreateViewRequestObject{
-			Body: &generated.CreateViewJSONRequestBody{
-				Title:   "notes",
-				Content: "alfa",
-			},
-		},
+		client.CreateViewJSONRequestBody{Title: "notes", Content: "alfa"},
 	)
-	assert.Nil(t, e)
-	v := generated.View(created.(generated.CreateView200JSONResponse))
-	assert.Integer(t, 1, v.ViewId)
-	assert.String(t, "notes", v.Title)
-	list, e := s.GetViews(
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, created.JSON200)
+	assert.Integer(t, 1, created.JSON200.ViewId)
+	assert.String(t, "notes", created.JSON200.Title)
+	list, e := c.GetViewsWithResponse(context.Background())
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, list.JSON200)
+	assert.Count(t, 1, *list.JSON200)
+	edited, e := c.EditViewWithResponse(
 		context.Background(),
-		generated.GetViewsRequestObject{},
-	)
-	assert.Nil(t, e)
-	assert.Integer(t, 1, len(list.(generated.GetViews200JSONResponse)))
-	edited, e := s.EditView(
-		context.Background(),
-		generated.EditViewRequestObject{
-			Id: 1,
-			Body: &generated.EditViewJSONRequestBody{
-				OldString: "alfa",
-				NewString: "bravo",
-			},
-		},
-	)
-	assert.Nil(t, e)
-	text := generated.View(edited.(generated.EditView200JSONResponse)).Text
-	assert.NotNil(t, text)
-	assert.String(t, "bravo", *text)
-	read, e := s.GetView(
-		context.Background(),
-		generated.GetViewRequestObject{Id: 1},
-	)
-	assert.Nil(t, e)
-	assert.Integer(
-		t,
 		1,
-		generated.View(read.(generated.GetView200JSONResponse)).ViewId,
+		client.EditViewJSONRequestBody{OldString: "alfa", NewString: "bravo"},
 	)
-	_, e = s.CloseView(
-		context.Background(),
-		generated.CloseViewRequestObject{Id: 1},
-	)
-	assert.Nil(t, e)
-	list, e = s.GetViews(
-		context.Background(),
-		generated.GetViewsRequestObject{},
-	)
-	assert.Nil(t, e)
-	assert.Integer(t, 0, len(list.(generated.GetViews200JSONResponse)))
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, edited.JSON200)
+	assert.FatalNotNil(t, edited.JSON200.Text)
+	assert.String(t, "bravo", *edited.JSON200.Text)
+	read, e := c.GetViewWithResponse(context.Background(), 1)
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, read.JSON200)
+	assert.Integer(t, 1, read.JSON200.ViewId)
+	closed, e := c.CloseViewWithResponse(context.Background(), 1)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusNoContent, closed.StatusCode())
+	list, e = c.GetViewsWithResponse(context.Background())
+	assert.FatalOnError(t, e)
+	assert.FatalNotNil(t, list.JSON200)
+	assert.Count(t, 0, *list.JSON200)
 }

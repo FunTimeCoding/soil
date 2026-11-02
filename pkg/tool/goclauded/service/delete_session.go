@@ -39,7 +39,7 @@ func (s *Service) DeleteSession(
 	}
 
 	s.client.Delete(identifier)
-	result.Sources = sweep.DeleteSource(identifier)
+	result.Sources = sweep.DeleteSource(s.sources(), identifier)
 
 	if g := s.store.DeleteSession(identifier); g != nil {
 		return nil, g

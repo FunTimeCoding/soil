@@ -105,6 +105,7 @@ var (
 		"client",
 		"constant",
 		"convert",
+		"daemon",
 		"face",
 		"generated",
 		"helper",

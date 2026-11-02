@@ -13,6 +13,7 @@ func (s *Server) serve(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
+	s.wait(r)
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	path := strings.TrimPrefix(r.URL.Path, webConstant.RootPath)

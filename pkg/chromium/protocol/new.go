@@ -15,5 +15,5 @@ func New(
 		panic(constant.TabNotFound)
 	}
 
-	return &Protocol{client: c, context: c.TargetContext(t.Identifier)}
+	return &Protocol{client: c, identifier: t.Identifier}
 }

@@ -37,3 +37,10 @@ func TestNewestSectionKeepsLiveTargetWithConfiguredProject(t *testing.T) {
 	o.AssertContains(`sse-swap="newest"`, constant.PlatePath)
 	o.AssertMissing("Newest Issues", constant.PlatePath)
 }
+
+func TestTheClockFillsThePlatePage(t *testing.T) {
+	o := web_interface_tester.New(t)
+	o.Refresh(openIssue("ALFA-1"))
+	o.AssertContains("ALFA-1", constant.PlatePath)
+	o.AssertMissing("All clean.", constant.PlatePath)
+}

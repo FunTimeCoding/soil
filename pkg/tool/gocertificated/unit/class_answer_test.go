@@ -19,6 +19,7 @@ func TestMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
+	assert.FatalNotNil(t, r.JSON404)
 	assert.StringContains(t, "not found", r.JSON404.Error)
 	assert.Count(t, 0, s.Reporter.Events())
 }
@@ -28,12 +29,13 @@ func TestRootBeforeCreationAnswersNotFoundQuietly(t *testing.T) {
 	r, e := restClient(t, s).GetRootWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
+	assert.NotNil(t, r.JSON404)
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestRootFaultIsCapturedAsServerError(t *testing.T) {
 	s := base.New(t)
-	s.Service.Close()
+	s.Daemon.Close()
 	r, e := restClient(t, s).GetRootWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())
@@ -46,6 +48,7 @@ func TestSecondRootAnswersConflictQuietly(t *testing.T) {
 	postAuthority(t, c, server_tester.RootBody())
 	r := postAuthority(t, c, server_tester.RootBody())
 	assert.Integer(t, http.StatusConflict, r.StatusCode())
+	assert.FatalNotNil(t, r.JSON409)
 	assert.StringContains(t, "already live", r.JSON409.Error)
 	assert.Count(t, 0, s.Reporter.Events())
 }
@@ -58,6 +61,7 @@ func TestUnusableAddressAnswersBadRequestQuietly(t *testing.T) {
 	b.PermittedAddress = &[]string{"nowhere"}
 	r := postAuthority(t, c, b)
 	assert.Integer(t, http.StatusBadRequest, r.StatusCode())
+	assert.FatalNotNil(t, r.JSON400)
 	assert.StringContains(t, "nowhere", r.JSON400.Error)
 	assert.Count(t, 0, s.Reporter.Events())
 }
@@ -66,6 +70,7 @@ func TestIssuingFromMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
 	r := postCertificate(t, restClient(t, s))
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
+	assert.NotNil(t, r.JSON404)
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
@@ -74,7 +79,9 @@ func TestRevokingTwiceAnswersNotFoundQuietly(t *testing.T) {
 	c := restClient(t, s)
 	postAuthority(t, c, server_tester.RootBody())
 	postAuthority(t, c, server_tester.ClusterBody())
-	serial := postCertificate(t, c).JSON200.Serial
+	issued := postCertificate(t, c)
+	assert.FatalNotNil(t, issued.JSON200)
+	serial := issued.JSON200.Serial
 	_, e := c.PostRevocationWithResponse(t.Context(), serial)
 	assert.FatalOnError(t, e)
 	r, f := c.PostRevocationWithResponse(t.Context(), serial)
@@ -98,7 +105,7 @@ func TestMissingCertificateRefusesThroughToolsQuietly(t *testing.T) {
 
 func TestToolFaultIsCaptured(t *testing.T) {
 	o := model_context_tester.New(t)
-	o.Server.Service.Close()
+	o.Server.Daemon.Close()
 	o.Client.MustCallToolError(constant.RootCertificate, map[string]any{})
 	assert.Count(t, 1, o.Server.Reporter.Events())
 }
@@ -118,7 +125,7 @@ func TestFormRejectionIsNotCaptured(t *testing.T) {
 
 func TestFormFaultIsCapturedNotInlined(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Server.Service.Close()
+	o.Server.Daemon.Close()
 	page := o.Submit(constant.CreateAuthorityPath, rootValues())
 	assert.Count(t, 1, o.Server.Reporter.Events())
 	assert.StringNotContains(t, "Example Root CA", page)

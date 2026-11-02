@@ -39,7 +39,7 @@ func Main() {
 	o.ServiceTokens = web.ServiceTokens()
 
 	if environment.Exists(directoryConstant.HostEnvironment) {
-		o.Directory = func() face.Client { return directory.NewEnvironment() }
+		o.Directory = func() face.DirectoryClient { return directory.NewEnvironment() }
 	}
 
 	Run(o, s)

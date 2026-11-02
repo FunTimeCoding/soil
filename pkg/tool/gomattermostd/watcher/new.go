@@ -1,7 +1,7 @@
 package watcher
 
 import (
-	mattermostFace "github.com/funtimecoding/soil/pkg/chat/mattermost/face"
+	chat "github.com/funtimecoding/soil/pkg/chat/face"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/socket"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -13,7 +13,7 @@ import (
 )
 
 func New(
-	c mattermostFace.Client,
+	c chat.MattermostClient,
 	g *peer.Guard,
 	s *store.Store,
 	l *logger.Logger,

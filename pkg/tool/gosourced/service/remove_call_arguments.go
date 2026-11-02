@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/dave/dst"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 )
 
 func removeCallArguments(

@@ -2,11 +2,11 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	parser "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/service"
 )
 
 func New(
-	v parser.Generator,
+	v *service.Service,
 	r face.Reporter,
 ) *Server {
 	return &Server{service: v, reporter: r}

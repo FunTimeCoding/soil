@@ -23,7 +23,7 @@ func (s *Service) Reconcile(
 		)
 	}
 
-	c, e := s.Client(hypervisor)
+	c, e := s.client(hypervisor)
 
 	if e != nil {
 		return nil, e

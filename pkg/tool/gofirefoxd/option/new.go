@@ -6,5 +6,5 @@ import (
 )
 
 func New() *Firefox {
-	return &Firefox{Client: func() face.Client { return firefox.New() }}
+	return &Firefox{Client: func() face.FirefoxClient { return firefox.New() }}
 }

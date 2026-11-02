@@ -1,13 +1,24 @@
 package ssh
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"io"
+)
 
 func (c *Client) Close() {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	if c.sftp != nil {
-		errors.LogClose(c.sftp)
+		if e := c.sftp.Close(); !errors.Is(e, io.EOF) {
+			errors.LogOnError(e)
+		}
+
+		c.sftp = nil
 	}
 
 	if c.client != nil {
-		errors.LogClose(c.client)
+		errors.LogReclose(c.client)
+		c.client = nil
 	}
 }

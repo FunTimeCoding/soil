@@ -11,7 +11,7 @@ func (w *Worker) pollInstance(
 	hypervisor string,
 	f *floor.Floor,
 ) error {
-	c, e := w.service.Client(hypervisor)
+	c, e := w.client(hypervisor)
 
 	if e != nil {
 		return e

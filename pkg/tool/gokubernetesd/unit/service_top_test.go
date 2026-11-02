@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
 	"testing"
 )

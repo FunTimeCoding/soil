@@ -37,7 +37,7 @@ func TestClientSeesAResolutionByIdentifier(t *testing.T) {
 	s := base.New(t)
 	c := s.AlertClient(t)
 	s.MockClient.Remove("fp1")
-	s.Worker.Poll()
+	s.Clock.Poll()
 	result, e := c.GetAlertsByIdentifier(
 		t.Context(),
 		&client.GetAlertsByIdentifierParams{Identifier: []int{1, 2}},

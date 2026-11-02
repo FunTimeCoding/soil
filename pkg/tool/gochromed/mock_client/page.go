@@ -6,6 +6,9 @@ import (
 )
 
 func (c *Client) Page(identifier string) face.Page {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	if p, found := c.pages[identifier]; found {
 		return p
 	}

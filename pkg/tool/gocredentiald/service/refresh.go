@@ -7,6 +7,15 @@ func (s *Service) refresh() {
 		return
 	}
 
-	s.logger.Structured("database changed on disk - reloading")
-	s.client = keepass.New(s.path, s.password)
+	c, e := keepass.New(s.path, s.password)
+
+	if e != nil {
+		s.reportReload(e)
+
+		return
+	}
+
+	s.logger.Structured("database changed on disk - reloaded")
+	s.client = c
+	s.reported = false
 }

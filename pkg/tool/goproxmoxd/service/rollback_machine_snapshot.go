@@ -6,7 +6,7 @@ func (s *Service) RollbackMachineSnapshot(
 	node string,
 	name string,
 ) (string, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return "", clientFail

@@ -2,12 +2,11 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/band/mock_client"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"testing"
 )
 
@@ -18,15 +17,10 @@ func intentService(t *testing.T) (
 	*memory.Memory,
 ) {
 	t.Helper()
-	engine := mock_client.New()
-	engine.SetPower(constant.PowerOn, runningStates()...)
-	n := netbox.New()
 	r := memory.New()
-	o := alfaOption()
-	o.Netbox = func() face.Client { return n }
-	v := service.New(o, logger.New(t.Context()), r)
-	t.Cleanup(v.Close)
-	v.Pool().Set("alfa", engine)
+	v, engines, n := service_tester.NewWithNetbox(t, r, "alfa")
+	engine := engines["alfa"]
+	engine.SetPower(constant.PowerOn, runningStates()...)
 
 	return v, n, engine, r
 }

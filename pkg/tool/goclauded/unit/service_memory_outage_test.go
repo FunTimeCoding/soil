@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 )

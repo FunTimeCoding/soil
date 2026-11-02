@@ -2,15 +2,19 @@ package worker
 
 import (
 	"context"
+	"github.com/fsnotify/fsnotify"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 	"sync"
 )
 
 type Worker struct {
-	service  *service.Service
+	handle   func(fsnotify.Event) []error
+	paths    []string
+	prepare  []func() []error
 	logger   *logger.Logger
+	reporter face.Reporter
 	recovery *recovery.Recovery
 	context  context.Context
 	cancel   context.CancelFunc

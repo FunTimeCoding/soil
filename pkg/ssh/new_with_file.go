@@ -12,15 +12,12 @@ func NewWithFile(
 	keyName string,
 	secure bool,
 ) *Client {
-	return &Client{
-		user:   user,
-		host:   host,
-		secure: secure,
-		authenticate: func() (ssh.AuthMethod, io.Closer, error) {
-			m, e := fileAuthentication(keyPath, keyName)
+	result := New(user, host, secure)
+	result.authenticate = func() (ssh.AuthMethod, io.Closer, error) {
+		m, e := fileAuthentication(keyPath, keyName)
 
-			return m, nil, e
-		},
-		Panic: true,
+		return m, nil, e
 	}
+
+	return result
 }

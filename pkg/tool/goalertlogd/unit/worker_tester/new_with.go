@@ -7,9 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	"github.com/prometheus/client_golang/prometheus"
 	"testing"
 	"time"
 )
@@ -21,13 +21,16 @@ func NewWith(
 	retention time.Duration,
 ) *Tester {
 	t.Helper()
-	o := service_tester.NewOption(path, c)
-	o.Retention = retention
 	r := memory.New()
-	l := logger.New(context.Background())
-	v := service.New(o, l, r)
-	t.Cleanup(v.Close)
-	w := worker.New(v, notifier.New(), l, r, constant.PollInterval, nil)
+	y := prometheus.NewRegistry()
+	v := service_tester.NewServiceWith(t, path, c, retention, notifier.New())
+	w := worker.New(
+		v.Record,
+		constant.PollInterval,
+		logger.New(context.Background()),
+		y,
+		r,
+	)
 	t.Cleanup(w.Close)
 
 	return &Tester{
@@ -35,6 +38,7 @@ func NewWith(
 		Worker:     w,
 		MockClient: c,
 		Reporter:   r,
+		Registry:   y,
 		Path:       path,
 		t:          t,
 	}

@@ -6,5 +6,7 @@ import (
 )
 
 func (c *Client) DeleteHost(identifier string) error {
+	c.Asked = append(c.Asked, identifier)
+
 	return not_found.New(constant.HostSubject, identifier)
 }

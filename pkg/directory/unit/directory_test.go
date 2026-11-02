@@ -12,7 +12,7 @@ import (
 )
 
 func TestTheDirectoryClientAndItsMockShareTheFace(t *testing.T) {
-	faces := []face.Client{
+	faces := []face.DirectoryClient{
 		directory.New("directory.test", "dc=test"),
 		mock_client.New("dc=test"),
 	}

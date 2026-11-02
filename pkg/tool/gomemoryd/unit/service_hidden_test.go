@@ -8,8 +8,7 @@ import (
 )
 
 func TestDashboardViewCountsOnlyVisibleMemories(t *testing.T) {
-	o := service_tester.New(t)
-	o.Service.WithHiddenTag("private")
+	o := service_tester.NewHidden(t, "private")
 	alfa := createTagged(t, o, "alfa", "shared")
 	bravo := createTagged(t, o, "bravo", "shared", "private")
 	charlie := createTagged(t, o, "charlie")
@@ -38,8 +37,7 @@ func TestDashboardViewCountsOnlyVisibleMemories(t *testing.T) {
 }
 
 func TestMemoryListLeavesHiddenMemoriesOut(t *testing.T) {
-	o := service_tester.New(t)
-	o.Service.WithHiddenTag("private")
+	o := service_tester.NewHidden(t, "private")
 	createTagged(t, o, "alfa")
 	createTagged(t, o, "bravo", "private")
 	l, e := o.Service.MemoryList("", "", "", 1)
@@ -50,16 +48,14 @@ func TestMemoryListLeavesHiddenMemoriesOut(t *testing.T) {
 }
 
 func TestHiddenMemoryViewReadsAsNotFound(t *testing.T) {
-	o := service_tester.New(t)
-	o.Service.WithHiddenTag("private")
+	o := service_tester.NewHidden(t, "private")
 	bravo := createTagged(t, o, "bravo", "private")
 	_, e := o.Service.MemoryView(bravo.Identifier)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestMemoryViewLeavesHiddenRelatedOut(t *testing.T) {
-	o := service_tester.New(t)
-	o.Service.WithHiddenTag("private")
+	o := service_tester.NewHidden(t, "private")
 	alfa := createTagged(t, o, "alfa")
 	bravo := createTagged(t, o, "bravo", "private")
 	charlie := createTagged(t, o, "charlie")
@@ -78,8 +74,7 @@ func TestMemoryViewLeavesHiddenRelatedOut(t *testing.T) {
 }
 
 func TestVisibleRelationsLeaveHiddenEndpointsOut(t *testing.T) {
-	o := service_tester.New(t)
-	o.Service.WithHiddenTag("private")
+	o := service_tester.NewHidden(t, "private")
 	alfa := createTagged(t, o, "alfa")
 	bravo := createTagged(t, o, "bravo", "private")
 	charlie := createTagged(t, o, "charlie")

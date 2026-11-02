@@ -9,6 +9,8 @@ import (
 )
 
 func (s *Service) Record(now time.Time) (*outcome.Outcome, error) {
+	s.lastPoll.Store(now)
+	defer s.notifier.Notify()
 	alerts, e := s.activeAlerts()
 
 	if e != nil {

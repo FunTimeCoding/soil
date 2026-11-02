@@ -1,13 +1,19 @@
 # Package Design
 
-One struct with receivers per package. This is the core rule for package
+One type with methods per package. This is the core rule for package
 scope - it drives when to extract sub-packages and how to organize types.
 
 ## The Rule
 
-Each package has at most one struct that carries methods (receivers). That
-struct is the package's identity. Its file is named after the struct in
+Each package has at most one type that carries methods (receivers). That
+type is the package's identity. Its file is named after the type in
 snake_case. Constructor lives in `new.go`.
+
+Any named type counts: a struct, a function type adapting an interface
+(`http.HandlerFunc`'s shape), a `type Kind int` with `String()`. Each
+carries behaviour, so each gets its own package. A face, a package of
+interfaces, holds no adapter beside them; each adapter is a sub-package
+of the face named after it.
 
 Data-only structs (no receivers) may coexist - one per file, named after the
 struct. Group related data structs in a dedicated sub-package when there are
@@ -60,9 +66,9 @@ checklist:
 
 ## When to Extract
 
-When a second struct with receivers appears in a package, extract it and
+When a second type with methods appears in a package, extract it and
 its helper functions into a sub-package. The sub-package is named after
-the struct. The struct inside drops the package prefix:
+the type. The type inside drops the package prefix:
 
 ```
 pkg/tool/gosalt/analyzer/    → type Live struct
@@ -82,10 +88,10 @@ real implementation.
 
 ## What Stays
 
-Package-level functions without a receiver are fine alongside the single
-struct. Constants live in the root's `<path>/constant/` package. Each function
-gets its own file.
+Package-level functions without a receiver are fine alongside the single type
+with methods. Constants live in the root's `<path>/constant/` package. Each
+function gets its own file.
 
-Tool entrypoint packages (`pkg/tool/go<name>/`) often have no struct with
-receivers at all - just `Main()`, `run()`, and orchestration functions.
-This is normal. The rule applies when structs with receivers do appear.
+Tool entrypoint packages (`pkg/tool/go<name>/`) often have no type with
+methods at all - just `Main()`, `run()`, and orchestration functions.
+This is normal. The rule applies when types with methods do appear.

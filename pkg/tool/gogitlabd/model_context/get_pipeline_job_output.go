@@ -23,13 +23,13 @@ func (s *Server) GetPipelineJobOutput(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	v, e := s.service.Trace(instance, project, a.Job)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	return mcp.NewToolResultText(v), nil

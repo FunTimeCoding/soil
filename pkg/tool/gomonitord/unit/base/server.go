@@ -1,11 +1,7 @@
 package base
 
-import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
-)
+import "github.com/funtimecoding/soil/pkg/generative/model_context_server"
 
 type Server struct {
-	Store face.Claims
 	*model_context_server.Server
 }

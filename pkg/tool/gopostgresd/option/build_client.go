@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 )
 
-func BuildClient(i *instance.Instance) (face.Client, error) {
+func BuildClient(i *instance.Instance) (face.PostgresClient, error) {
 	result, e := postgres.New(i.Locator())
 
 	if e != nil {

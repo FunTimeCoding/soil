@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/failed_chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/failed_chunk"
 )
 
 func (s *Service) Failed(collection string) ([]*failed_chunk.Chunk, error) {

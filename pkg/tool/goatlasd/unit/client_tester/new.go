@@ -5,10 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/client"
+	generated "github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
@@ -23,12 +25,19 @@ func New(
 ) *client.Client {
 	t.Helper()
 	m := http.NewServeMux()
-	goatlasd.Mount(
-		v,
-		web.New(v),
-		memory.New(),
-		mock_recorder.New(),
-		guard.New(m, []string{constant.ModelContextTestToken}),
+	guard.New(m, []string{constant.ModelContextTestToken}).TokenMount(
+		webConstant.InterfacePath,
+		generated.HandlerFromMux(
+			generated.NewStrictHandler(
+				server.New(v, memory.New()),
+				[]generated.StrictMiddlewareFunc{
+					web.RecordingMiddleware[generated.StrictHandlerFunc](
+						mock_recorder.New(),
+					),
+				},
+			),
+			http.NewServeMux(),
+		),
 	)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)

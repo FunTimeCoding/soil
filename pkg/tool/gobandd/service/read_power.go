@@ -2,12 +2,12 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/band"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/face"
+	"github.com/funtimecoding/soil/pkg/band/face"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/types/status"
 )
 
 func readPower(
-	c face.Engine,
+	c face.BandClient,
 	v *status.Status,
 ) error {
 	r, e := c.PowerState()

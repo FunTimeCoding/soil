@@ -1,7 +1,9 @@
 package keepass
 
-import "github.com/funtimecoding/soil/pkg/system"
+import "os"
 
 func (c *Client) Changed() bool {
-	return !system.Stat(c.path).ModTime().Equal(c.loaded)
+	i, e := os.Stat(c.path)
+
+	return e != nil || !i.ModTime().Equal(c.loaded)
 }

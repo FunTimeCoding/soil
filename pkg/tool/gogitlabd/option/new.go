@@ -1,5 +1,5 @@
 package option
 
 func New() *Gitlab {
-	return &Gitlab{}
+	return &Gitlab{Client: BuildClient}
 }

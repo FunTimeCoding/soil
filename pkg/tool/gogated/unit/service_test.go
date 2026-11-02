@@ -4,22 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/login_session"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/worker"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"testing"
 	"time"
 )
-
-func TestTheServiceClosesWhatItBuiltOnce(t *testing.T) {
-	s := service.New(base.NewOption(t), logger.New(t.Context()), memory.New())
-	s.Close()
-	s.Close()
-	_, e := s.GetLoginSession("any")
-	assert.Error(t, e)
-}
 
 func TestOnlyTheSuperUserIsAdministrator(t *testing.T) {
 	b := base.New(t)
@@ -39,9 +31,9 @@ func TestOnlyTheSuperUserIsAdministrator(t *testing.T) {
 }
 
 func TestAFailingStoreIsNotAnAnswerAboutTheAdministrator(t *testing.T) {
-	s := service.New(base.NewOption(t), logger.New(t.Context()), memory.New())
-	s.Close()
-	_, e := s.IsAdministrator("anyone")
+	b := base.New(t)
+	relational.CloseMapper(b.Database)
+	_, e := b.Service.IsAdministrator("anyone")
 	assert.Error(t, e)
 }
 
@@ -68,9 +60,9 @@ func TestCleanDropsOnlyExpiredLoginSessions(t *testing.T) {
 }
 
 func TestACleanTickReportsEachFailure(t *testing.T) {
-	s := service.New(base.NewOption(t), logger.New(t.Context()), memory.New())
-	s.Close()
+	b := base.New(t)
+	relational.CloseMapper(b.Database)
 	r := memory.New()
-	worker.New(s, time.Hour, logger.New(t.Context()), r).Poll()
+	worker.NewEvery(b.Service.Clean, logger.New(t.Context()), r, time.Hour).Poll()
 	assert.Count(t, 2, r.Events())
 }

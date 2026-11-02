@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -15,6 +16,7 @@ import (
 
 func New(
 	v *service.Service,
+	a *client.Client,
 	f face.Reporter,
 ) *Server {
 	r := registry.New()
@@ -47,9 +49,10 @@ func New(
 	)
 
 	return &Server{
-		service:  v,
-		reporter: f,
-		registry: r,
+		service:       v,
+		authorization: a,
+		reporter:      f,
+		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTyria).

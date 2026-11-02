@@ -1,22 +1,19 @@
 package worker
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
 func (w *Worker) poll() {
-	_, e := w.service.IndexCollections("")
-	errors.PanicOnError(e)
-	w.metric.CountPruned(w.service.Prune())
-	f := w.service.EmbedPending(w.context)
+	pruned, e := w.maintain(w.context)
+	w.metric.CountPruned(pruned)
 
 	switch {
-	case f == nil, w.context.Err() != nil:
-	case classify.Reportable(f):
-		w.reporter.CaptureException(f)
+	case e == nil, w.context.Err() != nil:
+	case classify.Reportable(e):
+		w.reporter.CaptureException(e)
 	default:
-		w.logger.Plain(constant.EmbeddingDeferred, f)
+		w.logger.Plain(constant.EmbeddingDeferred, e)
 	}
 }

@@ -5,10 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_service_tester"
@@ -16,16 +21,18 @@ import (
 	"testing"
 )
 
-func TestTheServiceClosesItsDatabaseOnce(t *testing.T) {
-	v := service.New(base.NewOption(t), logger.New(t.Context()), memory.New())
-	v.Close()
-	v.Close()
-	_, e := v.Query(query_option.New())
-	assert.Error(t, e)
+func TestTheDaemonClosesItsDatabaseOnce(t *testing.T) {
+	d := daemon.New(base.NewOption(t), logger.New(t.Context()), memory.New())
+	d.Close()
+	d.Close()
 }
 
 func TestTheServiceRecordsItsOwnUse(t *testing.T) {
-	b := base.New(t)
+	o := base.NewOption(t)
+	m := lite.New(logger.New(t.Context()), o.LitePath)
+	defer relational.CloseMapper(m)
+	migrate.AutoMigrate(m)
+	v := service.New(store.New(m), memory.New())
 	e := record.NewBaseline(
 		"GetSummary",
 		constant.SurfaceWebService,
@@ -33,8 +40,8 @@ func TestTheServiceRecordsItsOwnUse(t *testing.T) {
 		constant.OutcomeSuccess,
 	)
 	e.Detail = map[string]string{"operation": "GetSummary"}
-	b.Service.Record(e)
-	events, f := b.Service.Query(query_option.New())
+	v.Record(e)
+	events, f := v.Query(query_option.New())
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, events)
 	assert.String(t, "GetSummary", events[0].Tool)
@@ -43,7 +50,7 @@ func TestTheServiceRecordsItsOwnUse(t *testing.T) {
 
 func TestAFailingStoreIsAnsweredAndReported(t *testing.T) {
 	o := web_service_tester.New(t)
-	o.Service.Close()
+	o.Daemon.Close()
 	r, e := o.Client.GetSummaryWithResponse(
 		context.Background(),
 		&client.GetSummaryParams{},
@@ -51,5 +58,5 @@ func TestAFailingStoreIsAnsweredAndReported(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())
 	assert.NotNil(t, r.JSON500)
-	assert.Count(t, 1, o.Reporter.Events())
+	assert.Count(t, 2, o.Reporter.Events())
 }

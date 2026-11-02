@@ -1,5 +1,7 @@
 package worker
 
 func (w *Worker) Close() {
-	close(w.stop)
+	w.stopped.Do(func() { close(w.stop) })
+	w.started.Do(func() { close(w.done) })
+	<-w.done
 }

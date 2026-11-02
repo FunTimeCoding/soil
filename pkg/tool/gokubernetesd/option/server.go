@@ -1,6 +1,6 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 
 type Server struct {
 	Address         string

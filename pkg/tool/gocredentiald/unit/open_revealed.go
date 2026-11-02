@@ -1,11 +1,9 @@
 package unit
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/service"
 	"testing"
-	"time"
 )
 
 func openRevealed(
@@ -15,11 +13,5 @@ func openRevealed(
 ) *service.Service {
 	t.Helper()
 
-	return service.New(
-		path,
-		"secret",
-		revealedField,
-		time.Now,
-		logger.New(context.Background()),
-	)
+	return openReported(t, path, revealedField, memory.New())
 }

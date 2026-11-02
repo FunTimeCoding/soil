@@ -14,14 +14,14 @@ import (
 
 func (s *Server) event() http.HandlerFunc {
 	return layout.HandleServerSideEventWithRequest(
-		s.worker.Notifier(),
+		s.service.Notifier(),
 		func(
 			w http.ResponseWriter,
 			f http.Flusher,
 			r *http.Request,
 		) {
 			subs := subscription.Parse(r)
-			entries := s.worker.Entries()
+			entries := s.service.Entries()
 			multiple := s.multiple()
 
 			if subs.Has(constant.SummaryEvent) {
@@ -36,7 +36,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.RequestEvent,
-					board_page.Requests(s.worker.Requests(), multiple),
+					board_page.Requests(s.service.Requests(), multiple),
 				)
 			}
 

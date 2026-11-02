@@ -40,6 +40,7 @@ func TestPollCollectsResources(t *testing.T) {
 
 func TestPollFailureClearsResources(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
+	defer c.Close()
 	w, y := worker_tester.NewPollWorker("pve", c)
 	defer w.Close()
 	w.Poll()

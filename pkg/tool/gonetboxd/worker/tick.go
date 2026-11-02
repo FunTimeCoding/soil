@@ -1,7 +1,7 @@
 package worker
 
 func (w *Worker) tick() []error {
-	v, e := w.service.Intents()
+	v, e := w.intents()
 
 	if e != nil {
 		return []error{e}

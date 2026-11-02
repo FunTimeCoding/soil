@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -25,13 +26,19 @@ func (s *Server) DeleteSnippet(
 		return server.DeleteSnippet500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
-	c, e := s.service.SSHClient(instance)
+	e = s.service.DeleteSnippet(instance, r.Name)
+
+	if validation.Is(e) {
+		return server.DeleteSnippet400JSONResponse(*clientError(e)), nil
+	}
+
+	if not_found.Is(e) {
+		return server.DeleteSnippet404JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.DeleteSnippet500JSONResponse(*s.captureDetail(e)), nil
 	}
-
-	c.RemoveFile(snippetPath(r.Name))
 
 	return server.DeleteSnippet200JSONResponse{Status: "deleted"}, nil
 }

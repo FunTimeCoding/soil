@@ -25,7 +25,7 @@ func TestPollCountsFailuresPerSource(t *testing.T) {
 	y := prometheus.NewRegistry()
 	r := memory.New()
 	w := worker.New(
-		v.Service,
+		v.Service.Collect,
 		constant.FixtureInterval,
 		logger.New(context.Background()),
 		y,
@@ -63,7 +63,7 @@ func TestPollReportsNothingForAnAwayPeer(t *testing.T) {
 	}
 	r := memory.New()
 	w := worker.New(
-		v.Service,
+		v.Service.Collect,
 		constant.FixtureInterval,
 		logger.New(context.Background()),
 		prometheus.NewRegistry(),

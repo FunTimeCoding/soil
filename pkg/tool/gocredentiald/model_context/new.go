@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
-	credentialFace "github.com/funtimecoding/soil/pkg/tool/gocredentiald/face"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/service"
 )
 
 func New(
-	s credentialFace.CredentialSource,
+	s *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

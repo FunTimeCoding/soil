@@ -6,7 +6,7 @@ import (
 )
 
 type Service struct {
-	client       face.Client
+	client       face.SentryClient
 	guard        *peer.Guard
 	organization string
 }

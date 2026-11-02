@@ -1,14 +1,11 @@
 package option
 
-import (
-	confluence "github.com/funtimecoding/soil/pkg/atlassian/confluence/face"
-	jira "github.com/funtimecoding/soil/pkg/atlassian/jira/face"
-)
+import "github.com/funtimecoding/soil/pkg/atlassian/face"
 
 type Atlassian struct {
 	Address       string
 	ServiceTokens []string
 	Project       []string
-	Jira          func() jira.Client
-	Confluence    func() confluence.Client
+	Jira          func() face.JiraClient
+	Confluence    func() face.ConfluenceClient
 }

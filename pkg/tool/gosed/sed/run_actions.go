@@ -9,7 +9,7 @@ import (
 )
 
 func runActions(
-	c face.Forge,
+	c face.GitLabClient,
 	project int64,
 	o *option.Sed,
 ) {

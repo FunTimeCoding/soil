@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	jellyfin "github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/service"
 	"github.com/mark3labs/mcp-go/server"
 )
 
 type Server struct {
 	server   *server.MCPServer
-	service  jellyfin.Jellyfin
+	service  *service.Service
 	reporter face.Reporter
 }

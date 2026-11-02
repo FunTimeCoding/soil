@@ -14,7 +14,7 @@ func (s *Service) Rules(
 		s,
 		x,
 		instance,
-		func(c face.Client) ([]*rule.Rule, error) {
+		func(c face.PrometheusClient) ([]*rule.Rule, error) {
 			v, e := c.Rules()
 
 			if e != nil {

@@ -145,8 +145,8 @@ type Server struct {
 }
 ```
 
-The server takes the daemon's `*service.Service` and never closes it
-(`service-tool.md`, Service).
+The server takes the services its tools call, never the daemon, and
+closes none of them (`service-tool.md`, Services).
 
 `new.go` - create the MCPServer via the factory, register tools, return:
 ```go

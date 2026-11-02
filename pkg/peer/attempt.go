@@ -12,7 +12,14 @@ func (g *Guard) Attempt(
 		return e
 	}
 
+	returned := false
+	defer func() {
+		if !returned {
+			g.abandon(trial)
+		}
+	}()
 	f := call(x)
+	returned = true
 
 	if x.Err() != nil {
 		g.abandon(trial)

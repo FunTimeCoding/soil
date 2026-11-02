@@ -7,5 +7,5 @@ type Firefox struct {
 	DownloadDirectory string
 	ServiceTokens     []string
 	BridgePort        int
-	Client            func() face.Client
+	Client            func() face.FirefoxClient
 }

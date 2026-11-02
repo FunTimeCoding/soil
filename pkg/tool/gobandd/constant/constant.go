@@ -33,6 +33,7 @@ const (
 	ScreenServiceWrite = "screen service"
 )
 
+const InstancePeer = "band"
 const (
 	HostEnvironment     = "GOBAND_HOST"
 	PortEnvironment     = "GOBAND_PORT"

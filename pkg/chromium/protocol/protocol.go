@@ -7,7 +7,8 @@ import (
 )
 
 type Protocol struct {
-	client  *chromium.Client
-	context context.Context
-	timeout time.Duration
+	client     *chromium.Client
+	identifier string
+	context    context.Context
+	timeout    time.Duration
 }

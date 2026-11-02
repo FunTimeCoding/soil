@@ -9,6 +9,7 @@ import (
 
 type Server struct {
 	service  *service.Service
+	notifier face.EventNotifier
 	reporter face.Reporter
 	view     *view.View
 	registry *registry.Registry

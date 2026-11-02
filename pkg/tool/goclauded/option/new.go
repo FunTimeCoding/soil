@@ -1,9 +1,11 @@
 package option
 
 import (
+	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
 	memoryClient "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
@@ -21,5 +23,7 @@ func New() *Option {
 		Memory:   func() memoryd.Client { return memoryClient.NewEnvironment() },
 		Query:    func() queryd.Client { return queryClient.NewEnvironment() },
 		Notifier: func() face.Notifier { return notifier.New() },
+		Browser:  chromium.NewEnvironment,
+		Sources:  sweep.SourceDirectories,
 	}
 }

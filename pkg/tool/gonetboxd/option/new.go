@@ -8,7 +8,7 @@ import (
 
 func New() *Netbox {
 	return &Netbox{
-		Source: func(o prometheus.ObserverVec) face.Client {
+		Source: func(o prometheus.ObserverVec) face.NetBoxClient {
 			return netbox.NewEnvironment(netbox.WithRequestDuration(o))
 		},
 	}

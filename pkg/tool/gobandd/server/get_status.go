@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/server"
 )
 
@@ -26,6 +29,18 @@ func (s *Server) GetStatus(
 	}
 
 	v, f := s.service.Status(instance)
+
+	if validation.Is(f) {
+		return server.GetStatus400JSONResponse(*clientError(f)), nil
+	}
+
+	if forbidden.Is(f) {
+		return server.GetStatus403JSONResponse(*clientError(f)), nil
+	}
+
+	if unavailable.Is(f) {
+		return server.GetStatus503JSONResponse(*clientError(f)), nil
+	}
 
 	if f != nil {
 		return server.GetStatus500JSONResponse(*s.captureDetail(f)), nil

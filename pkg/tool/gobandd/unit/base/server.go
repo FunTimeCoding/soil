@@ -1,9 +1,9 @@
 package base
 
 import (
+	"github.com/funtimecoding/soil/pkg/band/mock_client"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/mock_client"
 )
 
 type Server struct {

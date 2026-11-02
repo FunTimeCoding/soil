@@ -1,15 +1,15 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/band/face"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/types/status"
 	"strings"
 )
 
 func readHost(
-	c face.Engine,
+	c face.BandClient,
 	v *status.Status,
 ) error {
 	r, e := c.GeneralSettings()

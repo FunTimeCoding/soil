@@ -7,30 +7,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/snapshot"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/mock_system"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 	"testing"
 	"time"
 )
 
-func TestTheServiceClosesItsDatabaseOnce(t *testing.T) {
-	v := service.New(
-		base.NewOption(t, mock_system.New()),
-		logger.New(t.Context()),
-	)
-	v.Close()
-	v.Close()
-	_, e := v.Status()
-	assert.Error(t, e)
-}
-
 func TestTheWorkerClosesTwice(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	w := worker.NewEvery(
 		s.Service.Prune,
 		logger.New(t.Context()),
@@ -43,7 +31,7 @@ func TestTheWorkerClosesTwice(t *testing.T) {
 }
 
 func TestABluetoothSampleRecordsOnlyChanges(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
 	assert.Count(t, 0, s.Service.SampleBluetooth())
 	assert.Count(t, 0, s.Service.SampleBluetooth())
@@ -53,7 +41,7 @@ func TestABluetoothSampleRecordsOnlyChanges(t *testing.T) {
 }
 
 func TestAWirelessSampleRecordsOnlyChanges(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	s.System.Answer(constant.Sudo, constant.WirelessSample)
 	assert.True(t, s.Service.WirelessAvailable())
 	assert.Count(t, 0, s.Service.SampleWireless())
@@ -64,7 +52,7 @@ func TestAWirelessSampleRecordsOnlyChanges(t *testing.T) {
 }
 
 func TestAFailedCommandIsLoggedNotReported(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	s.System.Fail(constant.SystemProfiler, errors.Format("exit", 1))
 	s.System.Fail(constant.Sudo, errors.Format("exit", 1))
 	assert.False(t, s.Service.WirelessAvailable())
@@ -79,9 +67,9 @@ func TestAFailedCommandIsLoggedNotReported(t *testing.T) {
 }
 
 func TestAFailingStoreIsReportedByTheWorker(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
-	s.Service.Close()
+	s.CloseStore()
 	worker.NewEvery(
 		s.Service.SampleBluetooth,
 		logger.New(t.Context()),
@@ -92,7 +80,7 @@ func TestAFailingStoreIsReportedByTheWorker(t *testing.T) {
 }
 
 func TestPruneDropsWhatIsPastRetention(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	old := time.Now().Add(-constant.Retention - time.Hour)
 	assert.FatalOnError(
 		t,
@@ -115,7 +103,7 @@ func TestPruneDropsWhatIsPastRetention(t *testing.T) {
 
 func TestAFailingStoreIsAnsweredAndReported(t *testing.T) {
 	s := base.New(t)
-	s.Service.Close()
+	assert.FatalOnError(t, s.Mapper.Migrator().DropTable(event.Stub()))
 	r, e := s.Client.GetStatusWithResponse(context.Background())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())

@@ -1,7 +1,7 @@
 package worker
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/node"
 )
 

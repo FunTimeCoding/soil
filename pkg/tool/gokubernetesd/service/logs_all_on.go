@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/response"
 )
 
 func logsAllOn(

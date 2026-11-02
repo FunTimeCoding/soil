@@ -4,15 +4,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/brave/constant"
 	"github.com/funtimecoding/soil/pkg/brave/helper"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/join"
+	"os"
+	"path/filepath"
 )
 
-func Parse(profile string) *Preference {
-	var result Preference
-	p := join.Absolute(helper.SettingsPath(), profile)
-	b := system.ReadBytes(p, constant.PreferencesFile)
-	notation.MustDecodeBytes(b, &result, false)
+func Parse(profile string) (*Preference, error) {
+	b, e := os.ReadFile(
+		filepath.Join(helper.SettingsPath(), profile, constant.PreferencesFile),
+	)
 
-	return &result
+	if e != nil {
+		return nil, e
+	}
+
+	var result Preference
+
+	if f := notation.DecodeBytes(b, &result); f != nil {
+		return nil, f
+	}
+
+	return &result, nil
 }

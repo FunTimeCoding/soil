@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/diff"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/diff"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+)
 
 func (s *Service) CommitDiff(
 	instance string,
@@ -8,11 +11,11 @@ func (s *Service) CommitDiff(
 	sha string,
 	limit int64,
 ) ([]*diff.Diff, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.CommitDiff(project, sha, limit)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*diff.Diff, error) {
+			return c.CommitDiff(project, sha, limit)
+		},
+	)
 }

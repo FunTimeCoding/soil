@@ -1,28 +1,14 @@
 package sweep
 
-import (
-	"os"
-	"path/filepath"
-)
+import "path/filepath"
 
-func collectSources() []string {
-	base := sourcePath()
-	entries, e := os.ReadDir(base)
-
-	if e != nil {
-		return nil
-	}
-
+func collectSources(directories []string) []string {
 	var result []string
 
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
+	for _, d := range directories {
+		files, e := filepath.Glob(filepath.Join(d, "*.jsonl"))
 
-		files, f := filepath.Glob(filepath.Join(base, entry.Name(), "*.jsonl"))
-
-		if f != nil {
+		if e != nil {
 			continue
 		}
 

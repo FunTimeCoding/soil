@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -22,8 +21,7 @@ func TestModelContextAlertsNeedASelectedInstance(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goalertmanagerd.Mount(
-				healthy(t, "alfa", "bravo"),
+			healthyDaemon(t, "alfa", "bravo").Mount(
 				memory.New(),
 				mock_recorder.New(),
 				g,

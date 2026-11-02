@@ -630,12 +630,16 @@ type RequestPowerResponse struct {
 	JSON200 *PowerResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -646,6 +650,11 @@ func (r RequestPowerResponse) GetJSON200() *PowerResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r RequestPowerResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r RequestPowerResponse) GetJSON403() *Error {
+	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -661,6 +670,11 @@ func (r RequestPowerResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r RequestPowerResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r RequestPowerResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -699,10 +713,14 @@ type EnableRedirectionResponse struct {
 	JSON200 *RedirectionResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -715,6 +733,11 @@ func (r EnableRedirectionResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r EnableRedirectionResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r EnableRedirectionResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -723,6 +746,11 @@ func (r EnableRedirectionResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r EnableRedirectionResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r EnableRedirectionResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -761,10 +789,14 @@ type GetStatusResponse struct {
 	JSON200 *Status
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -777,6 +809,11 @@ func (r GetStatusResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetStatusResponse) GetJSON403() *Error {
+	return r.JSON403
+}
+
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r GetStatusResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -785,6 +822,11 @@ func (r GetStatusResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetStatusResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetStatusResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -936,6 +978,13 @@ func ParseRequestPowerResponse(rsp *http.Response) (*RequestPowerResponse, error
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -956,6 +1005,13 @@ func ParseRequestPowerResponse(rsp *http.Response) (*RequestPowerResponse, error
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -990,6 +1046,13 @@ func ParseEnableRedirectionResponse(rsp *http.Response) (*EnableRedirectionRespo
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1003,6 +1066,13 @@ func ParseEnableRedirectionResponse(rsp *http.Response) (*EnableRedirectionRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -1037,6 +1107,13 @@ func ParseGetStatusResponse(rsp *http.Response) (*GetStatusResponse, error) {
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1050,6 +1127,13 @@ func ParseGetStatusResponse(rsp *http.Response) (*GetStatusResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

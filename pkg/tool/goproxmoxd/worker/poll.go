@@ -13,7 +13,7 @@ import (
 func (w *Worker) Poll() {
 	f := floor.New()
 
-	for _, i := range w.service.Inventory().Instances {
+	for _, i := range w.inventory.Instances {
 		start := time.Now()
 		e := w.pollInstance(i.Name, f)
 

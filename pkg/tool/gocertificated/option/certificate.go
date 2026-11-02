@@ -17,5 +17,5 @@ type Certificate struct {
 	ClientSecret       string
 	EncryptionSecret   string
 	PublicLocator      string
-	Forge              func() face.Forge
+	Forge              func() face.GitLabClient
 }

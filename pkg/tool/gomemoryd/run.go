@@ -7,11 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 )
 
@@ -21,24 +19,21 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l, r)
-	defer v.Close()
-	u := web.New(v, r)
+	d := daemon.New(o, l, r)
+	defer d.Close()
 	c := lifecycle.New(l)
 
-	for _, w := range v.Workers() {
+	for _, w := range d.Workers() {
 		c.WithWorker(w)
 	}
 
-	c.WithWorker(
-		worker.New(v.Reconcile, l, r, constant.ReconcileInterval),
-	).WithServer(
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
-		).WithMiddleware(u.Recovery(r)),
+		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()
 }

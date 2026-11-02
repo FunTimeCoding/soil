@@ -8,7 +8,11 @@ func (s *Service) Update(
 ) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	s.refresh()
+
+	if e := s.writable(); e != nil {
+		return e
+	}
+
 	entry, _ := s.client.EntryByIdentifier(identifier)
 
 	if entry == nil {

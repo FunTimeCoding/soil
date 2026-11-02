@@ -30,8 +30,8 @@ func ExportTestHelpers() {
 	targetPath := path.Join(packagePath, target)
 	moved := 0
 	asked := 0
-	s := offline_service.New()
-	defer s.Close()
+	s, closeService := offline_service.New()
+	defer closeService()
 
 	for _, line := range strings.Split(string(content), "\n") {
 		name := strings.TrimSpace(line)

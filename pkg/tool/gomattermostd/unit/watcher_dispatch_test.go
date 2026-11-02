@@ -158,3 +158,37 @@ func TestWatcherDueHoldsARootInsideItsWindow(t *testing.T) {
 	)
 	assert.Count(t, 0, o.Watcher.Drain())
 }
+
+func TestWatcherDueCoalescesARootsEvents(t *testing.T) {
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Client.AddUser("foxtrot", "Foxtrot")
+	o.Watcher.Index("alfa")
+
+	for _, m := range []string{"first", "second", "third"} {
+		o.Watcher.Dispatch(
+			worker_tester.PostEvent(
+				&model.Post{
+					Id:      m,
+					RootId:  "alfa",
+					UserId:  "foxtrot",
+					Message: m,
+				},
+			),
+		)
+	}
+
+	due := o.Watcher.Due(
+		time.Now().Add(2*constant.DebounceWindow),
+		constant.DebounceWindow,
+	)
+	assert.Count(t, 1, due)
+	var texts []string
+
+	for _, e := range due["alfa"] {
+		texts = append(texts, e.Text)
+	}
+
+	assert.Strings(t, []string{"first", "second", "third"}, texts)
+	assert.Count(t, 0, o.Watcher.Drain())
+}

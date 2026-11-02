@@ -13,7 +13,6 @@ func TestSubscriptionsNeedGoclauded(t *testing.T) {
 	m.AddPost("alfa")
 	s := service_tester.Service(t, m, nil, nil)
 	assert.False(t, s.Subscribing())
-	assert.Count(t, 1, s.Workers())
 	p, e := m.FindPost("alfa")
 	assert.FatalOnError(t, e)
 	_, _, f := s.Subscribe(p, "kilo", "")
@@ -24,7 +23,7 @@ func TestSubscriptionsNeedGoclauded(t *testing.T) {
 	assert.True(t, not_configured.Is(h))
 }
 
-func TestGoclaudedBuildsTheSubscriptionWorkers(t *testing.T) {
+func TestGoclaudedTurnsSubscriptionsOn(t *testing.T) {
 	_, k := worker_tester.NewSink(t)
 	s := service_tester.Service(
 		t,
@@ -33,7 +32,6 @@ func TestGoclaudedBuildsTheSubscriptionWorkers(t *testing.T) {
 		nil,
 	)
 	assert.True(t, s.Subscribing())
-	assert.Count(t, 3, s.Workers())
 }
 
 func TestMonitorNeedsItsConfiguration(t *testing.T) {

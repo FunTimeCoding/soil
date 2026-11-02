@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	parser "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/service"
 )
 
 type Server struct {
-	service  parser.Generator
+	service  *service.Service
 	reporter face.Reporter
 }

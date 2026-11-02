@@ -22,10 +22,14 @@ Validation errors that re-render a form are the form round-trip instead
 
 Panics stay the net for faults the handler does not expect. A web package
 exposes a `Recovery` delegate (wrapping `view.Recovery`) that renders a
-panic the same way at 500, and reads its class: a panicking quiet-class
-error is shown without a capture, so a forgotten `PanicOnError` on a peer's
-`unavailable` does not flood Sentry. A daemon without a web package uses
-`web.RecoveryMiddleware`, a plain-text 500.
+panic the same way, at its class's status, and reads its class for the
+capture: a panicking quiet-class error is shown without a capture, so a
+forgotten `PanicOnError` on a peer's `unavailable` does not flood Sentry. A
+panic that is not a classified error stays a 500 and is captured. A daemon
+without a web package uses `web.RecoveryMiddleware`, a plain-text 500 for
+every panic, and stays that way on purpose: on REST a quiet class reaching
+the 500 is a missing branch, captured as such (`README.md`, Answering an
+error).
 
 ## Worker and HTTP Recovery
 
@@ -44,6 +48,10 @@ refusal edges, `pkg/peer/retry/` for the bounded loops, and
 
 ### Required and guarded peers
 
+A peer is something the daemon dials: it is guarded and a lasting outage
+is reported. A client that dials in - a browser extension - is not a peer
+and has no guard: there is no call to fail fast and nothing to probe.
+
 Every peer is guarded once the daemon runs (The guard). Whether it must
 also answer before the daemon serves follows from what calls it.
 
@@ -55,16 +63,16 @@ daemon's own store or as `unavailable` (goqueryd's embedder) - is guarded
 and not waited on, so a peer that is away stops what needs it while every
 other answer keeps going.
 
-The service decides which, per peer, where it builds the guard; it is a
+The daemon decides which, per peer, where it builds the guard; it is a
 property of how the peer is used, so no flag or variable changes it. The
 environment decides only whether a peer exists: `Main` sets its factory
 when the environment names it.
 
-`Run` waits for each required peer before the lifecycle starts and panics
-when one never comes. `go:pkg/peer/Await` polls the peer's probe for a minute
-(`Wait`, every `Poll`), logs `<name>_connected`, and returns why the peer
-never came; a guard's `Wait` is the same wait. The wait takes
-`context.Background()`, since a signal before the lifecycle ends the
+`Run` waits for each required peer before the lifecycle starts, through the
+daemon's `Wait`, and panics when one never comes. `go:pkg/peer/Await` polls the
+peer's probe for a minute (`Wait`, every `Poll`), logs `<name>_connected`, and
+returns why the peer never came; a guard's `Wait` is the same wait. The wait
+takes `context.Background()`, since a signal before the lifecycle ends the
 process.
 
 ### The probe route
@@ -103,9 +111,10 @@ Sentry where it is an anomaly, to the log where it is expected.
 ### The guard
 
 After start-up every peer sits behind one `go:pkg/peer/Guard` over its probe,
-shared by every path that calls it. The service builds the guards and hands them
-to `Run` through `Workers()`. `Attempt` runs a call through the reacher: while
-the peer is down it fails at once with `errors/unavailable`.
+shared by every path that calls it. The daemon builds the guards, hands them to
+the services that call the peer, and to `Run` through `Workers()`, first.
+`Attempt` runs a call through the reacher: while the peer is down it fails at
+once with `errors/unavailable`.
 
 A peer goes down two ways, and each comes back the way it failed. A
 transport failure is a peer that does not answer, so the guard probes it

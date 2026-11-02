@@ -1,10 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
+import "github.com/funtimecoding/soil/pkg/firefox/face"
 
-func New(o *option.Firefox) *Service {
-	return &Service{
-		client:            o.Client(),
-		downloadDirectory: o.DownloadDirectory,
-	}
+func New(
+	c face.FirefoxClient,
+	downloadDirectory string,
+) *Service {
+	return &Service{client: c, downloadDirectory: downloadDirectory}
 }

@@ -1,8 +1,8 @@
 package option
 
 type Audit struct {
-	Roots   []string
-	Table   bool
-	Web     bool
-	Service bool
+	Roots  []string
+	Table  bool
+	Web    bool
+	Daemon bool
 }

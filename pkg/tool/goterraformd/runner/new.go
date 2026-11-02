@@ -21,7 +21,7 @@ func New(
 	r face.Reporter,
 	registry face.ProcessRegistry,
 	y *prometheus.Registry,
-	k kubernetesFace.Client,
+	k kubernetesFace.KubernetesClient,
 	downstream []provisionFace.Downstream,
 ) *Runner {
 	result := &Runner{

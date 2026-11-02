@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gogated/service/response"
+import "github.com/funtimecoding/soil/pkg/tool/gogated/types/response"
 
 func (s *Service) SigningKeys() *response.SigningKeySet {
 	return response.NewSigningKeySet(

@@ -7,9 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/postgres/mock_client"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -28,7 +27,7 @@ func served(
 ) {
 	t.Helper()
 	r := memory.New()
-	v, clients := service_tester.New(t, "alfa")
+	d, clients := daemon_tester.New(t, "alfa")
 	clients["alfa"].Failure = failure
 	s := model_context_server.New(
 		t,
@@ -36,7 +35,7 @@ func served(
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gopostgresd.Mount(v, r, mock_recorder.New(), g)
+			d.Mount(r, mock_recorder.New(), g)
 		},
 	)
 	t.Cleanup(s.Close)

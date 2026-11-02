@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/model_context_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/model_context_configuration"
 	"os"
 	"path/filepath"
 )

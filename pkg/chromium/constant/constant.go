@@ -11,6 +11,7 @@ const (
 	IframeTabType = "iframe"
 
 	NotationPath = "/json"
+	VersionPath  = "/json/version"
 
 	TabNotFound = "tab not found"
 	BrowserTab  = "browser tab"

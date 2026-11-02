@@ -103,6 +103,43 @@ func TestTheNextSuccessfulCallBringsAnUnavailablePeerBack(t *testing.T) {
 	assert.Integer(t, 0, p.Probes())
 }
 
+func TestAPanickingTrialLeavesTheNextTrialAdmitted(t *testing.T) {
+	c := fake_clock.New()
+	g := peer.New(
+		"papa",
+		"http://server.test:8080",
+		new(SwitchablePeer),
+		logger.New(context.Background()),
+		memory.New(),
+	).WithBackoff(time.Second, time.Minute).WithClock(c.Now)
+	defer g.Close()
+	assert.True(
+		t,
+		unavailable.Is(
+			g.Attempt(
+				t.Context(),
+				func(context.Context) error { return upstreamUnavailable() },
+			),
+		),
+	)
+	c.Advance(time.Second)
+	assert.Any(t, "trial", panicking(t.Context(), g))
+	calls := 0
+	assert.Nil(
+		t,
+		g.Attempt(
+			t.Context(),
+			func(context.Context) error {
+				calls++
+
+				return nil
+			},
+		),
+	)
+	assert.Integer(t, 1, calls)
+	assert.Nil(t, g.Unavailable())
+}
+
 func TestALastingUnavailablePeerIsCapturedOnce(t *testing.T) {
 	c := fake_clock.New()
 	r := memory.New()

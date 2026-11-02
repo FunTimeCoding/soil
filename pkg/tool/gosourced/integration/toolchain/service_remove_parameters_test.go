@@ -3,7 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"testing"

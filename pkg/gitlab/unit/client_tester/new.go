@@ -11,6 +11,7 @@ import (
 func New(
 	t *testing.T,
 	configure func(*http.ServeMux),
+	o ...gitlab.Option,
 ) *Tester {
 	t.Helper()
 	m := http.NewServeMux()
@@ -22,7 +23,10 @@ func New(
 		Client: gitlab.New(
 			web.TrimScheme(s.URL),
 			"test-token",
-			gitlab.WithInsecure(),
+			append(
+				[]gitlab.Option{gitlab.WithInsecure(), gitlab.WithRetryMax(0)},
+				o...,
+			)...,
 		),
 	}
 	t.Cleanup(result.Client.Close)

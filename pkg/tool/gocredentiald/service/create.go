@@ -14,7 +14,11 @@ func (s *Service) Create(
 ) (string, error) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	s.refresh()
+
+	if e := s.writable(); e != nil {
+		return "", e
+	}
+
 	group := s.client.GroupByPath(groupPath)
 
 	if group == nil {

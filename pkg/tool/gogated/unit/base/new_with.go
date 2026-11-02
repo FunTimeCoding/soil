@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/store"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -18,17 +17,15 @@ import (
 
 func NewWith(
 	t *testing.T,
-	d face.Client,
+	d face.DirectoryClient,
 ) *Server {
 	t.Helper()
 	o := NewOption(t)
-	o.Directory = func() face.Client { return d }
 	l := logger.New(context.Background())
 	r := memory.New()
-	s := service.New(o, l, r)
-	t.Cleanup(s.Close)
 	m := lite.New(l, o.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(m) })
+	s := NewService(t, o, m, d, l, r)
 	h := model_context_server.New(
 		t,
 		func(_ *http.ServeMux, g *guard.Mux) {

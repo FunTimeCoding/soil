@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 )
 
 func BuildClusters() map[string]*cluster.Cluster {

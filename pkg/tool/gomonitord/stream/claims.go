@@ -6,13 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/convert"
-	monitor "github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/service"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"net/http"
 )
 
 func Claims(
-	v monitor.ClaimStream,
+	v *service.Service,
 	r face.Reporter,
 ) http.HandlerFunc {
 	return layout.HandleServerSideEvent(

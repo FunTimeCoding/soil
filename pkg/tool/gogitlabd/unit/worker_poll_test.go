@@ -4,25 +4,47 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"testing"
 )
 
-func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
-	alfa := seededForge(t, 1, "app")
-	bravo := seededForge(t, 2, "web")
+func TestPollReportsARefusalBesideAnInstanceThatIsAway(t *testing.T) {
 	r := memory.New()
-	w := newWorker(t, alfa, bravo, r)
+	w, _, clients := newWorker(t, r)
 	defer w.Close()
+	seedForge(clients[constant.FixtureInstance], 1, "app")
+	seedForge(clients[constant.FixtureOtherInstance], 2, "web")
+	clients[constant.FixtureInstance].FailProjects(
+		unavailable.Format("gitlab away"),
+	)
+	clients[constant.FixtureOtherInstance].FailProjects(
+		errors.New("refused for no known reason"),
+	)
 	w.Poll()
-	assert.Count(t, 2, w.Entries())
+	events := r.Events()
+	assert.Count(t, 1, events)
+	assert.String(t, "refused for no known reason", events[0].Error.Error())
+}
+
+func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
+	r := memory.New()
+	w, s, clients := newWorker(t, r)
+	defer w.Close()
+	alfa := clients[constant.FixtureInstance]
+	bravo := clients[constant.FixtureOtherInstance]
+	seedForge(alfa, 1, "app")
+	seedForge(bravo, 2, "web")
+	w.Poll()
+	assert.Count(t, 2, s.Entries())
 	alfa.FailProjects(errors.New("unreachable"))
 	bravo.SeedBranch("feature", "bbb")
 	bravo.SeedPipeline(11, "feature", "bbb", "running")
 	w.Poll()
 	var instances []string
 
-	for _, e := range w.Entries() {
+	for _, e := range s.Entries() {
 		instances = append(instances, e.Instance)
 	}
 
@@ -31,20 +53,22 @@ func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
 }
 
 func TestRequestsCarryTheirInstance(t *testing.T) {
-	alfa := seededForge(t, 1, "app")
+	w, s, clients := newWorker(t, memory.New())
+	defer w.Close()
+	alfa := clients[constant.FixtureInstance]
+	seedForge(alfa, 1, "app")
 	alfa.SetMergeRequests(
 		[]*merge_request.Request{newRequest(1, 1, "alfa change", 1)},
 		nil,
 	)
-	bravo := seededForge(t, 2, "web")
+	bravo := clients[constant.FixtureOtherInstance]
+	seedForge(bravo, 2, "web")
 	bravo.SetMergeRequests(
 		nil,
 		[]*merge_request.Request{newRequest(2, 1, "bravo change", 2)},
 	)
-	w := newWorker(t, alfa, bravo, memory.New())
-	defer w.Close()
 	w.Poll()
-	requests := w.Requests()
+	requests := s.Requests()
 	assert.Count(t, 2, requests)
 	assert.String(t, "alfa", requests[0].Instance)
 	assert.String(t, "alfa change", requests[0].Request.Title)

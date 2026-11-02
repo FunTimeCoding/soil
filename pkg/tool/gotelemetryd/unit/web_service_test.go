@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_service_tester"
 	"net/http"
 	"testing"
@@ -68,17 +69,14 @@ func TestIngestOperationNotRecorded(t *testing.T) {
 	summary, e := o.Client.GetSummaryWithResponse(x, &client.GetSummaryParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, summary.StatusCode())
-	summaryRecorded := false
-
-	for _, r := range o.Recorder.Records() {
-		if r.Tool == constant.IngestOperation {
-			t.Fatalf("ingest operation recorded: %s", r.Tool)
-		}
-
-		if r.Tool == "GetSummary" {
-			summaryRecorded = true
-		}
-	}
-
-	assert.True(t, summaryRecorded)
+	ingest := query_option.New()
+	ingest.Tool = constant.IngestOperation
+	ingested, f := o.Store.Recent(ingest)
+	assert.FatalOnError(t, f)
+	assert.Count(t, 0, ingested)
+	summaries := query_option.New()
+	summaries.Tool = "GetSummary"
+	recorded, g := o.Store.Recent(summaries)
+	assert.FatalOnError(t, g)
+	assert.Count(t, 1, recorded)
 }

@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 )
 
 func guardedError(

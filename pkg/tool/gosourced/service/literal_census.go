@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/literal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/literal"
 	"go/ast"
 	"go/token"
 	"go/types"

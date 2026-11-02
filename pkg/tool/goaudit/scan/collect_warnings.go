@@ -2,7 +2,9 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"path/filepath"
 )
 
 func (s *Service) collectWarnings(
@@ -28,8 +30,11 @@ func (s *Service) collectWarnings(
 	s.checkStrictServer(v, path)
 	s.checkErrorHandling(v, path, configuration)
 	s.checkServerPatterns(v, path)
+	s.checkSurfaceHoldsDaemon(v, path)
 
-	if configuration.Service {
-		s.checkServiceShape(v, path)
+	if v.DirectoryExists(filepath.Join(path, constant.DaemonDirectory)) {
+		s.checkDaemonShape(v, path)
+	} else if configuration.Daemon {
+		s.checkMissingDaemon(v, path)
 	}
 }

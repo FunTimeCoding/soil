@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -13,32 +12,19 @@ func (s *Server) CreateSnippet(
 	_ mcp.CallToolRequest,
 	a argument.CreateSnippet,
 ) (*mcp.CallToolResult, error) {
-	if a.Name == "" {
-		return response.Fail("name is required")
-	}
-
-	if a.Content == "" {
-		return response.Fail("content is required")
-	}
-
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	c, e := s.service.SSHClient(instance)
+	volume, e := s.service.CreateSnippet(instance, a.Name, a.Content)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	c.WriteFile(snippetPath(a.Name), []byte(a.Content))
-
 	return response.SuccessAny(
-		map[string]string{
-			"volume": fmt.Sprintf("local:snippets/%s", a.Name),
-			"status": "created",
-		},
+		map[string]string{"volume": volume, "status": "created"},
 	)
 }

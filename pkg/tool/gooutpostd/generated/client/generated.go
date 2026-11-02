@@ -15,6 +15,12 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Error           string `json:"error"`
+	EventIdentifier string `json:"event_identifier"`
+}
+
 // Host defines model for Host.
 type Host struct {
 	HardwareAddresses *[]string `json:"hardware_addresses,omitempty"`
@@ -328,11 +334,18 @@ type ListServicesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]Service
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListServicesResponse) GetJSON200() *[]Service {
 	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListServicesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
 }
 
 // GetBody returns the raw response body bytes
@@ -432,6 +445,13 @@ func ParseListServicesResponse(rsp *http.Response) (*ListServicesResponse, error
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
 
 	}
 

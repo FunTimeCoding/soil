@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/deletion"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/deletion"
 )
 
 func (s *Service) emptyChecks() []deletion.EmptyCheck {

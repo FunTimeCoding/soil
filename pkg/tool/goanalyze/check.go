@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/file_identity"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/forwarding_function"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/nil_dependency"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/omit_empty_zero"
@@ -66,6 +67,7 @@ func check(
 	constant_declaration.Check(p, results)
 	unclosed_resource.Check(p, results, summaries)
 	nil_dependency.Check(p, results)
+	forwarding_function.CheckDaemon(p, results)
 
 	if comment {
 		stray_comment.Check(p, results)

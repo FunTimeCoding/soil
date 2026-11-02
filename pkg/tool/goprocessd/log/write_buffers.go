@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
-	"os"
 	"strings"
 	"time"
 )
@@ -13,7 +12,7 @@ func (l *Logger) writeBuffers(line []byte) {
 	mutex.Lock()
 	now := time.Now().Format("15:04:05")
 	writer.Print(
-		os.Stdout,
+		l.output,
 		"\x1b[%dm%s %*s | \x1b[m",
 		constant.Colors[l.colorIndex],
 		now,
@@ -23,7 +22,7 @@ func (l *Logger) writeBuffers(line []byte) {
 	l.buffers = append(l.buffers, line)
 
 	for _, b := range l.buffers {
-		_, e := os.Stdout.Write(b)
+		_, e := l.output.Write(b)
 		errors.PanicOnError(e)
 	}
 

@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/file"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/file"
+)
 
 func (s *Service) File(
 	instance string,
@@ -8,11 +11,11 @@ func (s *Service) File(
 	branch string,
 	name string,
 ) (*file.File, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.File(project, branch, name)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) (*file.File, error) {
+			return c.File(project, branch, name)
+		},
+	)
 }

@@ -6,6 +6,7 @@ import (
 )
 
 type Server struct {
-	service  *service.Service
-	reporter face.Reporter
+	service   *service.Service
+	hiddenTag string
+	reporter  face.Reporter
 }

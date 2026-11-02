@@ -25,7 +25,10 @@ func New(
 	}
 
 	result.pool = stall_client.New().Build()
-	p := []gitlab.ClientOptionFunc{gitlab.WithHTTPClient(result.pool.Client())}
+	p := []gitlab.ClientOptionFunc{
+		gitlab.WithHTTPClient(result.pool.Client()),
+		gitlab.WithOnlyIdempotentRetries(),
+	}
 
 	if host != "" {
 		l := locator.New(host).Base(constant.Base)
@@ -35,6 +38,10 @@ func New(
 		}
 
 		p = append(p, gitlab.WithBaseURL(l.String()))
+	}
+
+	if result.retryMax != nil {
+		p = append(p, gitlab.WithCustomRetryMax(*result.retryMax))
 	}
 
 	client, e := gitlab.NewClient(token, p...)

@@ -6,8 +6,9 @@ import (
 )
 
 type Source struct {
-	Address       string
-	ServiceTokens []string
-	Inventory     *inventory.Inventory
-	Memory        func() face.Client
+	Address        string
+	ServiceTokens  []string
+	Inventory      *inventory.Inventory
+	IndexDirectory string
+	Memory         func() face.Client
 }

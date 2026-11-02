@@ -15,8 +15,8 @@ func RenameTestHomes() {
 
 	directory := os.Args[1]
 	module := os.Args[2]
-	s := offline_service.New()
-	defer s.Close()
+	s, closeService := offline_service.New()
+	defer closeService()
 
 	for _, relative := range testHomeDirectories(directory, "unit_test") {
 		renameTestHome(s, directory, module, relative, "unit")

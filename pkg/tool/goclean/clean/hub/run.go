@@ -7,7 +7,7 @@ import (
 )
 
 func Run(
-	c face.Client,
+	c face.GitHubClient,
 	namespace string,
 	repository string,
 ) {

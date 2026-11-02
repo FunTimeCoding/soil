@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 )
 
 func (s *Service) ExtractType(

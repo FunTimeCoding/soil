@@ -3,8 +3,10 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/server"
 )
@@ -37,8 +39,16 @@ func (s *Server) RequestPower(
 		return server.RequestPower400JSONResponse(*clientError(f)), nil
 	}
 
+	if forbidden.Is(f) {
+		return server.RequestPower403JSONResponse(*clientError(f)), nil
+	}
+
 	if conflict.Is(f) {
 		return server.RequestPower409JSONResponse(*clientError(f)), nil
+	}
+
+	if unavailable.Is(f) {
+		return server.RequestPower503JSONResponse(*clientError(f)), nil
 	}
 
 	if f != nil {

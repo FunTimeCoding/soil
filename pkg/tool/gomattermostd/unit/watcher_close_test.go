@@ -43,7 +43,7 @@ func TestCloseFlushesAnEventStillBeingDispatched(t *testing.T) {
 
 	closed := make(chan struct{})
 	go func() {
-		r.Service.Close()
+		r.Daemon.Close()
 		close(closed)
 	}()
 

@@ -1,8 +1,8 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
 	"github.com/funtimecoding/soil/pkg/proxmox/network_device"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"strings"
 )
 

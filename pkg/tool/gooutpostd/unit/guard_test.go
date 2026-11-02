@@ -1,10 +1,10 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gooutpostd"
-	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/daemon"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -17,7 +17,7 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gooutpostd.Mount(service.New(), mock_recorder.New(), g)
+			daemon.New().Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()

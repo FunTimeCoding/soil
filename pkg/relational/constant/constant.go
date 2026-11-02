@@ -16,7 +16,7 @@ const (
 	LiteDriverName  = "sqlite"
 	LiteDialectName = "sqlite"
 
-	LiteFileParameters   = "?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"
+	LiteFileParameters   = "?_txlock=immediate&_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"
 	LiteMemoryParameters = "?_pragma=foreign_keys(1)"
 
 	LiteUniversalTable = "lite_universal_time"

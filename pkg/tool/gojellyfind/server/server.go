@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	jellyfin "github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/service"
 )
 
 type Server struct {
-	service  jellyfin.Jellyfin
+	service  *service.Service
 	reporter face.Reporter
 }

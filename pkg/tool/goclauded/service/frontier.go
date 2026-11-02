@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/door"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/door"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"sort"
 )

@@ -6,5 +6,5 @@ type Habitica struct {
 	Address       string
 	ServiceTokens []string
 	Host          string
-	Source        func() face.Client
+	Source        func() face.HabiticaClient
 }

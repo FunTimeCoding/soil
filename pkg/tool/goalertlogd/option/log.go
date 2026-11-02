@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	"time"
 )
 
@@ -12,5 +12,5 @@ type Log struct {
 	PostgresLocator string
 	LitePath        string
 	Retention       time.Duration
-	Alertmanager    func() face.Client
+	Alertmanager    func() face.AlertmanagerClient
 }

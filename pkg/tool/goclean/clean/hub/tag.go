@@ -9,7 +9,7 @@ import (
 )
 
 func Tag(
-	c face.Client,
+	c face.GitHubClient,
 	namespace string,
 	repository string,
 ) {

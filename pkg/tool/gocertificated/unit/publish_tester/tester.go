@@ -1,11 +1,13 @@
 package publish_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/base"
+	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
 	"testing"
 )
 
 type Tester struct {
-	Server *base.Server
-	t      *testing.T
+	Service *service.Service
+	Forge   *mock_client.Client
+	t       *testing.T
 }

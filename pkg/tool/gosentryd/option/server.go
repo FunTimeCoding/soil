@@ -7,5 +7,5 @@ type Server struct {
 	ServiceTokens []string
 	Organization  string
 	Host          string
-	Source        func() face.Client
+	Source        func() face.SentryClient
 }

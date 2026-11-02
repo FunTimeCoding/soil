@@ -1,10 +1,11 @@
 package base
 
-import "github.com/funtimecoding/soil/pkg/errors"
-
 func (s *Stack) Close() {
-	s.Client.Close()
-	errors.LogOnError(s.process.Kill())
+	if s.Client != nil {
+		s.Client.Close()
+	}
+
+	s.Stop()
 	s.Site.CloseClientConnections()
 	s.Site.Close()
 	s.pool.Close()

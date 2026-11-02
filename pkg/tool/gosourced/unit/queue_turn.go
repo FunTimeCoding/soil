@@ -2,7 +2,7 @@ package unit
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/turn"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
 	"testing"
 )
 

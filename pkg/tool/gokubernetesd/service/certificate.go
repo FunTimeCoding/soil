@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/certificate_detail"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/certificate_detail"
 )
 
 func (s *Service) Certificate(

@@ -8,23 +8,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
 
 func TestModelContextSchemasNeedASelectedInstance(t *testing.T) {
-	s, _ := service_tester.New(t, "alfa", "bravo")
+	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	v := model_context_server.New(
 		t,
 		func(
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gopostgresd.Mount(s, memory.New(), mock_recorder.New(), g)
+			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()

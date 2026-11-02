@@ -4,10 +4,10 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/refusal"
 	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/argocd_detail"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/resource"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/argocd_detail"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

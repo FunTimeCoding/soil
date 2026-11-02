@@ -11,6 +11,8 @@ const (
 	PollInterval       = time.Minute
 	ActivePollInterval = 10 * time.Second
 )
+
+const InstancePeer = "gitlab"
 const (
 	BoardTitle   = "Pipelines"
 	BoardPath    = "/"

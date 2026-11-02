@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service/response"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/response"
 )
 
 func (s *Service) Discovery() *response.Discovery {

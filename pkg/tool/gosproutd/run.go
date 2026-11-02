@@ -7,10 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -21,17 +19,21 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o, l)
-	defer v.Close()
-	w := worker.New(v, l, r, o.SeedDirectory)
-	u := web.New(v, r)
-	lifecycle.New(l).WithWorker(w).WithServer(
+	d := daemon.New(o, l, r)
+	defer d.Close()
+	c := lifecycle.New(l)
+
+	for _, w := range d.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,
 			func(m *http.ServeMux) {
-				Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
 			},
-		).WithMiddleware(u.Recovery(r)).WithDefaultCertificate(),
+		).WithMiddleware(d.Recovery(r)).WithDefaultCertificate(),
 	).RunUntilSignal()
 }

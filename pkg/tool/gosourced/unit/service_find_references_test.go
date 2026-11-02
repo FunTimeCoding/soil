@@ -2,8 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/location"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/references"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result/location"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result/references"
 	"testing"
 )
 

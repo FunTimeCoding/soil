@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/preview_chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/preview_chunk"
 	"testing"
 )
 

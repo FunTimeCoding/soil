@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/service/match"
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/types/match"
 
 func parseApplyPatterns(
 	pattern string,

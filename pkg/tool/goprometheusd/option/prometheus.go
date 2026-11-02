@@ -9,5 +9,5 @@ type Prometheus struct {
 	Address       string
 	ServiceTokens []string
 	Inventory     *instance.Inventory
-	Client        func(*instance.Instance) (face.Client, error)
+	Client        func(*instance.Instance) (face.PrometheusClient, error)
 }

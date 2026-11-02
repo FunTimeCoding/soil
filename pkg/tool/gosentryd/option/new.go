@@ -7,7 +7,7 @@ import (
 
 func New() *Server {
 	return &Server{
-		Source: func() face.Client {
+		Source: func() face.SentryClient {
 			return sentry.NewEnvironment()
 		},
 	}

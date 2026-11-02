@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/pipeline"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
+)
 
 func (s *Service) Pipelines(
 	instance string,
@@ -9,11 +12,11 @@ func (s *Service) Pipelines(
 	status string,
 	limit int64,
 ) ([]*pipeline.Pipeline, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.Pipelines(project, reference, status, limit)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*pipeline.Pipeline, error) {
+			return c.Pipelines(project, reference, status, limit)
+		},
+	)
 }

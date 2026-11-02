@@ -8,7 +8,6 @@ import (
 const (
 	JiraPeer       = "jira upstream"
 	ConfluencePeer = "confluence upstream"
-	PlateDeferred  = "plate refresh skipped: %v"
 )
 
 var Identity = identity.New(

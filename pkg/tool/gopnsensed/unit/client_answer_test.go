@@ -28,11 +28,13 @@ func TestTheClientAnswersARejectedHostAsValidation(t *testing.T) {
 }
 
 func TestTheClientAnswersAnUnknownHostAsNotFound(t *testing.T) {
-	c := client_tester.New(t, missing_host.New())
+	m := missing_host.New()
+	c := client_tester.New(t, m)
 	assert.True(
 		t,
 		not_found.Is(c.DeleteHost(context.Background(), "alfa", true)),
 	)
+	assert.Strings(t, []string{"alfa"}, m.Asked)
 }
 
 func TestTheClientAcceptsANoContentWrite(t *testing.T) {

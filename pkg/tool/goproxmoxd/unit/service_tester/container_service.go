@@ -1,20 +1,20 @@
 package service_tester
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
+	sshMock "github.com/funtimecoding/soil/pkg/ssh/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
+	"testing"
 )
 
-func ContainerService(c *mock_client.Client) *service.Service {
-	result := service.New(
-		containerOption(),
-		logger.New(context.Background()),
-		memory.New(),
-	)
-	result.Pool().Set("test", c)
+func ContainerService(
+	t *testing.T,
+	c *mock_client.Client,
+) *service.Service {
+	t.Helper()
+	h := sshMock.New()
+	t.Cleanup(h.Close)
 
-	return result
+	return newService(t, c, h, memory.New())
 }

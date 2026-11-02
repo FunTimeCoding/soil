@@ -10,9 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -25,18 +24,13 @@ func TestModelContextQueriesNeedASelectedInstance(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goprometheusd.Mount(
-				service_tester.New(
-					t,
-					map[string]*mock_client.Client{
-						"alfa":  mock_client.New(),
-						"bravo": mock_client.New(),
-					},
-				),
-				memory.New(),
-				mock_recorder.New(),
-				g,
-			)
+			daemon_tester.New(
+				t,
+				map[string]*mock_client.Client{
+					"alfa":  mock_client.New(),
+					"bravo": mock_client.New(),
+				},
+			).Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()

@@ -2,30 +2,25 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
+	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 )
 
 func New(
-	o *option.Query,
-	l *logger.Logger,
-	r face.Reporter,
+	embedModel string,
+	s *store.Store,
+	m face.ReachableEmbedder,
+	g *peer.Guard,
+	a queryd.Reranker,
+	c queryd.EmbedCounter,
 ) *Service {
-	model := embedModelByName(o.EmbedModel)
-	d := connection.New(l, o.LitePath)
-	m := o.Embedder()
-
 	return &Service{
-		model:    model,
-		database: d,
-		store:    store.New(d, o.EmbedModel),
+		model:    embedModelByName(embedModel),
+		store:    s,
 		embedder: m,
-		guard:    peer.New(constant.EmbedderPeer, o.EmbedTarget, m, l, r),
-		reranker: o.Reranker(),
-		counter:  o.EmbedCounter(),
+		guard:    g,
+		reranker: a,
+		counter:  c,
 	}
 }

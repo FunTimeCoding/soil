@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/types/instance"
 )
 
-func BuildPrometheus(i *instance.Instance) (face.Client, error) {
+func BuildPrometheus(i *instance.Instance) (face.PrometheusClient, error) {
 	var o []prometheus.Option
 
 	if l := i.Prometheus.Link; l.Host != "" {

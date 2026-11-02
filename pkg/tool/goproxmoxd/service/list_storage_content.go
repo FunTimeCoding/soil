@@ -7,7 +7,7 @@ func (s *Service) ListStorageContent(
 	node string,
 	storage string,
 ) ([]*proxmox.StorageContent, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return nil, clientFail

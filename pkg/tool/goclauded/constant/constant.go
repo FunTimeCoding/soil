@@ -12,6 +12,14 @@ const UsagePageUnreadable = "usage page carries no weekly meter"
 const CompleteTimeoutWindow = 30 * time.Minute
 const ChannelHold = 5 * time.Minute
 const ReconcileInterval = 10 * time.Minute
+const (
+	TimeoutSweepInterval    = 5 * time.Minute
+	MemoryPollInterval      = 30 * time.Second
+	ImpressionInterval      = 30 * time.Second
+	FindingInterval         = 5 * time.Minute
+	UsagePollInterval       = time.Minute
+	UtilizationPollInterval = 5 * time.Minute
+)
 const RosterStaleAfter = 45 * time.Minute
 const (
 	PageSize        = 20

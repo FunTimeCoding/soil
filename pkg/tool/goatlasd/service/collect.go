@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service/outcome"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/outcome"
 )
 
 func (s *Service) Collect(x context.Context) ([]*outcome.Outcome, error) {

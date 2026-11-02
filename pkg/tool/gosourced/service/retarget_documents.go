@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/symbol_move"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
 	"path/filepath"
 	"slices"

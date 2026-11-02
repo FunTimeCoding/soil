@@ -17,7 +17,7 @@ func (s *Service) LabelNames(
 		s,
 		x,
 		instance,
-		func(c face.Client) (*label_result.Result, error) {
+		func(c face.PrometheusClient) (*label_result.Result, error) {
 			return c.LabelNames(matches, since)
 		},
 	)

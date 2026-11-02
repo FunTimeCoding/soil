@@ -14,13 +14,13 @@ func documentAnswer(
 ) (*client.GetDocumentResponse, *memory.Memory) {
 	t.Helper()
 	r := memory.New()
-	v := service_tester.New(
+	c := mountedClient(
 		t,
 		service_tester.NewOption(t, newEmbedder(t), newReranker(t)),
 		r,
 	)
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
-	answer, e := mountedClient(t, v, r).GetDocumentWithResponse(
+	pushDocument(t, c, "notes", "alfa.md", "# Alfa\n\nzulu.\n")
+	answer, e := c.GetDocumentWithResponse(
 		t.Context(),
 		&client.GetDocumentParams{Path: path},
 	)

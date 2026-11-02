@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument"
 )
 
 func (s *Server) GetTimeline(

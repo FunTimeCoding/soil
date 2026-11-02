@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"net/http"
 	"strconv"
 )
@@ -17,7 +18,12 @@ func queryInteger(
 	}
 
 	result, e := strconv.ParseInt(value, 10, 64)
-	errors.PanicOnError(e)
+
+	if e != nil {
+		errors.PanicOnError(
+			validation.New("%s is not a number: %s", name, value),
+		)
+	}
 
 	return result
 }

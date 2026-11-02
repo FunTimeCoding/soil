@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/ambiguous_pods"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 )
 
 func logsOn(

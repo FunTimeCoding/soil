@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -26,20 +25,15 @@ func (s *Server) ListSnippets(
 		return server.ListSnippets500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
-	c, e := s.service.SSHClient(instance)
+	entries, e := s.service.ListSnippets(instance)
 
 	if e != nil {
 		return server.ListSnippets500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	entries := c.ListDirectory(constant.SnippetDirectory)
 	var result server.ListSnippets200JSONResponse
 
 	for _, v := range entries {
-		if v.IsDir() {
-			continue
-		}
-
 		result = append(
 			result,
 			server.SnippetItem{Name: v.Name(), Size: new(int64(v.Size()))},

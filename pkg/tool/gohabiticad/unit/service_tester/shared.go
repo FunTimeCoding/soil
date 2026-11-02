@@ -3,10 +3,10 @@ package service_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/habitica/face"
 	"github.com/funtimecoding/soil/pkg/habitica/mock_client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/option"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/service"
 	"testing"
 )
@@ -17,11 +17,14 @@ func Shared(
 	r *memory.Memory,
 ) *service.Service {
 	t.Helper()
-	o := option.New()
-	o.Host = "habitica.test"
-	o.Source = func() face.Client { return c }
-	result := service.New(o, logger.New(context.Background()), r)
-	t.Cleanup(result.Close)
+	g := peer.New(
+		constant.HabiticaPeer,
+		"habitica.test",
+		c,
+		logger.New(context.Background()),
+		r,
+	)
+	t.Cleanup(g.Close)
 
-	return result
+	return service.New(c, g)
 }

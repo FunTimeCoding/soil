@@ -1,82 +1,120 @@
 package unit
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/service"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/failing_jira"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
+	"go.uber.org/goleak"
 	"testing"
 )
 
-func TestTheServiceClosesBothClientsItBuilt(t *testing.T) {
+func TestTheDaemonClosesBothClientsItBuilt(t *testing.T) {
 	j := service_tester.NewJira(t)
 	c := service_tester.NewConfluence(t)
-	service.New(
+	d := service_tester.NewDaemon(
+		t,
 		service_tester.NewOption(j, c, nil),
-		logger.New(t.Context()),
 		memory.New(),
-	).Close()
+	)
+	d.Close()
+	d.Close()
 	assert.Integer(t, 1, j.Closed)
 	assert.Integer(t, 1, c.Closed)
 }
 
-func TestAPollFillsThePlateFromTheService(t *testing.T) {
+func TestTheDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
+	workers := service_tester.NewDaemon(
+		t,
+		service_tester.NewOption(
+			service_tester.NewJira(t),
+			service_tester.NewConfluence(t),
+			nil,
+		),
+		memory.New(),
+	).Workers()
+	assert.Count(t, 3, workers)
+
+	for n, w := range workers {
+		_, guard := w.(*peer.Guard)
+		assert.Boolean(t, n < 2, guard)
+	}
+}
+
+func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+	o := service_tester.NewOption(
+		service_tester.NewJira(t),
+		service_tester.NewConfluence(t),
+		nil,
+	)
+	before := goleak.IgnoreCurrent()
+	d := service_tester.NewDaemon(t, o, memory.New())
+	workers := d.Workers()
+
+	for _, w := range workers {
+		w.Start()
+	}
+
+	for _, w := range workers {
+		w.Close()
+	}
+
+	d.Close()
+	goleak.VerifyNone(t, before)
+}
+
+func TestARefreshFillsThePlateAndNotifiesOnlyOnChange(t *testing.T) {
 	j := service_tester.NewJira(t)
 	j.Issues = []*issue.Issue{
 		issue.New(issue.Raw("ALFA-1"), issue.FixtureOption()),
 	}
-	k := worker.New(
-		service_tester.NewService(t, j, service_tester.NewConfluence(t), nil),
-		constant.PollInterval,
-		logger.New(context.Background()),
-		memory.New(),
+	n := notifier.New()
+	changes := n.Subscribe()
+	defer n.Unsubscribe(changes)
+	v := service_tester.NewService(
+		t,
+		j,
+		service_tester.NewConfluence(t),
+		nil,
+		n,
 	)
-	defer k.Close()
-	k.Poll()
-	assert.Count(t, 1, k.Issues())
-	assert.String(t, "ALFA-1", k.Issues()[0].Key)
+	assert.Count(t, 0, v.RefreshPlate())
+	assert.Count(t, 1, v.CurrentPlate().Issues)
+	assert.String(t, "ALFA-1", v.CurrentPlate().Issues[0].Key)
+	assert.Integer(t, 1, len(changes))
+	<-changes
+	assert.Count(t, 0, v.RefreshPlate())
+	assert.Integer(t, 0, len(changes))
 }
 
-func TestAFailedPollIsReportedAndKeepsThePlate(t *testing.T) {
-	r := memory.New()
-	k := worker.New(
-		service_tester.NewService(
-			t,
-			failing_jira.New(errors.Format("search refused", "ALFA")),
-			service_tester.NewConfluence(t),
-			nil,
-		),
-		constant.PollInterval,
-		logger.New(context.Background()),
-		r,
+func TestAFailedRefreshIsReportableAndKeepsThePlate(t *testing.T) {
+	v := service_tester.NewService(
+		t,
+		failing_jira.New(errors.Format("search refused", "ALFA")),
+		service_tester.NewConfluence(t),
+		nil,
+		notifier.New(),
 	)
-	defer k.Close()
-	k.Poll()
-	assert.Count(t, 1, r.Events())
-	assert.Count(t, 0, k.Issues())
+	failures := v.RefreshPlate()
+	assert.Count(t, 1, failures)
+	assert.True(t, classify.Reportable(failures[0]))
+	assert.Count(t, 0, v.CurrentPlate().Issues)
 }
 
-func TestAnOutageLeavesTheReportToTheGuard(t *testing.T) {
-	r := memory.New()
-	k := worker.New(
-		service_tester.NewService(
-			t,
-			failing_jira.New(refusedConnection()),
-			service_tester.NewConfluence(t),
-			nil,
-		),
-		constant.PollInterval,
-		logger.New(context.Background()),
-		r,
+func TestAnOutageIsLeftToTheGuard(t *testing.T) {
+	v := service_tester.NewService(
+		t,
+		failing_jira.New(refusedConnection()),
+		service_tester.NewConfluence(t),
+		nil,
+		notifier.New(),
 	)
-	defer k.Close()
-	k.Poll()
-	assert.Count(t, 0, r.Events())
+	failures := v.RefreshPlate()
+	assert.Count(t, 1, failures)
+	assert.False(t, classify.Reportable(failures[0]))
 }

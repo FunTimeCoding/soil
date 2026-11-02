@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/branch"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/branch"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+)
 
 func (s *Service) CreateBranch(
 	instance string,
@@ -8,11 +11,11 @@ func (s *Service) CreateBranch(
 	name string,
 	reference string,
 ) (*branch.Branch, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.CreateBranch(project, name, reference)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) (*branch.Branch, error) {
+			return c.CreateBranch(project, name, reference)
+		},
+	)
 }

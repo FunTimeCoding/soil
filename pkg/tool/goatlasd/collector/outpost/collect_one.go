@@ -23,11 +23,11 @@ func collectOne(
 		func(x context.Context) error {
 			var f error
 
-			if host, f = t.Client.Host(x); f != nil {
+			if host, f = t.Client.GetHost(x); f != nil {
 				return f
 			}
 
-			services, f = t.Client.Services(x, "")
+			services, f = t.Client.ListServices(x, "")
 
 			return f
 		},

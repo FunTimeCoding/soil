@@ -6,7 +6,7 @@ func (s *Service) ListStorages(
 	instance string,
 	node string,
 ) (proxmox.Storages, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return nil, clientFail

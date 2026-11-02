@@ -17,14 +17,18 @@ func (s *Service) referenceLoad(
 	w := s.workspace(directory)
 
 	if s.full {
-		return wholeLoad(directory, w, packagePath)
+		return wholeLoad(directory, w, packagePath, targetPackagePath)
 	}
 
 	i := w.References()
+	reached := reachedPaths(w.Graph(), []string{packagePath, targetPackagePath})
 
 	if !i.Has(packagePath) && !w.Reaches(packagePath) ||
-		len(i.Unindexed()) > 0 {
-		return wholeLoad(directory, w, packagePath)
+		slices.ContainsFunc(
+			i.Unindexed(),
+			func(unit string) bool { return reached[unit] },
+		) {
+		return wholeLoad(directory, w, packagePath, targetPackagePath)
 	}
 
 	patterns := []string{packagePath}
@@ -51,7 +55,7 @@ func (s *Service) referenceLoad(
 		t, okay := xref.Target(o)
 
 		if !okay {
-			return wholeLoad(directory, w, packagePath)
+			return wholeLoad(directory, w, packagePath, targetPackagePath)
 		}
 
 		for _, unit := range i.Referencing(t) {
@@ -66,7 +70,7 @@ func (s *Service) referenceLoad(
 	patterns = slices.Compact(slices.Sorted(slices.Values(patterns)))
 
 	if 2*len(patterns) > i.Count() {
-		return wholeLoad(directory, w, packagePath)
+		return wholeLoad(directory, w, packagePath, targetPackagePath)
 	}
 
 	return loadPackages(directory, patterns...)

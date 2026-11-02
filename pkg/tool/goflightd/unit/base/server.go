@@ -4,14 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/mock_system"
+	"gorm.io/gorm"
 )
 
 type Server struct {
-	Store    *store.Store
-	Service  *service.Service
+	Mapper   *gorm.DB
 	System   *mock_system.System
 	Reporter *memory.Memory
 	Client   *client.ClientWithResponses

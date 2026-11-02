@@ -2,40 +2,25 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
+	proxmox "github.com/funtimecoding/soil/pkg/proxmox/face"
+	ssh "github.com/funtimecoding/soil/pkg/ssh/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
 func New(
-	o *option.Proxmox,
+	p *pool.Pool[instance.Instance, *instance.Instance, proxmox.ProxmoxClient],
+	shells *pool.Pool[instance.Instance, *instance.Instance, ssh.SSHClient],
+	i *instance.Inventory,
 	l *logger.Logger,
 	r face.Reporter,
 ) *Service {
-	result := &Service{
-		inventory: o.Inventory,
-		pool:      pool.New(o.Inventory, newClient),
-		snippets:  pool.New(o.Inventory, newSnippetClient),
-		selection: selection.New(),
+	return &Service{
+		inventory: i,
+		pool:      p,
+		shells:    shells,
 		logger:    l,
 		reporter:  r,
 	}
-
-	if o.Netbox == nil {
-		return result
-	}
-
-	result.netbox = o.Netbox()
-	result.netboxGuard = peer.New(
-		constant.Identity.Name(),
-		result.netbox.Address(),
-		result.netbox,
-		l,
-		r,
-	)
-
-	return result
 }

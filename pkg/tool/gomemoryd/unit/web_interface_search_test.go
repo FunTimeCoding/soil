@@ -25,8 +25,7 @@ func TestSearchPartialWordMatches(t *testing.T) {
 }
 
 func TestSearchOmitsHiddenMemories(t *testing.T) {
-	s := base.New(t)
-	s.Service().WithHiddenTag("private")
+	s := base.NewHidden(t, "private")
 	visible := save_option.New()
 	visible.Name = "scripted reads"
 	visible.Content = "scripted reads stay visible"

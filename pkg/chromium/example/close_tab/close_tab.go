@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
@@ -21,8 +22,10 @@ func CloseTab() {
 	}
 
 	console.Format("listing targets via CDP...\n")
+	targets, f := c.Targets()
+	errors.PanicOnError(f)
 
-	for _, t := range c.Targets() {
+	for _, t := range targets {
 		console.Format("  %s %s\n", t.TargetID, t.Title)
 	}
 

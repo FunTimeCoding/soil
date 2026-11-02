@@ -1,16 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/tag"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
+)
 
 func (s *Service) Tags(
 	instance string,
 	project int64,
 ) ([]*tag.Tag, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.Tags(project)
+	return guarded(
+		s,
+		instance,
+		func(c face.GitLabClient) ([]*tag.Tag, error) {
+			return c.Tags(project)
+		},
+	)
 }

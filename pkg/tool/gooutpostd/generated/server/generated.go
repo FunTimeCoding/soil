@@ -22,6 +22,12 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Error           string `json:"error"`
+	EventIdentifier string `json:"event_identifier"`
+}
+
 // Host defines model for Host.
 type Host struct {
 	HardwareAddresses *[]string `json:"hardware_addresses,omitempty"`
@@ -281,6 +287,20 @@ func (response ListServices200JSONResponse) VisitListServicesResponse(w http.Res
 	return err
 }
 
+type ListServices500JSONResponse ErrorResponse
+
+func (response ListServices500JSONResponse) VisitListServicesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -385,14 +405,15 @@ func (sh *strictHandler) ListServices(w http.ResponseWriter, r *http.Request, pa
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"pFNNjxMxDP0rUeBYdQrc5o5YBLc9rlbIzbgdLzNx1nZbVVX/O0rSL7YtHPaUTDx+ee/5ZecDj4kjRlPf",
-	"7ryGHkco2wdWy2sSTihGWE57kG4Dgr+g6wRV6ykZjmVj24S+9WpCcen3k+MBiMA2f/esFmHEmz+nAWzB",
-	"Mt4o7ide8HVFgp1vn84wF03Pp9t4/oLBMuIjypoCXuvocKA5CtglkznzgBBz412OLLSkeJs+hN+wvN2m",
-	"vJJwp2R/szhX1ihKHP9vx8GKinTiOLlUee1OBqG44AJPNuTaknllidU6f3G9/zSdTWdFfcIIiXzrv5Sj",
-	"LNr64mgDiZr+EJolliU7DkYcv3e+9d/QSqgyd00cD+H5PJvlJXA0jKUNUhoolMbmRasBNZl591Fw4Vv/",
-	"oTlHtznktin4RVmHGoSSVQEPvHHWk7oRQk8RXXZMHZnisHDGznp0FNcYjWU7zRD7SZWkNUJ6V9ZPUns8",
-	"/pQNERjRUNS3T7s3PH4gJsdx2LojrAMzofnKsKs8SF2d39Tn+fjWv65Qtv6YyfN0z5a8TcfzOy0+ved/",
-	"eX18W1ev/Nr+r2uUk+SqMSfFBRAh1InbkPV5Gi4JrzFCDFiHsN//CQAA//8=",
+	"rFRNb9swDP0rgrajEWcbdvG9W4fttB6LolBkJmZniyrJJAiC/PdBUr7aOOthPVkVxdf3Hh+ztZ6GSAGC",
+	"im22VnwHg8vHG2bi3yCRgkC6iEwRWBFyGVI5HXQTwTZWlDEs7K6ysIKgj9hCUJwjjD3aVZbheYkMrW3u",
+	"91gjnQ/VoZNmT+A1wd+S6CWdznG7dgyPrm0ZRMotKgwySnJ/4ZjdJv3dkWhwA4w+jr3TOfHwtpIjzFnT",
+	"mIg74BX6EVtb6HEG7PScyYyoBxdS41WOxLjAME7f+T9uMd4mtGR/paQvWZwqK2BBCm/bsbeiIB05Vucq",
+	"L91JIBjmlOFR+1RbEC01kmhrz/69/TSZTqZZfYTgItrGfslXSbR22dHaRay7fWgWkD/JcadI4UdrG/sd",
+	"NIcqcS9xz42fp9P08RQUQm5zMfboc2P9JMWAsjHp9JFhbhv7oT6tVL3fpzrjZ2UtiGeMWgTc0tpoh2IG",
+	"5zsMYJJjYlAF+rlRMtqBwZD2gngzSRC7qkiSEiG5KusXit4dHiVD2A2gwGKb++0rHj8BoqHQb8wB1jhV",
+	"xtlSoS08UEyZ38Sm+djGPi+BN/aQydN0T5a8TsfDf1p83Od/eX3YrYstv7T/ZgV8lFw0pqQY75gRpDJr",
+	"1C5Nw0SmFQQXPEwS8Nd3zMbLH9oRlt8c9mUKPYrmSByndMG5ZGS3+xsAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

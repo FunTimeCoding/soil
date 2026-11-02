@@ -1,0 +1,52 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"testing"
+)
+
+func TestAlertmanagerConstantCategory(t *testing.T) {
+	assert.String(t, "Bad", constant.CategoryBad)
+	assert.String(t, "Behind", constant.CategoryBehind)
+	assert.String(t, "Big", constant.CategoryBig)
+	assert.String(t, "Broken", constant.CategoryBroken)
+	assert.String(t, "Close", constant.CategoryClose)
+	assert.String(t, "Corrupt", constant.CategoryCorrupt)
+	assert.String(t, "Crashed", constant.CategoryCrashed)
+	assert.String(t, "Degraded", constant.CategoryDegraded)
+	assert.String(t, "Disconnected", constant.CategoryDisconnected)
+	assert.String(t, "Down", constant.CategoryDown)
+	assert.String(t, "Empty", constant.CategoryEmpty)
+	assert.String(t, "Exceeded", constant.CategoryExceeded)
+	assert.String(t, "Expired", constant.CategoryExpired)
+	assert.String(t, "Frozen", constant.CategoryFrozen)
+	assert.String(t, "Full", constant.CategoryFull)
+	assert.String(t, "Hot", constant.CategoryHot)
+	assert.String(t, "Imbalance", constant.CategoryImbalance)
+	assert.String(t, "Inconsistent", constant.CategoryInconsistent)
+	assert.String(t, "Lag", constant.CategoryLag)
+	assert.String(t, "Load", constant.CategoryLoad)
+	assert.String(t, "Logon", constant.CategoryLogon)
+	assert.String(t, "Low", constant.CategoryLow)
+	assert.String(t, "Missing", constant.CategoryMissing)
+	assert.String(t, "NearBroken", constant.CategoryNearBroken)
+	assert.String(t, "NearExceeded", constant.CategoryNearExceeded)
+	assert.String(t, "NearExpired", constant.CategoryNearExpired)
+	assert.String(t, "NearFull", constant.CategoryNearFull)
+	assert.String(t, "Off", constant.CategoryOff)
+	assert.String(t, "Old", constant.CategoryOld)
+	assert.String(t, "OutOfMemory", constant.CategoryOutOfMemory)
+	assert.String(t, "OutOfSync", constant.CategoryOutOfSync)
+	assert.String(t, "Overload", constant.CategoryOverload)
+	assert.String(t, "ReadOnly", constant.CategoryReadOnly)
+	assert.String(t, "Received", constant.CategoryReceived)
+	assert.String(t, "Saturated", constant.CategorySaturated)
+	assert.String(t, "Set", constant.CategorySet)
+	assert.String(t, "Slow", constant.CategorySlow)
+	assert.String(t, "Stuck", constant.CategoryStuck)
+	assert.String(t, "Timeout", constant.CategoryTimeout)
+	assert.String(t, "Unbound", constant.CategoryUnbound)
+	assert.String(t, "Unhealthy", constant.CategoryUnhealthy)
+	assert.String(t, "Okay", constant.CategoryOkay)
+}

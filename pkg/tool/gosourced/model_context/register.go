@@ -7,10 +7,12 @@ func (s *Server) register() {
 	s.registerPatternRewrite()
 	s.registerConstructors()
 	s.registerNames()
+	s.registerRenameSymbols()
 	s.registerParameters()
 	s.registerMoveSymbol()
 	s.registerMoveSymbols()
 	s.registerPackages()
 	s.registerExtraction()
 	s.registerImports()
+	s.registerRetarget()
 }

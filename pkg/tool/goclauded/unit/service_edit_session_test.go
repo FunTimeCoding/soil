@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument/edit_session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 )

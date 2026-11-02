@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/surface"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -30,7 +30,7 @@ func NewWithHold(
 				g *guard.Mux,
 			) {
 				r := memory.New()
-				goclauded.Mount(
+				surface.Mount(
 					s.Service,
 					web.New(s.Service, r),
 					l,

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"

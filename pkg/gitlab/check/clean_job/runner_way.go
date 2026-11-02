@@ -9,7 +9,7 @@ import (
 )
 
 func RunnerWay(
-	g face.Forge,
+	g face.GitLabClient,
 	r *runner.Runner,
 	f *option.Format,
 ) {

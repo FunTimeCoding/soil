@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/face"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func (s *Service) CreateSilence(
 		s,
 		x,
 		instance,
-		func(c face.Client) (string, error) {
+		func(c face.AlertmanagerClient) (string, error) {
 			return c.SetSilence(alert, comment, d, r)
 		},
 	)

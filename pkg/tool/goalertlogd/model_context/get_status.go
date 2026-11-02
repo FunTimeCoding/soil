@@ -18,7 +18,7 @@ func (s *Server) getStatus(
 	}
 
 	totalRecords := status.Total
-	lastPoll := s.worker.LastPoll()
+	lastPoll := s.service.LastPoll()
 
 	if lastPoll.IsZero() {
 		return response.Success(

@@ -4,8 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/report"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/revision"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/report"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision"
 )
 
 func (s *Service) DiffSymbols(

@@ -2,22 +2,27 @@ package worker
 
 import (
 	"context"
+	"github.com/fsnotify/fsnotify"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 )
 
 func New(
-	v *service.Service,
+	handle func(fsnotify.Event) []error,
+	paths []string,
 	l *logger.Logger,
 	r face.Reporter,
+	prepare ...func() []error,
 ) *Worker {
 	x, cancel := context.WithCancel(context.Background())
 
 	return &Worker{
-		service:  v,
+		handle:   handle,
+		paths:    paths,
+		prepare:  prepare,
 		logger:   l,
+		reporter: r,
 		recovery: recovery.New(l, r),
 		context:  x,
 		cancel:   cancel,

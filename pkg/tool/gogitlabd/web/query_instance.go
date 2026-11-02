@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) queryInstance(r *http.Request) (string, error) {
-	return s.service.Inventory().ResolveInstance(
+	return s.inventory.ResolveInstance(
 		r.URL.Query().Get(constant.InstanceParameter),
 	)
 }

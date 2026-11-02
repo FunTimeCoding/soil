@@ -15,21 +15,22 @@ func TestServiceDeleteOfUnknownEntryIsNotFound(t *testing.T) {
 }
 
 func TestServiceRefusesEntryWithoutAction(t *testing.T) {
-	s := service_tester.Service(t)
-	c := s.Notifier().Subscribe()
-	defer s.Notifier().Unsubscribe(c)
+	o := service_tester.New(t)
+	c := o.Notifier.Subscribe()
+	defer o.Notifier.Unsubscribe(c)
 	v := sample()
 	v.Action = ""
-	assert.True(t, validation.Is(s.Add(v)))
+	assert.True(t, validation.Is(o.Service.Add(v)))
 	assert.False(t, fired(c))
 }
 
 func TestServiceRefusesUpdateClearingUser(t *testing.T) {
-	s := service_tester.Service(t)
+	o := service_tester.New(t)
+	s := o.Service
 	v := sample()
 	assert.FatalOnError(t, s.Add(v))
-	c := s.Notifier().Subscribe()
-	defer s.Notifier().Unsubscribe(c)
+	c := o.Notifier.Subscribe()
+	defer o.Notifier.Unsubscribe(c)
 	empty := ""
 	h := change.New()
 	h.User = &empty

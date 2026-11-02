@@ -7,8 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	generated "github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/server"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
 	"net"
 	"os"
@@ -24,16 +23,12 @@ func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
 		Err: os.NewSyscallError("connect", syscall.ECONNREFUSED),
 	}
 	m := memory.New()
-	s := server.New(service_tester.Service(t, c, m), m)
+	s := restClient(t, c, m)
 
 	for range 2 {
-		r, e := s.GetLists(
-			context.Background(),
-			generated.GetListsRequestObject{},
-		)
+		r, e := s.GetListsWithResponse(context.Background(), nil)
 		assert.FatalOnError(t, e)
-		_, away := r.(generated.GetLists503JSONResponse)
-		assert.True(t, away)
+		assert.NotNil(t, r.JSON503)
 	}
 
 	assert.Count(t, 0, m.Events())
@@ -43,13 +38,9 @@ func TestARefusedTokenIsAnsweredAsForbiddenWithoutACapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("linkace: %s", "Unauthenticated.")
 	m := memory.New()
-	r, e := server.New(service_tester.Service(t, c, m), m).GetTags(
-		context.Background(),
-		generated.GetTagsRequestObject{},
-	)
+	r, e := restClient(t, c, m).GetTagsWithResponse(context.Background(), nil)
 	assert.FatalOnError(t, e)
-	_, refused := r.(generated.GetTags403JSONResponse)
-	assert.True(t, refused)
+	assert.NotNil(t, r.JSON403)
 	assert.Count(t, 0, m.Events())
 }
 
@@ -57,15 +48,12 @@ func TestARejectedLinkIsAnsweredAsBadRequestWithoutACapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("linkace: %s", "The url field is required.")
 	m := memory.New()
-	r, e := server.New(service_tester.Service(t, c, m), m).AddLink(
+	r, e := restClient(t, c, m).AddLinkWithResponse(
 		context.Background(),
-		generated.AddLinkRequestObject{
-			Body: &generated.AddLinkJSONRequestBody{Link: "not a url"},
-		},
+		client.AddLinkJSONRequestBody{Link: "not a url"},
 	)
 	assert.FatalOnError(t, e)
-	_, rejected := r.(generated.AddLink400JSONResponse)
-	assert.True(t, rejected)
+	assert.NotNil(t, r.JSON400)
 	assert.Count(t, 0, m.Events())
 }
 
@@ -73,14 +61,11 @@ func TestATakenTagNameIsAnsweredAsConflictWithoutACapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = conflict.Format("linkace: %s", "The tag already exists.")
 	m := memory.New()
-	r, e := server.New(service_tester.Service(t, c, m), m).CreateTag(
+	r, e := restClient(t, c, m).CreateTagWithResponse(
 		context.Background(),
-		generated.CreateTagRequestObject{
-			Body: &generated.CreateTagJSONRequestBody{Name: "deploy"},
-		},
+		client.CreateTagJSONRequestBody{Name: "deploy"},
 	)
 	assert.FatalOnError(t, e)
-	_, taken := r.(generated.CreateTag409JSONResponse)
-	assert.True(t, taken)
+	assert.NotNil(t, r.JSON409)
 	assert.Count(t, 0, m.Events())
 }

@@ -8,7 +8,7 @@ import (
 
 func NewWith(
 	t *testing.T,
-	d face.Client,
+	d face.DirectoryClient,
 ) *Tester {
 	t.Helper()
 	s := base.NewWith(t, d)

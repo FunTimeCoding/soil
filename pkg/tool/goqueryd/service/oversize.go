@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/oversize"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/oversize"
 	"sort"
 )
 

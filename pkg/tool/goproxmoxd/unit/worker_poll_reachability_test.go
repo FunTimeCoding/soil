@@ -11,6 +11,7 @@ import (
 
 func TestPollTracksHypervisorReachability(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
+	defer c.Close()
 	w, _ := worker_tester.NewPollWorker("pve", c)
 	defer w.Close()
 	w.Poll()
@@ -29,6 +30,7 @@ func TestPollTracksHypervisorReachability(t *testing.T) {
 
 func TestPollOtherFailureLeavesReachability(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
+	defer c.Close()
 	w, _ := worker_tester.NewPollWorker("pve", c)
 	defer w.Close()
 	w.Poll()

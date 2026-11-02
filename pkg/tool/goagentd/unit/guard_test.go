@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/system/run/stream/mock_stream"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goagentd"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	v := service_tester.New(
+	d := daemon_tester.New(
 		t,
 		service_tester.Fixed(mock_stream.New(nil, false, nil)),
 	)
@@ -23,7 +23,7 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goagentd.Mount(v, memory.New(), mock_recorder.New(), g)
+			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer s.Close()

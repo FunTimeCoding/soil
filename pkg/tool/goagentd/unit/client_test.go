@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client/mock_client"
 	agent "github.com/funtimecoding/soil/pkg/tool/goagentd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
@@ -20,8 +21,8 @@ import (
 func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
 	s := mock_stream.New([]string{"lima"}, true, nil)
 	defer s.Close()
-	v := service_tester.New(t, service_tester.Fixed(s))
-	c := mountedClient(t, v, constant.ModelContextTestToken)
+	d := daemon_tester.New(t, service_tester.Fixed(s))
+	c := mountedClient(t, d, constant.ModelContextTestToken)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	assert.True(t, validation.Is(c.PostRun(t.Context(), "")))
 	assert.FatalOnError(t, c.PostRun(t.Context(), "mike"))
@@ -29,30 +30,28 @@ func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
 	running, e := c.GetStatus(t.Context())
 	assert.FatalOnError(t, e)
 	assert.String(t, "running", running.State)
-	v.Workers()[0].(face.Drainer).Interrupt()
-	service_tester.AwaitDone(t, v)
-	done, f := c.GetStatus(t.Context())
-	assert.FatalOnError(t, f)
+	d.Workers()[0].(face.Drainer).Interrupt()
+	done := awaitServedDone(t, c)
 	assert.String(t, "done", done.State)
 	assert.String(t, "lima", *done.Result)
 }
 
 func TestTheClientHearsAClosingRunner(t *testing.T) {
-	v := service_tester.New(
+	d := daemon_tester.New(
 		t,
 		service_tester.Fixed(mock_stream.New(nil, false, nil)),
 	)
-	c := mountedClient(t, v, constant.ModelContextTestToken)
-	v.Close()
+	c := mountedClient(t, d, constant.ModelContextTestToken)
+	d.Close()
 	assert.True(t, unavailable.Is(c.PostRun(t.Context(), "oscar")))
 }
 
 func TestARefusedTokenIsAnError(t *testing.T) {
-	v := service_tester.New(
+	d := daemon_tester.New(
 		t,
 		service_tester.Fixed(mock_stream.New(nil, false, nil)),
 	)
-	c := mountedClient(t, v, "papa-wrong")
+	c := mountedClient(t, d, "papa-wrong")
 	_, e := c.GetStatus(t.Context())
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status status: 401", e.Error())

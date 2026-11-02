@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/token"
 	"golang.org/x/tools/go/ast/astutil"
 	"golang.org/x/tools/go/packages"

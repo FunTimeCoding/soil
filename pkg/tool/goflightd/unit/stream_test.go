@@ -6,13 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/run/stream/mock_stream"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/service_tester"
 	"testing"
 	"time"
 )
 
 func TestTheStreamRecordsEachMessage(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	s.System.Serve(
 		mock_stream.New(
 			[]string{
@@ -32,13 +32,13 @@ func TestTheStreamRecordsEachMessage(t *testing.T) {
 }
 
 func TestAStreamThatEndsBadlyIsAnError(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	s.System.Serve(mock_stream.New(nil, false, errors.Format("exit", 1)))
 	assert.Count(t, 1, s.Service.CaptureStream(context.Background()))
 }
 
 func TestCancelKillsTheStream(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	m := mock_stream.New(
 		[]string{constant.SessionSample},
 		true,
@@ -61,10 +61,10 @@ func TestCancelKillsTheStream(t *testing.T) {
 }
 
 func TestAFailingStoreStopsTheStream(t *testing.T) {
-	s := base.New(t)
+	s := service_tester.New(t)
 	m := mock_stream.New([]string{constant.SessionSample}, true, nil)
 	s.System.Serve(m)
-	s.Service.Close()
+	s.CloseStore()
 	done := make(chan []error)
 	go func() { done <- s.Service.CaptureStream(context.Background()) }()
 

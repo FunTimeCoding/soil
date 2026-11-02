@@ -6,29 +6,28 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/metric"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
 
 func New(
-	v *service.Service,
+	maintain func(context.Context) (int64, error),
 	interval time.Duration,
 	l *logger.Logger,
-	registry *prometheus.Registry,
+	y *prometheus.Registry,
 	r face.Reporter,
 ) *Worker {
 	x, cancel := context.WithCancel(context.Background())
 
 	return &Worker{
-		service:  v,
+		context:  x,
+		cancel:   cancel,
+		maintain: maintain,
 		interval: interval,
 		logger:   l,
 		reporter: r,
-		metric:   metric.New(registry),
+		metric:   metric.New(y),
 		recovery: recovery.New(l, r),
-		context:  x,
-		cancel:   cancel,
-		stop:     make(chan struct{}),
+		done:     make(chan struct{}),
 	}
 }

@@ -123,7 +123,7 @@ func TestRenameSymbolNamesAPackageThatDoesNotLoad(t *testing.T) {
 		t,
 		o.Directory,
 		"pkg/broken/broken.go",
-		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
+		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",
 	)
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := o.Client.CallTool(

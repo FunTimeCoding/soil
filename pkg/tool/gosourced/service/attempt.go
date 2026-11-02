@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/snapshot"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 )
 
 func (s *Service) attempt(
@@ -81,7 +81,7 @@ func (s *Service) attempt(
 		return r, nil
 	}
 
-	committed, e := s.commit(directory, before, roots, outs, r)
+	committed, e := s.commit(directory, before, roots, packagePaths, outs, r)
 
 	if e != nil || hasUnfixed(committed) {
 		return committed, e

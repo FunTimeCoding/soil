@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/revision"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol"
 	"testing"
 )

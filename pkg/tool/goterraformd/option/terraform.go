@@ -21,6 +21,6 @@ type Terraform struct {
 	StateLease        string
 	Downstream        []string
 	DownstreamToken   string
-	Cluster           func() face.Client
+	Cluster           func() face.KubernetesClient
 	DownstreamClients func() []provisionFace.Client
 }

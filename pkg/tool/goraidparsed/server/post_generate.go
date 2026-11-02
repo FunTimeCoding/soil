@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
 	"time"
 )
@@ -18,6 +19,10 @@ func (s *Server) PostGenerate(
 	}
 
 	v, e := s.service.Generate(r.Body.Files, date)
+
+	if validation.Is(e) {
+		return server.PostGenerate400JSONResponse{Error: e.Error()}, nil
+	}
 
 	if not_found.Is(e) {
 		return server.PostGenerate404JSONResponse{Error: e.Error()}, nil

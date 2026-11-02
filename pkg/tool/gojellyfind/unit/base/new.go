@@ -4,9 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -15,18 +14,14 @@ import (
 func New(t *testing.T) *Server {
 	t.Helper()
 	c := mock_client.New()
+	d := daemon_tester.New(t, c)
 
 	return &Server{
 		MockClient: c,
 		ContextServer: model_context_server.New(
 			t,
 			func(_ *http.ServeMux, g *guard.Mux) {
-				gojellyfind.Mount(
-					service_tester.New(t, c),
-					memory.New(),
-					mock_recorder.New(),
-					g,
-				)
+				d.Mount(memory.New(), mock_recorder.New(), g)
 			},
 		),
 	}

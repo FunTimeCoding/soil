@@ -25,8 +25,3 @@ func TestAnAlertmanagerFaultIsCapturedOnce(t *testing.T) {
 	o.Worker.Poll()
 	assert.Count(t, 1, o.Reporter.Events())
 }
-
-func TestTheGuardRunsOnTheLifecycle(t *testing.T) {
-	o := worker_tester.New(t)
-	assert.Count(t, 1, o.Service.Workers())
-}

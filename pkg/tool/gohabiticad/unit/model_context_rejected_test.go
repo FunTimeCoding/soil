@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -17,7 +17,7 @@ import (
 func TestAnInvalidStatIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("%q is not a valid Stat.", "bravo")
-	v := service_tester.Service(t, c)
+	d := daemon_tester.New(t, c)
 	m := memory.New()
 	s := model_context_server.New(
 		t,
@@ -25,7 +25,7 @@ func TestAnInvalidStatIsAnsweredQuietlyOverModelContext(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gohabiticad.Mount(v, m, mock_recorder.New(), g)
+			d.Mount(m, mock_recorder.New(), g)
 		},
 	)
 	defer s.Close()

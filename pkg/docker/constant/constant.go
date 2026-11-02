@@ -5,4 +5,5 @@ const (
 	BasePath          = "/v2/repositories"
 	PageSize          = "100"
 	PageSizeParameter = "page_size"
+	ProbeImage        = "library/alpine"
 )

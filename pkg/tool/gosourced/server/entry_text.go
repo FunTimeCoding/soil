@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/report"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/report"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/entry"
 )
 

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"net/http"
 	"testing"
 )
@@ -11,9 +12,8 @@ import (
 func TestASearchWhileTheEmbedderIsDownAnswers503WithoutAReport(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
 	r := memory.New()
-	c := mountedClient(t, v, r)
+	c := mountedClient(t, service_tester.NewOption(t, m, newReranker(t)), r)
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},
@@ -28,8 +28,11 @@ func TestASearchWhileTheEmbedderIsDownAnswers503WithoutAReport(t *testing.T) {
 func TestAPushWhileTheEmbedderIsDownAnswersItsWarning(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
-	c := mountedClient(t, v, memory.New())
+	c := mountedClient(
+		t,
+		service_tester.NewOption(t, m, newReranker(t)),
+		memory.New(),
+	)
 	answer, e := c.PostDocumentWithResponse(
 		t.Context(),
 		client.PostDocumentJSONRequestBody{

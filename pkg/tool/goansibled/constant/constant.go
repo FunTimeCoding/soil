@@ -31,5 +31,6 @@ const (
 	InventoryPattern = "goansibled-inventory-*"
 	InventoryFile    = "netbox.yaml"
 	InventoryScope   = "inventory"
+	InventoryPeer    = "inventory"
 	LimitFlag        = "--limit"
 )

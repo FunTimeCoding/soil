@@ -3,6 +3,7 @@ package proxmox
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/funtimecoding/soil/pkg/proxmox/refusal_transport"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/luthermonson/go-proxmox"
@@ -60,7 +61,9 @@ func New(
 	}
 
 	result.pool = b.Build()
-	option = append(option, proxmox.WithHTTPClient(result.pool.Client()))
+	c := result.pool.Client()
+	c.Transport = refusal_transport.New(host, c.Transport)
+	option = append(option, proxmox.WithHTTPClient(c))
 	p := constant.Port
 
 	if result.port > 0 {

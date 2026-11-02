@@ -7,7 +7,7 @@ import (
 
 func New() *Habitica {
 	return &Habitica{
-		Source: func() face.Client {
+		Source: func() face.HabiticaClient {
 			return habitica.NewEnvironment()
 		},
 	}

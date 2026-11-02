@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory/face"
 )
 
-func New[T any, P face.Entry[T], C any](
+func New[T any, P face.Entry[T], C comparable](
 	i *inventory.Inventory[T, P],
 	build func(*T) (C, error),
 ) *Pool[T, P, C] {
@@ -13,6 +13,5 @@ func New[T any, P face.Entry[T], C any](
 		inventory: i,
 		build:     build,
 		clients:   make(map[string]C),
-		built:     make(map[string]bool),
 	}
 }

@@ -38,7 +38,8 @@ func New(t *testing.T) *Tester {
 	o.Indexer = func() face.Indexer { return i }
 
 	return &Tester{
-		Service:      service.New(o),
+		Service:      service.New(root, keys, key, i),
+		Option:       o,
 		Indexer:      i,
 		PackageRoot:  root,
 		KeyDirectory: keys,

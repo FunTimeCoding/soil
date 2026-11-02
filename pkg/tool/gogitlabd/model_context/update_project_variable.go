@@ -27,7 +27,7 @@ func (s *Server) UpdateProjectVariable(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	v, e := s.service.UpdateProjectVariable(
@@ -41,7 +41,7 @@ func (s *Server) UpdateProjectVariable(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answerWith(e, "")
 	}
 
 	return response.SuccessAny(v)

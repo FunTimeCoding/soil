@@ -13,6 +13,6 @@ func TestTheSentryClientAndItsMockShareTheFace(t *testing.T) {
 	defer c.Close()
 	m := mock_client.New()
 	defer m.Close()
-	faces := []face.Client{c, m}
+	faces := []face.SentryClient{c, m}
 	assert.Count(t, 2, faces)
 }

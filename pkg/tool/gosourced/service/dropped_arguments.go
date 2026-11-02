@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"

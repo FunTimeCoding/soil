@@ -2,7 +2,7 @@ package worker_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
 )
 
 func PopulatedClient(name string) *mock_client.Client {

@@ -7,7 +7,7 @@ func (s *Service) GetMachine(
 	identifier int,
 	node string,
 ) (*proxmox.VirtualMachine, error) {
-	c, clientFail := s.Client(instance)
+	c, clientFail := s.client(instance)
 
 	if clientFail != nil {
 		return nil, clientFail

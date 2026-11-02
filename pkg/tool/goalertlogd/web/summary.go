@@ -9,5 +9,5 @@ func (s *Server) summary() []string {
 	status, e := s.service.Status()
 	errors.PanicOnError(e)
 
-	return dashboard_page.Summary(status, s.worker.LastPoll())
+	return dashboard_page.Summary(status, s.service.LastPoll())
 }

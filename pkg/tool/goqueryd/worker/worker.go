@@ -6,18 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/metric"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
+	"sync"
 	"time"
 )
 
 type Worker struct {
-	service  *service.Service
+	context  context.Context
+	cancel   context.CancelFunc
+	maintain func(context.Context) (int64, error)
 	interval time.Duration
 	logger   *logger.Logger
 	reporter face.Reporter
 	metric   *metric.Metric
 	recovery *recovery.Recovery
-	context  context.Context
-	cancel   context.CancelFunc
-	stop     chan struct{}
+	started  sync.Once
+	done     chan struct{}
 }

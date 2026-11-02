@@ -1,7 +1,13 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/chromium/tab"
+import (
+	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/errors"
+)
 
 func (c *Client) MustTabs() []*tab.Tab {
-	return c.tabs
+	result, e := c.Tabs()
+	errors.PanicOnError(e)
+
+	return result
 }

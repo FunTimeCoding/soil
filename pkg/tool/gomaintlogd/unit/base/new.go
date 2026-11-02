@@ -3,21 +3,24 @@ package base
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
+	"path/filepath"
 	"testing"
 )
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	v := service_tester.Service(t)
+	o := option.New()
+	o.LitePath = filepath.Join(t.TempDir(), "maintenance.db")
 	r := memory.New()
+	d := daemon.New(o, logger.New(t.Context()), r)
+	t.Cleanup(d.Close)
 	result := &Server{
-		Service:  v,
 		Reporter: r,
 		Server: model_context_server.New(
 			t,
@@ -25,7 +28,7 @@ func New(t *testing.T) *Server {
 				_ *http.ServeMux,
 				g *guard.Mux,
 			) {
-				gomaintlogd.Mount(v, web.New(v, r), r, mock_recorder.New(), g)
+				d.Mount(r, mock_recorder.New(), g)
 			},
 		),
 	}

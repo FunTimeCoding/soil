@@ -2,9 +2,9 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/port_forward"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/port_forward"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"k8s.io/client-go/tools/portforward"
 	"k8s.io/client-go/transport/spdy"
 	"net/http"
@@ -68,22 +68,23 @@ func (s *Service) portForwardOn(
 	}
 
 	failed := make(chan error, 1)
-	go func() {
-		i := forwarder.ForwardPorts()
+	s.forwards.Launch(
+		result,
+		func() {
+			i := forwarder.ForwardPorts()
 
-		select {
-		case <-ready:
-			s.forwardEnded(result, i)
-		default:
-			failed <- i
-		}
-	}()
+			select {
+			case <-ready:
+				s.forwardEnded(i)
+			default:
+				failed <- i
+			}
+		},
+	)
 
 	if j := port_forward.AwaitReady(ready, failed); j != nil {
 		return nil, fmt.Errorf("start port forward: %w", j)
 	}
-
-	s.StorePortForward(result)
 
 	return result, nil
 }

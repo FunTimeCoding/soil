@@ -26,7 +26,7 @@ func New(t *testing.T) *Tester {
 		t:          t,
 		server:     s,
 		Client:     c,
-		Worker:     s.Worker,
+		Worker:     s.Clock,
 		MockClient: s.MockClient,
 	}
 }

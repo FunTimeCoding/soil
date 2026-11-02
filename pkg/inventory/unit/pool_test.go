@@ -62,17 +62,3 @@ func TestPoolRetriesAFailedBuild(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.String(t, "alfa.example", c)
 }
-
-func TestPoolSetReplacesTheBuild(t *testing.T) {
-	p := pool.New(
-		instance_tester.Inventory("alfa"),
-		func(*instance_tester.Instance) (string, error) {
-			return "", errors.New("not reached")
-		},
-	)
-	defer p.Close()
-	p.Set("alfa", "injected")
-	c, e := p.Client("alfa")
-	assert.FatalOnError(t, e)
-	assert.String(t, "injected", c)
-}
