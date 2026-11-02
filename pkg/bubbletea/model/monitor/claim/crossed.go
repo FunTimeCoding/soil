@@ -10,5 +10,5 @@ func (c *Connection) Crossed(x *edge.Edge) {
 		return
 	}
 
-	c.updates <- Message{Error: unavailable.Format("%s", x)}
+	c.deliver(Message{Error: unavailable.Format("%s", x)})
 }

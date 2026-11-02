@@ -12,7 +12,7 @@ func TestFindLiteralsGroupsOutsideSitesByShape(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("find-literals/src"),
 	)
-	r, literals, e := service_tester.NewService().FindLiterals(
+	r, literals, e := service_tester.NewService(t).FindLiterals(
 		d,
 		"example/pkg/target",
 		"Shape",
@@ -50,7 +50,7 @@ func TestFindLiteralsCollapsesAMultilineExemplar(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("find-literals-exemplar/src"),
 	)
-	_, literals, e := service_tester.NewService().FindLiterals(
+	_, literals, e := service_tester.NewService(t).FindLiterals(
 		d,
 		"example/pkg/target",
 		"Shape",
@@ -68,7 +68,7 @@ func TestFindLiteralsRefusesAMissingType(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("find-literals/src"),
 	)
-	r, literals, e := service_tester.NewService().FindLiterals(
+	r, literals, e := service_tester.NewService(t).FindLiterals(
 		d,
 		"example/pkg/target",
 		"Missing",
@@ -83,7 +83,7 @@ func TestFindLiteralsRefusesANonStruct(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("find-literals/src"),
 	)
-	r, literals, e := service_tester.NewService().FindLiterals(
+	r, literals, e := service_tester.NewService(t).FindLiterals(
 		d,
 		"example/pkg/target",
 		"DefaultShape",

@@ -48,7 +48,8 @@ func (p *Page) CruiseForm(alert string) gomponents.Node {
 				html.P(
 					html.Class(webConstant.AbsentClass),
 					gomponents.Textf(
-						"last woke %s",
+						"woken %d times, last %s",
+						setting.Woken,
 						promoted(setting.PromotedAt),
 					),
 				),

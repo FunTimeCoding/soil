@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/web"
@@ -27,12 +28,12 @@ import (
 )
 
 func TestModelContextNodesFollowTheSelectedInstance(t *testing.T) {
-	s := service.New(
-		inventory.New[instance.Instance](
-			instance.Instance{Name: "alfa", Host: "alfa.example"},
-			instance.Instance{Name: "bravo", Host: "bravo.example", Index: 1},
-		),
+	o := option.New()
+	o.Inventory = inventory.New[instance.Instance](
+		instance.Instance{Name: "alfa", Host: "alfa.example"},
+		instance.Instance{Name: "bravo", Host: "bravo.example", Index: 1},
 	)
+	s := service.New(o, logger.New(t.Context()), memory.New())
 	a := mock_client.New()
 	a.AddNode("alfa-node")
 	s.Pool().Set("alfa", a)
@@ -89,12 +90,12 @@ func TestModelContextNodesFollowTheSelectedInstance(t *testing.T) {
 }
 
 func TestModelContextClosingForgetsTheSelection(t *testing.T) {
-	s := service.New(
-		inventory.New[instance.Instance](
-			instance.Instance{Name: "alfa", Host: "alfa.example"},
-			instance.Instance{Name: "bravo", Host: "bravo.example", Index: 1},
-		),
+	o := option.New()
+	o.Inventory = inventory.New[instance.Instance](
+		instance.Instance{Name: "alfa", Host: "alfa.example"},
+		instance.Instance{Name: "bravo", Host: "bravo.example", Index: 1},
 	)
+	s := service.New(o, logger.New(t.Context()), memory.New())
 	k := worker.New(
 		s,
 		time.Hour,

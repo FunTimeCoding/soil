@@ -49,7 +49,9 @@ const (
 	LabelPrefix      = 8
 
 	MattermostPeer = "mattermost upstream"
+	RosterPeer     = "goclauded"
 	DebounceWindow = 30 * time.Second
+	FlushTick      = time.Second
 	PurgeWindow    = 7 * 24 * time.Hour
 	PurgeInterval  = time.Hour
 

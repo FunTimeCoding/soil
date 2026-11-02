@@ -1237,6 +1237,7 @@ components:
       type: object
       required:
       - mode
+      - woken
       properties:
         mode:
           type: string
@@ -1245,6 +1246,9 @@ components:
         promoted_at:
           type: string
           format: date-time
+        woken:
+          type: integer
+          description: How many times cruise has woken the session.
     ContextRequest:
       type: object
       required:

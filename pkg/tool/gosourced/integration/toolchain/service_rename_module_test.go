@@ -13,8 +13,15 @@ func TestRenameModule(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenameModule(d, "example/lib/v2", "example/lib/v3", false, false)
+	s := service_tester.NewService(t)
+	r, e := s.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
@@ -29,8 +36,15 @@ func TestRenameModuleBreakage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-break/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenameModule(d, "example/lib/v2", "example/lib/v3", false, false)
+	s := service_tester.NewService(t)
+	r, e := s.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, "Gone no longer exists")
 	testutil.AssertBlockedContains(t, r, "size int")
@@ -44,8 +58,15 @@ func TestRenameModuleForce(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-break/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenameModule(d, "example/lib/v2", "example/lib/v3", true, false)
+	s := service_tester.NewService(t)
+	r, e := s.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		true,
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
@@ -57,8 +78,15 @@ func TestRenameModuleDryRun(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenameModule(d, "example/lib/v2", "example/lib/v3", false, true)
+	s := service_tester.NewService(t)
+	r, e := s.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		true,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
@@ -70,8 +98,9 @@ func TestRenameModuleUnused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.RenameModule(
+		t.Context(),
 		d,
 		"example/other/v2",
 		"example/other/v3",
@@ -87,8 +116,15 @@ func TestRenameModuleMissingTarget(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenameModule(d, "example/lib/v2", "example/lib/v4", false, false)
+	s := service_tester.NewService(t)
+	r, e := s.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v4",
+		false,
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, "package not found")
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")

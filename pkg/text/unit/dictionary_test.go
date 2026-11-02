@@ -1,11 +1,42 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/text/dictionary"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
+
+func TestParse(t *testing.T) {
+	categories := dictionary.Parse(
+		strings.NewReader("# English\nalfa\n\nbravo\n# Go\ngoroutine\n"),
+	)
+	var names []string
+
+	for _, c := range categories {
+		names = append(names, c.Name)
+	}
+
+	assert.Strings(t, []string{"English", "Go"}, names)
+	assert.Strings(t, []string{"alfa", "bravo"}, categories[0].Words)
+	assert.Strings(t, []string{"goroutine"}, categories[1].Words)
+}
+
+func TestStems(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{"memori", "memorie", "memory"},
+		dictionary.Stems("memories"),
+	)
+	assert.Strings(t, []string{"mov", "move"}, dictionary.Stems("moved"))
+	assert.Strings(t, []string{"read", "reade"}, dictionary.Stems("reading"))
+	assert.Strings(t, []string{"test", "teste"}, dictionary.Stems("tester"))
+	assert.Strings(t, []string{"alfa"}, dictionary.Stems("alfas"))
+	assert.Strings(t, nil, dictionary.Stems("as"))
+	assert.Strings(t, nil, dictionary.Stems("ids"))
+}
 
 func TestMerge(t *testing.T) {
 	d := t.TempDir()

@@ -28,7 +28,13 @@ func (s *Server) extractToFile(
 		return s.captureDetail(e)
 	}
 
-	r, e := s.service.ExtractToFile(directory, a.File, a.Symbol, a.DryRun)
+	r, e := s.service.ExtractToFile(
+		turnContext(x),
+		directory,
+		a.File,
+		a.Symbol,
+		a.DryRun,
+	)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

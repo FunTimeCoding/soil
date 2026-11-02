@@ -43,6 +43,7 @@ func (s *Server) moveSymbols(
 	}
 
 	r, e := s.service.MoveSymbols(
+		turnContext(x),
 		directory,
 		a.PackagePath,
 		a.Symbols,

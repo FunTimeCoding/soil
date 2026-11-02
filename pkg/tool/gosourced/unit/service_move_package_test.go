@@ -12,8 +12,9 @@ func TestMovePackageBaseMismatch(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("package-move/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MovePackage(
+		t.Context(),
 		d,
 		"example/pkg/outer/store",
 		"example/pkg/depot",
@@ -29,8 +30,9 @@ func TestMovePackageIntoItself(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("package-move/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MovePackage(
+		t.Context(),
 		d,
 		"example/pkg/outer/store",
 		"example/pkg/outer/store/inner/store",

@@ -9,13 +9,9 @@ import (
 )
 
 func TestASameNamedGuestIsNeverReconciled(t *testing.T) {
-	c, n := ambiguousFloor()
-	p, e := service_tester.IntentService(t, c, n, memory.New()).Reconcile(
-		context.Background(),
-		"test",
-		true,
-		true,
-	)
+	c, machines := ambiguousFloor()
+	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
+	p, e := v.Reconcile(context.Background(), "test", true, true)
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"alfa"}, p.Ambiguous)
 	assert.Count(t, 0, p.Changes)
@@ -23,13 +19,10 @@ func TestASameNamedGuestIsNeverReconciled(t *testing.T) {
 }
 
 func TestASameNamedGuestIsNeverRecordedOnStart(t *testing.T) {
-	c, n := ambiguousFloor()
+	c, machines := ambiguousFloor()
 	m := memory.New()
-	_, e := service_tester.IntentService(t, c, n, m).StartMachine(
-		"test",
-		101,
-		"",
-	)
+	v, n := service_tester.IntentService(t, c, m, machines...)
+	_, e := v.StartMachine("test", 101, "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, n.UpdatedMachines)
 	assert.Count(t, 0, m.Events())

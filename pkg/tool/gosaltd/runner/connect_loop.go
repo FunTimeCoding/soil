@@ -8,15 +8,12 @@ import (
 )
 
 func (r *Runner) connectLoop(x context.Context) bool {
-	c := r.saltConnector()
-	r.keep(c)
-
 	if e := peer.Await(
 		x,
 		r.logger,
 		constant.SaltPeer,
-		c.Address(),
-		c.Login,
+		r.salt.Address(),
+		r.salt.Login,
 	); e != nil {
 		if x.Err() != nil {
 			return false
@@ -24,7 +21,7 @@ func (r *Runner) connectLoop(x context.Context) bool {
 
 		r.logger.Plain("%v", e)
 
-		for !r.connect(x, c) {
+		for !r.connect(x, r.salt) {
 			select {
 			case <-x.Done():
 				return false
@@ -33,7 +30,6 @@ func (r *Runner) connectLoop(x context.Context) bool {
 		}
 	}
 
-	r.salt = c
 	close(r.connected)
 
 	return true

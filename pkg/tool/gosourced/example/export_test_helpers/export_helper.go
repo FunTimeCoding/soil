@@ -1,6 +1,7 @@
 package export_test_helpers
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
@@ -25,7 +26,14 @@ func exportHelper(
 		return true
 	}
 
-	r, e := s.ChangeVisibility(directory, name, packagePath, "", false)
+	r, e := s.ChangeVisibility(
+		context.Background(),
+		directory,
+		name,
+		packagePath,
+		"",
+		false,
+	)
 	errors.PanicOnError(e)
 
 	if reason := refused(r); reason != "" {
@@ -35,6 +43,7 @@ func exportHelper(
 	}
 
 	t, f := s.MoveSymbol(
+		context.Background(),
 		directory,
 		packagePath,
 		exported,

@@ -18,8 +18,6 @@ func NewMonitor(
 	t.Helper()
 	o := option.New()
 	o.Channels = channels
-	result := monitor.New(c, NewGuard(t, c, r), o, logger.New(t.Context()), r)
-	t.Cleanup(result.Close)
 
-	return result
+	return monitor.New(c, NewGuard(t, c, r), o, logger.New(t.Context()))
 }

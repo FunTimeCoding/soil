@@ -24,6 +24,7 @@ func newResolver(
 	r.Literal = p.Literal
 	r.Routes = p.Routes
 	r.Headings = p.Headings
+	r.Declares = p.Declares
 
 	return r
 }

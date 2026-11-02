@@ -11,9 +11,20 @@ func (r *Resolver) resolveSymbol(candidate string) *pointer.Resolution {
 	whole := pointer.Normalize(reference)
 	directory := pointer.PackageDirectory(reference)
 
-	if r.Exists(directory) ||
-		r.SiblingExists(directory) ||
-		r.Stdlib(directory) ||
+	if r.Exists(directory) || r.SiblingExists(directory) {
+		name := pointer.SymbolName(reference, directory)
+
+		if name != "" && !r.Declares(directory, name) {
+			result := pointer.NewResolution(constant.VerdictDead)
+			result.Hint = constant.UndeclaredSymbolHint
+
+			return result
+		}
+
+		return pointer.NewResolution(constant.VerdictLive)
+	}
+
+	if r.Stdlib(directory) ||
 		r.Exists(whole) ||
 		r.SiblingExists(whole) ||
 		r.Stdlib(whole) ||

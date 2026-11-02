@@ -1,4 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ignorePaths": ["graft/py/sublime_bridge/.python-version"]
+  "ignorePaths": ["graft/py/sublime_bridge/.python-version"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Parser release cloned by the raidparse workflow",
+      "managerFilePatterns": ["/^\\.github/workflows/raidparse\\.yml$/"],
+      "matchStrings": [
+        "--branch (?<currentValue>v\\S+) https://github\\.com/(?<depName>[^/\\s]+/[^/\\s]+?)\\.git"
+      ],
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-TW$"
+    }
+  ]
 }

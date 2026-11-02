@@ -18,15 +18,5 @@ func (s *Service) Unsubscribe(
 		return false, nil
 	}
 
-	remaining, f := s.store.ByRoot(root)
-
-	if f != nil {
-		return true, f
-	}
-
-	if len(remaining) == 0 {
-		s.watcher.Forget(root)
-	}
-
-	return true, nil
+	return true, s.forgetIfUnwatched(root)
 }

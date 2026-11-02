@@ -28,6 +28,7 @@ func (s *Server) addImport(
 	}
 
 	r, e := s.service.AddImport(
+		turnContext(x),
 		directory,
 		a.File,
 		a.ImportPath,

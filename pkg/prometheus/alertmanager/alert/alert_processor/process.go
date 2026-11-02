@@ -25,9 +25,7 @@ func (p *Processor) Process(v []*alert.Alert) ([]*alert.Alert, *statistic.Statis
 		v = p.labelFilter.Run(v)
 	}
 
-	if p.option != nil {
-		v = alert_filter.New(p.option).Run(v)
-	}
+	v = alert_filter.New(p.option).Run(v)
 
 	for _, a := range v {
 		a.Runbook = p.rule.Runbook(a.Name)

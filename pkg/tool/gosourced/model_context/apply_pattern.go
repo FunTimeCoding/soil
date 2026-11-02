@@ -36,6 +36,7 @@ func (s *Server) applyPattern(
 	}
 
 	r, apply, f := s.service.ApplyPattern(
+		turnContext(x),
 		directory,
 		a.PackagePath,
 		a.Symbol,

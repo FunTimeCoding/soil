@@ -3,12 +3,12 @@ package goband
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goband/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/face"
 	"github.com/spf13/cobra"
 )
 
 func New(
-	c *client.ClientWithResponses,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	x := &Context{Client: c, Terminal: t}

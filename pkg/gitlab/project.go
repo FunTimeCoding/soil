@@ -3,7 +3,11 @@ package gitlab
 import "github.com/funtimecoding/soil/pkg/gitlab/project"
 
 func (c *Client) Project(identifier int64) (*project.Project, error) {
-	if p, okay := c.projectCache[identifier]; okay {
+	c.mutex.Lock()
+	p, okay := c.projectCache[identifier]
+	c.mutex.Unlock()
+
+	if okay {
 		return p, nil
 	}
 
@@ -13,7 +17,10 @@ func (c *Client) Project(identifier int64) (*project.Project, error) {
 		return nil, wrapError(e)
 	}
 
-	c.projectCache[identifier] = project.New(result)
+	p = project.New(result)
+	c.mutex.Lock()
+	c.projectCache[identifier] = p
+	c.mutex.Unlock()
 
-	return c.projectCache[identifier], nil
+	return p, nil
 }

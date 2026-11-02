@@ -2,6 +2,7 @@ package resolve
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
@@ -28,7 +29,7 @@ func LoadPackagesThrough(
 
 	for _, p := range result {
 		for _, f := range p.Errors {
-			return nil, nil, fmt.Errorf("%s: %w", p.PkgPath, f)
+			return nil, nil, load_failure.New(p.PkgPath, f)
 		}
 	}
 

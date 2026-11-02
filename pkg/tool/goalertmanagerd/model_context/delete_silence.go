@@ -22,7 +22,7 @@ func (s *Server) deleteSilence(
 		return s.captureDetail(e)
 	}
 
-	e = s.service.DeleteSilence(instance, a.Identifier)
+	e = s.service.DeleteSilence(x, instance, a.Identifier)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -48,14 +48,14 @@ func TestUtilizationParseWeekWithoutSession(t *testing.T) {
 	assert.FatalNotNil(t, result)
 	assert.False(t, result.SessionSeen)
 	assert.True(t, result.SessionReset.IsZero())
-	assert.Integer(t, 26, result.WeeklyPercent)
+	assert.Integer(t, 41, result.WeeklyPercent)
 	assert.String(
 		t,
-		"2026-11-04T18:59:59Z",
+		"2026-09-16T18:59:59Z",
 		result.WeeklyReset.UTC().Format("2006-01-02T15:04:05Z"),
 	)
 	assert.True(t, result.FableSeen)
-	assert.Integer(t, 2, result.FablePercent)
+	assert.Integer(t, 18, result.FablePercent)
 	assert.False(t, result.FableReset.IsZero())
 }
 

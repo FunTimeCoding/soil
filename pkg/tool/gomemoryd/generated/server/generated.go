@@ -79,6 +79,12 @@ type NamedCount struct {
 	Name        string   `json:"name"`
 }
 
+// PathMove defines model for PathMove.
+type PathMove struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+
 // ProfileCompletion defines model for ProfileCompletion.
 type ProfileCompletion struct {
 	Body        string `json:"body"`
@@ -172,6 +178,33 @@ type Relation struct {
 	Type             *string `json:"type,omitempty"`
 }
 
+// RetargetChange defines model for RetargetChange.
+type RetargetChange struct {
+	After  string `json:"after"`
+	Before string `json:"before"`
+	Line   int    `json:"line"`
+	Reason string `json:"reason"`
+}
+
+// RetargetRequest defines model for RetargetRequest.
+type RetargetRequest struct {
+	DryRun  bool         `json:"dry_run"`
+	Paths   []PathMove   `json:"paths"`
+	Symbols []SymbolMove `json:"symbols"`
+}
+
+// RetargetResponse defines model for RetargetResponse.
+type RetargetResponse struct {
+	Memories []RetargetedMemory `json:"memories"`
+}
+
+// RetargetedMemory defines model for RetargetedMemory.
+type RetargetedMemory struct {
+	Changes    []RetargetChange `json:"changes"`
+	Identifier int64            `json:"identifier"`
+	Name       string           `json:"name"`
+}
+
 // SourcedMemory defines model for SourcedMemory.
 type SourcedMemory struct {
 	Identifier       int64  `json:"identifier"`
@@ -196,6 +229,14 @@ type Spread struct {
 type Statistics struct {
 	Scopes []NamedCount `json:"scopes"`
 	Tags   []NamedCount `json:"tags"`
+}
+
+// SymbolMove defines model for SymbolMove.
+type SymbolMove struct {
+	Directory    string `json:"directory"`
+	Name         string `json:"name"`
+	NewDirectory string `json:"new_directory"`
+	NewName      string `json:"new_name"`
 }
 
 // TokenStatistic defines model for TokenStatistic.
@@ -293,6 +334,9 @@ type PostMemoryJSONRequestBody = MemoryRequest
 // PutMemoryJSONRequestBody defines body for PutMemory for application/json ContentType.
 type PutMemoryJSONRequestBody = MemoryUpdateRequest
 
+// PostReferencesRetargetJSONRequestBody defines body for PostReferencesRetarget for application/json ContentType.
+type PostReferencesRetargetJSONRequestBody = RetargetRequest
+
 // PostRelationJSONRequestBody defines body for PostRelation for application/json ContentType.
 type PostRelationJSONRequestBody PostRelationJSONBody
 
@@ -319,6 +363,9 @@ type ServerInterface interface {
 
 	// (GET /api/profile)
 	GetProfile(w http.ResponseWriter, r *http.Request, params GetProfileParams)
+
+	// (POST /api/references/retarget)
+	PostReferencesRetarget(w http.ResponseWriter, r *http.Request)
 
 	// (DELETE /api/relation)
 	DeleteRelation(w http.ResponseWriter, r *http.Request, params DeleteRelationParams)
@@ -528,6 +575,20 @@ func (siw *ServerInterfaceWrapper) GetProfile(w http.ResponseWriter, r *http.Req
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetProfile(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostReferencesRetarget operation middleware
+func (siw *ServerInterfaceWrapper) PostReferencesRetarget(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostReferencesRetarget(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -882,6 +943,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/relation", wrapper.PostRelation)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/relations", wrapper.GetRelations)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/impressions", wrapper.PostImpressions)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/references/retarget", wrapper.PostReferencesRetarget)
 
 	return m
 }
@@ -1195,6 +1257,42 @@ func (response GetProfile500JSONResponse) VisitGetProfileResponse(w http.Respons
 	return err
 }
 
+type PostReferencesRetargetRequestObject struct {
+	Body *PostReferencesRetargetJSONRequestBody
+}
+
+type PostReferencesRetargetResponseObject interface {
+	VisitPostReferencesRetargetResponse(w http.ResponseWriter) error
+}
+
+type PostReferencesRetarget200JSONResponse RetargetResponse
+
+func (response PostReferencesRetarget200JSONResponse) VisitPostReferencesRetargetResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostReferencesRetarget500JSONResponse ErrorResponse
+
+func (response PostReferencesRetarget500JSONResponse) VisitPostReferencesRetargetResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteRelationRequestObject struct {
 	Params DeleteRelationParams
 }
@@ -1435,6 +1533,9 @@ type StrictServerInterface interface {
 
 	// (GET /api/profile)
 	GetProfile(ctx context.Context, request GetProfileRequestObject) (GetProfileResponseObject, error)
+
+	// (POST /api/references/retarget)
+	PostReferencesRetarget(ctx context.Context, request PostReferencesRetargetRequestObject) (PostReferencesRetargetResponseObject, error)
 
 	// (DELETE /api/relation)
 	DeleteRelation(ctx context.Context, request DeleteRelationRequestObject) (DeleteRelationResponseObject, error)
@@ -1692,6 +1793,37 @@ func (sh *strictHandler) GetProfile(w http.ResponseWriter, r *http.Request, para
 	}
 }
 
+// PostReferencesRetarget operation middleware
+func (sh *strictHandler) PostReferencesRetarget(w http.ResponseWriter, r *http.Request) {
+	var request PostReferencesRetargetRequestObject
+
+	var body PostReferencesRetargetJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostReferencesRetarget(ctx, request.(PostReferencesRetargetRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostReferencesRetarget")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostReferencesRetargetResponseObject); ok {
+		if err := validResponse.VisitPostReferencesRetargetResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // DeleteRelation operation middleware
 func (sh *strictHandler) DeleteRelation(w http.ResponseWriter, r *http.Request, params DeleteRelationParams) {
 	var request DeleteRelationRequestObject
@@ -1856,41 +1988,46 @@ func (sh *strictHandler) GetVersions(w http.ResponseWriter, r *http.Request, par
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"IhZkO2oySEV5SZpZuFvNHLkeH/8fAAD//w==",
+	"3Ftfc9u4Ef8qGLaPrO02uc6c7625XCcPaTNOen24yWggYiXiTAIMsJSjyfi7dwiA/5cUJcuRe2+JuFjs",
+	"nx92F7vwtyjReaEVKLTR7bfIJink3P3zrTHaVP8ojC7AoAT3M9Q/476A6DayaKTaRo+PcWTgSykNiOj2",
+	"t0D2Oa7J9Pp3SDB6jD3fO7CFVhaW848j2IHClRSgUG4kLBaCWEnJ9S4vDFgrtZoWjtxcKoQtmNHuB/Z7",
+	"D7k2+zv4UoLF8VaJVggKSUsIsImRBUqtyO85IBccefWRCyErQp596PEfLRoJqHgOJKU2QiqeUSaIo4Kb",
+	"sZs22uQcPeHfX0cxtc7oHSiuElhxlaQTGOhQbWQGh2hSblOSxia6oFdbXZqE/oR861GAkM/akBvD9+3/",
+	"D8HUGTpuPN737xx0lsH0oPFPwe1/CsEROujtYTL6dy4RQbCNhExYdg9QMExBGmZRGxBsx7MS7FUU/1Fg",
+	"vwR054MWJfi/eA7ijS4VGU3KnlE7krfu7kuw4MwO4T5huim4VyJRCPvAMX2vdwSwN0bntHX04X3dYkdK",
+	"bmp0FVHe6LzIoIZYf/e1FnvasT5vrJbp36OOPdcZiX4G5DIbS8OzB763K9T3oCzt2nUptjDh9qRRdJZF",
+	"S2ZXaGSeVzpQhKkUAtQ4ErxVaCRY9iAxTSETrHIDw1RaZkuz4Qmw9b6KDcxzYMi3PzEnEnMQsUyqJCsF",
+	"VET5FQlE2eTuWWVasgPKSCXg6zwrTzHHxEAGO65wlk9LNMcKNfJshs8AYcHv8QAjA72GSlCYoAFAGZy2",
+	"7tgKhMoD/RoszRyKtlg7rnJKDHAEseL05/n6biaCT6fQbl4Py3tizCjpM+1ZFTyUQg8ZQNoVT1DuujZY",
+	"a50BV7O582ylUxyVrvKY0HDOD7NlVtiwZ8DeXl3dZ3w2XZT5s9gzwp8NbKLb6E/X7SXsOtzArvsYIAzU",
+	"OZjHMu0kOYKxaBLOAlYhO/WD67HydE4zIY+LUsey/FjmOacNV8efo1kCN0l6B7bMkEQsfCUq4U8pMANK",
+	"QFX1Fp4Tg688wWzPuHWZL9cCMmYgAbkDyyR2stwEsgOaauuE3WeA2ZP+rLfNQzFjMigYru47H1SZr0O6",
+	"+7+JFr0A4fSZc0HA5Nj6qcyE8dXTcp2fzS8vyPyHjE5Z+w4yThfwB5KjT8/Hty7Cukl7hu/TPQfkZgsn",
+	"9EzCuhlHuu8zGy/qT4zt0teZUqAvHO0mT/Em5WpL5csNAt0EWsNGG1qhTCqYKrS5JQ/KQFnHodkjDmI0",
+	"6+c0mezlCbNfmVLRNVPBMT0iY9Z3Y+IU2n2+1tlyXh8dPc1tYBUvZLtF3Og0b5CpYiivypq6W7VE1pol",
+	"iKmKaCBxs8OcgA03IiRXqDxevoBmqow59nQv6yaQSSsIT6n+0R3cSb3PJeUfoEu8wNDDjSgBx1u1tiEd",
+	"VBjggjgy/KvMy5y2Zw5CcjWR56UClIDpzOf9Skk1ReFu5wvaDkGI7o4D9nGjRc2VtABylBZlYsdWcLls",
+	"+bHs9ESpsmVY6JzKapgwvZBhA1LFNvSOs4U0kGA4nSPcTp43BQ+rA0vhYWGLsuXTQL3PvsOMUu+TvgfV",
+	"uJHopGY6uafBRle1ZL/6qRHqhKb7oYDgFTs8wfEGmroPNOaZzd4+ToxNtmyR7Xpn0QEYOJU4T3WPd3wL",
+	"fh+ysW/pgmBSuZuvdfJYti5x1CEGllU7qe3V4ZlVqw3tg45slDt+BWOlVm8VTtcCq8lLjv/+bD03V8ns",
+	"Vydf505qWo43nbiTdZSPe5ZqNh4b/NF1dTZ+ZiOxytDRVvstRRRHO++O6Db669XN1Y2rJgpQvJDRbfTK",
+	"/dSpm695Ia8H3adC+zq8cqO7DL4T0W30QVt81yH0+oPFf4TJTqcNwosik4lbe/17uDn4k/CUhmz/VPw3",
+	"BX8MWunZA7cs4QWWBkTM7n55w169evXjT46MGyN3PGMoc2AP1WK+tqCodtFyt9fC025qKdGU4H7wNb1T",
+	"/G83N0eZbS68EO8vnAR9k7VULFj2qlL2hzMK0n+gQsjwC5cZCIY6iNBx31VF/xh7TNZXkGsDgifohzth",
+	"INcH5j+ru5KnqSNl9ERTnz7HJYzejohZopUt8+pfeWmRKY1MSFtkfH9JR1SZgtVmZp2RNu0QfzZm/dG9",
+	"J3l3FNzwHNDNyX/7FslKgi8ltEXSbXhWMjw1cUff4Vn8fC43z2b93p1vgcN/1kmZg8K/BEOx2nJN3q4U",
+	"dRmbtbebiwNgKO3Y+fv55BAsdHpemNOm/+DrO0fXwZMhwpaeohdVX5/bl2RwUTueScGCyV9AOPdIIcBz",
+	"/a2NLI8+nWeAMMbSz+73Bk1U5KjKlzZw9Oqs6eix4CnXRGCqJ8/PF4nOgr6NNluNCCrg7/Xz4y/sXCWy",
+	"jS7VReuJSn3ALgDjqCipYFXiJdD1+TkjY/9J4UuNj2H4dGF8vr758fvtzHNgPKsu6nuG/B5UVQVItL4K",
+	"uOR58c6gAnaYtM9VeGEqu6yyQ1245sJ0/JyIvOE1RXelgA13U/gNzyzEo5nQs4bi4TsVwr6BxJd3KN3L",
+	"hU5JdbkaT/PmCUXP2QY2YEAl7qrl5zDdOq/P7w4ejGxAw9q1VfRlud6BYK63wLgSLAy8rtgH/5OB6s6t",
+	"sxKBacOMmzXvoBIP3UuPwI0Zrd29fFxk3jU71kOjZyo4h3PJ7xxSR1NAwrmfUmjvFg+pttB1iHPGJRFX",
+	"o6kj1AB47VOD+VqweZSw7B5JTNyfoSqkxvZPLg/GaBqeP28JZqD173fJpM3OL6LW8+qzGkJ1tTd5N+0g",
+	"6Dxdy1Ofu5z8WuXkxybjHZ/QrJzARLj3VkG9rnUKA767evEbaQ8kw+Bj59uKNdGyMid07o+tcurG14Ub",
+	"Xc0ZWdDjaizj6xwDVmdV7q80CrnfjXFfQFszCNrzvu0NySe7mC3VM2b6zi6EOm+0KUpb/zHHeh+ah5WF",
+	"kW8verp0XlSFXGvLnonbv7eYMu+n+i8WjugNX6YD0xs4k6chPFH2f3nTWIQVYEKpHLMU+E6CRbaR5sKd",
+	"uuC5gbR9/4Ux4qwHf61plvlQquS4/v5EvMxkLpG+FP5ws7yA05uNhQk+N8sLtPMG4d4wfUEgDm2G2lvM",
+	"GdnNOC3yvLgkzJy5G8k8uB4f/xcAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

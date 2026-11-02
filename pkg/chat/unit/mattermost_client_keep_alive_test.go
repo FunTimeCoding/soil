@@ -43,7 +43,7 @@ func TestRefreshSocketMovesTheKeepAlive(t *testing.T) {
 	}
 
 	assert.True(t, r.Pings() >= 2)
-	assert.Nil(t, r.Client.RefreshSocket())
+	assert.Nil(t, r.Client.RefreshSocket(t.Context()))
 	after := r.Client.WebSocket()
 	after.Listen()
 	defer after.Close()

@@ -18,6 +18,6 @@ type Client interface {
 	MustConfiguration() map[string]string
 	MustRefreshSocket()
 	Reachable(x context.Context) error
-	RefreshSocket() error
+	RefreshSocket(x context.Context) error
 	WebSocket() *model.WebSocketClient
 }

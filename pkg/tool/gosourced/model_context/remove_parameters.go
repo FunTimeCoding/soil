@@ -47,7 +47,12 @@ func (s *Server) removeParameters(
 		return s.captureDetail(e)
 	}
 
-	r, e := s.service.RemoveParameters(directory, removals, a.DryRun)
+	r, e := s.service.RemoveParameters(
+		turnContext(x),
+		directory,
+		removals,
+		a.DryRun,
+	)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

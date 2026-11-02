@@ -14,7 +14,7 @@ func TestCloseAndRefreshDoNotRace(t *testing.T) {
 	w.Go(
 		func() {
 			for range 20 {
-				if e := r.Client.RefreshSocket(); e != nil {
+				if e := r.Client.RefreshSocket(t.Context()); e != nil {
 					return
 				}
 			}
@@ -22,6 +22,6 @@ func TestCloseAndRefreshDoNotRace(t *testing.T) {
 	)
 	r.Client.Close()
 	w.Wait()
-	assert.Error(t, r.Client.RefreshSocket())
+	assert.Error(t, r.Client.RefreshSocket(t.Context()))
 	assert.True(t, r.Client.WebSocket() == nil)
 }

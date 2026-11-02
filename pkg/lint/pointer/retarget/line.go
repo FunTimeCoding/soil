@@ -3,7 +3,7 @@ package retarget
 import (
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
-	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/retarget_change"
 	"strings"
 )
@@ -12,7 +12,7 @@ func Line(
 	r *resolver.Resolver,
 	source string,
 	declared *pointer.Declared,
-	moves []*path_move.Move,
+	moves *move_set.Set,
 	text string,
 	number int,
 ) (string, []*retarget_change.Change) {

@@ -23,21 +23,21 @@ func Run(
 	s face.Instrument,
 ) {
 	r := s.Reporter()
-	v := service.New(o.Inventory)
-	defer v.Close()
 	l := logger.New(context.Background())
+	v := service.New(o, l, r)
+	defer v.Close()
 	m := metric.New()
 	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
 	b := web.New(v, k)
-	c := lifecycle.New(l).WithWorker(k)
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithWorker(k)
 
 	if o.Netbox != nil {
-		v.WithNetbox(o.Netbox(), l, r)
-
-		for _, w := range v.Workers() {
-			c.WithWorker(w)
-		}
-
 		c.WithWorker(reconciler.New(v, constant.ReconcileInterval, l, r))
 	}
 

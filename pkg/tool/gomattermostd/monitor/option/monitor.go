@@ -1,8 +1,10 @@
 package option
 
+import "time"
+
 type Monitor struct {
 	Enabled             bool
-	Schedule            string
+	Interval            time.Duration
 	Channels            []string
 	Topics              []string
 	MessageLimit        int

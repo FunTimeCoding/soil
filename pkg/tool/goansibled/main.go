@@ -7,7 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
@@ -37,12 +39,13 @@ func Main() {
 	o.LitePath = a.GetString(argumentConstant.Lite)
 
 	if environment.Exists(netboxConstant.HostEnvironment) {
-		o.InventoryLocator = locator.Environment(
+		l := locator.Environment(
 			netboxConstant.HostEnvironment,
 			netboxConstant.PortEnvironment,
 			netboxConstant.InsecureEnvironment,
 		)
-		o.InventoryToken = environment.Required(netboxConstant.TokenEnvironment)
+		token := environment.Required(netboxConstant.TokenEnvironment)
+		o.Inventory = func() face.Client { return client.New(l, token) }
 	}
 
 	Run(o, s)

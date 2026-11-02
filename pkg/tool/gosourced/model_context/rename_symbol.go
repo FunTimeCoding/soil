@@ -37,6 +37,7 @@ func (s *Server) renameSymbol(
 	}
 
 	r, e := s.service.Rename(
+		turnContext(x),
 		directory,
 		a.PackagePath,
 		a.OldName,

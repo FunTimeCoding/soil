@@ -63,8 +63,7 @@ func TestARefusedShutdownExitsWithTheDaemonsMessage(t *testing.T) {
 	)
 	_, failure, code := run(t, s, "shutdown", "--instance", "alfa", "--yes")
 	assert.Integer(t, 1, code)
-	assert.StringContains(t, "409 Conflict", failure)
-	assert.StringContains(t, "off soft graceful not offered", failure)
+	assert.StringContains(t, "power: off soft graceful not offered", failure)
 	assert.Count(t, 0, s.Alfa.Requested())
 }
 

@@ -24,7 +24,7 @@ func (s *Server) query(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Query(instance, a.Query, time.Now())
+	v, e := s.service.Query(x, instance, a.Query, time.Now())
 
 	if e != nil {
 		return s.captureDetail(e)

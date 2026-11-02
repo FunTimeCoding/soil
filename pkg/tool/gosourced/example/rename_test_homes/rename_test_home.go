@@ -1,6 +1,7 @@
 package rename_test_homes
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
@@ -18,7 +19,13 @@ func renameTestHome(
 	newName string,
 ) {
 	packagePath := path.Join(module, filepath.ToSlash(relative))
-	_, e := s.RenamePackage(directory, packagePath, newName, false)
+	_, e := s.RenamePackage(
+		context.Background(),
+		directory,
+		packagePath,
+		newName,
+		false,
+	)
 	errors.PanicOnError(e)
 
 	if _, f := os.Stat(filepath.Join(directory, relative)); f == nil {

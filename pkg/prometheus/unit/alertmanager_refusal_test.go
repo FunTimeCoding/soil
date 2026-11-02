@@ -6,6 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 	"net/http"
 	"testing"
 )
@@ -16,7 +18,11 @@ func TestABadAlertmanagerFilterIsTheCallersMistake(t *testing.T) {
 		http.StatusBadRequest,
 		`"bad matcher format: severity~"`,
 	)
-	_, _, e := c.Alerts(advanced_option.New(), nil)
+	_, _, e := c.Alerts(
+		advanced_option.New(),
+		alert_filter.New(),
+		rule_list.New(),
+	)
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "bad matcher format", e.Error())
 }
@@ -33,7 +39,11 @@ func TestAnAlertmanagerBehindAnUnavailableProxyIsUnavailable(t *testing.T) {
 		http.StatusServiceUnavailable,
 		"<html>503 Service Temporarily Unavailable</html>",
 	)
-	_, _, e := c.Alerts(advanced_option.New(), nil)
+	_, _, e := c.Alerts(
+		advanced_option.New(),
+		alert_filter.New(),
+		rule_list.New(),
+	)
 	assert.True(t, unavailable.Is(e))
 }
 
@@ -43,7 +53,11 @@ func TestAnAlertmanagerFaultKeepsItsText(t *testing.T) {
 		http.StatusInternalServerError,
 		`"failed to iterate alerts"`,
 	)
-	_, _, e := c.Alerts(advanced_option.New(), nil)
+	_, _, e := c.Alerts(
+		advanced_option.New(),
+		alert_filter.New(),
+		rule_list.New(),
+	)
 	assert.Error(t, e)
 	assert.False(t, validation.Is(e))
 	assert.False(t, unavailable.Is(e))

@@ -12,7 +12,15 @@ func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 	tree := sameRewrite(
 		t,
 		func(s *service.Service, d string) (*output.Results, error) {
-			return s.Rename(d, "example/alfa", "NewServer", "Make", "", false)
+			return s.Rename(
+				t.Context(),
+				d,
+				"example/alfa",
+				"NewServer",
+				"Make",
+				"",
+				false,
+			)
 		},
 	)
 	assert.Integer(t, 5, strings.Count(tree, "Make()"))
@@ -23,6 +31,7 @@ func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 		t,
 		func(s *service.Service, d string) (*output.Results, error) {
 			return s.Rename(
+				t.Context(),
 				d,
 				"example/alfa",
 				"Port",
@@ -40,6 +49,7 @@ func TestTargetedMovePackageMatchesFullLoad(t *testing.T) {
 		t,
 		func(s *service.Service, d string) (*output.Results, error) {
 			return s.MovePackage(
+				t.Context(),
 				d,
 				"example/delta",
 				"example/zulu/delta",

@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
-	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -13,7 +13,7 @@ func alternative(
 	r *resolver.Resolver,
 	source string,
 	declared *pointer.Declared,
-	moves []*path_move.Move,
+	moves *move_set.Set,
 	c *pointer.Candidate,
 ) string {
 	span, fragment, cut := strings.Cut(c.Span, constant.FragmentSeparator)
@@ -36,7 +36,7 @@ func alternative(
 		}
 
 		normalized := pointer.Normalize(span)
-		path := rewritePath(moves, source, normalized, v.Target)
+		path := rewritePath(moves.Paths, source, normalized, v.Target)
 
 		if path != "" {
 			after = strings.Replace(span, normalized, path, 1)

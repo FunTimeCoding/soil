@@ -25,6 +25,7 @@ const (
 	FragmentSeparator = "#"
 	LocatorSeparator  = "://"
 	HintSeparator     = " - "
+	UndeclaredSymbolHint = "the package declares no such symbol"
 	NearestPrefix     = "nearest: "
 	NearestFormat     = "#%s (%q)"
 	NearestLimit      = 3

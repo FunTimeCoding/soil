@@ -11,9 +11,5 @@ func (w *Watcher) Forget(root string) {
 	}
 
 	delete(w.buffer, root)
-
-	if t, okay := w.timer[root]; okay {
-		t.Stop()
-		delete(w.timer, root)
-	}
+	delete(w.since, root)
 }

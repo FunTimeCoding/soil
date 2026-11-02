@@ -12,8 +12,14 @@ func TestRenamePackageInvalidName(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenamePackage(d, "example/pkg/outer/store", "9depot", false)
+	s := service_tester.NewService(t)
+	r, e := s.RenamePackage(
+		t.Context(),
+		d,
+		"example/pkg/outer/store",
+		"9depot",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not a valid")

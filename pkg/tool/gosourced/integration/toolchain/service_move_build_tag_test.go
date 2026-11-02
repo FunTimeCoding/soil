@@ -13,8 +13,9 @@ func TestMoveBuildTagCarry(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-build-tag/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/tagged",
 		[]string{"Flag"},
@@ -38,8 +39,9 @@ func TestMoveBuildTagMismatchBlocked(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-build-tag/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/tagged",
 		[]string{"Flag"},
@@ -59,8 +61,9 @@ func TestMoveBuildTagMixedSourcesBlocked(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-build-tag/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/tagged",
 		[]string{"Flag", "Plain"},
@@ -80,8 +83,9 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-build-tag/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/tagged",
 		[]string{"Flag"},
@@ -107,8 +111,9 @@ func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-build-tag/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/tagged",
 		[]string{"Plain"},

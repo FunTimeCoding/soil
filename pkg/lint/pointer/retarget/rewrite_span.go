@@ -3,7 +3,7 @@ package retarget
 import (
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
-	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
@@ -13,7 +13,7 @@ func rewriteSpan(
 	r *resolver.Resolver,
 	source string,
 	declared *pointer.Declared,
-	moves []*path_move.Move,
+	moves *move_set.Set,
 	c *pointer.Candidate,
 ) (string, bool) {
 	alternatives := pointer.Expand(c)

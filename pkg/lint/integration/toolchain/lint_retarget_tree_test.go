@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
 	"github.com/funtimecoding/soil/pkg/system"
 	"testing"
@@ -18,7 +19,10 @@ func TestRetargetTreeRewritesOnlyWhatMentionsTheMove(t *testing.T) {
 	testutil.WriteFile(t, d, "pkg/bravo/stay.go", "package bravo\n")
 	documents := lint.RetargetTree(
 		d,
-		[]*path_move.Move{path_move.New("pkg/alfa", "pkg/charlie")},
+		move_set.New(
+			[]*path_move.Move{path_move.New("pkg/alfa", "pkg/charlie")},
+			nil,
+		),
 	)
 	assert.Count(t, 1, documents)
 	assert.String(t, "doc/note.md", documents[0].Path)

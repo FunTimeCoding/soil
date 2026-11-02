@@ -21,4 +21,8 @@ type Resolver struct {
 	) bool
 	Routes   func(string) ([]string, bool)
 	Headings func(string) ([]*heading.Heading, bool)
+	Declares func(
+		string,
+		string,
+	) bool
 }

@@ -18,6 +18,7 @@ func New(
 		routes:         map[string][]string{},
 		headings:       map[string][]*heading.Heading{},
 		missing:        map[string]bool{},
+		declarations:   map[string]map[string]bool{},
 		siblingIgnored: map[string]func(string) bool{},
 	}
 	result.ignored = git.IgnoreMatcher(result.Root)

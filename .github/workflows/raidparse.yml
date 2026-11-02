@@ -13,7 +13,7 @@ jobs:
     - {name: Build, run: 'go run cmd/gobuild/main.go build goraidparsed --linux-amd64'}
     - name: Parser
       run: |
-        git clone https://github.com/Drevarr/arcdps_top_stats_parser.git strata/container/raidparse/parser
+        git clone --depth 1 --branch v3.6.6.0-TW https://github.com/Drevarr/arcdps_top_stats_parser.git strata/container/raidparse/parser
         cp strata/container/raidparse/parser/example_output/TW5_Top_Stat_Parse.html strata/container/raidparse/TW5_Top_Stat_Parse.html
     - name: Lowercase image
       run: echo "IMAGE_LC=${GITHUB_REPOSITORY_OWNER@L}/raidparse" >> $GITHUB_ENV

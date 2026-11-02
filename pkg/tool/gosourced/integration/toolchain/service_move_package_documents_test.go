@@ -11,7 +11,8 @@ import (
 
 func TestMovePackageRetargetsDocuments(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
-	r, e := service_tester.NewService().MovePackage(
+	r, e := service_tester.NewService(t).MovePackage(
+		t.Context(),
 		d,
 		"example/pkg/outer/store",
 		"example/pkg/store",
@@ -28,7 +29,8 @@ func TestMovePackageRetargetsDocuments(t *testing.T) {
 
 func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
-	r, e := service_tester.NewService().MovePackage(
+	r, e := service_tester.NewService(t).MovePackage(
+		t.Context(),
 		d,
 		"example/pkg/outer/store",
 		"example/pkg/store",
@@ -48,23 +50,28 @@ func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 	)
 }
 
-func TestMovePackageRefusesWhenADocumentChanges(t *testing.T) {
+func TestMovePackageKeepsADocumentEditedMeanwhile(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	s.BeforeCommit(
 		func() {
 			testutil.WriteFile(t, d, "doc/note.md", "Edited meanwhile.\n")
 		},
 	)
 	r, e := s.MovePackage(
+		t.Context(),
 		d,
 		"example/pkg/outer/store",
 		"example/pkg/store",
 		false,
 	)
 	assert.FatalOnError(t, e)
-	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(t, r, "changed since it was read")
+	testutil.AssertBlocked(t, r, 0)
+	assert.StringContains(
+		t,
+		"doc/note.md: changed while the call ran - ran again",
+		strings.Join(service_tester.ConcernText(r), stringsConstant.Unix),
+	)
 	assert.String(
 		t,
 		"Edited meanwhile.\n",

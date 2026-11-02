@@ -35,6 +35,7 @@ func (s *Server) movePackage(
 	}
 
 	r, e := s.service.MovePackage(
+		turnContext(x),
 		directory,
 		a.PackagePath,
 		a.TargetPackagePath,

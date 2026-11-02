@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net"
@@ -31,15 +30,12 @@ func newRefusingAlertmanager(
 		),
 	)
 	t.Cleanup(s.Close)
-	p := prometheus.New("127.0.0.1", 0, false, "", "")
-	t.Cleanup(p.Close)
 	result := alertmanager.New(
 		"127.0.0.1",
 		s.Listener.Addr().(*net.TCPAddr).Port,
 		false,
 		"",
 		"",
-		p,
 	)
 	t.Cleanup(result.Close)
 

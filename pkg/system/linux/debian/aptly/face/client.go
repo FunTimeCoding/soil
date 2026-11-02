@@ -1,6 +1,9 @@
 package face
 
+import "github.com/funtimecoding/soil/pkg/face"
+
 type Client interface {
+	face.Reachable
 	AddToRepository(
 		repository string,
 		directory string,

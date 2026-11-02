@@ -1,19 +1,27 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/prometheus/rule"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule"
+)
 
-func (s *Service) Rules(instance string) ([]*rule.Rule, error) {
-	c, e := s.pool.Client(instance)
+func (s *Service) Rules(
+	x context.Context,
+	instance string,
+) ([]*rule.Rule, error) {
+	return guarded(
+		s,
+		x,
+		instance,
+		func(c face.Client) ([]*rule.Rule, error) {
+			v, e := c.Rules()
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	v, f := c.Rules()
-
-	if f != nil {
-		return nil, f
-	}
-
-	return v.Get(), nil
+			return v.Get(), nil
+		},
+	)
 }

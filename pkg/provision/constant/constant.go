@@ -42,6 +42,7 @@ const (
 
 	RunnerConsecutive = "consecutive"
 	RunnerError       = "error"
+	RunnerStopped     = "runner stopped"
 
 	SaltHostEnvironment           = "SALT_HOST"
 	SaltPortEnvironment           = "SALT_PORT"
@@ -72,6 +73,7 @@ const (
 	StoreStatusRunning = "running"
 	StoreStatusSuccess = "success"
 	StoreStatusError   = "error"
+	StoreAbandoned     = "abandoned: the daemon stopped before the run finished"
 	StoreRetentionDays = 14
 	StoreRetentionAge  = StoreRetentionDays * 24 * time.Hour
 )

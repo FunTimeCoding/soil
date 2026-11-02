@@ -26,3 +26,5 @@ const (
 	LabelNames  = "label_names"
 	QueryRules  = "query_rules"
 )
+
+const InstancePeer = "prometheus"

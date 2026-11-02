@@ -12,8 +12,9 @@ func TestRenameFunction(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"IsGeneratedHeader",
@@ -41,8 +42,9 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"IsGenerated",
@@ -67,8 +69,9 @@ func TestRenameMethod(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-method/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"FindByName",
@@ -96,8 +99,16 @@ func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-unexport/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.Rename(d, "example/pkg/target", "Validate", "check", "", false)
+	s := service_tester.NewService(t)
+	r, e := s.Rename(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Validate",
+		"check",
+		"",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "would lose access")
@@ -110,8 +121,9 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"IsGenerated",
@@ -134,8 +146,9 @@ func TestRenameCollision(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"IsGeneratedHeader",
@@ -153,8 +166,16 @@ func TestRenameSymbolNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.Rename(d, "example/pkg/target", "Missing", "Something", "", false)
+	s := service_tester.NewService(t)
+	r, e := s.Rename(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Missing",
+		"Something",
+		"",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
@@ -165,8 +186,9 @@ func TestRenamePackageNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/missing",
 		"IsGeneratedHeader",
@@ -184,8 +206,9 @@ func TestRenameReceiverNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-method/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"FindByName",
@@ -203,8 +226,9 @@ func TestRenameMethodNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-method/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Missing",
@@ -222,8 +246,16 @@ func TestRenameMethodCollision(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("method-collision/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.Rename(d, "example/pkg/target", "Save", "Load", "Store", false)
+	s := service_tester.NewService(t)
+	r, e := s.Rename(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Save",
+		"Load",
+		"Store",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already exists")
@@ -234,8 +266,9 @@ func TestRenameSameName(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"IsGeneratedHeader",
@@ -253,8 +286,9 @@ func TestRenameLongerKeepsComments(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-longer/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target/constant",
 		"Legend",

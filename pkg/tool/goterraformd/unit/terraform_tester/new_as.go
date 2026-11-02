@@ -13,5 +13,5 @@ func NewAs(
 ) *Tester {
 	t.Helper()
 
-	return build(t, c, hostname, 0, constant.FixtureEmptyPlan, "")
+	return build(t, c, hostname, 0, constant.FixtureEmptyPlan, nil)
 }

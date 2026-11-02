@@ -6,47 +6,48 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgres/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/face"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/spf13/cobra"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
-	p := stall_client.New().Build()
-	defer p.Close()
 	t := terminal.New(s)
-	v, e := client.NewClient(
-		locator.Environment(
-			constant.HostEnvironment,
-			constant.PortEnvironment,
-			constant.InsecureEnvironment,
-		).String(),
-		client.WithHTTPClient(p.Client()),
-		client.WithRequestEditorFn(
-			web.DeferredBearerEditor(t.Required, constant.TokenEnvironment),
-		),
-	)
-
-	if e != nil {
-		t.Exitf("client: %v\n", e)
-	}
-
+	var v face.Client
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
+		PersistentPreRun: func(
+			_ *cobra.Command,
+			_ []string,
+		) {
+			v = client.New(
+				locator.Environment(
+					constant.HostEnvironment,
+					constant.PortEnvironment,
+					constant.InsecureEnvironment,
+				),
+				t.Required(constant.TokenEnvironment),
+			)
+		},
+		PersistentPostRun: func(
+			_ *cobra.Command,
+			_ []string,
+		) {
+			v.Close()
+		},
 	}
-	o.AddCommand(listInstances(v, t))
-	o.AddCommand(query(v, t))
-	o.AddCommand(explain(v, t))
-	o.AddCommand(listSchemas(v, t))
-	o.AddCommand(listTables(v, t))
-	o.AddCommand(describeTable(v, t))
-	o.AddCommand(listIndexes(v, t))
-	o.AddCommand(tableSizes(v, t))
+	o.AddCommand(listInstances(&v, t))
+	o.AddCommand(query(&v, t))
+	o.AddCommand(explain(&v, t))
+	o.AddCommand(listSchemas(&v, t))
+	o.AddCommand(listTables(&v, t))
+	o.AddCommand(describeTable(&v, t))
+	o.AddCommand(listIndexes(&v, t))
+	o.AddCommand(tableSizes(&v, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())

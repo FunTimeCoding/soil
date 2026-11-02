@@ -283,6 +283,8 @@ type PostTriggerResponse struct {
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
@@ -293,6 +295,11 @@ func (r PostTriggerResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r PostTriggerResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PostTriggerResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -376,6 +383,13 @@ func ParsePostTriggerResponse(rsp *http.Response) (*PostTriggerResponse, error) 
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

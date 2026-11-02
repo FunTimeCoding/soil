@@ -1,5 +1,8 @@
 package option
 
 func New() *Alertmanager {
-	return &Alertmanager{}
+	return &Alertmanager{
+		Alertmanager: BuildAlertmanager,
+		Prometheus:   BuildPrometheus,
+	}
 }

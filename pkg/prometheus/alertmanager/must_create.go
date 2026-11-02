@@ -7,9 +7,9 @@ func (c *Client) MustCreate(
 	instance string,
 	summary string,
 	description string,
-	expression string,
+	generator string,
 ) {
 	errors.PanicOnError(
-		c.Create(name, instance, summary, description, expression),
+		c.Create(name, instance, summary, description, generator),
 	)
 }

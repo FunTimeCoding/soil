@@ -20,7 +20,7 @@ func (s *Server) listSilences(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Silences(instance, a.Expired)
+	v, e := s.service.Silences(x, instance, a.Expired)
 
 	if e != nil {
 		return s.captureDetail(e)

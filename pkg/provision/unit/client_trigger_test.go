@@ -2,10 +2,14 @@ package unit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
@@ -29,7 +33,7 @@ func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 	defer c.Close()
 	assert.FatalOnError(
 		t,
-		c.Trigger(
+		c.PostTrigger(
 			change.New(
 				[]string{"alfa", "bravo"},
 				[]*host_event.Event{
@@ -66,7 +70,7 @@ func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	assert.FatalOnError(t, c.Trigger(change.New([]string{"alfa"}, nil)))
+	assert.FatalOnError(t, c.PostTrigger(change.New([]string{"alfa"}, nil)))
 	assert.Any(
 		t,
 		[]*host_event.Event{},
@@ -100,10 +104,22 @@ func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 	s := newTriggerServer(t, n, memory.New())
 	c := client.New(webConstant.Localhost, s.Port, "bravo")
 	defer c.Close()
-	e := c.Trigger(change.New([]string{"alfa"}, nil))
-	assert.NotNil(t, e)
-	assert.StringContains(t, "status 401", e.Error())
+	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
+	assert.True(t, unexpected.Is(e))
+	assert.StringContains(t, "401", e.Error())
 	assert.Count(t, 0, n.Requests())
+}
+
+func TestClientTriggerToNobodyIsAConnectionFailure(t *testing.T) {
+	c := client.New(
+		webConstant.Localhost,
+		1,
+		generativeConstant.ModelContextTestToken,
+	)
+	defer c.Close()
+	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
+	var f *connection.Failure
+	assert.True(t, errors.As(e, &f))
 }
 
 func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
@@ -119,10 +135,28 @@ func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	e := c.Trigger(change.New([]string{"alfa"}, nil))
-	assert.NotNil(t, e)
-	assert.StringContains(t, "status 409", e.Error())
+	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
+	assert.True(t, conflict.Is(e))
 	assert.StringContains(t, "run already queued", e.Error())
+	assert.Count(t, 0, r.Events())
+}
+
+func TestClientTriggerOnAStoppedRunnerIsUnavailable(t *testing.T) {
+	r := memory.New()
+	s := newTriggerServer(
+		t,
+		mock_runner.New().WithFail(unavailable.Format(constant.RunnerStopped)),
+		r,
+	)
+	c := client.New(
+		webConstant.Localhost,
+		s.Port,
+		generativeConstant.ModelContextTestToken,
+	)
+	defer c.Close()
+	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
+	assert.True(t, unavailable.Is(e))
+	assert.StringContains(t, "runner stopped", e.Error())
 	assert.Count(t, 0, r.Events())
 }
 
@@ -135,8 +169,8 @@ func TestClientTriggerFailureIsCaptured(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	e := c.Trigger(change.New([]string{"alfa"}, nil))
-	assert.NotNil(t, e)
-	assert.StringContains(t, "status 500", e.Error())
+	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
+	assert.True(t, unexpected.Is(e))
+	assert.StringContains(t, "500", e.Error())
 	assert.Count(t, 1, r.Events())
 }

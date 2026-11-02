@@ -8,20 +8,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
 	"github.com/funtimecoding/soil/pkg/provision/store"
-	"sync"
 )
 
 type Runner struct {
-	provision     *runner.Runner
-	store         *store.Store
-	saltConnector func() *salt.Client
-	salt          *salt.Client
-	built         *salt.Client
-	mutex         sync.Mutex
-	closed        bool
-	connected     chan struct{}
-	logger        *logger.Logger
-	reporter      face.Reporter
-	recovery      *recovery.Recovery
-	reacher       *reacher.Reacher
+	provision *runner.Runner
+	store     *store.Store
+	salt      *salt.Client
+	connected chan struct{}
+	logger    *logger.Logger
+	reporter  face.Reporter
+	recovery  *recovery.Recovery
+	reacher   *reacher.Reacher
 }

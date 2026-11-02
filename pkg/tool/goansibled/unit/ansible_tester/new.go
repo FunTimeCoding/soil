@@ -13,6 +13,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/service"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 	"net/http/httptest"
@@ -63,9 +65,14 @@ func New(
 	capture := filepath.Join(base, "capture")
 	system.EnsurePathExists(capture)
 	t.Setenv(constant.FixtureCaptureEnvironment, capture)
-	result := &Tester{t: t, Reporter: memory.New(), capture: capture}
+	result := &Tester{
+		t:        t,
+		Reporter: memory.New(),
+		capture:  capture,
+		litePath: filepath.Join(base, "runs.db"),
+	}
 	o := option.New()
-	o.LitePath = filepath.Join(base, "runs.db")
+	o.LitePath = result.litePath
 	o.Repository = remote
 	o.ClonePath = clone
 	o.AnsiblePath = "."
@@ -75,8 +82,10 @@ func New(
 		s := httptest.NewServer(inventory)
 		t.Cleanup(s.Close)
 		host, port := network.SplitHostPort(s.Listener.Addr().String())
-		o.InventoryLocator = locator.New(host).Port(port).Insecure()
-		o.InventoryToken = constant.FixtureToken
+		l := locator.New(host).Port(port).Insecure()
+		o.Inventory = func() face.Client {
+			return client.New(l, constant.FixtureToken)
+		}
 	}
 
 	v := service.New(o, logger.New(context.Background()), result.Reporter)

@@ -2,9 +2,12 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 )
 
@@ -23,10 +26,10 @@ func (s *Server) DescribeTable(
 	}
 
 	if e != nil {
-		return server.DescribeTable500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.DescribeTable500JSONResponse(*s.answerWith(e, "")), nil
 	}
 
-	schema := "public"
+	var schema string
 
 	if r.Params.Schema != nil {
 		schema = *r.Params.Schema
@@ -34,11 +37,28 @@ func (s *Server) DescribeTable(
 
 	rows, e := s.service.DescribeTable(c, instance, schema, r.Table)
 
-	if e != nil {
-		return server.DescribeTable500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+	if validation.Is(e) {
+		return server.DescribeTable400JSONResponse(*clientError(e)), nil
 	}
 
-	return server.DescribeTable200JSONResponse{Rows: toRows(rows)}, nil
+	if forbidden.Is(e) {
+		return server.DescribeTable403JSONResponse(*clientError(e)), nil
+	}
+
+	if conflict.Is(e) {
+		return server.DescribeTable409JSONResponse(*clientError(e)), nil
+	}
+
+	if unavailable.Is(e) {
+		return server.DescribeTable503JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.DescribeTable500JSONResponse(*s.answerWith(e, "")), nil
+	}
+
+	return server.DescribeTable200JSONResponse{
+		Columns: rows.Columns,
+		Rows:    rows.Rows,
+	}, nil
 }

@@ -2,14 +2,14 @@ package gopostgres
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func tableSizes(
-	c *client.Client,
+	c *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var instance string
@@ -27,9 +27,8 @@ func tableSizes(
 				p.Schema = &schema
 			}
 
-			r, e := c.TableSizes(context.Background(), p)
-			errors.PanicOnError(e)
-			printResponse(t, r)
+			r, e := (*c).TableSizes(context.Background(), p)
+			t.EmitValue(r, e)
 		},
 	}
 	result.Flags().StringVar(

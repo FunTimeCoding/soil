@@ -39,7 +39,7 @@ func (s *Server) labelNames(
 		since = time.Now().Add(-d)
 	}
 
-	v, e := s.service.LabelNames(instance, matches, since)
+	v, e := s.service.LabelNames(x, instance, matches, since)
 
 	if e != nil {
 		return s.captureDetail(e)

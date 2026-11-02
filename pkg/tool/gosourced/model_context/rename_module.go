@@ -29,6 +29,7 @@ func (s *Server) renameModule(
 	}
 
 	r, e := s.service.RenameModule(
+		turnContext(x),
 		directory,
 		a.ModulePath,
 		a.NewModulePath,

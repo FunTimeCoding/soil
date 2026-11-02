@@ -76,7 +76,6 @@ require (
 	github.com/prometheus/client_golang v1.25.0
 	github.com/prometheus/common v0.73.1
 	github.com/refraction-networking/utls v1.8.2
-	github.com/robfig/cron/v3 v3.0.1
 	github.com/sashabaranov/go-openai v1.43.0
 	github.com/sergi/go-diff v1.4.0
 	github.com/shirou/gopsutil/v4 v4.26.10

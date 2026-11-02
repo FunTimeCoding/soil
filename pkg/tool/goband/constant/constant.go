@@ -9,11 +9,6 @@ var Identity = identity.New(
 )
 
 const (
-	HostEnvironment     = "GOBAND_HOST"
-	PortEnvironment     = "GOBAND_PORT"
-	InsecureEnvironment = "GOBAND_INSECURE"
-	TokenEnvironment    = "GOBAND_TOKEN"
-
 	InstanceArgument = "instance"
 	InstanceUsage    = "Management engine name (optional when only one is configured)"
 	YesArgument      = "yes"

@@ -29,6 +29,7 @@ func (s *Server) renamePackageClause(
 	}
 
 	r, e := s.service.RenamePackageClause(
+		turnContext(x),
 		directory,
 		a.PackagePath,
 		a.NewName,

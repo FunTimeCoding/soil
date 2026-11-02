@@ -33,13 +33,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -67,13 +85,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -102,13 +138,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -144,13 +198,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -192,13 +264,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -240,13 +330,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -282,13 +390,31 @@ paths:
               schema:
                 $ref: "#/components/schemas/QueryResult"
         "400":
-          description: Invalid instance.
+          description: Invalid instance or a statement the database refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The database refused the statement for lack of privilege.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The statement conflicted with data or another transaction.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database instance is unavailable.
           content:
             application/json:
               schema:
@@ -346,13 +472,18 @@ components:
     QueryResult:
       type: object
       required:
+      - columns
       - rows
       properties:
+        columns:
+          type: array
+          items:
+            type: string
         rows:
           type: array
           items:
-            type: object
-            additionalProperties: true
+            type: array
+            items: {}
     Error:
       type: object
       required: [error]

@@ -23,21 +23,15 @@ func (s *Server) describeTable(
 		return s.captureDetail(e)
 	}
 
-	schema := a.Schema
-
-	if schema == "" {
-		schema = "public"
-	}
-
-	v, e := s.service.DescribeTable(x, instance, schema, a.Table)
+	v, e := s.service.DescribeTable(x, instance, a.Schema, a.Table)
 
 	if e != nil {
-		return s.captureFail(
+		return s.answerWith(
 			e,
 			fmt.Sprintf(
 				"database error on %s: table %s.%s not described",
 				instance,
-				schema,
+				a.Schema,
 				a.Table,
 			),
 		)

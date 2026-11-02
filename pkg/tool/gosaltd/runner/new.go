@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/salt"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
@@ -17,15 +18,16 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 	registry face.ProcessRegistry,
+	c *salt.Client,
 ) *Runner {
 	result := &Runner{
-		store:         s,
-		saltConnector: o.Master,
-		connected:     make(chan struct{}),
-		logger:        l,
-		reporter:      r,
-		recovery:      recovery.New(l, r),
-		reacher:       reacher.New(r),
+		store:     s,
+		salt:      c,
+		connected: make(chan struct{}),
+		logger:    l,
+		reporter:  r,
+		recovery:  recovery.New(l, r),
+		reacher:   reacher.New(r),
 	}
 	result.provision = runner.New(
 		runner_option.Option{

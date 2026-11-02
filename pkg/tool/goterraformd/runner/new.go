@@ -4,8 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	kubernetesFace "github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/network"
-	"github.com/funtimecoding/soil/pkg/provision/client"
 	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
@@ -24,6 +22,7 @@ func New(
 	registry face.ProcessRegistry,
 	y *prometheus.Registry,
 	k kubernetesFace.Client,
+	downstream []provisionFace.Downstream,
 ) *Runner {
 	result := &Runner{
 		store:          s,
@@ -42,15 +41,6 @@ func New(
 	}
 	result.metrics = metric.New(y, result.stateLease)
 	result.seedLastSuccess()
-	var targets []provisionFace.Downstream
-
-	for _, address := range o.Downstream {
-		host, port := network.SplitHostPort(address)
-		c := client.New(host, port, o.DownstreamToken)
-		result.downstream = append(result.downstream, c)
-		targets = append(targets, c)
-	}
-
 	result.provision = runner.New(
 		runner_option.Option{
 			Repository:      o.Repository,
@@ -60,7 +50,7 @@ func New(
 			InitFunction:    result.terraformInit,
 			CleanupFunction: s.Cleanup,
 			ChangeFunction:  result.changes,
-			Downstream:      targets,
+			Downstream:      downstream,
 			Registry:        registry,
 		},
 		l,

@@ -14,5 +14,5 @@ func (s *Sink) Renames() []*sink_operation.Operation {
 		}
 	}
 
-	return result
+	return append(result, s.relocations...)
 }

@@ -151,6 +151,9 @@ type CruiseResponse struct {
 	Mode        string     `json:"mode"`
 	PaceMinutes *int       `json:"pace_minutes,omitempty"`
 	PromotedAt  *time.Time `json:"promoted_at,omitempty"`
+
+	// Woken How many times cruise has woken the session.
+	Woken int `json:"woken"`
 }
 
 // DeleteReceiptResponse defines model for DeleteReceiptResponse.

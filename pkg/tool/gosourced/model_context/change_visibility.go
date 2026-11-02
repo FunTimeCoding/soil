@@ -29,6 +29,7 @@ func (s *Server) changeVisibility(
 	}
 
 	r, e := s.service.ChangeVisibility(
+		turnContext(x),
 		directory,
 		a.Symbol,
 		a.PackagePath,

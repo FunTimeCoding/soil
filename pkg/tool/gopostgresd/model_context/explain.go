@@ -23,16 +23,10 @@ func (s *Server) explain(
 		return s.captureDetail(e)
 	}
 
-	prefix := "EXPLAIN"
-
-	if a.Analyze {
-		prefix = "EXPLAIN ANALYZE"
-	}
-
-	v, e := s.service.Query(x, instance, fmt.Sprintf("%s %s", prefix, a.SQL))
+	v, e := s.service.Explain(x, instance, a.SQL, a.Analyze)
 
 	if e != nil {
-		return s.captureFail(
+		return s.answerWith(
 			e,
 			fmt.Sprintf("database error on %s: explain not executed", instance),
 		)

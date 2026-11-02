@@ -1,7 +1,8 @@
 package runner
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/provision/types/update"
 )
@@ -11,12 +12,12 @@ func (r *Runner) drainChannels() {
 		select {
 		case request := <-r.sync:
 			u := update.NewResult()
-			u.Error = fmt.Errorf("runner stopped")
+			u.Error = unavailable.Format(constant.RunnerStopped)
 			request.Response <- u
 		case request := <-r.trigger:
 			if request.Response != nil {
 				t := trigger.NewResult()
-				t.Error = fmt.Errorf("runner stopped")
+				t.Error = unavailable.Format(constant.RunnerStopped)
 				request.Response <- t
 			}
 		default:

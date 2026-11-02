@@ -13,8 +13,8 @@ func indexedAndFull(t *testing.T) (string, *service.Service, *service.Service) {
 		t,
 		service_tester.ServiceTestdata("indexed/src"),
 	)
-	full := service_tester.NewService()
+	full := service_tester.NewService(t)
 	full.UseFullLoad()
 
-	return directory, service_tester.NewService(), full
+	return directory, service_tester.NewService(t), full
 }

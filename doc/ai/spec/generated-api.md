@@ -70,7 +70,13 @@ output: generated.go
 
 ## Generation
 
-Run via taskfile:
+After changing an `openapi.yaml`, run `task generate` in the repository
+root. It regenerates every service's client and server, and output is
+a pure function of each spec, so services nobody touched come out
+unchanged. The guard's PreToolUse hook notes the task when a call runs
+oapi-codegen directly; it does not block the call.
+
+A new service adds its two lines to the `generate` task:
 ```yaml
 generate:
   cmds:

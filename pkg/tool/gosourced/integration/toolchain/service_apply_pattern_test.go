@@ -15,8 +15,9 @@ func TestApplyPatternDryRun(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("census/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, apply, e := s.ApplyPattern(
+		t.Context(),
 		d,
 		"example/pkg/pair",
 		"Compare",
@@ -43,8 +44,9 @@ func TestApplyPatternPartial(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("census/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, apply, e := s.ApplyPattern(
+		t.Context(),
 		d,
 		"example/pkg/pair",
 		"Compare",
@@ -70,8 +72,9 @@ func TestApplyPatternAllOrNothing(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("census/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, apply, e := s.ApplyPattern(
+		t.Context(),
 		d,
 		"example/pkg/pair",
 		"Compare",
@@ -97,8 +100,9 @@ func TestApplyPatternImport(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("census/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, apply, e := s.ApplyPattern(
+		t.Context(),
 		d,
 		"fmt",
 		"Println",

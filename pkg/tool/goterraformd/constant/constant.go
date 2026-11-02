@@ -33,6 +33,7 @@ const (
 	ForceUnlock      = "force-unlock"
 	ForceArgument    = "-force"
 	LockContext      = "terraform_lock"
+	DownstreamPeer   = "downstream"
 
 	TerraformPathEnvironment   = "TERRAFORM_PATH"
 	DownstreamEnvironment      = "DOWNSTREAM_HOST"

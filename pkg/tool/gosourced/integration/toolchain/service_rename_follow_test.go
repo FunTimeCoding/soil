@@ -13,7 +13,8 @@ import (
 
 func TestRenameMovesAFunctionsFile(t *testing.T) {
 	d := renameFollowFixture(t)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/alfa",
 		"OldName",
@@ -33,7 +34,8 @@ func TestRenameMovesAFunctionsFile(t *testing.T) {
 
 func TestRenameMovesATypesFile(t *testing.T) {
 	d := renameFollowFixture(t)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/alfa",
 		"OldType",
@@ -49,7 +51,8 @@ func TestRenameMovesATypesFile(t *testing.T) {
 
 func TestRenameLeavesAFileWithTwoIdentities(t *testing.T) {
 	d := renameFollowFixture(t)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/alfa",
 		"PairOne",
@@ -68,7 +71,8 @@ func TestRenameLeavesAFileWithTwoIdentities(t *testing.T) {
 
 func TestRenameLeavesAFileWhoseNameIsTaken(t *testing.T) {
 	d := renameFollowFixture(t)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/alfa",
 		"Taken",
@@ -93,7 +97,8 @@ func TestRenameLeavesAFileWhoseNameIsTaken(t *testing.T) {
 
 func TestAVisibilityFlipLeavesTheFile(t *testing.T) {
 	d := renameFollowFixture(t)
-	r, e := service_tester.NewService().ChangeVisibility(
+	r, e := service_tester.NewService(t).ChangeVisibility(
+		t.Context(),
 		d,
 		"Flip",
 		"example/pkg/alfa",
@@ -111,7 +116,8 @@ func TestAVisibilityFlipLeavesTheFile(t *testing.T) {
 
 func TestARenameDryRunLeavesTheFile(t *testing.T) {
 	d := renameFollowFixture(t)
-	_, e := service_tester.NewService().Rename(
+	_, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/alfa",
 		"OldName",

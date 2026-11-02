@@ -275,6 +275,20 @@ func (response PostTrigger500JSONResponse) VisitPostTriggerResponse(w http.Respo
 	return err
 }
 
+type PostTrigger503JSONResponse Error
+
+func (response PostTrigger503JSONResponse) VisitPostTriggerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -357,15 +371,15 @@ func (sh *strictHandler) PostTrigger(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"rJRBb9s8DIb/isDvOxqx122HeacOKLDdhqLADsMwKNLbWIUjKRSdISjy3wfJTt0sBtpDfSIoinz4ktYj",
-	"mbCNwcNLovaRkumw1cW8YQ6cjcghgsWhuHFyyyGCWkrCzm/oeKyIsRscw1L7cwr7VZ3CwvoBRuhYjXlv",
-	"kWLwCa/PXxH28PLbWXhx9w6vhli4ucT1NSS5yYGXTNqIC77Q+WGbMxuGFlBFQ7SjwYi9Ntmy6CF4VmNu",
-	"oQtJXsYuUdWp6hLrHbvNBnyL3YC0AGw67Tej6QTbtKjn5NDM+nCCK5EWybCLY8/0o9OiOh0jPKySoKBN",
-	"p3Kwkg5qKqU4u1fqep3gRf3p4MtxgrdgZbT3QZSg7z8rbKMc5pCzDMqHkntF1Yz+P+OeWvqvnpe1nja1",
-	"nse20NI0nbn7dQg9tL+Q/GmMJ+UuVc9XnL8PJZuTPp9FDnuXsk4V7cFpVOzdqlk1uXyI8Do6aul9cVUU",
-	"tXSlpVpHV8s4xjK/aTPyFHVW/pullr6HJNOsaQRGki/BHsqQg5dpXXWMvTPlXv2QxlUdBXpJvn826Xgu",
-	"jPCA4hj/1kJ+1VxdLsnt4NVuwAC7yo1/aD69GeH4DhWw85rXigevXFK6Z2h7eA7wsWneFuDpwVoAuetQ",
-	"UEwYeqvynq8xw5TvbwAAAP//",
+	"tJRBa9w8EIb/itD3Hc3aTdpD3VMKgfZWQqCHUopWerNW8I6U0XjLEva/F8neONs1JIfUp2E0mnnmnbEe",
+	"tQ3bGAgkSbePOtkOW1PMa+bA2YgcIlg8ihtHt+wjdKuTsKeNPhwqzXgYPMPp9scU9rM6hoX1PazoQzXm",
+	"vUGKgRJen7/S2IHkl3cg8Xcer4ZYuLnE9SUkuc6B50zGig9U6GjY5syWYQS60kN0o8GIvbHZcugheFZj",
+	"bqELSV7GLlHVseoS6y37zQZ8g4cBaQHYdoY2o+kF27So5+QwzGZ/hCuRDsmyj2PP+ntnRHUmRhCckqBg",
+	"bKdysJIOaiqlOLtX6mqdQKJ+d6BynEAOrKwhCqIEff9JYRtlP4ecZFAUSu6Vrmb0/xl3utX/1fOy1tOm",
+	"1vPYFlqapjN3vw6hh6EzyZ/GeFTuXPV8xdNdKNm89Pksctj5lHWq9A6cRsXerZpVk8uHCDLR61ZfFlel",
+	"o5GutFSb6GsZx1jmN21GnqLJyn91utXfQpJp1noERpLPwe3LkAPJtK4mxt7bcq++T+OqjgK9JN9fm3Q4",
+	"FUZ4QHGMf2shv2guzpfkZiD1MGCAW+XG3zcf34xwfIcK2GnNK8UDKZ+U6RnG7Z8DfGiatwV4erAWQG47",
+	"FBQbht6pvOdrnMJc/ns1JggCq84klSTEWOqX708AAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

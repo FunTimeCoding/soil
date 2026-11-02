@@ -21,7 +21,7 @@ func sameRewrite(
 			t,
 			service_tester.ServiceTestdata("indexed/src"),
 		)
-		s := service_tester.NewService()
+		s := service_tester.NewService(t)
 
 		if full {
 			s.UseFullLoad()

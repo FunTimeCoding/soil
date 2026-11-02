@@ -14,9 +14,10 @@ import (
 )
 
 func TestTheReconcilerOnlyPromotes(t *testing.T) {
-	c, n := reconcileFloor()
+	c, machines := reconcileFloor()
+	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	r := reconciler.New(
-		service_tester.IntentService(t, c, n, memory.New()),
+		v,
 		constant.ReconcileInterval,
 		logger.New(t.Context()),
 		memory.New(),
@@ -28,7 +29,7 @@ func TestTheReconcilerOnlyPromotes(t *testing.T) {
 }
 
 func TestAnUnreachableHypervisorIsOnlyLogged(t *testing.T) {
-	c, n := reconcileFloor()
+	c, machines := reconcileFloor()
 	c.SetFailure(
 		&net.OpError{
 			Op:  "dial",
@@ -37,8 +38,9 @@ func TestAnUnreachableHypervisorIsOnlyLogged(t *testing.T) {
 		},
 	)
 	m := memory.New()
+	v, n := service_tester.IntentService(t, c, m, machines...)
 	r := reconciler.New(
-		service_tester.IntentService(t, c, n, m),
+		v,
 		constant.ReconcileInterval,
 		logger.New(t.Context()),
 		m,

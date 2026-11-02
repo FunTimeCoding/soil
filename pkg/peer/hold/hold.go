@@ -23,5 +23,6 @@ type Hold struct {
 	maximum    time.Duration
 	context    context.Context
 	cancel     context.CancelFunc
+	started    sync.Once
 	done       chan struct{}
 }

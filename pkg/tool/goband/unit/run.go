@@ -20,7 +20,7 @@ func run(
 	var failure bytes.Buffer
 	code := 0
 	o := goband.New(
-		s.Client,
+		s.BandClient(t),
 		terminal.NewWith(
 			command_end_recorder.New(),
 			&output,

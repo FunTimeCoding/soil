@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/retarget"
-	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/retarget_change"
 	"github.com/funtimecoding/soil/pkg/markup/front_matter"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
@@ -16,8 +16,9 @@ func RetargetDocument(
 	r *resolver.Resolver,
 	path string,
 	content string,
-	moves []*path_move.Move,
+	moves *move_set.Set,
 ) (string, []*retarget_change.Change) {
+	through := retarget.Through(r, moves.Paths)
 	declared := pointer.NewDeclared()
 	skip := 0
 	baseLine := 0
@@ -29,7 +30,7 @@ func RetargetDocument(
 
 		if f.Decode(&d) == nil {
 			for _, value := range declaredValues(d.Base) {
-				if r.BaseExists(value) {
+				if through.BaseExists(value) {
 					declared.Bases = append(declared.Bases, value)
 				}
 			}
@@ -44,14 +45,14 @@ func RetargetDocument(
 
 		if number <= skip {
 			if baseBlock(lines, baseLine, number) {
-				lines[i] = retarget.Values(moves, declared.Bases, line)
+				lines[i] = retarget.Values(moves.Paths, declared.Bases, line)
 			}
 
 			continue
 		}
 
 		rewritten, found := retarget.Line(
-			r,
+			through,
 			path,
 			declared,
 			moves,

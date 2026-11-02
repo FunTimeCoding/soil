@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/model_context_tester"
 	"os"
@@ -111,6 +112,33 @@ func TestRenameSymbol(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "func IsGenerated(", string(helper))
+}
+
+func TestRenameSymbolNamesAPackageThatDoesNotLoad(t *testing.T) {
+	o := model_context_tester.New(
+		t,
+		"../../service/testdata/rename-function/src",
+	)
+	testutil.WriteFile(
+		t,
+		o.Directory,
+		"pkg/broken/broken.go",
+		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
+	)
+	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
+	_, e := o.Client.CallTool(
+		constant.RenameSymbol,
+		map[string]any{
+			"package_path": "example/pkg/target",
+			"old_name":     "IsGeneratedHeader",
+			"new_name":     "IsGenerated",
+		},
+	)
+	assert.StringContains(
+		t,
+		"module does not load: example/pkg/broken",
+		e.Error(),
+	)
 }
 
 func TestRenameSymbolToUnexportedBlocked(t *testing.T) {

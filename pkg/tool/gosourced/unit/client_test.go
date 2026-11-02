@@ -15,7 +15,11 @@ import (
 
 func TestTheClientReadsADiff(t *testing.T) {
 	r := diffRepository(t)
-	c := mountedClient(t, diffService(r.Clone), constant.ModelContextTestToken)
+	c := mountedClient(
+		t,
+		diffService(t, r.Clone),
+		constant.ModelContextTestToken,
+	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	d, e := c.GetDiff(t.Context(), &generated.GetDiffParams{Module: "echo"})
 	assert.FatalOnError(t, e)
@@ -31,7 +35,11 @@ func TestTheClientReadsADiff(t *testing.T) {
 
 func TestTheClientReadsTheTextOfAChange(t *testing.T) {
 	r := diffRepository(t)
-	c := mountedClient(t, diffService(r.Clone), constant.ModelContextTestToken)
+	c := mountedClient(
+		t,
+		diffService(t, r.Clone),
+		constant.ModelContextTestToken,
+	)
 	d, e := c.GetDiff(
 		t.Context(),
 		&generated.GetDiffParams{Module: "echo", Text: new(true)},
@@ -47,14 +55,18 @@ func TestTheClientReadsTheTextOfAChange(t *testing.T) {
 
 func TestTheClientHearsAnUnknownModule(t *testing.T) {
 	r := diffRepository(t)
-	c := mountedClient(t, diffService(r.Clone), constant.ModelContextTestToken)
+	c := mountedClient(
+		t,
+		diffService(t, r.Clone),
+		constant.ModelContextTestToken,
+	)
 	_, e := c.GetDiff(t.Context(), &generated.GetDiffParams{Module: "golf"})
 	assert.True(t, not_found.Is(e))
 }
 
 func TestARefusedTokenIsAnError(t *testing.T) {
 	r := diffRepository(t)
-	c := mountedClient(t, diffService(r.Clone), "hotel-wrong")
+	c := mountedClient(t, diffService(t, r.Clone), "hotel-wrong")
 	_, e := c.GetDiff(t.Context(), &generated.GetDiffParams{Module: "echo"})
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "diff status: 401", e.Error())

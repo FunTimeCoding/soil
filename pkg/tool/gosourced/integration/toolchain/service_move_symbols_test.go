@@ -16,8 +16,9 @@ func TestBatchFile(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -56,8 +57,9 @@ func TestBatchEnum(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-enum/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -95,8 +97,9 @@ func TestBatchSubset(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		[]string{"first", "second"},
@@ -130,8 +133,9 @@ func TestBatchCollision(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-collision/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -152,8 +156,9 @@ func TestBatchDependencyTogether(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-dependency/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		[]string{"prefix", "composed"},
@@ -180,8 +185,9 @@ func TestBatchMultiName(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-multi-name/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -210,8 +216,9 @@ func TestBatchMultiNamePartial(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-multi-name/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		[]string{"alfa"},
@@ -232,8 +239,9 @@ func TestBatchMethodRefused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-method/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -254,8 +262,9 @@ func TestBatchMethodSetRefused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-method/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		[]string{"Store"},
@@ -277,8 +286,9 @@ func TestBackReferenceQualified(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("back-reference/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/source",
 		[]string{"Mover"},
@@ -306,8 +316,9 @@ func TestBackReferenceRefusedWithoutFlag(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("back-reference/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/source",
 		[]string{"Mover"},
@@ -328,8 +339,9 @@ func TestBackReferenceCycleRefused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("cycle/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/source",
 		[]string{"Mover"},
@@ -350,8 +362,9 @@ func TestBackReferenceUnexportedRefused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("back-reference-unexported/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/source",
 		[]string{"Mover"},

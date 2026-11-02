@@ -10,7 +10,7 @@ func (c *Client) PostSimple(
 		return nil, c.Failure
 	}
 
-	result := &model.Post{ChannelId: channel.Name, Message: message}
+	result := &model.Post{ChannelId: channel.Id, Message: message}
 	c.Posted = append(c.Posted, result)
 
 	return result, nil

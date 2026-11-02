@@ -19,7 +19,7 @@ func (s *Server) series(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Series(instance)
+	v, e := s.service.Series(x, instance)
 
 	if e != nil {
 		return s.captureDetail(e)

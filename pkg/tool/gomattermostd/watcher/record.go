@@ -13,9 +13,7 @@ func (w *Watcher) Record(
 	defer w.mutex.Unlock()
 	w.buffer[root] = append(w.buffer[root], e)
 
-	if _, okay := w.timer[root]; okay {
-		return
+	if _, okay := w.since[root]; !okay {
+		w.since[root] = time.Now()
 	}
-
-	w.timer[root] = time.AfterFunc(w.window, func() { w.Flush(root) })
 }

@@ -2,14 +2,14 @@ package gopostgres
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func explain(
-	c *client.Client,
+	c *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var instance string
@@ -22,7 +22,7 @@ func explain(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := c.Explain(
+			r, e := (*c).Explain(
 				context.Background(),
 				client.ExplainJSONRequestBody{
 					Instance: instancePointer(instance),
@@ -30,8 +30,7 @@ func explain(
 					Analyze:  &analyze,
 				},
 			)
-			errors.PanicOnError(e)
-			printResponse(t, r)
+			t.EmitValue(r, e)
 		},
 	}
 	result.Flags().StringVar(

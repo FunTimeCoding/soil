@@ -12,7 +12,8 @@ import (
 
 func TestMovePackageRetargetsAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
-	r, e := replacingService(library, user).MovePackage(
+	r, e := replacingService(t, library, user).MovePackage(
+		t.Context(),
 		library,
 		"other.test/lib/shape",
 		"other.test/lib/geometry/shape",
@@ -48,7 +49,8 @@ func TestMovePackageRetargetsAReplacingModule(t *testing.T) {
 
 func TestRenamePackageRenamesQualifiersInAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
-	r, e := replacingService(library, user).RenamePackage(
+	r, e := replacingService(t, library, user).RenamePackage(
+		t.Context(),
 		library,
 		"other.test/lib/shape",
 		"form",
@@ -78,7 +80,8 @@ func TestRenamePackageRenamesQualifiersInAReplacingModule(t *testing.T) {
 
 func TestRenamePackageClauseRenamesQualifiersInAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
-	r, e := replacingService(library, user).RenamePackageClause(
+	r, e := replacingService(t, library, user).RenamePackageClause(
+		t.Context(),
 		library,
 		"other.test/lib/shape",
 		"form",
@@ -107,7 +110,8 @@ func TestRenamePackageRefusedWhenTheNameIsTakenInAReplacingModule(
 		"pkg/clash/clash.go",
 		"package clash\n\nimport \"other.test/lib/shape\"\n\nfunc form() int {\n\treturn shape.New().Width\n}\n",
 	)
-	r, e := replacingService(library, user).RenamePackage(
+	r, e := replacingService(t, library, user).RenamePackage(
+		t.Context(),
 		library,
 		"other.test/lib/shape",
 		"form",
@@ -128,7 +132,8 @@ func TestMovePackageReachesAReplacingModuleThroughASubpackage(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/user")))
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/aliased")))
-	r, e := replacingService(library, user).MovePackage(
+	r, e := replacingService(t, library, user).MovePackage(
+		t.Context(),
 		library,
 		"other.test/lib/shape",
 		"other.test/lib/geometry/shape",
@@ -146,7 +151,8 @@ func TestMovePackageReachesAReplacingModuleThroughASubpackage(t *testing.T) {
 func TestMovePackageDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	before := treeOf(t, user)
-	r, e := replacingService(library, user).MovePackage(
+	r, e := replacingService(t, library, user).MovePackage(
+		t.Context(),
 		library,
 		"other.test/lib/shape",
 		"other.test/lib/geometry/shape",

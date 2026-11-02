@@ -1,5 +1,7 @@
 package constant
 
+import "github.com/funtimecoding/soil/pkg/strings/join"
+
 const (
 	FixtureLockDetail = `{"ID":"11111111-2222-4333-8444-555555555555","Operation":"OperationTypePlan","Info":"","Who":"user@host.example","Version":"1.0.0","Created":"2020-01-02T03:04:05.123456789Z","Path":""}`
 
@@ -13,8 +15,16 @@ exit 0
 `
 
 	FixtureEmptyPlan = `{}`
+)
 
-	FixturePlan = `{
+var FixturePlan = join.Empty(
+	FixturePlanChanges,
+	FixturePlanState,
+	FixturePlanConfiguration,
+	FixturePlanModuleCalls,
+)
+
+const FixturePlanChanges = `{
   "resource_changes": [
     {"address": "module.storage.example_disk.charlie", "type": "example_disk",
      "change": {"actions": ["create"], "before": null, "after": {"size": 8}}},
@@ -37,7 +47,9 @@ exit 0
     {"address": "module.compute.proxmox_virtual_environment_vm.mike", "type": "proxmox_virtual_environment_vm",
      "change": {"actions": ["no-op"], "before": {"name": "mike"}, "after": {"name": "mike"}}}
   ],
-  "planned_values": {"root_module": {
+`
+
+const FixturePlanState = `  "planned_values": {"root_module": {
     "resources": [
       {"address": "example_network.delta", "type": "example_network", "values": {}},
       {"address": "example_role.echo", "type": "example_role", "values": {"name": "echo"}}
@@ -61,14 +73,18 @@ exit 0
       {"address": "module.compute.proxmox_virtual_environment_vm.foxtrot", "type": "proxmox_virtual_environment_vm", "values": {"name": "foxtrot"}}
     ]}
   ]}}},
-  "configuration": {"root_module": {
+`
+
+const FixturePlanConfiguration = `  "configuration": {"root_module": {
     "resources": [
       {"address": "example_network.delta", "type": "example_network",
        "expressions": {"members": {"references": ["module.compute.hotel_id", "module.compute", "module.compute.lima_id"]}}},
       {"address": "example_role.echo", "type": "example_role", "expressions": {"name": {"constant_value": "echo"}}},
       {"address": "data.example_lookup.india", "type": "example_lookup", "expressions": {}}
     ],
-    "module_calls": {
+`
+
+const FixturePlanModuleCalls = `    "module_calls": {
       "compute": {"expressions": {}, "module": {
         "resources": [
           {"address": "proxmox_download_file.image", "type": "proxmox_download_file", "expressions": {}},
@@ -99,4 +115,3 @@ exit 0
     }
   }}
 }`
-)

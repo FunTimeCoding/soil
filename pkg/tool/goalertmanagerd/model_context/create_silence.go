@@ -33,7 +33,7 @@ func (s *Server) createSilence(
 		}
 	}
 
-	v, e := s.service.CreateSilence(instance, a.Alert, a.Comment, d)
+	v, e := s.service.CreateSilence(x, instance, a.Alert, a.Comment, d)
 
 	if e != nil {
 		return s.captureDetail(e)

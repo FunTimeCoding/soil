@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	kubernetesFace "github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
@@ -29,5 +28,4 @@ type Runner struct {
 	stateNamespace string
 	stateLeaseName string
 	pending        *change.Change
-	downstream     []*client.Client
 }

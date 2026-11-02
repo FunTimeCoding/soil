@@ -15,8 +15,9 @@ func TestExtractType(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-basic/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Store",
@@ -55,8 +56,9 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-internal/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Store",
@@ -81,8 +83,9 @@ func TestExtractTypeCollision(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-collision/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Store",
@@ -101,8 +104,9 @@ func TestExtractTypeDependency(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-dependency/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Store",
@@ -122,8 +126,9 @@ func TestExtractTypeFieldCollision(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-field-collision/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Store",
@@ -142,8 +147,9 @@ func TestExtractTypeUnexported(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-unexported-type/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"store",
@@ -168,8 +174,9 @@ func TestExtractTypeTargetFile(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-internal/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ExtractType(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Store",

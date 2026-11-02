@@ -3,11 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/inventory"
+	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/types/instance"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -21,7 +20,7 @@ func TestGuard(t *testing.T) {
 			g *guard.Mux,
 		) {
 			goprometheusd.Mount(
-				service.New(inventory.New[instance.Instance]()),
+				service_tester.New(t, map[string]*mock_client.Client{}),
 				memory.New(),
 				mock_recorder.New(),
 				g,

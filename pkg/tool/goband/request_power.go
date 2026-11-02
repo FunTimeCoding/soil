@@ -29,9 +29,9 @@ func requestPower(
 		return
 	}
 
-	r, e := x.Client.RequestPowerWithResponse(
+	r, e := x.Client.RequestPower(
 		context.Background(),
-		client.RequestPowerJSONRequestBody{
+		client.PowerRequest{
 			Instance:  &v.Instance,
 			Operation: operation,
 			Force:     &force,
@@ -39,20 +39,10 @@ func requestPower(
 	)
 
 	if e != nil {
-		x.Terminal.Exitf("error: %v\n", e)
-	}
-
-	if r.JSON200 == nil {
-		x.Terminal.Reject(r.Status(), r.Body)
+		x.Terminal.Exitln(e)
 
 		return
 	}
 
-	x.Terminal.Line(
-		fmt.Sprintf(
-			"%s requested on %s",
-			r.JSON200.Requested,
-			r.JSON200.Instance,
-		),
-	)
+	x.Terminal.Line(fmt.Sprintf("%s requested on %s", r.Requested, r.Instance))
 }

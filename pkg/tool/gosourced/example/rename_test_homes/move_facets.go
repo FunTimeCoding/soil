@@ -1,6 +1,7 @@
 package rename_test_homes
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
@@ -39,7 +40,13 @@ func moveFacets(
 			"/integration/",
 			1,
 		)
-		_, f := s.MovePackage(directory, packagePath, targetPath, false)
+		_, f := s.MovePackage(
+			context.Background(),
+			directory,
+			packagePath,
+			targetPath,
+			false,
+		)
 		errors.PanicOnError(f)
 
 		if _, g := os.Stat(filepath.Join(source, entry.Name())); g == nil {

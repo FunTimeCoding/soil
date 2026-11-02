@@ -12,8 +12,9 @@ func TestUnexportFunction(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ChangeVisibility(
+		t.Context(),
 		d,
 		"IsGenerated",
 		"example/pkg/target",
@@ -34,8 +35,9 @@ func TestExportFunction(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("export-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ChangeVisibility(
+		t.Context(),
 		d,
 		"isGenerated",
 		"example/pkg/target",
@@ -56,8 +58,15 @@ func TestUnexportMethod(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("unexport-method/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ChangeVisibility(d, "Save", "example/pkg/target", "Store", false)
+	s := service_tester.NewService(t)
+	r, e := s.ChangeVisibility(
+		t.Context(),
+		d,
+		"Save",
+		"example/pkg/target",
+		"Store",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 2)
@@ -72,8 +81,9 @@ func TestCollisionDetection(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("collision/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ChangeVisibility(
+		t.Context(),
 		d,
 		"IsGenerated",
 		"example/pkg/target",
@@ -90,8 +100,15 @@ func TestSymbolNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ChangeVisibility(d, "Missing", "example/pkg/target", "", false)
+	s := service_tester.NewService(t)
+	r, e := s.ChangeVisibility(
+		t.Context(),
+		d,
+		"Missing",
+		"example/pkg/target",
+		"",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
@@ -102,8 +119,9 @@ func TestPackageNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.ChangeVisibility(
+		t.Context(),
 		d,
 		"IsGenerated",
 		"example/pkg/missing",
@@ -120,8 +138,15 @@ func TestUnexportBlockedByCrossPackageCaller(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("cross-package/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ChangeVisibility(d, "IsValid", "example/pkg/target", "", false)
+	s := service_tester.NewService(t)
+	r, e := s.ChangeVisibility(
+		t.Context(),
+		d,
+		"IsValid",
+		"example/pkg/target",
+		"",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "would lose access")

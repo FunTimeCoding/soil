@@ -2,10 +2,12 @@ package server
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 )
 
@@ -24,26 +26,38 @@ func (s *Server) Explain(
 	}
 
 	if e != nil {
-		return server.Explain500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.Explain500JSONResponse(*s.answerWith(e, "")), nil
 	}
 
-	prefix := "EXPLAIN"
-
-	if r.Body.Analyze != nil && *r.Body.Analyze {
-		prefix = "EXPLAIN ANALYZE"
-	}
-
-	rows, e := s.service.Query(
+	rows, e := s.service.Explain(
 		c,
 		instance,
-		fmt.Sprintf("%s %s", prefix, r.Body.Sql),
+		r.Body.Sql,
+		r.Body.Analyze != nil && *r.Body.Analyze,
 	)
 
-	if e != nil {
-		return server.Explain500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+	if validation.Is(e) {
+		return server.Explain400JSONResponse(*clientError(e)), nil
 	}
 
-	return server.Explain200JSONResponse{Rows: toRows(rows)}, nil
+	if forbidden.Is(e) {
+		return server.Explain403JSONResponse(*clientError(e)), nil
+	}
+
+	if conflict.Is(e) {
+		return server.Explain409JSONResponse(*clientError(e)), nil
+	}
+
+	if unavailable.Is(e) {
+		return server.Explain503JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.Explain500JSONResponse(*s.answerWith(e, "")), nil
+	}
+
+	return server.Explain200JSONResponse{
+		Columns: rows.Columns,
+		Rows:    rows.Rows,
+	}, nil
 }

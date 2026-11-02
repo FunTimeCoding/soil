@@ -13,6 +13,7 @@ func (r *Runner) Close() {
 	r.cancel()
 
 	if !r.started {
+		r.drainChannels()
 		close(r.finished)
 	}
 }

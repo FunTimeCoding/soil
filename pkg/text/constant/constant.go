@@ -6,6 +6,7 @@ const (
 	NoLimit int = -1
 
 	DictionaryFile = "dictionary.dic"
+	MinimumStem    = 3
 
 	WikiPathEnvironment = "WIKI_PATH"
 )
@@ -42,3 +43,12 @@ var (
 		constant.DockerFile:    true,
 	}
 )
+
+var Inflections = map[string][]string{
+	"ies": {"y"},
+	"es":  {""},
+	"s":   {""},
+	"ed":  {"", "e"},
+	"ing": {"", "e"},
+	"er":  {"", "e"},
+}

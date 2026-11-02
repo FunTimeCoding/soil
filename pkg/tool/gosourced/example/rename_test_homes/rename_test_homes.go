@@ -2,7 +2,7 @@ package rename_test_homes
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/example/offline_service"
 	"os"
 )
 
@@ -15,7 +15,8 @@ func RenameTestHomes() {
 
 	directory := os.Args[1]
 	module := os.Args[2]
-	s := service.New(nil)
+	s := offline_service.New()
+	defer s.Close()
 
 	for _, relative := range testHomeDirectories(directory, "unit_test") {
 		renameTestHome(s, directory, module, relative, "unit")

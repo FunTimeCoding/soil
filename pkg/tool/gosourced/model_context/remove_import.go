@@ -28,7 +28,13 @@ func (s *Server) removeImport(
 		return s.captureDetail(e)
 	}
 
-	r, e := s.service.RemoveImport(directory, a.File, a.ImportPath, a.DryRun)
+	r, e := s.service.RemoveImport(
+		turnContext(x),
+		directory,
+		a.File,
+		a.ImportPath,
+		a.DryRun,
+	)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

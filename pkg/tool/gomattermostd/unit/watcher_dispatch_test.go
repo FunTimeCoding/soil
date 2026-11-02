@@ -2,10 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
+	"time"
 )
 
 func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
@@ -25,11 +27,11 @@ func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
 			},
 		),
 	)
-	o.Watcher.Flush("alfa")
-	result := o.Sink.All()
-	assert.Integer(t, 1, len(result))
-	assert.String(t, "kilo", result[0].Callsign)
-	assert.String(t, "[papa] 14:32 · Foxtrot: first message", result[0].Body)
+	events := o.Watcher.Drain()["alfa"]
+	assert.Count(t, 1, events)
+	assert.String(t, "Foxtrot", events[0].Author)
+	assert.String(t, "first message", events[0].Text)
+	assert.True(t, events[0].At.Equal(dispatchAt()))
 }
 
 func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {
@@ -46,8 +48,7 @@ func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {
 			},
 		),
 	)
-	o.Watcher.Flush("other")
-	assert.Integer(t, 0, len(o.Sink.All()))
+	assert.Count(t, 0, o.Watcher.Drain())
 }
 
 func TestWatcherDispatchIgnoresOwnPost(t *testing.T) {
@@ -65,8 +66,7 @@ func TestWatcherDispatchIgnoresOwnPost(t *testing.T) {
 			},
 		),
 	)
-	o.Watcher.Flush("alfa")
-	assert.Integer(t, 0, len(o.Sink.All()))
+	assert.Count(t, 0, o.Watcher.Drain())
 }
 
 func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
@@ -86,10 +86,11 @@ func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
 			},
 		),
 	)
-	o.Watcher.Flush("alfa")
-	result := o.Sink.All()
-	assert.Integer(t, 1, len(result))
-	assert.StringContains(t, "Golf reacted :eyes:", result[0].Body)
+	events := o.Watcher.Drain()["alfa"]
+	assert.Count(t, 1, events)
+	assert.True(t, events[0].Kind == constant.ReactionAddedEvent)
+	assert.String(t, "Golf", events[0].Author)
+	assert.String(t, ":eyes:", events[0].Text)
 }
 
 func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
@@ -108,8 +109,7 @@ func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
 			},
 		),
 	)
-	o.Watcher.Flush("alfa")
-	assert.Integer(t, 0, len(o.Sink.All()))
+	assert.Count(t, 0, o.Watcher.Drain())
 }
 
 func TestWatcherForgetStopsMatching(t *testing.T) {
@@ -129,6 +129,32 @@ func TestWatcherForgetStopsMatching(t *testing.T) {
 			},
 		),
 	)
-	o.Watcher.Flush("alfa")
-	assert.Integer(t, 0, len(o.Sink.All()))
+	assert.Count(t, 0, o.Watcher.Drain())
+}
+
+func TestWatcherDueHoldsARootInsideItsWindow(t *testing.T) {
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Client.AddUser("foxtrot", "Foxtrot")
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.PostEvent(
+			&model.Post{
+				Id:      "reply",
+				RootId:  "alfa",
+				UserId:  "foxtrot",
+				Message: "first message",
+			},
+		),
+	)
+	assert.Count(t, 0, o.Watcher.Due(time.Now(), constant.DebounceWindow))
+	assert.Count(
+		t,
+		1,
+		o.Watcher.Due(
+			time.Now().Add(2*constant.DebounceWindow),
+			constant.DebounceWindow,
+		),
+	)
+	assert.Count(t, 0, o.Watcher.Drain())
 }

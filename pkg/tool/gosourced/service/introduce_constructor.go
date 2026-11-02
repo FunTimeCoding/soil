@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
 
 func (s *Service) IntroduceConstructor(
+	x context.Context,
 	directory string,
 	packagePath string,
 	name string,
@@ -17,6 +19,7 @@ func (s *Service) IntroduceConstructor(
 ) (*output.Results, *result.Constructor, error) {
 	var report *result.Constructor
 	r, e := s.transact(
+		x,
 		directory,
 		nil,
 		dryRun,

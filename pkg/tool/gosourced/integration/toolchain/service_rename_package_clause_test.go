@@ -14,8 +14,14 @@ func TestRenamePackageClause(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenamePackageClause(d, "example/pkg/outer/store", "depot", false)
+	s := service_tester.NewService(t)
+	r, e := s.RenamePackageClause(
+		t.Context(),
+		d,
+		"example/pkg/outer/store",
+		"depot",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	reported := joinedConcerns(r)
@@ -59,8 +65,14 @@ func TestRenamePackageClauseShadowed(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-collision/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenamePackageClause(d, "example/pkg/outer/store", "depot", false)
+	s := service_tester.NewService(t)
+	r, e := s.RenamePackageClause(
+		t.Context(),
+		d,
+		"example/pkg/outer/store",
+		"depot",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "taken")
@@ -71,8 +83,14 @@ func TestRenamePackageClauseSameName(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenamePackageClause(d, "example/pkg/outer/store", "store", false)
+	s := service_tester.NewService(t)
+	r, e := s.RenamePackageClause(
+		t.Context(),
+		d,
+		"example/pkg/outer/store",
+		"store",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already named")
@@ -87,8 +105,14 @@ func TestRenamePackageClauseReportsATestOnlyPackage(t *testing.T) {
 		"pkg/alfa/alfa_test.go",
 		"package guard\n\nimport \"testing\"\n\nfunc TestAlfa(t *testing.T) {}\n",
 	)
-	s := service_tester.NewService()
-	r, e := s.RenamePackageClause(d, "example/pkg/alfa", "unit", false)
+	s := service_tester.NewService(t)
+	r, e := s.RenamePackageClause(
+		t.Context(),
+		d,
+		"example/pkg/alfa",
+		"unit",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.String(

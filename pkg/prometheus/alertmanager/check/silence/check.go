@@ -4,7 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
@@ -24,13 +26,17 @@ func Check(o *option.Silence) {
 		return
 	}
 
+	p := prometheus.NewEnvironment()
+	defer p.Close()
+	r := p.MustRules()
+
 	if o.Set != "" {
-		console.Format("Set: %s\n", c.MustSimpleSilence(o.Set))
+		console.Format("Set: %s\n", c.MustSimpleSilence(o.Set, r))
 	}
 
 	o2 := advanced_option.New()
 	o2.All = true
-	a, _ := c.MustAlerts(o2, nil)
+	a, _ := c.MustAlerts(o2, alert_filter.New(), r)
 	console.Format("Alerts: %d\n", len(a))
 
 	if !o.All {

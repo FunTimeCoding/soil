@@ -73,6 +73,12 @@ type NamedCount struct {
 	Name        string   `json:"name"`
 }
 
+// PathMove defines model for PathMove.
+type PathMove struct {
+	From string `json:"from"`
+	To   string `json:"to"`
+}
+
 // ProfileCompletion defines model for ProfileCompletion.
 type ProfileCompletion struct {
 	Body        string `json:"body"`
@@ -166,6 +172,33 @@ type Relation struct {
 	Type             *string `json:"type,omitempty"`
 }
 
+// RetargetChange defines model for RetargetChange.
+type RetargetChange struct {
+	After  string `json:"after"`
+	Before string `json:"before"`
+	Line   int    `json:"line"`
+	Reason string `json:"reason"`
+}
+
+// RetargetRequest defines model for RetargetRequest.
+type RetargetRequest struct {
+	DryRun  bool         `json:"dry_run"`
+	Paths   []PathMove   `json:"paths"`
+	Symbols []SymbolMove `json:"symbols"`
+}
+
+// RetargetResponse defines model for RetargetResponse.
+type RetargetResponse struct {
+	Memories []RetargetedMemory `json:"memories"`
+}
+
+// RetargetedMemory defines model for RetargetedMemory.
+type RetargetedMemory struct {
+	Changes    []RetargetChange `json:"changes"`
+	Identifier int64            `json:"identifier"`
+	Name       string           `json:"name"`
+}
+
 // SourcedMemory defines model for SourcedMemory.
 type SourcedMemory struct {
 	Identifier       int64  `json:"identifier"`
@@ -190,6 +223,14 @@ type Spread struct {
 type Statistics struct {
 	Scopes []NamedCount `json:"scopes"`
 	Tags   []NamedCount `json:"tags"`
+}
+
+// SymbolMove defines model for SymbolMove.
+type SymbolMove struct {
+	Directory    string `json:"directory"`
+	Name         string `json:"name"`
+	NewDirectory string `json:"new_directory"`
+	NewName      string `json:"new_name"`
 }
 
 // TokenStatistic defines model for TokenStatistic.
@@ -286,6 +327,9 @@ type PostMemoryJSONRequestBody = MemoryRequest
 
 // PutMemoryJSONRequestBody defines body for PutMemory for application/json ContentType.
 type PutMemoryJSONRequestBody = MemoryUpdateRequest
+
+// PostReferencesRetargetJSONRequestBody defines body for PostReferencesRetarget for application/json ContentType.
+type PostReferencesRetargetJSONRequestBody = RetargetRequest
 
 // PostRelationJSONRequestBody defines body for PostRelation for application/json ContentType.
 type PostRelationJSONRequestBody PostRelationJSONBody
@@ -399,6 +443,18 @@ type ClientInterface interface {
 
 	// GetProfile performs a GET /api/profile (the `GetProfile` operationId) request.
 	GetProfile(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostReferencesRetargetWithBody performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+	PostReferencesRetargetWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostReferencesRetarget performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+	PostReferencesRetarget(ctx context.Context, body PostReferencesRetargetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteRelation performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
 	DeleteRelation(ctx context.Context, params *DeleteRelationParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -550,6 +606,38 @@ func (c *Client) PutMemory(ctx context.Context, identifier int64, body PutMemory
 // GetProfile performs a GET /api/profile (the `GetProfile` operationId) request.
 func (c *Client) GetProfile(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetProfileRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostReferencesRetargetWithBody performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request,
+// with any type of body and a specified content type.
+//
+// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+func (c *Client) PostReferencesRetargetWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostReferencesRetargetRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostReferencesRetarget performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+func (c *Client) PostReferencesRetarget(ctx context.Context, body PostReferencesRetargetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostReferencesRetargetRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -984,6 +1072,46 @@ func NewGetProfileRequest(server string, params *GetProfileParams) (*http.Reques
 	return req, nil
 }
 
+// NewPostReferencesRetargetRequest calls the generic PostReferencesRetarget builder with application/json body
+func NewPostReferencesRetargetRequest(server string, body PostReferencesRetargetJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostReferencesRetargetRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostReferencesRetargetRequestWithBody constructs an http.Request for the PostReferencesRetarget method, with any body, and a specified content type
+func NewPostReferencesRetargetRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/references/retarget")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewDeleteRelationRequest constructs an http.Request for the DeleteRelation method
 func NewDeleteRelationRequest(server string, params *DeleteRelationParams) (*http.Request, error) {
 	var err error
@@ -1397,6 +1525,20 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetProfileWithResponse(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*GetProfileResponse, error)
 
+	// PostReferencesRetargetWithBodyWithResponse performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostReferencesRetargetWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostReferencesRetargetResponse, error)
+
+	// PostReferencesRetargetWithResponse performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+	PostReferencesRetargetWithResponse(ctx context.Context, body PostReferencesRetargetJSONRequestBody, reqEditors ...RequestEditorFn) (*PostReferencesRetargetResponse, error)
+
 	// DeleteRelationWithResponse performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1797,6 +1939,54 @@ func (r GetProfileResponse) ContentType() string {
 	return ""
 }
 
+type PostReferencesRetargetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *RetargetResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostReferencesRetargetResponse) GetJSON200() *RetargetResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostReferencesRetargetResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostReferencesRetargetResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostReferencesRetargetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostReferencesRetargetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostReferencesRetargetResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type DeleteRelationResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2188,6 +2378,32 @@ func (c *ClientWithResponses) GetProfileWithResponse(ctx context.Context, params
 	return ParseGetProfileResponse(rsp)
 }
 
+// PostReferencesRetargetWithBodyWithResponse performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request,
+// with any type of body and a specified content type.
+//
+// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostReferencesRetargetWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostReferencesRetargetResponse, error) {
+	rsp, err := c.PostReferencesRetargetWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostReferencesRetargetResponse(rsp)
+}
+
+// PostReferencesRetargetWithResponse performs a POST /api/references/retarget (the `PostReferencesRetarget` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+func (c *ClientWithResponses) PostReferencesRetargetWithResponse(ctx context.Context, body PostReferencesRetargetJSONRequestBody, reqEditors ...RequestEditorFn) (*PostReferencesRetargetResponse, error) {
+	rsp, err := c.PostReferencesRetarget(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostReferencesRetargetResponse(rsp)
+}
+
 // DeleteRelationWithResponse performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -2507,6 +2723,39 @@ func ParseGetProfileResponse(rsp *http.Response) (*GetProfileResponse, error) {
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest ProfileResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostReferencesRetargetResponse parses an HTTP response from a PostReferencesRetargetWithResponse call
+func ParsePostReferencesRetargetResponse(rsp *http.Response) (*PostReferencesRetargetResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostReferencesRetargetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest RetargetResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

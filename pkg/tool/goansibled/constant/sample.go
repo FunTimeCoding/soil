@@ -13,7 +13,9 @@ const (
                 charlie:
                     ansible_host: 192.168.0.5
 `
+	FixtureHold   = "hold"
 	FixtureScript = `#!/bin/sh
+while [ -e "$GOANSIBLED_CAPTURE/hold" ]; do sleep 0.05; done
 printf '%s\n' "$@" > "$GOANSIBLED_CAPTURE/arguments"
 for a in "$@"; do
 	case "$a" in

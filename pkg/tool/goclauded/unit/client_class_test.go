@@ -10,7 +10,7 @@ import (
 
 func TestTheClientClassifiesAnUnknownCallsign(t *testing.T) {
 	s := base.New(t)
-	_, e := s.Connector(t).PostNotify(
+	_, e := s.Client(t).PostNotify(
 		t.Context(),
 		client.PostNotifyJSONRequestBody{
 			Callsign: "Nobody",
@@ -23,6 +23,6 @@ func TestTheClientClassifiesAnUnknownCallsign(t *testing.T) {
 
 func TestTheClientReadsTheStatus(t *testing.T) {
 	s := base.New(t)
-	_, e := s.Connector(t).GetStatus(t.Context())
+	_, e := s.Client(t).GetStatus(t.Context())
 	assert.FatalOnError(t, e)
 }

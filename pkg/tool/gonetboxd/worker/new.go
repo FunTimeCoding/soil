@@ -1,12 +1,11 @@
 package worker
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
@@ -18,16 +17,8 @@ func New(
 	y *prometheus.Registry,
 	r face.Reporter,
 ) *Worker {
-	x, cancel := context.WithCancel(context.Background())
+	result := &Worker{service: v, metric: metric.New(y)}
+	result.clock = worker.NewEvery(result.tick, l, r, interval)
 
-	return &Worker{
-		service:  v,
-		interval: interval,
-		logger:   l,
-		reporter: r,
-		metric:   metric.New(y),
-		recovery: recovery.New(l, r),
-		context:  x,
-		cancel:   cancel,
-	}
+	return result
 }

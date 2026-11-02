@@ -3,8 +3,9 @@ package gofix
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
-	"github.com/funtimecoding/soil/pkg/tool/gofix/constant"
+	"github.com/funtimecoding/soil/pkg/text/dictionary"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
@@ -16,6 +17,7 @@ func runSurvey(
 		patterns = []string{"./..."}
 	}
 
+	known := knownWords(directory)
 	counts := make(map[string]int)
 	examples := make(map[string][]string)
 	all, _ := Load(directory, patterns)
@@ -39,7 +41,10 @@ func runSurvey(
 			}
 
 			for _, s := range segment.Segments(i.Name) {
-				if constant.Whitelist[s] {
+				if known[s] || slices.ContainsFunc(
+					dictionary.Stems(s),
+					func(b string) bool { return known[b] },
+				) {
 					continue
 				}
 

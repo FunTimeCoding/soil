@@ -18,4 +18,7 @@ const (
 	BaseUpdateDescription    = "Directory the memory's bare file names resolve under, comma-separated for several; omit or leave empty to keep the current base"
 	ClearBaseDescription     = "Remove the memory's base; wins over base when both are given"
 	ReferencesClean          = "Every reference resolves"
+	RetargetReferences       = "retarget_references"
+	RetargetSummary          = "Rewrite memory references after paths or symbols moved - backticked paths, go: symbols and the base - so they name the new location. Works before or after the move happened; gosourced calls it for its own moves, this is for the rest (a hand git mv). Every memory changed keeps its previous version in history."
+	RetargetClean            = "No memory references the moved paths or symbols"
 )

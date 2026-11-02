@@ -1,16 +1,15 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/web/locator"
+import "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 
 type Ansible struct {
-	Address          string
-	ServiceTokens    []string
-	Repository       string
-	ClonePath        string
-	AnsiblePath      string
-	Playbook         []string
-	PostgresLocator  string
-	LitePath         string
-	InventoryLocator *locator.Locator
-	InventoryToken   string
+	Address         string
+	ServiceTokens   []string
+	Repository      string
+	ClonePath       string
+	AnsiblePath     string
+	Playbook        []string
+	PostgresLocator string
+	LitePath        string
+	Inventory       func() face.Client
 }

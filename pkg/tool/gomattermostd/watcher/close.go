@@ -10,17 +10,6 @@ func (w *Watcher) Close() {
 	}
 
 	w.running = false
-	var pending []string
-
-	for root, t := range w.timer {
-		t.Stop()
-		pending = append(pending, root)
-	}
-
 	w.mutex.Unlock()
 	w.hold.Close()
-
-	for _, root := range pending {
-		w.Flush(root)
-	}
 }

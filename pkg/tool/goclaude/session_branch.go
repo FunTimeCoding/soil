@@ -18,6 +18,7 @@ func sessionBranch(c *command_context.Context) *cobra.Command {
 	result.AddCommand(sessionHeatmap(c))
 	result.AddCommand(sessionBashDump(c))
 	result.AddCommand(sessionContext(c))
+	result.AddCommand(sessionCruise(c))
 	result.AddCommand(sessionFind(c))
 	result.AddCommand(sessionSearch(c))
 	result.AddCommand(sessionRead(c))

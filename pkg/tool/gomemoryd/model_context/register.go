@@ -6,4 +6,5 @@ func (s *Server) register() {
 	s.registerFetching()
 	s.registerGraph()
 	s.registerTags()
+	s.registerRetarget()
 }

@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net"
@@ -28,15 +27,12 @@ func TestAlertmanagerClientDialsConfiguredPort(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	p := prometheus.New("127.0.0.1", 0, false, "", "")
-	defer p.Close()
 	c := alertmanager.New(
 		"127.0.0.1",
 		s.Listener.Addr().(*net.TCPAddr).Port,
 		false,
 		"",
 		"",
-		p,
 	)
 	defer c.Close()
 	_, e := c.Status()

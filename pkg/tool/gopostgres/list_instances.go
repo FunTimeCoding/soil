@@ -2,14 +2,13 @@ package gopostgres
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/face"
 	"github.com/spf13/cobra"
 )
 
 func listInstances(
-	c *client.Client,
+	c *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -19,9 +18,8 @@ func listInstances(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.ListInstances(context.Background())
-			errors.PanicOnError(e)
-			printResponse(t, r)
+			r, e := (*c).ListInstances(context.Background())
+			t.EmitValue(r, e)
 		},
 	}
 }

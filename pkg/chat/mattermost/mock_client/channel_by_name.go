@@ -4,7 +4,7 @@ import "github.com/mattermost/mattermost/server/public/model"
 
 func (c *Client) ChannelByName(
 	_ *model.Team,
-	_ string,
+	name string,
 ) (*model.Channel, error) {
-	return nil, c.Failure
+	return c.TeamChannel(name)
 }

@@ -5,15 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/inventory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/types/instance"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -27,11 +26,12 @@ func TestModelContextQueriesNeedASelectedInstance(t *testing.T) {
 			g *guard.Mux,
 		) {
 			goprometheusd.Mount(
-				service.New(
-					inventory.New[instance.Instance](
-						instance.Instance{Name: "alfa", Host: "alfa.example"},
-						instance.Instance{Name: "bravo", Host: "bravo.example"},
-					),
+				service_tester.New(
+					t,
+					map[string]*mock_client.Client{
+						"alfa":  mock_client.New(),
+						"bravo": mock_client.New(),
+					},
 				),
 				memory.New(),
 				mock_recorder.New(),

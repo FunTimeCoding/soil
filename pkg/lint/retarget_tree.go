@@ -3,14 +3,14 @@ package lint
 import (
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/retarget"
-	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/retargeted_document"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func RetargetTree(
 	root string,
-	moves []*path_move.Move,
+	moves *move_set.Set,
 ) []*retargeted_document.Document {
 	o := option.New("", false)
 	o.Metadata = true

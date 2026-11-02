@@ -4,10 +4,10 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	band "github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/inventory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
 	"testing"
@@ -46,11 +46,7 @@ func TestARebootRecordsNothing(t *testing.T) {
 func TestAPowerActionWithoutTheSwitchRecordsNothing(t *testing.T) {
 	engine := mock_client.New()
 	engine.SetPower(band.PowerOn, runningStates()...)
-	v := service.New(
-		inventory.New[instance.Instance](
-			instance.Instance{Name: "alfa", Host: "alfa.example"},
-		),
-	)
+	v := service.New(alfaOption(), logger.New(t.Context()), memory.New())
 	defer v.Close()
 	v.Pool().Set("alfa", engine)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)

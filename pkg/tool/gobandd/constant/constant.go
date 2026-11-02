@@ -34,6 +34,13 @@ const (
 )
 
 const (
+	HostEnvironment     = "GOBAND_HOST"
+	PortEnvironment     = "GOBAND_PORT"
+	InsecureEnvironment = "GOBAND_INSECURE"
+	TokenEnvironment    = "GOBAND_TOKEN"
+)
+
+const (
 	OperationStart    = "start"
 	OperationShutdown = "shutdown"
 	OperationReboot   = "reboot"

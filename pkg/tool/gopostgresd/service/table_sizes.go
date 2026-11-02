@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/postgres/types/result"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 )
 
@@ -10,6 +10,12 @@ func (s *Service) TableSizes(
 	x context.Context,
 	instance string,
 	schema string,
-) ([]map[string]any, error) {
-	return s.Query(x, instance, fmt.Sprintf(constant.TableSizesQuery, schema))
+) (*result.Result, error) {
+	return s.guarded(
+		x,
+		instance,
+		ours,
+		constant.TableSizesQuery,
+		schemaOrDefault(schema),
+	)
 }

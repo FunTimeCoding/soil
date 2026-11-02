@@ -64,6 +64,21 @@ func TestPacedCruiseWakesAtMostOncePerPace(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
+func TestEveryCruiseWakeIsCountedAcrossARearm(t *testing.T) {
+	s := service_tester.New(t)
+	s.Check("session-1")
+	s.EndTurn("session-1")
+	s.Arm("session-1", constant.CruisePaced, 15*time.Minute)
+	assert.True(t, s.Pulse("session-1", constant.DeliveryCruise))
+	assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
+	s.Store.Advance(15 * time.Minute)
+	s.Service.ReleaseCruise()
+	s.Arm("session-1", constant.CruiseOn, 0)
+	setting, e := s.Service.CruiseSetting("session-1")
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 2, setting.Woken)
+}
+
 func TestCruiseReleaseKeepsToTheRateCap(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")

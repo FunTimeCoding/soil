@@ -15,7 +15,7 @@ func (c *Client) Create(
 	instance string,
 	summary string,
 	description string,
-	expression string,
+	generator string,
 ) error {
 	start := time.Now()
 	end := start.Add(3 * time.Minute)
@@ -29,7 +29,7 @@ func (c *Client) Create(
 					constant.SeverityLabel:  constant.CriticalSeverity,
 					constant.InstanceLabel:  instance,
 				},
-				GeneratorURL: strfmt.URI(c.prometheus.GraphLink(expression)),
+				GeneratorURL: strfmt.URI(generator),
 			},
 			Annotations: map[string]string{
 				constant.SummaryLabel:     summary,

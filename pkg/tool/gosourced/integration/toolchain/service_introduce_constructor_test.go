@@ -14,7 +14,8 @@ func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	r, c, e := service_tester.NewService().IntroduceConstructor(
+	r, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/single",
 		"Shape",
@@ -64,7 +65,8 @@ func TestIntroduceConstructorReportsWhyASiteStays(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	_, c, e := service_tester.NewService().IntroduceConstructor(
+	_, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/single",
 		"Shape",
@@ -94,7 +96,8 @@ func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	_, _, e := service_tester.NewService().IntroduceConstructor(
+	_, _, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/single",
 		"Shape",
@@ -118,7 +121,8 @@ func TestIntroduceConstructorNamesBagConstructorsAfterTheType(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	_, c, e := service_tester.NewService().IntroduceConstructor(
+	_, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/bag",
 		"Payload",
@@ -145,7 +149,8 @@ func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	_, c, e := service_tester.NewService().IntroduceConstructor(
+	_, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/bag",
 		"Header",
@@ -171,7 +176,8 @@ func TestIntroduceConstructorRefusesATaintedPackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	r, c, e := service_tester.NewService().IntroduceConstructor(
+	r, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/tainted",
 		"Record",
@@ -194,7 +200,8 @@ func TestIntroduceConstructorRefusesAnUnknownParameter(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	r, c, e := service_tester.NewService().IntroduceConstructor(
+	r, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/single",
 		"Shape",
@@ -213,7 +220,8 @@ func TestIntroduceConstructorDryRunWritesNothing(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
 	)
-	_, c, e := service_tester.NewService().IntroduceConstructor(
+	_, c, e := service_tester.NewService(t).IntroduceConstructor(
+		t.Context(),
 		d,
 		"example/pkg/single",
 		"Shape",

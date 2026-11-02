@@ -52,6 +52,7 @@ func (s *Server) queryRange(
 	}
 
 	v, f := s.service.QueryRange(
+		x,
 		instance,
 		a.Query,
 		v1.Range{Start: start, End: end, Step: step},

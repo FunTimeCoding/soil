@@ -61,23 +61,30 @@ c.Remove("fp1")
 ```
 
 A mock reaches the service the way the real client does: through the factory on
-the option (`service-tool.md`, Service). `<path>/unit/service_tester` builds the
-option, sets the factory to return the mock, builds the service and closes it on
-cleanup; a pooled client's factory answers per instance. A guarded service's
-test shares one reporter between the guard and the caller, so the events it
-counts are the ones the daemon would send. Tests of the service, its workers
-and the mount all go through it:
+the option (`service-tool.md`, Service). `<path>/unit/service_tester` creates
+the mock, builds the option with the factory returning it, builds the service
+and closes it on cleanup, and returns both; a pooled client's factory answers
+per instance, so a pooled tester takes the instance names and returns one mock
+per name -
+`New(t, names...) (*service.Service, map[string]*mock_client.Client)`. The
+service closes the mock it was handed through the factory, so no caller holds
+one it never closes - data the mock should carry before the service starts goes
+in as values, not as a mock the caller built. A guarded service's test shares
+one reporter between the guard and the caller, so the events it counts are the
+ones the daemon would send. Tests of the service, its workers and the mount all
+go through it:
 
 ```go
-func New(t *testing.T, c *mock_client.Client) *service.Service {
+func New(t *testing.T) (*service.Service, *mock_client.Client) {
     t.Helper()
+    c := mock_client.New()
     o := option.New()
     o.LitePath = filepath.Join(t.TempDir(), "daemon.db")
     o.Source = func() face.AlertSource { return c }
     result := service.New(o, logger.New(t.Context()))
     t.Cleanup(result.Close)
 
-    return result
+    return result, c
 }
 ```
 

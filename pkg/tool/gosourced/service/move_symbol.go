@@ -1,8 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/lint/output"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+)
 
 func (s *Service) MoveSymbol(
+	x context.Context,
 	directory string,
 	packagePath string,
 	symbol string,
@@ -12,6 +16,7 @@ func (s *Service) MoveSymbol(
 	dryRun bool,
 ) (*output.Results, error) {
 	return s.MoveSymbols(
+		x,
 		directory,
 		packagePath,
 		[]string{symbol},

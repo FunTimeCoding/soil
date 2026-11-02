@@ -1,20 +1,24 @@
 package service
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"time"
 )
 
 func (s *Service) Query(
+	x context.Context,
 	instance string,
 	query string,
 	t time.Time,
 ) (*query_result.Result, error) {
-	c, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.Query(query, t)
+	return guarded(
+		s,
+		x,
+		instance,
+		func(c face.Client) (*query_result.Result, error) {
+			return c.Query(query, t)
+		},
+	)
 }

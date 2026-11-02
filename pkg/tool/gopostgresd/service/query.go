@@ -2,27 +2,13 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/postgres/types/result"
 )
 
 func (s *Service) Query(
 	x context.Context,
 	instance string,
 	sql string,
-) ([]map[string]any, error) {
-	p, e := s.pool.Client(instance)
-
-	if e != nil {
-		return nil, e
-	}
-
-	rows, e := p.Query(x, sql)
-
-	if e != nil {
-		return nil, fmt.Errorf("query: %w", e)
-	}
-
-	defer rows.Close()
-
-	return scanRows(rows)
+) (*result.Result, error) {
+	return s.guarded(x, instance, theirs, sql)
 }

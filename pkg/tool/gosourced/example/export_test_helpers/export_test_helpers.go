@@ -3,7 +3,7 @@ package export_test_helpers
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/example/offline_service"
 	"os"
 	"path"
 	"path/filepath"
@@ -30,6 +30,8 @@ func ExportTestHelpers() {
 	targetPath := path.Join(packagePath, target)
 	moved := 0
 	asked := 0
+	s := offline_service.New()
+	defer s.Close()
 
 	for _, line := range strings.Split(string(content), "\n") {
 		name := strings.TrimSpace(line)
@@ -41,7 +43,7 @@ func ExportTestHelpers() {
 		asked++
 
 		if exportHelper(
-			service.New(nil),
+			s,
 			directory,
 			packagePath,
 			targetPath,

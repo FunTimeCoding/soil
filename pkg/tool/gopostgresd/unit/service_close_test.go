@@ -2,13 +2,18 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
 	"testing"
 )
 
-func TestConnectionPoolsAreClosedByTheSharedPool(t *testing.T) {
-	var connection any = (*pgxpool.Pool)(nil)
-	_, okay := connection.(face.Closer)
-	assert.True(t, okay)
+func TestClosingTheServiceClosesEveryInstanceClient(t *testing.T) {
+	s, clients := service_tester.New(t, "alfa", "bravo")
+	s.Close()
+	assert.Integer(t, 1, clients["alfa"].Closed)
+	assert.Integer(t, 1, clients["bravo"].Closed)
+}
+
+func TestTheServiceHandsOneGuardPerInstanceToTheLifecycle(t *testing.T) {
+	s, _ := service_tester.New(t, "alfa", "bravo")
+	assert.Count(t, 2, s.Workers())
 }

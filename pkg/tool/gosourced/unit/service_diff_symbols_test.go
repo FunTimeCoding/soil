@@ -8,7 +8,7 @@ import (
 
 func TestDiffSymbolsComparesHeadWithTheIndex(t *testing.T) {
 	r := diffRepository(t)
-	v := diffService(r.Clone)
+	v := diffService(t, r.Clone)
 	result, e := v.DiffSymbols("echo", "", "")
 	assert.FatalOnError(t, e)
 	assert.Strings(
@@ -23,7 +23,7 @@ func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
 	r.Commit("bravo")
 	r.Write("alfa.go", "package alfa\n\nfunc Charlie() int {\n\treturn 3\n}\n")
 	r.Commit("charlie")
-	v := diffService(r.Clone)
+	v := diffService(t, r.Clone)
 	result, e := v.DiffSymbols("echo", "HEAD~2", "HEAD")
 	assert.FatalOnError(t, e)
 	assert.Strings(
@@ -35,7 +35,7 @@ func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
 
 func TestDiffSymbolsRefusesAnUnknownModuleOrRevision(t *testing.T) {
 	r := diffRepository(t)
-	v := diffService(r.Clone)
+	v := diffService(t, r.Clone)
 	_, e := v.DiffSymbols("foxtrot", "", "")
 	assert.True(t, not_found.Is(e))
 	_, f := v.DiffSymbols("echo", "nowhere", "")

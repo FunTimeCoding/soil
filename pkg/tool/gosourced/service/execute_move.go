@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"go/ast"
+	"path/filepath"
 	"sort"
 )
 
@@ -155,6 +156,11 @@ func executeMove(
 
 		out.Remove(filename)
 		deleted[filename] = true
+
+		if target := soleMoveTarget(plan, filename); target != "" {
+			out.Relocate(filename, target)
+		}
+
 		r.AddConcern(
 			concern.NewFile(
 				constant.ConcernRemoved,
@@ -162,6 +168,19 @@ func executeMove(
 				filename,
 				true,
 			),
+		)
+	}
+
+	for _, entry := range plan.Entries {
+		if isMethod(entry.Object) {
+			continue
+		}
+
+		out.Resymbol(
+			filepath.Dir(plan.Set.Position(entry.File.Pos()).Filename),
+			entry.Symbol,
+			plan.MoveDirectory,
+			entry.NewName,
 		)
 	}
 

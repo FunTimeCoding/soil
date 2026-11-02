@@ -14,8 +14,14 @@ func TestExtractFunctionNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-function/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Missing", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/combined.go",
+		"Missing",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
@@ -26,8 +32,14 @@ func TestExtractFunctionFileNotFound(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-function/src"),
 	)
-	s := service_tester.NewService()
-	_, e := s.ExtractToFile(d, "pkg/target/missing.go", "Something", false)
+	s := service_tester.NewService(t)
+	_, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/missing.go",
+		"Something",
+		false,
+	)
 	assert.True(t, e != nil)
 }
 
@@ -39,8 +51,14 @@ func TestExtractFunctionTargetExists(t *testing.T) {
 	target := filepath.Join(d, "pkg/target/format_name.go")
 	e := os.WriteFile(target, []byte("package target\n"), 0644)
 	assert.FatalOnError(t, e)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "FormatName", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/combined.go",
+		"FormatName",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already exists")
@@ -51,8 +69,14 @@ func TestExtractFunctionRenamesSourceToType(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-type-pair/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "NewWidget", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/combined.go",
+		"NewWidget",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	extracted := service_tester.ReadFixtureFile(
@@ -72,8 +96,14 @@ func TestExtractTypeRenamesSourceToFunction(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-type-pair/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Widget", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/combined.go",
+		"Widget",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	extracted := service_tester.ReadFixtureFile(t, d, "pkg/target/widget.go")
@@ -89,8 +119,14 @@ func TestExtractGroupedTypeRefuses(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-type-group/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Alfa", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/combined.go",
+		"Alfa",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "type group")
@@ -103,8 +139,8 @@ func TestExtractTypeRefusesEmptyFile(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-type-single/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/only.go", "Only", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(t.Context(), d, "pkg/target/only.go", "Only", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "empty file")
@@ -115,8 +151,14 @@ func TestExtractLeavesVariableBehind(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-var-companion/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Register", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/combined.go",
+		"Register",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	extracted := service_tester.ReadFixtureFile(t, d, "pkg/target/register.go")
@@ -133,8 +175,14 @@ func TestExtractRefusesEmptyFile(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("extract-single/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.ExtractToFile(d, "pkg/target/only.go", "OnlyFunction", false)
+	s := service_tester.NewService(t)
+	r, e := s.ExtractToFile(
+		t.Context(),
+		d,
+		"pkg/target/only.go",
+		"OnlyFunction",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "empty file")

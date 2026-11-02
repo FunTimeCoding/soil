@@ -1,5 +1,5 @@
 package hold
 
 func (h *Hold) Start() {
-	go h.loop()
+	h.started.Do(func() { go h.loop() })
 }

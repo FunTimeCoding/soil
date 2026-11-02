@@ -22,7 +22,7 @@ func (s *Server) listSchemas(
 	v, e := s.service.ListSchemas(x, instance)
 
 	if e != nil {
-		return s.captureFail(
+		return s.answerWith(
 			e,
 			fmt.Sprintf("database error on %s: schemas not listed", instance),
 		)

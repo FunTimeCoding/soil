@@ -11,5 +11,6 @@ type Setting struct {
 	Mode              constant.Cruise `gorm:"column:mode;not null"`
 	Pace              time.Duration   `gorm:"column:pace"`
 	PromotedAt        *time.Time      `gorm:"column:promoted_at"`
+	Woken             int             `gorm:"column:woken;not null;default:0"`
 	UpdatedAt         time.Time       `gorm:"column:updated_at"`
 }

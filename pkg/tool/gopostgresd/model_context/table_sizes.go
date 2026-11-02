@@ -19,21 +19,15 @@ func (s *Server) tableSizes(
 		return s.captureDetail(e)
 	}
 
-	schema := a.Schema
-
-	if schema == "" {
-		schema = "public"
-	}
-
-	v, e := s.service.TableSizes(x, instance, schema)
+	v, e := s.service.TableSizes(x, instance, a.Schema)
 
 	if e != nil {
-		return s.captureFail(
+		return s.answerWith(
 			e,
 			fmt.Sprintf(
 				"database error on %s: table sizes in %s not retrieved",
 				instance,
-				schema,
+				a.Schema,
 			),
 		)
 	}

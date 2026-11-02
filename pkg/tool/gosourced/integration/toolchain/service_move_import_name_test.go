@@ -12,7 +12,8 @@ func TestMoveIntoOwnConstantDropsTheOrphan(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-orphan/src"),
 	)
-	r, e := service_tester.NewService().MoveSymbol(
+	r, e := service_tester.NewService(t).MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/alfa/constant",
 		"Mode",
@@ -35,7 +36,8 @@ func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-foreign-constant/src"),
 	)
-	r, e := service_tester.NewService().MoveSymbol(
+	r, e := service_tester.NewService(t).MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Mode",
@@ -57,7 +59,8 @@ func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
 
 func TestMoveKeepsOneImportBlock(t *testing.T) {
 	d := prepareDottedModule(t, "move-dotted/src")
-	r, e := service_tester.NewService().MoveSymbol(
+	r, e := service_tester.NewService(t).MoveSymbol(
+		t.Context(),
 		d,
 		"example.org/m/pkg/target",
 		"Mode",

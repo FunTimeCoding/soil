@@ -22,7 +22,7 @@ func (s *Server) queryRules(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Rules(instance)
+	v, e := s.service.Rules(x, instance)
 
 	if e != nil {
 		return s.captureDetail(e)

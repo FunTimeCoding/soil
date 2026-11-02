@@ -18,6 +18,6 @@ func New(
 		constant.FixtureHostname,
 		0,
 		constant.FixtureEmptyPlan,
-		"",
+		nil,
 	)
 }

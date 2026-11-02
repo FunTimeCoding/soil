@@ -6,11 +6,9 @@ import (
 )
 
 func (s *Service) Keys() (*response.KeysReturn, error) {
-	c := s.runner.SaltClient()
-
-	if c == nil {
+	if !s.runner.Connected() {
 		return nil, constant.ErrorNotConnected
 	}
 
-	return c.Keys()
+	return s.salt.Keys()
 }

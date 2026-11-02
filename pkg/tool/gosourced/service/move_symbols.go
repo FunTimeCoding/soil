@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"path/filepath"
 )
 
 func (s *Service) MoveSymbols(
+	x context.Context,
 	directory string,
 	packagePath string,
 	symbols []string,
@@ -24,6 +26,7 @@ func (s *Service) MoveSymbols(
 	}
 
 	return s.transact(
+		x,
 		directory,
 		[]string{packagePath},
 		dryRun,

@@ -15,12 +15,19 @@ func New(
 	token string,
 ) *Client {
 	p := stall_client.New().Build()
+	base := locator.New(host).Port(port).Insecure()
 	c, e := client.NewClientWithResponses(
-		locator.New(host).Port(port).Insecure().String(),
+		base.String(),
 		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)
 
-	return &Client{context: context.Background(), client: c, pool: p}
+	return &Client{
+		context: context.Background(),
+		client:  c,
+		pool:    p,
+		base:    base,
+		token:   token,
+	}
 }

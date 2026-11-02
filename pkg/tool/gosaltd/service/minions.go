@@ -6,11 +6,9 @@ import (
 )
 
 func (s *Service) Minions() ([]response.Minion, error) {
-	c := s.runner.SaltClient()
-
-	if c == nil {
+	if !s.runner.Connected() {
 		return nil, constant.ErrorNotConnected
 	}
 
-	return c.Minions()
+	return s.salt.Minions()
 }

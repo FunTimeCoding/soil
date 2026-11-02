@@ -18,6 +18,6 @@ func NewFailingUnlock(
 		constant.FixtureHostname,
 		1,
 		constant.FixtureEmptyPlan,
-		"",
+		nil,
 	)
 }

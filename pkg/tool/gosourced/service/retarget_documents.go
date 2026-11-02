@@ -3,6 +3,8 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
+	"github.com/funtimecoding/soil/pkg/lint/types/symbol_move"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
 	"path/filepath"
@@ -15,12 +17,14 @@ func (s *Service) retargetDocuments(
 	r *output.Results,
 ) []*sink.Sink {
 	var renames []*sink_operation.Operation
+	var symbols []*symbol_move.Move
 
 	for _, o := range outs {
 		renames = append(renames, o.Renames()...)
+		symbols = append(symbols, o.Symbols()...)
 	}
 
-	if len(renames) == 0 {
+	if len(renames) == 0 && len(symbols) == 0 {
 		return outs
 	}
 
@@ -28,9 +32,15 @@ func (s *Service) retargetDocuments(
 
 	for _, root := range slices.Concat(
 		[]string{directory},
-		s.inventory.Replacing(directory),
+		s.inventory.Requiring(directory),
 	) {
-		documents := lint.RetargetTree(root, relativeMoves(root, renames))
+		documents := lint.RetargetTree(
+			root,
+			move_set.New(
+				relativeMoves(root, renames),
+				relativeSymbols(root, symbols),
+			),
+		)
 
 		if len(documents) == 0 {
 			continue

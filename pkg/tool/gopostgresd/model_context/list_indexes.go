@@ -23,21 +23,15 @@ func (s *Server) listIndexes(
 		return s.captureDetail(e)
 	}
 
-	schema := a.Schema
-
-	if schema == "" {
-		schema = "public"
-	}
-
-	v, e := s.service.ListIndexes(x, instance, schema, a.Table)
+	v, e := s.service.ListIndexes(x, instance, a.Schema, a.Table)
 
 	if e != nil {
-		return s.captureFail(
+		return s.answerWith(
 			e,
 			fmt.Sprintf(
 				"database error on %s: indexes for %s.%s not listed",
 				instance,
-				schema,
+				a.Schema,
 				a.Table,
 			),
 		)

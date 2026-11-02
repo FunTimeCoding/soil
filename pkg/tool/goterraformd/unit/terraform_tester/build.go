@@ -4,12 +4,13 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	provisionMock "github.com/funtimecoding/soil/pkg/provision/client/mock_client"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
@@ -26,7 +27,7 @@ func build(
 	hostname string,
 	unlockExit int,
 	plan string,
-	downstream string,
+	downstream *provisionMock.Client,
 ) *Tester {
 	t.Helper()
 	base := t.TempDir()
@@ -96,9 +97,10 @@ func build(
 	o.Hostname = hostname
 	o.Namespace = constant.StateNamespace
 
-	if downstream != "" {
-		o.Downstream = []string{downstream}
-		o.DownstreamToken = generativeConstant.ModelContextTestToken
+	if downstream != nil {
+		o.DownstreamClients = func() []provisionFace.Client {
+			return []provisionFace.Client{downstream}
+		}
 	}
 
 	v := service.New(

@@ -16,6 +16,7 @@ type Repository struct {
 	routes         map[string][]string
 	headings       map[string][]*heading.Heading
 	missing        map[string]bool
+	declarations   map[string]map[string]bool
 	ignored        func(string) bool
 	siblingIgnored map[string]func(string) bool
 }

@@ -1,5 +1,7 @@
 package mock_client
 
-func (c *Client) RefreshSocket() error {
+import "context"
+
+func (c *Client) RefreshSocket(context.Context) error {
 	return c.Failure
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -8,12 +9,14 @@ import (
 )
 
 func (s *Service) MovePackage(
+	x context.Context,
 	directory string,
 	packagePath string,
 	targetPackagePath string,
 	dryRun bool,
 ) (*output.Results, error) {
 	return s.transact(
+		x,
 		directory,
 		[]string{join.Empty(packagePath, constant.RecursivePattern)},
 		dryRun,

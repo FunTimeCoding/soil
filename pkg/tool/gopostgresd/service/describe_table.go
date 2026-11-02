@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/postgres/types/result"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 )
 
@@ -11,10 +11,13 @@ func (s *Service) DescribeTable(
 	instance string,
 	schema string,
 	table string,
-) ([]map[string]any, error) {
-	return s.Query(
+) (*result.Result, error) {
+	return s.guarded(
 		x,
 		instance,
-		fmt.Sprintf(constant.DescribeTableQuery, schema, table),
+		ours,
+		constant.DescribeTableQuery,
+		schemaOrDefault(schema),
+		table,
 	)
 }

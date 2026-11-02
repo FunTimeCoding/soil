@@ -15,8 +15,9 @@ func TestMoveConstant(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-constant/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"itemFields",
@@ -48,8 +49,9 @@ func TestMoveIntoReferenced(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-into-referenced/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Table",
@@ -79,8 +81,9 @@ func TestMoveCrossPackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-cross-package/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Mode",
@@ -106,8 +109,9 @@ func TestMoveAlias(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-alias/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Mode",
@@ -134,8 +138,9 @@ func TestMoveCreateRefused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-create/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"itemFields",
@@ -154,8 +159,9 @@ func TestMoveCreate(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-create/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"itemFields",
@@ -184,8 +190,9 @@ func TestMoveCollision(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-collision/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"itemFields",
@@ -204,8 +211,9 @@ func TestMoveCycle(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-cycle/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target/constant",
 		"Mode",
@@ -224,8 +232,9 @@ func TestMoveDependency(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-dependency/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"composed",
@@ -245,8 +254,9 @@ func TestMoveGroup(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-group/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"First",
@@ -278,8 +288,9 @@ func TestMoveFunction(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("move-function/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbol(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"IsValid",

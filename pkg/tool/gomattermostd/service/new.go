@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/sweeper"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
 )
 
@@ -30,32 +29,30 @@ func New(
 		mattermost: m,
 		guard:      g,
 		connector:  o.Connector(),
+		logger:     l,
+		reporter:   r,
+		debounce:   o.DebounceWindow,
+		purge:      o.PurgeWindow,
 	}
 
 	if result.connector != nil {
-		n := notifier.New(result.connector, constant.Identity.Name(), r)
-		result.watcher = watcher.New(
-			m,
-			g,
-			result.store,
-			n,
+		result.rosterGuard = peer.New(
+			constant.RosterPeer,
+			result.connector.Address(),
+			result.connector,
 			l,
 			r,
-			o.DebounceWindow,
 		)
-		result.sweeper = sweeper.New(
-			result.store,
-			n,
-			result.watcher,
-			l,
-			r,
-			o.PurgeWindow,
-			o.PurgeInterval,
+		result.notifier = notifier.New(
+			result.connector,
+			constant.Identity.Name(),
+			result.rosterGuard,
 		)
+		result.watcher = watcher.New(m, g, result.store, l, r)
 	}
 
 	if o.Monitor.Enabled {
-		result.monitor = monitor.New(m, g, o.Monitor, l, r)
+		result.monitor = monitor.New(m, g, o.Monitor, l)
 	}
 
 	return result

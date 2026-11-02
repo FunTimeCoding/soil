@@ -11,7 +11,7 @@ import (
 
 func TestTheClientAnswersNoUsageAsAbsent(t *testing.T) {
 	s := base.New(t)
-	r, found, e := s.Connector(t).GetUsage(t.Context())
+	r, found, e := s.Client(t).GetUsage(t.Context())
 	assert.FatalOnError(t, e)
 	assert.False(t, found)
 	assert.True(t, r == nil)
@@ -24,7 +24,7 @@ func TestTheClientReadsRecordedUsage(t *testing.T) {
 		t,
 		s.Service.RecordRateLimits(0, 20, time.Time{}, now.Add(24*time.Hour)),
 	)
-	r, found, e := s.Connector(t).GetUsage(t.Context())
+	r, found, e := s.Client(t).GetUsage(t.Context())
 	assert.FatalOnError(t, e)
 	assert.True(t, found)
 	assert.Integer(t, 20, r.SevenDayPercent)
@@ -34,7 +34,7 @@ func TestTheClientAnswersAReleasedCallsignHoldAsAbsent(t *testing.T) {
 	s := base.NewWithHold(t, constant.FixtureChannelHold)
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)
-	r, found, e := s.Connector(t).GetChannelCallsign(
+	r, found, e := s.Client(t).GetChannelCallsign(
 		t.Context(),
 		&client.GetChannelCallsignParams{
 			Session: "session-1",
@@ -50,7 +50,7 @@ func TestTheClientReturnsTheMatchesOfAnAmbiguousQuery(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("abc-1111")
 	s.Store.EnsureSession("abc-2222")
-	r, matches, e := s.Connector(t).GetResolve(
+	r, matches, e := s.Client(t).GetResolve(
 		t.Context(),
 		&client.GetResolveParams{Query: "abc"},
 	)
@@ -62,7 +62,7 @@ func TestTheClientReturnsTheMatchesOfAnAmbiguousQuery(t *testing.T) {
 func TestTheClientResolvesAUniqueQuery(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("abc-1111")
-	r, matches, e := s.Connector(t).GetResolve(
+	r, matches, e := s.Client(t).GetResolve(
 		t.Context(),
 		&client.GetResolveParams{Query: "abc"},
 	)

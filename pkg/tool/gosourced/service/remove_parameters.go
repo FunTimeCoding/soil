@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/removal"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
 
 func (s *Service) RemoveParameters(
+	x context.Context,
 	directory string,
 	removals []*removal.Parameter,
 	dryRun bool,
@@ -18,6 +20,7 @@ func (s *Service) RemoveParameters(
 	}
 
 	return s.transact(
+		x,
 		directory,
 		paths,
 		dryRun,

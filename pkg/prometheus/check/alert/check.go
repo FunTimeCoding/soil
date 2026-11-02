@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -12,7 +13,10 @@ import (
 func Check(o *option.Alert) {
 	c := common.Alertmanager()
 	defer c.Close()
-	alerts, statistic := collect(c, o)
+	p := prometheus.NewEnvironment()
+	defer p.Close()
+	m := p.MustRules()
+	alerts, statistic := collect(c, o, m)
 
 	if o.Notation {
 		printNotation(alerts, o)
@@ -21,7 +25,7 @@ func Check(o *option.Alert) {
 	}
 
 	if o.Rules {
-		printRules(c, o.Firing)
+		printRules(m, o.Firing)
 
 		return
 	}
@@ -35,8 +39,6 @@ func Check(o *option.Alert) {
 	if o.Extended {
 		f.Extended()
 	}
-
-	m := c.MustRules()
 
 	for _, a := range alerts {
 		console.Line(a.Format(f))

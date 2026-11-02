@@ -363,6 +363,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/references/retarget:
+    post:
+      operationId: postReferencesRetarget
+      description: Rewrite memory references for moved paths and symbols. Paths are absolute or relative to the reference root.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RetargetRequest"
+      responses:
+        "200":
+          description: The memories whose references moved.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetargetResponse"
+        "500":
+          description: Failed to retarget references.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     MemoryRequest:
@@ -728,3 +751,70 @@ components:
           type: string
         event_identifier:
           type: string
+    PathMove:
+      type: object
+      required: [from, to]
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+    SymbolMove:
+      type: object
+      required: [directory, name, new_directory, new_name]
+      properties:
+        directory:
+          type: string
+        name:
+          type: string
+        new_directory:
+          type: string
+        new_name:
+          type: string
+    RetargetRequest:
+      type: object
+      required: [paths, symbols, dry_run]
+      properties:
+        paths:
+          type: array
+          items:
+            $ref: "#/components/schemas/PathMove"
+        symbols:
+          type: array
+          items:
+            $ref: "#/components/schemas/SymbolMove"
+        dry_run:
+          type: boolean
+    RetargetChange:
+      type: object
+      required: [line, before, after, reason]
+      properties:
+        line:
+          type: integer
+        before:
+          type: string
+        after:
+          type: string
+        reason:
+          type: string
+    RetargetedMemory:
+      type: object
+      required: [identifier, name, changes]
+      properties:
+        identifier:
+          type: integer
+          format: int64
+        name:
+          type: string
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RetargetChange"
+    RetargetResponse:
+      type: object
+      required: [memories]
+      properties:
+        memories:
+          type: array
+          items:
+            $ref: "#/components/schemas/RetargetedMemory"

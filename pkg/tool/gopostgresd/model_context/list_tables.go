@@ -19,21 +19,15 @@ func (s *Server) listTables(
 		return s.captureDetail(e)
 	}
 
-	schema := a.Schema
-
-	if schema == "" {
-		schema = "public"
-	}
-
-	v, e := s.service.ListTables(x, instance, schema)
+	v, e := s.service.ListTables(x, instance, a.Schema)
 
 	if e != nil {
-		return s.captureFail(
+		return s.answerWith(
 			e,
 			fmt.Sprintf(
 				"database error on %s: tables in %s not listed",
 				instance,
-				schema,
+				a.Schema,
 			),
 		)
 	}

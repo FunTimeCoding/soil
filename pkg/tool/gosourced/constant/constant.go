@@ -3,6 +3,7 @@ package constant
 import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"regexp"
+	"time"
 )
 
 var Identity = identity.New(
@@ -58,6 +59,8 @@ const (
 	ConcernMoved           = "moved"
 	ConcernRetargeted      = "retargeted"
 	ConcernReferenceLeft   = "reference_left"
+	ConcernWaited          = "waited"
+	ConcernRerun           = "rerun"
 )
 
 const (
@@ -83,17 +86,17 @@ const (
 )
 
 const (
-	IotaName          = "iota"
-	BlankName         = "_"
-	DotName           = "."
-	TestClauseSuffix  = "_test"
-	VersionPrefix     = "v"
-	ToolPrefix        = "go-"
-	ToolSuffix        = "-go"
-	IotaMarker        = " // iota "
-	VariantSeparator  = "@"
-	OrdinalSeparator  = "#"
-	KeySeparator      = " "
+	IotaName         = "iota"
+	BlankName        = "_"
+	DotName          = "."
+	TestClauseSuffix = "_test"
+	VersionPrefix    = "v"
+	ToolPrefix       = "go-"
+	ToolSuffix       = "-go"
+	IotaMarker       = " // iota "
+	VariantSeparator = "@"
+	OrdinalSeparator = "#"
+	KeySeparator     = " "
 )
 
 const (
@@ -124,6 +127,13 @@ var QualifiedReference = regexp.MustCompile(
 
 const ReferenceSeparator = " . "
 const TextContext = 2
+const (
+	TurnBound      = 2 * time.Minute
+	TurnReported   = time.Second
+	CommitAttempts = 3
+	LoadSettled    = 10 * time.Minute
+)
+
 const (
 	OperationWrite         = "write"
 	OperationRemove        = "remove"

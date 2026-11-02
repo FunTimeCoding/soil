@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/inventory/module"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -22,7 +22,7 @@ func New(
 	d := testutil.PrepareTestPackage(t, fixture)
 	i := inventory.New()
 	i.Modules = []module.Module{{Name: "test", Directory: d}}
-	s := service.New(i)
+	s := service_tester.ForInventory(t, i)
 	s.UseIndex(t.TempDir())
 	v := model_context_server.New(
 		t,

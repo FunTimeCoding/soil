@@ -4,6 +4,7 @@ import (
 	"context"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/generated/server"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
@@ -36,6 +37,10 @@ func (s *Server) PostTrigger(
 	if e := s.runner.Trigger(request); e != nil {
 		if conflict.Is(e) {
 			return server.PostTrigger409JSONResponse{Error: e.Error()}, nil
+		}
+
+		if unavailable.Is(e) {
+			return server.PostTrigger503JSONResponse{Error: e.Error()}, nil
 		}
 
 		return server.PostTrigger500JSONResponse(

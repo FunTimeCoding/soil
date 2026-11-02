@@ -1,12 +1,14 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
 
 func (s *Service) ApplyPattern(
+	x context.Context,
 	directory string,
 	packagePath string,
 	symbol string,
@@ -18,6 +20,7 @@ func (s *Service) ApplyPattern(
 ) (*output.Results, *result.Apply, error) {
 	var report *result.Apply
 	r, e := s.transact(
+		x,
 		directory,
 		nil,
 		dryRun,

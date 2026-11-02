@@ -13,7 +13,7 @@ type Service struct {
 	database     *gorm.DB
 	store        *store.Store
 	alertmanager face.Client
-	guard        *peer.Guard
+	guard       *peer.Guard
 	retention    time.Duration
 	closeOnce    sync.Once
 }

@@ -11,6 +11,7 @@ import (
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
+	"path/filepath"
 	"unicode"
 )
 
@@ -169,6 +170,13 @@ func (s *Service) renameThrough(
 	}
 
 	renameFollow(set, all, declaration, newName, out, r)
+	declaring := filepath.Dir(set.Position(declaration.Pos()).Filename)
+	out.Resymbol(
+		declaring,
+		memberName(receiver, oldName),
+		declaring,
+		memberName(receiver, newName),
+	)
 
 	return r, nil
 }

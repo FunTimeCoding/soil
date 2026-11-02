@@ -31,6 +31,9 @@ const (
 	PipMessage     = "pip install is blocked (supply-chain guard) - no python dependencies may be installed on this system"
 	XargsMessage   = "xargs on macOS is BSD xargs and rejects the GNU flags -a and -d - redirect the file on stdin instead: xargs command < file"
 
+	OapiCodegenCommand = "oapi-codegen"
+	OapiCodegenHint    = "`task generate` in the repository root regenerates every service's client and server from its openapi.yaml with this same oapi-codegen invocation; it is how this repository runs code generation, and it runs quietly"
+
 	NoGuardEnvironment = "CLAUDE_NO_GUARD"
 
 	StatusLineDumpFile = "/tmp/goclaude-status-line.json"

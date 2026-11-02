@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/source/inventory/module"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
@@ -59,5 +60,5 @@ func crossService(t *testing.T) *service.Service {
 		{Name: "lib", Directory: l.Clone},
 	}
 
-	return service.New(i)
+	return service_tester.ForInventory(t, i)
 }

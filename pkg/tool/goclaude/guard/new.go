@@ -34,8 +34,11 @@ func New(t *terminal.Terminal) *cobra.Command {
 				return
 			}
 
-			if q := Question(i.ToolInput.Command); q != "" {
-				t.Line(string(notation.Marshal(NewAskDecision(q))))
+			q := Question(i.ToolInput.Command)
+			h := Hint(i.ToolInput.Command)
+
+			if q != "" || h != "" {
+				t.Line(string(notation.Marshal(NewDecision(q, h))))
 			}
 		},
 	}

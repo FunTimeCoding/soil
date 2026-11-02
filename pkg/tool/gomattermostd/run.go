@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"net/http"
 )
 
@@ -28,6 +29,15 @@ func Run(
 
 	for _, w := range v.Workers() {
 		b.WithWorker(w)
+	}
+
+	if v.Subscribing() {
+		b.WithWorker(worker.NewEvery(v.FlushDue, l, r, constant.FlushTick)).
+			WithWorker(worker.NewEvery(v.Purge, l, r, o.PurgeInterval))
+	}
+
+	if v.Monitoring() {
+		b.WithWorker(worker.NewEvery(v.PollMonitor, l, r, o.Monitor.Interval))
 	}
 
 	b.WithServer(

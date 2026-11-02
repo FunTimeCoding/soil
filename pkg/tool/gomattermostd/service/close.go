@@ -7,12 +7,13 @@ func (s *Service) Close() {
 		func() {
 			if s.watcher != nil {
 				s.watcher.Close()
-				s.sweeper.Close()
-				s.connector.Close()
-			}
 
-			if s.monitor != nil {
-				s.monitor.Close()
+				for root, events := range s.watcher.Drain() {
+					s.report(s.flush(root, events))
+				}
+
+				s.rosterGuard.Close()
+				s.connector.Close()
 			}
 
 			s.guard.Close()

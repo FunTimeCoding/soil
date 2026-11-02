@@ -25,3 +25,8 @@ const (
 	DeleteSilence = "delete_silence"
 	GetStatus     = "get_status"
 )
+
+const (
+	AlertmanagerPeer = "alertmanager"
+	PrometheusPeer   = "prometheus"
+)

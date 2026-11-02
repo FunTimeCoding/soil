@@ -19,15 +19,8 @@ func (r *Runner) apply(
 	}
 
 	for _, d := range r.downstream {
-		if e := d.Trigger(c); e != nil {
-			r.reporter.CaptureWithContext(
-				e,
-				constant.DownstreamContext,
-				map[string]any{
-					constant.DownstreamChanges: c.Addresses,
-					constant.DownstreamHosts:   c.Hosts,
-				},
-			)
+		if e := d.PostTrigger(c); e != nil {
+			r.reportDownstream(e, c)
 
 			continue
 		}

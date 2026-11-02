@@ -11,6 +11,11 @@ func (h *Hold) session() bool {
 	}
 
 	defer h.connection.Close()
+
+	if h.context.Err() != nil {
+		return true
+	}
+
 	reason := constant.ClosedReason
 
 	if f := h.serve(); f != nil {

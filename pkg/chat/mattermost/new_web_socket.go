@@ -1,12 +1,16 @@
 package mattermost
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/gorilla/websocket"
 	"github.com/mattermost/mattermost/server/public/model"
+	"net"
 )
 
 func newWebSocket(
+	x context.Context,
 	host string,
 	token string,
 	insecure bool,
@@ -17,7 +21,19 @@ func newWebSocket(
 		scheme = constant.Socket
 	}
 
-	return model.NewWebSocketClient4(
+	d := *websocket.DefaultDialer
+	d.NetDialContext = func(
+		_ context.Context,
+		network string,
+		address string,
+	) (net.Conn, error) {
+		var n net.Dialer
+
+		return n.DialContext(x, network, address)
+	}
+
+	return model.NewWebSocketClient4WithDialer(
+		&d,
 		locator.New(host).Scheme(scheme).String(),
 		token,
 	)

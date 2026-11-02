@@ -6,11 +6,13 @@ import (
 	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/inventory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -23,12 +25,12 @@ func New(t *testing.T) *Server {
 	t.Helper()
 	alfa := mock_client.New()
 	bravo := mock_client.New()
-	s := service.New(
-		inventory.New[instance.Instance](
-			instance.Instance{Name: "alfa", Host: "alfa.example"},
-			instance.Instance{Name: "bravo", Host: "bravo.example"},
-		),
+	o := option.New()
+	o.Inventory = inventory.New[instance.Instance](
+		instance.Instance{Name: "alfa", Host: "alfa.example"},
+		instance.Instance{Name: "bravo", Host: "bravo.example"},
 	)
+	s := service.New(o, logger.New(t.Context()), memory.New())
 	s.Pool().Set("alfa", alfa)
 	s.Pool().Set("bravo", bravo)
 	v := model_context_server.New(

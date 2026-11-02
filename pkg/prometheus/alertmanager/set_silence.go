@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 	"time"
 )
 
@@ -11,18 +12,13 @@ func (c *Client) SetSilence(
 	alert string,
 	comment string,
 	d time.Duration,
+	r *rule_list.List,
 ) (string, error) {
 	if alert == "" {
 		return "", validation.New("alert is required")
 	}
 
-	exists, e := c.RuleExists(alert)
-
-	if e != nil {
-		return "", e
-	}
-
-	if !exists {
+	if r.Find(alert) == nil {
 		return "", validation.New("rule not found: %s", alert)
 	}
 

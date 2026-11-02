@@ -23,6 +23,7 @@ func TestCruiseRoundTripsThroughRest(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.String(t, "paced", g.JSON200.Mode)
 	assert.Integer(t, 15, *g.JSON200.PaceMinutes)
+	assert.Integer(t, 0, g.JSON200.Woken)
 }
 
 func TestRestRefusesPacedCruiseWithoutAPace(t *testing.T) {

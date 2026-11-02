@@ -20,13 +20,8 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(o.Inventory)
+	v := service.New(o, l, r)
 	defer v.Close()
-
-	if o.Netbox != nil {
-		v.WithNetbox(o.Netbox(), l, r)
-	}
-
 	c := lifecycle.New(l)
 
 	for _, w := range v.Workers() {

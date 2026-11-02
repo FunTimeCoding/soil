@@ -12,7 +12,8 @@ func TestRenameField(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"api",
@@ -36,7 +37,8 @@ func TestRenameExportedFieldAcrossPackages(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Name",
@@ -58,7 +60,8 @@ func TestRenameFieldCollidesWithField(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"api",
@@ -76,7 +79,8 @@ func TestRenameFieldCollidesWithMethod(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"api",
@@ -94,7 +98,8 @@ func TestRenameEmbeddedFieldRefused(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Base",
@@ -114,7 +119,8 @@ func TestRenameFieldToUnexportedBlockedByCrossPackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().Rename(
+	r, e := service_tester.NewService(t).Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"Name",
@@ -131,7 +137,7 @@ func TestFindReferencesField(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, references, e := service_tester.NewService().FindReferences(
+	r, references, e := service_tester.NewService(t).FindReferences(
 		d,
 		"example/pkg/target",
 		"api",
@@ -149,7 +155,8 @@ func TestChangeVisibilityField(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-field/src"),
 	)
-	r, e := service_tester.NewService().ChangeVisibility(
+	r, e := service_tester.NewService(t).ChangeVisibility(
+		t.Context(),
 		d,
 		"api",
 		"example/pkg/target",

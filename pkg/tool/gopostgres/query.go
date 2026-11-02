@@ -2,14 +2,14 @@ package gopostgres
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func query(
-	c *client.Client,
+	c *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var instance string
@@ -21,15 +21,14 @@ func query(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := c.Query(
+			r, e := (*c).Query(
 				context.Background(),
 				client.QueryJSONRequestBody{
 					Instance: instancePointer(instance),
 					Sql:      arguments[0],
 				},
 			)
-			errors.PanicOnError(e)
-			printResponse(t, r)
+			t.EmitValue(r, e)
 		},
 	}
 	result.Flags().StringVar(

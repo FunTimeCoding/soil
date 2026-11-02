@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer/hold/adapter"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/peer/unit/held_peer"
+	"sync"
 	"testing"
 	"time"
 )
@@ -171,4 +172,109 @@ func TestClosingAHeldConnectionEndsItWithoutReopening(t *testing.T) {
 	await(t, h.Done())
 	assert.Integer(t, 1, p.Opens())
 	assert.Integer(t, 2, p.Closes())
+}
+
+func TestANeverStartedHoldCloses(t *testing.T) {
+	h := hold.New(
+		"quebec",
+		held_peer.New(),
+		logger.New(context.Background()),
+		memory.New(),
+	)
+	closed := make(chan struct{})
+	go func() {
+		h.Close()
+		close(closed)
+	}()
+	await(t, closed)
+	await(t, h.Done())
+}
+
+func TestClosingWaitsForTheServeInFlight(t *testing.T) {
+	serving := make(chan struct{}, 1)
+	release := make(chan struct{})
+	h := hold.New(
+		"romeo",
+		adapter.New(
+			func(context.Context) error { return nil },
+			func(context.Context) error {
+				serving <- struct{}{}
+				<-release
+
+				return nil
+			},
+			func() {},
+		),
+		logger.New(context.Background()),
+		memory.New(),
+	)
+	h.Start()
+	await(t, serving)
+	closed := make(chan struct{})
+	go func() {
+		h.Close()
+		close(closed)
+	}()
+
+	select {
+	case <-closed:
+		t.Fatal("close returned with a serve in flight")
+	case <-time.After(100 * time.Millisecond):
+	}
+
+	close(release)
+	await(t, closed)
+}
+
+func TestClosingDuringAnOpenClosesWhatItOpened(t *testing.T) {
+	opening := make(chan struct{}, 1)
+	closing := make(chan struct{}, 2)
+	release := make(chan struct{})
+	var mutex sync.Mutex
+	var reading chan struct{}
+	h := hold.New(
+		"sierra",
+		adapter.New(
+			func(context.Context) error {
+				opening <- struct{}{}
+				<-release
+				mutex.Lock()
+				reading = make(chan struct{})
+				mutex.Unlock()
+
+				return nil
+			},
+			func(context.Context) error {
+				mutex.Lock()
+				r := reading
+				mutex.Unlock()
+				<-r
+
+				return nil
+			},
+			func() {
+				mutex.Lock()
+				defer mutex.Unlock()
+
+				if reading != nil {
+					close(reading)
+					reading = nil
+				}
+
+				closing <- struct{}{}
+			},
+		),
+		logger.New(context.Background()),
+		memory.New(),
+	)
+	h.Start()
+	await(t, opening)
+	closed := make(chan struct{})
+	go func() {
+		h.Close()
+		close(closed)
+	}()
+	await(t, closing)
+	close(release)
+	await(t, closed)
 }

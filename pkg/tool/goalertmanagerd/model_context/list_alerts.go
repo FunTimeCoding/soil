@@ -21,39 +21,34 @@ func (s *Server) listAlerts(
 		return s.captureDetail(e)
 	}
 
-	var f *alert_filter.Filter
+	f := alert_filter.New()
+	f.Receiver = a.Receiver
 
-	if a.Filter != "" || a.Active != "" || a.Silenced != "" ||
-		a.Inhibited != "" || a.Unprocessed != "" || a.Receiver != "" {
-		f = alert_filter.New()
-		f.Receiver = a.Receiver
-
-		if a.Filter != "" {
-			f.Filter = strings.Split(a.Filter, ",")
-		}
-
-		if a.Active != "" {
-			v := a.Active == "true"
-			f.Active = &v
-		}
-
-		if a.Silenced != "" {
-			v := a.Silenced == "true"
-			f.Silenced = &v
-		}
-
-		if a.Inhibited != "" {
-			v := a.Inhibited == "true"
-			f.Inhibited = &v
-		}
-
-		if a.Unprocessed != "" {
-			v := a.Unprocessed == "true"
-			f.Unprocessed = &v
-		}
+	if a.Filter != "" {
+		f.Filter = strings.Split(a.Filter, ",")
 	}
 
-	v, stat, e := s.service.Alerts(instance, f)
+	if a.Active != "" {
+		v := a.Active == "true"
+		f.Active = &v
+	}
+
+	if a.Silenced != "" {
+		v := a.Silenced == "true"
+		f.Silenced = &v
+	}
+
+	if a.Inhibited != "" {
+		v := a.Inhibited == "true"
+		f.Inhibited = &v
+	}
+
+	if a.Unprocessed != "" {
+		v := a.Unprocessed == "true"
+		f.Unprocessed = &v
+	}
+
+	v, stat, e := s.service.Alerts(x, instance, f)
 
 	if e != nil {
 		return s.captureDetail(e)

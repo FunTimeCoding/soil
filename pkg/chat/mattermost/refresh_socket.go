@@ -1,6 +1,8 @@
 package mattermost
 
-func (c *Client) RefreshSocket() error {
+import "context"
+
+func (c *Client) RefreshSocket(x context.Context) error {
 	c.socketMutex.Lock()
 	defer c.socketMutex.Unlock()
 
@@ -13,7 +15,7 @@ func (c *Client) RefreshSocket() error {
 		c.webSocket.Close()
 	}
 
-	s, e := newWebSocket(c.host, c.token, c.insecure)
+	s, e := newWebSocket(x, c.host, c.token, c.insecure)
 
 	if e != nil {
 		return e

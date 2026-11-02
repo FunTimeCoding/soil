@@ -6,7 +6,7 @@ import (
 )
 
 func toCruiseResponse(c *cruise_setting.Setting) server.CruiseResponse {
-	result := server.CruiseResponse{Mode: string(c.Mode)}
+	result := server.CruiseResponse{Mode: string(c.Mode), Woken: c.Woken}
 
 	if c.Pace > 0 {
 		result.PaceMinutes = new(int(c.Pace.Minutes()))

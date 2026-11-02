@@ -1,17 +1,18 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/inventory"
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
 func ContainerService(c *mock_client.Client) *service.Service {
 	result := service.New(
-		inventory.New[instance.Instance](
-			instance.Instance{Name: "test", Host: "mock"},
-		),
+		containerOption(),
+		logger.New(context.Background()),
+		memory.New(),
 	)
 	result.Pool().Set("test", c)
 

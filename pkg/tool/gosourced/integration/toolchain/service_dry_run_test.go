@@ -13,7 +13,7 @@ func TestDryRunLeavesTreeUntouched(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/target/constant.go")
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
 	target := service_tester.ReadFixtureFile(
@@ -22,6 +22,7 @@ func TestDryRunLeavesTreeUntouched(t *testing.T) {
 		"pkg/target/constant/constant.go",
 	)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -56,8 +57,9 @@ func TestDryRunReportsWhatTheRealRunReports(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	dry, e := s.MoveSymbols(
+		t.Context(),
 		planned,
 		"example/pkg/target",
 		nil,
@@ -74,6 +76,7 @@ func TestDryRunReportsWhatTheRealRunReports(t *testing.T) {
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
 	real, f := s.MoveSymbols(
+		t.Context(),
 		applied,
 		"example/pkg/target",
 		nil,
@@ -97,8 +100,9 @@ func TestDryRunMarksConcernsPlanned(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.MoveSymbols(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		nil,
@@ -123,9 +127,17 @@ func TestDryRunRenameLeavesFilesUntouched(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-enum/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	before := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	r, e := s.Rename(d, "example/pkg/target", "Run", "Execute", "", true)
+	r, e := s.Rename(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Run",
+		"Execute",
+		"",
+		true,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.String(

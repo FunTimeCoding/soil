@@ -19,9 +19,16 @@ func Run(
 	i face.Instrument,
 ) {
 	r := i.Reporter()
-	v := service.New(o.Inventory)
+	l := logger.New(context.Background())
+	v := service.New(o, l, r)
 	defer v.Close()
-	lifecycle.New(logger.New(context.Background())).WithServer(
+	c := lifecycle.New(l)
+
+	for _, w := range v.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

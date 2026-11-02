@@ -11,5 +11,6 @@ func New() *Resolver {
 		Literal:       absentIn,
 		Routes:        noRoutes,
 		Headings:      noHeadings,
+		Declares:      declaresAnything,
 	}
 }

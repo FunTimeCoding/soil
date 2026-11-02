@@ -2,10 +2,10 @@ package goband
 
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/face"
 )
 
 type Context struct {
-	Client   *client.ClientWithResponses
+	Client   face.Client
 	Terminal *terminal.Terminal
 }

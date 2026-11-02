@@ -43,17 +43,13 @@ func redirection(x *Context) *cobra.Command {
 				return
 			}
 
-			r, e := x.Client.EnableRedirectionWithResponse(
+			r, e := x.Client.EnableRedirection(
 				context.Background(),
-				client.EnableRedirectionJSONRequestBody{Instance: &v.Instance},
+				client.RedirectionRequest{Instance: &v.Instance},
 			)
 
 			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Reject(r.Status(), r.Body)
+				x.Terminal.Exitln(e)
 
 				return
 			}
@@ -61,8 +57,8 @@ func redirection(x *Context) *cobra.Command {
 			x.Terminal.Line(
 				fmt.Sprintf(
 					"Enabled %s on %s",
-					join.CommaSpace(r.JSON200.Enabled),
-					r.JSON200.Instance,
+					join.CommaSpace(r.Enabled),
+					r.Instance,
 				),
 			)
 		},

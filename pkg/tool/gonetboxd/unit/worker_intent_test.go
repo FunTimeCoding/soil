@@ -3,6 +3,7 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -97,4 +98,20 @@ func TestAnUnavailableNetboxIsOnlyLogged(t *testing.T) {
 	c.Failure = errors.New("netbox answered nonsense")
 	w.Poll()
 	assert.Count(t, 1, r.Events())
+}
+
+func TestAQuietFailureIsOnlyLogged(t *testing.T) {
+	c := service_tester.NewSource(t)
+	c.Failure = not_found.Format("no devices endpoint")
+	r := memory.New()
+	w := worker.New(
+		service_tester.Service(t, c),
+		constant.IntentInterval,
+		logger.New(t.Context()),
+		prometheus.NewRegistry(),
+		r,
+	)
+	defer w.Close()
+	w.Poll()
+	assert.Count(t, 0, r.Events())
 }

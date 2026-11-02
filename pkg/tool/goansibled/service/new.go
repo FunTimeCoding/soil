@@ -20,12 +20,19 @@ func New(
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(d, constant.RunsTable)
 	s := store.New(d, constant.RunsTable)
+	s.AbandonRunning()
 	p := reaper.New(r)
-
-	return &Service{
+	result := &Service{
 		database: d,
 		store:    s,
 		reaper:   p,
 		runner:   runner.New(o, s, l, r, p),
 	}
+
+	if o.Inventory != nil {
+		result.inventory = o.Inventory()
+		result.runner.WithInventory(result.inventory)
+	}
+
+	return result
 }

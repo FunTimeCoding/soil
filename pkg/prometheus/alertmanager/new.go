@@ -2,7 +2,6 @@ package alertmanager
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -17,7 +16,6 @@ func New(
 	secure bool,
 	user string,
 	password string,
-	p *prometheus.Client,
 	o ...Option,
 ) *Client {
 	errors.FatalOnEmpty(host, "host")
@@ -42,7 +40,7 @@ func New(
 	}
 
 	c.SetTransport(t)
-	result := &Client{client: c, link: connection, prometheus: p, pool: b}
+	result := &Client{client: c, link: connection, pool: b}
 
 	for _, f := range o {
 		f(result)

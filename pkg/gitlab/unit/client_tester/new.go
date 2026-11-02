@@ -14,7 +14,6 @@ func New(
 ) *Tester {
 	t.Helper()
 	m := http.NewServeMux()
-	m.HandleFunc("/api/v4/user", user)
 	configure(m)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)

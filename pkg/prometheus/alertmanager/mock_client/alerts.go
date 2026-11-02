@@ -5,11 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 )
 
 func (c *Client) Alerts(
 	_ *advanced_option.Alert,
 	_ *alert_filter.Filter,
+	_ *rule_list.List,
 ) ([]*alert.Alert, *statistic.Statistic, error) {
 	if c.failure != nil {
 		return nil, nil, c.failure

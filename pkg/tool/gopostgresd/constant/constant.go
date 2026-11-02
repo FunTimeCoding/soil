@@ -27,3 +27,8 @@ const (
 	ListIndexes   = "list_indexes"
 	TableSizes    = "table_sizes"
 )
+
+const (
+	DefaultSchema = "public"
+	InstancePeer  = "postgres"
+)

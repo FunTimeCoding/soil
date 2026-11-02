@@ -12,8 +12,15 @@ func TestRenameModuleSamePath(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.RenameModule(d, "example/lib/v2", "example/lib/v2", false, false)
+	s := service_tester.NewService(t)
+	r, e := s.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v2",
+		false,
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, "same")
 }

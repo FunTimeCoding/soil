@@ -2,8 +2,10 @@ package notify
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/sound"
 	soundConstant "github.com/funtimecoding/soil/pkg/sound/constant"
@@ -14,6 +16,7 @@ import (
 func worker(
 	stop <-chan struct{},
 	c *alertmanager.Client,
+	p *prometheus.Client,
 	s *State,
 ) {
 	for {
@@ -23,7 +26,11 @@ func worker(
 
 			return
 		default:
-			alerts, _ := c.MustAlerts(advanced_option.New(), nil)
+			alerts, _ := c.MustAlerts(
+				advanced_option.New(),
+				alert_filter.New(),
+				p.MustRules(),
+			)
 			now := alerts
 			add, stay, remove := difference(s.Alerts, now)
 			s.Alerts = now

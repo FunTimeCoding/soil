@@ -7,5 +7,5 @@ func (c *Client) TeamChannel(name string) (*model.Channel, error) {
 		return nil, c.Failure
 	}
 
-	return &model.Channel{Name: name}, nil
+	return &model.Channel{Id: name, Name: name}, nil
 }

@@ -27,7 +27,7 @@ func New(t *testing.T) *Tester {
 	return &Tester{
 		t:           t,
 		Service:     v,
-		Coordinator: coordinator.Connector(t),
+		Coordinator: coordinator.Client(t),
 		Goclauded:   coordinator,
 		now:         &now,
 	}

@@ -2,14 +2,14 @@ package gopostgres
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func listSchemas(
-	c *client.Client,
+	c *face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var instance string
@@ -20,12 +20,11 @@ func listSchemas(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.ListSchemas(
+			r, e := (*c).ListSchemas(
 				context.Background(),
 				&client.ListSchemasParams{Instance: instancePointer(instance)},
 			)
-			errors.PanicOnError(e)
-			printResponse(t, r)
+			t.EmitValue(r, e)
 		},
 	}
 	result.Flags().StringVar(

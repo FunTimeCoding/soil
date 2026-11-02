@@ -2,7 +2,9 @@ package face
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/retarget_report"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/version_entry"
 	"time"
 )
@@ -59,6 +61,11 @@ type Client interface {
 		source string,
 		capturedAt time.Time,
 	) error
+	PostReferencesRetarget(
+		x context.Context,
+		moves *move_set.Set,
+		dryRun bool,
+	) ([]*retarget_report.Report, error)
 	Reachable(x context.Context) error
 	Address() string
 	Close()

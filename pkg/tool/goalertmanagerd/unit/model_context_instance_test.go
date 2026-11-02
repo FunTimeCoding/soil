@@ -4,26 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/inventory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/types/instance"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
 
 func TestModelContextAlertsNeedASelectedInstance(t *testing.T) {
-	alfa := instance.Instance{Name: "alfa"}
-	alfa.Alertmanager.Host = "alertmanager.alfa.example"
-	alfa.Prometheus.Host = "prometheus.alfa.example"
-	bravo := instance.Instance{Name: "bravo"}
-	bravo.Alertmanager.Host = "alertmanager.bravo.example"
 	v := model_context_server.New(
 		t,
 		func(
@@ -31,7 +23,7 @@ func TestModelContextAlertsNeedASelectedInstance(t *testing.T) {
 			g *guard.Mux,
 		) {
 			goalertmanagerd.Mount(
-				service.New(inventory.New[instance.Instance](alfa, bravo)),
+				healthy(t, "alfa", "bravo"),
 				memory.New(),
 				mock_recorder.New(),
 				g,

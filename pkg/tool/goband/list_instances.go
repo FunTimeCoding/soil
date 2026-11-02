@@ -15,19 +15,15 @@ func listInstances(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := x.Client.ListInstancesWithResponse(context.Background())
+			instances, e := x.Client.ListInstances(context.Background())
 
 			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Reject(r.Status(), r.Body)
+				x.Terminal.Exitln(e)
 
 				return
 			}
 
-			for _, v := range *r.JSON200 {
+			for _, v := range instances {
 				x.Terminal.Line(fmt.Sprintf("%-12s %s", v.Name, v.Host))
 			}
 		},

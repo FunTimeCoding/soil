@@ -141,6 +141,37 @@ At the target, with what each is the reference for:
   leaves goqueryd's tiers out with a notice rather than failing. A daemon
   client moved three consumers off the generated client, one of them a CLI
   in another repository
+- goprometheusd - a pooled peer guarded per instance: the client factory on
+  the option, each pool entry a `peered` pair of client and guard built and
+  closed together, the pool filled in `New` so `Workers()` hands every guard
+  to the lifecycle; operations run through a `guarded` helper with the
+  instance's name. Its upstream already classified, so no B work
+- goalertmanagerd - two peers behind one instance, each guarded: the pool
+  entry holds the Alertmanager and Prometheus clients and a guard for each,
+  so a Prometheus outage no longer reads as Alertmanager's. The Alertmanager
+  client stopped holding a Prometheus client: it had fetched the rules
+  through one built inline as its constructor's argument and never closed,
+  and cached them for the process's life, so a new rule never reached
+  enrichment and a silence for it was refused until a restart. Rules are now
+  an argument to `Alerts` and `SetSilence`, fetched by each caller from a
+  Prometheus client it owns - 13 call sites in 7 packages, counted by
+  receiver, moved new-beside-old through a transitional variadic so the
+  consumers kept building. goalertlogd dropped Prometheus instead of
+  guarding it: rules only set a runbook it never stored. The client's nil
+  filter and nil option went too - an empty filter sends the same query, but
+  an empty option is not no option: `All: false` drops suppressed and
+  unrated alerts, so a caller that meant "everything" passes `All: true`
+- gopostgresd - a pooled peer where who wrote the SQL decides whose move a
+  refusal is: the client factory on the option over `pkg/postgres`, a guard
+  per instance, explain and the default schema in the service, catalogue
+  names as query arguments. `pkg/postgres/refusal` classifies a server answer
+  by SQLSTATE class from errcodes.txt at the deployed version, transport left
+  to `connection.Classify`; the caller's own query answers their mistake
+  quietly, a refusal of our catalogue SQL is captured, a statement timeout is
+  quiet on theirs and captured on ours, and a caller who left is not captured
+  on MCP. REST, MCP and the daemon client answer columns and positional rows,
+  and the CLI on the daemon client prints through `terminal.EmitValue` - the
+  wire shape changed, so the daemon and the CLI deploy together
 
 Beside them, upstream faces now full and home: Prometheus, Alertmanager,
 Argo CD (`ArgocdClient` in the kubernetes face), Nextcloud usage
@@ -150,12 +181,15 @@ own `refusal` packages. GitHub's and GitLab's faces and trivial mocks were
 generated from the client's AST, after a by-receiver count across both
 repositories and every tag - one counting calls through the face and inside
 the package too, or a twin only the face or the package itself calls reads as
-dead - removed the Must twins nobody called (8 and 31).
+dead - removed the Must twins nobody called (8 and 31). `pkg/postgres` is the
+client for the Postgres instances gopostgresd inspects, not a second way to open
+our stores - those stay on `pkg/relational`. Its query returns ordered columns
+and positional rows, so a duplicate column name and the column order survive.
 
 Ownership done, other rows open: gochromed, gosecretd, gomonitord,
 gogithubd, gooutpostd, goraidparsed, goansibled, gosaltd, goterraformd,
-goitermd, gosublimed, gojellyfind, gopnsensed, goprocessd, goalertmanagerd,
-gobandd, gogitlabd, gopostgresd, goprometheusd, goproxmoxd, gosourced.
+goitermd, gosublimed, gojellyfind, gopnsensed, goprocessd, gobandd,
+goproxmoxd, gosourced.
 
 ## Order
 
@@ -187,15 +221,27 @@ Leaks first - a client opened and never closed - then shape.
    carries the ambiguous matches, which the client returns beside the result
    instead of refusing. A generated method checks every 2xx its operation
    declares, and every non-2xx body the caller reads. Left:
-   - the test base's `Connector` helper keeps its old name; gosourced could
-     not rename it while consumers changed underneath
    - the tickers, gauge and watcher built in `Run` - goaudit's remaining
      hits, the plumbing and own-worker false positives
    - `Usage` answers a store failure as no data (204), the swallow B was
      meant to end
-2. The faces and clients off the full shape
-3. The goaudit rule, once a sound check replaces `run_builds_client`
-4. The analyzer gaps, once the findings they raise are few, each with a
+2. gogitlabd - A1 is in: `pkg/gitlab`'s `New` no longer dials; the current
+   user is fetched on first need and cached, and the project cache is safe
+   across goroutines, proven racing by a `-race` test first, so a GitLab
+   outage at start no longer panics a consumer that builds a client. Left:
+   - A2, the client factory on the option, a peered client and guard per
+     instance filled in `New`, the pooled tester
+   - A3, the board out of the worker into the service, web holding the
+     service alone, `delete` refreshing through the service instead of
+     calling `worker.Poll()`
+   - B, `pkg/gitlab` classifying - 401 captured, since the token is the
+     daemon's own credential, 403 `forbidden` - every operation guarded, the
+     worker reporting an outage once, MCP and web answering by class
+   - no C: MCP and web only; the gogitlab CLI reads GitLab directly and runs
+     no rule gogitlabd runs
+3. The faces and clients off the full shape
+4. The goaudit rule, once a sound check replaces `run_builds_client`
+5. The analyzer gaps, once the findings they raise are few, each with a
    case in the `unclosed_resource` testdata
 
 ## Off the full shape
@@ -214,14 +260,30 @@ Leaks first - a client opened and never closed - then shape.
   nil` - each gains state, the `Failure` check and the per-method one
   through `github.com/funtimecoding/soil/pkg/failure` when a test needs it,
   as the virtual disks and sizing setters did
-- Pooled daemons hard-wire their client factory in the service -
-  goprometheusd, gobandd, gogitlabd, gopostgresd - so their tests cannot
-  reach a mock
+- Pooled daemons hard-wire their client factory in the service - gobandd,
+  gogitlabd, goproxmoxd - so their tests reach a double only through a
+  `Pool().Set` seam, or not at all; goprometheusd is the shape to follow
+- gopostgresd: a refusal that surfaces while rows are read is untested (needs
+  a live database)
+- REST and MCP disagree on an expected error with no class: MCP's
+  `response.AnswerWith` honours `classify.Reportable`, REST's
+  `classify.Capture` captures it anyway. Only gopostgresd's caller-left error
+  meets it on REST, and Sentry has seen one "context canceled" ever (an embed
+  cancelled at shutdown), so REST keeps capturing until a second surface
+  needs otherwise; the fix then is in `Capture`, not in a daemon
 - Upstream clients: pkg/linkace, pkg/habitica and pkg/errors/sentry/basic map
   401 with 403 to `forbidden`, so an expired token fails quietly; pkg/gitlab
   does not classify its peer's 503 - checked against GitLab's own status
   table first; pkg/chat/mattermost's `New` panics and dials, so
-  gomattermostd's start-up wait never retries
+  gomattermostd's start-up wait never retries; pkg/gitlab's `Jobs` deletes
+  old pipelines from inside a read when `AutoCleanup` is set
+- No caller context: pkg/gitlab keeps `context.Background()` and no `Forge`
+  method takes a context, so a caller who left keeps its GitLab call
+  running; threading one through its 120 methods is a loop of its own, after
+  gogitlabd's B
+- A downstream daemon's 500 is captured twice, by the daemon and again by
+  the caller reading it as `unexpected` - fleet-wide, every
+  daemon-to-daemon client
 - Untested or unused: gomemoryd's profile search branch has no failure test
   of its own - goqueryd's mock fails every method at once, so completions
   fail first; gomemoryd's `importer.Import` has no caller but its test
@@ -230,30 +292,10 @@ Leaks first - a client opened and never closed - then shape.
   `github.com/funtimecoding/soil/pkg/ticker`'s `Close` panics before `Start`
   and on a second call, so every worker built on it is unsafe twice - its
   users unsurveyed
-- Clocks carrying the daemon's work instead of calling one operation:
-  gomattermostd's sweeper prunes, forgets and notifies itself, its
-  `release` repeating the tail of `Unsubscribe`, and its monitor is a cron
-  poll posting over the client. Consumers in other repositories carry the
-  same drift under their own seeds
-- `Close` not waiting for work in flight, which then runs on what the
-  service closes next: gomattermostd's sweeper, its monitor (`cron.Stop`'s
-  context dropped) and its watcher, where an event in flight can `Record`
-  after the timer sweep and flush later into a closed store.
-  `github.com/funtimecoding/soil/pkg/peer/hold`'s `Close` never waits on
-  `Done`, so every connection on it leaves its callback running; waiting
-  needs a started flag, or a never-started hold hangs its `Close`
-- `github.com/funtimecoding/soil/pkg/provision/runner` takes `Trigger` and
-  `Sync` after `Close`: once its loop has drained, a request still fits the
-  buffered channel and nobody answers - REST answers 202 for a run that
-  never happens, a synchronous MCP trigger and `Sync` block forever, and
-  the same before `Start`. goagentd's `Begin` refusing `unavailable` once
-  closed is the shape. When `Finished` is still open after the interrupt
-  margin, the service closes the database under the apply's last write.
-  goansibled's inventory client, gosaltd's salt client and goterraformd's
-  downstream clients are built by the runner and closed before the drain -
-  latent while each `Close` only drops idle connections
-- gosaltd's runner writes the salt client in its loop while the service
-  reads it from handlers through `SaltClient()` with no lock - a data race
+- A Mattermost that accepts the socket and stalls the handshake holds a
+  hold's `Close` up to gorilla's 45 s `HandshakeTimeout`; gomattermostd's
+  watcher still looks up an event's author over the client inside the
+  socket's callback
 - Web submits showing `e.Error()` through `form.Redirect` without a class
   check, so an unexpected failure reads as a form refusal: godirectoryd's
 - Untested wiring: gogated's admin pages - a served test needs a signed-in
@@ -320,7 +362,9 @@ Surveying:
 - Count a method's callers by receiver across every module and build tag in
   one pass: a `go/packages` program resolving each selector through
   `TypesInfo.Selections`. gosourced's `find_references` is per symbol and
-  per module; a name-level grep only proves a zero
+  per module; a name-level grep only proves a zero. A method gaining an
+  error return still compiles wherever a caller discarded its result -
+  errcheck finds those, the build does not
 - A CLI that bypassed its daemon to run a rule gets the rule as a daemon
   operation; other callers running the same rule are then bypasses too
 
@@ -451,18 +495,20 @@ Testing:
   cleanup removed
 - A quiet class reads the same guarded or not, so an outage test cannot prove
   the guard; what only the guard does - fail the next call at once after an
-  `unavailable`, without asking the peer - can. The double's failure is what
-  the client produces: a dial failure arrives as a `connection.Failure`,
-  which the guard counts as an outage, where a bare `unreachable.Format`
-  passes through as a refusal and the guard never opens. A hand-built
-  `net.OpError` classifies only around a real errno
-  (`os.NewSyscallError("connect", syscall.ECONNREFUSED)`); one wrapping a
-  plain error answers 500. A guard's outage report waits out `Lasting`, so a
-  fast test counts the peer's calls instead of the reporter's events. A
-  guard comes back only through its probe loop, on a real timer from
-  `ProbeMinimum` that no option reaches, so a test that needs the peer back -
-  nothing lost across a failed tick - fails it with a fault the guard passes
-  through untouched, and leaves the outage to the next-call test
+  `unavailable`, without asking the peer - can. The double's failure is what the
+  client produces: a dial failure arrives as a `connection.Failure`, which the
+  guard counts as an outage, where a bare `unreachable.Format` passes through as
+  a refusal and the guard never opens. A hand-built `net.OpError` classifies
+  only around a real errno
+  (`os.NewSyscallError("connect", syscall.ECONNREFUSED)`); one wrapping a plain
+  error answers 500. A guard's outage report waits out `Lasting`, so a fast test
+  counts the peer's calls instead of the reporter's events. The guard answers
+  `unavailable` on the very call that opens the outage, not only on the calls
+  after it, so a tick returning failures through `Attempt` hands its worker
+  nothing reportable. A guard comes back only through its probe loop, on a real
+  timer from `ProbeMinimum` that no option reaches, so a test that needs the
+  peer back - nothing lost across a failed tick - fails it with a fault the
+  guard passes through untouched, and leaves the outage to the next-call test
 - A mock answering `nil, nil` where the client never does hides a nil
   dereference; an unseeded query answers an empty result. A double replaced
   by a shared mock keeps its old default by seeding it: a query double

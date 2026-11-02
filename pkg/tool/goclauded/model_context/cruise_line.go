@@ -15,8 +15,9 @@ func cruiseLine(v *cruise_setting.Setting) string {
 
 	if v.PromotedAt != nil {
 		result = fmt.Sprintf(
-			"%s, last woke %s",
+			"%s, woken %d times, last %s",
 			result,
+			v.Woken,
 			v.PromotedAt.Format(time.RFC3339),
 		)
 	}

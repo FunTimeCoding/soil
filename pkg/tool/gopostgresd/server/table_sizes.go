@@ -2,9 +2,12 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 )
 
@@ -23,10 +26,10 @@ func (s *Server) TableSizes(
 	}
 
 	if e != nil {
-		return server.TableSizes500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.TableSizes500JSONResponse(*s.answerWith(e, "")), nil
 	}
 
-	schema := "public"
+	var schema string
 
 	if r.Params.Schema != nil {
 		schema = *r.Params.Schema
@@ -34,11 +37,28 @@ func (s *Server) TableSizes(
 
 	rows, e := s.service.TableSizes(c, instance, schema)
 
-	if e != nil {
-		return server.TableSizes500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+	if validation.Is(e) {
+		return server.TableSizes400JSONResponse(*clientError(e)), nil
 	}
 
-	return server.TableSizes200JSONResponse{Rows: toRows(rows)}, nil
+	if forbidden.Is(e) {
+		return server.TableSizes403JSONResponse(*clientError(e)), nil
+	}
+
+	if conflict.Is(e) {
+		return server.TableSizes409JSONResponse(*clientError(e)), nil
+	}
+
+	if unavailable.Is(e) {
+		return server.TableSizes503JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.TableSizes500JSONResponse(*s.answerWith(e, "")), nil
+	}
+
+	return server.TableSizes200JSONResponse{
+		Columns: rows.Columns,
+		Rows:    rows.Rows,
+	}, nil
 }

@@ -209,6 +209,6 @@ func TestAskDecisionShape(t *testing.T) {
 	assert.String(
 		t,
 		`{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"alfa"}}`,
-		string(notation.Marshal(guard.NewAskDecision("alfa"))),
+		string(notation.Marshal(guard.NewDecision("alfa", ""))),
 	)
 }

@@ -39,6 +39,7 @@ func (s *Server) extractType(
 	}
 
 	r, e := s.service.ExtractType(
+		turnContext(x),
 		directory,
 		a.PackagePath,
 		a.Type,

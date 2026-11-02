@@ -1,84 +1,68 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/snapshot"
-	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/turn"
 )
 
 func (s *Service) transact(
+	x context.Context,
 	directory string,
 	packagePaths []string,
 	dryRun bool,
 	operation func(string, *sink.Sink) (*output.Results, error),
 ) (*output.Results, error) {
-	candidates := []string{directory}
-
-	if len(packagePaths) > 0 {
-		candidates = append(candidates, s.inventory.Replacing(directory)...)
-	}
-
-	before := snapshot.Take(candidates...)
-	roots := []string{directory}
-	var captures []*sink.Sink
-	var reached []*concern.Concern
-
-	for _, other := range s.reaching(directory, packagePaths) {
-		capture := sink.New(other)
-		r, e := operation(other, capture)
-
-		if e != nil {
-			return nil, e
-		}
-
-		if hasUnfixed(r) {
-			refused := output.NewResultsWithDirectory(directory)
-
-			for _, c := range rebaseConcerns(other, r) {
-				refused.AddConcern(c)
-			}
-
-			return refused, nil
-		}
-
-		for _, c := range rebaseConcerns(other, r) {
-			if system.InsideDirectory(other, c.Path) {
-				reached = append(reached, c)
-			}
-		}
-
-		roots = append(roots, other)
-		captures = append(captures, capture)
-	}
-
-	out := sink.New(directory)
-	r, e := operation(directory, out)
-
-	if e != nil || hasUnfixed(r) {
-		return r, e
-	}
-
-	if dropped := out.Dropped(); len(dropped) > 0 {
-		return refuseOutside(directory, dropped), nil
-	}
-
-	for _, c := range reached {
-		r.AddConcern(c)
-	}
-
-	outs := s.retargetDocuments(
-		directory,
-		append([]*sink.Sink{out}, captures...),
-		r,
-	)
-
 	if dryRun {
-		r.MarkPlanned()
+		r, e := s.attempt(directory, packagePaths, dryRun, operation)
 
-		return r, nil
+		return r, markSettled(directory, e)
 	}
 
-	return s.commit(directory, before, roots, outs, r)
+	g, e := s.turns.Take(x, turn.SessionOf(x))
+
+	if e != nil {
+		return nil, e
+	}
+
+	defer g.Release()
+	var moved []string
+	var unloaded []string
+
+	for range constant.CommitAttempts - 1 {
+		r, f := s.attempt(directory, packagePaths, dryRun, operation)
+
+		if failure, okay := load_failure.As(f); okay && len(unloaded) == 0 {
+			unloaded = append(unloaded, failure.Package)
+
+			continue
+		}
+
+		if f != nil {
+			return nil, markSettled(directory, f)
+		}
+
+		changed := concurrentWrites(r)
+
+		if len(changed) == 0 {
+			reportTurn(r, g, moved, unloaded)
+
+			return r, nil
+		}
+
+		moved = append(moved, changed...)
+	}
+
+	r, f := s.attempt(directory, packagePaths, dryRun, operation)
+
+	if f != nil {
+		return nil, markSettled(directory, f)
+	}
+
+	reportTurn(r, g, moved, unloaded)
+
+	return r, nil
 }

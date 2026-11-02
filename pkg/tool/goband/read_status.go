@@ -15,15 +15,11 @@ func readStatus(
 		p.Instance = &instance
 	}
 
-	r, e := x.Client.GetStatusWithResponse(context.Background(), p)
+	result, e := x.Client.GetStatus(context.Background(), p)
 
 	if e != nil {
-		x.Terminal.Exitf("error: %v\n", e)
+		x.Terminal.Exitln(e)
 	}
 
-	if r.JSON200 == nil {
-		x.Terminal.Reject(r.Status(), r.Body)
-	}
-
-	return r.JSON200
+	return result
 }

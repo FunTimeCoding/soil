@@ -12,8 +12,9 @@ func TestRenameTestFunctionInTestOnlyPackage(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("test-symbols/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/flow",
 		"TestFlowStart",
@@ -32,8 +33,9 @@ func TestRenameTestFunctionBesideProduction(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("test-symbols/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, e := s.Rename(
+		t.Context(),
 		d,
 		"example/pkg/target",
 		"TestCompute",
@@ -56,7 +58,7 @@ func TestListCallsCountsTestVariantPackageOnce(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("test-symbols/src"),
 	)
-	s := service_tester.NewService()
+	s := service_tester.NewService(t)
 	r, inventory, e := s.ListCalls(d, "example/pkg/measure", 0)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -76,8 +78,16 @@ func TestRenameProductionSymbolRewritesTestFile(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("test-symbols/src"),
 	)
-	s := service_tester.NewService()
-	r, e := s.Rename(d, "example/pkg/target", "Compute", "Calculate", "", false)
+	s := service_tester.NewService(t)
+	r, e := s.Rename(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Compute",
+		"Calculate",
+		"",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	declaration := service_tester.ReadFixtureFile(

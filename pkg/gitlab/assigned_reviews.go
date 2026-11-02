@@ -7,17 +7,23 @@ import (
 )
 
 func (c *Client) AssignedReviews(all bool) ([]*merge_request.Request, error) {
-	requests, _, e := c.client.MergeRequests.ListMergeRequests(
+	u, e := c.userIdentifier()
+
+	if e != nil {
+		return nil, e
+	}
+
+	requests, _, f := c.client.MergeRequests.ListMergeRequests(
 		&gitlab.ListMergeRequestsOptions{
-			ReviewerID:  gitlab.ReviewerID(c.user.ID),
+			ReviewerID:  gitlab.ReviewerID(u),
 			State:       new(constant.OpenedState),
 			ListOptions: constant.DefaultListOptions,
 		},
 		nil,
 	)
 
-	if e != nil {
-		return nil, wrapError(e)
+	if f != nil {
+		return nil, wrapError(f)
 	}
 
 	result := merge_request.NewSlice(requests)

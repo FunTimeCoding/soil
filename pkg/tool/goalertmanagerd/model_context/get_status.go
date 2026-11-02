@@ -19,7 +19,7 @@ func (s *Server) getStatus(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Status(instance)
+	v, e := s.service.Status(x, instance)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -1,7 +1,7 @@
 package retarget
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"path"
 	"strings"
 )
@@ -9,11 +9,19 @@ import (
 func Mentions(
 	document string,
 	content string,
-	moves []*path_move.Move,
+	moves *move_set.Set,
 ) bool {
-	for _, m := range moves {
-		segment := path.Base(m.From)
+	var segments []string
 
+	for _, m := range moves.Paths {
+		segments = append(segments, path.Base(m.From))
+	}
+
+	for _, m := range moves.Symbols {
+		segments = append(segments, path.Base(m.Directory))
+	}
+
+	for _, segment := range segments {
 		if strings.Contains(content, segment) ||
 			strings.Contains(document, segment) {
 			return true

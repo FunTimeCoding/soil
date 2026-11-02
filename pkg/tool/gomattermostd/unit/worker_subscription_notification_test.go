@@ -15,7 +15,7 @@ func TestSocketEventBecomesNotification(t *testing.T) {
 	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	r.Watcher.Start()
+	r.Start()
 	r.Upstream.Push(
 		postEvent(
 			&model.Post{
@@ -42,7 +42,7 @@ func TestSocketEventBecomesNotification(t *testing.T) {
 
 	assert.Integer(t, 0, len(r.Reporter.Events()))
 	assert.Integer(t, 1, len(result))
-	assert.String(t, "mattermost", result[0].Source)
+	assert.String(t, "gomattermostd", result[0].Source)
 	assert.StringContains(t, "[papa]", result[0].Body)
 	assert.StringContains(t, "Foxtrot: first message", result[0].Body)
 }
@@ -51,7 +51,7 @@ func TestSocketEventInUnwatchedThreadIgnored(t *testing.T) {
 	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	r.Watcher.Start()
+	r.Start()
 	r.Upstream.Push(
 		postEvent(
 			&model.Post{

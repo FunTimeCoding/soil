@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/time/time_of_day"
 	"github.com/funtimecoding/soil/pkg/worker"
 	"sync/atomic"
 	"testing"
@@ -68,6 +69,55 @@ func TestCloseWaitsForARunningTick(t *testing.T) {
 	<-entered
 	w.Close()
 	assert.True(t, finished.Load())
+}
+
+func TestDailyWaitsForItsTimeInsteadOfTickingAtStart(t *testing.T) {
+	var ticks atomic.Int64
+	now := time.Now().UTC()
+	w := worker.NewDaily(
+		func() []error {
+			ticks.Add(1)
+
+			return nil
+		},
+		logger.New(t.Context()),
+		memory.New(),
+		time_of_day.New(now.Hour(), now.Minute(), time.UTC),
+	)
+	w.Start()
+	time.Sleep(50 * time.Millisecond)
+	w.Close()
+	assert.Integer(t, int64(0), ticks.Load())
+}
+
+func TestDailyDelayReachesItsNextTime(t *testing.T) {
+	w := worker.NewDaily(
+		func() []error { return nil },
+		logger.New(t.Context()),
+		memory.New(),
+		time_of_day.New(9, 0, time.UTC),
+	)
+	defer w.Close()
+	assert.Any(
+		t,
+		90*time.Minute,
+		w.Delay(time.Date(2026, time.May, 4, 7, 30, 0, 0, time.UTC)),
+	)
+}
+
+func TestEveryDelayIsItsInterval(t *testing.T) {
+	w := worker.NewEvery(
+		func() []error { return nil },
+		logger.New(t.Context()),
+		memory.New(),
+		time.Hour,
+	)
+	defer w.Close()
+	assert.Any(
+		t,
+		time.Hour,
+		w.Delay(time.Date(2026, time.May, 4, 7, 30, 0, 0, time.UTC)),
+	)
 }
 
 func TestAReportableFailureIsCapturedAndAQuietOneIsNot(t *testing.T) {
