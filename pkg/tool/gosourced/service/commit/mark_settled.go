@@ -2,8 +2,8 @@ package commit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/load_failure"
-	"github.com/funtimecoding/soil/pkg/go_mod/constant"
-	constant1 "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"golang.org/x/mod/modfile"
 	"os"
 	"path/filepath"
@@ -21,7 +21,7 @@ func MarkSettled(
 		return e
 	}
 
-	b, f := os.ReadFile(filepath.Join(directory, constant.ModFile))
+	b, f := os.ReadFile(filepath.Join(directory, go_modConstant.ModFile))
 
 	if f != nil {
 		return e
@@ -50,7 +50,7 @@ func MarkSettled(
 		}
 	}
 
-	failure.Settled = time.Since(newest) >= constant1.LoadSettled
+	failure.Settled = time.Since(newest) >= constant.LoadSettled
 
 	return e
 }

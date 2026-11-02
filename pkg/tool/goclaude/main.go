@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/spf13/cobra"
 )
 
@@ -43,7 +43,7 @@ func Main() {
 	o.PersistentFlags().StringVar(
 		&host,
 		"host",
-		environment.Fallback(constant.HostEnvironment, web.Localhost),
+		environment.Fallback(constant.HostEnvironment, webConstant.Localhost),
 		"goclauded host",
 	)
 	o.PersistentFlags().IntVar(

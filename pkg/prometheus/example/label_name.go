@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 )
 
@@ -13,7 +13,7 @@ func LabelName() {
 
 	for _, l := range c.MustLabelNames(
 		[]string{},
-		constant.StartOfTime,
+		soil.StartOfTime,
 	).Values {
 		console.Format("  %s\n", l)
 	}

@@ -2,14 +2,17 @@ package telemetry
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	gotelemetrydConstant "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func NewEnvironment() *Client {
 	return New(
-		environment.Fallback(constant.HostEnvironment, webConstant.Localhost),
-		environment.FallbackInteger(constant.PortEnvironment, 0),
-		environment.Exists(constant.InsecureEnvironment),
+		environment.Fallback(
+			gotelemetrydConstant.HostEnvironment,
+			webConstant.Localhost,
+		),
+		environment.FallbackInteger(gotelemetrydConstant.PortEnvironment, 0),
+		environment.Exists(gotelemetrydConstant.InsecureEnvironment),
 	)
 }

@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -12,10 +12,10 @@ func dialogPostButtons(m *mattermost.Client) {
 		ChannelId: m.DefaultChannel().Id,
 		Message:   "Some message with buttons",
 	}
-	callback := locator.New(constant.Localhost).Port(
-		constant.ListenPort,
+	callback := locator.New(webConstant.Localhost).Port(
+		webConstant.ListenPort,
 	).Insecure().Path(
-		constant.CallbackPath,
+		webConstant.CallbackPath,
 	).String()
 	model.ParseMessageAttachment(
 		p,

@@ -2,12 +2,12 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Silence() {
-	f := constant.ColorFormat.Copy().Tag(constant.TagState)
+	f := consoleConstant.ColorFormat.Copy().Tag(consoleConstant.TagState)
 	c := common.Alertmanager()
 	defer c.Close()
 

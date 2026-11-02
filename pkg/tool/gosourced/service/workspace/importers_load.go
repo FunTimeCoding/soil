@@ -1,7 +1,7 @@
 package workspace
 
 import (
-	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
 	"go/token"
@@ -19,7 +19,9 @@ func (s *Service) ImportersLoad(
 	reach := []string{packagePath}
 
 	if subtree {
-		reach = []string{join.Empty(packagePath, constant.RecursivePattern)}
+		reach = []string{
+			join.Empty(packagePath, go_modConstant.RecursivePattern),
+		}
 	}
 
 	if s.full {

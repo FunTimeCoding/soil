@@ -1,7 +1,7 @@
 package load
 
 import (
-	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
@@ -23,7 +23,7 @@ func ReachUnits(
 	}
 
 	for _, p := range packagePaths {
-		base, recursive := strings.CutSuffix(p, constant.RecursivePattern)
+		base, recursive := strings.CutSuffix(p, go_modConstant.RecursivePattern)
 
 		if !recursive {
 			add(base)

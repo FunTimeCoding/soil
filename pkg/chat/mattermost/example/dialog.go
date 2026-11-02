@@ -6,13 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
 func Dialog() {
 	w := http.NewServeMux()
-	w.HandleFunc(constant.DialogPath, handleDialog)
+	w.HandleFunc(webConstant.DialogPath, handleDialog)
 	s := web.ListenAsynchronous(w)
 	m := common.Mattermost()
 	defer m.Close()

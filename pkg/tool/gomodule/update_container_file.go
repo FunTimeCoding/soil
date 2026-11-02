@@ -3,7 +3,7 @@ package gomodule
 import (
 	"github.com/coreos/go-semver/semver"
 	"github.com/funtimecoding/soil/pkg/github"
-	"github.com/funtimecoding/soil/pkg/github/constant"
+	githubConstant "github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/release"
 	"github.com/funtimecoding/soil/pkg/project"
 	semverTrim "github.com/funtimecoding/soil/pkg/semver"
@@ -23,12 +23,15 @@ func updateContainerFile(v *semver.Version) {
 		v.String(),
 	)
 
-	if token := os.Getenv(constant.TokenEnvironment); token != "" {
+	if token := os.Getenv(githubConstant.TokenEnvironment); token != "" {
 		c := github.New(token)
 		defer c.Close()
 
 		if r := release.LatestCompatible(
-			c.MustReleases(constant.DelveNamespace, constant.DelveRepository),
+			c.MustReleases(
+				githubConstant.DelveNamespace,
+				githubConstant.DelveRepository,
+			),
 			v,
 		); r != nil {
 			d = project.ReplaceDelveVersion(d, semverTrim.Trim(r.Name))

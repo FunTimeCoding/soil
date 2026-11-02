@@ -1,7 +1,7 @@
 package index
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/crap/complexity"
 	"github.com/funtimecoding/soil/pkg/crap/function"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
@@ -23,7 +23,7 @@ func Load(
 			path := set.File(file.Pos()).Name()
 
 			if seen[path] ||
-				strings.HasSuffix(path, constant.TestSuffix) ||
+				strings.HasSuffix(path, soil.TestSuffix) ||
 				ast.IsGenerated(file) {
 				continue
 			}

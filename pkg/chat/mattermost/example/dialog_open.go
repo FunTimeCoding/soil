@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -11,10 +11,10 @@ func dialogOpen(m *mattermost.Client) {
 	m.MustOpenDialog(
 		model.OpenDialogRequest{
 			TriggerId: "",
-			URL: locator.New(constant.Localhost).Port(
-				constant.ListenPort,
+			URL: locator.New(webConstant.Localhost).Port(
+				webConstant.ListenPort,
 			).Insecure().Path(
-				constant.DialogPath,
+				webConstant.DialogPath,
 			).String(),
 			Dialog: model.Dialog{
 				CallbackId:       "myOwnId",
