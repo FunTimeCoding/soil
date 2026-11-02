@@ -30,7 +30,7 @@ func (s *Server) moment(
 		return response.Fail("line is required: %v", e)
 	}
 
-	if f := s.service.Moment(c.SessionIdentifier, c.Callsign, line); f != nil {
+	if f := s.event.Moment(c.SessionIdentifier, c.Callsign, line); f != nil {
 		return s.captureFail(f, soil.UnexpectedError)
 	}
 

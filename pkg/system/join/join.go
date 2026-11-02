@@ -1,7 +1,7 @@
 package join
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/slice"
 	"path"
 	"strings"
@@ -9,15 +9,15 @@ import (
 
 func Join(parts ...string) string {
 	result := slice.StripEmpty(parts)
-	absolute := strings.HasPrefix(result[0], constant.Slash)
-	result = slice.Trim(result, constant.Slash)
+	absolute := strings.HasPrefix(result[0], stringsConstant.Slash)
+	result = slice.Trim(result, stringsConstant.Slash)
 
 	if len(result) == 0 {
-		return constant.Slash
+		return stringsConstant.Slash
 	}
 
 	if absolute {
-		result = slice.Prepend(result, constant.Slash)
+		result = slice.Prepend(result, stringsConstant.Slash)
 	}
 
 	return path.Join(result...)

@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -11,11 +11,11 @@ func (s *Server) GetResolve(
 	_ context.Context,
 	r server.GetResolveRequestObject,
 ) (server.GetResolveResponseObject, error) {
-	result, e := s.service.ResolveSessionIdentifier(r.Params.Query)
+	result, e := s.roster.ResolveSessionIdentifier(r.Params.Query)
 
 	if e != nil {
 		return server.GetResolve500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

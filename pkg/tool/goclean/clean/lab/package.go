@@ -1,6 +1,7 @@
 package lab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
@@ -8,10 +9,11 @@ import (
 )
 
 func Package(
+	x context.Context,
 	c face.GitLabClient,
 	p *project.Project,
 ) {
-	projectPackages := c.MustPackages(p.Identifier, false)
+	projectPackages := c.MustPackages(x, p.Identifier, false)
 
 	if len(projectPackages) > 0 {
 		latest := packages.Latest(projectPackages)
@@ -31,7 +33,7 @@ func Package(
 			}
 
 			console.Format("Package: %s %s\n", a.Name, a.Version)
-			c.MustDeletePackage(p.Identifier, a.ID)
+			c.MustDeletePackage(x, p.Identifier, a.ID)
 		}
 	}
 }

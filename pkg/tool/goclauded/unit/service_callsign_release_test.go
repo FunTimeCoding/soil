@@ -15,7 +15,7 @@ func TestCallsignReleasedAfterSevenDays(t *testing.T) {
 	assert.True(t, r.Callsign != "")
 	callsign := r.Callsign
 	s.Store.Advance(8 * 24 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	e := s.Store.GetSession("session-1")
 	assert.True(t, e.Callsign == nil)
 	assert.String(t, callsign, e.Name)
@@ -26,7 +26,7 @@ func TestCallsignNotReleasedBeforeSevenDays(t *testing.T) {
 	r := s.RegisterActive("session-1")
 	assert.True(t, r.Callsign != "")
 	s.Store.Advance(6 * 24 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	e := s.Store.GetSession("session-1")
 	assert.True(t, e.Callsign != nil)
 }
@@ -65,7 +65,7 @@ func TestCallsignRecycledAfterSweepRelease(t *testing.T) {
 	}
 
 	s.Store.Advance(8 * 24 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r := s.Register("after-sweep")
 	assert.True(t, r.Callsign != "")
 }

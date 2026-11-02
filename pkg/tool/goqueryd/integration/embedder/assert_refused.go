@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"testing"
 )
@@ -17,7 +16,7 @@ func assertRefused(
 	body string,
 ) {
 	t.Helper()
-	chunks := chunk.Document(body, name, mock_reranker.New())
+	chunks := chunk.Document(body, name, newReranker(t))
 	assert.Count(t, 1, chunks)
 	_, f := embed.Single(t.Context(), e, chunks[0].Text)
 	assert.True(t, validation.Is(f))

@@ -11,7 +11,7 @@ import (
 
 func TestSendNotificationRefusesACallsignNobodyHolds(t *testing.T) {
 	s := service_tester.New(t)
-	_, e := s.Service.SendNotification(
+	_, e := s.Message.SendNotification(
 		"Nobody",
 		"downloader",
 		"a file landed",
@@ -25,7 +25,7 @@ func TestSendNotificationRefusesACallsignNobodyHolds(t *testing.T) {
 func TestSendNotificationReachesTheHolder(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
-	_, f := s.Service.SendNotification(
+	_, f := s.Message.SendNotification(
 		r.Callsign,
 		"downloader",
 		"a file landed",

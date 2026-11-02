@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/mock_client"
 	"github.com/funtimecoding/soil/pkg/atlassian/face"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
@@ -36,7 +36,7 @@ func NewReported(
 	t.Cleanup(s.Close)
 	result := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(result.Close)
 

@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
 )
@@ -10,9 +10,9 @@ import (
 func TestDryRunSaysWhenAShutdownWouldBeRefused(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
-		constant.PowerOn,
-		constant.PowerCycle,
-		constant.PowerOffSoft,
+		bandConstant.PowerOn,
+		bandConstant.PowerCycle,
+		bandConstant.PowerOffSoft,
 	)
 	output, _, code := run(t, s, "shutdown", "--instance", "alfa")
 	assert.Integer(t, 0, code)
@@ -27,9 +27,9 @@ func TestDryRunSaysWhenAShutdownWouldBeRefused(t *testing.T) {
 func TestDryRunDescribesAnAcceptedShutdown(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
-		constant.PowerOn,
-		constant.PowerOffSoft,
-		constant.PowerOffSoftGraceful,
+		bandConstant.PowerOn,
+		bandConstant.PowerOffSoft,
+		bandConstant.PowerOffSoftGraceful,
 	)
 	output, _, code := run(t, s, "shutdown", "--instance", "alfa")
 	assert.Integer(t, 0, code)
@@ -44,9 +44,9 @@ func TestDryRunDescribesAnAcceptedShutdown(t *testing.T) {
 func TestShutdownWithYesRequestsOffSoftGraceful(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
-		constant.PowerOn,
-		constant.PowerOffSoft,
-		constant.PowerOffSoftGraceful,
+		bandConstant.PowerOn,
+		bandConstant.PowerOffSoft,
+		bandConstant.PowerOffSoftGraceful,
 	)
 	output, _, code := run(t, s, "shutdown", "--instance", "alfa", "--yes")
 	assert.Integer(t, 0, code)
@@ -57,9 +57,9 @@ func TestShutdownWithYesRequestsOffSoftGraceful(t *testing.T) {
 func TestARefusedShutdownExitsWithTheDaemonsMessage(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
-		constant.PowerOn,
-		constant.PowerCycle,
-		constant.PowerOffSoft,
+		bandConstant.PowerOn,
+		bandConstant.PowerCycle,
+		bandConstant.PowerOffSoft,
 	)
 	_, failure, code := run(t, s, "shutdown", "--instance", "alfa", "--yes")
 	assert.Integer(t, 1, code)

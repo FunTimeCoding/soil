@@ -3,15 +3,15 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func sameResult(
 	t *testing.T,
-	run func(s *service.Service) (any, any, error),
-	indexed *service.Service,
-	full *service.Service,
+	run func(s *service_tester.Services) (any, any, error),
+	indexed *service_tester.Services,
+	full *service_tester.Services,
 ) string {
 	t.Helper()
 	r1, v1, e1 := run(indexed)

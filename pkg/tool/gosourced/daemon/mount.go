@@ -20,7 +20,7 @@ func (d *Daemon) Mount(
 		webConstant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(d.service, r),
+				server.New(d.diff, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -28,5 +28,14 @@ func (d *Daemon) Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(d.service, r, t).Mount(g)
+	model_context.New(
+		d.file,
+		d.module,
+		d.packages,
+		d.pattern,
+		d.reference,
+		d.symbol,
+		r,
+		t,
+	).Mount(g)
 }

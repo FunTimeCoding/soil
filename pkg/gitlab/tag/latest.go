@@ -1,7 +1,7 @@
 package tag
 
 import (
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"golang.org/x/mod/semver"
 	"strings"
 )
@@ -10,7 +10,7 @@ func Latest(v []*Tag) *Tag {
 	result := v[0]
 
 	for _, e := range v {
-		if !strings.HasPrefix(e.Name, constant.VersionPrefix) {
+		if !strings.HasPrefix(e.Name, gitConstant.VersionPrefix) {
 			continue
 		}
 

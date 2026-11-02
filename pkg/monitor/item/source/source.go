@@ -1,7 +1,7 @@
 package source
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"time"
 )
 
@@ -10,6 +10,6 @@ type Source struct {
 	AgeMultiplier   float64
 	StaleThreshold  time.Duration
 	StaleMultiplier float64
-	SeverityWeights map[constant.Severity]float64
+	SeverityWeights map[soil.Severity]float64
 	TriageBoost     float64
 }

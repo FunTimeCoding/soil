@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) sidebarNodes(skip int) []gomponents.Node {
-	sessions, e := s.service.EnrichedSessions(0, 0)
+	sessions, e := s.roster.EnrichedSessions(0, 0)
 	errors.PanicOnError(e)
 	limit := 30
 

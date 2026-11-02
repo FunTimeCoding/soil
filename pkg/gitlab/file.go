@@ -1,12 +1,14 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/file"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) File(
+	x context.Context,
 	project int64,
 	branch string,
 	name string,
@@ -17,7 +19,12 @@ func (c *Client) File(
 		o.Ref = &branch
 	}
 
-	result, r, e := c.client.RepositoryFiles.GetFile(project, name, o)
+	result, r, e := c.client.RepositoryFiles.GetFile(
+		project,
+		name,
+		o,
+		gitlab.WithContext(x),
+	)
 
 	if r != nil && r.StatusCode == 404 {
 		return nil, not_found.Format(

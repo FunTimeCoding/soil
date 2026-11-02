@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -20,7 +20,7 @@ func (c *Client) SendKey(
 		return fmt.Errorf("send key: %w", e)
 	}
 
-	r, f := c.client.Post(l, constant.Object, bytes.NewReader(body))
+	r, f := c.client.Post(l, webConstant.Object, bytes.NewReader(body))
 
 	if f != nil {
 		return fmt.Errorf("send key: %w", f)

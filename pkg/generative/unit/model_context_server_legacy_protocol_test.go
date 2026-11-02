@@ -21,8 +21,10 @@ func TestModelContextServerLegacyProtocol(t *testing.T) {
 	)
 	s.SetContextFunc(generative.LegacyProtocol)
 	inputReader, inputWriter := io.Pipe()
+	defer errors.PanicClose(inputReader)
 	outputReader, outputWriter := io.Pipe()
 	defer errors.PanicClose(outputReader)
+	defer errors.PanicClose(outputWriter)
 	done := make(chan error)
 	go func() {
 		done <- s.Listen(context.Background(), inputReader, outputWriter)

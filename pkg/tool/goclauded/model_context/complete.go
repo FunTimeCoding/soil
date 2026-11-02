@@ -31,7 +31,7 @@ func (s *Server) complete(
 		return response.Fail("message is required: %v", e)
 	}
 
-	topic, f := s.service.CompleteTask(c.Callsign)
+	topic, f := s.roster.CompleteTask(c.Callsign)
 
 	if f != nil {
 		return s.captureFail(f, soil.UnexpectedError)
@@ -47,7 +47,7 @@ func (s *Server) complete(
 		)
 	}
 
-	if f := s.service.Complete(
+	if f := s.event.Complete(
 		c.SessionIdentifier,
 		c.Callsign,
 		topic,

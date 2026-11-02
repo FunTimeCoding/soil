@@ -18,9 +18,11 @@ func Extract(p *packages.Package) *fact.Summary {
 	for t, methods := range methodsByType(p) {
 		if _, okay := methods[constant.CloseMethod]; okay {
 			result.Releases[typeKey(t)] = releasedFields(p, methods)
+			closeEquivalents(p, t, methods, result)
 		}
 	}
 
+	promotedReleases(p, result)
 	result.Shared = sharedVariables(p)
 
 	for _, file := range p.Syntax {
@@ -41,6 +43,9 @@ func Extract(p *packages.Package) *fact.Summary {
 			extractDisposals(p, f, o, result)
 			extractTakes(p, f, o, result)
 			extractWraps(p, f, o, result)
+			extractYields(p, f, o, result)
+			extractDraws(p, f, o, result)
+			extractRelays(p, f, o, result)
 
 			if returnsSelf(p, f) {
 				result.Self = append(result.Self, k)

@@ -15,7 +15,7 @@ import (
 func TestRenameSendsItsMovesToMemories(t *testing.T) {
 	d := renameFollowFixture(t)
 	s, m := service_tester.WithMemory(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -42,7 +42,7 @@ func TestRenameCommitsWhileMemoriesAreDown(t *testing.T) {
 	d := renameFollowFixture(t)
 	s, m := service_tester.WithMemory(t)
 	m.Failure = unavailable.New("gomemoryd", time.Now(), "connection refused")
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",

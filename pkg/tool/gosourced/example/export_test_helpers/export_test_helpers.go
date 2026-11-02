@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/example/offline_service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol"
 	"os"
 	"path"
 	"path/filepath"
@@ -30,8 +31,9 @@ func ExportTestHelpers() {
 	targetPath := path.Join(packagePath, target)
 	moved := 0
 	asked := 0
-	s, closeService := offline_service.New()
+	w, c, closeService := offline_service.New()
 	defer closeService()
+	s := symbol.New(w, c)
 
 	for _, line := range strings.Split(string(content), "\n") {
 		name := strings.TrimSpace(line)

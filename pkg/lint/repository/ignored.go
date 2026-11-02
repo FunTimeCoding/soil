@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"path/filepath"
 	"strings"
@@ -13,7 +13,7 @@ func (r *Repository) Ignored(path string) bool {
 	for sibling, ignored := range r.siblingIgnored {
 		inner, found := strings.CutPrefix(
 			clean,
-			join.Empty(sibling, constant.Slash),
+			join.Empty(sibling, stringsConstant.Slash),
 		)
 
 		if found {

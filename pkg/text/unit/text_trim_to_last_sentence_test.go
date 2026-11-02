@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/text"
 	"testing"
 )
@@ -64,7 +64,7 @@ func TestTrimToLastSentencePunctuationAtStart(t *testing.T) {
 }
 
 func TestTrimToLastSentenceOnlyPunctuation(t *testing.T) {
-	assert.String(t, ".", text.TrimToLastSentence(constant.Dot))
+	assert.String(t, ".", text.TrimToLastSentence(stringsConstant.Dot))
 }
 
 func TestTrimToLastSentenceNoFollowingText(t *testing.T) {

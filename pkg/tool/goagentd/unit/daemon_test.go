@@ -9,7 +9,9 @@ import (
 )
 
 func TestTheDaemonLeavesNothingRunning(t *testing.T) {
-	s := service_tester.Fixed(mock_stream.New(nil, false, nil))
+	stream := mock_stream.New(nil, false, nil)
+	t.Cleanup(stream.Close)
+	s := service_tester.Fixed(stream)
 	before := goleak.IgnoreCurrent()
 	d := daemon_tester.New(t, s)
 	workers := d.Workers()

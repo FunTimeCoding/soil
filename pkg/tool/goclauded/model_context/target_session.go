@@ -23,7 +23,7 @@ func (s *Server) targetSession(
 		return c.SessionIdentifier, nil, nil
 	}
 
-	r, f := s.service.ResolveSessionIdentifier(target)
+	r, f := s.roster.ResolveSessionIdentifier(target)
 
 	if f != nil {
 		result, e := s.captureFail(f, soil.UnexpectedError)

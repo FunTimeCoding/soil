@@ -10,7 +10,7 @@ func (s *Server) GetSessionTools(
 	_ context.Context,
 	r server.GetSessionToolsRequestObject,
 ) (server.GetSessionToolsResponseObject, error) {
-	calls := s.service.ToolCalls(r.Identifier)
+	calls := s.transcript.ToolCalls(r.Identifier)
 	var entries []server.ToolCallEntry
 
 	for _, c := range calls {

@@ -2749,6 +2749,20 @@ func (response ListContainers400JSONResponse) VisitListContainersResponse(w http
 	return err
 }
 
+type ListContainers403JSONResponse Error
+
+func (response ListContainers403JSONResponse) VisitListContainersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListContainers404JSONResponse Error
 
 func (response ListContainers404JSONResponse) VisitListContainersResponse(w http.ResponseWriter) error {
@@ -2773,6 +2787,20 @@ func (response ListContainers500JSONResponse) VisitListContainersResponse(w http
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListContainers503JSONResponse Error
+
+func (response ListContainers503JSONResponse) VisitListContainersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -2814,6 +2842,20 @@ func (response GetContainer400JSONResponse) VisitGetContainerResponse(w http.Res
 	return err
 }
 
+type GetContainer403JSONResponse Error
+
+func (response GetContainer403JSONResponse) VisitGetContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetContainer404JSONResponse Error
 
 func (response GetContainer404JSONResponse) VisitGetContainerResponse(w http.ResponseWriter) error {
@@ -2838,6 +2880,20 @@ func (response GetContainer500JSONResponse) VisitGetContainerResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetContainer503JSONResponse Error
+
+func (response GetContainer503JSONResponse) VisitGetContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -2879,6 +2935,20 @@ func (response ShutdownContainer400JSONResponse) VisitShutdownContainerResponse(
 	return err
 }
 
+type ShutdownContainer403JSONResponse Error
+
+func (response ShutdownContainer403JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ShutdownContainer404JSONResponse Error
 
 func (response ShutdownContainer404JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
@@ -2893,6 +2963,20 @@ func (response ShutdownContainer404JSONResponse) VisitShutdownContainerResponse(
 	return err
 }
 
+type ShutdownContainer409JSONResponse Error
+
+func (response ShutdownContainer409JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ShutdownContainer500JSONResponse ErrorResponse
 
 func (response ShutdownContainer500JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
@@ -2903,6 +2987,20 @@ func (response ShutdownContainer500JSONResponse) VisitShutdownContainerResponse(
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ShutdownContainer503JSONResponse Error
+
+func (response ShutdownContainer503JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -2944,6 +3042,20 @@ func (response ListContainerSnapshots400JSONResponse) VisitListContainerSnapshot
 	return err
 }
 
+type ListContainerSnapshots403JSONResponse Error
+
+func (response ListContainerSnapshots403JSONResponse) VisitListContainerSnapshotsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListContainerSnapshots404JSONResponse Error
 
 func (response ListContainerSnapshots404JSONResponse) VisitListContainerSnapshotsResponse(w http.ResponseWriter) error {
@@ -2968,6 +3080,20 @@ func (response ListContainerSnapshots500JSONResponse) VisitListContainerSnapshot
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListContainerSnapshots503JSONResponse Error
+
+func (response ListContainerSnapshots503JSONResponse) VisitListContainerSnapshotsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3010,6 +3136,20 @@ func (response CreateContainerSnapshot400JSONResponse) VisitCreateContainerSnaps
 	return err
 }
 
+type CreateContainerSnapshot403JSONResponse Error
+
+func (response CreateContainerSnapshot403JSONResponse) VisitCreateContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CreateContainerSnapshot404JSONResponse Error
 
 func (response CreateContainerSnapshot404JSONResponse) VisitCreateContainerSnapshotResponse(w http.ResponseWriter) error {
@@ -3024,6 +3164,20 @@ func (response CreateContainerSnapshot404JSONResponse) VisitCreateContainerSnaps
 	return err
 }
 
+type CreateContainerSnapshot409JSONResponse Error
+
+func (response CreateContainerSnapshot409JSONResponse) VisitCreateContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CreateContainerSnapshot500JSONResponse ErrorResponse
 
 func (response CreateContainerSnapshot500JSONResponse) VisitCreateContainerSnapshotResponse(w http.ResponseWriter) error {
@@ -3034,6 +3188,20 @@ func (response CreateContainerSnapshot500JSONResponse) VisitCreateContainerSnaps
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateContainerSnapshot503JSONResponse Error
+
+func (response CreateContainerSnapshot503JSONResponse) VisitCreateContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3076,6 +3244,20 @@ func (response DeleteContainerSnapshot400JSONResponse) VisitDeleteContainerSnaps
 	return err
 }
 
+type DeleteContainerSnapshot403JSONResponse Error
+
+func (response DeleteContainerSnapshot403JSONResponse) VisitDeleteContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteContainerSnapshot404JSONResponse Error
 
 func (response DeleteContainerSnapshot404JSONResponse) VisitDeleteContainerSnapshotResponse(w http.ResponseWriter) error {
@@ -3090,6 +3272,20 @@ func (response DeleteContainerSnapshot404JSONResponse) VisitDeleteContainerSnaps
 	return err
 }
 
+type DeleteContainerSnapshot409JSONResponse Error
+
+func (response DeleteContainerSnapshot409JSONResponse) VisitDeleteContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteContainerSnapshot500JSONResponse ErrorResponse
 
 func (response DeleteContainerSnapshot500JSONResponse) VisitDeleteContainerSnapshotResponse(w http.ResponseWriter) error {
@@ -3100,6 +3296,20 @@ func (response DeleteContainerSnapshot500JSONResponse) VisitDeleteContainerSnaps
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteContainerSnapshot503JSONResponse Error
+
+func (response DeleteContainerSnapshot503JSONResponse) VisitDeleteContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3142,6 +3352,20 @@ func (response RollbackContainerSnapshot400JSONResponse) VisitRollbackContainerS
 	return err
 }
 
+type RollbackContainerSnapshot403JSONResponse Error
+
+func (response RollbackContainerSnapshot403JSONResponse) VisitRollbackContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type RollbackContainerSnapshot404JSONResponse Error
 
 func (response RollbackContainerSnapshot404JSONResponse) VisitRollbackContainerSnapshotResponse(w http.ResponseWriter) error {
@@ -3156,6 +3380,20 @@ func (response RollbackContainerSnapshot404JSONResponse) VisitRollbackContainerS
 	return err
 }
 
+type RollbackContainerSnapshot409JSONResponse Error
+
+func (response RollbackContainerSnapshot409JSONResponse) VisitRollbackContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type RollbackContainerSnapshot500JSONResponse ErrorResponse
 
 func (response RollbackContainerSnapshot500JSONResponse) VisitRollbackContainerSnapshotResponse(w http.ResponseWriter) error {
@@ -3166,6 +3404,20 @@ func (response RollbackContainerSnapshot500JSONResponse) VisitRollbackContainerS
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RollbackContainerSnapshot503JSONResponse Error
+
+func (response RollbackContainerSnapshot503JSONResponse) VisitRollbackContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3207,6 +3459,20 @@ func (response StartContainer400JSONResponse) VisitStartContainerResponse(w http
 	return err
 }
 
+type StartContainer403JSONResponse Error
+
+func (response StartContainer403JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StartContainer404JSONResponse Error
 
 func (response StartContainer404JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
@@ -3221,6 +3487,20 @@ func (response StartContainer404JSONResponse) VisitStartContainerResponse(w http
 	return err
 }
 
+type StartContainer409JSONResponse Error
+
+func (response StartContainer409JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StartContainer500JSONResponse ErrorResponse
 
 func (response StartContainer500JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
@@ -3231,6 +3511,20 @@ func (response StartContainer500JSONResponse) VisitStartContainerResponse(w http
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartContainer503JSONResponse Error
+
+func (response StartContainer503JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3272,6 +3566,20 @@ func (response StopContainer400JSONResponse) VisitStopContainerResponse(w http.R
 	return err
 }
 
+type StopContainer403JSONResponse Error
+
+func (response StopContainer403JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StopContainer404JSONResponse Error
 
 func (response StopContainer404JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
@@ -3286,6 +3594,20 @@ func (response StopContainer404JSONResponse) VisitStopContainerResponse(w http.R
 	return err
 }
 
+type StopContainer409JSONResponse Error
+
+func (response StopContainer409JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StopContainer500JSONResponse ErrorResponse
 
 func (response StopContainer500JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
@@ -3296,6 +3618,20 @@ func (response StopContainer500JSONResponse) VisitStopContainerResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopContainer503JSONResponse Error
+
+func (response StopContainer503JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3336,6 +3672,20 @@ func (response DeriveHardwareAddress400JSONResponse) VisitDeriveHardwareAddressR
 	return err
 }
 
+type DeriveHardwareAddress403JSONResponse Error
+
+func (response DeriveHardwareAddress403JSONResponse) VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeriveHardwareAddress404JSONResponse Error
 
 func (response DeriveHardwareAddress404JSONResponse) VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error {
@@ -3360,6 +3710,20 @@ func (response DeriveHardwareAddress500JSONResponse) VisitDeriveHardwareAddressR
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeriveHardwareAddress503JSONResponse Error
+
+func (response DeriveHardwareAddress503JSONResponse) VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3421,6 +3785,20 @@ func (response ListMachines400JSONResponse) VisitListMachinesResponse(w http.Res
 	return err
 }
 
+type ListMachines403JSONResponse Error
+
+func (response ListMachines403JSONResponse) VisitListMachinesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListMachines404JSONResponse Error
 
 func (response ListMachines404JSONResponse) VisitListMachinesResponse(w http.ResponseWriter) error {
@@ -3445,6 +3823,20 @@ func (response ListMachines500JSONResponse) VisitListMachinesResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListMachines503JSONResponse Error
+
+func (response ListMachines503JSONResponse) VisitListMachinesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3486,6 +3878,20 @@ func (response CreateMachine400JSONResponse) VisitCreateMachineResponse(w http.R
 	return err
 }
 
+type CreateMachine403JSONResponse Error
+
+func (response CreateMachine403JSONResponse) VisitCreateMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CreateMachine404JSONResponse Error
 
 func (response CreateMachine404JSONResponse) VisitCreateMachineResponse(w http.ResponseWriter) error {
@@ -3510,6 +3916,20 @@ func (response CreateMachine500JSONResponse) VisitCreateMachineResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateMachine503JSONResponse Error
+
+func (response CreateMachine503JSONResponse) VisitCreateMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3547,6 +3967,20 @@ func (response DeleteMachine400JSONResponse) VisitDeleteMachineResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMachine403JSONResponse Error
+
+func (response DeleteMachine403JSONResponse) VisitDeleteMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3593,6 +4027,20 @@ func (response DeleteMachine500JSONResponse) VisitDeleteMachineResponse(w http.R
 	return err
 }
 
+type DeleteMachine503JSONResponse Error
+
+func (response DeleteMachine503JSONResponse) VisitDeleteMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetMachineRequestObject struct {
 	Identifier int64 `json:"identifier"`
 	Params     GetMachineParams
@@ -3630,6 +4078,20 @@ func (response GetMachine400JSONResponse) VisitGetMachineResponse(w http.Respons
 	return err
 }
 
+type GetMachine403JSONResponse Error
+
+func (response GetMachine403JSONResponse) VisitGetMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetMachine404JSONResponse Error
 
 func (response GetMachine404JSONResponse) VisitGetMachineResponse(w http.ResponseWriter) error {
@@ -3654,6 +4116,20 @@ func (response GetMachine500JSONResponse) VisitGetMachineResponse(w http.Respons
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetMachine503JSONResponse Error
+
+func (response GetMachine503JSONResponse) VisitGetMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3696,6 +4172,20 @@ func (response UpdateMachine400JSONResponse) VisitUpdateMachineResponse(w http.R
 	return err
 }
 
+type UpdateMachine403JSONResponse Error
+
+func (response UpdateMachine403JSONResponse) VisitUpdateMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type UpdateMachine404JSONResponse Error
 
 func (response UpdateMachine404JSONResponse) VisitUpdateMachineResponse(w http.ResponseWriter) error {
@@ -3710,6 +4200,20 @@ func (response UpdateMachine404JSONResponse) VisitUpdateMachineResponse(w http.R
 	return err
 }
 
+type UpdateMachine409JSONResponse Error
+
+func (response UpdateMachine409JSONResponse) VisitUpdateMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type UpdateMachine500JSONResponse ErrorResponse
 
 func (response UpdateMachine500JSONResponse) VisitUpdateMachineResponse(w http.ResponseWriter) error {
@@ -3720,6 +4224,20 @@ func (response UpdateMachine500JSONResponse) VisitUpdateMachineResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateMachine503JSONResponse Error
+
+func (response UpdateMachine503JSONResponse) VisitUpdateMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3762,6 +4280,20 @@ func (response CloneMachine400JSONResponse) VisitCloneMachineResponse(w http.Res
 	return err
 }
 
+type CloneMachine403JSONResponse Error
+
+func (response CloneMachine403JSONResponse) VisitCloneMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CloneMachine404JSONResponse Error
 
 func (response CloneMachine404JSONResponse) VisitCloneMachineResponse(w http.ResponseWriter) error {
@@ -3776,6 +4308,20 @@ func (response CloneMachine404JSONResponse) VisitCloneMachineResponse(w http.Res
 	return err
 }
 
+type CloneMachine409JSONResponse Error
+
+func (response CloneMachine409JSONResponse) VisitCloneMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CloneMachine500JSONResponse ErrorResponse
 
 func (response CloneMachine500JSONResponse) VisitCloneMachineResponse(w http.ResponseWriter) error {
@@ -3786,6 +4332,20 @@ func (response CloneMachine500JSONResponse) VisitCloneMachineResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CloneMachine503JSONResponse Error
+
+func (response CloneMachine503JSONResponse) VisitCloneMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3827,6 +4387,20 @@ func (response ResetMachine400JSONResponse) VisitResetMachineResponse(w http.Res
 	return err
 }
 
+type ResetMachine403JSONResponse Error
+
+func (response ResetMachine403JSONResponse) VisitResetMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ResetMachine404JSONResponse Error
 
 func (response ResetMachine404JSONResponse) VisitResetMachineResponse(w http.ResponseWriter) error {
@@ -3841,6 +4415,20 @@ func (response ResetMachine404JSONResponse) VisitResetMachineResponse(w http.Res
 	return err
 }
 
+type ResetMachine409JSONResponse Error
+
+func (response ResetMachine409JSONResponse) VisitResetMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ResetMachine500JSONResponse ErrorResponse
 
 func (response ResetMachine500JSONResponse) VisitResetMachineResponse(w http.ResponseWriter) error {
@@ -3851,6 +4439,20 @@ func (response ResetMachine500JSONResponse) VisitResetMachineResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ResetMachine503JSONResponse Error
+
+func (response ResetMachine503JSONResponse) VisitResetMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3892,6 +4494,20 @@ func (response ShutdownMachine400JSONResponse) VisitShutdownMachineResponse(w ht
 	return err
 }
 
+type ShutdownMachine403JSONResponse Error
+
+func (response ShutdownMachine403JSONResponse) VisitShutdownMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ShutdownMachine404JSONResponse Error
 
 func (response ShutdownMachine404JSONResponse) VisitShutdownMachineResponse(w http.ResponseWriter) error {
@@ -3906,6 +4522,20 @@ func (response ShutdownMachine404JSONResponse) VisitShutdownMachineResponse(w ht
 	return err
 }
 
+type ShutdownMachine409JSONResponse Error
+
+func (response ShutdownMachine409JSONResponse) VisitShutdownMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ShutdownMachine500JSONResponse ErrorResponse
 
 func (response ShutdownMachine500JSONResponse) VisitShutdownMachineResponse(w http.ResponseWriter) error {
@@ -3916,6 +4546,20 @@ func (response ShutdownMachine500JSONResponse) VisitShutdownMachineResponse(w ht
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ShutdownMachine503JSONResponse Error
+
+func (response ShutdownMachine503JSONResponse) VisitShutdownMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -3957,6 +4601,20 @@ func (response ListMachineSnapshots400JSONResponse) VisitListMachineSnapshotsRes
 	return err
 }
 
+type ListMachineSnapshots403JSONResponse Error
+
+func (response ListMachineSnapshots403JSONResponse) VisitListMachineSnapshotsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListMachineSnapshots404JSONResponse Error
 
 func (response ListMachineSnapshots404JSONResponse) VisitListMachineSnapshotsResponse(w http.ResponseWriter) error {
@@ -3981,6 +4639,20 @@ func (response ListMachineSnapshots500JSONResponse) VisitListMachineSnapshotsRes
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListMachineSnapshots503JSONResponse Error
+
+func (response ListMachineSnapshots503JSONResponse) VisitListMachineSnapshotsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4023,6 +4695,20 @@ func (response CreateMachineSnapshot400JSONResponse) VisitCreateMachineSnapshotR
 	return err
 }
 
+type CreateMachineSnapshot403JSONResponse Error
+
+func (response CreateMachineSnapshot403JSONResponse) VisitCreateMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CreateMachineSnapshot404JSONResponse Error
 
 func (response CreateMachineSnapshot404JSONResponse) VisitCreateMachineSnapshotResponse(w http.ResponseWriter) error {
@@ -4037,6 +4723,20 @@ func (response CreateMachineSnapshot404JSONResponse) VisitCreateMachineSnapshotR
 	return err
 }
 
+type CreateMachineSnapshot409JSONResponse Error
+
+func (response CreateMachineSnapshot409JSONResponse) VisitCreateMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CreateMachineSnapshot500JSONResponse ErrorResponse
 
 func (response CreateMachineSnapshot500JSONResponse) VisitCreateMachineSnapshotResponse(w http.ResponseWriter) error {
@@ -4047,6 +4747,20 @@ func (response CreateMachineSnapshot500JSONResponse) VisitCreateMachineSnapshotR
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateMachineSnapshot503JSONResponse Error
+
+func (response CreateMachineSnapshot503JSONResponse) VisitCreateMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4089,6 +4803,20 @@ func (response DeleteMachineSnapshot400JSONResponse) VisitDeleteMachineSnapshotR
 	return err
 }
 
+type DeleteMachineSnapshot403JSONResponse Error
+
+func (response DeleteMachineSnapshot403JSONResponse) VisitDeleteMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteMachineSnapshot404JSONResponse Error
 
 func (response DeleteMachineSnapshot404JSONResponse) VisitDeleteMachineSnapshotResponse(w http.ResponseWriter) error {
@@ -4103,6 +4831,20 @@ func (response DeleteMachineSnapshot404JSONResponse) VisitDeleteMachineSnapshotR
 	return err
 }
 
+type DeleteMachineSnapshot409JSONResponse Error
+
+func (response DeleteMachineSnapshot409JSONResponse) VisitDeleteMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteMachineSnapshot500JSONResponse ErrorResponse
 
 func (response DeleteMachineSnapshot500JSONResponse) VisitDeleteMachineSnapshotResponse(w http.ResponseWriter) error {
@@ -4113,6 +4855,20 @@ func (response DeleteMachineSnapshot500JSONResponse) VisitDeleteMachineSnapshotR
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMachineSnapshot503JSONResponse Error
+
+func (response DeleteMachineSnapshot503JSONResponse) VisitDeleteMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4155,6 +4911,20 @@ func (response RollbackMachineSnapshot400JSONResponse) VisitRollbackMachineSnaps
 	return err
 }
 
+type RollbackMachineSnapshot403JSONResponse Error
+
+func (response RollbackMachineSnapshot403JSONResponse) VisitRollbackMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type RollbackMachineSnapshot404JSONResponse Error
 
 func (response RollbackMachineSnapshot404JSONResponse) VisitRollbackMachineSnapshotResponse(w http.ResponseWriter) error {
@@ -4169,6 +4939,20 @@ func (response RollbackMachineSnapshot404JSONResponse) VisitRollbackMachineSnaps
 	return err
 }
 
+type RollbackMachineSnapshot409JSONResponse Error
+
+func (response RollbackMachineSnapshot409JSONResponse) VisitRollbackMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type RollbackMachineSnapshot500JSONResponse ErrorResponse
 
 func (response RollbackMachineSnapshot500JSONResponse) VisitRollbackMachineSnapshotResponse(w http.ResponseWriter) error {
@@ -4179,6 +4963,20 @@ func (response RollbackMachineSnapshot500JSONResponse) VisitRollbackMachineSnaps
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RollbackMachineSnapshot503JSONResponse Error
+
+func (response RollbackMachineSnapshot503JSONResponse) VisitRollbackMachineSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4220,6 +5018,20 @@ func (response StartMachine400JSONResponse) VisitStartMachineResponse(w http.Res
 	return err
 }
 
+type StartMachine403JSONResponse Error
+
+func (response StartMachine403JSONResponse) VisitStartMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StartMachine404JSONResponse Error
 
 func (response StartMachine404JSONResponse) VisitStartMachineResponse(w http.ResponseWriter) error {
@@ -4234,6 +5046,20 @@ func (response StartMachine404JSONResponse) VisitStartMachineResponse(w http.Res
 	return err
 }
 
+type StartMachine409JSONResponse Error
+
+func (response StartMachine409JSONResponse) VisitStartMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StartMachine500JSONResponse ErrorResponse
 
 func (response StartMachine500JSONResponse) VisitStartMachineResponse(w http.ResponseWriter) error {
@@ -4244,6 +5070,20 @@ func (response StartMachine500JSONResponse) VisitStartMachineResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartMachine503JSONResponse Error
+
+func (response StartMachine503JSONResponse) VisitStartMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4285,6 +5125,20 @@ func (response StopMachine400JSONResponse) VisitStopMachineResponse(w http.Respo
 	return err
 }
 
+type StopMachine403JSONResponse Error
+
+func (response StopMachine403JSONResponse) VisitStopMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StopMachine404JSONResponse Error
 
 func (response StopMachine404JSONResponse) VisitStopMachineResponse(w http.ResponseWriter) error {
@@ -4299,6 +5153,20 @@ func (response StopMachine404JSONResponse) VisitStopMachineResponse(w http.Respo
 	return err
 }
 
+type StopMachine409JSONResponse Error
+
+func (response StopMachine409JSONResponse) VisitStopMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type StopMachine500JSONResponse ErrorResponse
 
 func (response StopMachine500JSONResponse) VisitStopMachineResponse(w http.ResponseWriter) error {
@@ -4309,6 +5177,20 @@ func (response StopMachine500JSONResponse) VisitStopMachineResponse(w http.Respo
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopMachine503JSONResponse Error
+
+func (response StopMachine503JSONResponse) VisitStopMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4349,6 +5231,20 @@ func (response ListNodes400JSONResponse) VisitListNodesResponse(w http.ResponseW
 	return err
 }
 
+type ListNodes403JSONResponse Error
+
+func (response ListNodes403JSONResponse) VisitListNodesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListNodes404JSONResponse Error
 
 func (response ListNodes404JSONResponse) VisitListNodesResponse(w http.ResponseWriter) error {
@@ -4373,6 +5269,20 @@ func (response ListNodes500JSONResponse) VisitListNodesResponse(w http.ResponseW
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListNodes503JSONResponse Error
+
+func (response ListNodes503JSONResponse) VisitListNodesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4414,6 +5324,20 @@ func (response ListNetworks400JSONResponse) VisitListNetworksResponse(w http.Res
 	return err
 }
 
+type ListNetworks403JSONResponse Error
+
+func (response ListNetworks403JSONResponse) VisitListNetworksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListNetworks404JSONResponse Error
 
 func (response ListNetworks404JSONResponse) VisitListNetworksResponse(w http.ResponseWriter) error {
@@ -4438,6 +5362,20 @@ func (response ListNetworks500JSONResponse) VisitListNetworksResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListNetworks503JSONResponse Error
+
+func (response ListNetworks503JSONResponse) VisitListNetworksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4479,6 +5417,20 @@ func (response GetNodeStatus400JSONResponse) VisitGetNodeStatusResponse(w http.R
 	return err
 }
 
+type GetNodeStatus403JSONResponse Error
+
+func (response GetNodeStatus403JSONResponse) VisitGetNodeStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetNodeStatus404JSONResponse Error
 
 func (response GetNodeStatus404JSONResponse) VisitGetNodeStatusResponse(w http.ResponseWriter) error {
@@ -4503,6 +5455,20 @@ func (response GetNodeStatus500JSONResponse) VisitGetNodeStatusResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetNodeStatus503JSONResponse Error
+
+func (response GetNodeStatus503JSONResponse) VisitGetNodeStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4544,6 +5510,20 @@ func (response ListStorages400JSONResponse) VisitListStoragesResponse(w http.Res
 	return err
 }
 
+type ListStorages403JSONResponse Error
+
+func (response ListStorages403JSONResponse) VisitListStoragesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListStorages404JSONResponse Error
 
 func (response ListStorages404JSONResponse) VisitListStoragesResponse(w http.ResponseWriter) error {
@@ -4568,6 +5548,20 @@ func (response ListStorages500JSONResponse) VisitListStoragesResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListStorages503JSONResponse Error
+
+func (response ListStorages503JSONResponse) VisitListStoragesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4610,6 +5604,20 @@ func (response ListStorageContent400JSONResponse) VisitListStorageContentRespons
 	return err
 }
 
+type ListStorageContent403JSONResponse Error
+
+func (response ListStorageContent403JSONResponse) VisitListStorageContentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListStorageContent404JSONResponse Error
 
 func (response ListStorageContent404JSONResponse) VisitListStorageContentResponse(w http.ResponseWriter) error {
@@ -4634,6 +5642,20 @@ func (response ListStorageContent500JSONResponse) VisitListStorageContentRespons
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListStorageContent503JSONResponse Error
+
+func (response ListStorageContent503JSONResponse) VisitListStorageContentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4677,6 +5699,20 @@ func (response DownloadLocator400JSONResponse) VisitDownloadLocatorResponse(w ht
 	return err
 }
 
+type DownloadLocator403JSONResponse Error
+
+func (response DownloadLocator403JSONResponse) VisitDownloadLocatorResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DownloadLocator404JSONResponse Error
 
 func (response DownloadLocator404JSONResponse) VisitDownloadLocatorResponse(w http.ResponseWriter) error {
@@ -4701,6 +5737,20 @@ func (response DownloadLocator500JSONResponse) VisitDownloadLocatorResponse(w ht
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DownloadLocator503JSONResponse Error
+
+func (response DownloadLocator503JSONResponse) VisitDownloadLocatorResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4737,6 +5787,20 @@ func (response Reconcile400JSONResponse) VisitReconcileResponse(w http.ResponseW
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type Reconcile403JSONResponse Error
+
+func (response Reconcile403JSONResponse) VisitReconcileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4819,6 +5883,20 @@ func (response ListSnippets400JSONResponse) VisitListSnippetsResponse(w http.Res
 	return err
 }
 
+type ListSnippets403JSONResponse Error
+
+func (response ListSnippets403JSONResponse) VisitListSnippetsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListSnippets404JSONResponse Error
 
 func (response ListSnippets404JSONResponse) VisitListSnippetsResponse(w http.ResponseWriter) error {
@@ -4880,6 +5958,20 @@ func (response CreateSnippet400JSONResponse) VisitCreateSnippetResponse(w http.R
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateSnippet403JSONResponse Error
+
+func (response CreateSnippet403JSONResponse) VisitCreateSnippetResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -4949,6 +6041,20 @@ func (response DeleteSnippet400JSONResponse) VisitDeleteSnippetResponse(w http.R
 	return err
 }
 
+type DeleteSnippet403JSONResponse Error
+
+func (response DeleteSnippet403JSONResponse) VisitDeleteSnippetResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteSnippet404JSONResponse Error
 
 func (response DeleteSnippet404JSONResponse) VisitDeleteSnippetResponse(w http.ResponseWriter) error {
@@ -5010,6 +6116,20 @@ func (response GetSnippet400JSONResponse) VisitGetSnippetResponse(w http.Respons
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSnippet403JSONResponse Error
+
+func (response GetSnippet403JSONResponse) VisitGetSnippetResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(403)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -6214,57 +7334,60 @@ func (sh *strictHandler) GetSnippet(w http.ResponseWriter, r *http.Request, name
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

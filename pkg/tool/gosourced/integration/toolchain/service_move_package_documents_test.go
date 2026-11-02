@@ -11,7 +11,7 @@ import (
 
 func TestMovePackageRetargetsDocuments(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
-	r, e := service_tester.NewService(t).MovePackage(
+	r, e := service_tester.NewService(t).Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -29,7 +29,7 @@ func TestMovePackageRetargetsDocuments(t *testing.T) {
 
 func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
-	r, e := service_tester.NewService(t).MovePackage(
+	r, e := service_tester.NewService(t).Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -53,12 +53,12 @@ func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 func TestMovePackageKeepsADocumentEditedMeanwhile(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
 	s := service_tester.NewService(t)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			testutil.WriteFile(t, d, "doc/note.md", "Edited meanwhile.\n")
 		},
 	)
-	r, e := s.MovePackage(
+	r, e := s.Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",

@@ -22,7 +22,7 @@ func (s *Server) ListPipelines(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.Pipelines(instance, project, a.Reference, a.Status, 20)
+	v, e := s.service.Pipelines(x, instance, project, a.Reference, a.Status, 20)
 
 	if e != nil {
 		return s.answerWith(e, "")

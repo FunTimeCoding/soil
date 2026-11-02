@@ -1,6 +1,7 @@
 package commit
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -12,13 +13,15 @@ func Run(o *option.Commit) {
 	validate(o)
 	c := gitlab.New(o.Host, o.Token)
 	defer c.Close()
-	p := common.FindProjectOrExit(c, o.Owner, o.Repository)
+	x := context.Background()
+	p := common.FindProjectOrExit(x, c, o.Owner, o.Repository)
 	c.MustCommit(
+		x,
 		p.Identifier,
 		o.Branch,
 		o.Message,
 		o.Path,
 		strings.ReplaceAllSlice(system.ReadFileUnsafe(o.Template), o.Replace),
-		c.MustFileExists(p, o.Branch, o.Path),
+		c.MustFileExists(x, p, o.Branch, o.Path),
 	)
 }

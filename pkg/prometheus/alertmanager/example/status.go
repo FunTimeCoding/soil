@@ -6,7 +6,9 @@ import (
 )
 
 func Status() {
-	s := common.Alertmanager().MustStatus()
+	c := common.Alertmanager()
+	defer c.Close()
+	s := c.MustStatus()
 	console.Format("Status: %+v\n", s)
 	console.Format("  Cluster: %+v\n", s.Cluster)
 	console.Format("    Status: %s\n", *s.Cluster.Status)

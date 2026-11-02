@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"regexp"
 )
 
@@ -18,8 +18,8 @@ const (
 )
 
 var (
-	Format = constant.ExtendedColorFormat
-	Dense  = constant.ColorFormat
+	Format = consoleConstant.ExtendedColorFormat
+	Dense  = consoleConstant.ColorFormat
 )
 
 const (

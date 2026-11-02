@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/variable"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) CreateProjectVariable(
+	x context.Context,
 	project int64,
 	key string,
 	value string,
@@ -22,6 +24,7 @@ func (c *Client) CreateProjectVariable(
 			Masked:    &masked,
 			Raw:       &literal,
 		},
+		gitlab.WithContext(x),
 	)
 
 	if e != nil {

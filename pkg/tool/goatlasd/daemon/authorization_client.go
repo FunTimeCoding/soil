@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func authorizationClient(o *option.Atlas) *client.Client {
@@ -12,8 +12,8 @@ func authorizationClient(o *option.Atlas) *client.Client {
 		o.Issuer,
 		o.ClientIdentifier,
 		o.ClientSecret,
-		constant.SignInPath,
-		join.Empty(o.PublicLocator, constant.CallbackPath),
+		webConstant.SignInPath,
+		join.Empty(o.PublicLocator, webConstant.CallbackPath),
 		client.DeriveKey(o.EncryptionSecret),
 	)
 }

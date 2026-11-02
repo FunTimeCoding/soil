@@ -4,6 +4,7 @@ package store
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
@@ -14,11 +15,13 @@ func embedTestDocuments(
 	s *store.Store,
 	o *ollama.Client,
 ) error {
+	r := mock_reranker.New()
+	defer errors.LogClose(r)
 	pending := s.PendingEmbeddings()
 	now := "2024-01-01T00:00:00Z"
 
 	for _, p := range pending {
-		chunks := chunk.Document(p.Body, p.Path, mock_reranker.New())
+		chunks := chunk.Document(p.Body, p.Path, r)
 		texts := make([]string, len(chunks))
 
 		for i, c := range chunks {

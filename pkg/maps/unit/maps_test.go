@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/maps"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -20,7 +20,10 @@ func TestIntegerKeys(t *testing.T) {
 		t,
 		[]int{0, 1},
 		maps.IntegerKeys(
-			map[int]string{0: constant.UpperAlfa, 1: constant.UpperBravo},
+			map[int]string{
+				0: stringsConstant.UpperAlfa,
+				1: stringsConstant.UpperBravo,
+			},
 		),
 	)
 }
@@ -30,7 +33,10 @@ func TestStringKeys(t *testing.T) {
 		t,
 		[]string{"Alfa", "Bravo"},
 		maps.StringKeys(
-			map[string]int{constant.UpperAlfa: 0, constant.UpperBravo: 1},
+			map[string]int{
+				stringsConstant.UpperAlfa:  0,
+				stringsConstant.UpperBravo: 1,
+			},
 		),
 	)
 }
@@ -41,8 +47,8 @@ func TestJoin(t *testing.T) {
 		[]string{"Alfa", "Bravo"},
 		maps.StringKeys(
 			maps.Join(
-				map[string]int{constant.UpperAlfa: 0},
-				map[string]int{constant.UpperBravo: 1},
+				map[string]int{stringsConstant.UpperAlfa: 0},
+				map[string]int{stringsConstant.UpperBravo: 1},
 			),
 		),
 	)
@@ -53,8 +59,8 @@ func TestJoinLaterPartWins(t *testing.T) {
 		t,
 		1,
 		maps.Join(
-			map[string]any{constant.UpperAlfa: 0},
-			map[string]any{constant.UpperAlfa: 1},
+			map[string]any{stringsConstant.UpperAlfa: 0},
+			map[string]any{stringsConstant.UpperAlfa: 1},
 		),
 		"Alfa",
 	)

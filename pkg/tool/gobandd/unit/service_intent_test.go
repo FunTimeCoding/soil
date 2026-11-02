@@ -3,7 +3,7 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	band "github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
@@ -20,7 +20,7 @@ func TestAShutdownRecordsTheHostOffline(t *testing.T) {
 
 func TestAStartRecordsTheHostActive(t *testing.T) {
 	v, n, engine, _ := intentService(t)
-	engine.SetPower(band.PowerOffSoft, band.PowerOn)
+	engine.SetPower(bandConstant.PowerOffSoft, bandConstant.PowerOn)
 	_, e := v.Power("alfa", constant.OperationStart, false)
 	assert.FatalOnError(t, e)
 	assert.String(t, "active", *n.Updated["alfa"].Status)
@@ -28,7 +28,7 @@ func TestAStartRecordsTheHostActive(t *testing.T) {
 
 func TestARefusedPowerRequestRecordsNothing(t *testing.T) {
 	v, n, engine, _ := intentService(t)
-	engine.SetPower(band.PowerOn, hardStates()...)
+	engine.SetPower(bandConstant.PowerOn, hardStates()...)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.NotNil(t, e)
 	assert.Count(t, 0, n.Updated)
@@ -44,7 +44,7 @@ func TestARebootRecordsNothing(t *testing.T) {
 func TestAPowerActionWithoutTheSwitchRecordsNothing(t *testing.T) {
 	v, engines := service_tester.New(t, memory.New(), "alfa")
 	engine := engines["alfa"]
-	engine.SetPower(band.PowerOn, runningStates()...)
+	engine.SetPower(bandConstant.PowerOn, runningStates()...)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
 	assert.Integers(t, []int{12}, engine.Requested())

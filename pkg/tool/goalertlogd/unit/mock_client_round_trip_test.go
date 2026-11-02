@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
 	"testing"
@@ -18,7 +18,7 @@ func TestTheMockAnswersWhatTheServerAnswers(t *testing.T) {
 			alert.NewBasic(
 				fmt.Sprintf("fp%d", i),
 				fmt.Sprintf("Alert%d", i),
-				constant.WarningSeverity,
+				prometheusConstant.WarningSeverity,
 				"",
 			),
 		)

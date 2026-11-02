@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
@@ -52,7 +52,7 @@ func (s *Service) resolveTab(v *selector.Selector) (*tab.Tab, error) {
 	}
 
 	for _, t := range tabs {
-		if t.Type == constant.PageTabType {
+		if t.Type == chromiumConstant.PageTabType {
 			return t, nil
 		}
 	}

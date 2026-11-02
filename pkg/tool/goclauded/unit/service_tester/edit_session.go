@@ -9,5 +9,5 @@ func (o *Tester) EditSession(
 	identifier string,
 	a *edit_session.Session,
 ) {
-	assert.FatalOnError(o.t, o.Service.EditSession(identifier, a))
+	assert.FatalOnError(o.t, o.Roster.EditSession(identifier, a))
 }

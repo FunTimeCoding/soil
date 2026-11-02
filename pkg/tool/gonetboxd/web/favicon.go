@@ -3,7 +3,7 @@ package web
 import (
 	_ "embed"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -14,6 +14,6 @@ func (*Server) favicon(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	w.Header().Set(constant.ContentType, constant.Graphic)
+	w.Header().Set(webConstant.ContentType, webConstant.Graphic)
 	web.WriteBytes(w, http.StatusOK, favicon)
 }

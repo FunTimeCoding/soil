@@ -29,7 +29,7 @@ func TestAWriteMeetingABadGatewayIsSentOnce(t *testing.T) {
 		},
 		gitlab.WithRetryMax(1),
 	)
-	_, e := r.Client.CreatePipeline(7, "main", nil)
+	_, e := r.Client.CreatePipeline(t.Context(), 7, "main", nil)
 	assert.Error(t, e)
 	assert.Integer(t, 1, int(sent.Load()))
 }
@@ -53,7 +53,7 @@ func TestAReadMeetingABadGatewayIsRetried(t *testing.T) {
 		},
 		gitlab.WithRetryMax(1),
 	)
-	_, e := r.Client.Project(7)
+	_, e := r.Client.Project(t.Context(), 7)
 	assert.Error(t, e)
 	assert.Integer(t, 2, int(sent.Load()))
 }

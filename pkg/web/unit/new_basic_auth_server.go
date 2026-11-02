@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"net/http"
 	"net/http/httptest"
@@ -18,7 +18,7 @@ func newBasicAuthServer(t *testing.T) (*httptest.Server, *string) {
 				r *http.Request,
 			) {
 				user, password, _ := r.BasicAuth()
-				seen = join.Empty(user, constant.Colon, password)
+				seen = join.Empty(user, stringsConstant.Colon, password)
 				w.WriteHeader(http.StatusOK)
 			},
 		),

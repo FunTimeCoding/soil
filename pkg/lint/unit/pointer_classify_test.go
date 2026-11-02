@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"testing"
 )
 
@@ -27,7 +27,7 @@ func TestClassifyRepository(t *testing.T) {
 
 func TestClassifyShort(t *testing.T) {
 	assert.String(t, "short", classify("tmp/gosec.json"))
-	assert.String(t, "short", classify(constant.SoilModule))
+	assert.String(t, "short", classify(soil.SoilModule))
 }
 
 func TestClassifyCommand(t *testing.T) {

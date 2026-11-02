@@ -2,7 +2,6 @@ package goname
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/terminal"
@@ -26,5 +25,5 @@ func Main() {
 	o.AddCommand(deleteRecord(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
-	errors.PanicOnError(o.Execute())
+	argument.CobraExecute(o)
 }

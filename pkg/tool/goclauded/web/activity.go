@@ -11,7 +11,7 @@ func (s *Server) activity(
 	x context.Context,
 	kinds []string,
 ) (gomponents.Node, error) {
-	entries, e := s.service.Timeline(
+	entries, e := s.event.Timeline(
 		x,
 		argument.Timeline{Kinds: kinds, Limit: 10},
 	)

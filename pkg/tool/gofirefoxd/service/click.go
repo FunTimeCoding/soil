@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/firefox/constant"
+	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
 	"github.com/funtimecoding/soil/pkg/firefox/element"
 )
 
@@ -11,7 +11,7 @@ func (s *Service) Click(
 	selector string,
 ) (*element.Element, error) {
 	if selector == "" {
-		return nil, validation.New(constant.SelectorRequired)
+		return nil, validation.New(firefoxConstant.SelectorRequired)
 	}
 
 	return s.client.Click(identifier, selector)

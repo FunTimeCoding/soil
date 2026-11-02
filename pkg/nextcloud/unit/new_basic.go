@@ -13,10 +13,12 @@ func newBasic(
 ) *basic.Client {
 	t.Helper()
 	host, p := upstream_tester.HostPort(t, server)
-
-	return basic.New(
+	result := basic.New(
 		helper.FileRootLocator(host, "alfa").Insecure().Port(p),
 		"alfa",
 		"bravo-password",
 	)
+	t.Cleanup(result.Close)
+
+	return result
 }

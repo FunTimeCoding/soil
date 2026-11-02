@@ -13,7 +13,7 @@ func TestUnexportFunction(t *testing.T) {
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"IsGenerated",
@@ -36,7 +36,7 @@ func TestExportFunction(t *testing.T) {
 		service_tester.ServiceTestdata("export-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"isGenerated",
@@ -59,7 +59,7 @@ func TestUnexportMethod(t *testing.T) {
 		service_tester.ServiceTestdata("unexport-method/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"Save",
@@ -82,7 +82,7 @@ func TestCollisionDetection(t *testing.T) {
 		service_tester.ServiceTestdata("collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"IsGenerated",
@@ -101,7 +101,7 @@ func TestSymbolNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"Missing",
@@ -120,7 +120,7 @@ func TestPackageNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"IsGenerated",
@@ -139,7 +139,7 @@ func TestUnexportBlockedByCrossPackageCaller(t *testing.T) {
 		service_tester.ServiceTestdata("cross-package/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ChangeVisibility(
+	r, e := s.Symbol.ChangeVisibility(
 		t.Context(),
 		d,
 		"IsValid",

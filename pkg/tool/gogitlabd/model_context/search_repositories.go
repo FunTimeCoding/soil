@@ -22,7 +22,7 @@ func (s *Server) SearchRepositories(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.Projects(instance, a.Query)
+	v, e := s.service.Projects(x, instance, a.Query)
 
 	if e != nil {
 		return s.answerWith(e, "")

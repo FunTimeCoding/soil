@@ -10,6 +10,6 @@ func (o *Tester) Complete(
 ) {
 	assert.FatalOnError(
 		o.t,
-		o.Service.Complete(sessionIdentifier, name, topic, message),
+		o.Event.Complete(sessionIdentifier, name, topic, message),
 	)
 }

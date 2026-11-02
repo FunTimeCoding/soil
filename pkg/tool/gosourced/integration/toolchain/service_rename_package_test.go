@@ -16,7 +16,7 @@ func TestRenamePackage(t *testing.T) {
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackage(
+	r, e := s.Packages.RenamePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -62,7 +62,7 @@ func TestRenamePackageShadowed(t *testing.T) {
 		service_tester.ServiceTestdata("rename-collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackage(
+	r, e := s.Packages.RenamePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -80,7 +80,7 @@ func TestRenamePackageSameName(t *testing.T) {
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackage(
+	r, e := s.Packages.RenamePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",

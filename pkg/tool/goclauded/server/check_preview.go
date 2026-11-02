@@ -1,18 +1,18 @@
 package server
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
 func (s *Server) checkPreview(
 	sessionIdentifier string,
 ) (server.GetCheckResponseObject, error) {
-	callsign, e := s.service.CallsignBySessionIdentifier(sessionIdentifier)
+	callsign, e := s.roster.CallsignBySessionIdentifier(sessionIdentifier)
 
 	if e != nil {
 		return server.GetCheck500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -23,19 +23,19 @@ func (s *Server) checkPreview(
 		}, nil
 	}
 
-	entries, e := s.service.PeekQueue(sessionIdentifier, callsign)
+	entries, e := s.message.PeekQueue(sessionIdentifier, callsign)
 
 	if e != nil {
 		return server.GetCheck500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
-	text, e := s.service.Render(entries)
+	text, e := s.message.Render(entries)
 
 	if e != nil {
 		return server.GetCheck500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -31,7 +31,7 @@ func (s *Server) matchPattern(
 		return s.captureDetail(e)
 	}
 
-	r, match, f := s.service.MatchPattern(
+	r, match, f := s.pattern.MatchPattern(
 		directory,
 		a.PackagePath,
 		a.Symbol,
@@ -40,7 +40,7 @@ func (s *Server) matchPattern(
 	)
 
 	if f != nil {
-		return s.captureFail(f, constant.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if match == nil {

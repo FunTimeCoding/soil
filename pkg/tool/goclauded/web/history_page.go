@@ -21,7 +21,7 @@ func (s *Server) historyPage(
 	}
 
 	kinds := q.URL.Query()[constant.Kind]
-	entries, f := s.service.Timeline(
+	entries, f := s.event.Timeline(
 		q.Context(),
 		argument.Timeline{
 			Kinds:  kinds,

@@ -11,7 +11,7 @@ import (
 func TestRenameSymbols(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	r, e := s.RenameSymbols(
+	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -40,7 +40,7 @@ func TestRenameSymbols(t *testing.T) {
 func TestRenameSymbolsRefusedItemBlocksBatch(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	r, e := s.RenameSymbols(
+	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -64,7 +64,7 @@ func TestRenameSymbolsRefusedItemBlocksBatch(t *testing.T) {
 func TestRenameSymbolsSameTarget(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	r, e := s.RenameSymbols(
+	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -86,7 +86,7 @@ func TestRenameSymbolsSameTarget(t *testing.T) {
 func TestRenameSymbolsListedTwice(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	r, e := s.RenameSymbols(
+	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -104,7 +104,7 @@ func TestRenameSymbolsListedTwice(t *testing.T) {
 func TestRenameSymbolsOntoFreedName(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	r, e := s.RenameSymbols(
+	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",

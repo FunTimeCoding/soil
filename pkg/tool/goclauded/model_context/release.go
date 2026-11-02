@@ -24,7 +24,7 @@ func (s *Server) release(
 		)
 	}
 
-	if e := s.service.Release(c.SessionIdentifier, c.Callsign); e != nil {
+	if e := s.roster.Release(c.SessionIdentifier, c.Callsign); e != nil {
 		return s.captureFail(e, soil.UnexpectedError)
 	}
 

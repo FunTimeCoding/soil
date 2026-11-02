@@ -2,6 +2,8 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/credential"
+	generative "github.com/funtimecoding/soil/pkg/generative/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
@@ -24,4 +26,6 @@ type Option struct {
 	Notifier            func() face.Notifier
 	Browser             func() *chromium.Client
 	Sources             func() []string
+	Utilization         func() generative.AnthropicClient
+	Credential          func() *credential.Credential
 }

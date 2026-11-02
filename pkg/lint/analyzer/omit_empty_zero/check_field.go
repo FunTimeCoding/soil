@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/suppress"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/structs/constant"
+	structsConstant "github.com/funtimecoding/soil/pkg/structs/constant"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"reflect"
@@ -23,7 +23,7 @@ func checkField(
 
 	tag := reflect.StructTag(
 		strings.Trim(field.Tag.Value, "`"),
-	).Get(constant.NotationKey)
+	).Get(structsConstant.NotationKey)
 
 	if !hasOmitEmpty(tag) {
 		return

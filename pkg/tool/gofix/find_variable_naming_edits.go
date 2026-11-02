@@ -2,7 +2,7 @@ package gofix
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/variable_naming"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -23,7 +23,7 @@ func findVariableNamingEdits(
 
 	for _, p := range all {
 		for _, file := range p.Syntax {
-			if filepath.Base(p.Fset.File(file.Pos()).Name()) == constant.GeneratedFile {
+			if filepath.Base(p.Fset.File(file.Pos()).Name()) == soil.GeneratedFile {
 				continue
 			}
 

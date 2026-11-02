@@ -2,7 +2,6 @@ package gosublime
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
 )
@@ -26,21 +25,9 @@ func create(x *Context) *cobra.Command {
 				body.Syntax = &syntax
 			}
 
-			r, e := x.Client.CreateViewWithResponse(context.Background(), body)
-
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			console.Format("created view %d\n", r.JSON200.ViewId)
+			x.Terminal.EmitValue(
+				x.Client.CreateView(context.Background(), body),
+			)
 		},
 	}
 	result.Flags().StringVar(&syntax, "syntax", "", "syntax name")

@@ -2,7 +2,7 @@ package module
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (m *Module) formatRelease() string {
@@ -12,7 +12,7 @@ func (m *Module) formatRelease() string {
 
 	return fmt.Sprintf(
 		"%s (%d months)",
-		m.Release.Format(constant.DateYear),
+		m.Release.Format(timeConstant.DateYear),
 		m.Months,
 	)
 }

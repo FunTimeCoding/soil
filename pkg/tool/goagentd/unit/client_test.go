@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/run/stream/mock_stream"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client/mock_client"
@@ -22,7 +22,7 @@ func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
 	s := mock_stream.New([]string{"lima"}, true, nil)
 	defer s.Close()
 	d := daemon_tester.New(t, service_tester.Fixed(s))
-	c := mountedClient(t, d, constant.ModelContextTestToken)
+	c := mountedClient(t, d, generativeConstant.ModelContextTestToken)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	assert.True(t, validation.Is(c.PostRun(t.Context(), "")))
 	assert.FatalOnError(t, c.PostRun(t.Context(), "mike"))
@@ -37,20 +37,18 @@ func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
 }
 
 func TestTheClientHearsAClosingRunner(t *testing.T) {
-	d := daemon_tester.New(
-		t,
-		service_tester.Fixed(mock_stream.New(nil, false, nil)),
-	)
-	c := mountedClient(t, d, constant.ModelContextTestToken)
+	stream := mock_stream.New(nil, false, nil)
+	t.Cleanup(stream.Close)
+	d := daemon_tester.New(t, service_tester.Fixed(stream))
+	c := mountedClient(t, d, generativeConstant.ModelContextTestToken)
 	d.Close()
 	assert.True(t, unavailable.Is(c.PostRun(t.Context(), "oscar")))
 }
 
 func TestARefusedTokenIsAnError(t *testing.T) {
-	d := daemon_tester.New(
-		t,
-		service_tester.Fixed(mock_stream.New(nil, false, nil)),
-	)
+	stream := mock_stream.New(nil, false, nil)
+	t.Cleanup(stream.Close)
+	d := daemon_tester.New(t, service_tester.Fixed(stream))
 	c := mountedClient(t, d, "papa-wrong")
 	_, e := c.GetStatus(t.Context())
 	assert.True(t, unexpected.Is(e))

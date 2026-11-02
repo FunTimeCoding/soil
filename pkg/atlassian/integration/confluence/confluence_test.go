@@ -21,6 +21,8 @@ func TestUserAndSpacesRead(t *testing.T) {
 }
 
 func TestMissingPageIsNotFound(t *testing.T) {
-	_, e := confluence.NewEnvironment().Page("999999999999")
+	owned := confluence.NewEnvironment()
+	defer owned.Close()
+	_, e := owned.Page("999999999999")
 	assert.True(t, not_found.Is(e))
 }

@@ -1,15 +1,15 @@
 package utilization
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"runtime"
 )
 
 func rawCredential() string {
 	switch runtime.GOOS {
-	case constant.Darwin:
+	case systemConstant.Darwin:
 		return keychainRaw()
-	case constant.Linux:
+	case systemConstant.Linux:
 		return fileRaw()
 	default:
 		return ""

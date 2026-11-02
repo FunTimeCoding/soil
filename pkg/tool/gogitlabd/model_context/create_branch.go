@@ -30,7 +30,7 @@ func (s *Server) CreateBranch(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.CreateBranch(instance, project, a.Branch, a.Reference)
+	v, e := s.service.CreateBranch(x, instance, project, a.Branch, a.Reference)
 
 	if e != nil {
 		return s.answerWith(e, "")

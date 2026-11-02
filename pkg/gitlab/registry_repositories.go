@@ -1,6 +1,7 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
@@ -8,6 +9,7 @@ import (
 )
 
 func (c *Client) RegistryRepositories(
+	x context.Context,
 	project int64,
 	panicOnForbidden bool,
 ) ([]*registry_repository.Repository, error) {
@@ -23,6 +25,7 @@ func (c *Client) RegistryRepositories(
 					Page:    number,
 				},
 			},
+			gitlab.WithContext(x),
 		)
 
 		if !panicOnForbidden && r != nil && r.StatusCode == 403 {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
@@ -26,7 +26,7 @@ func TestPutMemoryWithDescriptionOnly(t *testing.T) {
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
-			web.BearerEditor(constant.ModelContextTestToken),
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	errors.PanicOnError(f)
@@ -56,7 +56,7 @@ func TestPutMemoryWithEmptyContentSetsIt(t *testing.T) {
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
-			web.BearerEditor(constant.ModelContextTestToken),
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	errors.PanicOnError(f)

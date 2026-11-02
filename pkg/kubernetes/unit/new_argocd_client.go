@@ -12,6 +12,8 @@ func newArgocdClient(
 ) *argocd.Client {
 	t.Helper()
 	host, port := upstream_tester.HostPort(t, server)
+	result := argocd.New(host, port, false, "alfa-token")
+	t.Cleanup(result.Close)
 
-	return argocd.New(host, port, false, "alfa-token")
+	return result
 }

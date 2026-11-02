@@ -1,7 +1,7 @@
 package image
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"golang.org/x/mod/semver"
 )
 
@@ -11,7 +11,7 @@ func Latest(v []*Image) *Image {
 	for _, e := range v {
 		current := e.Version()
 
-		if current == constant.LatestVersion {
+		if current == soil.LatestVersion {
 			continue
 		}
 

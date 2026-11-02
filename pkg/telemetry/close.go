@@ -1,5 +1,5 @@
 package telemetry
 
 func (c *Client) Close() {
-	c.pool.Close()
+	c.client.Close()
 }

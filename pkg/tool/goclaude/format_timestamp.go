@@ -1,7 +1,7 @@
 package goclaude
 
 import (
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -20,5 +20,5 @@ func formatTimestamp(ts string) string {
 		return ts
 	}
 
-	return t.Local().Format(constant.DateMinute)
+	return t.Local().Format(timeConstant.DateMinute)
 }

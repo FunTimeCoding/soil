@@ -3,7 +3,7 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
@@ -19,7 +19,7 @@ func (s *Store) ListRelationsAmong(
 	var arguments []any
 
 	for _, identifier := range identifiers {
-		placeholders = append(placeholders, constant.Question)
+		placeholders = append(placeholders, stringsConstant.Question)
 		arguments = append(arguments, identifier)
 	}
 

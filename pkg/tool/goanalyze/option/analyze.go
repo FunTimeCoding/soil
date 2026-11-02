@@ -1,5 +1,7 @@
 package option
 
+import "io"
+
 type Analyze struct {
 	Root     string
 	Summary  bool
@@ -7,4 +9,5 @@ type Analyze struct {
 	Full     bool
 	Index    string
 	Patterns []string
+	Notice   io.Writer
 }

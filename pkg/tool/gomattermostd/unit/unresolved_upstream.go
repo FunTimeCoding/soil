@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/mattermost/mattermost/server/public/model"
 	"net/http"
@@ -61,7 +61,7 @@ func unresolvedUpstream(m *http.ServeMux) {
 	serve(
 		"/api/v4/posts/bravo/reactions",
 		[]*model.Reaction{
-			{PostId: "bravo", EmojiName: constant.MattermostDoneReaction},
+			{PostId: "bravo", EmojiName: chatConstant.MattermostDoneReaction},
 		},
 	)
 	serve(

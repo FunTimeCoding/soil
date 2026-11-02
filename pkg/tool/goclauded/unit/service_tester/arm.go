@@ -11,5 +11,5 @@ func (o *Tester) Arm(
 	mode constant.Cruise,
 	pace time.Duration,
 ) {
-	assert.FatalOnError(o.t, o.Service.SetCruise(sessionIdentifier, mode, pace))
+	assert.FatalOnError(o.t, o.Message.SetCruise(sessionIdentifier, mode, pace))
 }

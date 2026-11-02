@@ -17,7 +17,7 @@ func TestChannelHoldEndsBeforeTheClientGivesUp(t *testing.T) {
 func TestAwaitImmediateQueueReleasesAfterTheHold(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
-	drained, e := s.Service.AwaitImmediateQueue(
+	drained, e := s.Message.AwaitImmediateQueue(
 		context.Background(),
 		"session-1",
 		r1.Callsign,
@@ -29,7 +29,7 @@ func TestAwaitImmediateQueueReleasesAfterTheHold(t *testing.T) {
 
 func TestAwaitCallsignReleasesAfterTheHold(t *testing.T) {
 	s := service_tester.New(t)
-	callsign, e := s.Service.AwaitCallsign(
+	callsign, e := s.Message.AwaitCallsign(
 		context.Background(),
 		"session-unknown",
 		s.Store.Clock()(),

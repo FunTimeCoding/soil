@@ -1,7 +1,7 @@
 package region
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
@@ -18,9 +18,9 @@ func Replace(
 
 	return join.Empty(
 		content[:inner],
-		constant.Unix,
+		stringsConstant.Unix,
 		block,
-		constant.Unix,
+		stringsConstant.Unix,
 		content[closing:],
 	), nil
 }

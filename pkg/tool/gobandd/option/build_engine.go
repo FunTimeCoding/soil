@@ -2,7 +2,7 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/band"
-	"github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/band/face"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
@@ -19,7 +19,7 @@ func BuildEngine(i *instance.Instance) (face.BandClient, error) {
 	user := i.User
 
 	if user == "" {
-		user = constant.DefaultUser
+		user = bandConstant.DefaultUser
 	}
 
 	return band.New(i.Locator(), user, i.Password), nil

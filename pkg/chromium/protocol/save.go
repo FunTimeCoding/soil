@@ -6,7 +6,7 @@ import (
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"os"
 	"time"
 )
@@ -17,7 +17,7 @@ func (p *Protocol) Save(
 ) error {
 	console.Line("  Save")
 	start := time.Now()
-	console.Format("    Start %v\n", start.Format(constant.Micro))
+	console.Format("    Start %v\n", start.Format(timeConstant.Micro))
 	b, e := run(
 		p,
 		func(
@@ -27,7 +27,7 @@ func (p *Protocol) Save(
 			t2 := time.Now()
 			console.Format(
 				"    GetResourceTree %v\n",
-				t2.Format(constant.Micro),
+				t2.Format(timeConstant.Micro),
 			)
 			t, e := cdp.Call(o, s, page.GetResourceTree, cdp.Empty{})
 

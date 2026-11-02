@@ -9,7 +9,7 @@ import (
 
 func TestMoveKeepsAHelperOnlyTheBatchCallsPrivate(t *testing.T) {
 	d := moveVisibilityFixture(t)
-	r, e := service_tester.NewService(t).MoveSymbols(
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -38,7 +38,7 @@ func TestMoveKeepsAHelperOnlyTheBatchCallsPrivate(t *testing.T) {
 
 func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 	d := moveVisibilityFixture(t)
-	r, e := service_tester.NewService(t).MoveSymbols(
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -67,7 +67,7 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 
 func TestMoveExportsWhatAnInPackageTestCalls(t *testing.T) {
 	d := moveVisibilityFixture(t)
-	r, e := service_tester.NewService(t).MoveSymbols(
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/alfa",

@@ -1,7 +1,13 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/tag"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
+)
 
-func (c *Client) Tags(_ int64) ([]*tag.Tag, error) {
+func (c *Client) Tags(
+	_ context.Context,
+	_ int64,
+) ([]*tag.Tag, error) {
 	return c.tags, nil
 }

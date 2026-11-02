@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/relational/lite/zone"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 	"time"
 )
@@ -47,7 +47,7 @@ func TestZoneReadsLocalTime(t *testing.T) {
 	errors.PanicOnError(
 		d.QueryRow(
 			constant.FixtureEventTime,
-			stringConstant.LowerAlfa,
+			stringsConstant.LowerAlfa,
 		).Scan(&read),
 	)
 	assert.True(t, read.Location() == time.Local)
@@ -62,12 +62,12 @@ func TestNormalizeConvertsStoredOffsets(t *testing.T) {
 
 	for _, v := range [][]any{
 		{
-			stringConstant.LowerAlfa,
+			stringsConstant.LowerAlfa,
 			"2026-10-25 02:30:00.123456+02:00",
 			"2026-13-45 02:30:00+02:00",
 		},
-		{stringConstant.LowerBravo, "2026-10-25 00:30:00+00:00", nil},
-		{stringConstant.LowerCharlie, "2026-10-25 02:30:00+01:00", nil},
+		{stringsConstant.LowerBravo, "2026-10-25 00:30:00+00:00", nil},
+		{stringsConstant.LowerCharlie, "2026-10-25 02:30:00+01:00", nil},
 	} {
 		_, f := d.Exec(constant.FixtureInsertNotedEvent, v...)
 		errors.PanicOnError(f)
@@ -98,7 +98,7 @@ func TestNormalizeRunsOnce(t *testing.T) {
 	zone.Normalize(d)
 	_, e = d.Exec(
 		constant.FixtureInsertEvent,
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"2026-10-25 02:30:00+02:00",
 	)
 	errors.PanicOnError(e)

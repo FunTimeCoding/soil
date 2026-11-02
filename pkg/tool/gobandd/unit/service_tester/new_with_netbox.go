@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
 	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"testing"
 )
 
@@ -21,7 +21,7 @@ func NewWithNetbox(
 	n := netbox.New()
 	t.Cleanup(n.Close)
 	g := peer.New(
-		constant.Identity.Name(),
+		gonetboxdConstant.Identity.Name(),
 		n.Address(),
 		n,
 		logger.New(t.Context()),

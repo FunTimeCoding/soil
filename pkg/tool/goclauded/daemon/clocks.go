@@ -5,37 +5,59 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/roster"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/search"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/transcript"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/usage"
 	"github.com/funtimecoding/soil/pkg/worker"
 )
 
 func clocks(
-	v *service.Service,
+	v *roster.Service,
+	t *transcript.Service,
+	m *message.Service,
+	y *memory.Service,
+	u *usage.Service,
+	x *search.Service,
+	d *document.Service,
 	o *option.Option,
 	l *logger.Logger,
 	r face.Reporter,
 ) []face.Worker {
 	result := []face.Worker{
-		worker.NewOnce(v.Warm, l, r),
-		worker.NewOnce(v.CatchUpSearch, l, r),
-		worker.New(v.Reconcile, l, r, constant.ReconcileInterval),
-		interim(v.RunTimeoutSweep, l, r, constant.TimeoutSweepInterval),
-		interim(v.PollMemory, l, r, constant.MemoryPollInterval),
-		interim(v.DeliverImpressions, l, r, constant.ImpressionInterval),
-		interim(v.ReleaseCruise, l, r, constant.CruiseInterval),
+		worker.NewOnce(t.Warm, l, r),
+		worker.NewOnce(x.CatchUpSearch, l, r),
+		worker.New(d.Reconcile, l, r, constant.ReconcileInterval),
+		worker.NewEvery(
+			v.RunTimeoutSweep,
+			l,
+			r,
+			constant.TimeoutSweepInterval,
+		).WithDelayedStart(),
+		worker.NewEvery(y.PollMemory, l, r, constant.MemoryPollInterval),
+		worker.NewEvery(y.DeliverImpressions, l, r, constant.ImpressionInterval),
+		worker.NewEvery(m.ReleaseCruise, l, r, constant.CruiseInterval),
 	}
 
 	if o.MonitorUsage {
 		result = append(
 			result,
-			interim(v.PollUsage, l, r, constant.UsagePollInterval),
+			worker.NewEvery(u.PollUsage, l, r, constant.UsagePollInterval),
 		)
 	}
 
 	if o.UtilizationFallback {
 		result = append(
 			result,
-			interim(v.PollUtilization, l, r, constant.UtilizationPollInterval),
+			worker.New(
+				u.PollUtilization,
+				l,
+				r,
+				constant.UtilizationPollInterval,
+			),
 		)
 	}
 

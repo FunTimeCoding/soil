@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"testing"
 	"time"
 )
@@ -11,7 +11,7 @@ func eventually(
 	condition func() bool,
 ) {
 	t.Helper()
-	deadline := time.Now().Add(constant.MattermostSocketWait)
+	deadline := time.Now().Add(chatConstant.MattermostSocketWait)
 
 	for time.Now().Before(deadline) {
 		if condition() {

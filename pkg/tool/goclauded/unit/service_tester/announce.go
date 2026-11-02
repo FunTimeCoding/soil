@@ -10,6 +10,6 @@ func (o *Tester) Announce(
 ) {
 	assert.FatalOnError(
 		o.t,
-		o.Service.Announce(sessionIdentifier, name, topic, files),
+		o.Roster.Announce(sessionIdentifier, name, topic, files),
 	)
 }

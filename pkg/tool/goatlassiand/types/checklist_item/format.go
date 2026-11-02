@@ -1,7 +1,7 @@
 package checklist_item
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
@@ -16,5 +16,5 @@ func Format(v []*Item) string {
 		}
 	}
 
-	return join.Empty(join.NewLine(lines), constant.Unix)
+	return join.Empty(join.NewLine(lines), stringsConstant.Unix)
 }

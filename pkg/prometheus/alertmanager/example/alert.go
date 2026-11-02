@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
@@ -19,7 +19,7 @@ func Alert() {
 		alert_filter.New(),
 		p.MustRules(),
 	)
-	f := constant.ExtendedColorFormat.Copy()
+	f := consoleConstant.ExtendedColorFormat.Copy()
 
 	for _, a := range alerts {
 		console.Format("Alert: %+v\n", a.Format(f))

@@ -16,12 +16,12 @@ func TestAnUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	)
 	alfa := clients[constant.FixtureInstance]
 	alfa.FailProjects(refusedConnection())
-	_, e := s.Projects(constant.FixtureInstance, "")
+	_, e := s.Projects(t.Context(), constant.FixtureInstance, "")
 	assert.True(t, unavailable.Is(e))
 	alfa.FailProjects(nil)
-	_, f := s.Projects(constant.FixtureInstance, "")
+	_, f := s.Projects(t.Context(), constant.FixtureInstance, "")
 	assert.True(t, unavailable.Is(f))
 	assert.StringContains(t, "gitlab:alfa unreachable since", f.Error())
-	_, g := s.Projects(constant.FixtureOtherInstance, "")
+	_, g := s.Projects(t.Context(), constant.FixtureOtherInstance, "")
 	assert.FatalOnError(t, g)
 }

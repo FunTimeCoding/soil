@@ -1,7 +1,7 @@
 package service
 
 import (
-	band "github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 )
@@ -12,19 +12,19 @@ func requestedState(
 ) (int, error) {
 	switch operation {
 	case constant.OperationStart:
-		return band.PowerOn, nil
+		return bandConstant.PowerOn, nil
 	case constant.OperationShutdown:
 		if force {
-			return band.PowerOffSoft, nil
+			return bandConstant.PowerOffSoft, nil
 		}
 
-		return band.PowerOffSoftGraceful, nil
+		return bandConstant.PowerOffSoftGraceful, nil
 	case constant.OperationReboot:
 		if force {
-			return band.PowerCycle, nil
+			return bandConstant.PowerCycle, nil
 		}
 
-		return band.PowerResetGraceful, nil
+		return bandConstant.PowerResetGraceful, nil
 	}
 
 	return 0, validation.New("operation unknown: %s", operation)

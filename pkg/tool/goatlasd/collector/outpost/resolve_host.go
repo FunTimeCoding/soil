@@ -1,7 +1,7 @@
 package outpost
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/place"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/client"
@@ -14,7 +14,7 @@ func resolveHost(
 ) (*place.Place, bool) {
 	for _, name := range []string{
 		host.Hostname,
-		strings.SplitN(host.Hostname, constant.Dot, 2)[0],
+		strings.SplitN(host.Hostname, stringsConstant.Dot, 2)[0],
 	} {
 		if v, okay := s.Resolve(name); okay {
 			return v, true

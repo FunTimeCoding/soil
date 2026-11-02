@@ -11,7 +11,7 @@ func (s *Server) listModules(
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {
-	modules := s.service.Modules()
+	modules := s.module.Modules()
 	var result []map[string]any
 
 	for _, m := range modules {

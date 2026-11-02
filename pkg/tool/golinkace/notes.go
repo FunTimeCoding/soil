@@ -2,9 +2,7 @@ package golinkace
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/linkace/note"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
 	"github.com/spf13/cobra"
@@ -22,22 +20,13 @@ func notes(c *command_context.Context) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			r, f := c.Client().GetLinkNotesWithResponse(
-				context.Background(),
-				int32(identifier),
-				&client.GetLinkNotesParams{},
+			c.Terminal().EmitValue(
+				c.Client().GetLinkNotes(
+					context.Background(),
+					int32(identifier),
+					&client.GetLinkNotesParams{},
+				),
 			)
-			errors.PanicOnError(f)
-
-			if r.JSON200 == nil {
-				c.Terminal().Reject(r.Status(), r.Body)
-			}
-
-			if r.JSON200.Notes != nil {
-				for _, n := range *r.JSON200.Notes {
-					fmt.Println(note.FromDaemon(n).Format())
-				}
-			}
 		},
 	}
 }

@@ -4,6 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	generative "github.com/funtimecoding/soil/pkg/generative/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
@@ -11,6 +14,7 @@ import (
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryClient "github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"time"
 )
 
@@ -25,5 +29,11 @@ func New() *Option {
 		Notifier: func() face.Notifier { return notifier.New() },
 		Browser:  chromium.NewEnvironment,
 		Sources:  sweep.SourceDirectories,
+		Utilization: func() generative.AnthropicClient {
+			return utilization.New(
+				locator.New(generativeConstant.AnthropicServiceHost),
+			)
+		},
+		Credential: utilization.ReadCredential,
 	}
 }

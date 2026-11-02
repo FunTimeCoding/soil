@@ -1,14 +1,14 @@
 package build_tag
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"maps"
 	"path/filepath"
 )
 
 func Files(directory string) map[string][]string {
 	if directory == "" {
-		directory = constant.CurrentDirectory
+		directory = soil.CurrentDirectory
 	}
 
 	if !memoizing.Load() {

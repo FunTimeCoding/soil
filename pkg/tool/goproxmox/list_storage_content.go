@@ -1,7 +1,9 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +16,14 @@ func listStorageContent(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			c.Terminal().Emit(c.Client().ListStorageContent(a[0], a[1]))
+			c.Terminal().EmitValue(
+				c.Client().ListStorageContent(
+					context.Background(),
+					a[0],
+					a[1],
+					&client.ListStorageContentParams{Instance: c.Instance()},
+				),
+			)
 		},
 	}
 }

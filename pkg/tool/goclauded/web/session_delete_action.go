@@ -10,9 +10,9 @@ func (s *Server) sessionDeleteAction(
 	q *http.Request,
 ) {
 	identifier := q.PathValue(constant.Identifier)
-	_, e := s.service.DeleteSession(
+	_, e := s.session.DeleteSession(
 		identifier,
-		s.service.DeleteHash(identifier),
+		s.session.DeleteHash(identifier),
 	)
 
 	if e != nil {

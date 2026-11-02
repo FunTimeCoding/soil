@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
@@ -23,17 +24,20 @@ func (s *Server) CreateSnippet(
 	}
 
 	if e != nil {
-		return server.CreateSnippet500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.CreateSnippet500JSONResponse(*s.answer(e)), nil
 	}
 
 	volume, e := s.service.CreateSnippet(instance, r.Body.Name, r.Body.Content)
 
-	if validation.Is(e) {
+	switch {
+	case validation.Is(e):
 		return server.CreateSnippet400JSONResponse(*clientError(e)), nil
-	}
-
-	if e != nil {
-		return server.CreateSnippet500JSONResponse(*s.captureDetail(e)), nil
+	case not_found.Is(e):
+		return server.CreateSnippet404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.CreateSnippet403JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.CreateSnippet500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.CreateSnippet200JSONResponse{

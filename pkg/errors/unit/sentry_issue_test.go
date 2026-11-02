@@ -4,17 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
 func TestIssue(t *testing.T) {
 	r := response.NewIssue()
 	r.Identifier = "1"
-	r.Type = constant.UpperBravo
-	r.Title = constant.UpperCharlie
-	r.Permalink = constant.UpperDelta
-	r.Project.Name = constant.UpperAlfa
+	r.Type = stringsConstant.UpperBravo
+	r.Title = stringsConstant.UpperCharlie
+	r.Permalink = stringsConstant.UpperDelta
+	r.Project.Name = stringsConstant.UpperAlfa
 	actual := issue.New(r)
 	actual.Create = nil
 	actual.Raw = nil

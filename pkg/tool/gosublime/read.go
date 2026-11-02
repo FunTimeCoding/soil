@@ -22,25 +22,14 @@ func read(x *Context) *cobra.Command {
 				x.Terminal.Exitf("invalid id: %s\n", arguments[0])
 			}
 
-			r, e := x.Client.GetViewWithResponse(
-				context.Background(),
-				identifier,
-			)
+			v, f := x.Client.GetView(context.Background(), identifier)
 
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
+			if f != nil {
+				x.Terminal.Exitln(f)
 			}
 
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			if r.JSON200.Text != nil {
-				fmt.Print(*r.JSON200.Text)
+			if v.Text != nil {
+				fmt.Print(*v.Text)
 			}
 		},
 	}

@@ -1,13 +1,13 @@
 package power_panel
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (p *Panel) formatName(f *option.Format) string {
 	if f.UseColor {
-		return constant.Cyan("%s", p.Name)
+		return consoleConstant.Cyan("%s", p.Name)
 	}
 
 	return p.Name

@@ -8,12 +8,4 @@ var Identity = identity.New(
 	"golinkace [command]",
 )
 
-const (
-	DaemonHostEnvironment     = "GOLINKACE_HOST"
-	DaemonPortEnvironment     = "GOLINKACE_PORT"
-	DaemonInsecureEnvironment = "GOLINKACE_INSECURE"
-	DaemonTokenEnvironment    = "GOLINKACE_TOKEN"
-	LinkAceHostEnvironment    = "LINKACE_HOST"
-
-	ListFlag = "list"
-)
+const ListFlag = "list"

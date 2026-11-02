@@ -18,7 +18,7 @@ func (s *Server) sessionEditSubmit(
 	a.Alias = &alias
 	a.Description = &description
 
-	if e := s.service.EditSession(identifier, a); e != nil {
+	if e := s.roster.EditSession(identifier, a); e != nil {
 		s.view.Answer(w, q, s.reporter, e)
 
 		return

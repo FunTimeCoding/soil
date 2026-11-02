@@ -31,6 +31,7 @@ func (s *Server) UpdateProjectVariable(
 	}
 
 	v, e := s.service.UpdateProjectVariable(
+		x,
 		instance,
 		project,
 		a.Key,

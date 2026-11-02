@@ -1,6 +1,7 @@
 package daemon
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -21,7 +22,7 @@ func New(
 ) *Daemon {
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	f := o.Forge()
-	project, e := f.ResolveProject(o.Project)
+	project, e := f.ResolveProject(context.Background(), o.Project)
 	errors.PanicOnError(e)
 	g := peer.New(constant.ForgePeer, "", f, l, r)
 	a := authorizationClient(o).WithReporter(r)

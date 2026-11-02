@@ -3,14 +3,16 @@ package alert
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func (a *Alert) enrich(
 	p *option.Alert,
 	t *team.Team,
 ) *Alert {
-	a.MonitorIdentifier = constant.GoGenie.IntegerIdentifier(a.SmallIdentifier)
+	a.MonitorIdentifier = monitorConstant.GoGenie.IntegerIdentifier(
+		a.SmallIdentifier,
+	)
 	a.TeamKey = p.Team.KeyByIdentifier(t.Identifier)
 	a.Team = t
 	a.TeamMap = p.Team

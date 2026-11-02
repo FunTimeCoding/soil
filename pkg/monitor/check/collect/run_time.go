@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"k8s.io/apimachinery/pkg/util/duration"
 	"time"
 )
@@ -15,7 +15,7 @@ func runTime(
 ) {
 	console.Format(
 		"%s %s %s\n",
-		t.Format(constant.DateSecond),
+		t.Format(timeConstant.DateSecond),
 		s.Name,
 		duration.HumanDuration(s.Interval),
 	)

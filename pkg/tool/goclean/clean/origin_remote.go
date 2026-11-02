@@ -2,7 +2,7 @@ package clean
 
 import (
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/remote"
 	"github.com/funtimecoding/soil/pkg/git/remote/provider_map"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -13,7 +13,7 @@ func originRemote(
 	o *option.Clean,
 	m *provider_map.Map,
 ) *remote.Remote {
-	result := git.Remote(system.WorkDirectory(), m, constant.OriginRemote)
+	result := git.Remote(system.WorkDirectory(), m, gitConstant.OriginRemote)
 
 	if result == nil {
 		system.Exitf(1, "could not identify provider: %s\n", o.GitLabHost)

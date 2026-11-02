@@ -2,7 +2,7 @@ package build
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
@@ -11,7 +11,7 @@ func GuessBinaryPath(
 	systemArchitecture string,
 ) string {
 	if s := join.Relative(
-		constant.Temporary,
+		systemConstant.Temporary,
 		name,
 		systemArchitecture,
 		name,

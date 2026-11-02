@@ -1,14 +1,16 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 	"strings"
 )
 
 func (c *Client) FindRunnerByDescription(
+	x context.Context,
 	match string,
 ) (*runner.Runner, bool, error) {
-	runners, e := c.Runners(true)
+	runners, e := c.Runners(x, true)
 
 	if e != nil {
 		return nil, false, e

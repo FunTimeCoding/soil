@@ -11,7 +11,7 @@ import (
 func TestDeleteEmptySessionNeedsNoConfirmation(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
-	r, e := s.Service.DeleteSession("husk", "")
+	r, e := s.Session.DeleteSession("husk", "")
 	assert.FatalOnError(t, e)
 	assert.String(t, "husk", r.Identifier)
 	assert.True(t, s.Store.GetSession("husk") == nil)
@@ -20,9 +20,9 @@ func TestDeleteEmptySessionNeedsNoConfirmation(t *testing.T) {
 func TestDeleteRefusesWithoutConfirmation(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("doomed", "some-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
-	_, e := s.Service.DeleteSession("doomed", "")
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
+	_, e := s.Session.DeleteSession("doomed", "")
 	assert.True(t, e != nil)
 	assert.String(
 		t,
@@ -35,11 +35,11 @@ func TestDeleteRefusesWithoutConfirmation(t *testing.T) {
 func TestDeleteRejectsStaleConfirmation(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("doomed", "some-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
-	stale := s.Service.DeleteHash("doomed")
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
+	stale := s.Session.DeleteHash("doomed")
 	s.Store.EnsureSession("doomed")
-	_, e := s.Service.DeleteSession("doomed", stale)
+	_, e := s.Session.DeleteSession("doomed", stale)
 	assert.True(t, e != nil)
 	assert.String(t, "confirmation does not match this session", e.Error())
 	assert.True(t, s.Store.GetSession("doomed") != nil)
@@ -49,9 +49,9 @@ func TestDeleteRejectsForeignConfirmation(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("doomed", "some-slug")
 	s.WriteSessionFile("bystander", "other-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
-	_, e := s.Service.DeleteSession("doomed", s.Service.DeleteHash("bystander"))
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
+	_, e := s.Session.DeleteSession("doomed", s.Session.DeleteHash("bystander"))
 	assert.True(t, e != nil)
 	assert.String(t, "confirmation does not match this session", e.Error())
 	assert.True(t, s.Store.GetSession("doomed") != nil)
@@ -87,7 +87,7 @@ func TestDeleteReceiptReportsWhatWentAway(t *testing.T) {
 		t,
 		s.Store.Store.SendPulse("rich", r.Callsign, "a pulse"),
 	)
-	result, g := s.Service.DeleteSession("rich", s.Service.DeleteHash("rich"))
+	result, g := s.Session.DeleteSession("rich", s.Session.DeleteHash("rich"))
 	assert.FatalOnError(t, g)
 	assert.Integer(t, 1, result.Events)
 	assert.Integer(t, 1, result.EventMetadata)
@@ -115,7 +115,7 @@ func TestDeleteClearsCallsignQueueWindow(t *testing.T) {
 		s.Store.Store.SendNotification("husk", r.Callsign, "Dale", "for husk"),
 	)
 	s.Store.Advance(time.Minute)
-	result, e := s.Service.DeleteSession("husk", "")
+	result, e := s.Session.DeleteSession("husk", "")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, result.Queue)
 	assert.Integer(t, 1, result.Notifications)

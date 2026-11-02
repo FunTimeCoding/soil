@@ -11,7 +11,7 @@ import (
 func TestConversationsSearchResults(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
-	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
+	s.Tick()
 	page := body(t, s.Server, "/conversations/search?query=legacy+pin")
 	assert.StringContains(t, `class="search-result"`, page)
 	assert.StringContains(t, "2 hits", page)
@@ -22,9 +22,7 @@ func TestConversationsSearchResults(t *testing.T) {
 func TestConversationsSearchEmptyQueryListsSessions(t *testing.T) {
 	s := base.New(t)
 	s.WriteSessionFile("echo", "echo-slug")
-	s.Service.PopulateCache()
-	s.Service.BackfillSessions()
-	s.Service.CheckConsistency()
+	s.Restart()
 	page := body(t, s.Server, "/conversations/search?query=")
 	assert.StringContains(t, "sidebar-entry", page)
 	assert.True(t, !strings.Contains(page, "search-result"))
@@ -33,7 +31,7 @@ func TestConversationsSearchEmptyQueryListsSessions(t *testing.T) {
 func TestConversationsHitsPanel(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
-	assert.Count(t, 0, s.Service.CatchUpSearch(t.Context()))
+	s.Tick()
 	page := body(
 		t,
 		s.Server,

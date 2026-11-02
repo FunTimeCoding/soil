@@ -2,14 +2,14 @@ package model
 
 import (
 	"charm.land/bubbletea/v2"
-	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
+	bubbleteaConstant "github.com/funtimecoding/soil/pkg/bubbletea/constant"
 )
 
 func (m *Model) Update(s tea.Msg) (tea.Model, tea.Cmd) {
 	switch g := s.(type) {
 	case tea.KeyPressMsg:
 		switch g.String() {
-		case constant.KeyEscape, constant.KeyCtrlC:
+		case bubbleteaConstant.KeyEscape, bubbleteaConstant.KeyCtrlC:
 			return m, tea.Quit
 		}
 

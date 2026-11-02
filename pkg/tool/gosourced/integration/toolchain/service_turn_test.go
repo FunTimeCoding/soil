@@ -20,7 +20,7 @@ func TestTwoSessionsRenameInOneModuleWithoutRefusing(t *testing.T) {
 		{"bravo", "OldType", "NewType"},
 	} {
 		go func() {
-			r, e := s.Rename(
+			r, e := s.Symbol.Rename(
 				turn.WithSession(t.Context(), rename[0]),
 				d,
 				"example/pkg/alfa",

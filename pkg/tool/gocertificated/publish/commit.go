@@ -1,18 +1,20 @@
 package publish
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (p *Publisher) Commit(
+	x context.Context,
 	v []*change.Change,
 	message string,
 ) (string, error) {
 	var action []*gitlab.CommitActionOptions
 
 	for _, c := range v {
-		present, e := p.exists(c.Path)
+		present, e := p.exists(x, c.Path)
 
 		if e != nil {
 			return "", e
@@ -34,7 +36,7 @@ func (p *Publisher) Commit(
 		)
 	}
 
-	result, e := p.forge.CommitActions(p.project, p.branch, message, action)
+	result, e := p.forge.CommitActions(x, p.project, p.branch, message, action)
 
 	if e != nil {
 		return "", e

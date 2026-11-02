@@ -6,7 +6,7 @@ import (
 )
 
 func (o *Tester) Check(sessionIdentifier string) *check_result.Result {
-	result, e := o.Service.Check(sessionIdentifier)
+	result, e := o.Message.Check(sessionIdentifier)
 	assert.FatalOnError(o.t, e)
 
 	return result

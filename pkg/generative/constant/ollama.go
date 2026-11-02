@@ -1,12 +1,12 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/web/constant"
+import webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 
 const (
 	OllamaHostEnvironment string = "OLLAMA_HOST"
 	OllamaPortEnvironment string = "OLLAMA_PORT"
 
-	OllamaHost     = constant.Localhost
+	OllamaHost     = webConstant.Localhost
 	OllamaPort int = 11434
 
 	Llama31   = "llama3.1"

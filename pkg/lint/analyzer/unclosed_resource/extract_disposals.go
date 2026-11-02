@@ -23,6 +23,13 @@ func extractDisposals(
 	ast.Inspect(
 		f.Body,
 		func(n ast.Node) bool {
+			if s, okay := n.(*ast.SelectorExpr); okay {
+				summary.Disposes[k] = append(
+					summary.Disposes[k],
+					registeredCloses(p, s, indices)...,
+				)
+			}
+
 			c, okay := n.(*ast.CallExpr)
 
 			if !okay {

@@ -152,7 +152,7 @@ closes none of them (`service-tool.md`, Services).
 ```go
 func New(v face.Log, r soil.Reporter, t soil.Recorder, version string) *Server {
     result := &Server{
-        server:   mark.New(constant.Identity, version).WithRecorder(t).Server(),
+        server:   mark.New(constant.Identity, r).WithRecorder(t).Server(),
         service:  v,
         reporter: r,
     }
@@ -163,7 +163,9 @@ func New(v face.Log, r soil.Reporter, t soil.Recorder, version string) *Server {
 ```
 
 The factory (`pkg/generative/mark/server/`) handles tool capabilities,
-instructions, and baseline telemetry hooks. `WithRecorder(t)` registers an
+instructions, baseline telemetry hooks, and panic recovery: it takes the
+reporter, and a panicking tool or resource handler is reported and answered with
+the event identifier (`error-handling/mcp.md`). `WithRecorder(t)` registers an
 AfterCallTool hook that records every MCP tool call as a baseline telemetry
 event. Import as
 `mark "github.com/funtimecoding/soil/pkg/generative/mark/server"`.

@@ -40,7 +40,9 @@ func TestUsageSendsTheTokenAndReadsCounts(t *testing.T) {
 		`{"ocs":{"data":{"nextcloud":{"storage":{"num_files":12},"shares":{"num_shares":3}}}}}`,
 	)
 	host, p := upstream_tester.HostPort(t, s.URL)
-	u, e := client.New(host, p, false, "charlie-token").Fetch()
+	owned := client.New(host, p, false, "charlie-token")
+	defer owned.Close()
+	u, e := owned.Fetch()
 	assert.FatalOnError(t, e)
 	assert.Any(t, int64(12), u.Files)
 	assert.Any(t, int64(3), u.Shares)
@@ -53,6 +55,8 @@ func TestUsageSendsTheTokenAndReadsCounts(t *testing.T) {
 func TestUsageRefusalIsUnexpected(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusForbidden, "")
 	host, p := upstream_tester.HostPort(t, s.URL)
-	_, e := client.New(host, p, false, "charlie-token").Fetch()
+	owned := client.New(host, p, false, "charlie-token")
+	defer owned.Close()
+	_, e := owned.Fetch()
 	assert.True(t, unexpected.Is(e))
 }

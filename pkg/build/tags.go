@@ -1,14 +1,14 @@
 package build
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func Tags(v string) string {
 	if v == "" {
-		return constant.TimeZoneTag
+		return soil.TimeZoneTag
 	}
 
-	return join.Comma([]string{constant.TimeZoneTag, v})
+	return join.Comma([]string{soil.TimeZoneTag, v})
 }

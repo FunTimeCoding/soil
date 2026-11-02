@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
 
@@ -16,5 +16,10 @@ func (s *Service) SetDeviceLabel(
 		return nil, e
 	}
 
-	return s.store.SetLabel(constant.DeviceAddress, d.Identifier, key, value)
+	return s.store.SetLabel(
+		netboxConstant.DeviceAddress,
+		d.Identifier,
+		key,
+		value,
+	)
 }

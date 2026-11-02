@@ -20,7 +20,7 @@ func (s *Server) readConversation(
 		return s.captureFail(e, soil.UnexpectedError)
 	}
 
-	blocks, e := s.service.ReadConversation(a.Session, a.Around, int(a.Count))
+	blocks, e := s.search.ReadConversation(a.Session, a.Around, int(a.Count))
 
 	if e != nil {
 		return s.captureFail(e, soil.UnexpectedError)

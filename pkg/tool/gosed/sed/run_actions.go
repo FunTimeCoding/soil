@@ -1,6 +1,7 @@
 package sed
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/strings/base64"
 	"github.com/funtimecoding/soil/pkg/tool/gosed/sed/option"
@@ -9,6 +10,7 @@ import (
 )
 
 func runActions(
+	x context.Context,
 	c face.GitLabClient,
 	project int64,
 	o *option.Sed,
@@ -34,7 +36,7 @@ func runActions(
 	update := gitlab.FileUpdate
 
 	for _, path := range order {
-		f := c.MustFile(project, o.Branch, path)
+		f := c.MustFile(x, project, o.Branch, path)
 
 		if f == nil {
 			log.Panicf("file does not exist: %s", path)
@@ -56,5 +58,5 @@ func runActions(
 		)
 	}
 
-	c.MustCommitActions(project, o.Branch, o.Message, commitActions)
+	c.MustCommitActions(x, project, o.Branch, o.Message, commitActions)
 }

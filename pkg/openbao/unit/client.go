@@ -17,9 +17,11 @@ func client(
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "token")
 	system.SaveFile(path, jwt)
-
-	return openbao.New(web.Locator(t, u.Address())).WithKubernetes(
+	result := openbao.New(web.Locator(t, u.Address())).WithKubernetes(
 		"alfa-role",
 		path,
 	)
+	t.Cleanup(result.Close)
+
+	return result
 }

@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	toolConstant "github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"go.uber.org/goleak"
@@ -73,7 +73,7 @@ func TestARecordStampsTheLastPollAndNotifies(t *testing.T) {
 		t,
 		service_tester.DatabasePath(t),
 		service_tester.NewAlertmanager(t),
-		toolConstant.Retention,
+		constant.Retention,
 		n,
 	)
 	assert.True(t, v.LastPoll().IsZero())
@@ -94,7 +94,7 @@ func TestAFailedRecordStillStampsAndNotifies(t *testing.T) {
 		t,
 		service_tester.DatabasePath(t),
 		c,
-		toolConstant.Retention,
+		constant.Retention,
 		n,
 	)
 	_, e := v.Record(time.Now())
@@ -105,8 +105,22 @@ func TestAFailedRecordStillStampsAndNotifies(t *testing.T) {
 
 func TestARecordReportsWhatItChanged(t *testing.T) {
 	c := service_tester.NewAlertmanager(t)
-	c.Add(alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""))
-	c.Add(alert.NewBasic("def456", "DiskFull", constant.WarningSeverity, ""))
+	c.Add(
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
+	)
+	c.Add(
+		alert.NewBasic(
+			"def456",
+			"DiskFull",
+			prometheusConstant.WarningSeverity,
+			"",
+		),
+	)
 	v := service_tester.NewService(t, service_tester.DatabasePath(t), c)
 	o, e := v.Record(time.Now())
 	assert.FatalOnError(t, e)

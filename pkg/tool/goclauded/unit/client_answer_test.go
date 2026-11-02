@@ -9,6 +9,15 @@ import (
 	"time"
 )
 
+func TestTheClientAnswersAFailedUsageReadAsAFailure(t *testing.T) {
+	s := base.New(t)
+	s.CloseDaemon()
+	_, found, e := s.Client(t).GetUsage(t.Context())
+	assert.NotNil(t, e)
+	assert.False(t, found)
+	assert.Count(t, 1, s.Reporter.Events())
+}
+
 func TestTheClientAnswersNoUsageAsAbsent(t *testing.T) {
 	s := base.New(t)
 	r, found, e := s.Client(t).GetUsage(t.Context())
@@ -20,10 +29,7 @@ func TestTheClientAnswersNoUsageAsAbsent(t *testing.T) {
 func TestTheClientReadsRecordedUsage(t *testing.T) {
 	s := base.New(t)
 	now := s.Store.Clock()()
-	assert.FatalOnError(
-		t,
-		s.Service.RecordRateLimits(0, 20, time.Time{}, now.Add(24*time.Hour)),
-	)
+	s.Store.Store.SaveRateSnapshot(0, 20, time.Time{}, now.Add(24*time.Hour))
 	r, found, e := s.Client(t).GetUsage(t.Context())
 	assert.FatalOnError(t, e)
 	assert.True(t, found)

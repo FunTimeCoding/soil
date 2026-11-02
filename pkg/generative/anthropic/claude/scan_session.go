@@ -3,7 +3,7 @@ package claude
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
@@ -22,11 +22,11 @@ func scanSession(path string) *session.Session {
 	defer errors.PanicClose(f)
 	identifier := strings.TrimSuffix(
 		filepath.Base(path),
-		constant.NotationLogExtension,
+		soil.NotationLogExtension,
 	)
 	s := session.New(identifier)
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(nil, constant.NotationScanBuffer)
+	scanner.Buffer(nil, soil.NotationScanBuffer)
 	filled := false
 
 	for scanner.Scan() {

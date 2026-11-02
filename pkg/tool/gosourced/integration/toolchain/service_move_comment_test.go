@@ -14,7 +14,7 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 		service_tester.ServiceTestdata("move-comment/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -50,7 +50,7 @@ func TestMoveCommentSourceScrub(t *testing.T) {
 		service_tester.ServiceTestdata("move-comment/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/keeper",
@@ -86,7 +86,7 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 		service_tester.ServiceTestdata("move-comment/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/keeper",
@@ -123,7 +123,7 @@ func TestMoveCommentGroupDocument(t *testing.T) {
 		service_tester.ServiceTestdata("move-comment/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/keeper",

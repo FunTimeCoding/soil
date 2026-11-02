@@ -2,7 +2,7 @@ package gofix
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/source/constant"
+	sourceConstant "github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/types/import_decision"
 )
@@ -10,7 +10,7 @@ import (
 func noAliasText(d *import_decision.Decision) string {
 	e := d.Entry
 
-	if d.Rule == constant.RuleConstant || d.Subsystem == "" {
+	if d.Rule == sourceConstant.RuleConstant || d.Subsystem == "" {
 		return fmt.Sprintf(
 			"no subsystem alias for %s, keeping %s",
 			e.Path,

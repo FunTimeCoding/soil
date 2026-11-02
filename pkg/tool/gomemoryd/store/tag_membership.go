@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strconv"
 	"strings"
 )
@@ -30,7 +30,7 @@ func (s *Store) TagMembership() (map[string][]int64, error) {
 			return nil, f
 		}
 
-		for _, one := range strings.Split(joined, constant.Comma) {
+		for _, one := range strings.Split(joined, stringsConstant.Comma) {
 			identifier, f := strconv.ParseInt(one, 10, 64)
 
 			if f == nil {

@@ -26,7 +26,7 @@ func (s *Server) RetryPipeline(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.RetryPipeline(instance, project, a.Pipeline)
+	v, e := s.service.RetryPipeline(x, instance, project, a.Pipeline)
 
 	if e != nil {
 		return s.answerWith(e, "")

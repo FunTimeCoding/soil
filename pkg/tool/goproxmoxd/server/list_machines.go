@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -23,7 +26,7 @@ func (s *Server) ListMachines(
 	}
 
 	if e != nil {
-		return server.ListMachines500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.ListMachines500JSONResponse(*s.answer(e)), nil
 	}
 
 	node := ""
@@ -34,8 +37,17 @@ func (s *Server) ListMachines(
 
 	machines, e := s.service.ListMachines(instance, node)
 
-	if e != nil {
-		return server.ListMachines500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.ListMachines400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.ListMachines404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.ListMachines403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.ListMachines503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.ListMachines500JSONResponse(*s.answer(e)), nil
 	}
 
 	pointers := convert.Machines(machines)

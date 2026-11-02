@@ -1,7 +1,7 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
 )
 
@@ -15,7 +15,7 @@ func (c *Client) AddTab(
 	t := tab.Tab{
 		Identifier: identifier,
 		Title:      title,
-		Type:       constant.PageTabType,
+		Type:       chromiumConstant.PageTabType,
 		Locator:    locator,
 	}
 	c.tabs = append(c.tabs, &t)

@@ -2,17 +2,17 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gw2"
 )
 
 func Guild() {
 	a := argument.NewSimple("gw2-guild")
-	a.String(constant.Tag, "", "Guild tag")
+	a.String(argumentConstant.Tag, "", "Guild tag")
 	a.ParseSimple()
 	c := gw2.NewEnvironment()
-	tag := a.GetString(constant.Tag)
+	tag := a.GetString(argumentConstant.Tag)
 	account := c.Account()
 
 	if len(account.GuildLeader) == 0 {

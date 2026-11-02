@@ -1,16 +1,16 @@
 package detail_error
 
-import "github.com/funtimecoding/soil/pkg/errors/constant"
+import errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 
 func (e *Detail) ErrorContext() (string, map[string]any) {
 	result := map[string]any{
-		constant.Status: e.Status,
-		constant.Detail: e.Detail,
+		errorsConstant.Status: e.Status,
+		errorsConstant.Detail: e.Detail,
 	}
 
 	if len(e.Body) > 0 {
-		result[constant.Body] = string(e.Body)
+		result[errorsConstant.Body] = string(e.Body)
 	}
 
-	return constant.Upstream, result
+	return errorsConstant.Upstream, result
 }

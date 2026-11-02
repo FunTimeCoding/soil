@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"strings"
 	"testing"
@@ -45,7 +44,7 @@ func TestTheCounterFitsEveryManualChunk(t *testing.T) {
 	for _, k := range chunk.Document(
 		fixture.Read(systemConstant.LimitPath, "manual.txt"),
 		"manual.txt",
-		mock_reranker.New(),
+		newReranker(t),
 	) {
 		assert.LessEqual(t, 2046, c.Count(k.Text))
 	}

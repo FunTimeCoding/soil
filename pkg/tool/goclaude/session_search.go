@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
 	"strings"
@@ -62,7 +62,7 @@ func sessionSearch(c *command_context.Context) *cobra.Command {
 				name := v.Name
 
 				if name == "" {
-					name = constant.UnnamedSession
+					name = goclaudedConstant.UnnamedSession
 				}
 
 				console.Format(

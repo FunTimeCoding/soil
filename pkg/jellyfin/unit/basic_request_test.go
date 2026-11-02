@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
 	"net/http"
@@ -31,7 +31,7 @@ func TestGetSendsTokenAndParameters(t *testing.T) {
 	assert.String(
 		t,
 		`MediaBrowser Token="alfa-token"`,
-		r.Header.Get(constant.Authorization),
+		r.Header.Get(webConstant.Authorization),
 	)
 }
 

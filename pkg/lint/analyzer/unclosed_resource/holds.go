@@ -15,6 +15,10 @@ func (s *Summaries) holds(c *fact.Condition) bool {
 		return s != nil && s.releases[c.Holder][c.Field]
 	case constant.WrapsCondition:
 		return s != nil && s.wraps[c.Callee][c.Argument]
+	case constant.DrawsCondition:
+		return s != nil && s.drawsField(c)
+	case constant.RelaysCondition:
+		return s != nil && s.relays(c)
 	}
 
 	return false

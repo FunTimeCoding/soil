@@ -1,6 +1,7 @@
 package lab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab/branch"
@@ -13,11 +14,12 @@ import (
 )
 
 func Pipeline(
+	x context.Context,
 	o *option.Clean,
 	c face.GitLabClient,
 	p *project.Project,
 ) {
-	branches := c.MustBranches(p.Identifier)
+	branches := c.MustBranches(x, p.Identifier)
 	mainBranch := branch.MainBranch(branches)
 	mainHash := mainBranch.Raw.Commit.ID
 
@@ -36,7 +38,7 @@ func Pipeline(
 		console.Format("Main hash: %s\n", mainHash)
 	}
 
-	pipelines := c.MustPipelines(p.Identifier)
+	pipelines := c.MustPipelines(x, p.Identifier)
 
 	if len(pipelines) == 0 {
 		return
@@ -98,6 +100,6 @@ func Pipeline(
 			console.Format("Pipeline: %s\n", i.Reference)
 		}
 
-		c.MustDeletePipeline(p.Identifier, i.Identifier)
+		c.MustDeletePipeline(x, p.Identifier, i.Identifier)
 	}
 }

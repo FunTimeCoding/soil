@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"path/filepath"
 	"testing"
 	"time"
@@ -31,7 +31,7 @@ func TestAReadThenWriteTransactionKeepsItsWrite(t *testing.T) {
 	go func() {
 		_, f := d.Exec(
 			constant.FixtureInsertEvent,
-			stringConstant.LowerCharlie,
+			stringsConstant.LowerCharlie,
 			time.Now(),
 		)
 		other <- f
@@ -39,7 +39,7 @@ func TestAReadThenWriteTransactionKeepsItsWrite(t *testing.T) {
 	time.Sleep(constant.FixtureOtherWriterStart)
 	_, e = first.Exec(
 		constant.FixtureInsertEvent,
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		time.Now(),
 	)
 	assert.FatalOnError(t, e)

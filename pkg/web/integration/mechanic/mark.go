@@ -3,10 +3,10 @@
 package mechanic
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func mark(name string) string {
-	return join.Empty(constant.Hash, name)
+	return join.Empty(stringsConstant.Hash, name)
 }

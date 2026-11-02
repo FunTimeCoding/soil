@@ -6,7 +6,9 @@ func ReadBytes(
 	base string,
 	name string,
 ) []byte {
-	result, e := Root(base).ReadFile(name)
+	r := Root(base)
+	defer errors.PanicClose(r)
+	result, e := r.ReadFile(name)
 	errors.PanicOnError(e)
 
 	return result

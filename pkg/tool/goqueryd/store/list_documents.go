@@ -3,7 +3,7 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 )
@@ -76,7 +76,7 @@ func (s *Store) ListDocuments(
 		}
 
 		r.VirtualPath = buildVirtualPath(r.Collection, r.Path)
-		r.FilePath = join.Empty(r.Collection, constant.Slash, r.Path)
+		r.FilePath = join.Empty(r.Collection, stringsConstant.Slash, r.Path)
 		r.Source = "list"
 		identifiers = append(identifiers, identifier)
 		u = append(u, r)

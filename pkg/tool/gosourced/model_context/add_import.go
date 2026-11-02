@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -27,7 +27,7 @@ func (s *Server) addImport(
 		return s.captureDetail(e)
 	}
 
-	r, e := s.service.AddImport(
+	r, e := s.file.AddImport(
 		turnContext(x),
 		directory,
 		a.File,
@@ -37,7 +37,7 @@ func (s *Server) addImport(
 	)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	return response.Success(formatConcerns(r.Entries))

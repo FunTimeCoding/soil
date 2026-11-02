@@ -2,7 +2,7 @@ package gosecret
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
 	"strings"
@@ -31,7 +31,7 @@ func ReadDecoded(path string) (map[string]string, error) {
 		}
 	}
 
-	for line := range strings.SplitSeq(string(b), constant.Unix) {
+	for line := range strings.SplitSeq(string(b), stringsConstant.Unix) {
 		if strings.HasPrefix(line, "=== ") && strings.HasSuffix(
 			line,
 			" ===",

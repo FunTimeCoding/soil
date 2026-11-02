@@ -16,7 +16,7 @@ func New(
 ) *Server {
 	chosen := selection.New()
 	result := &Server{
-		server: server.New(constant.Identity).WithResources().WithRecorder(
+		server: server.New(constant.Identity, r).WithResources().WithRecorder(
 			t,
 		).WithSessionEnd(chosen.Clear).Server(),
 		service:   s,

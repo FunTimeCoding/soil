@@ -1,7 +1,7 @@
 package example
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forwarding_function"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -9,9 +9,9 @@ import (
 )
 
 func Census() {
-	all, _, e := resolve.LoadPackages(constant.CurrentDirectory, "./...")
+	all, _, e := resolve.LoadPackages(soil.CurrentDirectory, "./...")
 	errors.PanicOnError(e)
-	results := output.NewResultsWithDirectory(constant.CurrentDirectory)
+	results := output.NewResultsWithDirectory(soil.CurrentDirectory)
 
 	for _, p := range resolve.PreferTestVariants(all) {
 		forwarding_function.Check(p, results)

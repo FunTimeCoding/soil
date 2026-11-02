@@ -12,7 +12,9 @@ import (
 
 func TestReaperInterruptStopsOwnedProcess(t *testing.T) {
 	windowsSkip(t)
-	r := reaper.New(reporter.NewOptional(identity.Example().Name()))
+	owned := reporter.NewOptional(identity.Example().Name())
+	defer owned.Close()
+	r := reaper.New(owned)
 	defer r.Close()
 	c := run.New().NoPanic().WithRegistry(r)
 	finished := make(chan struct{})

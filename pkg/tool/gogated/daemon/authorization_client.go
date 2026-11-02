@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/option"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func authorizationClient(o *option.Option) *client.Client {
@@ -12,8 +12,8 @@ func authorizationClient(o *option.Option) *client.Client {
 		o.Issuer,
 		o.AdminClientIdentifier,
 		o.AdminClientSecret,
-		constant.SignInPath,
-		join.Empty(o.Issuer, constant.CallbackPath),
+		webConstant.SignInPath,
+		join.Empty(o.Issuer, webConstant.CallbackPath),
 		client.DeriveKey(o.Secret),
 	)
 }

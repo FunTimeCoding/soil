@@ -26,7 +26,7 @@ func TestFindingsReportUnkeyedRows(t *testing.T) {
 func TestFindingsAreSilentWhenEveryRowCarriesItsSession(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
-	_, e := s.Service.Send(
+	_, e := s.Message.Send(
 		r.Callsign,
 		[]string{r.Callsign},
 		"hello",

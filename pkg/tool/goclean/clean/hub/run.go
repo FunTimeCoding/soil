@@ -2,7 +2,7 @@ package hub
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/github/constant"
+	githubConstant "github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/face"
 )
 
@@ -12,7 +12,7 @@ func Run(
 	repository string,
 ) {
 	for _, r := range c.MustProjectRuns(namespace, repository) {
-		if r.Status != constant.CompletedStatus {
+		if r.Status != githubConstant.CompletedStatus {
 			continue
 		}
 

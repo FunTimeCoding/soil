@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/cable"
 	"github.com/funtimecoding/soil/pkg/netbox/console_port"
 	"github.com/funtimecoding/soil/pkg/netbox/console_server_port"
@@ -22,9 +22,7 @@ func TestCablingEntities(t *testing.T) {
 	assert.NotNil(t, network.New(&netbox.Interface{}))
 	assert.NotNil(
 		t,
-		physical_address.New(
-			&netbox.MACAddress{Display: constant.PhysicalTest0},
-		),
+		physical_address.New(&netbox.MACAddress{Display: soil.PhysicalTest0}),
 	)
 	assert.NotNil(t, rear_port.New(&netbox.RearPort{}))
 }

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -14,11 +14,11 @@ func (s *Server) GetCheck(
 		return s.checkPreview(r.Params.Session)
 	}
 
-	result, checkError := s.service.Check(r.Params.Session)
+	result, checkError := s.message.Check(r.Params.Session)
 
 	if checkError != nil {
 		return server.GetCheck500JSONResponse(
-			*s.captureFail(checkError, constant.UnexpectedError),
+			*s.captureFail(checkError, soil.UnexpectedError),
 		), nil
 	}
 

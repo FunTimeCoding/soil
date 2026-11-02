@@ -9,7 +9,7 @@ func (s *Server) PostSweep(
 	_ context.Context,
 	_ server.PostSweepRequestObject,
 ) (server.PostSweepResponseObject, error) {
-	result := s.service.Sweep()
+	result := s.transcript.Sweep()
 
 	return server.PostSweep200JSONResponse{
 		Copied:  result.Copied,

@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
@@ -26,7 +26,7 @@ func findSingleParameterEdits(
 		for _, file := range p.Syntax {
 			name := p.Fset.File(file.Pos()).Name()
 
-			if filepath.Base(name) == constant.GeneratedFile {
+			if filepath.Base(name) == soil.GeneratedFile {
 				generated[name] = true
 			}
 		}

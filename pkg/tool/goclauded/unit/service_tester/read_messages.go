@@ -6,7 +6,7 @@ import (
 )
 
 func (o *Tester) ReadMessages(identifiers ...uint) []*message.Message {
-	result, e := o.Service.ReadMessages(identifiers)
+	result, e := o.Message.ReadMessages(identifiers)
 	assert.FatalOnError(o.t, e)
 
 	return result

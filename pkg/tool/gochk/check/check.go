@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"runtime"
 	"slices"
@@ -12,13 +12,16 @@ import (
 
 func Check(port string) {
 	switch runtime.GOOS {
-	case constant.Linux:
+	case systemConstant.Linux:
 		console.Line("Linux")
 		console.Format("Cores: %d\n", runtime.NumCPU())
-		console.Format("Failed: %s\n", Execute(constant.SystemdFailedCommand))
+		console.Format(
+			"Failed: %s\n",
+			Execute(systemConstant.SystemdFailedCommand),
+		)
 		diskFull()
 
-		if run.CommandExists(constant.Jc) {
+		if run.CommandExists(systemConstant.Jc) {
 			if port != "" {
 				ports := split.Comma(port)
 				var found []string
@@ -47,7 +50,7 @@ func Check(port string) {
 		} else {
 			console.Line("jc not found")
 		}
-	case constant.Darwin:
+	case systemConstant.Darwin:
 		console.Line("Darwin")
 	}
 }

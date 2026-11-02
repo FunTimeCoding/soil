@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/note"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/note"
+)
 
 func (c *Client) CreateMergeRequestNote(
+	_ context.Context,
 	_ int64,
 	_ int64,
 	_ string,

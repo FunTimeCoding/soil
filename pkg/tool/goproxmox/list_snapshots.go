@@ -1,8 +1,10 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
@@ -25,7 +27,16 @@ func listSnapshots(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			c.Terminal().Emit(c.Client().ListMachineSnapshots(identifier, n))
+			c.Terminal().EmitValue(
+				c.Client().ListMachineSnapshots(
+					context.Background(),
+					identifier,
+					&client.ListMachineSnapshotsParams{
+						Instance: c.Instance(),
+						Node:     n,
+					},
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name (speeds up lookup)")

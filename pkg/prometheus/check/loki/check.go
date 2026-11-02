@@ -1,7 +1,7 @@
 package loki
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 )
@@ -9,10 +9,10 @@ import (
 func Check(o *option.Loki) {
 	c := loki.NewEnvironment(false)
 	defer c.Close()
-	f := constant.ColorFormat.Copy()
+	f := consoleConstant.ColorFormat.Copy()
 
 	if o.Copyable {
-		f.Tag(constant.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	if o.Namespace == "" {

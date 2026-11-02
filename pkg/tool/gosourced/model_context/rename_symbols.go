@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
@@ -45,7 +45,7 @@ func (s *Server) renameSymbols(
 		return s.captureDetail(e)
 	}
 
-	r, e := s.service.RenameSymbols(
+	r, e := s.symbol.RenameSymbols(
 		turnContext(x),
 		directory,
 		a.PackagePath,
@@ -54,7 +54,7 @@ func (s *Server) renameSymbols(
 	)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

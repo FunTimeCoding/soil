@@ -1,14 +1,14 @@
 package inventory
 
 import (
-	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"golang.org/x/mod/modfile"
 	"os"
 	"path/filepath"
 )
 
 func (i *Inventory) Replacing(directory string) []string {
-	active, e := os.ReadFile(filepath.Join(directory, constant.ModFile))
+	active, e := os.ReadFile(filepath.Join(directory, go_modConstant.ModFile))
 
 	if e != nil {
 		return nil
@@ -25,13 +25,13 @@ func (i *Inventory) Replacing(directory string) []string {
 			continue
 		}
 
-		content, f := os.ReadFile(filepath.Join(other, constant.ModFile))
+		content, f := os.ReadFile(filepath.Join(other, go_modConstant.ModFile))
 
 		if f != nil {
 			continue
 		}
 
-		parsed, g := modfile.Parse(constant.ModFile, content, nil)
+		parsed, g := modfile.Parse(go_modConstant.ModFile, content, nil)
 
 		if g != nil {
 			continue

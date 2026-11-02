@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/constant"
+import soil "github.com/funtimecoding/soil/pkg/constant"
 
 const (
 	NoLimit int = -1
@@ -39,8 +39,8 @@ var (
 		".yml":       true,
 	}
 	DictionaryNoExtension = map[string]bool{
-		constant.ContainerFile: true,
-		constant.DockerFile:    true,
+		soil.ContainerFile: true,
+		soil.DockerFile:    true,
 	}
 )
 

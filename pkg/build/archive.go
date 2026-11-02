@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
@@ -18,7 +18,9 @@ func Archive(
 	console.Format("Source file: %s\n", sourceFile)
 	archiveName := fmt.Sprintf("%s-%s.zip", name, systemArchitecture)
 	console.Format("Archive name: %s\n", archiveName)
-	archive := system.Create(join.Relative(constant.Temporary, archiveName))
+	archive := system.Create(
+		join.Relative(systemConstant.Temporary, archiveName),
+	)
 	defer errors.PanicClose(archive)
 	w := zip.NewWriter(archive)
 	defer errors.PanicClose(w)

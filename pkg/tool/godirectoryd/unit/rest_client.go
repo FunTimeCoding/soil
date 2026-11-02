@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/directory/mock_client"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
@@ -34,7 +34,7 @@ func restClient(
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
-			web.BearerEditor(constant.ModelContextTestToken),
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	assert.FatalOnError(t, e)

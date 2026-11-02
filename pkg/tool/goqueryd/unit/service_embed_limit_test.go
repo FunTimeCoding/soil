@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"testing"
@@ -15,7 +14,7 @@ import (
 
 func TestARefusedChunkLeavesTheRestOfItsDocumentEmbedded(t *testing.T) {
 	body := fixture.Read(systemConstant.LimitPath, "manual.txt")
-	assert.Count(t, 3, chunk.Document(body, "manual.txt", mock_reranker.New()))
+	assert.Count(t, 3, chunk.Document(body, "manual.txt", newReranker(t)))
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))

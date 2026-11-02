@@ -1,8 +1,11 @@
 package example
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"time"
 )
 
@@ -34,7 +37,9 @@ func Utilization() {
 		return
 	}
 
-	r, e := utilization.Read(c.AccessToken)
+	u := utilization.New(locator.New(constant.AnthropicServiceHost))
+	defer u.Close()
+	r, e := u.Read(context.Background(), c.AccessToken)
 
 	if e != nil {
 		console.Format("no utilization data: %s\n", e)

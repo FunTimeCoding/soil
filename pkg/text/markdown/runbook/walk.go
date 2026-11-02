@@ -2,7 +2,7 @@ package runbook
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/text/markdown/runbook/command"
 	"github.com/funtimecoding/soil/pkg/text/markdown/runbook/section"
 	"github.com/yuin/goldmark/v2/ast"
@@ -31,10 +31,7 @@ func (r *Runbook) Walk(n ast.Node) {
 			}
 		case ast.KindParagraph:
 			if r.Title == "" {
-				r.Title = strings.TrimSuffix(
-					r.Filename,
-					constant.MarkdownExtension,
-				)
+				r.Title = strings.TrimSuffix(r.Filename, soil.MarkdownExtension)
 			}
 
 			if s == nil {

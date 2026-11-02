@@ -2,8 +2,10 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -23,18 +25,23 @@ func (s *Server) CreateMachine(
 	}
 
 	if e != nil {
-		return server.CreateMachine500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.CreateMachine500JSONResponse(*s.answer(e)), nil
 	}
 
 	m := convertCreateMachine(r.Body)
 	identifier, e := s.service.CreateMachine(instance, m)
 
-	if e != nil {
-		if validation.Is(e) {
-			return server.CreateMachine400JSONResponse(*clientError(e)), nil
-		}
-
-		return server.CreateMachine500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.CreateMachine400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.CreateMachine404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.CreateMachine403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.CreateMachine503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.CreateMachine500JSONResponse(*s.answer(e)), nil
 	}
 
 	status := "created"

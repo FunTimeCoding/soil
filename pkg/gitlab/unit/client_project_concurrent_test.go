@@ -37,7 +37,7 @@ func TestConcurrentProjectLookupsShareTheCache(t *testing.T) {
 	for range 8 {
 		g.Go(
 			func() {
-				_, e := r.Client.Project(7)
+				_, e := r.Client.Project(t.Context(), 7)
 				assert.FatalOnError(t, e)
 			},
 		)
@@ -45,7 +45,7 @@ func TestConcurrentProjectLookupsShareTheCache(t *testing.T) {
 
 	g.Wait()
 	hits.Store(0)
-	p, e := r.Client.Project(7)
+	p, e := r.Client.Project(t.Context(), 7)
 	assert.FatalOnError(t, e)
 	assert.String(t, "seven", p.Name)
 	assert.Integer(t, 0, int(hits.Load()))

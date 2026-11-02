@@ -1,17 +1,20 @@
 package service
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (s *Service) GetContainer(
 	instance string,
 	identifier int,
 	node string,
 ) (*proxmox.Container, error) {
-	c, clientFail := s.client(instance)
-
-	if clientFail != nil {
-		return nil, clientFail
-	}
-
-	return findContainer(c, identifier, node)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (*proxmox.Container, error) {
+			return findContainer(c, identifier, node)
+		},
+	)
 }

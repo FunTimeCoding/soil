@@ -19,7 +19,7 @@ func TestABrokenCallerNamesItself(t *testing.T) {
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",
 	)
-	_, e := service_tester.NewService(t).Rename(
+	_, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -47,7 +47,7 @@ func TestABrokenCallerNobodyTouchesIsSettled(t *testing.T) {
 		t,
 		os.Chtimes(filepath.Join(d, "pkg/broken/broken.go"), hourAgo, hourAgo),
 	)
-	_, e := service_tester.NewService(t).Rename(
+	_, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -69,7 +69,7 @@ func TestABrokenPackageOutsideTheReachDoesNotBlock(t *testing.T) {
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -96,8 +96,8 @@ func TestABrokenPackageOutsideTheReachDoesNotBlockAWholeLoad(t *testing.T) {
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
 	s := service_tester.NewService(t)
-	s.UseFullLoad()
-	r, e := s.Rename(
+	s.Workspace.UseFullLoad()
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -123,7 +123,7 @@ func TestABrokenPackageOutsideTheReachInAReplacingModuleDoesNotBlock(t *testing.
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",

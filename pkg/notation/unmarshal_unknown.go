@@ -2,7 +2,7 @@ package notation
 
 import (
 	"encoding/json/v2"
-	"github.com/funtimecoding/soil/pkg/structs/constant"
+	structsConstant "github.com/funtimecoding/soil/pkg/structs/constant"
 	"reflect"
 )
 
@@ -27,7 +27,7 @@ func UnmarshalUnknown(
 
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
-		j := f.Tag.Get(constant.NotationKey)
+		j := f.Tag.Get(structsConstant.NotationKey)
 
 		if j != "" && j != "-" {
 			for x := 0; x < len(j); x++ {

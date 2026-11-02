@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/generative/ollama/chat_request"
 )
@@ -11,7 +11,7 @@ func Chat() {
 	o := ollama.NewEnvironment()
 	defer o.Close()
 	r := chat_request.New()
-	f := constant.ColorFormat
+	f := consoleConstant.ColorFormat
 	r.System(
 		"You are a ChatOps bot. Respond in the users message length and writing style.",
 	)

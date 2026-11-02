@@ -4,7 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/roster"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/search"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/transcript"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/usage"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/conversations"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -15,7 +22,15 @@ import (
 )
 
 func New(
-	s *service.Service,
+	rosterService *roster.Service,
+	sessionService *session.Service,
+	labelService *label.Service,
+	messageService *message.Service,
+	eventService *event.Service,
+	transcriptService *transcript.Service,
+	usageService *usage.Service,
+	searchService *search.Service,
+	n face.EventNotifier,
 	f face.Reporter,
 ) *Server {
 	r := registry.New()
@@ -63,11 +78,21 @@ func New(
 	)
 
 	return &Server{
-		service:       s,
-		reporter:      f,
-		notifier:      s.Notifier(),
-		conversations: conversations.New(s),
-		registry:      r,
+		roster:     rosterService,
+		session:    sessionService,
+		label:      labelService,
+		message:    messageService,
+		event:      eventService,
+		transcript: transcriptService,
+		usage:      usageService,
+		reporter:   f,
+		notifier:   n,
+		conversations: conversations.New(
+			rosterService,
+			searchService,
+			transcriptService,
+		),
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeHearth).

@@ -54,7 +54,13 @@ func (s *Server) event() http.HandlerFunc {
 				instance, g := s.queryInstance(r)
 
 				if g == nil && project != 0 && pipeline != 0 {
-					v, e := s.service.JobView(instance, project, pipeline, 0)
+					v, e := s.service.JobView(
+						r.Context(),
+						instance,
+						project,
+						pipeline,
+						0,
+					)
 					errors.PanicOnError(e)
 					layout.PushEvent(
 						w,

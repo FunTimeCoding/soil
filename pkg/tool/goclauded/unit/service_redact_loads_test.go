@@ -9,10 +9,13 @@ import (
 func TestRedactedLoadsHideNameAndReference(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("redacted-session")
-	s.Memory.Redacted = map[int64]bool{109: true}
+	s.MemoryPeer.Redacted = map[int64]bool{109: true}
 	s.WriteContextLoadFile("redacted-session")
-	s.Service.EnrichSession("redacted-session")
-	loads, e := s.Service.ContextLoadsBySession(t.Context(), "redacted-session")
+	s.Transcript.EnrichSession("redacted-session")
+	loads, e := s.Transcript.ContextLoadsBySession(
+		t.Context(),
+		"redacted-session",
+	)
 	assert.FatalOnError(t, e)
 	seen := false
 
@@ -31,8 +34,8 @@ func TestUnredactedLoadsKeepTheirNames(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("plain-session")
 	s.WriteContextLoadFile("plain-session")
-	s.Service.EnrichSession("plain-session")
-	loads, e := s.Service.ContextLoadsBySession(t.Context(), "plain-session")
+	s.Transcript.EnrichSession("plain-session")
+	loads, e := s.Transcript.ContextLoadsBySession(t.Context(), "plain-session")
 	assert.FatalOnError(t, e)
 	seen := false
 

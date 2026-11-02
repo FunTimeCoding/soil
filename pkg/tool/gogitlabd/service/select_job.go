@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
@@ -20,13 +20,13 @@ func selectJob(
 	}
 
 	for _, j := range jobs {
-		if j.Status == constant.JobRunning {
+		if j.Status == gitlabConstant.JobRunning {
 			return j
 		}
 	}
 
 	for _, j := range jobs {
-		if j.Status == constant.JobFail {
+		if j.Status == gitlabConstant.JobFail {
 			return j
 		}
 	}

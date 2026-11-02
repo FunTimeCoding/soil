@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/packer/build"
 	stringJoin "github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"log"
 	"runtime"
@@ -30,7 +30,7 @@ func (c *Client) Run(
 
 	system.Move(
 		preseed,
-		join.Absolute(c.packerWebDirectory, constant.PreseedConfiguration),
+		join.Absolute(c.packerWebDirectory, systemConstant.PreseedConfiguration),
 	)
 	b := build.New(architecture, 4444, username, password)
 	b.SetBuilder(
@@ -57,12 +57,12 @@ func (c *Client) Run(
 		var connectCommand string
 
 		switch runtime.GOOS {
-		case constant.Linux:
+		case systemConstant.Linux:
 			connectCommand = fmt.Sprintf(
 				"nc -v 127.0.0.1 %d",
 				b.CharacterDevicePort,
 			)
-		case constant.Darwin:
+		case systemConstant.Darwin:
 			connectCommand = fmt.Sprintf(
 				"socat -,raw,echo=0,escape=0x11 tcp:127.0.0.1:%d",
 				b.CharacterDevicePort,

@@ -1,7 +1,7 @@
 package alert
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -14,7 +14,7 @@ func (a *Alert) Format(f *option.Format) string {
 		s.String(v)
 	}
 
-	if f.HasTag(constant.TagCategory) {
+	if f.HasTag(consoleConstant.TagCategory) {
 		if v := a.formatCategory(f); v != "" {
 			s.String(v)
 		}
@@ -26,7 +26,7 @@ func (a *Alert) Format(f *option.Format) string {
 
 	s.String(a.formatPriority(f))
 
-	if !f.HasTag(constant.TagFilter) && !f.HasTag(constant.TagDense) {
+	if !f.HasTag(consoleConstant.TagFilter) && !f.HasTag(consoleConstant.TagDense) {
 		s.String(a.formatStatus(f))
 	}
 

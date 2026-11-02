@@ -2,7 +2,6 @@ package goproxmox
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
@@ -53,6 +52,9 @@ func Main() {
 	o.AddCommand(deleteSnapshot(c))
 	o.AddCommand(listContainers(c))
 	o.AddCommand(getContainer(c))
+	o.AddCommand(startContainer(c))
+	o.AddCommand(stopContainer(c))
+	o.AddCommand(shutdownContainer(c))
 	o.AddCommand(listContainerSnapshots(c))
 	o.AddCommand(createContainerSnapshot(c))
 	o.AddCommand(rollbackContainerSnapshot(c))
@@ -67,5 +69,5 @@ func Main() {
 	o.AddCommand(deleteSnippet(c))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
-	errors.PanicOnError(o.Execute())
+	argument.CobraExecute(o)
 }

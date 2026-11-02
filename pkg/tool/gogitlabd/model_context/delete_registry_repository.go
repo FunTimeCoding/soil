@@ -27,7 +27,7 @@ func (s *Server) DeleteRegistryRepository(
 		return s.answerWith(e, "")
 	}
 
-	deleted, e := s.service.DeleteRegistryPath(instance, project, a.Path)
+	deleted, e := s.service.DeleteRegistryPath(x, instance, project, a.Path)
 
 	if not_found.Is(e) {
 		return response.Fail("no registry repository matches %s", a.Path)

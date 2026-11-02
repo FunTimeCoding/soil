@@ -11,14 +11,14 @@ import (
 
 func (s *Server) event() http.HandlerFunc {
 	return layout.HandleServerSideEventWithRequest(
-		s.worker.Notifier(),
+		s.service.Notifier(),
 		func(
 			w http.ResponseWriter,
 			f http.Flusher,
 			r *http.Request,
 		) {
 			subs := subscription.Parse(r)
-			snapshot := s.worker.Floor()
+			snapshot := s.service.Floor()
 
 			if subs.Has(constant.SummaryEvent) {
 				layout.PushEvent(

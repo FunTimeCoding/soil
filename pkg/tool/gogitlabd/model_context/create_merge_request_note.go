@@ -31,6 +31,7 @@ func (s *Server) CreateMergeRequestNote(
 	}
 
 	v, e := s.service.CreateMergeRequestNote(
+		x,
 		instance,
 		project,
 		a.MergeRequest,

@@ -4,13 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/lease"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
+	gopnsensedConstant "github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 )
 
 func (d *Daemon) addLease(o *option.Atlas) {
 	c := o.Lease()
 	g := peer.New(
-		constant.Identity.Name(),
+		gopnsensedConstant.Identity.Name(),
 		c.Address(),
 		c,
 		d.logger,

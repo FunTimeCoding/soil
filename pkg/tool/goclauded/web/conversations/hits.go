@@ -18,9 +18,9 @@ func (s *Server) hits(
 	query := r.URL.Query().Get(constant.QueryField)
 	kinds := r.URL.Query()[constant.KindField]
 	around := r.URL.Query().Get(constant.Around)
-	blocks, e := s.service.ConversationBlocks(session, kinds)
+	blocks, e := s.search.ConversationBlocks(session, kinds)
 	errors.PanicOnError(e)
-	matching, f := s.service.MatchingBlocks(session, query, kinds)
+	matching, f := s.search.MatchingBlocks(session, query, kinds)
 	errors.PanicOnError(f)
 	terms := strings.Fields(query)
 	var nodes []gomponents.Node

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/chromedp/chromedp"
 	"github.com/chromedp/chromedp/remote"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/requester"
 )
@@ -15,7 +15,7 @@ func New(
 ) *Client {
 	allocator, allocatorCancel := remote.NewAllocator(
 		context.Background(),
-		locator.New(host).Port(port).Scheme(constant.Socket).String(),
+		locator.New(host).Port(port).Scheme(webConstant.Socket).String(),
 	)
 	c, cancel := chromedp.NewContext(allocator)
 

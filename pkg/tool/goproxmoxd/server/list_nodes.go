@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -23,13 +26,22 @@ func (s *Server) ListNodes(
 	}
 
 	if e != nil {
-		return server.ListNodes500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.ListNodes500JSONResponse(*s.answer(e)), nil
 	}
 
 	nodes, e := s.service.ListNodes(instance)
 
-	if e != nil {
-		return server.ListNodes500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.ListNodes400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.ListNodes404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.ListNodes403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.ListNodes503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.ListNodes500JSONResponse(*s.answer(e)), nil
 	}
 
 	pointers := convert.Nodes(nodes)

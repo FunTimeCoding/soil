@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -17,7 +17,7 @@ func mountedClient(
 	v := mountedUpload(t, o.Option)
 	result := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(v.Port),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(result.Close)
 

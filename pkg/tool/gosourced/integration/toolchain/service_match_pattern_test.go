@@ -13,7 +13,7 @@ func TestMatchPattern(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, match, e := s.MatchPattern(
+	r, match, e := s.Pattern.MatchPattern(
 		d,
 		"example/pkg/client",
 		"Ready",
@@ -44,7 +44,7 @@ func TestMatchPatternImported(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, match, e := s.MatchPattern(
+	r, match, e := s.Pattern.MatchPattern(
 		d,
 		"fmt",
 		"Println",
@@ -69,7 +69,7 @@ func TestMatchPatternHoleConsistency(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, match, e := s.MatchPattern(
+	r, match, e := s.Pattern.MatchPattern(
 		d,
 		"example/pkg/pair",
 		"Compare",
@@ -92,7 +92,7 @@ func TestMatchPatternType(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, match, e := s.MatchPattern(
+	r, match, e := s.Pattern.MatchPattern(
 		d,
 		"example/pkg/client",
 		"Client",
@@ -118,7 +118,7 @@ func TestListCalls(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, inventory, e := s.ListCalls(d, "example/pkg/monitor", 0)
+	r, inventory, e := s.Reference.ListCalls(d, "example/pkg/monitor", 0)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.NotNil(t, inventory)
@@ -145,7 +145,7 @@ func TestMatchPatternWhitespace(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, match, e := s.MatchPattern(
+	r, match, e := s.Pattern.MatchPattern(
 		d,
 		"example/pkg/client",
 		"Ready",

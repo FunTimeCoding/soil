@@ -2,13 +2,13 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/network"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"strings"
 )
 
 func (a *Alert) FullHost() string {
 	result := a.HostDetail()
-	result = strings.TrimPrefix(result, constant.SecurePrefix)
+	result = strings.TrimPrefix(result, webConstant.SecurePrefix)
 
 	if strings.ContainsRune(result, ':') {
 		return network.SplitHost(result)

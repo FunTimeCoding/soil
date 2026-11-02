@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
@@ -28,7 +28,7 @@ func (s *Server) PostSessionLabel(
 
 	switch {
 	case r.Body.Expect != nil:
-		change, e = s.service.SwapLabel(
+		change, e = s.label.SwapLabel(
 			r.Identifier,
 			from,
 			r.Body.Key,
@@ -36,15 +36,9 @@ func (s *Server) PostSessionLabel(
 			value,
 		)
 	case value == "":
-		change, e = s.service.DeleteLabel(r.Identifier, from, "", r.Body.Key)
+		change, e = s.label.DeleteLabel(r.Identifier, from, "", r.Body.Key)
 	default:
-		change, e = s.service.SetLabel(
-			r.Identifier,
-			from,
-			"",
-			r.Body.Key,
-			value,
-		)
+		change, e = s.label.SetLabel(r.Identifier, from, "", r.Body.Key, value)
 	}
 
 	if e != nil {
@@ -55,7 +49,7 @@ func (s *Server) PostSessionLabel(
 		}
 
 		return server.PostSessionLabel500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

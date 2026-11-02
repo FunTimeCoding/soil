@@ -10,7 +10,7 @@ func NewPanel(
 	result := New(t)
 	result.Store.EnsureSession(identifier)
 	result.WriteContextLoadFile(identifier)
-	result.Service.EnrichSession(identifier)
+	result.Transcript.EnrichSession(identifier)
 
 	return result
 }

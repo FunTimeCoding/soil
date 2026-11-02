@@ -23,6 +23,7 @@ func (s *Server) GetRepositoryTree(
 	}
 
 	v, e := s.service.Tree(
+		x,
 		instance,
 		project,
 		a.Path,

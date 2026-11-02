@@ -1,18 +1,20 @@
 package example
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 )
 
 func Runner() {
 	g := gitlab.NewEnvironment()
 	defer g.Close()
-	f := constant.ExtendedColorFormat.Copy().Raw()
+	x := context.Background()
+	f := consoleConstant.ExtendedColorFormat.Copy().Raw()
 
-	for _, r := range g.MustRunners(true) {
-		r = g.MustRunner(r.Identifier)
+	for _, r := range g.MustRunners(x, true) {
+		r = g.MustRunner(x, r.Identifier)
 		console.Line(r.Format(f))
 	}
 }

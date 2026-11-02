@@ -1,7 +1,7 @@
 package reflow
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/yuin/goldmark/v2/ast"
 	"strings"
@@ -31,7 +31,7 @@ func rewrap(
 
 	if strings.HasPrefix(
 		string(source[first.Start:first.Stop]),
-		constant.Pipe,
+		stringsConstant.Pipe,
 	) {
 		return nil
 	}

@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
@@ -15,7 +15,7 @@ func formatFiles(all []*packages.Package) []string {
 		for _, file := range p.Syntax {
 			name := p.Fset.File(file.Pos()).Name()
 
-			if filepath.Base(name) == constant.GeneratedFile ||
+			if filepath.Base(name) == soil.GeneratedFile ||
 				ast.IsGenerated(file) ||
 				!filepath.IsAbs(name) ||
 				!fileExists(name) ||

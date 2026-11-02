@@ -1,13 +1,23 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) ListInstances() *response.Response {
-	result, e := c.client.ListInstancesWithResponse(c.context)
-	errors.PanicOnError(e)
+func (c *Client) ListInstances(
+	x context.Context,
+) ([]client.InstanceDetail, error) {
+	r, e := c.client.ListInstancesWithResponse(x)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("list instances", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

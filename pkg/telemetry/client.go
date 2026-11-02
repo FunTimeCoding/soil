@@ -1,14 +1,11 @@
 package telemetry
 
 import (
-	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/client"
 	"sync"
 )
 
 type Client struct {
-	base   string
-	client *http.Client
-	pool   *pool.Pool
+	client *client.Client
 	group  sync.WaitGroup
 }

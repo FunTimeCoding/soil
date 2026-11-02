@@ -15,6 +15,25 @@ issues from the next. golint also names every installed binary
 older than its repository's latest tag; `gobuild stale`
 installs them all.
 
+`task lint-check` runs the same stages without writing: golint and
+golangci-lint without `--fix`, `gofix --diff`, then goanalyze and
+goaudit. Use it to look; fix with `task lint`. `REACH=own` narrows
+it to what the current session changed, `REACH=<session>` to what a
+named one did: `goreach` reads the session's transcript - the files
+its edit tools wrote and the ones gosourced reports - keeps those git
+still sees changed, and prints the directories they reach, each
+changed package and every package importing it, read from import
+lines so code that does not type-check still counts. goaudit stays
+whole-repository. A reach with nothing changed ends the task early.
+Bash writes join the reach where the command names its files
+literally - `mv` and `git mv` (both sides), `cp` (the destination),
+`rm`, `git rm`, `rmdir`, `sed -i`, `tee`, `touch` and redirects -
+resolved from the directory the transcript recorded and any `cd`
+before them. `goreach` counts the rest apart: operands built from
+variables, globs or loops, fixer runs (their own run is their check)
+and scripts.
+`go test $(goreach)` tests the same reach.
+
 Run the full pipeline once per completed code scope - it covers
 the whole repository and takes minutes. For doc-only edits, run
 `golint <path>` on the changed files instead - the header says

@@ -1,8 +1,10 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
@@ -26,8 +28,16 @@ func rollbackSnapshot(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			c.Terminal().Emit(
-				c.Client().RollbackMachineSnapshot(identifier, name, n),
+			c.Terminal().EmitValue(
+				c.Client().RollbackMachineSnapshot(
+					context.Background(),
+					identifier,
+					name,
+					&client.RollbackMachineSnapshotParams{
+						Instance: c.Instance(),
+						Node:     n,
+					},
+				),
 			)
 		},
 	}

@@ -2,7 +2,7 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/provision/salt/session"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -19,6 +19,6 @@ func New(
 		session: s,
 		requester: newRequester(base).
 			WithAuthorizer(s).
-			WithHeader(constant.Accept, constant.Object),
+			WithHeader(webConstant.Accept, webConstant.Object),
 	}
 }

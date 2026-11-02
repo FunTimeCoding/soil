@@ -88,7 +88,9 @@ func TestAFailingPanelIsReportedAndShownPending(t *testing.T) {
 		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
 		r,
 	)
-	worker.NewEvery(v.Refresh, l, r, time.Hour).Poll()
+	owned := worker.NewEvery(v.Refresh, l, r, time.Hour)
+	defer owned.Close()
+	owned.Poll()
 	assert.Count(t, 1, r.Events())
 	assert.StringContains(t, "token expired", r.Events()[0].Error.Error())
 	assert.String(t, "–", v.Values()["Nextcloud"][0])

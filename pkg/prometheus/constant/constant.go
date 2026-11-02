@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/prometheus/common/model"
 	"time"
 )
@@ -50,10 +50,10 @@ const (
 	StatefulSetLabel = "statefulset"
 )
 
-var Format = constant.ColorFormat.Copy().Tag(
-	constant.TagCategory,
-	constant.TagEmoji,
-	constant.TagInstance,
+var Format = consoleConstant.ColorFormat.Copy().Tag(
+	consoleConstant.TagCategory,
+	consoleConstant.TagEmoji,
+	consoleConstant.TagInstance,
 )
 
 const (
@@ -112,7 +112,9 @@ const ExpiredState = "expired"
 const NodeNotReady = "KubeNodeNotReady"
 
 var (
-	AlertmanagerFormat = constant.ColorFormat.Copy().Tag(constant.TagComment)
+	AlertmanagerFormat = consoleConstant.ColorFormat.Copy().Tag(
+		consoleConstant.TagComment,
+	)
 
 	AlertStates = []string{ActiveState, SuppressedState}
 	Severities  = []string{

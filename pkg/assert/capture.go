@@ -22,6 +22,8 @@ func Capture(
 	f()
 	os.Stdout = original
 	FatalOnError(t, writer.Close())
+	result := <-done
+	FatalOnError(t, reader.Close())
 
-	return <-done
+	return result
 }

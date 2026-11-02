@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
 )
@@ -62,7 +62,7 @@ func sessionCruise(c *command_context.Context) *cobra.Command {
 	}
 	result.Flags().IntVar(
 		&pace,
-		constant.Pace,
+		goclaudedConstant.Pace,
 		0,
 		"minutes between wakes, for paced",
 	)

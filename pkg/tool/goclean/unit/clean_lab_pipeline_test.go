@@ -9,7 +9,7 @@ import (
 
 func TestPipelineCleanSparesRunningAndQueued(t *testing.T) {
 	c := seedProject(t)
-	lab.Pipeline(option.New(), c, seedTarget())
+	lab.Pipeline(t.Context(), option.New(), c, seedTarget())
 	assert.Any(t, []int64{3}, c.DeletedPipelines())
 }
 
@@ -17,6 +17,6 @@ func TestPipelineCleanAllDeletesRunningAndQueued(t *testing.T) {
 	c := seedProject(t)
 	o := option.New()
 	o.All = true
-	lab.Pipeline(o, c, seedTarget())
+	lab.Pipeline(t.Context(), o, c, seedTarget())
 	assert.Any(t, []int64{3, 4, 5}, c.DeletedPipelines())
 }

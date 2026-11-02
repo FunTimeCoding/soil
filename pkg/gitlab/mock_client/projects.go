@@ -1,8 +1,15 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/project"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
+)
 
-func (c *Client) Projects() ([]*project.Project, error) {
+func (c *Client) Projects(x context.Context) ([]*project.Project, error) {
+	if e := x.Err(); e != nil {
+		return nil, e
+	}
+
 	if c.projectFailure != nil {
 		return nil, c.projectFailure
 	}

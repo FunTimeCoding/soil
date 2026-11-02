@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
@@ -24,7 +24,7 @@ func (s *Service) VirtualMachines() (
 	}
 
 	grouped, e := s.store.GroupedLabels(
-		constant.VirtualMachineAddress,
+		netboxConstant.VirtualMachineAddress,
 		identifiers,
 	)
 

@@ -1,12 +1,12 @@
 package unit
 
-import "github.com/funtimecoding/soil/pkg/band/constant"
+import bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 
 func runningStates() []int {
 	return []int{
-		constant.PowerCycle,
-		constant.PowerOffSoft,
-		constant.PowerOffSoftGraceful,
-		constant.PowerResetGraceful,
+		bandConstant.PowerCycle,
+		bandConstant.PowerOffSoft,
+		bandConstant.PowerOffSoftGraceful,
+		bandConstant.PowerResetGraceful,
 	}
 }

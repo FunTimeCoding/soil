@@ -2,7 +2,6 @@ package gojellyfin
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
 	"github.com/spf13/cobra"
 )
@@ -28,25 +27,9 @@ func play(x *Context) *cobra.Command {
 				body.StartPositionTicks = &start
 			}
 
-			r, e := x.Client.PlayWithResponse(
-				context.Background(),
-				arguments[0],
-				body,
+			x.Terminal.EmitDone(
+				x.Client.Play(context.Background(), arguments[0], body),
 			)
-
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.HTTPResponse.StatusCode != 204 {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			fmt.Println("playback started")
 		},
 	}
 	result.Flags().StringVar(

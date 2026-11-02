@@ -15,7 +15,7 @@ func TestMoveWithCgoConsumerStaysInsideModule(t *testing.T) {
 		service_tester.ServiceTestdata("move-cgo-reference/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -37,7 +37,7 @@ func TestMovePackageWithTestVariantsStaysInsideModule(t *testing.T) {
 	e := os.MkdirAll(filepath.Join(d, "pkg/alfa/integration"), 0755)
 	assert.FatalOnError(t, e)
 	s := service_tester.NewService(t)
-	r, f := s.MovePackage(
+	r, f := s.Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/alfa/integration_test/client",

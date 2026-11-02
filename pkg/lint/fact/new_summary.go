@@ -10,5 +10,7 @@ func NewSummary() *Summary {
 		SpentVia:  make(map[string][]string),
 		LendsVia:  make(map[string][]string),
 		Wraps:     make(map[string][]Forward),
+		Yields:    make(map[string][]FieldForward),
+		Draws:     make(map[string][]FieldForward),
 	}
 }

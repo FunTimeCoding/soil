@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
@@ -31,7 +31,7 @@ func relations(
 			params := &client.GetRelationsParams{}
 
 			if untyped {
-				relationType = constant.UntypedFilter
+				relationType = gomemorydConstant.UntypedFilter
 			}
 
 			if relationType != "" {

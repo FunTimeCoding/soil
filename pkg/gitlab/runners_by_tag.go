@@ -1,20 +1,24 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 	"slices"
 )
 
-func (c *Client) RunnersByTag(tag string) ([]*runner.Runner, error) {
+func (c *Client) RunnersByTag(
+	x context.Context,
+	tag string,
+) ([]*runner.Runner, error) {
 	var result []*runner.Runner
-	runners, e := c.Runners(true)
+	runners, e := c.Runners(x, true)
 
 	if e != nil {
 		return nil, e
 	}
 
 	for _, r := range runners {
-		detail, f := c.Runner(r.Identifier)
+		detail, f := c.Runner(x, r.Identifier)
 
 		if f != nil {
 			return nil, f

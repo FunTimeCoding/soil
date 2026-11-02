@@ -1,8 +1,10 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
@@ -32,7 +34,17 @@ func deleteMachine(c *command_context.Context) *cobra.Command {
 				p = &purge
 			}
 
-			c.Terminal().Emit(c.Client().DeleteMachine(identifier, n, p))
+			c.Terminal().EmitValue(
+				c.Client().DeleteMachine(
+					context.Background(),
+					identifier,
+					&client.DeleteMachineParams{
+						Instance: c.Instance(),
+						Node:     n,
+						Purge:    p,
+					},
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name")

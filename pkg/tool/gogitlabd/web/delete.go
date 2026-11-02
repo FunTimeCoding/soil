@@ -23,9 +23,12 @@ func (s *Server) delete(
 
 	project := queryInteger(r, argumentConstant.Project)
 	pipeline := queryInteger(r, argumentConstant.Pipeline)
-	errors.PanicOnError(s.service.DeletePipeline(instance, project, pipeline))
+	x := r.Context()
+	errors.PanicOnError(
+		s.service.DeletePipeline(x, instance, project, pipeline),
+	)
 
-	for _, f := range s.service.Refresh() {
+	for _, f := range s.service.Refresh(x) {
 		if classify.Reportable(f) {
 			s.reporter.CaptureException(f)
 		}

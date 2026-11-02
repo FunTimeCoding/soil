@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	goproxmoxdConstant "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -21,7 +21,7 @@ func (c *Client) CreateMachine(
 
 	vm := &proxmox.VirtualMachine{
 		VMID: proxmox.StringOrUint64(identifier),
-		Name: optionValue(options, constant.NameOption),
+		Name: optionValue(options, goproxmoxdConstant.NameOption),
 		Node: n.Name,
 	}
 	nodeMachines[identifier] = vm

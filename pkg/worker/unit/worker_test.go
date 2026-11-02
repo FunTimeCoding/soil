@@ -71,6 +71,25 @@ func TestCloseWaitsForARunningTick(t *testing.T) {
 	assert.True(t, finished.Load())
 }
 
+func TestATickCancelledByCloseReportsNothing(t *testing.T) {
+	entered := make(chan struct{})
+	r := memory.New()
+	w := worker.NewOnce(
+		func(x context.Context) []error {
+			close(entered)
+			<-x.Done()
+
+			return []error{x.Err()}
+		},
+		logger.New(t.Context()),
+		r,
+	)
+	w.Start()
+	<-entered
+	w.Close()
+	assert.Count(t, 0, r.Events())
+}
+
 func TestDailyWaitsForItsTimeInsteadOfTickingAtStart(t *testing.T) {
 	var ticks atomic.Int64
 	now := time.Now().UTC()
@@ -122,13 +141,68 @@ func TestEveryDelayIsItsInterval(t *testing.T) {
 
 func TestAReportableFailureIsCapturedAndAQuietOneIsNot(t *testing.T) {
 	r := memory.New()
-	worker.NewEvery(
+	owned := worker.NewEvery(
 		func() []error {
 			return []error{fmt.Errorf("broken"), validation.New("refused")}
 		},
 		logger.New(t.Context()),
 		r,
 		time.Hour,
-	).Poll()
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Count(t, 1, r.Events())
+}
+
+func TestEveryTicksAtStart(t *testing.T) {
+	var ticks atomic.Int64
+	w := worker.NewEvery(
+		func() []error {
+			ticks.Add(1)
+
+			return nil
+		},
+		logger.New(t.Context()),
+		memory.New(),
+		time.Hour,
+	)
+	w.Start()
+	await(t, func() bool { return ticks.Load() == 1 })
+	w.Close()
+	assert.Integer(t, int64(1), ticks.Load())
+}
+
+func TestADelayedStartWaitsOneIntervalBeforeItsFirstTick(t *testing.T) {
+	var ticks atomic.Int64
+	w := worker.NewEvery(
+		func() []error {
+			ticks.Add(1)
+
+			return nil
+		},
+		logger.New(t.Context()),
+		memory.New(),
+		time.Hour,
+	).WithDelayedStart()
+	w.Start()
+	time.Sleep(50 * time.Millisecond)
+	w.Close()
+	assert.Integer(t, int64(0), ticks.Load())
+}
+
+func TestADelayedStartTicksAfterItsInterval(t *testing.T) {
+	var ticks atomic.Int64
+	w := worker.NewEvery(
+		func() []error {
+			ticks.Add(1)
+
+			return nil
+		},
+		logger.New(t.Context()),
+		memory.New(),
+		20*time.Millisecond,
+	).WithDelayedStart()
+	w.Start()
+	await(t, func() bool { return ticks.Load() >= 1 })
+	w.Close()
 }

@@ -3,7 +3,7 @@ package kestra
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/kestra-io/client-sdk/go-sdk/v2/kestra_api_client"
 )
@@ -14,7 +14,7 @@ func New(
 	o ...Option,
 ) *Client {
 	c := kestra_api_client.NewConfiguration()
-	c.Scheme = constant.Secure
+	c.Scheme = webConstant.Secure
 	c.Host = host
 	result := &Client{context: context.Background()}
 
@@ -23,8 +23,8 @@ func New(
 	}
 
 	if result.token != "" {
-		c.DefaultHeader[constant.Authorization] = key_value.Space(
-			constant.Bearer,
+		c.DefaultHeader[webConstant.Authorization] = key_value.Space(
+			webConstant.Bearer,
 			result.token,
 		)
 	}

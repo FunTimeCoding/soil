@@ -3,7 +3,7 @@ package fetch
 import (
 	"charm.land/bubbletea/v2"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"strings"
 )
 
@@ -17,10 +17,10 @@ func Command() tea.Cmd {
 			}
 		}
 
-		alert := fmt.Sprintf("%s-", constant.GoAlert.Prefix)
-		silence := fmt.Sprintf("%s-", constant.GoSilence.Prefix)
-		event := fmt.Sprintf("%s-", constant.GoKevt.Prefix)
-		file := fmt.Sprintf("%s-", constant.GoFile.Prefix)
+		alert := fmt.Sprintf("%s-", monitorConstant.GoAlert.Prefix)
+		silence := fmt.Sprintf("%s-", monitorConstant.GoSilence.Prefix)
+		event := fmt.Sprintf("%s-", monitorConstant.GoKevt.Prefix)
+		file := fmt.Sprintf("%s-", monitorConstant.GoFile.Prefix)
 
 		for i, t := range result.Items {
 			t.Label = t.Identifier

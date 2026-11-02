@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/keepass"
-	"github.com/funtimecoding/soil/pkg/keepass/constant"
+	keepassConstant "github.com/funtimecoding/soil/pkg/keepass/constant"
 )
 
 func main() {
@@ -15,5 +15,5 @@ func main() {
 		console.Line(entry.GetPassword())
 	}
 
-	console.Format("Entry: %+v\n", c.ByTitle(constant.DirectoryTitle))
+	console.Format("Entry: %+v\n", c.ByTitle(keepassConstant.DirectoryTitle))
 }

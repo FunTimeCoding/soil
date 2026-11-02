@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
 )
@@ -13,7 +13,7 @@ func (s *Service) unresolved(p *post.Post) (*thread.Thread, error) {
 
 	done, e := s.mattermost.PostHasReaction(
 		p.Raw,
-		constant.MattermostDoneReaction,
+		chatConstant.MattermostDoneReaction,
 	)
 
 	if e != nil || done {

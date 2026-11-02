@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -45,7 +45,7 @@ func rewriteSpan(
 	stop := start + strings.Index(c.Span[start:], "}")
 	inner := c.Span[start+1 : stop]
 	post := c.Span[stop+1:]
-	choices := strings.Split(inner, constant.Comma)
+	choices := strings.Split(inner, stringsConstant.Comma)
 
 	if len(choices) != len(afters) {
 		return "", false

@@ -2,7 +2,7 @@ package lint
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"strings"
@@ -27,7 +27,7 @@ func markdownFiles(
 			continue
 		}
 
-		if !strings.HasSuffix(p, constant.MarkdownExtension) {
+		if !strings.HasSuffix(p, soil.MarkdownExtension) {
 			continue
 		}
 

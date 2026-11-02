@@ -16,6 +16,7 @@ import (
 
 func OllamaSession() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	t := telegram.NewEnvironment()
 	defer t.Close()
 	t.PrintDatabase()

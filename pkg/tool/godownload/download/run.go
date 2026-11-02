@@ -1,6 +1,7 @@
 package download
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
@@ -19,9 +20,10 @@ func Run(o *option.Download) {
 	validate(o)
 	g := gitlab.New(o.Host, o.Token)
 	defer g.Close()
-	project := common.FindProjectOrExit(g, o.Owner, o.Repository)
+	x := context.Background()
+	project := common.FindProjectOrExit(x, g, o.Owner, o.Repository)
 	filtered := packages.FilterByName(
-		g.MustPackages(project.Identifier, false),
+		g.MustPackages(x, project.Identifier, false),
 		o.Package,
 	)
 	var p *library.Package
@@ -43,7 +45,7 @@ func Run(o *option.Download) {
 	}
 
 	f := packages.SystemMatchingFile(
-		g.MustPackageFiles(project.Identifier, p.ID),
+		g.MustPackageFiles(x, project.Identifier, p.ID),
 	)
 
 	if f == nil {

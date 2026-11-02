@@ -1,7 +1,7 @@
 package gomattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	soil "github.com/funtimecoding/soil/pkg/constant"
@@ -25,7 +25,7 @@ func formatPost(
 		}
 
 		if f.UseColor {
-			l = constant.Cyan("%s", l)
+			l = consoleConstant.Cyan("%s", l)
 		}
 
 		lines[i] = l

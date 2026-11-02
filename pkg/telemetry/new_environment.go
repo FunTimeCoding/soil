@@ -2,7 +2,7 @@ package telemetry
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 

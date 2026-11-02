@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
@@ -21,7 +21,7 @@ func New(t *testing.T) *Server {
 		alert.NewBasic(
 			"fp1",
 			"HighMemory",
-			constant.CriticalSeverity,
+			prometheusConstant.CriticalSeverity,
 			"Memory above 90%",
 		),
 	)
@@ -29,7 +29,7 @@ func New(t *testing.T) *Server {
 		alert.NewBasic(
 			"fp2",
 			"DiskFull",
-			constant.WarningSeverity,
+			prometheusConstant.WarningSeverity,
 			"Disk usage above 85%",
 		),
 	)

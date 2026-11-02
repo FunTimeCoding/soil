@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	proxmoxConstant "github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/guest"
 )
 
@@ -16,7 +16,7 @@ func (s *Server) guestLink(g guest.Guest) string {
 	port := i.Port
 
 	if port == 0 {
-		port = constant.Port
+		port = proxmoxConstant.Port
 	}
 
 	return fmt.Sprintf(

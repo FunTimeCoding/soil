@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
@@ -30,7 +30,7 @@ func Scopes(
 
 		relative = filepath.ToSlash(relative)
 
-		if relative == constant.ParentDirectory ||
+		if relative == soil.ParentDirectory ||
 			strings.HasPrefix(relative, "../") {
 			return nil, errors.Format("path outside repository", p)
 		}
@@ -40,7 +40,7 @@ func Scopes(
 			return nil, errors.Format("path does not exist", p)
 		}
 
-		if relative == constant.CurrentDirectory {
+		if relative == soil.CurrentDirectory {
 			continue
 		}
 

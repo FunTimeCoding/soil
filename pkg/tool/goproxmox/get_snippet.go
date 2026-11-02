@@ -1,7 +1,9 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
@@ -14,7 +16,13 @@ func getSnippet(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			c.Terminal().Emit(c.Client().GetSnippet(a[0]))
+			c.Terminal().EmitValue(
+				c.Client().GetSnippet(
+					context.Background(),
+					a[0],
+					&client.GetSnippetParams{Instance: c.Instance()},
+				),
+			)
 		},
 	}
 }

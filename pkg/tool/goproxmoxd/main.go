@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
@@ -37,7 +37,7 @@ func Main() {
 	)
 	errors.PanicOnError(instance.ValidateIndexes(o.Inventory))
 
-	if environment.Exists(netboxConstant.PowerIntentEnvironment) {
+	if environment.Exists(gonetboxdConstant.PowerIntentEnvironment) {
 		o.Netbox = func() face.Client { return client.NewEnvironment() }
 	}
 

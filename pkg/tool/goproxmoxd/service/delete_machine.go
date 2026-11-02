@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -11,36 +12,35 @@ func (s *Service) DeleteMachine(
 	node string,
 	purge bool,
 ) error {
-	c, clientFail := s.client(instance)
+	return s.attempt(
+		instance,
+		func(c face.ProxmoxClient) error {
+			vm, e := findMachine(c, identifier, node)
 
-	if clientFail != nil {
-		return clientFail
-	}
+			if e != nil {
+				return e
+			}
 
-	vm, e := findMachine(c, identifier, node)
+			if vm.Status == "running" {
+				return conflict.Format(
+					"machine %d is running - stop it before deleting",
+					identifier,
+				)
+			}
 
-	if e != nil {
-		return e
-	}
+			task, e := c.DeleteMachine(
+				vm,
+				&proxmox.VirtualMachineDeleteOptions{
+					Purge:                    proxmox.IntOrBool(purge),
+					DestroyUnreferencedDisks: proxmox.IntOrBool(true),
+				},
+			)
 
-	if vm.Status == "running" {
-		return conflict.Format(
-			"machine %d is running - stop it before deleting",
-			identifier,
-		)
-	}
+			if e != nil {
+				return e
+			}
 
-	task, e := c.DeleteMachine(
-		vm,
-		&proxmox.VirtualMachineDeleteOptions{
-			Purge:                    proxmox.IntOrBool(purge),
-			DestroyUnreferencedDisks: proxmox.IntOrBool(true),
+			return c.WaitForTask(task, 120)
 		},
 	)
-
-	if e != nil {
-		return e
-	}
-
-	return c.WaitForTask(task, 120)
 }

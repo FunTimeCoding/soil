@@ -16,7 +16,7 @@ func (s *Server) useModule(
 		return response.Fail("module is required")
 	}
 
-	if _, okay := s.service.Module(a.Module); !okay {
+	if _, okay := s.module.Module(a.Module); !okay {
 		return response.Fail("unknown module: %s", a.Module)
 	}
 

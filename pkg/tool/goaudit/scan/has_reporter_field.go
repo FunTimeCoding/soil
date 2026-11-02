@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 	"strings"
@@ -12,7 +12,7 @@ func hasReporterField(
 	serverPath string,
 ) bool {
 	for _, name := range v.MustReadDirectory(serverPath) {
-		if !strings.HasSuffix(name, constant.GoExtension) {
+		if !strings.HasSuffix(name, soil.GoExtension) {
 			continue
 		}
 

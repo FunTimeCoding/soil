@@ -35,7 +35,7 @@ func (s *Server) CreatePipeline(
 		vars = append(vars, &gitlab.PipelineVariableOptions{Key: &k, Value: &l})
 	}
 
-	v, e := s.service.CreatePipeline(instance, project, a.Reference, vars)
+	v, e := s.service.CreatePipeline(x, instance, project, a.Reference, vars)
 
 	if e != nil {
 		return s.answerWith(e, "")

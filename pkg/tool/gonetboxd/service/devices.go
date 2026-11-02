@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
@@ -30,7 +30,10 @@ func (s *Service) Devices(query string) (
 		identifiers = append(identifiers, d.Identifier)
 	}
 
-	grouped, e := s.store.GroupedLabels(constant.DeviceAddress, identifiers)
+	grouped, e := s.store.GroupedLabels(
+		netboxConstant.DeviceAddress,
+		identifiers,
+	)
 
 	if e != nil {
 		return nil, nil, e

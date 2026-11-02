@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
@@ -9,7 +9,7 @@ import (
 func (u *User) Format(f *option.Format) string {
 	s := status.New(f)
 
-	if f.HasTag(constant.TagIdentifier) {
+	if f.HasTag(consoleConstant.TagIdentifier) {
 		s.Integer32(u.Identifier)
 	}
 

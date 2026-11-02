@@ -1,12 +1,14 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) ProjectMergeRequests(
+	x context.Context,
 	project int64,
 	state string,
 ) ([]*merge_request.Request, error) {
@@ -28,6 +30,7 @@ func (c *Client) ProjectMergeRequests(
 		page, _, e := c.client.MergeRequests.ListProjectMergeRequests(
 			project,
 			o,
+			gitlab.WithContext(x),
 		)
 
 		if e != nil {

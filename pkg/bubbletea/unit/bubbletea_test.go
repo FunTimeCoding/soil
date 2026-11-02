@@ -22,7 +22,9 @@ func TestStyle(t *testing.T) {
 
 func TestConstructors(t *testing.T) {
 	assert.NotNil(t, fetch.Command())
-	assert.NotNil(t, monitor.New(false, memory.New()))
+	owned := monitor.New(false, memory.New())
+	defer owned.Close()
+	assert.NotNil(t, owned)
 	assert.NotNil(t, tick.Command())
 	assert.NotNil(t, toast.New(0, stringsConstant.UpperAlfa))
 	assert.NotNil(t, item.New(true))

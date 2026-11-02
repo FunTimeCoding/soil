@@ -7,7 +7,10 @@ import (
 
 // Reference: https://docs.n8n.io/api/api-reference/
 func main() {
-	for _, w := range n8n.NewEnvironment().Workflows() {
+	c := n8n.NewEnvironment()
+	defer c.Close()
+
+	for _, w := range c.Workflows() {
 		console.Format("Workflow: %s\n", w.Name)
 
 		for _, n := range w.Nodes {

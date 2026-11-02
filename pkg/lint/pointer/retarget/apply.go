@@ -2,7 +2,7 @@ package retarget
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -15,7 +15,7 @@ func apply(
 
 	for _, m := range moves {
 		if target != m.From &&
-			!strings.HasPrefix(target, join.Empty(m.From, constant.Slash)) {
+			!strings.HasPrefix(target, join.Empty(m.From, stringsConstant.Slash)) {
 			continue
 		}
 

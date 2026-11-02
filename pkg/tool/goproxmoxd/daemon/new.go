@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/reconciler"
@@ -23,7 +23,7 @@ func New(
 	r face.Reporter,
 	y *prometheus.Registry,
 ) *Daemon {
-	p := pool.New(o.Inventory, o.Hypervisor)
+	p := pool.New(o.Inventory, peeredBuilder(o, l, r))
 
 	for _, i := range o.Inventory.Instances {
 		_, e := p.Client(i.Name)
@@ -31,15 +31,15 @@ func New(
 	}
 
 	shells := pool.New(o.Inventory, o.Shell)
-	k := worker.New(p.Client, o.Inventory, constant.PollInterval, y, l, r)
+	v := service.New(p, shells, o.Inventory, l, r)
 	result := &Daemon{
 		inventory: o.Inventory,
 		pool:      p,
 		shells:    shells,
 		selection: selection.New(),
-		service:   service.New(p, shells, o.Inventory, l, r),
-		worker:    k,
-		web:       web.New(o.Inventory, k),
+		service:   v,
+		worker:    worker.New(v.Refresh, constant.PollInterval, y, l, r),
+		web:       web.New(o.Inventory, v),
 	}
 
 	if o.Netbox == nil {
@@ -48,7 +48,7 @@ func New(
 
 	result.netbox = o.Netbox()
 	result.netboxGuard = peer.New(
-		netboxConstant.Identity.Name(),
+		gonetboxdConstant.Identity.Name(),
 		result.netbox.Address(),
 		result.netbox,
 		l,

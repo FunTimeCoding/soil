@@ -45,7 +45,7 @@ func TestVariablesPagination(t *testing.T) {
 			)
 		},
 	)
-	result, e := r.Client.Variables(7)
+	result, e := r.Client.Variables(t.Context(), 7)
 
 	if e != nil {
 		t.Fatal(e)

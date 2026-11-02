@@ -1,7 +1,7 @@
 package service
 
 import (
-	band "github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/band/face"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 )
@@ -33,8 +33,8 @@ func (s *Service) EnableRedirection(instance string) ([]string, error) {
 				return result, g
 			}
 
-			if v.EnabledState != band.ScreenServiceEnabled &&
-				v.EnabledState != band.ScreenServiceOffline {
+			if v.EnabledState != bandConstant.ScreenServiceEnabled &&
+				v.EnabledState != bandConstant.ScreenServiceOffline {
 				if h := c.EnableScreenService(); h != nil {
 					return result, h
 				}

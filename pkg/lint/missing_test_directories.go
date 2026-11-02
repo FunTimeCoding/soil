@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"path/filepath"
 	"strings"
 )
@@ -32,7 +32,7 @@ func MissingTestDirectories(
 	}
 
 	for _, p := range paths {
-		if strings.HasSuffix(p, constant.TestSuffix) {
+		if strings.HasSuffix(p, soil.TestSuffix) {
 			directories[filepath.Dir(p)] = true
 		}
 	}

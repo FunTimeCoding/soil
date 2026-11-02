@@ -26,7 +26,7 @@ func (s *Server) GetCommit(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.ReadCommit(instance, project, a.Sha)
+	v, e := s.service.ReadCommit(x, instance, project, a.Sha)
 
 	if e != nil {
 		return s.answerWith(e, "")

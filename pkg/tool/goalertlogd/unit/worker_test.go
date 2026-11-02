@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/worker_tester"
 	"testing"
@@ -15,7 +15,7 @@ func TestPollSavesNewAlert(t *testing.T) {
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
-			constant.CriticalSeverity,
+			prometheusConstant.CriticalSeverity,
 			"Memory above 90%",
 		),
 	)
@@ -30,7 +30,12 @@ func TestPollSavesNewAlert(t *testing.T) {
 func TestPollResolvesRemovedAlert(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
@@ -43,7 +48,12 @@ func TestPollResolvesRemovedAlert(t *testing.T) {
 func TestPollIgnoresDuplicateFiring(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	o.Worker.Poll()
@@ -54,10 +64,20 @@ func TestPollIgnoresDuplicateFiring(t *testing.T) {
 func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	assert.Count(t, 1, o.Alerts("HighMemory"))
@@ -66,7 +86,12 @@ func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 func TestRestartPollKeepsFiringOpen(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	fresh := o.Restart()
@@ -80,7 +105,12 @@ func TestRestartPollKeepsFiringOpen(t *testing.T) {
 func TestRestartPollResolvesGone(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
@@ -100,7 +130,12 @@ func TestPollPrunesOldRecords(t *testing.T) {
 		0,
 	)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
@@ -118,10 +153,20 @@ func TestPollTracksLastPollTime(t *testing.T) {
 func TestAPollSetsTheGauges(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
+		alert.NewBasic(
+			"abc123",
+			"HighMemory",
+			prometheusConstant.CriticalSeverity,
+			"",
+		),
 	)
 	o.MockClient.Add(
-		alert.NewBasic("def456", "DiskFull", constant.WarningSeverity, ""),
+		alert.NewBasic(
+			"def456",
+			"DiskFull",
+			prometheusConstant.WarningSeverity,
+			"",
+		),
 	)
 	o.Worker.Poll()
 	assert.Float(t, 2, o.Gauge("alertlog_alerts_firing"))

@@ -63,6 +63,13 @@ func TestACleanTickReportsEachFailure(t *testing.T) {
 	b := base.New(t)
 	relational.CloseMapper(b.Database)
 	r := memory.New()
-	worker.NewEvery(b.Service.Clean, logger.New(t.Context()), r, time.Hour).Poll()
+	owned := worker.NewEvery(
+		b.Service.Clean,
+		logger.New(t.Context()),
+		r,
+		time.Hour,
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Count(t, 2, r.Events())
 }

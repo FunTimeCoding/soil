@@ -1,7 +1,7 @@
 package mock_client
 
 import (
-	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/pod"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	core "k8s.io/api/core/v1"
@@ -28,6 +28,6 @@ func (c *Client) Pod(
 		&core.Pod{
 			ObjectMeta: meta.ObjectMeta{Namespace: namespace, Name: name},
 		},
-		kubernetesConstant.InCluster,
+		constant.InCluster,
 	), nil
 }

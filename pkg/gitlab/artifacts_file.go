@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/system"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) ArtifactsFile(
+	x context.Context,
 	project int64,
 	reference string,
 	job string,
@@ -14,6 +16,7 @@ func (c *Client) ArtifactsFile(
 		project,
 		reference,
 		&gitlab.DownloadArtifactsFileOptions{Job: &job},
+		gitlab.WithContext(x),
 	)
 
 	if e != nil {

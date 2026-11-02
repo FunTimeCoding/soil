@@ -3,7 +3,7 @@ package alert
 import (
 	"fmt"
 	"github.com/docker/go-units"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -12,9 +12,9 @@ func condenseTime(t time.Time) string {
 	local := t.Local()
 
 	if time.Since(t) < 24*time.Hour {
-		format = local.Format(constant.HourMinute)
+		format = local.Format(timeConstant.HourMinute)
 	} else {
-		format = local.Format(constant.DateMinute)
+		format = local.Format(timeConstant.DateMinute)
 	}
 
 	return fmt.Sprintf(

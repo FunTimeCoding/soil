@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"path/filepath"
 )
 
@@ -10,7 +10,7 @@ func ModuleRoot(
 	limit string,
 ) string {
 	for {
-		if FileExists(filepath.Join(directory, constant.ModFile)) {
+		if FileExists(filepath.Join(directory, go_modConstant.ModFile)) {
 			return directory
 		}
 

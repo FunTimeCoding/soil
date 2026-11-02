@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
@@ -13,13 +13,13 @@ import (
 func TestReacherEdgesOnlyOnTransition(t *testing.T) {
 	c := fake_clock.New()
 	r := reacher.New(memory.New()).WithClock(c.Now)
-	down := r.Fail("sentry", constant.Refused)
+	down := r.Fail("sentry", errorsConstant.Refused)
 	assert.NotNil(t, down)
 	assert.True(t, down.Down)
 	assert.String(t, "sentry", down.Host)
 	assert.String(t, "connection refused", down.Reason)
-	assert.Nil(t, r.Fail("sentry", constant.Refused))
-	assert.Nil(t, r.Fail("sentry", constant.TimedOut))
+	assert.Nil(t, r.Fail("sentry", errorsConstant.Refused))
+	assert.Nil(t, r.Fail("sentry", errorsConstant.TimedOut))
 	c.Advance(130 * time.Second)
 	up := r.Succeed("sentry")
 	assert.NotNil(t, up)
@@ -30,8 +30,8 @@ func TestReacherEdgesOnlyOnTransition(t *testing.T) {
 
 func TestReacherKeepsFirstReasonThroughOutage(t *testing.T) {
 	r := reacher.New(memory.New())
-	r.Fail("sentry", constant.Refused)
-	r.Fail("sentry", constant.TimedOut)
+	r.Fail("sentry", errorsConstant.Refused)
+	r.Fail("sentry", errorsConstant.TimedOut)
 	down, h := r.Down("sentry")
 	assert.True(t, down)
 	assert.String(t, "connection refused", h.Reason)
@@ -39,8 +39,8 @@ func TestReacherKeepsFirstReasonThroughOutage(t *testing.T) {
 
 func TestReacherHostsAreIndependent(t *testing.T) {
 	r := reacher.New(memory.New())
-	assert.NotNil(t, r.Fail("sentry", constant.Refused))
-	assert.NotNil(t, r.Fail("netbox", constant.NoRoute))
+	assert.NotNil(t, r.Fail("sentry", errorsConstant.Refused))
+	assert.NotNil(t, r.Fail("netbox", errorsConstant.NoRoute))
 	assert.NotNil(t, r.Succeed("sentry"))
 	down, _ := r.Down("netbox")
 	assert.True(t, down)
@@ -58,7 +58,7 @@ func TestReacherSuccessOnUnknownHostIsSilent(t *testing.T) {
 
 func TestReacherDownReturnsACopy(t *testing.T) {
 	r := reacher.New(memory.New())
-	r.Fail("sentry", constant.Refused)
+	r.Fail("sentry", errorsConstant.Refused)
 	_, h := r.Down("sentry")
 	h.Down = false
 	down, _ := r.Down("sentry")

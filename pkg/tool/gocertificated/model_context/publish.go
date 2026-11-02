@@ -8,11 +8,11 @@ import (
 )
 
 func (s *Server) publish(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {
-	commit, change, e := s.service.Publish()
+	commit, change, e := s.service.Publish(x)
 
 	if e != nil {
 		return s.answer(e)

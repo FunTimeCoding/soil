@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/cross_service_tester"
@@ -28,7 +28,7 @@ func TestSocketEventBecomesNotification(t *testing.T) {
 		),
 	)
 	var result []notification.Notification
-	deadline := time.Now().Add(constant.MattermostSocketWait)
+	deadline := time.Now().Add(chatConstant.MattermostSocketWait)
 
 	for time.Now().Before(deadline) {
 		result = r.Goclauded.Store.PendingNotifications("kilo-session")

@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
-	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/worker"
 )
 
@@ -22,9 +22,15 @@ func New(
 	d := connection.New(l, o.LitePath)
 	q := o.Query()
 	result := &Daemon{
-		database:  d,
-		query:     q,
-		guard:     peer.New(queryConstant.Identity.Name(), q.Address(), q, l, r),
+		database: d,
+		query:    q,
+		guard: peer.New(
+			goquerydConstant.Identity.Name(),
+			q.Address(),
+			q,
+			l,
+			r,
+		),
 		hiddenTag: o.HiddenTag,
 	}
 	result.service = service.New(

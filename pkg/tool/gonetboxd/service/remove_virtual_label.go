@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/constant"
+import netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 
 func (s *Service) RemoveVirtualLabel(
 	machine string,
@@ -13,7 +13,7 @@ func (s *Service) RemoveVirtualLabel(
 	}
 
 	return s.store.RemoveLabel(
-		constant.VirtualMachineAddress,
+		netboxConstant.VirtualMachineAddress,
 		m.Identifier,
 		key,
 	)

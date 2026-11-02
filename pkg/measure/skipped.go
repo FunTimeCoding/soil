@@ -1,7 +1,7 @@
 package measure
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path"
 	"strings"
@@ -14,8 +14,8 @@ func skipped(
 	name := path.Base(relative)
 
 	for _, s := range skips {
-		if strings.Contains(s, constant.Slash) {
-			if relative == strings.TrimSuffix(s, constant.Slash) ||
+		if strings.Contains(s, stringsConstant.Slash) {
+			if relative == strings.TrimSuffix(s, stringsConstant.Slash) ||
 				strings.HasPrefix(relative, s) {
 				return true
 			}

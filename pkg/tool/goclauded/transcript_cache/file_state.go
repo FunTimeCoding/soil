@@ -1,7 +1,7 @@
 package transcript_cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
 	"path/filepath"
@@ -12,7 +12,7 @@ func (c *Cache) fileState(identifier string) (time.Time, int64, bool) {
 	i, e := os.Stat(
 		filepath.Join(
 			c.Base(),
-			join.Empty(identifier, constant.NotationLogExtension),
+			join.Empty(identifier, soil.NotationLogExtension),
 		),
 	)
 

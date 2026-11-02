@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
@@ -10,7 +10,7 @@ import (
 
 func TestARefusedPowerRequestSendsNothingToTheEngine(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(constant.PowerOn, hardStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
@@ -26,7 +26,7 @@ func TestARefusedPowerRequestSendsNothingToTheEngine(t *testing.T) {
 
 func TestAGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(constant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
@@ -42,7 +42,7 @@ func TestAGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 
 func TestAForcedRebootRequestsAPowerCycle(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(constant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
@@ -59,8 +59,8 @@ func TestAForcedRebootRequestsAPowerCycle(t *testing.T) {
 
 func TestPowerWithoutAnInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(constant.PowerOn, runningStates()...)
-	s.Bravo.SetPower(constant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
+	s.Bravo.SetPower(bandConstant.PowerOn, runningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{

@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"path/filepath"
 	"strings"
 )
@@ -9,7 +9,7 @@ import (
 func constantDirectory(path string) bool {
 	for s := range strings.SplitSeq(
 		filepath.ToSlash(filepath.Dir(path)),
-		constant.Slash,
+		stringsConstant.Slash,
 	) {
 		if s == "constant" {
 			return true

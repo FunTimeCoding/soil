@@ -2,7 +2,7 @@ package gomodule
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod"
 	"github.com/funtimecoding/soil/pkg/runtime"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -37,10 +37,10 @@ func update(
 	}
 
 	system.Run(
-		constant.Go,
-		constant.Mod,
-		constant.Edit,
-		key_value.Equals(constant.VersionArgument, v.String()),
+		soil.Go,
+		soil.Mod,
+		soil.Edit,
+		key_value.Equals(soil.VersionArgument, v.String()),
 	)
 	updateContainerFile(v)
 	updateGitLabFile(v.String())

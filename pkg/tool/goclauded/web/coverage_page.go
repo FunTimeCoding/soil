@@ -13,7 +13,7 @@ func (s *Server) coveragePage(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	servers := s.service.Coverage()
+	servers := s.transcript.Coverage()
 	sort.SliceStable(
 		servers,
 		func(i, j int) bool {

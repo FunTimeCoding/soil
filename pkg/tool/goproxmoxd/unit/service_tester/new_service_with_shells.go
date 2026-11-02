@@ -4,8 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	proxmox "github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/peered"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	"testing"
@@ -19,10 +22,20 @@ func newServiceWithShells(
 ) *service.Service {
 	t.Helper()
 	i := containerOption().Inventory
+	l := logger.New(t.Context())
 	p := pool.New(
 		i,
-		func(*instance.Instance) (proxmox.ProxmoxClient, error) {
-			return c, nil
+		func(n *instance.Instance) (*peered.Peered, error) {
+			return peered.New(
+				c,
+				peer.New(
+					join.Colon(constant.InstancePeer, n.Name),
+					n.Host,
+					c,
+					l,
+					r,
+				),
+			), nil
 		},
 	)
 	t.Cleanup(p.Close)
@@ -30,5 +43,5 @@ func newServiceWithShells(
 	s := pool.New(i, shells.build)
 	t.Cleanup(s.Close)
 
-	return service.New(p, s, i, logger.New(t.Context()), r)
+	return service.New(p, s, i, l, r)
 }

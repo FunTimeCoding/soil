@@ -12,6 +12,7 @@ type Builder struct {
 	logger       *logger.Logger
 	verbose      bool
 	resources    bool
+	reporter     face.Reporter
 	recorder     face.Recorder
 	experimental map[string]any
 	connected    func()

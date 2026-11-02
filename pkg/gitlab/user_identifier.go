@@ -1,6 +1,8 @@
 package gitlab
 
-func (c *Client) userIdentifier() (int64, error) {
+import "context"
+
+func (c *Client) userIdentifier(x context.Context) (int64, error) {
 	c.mutex.Lock()
 	u := c.user
 	c.mutex.Unlock()
@@ -9,7 +11,7 @@ func (c *Client) userIdentifier() (int64, error) {
 		return u.ID, nil
 	}
 
-	u, e := c.CurrentUser()
+	u, e := c.CurrentUser(x)
 
 	if e != nil {
 		return 0, e

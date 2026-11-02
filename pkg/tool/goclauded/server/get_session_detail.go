@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
@@ -13,7 +13,7 @@ func (s *Server) GetSessionDetail(
 	_ context.Context,
 	r server.GetSessionDetailRequestObject,
 ) (server.GetSessionDetailResponseObject, error) {
-	d, e := s.service.SessionDetail(r.Identifier)
+	d, e := s.session.SessionDetail(r.Identifier)
 
 	if not_found.Is(e) {
 		return server.GetSessionDetail404JSONResponse{Error: e.Error()}, nil
@@ -21,7 +21,7 @@ func (s *Server) GetSessionDetail(
 
 	if e != nil {
 		return server.GetSessionDetail500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -114,11 +114,11 @@ func (s *Server) GetSessionDetail(
 		result.Cost = &d.Cost
 	}
 
-	labels, labelError := s.service.LabelsBySession(d.Identifier)
+	labels, labelError := s.label.LabelsBySession(d.Identifier)
 
 	if labelError != nil {
 		return server.GetSessionDetail500JSONResponse(
-			*s.captureFail(labelError, constant.UnexpectedError),
+			*s.captureFail(labelError, soil.UnexpectedError),
 		), nil
 	}
 
@@ -132,11 +132,11 @@ func (s *Server) GetSessionDetail(
 		result.Labels = &le
 	}
 
-	pulses, pulseError := s.service.PulsesBySession(d.Identifier)
+	pulses, pulseError := s.message.PulsesBySession(d.Identifier)
 
 	if pulseError != nil {
 		return server.GetSessionDetail500JSONResponse(
-			*s.captureFail(pulseError, constant.UnexpectedError),
+			*s.captureFail(pulseError, soil.UnexpectedError),
 		), nil
 	}
 

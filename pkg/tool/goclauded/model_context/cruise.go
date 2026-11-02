@@ -30,7 +30,7 @@ func (s *Server) cruise(
 	}
 
 	if mode := q.GetString(constant.Mode, ""); mode != "" {
-		if g := s.service.SetCruise(
+		if g := s.message.SetCruise(
 			sessionIdentifier,
 			constant.Cruise(mode),
 			time.Duration(q.GetFloat(constant.Pace, 0)*float64(time.Minute)),
@@ -43,7 +43,7 @@ func (s *Server) cruise(
 		}
 	}
 
-	setting, h := s.service.CruiseSetting(sessionIdentifier)
+	setting, h := s.message.CruiseSetting(sessionIdentifier)
 
 	if h != nil {
 		return s.captureFail(h, soil.UnexpectedError)

@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) CreateTag(
+	x context.Context,
 	project int64,
 	name string,
 	reference string,
@@ -18,6 +20,7 @@ func (c *Client) CreateTag(
 			Ref:     new(reference),
 			Message: new(message),
 		},
+		gitlab.WithContext(x),
 	)
 
 	if e != nil {

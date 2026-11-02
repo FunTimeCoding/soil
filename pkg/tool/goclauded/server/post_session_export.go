@@ -10,7 +10,7 @@ func (s *Server) PostSessionExport(
 	_ context.Context,
 	r server.PostSessionExportRequestObject,
 ) (server.PostSessionExportResponseObject, error) {
-	e := s.service.Resolve(r.Identifier)
+	e := s.transcript.Resolve(r.Identifier)
 
 	if e.Identifier == "" {
 		return server.PostSessionExport404JSONResponse{
@@ -19,6 +19,6 @@ func (s *Server) PostSessionExport(
 	}
 
 	return server.PostSessionExport200JSONResponse{
-		Paths: []string{s.service.ExportSession(e)},
+		Paths: []string{s.transcript.ExportSession(e)},
 	}, nil
 }

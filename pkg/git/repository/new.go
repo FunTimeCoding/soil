@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"path/filepath"
 	"strings"
 )
@@ -13,7 +13,7 @@ func New(
 	name := filepath.Base(path)
 
 	return &Repository{
-		MonitorIdentifier: constant.GoGitStatus.StringIdentifier(name),
+		MonitorIdentifier: monitorConstant.GoGitStatus.StringIdentifier(name),
 		Name:              name,
 		Path:              path,
 		IsClean:           len(strings.TrimSpace(status)) == 0,

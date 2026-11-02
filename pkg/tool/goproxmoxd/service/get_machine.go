@@ -1,17 +1,20 @@
 package service
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (s *Service) GetMachine(
 	instance string,
 	identifier int,
 	node string,
 ) (*proxmox.VirtualMachine, error) {
-	c, clientFail := s.client(instance)
-
-	if clientFail != nil {
-		return nil, clientFail
-	}
-
-	return findMachine(c, identifier, node)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (*proxmox.VirtualMachine, error) {
+			return findMachine(c, identifier, node)
+		},
+	)
 }

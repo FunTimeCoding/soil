@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"net/http"
 	"testing"
@@ -15,7 +15,11 @@ func TestApplicationsSendTheToken(t *testing.T) {
 	assert.FatalOnError(t, e)
 	r := last()
 	assert.String(t, "/api/v1/applications", r.URL.Path)
-	assert.String(t, "Bearer alfa-token", r.Header.Get(constant.Authorization))
+	assert.String(
+		t,
+		"Bearer alfa-token",
+		r.Header.Get(webConstant.Authorization),
+	)
 }
 
 func TestRefusalCarriesTheReason(t *testing.T) {

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	telemetryConstant "github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
@@ -24,16 +24,16 @@ func (b *Builder) Server() *server.MCPServer {
 				message *mcp.CallToolRequest,
 				result any,
 			) {
-				outcome := constant.Success
+				outcome := telemetryConstant.Success
 
 				if v, okay := result.(*mcp.CallToolResult); okay && v.IsError {
-					outcome = constant.Error
+					outcome = telemetryConstant.Error
 				}
 
 				r.Record(
 					record.NewBaseline(
 						message.Params.Name,
-						constant.ModelContext,
+						telemetryConstant.ModelContext,
 						"model",
 						outcome,
 					),
@@ -74,6 +74,8 @@ func (b *Builder) Server() *server.MCPServer {
 		server.WithHooks(hooks),
 		server.WithInputSchemaValidation(),
 		server.WithStrictInputSchemaDefault(),
+		server.WithToolHandlerMiddleware(recovered(b.reporter)),
+		server.WithResourceHandlerMiddleware(recoveredResource(b.reporter)),
 	}
 
 	if b.logger != nil {

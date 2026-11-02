@@ -1,11 +1,13 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 )
 
 func (s *Service) Pipelines(
+	x context.Context,
 	instance string,
 	project int64,
 	reference string,
@@ -13,10 +15,11 @@ func (s *Service) Pipelines(
 	limit int64,
 ) ([]*pipeline.Pipeline, error) {
 	return guarded(
+		x,
 		s,
 		instance,
-		func(c face.GitLabClient) ([]*pipeline.Pipeline, error) {
-			return c.Pipelines(project, reference, status, limit)
+		func(y context.Context, c face.GitLabClient) ([]*pipeline.Pipeline, error) {
+			return c.Pipelines(y, project, reference, status, limit)
 		},
 	)
 }

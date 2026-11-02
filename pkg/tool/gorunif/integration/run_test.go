@@ -2,7 +2,7 @@ package integration
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/unit/repository_tester"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if"
@@ -40,7 +40,7 @@ func TestRunExplicitRange(t *testing.T) {
 	o.Pattern = "doc/"
 	o.Execute = "touch never"
 	assert.False(t, run_if.Run(o))
-	o.Pattern = constant.GoExtension
+	o.Pattern = soil.GoExtension
 	o.Suffix = true
 	o.Execute = "touch ran"
 	assert.True(t, run_if.Run(o))
@@ -53,7 +53,7 @@ func TestRunWithoutUpstreamRunsAlways(t *testing.T) {
 		root,
 		"init",
 		"--initial-branch=main",
-		constant.CurrentDirectory,
+		soil.CurrentDirectory,
 	)
 	o := option.New()
 	o.Directory = root

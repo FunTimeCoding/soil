@@ -6,19 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
 	outpostClient "github.com/funtimecoding/soil/pkg/tool/gooutpostd/client"
-	outpostConstant "github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
+	gooutpostdConstant "github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
 	outpost "github.com/funtimecoding/soil/pkg/tool/gooutpostd/face"
 	opnsenseClient "github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
-	opnsenseConstant "github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
+	gopnsensedConstant "github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	opnsense "github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	processClient "github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
-	processConstant "github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
+	goprocessdConstant "github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	process "github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func peers(o *option.Atlas) {
-	if environment.Optional(opnsenseConstant.TokenEnvironment) != "" {
+	if environment.Optional(gopnsensedConstant.TokenEnvironment) != "" {
 		o.Lease = func() opnsense.Client {
 			return opnsenseClient.NewEnvironment()
 		}
@@ -27,7 +27,7 @@ func peers(o *option.Atlas) {
 	place := environment.Optional(constant.PlaceEnvironment)
 
 	if place != "" &&
-		environment.Optional(processConstant.TokenEnvironment) != "" {
+		environment.Optional(goprocessdConstant.TokenEnvironment) != "" {
 		o.ProcessPlace = place
 		o.Process = func() process.Client {
 			return processClient.NewEnvironment()
@@ -35,14 +35,14 @@ func peers(o *option.Atlas) {
 	}
 
 	hosts := environment.Optional(constant.OutpostHostsEnvironment)
-	token := environment.Optional(outpostConstant.TokenEnvironment)
+	token := environment.Optional(gooutpostdConstant.TokenEnvironment)
 
 	if hosts == "" || token == "" {
 		return
 	}
 
-	port := environment.RequiredInteger(outpostConstant.PortEnvironment)
-	insecure := environment.Exists(outpostConstant.InsecureEnvironment)
+	port := environment.RequiredInteger(gooutpostdConstant.PortEnvironment)
+	insecure := environment.Exists(gooutpostdConstant.InsecureEnvironment)
 	o.OutpostHosts = split.Comma(hosts)
 	o.Outpost = func(host string) outpost.Client {
 		u := locator.New(host)

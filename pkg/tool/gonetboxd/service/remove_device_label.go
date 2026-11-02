@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/constant"
+import netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 
 func (s *Service) RemoveDeviceLabel(
 	device string,
@@ -12,5 +12,5 @@ func (s *Service) RemoveDeviceLabel(
 		return e
 	}
 
-	return s.store.RemoveLabel(constant.DeviceAddress, d.Identifier, key)
+	return s.store.RemoveLabel(netboxConstant.DeviceAddress, d.Identifier, key)
 }

@@ -2,39 +2,19 @@ package godirectory
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectory/constant"
-	godirectorydConstant "github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/funtimecoding/soil/pkg/web/stall_client"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/client"
 	"github.com/spf13/cobra"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
-	p := stall_client.New().Build()
-	defer p.Close()
 	t := terminal.New(s)
-	c, e := client.NewClientWithResponses(
-		locator.Environment(
-			godirectorydConstant.HostEnvironment,
-			godirectorydConstant.PortEnvironment,
-			godirectorydConstant.InsecureEnvironment,
-		).String(),
-		client.WithHTTPClient(p.Client()),
-		client.WithRequestEditorFn(
-			web.DeferredBearerEditor(
-				t.Required,
-				godirectorydConstant.TokenEnvironment,
-			),
-		),
-	)
-	errors.PanicOnError(e)
+	c := client.NewDeferred(t.Required)
+	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
@@ -43,5 +23,5 @@ func Main() {
 	o.AddCommand(group(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
-	errors.PanicOnError(o.Execute())
+	argument.CobraExecute(o)
 }

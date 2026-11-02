@@ -3,7 +3,7 @@ package alertmanager
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	transport "github.com/go-openapi/runtime/client"
@@ -19,10 +19,10 @@ func New(
 	o ...Option,
 ) *Client {
 	errors.FatalOnEmpty(host, "host")
-	scheme := constant.Insecure
+	scheme := webConstant.Insecure
 
 	if secure {
-		scheme = constant.Secure
+		scheme = webConstant.Secure
 	}
 
 	connection := locator.NewEndpoint(host, port, secure)

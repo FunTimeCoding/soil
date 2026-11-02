@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/peer/constant"
+	peerConstant "github.com/funtimecoding/soil/pkg/peer/constant"
 	"testing"
 	"time"
 )
@@ -13,7 +13,7 @@ func awaitEvents(
 	count int,
 ) {
 	t.Helper()
-	deadline := time.Now().Add(constant.FixtureSignalWait)
+	deadline := time.Now().Add(peerConstant.FixtureSignalWait)
 
 	for len(r.Events()) < count && time.Now().Before(deadline) {
 		time.Sleep(time.Millisecond)

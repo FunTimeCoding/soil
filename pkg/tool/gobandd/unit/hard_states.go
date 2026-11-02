@@ -1,7 +1,7 @@
 package unit
 
-import "github.com/funtimecoding/soil/pkg/band/constant"
+import bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 
 func hardStates() []int {
-	return []int{constant.PowerCycle, constant.PowerOffSoft}
+	return []int{bandConstant.PowerCycle, bandConstant.PowerOffSoft}
 }

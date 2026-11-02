@@ -1,12 +1,14 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) BranchRequest(
+	x context.Context,
 	project int64,
 	branch string,
 ) (*merge_request.Request, error) {
@@ -16,6 +18,7 @@ func (c *Client) BranchRequest(
 			SourceBranch: new(branch),
 			ListOptions:  gitlab.ListOptions{PerPage: 1},
 		},
+		gitlab.WithContext(x),
 	)
 
 	if r != nil && r.StatusCode == 404 {

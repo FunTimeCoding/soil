@@ -11,6 +11,8 @@ func newClient(
 	server string,
 ) *basic.Client {
 	t.Helper()
+	result := basic.New(upstream_tester.Locator(t, server), "alfa-token")
+	t.Cleanup(result.Close)
 
-	return basic.New(upstream_tester.Locator(t, server), "alfa-token")
+	return result
 }

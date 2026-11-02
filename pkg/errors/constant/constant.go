@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/constant"
+import consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	Base = "/api/0"
@@ -55,5 +55,5 @@ var (
 )
 
 var (
-	Format = constant.ColorFormat.Copy()
+	Format = consoleConstant.ColorFormat.Copy()
 )

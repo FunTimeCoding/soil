@@ -8,8 +8,10 @@ import (
 
 func Space() {
 	f := constant.ConfluenceFormat
+	c := confluence.NewEnvironment()
+	defer c.Close()
 
-	for _, s := range confluence.NewEnvironment().MustSpaces() {
+	for _, s := range c.MustSpaces() {
 		console.Line(s.Format(f))
 	}
 }

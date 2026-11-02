@@ -1,11 +1,12 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 	"time"
 )
 
-func (s *Service) Publish() (string, []*change.Change, error) {
+func (s *Service) Publish(x context.Context) (string, []*change.Change, error) {
 	pending, e := s.store.Unpublished()
 
 	if e != nil {
@@ -23,10 +24,11 @@ func (s *Service) Publish() (string, []*change.Change, error) {
 	}
 
 	var commit string
-	g := s.attempt(
-		func() error {
+	g := s.guard.Attempt(
+		x,
+		func(y context.Context) error {
 			var h error
-			commit, h = s.publisher.Commit(change, message(pending))
+			commit, h = s.publisher.Commit(y, change, message(pending))
 
 			return h
 		},

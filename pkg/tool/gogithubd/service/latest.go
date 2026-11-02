@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/github/constant"
+	githubConstant "github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/types/run_key"
 )
@@ -25,7 +25,7 @@ func (s *Service) Latest() (map[run_key.Key]*run.Run, error) {
 		}
 
 		for _, r := range runs {
-			if r.Status != constant.CompletedStatus {
+			if r.Status != githubConstant.CompletedStatus {
 				continue
 			}
 

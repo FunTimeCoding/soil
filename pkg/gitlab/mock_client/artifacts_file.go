@@ -1,5 +1,12 @@
 package mock_client
 
-func (c *Client) ArtifactsFile(_ int64, _ string, _ string) (string, error) {
+import "context"
+
+func (c *Client) ArtifactsFile(
+	_ context.Context,
+	_ int64,
+	_ string,
+	_ string,
+) (string, error) {
 	return "", c.failure
 }

@@ -1,9 +1,7 @@
 package command_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/client"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -11,7 +9,6 @@ func (c *Context) Initialize(
 	host string,
 	port int,
 	insecure bool,
-	linkaceHost string,
 	token string,
 ) {
 	l := locator.New(host)
@@ -24,12 +21,5 @@ func (c *Context) Initialize(
 		l.Insecure()
 	}
 
-	r, e := client.NewClientWithResponses(
-		l.String(),
-		client.WithHTTPClient(c.pool.Client()),
-		client.WithRequestEditorFn(web.BearerEditor(token)),
-	)
-	errors.PanicOnError(e)
-	c.client = r
-	c.host = linkaceHost
+	c.client = client.New(l, token)
 }

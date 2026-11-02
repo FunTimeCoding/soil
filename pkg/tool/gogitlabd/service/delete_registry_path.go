@@ -1,21 +1,24 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (s *Service) DeleteRegistryPath(
+	x context.Context,
 	instance string,
 	project int64,
 	path string,
 ) ([]string, error) {
 	return guarded(
+		x,
 		s,
 		instance,
-		func(c face.GitLabClient) ([]string, error) {
-			list, e := c.RegistryRepositories(project, false)
+		func(y context.Context, c face.GitLabClient) ([]string, error) {
+			list, e := c.RegistryRepositories(y, project, false)
 
 			if e != nil {
 				return nil, e
@@ -33,6 +36,7 @@ func (s *Service) DeleteRegistryPath(
 					}
 
 					if f := c.DeleteRegistryRepository(
+						y,
 						project,
 						repository.Identifier,
 					); f != nil {

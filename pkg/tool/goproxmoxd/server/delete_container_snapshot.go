@@ -2,8 +2,12 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -22,9 +26,7 @@ func (s *Server) DeleteContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.DeleteContainerSnapshot500JSONResponse(
-			*s.captureFail(e, e.Error()),
-		), nil
+		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(e)), nil
 	}
 
 	node := ""
@@ -40,16 +42,19 @@ func (s *Server) DeleteContainerSnapshot(
 		r.Name,
 	)
 
-	if e != nil {
-		if not_found.Is(e) {
-			return server.DeleteContainerSnapshot404JSONResponse{
-				Error: e.Error(),
-			}, nil
-		}
-
-		return server.DeleteContainerSnapshot500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+	switch {
+	case validation.Is(e):
+		return server.DeleteContainerSnapshot400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.DeleteContainerSnapshot404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.DeleteContainerSnapshot403JSONResponse(*clientError(e)), nil
+	case conflict.Is(e):
+		return server.DeleteContainerSnapshot409JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.DeleteContainerSnapshot503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.DeleteContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

@@ -2,7 +2,7 @@ package segment
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/types/segment_span"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"strings"
@@ -26,7 +26,7 @@ func ReplaceSegment(name, old, replacement string) string {
 
 	firstUpper := unicode.IsUpper(rune(name[target.Start]))
 	words := split.Underscore(replacement)
-	underscore := strings.Contains(name, constant.Underscore)
+	underscore := strings.Contains(name, stringsConstant.Underscore)
 	var b strings.Builder
 
 	for i, w := range words {

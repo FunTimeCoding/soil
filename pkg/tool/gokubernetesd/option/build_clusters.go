@@ -3,14 +3,14 @@ package option
 import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
-	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 )
 
 func BuildClusters() map[string]*cluster.Cluster {
 	result := make(map[string]*cluster.Cluster)
 
-	if c, e := client.TryInCluster(constant.InCluster); e == nil {
+	if c, e := client.TryInCluster(kubernetesConstant.InCluster); e == nil {
 		result["in-cluster"] = cluster.New(
 			"in-cluster",
 			c.Nested(),

@@ -2,14 +2,14 @@ package base
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/brave/constant"
+	braveConstant "github.com/funtimecoding/soil/pkg/brave/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
 func (s *Stack) Start() {
 	s.T.Helper()
 	s.process = run.New().Open(
-		constant.BravePath,
+		braveConstant.BravePath,
 		"--headless=new",
 		fmt.Sprintf("--remote-debugging-port=%d", s.Port),
 		fmt.Sprintf("--user-data-dir=%s", s.profile),

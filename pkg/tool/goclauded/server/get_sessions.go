@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"time"
 )
@@ -24,17 +24,17 @@ func (s *Server) GetSessions(
 	}
 
 	peek := r.Params.Peek != nil && *r.Params.Peek
-	list := s.service.EnrichedSessions
+	list := s.roster.EnrichedSessions
 
 	if r.Params.Unnamed != nil && *r.Params.Unnamed {
-		list = s.service.UnnamedSessions
+		list = s.roster.UnnamedSessions
 	}
 
 	sessions, e := list(limit, offset)
 
 	if e != nil {
 		return server.GetSessions500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -44,11 +44,11 @@ func (s *Server) GetSessions(
 		identifiers = append(identifiers, i.Identifier)
 	}
 
-	labels, f := s.service.LabelsBySessions(identifiers)
+	labels, f := s.label.LabelsBySessions(identifiers)
 
 	if f != nil {
 		return server.GetSessions500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
+			*s.captureFail(f, soil.UnexpectedError),
 		), nil
 	}
 
@@ -118,7 +118,7 @@ func (s *Server) GetSessions(
 		}
 
 		if peek {
-			preview := s.service.FirstUserMessage(i.Identifier)
+			preview := s.transcript.FirstUserMessage(i.Identifier)
 
 			if len(preview) > 60 {
 				preview = preview[:60]

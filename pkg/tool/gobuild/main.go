@@ -3,7 +3,6 @@ package gobuild
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gobuild/constant"
 	"github.com/spf13/cobra"
@@ -28,5 +27,5 @@ func Main() {
 	o.AddCommand(installCommand())
 	o.AddCommand(staleCommand())
 	argument.CobraStamp(o, constant.Identity)
-	errors.PanicOnError(o.Execute())
+	argument.CobraExecute(o)
 }

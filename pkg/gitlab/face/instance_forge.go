@@ -1,23 +1,33 @@
 package face
 
-import "gitlab.com/gitlab-org/api/client-go/v3"
+import (
+	"context"
+	"gitlab.com/gitlab-org/api/client-go/v3"
+)
 
 type InstanceForge interface {
-	AdminMode(on bool) (*gitlab.Settings, error)
-	CurrentUser() (*gitlab.User, error)
-	FeatureDefinitions() ([]*gitlab.FeatureDefinition, error)
-	Features() ([]*gitlab.Feature, error)
-	MustCurrentUser() *gitlab.User
-	MustFeatureDefinitions() []*gitlab.FeatureDefinition
-	MustFeatures() []*gitlab.Feature
+	AdminMode(
+		x context.Context,
+		on bool,
+	) (*gitlab.Settings, error)
+	CurrentUser(x context.Context) (*gitlab.User, error)
+	FeatureDefinitions(
+		x context.Context,
+	) ([]*gitlab.FeatureDefinition, error)
+	Features(x context.Context) ([]*gitlab.Feature, error)
+	MustCurrentUser(x context.Context) *gitlab.User
+	MustFeatureDefinitions(x context.Context) []*gitlab.FeatureDefinition
+	MustFeatures(x context.Context) []*gitlab.Feature
 	MustQuery(
+		x context.Context,
 		q string,
 		response any,
 	)
 	Query(
+		x context.Context,
 		q string,
 		response any,
 	) error
-	Setting() (*gitlab.Settings, error)
-	Users() ([]*gitlab.User, error)
+	Setting(x context.Context) (*gitlab.Settings, error)
+	Users(x context.Context) ([]*gitlab.User, error)
 }

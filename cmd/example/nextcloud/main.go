@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/nextcloud"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
@@ -31,14 +31,18 @@ func main() {
 	if false {
 		n.MustDownloadFile(
 			"example.png",
-			join.Absolute(system.Home(), constant.DownloadsPath, "example.png"),
+			join.Absolute(
+				system.Home(),
+				systemConstant.DownloadsPath,
+				"example.png",
+			),
 		)
 	}
 
 	if false {
 		n.MustUploadFile(
 			"example2.png",
-			join.Absolute(system.Home(), constant.DownloadsPath),
+			join.Absolute(system.Home(), systemConstant.DownloadsPath),
 			"example.png",
 		)
 	}

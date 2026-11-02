@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
 	"testing"
 )
@@ -20,7 +20,7 @@ func body(
 	q := web.NewGet(s.Address(target))
 
 	if extended {
-		q.Header.Set(constant.ExtendedRequest, "true")
+		q.Header.Set(webConstant.ExtendedRequest, "true")
 	}
 
 	r, e := s.Client().Do(q)

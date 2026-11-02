@@ -1,13 +1,13 @@
 package link
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (l *Link) formatName(f *option.Format) string {
 	if f.UseColor {
-		return constant.Cyan("%s", l.Title)
+		return consoleConstant.Cyan("%s", l.Title)
 	}
 
 	return l.Title

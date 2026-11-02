@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/spf13/cobra"
 	"testing"
 )
@@ -11,16 +11,13 @@ func TestANestedCommandIsRecordedByItsFullPath(t *testing.T) {
 	root := &cobra.Command{Use: "gotest"}
 	group := &cobra.Command{Use: "character"}
 	group.AddCommand(
-		&cobra.Command{
-			Use: constant.List,
-			Run: func(*cobra.Command, []string) {},
-		},
+		&cobra.Command{Use: soil.List, Run: func(*cobra.Command, []string) {}},
 	)
 	root.AddCommand(group)
 	assert.Strings(
 		t,
 		[]string{"begin gotest character list", "record gotest character list"},
-		runInstrumented(t, root, "character", constant.List).entries,
+		runInstrumented(t, root, "character", soil.List).entries,
 	)
 }
 
@@ -33,11 +30,8 @@ func TestTheRootsOwnPreRunStillRuns(t *testing.T) {
 		},
 	}
 	root.AddCommand(
-		&cobra.Command{
-			Use: constant.List,
-			Run: func(*cobra.Command, []string) {},
-		},
+		&cobra.Command{Use: soil.List, Run: func(*cobra.Command, []string) {}},
 	)
-	runInstrumented(t, root, constant.List)
+	runInstrumented(t, root, soil.List)
 	assert.True(t, ran)
 }

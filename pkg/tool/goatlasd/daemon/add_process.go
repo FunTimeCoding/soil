@@ -4,13 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/process"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
+	goprocessdConstant "github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 )
 
 func (d *Daemon) addProcess(o *option.Atlas) {
 	c := o.Process()
 	g := peer.New(
-		constant.Identity.Name(),
+		goprocessdConstant.Identity.Name(),
 		c.Address(),
 		c,
 		d.logger,

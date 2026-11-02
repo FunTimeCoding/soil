@@ -26,7 +26,7 @@ func (s *Server) DeleteProjectVariable(
 		return s.answerWith(e, "")
 	}
 
-	e = s.service.DeleteProjectVariable(instance, project, a.Key)
+	e = s.service.DeleteProjectVariable(x, instance, project, a.Key)
 
 	if e != nil {
 		return s.answerWith(e, "")

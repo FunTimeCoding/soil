@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gmail"
-	"github.com/funtimecoding/soil/pkg/gmail/constant"
+	gmailConstant "github.com/funtimecoding/soil/pkg/gmail/constant"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		var subject string
 
 		for _, h := range c.Message(m).Payload.Headers {
-			if h.Name == constant.SubjectHeader {
+			if h.Name == gmailConstant.SubjectHeader {
 				subject = h.Value
 
 				break

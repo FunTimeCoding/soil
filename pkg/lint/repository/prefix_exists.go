@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -10,7 +10,7 @@ func (r *Repository) PrefixExists(
 	directory string,
 	prefix string,
 ) bool {
-	full := join.Empty(directory, constant.Slash, prefix)
+	full := join.Empty(directory, stringsConstant.Slash, prefix)
 
 	for _, p := range r.Files.Files() {
 		if strings.HasPrefix(p, full) {

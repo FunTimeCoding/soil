@@ -3,17 +3,17 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
 func TestNewLine(t *testing.T) {
 	c := concern.NewLine(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 		1,
-		constant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		false,
 	)
 	assert.NotNil(t, c)
@@ -23,9 +23,9 @@ func TestNewLine(t *testing.T) {
 
 func TestNewFile(t *testing.T) {
 	c := concern.NewFile(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 		false,
 	)
 	assert.NotNil(t, c)
@@ -35,9 +35,9 @@ func TestNewFile(t *testing.T) {
 
 func TestNewPackage(t *testing.T) {
 	c := concern.NewPackage(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 	)
 	assert.NotNil(t, c)
 	assert.String(t, "package", c.Type)
@@ -46,11 +46,11 @@ func TestNewPackage(t *testing.T) {
 
 func TestNewDelegatesToNewLine(t *testing.T) {
 	c := concern.New(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 		1,
-		constant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		false,
 	)
 	assert.String(t, "line", c.Type)

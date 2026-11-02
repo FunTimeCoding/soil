@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -22,13 +25,22 @@ func (s *Server) ListStorages(
 	}
 
 	if e != nil {
-		return server.ListStorages500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.ListStorages500JSONResponse(*s.answer(e)), nil
 	}
 
 	storages, e := s.service.ListStorages(instance, r.Name)
 
-	if e != nil {
-		return server.ListStorages500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.ListStorages400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.ListStorages404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.ListStorages403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.ListStorages503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.ListStorages500JSONResponse(*s.answer(e)), nil
 	}
 
 	var result server.ListStorages200JSONResponse

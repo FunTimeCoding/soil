@@ -9,7 +9,7 @@ func (s *Server) GetSessionPeek(
 	_ context.Context,
 	r server.GetSessionPeekRequestObject,
 ) (server.GetSessionPeekResponseObject, error) {
-	p := s.service.Peek(r.Identifier)
+	p := s.transcript.Peek(r.Identifier)
 	var entries []server.PeekEntry
 
 	for _, entry := range p.Entries {

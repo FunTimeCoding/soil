@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -10,11 +10,11 @@ func (s *Server) GetSessionCruise(
 	_ context.Context,
 	r server.GetSessionCruiseRequestObject,
 ) (server.GetSessionCruiseResponseObject, error) {
-	c, e := s.service.CruiseSetting(r.Identifier)
+	c, e := s.message.CruiseSetting(r.Identifier)
 
 	if e != nil {
 		return server.GetSessionCruise500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

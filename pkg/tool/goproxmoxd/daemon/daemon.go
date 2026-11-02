@@ -4,9 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/peer"
-	proxmox "github.com/funtimecoding/soil/pkg/proxmox/face"
 	ssh "github.com/funtimecoding/soil/pkg/ssh/face"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/peered"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/reconciler"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
@@ -16,7 +16,7 @@ import (
 
 type Daemon struct {
 	inventory   *instance.Inventory
-	pool        *pool.Pool[instance.Instance, *instance.Instance, proxmox.ProxmoxClient]
+	pool        *pool.Pool[instance.Instance, *instance.Instance, *peered.Peered]
 	shells      *pool.Pool[instance.Instance, *instance.Instance, ssh.SSHClient]
 	selection   *selection.Selection
 	netbox      face.Client

@@ -3,7 +3,7 @@ package run_if
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git/changed"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
 )
@@ -23,7 +23,7 @@ func Run(o *option.RunIf) bool {
 
 	e := run.New()
 	e.Directory = o.Directory
-	e.Execute(constant.Shell, constant.ShellCommand, o.Execute)
+	e.Execute(systemConstant.Shell, systemConstant.ShellCommand, o.Execute)
 
 	if o.Verbose {
 		console.Format("Ran: %s\n", o.Execute)

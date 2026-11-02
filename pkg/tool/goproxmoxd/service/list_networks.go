@@ -1,22 +1,25 @@
 package service
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (s *Service) ListNetworks(
 	instance string,
 	node string,
 ) (proxmox.NodeNetworks, error) {
-	c, clientFail := s.client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (proxmox.NodeNetworks, error) {
+			n, e := c.Node(node)
 
-	if clientFail != nil {
-		return nil, clientFail
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	n, e := c.Node(node)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.Networks(n)
+			return c.Networks(n)
+		},
+	)
 }

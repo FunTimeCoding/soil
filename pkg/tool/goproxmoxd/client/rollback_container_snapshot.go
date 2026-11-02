@@ -1,26 +1,35 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) RollbackContainerSnapshot(
+	x context.Context,
 	identifier int64,
 	name string,
-	node *string,
-) *response.Response {
-	result, e := c.client.RollbackContainerSnapshotWithResponse(
-		c.context,
+	p *client.RollbackContainerSnapshotParams,
+) (*client.TaskResult, error) {
+	r, e := c.client.RollbackContainerSnapshotWithResponse(
+		x,
 		identifier,
 		name,
-		&client.RollbackContainerSnapshotParams{
-			Instance: &c.instance,
-			Node:     node,
-		},
+		p,
 	)
-	errors.PanicOnError(e)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New(
+			"rollback container snapshot",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return r.JSON200, nil
 }

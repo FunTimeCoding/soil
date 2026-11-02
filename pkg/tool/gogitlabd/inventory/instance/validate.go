@@ -2,12 +2,12 @@ package instance
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (i *Instance) Validate() error {
-	if web.TrimScheme(i.Host) != constant.PublicHost {
+	if web.TrimScheme(i.Host) != gitlabConstant.PublicHost {
 		return nil
 	}
 
@@ -18,6 +18,6 @@ func (i *Instance) Validate() error {
 	return validation.New(
 		"instance %s points at %s without groups or projects",
 		i.Name,
-		constant.PublicHost,
+		gitlabConstant.PublicHost,
 	)
 }

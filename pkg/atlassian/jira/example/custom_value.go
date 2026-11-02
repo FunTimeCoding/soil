@@ -10,8 +10,7 @@ import (
 func CustomValue() {
 	i := environment.Required(constant.JiraTestIssueEnvironment)
 	f := environment.Required(constant.JiraTestFieldEnvironment)
-	console.Format(
-		"Field value: %s\n",
-		common.Jira().SetVerbose(true).MustIssue(i).CustomValue(f),
-	)
+	c := common.Jira().SetVerbose(true)
+	defer c.Close()
+	console.Format("Field value: %s\n", c.MustIssue(i).CustomValue(f))
 }

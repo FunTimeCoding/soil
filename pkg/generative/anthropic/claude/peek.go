@@ -3,7 +3,7 @@ package claude
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/peek"
@@ -16,7 +16,7 @@ import (
 func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 	path := filepath.Join(
 		c.base,
-		join.Empty(sessionIdentifier, constant.NotationLogExtension),
+		join.Empty(sessionIdentifier, soil.NotationLogExtension),
 	)
 	f, e := os.Open(path)
 
@@ -27,7 +27,7 @@ func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 	defer errors.PanicClose(f)
 	result := peek.New()
 	s := bufio.NewScanner(f)
-	s.Buffer(nil, constant.NotationScanBuffer)
+	s.Buffer(nil, soil.NotationScanBuffer)
 	toolCounts := map[string]int{}
 	var lastAssistantText string
 

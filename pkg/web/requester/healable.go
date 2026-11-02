@@ -2,7 +2,7 @@ package requester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/connection"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 )
 
 func healable(e error) bool {
@@ -12,6 +12,6 @@ func healable(e error) bool {
 		return false
 	}
 
-	return f.Kind == constant.Timeout || f.Kind == constant.Dropped ||
-		f.Reason == constant.Refused
+	return f.Kind == errorsConstant.Timeout || f.Kind == errorsConstant.Dropped ||
+		f.Reason == errorsConstant.Refused
 }

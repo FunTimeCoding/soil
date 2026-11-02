@@ -1,7 +1,7 @@
 package module_graph
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"path"
 	"path/filepath"
 	"strings"
@@ -18,7 +18,7 @@ func mainPath(
 		return "", false
 	}
 
-	if relative == constant.CurrentDirectory {
+	if relative == soil.CurrentDirectory {
 		return module, true
 	}
 

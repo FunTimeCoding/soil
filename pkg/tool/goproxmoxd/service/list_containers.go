@@ -1,40 +1,43 @@
 package service
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (s *Service) ListContainers(
 	instance string,
 	node string,
 ) (proxmox.Containers, error) {
-	c, clientFail := s.client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (proxmox.Containers, error) {
+			nodeNames, e := s.resolveNodeNames(c, node)
 
-	if clientFail != nil {
-		return nil, clientFail
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	nodeNames, e := s.resolveNodeNames(c, node)
+			var result proxmox.Containers
 
-	if e != nil {
-		return nil, e
-	}
+			for _, name := range nodeNames {
+				n, f := c.Node(name)
 
-	var result proxmox.Containers
+				if f != nil {
+					return nil, f
+				}
 
-	for _, name := range nodeNames {
-		n, e := c.Node(name)
+				containers, f := c.Containers(n)
 
-		if e != nil {
-			return nil, e
-		}
+				if f != nil {
+					return nil, f
+				}
 
-		containers, e := c.Containers(n)
+				result = append(result, containers...)
+			}
 
-		if e != nil {
-			return nil, e
-		}
-
-		result = append(result, containers...)
-	}
-
-	return result, nil
+			return result, nil
+		},
+	)
 }

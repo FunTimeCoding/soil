@@ -15,7 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/worker"
-	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -28,7 +28,7 @@ func New(
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(d)
 	n := o.Netbox()
-	ng := peer.New(netbox.Identity.Name(), n.Address(), n, l, r)
+	ng := peer.New(gonetboxdConstant.Identity.Name(), n.Address(), n, l, r)
 	k := o.Kubernetes()
 	kg := peer.New(constant.SourceKubernetes, k.Configuration().Host, k, l, r)
 	result := &Daemon{

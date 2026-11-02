@@ -1,7 +1,7 @@
 package branch
 
 import (
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"log"
 	"slices"
@@ -15,7 +15,7 @@ func MainBranch(v []*Branch) *Branch {
 			names = append(names, b.Name)
 		}
 
-		if slices.Contains(constant.MainBranches, b.Name) {
+		if slices.Contains(gitConstant.MainBranches, b.Name) {
 			return b
 		}
 	}

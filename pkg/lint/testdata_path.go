@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"path/filepath"
 	"strings"
 )
@@ -11,7 +11,7 @@ func testdataPath(path string) bool {
 		filepath.ToSlash(filepath.Dir(path)),
 		"/",
 	) {
-		if s == constant.TestdataPath {
+		if s == systemConstant.TestdataPath {
 			return true
 		}
 	}

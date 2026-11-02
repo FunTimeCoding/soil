@@ -6,7 +6,7 @@ func (w *Worker) Start() {
 			go func() {
 				defer close(w.finished)
 
-				if w.at == nil {
+				if w.at == nil && !w.delayed {
 					w.recovery.Run(w.Poll)
 				}
 

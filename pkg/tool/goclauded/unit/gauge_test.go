@@ -18,7 +18,7 @@ func TestGaugePublishesEveryKind(t *testing.T) {
 	s := service_tester.New(t)
 	r := prometheus.NewRegistry()
 	g := gauge.New(
-		s.Service.Findings,
+		s.Roster.Findings,
 		constant.FindingInterval,
 		logger.New(context.Background()),
 		r,
@@ -49,7 +49,7 @@ func TestGaugeCarriesTheCountNotTheFindingTally(t *testing.T) {
 
 	r := prometheus.NewRegistry()
 	g := gauge.New(
-		s.Service.Findings,
+		s.Roster.Findings,
 		constant.FindingInterval,
 		logger.New(context.Background()),
 		r,
@@ -73,7 +73,7 @@ func TestGaugeResetsWhenFindingResolves(t *testing.T) {
 	)
 	r := prometheus.NewRegistry()
 	g := gauge.New(
-		s.Service.Findings,
+		s.Roster.Findings,
 		constant.FindingInterval,
 		logger.New(context.Background()),
 		r,

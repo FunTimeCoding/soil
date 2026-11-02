@@ -3,13 +3,13 @@ package workflow
 import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (w *Workflow) Format(f *option.Format) string {
 	return status.New(f).String(
 		w.Name,
 		w.State,
-		w.CreatedAt.Format(constant.DateMinute),
+		w.CreatedAt.Format(timeConstant.DateMinute),
 	).RawList(w).Format()
 }

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -22,11 +22,11 @@ func (s *Server) GetSessionsSearch(
 		limit = *r.Params.Limit
 	}
 
-	found, e := s.service.SearchConversations(r.Params.Query, kinds, limit)
+	found, e := s.search.SearchConversations(r.Params.Query, kinds, limit)
 
 	if e != nil {
 		return server.GetSessionsSearch500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -36,7 +36,7 @@ func (s *Server) GetSessionsSearch(
 		conversations = append(conversations, searchConversation(c))
 	}
 
-	indexed, total := s.service.SearchProgress()
+	indexed, total := s.search.SearchProgress()
 
 	return server.GetSessionsSearch200JSONResponse{
 		Conversations: conversations,

@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -11,13 +12,15 @@ import (
 )
 
 type Worker struct {
-	refresh  func() []error
+	refresh  func(context.Context) []error
 	entries  func() []*board_entry.Entry
 	interval time.Duration
 	gauge    *prometheus.GaugeVec
 	reporter face.Reporter
 	logger   *logger.Logger
 	recovery *recovery.Recovery
+	context  context.Context
+	cancel   context.CancelFunc
 	stop     chan struct{}
 	done     chan struct{}
 	started  sync.Once

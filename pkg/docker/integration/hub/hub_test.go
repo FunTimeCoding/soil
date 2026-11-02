@@ -9,7 +9,9 @@ import (
 )
 
 func TestGolangTagsRead(t *testing.T) {
-	tags, e := hub.New().Tags("library/golang")
+	owned := hub.New()
+	defer owned.Close()
+	tags, e := owned.Tags("library/golang")
 	assert.FatalOnError(t, e)
 	assert.NotEmpty(t, tags)
 }

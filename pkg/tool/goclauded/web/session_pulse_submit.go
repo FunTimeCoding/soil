@@ -19,7 +19,7 @@ func (s *Server) sessionPulseSubmit(
 			d = constant.DeliveryImmediate
 		}
 
-		if _, e := s.service.SendPulse(identifier, "", body, d); e != nil {
+		if _, e := s.message.SendPulse(identifier, "", body, d); e != nil {
 			s.view.Answer(w, q, s.reporter, e)
 
 			return

@@ -9,7 +9,7 @@ import (
 
 func TestRenameOntoAnImportedNameRefuses(t *testing.T) {
 	d := renameScopeFixture(t)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -27,7 +27,7 @@ func TestRenameOntoAnImportedNameRefuses(t *testing.T) {
 
 func TestRenameOntoALocalAtACallSiteRefuses(t *testing.T) {
 	d := renameScopeFixture(t)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -45,7 +45,7 @@ func TestRenameOntoALocalAtACallSiteRefuses(t *testing.T) {
 
 func TestRenameOntoAUsedBuiltinRefuses(t *testing.T) {
 	d := renameScopeFixture(t)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -62,7 +62,7 @@ func TestRenameOntoAUsedBuiltinRefuses(t *testing.T) {
 
 func TestRenameBesideAnUnrelatedLocalBuilds(t *testing.T) {
 	d := renameScopeFixture(t)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",

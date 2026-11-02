@@ -6,5 +6,8 @@ import (
 )
 
 func collect() []*alert.Alert {
-	return common.Opsgenie().Open()
+	c := common.Opsgenie()
+	defer c.Close()
+
+	return c.Open()
 }

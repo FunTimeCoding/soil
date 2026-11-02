@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/model_context/argument"
@@ -31,11 +31,11 @@ func (s *Server) queryRules(
 	ruleType := a.Type
 
 	if ruleType == "" {
-		ruleType = constant.AlertType
+		ruleType = prometheusConstant.AlertType
 	}
 
 	switch ruleType {
-	case constant.AlertType, constant.RecordType, constant.AllType:
+	case prometheusConstant.AlertType, prometheusConstant.RecordType, prometheusConstant.AllType:
 	default:
 		return response.Fail(
 			"invalid type: %s (expected alert, record, or all)",
@@ -46,11 +46,11 @@ func (s *Server) queryRules(
 	var filtered []*rule.Rule
 
 	for _, r := range v {
-		if ruleType == constant.AlertType && !r.IsAlert() {
+		if ruleType == prometheusConstant.AlertType && !r.IsAlert() {
 			continue
 		}
 
-		if ruleType == constant.RecordType && !r.IsRecord() {
+		if ruleType == prometheusConstant.RecordType && !r.IsRecord() {
 			continue
 		}
 

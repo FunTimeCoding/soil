@@ -2,13 +2,13 @@ package page
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/strings"
 )
 
 func (p *Page) PrintConsole() {
 	console.Line(
-		constant.Cyan(
+		consoleConstant.Cyan(
 			"%s",
 			strings.PrefixMultiline(bodyToMarkdown(p.Raw.Body), "> "),
 		),

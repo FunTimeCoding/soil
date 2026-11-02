@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/constant"
+import consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	VersionPrefix = "v"
@@ -83,7 +83,7 @@ var (
 		HookPostMerge,
 	}
 
-	Format = constant.ExtendedColorFormat.Copy()
+	Format = consoleConstant.ExtendedColorFormat.Copy()
 )
 
 const (

@@ -2,7 +2,7 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -96,7 +96,7 @@ func TestFix(t *testing.T) {
 						directory,
 						"pkg",
 						"types",
-						constant.GeneratedFile,
+						soil.GeneratedFile,
 					),
 				),
 			)

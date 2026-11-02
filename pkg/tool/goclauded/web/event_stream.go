@@ -22,7 +22,7 @@ func (s *Server) eventStream() http.HandlerFunc {
 				return
 			}
 
-			events, e := s.service.NextEvents(
+			events, e := s.event.NextEvents(
 				name,
 				kindList(r),
 				streamOverride(r),

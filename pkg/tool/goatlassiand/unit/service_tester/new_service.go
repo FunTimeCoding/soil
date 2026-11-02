@@ -21,6 +21,8 @@ func NewService(
 	t.Helper()
 	l := logger.New(t.Context())
 	r := memory.New()
+	t.Cleanup(j.Close)
+	t.Cleanup(c.Close)
 	jiraGuard := peer.New(constant.JiraPeer, "", j, l, r)
 	t.Cleanup(jiraGuard.Close)
 	confluenceGuard := peer.New(constant.ConfluencePeer, "", c, l, r)

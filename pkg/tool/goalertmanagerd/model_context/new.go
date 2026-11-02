@@ -18,7 +18,7 @@ func New(
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server: server.New(constant.Identity).WithInstructions(
+		server: server.New(constant.Identity, r).WithInstructions(
 			instance_tool.Instructions(constant.Identity, len(i.Instances)),
 		).WithRecorder(t).WithSessionEnd(n.Clear).Server(),
 		service:   v,

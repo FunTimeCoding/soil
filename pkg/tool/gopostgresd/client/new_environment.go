@@ -2,17 +2,17 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgres/constant"
+	gopostgresConstant "github.com/funtimecoding/soil/pkg/tool/gopostgres/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func NewEnvironment() *Client {
 	return New(
 		locator.Environment(
-			constant.HostEnvironment,
-			constant.PortEnvironment,
-			constant.InsecureEnvironment,
+			gopostgresConstant.HostEnvironment,
+			gopostgresConstant.PortEnvironment,
+			gopostgresConstant.InsecureEnvironment,
 		),
-		environment.Required(constant.TokenEnvironment),
+		environment.Required(gopostgresConstant.TokenEnvironment),
 	)
 }

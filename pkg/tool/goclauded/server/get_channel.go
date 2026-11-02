@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -10,11 +10,11 @@ func (s *Server) GetChannel(
 	x context.Context,
 	r server.GetChannelRequestObject,
 ) (server.GetChannelResponseObject, error) {
-	holder, e := s.service.SessionByCallsign(r.Params.Callsign)
+	holder, e := s.roster.SessionByCallsign(r.Params.Callsign)
 
 	if e != nil {
 		return server.GetChannel500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -24,7 +24,7 @@ func (s *Server) GetChannel(
 		), nil
 	}
 
-	drained, f := s.service.AwaitImmediateQueue(
+	drained, f := s.message.AwaitImmediateQueue(
 		x,
 		holder.Identifier,
 		r.Params.Callsign,
@@ -33,7 +33,7 @@ func (s *Server) GetChannel(
 
 	if f != nil {
 		return server.GetChannel500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
+			*s.captureFail(f, soil.UnexpectedError),
 		), nil
 	}
 

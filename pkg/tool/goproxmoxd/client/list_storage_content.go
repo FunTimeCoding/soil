@@ -1,22 +1,26 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) ListStorageContent(
-	name string,
+	x context.Context,
+	node string,
 	storage string,
-) *response.Response {
-	result, e := c.client.ListStorageContentWithResponse(
-		c.context,
-		name,
-		storage,
-		&client.ListStorageContentParams{Instance: &c.instance},
-	)
-	errors.PanicOnError(e)
+	p *client.ListStorageContentParams,
+) ([]client.StorageContentItem, error) {
+	r, e := c.client.ListStorageContentWithResponse(x, node, storage, p)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("list storage content", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

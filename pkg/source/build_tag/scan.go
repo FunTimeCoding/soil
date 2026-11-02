@@ -1,7 +1,7 @@
 package build_tag
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"io/fs"
 	"path/filepath"
@@ -30,7 +30,7 @@ func scan(directory string) map[string][]string {
 					return nil
 				}
 
-				if !strings.HasSuffix(path, constant.GoExtension) {
+				if !strings.HasSuffix(path, soil.GoExtension) {
 					return nil
 				}
 

@@ -16,7 +16,7 @@ func TestMoveConstant(t *testing.T) {
 		service_tester.ServiceTestdata("move-constant/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -50,7 +50,7 @@ func TestMoveIntoReferenced(t *testing.T) {
 		service_tester.ServiceTestdata("move-into-referenced/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -82,7 +82,7 @@ func TestMoveCrossPackage(t *testing.T) {
 		service_tester.ServiceTestdata("move-cross-package/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -110,7 +110,7 @@ func TestMoveAlias(t *testing.T) {
 		service_tester.ServiceTestdata("move-alias/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -139,7 +139,7 @@ func TestMoveCreateRefused(t *testing.T) {
 		service_tester.ServiceTestdata("move-create/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -160,7 +160,7 @@ func TestMoveCreate(t *testing.T) {
 		service_tester.ServiceTestdata("move-create/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -191,7 +191,7 @@ func TestMoveCollision(t *testing.T) {
 		service_tester.ServiceTestdata("move-collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -212,7 +212,7 @@ func TestMoveCycle(t *testing.T) {
 		service_tester.ServiceTestdata("move-cycle/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target/constant",
@@ -233,7 +233,7 @@ func TestMoveDependency(t *testing.T) {
 		service_tester.ServiceTestdata("move-dependency/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -255,7 +255,7 @@ func TestMoveGroup(t *testing.T) {
 		service_tester.ServiceTestdata("move-group/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -289,7 +289,7 @@ func TestMoveFunction(t *testing.T) {
 		service_tester.ServiceTestdata("move-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbol(
+	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
 		d,
 		"example/pkg/target",

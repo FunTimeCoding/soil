@@ -1,0 +1,47 @@
+package symbol
+
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
+)
+
+func (s *Service) ExtractType(
+	x context.Context,
+	directory string,
+	packagePath string,
+	typeName string,
+	targetPackagePath string,
+	targetFile string,
+	create bool,
+	dryRun bool,
+) (*output.Results, error) {
+	return s.commit.Transact(
+		x,
+		directory,
+		[]string{packagePath},
+		dryRun,
+		func(d string, out *sink.Sink) (*output.Results, error) {
+			if d != directory {
+				return s.moveSymbolsFollow(
+					d,
+					packagePath,
+					[]string{typeName},
+					"",
+					targetPackagePath,
+					out,
+				)
+			}
+
+			return s.extractTypeThrough(
+				d,
+				packagePath,
+				typeName,
+				targetPackagePath,
+				targetFile,
+				create,
+				out,
+			)
+		},
+	)
+}

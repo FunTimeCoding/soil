@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -35,7 +35,7 @@ func (s *Server) applyPattern(
 		return s.captureDetail(e)
 	}
 
-	r, apply, f := s.service.ApplyPattern(
+	r, apply, f := s.pattern.ApplyPattern(
 		turnContext(x),
 		directory,
 		a.PackagePath,
@@ -48,7 +48,7 @@ func (s *Server) applyPattern(
 	)
 
 	if f != nil {
-		return s.captureFail(f, constant.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if apply == nil {

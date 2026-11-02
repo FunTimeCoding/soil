@@ -14,7 +14,7 @@ func (s *Server) sessionDetailPage(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
-	v, e := s.service.SessionView(q.Context(), q.PathValue(constant.Identifier))
+	v, e := s.session.SessionView(q.Context(), q.PathValue(constant.Identifier))
 
 	if e != nil {
 		s.view.Answer(w, q, s.reporter, e)

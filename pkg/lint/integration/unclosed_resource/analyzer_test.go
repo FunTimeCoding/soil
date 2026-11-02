@@ -7,10 +7,25 @@ import (
 
 func TestFlagged(t *testing.T) {
 	results := checkModule(t, "testdata/src/flagged")
-	testutil.AssertBlocked(t, results, 10)
+	testutil.AssertBlocked(t, results, 17)
 	testutil.AssertBlockedContains(t, results, "PanicClose(r.Body)")
 	testutil.AssertBlockedContains(t, results, "local is never closed")
 	testutil.AssertBlockedContains(t, results, "c is never closed")
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		"newClient() is never closed; assign it",
+	)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		"newClient() passed to use is never closed",
+	)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		"newClient() passed to newSettings is never closed",
+	)
 }
 
 func TestClean(t *testing.T) {

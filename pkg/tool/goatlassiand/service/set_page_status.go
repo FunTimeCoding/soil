@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
-	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (s *Service) SetPageStatus(
@@ -15,7 +15,7 @@ func (s *Service) SetPageStatus(
 			var current *page.Page
 			var e error
 
-			if status == constant.ConfluenceCurrentStatus {
+			if status == atlassianConstant.ConfluenceCurrentStatus {
 				current, e = s.confluence.DraftOverlay(identifier)
 			} else {
 				current, e = s.confluence.Page(identifier)
@@ -27,11 +27,11 @@ func (s *Service) SetPageStatus(
 
 			version := 1
 
-			if status == constant.ConfluenceCurrentStatus {
+			if status == atlassianConstant.ConfluenceCurrentStatus {
 				published, f := s.confluence.Page(identifier)
 
 				if f == nil &&
-					published.Raw.Status == constant.ConfluenceCurrentStatus {
+					published.Raw.Status == atlassianConstant.ConfluenceCurrentStatus {
 					version = published.Raw.Version.Number + 1
 				}
 			}

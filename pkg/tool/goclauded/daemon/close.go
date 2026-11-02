@@ -23,7 +23,12 @@ func (d *Daemon) Close() {
 				d.browser.Close()
 			}
 
-			d.memory.Close()
+			if d.utilization != nil {
+				d.utilizationGuard.Close()
+				d.utilization.Close()
+			}
+
+			d.memoryPeer.Close()
 			d.query.Close()
 			errors.PanicClose(d.searchDatabase)
 			relational.CloseMapper(d.database)

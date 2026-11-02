@@ -2,7 +2,7 @@ package revision
 
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -12,7 +12,7 @@ import (
 )
 
 func New(files map[string][]byte) *Revision {
-	result := &Revision{Module: modulePath(files[modConstant.ModFile])}
+	result := &Revision{Module: modulePath(files[go_modConstant.ModFile])}
 	s := token.NewFileSet()
 	var parsed []*ast.File
 

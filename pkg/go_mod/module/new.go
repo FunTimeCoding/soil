@@ -2,7 +2,7 @@ package module
 
 import (
 	"github.com/funtimecoding/soil/pkg/go_mod/response"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"golang.org/x/mod/module"
 	"time"
 )
@@ -19,7 +19,7 @@ func New(
 	}
 
 	return &Module{
-		MonitorIdentifier: constant.GoStale.StringIdentifier(r.Path),
+		MonitorIdentifier: monitorConstant.GoStale.StringIdentifier(r.Path),
 		Path:              r.Path,
 		Version:           r.Version,
 		Latest:            latest.Version,

@@ -2,7 +2,6 @@ package gosublime
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
@@ -36,25 +35,9 @@ func edit(x *Context) *cobra.Command {
 				body.ReplaceAll = &all
 			}
 
-			r, f := x.Client.EditViewWithResponse(
-				context.Background(),
-				identifier,
-				body,
+			x.Terminal.EmitValue(
+				x.Client.EditView(context.Background(), identifier, body),
 			)
-
-			if f != nil {
-				x.Terminal.Exitf("error: %v\n", f)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			console.Format("edited view %d\n", identifier)
 		},
 	}
 	result.Flags().StringVar(&old, "old", "", "text to replace")

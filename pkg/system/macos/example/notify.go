@@ -1,13 +1,17 @@
 package example
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos"
 )
 
 func Notify() {
-	macos.Notify(constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie)
-	macos.SimpleNotify(constant.UpperAlfa)
+	macos.Notify(
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
+	)
+	macos.SimpleNotify(stringsConstant.UpperAlfa)
 	macos.Beep()
 	macos.Alert("Subject", "Body")
 	macos.InputDialog("Test1", "Test2", "")

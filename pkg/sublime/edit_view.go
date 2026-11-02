@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -38,7 +38,7 @@ func (c *Client) EditView(
 		return view.Stub(), fmt.Errorf("edit view: %w", f)
 	}
 
-	q.Header.Set(constant.ContentType, constant.Object)
+	q.Header.Set(webConstant.ContentType, webConstant.Object)
 	r, g := c.client.Do(q)
 
 	if g != nil {

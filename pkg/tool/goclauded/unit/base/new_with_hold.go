@@ -1,15 +1,7 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/surface"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
-	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/double"
 	"testing"
 	"time"
 )
@@ -19,30 +11,8 @@ func NewWithHold(
 	hold time.Duration,
 ) *Server {
 	t.Helper()
-	s := service_tester.New(t)
-	l := logger.New(t.Context())
-	result := &Server{
-		Tester: s,
-		Server: model_context_server.New(
-			t,
-			func(
-				_ *http.ServeMux,
-				g *guard.Mux,
-			) {
-				r := memory.New()
-				surface.Mount(
-					s.Service,
-					web.New(s.Service, r),
-					l,
-					r,
-					hold,
-					mock_recorder.New(),
-					g,
-				)
-			},
-		),
-	}
-	t.Cleanup(result.Close)
+	d := double.New(t)
+	t.Cleanup(d.Close)
 
-	return result
+	return serve(t, hold, d)
 }

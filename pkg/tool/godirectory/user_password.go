@@ -2,16 +2,14 @@ package godirectory
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func userPassword(
-	c *client.ClientWithResponses,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -22,18 +20,15 @@ func userPassword(
 			_ *cobra.Command,
 			a []string,
 		) {
-			result, e := c.PostUserAccountPasswordWithResponse(
-				context.Background(),
-				a[0],
-				client.PostUserAccountPasswordJSONRequestBody{Password: a[1]},
+			t.EmitValue(
+				c.PostUserAccountPassword(
+					context.Background(),
+					a[0],
+					client.PostUserAccountPasswordJSONRequestBody{
+						Password: a[1],
+					},
+				),
 			)
-			errors.PanicOnError(e)
-
-			if result.JSON200 == nil {
-				t.Reject(result.Status(), result.Body)
-			}
-
-			console.Line(notation.MarshalIndent(result.JSON200))
 		},
 	}
 }

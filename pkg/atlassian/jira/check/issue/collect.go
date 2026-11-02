@@ -9,8 +9,11 @@ import (
 )
 
 func collect() []*issue.Issue {
+	c := common.Jira()
+	defer c.Close()
+
 	return query.Open(
-		common.Jira(),
+		c,
 		environment.Required(constant.JiraDefaultProjectNameEnvironment),
 	)
 }

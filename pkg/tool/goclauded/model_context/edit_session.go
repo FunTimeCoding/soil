@@ -54,7 +54,7 @@ func (s *Server) editSession(
 		return response.Fail("at least one field required")
 	}
 
-	if e := s.service.EditSession(sessionIdentifier, a); e != nil {
+	if e := s.roster.EditSession(sessionIdentifier, a); e != nil {
 		if conflict.Is(e) {
 			return response.Fail(e.Error())
 		}

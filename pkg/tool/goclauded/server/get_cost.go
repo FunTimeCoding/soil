@@ -20,7 +20,7 @@ func (s *Server) GetCost(
 
 	to := time.Now().UTC()
 	from := to.Add(-time.Duration(days) * 24 * time.Hour)
-	usage := s.service.UsageBetween(from, to)
+	usage := s.transcript.UsageBetween(from, to)
 	result := server.CostResponse{}
 
 	if len(usage) == 0 {

@@ -25,7 +25,7 @@ func serveChannel(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			s := channel.New(constant.Identity, constant.ChannelInstructions)
+			s := channel.New(constant.Identity, constant.ChannelInstructions, r)
 			go runChannel(
 				c,
 				s,

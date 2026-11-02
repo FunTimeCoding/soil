@@ -1,13 +1,13 @@
 package pointer
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
 
 func CommandPaths(s string) []string {
-	name := strings.TrimPrefix(s, constant.Slash)
+	name := strings.TrimPrefix(s, stringsConstant.Slash)
 
 	if plugin, skill, found := strings.Cut(name, ":"); found {
 		return []string{

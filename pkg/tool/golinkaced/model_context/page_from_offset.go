@@ -1,6 +1,6 @@
 package model_context
 
-import "github.com/funtimecoding/soil/pkg/linkace/constant"
+import linkaceConstant "github.com/funtimecoding/soil/pkg/linkace/constant"
 
 func pageFromOffset(
 	offset int,
@@ -13,7 +13,7 @@ func pageFromOffset(
 	perPage := limit
 
 	if perPage <= 0 {
-		perPage = constant.DefaultPerPage
+		perPage = linkaceConstant.DefaultPerPage
 	}
 
 	return (offset / perPage) + 1

@@ -13,7 +13,7 @@ func (s *Server) floor(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	f := s.worker.Floor()
+	f := s.service.Floor()
 	s.view.RenderLivePageWithSummary(
 		w,
 		constant.FloorTitle,

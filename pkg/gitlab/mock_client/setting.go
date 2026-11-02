@@ -1,7 +1,10 @@
 package mock_client
 
-import "gitlab.com/gitlab-org/api/client-go/v3"
+import (
+	"context"
+	"gitlab.com/gitlab-org/api/client-go/v3"
+)
 
-func (c *Client) Setting() (*gitlab.Settings, error) {
+func (c *Client) Setting(_ context.Context) (*gitlab.Settings, error) {
 	return nil, c.failure
 }

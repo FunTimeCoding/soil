@@ -1,12 +1,16 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/variable"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
-func (c *Client) Variables(project int64) ([]*variable.Variable, error) {
+func (c *Client) Variables(
+	x context.Context,
+	project int64,
+) ([]*variable.Variable, error) {
 	var result []*gitlab.ProjectVariable
 	number := int64(1)
 
@@ -19,6 +23,7 @@ func (c *Client) Variables(project int64) ([]*variable.Variable, error) {
 					Page:    number,
 				},
 			},
+			gitlab.WithContext(x),
 		)
 
 		if r != nil && r.StatusCode == 403 {

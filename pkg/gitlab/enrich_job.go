@@ -1,18 +1,22 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
-func (c *Client) enrichJob(j *job.Job) (*job.Job, error) {
+func (c *Client) enrichJob(
+	x context.Context,
+	j *job.Job,
+) (*job.Job, error) {
 	identifier := j.ProjectIdentifier()
 
 	if identifier == 0 {
 		return nil, unexpected.Format("job %d has no project", j.Identifier)
 	}
 
-	p, e := c.Project(identifier)
+	p, e := c.Project(x, identifier)
 
 	if e != nil {
 		return nil, e
@@ -20,7 +24,7 @@ func (c *Client) enrichJob(j *job.Job) (*job.Job, error) {
 
 	j.Project = p
 
-	if f := c.enrichJobCommon(j); f != nil {
+	if f := c.enrichJobCommon(x, j); f != nil {
 		return nil, f
 	}
 

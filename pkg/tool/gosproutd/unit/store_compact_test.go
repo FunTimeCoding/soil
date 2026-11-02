@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
 	"testing"
 	"time"
@@ -10,16 +10,22 @@ import (
 
 func TestCompactClosesGaps(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
 	s.Store.UpsertSeed(
-		constant.LowerBravo,
+		stringsConstant.LowerAlfa,
+		"alfa.md",
+		"hash-a",
+		"a",
+		time.Now(),
+	)
+	s.Store.UpsertSeed(
+		stringsConstant.LowerBravo,
 		"bravo.md",
 		"hash-b",
 		"b",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerCharlie,
+		stringsConstant.LowerCharlie,
 		"charlie.md",
 		"hash-c",
 		"c",
@@ -54,23 +60,29 @@ func TestCompactEmptyStore(t *testing.T) {
 
 func TestCompactPreservesOrder(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
 	s.Store.UpsertSeed(
-		constant.LowerBravo,
+		stringsConstant.LowerAlfa,
+		"alfa.md",
+		"hash-a",
+		"a",
+		time.Now(),
+	)
+	s.Store.UpsertSeed(
+		stringsConstant.LowerBravo,
 		"bravo.md",
 		"hash-b",
 		"b",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerCharlie,
+		stringsConstant.LowerCharlie,
 		"charlie.md",
 		"hash-c",
 		"c",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerDelta,
+		stringsConstant.LowerDelta,
 		"delta.md",
 		"hash-d",
 		"d",

@@ -11,7 +11,7 @@ func checkedValue(
 	}
 
 	switch v := ast.Unparen(a.Rhs[0]).(type) {
-	case *ast.IndexExpr, *ast.TypeAssertExpr:
+	case *ast.IndexExpr, *ast.TypeAssertExpr, *ast.CallExpr:
 		return v
 	}
 

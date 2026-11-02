@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -13,8 +13,8 @@ func TestConfluenceSpaceNames(t *testing.T) {
 		[]string{"Alfa", "Bravo"},
 		space.Names(
 			[]*space.Space{
-				{Name: constant.UpperAlfa},
-				{Name: constant.UpperBravo},
+				{Name: stringsConstant.UpperAlfa},
+				{Name: stringsConstant.UpperBravo},
 			},
 		),
 	)

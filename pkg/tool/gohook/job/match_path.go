@@ -3,7 +3,7 @@ package job
 import (
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -11,7 +11,7 @@ func matchPath(
 	pattern string,
 	path string,
 ) bool {
-	if strings.HasSuffix(pattern, constant.Slash) {
+	if strings.HasSuffix(pattern, stringsConstant.Slash) {
 		return strings.HasPrefix(path, pattern)
 	}
 

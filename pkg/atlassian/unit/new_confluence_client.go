@@ -11,6 +11,12 @@ func newConfluenceClient(
 	server string,
 ) *basic.Client {
 	t.Helper()
+	result := basic.New(
+		upstream_tester.Locator(t, server),
+		"alfa",
+		"bravo-token",
+	)
+	t.Cleanup(result.Close)
 
-	return basic.New(upstream_tester.Locator(t, server), "alfa", "bravo-token")
+	return result
 }

@@ -1,7 +1,7 @@
 package event
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"k8s.io/api/events/v1"
 )
 
@@ -10,7 +10,7 @@ func New(
 	cluster string,
 ) *Event {
 	return &Event{
-		MonitorIdentifier: constant.GoKevt.StringIdentifier(v.Name),
+		MonitorIdentifier: monitorConstant.GoKevt.StringIdentifier(v.Name),
 		Cluster:           cluster,
 		Namespace:         v.Namespace,
 		RegardingKind:     v.Regarding.Kind,

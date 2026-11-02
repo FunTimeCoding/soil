@@ -1,17 +1,20 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) ProjectByName(
+	x context.Context,
 	namespace string,
 	name string,
 ) (*project.Project, error) {
 	result, _, e := c.client.Projects.ListProjects(
 		&gitlab.ListProjectsOptions{Search: &name},
+		gitlab.WithContext(x),
 	)
 
 	if e != nil {

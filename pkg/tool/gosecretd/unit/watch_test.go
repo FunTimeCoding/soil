@@ -19,12 +19,14 @@ import (
 
 func TestWatchReportsAnUnsealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	watch.New(
+	owned := watch.New(
 		service_tester.New(t, mock_client.New()).Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),
-	).Poll()
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Float(t, 0, gauge(t, y, constant.SealedGauge))
 	assert.Float(t, 1, gauge(t, y, constant.ReachableGauge))
 }
@@ -33,12 +35,14 @@ func TestWatchReportsASealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
 	c.Seal()
-	watch.New(
+	owned := watch.New(
 		service_tester.New(t, c).Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),
-	).Poll()
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Float(t, 1, gauge(t, y, constant.SealedGauge))
 }
 
@@ -46,12 +50,14 @@ func TestWatchReportsAnUnreachableStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
 	c.FailHealth(errors.New("connection refused"))
-	watch.New(
+	owned := watch.New(
 		service_tester.New(t, c).Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),
-	).Poll()
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Float(t, 0, gauge(t, y, constant.ReachableGauge))
 }
 

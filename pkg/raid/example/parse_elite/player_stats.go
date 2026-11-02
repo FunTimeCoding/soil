@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/raid/elite"
 	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
 	"os"
@@ -24,7 +24,7 @@ func PlayerStats() {
 	skipped := 0
 
 	for _, entry := range entries {
-		if !strings.HasSuffix(entry.Name(), constant.DetailedWvWKillSuffix) {
+		if !strings.HasSuffix(entry.Name(), gw2Constant.DetailedWvWKillSuffix) {
 			continue
 		}
 

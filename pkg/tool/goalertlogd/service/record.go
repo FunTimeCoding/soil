@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/outcome"
 	"maps"
@@ -33,7 +33,7 @@ func (s *Service) Record(now time.Time) (*outcome.Outcome, error) {
 	current := make(map[string]bool)
 
 	for _, a := range alerts {
-		if a.State != constant.ActiveState {
+		if a.State != prometheusConstant.ActiveState {
 			continue
 		}
 

@@ -1,31 +1,43 @@
 package service
 
-import netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+)
 
 func (s *Service) ShutdownMachine(
 	instance string,
 	identifier int,
 	node string,
 ) (string, error) {
-	c, clientFail := s.client(instance)
+	var name string
+	upid, e := guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (string, error) {
+			vm, f := findMachine(c, identifier, node)
 
-	if clientFail != nil {
-		return "", clientFail
-	}
+			if f != nil {
+				return "", f
+			}
 
-	vm, e := findMachine(c, identifier, node)
+			task, f := c.ShutdownMachine(vm)
+
+			if f != nil {
+				return "", f
+			}
+
+			name = vm.Name
+
+			return string(task.UPID), nil
+		},
+	)
 
 	if e != nil {
 		return "", e
 	}
 
-	task, e := c.ShutdownMachine(vm)
+	s.recordGuest(name, gonetboxdConstant.StatusOffline)
 
-	if e != nil {
-		return "", e
-	}
-
-	s.recordGuest(vm.Name, netbox.StatusOffline)
-
-	return string(task.UPID), nil
+	return upid, nil
 }

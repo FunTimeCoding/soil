@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -29,7 +29,7 @@ func (c *Client) CreateView(
 
 	r, f := c.client.Post(
 		c.base.Copy().Path("/views").String(),
-		constant.Object,
+		webConstant.Object,
 		bytes.NewReader(body),
 	)
 

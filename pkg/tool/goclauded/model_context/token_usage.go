@@ -21,9 +21,13 @@ func (s *Server) tokenUsage(
 		return s.captureFail(e, soil.UnexpectedError)
 	}
 
-	result := s.service.Usage()
+	result, found, f := s.usage.FindUsage()
 
-	if result == nil {
+	if f != nil {
+		return s.captureFail(f, soil.UnexpectedError)
+	}
+
+	if !found {
 		return response.Success("No usage data yet.")
 	}
 

@@ -2,7 +2,7 @@ package assert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"net"
 	"testing"
 	"time"
@@ -17,7 +17,7 @@ func Listen(
 
 	for time.Now().Before(deadline) {
 		c, e := net.DialTimeout(
-			constant.Transmission,
+			systemConstant.Transmission,
 			fmt.Sprintf("localhost:%d", port),
 			50*time.Millisecond,
 		)

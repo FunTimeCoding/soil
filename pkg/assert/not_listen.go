@@ -2,7 +2,7 @@ package assert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"net"
 	"testing"
 )
@@ -13,9 +13,9 @@ func NotListen(
 ) {
 	t.Helper()
 	c, e := net.DialTimeout(
-		constant.Transmission,
+		systemConstant.Transmission,
 		fmt.Sprintf("localhost:%d", port),
-		constant.Retry,
+		systemConstant.Retry,
 	)
 
 	if e == nil {

@@ -2,18 +2,16 @@ package gosecret
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/spf13/cobra"
-	"net/http"
 )
 
 func listCommand(
 	t *terminal.Terminal,
-	h *http.Client,
+	c face.Client,
 ) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.ListUsage,
@@ -29,21 +27,7 @@ func listCommand(
 				p.Path = &arguments[0]
 			}
 
-			r, e := interfaceClient(t, h).ListSecretsWithResponse(
-				context.Background(),
-				p,
-			)
-			errors.PanicOnError(e)
-
-			if r.JSON200 == nil {
-				t.Reject(r.Status(), r.Body)
-
-				return
-			}
-
-			for _, entry := range r.JSON200.Entries {
-				console.Line(entry)
-			}
+			t.EmitValue(c.ListSecrets(context.Background(), p))
 		},
 	}
 }

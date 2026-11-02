@@ -3,7 +3,7 @@ package base
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func (s *Server) Seed(count int) {
@@ -12,7 +12,7 @@ func (s *Server) Seed(count int) {
 			alert.NewBasic(
 				fmt.Sprintf("fingerprint-%d", i),
 				"HypervisorUnreachable",
-				constant.WarningSeverity,
+				prometheusConstant.WarningSeverity,
 				"",
 			),
 		)

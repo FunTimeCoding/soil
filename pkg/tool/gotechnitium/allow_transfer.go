@@ -1,7 +1,7 @@
 package gotechnitium
 
 import (
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/funtimecoding/soil/pkg/terminal"
@@ -37,15 +37,15 @@ func allowTransfer(
 		},
 	}
 	f := result.Flags()
-	f.StringVar(&keyName, constant.Key, "", "TSIG key name")
+	f.StringVar(&keyName, argumentConstant.Key, "", "TSIG key name")
 	f.StringVar(
 		&network,
-		constant.Network,
+		argumentConstant.Network,
 		"",
 		"Network allowed to transfer the zone, such as 198.51.100.0/24",
 	)
-	errors.PanicOnError(result.MarkFlagRequired(constant.Key))
-	errors.PanicOnError(result.MarkFlagRequired(constant.Network))
+	errors.PanicOnError(result.MarkFlagRequired(argumentConstant.Key))
+	errors.PanicOnError(result.MarkFlagRequired(argumentConstant.Network))
 
 	return result
 }

@@ -12,11 +12,13 @@ func newSaltClient(
 	password string,
 ) *basic.Client {
 	t.Helper()
-
-	return basic.New(
+	result := basic.New(
 		upstream_tester.Locator(t, server),
 		"alfa",
 		password,
 		"pam",
 	)
+	t.Cleanup(result.Close)
+
+	return result
 }

@@ -3,7 +3,7 @@ package gonetbox
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
@@ -34,8 +34,8 @@ func ansibleInventory(
 	}
 	result.Flags().StringVar(
 		&field,
-		constant.Field,
-		constant.AnsibleField,
+		gonetboxdConstant.Field,
+		gonetboxdConstant.AnsibleField,
 		"custom field whose values become the groups",
 	)
 

@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"time"
 )
 
@@ -54,6 +54,6 @@ const (
 )
 
 var (
-	MattermostFormat = constant.ExtendedColorFormat.Copy()
-	TelegramFormat   = constant.ColorFormat.Copy()
+	MattermostFormat = consoleConstant.ExtendedColorFormat.Copy()
+	TelegramFormat   = consoleConstant.ColorFormat.Copy()
 )

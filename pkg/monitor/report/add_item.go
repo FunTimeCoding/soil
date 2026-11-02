@@ -1,7 +1,7 @@
 package report
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"time"
@@ -10,7 +10,7 @@ import (
 func (r *Report) AddItem(
 	c *collector.Collector,
 	identifier string,
-	s constant.Severity,
+	s soil.Severity,
 	detail string,
 	link string,
 	create *time.Time,

@@ -1,12 +1,14 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) RunnerJobs(
+	x context.Context,
 	runner int64,
 	stopAfter int,
 ) ([]*job.Job, error) {
@@ -24,6 +26,7 @@ func (c *Client) RunnerJobs(
 				OrderBy: new(constant.Identifier),
 				Sort:    new(constant.Descending),
 			},
+			gitlab.WithContext(x),
 		)
 
 		if e != nil {
@@ -47,5 +50,5 @@ func (c *Client) RunnerJobs(
 		number++
 	}
 
-	return c.enrichJobs(job.NewSlice(result))
+	return c.enrichJobs(x, job.NewSlice(result))
 }

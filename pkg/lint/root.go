@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/system"
 )
@@ -22,7 +22,7 @@ func Root(flag string) (string, string) {
 			1,
 			"no repository found above %s, pass --%s\n",
 			work,
-			constant.Root,
+			argumentConstant.Root,
 		)
 	}
 

@@ -3,7 +3,7 @@ package mock_client
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/opnsense/constant"
+	opnsenseConstant "github.com/funtimecoding/soil/pkg/opnsense/constant"
 	"slices"
 )
 
@@ -19,7 +19,7 @@ func (c *Client) DeleteHost(
 	i := c.index(identifier)
 
 	if i < 0 {
-		return not_found.New(constant.HostSubject, identifier)
+		return not_found.New(opnsenseConstant.HostSubject, identifier)
 	}
 
 	c.HostList = slices.Delete(c.HostList, i, i+1)

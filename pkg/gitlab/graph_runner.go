@@ -1,13 +1,18 @@
 package gitlab
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/gitlab/response"
 )
 
-func (c *Client) GraphRunner(identifier int64) (*response.Runner, error) {
+func (c *Client) GraphRunner(
+	x context.Context,
+	identifier int64,
+) (*response.Runner, error) {
 	result := response.New()
 	e := c.Query(
+		x,
 		fmt.Sprintf(
 			"query {runner(id: \"gid://gitlab/Ci::Runner/%d\") { id description status runnerType managers { nodes { systemId ipAddress version revision } } } }",
 			identifier,

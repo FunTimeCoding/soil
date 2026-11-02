@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/claude_settings"
 	"strings"
 )
@@ -19,7 +19,7 @@ func permissionEntries(s *claude_settings.Settings) []string {
 		s.Permissions.Ask,
 	} {
 		for _, entry := range list {
-			if strings.HasPrefix(entry, constant.ModelContextToolPrefix) {
+			if strings.HasPrefix(entry, generativeConstant.ModelContextToolPrefix) {
 				result = append(result, entry)
 			}
 		}

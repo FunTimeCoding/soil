@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/tree"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/tree"
+)
 
 func (c *Client) Tree(
+	_ context.Context,
 	_ int64,
 	_ string,
 	_ string,

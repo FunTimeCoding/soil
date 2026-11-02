@@ -2,7 +2,6 @@ package gosublime
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
 	"strconv"
@@ -29,25 +28,9 @@ func save(x *Context) *cobra.Command {
 				body.FilePath = &arguments[1]
 			}
 
-			r, f := x.Client.SaveViewWithResponse(
-				context.Background(),
-				identifier,
-				body,
+			x.Terminal.EmitDone(
+				x.Client.SaveView(context.Background(), identifier, body),
 			)
-
-			if f != nil {
-				x.Terminal.Exitf("error: %v\n", f)
-			}
-
-			if r.HTTPResponse.StatusCode != 204 {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			console.Format("saved view %d\n", identifier)
 		},
 	}
 }

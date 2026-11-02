@@ -1,15 +1,15 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func ParseSearch(output string) map[string]string {
 	result := make(map[string]string)
 
-	for _, line := range strings.Split(output, constant.Unix) {
-		name, path, okay := strings.Cut(line, constant.Colon)
+	for _, line := range strings.Split(output, stringsConstant.Unix) {
+		name, path, okay := strings.Cut(line, stringsConstant.Colon)
 
 		if !okay {
 			continue
@@ -17,9 +17,9 @@ func ParseSearch(output string) map[string]string {
 
 		path = strings.TrimSpace(path)
 
-		if !strings.HasPrefix(path, constant.Slash) ||
-			strings.Contains(path, constant.Space) ||
-			strings.Contains(name, constant.Space) {
+		if !strings.HasPrefix(path, stringsConstant.Slash) ||
+			strings.Contains(path, stringsConstant.Space) ||
+			strings.Contains(name, stringsConstant.Space) {
 			continue
 		}
 

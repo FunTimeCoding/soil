@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"path/filepath"
 	"testing"
 )
@@ -26,7 +26,7 @@ func newWith(
 	t.Cleanup(func() { errors.PanicClose(d) })
 	q := mock_client.New()
 	t.Cleanup(q.Close)
-	g := peer.New(constant.Identity.Name(), q.Address(), q, l, r)
+	g := peer.New(goquerydConstant.Identity.Name(), q.Address(), q, l, r)
 	t.Cleanup(g.Close)
 
 	return &Tester{

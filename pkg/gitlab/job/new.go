@@ -1,13 +1,13 @@
 package job
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func New(v *gitlab.Job) *Job {
 	return &Job{
-		MonitorIdentifier: constant.GoGitLab.Integer64Identifier(v.ID),
+		MonitorIdentifier: monitorConstant.GoGitLab.Integer64Identifier(v.ID),
 		Identifier:        v.ID,
 		Name:              v.Name,
 		Status:            v.Status,

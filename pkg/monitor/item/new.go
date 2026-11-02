@@ -1,7 +1,7 @@
 package item
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
 	"time"
 )
@@ -9,7 +9,7 @@ import (
 func New(
 	c *collector.Collector,
 	identifier string,
-	s constant.Severity,
+	s soil.Severity,
 	detail string,
 	link string,
 	create *time.Time,
@@ -25,6 +25,6 @@ func New(
 		Detail:     detail,
 		Link:       link,
 		Create:     create,
-		Status:     constant.Open,
+		Status:     soil.Open,
 	}
 }

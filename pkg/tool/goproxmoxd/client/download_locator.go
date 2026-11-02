@@ -1,24 +1,27 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) DownloadLocator(
+	x context.Context,
 	node string,
 	storage string,
-	body client.DownloadLocatorJSONRequestBody,
-) *response.Response {
-	result, e := c.client.DownloadLocatorWithResponse(
-		c.context,
-		node,
-		storage,
-		&client.DownloadLocatorParams{Instance: &c.instance},
-		body,
-	)
-	errors.PanicOnError(e)
+	p *client.DownloadLocatorParams,
+	b client.DownloadLocatorJSONRequestBody,
+) (*client.StatusResult, error) {
+	r, e := c.client.DownloadLocatorWithResponse(x, node, storage, p, b)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("download locator", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

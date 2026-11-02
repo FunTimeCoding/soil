@@ -1,6 +1,7 @@
 package clean_job
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console"
@@ -17,6 +18,7 @@ func Check() {
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
 	defer g.Close()
+	x := context.Background()
 	f := constant.Format.Copy().Tag(consoleConstant.TagDense)
 	m := a.GetString(argumentConstant.Match)
 
@@ -26,14 +28,14 @@ func Check() {
 			argumentConstant.Match,
 		)
 
-		for _, r := range g.MustRunners(true) {
+		for _, r := range g.MustRunners(x, true) {
 			console.Line(r.Format(f))
 		}
 
 		os.Exit(1)
 	}
 
-	r, found, e := g.FindRunnerByDescription(m)
+	r, found, e := g.FindRunnerByDescription(x, m)
 	errors.PanicOnError(e)
 
 	if !found {
@@ -41,5 +43,5 @@ func Check() {
 		os.Exit(1)
 	}
 
-	RunnerWay(g, r, f)
+	RunnerWay(x, g, r, f)
 }

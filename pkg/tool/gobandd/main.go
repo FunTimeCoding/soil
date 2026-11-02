@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/web"
 )
@@ -33,7 +33,7 @@ func Main() {
 		a.GetString(argumentConstant.Inventory),
 	)
 
-	if environment.Exists(netboxConstant.PowerIntentEnvironment) {
+	if environment.Exists(gonetboxdConstant.PowerIntentEnvironment) {
 		o.Netbox = func() face.Client { return client.NewEnvironment() }
 	}
 

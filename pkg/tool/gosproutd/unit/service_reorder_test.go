@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/types/discovered_file"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"testing"
@@ -13,19 +13,19 @@ func TestSetPositionNotifies(t *testing.T) {
 	s.Service.Sync(
 		[]discovered_file.File{
 			{
-				Name:        constant.LowerAlfa,
+				Name:        stringsConstant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "a",
 				Content:     "a",
 			},
 			{
-				Name:        constant.LowerBravo,
+				Name:        stringsConstant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "b",
 				Content:     "b",
 			},
 			{
-				Name:        constant.LowerCharlie,
+				Name:        stringsConstant.LowerCharlie,
 				Path:        "charlie.md",
 				ContentHash: "c",
 				Content:     "c",
@@ -43,13 +43,13 @@ func TestReorderNotifies(t *testing.T) {
 	s.Service.Sync(
 		[]discovered_file.File{
 			{
-				Name:        constant.LowerAlfa,
+				Name:        stringsConstant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "a",
 				Content:     "a",
 			},
 			{
-				Name:        constant.LowerBravo,
+				Name:        stringsConstant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "b",
 				Content:     "b",

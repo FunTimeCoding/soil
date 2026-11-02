@@ -19,6 +19,8 @@ func releasesIn(
 			switch v := n.(type) {
 			case *ast.CallExpr:
 				result = append(result, callRelease(p, v, r)...)
+			case *ast.AssignStmt:
+				result = append(result, assertedRelease(p, body, v, r)...)
 			case *ast.RangeStmt:
 				if field := fieldOfReceiver(p, v.X, r); field != "" {
 					result = append(result, fact.Release{Field: field})

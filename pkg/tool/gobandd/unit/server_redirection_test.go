@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	band "github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
@@ -26,7 +26,7 @@ func TestEnableRedirectionLeavesAnEnabledButOfflineScreenServiceAlone(
 	t *testing.T,
 ) {
 	s := base.New(t)
-	s.Alfa.SetRedirection(true, band.ScreenServiceOffline)
+	s.Alfa.SetRedirection(true, bandConstant.ScreenServiceOffline)
 	r, e := s.Client.EnableRedirectionWithResponse(
 		t.Context(),
 		client.EnableRedirectionJSONRequestBody{Instance: new("alfa")},

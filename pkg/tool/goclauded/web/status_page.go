@@ -12,7 +12,7 @@ func (s *Server) statusPage(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
-	findings, e := s.service.Findings()
+	findings, e := s.roster.Findings()
 
 	if e != nil {
 		s.view.Answer(w, q, s.reporter, e)

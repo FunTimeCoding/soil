@@ -1,7 +1,7 @@
 package module_graph
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"go/build"
 	"io/fs"
@@ -40,7 +40,7 @@ func mainNodes(
 
 				p := module
 
-				if relative != constant.CurrentDirectory {
+				if relative != soil.CurrentDirectory {
 					p = path.Join(module, filepath.ToSlash(relative))
 				}
 

@@ -2,7 +2,7 @@ package mattermost
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/gorilla/websocket"
 	"github.com/mattermost/mattermost/server/public/model"
@@ -15,10 +15,10 @@ func newWebSocket(
 	token string,
 	insecure bool,
 ) (*model.WebSocketClient, error) {
-	scheme := constant.SecureSocket
+	scheme := webConstant.SecureSocket
 
 	if insecure {
-		scheme = constant.Socket
+		scheme = webConstant.Socket
 	}
 
 	d := *websocket.DefaultDialer

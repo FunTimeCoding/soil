@@ -17,8 +17,4 @@ const (
 
 	Baseline = "baseline"
 	Domain   = "domain"
-
-	HostEnvironment     = "GOTELEMETRY_HOST"
-	PortEnvironment     = "GOTELEMETRY_PORT"
-	InsecureEnvironment = "GOTELEMETRY_INSECURE"
 )

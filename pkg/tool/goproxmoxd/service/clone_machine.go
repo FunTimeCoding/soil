@@ -1,6 +1,9 @@
 package service
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (s *Service) CloneMachine(
 	instance string,
@@ -8,29 +11,27 @@ func (s *Service) CloneMachine(
 	node string,
 	options *proxmox.VirtualMachineCloneOptions,
 ) (int, error) {
-	c, clientFail := s.client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (int, error) {
+			vm, e := findMachine(c, identifier, node)
 
-	if clientFail != nil {
-		return 0, clientFail
-	}
+			if e != nil {
+				return 0, e
+			}
 
-	vm, e := findMachine(c, identifier, node)
+			newIdentifier, task, e := c.CloneMachine(vm, options)
 
-	if e != nil {
-		return 0, e
-	}
+			if e != nil {
+				return 0, e
+			}
 
-	newIdentifier, task, e := c.CloneMachine(vm, options)
+			if f := c.WaitForTask(task, 600); f != nil {
+				return 0, f
+			}
 
-	if e != nil {
-		return 0, e
-	}
-
-	e = c.WaitForTask(task, 600)
-
-	if e != nil {
-		return 0, e
-	}
-
-	return newIdentifier, nil
+			return newIdentifier, nil
+		},
+	)
 }

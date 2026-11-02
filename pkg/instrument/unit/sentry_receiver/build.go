@@ -2,7 +2,7 @@ package sentry_receiver
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/getsentry/sentry-go"
 	"net/http"
 	"net/http/httptest"
@@ -33,7 +33,7 @@ func build(
 	)
 	t.Cleanup(s.Close)
 	t.Setenv(
-		constant.LocatorEnvironment,
+		errorsConstant.LocatorEnvironment,
 		fmt.Sprintf("http://key@%s/1", strings.TrimPrefix(s.URL, "http://")),
 	)
 	t.Cleanup(func() { sentry.CurrentHub().BindClient(nil) })

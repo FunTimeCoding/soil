@@ -1,8 +1,14 @@
 package mock_client
 
-import "strconv"
+import (
+	"context"
+	"strconv"
+)
 
-func (c *Client) ResolveProject(identifier string) (int64, error) {
+func (c *Client) ResolveProject(
+	_ context.Context,
+	identifier string,
+) (int64, error) {
 	if number, e := strconv.ParseInt(identifier, 10, 64); e == nil {
 		return number, nil
 	}

@@ -50,7 +50,7 @@ func (s *Server) update(
 		}
 	}
 
-	if f := s.service.Update(
+	if f := s.roster.Update(
 		c.SessionIdentifier,
 		c.Callsign,
 		topic,

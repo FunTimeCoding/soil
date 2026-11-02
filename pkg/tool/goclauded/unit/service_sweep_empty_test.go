@@ -10,29 +10,29 @@ import (
 func TestSweepRemovesClosedEmptySessionAtOnce(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
-	assert.FatalOnError(t, s.Service.CloseSession("husk", "prompt_input_exit"))
-	s.Service.RunTimeoutSweep()
+	assert.FatalOnError(t, s.Roster.CloseSession("husk", "prompt_input_exit"))
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("husk") == nil)
 }
 
 func TestSweepKeepsUnmarkedEmptySessionUntilCutoff(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("husk") != nil)
 	s.Store.Advance(25 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("husk") == nil)
 }
 
 func TestSweepKeepsClosedSessionWithContent(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("spoken", "some-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
-	assert.FatalOnError(t, s.Service.CloseSession("spoken", "logout"))
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
+	assert.FatalOnError(t, s.Roster.CloseSession("spoken", "logout"))
 	s.Store.Advance(25 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("spoken") != nil)
 }
 
@@ -44,7 +44,7 @@ func TestSweepKeepsMetadataGhost(t *testing.T) {
 		map[string]any{"alias": "named-by-hand"},
 	)
 	s.Store.Advance(25 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("ghost") != nil)
 }
 
@@ -56,15 +56,15 @@ func TestSweepKeepsDescribedSession(t *testing.T) {
 		map[string]any{"description": "written by hand"},
 	)
 	s.Store.Advance(25 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("described") != nil)
 }
 
 func TestSweptSessionReregistersOnResume(t *testing.T) {
 	s := service_tester.New(t)
 	first := s.Store.EnsureSession("husk")
-	assert.FatalOnError(t, s.Service.CloseSession("husk", "logout"))
-	s.Service.RunTimeoutSweep()
+	assert.FatalOnError(t, s.Roster.CloseSession("husk", "logout"))
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.True(t, s.Store.GetSession("husk") == nil)
 	second := s.Store.EnsureSession("husk")
 	r := s.Store.GetSession("husk")

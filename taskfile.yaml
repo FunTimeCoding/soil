@@ -11,6 +11,30 @@ tasks:
     - goanalyze ./...
     - goaudit .
     silent: true
+  lint-check:
+    desc: 'The lint stages without writing; REACH=own or REACH=<session> narrows them to what a session changed'
+    cmds:
+    - |
+      set -e
+      packages=./...
+      documents=
+      if [ -n "{{.REACH}}" ]; then
+        session={{if ne .REACH "own"}}{{.REACH}}{{end}}
+        packages=$(goreach $session)
+        documents=$(goreach --documents $session 2>/dev/null)
+        if [ -z "$documents" ]; then
+          echo "goreach: nothing changed"
+          exit 0
+        fi
+      fi
+      golint $documents
+      if [ -n "$packages" ]; then
+        golangci-lint run --build-tags local $packages
+        gofix --diff $packages
+        goanalyze $packages
+      fi
+      goaudit .
+    silent: true
   test:
     cmds: ['gotestsum --format dots -- --tags local ./...']
     silent: true

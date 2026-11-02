@@ -1,7 +1,7 @@
 package layout
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"net/http"
@@ -23,5 +23,5 @@ func PushPayload(
 		writer.Print(w, "data: %s\n", l)
 	}
 
-	writer.Print(w, constant.Unix)
+	writer.Print(w, stringsConstant.Unix)
 }

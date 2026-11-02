@@ -2,7 +2,7 @@ package metric
 
 import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/lease"
-	"github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/lock_detail"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
@@ -18,7 +18,7 @@ func New(
 				Name: "terraform_run_total",
 				Help: "Total number of terraform applies by outcome.",
 			},
-			[]string{constant.RunnerStatus},
+			[]string{provisionConstant.RunnerStatus},
 		),
 		ApplyDuration: prometheus.NewHistogram(
 			prometheus.HistogramOpts{

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -22,16 +22,16 @@ func (s *Server) PostSessionContext(
 		model = *r.Body.Model
 	}
 
-	s.service.RecordContext(r.Identifier, r.Body.UsedPercentage, window, model)
+	s.roster.RecordContext(r.Identifier, r.Body.UsedPercentage, window, model)
 
 	if r.Body.FablePercent != nil {
-		if e := s.service.RecordFable(
+		if e := s.usage.RecordFable(
 			*r.Body.FablePercent,
 			"",
 			epochTimePointer(r.Body.FableReset),
 		); e != nil {
 			return server.PostSessionContext500JSONResponse(
-				*s.captureFail(e, constant.UnexpectedError),
+				*s.captureFail(e, soil.UnexpectedError),
 			), nil
 		}
 	}
@@ -46,14 +46,14 @@ func (s *Server) PostSessionContext(
 		fiveHour = *r.Body.FiveHourPercent
 	}
 
-	if e := s.service.RecordRateLimits(
+	if e := s.usage.RecordRateLimits(
 		fiveHour,
 		*r.Body.SevenDayPercent,
 		epochTime(r.Body.FiveHourReset),
 		epochTime(r.Body.SevenDayReset),
 	); e != nil {
 		return server.PostSessionContext500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

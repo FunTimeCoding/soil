@@ -1,13 +1,17 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
-func (c *Client) ReviewingMergeRequests(all bool) ([]*merge_request.Request, error) {
-	u, e := c.userIdentifier()
+func (c *Client) ReviewingMergeRequests(
+	x context.Context,
+	all bool,
+) ([]*merge_request.Request, error) {
+	u, e := c.userIdentifier(x)
 
 	if e != nil {
 		return nil, e
@@ -19,7 +23,7 @@ func (c *Client) ReviewingMergeRequests(all bool) ([]*merge_request.Request, err
 			State:       new(constant.OpenedState),
 			ListOptions: constant.DefaultListOptions,
 		},
-		nil,
+		gitlab.WithContext(x),
 	)
 
 	if f != nil {

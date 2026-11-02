@@ -7,5 +7,5 @@ import (
 
 func (o *Tester) EndTurn(sessionIdentifier string) {
 	o.Store.Advance(time.Minute)
-	assert.FatalOnError(o.t, o.Service.StampTurnEnd(sessionIdentifier))
+	assert.FatalOnError(o.t, o.Roster.StampTurnEnd(sessionIdentifier))
 }

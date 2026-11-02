@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/outpost"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/target"
-	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
+	gooutpostdConstant "github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
 )
 
 func (d *Daemon) addOutposts(o *option.Atlas) {
@@ -15,7 +15,7 @@ func (d *Daemon) addOutposts(o *option.Atlas) {
 	for _, host := range o.OutpostHosts {
 		c := o.Outpost(host)
 		g := peer.New(
-			join.Colon(constant.Identity.Name(), host),
+			join.Colon(gooutpostdConstant.Identity.Name(), host),
 			c.Address(),
 			c,
 			d.logger,

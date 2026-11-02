@@ -15,7 +15,7 @@ func TestRenameRetargetsTheSymbolAndItsFile(t *testing.T) {
 		"doc/note.md",
 		"Call `go:pkg/alfa.OldName` from `pkg/alfa/old_name.go`.\n",
 	)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -44,7 +44,7 @@ func TestRenameMethodRetargetsTheQualifiedName(t *testing.T) {
 		"doc/note.md",
 		"Look up with `go:pkg/target.Store.FindByName()`.\n",
 	)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -65,7 +65,7 @@ func TestRenameMethodRetargetsTheQualifiedName(t *testing.T) {
 func TestMoveRetargetsTheExportedSymbol(t *testing.T) {
 	d := moveVisibilityFixture(t)
 	testutil.WriteFile(t, d, "doc/note.md", "See `go:pkg/alfa.lone`.\n")
-	r, e := service_tester.NewService(t).MoveSymbols(
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/alfa",

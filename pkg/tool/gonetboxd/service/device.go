@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
@@ -13,7 +13,7 @@ func (s *Service) Device(name string) (*device.Device, []*label.Label, error) {
 		return nil, nil, e
 	}
 
-	labels, e := s.store.Labels(constant.DeviceAddress, d.Identifier)
+	labels, e := s.store.Labels(netboxConstant.DeviceAddress, d.Identifier)
 
 	if e != nil {
 		return nil, nil, e

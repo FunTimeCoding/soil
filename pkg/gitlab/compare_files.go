@@ -1,11 +1,14 @@
 package gitlab
 
+import "context"
+
 func (c *Client) CompareFiles(
+	x context.Context,
 	project int64,
 	from string,
 	to string,
 ) ([]string, error) {
-	result, e := c.Compare(project, from, to)
+	result, e := c.Compare(x, project, from, to)
 
 	if e != nil {
 		return nil, e

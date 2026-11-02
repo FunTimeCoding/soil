@@ -1,12 +1,14 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) Packages(
+	x context.Context,
 	project int64,
 	panicOnForbidden bool,
 ) ([]*gitlab.Package, error) {
@@ -15,6 +17,7 @@ func (c *Client) Packages(
 		&gitlab.ListProjectPackagesOptions{
 			ListOptions: gitlab.ListOptions{PerPage: constant.PerPage1000},
 		},
+		gitlab.WithContext(x),
 	)
 
 	if !panicOnForbidden && r != nil && r.StatusCode == 403 {

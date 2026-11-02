@@ -1,7 +1,7 @@
 package project
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"path/filepath"
 )
 
@@ -13,7 +13,7 @@ func New(
 	name := filepath.Base(path)
 
 	return &Project{
-		MonitorIdentifier: constant.GoVersion.StringIdentifier(name),
+		MonitorIdentifier: monitorConstant.GoVersion.StringIdentifier(name),
 		Name:              name,
 		Path:              path,
 		Version:           projectVersion,

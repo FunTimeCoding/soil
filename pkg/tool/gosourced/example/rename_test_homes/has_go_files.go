@@ -1,7 +1,7 @@
 package rename_test_homes
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 	"path/filepath"
@@ -17,7 +17,7 @@ func hasGoFiles(
 
 	for _, entry := range entries {
 		if !entry.IsDir() &&
-			strings.HasSuffix(entry.Name(), constant.GoExtension) {
+			strings.HasSuffix(entry.Name(), soil.GoExtension) {
 			return true
 		}
 	}

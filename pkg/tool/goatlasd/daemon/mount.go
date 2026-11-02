@@ -5,7 +5,7 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/server"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -17,7 +17,7 @@ func (d *Daemon) Mount(
 ) {
 	d.web.Mount(g)
 	g.TokenMount(
-		constant.InterfacePath,
+		webConstant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
 				server.New(d.service, r),

@@ -14,7 +14,7 @@ func (s *Server) panel(
 	r *http.Request,
 ) {
 	identifier := r.PathValue(constant.Identifier)
-	session := s.service.Resolve(identifier)
+	session := s.transcript.Resolve(identifier)
 
 	if session.Identifier == "" {
 		w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
@@ -25,7 +25,7 @@ func (s *Server) panel(
 		return
 	}
 
-	messages := s.service.Messages(session.Identifier)
+	messages := s.transcript.Messages(session.Identifier)
 	var nodes []gomponents.Node
 
 	for i := range messages {

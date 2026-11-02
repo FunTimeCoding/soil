@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/proxmox/constant"
-	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	proxmoxConstant "github.com/funtimecoding/soil/pkg/proxmox/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 )
 
 func desiredStatus(
@@ -10,13 +10,13 @@ func desiredStatus(
 	current string,
 	full bool,
 ) (string, bool) {
-	if guest == constant.RunningStatus && current == netbox.StatusOffline {
-		return netbox.StatusActive, true
+	if guest == proxmoxConstant.RunningStatus && current == gonetboxdConstant.StatusOffline {
+		return gonetboxdConstant.StatusActive, true
 	}
 
-	if full && guest == constant.StoppedStatus &&
-		current == netbox.StatusActive {
-		return netbox.StatusOffline, true
+	if full && guest == proxmoxConstant.StoppedStatus &&
+		current == gonetboxdConstant.StatusActive {
+		return gonetboxdConstant.StatusOffline, true
 	}
 
 	return "", false

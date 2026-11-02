@@ -1,9 +1,10 @@
 package example
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -13,7 +14,7 @@ func CloneAll() {
 	g := gitlab.NewEnvironment()
 	defer g.Close()
 	base := join.Absolute(system.Home(), "gitlab-backup")
-	projects := g.MustProjects()
+	projects := g.MustProjects(context.Background())
 	count := len(projects)
 	var i int
 
@@ -32,7 +33,7 @@ func CloneAll() {
 
 		if !system.DirectoryExists(repository) {
 			system.ChangeDirectory(group)
-			git.Run(constant.Clone, p.Raw.SSHURLToRepo)
+			git.Run(gitConstant.Clone, p.Raw.SSHURLToRepo)
 
 			if false {
 				git.Clone(p.Raw.SSHURLToRepo, repository)

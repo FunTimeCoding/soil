@@ -2,7 +2,7 @@ package file_identity
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
@@ -93,7 +93,7 @@ func checkFile(
 		}
 	}
 
-	stem := trimPlatformSuffix(strings.TrimSuffix(name, constant.GoExtension))
+	stem := trimPlatformSuffix(strings.TrimSuffix(name, soil.GoExtension))
 	expected := camel.ToSnake(sole.name)
 
 	if stem != expected {

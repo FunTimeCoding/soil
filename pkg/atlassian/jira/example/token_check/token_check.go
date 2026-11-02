@@ -19,11 +19,9 @@ func TokenCheck() {
 	rawSearch(host, user, token, k)
 	console.Line()
 	console.Line("TokenCheck: SearchLimit(1)")
-	issues := common.Jira().MustSearchLimit(
-		1,
-		"project = %s ORDER BY updated DESC",
-		k,
-	)
+	c := common.Jira()
+	defer c.Close()
+	issues := c.MustSearchLimit(1, "project = %s ORDER BY updated DESC", k)
 	console.Format("  Count: %d\n", len(issues))
 
 	for _, i := range issues {

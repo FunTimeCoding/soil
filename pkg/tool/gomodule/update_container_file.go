@@ -24,11 +24,11 @@ func updateContainerFile(v *semver.Version) {
 	)
 
 	if token := os.Getenv(constant.TokenEnvironment); token != "" {
+		c := github.New(token)
+		defer c.Close()
+
 		if r := release.LatestCompatible(
-			github.New(token).MustReleases(
-				constant.DelveNamespace,
-				constant.DelveRepository,
-			),
+			c.MustReleases(constant.DelveNamespace, constant.DelveRepository),
 			v,
 		); r != nil {
 			d = project.ReplaceDelveVersion(d, semverTrim.Trim(r.Name))

@@ -1,7 +1,7 @@
 package table
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -11,7 +11,7 @@ func (t *Table) line(
 ) {
 	for i, c := range t.columns {
 		if i > 0 {
-			b.WriteString(constant.DoubleSpace)
+			b.WriteString(stringsConstant.DoubleSpace)
 		}
 
 		var v string
@@ -23,5 +23,5 @@ func (t *Table) line(
 		b.WriteString(pad(v, c.Width, c.Right))
 	}
 
-	b.WriteString(constant.Unix)
+	b.WriteString(stringsConstant.Unix)
 }

@@ -2,7 +2,7 @@ package relay_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"net"
 	"sync/atomic"
 )
@@ -15,7 +15,7 @@ func (r *Relay) accept() {
 			return
 		}
 
-		u, f := net.Dial(constant.Transmission, r.target)
+		u, f := net.Dial(systemConstant.Transmission, r.target)
 		errors.PanicOnError(f)
 		frozen := &atomic.Bool{}
 		r.mutex.Lock()

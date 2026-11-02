@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/packages"
 	"log"
 	"os"
 	"path"
@@ -13,7 +13,7 @@ import (
 )
 
 func moveFacets(
-	s *service.Service,
+	s *packages.Service,
 	directory string,
 	module string,
 	relative string,

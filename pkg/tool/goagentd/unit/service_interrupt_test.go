@@ -40,11 +40,9 @@ func TestAnInterruptBeforeTheLaunchKillsTheAgent(t *testing.T) {
 
 func TestAnAgentAlreadyGoneIsNotReported(t *testing.T) {
 	r := memory.New()
-	o := service_tester.NewWith(
-		t,
-		service_tester.Fixed(stubborn_stream.New(os.ErrProcessDone)),
-		r,
-	)
+	stream := stubborn_stream.New(os.ErrProcessDone)
+	t.Cleanup(stream.Close)
+	o := service_tester.NewWith(t, service_tester.Fixed(stream), r)
 	assert.FatalOnError(t, o.Service.Run("sierra"))
 	o.Runner.Interrupt()
 	service_tester.AwaitDone(t, o.Service)
@@ -53,13 +51,9 @@ func TestAnAgentAlreadyGoneIsNotReported(t *testing.T) {
 
 func TestAKillThatFailsIsReported(t *testing.T) {
 	r := memory.New()
-	o := service_tester.NewWith(
-		t,
-		service_tester.Fixed(
-			stubborn_stream.New(errors.New("operation not permitted")),
-		),
-		r,
-	)
+	stream := stubborn_stream.New(errors.New("operation not permitted"))
+	t.Cleanup(stream.Close)
+	o := service_tester.NewWith(t, service_tester.Fixed(stream), r)
 	assert.FatalOnError(t, o.Service.Run("tango"))
 	o.Runner.Interrupt()
 	service_tester.AwaitDone(t, o.Service)

@@ -14,7 +14,7 @@ func TestRenameModule(t *testing.T) {
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenameModule(
+	r, e := s.Module.RenameModule(
 		t.Context(),
 		d,
 		"example/lib/v2",
@@ -37,7 +37,7 @@ func TestRenameModuleBreakage(t *testing.T) {
 		service_tester.ServiceTestdata("module-break/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenameModule(
+	r, e := s.Module.RenameModule(
 		t.Context(),
 		d,
 		"example/lib/v2",
@@ -59,7 +59,7 @@ func TestRenameModuleForce(t *testing.T) {
 		service_tester.ServiceTestdata("module-break/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenameModule(
+	r, e := s.Module.RenameModule(
 		t.Context(),
 		d,
 		"example/lib/v2",
@@ -79,7 +79,7 @@ func TestRenameModuleDryRun(t *testing.T) {
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenameModule(
+	r, e := s.Module.RenameModule(
 		t.Context(),
 		d,
 		"example/lib/v2",
@@ -99,7 +99,7 @@ func TestRenameModuleUnused(t *testing.T) {
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenameModule(
+	r, e := s.Module.RenameModule(
 		t.Context(),
 		d,
 		"example/other/v2",
@@ -117,7 +117,7 @@ func TestRenameModuleMissingTarget(t *testing.T) {
 		service_tester.ServiceTestdata("module-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenameModule(
+	r, e := s.Module.RenameModule(
 		t.Context(),
 		d,
 		"example/lib/v2",

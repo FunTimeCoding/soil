@@ -7,8 +7,10 @@ import (
 
 func Metric() {
 	console.Line("Metric")
+	c := prometheus.NewEnvironment()
+	defer c.Close()
 
-	for _, m := range prometheus.NewEnvironment().MustAllMetrics() {
+	for _, m := range c.MustAllMetrics() {
 		console.Format("  %s\n", m)
 	}
 }

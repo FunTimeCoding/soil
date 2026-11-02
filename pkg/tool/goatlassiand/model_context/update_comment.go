@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -11,19 +11,19 @@ func (s *Server) updateComment(
 	c context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	key, f := r.RequireString(constant.ParameterKey)
+	key, f := r.RequireString(generativeConstant.ParameterKey)
 
 	if f != nil {
 		return response.Fail("key is required: %v", f)
 	}
 
-	identifier, g := r.RequireString(constant.ParameterIdentifier)
+	identifier, g := r.RequireString(generativeConstant.ParameterIdentifier)
 
 	if g != nil {
 		return response.Fail("identifier is required: %v", g)
 	}
 
-	body, h := r.RequireString(constant.ParameterBody)
+	body, h := r.RequireString(generativeConstant.ParameterBody)
 
 	if h != nil {
 		return response.Fail("body is required: %v", h)

@@ -7,7 +7,7 @@ import (
 
 func (o *Tester) FindingsByKind(kind string) []*finding.Finding {
 	o.t.Helper()
-	all, e := o.Service.Findings()
+	all, e := o.Roster.Findings()
 	assert.FatalOnError(o.t, e)
 	var result []*finding.Finding
 

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/report"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/report_tester"
 	"testing"
 )
 
@@ -33,7 +34,7 @@ func TestReportSeparatesBodyAndSignatureChanges(t *testing.T) {
 			"signature . alfa Charlie",
 			"body . alfa Bravo",
 		},
-		reportLines(r),
+		report_tester.Lines(r),
 	)
 }
 
@@ -56,7 +57,11 @@ func TestReportIgnoresLayout(t *testing.T) {
 			},
 		),
 	)
-	assert.Strings(t, []string{"unchanged . alfa Bravo"}, reportLines(r))
+	assert.Strings(
+		t,
+		[]string{"unchanged . alfa Bravo"},
+		report_tester.Lines(r),
+	)
 }
 
 func TestReportFollowsAPackageMovedWhole(t *testing.T) {
@@ -91,7 +96,7 @@ func TestReportFollowsAPackageMovedWhole(t *testing.T) {
 			"moved bravo bravo Card",
 			"moved bravo bravo New",
 		},
-		reportLines(r),
+		report_tester.Lines(r),
 	)
 }
 
@@ -114,7 +119,7 @@ func TestReportFindsARenameByShape(t *testing.T) {
 			},
 		),
 	)
-	assert.Strings(t, []string{"renamed . alfa Total"}, reportLines(r))
+	assert.Strings(t, []string{"renamed . alfa Total"}, report_tester.Lines(r))
 }
 
 func TestReportMarksAMoveThatChanged(t *testing.T) {
@@ -139,7 +144,7 @@ func TestReportMarksAMoveThatChanged(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"moved-changed bravo bravo Limit"},
-		reportLines(r),
+		report_tester.Lines(r),
 	)
 }
 
@@ -165,7 +170,7 @@ func TestReportListsAddedAndRemoved(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"added . alfa Foxtrot", "removed . alfa Echo"},
-		reportLines(r),
+		report_tester.Lines(r),
 	)
 }
 
@@ -214,7 +219,7 @@ func TestReportPairsAnAmbiguousNameByItsPackage(t *testing.T) {
 			"moved-changed bravo bravo New",
 			"moved-changed delta delta New",
 		},
-		reportLines(r),
+		report_tester.Lines(r),
 	)
 }
 
@@ -247,6 +252,6 @@ func TestReportPairsAnAmbiguousTypeByItsMethods(t *testing.T) {
 			"moved-changed bravo bravo Tank",
 			"removed charlie charlie Tank",
 		},
-		reportLines(r),
+		report_tester.Lines(r),
 	)
 }

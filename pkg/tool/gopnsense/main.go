@@ -2,7 +2,6 @@ package gopnsense
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsense/constant"
@@ -48,5 +47,5 @@ func Main() {
 	o.AddCommand(reconfigure(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
-	errors.PanicOnError(o.Execute())
+	argument.CobraExecute(o)
 }

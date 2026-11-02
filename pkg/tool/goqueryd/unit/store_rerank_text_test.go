@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"testing"
@@ -23,7 +22,7 @@ func TestRerankTextKeywordHitTakesTheChunkHoldingItsLine(t *testing.T) {
 		store.RerankText(
 			halves(),
 			result.NewSearch("halves.md", "", constant.NoChunkPosition, 1),
-			mock_reranker.New(),
+			newReranker(t),
 		),
 	)
 	assert.StringContains(
@@ -32,7 +31,7 @@ func TestRerankTextKeywordHitTakesTheChunkHoldingItsLine(t *testing.T) {
 		store.RerankText(
 			halves(),
 			result.NewSearch("halves.md", "", constant.NoChunkPosition, 1200),
-			mock_reranker.New(),
+			newReranker(t),
 		),
 	)
 }
@@ -44,7 +43,7 @@ func TestRerankTextVectorChunkWinsOverSnippetLine(t *testing.T) {
 		store.RerankText(
 			halves(),
 			result.NewSearch("halves.md", "", 0, 1200),
-			mock_reranker.New(),
+			newReranker(t),
 		),
 	)
 }
@@ -61,7 +60,7 @@ func TestRerankTextWithoutBodyUsesSnippet(t *testing.T) {
 				constant.NoChunkPosition,
 				0,
 			),
-			mock_reranker.New(),
+			newReranker(t),
 		),
 	)
 }

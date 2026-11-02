@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
@@ -13,7 +13,7 @@ func hasSentryReporter(
 	directory string,
 ) bool {
 	for _, name := range v.MustReadDirectory(directory) {
-		if !strings.HasSuffix(name, constant.GoExtension) {
+		if !strings.HasSuffix(name, soil.GoExtension) {
 			continue
 		}
 

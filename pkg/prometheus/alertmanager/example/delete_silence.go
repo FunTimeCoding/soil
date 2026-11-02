@@ -8,7 +8,7 @@ import (
 func DeleteSilence() {
 	a := argument.NewSimple("delete-silence")
 	a.ParseSimple()
-	common.Alertmanager().MustDeleteSilence(
-		a.RequiredPositional(0, "SILENCE_IDENTIFIER"),
-	)
+	c := common.Alertmanager()
+	defer c.Close()
+	c.MustDeleteSilence(a.RequiredPositional(0, "SILENCE_IDENTIFIER"))
 }

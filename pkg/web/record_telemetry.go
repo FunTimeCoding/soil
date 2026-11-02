@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	telemetryConstant "github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 )
 
@@ -11,13 +11,18 @@ func RecordTelemetry(
 	operation string,
 	e error,
 ) {
-	outcome := constant.Success
+	outcome := telemetryConstant.Success
 
 	if e != nil {
-		outcome = constant.Error
+		outcome = telemetryConstant.Error
 	}
 
 	c.Record(
-		record.NewBaseline(operation, constant.WebService, "user", outcome),
+		record.NewBaseline(
+			operation,
+			telemetryConstant.WebService,
+			"user",
+			outcome,
+		),
 	)
 }

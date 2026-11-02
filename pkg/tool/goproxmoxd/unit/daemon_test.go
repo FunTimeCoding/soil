@@ -17,14 +17,26 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsOnlyThePollerOutWithoutNetbox(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
-	d := daemon_tester.New(t, map[string]*mock_client.Client{"alfa": c})
-	assert.Count(t, 1, d.Workers())
+func TestTheDaemonHandsOneGuardPerHypervisorOutBeforeThePoller(t *testing.T) {
+	alfa := mock_client.New()
+	defer alfa.Close()
+	bravo := mock_client.New()
+	defer bravo.Close()
+	d := daemon_tester.New(
+		t,
+		map[string]*mock_client.Client{"alfa": alfa, "bravo": bravo},
+	)
+	workers := d.Workers()
+	assert.Count(t, 3, workers)
+	_, first := workers[0].(*peer.Guard)
+	_, second := workers[1].(*peer.Guard)
+	_, third := workers[2].(*peer.Guard)
+	assert.True(t, first)
+	assert.True(t, second)
+	assert.False(t, third)
 }
 
-func TestTheDaemonHandsTheNetboxGuardOutFirst(t *testing.T) {
+func TestTheDaemonHandsEveryGuardOutBeforeItsClocks(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	d := daemon_tester.NewWithNetbox(
@@ -33,9 +45,13 @@ func TestTheDaemonHandsTheNetboxGuardOutFirst(t *testing.T) {
 		netbox.New(),
 	)
 	workers := d.Workers()
-	assert.Count(t, 3, workers)
-	_, okay := workers[0].(*peer.Guard)
-	assert.True(t, okay)
+	assert.Count(t, 4, workers)
+	_, first := workers[0].(*peer.Guard)
+	_, second := workers[1].(*peer.Guard)
+	_, third := workers[2].(*peer.Guard)
+	assert.True(t, first)
+	assert.True(t, second)
+	assert.False(t, third)
 }
 
 func TestClosingTheDaemonClosesEveryClientItBuilt(t *testing.T) {

@@ -26,7 +26,7 @@ func (s *Server) GetMergeRequestDiffs(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.MergeRequestDiffs(instance, project, a.MergeRequest)
+	v, e := s.service.MergeRequestDiffs(x, instance, project, a.MergeRequest)
 
 	if e != nil {
 		return s.answerWith(e, "")

@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/build"
 	buildOption "github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobuild/option"
 )
 
@@ -40,7 +40,11 @@ func Run(o *option.Build) error {
 
 		if p.MainPath == "" {
 			if p.MainPath = build.GuessMainPath(n); p.MainPath == "" {
-				return fmt.Errorf("no %s/%s/main.go", constant.CommandPath, n)
+				return fmt.Errorf(
+					"no %s/%s/main.go",
+					systemConstant.CommandPath,
+					n,
+				)
 			}
 		}
 

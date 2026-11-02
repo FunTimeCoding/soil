@@ -18,7 +18,7 @@ func (s *Server) ListProjects(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.Projects(instance, a.Search)
+	v, e := s.service.Projects(x, instance, a.Search)
 
 	if e != nil {
 		return s.answerWith(e, "")

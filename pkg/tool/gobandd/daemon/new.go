@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 )
 
 func New(
@@ -34,7 +34,7 @@ func New(
 	if o.Netbox != nil {
 		result.netbox = o.Netbox()
 		result.netboxGuard = peer.New(
-			constant.Identity.Name(),
+			gonetboxdConstant.Identity.Name(),
 			result.netbox.Address(),
 			result.netbox,
 			l,

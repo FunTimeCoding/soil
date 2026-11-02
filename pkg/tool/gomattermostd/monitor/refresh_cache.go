@@ -1,15 +1,18 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
 func (m *Monitor) refreshCache() error {
 	var all []*model.ChannelWithTeamData
 
-	for offset := 0; ; offset += constant.MattermostMaxPerPage {
-		page, e := m.client.AllChannels(constant.MattermostMaxPerPage, offset)
+	for offset := 0; ; offset += chatConstant.MattermostMaxPerPage {
+		page, e := m.client.AllChannels(
+			chatConstant.MattermostMaxPerPage,
+			offset,
+		)
 
 		if e != nil {
 			return e
@@ -17,7 +20,7 @@ func (m *Monitor) refreshCache() error {
 
 		all = append(all, page...)
 
-		if len(page) < constant.MattermostMaxPerPage {
+		if len(page) < chatConstant.MattermostMaxPerPage {
 			break
 		}
 	}

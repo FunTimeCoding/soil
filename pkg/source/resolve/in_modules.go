@@ -1,7 +1,7 @@
 package resolve
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -11,7 +11,7 @@ func inModules(
 	modules []string,
 ) bool {
 	for _, m := range modules {
-		if path == m || strings.HasPrefix(path, join.Empty(m, constant.Slash)) {
+		if path == m || strings.HasPrefix(path, join.Empty(m, stringsConstant.Slash)) {
 			return true
 		}
 	}

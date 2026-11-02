@@ -7,14 +7,14 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
 func (c *Client) Activate(targetIdentifier string) {
 	console.Line("  Activate")
 	start := time.Now()
-	console.Format("    Start %v\n", start.Format(constant.Micro))
+	console.Format("    Start %v\n", start.Format(timeConstant.Micro))
 	b, e := c.browser()
 	errors.PanicOnError(e)
 	t1 := time.Now()

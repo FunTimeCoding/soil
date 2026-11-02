@@ -1,13 +1,16 @@
 package service
 
-import "slices"
+import (
+	"context"
+	"slices"
+)
 
-func (s *Service) Refresh() []error {
+func (s *Service) Refresh(x context.Context) []error {
 	var failures []error
 	changed := false
 
 	for _, i := range s.inventory.Instances {
-		entries, e := s.boardOf(i.Name)
+		entries, e := s.boardOf(x, i.Name)
 
 		if e != nil {
 			failures = append(failures, e)
@@ -15,7 +18,7 @@ func (s *Service) Refresh() []error {
 			continue
 		}
 
-		requests, f := s.requestsOf(i.Name)
+		requests, f := s.requestsOf(x, i.Name)
 
 		if f != nil {
 			failures = append(failures, f)

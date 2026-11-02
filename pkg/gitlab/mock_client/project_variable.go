@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/variable"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/variable"
+)
 
 func (c *Client) ProjectVariable(
+	_ context.Context,
 	_ int64,
 	_ string,
 ) (*variable.Variable, error) {

@@ -60,7 +60,7 @@ func (s *Server) registerSession() {
 				),
 			),
 		),
-		s.label,
+		s.labelSession,
 	)
 	s.server.AddTool(
 		mcp.NewTool(

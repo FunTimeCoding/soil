@@ -17,13 +17,6 @@ const (
 )
 
 const (
-	HostEnvironment     = "GOSECRET_HOST"
-	PortEnvironment     = "GOSECRET_PORT"
-	InsecureEnvironment = "GOSECRET_INSECURE"
-	TokenEnvironment    = "GOSECRET_TOKEN"
-)
-
-const (
 	DecodeUsage  = "decode"
 	CheckUsage   = "check"
 	EncodeUsage  = "encode"

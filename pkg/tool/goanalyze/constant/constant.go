@@ -9,3 +9,7 @@ var Identity = identity.New(
 )
 
 const ConfigurationPath = "strata/tool/goanalyze.yaml"
+const (
+	FixtureDirectoryEnvironment = "GOANALYZE_FIXTURE_DIRECTORY"
+	FixtureFullEnvironment      = "GOANALYZE_FIXTURE_FULL"
+)

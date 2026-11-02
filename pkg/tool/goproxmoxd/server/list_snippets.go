@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
@@ -22,13 +23,18 @@ func (s *Server) ListSnippets(
 	}
 
 	if e != nil {
-		return server.ListSnippets500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.ListSnippets500JSONResponse(*s.answer(e)), nil
 	}
 
 	entries, e := s.service.ListSnippets(instance)
 
-	if e != nil {
-		return server.ListSnippets500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case not_found.Is(e):
+		return server.ListSnippets404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.ListSnippets403JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.ListSnippets500JSONResponse(*s.answer(e)), nil
 	}
 
 	var result server.ListSnippets200JSONResponse

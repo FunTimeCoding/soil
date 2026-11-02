@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
@@ -28,7 +28,7 @@ func TestObserveIgnoresNonTransportErrors(t *testing.T) {
 	assert.Nil(t, r.Observe("sentry", not_found.New("issue", "GO-1")))
 	down, _ := r.Down("sentry")
 	assert.False(t, down)
-	r.Fail("sentry", constant.Refused)
+	r.Fail("sentry", errorsConstant.Refused)
 	assert.Nil(t, r.Observe("sentry", not_found.New("issue", "GO-1")))
 	down, _ = r.Down("sentry")
 	assert.True(t, down)

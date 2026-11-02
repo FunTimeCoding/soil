@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/band/face"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/types/status"
 	"strings"
@@ -20,7 +20,7 @@ func readHost(
 
 	v.Host = strings.Trim(
 		join.Dot([]string{r.HostName, r.DomainName}),
-		constant.Dot,
+		stringsConstant.Dot,
 	)
 
 	return nil

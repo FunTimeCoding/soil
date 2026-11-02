@@ -41,9 +41,9 @@ func TestTheUserIsFetchedOnFirstNeed(t *testing.T) {
 		},
 	)
 	assert.Integer(t, 0, int(users.Load()))
-	_, e := r.Client.AssignedMergeRequests(true)
+	_, e := r.Client.AssignedMergeRequests(t.Context(), true)
 	assert.FatalOnError(t, e)
-	_, e = r.Client.AssignedMergeRequests(true)
+	_, e = r.Client.AssignedMergeRequests(t.Context(), true)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, int(users.Load()))
 	assert.Any(t, "42", assignee.Load())
@@ -76,6 +76,6 @@ func TestAUserLookupRefusedIsAnError(t *testing.T) {
 			)
 		},
 	)
-	_, e := r.Client.ReviewingMergeRequests(true)
+	_, e := r.Client.ReviewingMergeRequests(t.Context(), true)
 	assert.Error(t, e)
 }

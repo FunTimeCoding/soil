@@ -26,7 +26,7 @@ func (s *Server) GetPipeline(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.Pipeline(instance, project, a.Pipeline)
+	v, e := s.service.Pipeline(x, instance, project, a.Pipeline)
 
 	if e != nil {
 		return s.answerWith(e, "")

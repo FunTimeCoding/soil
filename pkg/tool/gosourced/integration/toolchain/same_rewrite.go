@@ -4,14 +4,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func sameRewrite(
 	t *testing.T,
-	run func(s *service.Service, directory string) (*output.Results, error),
+	run func(
+		s *service_tester.Services,
+		directory string,
+	) (*output.Results, error),
 ) string {
 	t.Helper()
 	var trees []string
@@ -24,7 +26,7 @@ func sameRewrite(
 		s := service_tester.NewService(t)
 
 		if full {
-			s.UseFullLoad()
+			s.Workspace.UseFullLoad()
 		}
 
 		r, e := run(s, directory)

@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
-	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (s *Service) EditPage(
@@ -30,10 +30,10 @@ func (s *Service) EditPage(
 		title = current.Name
 	}
 
-	status := constant.ConfluenceCurrentStatus
+	status := atlassianConstant.ConfluenceCurrentStatus
 
 	if draft {
-		status = constant.ConfluenceDraftStatus
+		status = atlassianConstant.ConfluenceDraftStatus
 	}
 
 	return guarded(

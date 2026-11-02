@@ -3,7 +3,7 @@ package web_interface_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
 	"net/url"
 	"strings"
@@ -16,7 +16,7 @@ func (o *Tester) PostForm(
 	o.t.Helper()
 	r, e := o.server.Client().Post(
 		o.server.Address(path),
-		constant.FormEncoded,
+		webConstant.FormEncoded,
 		strings.NewReader(values.Encode()),
 	)
 	assert.FatalOnError(o.t, e)

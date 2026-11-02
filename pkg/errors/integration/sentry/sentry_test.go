@@ -23,7 +23,9 @@ func TestWhoamiAndOrganizationsRead(t *testing.T) {
 }
 
 func TestMissingIssueIsNotFound(t *testing.T) {
-	_, e := sentry.NewEnvironment().IssueByIdentifier(
+	owned := sentry.NewEnvironment()
+	defer owned.Close()
+	_, e := owned.IssueByIdentifier(
 		environment.Required(constant.OrganizationEnvironment),
 		"999999999",
 	)

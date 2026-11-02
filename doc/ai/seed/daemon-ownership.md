@@ -19,8 +19,8 @@ seed of its own and follows this one for everything else.
 
 ## Where the work stopped
 
-The daemons listed at the target in Census meet every row of it; goclauded's
-three loops are in, its `Run`-built workers left (Order).
+The daemons listed at the target in Census meet every row of it, goclauded
+included.
 
 ## Working model
 
@@ -253,8 +253,14 @@ At the target, with what each is the reference for:
   runs - is built once in `New` over the metric registry, since its gauge
   registers on construction, and is handed out after the guards; its `Close`
   is safe twice and waits out a tick in flight, so no `Refresh` meets a closed
-  pool. The service keeps the inventory as a part, `Refresh` walking
-  it; the daemon holds the web server and hands `Run` its recovery. Untested:
+  pool. Every operation takes its caller's context - MCP's, the web request's,
+  the clock's - into the guard and `pkg/gitlab`. The clock keeps its own loop
+  rather than `github.com/funtimecoding/soil/pkg/worker`, for the faster
+  interval while a pipeline runs, and builds the same context: cancelled at
+  `Close`, so a refresh in flight stops, and a cancelled tick's failures are
+  dropped rather than reported. The service keeps the inventory as a part,
+  `Refresh` walking it; the daemon holds the web server and hands `Run` its
+  recovery. Untested:
   the daemon wiring `Refresh` and `Entries` into the clock
 - gobandd - a pooled peer whose requests the daemon writes: on `<path>/daemon/`,
   the engine factory on the option answering `validation` for an instance
@@ -283,6 +289,11 @@ At the target, with what each is the reference for:
   the protected entries locked in memory or a temporary file behind, and a
   backup that fails refuses the write. A failed write is discarded by reloading
   from disk. It owns nothing running, so it has no `Close` and no leak test
+- gooutpostd - an owner of nothing whose listing is the fact it reports: a
+  failed `systemctl` or `launchctl` listing is an error answered 500, never an
+  empty host, and the lookups after it still tolerate a nonzero exit; the
+  service takes its reader; the client is named for the operations and held to
+  the spec by a coverage test. No CLI - the atlas is its reader
 
 Beside them, upstream faces now full and home: Prometheus, Alertmanager, Argo CD
 (`ArgocdClient` in the kubernetes face), Nextcloud usage (`UsageClient`),
@@ -303,7 +314,7 @@ returns ordered columns and positional rows, so a duplicate column name and the
 column order survive.
 
 Ownership done, other rows open: gochromed, gosecretd, gomonitord, gogithubd,
-gooutpostd, goraidparsed, goansibled, gosaltd, goterraformd, goitermd,
+goraidparsed, goansibled, gosaltd, goterraformd, goitermd,
 gosublimed, gojellyfind, gopnsensed, goprocessd, goproxmoxd, gosourced. Of
 these, gopnsensed, gomonitord, gosublimed, goitermd, gojellyfind and gochromed
 are on `<path>/daemon/`, the last five with their mirror face retired - each
@@ -324,12 +335,19 @@ and `mock_service` retired, and the snippet operations its surfaces ran on an
 SSH client of their own are the service's. A snippet name joined into the
 snippet directory was a traversal; it is checked as a bare name. The SSH mock
 listed every file under its full path, wherever it lay, so it now lists one
-directory by base name as the client does. The poller reaches the API client
-through the pool's lookup until it becomes a clock over a service `Refresh`; the
-API pool has no guard yet, and its surfaces answer the new classes through the
-old branches (next: P and the per-class spec). pkg/proxmox classifies in a
-transport under go-proxmox, which keeps only `res.Status` for a 500 and folds
-401 and 403 into `ErrNotAuthorized`. PVE (pve-manager `HTTPServer.pm`
+directory by base name as the client does. The API pool is `peered`, a guard per
+hypervisor handed out first; every service operation runs through one `guarded`
+path, NetBox writes outside it. The poller is a gauged clock over the service's
+`Refresh`, which samples each hypervisor through its guard and keeps the floor
+and its notifier that web reads; the clock sets its gauges from the samples. Its
+hand-rolled reacher is gone, and an unexpected poll failure is captured where it
+had been logged. The spec
+answers 403, 409 (a locked guest, on writes) and 503 per class; REST branches on
+each. Two handlers are tested per class; `error_answer` checks the shape of the
+other branches but not that each is present. Most of the Proxmox mock's methods
+ignore `SetFailure` - each gains it when a test needs it. pkg/proxmox classifies
+in a transport under go-proxmox, which keeps only `res.Status` for a 500 and
+folds 401 and 403 into `ErrNotAuthorized`. PVE (pve-manager `HTTPServer.pm`
 `rest_handler`) answers a `PVE::Exception`'s code and 500 for any other `die`,
 its message in the status line, and never 404 for a guest: "does not exist"
 (pve-guest-common `AbstractConfig.pm` 58, and the snapshot lookups) reads as
@@ -340,25 +358,27 @@ carry the caller's configuration; elsewhere it is ours, captured. 401 passes to
 go-proxmox's session re-create. The texts are fixtures, so only a live call
 would show a PVE upgrade rewording them. 595, 596 and 599 - AnyEvent::HTTP's
 statuses when PVE cannot reach another cluster node - stay captured until a
-second node exists. pkg/ssh's file operations return errors
-classified at their lowest layer - a missing path `not_found`, a refused one
-`forbidden`, sftp's lost connection `dropped` - tested against an in-process SSH
-server; its lazily opened sftp session had no lock while REST and MCP shared one
-pooled client, a race now closed. Its shell pool is the only pool in the fleet
-holding a connection between calls - the others hold HTTP clients that redial
-per request, or pgx's self-healing pool - so only goproxmoxd calls
+second node exists. pkg/ssh's file operations return errors classified at their
+lowest layer - a missing path `not_found`, a refused one `forbidden`, sftp's
+lost connection `dropped` - tested against an in-process SSH server; its lazily
+opened sftp session had no lock while REST and MCP shared one pooled client, a
+race now closed. Its shell pool is the only pool in the fleet holding a
+connection between calls - the others hold HTTP clients that redial per request,
+or pgx's self-healing pool - so only goproxmoxd calls
 `github.com/funtimecoding/soil/pkg/inventory/pool`'s `Forget`: a snippet
 operation answering `dropped` forgets that shell, the error still reaching the
 caller and nothing retried, and the next call redials. `Forget` drops a client
 only while the pool still holds that one, so a second caller holding the dead
 client never closes one a third call rebuilt; the pool's client type is
-`comparable` for it, and its `Set` went with goproxmoxd's seam. gooutpostd is
-too: it owns nothing, so it has no `Close` and no leak test, and the service
-takes its reader. A failed `systemctl` or `launchctl` listing had answered 200
-with no services, which goatlasd read as a host with nothing deployed; it is an
-error, captured and answered 500, and the lookups after it still tolerate a
-nonzero exit. Its client is named for the operations, `ListServices` and
-`GetHost`, and a coverage test holds it to the spec. goprocessd is too: its
+`comparable` for it, and its `Set` went with goproxmoxd's seam. Its C is done
+too: the daemon client covers all 36 operations under their spec names, each
+answering its typed result or a classified refusal, and takes the instance per
+call in the generated parameters - gobandd's shape - so one client serves every
+hypervisor. `face.Client` holds them in machine, container, node and snippet
+parts; the stateful mock answers an unknown machine, container, node, snapshot
+or snippet `not_found`, writes included, as the daemon does. The goproxmox CLI
+is its one consumer, on `NewDeferred` and `EmitValue`, and gained the three
+container power commands the client already had. goprocessd is too: its
 supervisor is the daemon's one worker - `Start` spawns the Procfile, `Close`
 stops every process - and `Run` waits on interrupt, terminate, hangup or the
 daemon's `Done`, so a closed terminal stops the processes and the daemon still
@@ -368,10 +388,12 @@ nothing stopped, a dropped process's included; the writer now flushes a partial
 line on a timer and runs no goroutine. Its leak test starts real processes, so
 it lives under `<path>/integration/`. gosourced is too: the daemon builds and
 closes its memory peer and guard; the index cache and the turn scheduler start
-nothing and close nothing, so they stay the service's own fields. Its
-subpackages moved out of `<path>/service/` - value types to `<path>/types/`,
-the sink, turns, decoration, matcher, report and revision to the root. Its
-250-file service splits by noun in a loop of its own.
+nothing and close nothing, so they are the workspace and commit services' own
+fields. Its subpackages moved out of `<path>/service/` - value types to
+`<path>/types/`, the sink, turns, decoration, matcher, report and revision to
+the root. Its use cases are nine services under `<path>/service/`: the
+workspace and the commit part every verb shares, and seven nouns built with
+them, diff with module.
 
 goterraformd's downstream guards and goansibled's inventory guard have no
 recovery test. Tests prove that `Workers()` returns them first and that an
@@ -412,20 +434,39 @@ Leaks first - a client opened and never closed - then shape.
    three released holds; they return the Find shape now. `getResolve`'s 409
    carries the ambiguous matches, which the client returns beside the result
    instead of refusing. A generated method checks every 2xx its operation
-   declares, and every non-2xx body the caller reads. Left:
-   - the tickers, gauge and watcher built in `Run`, which move to the daemon
-     at its layout loop (`run_builds_clock`, `run_builds_client`)
-   - `Usage` answers a store failure as no data (204), the swallow B was
-     meant to end
+   declares, and every non-2xx body the caller reads. On `<path>/daemon/`
+   since: the daemon builds the tickers, gauge and watcher; `FindUsage`
+   answers a store failure as an error, not 204. Left: a consumer in another
+   repository still wraps the generated client (Off the full shape)
 2. The faces and clients off the full shape
-3. The analyzer gaps, once the findings they raise are few, each with a
-   case in the `unclosed_resource` testdata
+3. The analyzer gaps are closed (Analyzer gaps); left is the daemon as
+   owner, a design question before it is a rule
 
 ## Off the full shape
 
-- Daemon clients: no `<path>/client/` package - most daemons, many rightly;
-  which have a consumer reaching them another way is unsurveyed. gokubernetesd
-  serves MCP only
+- Daemon clients: surveyed by who builds a daemon's generated client outside
+  it, hand-built HTTP, and consumers defining a daemon's `GO*_HOST`; nothing
+  reaches a daemon over MCP. gotelemetryd has its client, and `pkg/telemetry`
+  sends through it, best-effort as before - a refused or stalled daemon costs
+  the command at most its timeout, and nothing fails. gosecretd, gosublimed,
+  gojellyfind, godirectoryd and golinkaced have theirs, and each CLI is on it
+  through `EmitValue`: `gosecret reveal` and `gosublime read` still print the
+  bare value they promise for `$(...)`, `gosecret migrate` keeps its report,
+  and golinkace's colored views and `--linkace-host` are gone; four of its
+  deletes had printed success on a refusal. `pkg/linkace`'s `FromDaemon`
+  converters and `Format` methods have no caller in this module now; they stay
+  as exports until a consumer outside it is ruled out. The gomonitord claim
+  test reads through its typed client's `Claims`. A client exists but is gone
+  around by a consumer in another repository, wrapping goclauded's
+  generated client for its own short timeout - the typed client builds its
+  pool only through an unexported constructor, so it needs a timeout or
+  builder constructor first.
+  Rightly without one, as nothing reaches them over REST:
+  goalertmanagerd, goansibled, gochromed (its importers take its browser and
+  face, not the daemon), gocredentiald, godashboardd, gofirefoxd, gogated,
+  gogithubd, gogitlabd, goitermd, gokubernetesd (MCP only), goprometheusd,
+  gosaltd, gosentryd, gosproutd, goterraformd, and gocertificated and goflightd,
+  whose generated clients nothing imports
 - Faces mirroring the service: gosecretd
 - `github.com/funtimecoding/soil/pkg/tool/gochromed/face.ChromiumSource` has
   no `Close`, so its owners close it through `face.Closer` - gochromed's own
@@ -457,14 +498,13 @@ Leaks first - a client opened and never closed - then shape.
   pipeline and branch creates; pkg/chat/mattermost's `New` panics and
   dials, so gomattermostd's start-up wait never retries; pkg/gitlab's `Jobs`
   deletes old pipelines from inside a read when `AutoCleanup` is set
-- No caller context: pkg/gitlab keeps `context.Background()` and no `Forge`
-  method takes a context, so a caller who left keeps its GitLab call
-  running, and gogitlabd's guards attempt under `context.Background()`;
-  threading one through its 120 methods is a loop of its own, not yet
-  scheduled
 - A downstream daemon's 500 is captured twice, by the daemon and again by
   the caller reading it as `unexpected` - fleet-wide, every
-  daemon-to-daemon client
+  daemon-to-daemon client. It recurs most on clocks over a peer, since every
+  tick that meets the 500 hands it back to be reported: goclauded's
+  `Reconcile` against goqueryd, `PollMemory` and `DeliverImpressions`
+  against gomemoryd, each also behind a guard whose `handle` captures what
+  is not `unavailable`; how many captures one 500 makes there is unmeasured
 - Untested or unused: gomemoryd's profile search branch has no failure test
   of its own - goqueryd's mock fails every method at once, so completions
   fail first; gomemoryd's `importer.Import` has no caller but its test
@@ -651,9 +691,10 @@ Building:
   `m.Run()`, the one point every test has finished
 - A test seeding a store the daemon will own seeds it through its own
   connection on the option's `LitePath`, then builds the daemon there. A
-  test seam building the daemon from finished clients (`NewFor`) builds one
-  that cannot close, and its holder is an owner goanalyze flags - a service
-  test builds the service from its parts instead, owning what it built; and
+  test seam building the daemon from finished clients builds one that cannot
+  close what it holds, which goanalyze does not see yet (Analyzer gaps) - a
+  service test builds the service from its parts instead, owning what it
+  built; and
   a fleet double above the upstream face cannot reach a daemon built from
   the option - the fixtures become the face's seeded data, through one
   translator proven first by loading every fixture back field by field.
@@ -680,6 +721,9 @@ Testing:
   missed its anchor leaves the code unbroken and passes as a proof; the
   break script compares the target with its backup and refuses to run on a
   match, and reads a build failure as no verdict rather than a failed test.
+  A panic in a goroutine the test does not own prints no `--- FAIL` line, so
+  the script reads `panic:` and a package `FAIL` as failures too, checked by a
+  control break that must survive.
   A break the test survives names a branch no test reaches - add the test -
   or code nothing needs: an owner's once-guard over workers each safe twice,
   removed. Staging while a break stands stages it; name the files. A mock
@@ -713,19 +757,22 @@ Testing:
   peer back - nothing lost across a failed tick - fails it with a fault the
   guard passes through untouched, and leaves the outage to the next-call test
 - A mock answering `nil, nil` where the client never does hides a nil
-  dereference; an unseeded query answers an empty result. A double replaced
-  by a shared mock keeps its old default by seeding it: a query double
-  answering 100 to every query, replaced by a mock answering 0, flips which
-  alerts a threshold filters. A mock that only ever replaced the client
-  hides the client's own bugs: gofirefoxd's `CreateTab` decoded into a nil
-  pointer and failed every call after Firefox had opened the tab; one round
-  trip through the real client found it. A browser-scraping client is tested
-  without a browser through a page serving a captured fixture's HTML as its
-  body; its `Evaluate` tells a click (nil target) from a value poll, or a
-  test meant for one branch fails earlier in another - two write branches
-  answering alike each need their own test, which a break of the other
-  shows. The daemon-client methods carry the spec's operation names, so the
-  coverage test checks names exactly instead of mapping them
+  dereference; an unseeded query answers an empty result. A double replaced by a
+  shared mock keeps its old default by seeding it: a query double answering 100
+  to every query, replaced by a mock answering 0, flips which alerts a threshold
+  filters. A mock that only ever replaced the client hides the client's own
+  bugs: gofirefoxd's `CreateTab` decoded into a nil pointer and failed every
+  call after Firefox had opened the tab; one round trip through the real client
+  found it. golinkaced's five deletes checked for 204 where the spec answers
+  200, so every delete that happened read as a refusal; each success path goes
+  through the client against the served daemon, and a mock answers absence as
+  the daemon does. A browser-scraping client is tested without a browser through
+  a page serving a captured fixture's HTML as its body; its `Evaluate` tells a
+  click (nil target) from a value poll, or a test meant for one branch fails
+  earlier in another - two write branches answering alike each need their own
+  test, which a break of the other shows. The daemon-client methods carry the
+  spec's operation names, so the coverage test checks names exactly instead of
+  mapping them
 - Moving a peer from the guard's `Do` to `Attempt` moves the reporting: the
   caller that got nothing back now gets the error and reports what
   `classify.Reportable` admits, or every non-outage failure goes silent. A
@@ -773,32 +820,22 @@ Tools:
 
 ## Analyzer gaps
 
-The analyzer misses four shapes, so a clean lint is not a clean tree:
+goanalyze's `unclosed_resource` follows an owner past its own assignment: a
+method chained straight onto what a package-level constructor built; an owner
+passed inline to a call, which takes it only when it disposes, keeps or wraps
+it - followed through the option factories a daemon draws from, so a tester
+handing a mock to an option the daemon closes has handed it off; a closure,
+which hands an owner off only when the closure itself leaves; and a helper
+unpacking a pooled entry, which lends. A method releasing every closable field
+its type's `Close` releases counts as a release. What it cannot summarise in
+the standard library is named in `TakenArguments` and `ReleasingMethods`.
 
-- A consuming chain on a fresh owner - `gitlab.NewEnvironment().MustProjects()`
-  is never assigned, so never a candidate. Hits: eight soil examples,
-  Ollama's `reachable_skip` twice
-- An owner captured by a closure - `escapes.go` treats any function literal
-  referencing the owner as a hand-off; no hit remains
-- An owner built inline as another constructor's argument -
-  `store.New(lite.New(...))` - is never assigned; the telegram environment is
-  a live hit
-- An owner built in `Main` and handed to `Run` crosses a function boundary
-  the analyzer does not follow; no hit remains
-
-It also sees one borrow as ownership: `checkedValue` follows `v, e := call()`
-only from a map index or a type assertion, so a helper that unpacks a pooled
-entry - `p, e := s.pool.Client(i)` then `return p.Client(), nil` - is read as
-handing out a fresh client, and every caller is flagged unclosed. gogitlabd
-calls `p.Client()` inline at each site instead.
-
-Its owner tracking predates the layout: it was taught on a service that
-owned what it built. Under the layout no service holds a closer and the
-obligation sits on `daemon.Daemon`, so the craft's test-seam line - the
-holder of a daemon that cannot close is an owner goanalyze flags -
-depends on the analyzer knowing which type owns. How it learns that is
-not worked out; a follow-up, with a case in the `unclosed_resource`
-testdata when it is.
+Open: its owner tracking predates the layout. It was taught on a service that
+owned what it built; under the layout no service holds a closer and the
+obligation sits on `daemon.Daemon`, so a test seam holding a daemon built from
+finished clients is not flagged. How the analyzer learns which type owns is
+not worked out - a follow-up, with a case in the `unclosed_resource` testdata
+when it is.
 
 ## goaudit's layout rules
 

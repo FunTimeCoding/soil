@@ -19,11 +19,15 @@ func TestStopReachesTheProcess(t *testing.T) {
 }
 
 func TestAnUnknownProcessIsNotFound(t *testing.T) {
-	e := goprocess.Dispatch(mock_client.New(), "restart", []string{"alfa"})
+	owned := mock_client.New()
+	defer owned.Close()
+	e := goprocess.Dispatch(owned, "restart", []string{"alfa"})
 	assert.True(t, not_found.Is(e))
 }
 
 func TestAnUnknownCommandIsRefused(t *testing.T) {
-	e := goprocess.Dispatch(mock_client.New(), "wipe", nil)
+	owned := mock_client.New()
+	defer owned.Close()
+	e := goprocess.Dispatch(owned, "wipe", nil)
 	assert.True(t, validation.Is(e))
 }

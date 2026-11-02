@@ -26,7 +26,7 @@ func (s *Server) CancelPipeline(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.CancelPipeline(instance, project, a.Pipeline)
+	v, e := s.service.CancelPipeline(x, instance, project, a.Pipeline)
 
 	if e != nil {
 		return s.answerWith(e, "")

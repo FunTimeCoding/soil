@@ -12,7 +12,7 @@ func (s *Server) sessionEditForm(
 	q *http.Request,
 ) {
 	identifier := q.PathValue(constant.Identifier)
-	found, okay, e := s.service.FindSession(identifier)
+	found, okay, e := s.roster.FindSession(identifier)
 
 	if e == nil && !okay {
 		e = not_found.New(constant.SessionKind, identifier)

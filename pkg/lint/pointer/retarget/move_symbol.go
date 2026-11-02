@@ -2,7 +2,7 @@ package retarget
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -12,7 +12,7 @@ func moveSymbol(
 	directory string,
 	tail string,
 ) (string, bool) {
-	name, qualified := strings.CutPrefix(tail, constant.Dot)
+	name, qualified := strings.CutPrefix(tail, stringsConstant.Dot)
 
 	if !qualified {
 		return "", false
@@ -25,12 +25,12 @@ func moveSymbol(
 
 		rest := name[len(m.Name):]
 
-		if rest != "" && !strings.HasPrefix(rest, constant.Dot) &&
+		if rest != "" && !strings.HasPrefix(rest, stringsConstant.Dot) &&
 			!strings.HasPrefix(rest, "(") {
 			continue
 		}
 
-		return join.Empty(m.NewDirectory, constant.Dot, m.NewName, rest), true
+		return join.Empty(m.NewDirectory, stringsConstant.Dot, m.NewName, rest), true
 	}
 
 	return "", false

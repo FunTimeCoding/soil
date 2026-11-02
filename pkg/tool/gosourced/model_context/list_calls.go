@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -33,10 +33,10 @@ func (s *Server) listCalls(
 		limit = 100
 	}
 
-	r, inventory, f := s.service.ListCalls(directory, a.Region, limit)
+	r, inventory, f := s.reference.ListCalls(directory, a.Region, limit)
 
 	if f != nil {
-		return s.captureFail(f, constant.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if inventory == nil {

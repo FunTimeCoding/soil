@@ -1,9 +1,9 @@
 package item
 
-import "github.com/funtimecoding/soil/pkg/constant"
+import soil "github.com/funtimecoding/soil/pkg/constant"
 
 func (i *Item) triageScore() float64 {
-	if i.Status == constant.Open && i.Assignee == "" {
+	if i.Status == soil.Open && i.Assignee == "" {
 		return i.collector.Source.TriageBoost
 	}
 

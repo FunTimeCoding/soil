@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"io"
 	"net/http"
@@ -22,7 +22,7 @@ func (c *Client) PostPackage(
 		repository,
 		architecture,
 		file,
-		constant.Octets,
+		webConstant.Octets,
 		body,
 	)
 

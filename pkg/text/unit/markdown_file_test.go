@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/text/markdown/file"
 	"testing"
 )
@@ -26,6 +26,6 @@ func TestFixture(t *testing.T) {
 	assert.String(
 		t,
 		"## Example\n\nList of files in the current directory:\n```sh\nls -alh\n```\n",
-		fixture.Read(constant.MarkdownPath, "1.md"),
+		fixture.Read(systemConstant.MarkdownPath, "1.md"),
 	)
 }

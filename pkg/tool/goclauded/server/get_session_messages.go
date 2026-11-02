@@ -11,7 +11,7 @@ func (s *Server) GetSessionMessages(
 ) (server.GetSessionMessagesResponseObject, error) {
 	var result []server.SessionMessage
 
-	for _, m := range s.service.Messages(r.Identifier) {
+	for _, m := range s.transcript.Messages(r.Identifier) {
 		e := server.SessionMessage{
 			Role:      m.Role,
 			Text:      m.Text,

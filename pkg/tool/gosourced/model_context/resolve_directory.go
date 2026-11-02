@@ -20,7 +20,7 @@ func (s *Server) resolveDirectory(x context.Context) (string, error) {
 		)
 	}
 
-	m, okay := s.service.Module(name)
+	m, okay := s.module.Module(name)
 
 	if !okay {
 		return "", not_found.New(constant.ModuleKind, name)

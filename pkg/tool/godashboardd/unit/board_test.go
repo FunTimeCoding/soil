@@ -3,13 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"testing"
 )
 
 func TestLoad(t *testing.T) {
-	b := board.Load(fixture.Path(constant.BoardPath, "board.yaml"))
+	b := board.Load(fixture.Path(systemConstant.BoardPath, "board.yaml"))
 	assert.String(t, "prometheus.example", b.Connection.Prometheus.Host)
 	assert.Integer(t, 2, len(b.Top))
 	assert.String(t, "monitoring", b.Top[0].Name)

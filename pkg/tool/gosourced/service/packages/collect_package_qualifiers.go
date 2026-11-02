@@ -1,0 +1,51 @@
+package packages
+
+import (
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"go/token"
+	"go/types"
+	"golang.org/x/tools/go/packages"
+)
+
+func collectPackageQualifiers(
+	all []*packages.Package,
+	set *token.FileSet,
+	packagePath string,
+	oldName string,
+	newName string,
+) ([]resolve_reference.Reference, string) {
+	var result []resolve_reference.Reference
+
+	for _, loaded := range all {
+		for ident, o := range loaded.TypesInfo.Uses {
+			packageName, okay := o.(*types.PkgName)
+
+			if !okay || packageName.Imported().Path() != packagePath {
+				continue
+			}
+
+			if packageName.Name() != oldName {
+				continue
+			}
+
+			scope := loaded.Types.Scope().Innermost(ident.Pos())
+
+			if scope != nil {
+				_, shadow := scope.LookupParent(newName, ident.Pos())
+
+				if shadow != nil &&
+					shadow.Parent() != types.Universe {
+					return nil, lookup.TakenAt(set, newName, ident.Pos())
+				}
+			}
+
+			result = append(
+				result,
+				resolve_reference.Reference{Ident: ident, Package: loaded},
+			)
+		}
+	}
+
+	return result, ""
+}

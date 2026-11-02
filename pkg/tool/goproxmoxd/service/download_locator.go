@@ -1,5 +1,7 @@
 package service
 
+import "github.com/funtimecoding/soil/pkg/proxmox/face"
+
 func (s *Service) DownloadLocator(
 	instance string,
 	node string,
@@ -8,29 +10,28 @@ func (s *Service) DownloadLocator(
 	filename string,
 	l string,
 ) error {
-	c, clientFail := s.client(instance)
+	return s.attempt(
+		instance,
+		func(c face.ProxmoxClient) error {
+			n, e := c.Node(node)
 
-	if clientFail != nil {
-		return clientFail
-	}
+			if e != nil {
+				return e
+			}
 
-	n, e := c.Node(node)
+			st, e := c.Storage(n, storage)
 
-	if e != nil {
-		return e
-	}
+			if e != nil {
+				return e
+			}
 
-	st, e := c.Storage(n, storage)
+			task, e := c.DownloadLocator(st, content, filename, l)
 
-	if e != nil {
-		return e
-	}
+			if e != nil {
+				return e
+			}
 
-	task, e := c.DownloadLocator(st, content, filename, l)
-
-	if e != nil {
-		return e
-	}
-
-	return c.WaitForTask(task, 600)
+			return c.WaitForTask(task, 600)
+		},
+	)
 }

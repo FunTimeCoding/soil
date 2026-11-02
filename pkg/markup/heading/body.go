@@ -2,7 +2,7 @@ package heading
 
 import (
 	"github.com/funtimecoding/soil/pkg/markup/front_matter"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -13,7 +13,7 @@ func body(content string) string {
 		return content
 	}
 
-	lines := strings.SplitAfter(content, constant.Unix)
+	lines := strings.SplitAfter(content, stringsConstant.Unix)
 
 	return strings.Join(lines[f.Lines:], "")
 }

@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -40,14 +40,14 @@ func (s *Server) findReferences(
 	}
 
 	if a.File != "" {
-		r, references, f := s.service.FileReferences(
+		r, references, f := s.reference.FileReferences(
 			directory,
 			a.PackagePath,
 			a.File,
 		)
 
 		if f != nil {
-			return s.captureFail(f, constant.UnexpectedError)
+			return s.captureFail(f, soil.UnexpectedError)
 		}
 
 		if references == nil {
@@ -61,7 +61,7 @@ func (s *Server) findReferences(
 		return response.SuccessAny(references)
 	}
 
-	r, references, f := s.service.FindReferences(
+	r, references, f := s.reference.FindReferences(
 		directory,
 		a.PackagePath,
 		a.Symbol,
@@ -69,7 +69,7 @@ func (s *Server) findReferences(
 	)
 
 	if f != nil {
-		return s.captureFail(f, constant.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if references == nil {

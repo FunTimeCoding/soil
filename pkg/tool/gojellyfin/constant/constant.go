@@ -7,10 +7,3 @@ var Identity = identity.New(
 	"Jellyfin media server - libraries, items, playback sessions",
 	"gojellyfin <command>",
 )
-
-const (
-	HostEnvironment     = "GOJELLYFIN_HOST"
-	PortEnvironment     = "GOJELLYFIN_PORT"
-	InsecureEnvironment = "GOJELLYFIN_INSECURE"
-	TokenEnvironment    = "GOJELLYFIN_TOKEN"
-)

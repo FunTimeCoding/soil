@@ -24,7 +24,7 @@ func (s *Server) pulse(
 		return response.Fail("line is required: %v", e)
 	}
 
-	if _, f := s.service.SendPulse(
+	if _, f := s.message.SendPulse(
 		c.SessionIdentifier,
 		c.Callsign,
 		line,

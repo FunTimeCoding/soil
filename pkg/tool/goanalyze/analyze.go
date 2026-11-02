@@ -32,6 +32,7 @@ func Analyze(o *option.Analyze) *output.Results {
 			directory,
 			o.Root,
 			patterns,
+			o.Notice,
 		)
 	} else {
 		loaded, reported, faces, summaries = persistedIndex(

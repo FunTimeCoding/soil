@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 )
@@ -11,7 +11,7 @@ func (s *Server) PostSessionPulse(
 	_ context.Context,
 	r server.PostSessionPulseRequestObject,
 ) (server.PostSessionPulseResponseObject, error) {
-	delivered, e := s.service.SendPulse(
+	delivered, e := s.message.SendPulse(
 		r.Identifier,
 		"",
 		r.Body.Body,
@@ -26,7 +26,7 @@ func (s *Server) PostSessionPulse(
 		}
 
 		return server.PostSessionPulse500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

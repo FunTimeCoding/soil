@@ -1,10 +1,16 @@
 package gitlab
 
-import "github.com/funtimecoding/soil/pkg/gitlab/job"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
+)
 
-func (c *Client) enrichJobCommon(j *job.Job) error {
+func (c *Client) enrichJobCommon(
+	x context.Context,
+	j *job.Job,
+) error {
 	if j.Fail() {
-		trace, e := c.Trace(j.Project.Identifier, j.Identifier)
+		trace, e := c.Trace(x, j.Project.Identifier, j.Identifier)
 
 		if e != nil {
 			return e

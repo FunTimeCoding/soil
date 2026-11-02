@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/diff"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) CommitDiff(
+	x context.Context,
 	project int64,
 	sha string,
 	limit int64,
@@ -20,6 +22,7 @@ func (c *Client) CommitDiff(
 		&gitlab.GetCommitDiffOptions{
 			ListOptions: gitlab.ListOptions{PerPage: limit},
 		},
+		gitlab.WithContext(x),
 	)
 
 	if e != nil {

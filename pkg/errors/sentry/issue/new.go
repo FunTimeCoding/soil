@@ -2,17 +2,19 @@ package issue
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func New(v *response.Issue) *Issue {
 	return &Issue{
-		MonitorIdentifier: constant.GoSentry.StringIdentifier(v.Identifier),
-		Project:           v.Project.Name,
-		Type:              v.Type,
-		Title:             v.Title,
-		Link:              v.Permalink,
-		Create:            v.FirstSeen,
-		Raw:               v,
+		MonitorIdentifier: monitorConstant.GoSentry.StringIdentifier(
+			v.Identifier,
+		),
+		Project: v.Project.Name,
+		Type:    v.Type,
+		Title:   v.Title,
+		Link:    v.Permalink,
+		Create:  v.FirstSeen,
+		Raw:     v,
 	}
 }

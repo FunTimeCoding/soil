@@ -19,7 +19,7 @@ func assertRemovalRefused(
 		service_tester.ServiceTestdata("remove-parameters-refused/src"),
 	)
 	before := service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go")
-	r, e := service_tester.NewService(t).RemoveParameters(
+	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
 		t.Context(),
 		d,
 		[]*removal.Parameter{

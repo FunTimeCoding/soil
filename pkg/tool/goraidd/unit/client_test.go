@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
@@ -23,7 +23,7 @@ func TestTheClientListsLogsAndReports(t *testing.T) {
 	system.WriteFile(filepath.Join(output, "hotel.html"), []byte("h"), 0o600)
 	o := service_tester.NewOption(t, cache, output, service_tester.NewParser(t))
 	service_tester.NewService(t, o, memory.New()).SyncLogCache()
-	c := mountedClient(t, o, constant.ModelContextTestToken)
+	c := mountedClient(t, o, generativeConstant.ModelContextTestToken)
 	logs, e := c.GetLogs(t.Context(), &client.GetLogsParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, logs.Total)

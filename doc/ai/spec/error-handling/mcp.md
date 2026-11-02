@@ -4,16 +4,27 @@ base: pkg/tool
 
 # MCP error handling
 
-MCP tool handlers run without panic recovery of their own: mcp-go's
-recovery is an opt-in server option that is not enabled, so a panic
-escapes the handler and is caught by the HTTP recovery middleware,
-which answers an HTML 500 the model cannot read as a tool result.
-Every error a handler meets must therefore be translated to a tool
-result, and no client call a handler makes may panic underneath it -
-the Must/non-Must pair in `service-tool.md` exists for this.
+The server builder (`pkg/generative/mark/server`) recovers every tool
+and resource handler once, for every daemon: a panic is reported
+through the reporter the builder is constructed with and answered as
+an error the model can read - a tool with `response.RecoverFail`'s
+`error` and `event_identifier`, a resource with an error naming the
+event. The reporter is a required argument of `New`, so no server
+recovers without reporting.
 
-Do not add per-handler recover defers as a workaround; the fix is
-in the client or in the server builder.
+Recovery makes the answer readable, not the panic fine: a recovered
+panic is still a captured anomaly, so the code that panics is a bug
+to fix at its cause. Every error a handler meets is translated to a
+tool result, and no client call a handler makes panics underneath
+it; the Must/non-Must pair in `service-tool.md` exists for this. A
+step that can panic is checked before it runs. Do not add per-handler
+recover defers; the builder's is the one.
+
+A panic inside a peer guard's `Attempt` unwinds through it before the
+builder recovers it: the guard releases a trial it admitted and
+records no outcome, since a panic is a bug here rather than evidence
+about the peer, so the next caller is admitted
+(`TestAPanickingTrialLeavesTheNextTrialAdmitted`).
 
 Whether Sentry hears of an error is its class, in the table in
 `README.md` (Answering an error); this leaf is how a handler builds

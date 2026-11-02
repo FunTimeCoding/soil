@@ -1,11 +1,13 @@
 package mock_client
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) CreateTag(
+	_ context.Context,
 	_ int64,
 	name string,
 	_ string,

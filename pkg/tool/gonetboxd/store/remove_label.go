@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
@@ -25,7 +25,7 @@ func (s *Store) RemoveLabel(
 	}
 
 	if result.RowsAffected == 0 {
-		return not_found.New(constant.LabelKey, key)
+		return not_found.New(soil.LabelKey, key)
 	}
 
 	return nil

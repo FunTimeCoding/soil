@@ -2,14 +2,14 @@ package message
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"strings"
 )
 
 func (m *Message) ReadHeader() http.Header {
 	result := http.Header{}
-	prefix := fmt.Sprintf("%s.", constant.TelemetryHeaderPrefix)
+	prefix := fmt.Sprintf("%s.", webConstant.TelemetryHeaderPrefix)
 
 	for k, v := range m.Values {
 		if !strings.HasPrefix(k, prefix) {

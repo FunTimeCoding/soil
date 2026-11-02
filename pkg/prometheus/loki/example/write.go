@@ -3,7 +3,7 @@ package example
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -20,6 +20,10 @@ func Write() {
 	)
 
 	for _, v := range r {
-		console.Format("%s %s\n", v.Time.Format(constant.DateMinute), v.Text)
+		console.Format(
+			"%s %s\n",
+			v.Time.Format(timeConstant.DateMinute),
+			v.Text,
+		)
 	}
 }

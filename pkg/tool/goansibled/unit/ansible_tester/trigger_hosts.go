@@ -1,7 +1,7 @@
 package ansible_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
@@ -13,8 +13,10 @@ func (o *Tester) TriggerHosts(events []*host_event.Event) []*run.Run {
 
 	if e := o.Service.Trigger(
 		trigger.Request{
-			Parameters: map[string]any{constant.DownstreamHosts: events},
-			Response:   response,
+			Parameters: map[string]any{
+				provisionConstant.DownstreamHosts: events,
+			},
+			Response: response,
 		},
 	); e != nil {
 		o.t.Fatal(e)

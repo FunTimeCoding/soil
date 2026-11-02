@@ -10,7 +10,7 @@ func (o *Tester) SendImmediate(
 	to string,
 	body string,
 ) {
-	_, e := o.Service.Send(
+	_, e := o.Message.Send(
 		name,
 		addressed(to),
 		body,

@@ -3,7 +3,7 @@ package chromium
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"net"
 )
 
@@ -12,9 +12,9 @@ func Listening(
 	port int,
 ) bool {
 	c, e := net.DialTimeout(
-		constant.Transmission,
+		systemConstant.Transmission,
 		fmt.Sprintf("%s:%d", host, port),
-		constant.Retry,
+		systemConstant.Retry,
 	)
 
 	if e != nil {

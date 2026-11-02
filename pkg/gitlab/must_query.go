@@ -1,10 +1,14 @@
 package gitlab
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
+)
 
 func (c *Client) MustQuery(
+	x context.Context,
 	q string,
 	response any,
 ) {
-	errors.PanicOnError(c.Query(q, response))
+	errors.PanicOnError(c.Query(x, q, response))
 }

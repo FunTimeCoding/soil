@@ -12,7 +12,7 @@ func (s *Server) resolveProject(
 		return "", 0, e
 	}
 
-	project, f := s.service.ResolveProject(instance, identifier)
+	project, f := s.service.ResolveProject(x, instance, identifier)
 
 	if f != nil {
 		return "", 0, f

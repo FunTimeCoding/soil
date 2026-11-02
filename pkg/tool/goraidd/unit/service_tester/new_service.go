@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
+	goraidparsedConstant "github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
 	"testing"
 )
 
@@ -22,7 +22,7 @@ func NewService(
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	p := o.Parser()
-	g := peer.New(constant.Identity.Name(), "", p, l, r)
+	g := peer.New(goraidparsedConstant.Identity.Name(), "", p, l, r)
 	t.Cleanup(g.Close)
 
 	return service.New(

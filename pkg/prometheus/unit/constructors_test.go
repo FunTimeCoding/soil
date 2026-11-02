@@ -42,27 +42,29 @@ func TestConstructors(t *testing.T) {
 		),
 	)
 	assert.NotNil(t, rule_parser.New(nil))
-	assert.NotNil(t, mock_client.New())
+	m := mock_client.New()
+	defer m.Close()
+	assert.NotNil(t, m)
 	assert.NotNil(t, client.New("", nil))
-	assert.NotNil(
-		t,
-		basic.New(
-			locator.New(stringsConstant.UpperAlfa),
-			stringsConstant.UpperBravo,
-			stringsConstant.UpperCharlie,
-			false,
-		),
+	b := basic.New(
+		locator.New(stringsConstant.UpperAlfa),
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
+		false,
 	)
-	assert.NotNil(
-		t,
-		loki.New(
-			stringsConstant.UpperAlfa,
-			stringsConstant.UpperBravo,
-			stringsConstant.UpperCharlie,
-			false,
-		),
+	defer b.Close()
+	assert.NotNil(t, b)
+	l := loki.New(
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
+		false,
 	)
-	assert.NotNil(t, prometheus.New(webConstant.Localhost, 0, false, "", ""))
+	defer l.Close()
+	assert.NotNil(t, l)
+	p := prometheus.New(webConstant.Localhost, 0, false, "", "")
+	defer p.Close()
+	assert.NotNil(t, p)
 	assert.NotNil(
 		t,
 		push.New(

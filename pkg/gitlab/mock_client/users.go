@@ -1,7 +1,10 @@
 package mock_client
 
-import "gitlab.com/gitlab-org/api/client-go/v3"
+import (
+	"context"
+	"gitlab.com/gitlab-org/api/client-go/v3"
+)
 
-func (c *Client) Users() ([]*gitlab.User, error) {
+func (c *Client) Users(_ context.Context) ([]*gitlab.User, error) {
 	return nil, c.failure
 }

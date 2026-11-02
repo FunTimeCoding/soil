@@ -1,7 +1,13 @@
 package mock_client
 
-import "gitlab.com/gitlab-org/api/client-go/v3"
+import (
+	"context"
+	"gitlab.com/gitlab-org/api/client-go/v3"
+)
 
-func (c *Client) SearchBlob(_ string) ([]*gitlab.Blob, error) {
+func (c *Client) SearchBlob(
+	_ context.Context,
+	_ string,
+) ([]*gitlab.Blob, error) {
 	return nil, c.failure
 }

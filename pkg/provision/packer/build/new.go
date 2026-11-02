@@ -1,7 +1,7 @@
 package build
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"log"
 )
 
@@ -12,7 +12,7 @@ func New(
 	password string,
 ) *Build {
 	switch architecture {
-	case constant.AMD64:
+	case systemConstant.AMD64:
 		// pass
 	default:
 		log.Panicf("unsupported architecture: %s", architecture)

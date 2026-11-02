@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
-	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
@@ -18,7 +18,7 @@ func (s *Service) SearchRelevant(
 		Collection: new(constant.DefaultCollection),
 		Limit:      &limit,
 		Full:       new(true),
-		Mode:       new(client.GetSearchParamsMode(queryConstant.HybridMode)),
+		Mode:       new(client.GetSearchParamsMode(goquerydConstant.HybridMode)),
 	}
 
 	if len(exclude) > 0 {

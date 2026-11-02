@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"golang.org/x/crypto/ssh"
 	"net"
 	"strconv"
@@ -28,7 +28,7 @@ func (c *Client) Dial() error {
 	}
 
 	result, g := ssh.Dial(
-		constant.Transmission,
+		systemConstant.Transmission,
 		net.JoinHostPort(c.host, strconv.Itoa(c.port)),
 		&ssh.ClientConfig{
 			User:            c.user,

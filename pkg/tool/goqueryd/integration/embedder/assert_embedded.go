@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"testing"
 )
@@ -17,7 +16,7 @@ func assertEmbedded(
 ) {
 	t.Helper()
 
-	for _, c := range chunk.Document(body, name, mock_reranker.New()) {
+	for _, c := range chunk.Document(body, name, newReranker(t)) {
 		_, f := embed.Single(t.Context(), e, c.Text)
 		assert.FatalOnError(t, f)
 	}

@@ -1,7 +1,7 @@
 package file_report
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -10,5 +10,5 @@ func (r *Report) append(
 	line string,
 ) {
 	b.WriteString(line)
-	b.WriteString(constant.Unix)
+	b.WriteString(stringsConstant.Unix)
 }

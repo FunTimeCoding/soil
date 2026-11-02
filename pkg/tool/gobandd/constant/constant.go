@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/identity/paragraph"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
-	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 )
 
 var Identity = identity.New(
@@ -49,8 +49,8 @@ const (
 
 var Operations = []string{OperationStart, OperationShutdown, OperationReboot}
 var IntentStatus = map[string]string{
-	OperationStart:    netbox.StatusActive,
-	OperationShutdown: netbox.StatusOffline,
+	OperationStart:    gonetboxdConstant.StatusActive,
+	OperationShutdown: gonetboxdConstant.StatusOffline,
 }
 
 const ForceParameter = "force"

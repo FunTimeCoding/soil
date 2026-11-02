@@ -15,7 +15,7 @@ func TestRenamePackageClause(t *testing.T) {
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackageClause(
+	r, e := s.Packages.RenamePackageClause(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -66,7 +66,7 @@ func TestRenamePackageClauseShadowed(t *testing.T) {
 		service_tester.ServiceTestdata("rename-collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackageClause(
+	r, e := s.Packages.RenamePackageClause(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -84,7 +84,7 @@ func TestRenamePackageClauseSameName(t *testing.T) {
 		service_tester.ServiceTestdata("package-rename/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackageClause(
+	r, e := s.Packages.RenamePackageClause(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -106,7 +106,7 @@ func TestRenamePackageClauseReportsATestOnlyPackage(t *testing.T) {
 		"package guard\n\nimport \"testing\"\n\nfunc TestAlfa(t *testing.T) {}\n",
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RenamePackageClause(
+	r, e := s.Packages.RenamePackageClause(
 		t.Context(),
 		d,
 		"example/pkg/alfa",

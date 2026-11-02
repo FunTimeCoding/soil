@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/tunnel_termination"
 )
 
@@ -31,7 +31,7 @@ func (s *Service) CreateDeviceTunnelTermination(
 
 	return s.client.CreateTunnelTermination(
 		t,
-		constant.InterfaceAddress,
+		netboxConstant.InterfaceAddress,
 		int64(i.Identifier),
 		role,
 	)

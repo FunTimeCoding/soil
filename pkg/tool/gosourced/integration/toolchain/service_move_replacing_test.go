@@ -9,7 +9,7 @@ import (
 
 func TestMoveSymbolsRequalifiesAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).MoveSymbols(
+	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -41,7 +41,7 @@ func TestMoveSymbolsRequalifiesAReplacingModule(t *testing.T) {
 
 func TestMoveSymbolsToANewPackageRequalifiesAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).MoveSymbols(
+	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -64,7 +64,7 @@ func TestMoveSymbolsToANewPackageRequalifiesAReplacingModule(t *testing.T) {
 
 func TestMoveSymbolsByFileRequalifiesAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).MoveSymbols(
+	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -91,7 +91,7 @@ func TestMoveSymbolsByFileRequalifiesAReplacingModule(t *testing.T) {
 
 func TestExtractTypeRequalifiesAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).ExtractType(
+	r, e := replacingService(t, library, user).Symbol.ExtractType(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -113,8 +113,8 @@ func TestExtractTypeRequalifiesAReplacingModule(t *testing.T) {
 func TestMoveSymbolsRequalifiesAReplacingModuleOnTheWholeLoad(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	s := replacingService(t, library, user)
-	s.UseFullLoad()
-	r, e := s.MoveSymbols(
+	s.Workspace.UseFullLoad()
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -138,7 +138,7 @@ func TestMoveSymbolsRequalifiesAReplacingModuleOnTheWholeLoad(t *testing.T) {
 func TestMoveSymbolsDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	before := treeOf(t, user)
-	r, e := replacingService(t, library, user).MoveSymbols(
+	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",

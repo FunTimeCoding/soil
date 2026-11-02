@@ -3,10 +3,10 @@ package build
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/build/constant"
-	constant1 "github.com/funtimecoding/soil/pkg/constant"
-	constant2 "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	constant3 "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
@@ -18,19 +18,19 @@ func throwaway(
 	name string,
 ) error {
 	system.SaveFile(
-		join.Absolute(directory, constant2.ModFile),
+		join.Absolute(directory, go_modConstant.ModFile),
 		fmt.Sprintf("module %s\n", constant.ThrowawayModule),
 	)
 	r := run.New()
 	r.Panic = false
 	r.Directory = directory
 	r.Start(
-		constant1.Go,
-		constant1.Get,
+		soil.Go,
+		soil.Get,
 		fmt.Sprintf(
 			"%s/%s/%s@%s",
 			module,
-			constant3.CommandPath,
+			systemConstant.CommandPath,
 			name,
 			version,
 		),

@@ -64,7 +64,7 @@ func TestReconcileCatchesUpACompletionAWriteMissed(t *testing.T) {
 	)
 	assert.Count(t, 0, s.Pushed(constant.CompletionCollection))
 	s.Query.Failure = nil
-	assert.Count(t, 0, s.Service.Reconcile(t.Context()))
+	s.Tick()
 	pushed := s.Pushed(constant.CompletionCollection)
 	assert.Count(t, 1, pushed)
 	assert.String(t, "test-completion/1", pushed[0].Path)
@@ -75,8 +75,8 @@ func TestCatchUpSearchStopsWhenCancelled(t *testing.T) {
 	s.WriteSessionFile("alfa", "alfa-slug")
 	x, cancel := context.WithCancel(t.Context())
 	cancel()
-	assert.Count(t, 0, s.Service.CatchUpSearch(x))
-	r, e := s.Search.Search("login bug", nil, 20)
+	assert.Count(t, 0, s.Search.CatchUpSearch(x))
+	r, e := s.Index.Search("login bug", nil, 20)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, r)
 }

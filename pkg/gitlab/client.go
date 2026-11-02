@@ -1,7 +1,6 @@
 package gitlab
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"gitlab.com/gitlab-org/api/client-go/v3"
@@ -9,7 +8,6 @@ import (
 )
 
 type Client struct {
-	context      context.Context
 	client       *gitlab.Client
 	mutex        sync.Mutex
 	user         *gitlab.User

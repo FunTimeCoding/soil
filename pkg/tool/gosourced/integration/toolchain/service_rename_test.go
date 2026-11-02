@@ -13,7 +13,7 @@ func TestRenameFunction(t *testing.T) {
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -43,7 +43,7 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -70,7 +70,7 @@ func TestRenameMethod(t *testing.T) {
 		service_tester.ServiceTestdata("rename-method/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -100,7 +100,7 @@ func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
 		service_tester.ServiceTestdata("rename-unexport/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -122,7 +122,7 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -147,7 +147,7 @@ func TestRenameCollision(t *testing.T) {
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -167,7 +167,7 @@ func TestRenameSymbolNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -187,7 +187,7 @@ func TestRenamePackageNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/missing",
@@ -207,7 +207,7 @@ func TestRenameReceiverNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("rename-method/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -227,7 +227,7 @@ func TestRenameMethodNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("rename-method/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -247,7 +247,7 @@ func TestRenameMethodCollision(t *testing.T) {
 		service_tester.ServiceTestdata("method-collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -267,7 +267,7 @@ func TestRenameSameName(t *testing.T) {
 		service_tester.ServiceTestdata("rename-function/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -287,7 +287,7 @@ func TestRenameLongerKeepsComments(t *testing.T) {
 		service_tester.ServiceTestdata("rename-longer/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target/constant",

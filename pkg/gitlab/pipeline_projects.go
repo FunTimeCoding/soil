@@ -1,10 +1,13 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	"context"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 )
 
-func (c *Client) PipelineProjects() ([]*project.Project, error) {
-	return c.ProjectsWithFile(constant.GitLabFile, false)
+func (c *Client) PipelineProjects(
+	x context.Context,
+) ([]*project.Project, error) {
+	return c.ProjectsWithFile(x, soil.GitLabFile, false)
 }

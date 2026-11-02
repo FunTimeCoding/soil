@@ -2,8 +2,10 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -23,9 +25,7 @@ func (s *Server) DeriveHardwareAddress(
 	}
 
 	if e != nil {
-		return server.DeriveHardwareAddress500JSONResponse(
-			*s.captureFail(e, e.Error()),
-		), nil
+		return server.DeriveHardwareAddress500JSONResponse(*s.answer(e)), nil
 	}
 
 	address, holder, g := s.service.DeriveHardwareAddress(
@@ -33,16 +33,17 @@ func (s *Server) DeriveHardwareAddress(
 		r.Params.Identifier,
 	)
 
-	if g != nil {
-		if validation.Is(g) {
-			return server.DeriveHardwareAddress400JSONResponse(
-				*clientError(g),
-			), nil
-		}
-
-		return server.DeriveHardwareAddress500JSONResponse(
-			*s.captureDetail(g),
-		), nil
+	switch {
+	case validation.Is(g):
+		return server.DeriveHardwareAddress400JSONResponse(*clientError(g)), nil
+	case not_found.Is(g):
+		return server.DeriveHardwareAddress404JSONResponse(*clientError(g)), nil
+	case forbidden.Is(g):
+		return server.DeriveHardwareAddress403JSONResponse(*clientError(g)), nil
+	case unavailable.Is(g):
+		return server.DeriveHardwareAddress503JSONResponse(*clientError(g)), nil
+	case g != nil:
+		return server.DeriveHardwareAddress500JSONResponse(*s.answer(g)), nil
 	}
 
 	return server.DeriveHardwareAddress200JSONResponse{

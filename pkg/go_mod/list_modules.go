@@ -1,7 +1,7 @@
 package go_mod
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -22,11 +22,11 @@ func ListModules(
 	r.Start(
 		append(
 			[]string{
-				constant.Go,
-				constant.List,
-				constant.ModuleArgument,
-				constant.UpdateArgument,
-				constant.NotationArgument,
+				soil.Go,
+				soil.List,
+				soil.ModuleArgument,
+				soil.UpdateArgument,
+				soil.NotationArgument,
 			},
 			modules...,
 		)...,

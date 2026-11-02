@@ -2,7 +2,7 @@ package scan
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 	"strings"
@@ -17,8 +17,8 @@ func treeSourceFiles(
 
 	for _, f := range v.Files() {
 		if !strings.HasPrefix(f, prefix) ||
-			!strings.HasSuffix(f, constant.GoExtension) ||
-			strings.HasSuffix(f, constant.TestSuffix) ||
+			!strings.HasSuffix(f, soil.GoExtension) ||
+			strings.HasSuffix(f, soil.TestSuffix) ||
 			isTestdataPath(strings.Split(f, string(filepath.Separator))) {
 			continue
 		}

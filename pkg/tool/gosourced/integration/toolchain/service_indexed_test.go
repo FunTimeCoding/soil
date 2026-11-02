@@ -3,7 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
@@ -20,15 +20,20 @@ func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
 	for _, s := range symbols {
 		sameResult(
 			t,
-			func(x *service.Service) (any, any, error) {
-				return x.FindReferences(directory, "example/alfa", s[0], s[1])
+			func(x *service_tester.Services) (any, any, error) {
+				return x.Reference.FindReferences(
+					directory,
+					"example/alfa",
+					s[0],
+					s[1],
+				)
 			},
 			indexed,
 			full,
 		)
 	}
 
-	_, references, e := indexed.FindReferences(
+	_, references, e := indexed.Reference.FindReferences(
 		directory,
 		"example/alfa",
 		"NewServer",
@@ -45,8 +50,8 @@ func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
 func TestFieldReferencesCrossTestVariant(t *testing.T) {
 	directory, indexed, full := indexedAndFull(t)
 
-	for _, s := range []*service.Service{indexed, full} {
-		_, references, e := s.FindReferences(
+	for _, s := range []*service_tester.Services{indexed, full} {
+		_, references, e := s.Reference.FindReferences(
 			directory,
 			"example/alfa",
 			"Port",
@@ -65,8 +70,12 @@ func TestIndexedFileReferencesMatchesFullLoad(t *testing.T) {
 	directory, indexed, full := indexedAndFull(t)
 	sameResult(
 		t,
-		func(x *service.Service) (any, any, error) {
-			return x.FileReferences(directory, "example/alfa", "alfa/server.go")
+		func(x *service_tester.Services) (any, any, error) {
+			return x.Reference.FileReferences(
+				directory,
+				"example/alfa",
+				"alfa/server.go",
+			)
 		},
 		indexed,
 		full,
@@ -77,8 +86,8 @@ func TestIndexedLiteralsReachElisionThroughThirdPackage(t *testing.T) {
 	directory, indexed, full := indexedAndFull(t)
 	result := sameResult(
 		t,
-		func(x *service.Service) (any, any, error) {
-			return x.FindLiterals(directory, "example/alfa", "Server")
+		func(x *service_tester.Services) (any, any, error) {
+			return x.Pattern.FindLiterals(directory, "example/alfa", "Server")
 		},
 		indexed,
 		full,
@@ -91,8 +100,8 @@ func TestIndexedListCallsMatchesFullLoad(t *testing.T) {
 	directory, indexed, full := indexedAndFull(t)
 	sameResult(
 		t,
-		func(x *service.Service) (any, any, error) {
-			return x.ListCalls(directory, "example/bravo", 20)
+		func(x *service_tester.Services) (any, any, error) {
+			return x.Reference.ListCalls(directory, "example/bravo", 20)
 		},
 		indexed,
 		full,

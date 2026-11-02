@@ -19,7 +19,7 @@ func (s *Server) historyCount(
 		return s.captureFail(e, soil.UnexpectedError)
 	}
 
-	count, e := s.service.CountEvents()
+	count, e := s.event.CountEvents()
 
 	if e != nil {
 		return s.captureFail(e, soil.UnexpectedError)

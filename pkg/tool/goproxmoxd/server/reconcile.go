@@ -2,9 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -23,7 +25,7 @@ func (s *Server) Reconcile(
 	}
 
 	if e != nil {
-		return server.Reconcile500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.Reconcile500JSONResponse(*s.answer(e)), nil
 	}
 
 	p, e := s.service.Reconcile(
@@ -33,12 +35,17 @@ func (s *Server) Reconcile(
 		r.Params.Write != nil && *r.Params.Write,
 	)
 
-	if unavailable.Is(e) {
+	switch {
+	case validation.Is(e):
+		return server.Reconcile400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.Reconcile404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.Reconcile403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
 		return server.Reconcile503JSONResponse(*clientError(e)), nil
-	}
-
-	if e != nil {
-		return server.Reconcile500JSONResponse(*s.captureDetail(e)), nil
+	case e != nil:
+		return server.Reconcile500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.Reconcile200JSONResponse(convertPlan(p)), nil

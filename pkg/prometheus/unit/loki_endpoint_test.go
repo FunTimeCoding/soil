@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/stream"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
 	"net/http"
@@ -69,7 +69,7 @@ func TestPushPostsTheStreams(t *testing.T) {
 	r := last()
 	assert.String(t, http.MethodPost, r.Method)
 	assert.String(t, "/loki/api/v1/push", r.URL.Path)
-	assert.String(t, "application/json", r.Header.Get(constant.ContentType))
+	assert.String(t, "application/json", r.Header.Get(webConstant.ContentType))
 	b, e := io.ReadAll(r.Body)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, `"application":"delta"`, string(b))

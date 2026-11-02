@@ -1,13 +1,17 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/gpustack/gguf-parser-go/util/ptr"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
-func (c *Client) GroupProjects(identifier ...int64) ([]*project.Project, error) {
+func (c *Client) GroupProjects(
+	x context.Context,
+	identifier ...int64,
+) ([]*project.Project, error) {
 	var result []*gitlab.Project
 
 	for _, i := range identifier {
@@ -23,6 +27,7 @@ func (c *Client) GroupProjects(identifier ...int64) ([]*project.Project, error) 
 					},
 					Archived: ptr.Bool(false),
 				},
+				gitlab.WithContext(x),
 			)
 
 			if e != nil {

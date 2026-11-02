@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 )
@@ -17,11 +17,11 @@ func (s *Server) GetMessages(
 		identifiers = append(identifiers, uint(i))
 	}
 
-	found, e := s.service.ReadMessages(identifiers)
+	found, e := s.message.ReadMessages(identifiers)
 
 	if e != nil {
 		return server.GetMessages500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

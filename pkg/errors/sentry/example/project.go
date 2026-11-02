@@ -6,7 +6,10 @@ import (
 )
 
 func Project() {
-	for _, p := range sentry.NewEnvironment().MustProjects() {
+	c := sentry.NewEnvironment()
+	defer c.Close()
+
+	for _, p := range c.MustProjects() {
 		console.Format("%+v\n", p)
 	}
 }

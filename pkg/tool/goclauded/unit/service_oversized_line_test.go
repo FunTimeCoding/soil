@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	integration "github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
@@ -25,14 +25,14 @@ func TestOversizedLineDoesNotStopExtraction(t *testing.T) {
 		os.WriteFile(
 			filepath.Join(
 				s.Harbor,
-				join.Empty("oversized-session", constant.NotationLogExtension),
+				join.Empty("oversized-session", soil.NotationLogExtension),
 			),
 			[]byte(body),
 			0o644,
 		),
 	)
-	s.Service.EnrichSession("oversized-session")
-	loads, e := s.Service.ContextLoadsBySession(
+	s.Transcript.EnrichSession("oversized-session")
+	loads, e := s.Transcript.ContextLoadsBySession(
 		t.Context(),
 		"oversized-session",
 	)

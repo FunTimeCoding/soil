@@ -44,7 +44,7 @@ func TestSendReachesEveryNamedRecipient(t *testing.T) {
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
 	r3 := s.Check("session-3")
-	_, e := s.Service.Send(
+	_, e := s.Message.Send(
 		r1.Callsign,
 		[]string{r2.Callsign, r3.Callsign},
 		"alfa",
@@ -68,7 +68,7 @@ func TestAnUnknownRecipientRefusesTheWholeSend(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
-	_, e := s.Service.Send(
+	_, e := s.Message.Send(
 		r1.Callsign,
 		[]string{r2.Callsign, "Nobody"},
 		"bravo",
@@ -90,7 +90,7 @@ func TestABroadcastSkipsItsSenderAndQuietSessions(t *testing.T) {
 	r1 := s.Check("session-1")
 	s.Check("session-2")
 	r3 := s.Check("session-3")
-	_, e := s.Service.SetLabel(
+	_, e := s.Label.SetLabel(
 		"session-3",
 		r3.Callsign,
 		r3.Callsign,
@@ -116,7 +116,7 @@ func TestANamedQuietSessionIsStillReached(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
-	_, e := s.Service.SetLabel(
+	_, e := s.Label.SetLabel(
 		"session-2",
 		r2.Callsign,
 		r2.Callsign,
@@ -140,7 +140,7 @@ func TestImmediateWakesEveryNamedRecipient(t *testing.T) {
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
 	r3 := s.Check("session-3")
-	held, e := s.Service.Send(
+	held, e := s.Message.Send(
 		r1.Callsign,
 		[]string{r2.Callsign, r3.Callsign},
 		"echo",
@@ -148,10 +148,10 @@ func TestImmediateWakesEveryNamedRecipient(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, held)
-	two, f := s.Service.DrainImmediateQueue("session-2", r2.Callsign)
+	two, f := s.Message.DrainImmediateQueue("session-2", r2.Callsign)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, two)
-	three, g := s.Service.DrainImmediateQueue("session-3", r3.Callsign)
+	three, g := s.Message.DrainImmediateQueue("session-3", r3.Callsign)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, three)
 }

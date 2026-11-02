@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/iterm/session"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
 func (c *Client) CreateTab() (*session.Session, error) {
 	r, e := c.client.Post(
 		c.base.Copy().Path("/tabs").String(),
-		constant.Object,
+		webConstant.Object,
 		nil,
 	)
 

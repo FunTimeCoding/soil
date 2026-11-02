@@ -12,7 +12,7 @@ func (o *Tester) AwaitImmediateQueue(
 	sessionIdentifier string,
 	callsign string,
 ) []queue.Entry {
-	drained, e := o.Service.AwaitImmediateQueue(
+	drained, e := o.Message.AwaitImmediateQueue(
 		x,
 		sessionIdentifier,
 		callsign,

@@ -14,6 +14,8 @@ func items(
 	t.Helper()
 	s, _ := upstream_tester.New(t, http.StatusOK, answer)
 	host, port := upstream_tester.HostPort(t, s.URL)
+	result := jellyfin.New(host, port, "alfa-token")
+	t.Cleanup(result.Close)
 
-	return jellyfin.New(host, port, "alfa-token")
+	return result
 }

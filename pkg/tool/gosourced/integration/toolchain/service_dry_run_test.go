@@ -21,7 +21,7 @@ func TestDryRunLeavesTreeUntouched(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -58,7 +58,7 @@ func TestDryRunReportsWhatTheRealRunReports(t *testing.T) {
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
 	s := service_tester.NewService(t)
-	dry, e := s.MoveSymbols(
+	dry, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		planned,
 		"example/pkg/target",
@@ -75,7 +75,7 @@ func TestDryRunReportsWhatTheRealRunReports(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
-	real, f := s.MoveSymbols(
+	real, f := s.Symbol.MoveSymbols(
 		t.Context(),
 		applied,
 		"example/pkg/target",
@@ -101,7 +101,7 @@ func TestDryRunMarksConcernsPlanned(t *testing.T) {
 		service_tester.ServiceTestdata("batch-file/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -129,7 +129,7 @@ func TestDryRunRenameLeavesFilesUntouched(t *testing.T) {
 	)
 	s := service_tester.NewService(t)
 	before := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",

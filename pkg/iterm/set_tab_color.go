@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -25,7 +25,7 @@ func (c *Client) SetTabColor(
 
 	r, f := c.client.Post(
 		c.base.Copy().Path("/sessions/%s/color", sessionIdentifier).String(),
-		constant.Object,
+		webConstant.Object,
 		bytes.NewReader(body),
 	)
 

@@ -1,10 +1,13 @@
 package gitlab
 
-import "github.com/funtimecoding/soil/pkg/gitlab/job"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
+)
 
-func (c *Client) FailedJobs() ([]*job.Job, error) {
+func (c *Client) FailedJobs(x context.Context) ([]*job.Job, error) {
 	var result []*job.Job
-	jobs, e := c.Jobs()
+	jobs, e := c.Jobs(x)
 
 	if e != nil {
 		return nil, e

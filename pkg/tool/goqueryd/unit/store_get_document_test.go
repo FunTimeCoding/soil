@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
@@ -33,7 +33,7 @@ func TestFindDocumentMissIsNotFound(t *testing.T) {
 
 func TestGetDocumentWithContext(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
-	s.AddContext("test", constant.Slash, "root context")
+	s.AddContext("test", stringsConstant.Slash, "root context")
 	d := s.MustGetDocument("test/alfa.md")
 	assert.NotNil(t, d)
 	assert.String(t, "root context", d.Context)

@@ -16,7 +16,7 @@ func TestMovePackage(t *testing.T) {
 		service_tester.ServiceTestdata("package-move/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MovePackage(
+	r, e := s.Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -48,7 +48,7 @@ func TestMovePackageTargetExists(t *testing.T) {
 	e := os.MkdirAll(filepath.Join(d, "pkg/store"), 0755)
 	assert.FatalOnError(t, e)
 	s := service_tester.NewService(t)
-	r, e := s.MovePackage(
+	r, e := s.Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/store",
@@ -66,7 +66,7 @@ func TestMovePackageNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("package-move/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MovePackage(
+	r, e := s.Packages.MovePackage(
 		t.Context(),
 		d,
 		"example/pkg/outer/missing",

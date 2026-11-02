@@ -1,7 +1,7 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
@@ -16,7 +16,7 @@ func (c *Client) Delete(sessionIdentifier string) {
 	e := os.Remove(
 		filepath.Join(
 			c.Harbor,
-			join.Empty(sessionIdentifier, constant.NotationLogExtension),
+			join.Empty(sessionIdentifier, soil.NotationLogExtension),
 		),
 	)
 

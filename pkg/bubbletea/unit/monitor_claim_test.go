@@ -8,15 +8,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"github.com/funtimecoding/soil/pkg/system"
 	gomonitord "github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/base"
-	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
 
@@ -53,17 +50,8 @@ func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	present.Label = present.Identifier
 	_, c := m.Update(fetch.Message{Items: []*item.Item{present}})
 	runCommand(c)
-	g, e := client.NewClientWithResponses(
-		s.Address(webConstant.RootPath),
-		client.WithHTTPClient(s.Client()),
-		client.WithRequestEditorFn(
-			web.BearerEditor(generativeConstant.ModelContextTestToken),
-		),
-	)
+	r, e := d.Claims()
 	assert.FatalOnError(t, e)
-	r, f := g.GetClaimsWithResponse(t.Context())
-	assert.FatalOnError(t, f)
-	assert.FatalNotNil(t, r.JSON200)
-	assert.Count(t, 1, *r.JSON200)
-	assert.String(t, "someone@elsewhere", (*r.JSON200)[0].Owner)
+	assert.Count(t, 1, r)
+	assert.String(t, "someone@elsewhere", r[0].Owner)
 }

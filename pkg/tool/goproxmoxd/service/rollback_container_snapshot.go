@@ -1,28 +1,30 @@
 package service
 
+import "github.com/funtimecoding/soil/pkg/proxmox/face"
+
 func (s *Service) RollbackContainerSnapshot(
 	instance string,
 	identifier int,
 	node string,
 	name string,
 ) (string, error) {
-	c, clientFail := s.client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) (string, error) {
+			ct, e := findContainer(c, identifier, node)
 
-	if clientFail != nil {
-		return "", clientFail
-	}
+			if e != nil {
+				return "", e
+			}
 
-	ct, e := findContainer(c, identifier, node)
+			task, e := c.RollbackContainerSnapshot(ct, name)
 
-	if e != nil {
-		return "", e
-	}
+			if e != nil {
+				return "", e
+			}
 
-	task, e := c.RollbackContainerSnapshot(ct, name)
-
-	if e != nil {
-		return "", e
-	}
-
-	return string(task.UPID), nil
+			return string(task.UPID), nil
+		},
+	)
 }

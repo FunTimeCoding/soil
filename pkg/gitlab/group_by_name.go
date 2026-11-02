@@ -1,13 +1,17 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
-func (c *Client) GroupByName(s string) (*gitlab.Group, error) {
-	result, _, e := c.client.Groups.SearchGroup(s)
+func (c *Client) GroupByName(
+	x context.Context,
+	s string,
+) (*gitlab.Group, error) {
+	result, _, e := c.client.Groups.SearchGroup(s, gitlab.WithContext(x))
 
 	if e != nil {
 		return nil, wrapError(e)

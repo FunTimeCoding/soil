@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/raid/elite"
 	"os"
@@ -13,7 +13,7 @@ func (s *Service) EnrichFile(
 	base string,
 	name string,
 ) error {
-	if !strings.HasSuffix(name, constant.DetailedWvWKillSuffix) {
+	if !strings.HasSuffix(name, gw2Constant.DetailedWvWKillSuffix) {
 		return nil
 	}
 

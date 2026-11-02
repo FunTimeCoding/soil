@@ -4,37 +4,48 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/worker_tester"
+	"github.com/prometheus/client_golang/prometheus/testutil"
+	"strings"
 	"testing"
 )
 
-func TestPollTracksHypervisorReachability(t *testing.T) {
+func TestARefusedHypervisorIsLeftToTheGuard(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
 	defer c.Close()
-	w, _ := worker_tester.NewPollWorker("pve", c)
+	w, y, r := worker_tester.NewPollWorker(t, "pve", c)
 	defer w.Close()
 	w.Poll()
-	assert.False(t, w.Unreachable("pve"))
 	c.SetFailure(
-		connection.New(constant.Unreachable, "pve", "", constant.Refused),
+		connection.New(
+			errorsConstant.Unreachable,
+			"pve",
+			"",
+			errorsConstant.Refused,
+		),
 	)
 	w.Poll()
-	assert.True(t, w.Unreachable("pve"))
-	w.Poll()
-	assert.True(t, w.Unreachable("pve"))
 	c.SetFailure(nil)
 	w.Poll()
-	assert.False(t, w.Unreachable("pve"))
+	assert.Count(t, 0, r.Events())
+
+	if e := testutil.GatherAndCompare(
+		y,
+		strings.NewReader(worker_tester.ScrapeSuccess("0")),
+		"proxmox_scrape_success",
+	); e != nil {
+		t.Errorf("%v", e)
+	}
 }
 
-func TestPollOtherFailureLeavesReachability(t *testing.T) {
+func TestAPollFailingOtherwiseIsCaptured(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
 	defer c.Close()
-	w, _ := worker_tester.NewPollWorker("pve", c)
+	w, _, r := worker_tester.NewPollWorker(t, "pve", c)
 	defer w.Close()
 	w.Poll()
 	c.SetFailure(errors.New("token rejected"))
 	w.Poll()
-	assert.False(t, w.Unreachable("pve"))
+	assert.Count(t, 1, r.Events())
 }

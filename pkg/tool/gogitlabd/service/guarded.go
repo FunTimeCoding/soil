@@ -6,9 +6,10 @@ import (
 )
 
 func guarded[T any](
+	x context.Context,
 	s *Service,
 	instance string,
-	f func(face.GitLabClient) (T, error),
+	f func(context.Context, face.GitLabClient) (T, error),
 ) (T, error) {
 	var result T
 	p, e := s.pool.Client(instance)
@@ -18,10 +19,10 @@ func guarded[T any](
 	}
 
 	g := p.Guard().Attempt(
-		context.Background(),
-		func(context.Context) error {
+		x,
+		func(y context.Context) error {
 			var h error
-			result, h = f(p.Client())
+			result, h = f(y, p.Client())
 
 			return h
 		},

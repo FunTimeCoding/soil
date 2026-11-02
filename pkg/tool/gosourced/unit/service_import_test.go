@@ -15,7 +15,7 @@ func TestAddImportToGrouped(t *testing.T) {
 		service_tester.ServiceTestdata("import-grouped/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.AddImport(
+	r, e := s.File.AddImport(
 		t.Context(),
 		d,
 		"pkg/target/example.go",
@@ -43,7 +43,7 @@ func TestAddImportToEmpty(t *testing.T) {
 		service_tester.ServiceTestdata("import-empty/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.AddImport(
+	r, e := s.File.AddImport(
 		t.Context(),
 		d,
 		"pkg/target/example.go",
@@ -63,7 +63,7 @@ func TestAddImportWithAlias(t *testing.T) {
 		service_tester.ServiceTestdata("import-grouped/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.AddImport(
+	r, e := s.File.AddImport(
 		t.Context(),
 		d,
 		"pkg/target/example.go",
@@ -83,7 +83,7 @@ func TestRemoveImport(t *testing.T) {
 		service_tester.ServiceTestdata("import-grouped/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RemoveImport(
+	r, e := s.File.RemoveImport(
 		t.Context(),
 		d,
 		"pkg/target/example.go",
@@ -104,7 +104,13 @@ func TestRemoveImportNotFound(t *testing.T) {
 		service_tester.ServiceTestdata("import-grouped/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.RemoveImport(t.Context(), d, "pkg/target/example.go", "os", false)
+	r, e := s.File.RemoveImport(
+		t.Context(),
+		d,
+		"pkg/target/example.go",
+		"os",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
@@ -120,7 +126,7 @@ func TestAddImportRefusesAFileOutsideTheModule(t *testing.T) {
 		service_tester.ServiceTestdata("import-grouped/src"),
 	)
 	source := service_tester.ReadFixtureFile(t, other, "pkg/target/example.go")
-	r, e := service_tester.NewService(t).AddImport(
+	r, e := service_tester.NewService(t).File.AddImport(
 		t.Context(),
 		d,
 		filepath.Join(other, "pkg/target/example.go"),

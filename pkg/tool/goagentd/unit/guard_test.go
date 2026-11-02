@@ -13,10 +13,9 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	d := daemon_tester.New(
-		t,
-		service_tester.Fixed(mock_stream.New(nil, false, nil)),
-	)
+	stream := mock_stream.New(nil, false, nil)
+	t.Cleanup(stream.Close)
+	d := daemon_tester.New(t, service_tester.Fixed(stream))
 	s := model_context_server.New(
 		t,
 		func(

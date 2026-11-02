@@ -1,10 +1,16 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v3"
+import (
+	"context"
+	"gitlab.com/gitlab-org/api/client-go/v3"
+)
 
-func (c *Client) SearchBlob(query string) ([]*gitlab.Blob, error) {
+func (c *Client) SearchBlob(
+	x context.Context,
+	query string,
+) ([]*gitlab.Blob, error) {
 	var result []*gitlab.Blob
-	projects, e := c.Projects()
+	projects, e := c.Projects(x)
 
 	if e != nil {
 		return nil, e
@@ -15,6 +21,7 @@ func (c *Client) SearchBlob(query string) ([]*gitlab.Blob, error) {
 			p.Identifier,
 			query,
 			&gitlab.SearchOptions{},
+			gitlab.WithContext(x),
 		)
 
 		if f != nil {

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 )
@@ -17,7 +17,7 @@ func (s *Server) DeleteSessionByIdentifier(
 		confirm = *r.Params.Confirm
 	}
 
-	result, e := s.service.DeleteSession(r.Identifier, confirm)
+	result, e := s.session.DeleteSession(r.Identifier, confirm)
 
 	if e != nil {
 		if refusal.Is(e) {
@@ -27,7 +27,7 @@ func (s *Server) DeleteSessionByIdentifier(
 		}
 
 		return server.DeleteSessionByIdentifier500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

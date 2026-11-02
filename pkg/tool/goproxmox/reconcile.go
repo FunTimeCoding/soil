@@ -1,9 +1,11 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
-	goproxmox "github.com/funtimecoding/soil/pkg/tool/goproxmox/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmox/constant"
+	goproxmoxdConstant "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
@@ -19,18 +21,27 @@ func reconcile(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			c.Terminal().Emit(c.Client().Reconcile(full, write))
+			c.Terminal().EmitValue(
+				c.Client().Reconcile(
+					context.Background(),
+					&client.ReconcileParams{
+						Instance: c.Instance(),
+						Full:     &full,
+						Write:    &write,
+					},
+				),
+			)
 		},
 	}
 	result.Flags().BoolVar(
 		&full,
-		constant.FullParameter,
+		goproxmoxdConstant.FullParameter,
 		false,
 		"also record stopped guests as offline",
 	)
 	result.Flags().BoolVar(
 		&write,
-		goproxmox.YesArgument,
+		constant.YesArgument,
 		false,
 		"write the changes",
 	)

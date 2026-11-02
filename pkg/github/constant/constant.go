@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -31,7 +31,7 @@ const (
 )
 
 var (
-	Format         = constant.ExtendedColorFormat.Copy()
+	Format         = consoleConstant.ExtendedColorFormat.Copy()
 	NotationFormat = option.New()
 )
 

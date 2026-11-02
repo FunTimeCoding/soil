@@ -19,7 +19,7 @@ func (s *Server) messagesPage(
 		page = 1
 	}
 
-	messages := s.service.AllMessages(
+	messages := s.message.AllMessages(
 		constant.PageSize+1,
 		(page-1)*constant.PageSize,
 	)

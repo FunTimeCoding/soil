@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/unit/client_tester"
 	"runtime"
 	"testing"
@@ -32,7 +32,7 @@ func TestTheClientPassesTheOriginFilter(t *testing.T) {
 func TestAFailedListingIsAnsweredAndCaptured(t *testing.T) {
 	r := memory.New()
 	c := client_tester.New(t, r)
-	t.Setenv(constant.PathEnvironment, t.TempDir())
+	t.Setenv(systemConstant.PathEnvironment, t.TempDir())
 	v, e := c.ListServices(context.Background(), "")
 	assert.Error(t, e)
 	assert.Count(t, 0, v)

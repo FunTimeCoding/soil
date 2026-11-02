@@ -3,7 +3,7 @@ package gofix
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/constant"
+	sourceConstant "github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/source/types/import_decision"
 )
 
@@ -24,9 +24,9 @@ func reportDecision(
 	}
 
 	switch d.Kind {
-	case constant.DecisionUnderivable:
+	case sourceConstant.DecisionUnderivable:
 		addSuggestion(r, filePath, noAliasText(d))
-	case constant.DecisionRefused:
+	case sourceConstant.DecisionRefused:
 		addSuggestion(
 			r,
 			filePath,
@@ -38,8 +38,8 @@ func reportDecision(
 				d.Reason,
 			),
 		)
-	case constant.DecisionRename:
-		if d.Rule == constant.RuleConstant {
+	case sourceConstant.DecisionRename:
+		if d.Rule == sourceConstant.RuleConstant {
 			reportAlias(
 				r,
 				filePath,

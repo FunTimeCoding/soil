@@ -2,7 +2,7 @@ package client_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/netbox/face"
@@ -34,14 +34,14 @@ func New(
 	d.Mount(
 		memory.New(),
 		mock_recorder.New(),
-		guard.New(m, []string{constant.ModelContextTestToken}),
+		guard.New(m, []string{generativeConstant.ModelContextTestToken}),
 	)
 	h := httptest.NewServer(m)
 	t.Cleanup(h.Close)
 	host, port := network.SplitHostPort(h.Listener.Addr().String())
 	result := client.New(
 		locator.New(host).Port(port).Insecure(),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(result.Close)
 

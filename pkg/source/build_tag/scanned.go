@@ -1,7 +1,7 @@
 package build_tag
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"path/filepath"
 	"strings"
 )
@@ -10,7 +10,7 @@ func Scanned(
 	directory string,
 	path string,
 ) bool {
-	if !strings.HasSuffix(path, constant.GoExtension) {
+	if !strings.HasSuffix(path, soil.GoExtension) {
 		return false
 	}
 
@@ -20,7 +20,7 @@ func Scanned(
 		return false
 	}
 
-	if relative == constant.CurrentDirectory {
+	if relative == soil.CurrentDirectory {
 		return true
 	}
 

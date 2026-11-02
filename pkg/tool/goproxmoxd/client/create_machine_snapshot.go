@@ -1,27 +1,30 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) CreateMachineSnapshot(
+	x context.Context,
 	identifier int64,
-	name string,
-	node *string,
-) *response.Response {
-	body := client.CreateMachineSnapshotJSONRequestBody{Name: name}
-	result, e := c.client.CreateMachineSnapshotWithResponse(
-		c.context,
-		identifier,
-		&client.CreateMachineSnapshotParams{
-			Instance: &c.instance,
-			Node:     node,
-		},
-		body,
-	)
-	errors.PanicOnError(e)
+	p *client.CreateMachineSnapshotParams,
+	b client.CreateMachineSnapshotJSONRequestBody,
+) (*client.TaskResult, error) {
+	r, e := c.client.CreateMachineSnapshotWithResponse(x, identifier, p, b)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New(
+			"create machine snapshot",
+			r.HTTPResponse,
+			r.Body,
+		)
+	}
+
+	return r.JSON200, nil
 }

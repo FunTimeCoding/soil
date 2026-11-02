@@ -11,7 +11,7 @@ import (
 func TestSummarize(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("session-1")
-	e := s.Service.Summarize(
+	e := s.Event.Summarize(
 		"session-1",
 		"Cedar",
 		"Fixed the auth race condition",
@@ -30,11 +30,11 @@ func TestSummarizeReplace(t *testing.T) {
 	s.Store.EnsureSession("session-1")
 	assert.FatalOnError(
 		t,
-		s.Service.Summarize("session-1", "Cedar", "first summary"),
+		s.Event.Summarize("session-1", "Cedar", "first summary"),
 	)
 	assert.FatalOnError(
 		t,
-		s.Service.Summarize("session-1", "Cedar", "revised summary"),
+		s.Event.Summarize("session-1", "Cedar", "revised summary"),
 	)
 	body := s.Store.SummaryBySession("session-1")
 	assert.String(t, "revised summary", body)

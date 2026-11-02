@@ -26,7 +26,7 @@ func (s *Server) sessionStatus(
 		)
 	}
 
-	d, f := s.service.SessionByCallsign(c.Callsign)
+	d, f := s.roster.SessionByCallsign(c.Callsign)
 
 	if f != nil {
 		return s.captureFail(f, soil.UnexpectedError)

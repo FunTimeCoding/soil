@@ -11,6 +11,6 @@ func (o *Tester) Update(
 ) {
 	assert.FatalOnError(
 		o.t,
-		o.Service.Update(sessionIdentifier, name, topic, message, files),
+		o.Roster.Update(sessionIdentifier, name, topic, message, files),
 	)
 }

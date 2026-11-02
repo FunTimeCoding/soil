@@ -2,8 +2,12 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -22,9 +26,7 @@ func (s *Server) CreateMachineSnapshot(
 	}
 
 	if e != nil {
-		return server.CreateMachineSnapshot500JSONResponse(
-			*s.captureFail(e, e.Error()),
-		), nil
+		return server.CreateMachineSnapshot500JSONResponse(*s.answer(e)), nil
 	}
 
 	node := ""
@@ -40,12 +42,19 @@ func (s *Server) CreateMachineSnapshot(
 		r.Body.Name,
 	)
 
-	if e != nil {
-		if not_found.Is(e) {
-			return server.CreateMachineSnapshot404JSONResponse{Error: e.Error()}, nil
-		}
-
-		return server.CreateMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.CreateMachineSnapshot400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.CreateMachineSnapshot404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.CreateMachineSnapshot403JSONResponse(*clientError(e)), nil
+	case conflict.Is(e):
+		return server.CreateMachineSnapshot409JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.CreateMachineSnapshot503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.CreateMachineSnapshot500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.CreateMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

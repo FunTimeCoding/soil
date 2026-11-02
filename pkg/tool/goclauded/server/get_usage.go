@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -9,9 +10,15 @@ func (s *Server) GetUsage(
 	_ context.Context,
 	_ server.GetUsageRequestObject,
 ) (server.GetUsageResponseObject, error) {
-	result := s.service.Usage()
+	result, found, e := s.usage.FindUsage()
 
-	if result == nil {
+	if e != nil {
+		return server.GetUsage500JSONResponse(
+			*s.captureFail(e, soil.UnexpectedError),
+		), nil
+	}
+
+	if !found {
 		return server.GetUsage204Response{}, nil
 	}
 

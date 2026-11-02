@@ -2,7 +2,7 @@ package client_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/mock_client"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
@@ -25,7 +25,7 @@ func New(
 	daemon_tester.New(t, c).Mount(
 		memory.New(),
 		mock_recorder.New(),
-		guard.New(m, []string{constant.ModelContextTestToken}),
+		guard.New(m, []string{generativeConstant.ModelContextTestToken}),
 	)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)

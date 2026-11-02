@@ -13,7 +13,7 @@ func (s *Server) registerRoster() {
 				"List all active sessions with their names and topics.",
 			),
 		),
-		s.roster,
+		s.listRoster,
 	)
 	s.server.AddTool(
 		mcp.NewTool(

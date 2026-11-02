@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument"
@@ -26,11 +26,11 @@ func (s *Server) GetTimeline(
 		a.Since = *r.Params.Since
 	}
 
-	merged, timelineError := s.service.Timeline(x, a)
+	merged, timelineError := s.event.Timeline(x, a)
 
 	if timelineError != nil {
 		return server.GetTimeline500JSONResponse(
-			*s.captureFail(timelineError, constant.UnexpectedError),
+			*s.captureFail(timelineError, soil.UnexpectedError),
 		), nil
 	}
 

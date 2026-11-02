@@ -1,7 +1,7 @@
 package index
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"runtime"
 	"strings"
@@ -15,7 +15,7 @@ func externalVersion(
 
 	for module := range requirements {
 		if (path == module ||
-			strings.HasPrefix(path, join.Empty(module, constant.Slash))) &&
+			strings.HasPrefix(path, join.Empty(module, stringsConstant.Slash))) &&
 			len(module) > len(best) {
 			best = module
 		}

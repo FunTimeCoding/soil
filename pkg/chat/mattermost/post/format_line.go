@@ -1,7 +1,7 @@
 package post
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -14,7 +14,7 @@ func formatLine(
 	}
 
 	if f.UseColor {
-		result = constant.Cyan("%s", result)
+		result = consoleConstant.Cyan("%s", result)
 	}
 
 	return result

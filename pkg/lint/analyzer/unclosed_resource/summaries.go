@@ -9,4 +9,6 @@ type Summaries struct {
 	self     map[string]bool
 	spent    map[string]bool
 	wraps    map[string]map[int]bool
+	yields   map[string]map[int]map[string]bool
+	draws    map[string]map[int]map[string]bool
 }

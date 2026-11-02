@@ -3,7 +3,7 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
 	"testing"
@@ -11,8 +11,8 @@ import (
 
 func TestTopNodes(t *testing.T) {
 	s := service_tester.New(t)
-	s.AddNode(constant.UpperAlfa, 2, 8)
-	s.AddNodeMetrics(constant.UpperAlfa, "500m", "4Gi")
+	s.AddNode(stringsConstant.UpperAlfa, 2, 8)
+	s.AddNodeMetrics(stringsConstant.UpperAlfa, "500m", "4Gi")
 	result, e := s.Service.TopNodes(context.Background(), "test")
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)

@@ -2,7 +2,7 @@ package go_mod
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
@@ -24,10 +24,10 @@ func recoverDeadTag(
 	r.Panic = false
 
 	if skipProxy {
-		r.Environment(constant.Proxy, constant.Direct)
+		r.Environment(soil.Proxy, soil.Direct)
 	}
 
-	r.Start(constant.Go, constant.Get, name)
+	r.Start(soil.Go, soil.Get, name)
 
 	return r
 }

@@ -1,7 +1,7 @@
 package pointer
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 	"unicode"
@@ -12,7 +12,7 @@ func PackageDirectory(s string) string {
 	directory := ""
 	base := trimmed
 
-	if i := strings.LastIndex(trimmed, constant.Slash); i != -1 {
+	if i := strings.LastIndex(trimmed, stringsConstant.Slash); i != -1 {
 		directory = trimmed[:i]
 		base = trimmed[i+1:]
 	}
@@ -21,7 +21,7 @@ func PackageDirectory(s string) string {
 		return directory
 	}
 
-	if j := strings.Index(base, constant.Dot); j != -1 {
+	if j := strings.Index(base, stringsConstant.Dot); j != -1 {
 		base = base[:j]
 	}
 
@@ -29,5 +29,5 @@ func PackageDirectory(s string) string {
 		return base
 	}
 
-	return join.Empty(directory, constant.Slash, base)
+	return join.Empty(directory, stringsConstant.Slash, base)
 }

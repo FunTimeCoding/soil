@@ -10,7 +10,9 @@ import (
 func TestRefusedExchangeAnswersWithTheProviderReason(t *testing.T) {
 	s := newFakeIssuer(t)
 	r := memory.New()
-	w := signInAndReturn(t, newAuthorizationClient(s.URL, r), "expired")
+	owned := newAuthorizationClient(s.URL, r)
+	defer owned.Close()
+	w := signInAndReturn(t, owned, "expired")
 	assert.Integer(t, http.StatusBadGateway, w.Code)
 	assert.StringContains(t, "token exchange failed", w.Body.String())
 	assert.StringContains(t, "Code expired", w.Body.String())

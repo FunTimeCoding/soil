@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
@@ -14,38 +14,53 @@ func assignmentFlags(c *cobra.Command) func() *client.ConfigurationAssignment {
 	var tenants []string
 	var tags []string
 	f := c.Flags()
-	f.StringSliceVar(&roles, constant.Role, nil, "role names it applies to")
+	f.StringSliceVar(
+		&roles,
+		gonetboxdConstant.Role,
+		nil,
+		"role names it applies to",
+	)
 	f.StringSliceVar(
 		&clusters,
-		constant.Cluster,
+		gonetboxdConstant.Cluster,
 		nil,
 		"cluster names it applies to",
 	)
 	f.StringSliceVar(
 		&platforms,
-		constant.Platform,
+		gonetboxdConstant.Platform,
 		nil,
 		"platform names it applies to",
 	)
-	f.StringSliceVar(&sites, constant.Site, nil, "site names it applies to")
+	f.StringSliceVar(
+		&sites,
+		gonetboxdConstant.Site,
+		nil,
+		"site names it applies to",
+	)
 	f.StringSliceVar(
 		&tenants,
-		constant.Tenant,
+		gonetboxdConstant.Tenant,
 		nil,
 		"tenant names it applies to",
 	)
-	f.StringSliceVar(&tags, constant.Tag, nil, "tag names it applies to")
+	f.StringSliceVar(
+		&tags,
+		gonetboxdConstant.Tag,
+		nil,
+		"tag names it applies to",
+	)
 
 	return func() *client.ConfigurationAssignment {
 		given := false
 
 		for _, n := range []string{
-			constant.Role,
-			constant.Cluster,
-			constant.Platform,
-			constant.Site,
-			constant.Tenant,
-			constant.Tag,
+			gonetboxdConstant.Role,
+			gonetboxdConstant.Cluster,
+			gonetboxdConstant.Platform,
+			gonetboxdConstant.Site,
+			gonetboxdConstant.Tenant,
+			gonetboxdConstant.Tag,
 		} {
 			if f.Changed(n) {
 				given = true

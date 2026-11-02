@@ -13,7 +13,7 @@ func TestRenameRefusesAMethodSatisfyingAnInterface(t *testing.T) {
 		service_tester.ServiceTestdata("rename-interface/src"),
 	)
 	before := treeOf(t, d)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/box",
@@ -37,7 +37,7 @@ func TestRenameRefusesAMethodSatisfyingAStandardInterface(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
 	)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/box",
@@ -55,7 +55,7 @@ func TestRenameRefusesAnInterfaceMethod(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
 	)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/shape",
@@ -78,7 +78,7 @@ func TestRenameAllowsAMethodNoInterfaceNames(t *testing.T) {
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
 	)
-	r, e := service_tester.NewService(t).Rename(
+	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/box",
@@ -111,7 +111,7 @@ func TestRenameRefusesAMethodSatisfyingAReplacingModuleInterface(t *testing.T) {
 		"package reader\n\nimport \"other.test/lib/meter\"\n\ntype Reader interface {\n\tRead() int\n}\n\nvar Default Reader = &meter.Meter{}\n",
 	)
 	source := service_tester.ReadFixtureFile(t, library, "meter/meter.go")
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/meter",

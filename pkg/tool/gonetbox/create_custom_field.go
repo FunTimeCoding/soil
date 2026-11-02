@@ -3,7 +3,7 @@ package gonetbox
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
@@ -38,7 +38,12 @@ func createCustomField(
 		"",
 		"choice set the field selects from (required)",
 	)
-	result.Flags().StringVar(&label, constant.Label, "", "display label")
+	result.Flags().StringVar(
+		&label,
+		gonetboxdConstant.Label,
+		"",
+		"display label",
+	)
 
 	return result
 }

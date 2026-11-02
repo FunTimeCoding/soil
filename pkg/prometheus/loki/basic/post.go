@@ -2,7 +2,7 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
 )
@@ -16,7 +16,7 @@ func (c *Client) Post(
 	}
 
 	_, e := c.requester.Bytes(
-		request.New(http.MethodPost, path).WithBody(constant.Object, body),
+		request.New(http.MethodPost, path).WithBody(webConstant.Object, body),
 	)
 
 	return e

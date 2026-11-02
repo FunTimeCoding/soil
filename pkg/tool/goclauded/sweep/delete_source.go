@@ -1,7 +1,7 @@
 package sweep
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
 	"path/filepath"
@@ -12,7 +12,7 @@ func DeleteSource(
 	sessionIdentifier string,
 ) []string {
 	var result []string
-	target := join.Empty(sessionIdentifier, constant.NotationLogExtension)
+	target := join.Empty(sessionIdentifier, soil.NotationLogExtension)
 
 	for _, d := range directories {
 		path := filepath.Join(d, target)

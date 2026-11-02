@@ -6,7 +6,7 @@ import (
 )
 
 func (o *Tester) Register(sessionIdentifier string) *ensure_result.Result {
-	result, e := o.Service.Register(sessionIdentifier)
+	result, e := o.Roster.Register(sessionIdentifier)
 	assert.FatalOnError(o.t, e)
 
 	return result

@@ -1,17 +1,21 @@
 package worker
 
-import "github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/classify"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+)
 
 func (w *Worker) logFailure(
 	hypervisor string,
 	e error,
 ) {
-	w.reacher.Handle(
-		hypervisor,
-		e,
-		func(x *edge.Edge) { w.log.Plain("poll hypervisor %s", x) },
-		func(f error) {
-			w.log.Plain("poll hypervisor %s failed: %v", hypervisor, f)
-		},
-	)
+	if connection.Classify(e) != nil || unavailable.Is(e) ||
+		!classify.Reportable(e) {
+		w.log.Plain("poll hypervisor %s: %v", hypervisor, e)
+
+		return
+	}
+
+	w.reporter.CaptureException(e)
 }

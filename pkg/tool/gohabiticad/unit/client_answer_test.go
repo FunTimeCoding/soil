@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/tag"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/client_tester"
@@ -27,7 +27,7 @@ func TestTheClientReadsTasksAndTags(t *testing.T) {
 	g.Identifier = "tag-1"
 	g.Name = "deploy"
 	m.AddTag(g)
-	c := client_tester.New(t, m, constant.ModelContextTestToken)
+	c := client_tester.New(t, m, generativeConstant.ModelContextTestToken)
 	all, e := c.GetTasks(t.Context(), "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, all)
@@ -45,7 +45,7 @@ func TestTheClientCreatesATask(t *testing.T) {
 	c := client_tester.New(
 		t,
 		service_tester.NewSource(t),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	v, e := c.CreateTask(t.Context(), "todo", "Ship loop C", "")
 	assert.FatalOnError(t, e)
@@ -55,7 +55,7 @@ func TestTheClientCreatesATask(t *testing.T) {
 func TestTheClientAnswersARefusedStatAsValidation(t *testing.T) {
 	m := service_tester.NewSource(t)
 	m.Failure = validation.New("%q is not a valid Stat.", "per")
-	c := client_tester.New(t, m, constant.ModelContextTestToken)
+	c := client_tester.New(t, m, generativeConstant.ModelContextTestToken)
 	_, e := c.AllocateStat(t.Context(), "per")
 	assert.True(t, validation.Is(e))
 }
@@ -64,7 +64,7 @@ func TestTheClientReachesTheDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
 		service_tester.NewSource(t),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }

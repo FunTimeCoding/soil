@@ -1,6 +1,7 @@
 package clean_job
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
@@ -9,12 +10,13 @@ import (
 )
 
 func RunnerWay(
+	x context.Context,
 	g face.GitLabClient,
 	r *runner.Runner,
 	f *option.Format,
 ) {
 	console.Format("Runner: %s\n", r.Format(f))
-	jobs := g.MustRunnerJobs(r.Identifier, 1000)
+	jobs := g.MustRunnerJobs(x, r.Identifier, 1000)
 	console.Format("Job count: %d\n", len(jobs))
 	f2 := f.Copy().Extended()
 
@@ -29,7 +31,7 @@ func RunnerWay(
 			console.Format("  Start timeout: %s\n", j.Stage)
 
 			if console.AskConfirmation("Retry job?") {
-				g.MustRetryJob(j)
+				g.MustRetryJob(x, j)
 			}
 		}
 	}

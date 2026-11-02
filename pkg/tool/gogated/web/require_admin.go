@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"net/url"
 )
@@ -20,7 +20,7 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 				r,
 				fmt.Sprintf(
 					"%s?return=%s",
-					constant.SignInPath,
+					webConstant.SignInPath,
 					url.QueryEscape(r.URL.Path),
 				),
 				http.StatusFound,

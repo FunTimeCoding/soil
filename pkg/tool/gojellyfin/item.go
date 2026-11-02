@@ -2,7 +2,6 @@ package gojellyfin
 
 import (
 	"context"
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -15,24 +14,9 @@ func item(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := x.Client.GetItemWithResponse(
-				context.Background(),
-				arguments[0],
+			x.Terminal.EmitValue(
+				x.Client.GetItem(context.Background(), arguments[0]),
 			)
-
-			if e != nil {
-				x.Terminal.Exitf("error: %v\n", e)
-			}
-
-			if r.JSON200 == nil {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			fmt.Println(string(r.Body))
 		},
 	}
 }

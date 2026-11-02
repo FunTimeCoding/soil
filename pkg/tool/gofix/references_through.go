@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
@@ -65,7 +65,7 @@ func referencesThrough(
 					return nil
 				}
 
-				if !strings.HasSuffix(path, constant.GoExtension) {
+				if !strings.HasSuffix(path, soil.GoExtension) {
 					return nil
 				}
 

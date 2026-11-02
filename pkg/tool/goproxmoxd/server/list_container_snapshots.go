@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -23,9 +26,7 @@ func (s *Server) ListContainerSnapshots(
 	}
 
 	if e != nil {
-		return server.ListContainerSnapshots500JSONResponse(
-			*s.captureFail(e, e.Error()),
-		), nil
+		return server.ListContainerSnapshots500JSONResponse(*s.answer(e)), nil
 	}
 
 	node := ""
@@ -40,14 +41,17 @@ func (s *Server) ListContainerSnapshots(
 		node,
 	)
 
-	if e != nil {
-		if not_found.Is(e) {
-			return server.ListContainerSnapshots404JSONResponse{
-				Error: e.Error(),
-			}, nil
-		}
-
-		return server.ListContainerSnapshots500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.ListContainerSnapshots400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.ListContainerSnapshots404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.ListContainerSnapshots403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.ListContainerSnapshots503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.ListContainerSnapshots500JSONResponse(*s.answer(e)), nil
 	}
 
 	converted := convert.ContainerSnapshots(snapshots)

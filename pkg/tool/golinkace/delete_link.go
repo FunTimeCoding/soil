@@ -2,7 +2,6 @@ package golinkace
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/spf13/cobra"
@@ -20,21 +19,9 @@ func deleteLink(c *command_context.Context) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			r, f := c.Client().DeleteLinkWithResponse(
-				context.Background(),
-				int32(identifier),
+			c.Terminal().EmitDone(
+				c.Client().DeleteLink(context.Background(), int32(identifier)),
 			)
-			errors.PanicOnError(f)
-
-			if r.HTTPResponse.StatusCode != 204 {
-				c.Terminal().Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			fmt.Printf("deleted link %d\n", identifier)
 		},
 	}
 }

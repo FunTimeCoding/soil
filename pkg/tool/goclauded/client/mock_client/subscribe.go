@@ -7,5 +7,5 @@ import (
 )
 
 func (c *Client) Subscribe(_ string, _ []string, _ *logger.Logger, _ face.Reporter) (<-chan *stream_event.Event, func()) {
-	return nil, func(){}
+	return nil, func() {}
 }

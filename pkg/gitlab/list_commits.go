@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) ListCommits(
+	x context.Context,
 	project int64,
 	reference string,
 	limit int64,
@@ -22,7 +24,11 @@ func (c *Client) ListCommits(
 		o.RefName = &reference
 	}
 
-	result, _, e := c.client.Commits.ListCommits(project, o)
+	result, _, e := c.client.Commits.ListCommits(
+		project,
+		o,
+		gitlab.WithContext(x),
+	)
 
 	if e != nil {
 		return nil, wrapError(e)

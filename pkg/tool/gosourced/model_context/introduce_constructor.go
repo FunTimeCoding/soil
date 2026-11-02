@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -27,7 +27,7 @@ func (s *Server) introduceConstructor(
 		return s.captureDetail(e)
 	}
 
-	r, c, f := s.service.IntroduceConstructor(
+	r, c, f := s.pattern.IntroduceConstructor(
 		turnContext(x),
 		directory,
 		a.PackagePath,
@@ -39,7 +39,7 @@ func (s *Server) introduceConstructor(
 	)
 
 	if f != nil {
-		return s.captureFail(f, constant.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if c == nil {

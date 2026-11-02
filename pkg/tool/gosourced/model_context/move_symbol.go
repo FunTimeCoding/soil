@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
@@ -38,7 +38,7 @@ func (s *Server) moveSymbol(
 		return s.captureDetail(e)
 	}
 
-	r, e := s.service.MoveSymbol(
+	r, e := s.symbol.MoveSymbol(
 		turnContext(x),
 		directory,
 		a.PackagePath,
@@ -50,7 +50,7 @@ func (s *Server) moveSymbol(
 	)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

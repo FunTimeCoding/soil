@@ -1,6 +1,7 @@
 package sed
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/strings/base64"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -12,21 +13,23 @@ func Run(o *option.Sed) {
 	validate(o)
 	c := gitlab.New(o.Host, o.Token)
 	defer c.Close()
-	p := common.FindProjectOrExit(c, o.Owner, o.Repository)
+	x := context.Background()
+	p := common.FindProjectOrExit(x, c, o.Owner, o.Repository)
 
 	if len(o.RawActions) > 0 {
-		runActions(c, p.Identifier, o)
+		runActions(x, c, p.Identifier, o)
 
 		return
 	}
 
-	f := c.MustFile(p.Identifier, o.Branch, o.Path)
+	f := c.MustFile(x, p.Identifier, o.Branch, o.Path)
 
 	if f == nil {
 		log.Panicf("file does not exist: %s", o.Path)
 	}
 
 	c.MustCommit(
+		x,
 		p.Identifier,
 		o.Branch,
 		o.Message,

@@ -2,7 +2,7 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/maps"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -19,7 +19,7 @@ func (a *Alert) formatRemainingLabels(f *option.Format) string {
 		v := a.Remaining[k]
 
 		if f.UseColor {
-			k = constant.Yellow("%s", k)
+			k = consoleConstant.Yellow("%s", k)
 		}
 
 		result = append(result, fmt.Sprintf("%s=%s", k, v))

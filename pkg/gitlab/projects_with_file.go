@@ -1,12 +1,14 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"strings"
 )
 
 func (c *Client) ProjectsWithFile(
+	x context.Context,
 	path string,
 	caseInsensitive bool,
 ) ([]*project.Project, error) {
@@ -16,7 +18,7 @@ func (c *Client) ProjectsWithFile(
 		path = strings.ToLower(path)
 	}
 
-	projects, e := c.Projects()
+	projects, e := c.Projects(x)
 
 	if e != nil {
 		return nil, e
@@ -27,7 +29,7 @@ func (c *Client) ProjectsWithFile(
 			console.Format("Project: %s\n", p.Raw.NameWithNamespace)
 		}
 
-		nodes, f := c.Tree(p.Identifier, "", "", false, 0)
+		nodes, f := c.Tree(x, p.Identifier, "", "", false, 0)
 
 		if f != nil {
 			return nil, f

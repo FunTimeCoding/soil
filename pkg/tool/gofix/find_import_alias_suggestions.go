@@ -2,7 +2,7 @@ package gofix
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/constant"
+	sourceConstant "github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"go/token"
 	"golang.org/x/tools/go/packages"
@@ -37,7 +37,7 @@ func findImportAliasSuggestions(
 			for _, d := range imports.Decide(v) {
 				spec := specs[d.Entry]
 
-				if d.Rule == constant.RuleConstant {
+				if d.Rule == sourceConstant.RuleConstant {
 					handled[spec.Pos()] = true
 				}
 
@@ -46,8 +46,8 @@ func findImportAliasSuggestions(
 				}
 
 				if realias &&
-					d.Rule == constant.RuleConstant &&
-					d.Kind == constant.DecisionRename {
+					d.Rule == sourceConstant.RuleConstant &&
+					d.Kind == sourceConstant.DecisionRename {
 					edits = append(
 						edits,
 						buildRealiasEdits(

@@ -2,14 +2,14 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"strings"
 )
 
 func sourceTypePrefixes(p string) []string {
-	parts := split.Slash(strings.Trim(p, constant.Slash))
+	parts := split.Slash(strings.Trim(p, stringsConstant.Slash))
 	result := make([]string, 0, len(parts))
 
 	for i := len(parts) - 1; i >= 0; i-- {

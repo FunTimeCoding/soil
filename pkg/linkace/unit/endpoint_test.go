@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
 	"net/http"
@@ -28,8 +28,12 @@ func TestPostSendsNotationWithToken(t *testing.T) {
 	r := last()
 	assert.String(t, http.MethodPost, r.Method)
 	assert.String(t, "/api/v2/links", r.URL.Path)
-	assert.String(t, "Bearer alfa-token", r.Header.Get(constant.Authorization))
-	assert.String(t, "application/json", r.Header.Get(constant.Accept))
+	assert.String(
+		t,
+		"Bearer alfa-token",
+		r.Header.Get(webConstant.Authorization),
+	)
+	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 	b, f := io.ReadAll(r.Body)
 	assert.FatalOnError(t, f)
 	assert.String(t, `{"url":"https://bravo.example"}`, string(b))

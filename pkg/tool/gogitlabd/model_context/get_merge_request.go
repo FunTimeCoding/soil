@@ -26,7 +26,7 @@ func (s *Server) GetMergeRequest(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.MergeRequest(instance, project, a.MergeRequest)
+	v, e := s.service.MergeRequest(x, instance, project, a.MergeRequest)
 
 	if e != nil {
 		return s.answerWith(e, "")

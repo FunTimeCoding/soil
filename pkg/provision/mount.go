@@ -6,7 +6,7 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/provision/generated/server"
 	"github.com/funtimecoding/soil/pkg/provision/server"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -18,7 +18,7 @@ func Mount(
 	g *guard.Mux,
 ) {
 	g.TokenMount(
-		constant.InterfacePath,
+		webConstant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
 				server.New(n, r),

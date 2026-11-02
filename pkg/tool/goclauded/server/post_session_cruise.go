@@ -19,7 +19,7 @@ func (s *Server) PostSessionCruise(
 		pace = time.Duration(*r.Body.PaceMinutes) * time.Minute
 	}
 
-	if e := s.service.SetCruise(
+	if e := s.message.SetCruise(
 		r.Identifier,
 		constant.Cruise(r.Body.Mode),
 		pace,
@@ -35,7 +35,7 @@ func (s *Server) PostSessionCruise(
 		), nil
 	}
 
-	c, f := s.service.CruiseSetting(r.Identifier)
+	c, f := s.message.CruiseSetting(r.Identifier)
 
 	if f != nil {
 		return server.PostSessionCruise500JSONResponse(

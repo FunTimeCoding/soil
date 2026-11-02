@@ -26,7 +26,7 @@ func (s *Server) GetProjectVariable(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.ProjectVariable(instance, project, a.Key)
+	v, e := s.service.ProjectVariable(x, instance, project, a.Key)
 
 	if e != nil {
 		return s.answerWith(e, "")

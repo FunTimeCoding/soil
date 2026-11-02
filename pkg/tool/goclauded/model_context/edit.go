@@ -36,7 +36,7 @@ func (s *Server) edit(
 		return s.captureFail(g, soil.UnexpectedError)
 	}
 
-	_, g = s.service.EditEvent(uint(identifier), message)
+	_, g = s.event.EditEvent(uint(identifier), message)
 
 	if g != nil {
 		if not_found.Is(g) {

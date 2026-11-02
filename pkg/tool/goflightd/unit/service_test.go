@@ -56,12 +56,14 @@ func TestAFailedCommandIsLoggedNotReported(t *testing.T) {
 	s.System.Fail(constant.SystemProfiler, errors.Format("exit", 1))
 	s.System.Fail(constant.Sudo, errors.Format("exit", 1))
 	assert.False(t, s.Service.WirelessAvailable())
-	worker.NewEvery(
+	owned := worker.NewEvery(
 		s.Service.SampleBluetooth,
 		logger.New(t.Context()),
 		s.Reporter,
 		time.Hour,
-	).Poll()
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Count(t, 0, s.Service.SampleWireless())
 	assert.Count(t, 0, s.Reporter.Events())
 }
@@ -70,12 +72,14 @@ func TestAFailingStoreIsReportedByTheWorker(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
 	s.CloseStore()
-	worker.NewEvery(
+	owned := worker.NewEvery(
 		s.Service.SampleBluetooth,
 		logger.New(t.Context()),
 		s.Reporter,
 		time.Hour,
-	).Poll()
+	)
+	defer owned.Close()
+	owned.Poll()
 	assert.Count(t, 1, s.Reporter.Events())
 }
 

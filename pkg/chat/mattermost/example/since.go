@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -19,7 +19,7 @@ func Since() {
 	c := m.MustTeamChannel(channel)
 	console.Format("Channel: %s\n", c.Name)
 	t, e := time.ParseInLocation(
-		constant.DateMinute,
+		timeConstant.DateMinute,
 		since,
 		time.Now().Location(),
 	)
@@ -47,7 +47,7 @@ func Since() {
 	for _, p := range posts {
 		console.Format(
 			"  %s %s root=%v files=%d: %.60s\n",
-			p.Create.Format(constant.DateMinute),
+			p.Create.Format(timeConstant.DateMinute),
 			p.User.Username,
 			p.Raw.RootId == "",
 			len(p.Raw.FileIds),

@@ -12,7 +12,7 @@ func (s *Server) GetCoverage(
 ) (server.GetCoverageResponseObject, error) {
 	var servers []server.CoverageServer
 
-	for _, e := range s.service.Coverage() {
+	for _, e := range s.transcript.Coverage() {
 		entry := server.CoverageServer{
 			Name:        e.Name,
 			Configured:  e.Configured,

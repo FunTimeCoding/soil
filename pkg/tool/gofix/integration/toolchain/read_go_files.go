@@ -2,7 +2,7 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"os"
 	"path/filepath"
@@ -20,7 +20,7 @@ func readGoFiles(
 	result := make(map[string]string)
 
 	for _, entry := range entries {
-		if !strings.HasSuffix(entry.Name(), constant.GoExtension) {
+		if !strings.HasSuffix(entry.Name(), soil.GoExtension) {
 			continue
 		}
 

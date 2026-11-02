@@ -16,10 +16,10 @@ func (s *Server) editForm(
 	r *http.Request,
 ) {
 	identifier := r.PathValue(constant.Identifier)
-	session := s.service.Resolve(identifier)
+	session := s.transcript.Resolve(identifier)
 	alias := session.Slug
 	var description string
-	e, found, f := s.service.FindSession(session.Identifier)
+	e, found, f := s.roster.FindSession(session.Identifier)
 	errors.PanicOnError(f)
 
 	if found {

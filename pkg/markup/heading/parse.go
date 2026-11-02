@@ -2,7 +2,7 @@ package heading
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/yuin/goldmark/v2/ast"
 	"github.com/yuin/goldmark/v2/parser"
@@ -31,7 +31,11 @@ func Parse(content string) []*Heading {
 
 				if count := seen[slug]; count > 0 {
 					seen[slug]++
-					slug = join.Empty(slug, constant.Dash, strconv.Itoa(count))
+					slug = join.Empty(
+						slug,
+						stringsConstant.Dash,
+						strconv.Itoa(count),
+					)
 				} else {
 					seen[slug] = 1
 				}

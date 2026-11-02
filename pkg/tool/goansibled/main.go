@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -38,13 +38,13 @@ func Main() {
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 
-	if environment.Exists(netboxConstant.HostEnvironment) {
+	if environment.Exists(gonetboxdConstant.HostEnvironment) {
 		l := locator.Environment(
-			netboxConstant.HostEnvironment,
-			netboxConstant.PortEnvironment,
-			netboxConstant.InsecureEnvironment,
+			gonetboxdConstant.HostEnvironment,
+			gonetboxdConstant.PortEnvironment,
+			gonetboxdConstant.InsecureEnvironment,
 		)
-		token := environment.Required(netboxConstant.TokenEnvironment)
+		token := environment.Required(gonetboxdConstant.TokenEnvironment)
 		o.Inventory = func() face.Client { return client.New(l, token) }
 	}
 

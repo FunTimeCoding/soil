@@ -23,7 +23,7 @@ func (s *Server) sessionCruiseSubmit(
 		pace = time.Duration(minutes) * time.Minute
 	}
 
-	if e := s.service.SetCruise(identifier, mode, pace); e != nil {
+	if e := s.message.SetCruise(identifier, mode, pace); e != nil {
 		form.RedirectFor(
 			w,
 			q,

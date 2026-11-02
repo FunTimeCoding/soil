@@ -10,7 +10,7 @@ import (
 
 func TestRenameRewritesAReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -38,7 +38,7 @@ func TestRenameRewritesAReplacingModule(t *testing.T) {
 
 func TestRenameFieldReachesAReplacingModuleThroughAnotherPackage(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -59,7 +59,7 @@ func TestRenameFieldReachesAReplacingModuleThroughAnotherPackage(t *testing.T) {
 func TestRenameDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	source := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -83,7 +83,7 @@ func TestRenameDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
 func TestRenameRefusesUnexportingWhatAReplacingModuleUses(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -118,7 +118,7 @@ func TestRenameRefusedWhenAReplacingModuleDoesNotTypeCheck(t *testing.T) {
 		"package broken\n\nimport \"other.test/lib\"\n\nfunc Broken() string {\n\treturn lib.Log(missing)\n}\n",
 	)
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	_, e := replacingService(t, library, user).Rename(
+	_, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -137,7 +137,7 @@ func TestRenameRefusedWhenAReplacingModuleDoesNotTypeCheck(t *testing.T) {
 
 func TestRenameSkipsAReplacingModuleThatDoesNotReach(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	r, e := replacingService(t, library, user).Rename(
+	r, e := replacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/unused",

@@ -2,6 +2,7 @@ package daemon
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -29,7 +30,7 @@ func New(
 			l,
 			filepath.Join(filepath.Dir(o.LitePath), constant.SearchIndexFile),
 		),
-		memory:      m,
+		memoryPeer:  m,
 		memoryGuard: peer.New(constant.MemoryPeer, m.Address(), m, l, r),
 		query:       q,
 		queryGuard:  peer.New(constant.QueryPeer, q.Address(), q, l, r),
@@ -41,8 +42,20 @@ func New(
 		result.browser = o.Browser()
 	}
 
+	if o.UtilizationFallback {
+		u := o.Utilization()
+		result.utilization = u
+		result.utilizationGuard = peer.New(
+			constant.UtilizationPeer,
+			generativeConstant.AnthropicServiceHost,
+			u,
+			l,
+			r,
+		)
+	}
+
 	result.build(o, l, r, y)
-	result.service.Prepare()
+	result.startup.Prepare()
 	l.Structured("started", "elapsed", time.Since(start).Seconds())
 
 	return result

@@ -1,7 +1,7 @@
 package instrument
 
 import (
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	telemetryConstant "github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 )
 
@@ -10,6 +10,11 @@ func (i *Instrument) record(
 	outcome string,
 ) {
 	i.recorder.Record(
-		record.NewDomain(name, constant.CommandLine, constant.User, outcome),
+		record.NewDomain(
+			name,
+			telemetryConstant.CommandLine,
+			telemetryConstant.User,
+			outcome,
+		),
 	)
 }

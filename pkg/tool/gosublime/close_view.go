@@ -2,7 +2,6 @@ package gosublime
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/spf13/cobra"
 	"strconv"
 )
@@ -22,24 +21,9 @@ func closeView(x *Context) *cobra.Command {
 				x.Terminal.Exitf("invalid id: %s\n", arguments[0])
 			}
 
-			r, f := x.Client.CloseViewWithResponse(
-				context.Background(),
-				identifier,
+			x.Terminal.EmitDone(
+				x.Client.CloseView(context.Background(), identifier),
 			)
-
-			if f != nil {
-				x.Terminal.Exitf("error: %v\n", f)
-			}
-
-			if r.HTTPResponse.StatusCode != 204 {
-				x.Terminal.Exitf(
-					"unexpected status: %s\n%s\n",
-					r.HTTPResponse.Status,
-					string(r.Body),
-				)
-			}
-
-			console.Format("closed view %d\n", identifier)
 		},
 	}
 }

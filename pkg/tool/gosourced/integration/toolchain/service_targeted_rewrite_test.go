@@ -3,7 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
@@ -11,8 +11,8 @@ import (
 func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 	tree := sameRewrite(
 		t,
-		func(s *service.Service, d string) (*output.Results, error) {
-			return s.Rename(
+		func(s *service_tester.Services, d string) (*output.Results, error) {
+			return s.Symbol.Rename(
 				t.Context(),
 				d,
 				"example/alfa",
@@ -29,8 +29,8 @@ func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 	tree := sameRewrite(
 		t,
-		func(s *service.Service, d string) (*output.Results, error) {
-			return s.Rename(
+		func(s *service_tester.Services, d string) (*output.Results, error) {
+			return s.Symbol.Rename(
 				t.Context(),
 				d,
 				"example/alfa",
@@ -47,8 +47,8 @@ func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 func TestTargetedMovePackageMatchesFullLoad(t *testing.T) {
 	tree := sameRewrite(
 		t,
-		func(s *service.Service, d string) (*output.Results, error) {
-			return s.MovePackage(
+		func(s *service_tester.Services, d string) (*output.Results, error) {
+			return s.Packages.MovePackage(
 				t.Context(),
 				d,
 				"example/delta",

@@ -39,10 +39,9 @@ func TestARunReturnsTheAgentOutput(t *testing.T) {
 }
 
 func TestAnEmptyIntentIsRefused(t *testing.T) {
-	o := service_tester.New(
-		t,
-		service_tester.Fixed(mock_stream.New(nil, false, nil)),
-	)
+	stream := mock_stream.New(nil, false, nil)
+	t.Cleanup(stream.Close)
+	o := service_tester.New(t, service_tester.Fixed(stream))
 	assert.True(t, validation.Is(o.Service.Run(" \n")))
 	assert.String(t, "idle", string(o.Service.Status().State))
 }
@@ -111,10 +110,9 @@ func TestShutdownWaitsForTheRunThenInterrupts(t *testing.T) {
 }
 
 func TestAnIdleRunnerFinishesOnClose(t *testing.T) {
-	o := service_tester.New(
-		t,
-		service_tester.Fixed(mock_stream.New(nil, false, nil)),
-	)
+	stream := mock_stream.New(nil, false, nil)
+	t.Cleanup(stream.Close)
+	o := service_tester.New(t, service_tester.Fixed(stream))
 	o.Runner.Close()
 
 	select {

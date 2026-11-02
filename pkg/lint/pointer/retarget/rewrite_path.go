@@ -2,7 +2,7 @@ package retarget
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"path"
 	"path/filepath"
@@ -29,9 +29,9 @@ func rewritePath(
 		if implicit != "" {
 			head, _ := apply(
 				moves,
-				strings.TrimSuffix(implicit, constant.Slash),
+				strings.TrimSuffix(implicit, stringsConstant.Slash),
 			)
-			prefix := join.Empty(head, constant.Slash)
+			prefix := join.Empty(head, stringsConstant.Slash)
 
 			if strings.HasPrefix(moved, prefix) {
 				result = strings.TrimPrefix(moved, prefix)

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/server"
 )
@@ -31,7 +31,7 @@ func (s *Server) ListPlacements(
 
 	if e != nil {
 		return server.ListPlacements500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

@@ -6,7 +6,7 @@ func (o *Tester) RefusalFor(identifier string) string {
 	o.t.Helper()
 	r := o.Store.GetSession(identifier)
 	assert.True(o.t, r != nil)
-	result, e := o.Service.EmptyRefusal(r)
+	result, e := o.Session.EmptyRefusal(r)
 	assert.FatalOnError(o.t, e)
 	assert.True(o.t, result != nil)
 

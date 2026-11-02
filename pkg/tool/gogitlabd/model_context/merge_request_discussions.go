@@ -26,7 +26,12 @@ func (s *Server) MergeRequestDiscussions(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.MergeRequestDiscussions(instance, project, a.MergeRequest)
+	v, e := s.service.MergeRequestDiscussions(
+		x,
+		instance,
+		project,
+		a.MergeRequest,
+	)
 
 	if e != nil {
 		return s.answerWith(e, "")

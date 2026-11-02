@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -27,10 +27,10 @@ func (s *Server) findLiterals(
 		return s.captureDetail(e)
 	}
 
-	r, literals, f := s.service.FindLiterals(directory, a.PackagePath, a.Type)
+	r, literals, f := s.pattern.FindLiterals(directory, a.PackagePath, a.Type)
 
 	if f != nil {
-		return s.captureFail(f, constant.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if literals == nil {

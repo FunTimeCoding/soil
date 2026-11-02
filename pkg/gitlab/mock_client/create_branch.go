@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/branch"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/branch"
+)
 
 func (c *Client) CreateBranch(
+	_ context.Context,
 	_ int64,
 	_ string,
 	_ string,

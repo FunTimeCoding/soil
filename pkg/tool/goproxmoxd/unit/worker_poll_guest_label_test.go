@@ -8,10 +8,9 @@ import (
 )
 
 func TestPollGuestLabelSet(t *testing.T) {
-	w, y := worker_tester.NewPollWorker(
-		"pve",
-		worker_tester.PopulatedClient("pve"),
-	)
+	c := worker_tester.PopulatedClient("pve")
+	t.Cleanup(c.Close)
+	w, y, _ := worker_tester.NewPollWorker(t, "pve", c)
 	defer w.Close()
 	w.Poll()
 

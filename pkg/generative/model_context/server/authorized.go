@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"strings"
 )
 
 func (s *Server) authorized(r *http.Request) bool {
 	t := strings.TrimPrefix(
-		r.Header.Get(constant.Authorization),
-		fmt.Sprintf("%s ", constant.Bearer),
+		r.Header.Get(webConstant.Authorization),
+		fmt.Sprintf("%s ", webConstant.Bearer),
 	)
 	address := web.ClientAddress(r)
 

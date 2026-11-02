@@ -4,6 +4,7 @@ package store
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
@@ -24,7 +25,9 @@ func pushTestDocument(
 	title := store.ExtractTitle(body, path)
 	s.InsertContent(hash, body, now)
 	s.InsertDocument(collection, path, title, hash, now)
-	chunks := chunk.Document(body, path, mock_reranker.New())
+	r := mock_reranker.New()
+	defer errors.LogClose(r)
+	chunks := chunk.Document(body, path, r)
 	texts := make([]string, len(chunks))
 
 	for i, c := range chunks {

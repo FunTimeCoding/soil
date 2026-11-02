@@ -2,7 +2,7 @@ package envrc
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
 	"os"
@@ -16,8 +16,8 @@ func TestLoadRemovesVanishedExport(t *testing.T) {
 		[]string{
 			key_value.Equals("PATH", os.Getenv("PATH")),
 			key_value.Equals(
-				constant.HomeEnvironment,
-				os.Getenv(constant.HomeEnvironment),
+				soil.HomeEnvironment,
+				os.Getenv(soil.HomeEnvironment),
 			),
 			"GHOST=stale",
 		},
@@ -48,8 +48,8 @@ func TestLoadRestoresReturnedExport(t *testing.T) {
 		[]string{
 			key_value.Equals("PATH", os.Getenv("PATH")),
 			key_value.Equals(
-				constant.HomeEnvironment,
-				os.Getenv(constant.HomeEnvironment),
+				soil.HomeEnvironment,
+				os.Getenv(soil.HomeEnvironment),
 			),
 			"GHOST=stale",
 		},
@@ -77,8 +77,8 @@ func TestLoadKeepsUnrelatedBase(t *testing.T) {
 		[]string{
 			key_value.Equals("PATH", os.Getenv("PATH")),
 			key_value.Equals(
-				constant.HomeEnvironment,
-				os.Getenv(constant.HomeEnvironment),
+				soil.HomeEnvironment,
+				os.Getenv(soil.HomeEnvironment),
 			),
 			"UNRELATED=keep",
 		},

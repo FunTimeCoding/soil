@@ -12,8 +12,10 @@ func Rule() {
 	f := consoleConstant.ExtendedColorFormat.Copy()
 	var severities []string
 	console.Line("Rules")
+	c := prometheus.NewEnvironment()
+	defer c.Close()
 
-	for _, r := range prometheus.NewEnvironment().MustRules().Alert() {
+	for _, r := range c.MustRules().Alert() {
 		if r.RawAlert != nil {
 			console.Format("Alert: %s\n", r.Format(f))
 

@@ -1,14 +1,18 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/pipeline_view"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/pipeline_view"
+)
 
 func (s *Service) JobView(
+	x context.Context,
 	instance string,
 	project int64,
 	pipeline int64,
 	requested int64,
 ) (*pipeline_view.View, error) {
-	jobs, e := s.PipelineJobs(instance, project, pipeline)
+	jobs, e := s.PipelineJobs(x, instance, project, pipeline)
 
 	if e != nil {
 		return nil, e
@@ -22,7 +26,7 @@ func (s *Service) JobView(
 		return result, nil
 	}
 
-	trace, f := s.Trace(instance, project, result.Selected.Identifier)
+	trace, f := s.Trace(x, instance, project, result.Selected.Identifier)
 
 	if f != nil {
 		return nil, f

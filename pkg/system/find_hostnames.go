@@ -2,7 +2,7 @@ package system
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"net"
 	"strings"
 )
@@ -34,7 +34,7 @@ func FindHostnames(host string) ([]string, error) {
 		result = names
 
 		for i := range result {
-			result[i] = strings.TrimSuffix(result[i], constant.CurrentDirectory)
+			result[i] = strings.TrimSuffix(result[i], soil.CurrentDirectory)
 		}
 	} else {
 		result = []string{host}

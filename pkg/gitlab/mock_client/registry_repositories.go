@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
+)
 
 func (c *Client) RegistryRepositories(
+	_ context.Context,
 	project int64,
 	_ bool,
 ) ([]*registry_repository.Repository, error) {

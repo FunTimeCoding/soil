@@ -1,7 +1,9 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +22,12 @@ func listMachines(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			c.Terminal().Emit(c.Client().ListMachines(n))
+			c.Terminal().EmitValue(
+				c.Client().ListMachines(
+					context.Background(),
+					&client.ListMachinesParams{Instance: c.Instance(), Node: n},
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "filter by node name")

@@ -17,7 +17,7 @@ func (s *Server) GetSessionToolContext(
 
 	var result []server.ToolContextResult
 
-	for _, c := range s.service.ToolContext(
+	for _, c := range s.transcript.ToolContext(
 		r.Identifier,
 		r.Params.Filter,
 		surround,

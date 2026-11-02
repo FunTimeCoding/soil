@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"testing"
@@ -15,7 +15,15 @@ func TestDetailErrorCarriesUpstreamContext(t *testing.T) {
 	var provider face.ContextProvider = e
 	key, context := provider.ErrorContext()
 	assert.String(t, "upstream", key)
-	assert.String(t, "400 Bad Request", context[constant.Status].(string))
-	assert.String(t, "zone already exists", context[constant.Detail].(string))
-	assert.String(t, `{"status":"error"}`, context[constant.Body].(string))
+	assert.String(t, "400 Bad Request", context[errorsConstant.Status].(string))
+	assert.String(
+		t,
+		"zone already exists",
+		context[errorsConstant.Detail].(string),
+	)
+	assert.String(
+		t,
+		`{"status":"error"}`,
+		context[errorsConstant.Body].(string),
+	)
 }

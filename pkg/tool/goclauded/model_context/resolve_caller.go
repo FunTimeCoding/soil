@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	telemetryConstant "github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/caller"
 	"github.com/mark3labs/mcp-go/server"
@@ -19,7 +19,7 @@ func (s *Server) resolveCaller(
 	}
 
 	modelContextSessionIdentifier := session.SessionID()
-	name, sessionIdentifier, e := s.service.ResolveModelContextSession(
+	name, sessionIdentifier, e := s.roster.ResolveModelContextSession(
 		modelContextSessionIdentifier,
 	)
 
@@ -28,7 +28,12 @@ func (s *Server) resolveCaller(
 	}
 
 	s.telemetry.Record(
-		record.NewDomain(tool, constant.ModelContext, name, constant.Success),
+		record.NewDomain(
+			tool,
+			telemetryConstant.ModelContext,
+			name,
+			telemetryConstant.Success,
+		),
 	)
 	c := caller.New()
 	c.Callsign = name

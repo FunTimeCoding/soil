@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) Commit(
+	x context.Context,
 	project int64,
 	branch string,
 	text string,
@@ -30,6 +32,7 @@ func (c *Client) Commit(
 				{Action: &action, FilePath: &path, Content: &content},
 			},
 		},
+		gitlab.WithContext(x),
 	)
 
 	if e != nil {

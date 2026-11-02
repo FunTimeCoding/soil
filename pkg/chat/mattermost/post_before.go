@@ -3,7 +3,7 @@ package mattermost
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )
@@ -24,7 +24,7 @@ func (c *Client) PostBefore(
 		if len(page.Order) == 0 {
 			return nil, not_found.Format(
 				"no post before %s in channel %s",
-				t.Format(constant.DateMinute),
+				t.Format(timeConstant.DateMinute),
 				h.Id,
 			)
 		}

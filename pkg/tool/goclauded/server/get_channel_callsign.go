@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -10,7 +10,7 @@ func (s *Server) GetChannelCallsign(
 	x context.Context,
 	r server.GetChannelCallsignRequestObject,
 ) (server.GetChannelCallsignResponseObject, error) {
-	callsign, e := s.service.AwaitCallsign(
+	callsign, e := s.message.AwaitCallsign(
 		x,
 		r.Params.Session,
 		r.Params.Since,
@@ -19,7 +19,7 @@ func (s *Server) GetChannelCallsign(
 
 	if e != nil {
 		return server.GetChannelCallsign500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

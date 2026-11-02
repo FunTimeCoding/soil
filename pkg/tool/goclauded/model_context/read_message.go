@@ -31,7 +31,7 @@ func (s *Server) readMessage(
 		identifiers = append(identifiers, uint(v))
 	}
 
-	found, e := s.service.ReadMessages(identifiers)
+	found, e := s.message.ReadMessages(identifiers)
 
 	if e != nil {
 		return s.captureFail(e, soil.UnexpectedError)

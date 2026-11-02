@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -9,10 +10,13 @@ import (
 	"time"
 )
 
-func (s *Service) boardOf(instance string) ([]*board_entry.Entry, error) {
+func (s *Service) boardOf(
+	x context.Context,
+	instance string,
+) ([]*board_entry.Entry, error) {
 	latest := make(map[[2]string]*pipeline.Pipeline)
 	projects := make(map[string]*project.Project)
-	all, e := s.Projects(instance, "")
+	all, e := s.Projects(x, instance, "")
 
 	if e != nil {
 		return nil, e
@@ -21,19 +25,19 @@ func (s *Service) boardOf(instance string) ([]*board_entry.Entry, error) {
 	for _, p := range all {
 		name := join.Slash([]string{p.Namespace, p.Name})
 		projects[name] = p
-		branches, f := s.Branches(instance, p.Identifier)
+		branches, f := s.Branches(x, instance, p.Identifier)
 
 		if f != nil {
 			return nil, f
 		}
 
-		tags, g := s.Tags(instance, p.Identifier)
+		tags, g := s.Tags(x, instance, p.Identifier)
 
 		if g != nil {
 			return nil, g
 		}
 
-		pipelines, h := s.Pipelines(instance, p.Identifier, "", "", 0)
+		pipelines, h := s.Pipelines(x, instance, p.Identifier, "", "", 0)
 
 		if h != nil {
 			return nil, h

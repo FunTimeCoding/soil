@@ -1,0 +1,46 @@
+package packages
+
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"go/token"
+)
+
+func decorateQualifiers(
+	r *output.Results,
+	decorations *decoration.Set,
+	set *token.FileSet,
+	qualifiers []resolve_reference.Reference,
+	oldName string,
+	newName string,
+) error {
+	for _, f := range qualifiers {
+		position := set.Position(f.Ident.Pos())
+		r.AddConcern(
+			concern.NewLine(
+				constant.ConcernRenamed,
+				fmt.Sprintf("%s → %s", oldName, newName),
+				position.Filename,
+				position.Line,
+				"",
+				true,
+			),
+		)
+		file := lookup.FindSyntaxFile(set, f.Package, position.Filename)
+
+		if file == nil {
+			continue
+		}
+
+		if _, e := decorations.DecorateFile(set, f.Package, file); e != nil {
+			return e
+		}
+	}
+
+	return nil
+}

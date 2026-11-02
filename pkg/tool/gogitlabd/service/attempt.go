@@ -6,8 +6,9 @@ import (
 )
 
 func (s *Service) attempt(
+	x context.Context,
 	instance string,
-	f func(face.GitLabClient) error,
+	f func(context.Context, face.GitLabClient) error,
 ) error {
 	p, e := s.pool.Client(instance)
 
@@ -16,9 +17,9 @@ func (s *Service) attempt(
 	}
 
 	return p.Guard().Attempt(
-		context.Background(),
-		func(context.Context) error {
-			return f(p.Client())
+		x,
+		func(y context.Context) error {
+			return f(y, p.Client())
 		},
 	)
 }

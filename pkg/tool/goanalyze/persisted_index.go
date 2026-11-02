@@ -22,7 +22,7 @@ func persistedIndex(
 	reported, e := resolve.ListPackages(root, patterns...)
 	errors.PanicOnError(e)
 	result, _, e := resolve.LoadPackages(root, patterns...)
-	errors.PanicOnError(e)
+	resolve.ExitOnLoadFailure(e)
 	loaded := resolve.PreferTestVariants(result)
 	w := index.New(directory, root, face.Kind(), unclosed_resource.Kind())
 

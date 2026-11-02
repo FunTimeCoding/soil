@@ -1,7 +1,7 @@
 package scan
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"path/filepath"
@@ -18,7 +18,7 @@ func Services(
 	toolDirectory := "pkg/tool"
 
 	for _, name := range v.MustReadDirectory(toolDirectory) {
-		if !strings.HasPrefix(name, constant.Go) {
+		if !strings.HasPrefix(name, soil.Go) {
 			continue
 		}
 

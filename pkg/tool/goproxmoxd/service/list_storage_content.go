@@ -1,29 +1,32 @@
 package service
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (s *Service) ListStorageContent(
 	instance string,
 	node string,
 	storage string,
 ) ([]*proxmox.StorageContent, error) {
-	c, clientFail := s.client(instance)
+	return guarded(
+		s,
+		instance,
+		func(c face.ProxmoxClient) ([]*proxmox.StorageContent, error) {
+			n, e := c.Node(node)
 
-	if clientFail != nil {
-		return nil, clientFail
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	n, e := c.Node(node)
+			s2, e := c.Storage(n, storage)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	s2, e := c.Storage(n, storage)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.StorageContent(s2)
+			return c.StorageContent(s2)
+		},
+	)
 }

@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	band "github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
@@ -57,7 +57,7 @@ func TestGracefulShutdownOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 	_, e := service.Decide(
 		constant.OperationShutdown,
 		false,
-		[]int{band.PowerOn},
+		[]int{bandConstant.PowerOn},
 	)
 	assert.True(t, conflict.Is(e))
 	assert.String(
@@ -68,7 +68,11 @@ func TestGracefulShutdownOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 }
 
 func TestGracefulRebootOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
-	_, e := service.Decide(constant.OperationReboot, false, []int{band.PowerOn})
+	_, e := service.Decide(
+		constant.OperationReboot,
+		false,
+		[]int{bandConstant.PowerOn},
+	)
 	assert.True(t, conflict.Is(e))
 	assert.String(
 		t,
@@ -86,7 +90,7 @@ func TestStartPowersOnAMachineThatIsOff(t *testing.T) {
 	state, e := service.Decide(
 		constant.OperationStart,
 		false,
-		[]int{band.PowerOn},
+		[]int{bandConstant.PowerOn},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, state)

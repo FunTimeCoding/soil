@@ -2,7 +2,7 @@ package gomemory
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 )
 
 func tagSuffix(tags *[]string) string {
@@ -10,5 +10,9 @@ func tagSuffix(tags *[]string) string {
 		return ""
 	}
 
-	return join.Empty(constant.TagOpen, join.Space(*tags...), constant.TagClose)
+	return join.Empty(
+		gomemorydConstant.TagOpen,
+		join.Space(*tags...),
+		gomemorydConstant.TagClose,
+	)
 }

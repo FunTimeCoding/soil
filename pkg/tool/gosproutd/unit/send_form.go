@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
 	"net/http"
 	"net/url"
@@ -25,10 +25,10 @@ func sendForm(
 		q = web.NewGet(s.Address(target))
 	} else {
 		q = web.NewPost(s.Address(target), values.Encode())
-		q.Header.Set(constant.ContentType, constant.FormEncoded)
+		q.Header.Set(webConstant.ContentType, webConstant.FormEncoded)
 	}
 
-	q.Header.Set(constant.ExtendedRequest, "true")
+	q.Header.Set(webConstant.ExtendedRequest, "true")
 	r, e := s.Client().Do(q)
 	assert.FatalOnError(t, e)
 	defer errors.PanicClose(r.Body)

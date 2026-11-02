@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -17,15 +17,11 @@ func (s *Server) GetSessionWindow(
 		count = *r.Params.Count
 	}
 
-	blocks, e := s.service.ReadConversation(
-		r.Identifier,
-		r.Params.Around,
-		count,
-	)
+	blocks, e := s.search.ReadConversation(r.Identifier, r.Params.Around, count)
 
 	if e != nil {
 		return server.GetSessionWindow500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

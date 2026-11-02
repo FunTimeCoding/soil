@@ -21,6 +21,8 @@ func Skip(t *testing.T) {
 	t.Helper()
 
 	if !reachable() {
-		t.Skipf("embed host unreachable: %s", ollama.NewEnvironment().Locator())
+		c := ollama.NewEnvironment()
+		defer c.Close()
+		t.Skipf("embed host unreachable: %s", c.Locator())
 	}
 }

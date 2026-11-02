@@ -2,7 +2,7 @@ package unclosed_resource
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/types/resource_candidate"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -32,7 +32,7 @@ func candidates(
 			for _, l := range a.Lhs {
 				i, okay := l.(*ast.Ident)
 
-				if !okay || i.Name == constant.Underscore {
+				if !okay || i.Name == stringsConstant.Underscore {
 					continue
 				}
 

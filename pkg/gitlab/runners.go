@@ -1,12 +1,16 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
-func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
+func (c *Client) Runners(
+	x context.Context,
+	all bool,
+) ([]*runner.Runner, error) {
 	var result []*gitlab.Runner
 	number := int64(1)
 
@@ -21,9 +25,9 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 		}
 
 		if all {
-			page, _, e = c.allRunners(options)
+			page, _, e = c.allRunners(x, options)
 		} else {
-			page, _, e = c.ownerRunners(options)
+			page, _, e = c.ownerRunners(x, options)
 		}
 
 		if e != nil {
@@ -39,5 +43,5 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 		number++
 	}
 
-	return c.enrichRunners(runner.NewSlice(runner.Deduplicate(result)))
+	return c.enrichRunners(x, runner.NewSlice(runner.Deduplicate(result)))
 }

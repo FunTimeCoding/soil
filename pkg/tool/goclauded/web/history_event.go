@@ -17,7 +17,7 @@ func (s *Server) historyEvent(
 	var found *event.Event
 
 	if e == nil && identifier > 0 {
-		found = s.service.GetEvent(uint(identifier))
+		found = s.event.GetEvent(uint(identifier))
 	}
 
 	if found == nil {

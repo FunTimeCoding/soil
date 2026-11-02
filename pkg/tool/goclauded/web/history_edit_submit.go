@@ -15,6 +15,6 @@ func (s *Server) historyEditSubmit(
 		return
 	}
 
-	s.service.MustEditEvent(e.Identifier, q.FormValue(constant.Body))
+	s.event.MustEditEvent(e.Identifier, q.FormValue(constant.Body))
 	s.historyRow(w, q)
 }

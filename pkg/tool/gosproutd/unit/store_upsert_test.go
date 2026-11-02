@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
 	"testing"
 	"time"
@@ -11,7 +11,7 @@ import (
 func TestUpsertNewSeed(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-a",
 		"content a",
@@ -27,14 +27,14 @@ func TestUpsertNewSeed(t *testing.T) {
 func TestUpsertSecondSeedGetsNextPosition(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-a",
 		"content a",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerBravo,
+		stringsConstant.LowerBravo,
 		"bravo.md",
 		"hash-b",
 		"content b",
@@ -49,14 +49,14 @@ func TestUpsertSecondSeedGetsNextPosition(t *testing.T) {
 func TestUpsertUpdatesContentOnHashChange(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"old content",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-2",
 		"new content",
@@ -72,14 +72,14 @@ func TestUpsertNoOpOnSameHash(t *testing.T) {
 	s := store_tester.New(t)
 	modified := time.Now()
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"same content",
 		modified,
 	)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"same content",
@@ -93,14 +93,14 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 	s := store_tester.New(t)
 	base := time.Now()
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"same content",
 		base.Add(-time.Hour),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"same content",
@@ -114,14 +114,14 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 func TestUpsertSameNameDifferentPath(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"alfa.md",
 		"hash-a",
 		"root",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		constant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"sub/alfa.md",
 		"hash-b",
 		"nested",

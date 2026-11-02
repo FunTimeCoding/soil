@@ -60,6 +60,7 @@ var (
 const (
 	MemoryPeer            = "memory"
 	QueryPeer             = "query"
+	UtilizationPeer       = "utilization"
 	MemoryLoadsHidden     = "%v; loads hidden"
 	MemoryUnreachableKind = "memory_unreachable"
 	ImpressionContext     = "impression"

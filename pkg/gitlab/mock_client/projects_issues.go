@@ -1,7 +1,10 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/issue"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/issue"
+)
 
-func (c *Client) ProjectsIssues() ([]*issue.Issue, error) {
+func (c *Client) ProjectsIssues(_ context.Context) ([]*issue.Issue, error) {
 	return nil, c.failure
 }

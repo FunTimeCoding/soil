@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -15,7 +15,7 @@ func optionalList(
 
 	var result []string
 
-	for _, item := range strings.Split(value, constant.Comma) {
+	for _, item := range strings.Split(value, stringsConstant.Comma) {
 		if trimmed := strings.TrimSpace(item); trimmed != "" {
 			result = append(result, trimmed)
 		}

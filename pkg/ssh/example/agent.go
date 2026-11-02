@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/ssh"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -20,7 +20,7 @@ func Agent(host string) {
 	defer s.Close()
 	console.Format("Hostname: %s\n", s.Run("hostname").OutputString)
 	console.Format("Uptime: %s\n", s.Run("uptime").OutputString)
-	entries, e := s.ListDirectory(constant.CurrentDirectory)
+	entries, e := s.ListDirectory(soil.CurrentDirectory)
 	errors.PanicOnError(e)
 	console.Format("Home: %d entries\n", len(entries))
 }

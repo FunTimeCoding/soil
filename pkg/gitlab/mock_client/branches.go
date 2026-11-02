@@ -1,7 +1,13 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/branch"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/branch"
+)
 
-func (c *Client) Branches(_ int64) ([]*branch.Branch, error) {
+func (c *Client) Branches(
+	_ context.Context,
+	_ int64,
+) ([]*branch.Branch, error) {
 	return c.branches, nil
 }

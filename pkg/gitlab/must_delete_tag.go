@@ -1,10 +1,14 @@
 package gitlab
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
+)
 
 func (c *Client) MustDeleteTag(
+	x context.Context,
 	project int64,
 	name string,
 ) {
-	errors.PanicOnError(c.DeleteTag(project, name))
+	errors.PanicOnError(c.DeleteTag(x, project, name))
 }

@@ -12,7 +12,7 @@ import (
 func TestDeleteHostReportsMissingEntry(t *testing.T) {
 	s := canned(`{"result":"not found"}`)
 	defer s.Close()
-	e := client(s).DeleteHost("00000000-0000-0000-0000-000000000000")
+	e := client(t, s).DeleteHost("00000000-0000-0000-0000-000000000000")
 	assert.True(t, not_found.Is(e))
 	assert.StringContains(t, "dnsmasq host not found", e.Error())
 }
@@ -20,13 +20,13 @@ func TestDeleteHostReportsMissingEntry(t *testing.T) {
 func TestDeleteHostAcceptsDeleted(t *testing.T) {
 	s := canned(`{"result":"deleted"}`)
 	defer s.Close()
-	assert.Nil(t, client(s).DeleteHost("abc"))
+	assert.Nil(t, client(t, s).DeleteHost("abc"))
 }
 
 func TestAddHostRejectionIsValidation(t *testing.T) {
 	s := canned(`{"result":"failed","validations":{"host.ip":"bad address"}}`)
 	defer s.Close()
-	_, e := client(s).AddHost(request.New())
+	_, e := client(t, s).AddHost(request.New())
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "host.ip: bad address", e.Error())
 }
@@ -34,7 +34,7 @@ func TestAddHostRejectionIsValidation(t *testing.T) {
 func TestAddHostFailingWithoutValidationsIsAFault(t *testing.T) {
 	s := canned(`{"result":"failed"}`)
 	defer s.Close()
-	_, e := client(s).AddHost(request.New())
+	_, e := client(t, s).AddHost(request.New())
 	assert.True(t, unexpected.Is(e))
 	assert.String(
 		t,
@@ -46,7 +46,7 @@ func TestAddHostFailingWithoutValidationsIsAFault(t *testing.T) {
 func TestSetHostOnAnUnknownEntryIsNotFound(t *testing.T) {
 	s := canned(`{"result":"failed"}`)
 	defer s.Close()
-	e := client(s).SetHost(
+	e := client(t, s).SetHost(
 		"00000000-0000-0000-0000-000000000000",
 		request.New(),
 	)
@@ -60,7 +60,7 @@ func TestSetHostOnAnUnknownEntryIsNotFound(t *testing.T) {
 func TestSetHostRejectionIsValidation(t *testing.T) {
 	s := canned(`{"result":"failed","validations":{"host.ip":"bad address"}}`)
 	defer s.Close()
-	e := client(s).SetHost("abc", request.New())
+	e := client(t, s).SetHost("abc", request.New())
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "host.ip: bad address", e.Error())
 }
@@ -68,7 +68,7 @@ func TestSetHostRejectionIsValidation(t *testing.T) {
 func TestAddHostReturnsIdentifier(t *testing.T) {
 	s := canned(`{"result":"saved","uuid":"a-b-c"}`)
 	defer s.Close()
-	result, e := client(s).AddHost(request.New())
+	result, e := client(t, s).AddHost(request.New())
 	assert.Nil(t, e)
 	assert.String(t, "a-b-c", result)
 }

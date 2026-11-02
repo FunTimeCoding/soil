@@ -1,7 +1,7 @@
 package gazetteer
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/place"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
@@ -19,14 +19,18 @@ func New(
 
 	for _, m := range machines {
 		result.add(
-			place.New(constant.VirtualMachineAddress, m.Identifier, m.Name),
+			place.New(
+				netboxConstant.VirtualMachineAddress,
+				m.Identifier,
+				m.Name,
+			),
 			m.PrimaryAddress,
 		)
 	}
 
 	for _, d := range devices {
 		result.add(
-			place.New(constant.DeviceAddress, d.Identifier, d.Name),
+			place.New(netboxConstant.DeviceAddress, d.Identifier, d.Name),
 			d.PrimaryAddress,
 		)
 	}

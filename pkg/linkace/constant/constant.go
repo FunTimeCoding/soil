@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/constant"
+import consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	HostEnvironment  = "LINKACE_HOST"
@@ -14,5 +14,5 @@ const (
 )
 
 var (
-	Format = constant.ExtendedColorFormat.Copy()
+	Format = consoleConstant.ExtendedColorFormat.Copy()
 )

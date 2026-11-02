@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/option"
@@ -21,7 +21,7 @@ func TestRepositoryIgnoredReadsEachCheckoutRules(t *testing.T) {
 	testutil.WriteFile(t, root, ".gitignore", "/scratch\n")
 	testutil.WriteFile(
 		t,
-		filepath.Join(root, constant.ParentDirectory, "bravo"),
+		filepath.Join(root, soil.ParentDirectory, "bravo"),
 		".gitignore",
 		"/tmp\n",
 	)

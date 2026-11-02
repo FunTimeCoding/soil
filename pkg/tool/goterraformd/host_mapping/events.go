@@ -1,7 +1,7 @@
 package host_mapping
 
 import (
-	"github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/plan"
 	"maps"
@@ -27,7 +27,7 @@ func (x *Index) Events(changes []*plan.ResourceChange) []*host_event.Event {
 		}
 
 		for _, h := range x.hosts(configurationAddress(c.Address), map[string]bool{}) {
-			merged[h] = stronger(merged[h], constant.HostUpdate)
+			merged[h] = stronger(merged[h], provisionConstant.HostUpdate)
 		}
 	}
 

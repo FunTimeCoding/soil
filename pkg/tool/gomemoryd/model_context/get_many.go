@@ -3,7 +3,7 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
 	memoryResponse "github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -17,7 +17,7 @@ func (s *Server) getMany(
 ) (*mcp.CallToolResult, error) {
 	var result []any
 
-	for _, part := range strings.Split(raw, constant.Comma) {
+	for _, part := range strings.Split(raw, stringsConstant.Comma) {
 		identifier, e := strconv.ParseInt(strings.TrimSpace(part), 10, 64)
 
 		if e != nil {

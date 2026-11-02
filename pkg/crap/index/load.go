@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/crap/complexity"
 	"github.com/funtimecoding/soil/pkg/crap/function"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/ast"
 	"strings"
@@ -15,7 +14,7 @@ func Load(
 	patterns ...string,
 ) *Index {
 	loaded, set, e := resolve.LoadPackages(root, patterns...)
-	errors.PanicOnError(e)
+	resolve.ExitOnLoadFailure(e)
 	result := New(root)
 	seen := map[string]bool{}
 

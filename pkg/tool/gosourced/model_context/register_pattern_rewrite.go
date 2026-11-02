@@ -33,15 +33,13 @@ func (s *Server) registerPatternRewrite() {
 			mcp.WithString(
 				"pattern",
 				mcp.Required(),
-				mcp.Description(
-					"Current shape, as in match_pattern. May carry an import block when the replacement introduces packages the tool cannot resolve unambiguously.",
-				),
+				mcp.Description("Current shape, as in match_pattern."),
 			),
 			mcp.WithString(
 				"replacement",
 				mcp.Required(),
 				mcp.Description(
-					"Target shape - a Go function with the same hole names and exactly one body statement, e.g. func replacement(c *client.Client, t *terminal.Terminal, key string) { t.Emit(c.DeleteComment(key)) }.",
+					"Target shape - a Go function with the same hole names and exactly one body statement, e.g. func replacement(c *client.Client, t *terminal.Terminal, key string) { t.Emit(c.DeleteComment(key)) }. May carry an import block when it introduces packages the tool cannot resolve unambiguously.",
 				),
 			),
 			mcp.WithBoolean(

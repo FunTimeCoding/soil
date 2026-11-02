@@ -3,169 +3,34 @@ package example
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/text/multi_line"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/funtimecoding/soil/pkg/web/request_context"
-	"github.com/mattermost/mattermost/server/public/model"
 	"net/http"
 )
 
 func Dialog() {
 	w := http.NewServeMux()
-	w.HandleFunc(
-		constant.DialogPath,
-		func(
-			w http.ResponseWriter,
-			e *http.Request,
-		) {
-			c := request_context.New(w, e)
-			c.SetLastLocation()
-			l := multi_line.New()
-			request_context.AppendDetail(l, c)
-			r := &model.PostActionIntegrationRequest{}
-			notation.MustDecode(c.Body(), r, false)
-			l.Format("Decoded request: %+v", r)
-			response := &model.PostActionIntegrationResponse{
-				EphemeralText: "You updated the post!",
-			}
-
-			if false {
-				response.Update = &model.Post{Message: "Updated message text!"}
-			}
-
-			c.WriteOkay(notation.Encode(response, false))
-			console.Line("Request receive:")
-			console.Line(l.Render())
-		},
-	)
+	w.HandleFunc(constant.DialogPath, handleDialog)
 	s := web.ListenAsynchronous(w)
 	m := common.Mattermost()
 	defer m.Close()
 
 	if true {
-		p := &model.Post{
-			ChannelId: m.DefaultChannel().Id,
-			Message:   "Some message with buttons",
-		}
-		callback := locator.New(constant.Localhost).Port(
-			constant.ListenPort,
-		).Insecure().Path(
-			constant.CallbackPath,
-		).String()
-		model.ParseMessageAttachment(
-			p,
-			[]*model.MessageAttachment{
-				{
-					AuthorName: "alfa",
-					Title:      "bravo",
-					Text:       "charlie",
-					Color:      "#36a64f",
-					Fields: []*model.MessageAttachmentField{
-						{
-							Title: "Current Version",
-							Value: "v2.1.0",
-							Short: true,
-						},
-						{Title: "Target Version", Value: "v2.2.1", Short: true},
-					},
-					Actions: []*model.PostAction{
-						{
-							Id:    "yes",
-							Name:  "Yes",
-							Type:  model.PostActionTypeButton,
-							Style: "primary",
-							Integration: &model.PostActionIntegration{
-								Context: model.StringInterface{
-									"action":  "update_server",
-									"server":  "prod-web-01",
-									"version": "v2.2.1",
-								},
-								URL: callback,
-							},
-						},
-						{
-							Id:    "cancel",
-							Name:  "Cancel",
-							Type:  model.PostActionTypeButton,
-							Style: "danger",
-							Integration: &model.PostActionIntegration{
-								Context: model.StringInterface{
-									"action":  "cancel_update",
-									"server":  "prod-web-01",
-									"version": "v2.2.1",
-								},
-								URL: callback,
-							},
-						},
-					},
-				},
-			},
-		)
-		m.MustPost(p)
+		dialogPostButtons(m)
 	}
 
 	if false {
-		elements := []model.DialogElement{
-			{
-				DisplayName: "",
-				Name:        "",
-				Type:        "",
-				SubType:     "",
-				Default:     "",
-				Placeholder: "",
-				HelpText:    "",
-				Optional:    false,
-				MinLength:   0,
-				MaxLength:   0,
-				DataSource:  "",
-				Options:     nil,
-			},
-		}
-		console.Format("Dialog elements: %d\n", len(elements))
+		dialogElements()
 	}
 
 	if false {
-		m.MustOpenDialog(
-			model.OpenDialogRequest{
-				TriggerId: "",
-				URL: locator.New(constant.Localhost).Port(
-					constant.ListenPort,
-				).Insecure().Path(
-					constant.DialogPath,
-				).String(),
-				Dialog: model.Dialog{
-					CallbackId:       "myOwnId",
-					Title:            "Maximum 24 characters",
-					IntroductionText: "Markdown formatted text",
-					IconURL:          "",
-					Elements:         nil,
-					SubmitLabel:      "",
-					NotifyOnCancel:   false,
-					State:            "",
-				},
-			},
-		)
+		dialogOpen(m)
 	}
 
 	if false {
-		m.MustSubmitDialog(
-			model.SubmitDialogRequest{
-				Type:       "",
-				URL:        "",
-				CallbackId: "",
-				State:      "",
-				UserId:     "",
-				ChannelId:  m.DefaultChannel().Id,
-				TeamId:     m.DefaultTeam().Id,
-				Submission: nil,
-				Cancelled:  false,
-			},
-		)
+		dialogSubmit(m)
 	}
 
 	console.Line("Cancel server with Ctrl-C")

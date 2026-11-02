@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -19,7 +19,7 @@ func restClient(
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
-			web.BearerEditor(constant.ModelContextTestToken),
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	assert.FatalOnError(t, e)

@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/worker"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
+	goraidparsedConstant "github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
 )
 
 func New(
@@ -21,9 +21,15 @@ func New(
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	p := o.Parser()
 	result := &Daemon{
-		database:      d,
-		parser:        p,
-		parserGuard:   peer.New(constant.Identity.Name(), "", p, l, r),
+		database: d,
+		parser:   p,
+		parserGuard: peer.New(
+			goraidparsedConstant.Identity.Name(),
+			"",
+			p,
+			l,
+			r,
+		),
 		authorization: authorizationClient(o).WithReporter(r),
 		logger:        l,
 		reporter:      r,

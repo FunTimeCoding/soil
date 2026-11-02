@@ -10,14 +10,14 @@ import (
 func TestDeleteSessionClearsTrackerState(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("doomed", "some-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
 	assert.True(t, s.Store.GetSession("doomed") != nil)
-	_, e := s.Service.DeleteSession("doomed", s.Service.DeleteHash("doomed"))
+	_, e := s.Session.DeleteSession("doomed", s.Session.DeleteHash("doomed"))
 	errors.PanicOnError(e)
 	_, tracked := s.Store.Store.TrackerStates()["doomed"]
 	assert.False(t, tracked)
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
 	assert.True(t, s.Store.GetSession("doomed") == nil)
 }

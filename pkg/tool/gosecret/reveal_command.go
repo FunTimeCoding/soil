@@ -3,17 +3,16 @@ package gosecret
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/spf13/cobra"
-	"net/http"
 )
 
 func revealCommand(
 	t *terminal.Terminal,
-	h *http.Client,
+	c face.Client,
 ) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.RevealUsage,
@@ -23,22 +22,21 @@ func revealCommand(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := interfaceClient(t, h).RevealSecretWithResponse(
+			v, e := c.RevealSecret(
 				context.Background(),
 				&client.RevealSecretParams{
 					Path: arguments[0],
 					Key:  arguments[1],
 				},
 			)
-			errors.PanicOnError(e)
 
-			if r.JSON200 == nil {
-				t.Reject(r.Status(), r.Body)
+			if e != nil {
+				t.Exitln(e)
 
 				return
 			}
 
-			console.Line(r.JSON200.Value)
+			console.Line(v.Value)
 		},
 	}
 }

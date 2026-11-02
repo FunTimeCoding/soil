@@ -14,7 +14,7 @@ func TestMatchPatternSpreadHoleType(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, match, e := s.MatchPattern(
+	r, match, e := s.Pattern.MatchPattern(
 		d,
 		"example/pkg/client",
 		"Client",
@@ -32,7 +32,7 @@ func TestListCallsUnknownRegion(t *testing.T) {
 		service_tester.ServiceTestdata("census/src"),
 	)
 	s := service_tester.NewService(t)
-	r, inventory, e := s.ListCalls(d, "example/pkg/missing", 0)
+	r, inventory, e := s.Reference.ListCalls(d, "example/pkg/missing", 0)
 	assert.FatalOnError(t, e)
 	assert.True(t, inventory == nil)
 	testutil.AssertBlockedContains(t, r, constant.MissingPackage)

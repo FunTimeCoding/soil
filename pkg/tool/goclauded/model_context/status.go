@@ -18,7 +18,7 @@ func (s *Server) status(
 		return s.captureFail(e, soil.UnexpectedError)
 	}
 
-	findings, e := s.service.Findings()
+	findings, e := s.roster.Findings()
 
 	if e != nil {
 		return s.captureFail(e, soil.UnexpectedError)

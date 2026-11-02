@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
@@ -12,7 +12,7 @@ func (s *Server) PostNotify(
 	_ context.Context,
 	r server.PostNotifyRequestObject,
 ) (server.PostNotifyResponseObject, error) {
-	delivered, e := s.service.SendNotification(
+	delivered, e := s.message.SendNotification(
 		r.Body.Callsign,
 		r.Body.Source,
 		r.Body.Body,
@@ -33,7 +33,7 @@ func (s *Server) PostNotify(
 		}
 
 		return server.PostNotify500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

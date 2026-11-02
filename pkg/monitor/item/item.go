@@ -1,7 +1,7 @@
 package item
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
 	"time"
 )
@@ -10,9 +10,9 @@ type Item struct {
 	collector  *collector.Collector
 	Identifier string
 	Label      string
-	Severity   constant.Severity
+	Severity   soil.Severity
 	Detail     string
-	Status     constant.Status
+	Status     soil.Status
 	Assignee   string
 	Link       string
 	Create     *time.Time

@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -12,7 +12,9 @@ func (s *Server) listPools(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.service.Pools(r.GetString(constant.ParameterQuery, ""))
+	result, e := s.service.Pools(
+		r.GetString(generativeConstant.ParameterQuery, ""),
+	)
 
 	if e != nil {
 		return s.answer(e)

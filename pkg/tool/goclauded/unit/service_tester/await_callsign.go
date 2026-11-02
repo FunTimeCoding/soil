@@ -12,7 +12,7 @@ func (o *Tester) AwaitCallsign(
 	sessionIdentifier string,
 	since time.Time,
 ) string {
-	callsign, e := o.Service.AwaitCallsign(
+	callsign, e := o.Message.AwaitCallsign(
 		x,
 		sessionIdentifier,
 		since,

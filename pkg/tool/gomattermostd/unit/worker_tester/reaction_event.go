@@ -1,7 +1,7 @@
 package worker_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -15,7 +15,7 @@ func ReactionEvent(
 
 	return v.SetData(
 		map[string]any{
-			constant.MattermostReactionField: notation.Encode(r, false),
+			chatConstant.MattermostReactionField: notation.Encode(r, false),
 		},
 	)
 }

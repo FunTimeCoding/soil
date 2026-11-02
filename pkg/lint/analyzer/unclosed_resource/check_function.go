@@ -34,6 +34,8 @@ func checkFunction(
 		)
 	}
 
+	checkChains(p, results, body, s)
+	checkArguments(p, results, body, s)
 	owned := ownedLocals(p, body, s)
 
 	for _, t := range transfers(p, body) {

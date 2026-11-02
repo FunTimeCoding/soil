@@ -42,7 +42,7 @@ func (s *Server) send(
 		return response.Fail("delivery must be queued, immediate or cruise")
 	}
 
-	held, f := s.service.Send(c.Callsign, to, body, d)
+	held, f := s.message.Send(c.Callsign, to, body, d)
 
 	if f != nil {
 		if not_found.Is(f) {

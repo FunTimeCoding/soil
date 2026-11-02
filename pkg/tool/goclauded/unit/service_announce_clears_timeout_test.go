@@ -15,7 +15,7 @@ func TestAnnounceClearsPendingTimeout(t *testing.T) {
 	s.Announce("session-1", r.Callsign, "working", "")
 	s.Check("session-1")
 	s.Store.Advance(2 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	s.Announce("session-1", r.Callsign, "back again", "")
 	r = s.Check("session-1")
 	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)

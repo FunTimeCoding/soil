@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -21,7 +21,7 @@ func declarationNames(directory string) map[string]bool {
 	set := token.NewFileSet()
 
 	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), constant.GoExtension) {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), soil.GoExtension) {
 			continue
 		}
 

@@ -20,7 +20,7 @@ func (s *Server) searchConversations(
 		return s.captureFail(e, soil.UnexpectedError)
 	}
 
-	found, e := s.service.SearchConversations(a.Query, a.Kinds, int(a.Limit))
+	found, e := s.search.SearchConversations(a.Query, a.Kinds, int(a.Limit))
 
 	if e != nil {
 		return s.captureFail(e, soil.UnexpectedError)
@@ -28,7 +28,7 @@ func (s *Server) searchConversations(
 
 	var lines []string
 
-	if indexed, total := s.service.SearchProgress(); indexed < total {
+	if indexed, total := s.search.SearchProgress(); indexed < total {
 		lines = append(
 			lines,
 			fmt.Sprintf(

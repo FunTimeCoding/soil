@@ -3,12 +3,12 @@ package check
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/linux/systemd/jc"
 )
 
 func Netstat(verbose bool) []*jc.Output {
-	output := Execute(constant.NetstatCommand)
+	output := Execute(systemConstant.NetstatCommand)
 
 	if verbose {
 		console.Format("Netstat raw: %s\n", output)
@@ -17,9 +17,9 @@ func Netstat(verbose bool) []*jc.Output {
 	var result []*jc.Output
 	notation.MustDecode(
 		Pipe(
-			Pipe(output, verbose, constant.Awk, "!seen[$4]++"),
+			Pipe(output, verbose, systemConstant.Awk, "!seen[$4]++"),
 			verbose,
-			constant.Jc,
+			systemConstant.Jc,
 			"--netstat",
 			"--monochrome",
 		),

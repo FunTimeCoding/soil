@@ -16,7 +16,7 @@ func TestExtractType(t *testing.T) {
 		service_tester.ServiceTestdata("extract-basic/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -57,7 +57,7 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 		service_tester.ServiceTestdata("extract-internal/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -84,7 +84,7 @@ func TestExtractTypeCollision(t *testing.T) {
 		service_tester.ServiceTestdata("extract-collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -105,7 +105,7 @@ func TestExtractTypeDependency(t *testing.T) {
 		service_tester.ServiceTestdata("extract-dependency/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -127,7 +127,7 @@ func TestExtractTypeFieldCollision(t *testing.T) {
 		service_tester.ServiceTestdata("extract-field-collision/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -148,7 +148,7 @@ func TestExtractTypeUnexported(t *testing.T) {
 		service_tester.ServiceTestdata("extract-unexported-type/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -175,7 +175,7 @@ func TestExtractTypeTargetFile(t *testing.T) {
 		service_tester.ServiceTestdata("extract-internal/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.ExtractType(
+	r, e := s.Symbol.ExtractType(
 		t.Context(),
 		d,
 		"example/pkg/target",

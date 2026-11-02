@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/raid/elite"
 	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
@@ -37,7 +37,7 @@ func (s *Store) EnrichFight(
 	}
 
 	enemyTeamsString := string(notation.Marshal(enemyTeams))
-	zevtcBase := strings.TrimSuffix(name, constant.DetailedWvWKillSuffix)
+	zevtcBase := strings.TrimSuffix(name, gw2Constant.DetailedWvWKillSuffix)
 	var fightRow fight.Fight
 	lookup := s.mapper.
 		Where("filename LIKE ?", join.Empty("%", zevtcBase, "%")).

@@ -11,6 +11,8 @@ const (
 	PollInterval      = 30 * time.Second
 	ReconcileInterval = time.Hour
 )
+
+const InstancePeer = "proxmox"
 const (
 	FloorTitle = "Floor"
 	FloorPath  = "/"

@@ -1,7 +1,7 @@
 package pointer
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -9,11 +9,11 @@ func ContainsLiteral(
 	content string,
 	needle string,
 ) bool {
-	open := len(needle) > 1 && strings.HasSuffix(needle, constant.Slash)
-	needle = strings.TrimSuffix(needle, constant.Slash)
+	open := len(needle) > 1 && strings.HasSuffix(needle, stringsConstant.Slash)
+	needle = strings.TrimSuffix(needle, stringsConstant.Slash)
 
 	if open {
-		needle = strings.TrimSuffix(needle, constant.Slash)
+		needle = strings.TrimSuffix(needle, stringsConstant.Slash)
 	}
 
 	offset := 0

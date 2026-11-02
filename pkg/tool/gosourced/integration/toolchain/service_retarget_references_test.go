@@ -12,7 +12,7 @@ import (
 func TestRetargetReferencesFollowsAHandMove(t *testing.T) {
 	d := handMovedFixture(t)
 	s, m := service_tester.WithMemory(t)
-	r, e := s.RetargetReferences(
+	r, e := s.Reference.RetargetReferences(
 		t.Context(),
 		d,
 		[]*path_move.Move{
@@ -37,7 +37,7 @@ func TestRetargetReferencesFollowsAHandMove(t *testing.T) {
 
 func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 	d := handMovedFixture(t)
-	r, e := service_tester.NewService(t).RetargetReferences(
+	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
 		d,
 		[]*path_move.Move{
@@ -56,7 +56,7 @@ func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 
 func TestRetargetReferencesRefusesAPathOutsideTheModule(t *testing.T) {
 	d := handMovedFixture(t)
-	r, e := service_tester.NewService(t).RetargetReferences(
+	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
 		d,
 		[]*path_move.Move{path_move.New("../elsewhere.md", "doc/here.md")},
@@ -73,7 +73,7 @@ func TestRetargetReferencesRefusesAPathOutsideTheModule(t *testing.T) {
 
 func TestRetargetReferencesSaysWhenNothingCitesTheMove(t *testing.T) {
 	d := handMovedFixture(t)
-	r, e := service_tester.NewService(t).RetargetReferences(
+	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
 		d,
 		[]*path_move.Move{

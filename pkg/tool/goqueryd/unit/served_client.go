@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -19,7 +19,7 @@ func servedClient(t *testing.T) *client.Client {
 	)
 	result := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(result.Close)
 

@@ -1,6 +1,6 @@
 package goclaude
 
-import "github.com/funtimecoding/soil/pkg/generative/constant"
+import generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 
 func fableScope(limits *StatusLineRateLimits) *StatusLineModelScoped {
 	if limits == nil {
@@ -8,7 +8,7 @@ func fableScope(limits *StatusLineRateLimits) *StatusLineModelScoped {
 	}
 
 	for _, m := range limits.ModelScoped {
-		if m.DisplayName == constant.UsageScopeFable {
+		if m.DisplayName == generativeConstant.UsageScopeFable {
 			return &m
 		}
 	}

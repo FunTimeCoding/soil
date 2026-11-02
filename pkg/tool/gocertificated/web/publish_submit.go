@@ -9,7 +9,7 @@ func (s *Server) publishSubmit(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	if _, _, e := s.service.Publish(); e != nil {
+	if _, _, e := s.service.Publish(r.Context()); e != nil {
 		s.view.Answer(w, r, s.reporter, e)
 
 		return

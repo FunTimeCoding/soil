@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"github.com/prometheus/common/model"
 	"testing"
@@ -36,21 +36,21 @@ func TestGroupByInstance(t *testing.T) {
 		alert.GroupByInstance(
 			[]*alert.Alert{
 				{
-					Name:        constant.UpperAlfa,
+					Name:        stringsConstant.UpperAlfa,
 					Fingerprint: "fingerprint1",
 					Labels: models.LabelSet{
 						model.InstanceLabel: "instance1",
 					},
 				},
 				{
-					Name:        constant.UpperBravo,
+					Name:        stringsConstant.UpperBravo,
 					Fingerprint: "fingerprint2",
 					Labels: models.LabelSet{
 						model.InstanceLabel: "instance1",
 					},
 				},
 				{
-					Name:        constant.UpperCharlie,
+					Name:        stringsConstant.UpperCharlie,
 					Fingerprint: "fingerprint3",
 					Labels: models.LabelSet{
 						model.InstanceLabel: "instance2",

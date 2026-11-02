@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/netbox-community/go-netbox/v4"
 	"regexp"
 )
@@ -100,7 +100,7 @@ const (
 )
 
 var (
-	Format = constant.ColorFormat.Copy()
+	Format = consoleConstant.ColorFormat.Copy()
 
 	InternetAddressTargets = []string{
 		DeviceAddress,

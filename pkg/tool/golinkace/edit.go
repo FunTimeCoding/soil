@@ -2,10 +2,7 @@ package golinkace
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/linkace/constant"
-	"github.com/funtimecoding/soil/pkg/linkace/link"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
 	"github.com/spf13/cobra"
@@ -52,19 +49,12 @@ func edit(c *command_context.Context) *cobra.Command {
 				body.Lists = &lists
 			}
 
-			r, f := c.Client().EditLinkWithResponse(
-				context.Background(),
-				int32(identifier),
-				body,
-			)
-			errors.PanicOnError(f)
-
-			if r.JSON200 == nil {
-				c.Terminal().Reject(r.Status(), r.Body)
-			}
-
-			fmt.Println(
-				link.FromDaemon(*r.JSON200, c.Host()).Format(constant.Format),
+			c.Terminal().EmitValue(
+				c.Client().EditLink(
+					context.Background(),
+					int32(identifier),
+					body,
+				),
 			)
 		},
 	}

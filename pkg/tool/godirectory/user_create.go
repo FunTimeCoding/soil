@@ -2,16 +2,14 @@ package godirectory
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func userCreate(
-	c *client.ClientWithResponses,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var mail, password string
@@ -37,14 +35,7 @@ func userCreate(
 				body.Password = &password
 			}
 
-			response, e := c.PostUserWithResponse(context.Background(), body)
-			errors.PanicOnError(e)
-
-			if response.JSON200 == nil {
-				t.Reject(response.Status(), response.Body)
-			}
-
-			console.Line(notation.MarshalIndent(response.JSON200))
+			t.EmitValue(c.PostUser(context.Background(), body))
 		},
 	}
 	result.Flags().StringVar(&mail, "mail", "", "Mail address")

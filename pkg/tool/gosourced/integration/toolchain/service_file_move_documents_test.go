@@ -15,7 +15,7 @@ func TestMoveSymbolsRetargetsAnEmptiedFile(t *testing.T) {
 		"doc/note.md",
 		"Keep `pkg/alfa/keep.go`, move `pkg/alfa/lone.go`.\n",
 	)
-	r, e := service_tester.NewService(t).MoveSymbols(
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/alfa",
@@ -47,7 +47,7 @@ func TestExtractToFileRetargetsTheRenamedResidual(t *testing.T) {
 		"doc/note.md",
 		"Names live in `pkg/target/combined.go`.\n",
 	)
-	r, e := service_tester.NewService(t).ExtractToFile(
+	r, e := service_tester.NewService(t).File.ExtractToFile(
 		t.Context(),
 		d,
 		"pkg/target/combined.go",

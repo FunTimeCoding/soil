@@ -1,6 +1,7 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
@@ -48,7 +49,14 @@ func updateMachine(c *command_context.Context) *cobra.Command {
 				body.Delete = &deleteFields
 			}
 
-			c.Terminal().Emit(c.Client().UpdateMachine(identifier, n, body))
+			c.Terminal().EmitValue(
+				c.Client().UpdateMachine(
+					context.Background(),
+					identifier,
+					&client.UpdateMachineParams{Instance: c.Instance(), Node: n},
+					body,
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name")

@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/pipeline"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
+)
 
 func (c *Client) Pipelines(
+	_ context.Context,
 	_ int64,
 	_ string,
 	_ string,

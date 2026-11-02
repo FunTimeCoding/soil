@@ -12,9 +12,9 @@ import (
 func TestFindingsCleanState(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("healthy", "some-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
-	result, e := s.Service.Findings()
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
+	result, e := s.Roster.Findings()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, result)
 }
@@ -63,8 +63,8 @@ func TestFindingsMissingTranscriptSplit(t *testing.T) {
 func TestFindingsOrphanTrackerState(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("vanished", "some-slug")
-	s.Service.PopulateCache()
-	s.Service.CheckConsistency()
+	s.Transcript.PopulateCache()
+	s.Transcript.CheckConsistency()
 	assert.Count(t, 0, s.FindingsByKind(constant.OrphanTrackerState))
 	assert.FatalOnError(t, s.Store.Store.DeleteSession("vanished"))
 	result := s.FindingsByKind(constant.OrphanTrackerState)
@@ -117,6 +117,6 @@ func TestFindingsStaleCallsignClearedBySweep(t *testing.T) {
 	s.RegisterActive("lingering")
 	s.Store.Advance(8 * 24 * time.Hour)
 	assert.Count(t, 1, s.FindingsByKind(constant.StaleCallsign))
-	s.Service.RunTimeoutSweep()
+	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	assert.Count(t, 0, s.FindingsByKind(constant.StaleCallsign))
 }

@@ -3,9 +3,11 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
-	"github.com/funtimecoding/soil/pkg/proxmox/constant"
-	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	proxmoxConstant "github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/funtimecoding/soil/pkg/proxmox/face"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/intent"
+	"github.com/luthermonson/go-proxmox"
 	"slices"
 	"strings"
 )
@@ -19,17 +21,17 @@ func (s *Service) Reconcile(
 	if s.netbox == nil {
 		return nil, not_configured.Format(
 			"%s is not set",
-			netbox.PowerIntentEnvironment,
+			gonetboxdConstant.PowerIntentEnvironment,
 		)
 	}
 
-	c, e := s.client(hypervisor)
-
-	if e != nil {
-		return nil, e
-	}
-
-	resources, e := c.ClusterResources()
+	resources, e := guarded(
+		s,
+		hypervisor,
+		func(c face.ProxmoxClient) (proxmox.ClusterResources, error) {
+			return c.ClusterResources()
+		},
+	)
 
 	if e != nil {
 		return nil, e
@@ -44,7 +46,7 @@ func (s *Service) Reconcile(
 	result := intent.NewPlan(hypervisor)
 
 	for _, r := range resources {
-		if r.Type != constant.MachineType && r.Type != constant.ContainerType ||
+		if r.Type != proxmoxConstant.MachineType && r.Type != proxmoxConstant.ContainerType ||
 			r.Template != 0 {
 			continue
 		}

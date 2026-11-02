@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"net/http"
 )
@@ -15,6 +15,6 @@ func (s *Server) paletteMemories(
 		"/palette/memories/search",
 		"Search memories...",
 	)
-	w.Header().Set(constant.ContentType, constant.MarkupUnicode)
+	w.Header().Set(webConstant.ContentType, webConstant.MarkupUnicode)
 	errors.PanicOnError(fragment.Render(w))
 }

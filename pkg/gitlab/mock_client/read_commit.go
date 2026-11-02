@@ -1,8 +1,12 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/gitlab/commit"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
+)
 
 func (c *Client) ReadCommit(
+	_ context.Context,
 	_ int64,
 	_ string,
 ) (*commit.Commit, error) {

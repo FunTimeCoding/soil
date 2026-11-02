@@ -2,7 +2,7 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 )
 
 func (a *Alert) ResolveHost() string {
@@ -13,7 +13,7 @@ func (a *Alert) ResolveHost() string {
 	result := system.Lookup(a.FullHost())
 
 	if len(result) == 0 {
-		return constant.UnknownHost
+		return systemConstant.UnknownHost
 	}
 
 	return result[0]

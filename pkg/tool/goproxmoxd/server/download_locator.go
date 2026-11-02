@@ -2,8 +2,11 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -22,9 +25,7 @@ func (s *Server) DownloadLocator(
 	}
 
 	if e != nil {
-		return server.DownloadLocator500JSONResponse(
-			*s.captureFail(e, e.Error()),
-		), nil
+		return server.DownloadLocator500JSONResponse(*s.answer(e)), nil
 	}
 
 	e = s.service.DownloadLocator(
@@ -36,8 +37,17 @@ func (s *Server) DownloadLocator(
 		r.Body.Locator,
 	)
 
-	if e != nil {
-		return server.DownloadLocator500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.DownloadLocator400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.DownloadLocator404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.DownloadLocator403JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.DownloadLocator503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.DownloadLocator500JSONResponse(*s.answer(e)), nil
 	}
 
 	status := "downloaded"

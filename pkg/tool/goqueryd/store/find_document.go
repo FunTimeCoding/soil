@@ -3,7 +3,7 @@ package store
 import (
 	"database/sql"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"strings"
@@ -14,7 +14,7 @@ func (s *Store) FindDocument(reference string) (*result.Document, bool, error) {
 
 	if strings.HasPrefix(reference, "qmd://") {
 		trimmed := strings.TrimPrefix(reference, "qmd://")
-		slash := strings.Index(trimmed, constant.Slash)
+		slash := strings.Index(trimmed, stringsConstant.Slash)
 
 		if slash == -1 {
 			return nil, false, validation.New(
@@ -26,7 +26,7 @@ func (s *Store) FindDocument(reference string) (*result.Document, bool, error) {
 		collection = trimmed[:slash]
 		path = trimmed[slash+1:]
 	} else {
-		slash := strings.Index(reference, constant.Slash)
+		slash := strings.Index(reference, stringsConstant.Slash)
 
 		if slash == -1 {
 			return nil, false, validation.New(
@@ -59,7 +59,7 @@ func (s *Store) FindDocument(reference string) (*result.Document, bool, error) {
 	}
 
 	d.VirtualPath = buildVirtualPath(d.Collection, d.Path)
-	d.FilePath = join.Empty(d.Collection, constant.Slash, d.Path)
+	d.FilePath = join.Empty(d.Collection, stringsConstant.Slash, d.Path)
 	d.Context = s.ResolveContext(d.Collection, d.Path)
 
 	return &d, true, nil

@@ -1,7 +1,7 @@
 package pointer
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"path"
 	"strings"
 )
@@ -12,5 +12,5 @@ func Relative(
 ) (string, bool) {
 	result := path.Join(path.Dir(source), Normalize(s))
 
-	return result, !strings.HasPrefix(result, constant.ParentDirectory)
+	return result, !strings.HasPrefix(result, soil.ParentDirectory)
 }

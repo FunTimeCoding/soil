@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"time"
 )
 
@@ -25,4 +25,4 @@ const (
 	SendTimeout = 60 * time.Second
 )
 
-var Format = constant.ColorFormat.Copy()
+var Format = consoleConstant.ColorFormat.Copy()

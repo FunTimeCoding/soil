@@ -2,14 +2,14 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/gw2"
-	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/gw2/log_manager/log"
 	"os"
 	"path/filepath"
 )
 
 func (s *Service) SyncLogCache() []error {
-	b, e := os.ReadFile(filepath.Join(s.logCachePath, constant.LogFile))
+	b, e := os.ReadFile(filepath.Join(s.logCachePath, gw2Constant.LogFile))
 
 	if e != nil {
 		return []error{e}

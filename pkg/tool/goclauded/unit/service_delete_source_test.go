@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
@@ -16,7 +16,7 @@ func TestDeleteReceiptReportsRemovedSources(t *testing.T) {
 	identifier := "11111111-2222-3333-4444-555555555555"
 	transcript := filepath.Join(
 		s.Source,
-		join.Empty(identifier, constant.NotationLogExtension),
+		join.Empty(identifier, soil.NotationLogExtension),
 	)
 	errors.PanicOnError(os.WriteFile(transcript, []byte("{}\n"), 0o644))
 	companion := filepath.Join(s.Source, identifier)
@@ -29,7 +29,7 @@ func TestDeleteReceiptReportsRemovedSources(t *testing.T) {
 		),
 	)
 	s.Store.EnsureSession(identifier)
-	result, e := s.Service.DeleteSession(identifier, "")
+	result, e := s.Session.DeleteSession(identifier, "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, result.Sources)
 	assert.StringContains(t, transcript, result.Sources[0])
@@ -43,7 +43,7 @@ func TestDeleteReceiptReportsRemovedSources(t *testing.T) {
 func TestDeleteReportsNoSourcesWhenNoneExist(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("absent")
-	result, e := s.Service.DeleteSession("absent", "")
+	result, e := s.Session.DeleteSession("absent", "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, result.Sources)
 }

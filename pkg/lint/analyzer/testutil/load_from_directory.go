@@ -2,7 +2,7 @@ package testutil
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/token"
@@ -22,7 +22,7 @@ func LoadFromDirectory(
 		Dir:   directory,
 		Tests: true,
 	}
-	loaded, e := packages.Load(configuration, constant.CurrentDirectory)
+	loaded, e := packages.Load(configuration, soil.CurrentDirectory)
 
 	if e != nil {
 		t.Fatalf("load: %s", e)

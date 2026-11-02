@@ -1,7 +1,7 @@
 package toolchain
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"testing"
 )
@@ -13,7 +13,7 @@ func assertCompiles(
 	t.Helper()
 	r := run.New().NoPanic()
 	r.Directory = directory
-	r.Start(constant.Go, "vet", "./...")
+	r.Start(soil.Go, "vet", "./...")
 
 	if r.Error != nil {
 		t.Fatalf("vet: %s", r.ErrorString)

@@ -127,9 +127,9 @@ func TestSecondUnauthorizedIsReturned(t *testing.T) {
 
 func TestAbsoluteLocatorLeavesTheBase(t *testing.T) {
 	s, seen := newScriptedServer(t, "alfa", http.StatusOK)
-	b, e := requester.New(locator.New("unused.example")).Bytes(
-		request.Absolute(join.Empty(s.URL, "/files/a.png")),
-	)
+	owned := requester.New(locator.New("unused.example"))
+	defer owned.Close()
+	b, e := owned.Bytes(request.Absolute(join.Empty(s.URL, "/files/a.png")))
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", string(b))
 	assert.String(t, "/files/a.png", seen()[0].URL.Path)
@@ -137,7 +137,9 @@ func TestAbsoluteLocatorLeavesTheBase(t *testing.T) {
 
 func TestAbsoluteLocatorKeepsItsParameters(t *testing.T) {
 	s, seen := newScriptedServer(t, "alfa", http.StatusOK)
-	_, e := requester.New(locator.New("unused.example")).Bytes(
+	owned := requester.New(locator.New("unused.example"))
+	defer owned.Close()
+	_, e := owned.Bytes(
 		request.Absolute(join.Empty(s.URL, "/files/a.png?size=full")).
 			WithParameter("sid", "bravo"),
 	)

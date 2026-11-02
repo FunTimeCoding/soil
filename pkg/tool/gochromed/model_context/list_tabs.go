@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/tab_response"
@@ -23,7 +23,7 @@ func (s *Server) ListTabs(
 	var result []*tab_response.Response
 
 	for _, t := range tabs {
-		if t.Type != constant.PageTabType {
+		if t.Type != chromiumConstant.PageTabType {
 			continue
 		}
 
@@ -34,7 +34,7 @@ func (s *Server) ListTabs(
 	}
 
 	for _, t := range tabs {
-		if t.Type != constant.IframeTabType || t.Locator == "" {
+		if t.Type != chromiumConstant.IframeTabType || t.Locator == "" {
 			continue
 		}
 

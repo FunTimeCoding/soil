@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
@@ -18,15 +18,15 @@ func (s *Server) PostAnnounce(
 		files = join.NewLine(*r.Body.Files)
 	}
 
-	identifier, e := s.service.ResolveByCallsign(r.Body.Callsign)
+	identifier, e := s.roster.ResolveByCallsign(r.Body.Callsign)
 
 	if e != nil {
 		return server.PostAnnounce500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
-	if e := s.service.Announce(
+	if e := s.roster.Announce(
 		identifier,
 		r.Body.Callsign,
 		r.Body.Topic,
@@ -39,7 +39,7 @@ func (s *Server) PostAnnounce(
 		}
 
 		return server.PostAnnounce500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

@@ -21,7 +21,7 @@ func (s *Server) sessionsPage(
 	}
 
 	active := q.URL.Query().Get(constant.Active) == "true"
-	all, f := s.service.EnrichedSessions(0, 0)
+	all, f := s.roster.EnrichedSessions(0, 0)
 
 	if f != nil {
 		s.view.Answer(w, q, s.reporter, f)

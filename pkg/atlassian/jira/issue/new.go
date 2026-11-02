@@ -3,7 +3,7 @@ package issue
 import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"strings"
 	"time"
 )
@@ -13,7 +13,7 @@ func New(
 	o *option.Issue,
 ) *Issue {
 	result := Stub()
-	result.MonitorIdentifier = constant.GoJira.StringIdentifier(v.Key)
+	result.MonitorIdentifier = monitorConstant.GoJira.StringIdentifier(v.Key)
 	result.Key = v.Key
 	result.Summary = strings.TrimSpace(v.Fields.Summary)
 	result.Description = strings.TrimSpace(v.Fields.Description)

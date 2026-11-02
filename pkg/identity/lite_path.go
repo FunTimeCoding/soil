@@ -1,7 +1,7 @@
 package identity
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"path/filepath"
 )
@@ -9,6 +9,6 @@ import (
 func (t *Tool) LitePath() string {
 	return filepath.Join(
 		t.StorageDirectory(false),
-		join.Empty(t.name, constant.LiteExtension),
+		join.Empty(t.name, soil.LiteExtension),
 	)
 }

@@ -18,11 +18,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
-	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
-	opnsenseConstant "github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
+	gopnsensedConstant "github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	opnsense "github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
-	processConstant "github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
+	goprocessdConstant "github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	process "github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 	"path/filepath"
 	"testing"
@@ -53,10 +53,10 @@ func New(t *testing.T) *Tester {
 	m := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(m)
 	t.Cleanup(func() { relational.CloseMapper(m) })
-	ng := guard(t, netboxConstant.Identity.Name(), n.Address(), n, l, r)
+	ng := guard(t, gonetboxdConstant.Identity.Name(), n.Address(), n, l, r)
 	kg := guard(t, constant.SourceKubernetes, k.Configuration().Host, k, l, r)
-	pg := guard(t, processConstant.Identity.Name(), p.Address(), p, l, r)
-	dg := guard(t, opnsenseConstant.Identity.Name(), d.Address(), d, l, r)
+	pg := guard(t, goprocessdConstant.Identity.Name(), p.Address(), p, l, r)
+	dg := guard(t, gopnsensedConstant.Identity.Name(), d.Address(), d, l, r)
 
 	return &Tester{
 		Option: o,

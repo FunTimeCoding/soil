@@ -13,7 +13,7 @@ func TestMoveKeepsAVariadicSpread(t *testing.T) {
 		service_tester.ServiceTestdata("move-variadic/src"),
 	)
 	s := service_tester.NewService(t)
-	r, e := s.MoveSymbols(
+	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
 		d,
 		"example/pkg/source",

@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/peer/constant"
+	peerConstant "github.com/funtimecoding/soil/pkg/peer/constant"
 	"testing"
 	"time"
 )
@@ -15,7 +15,7 @@ func await[T any](
 	select {
 	case v := <-c:
 		return v
-	case <-time.After(constant.FixtureSignalWait):
+	case <-time.After(peerConstant.FixtureSignalWait):
 		t.Fatal("the signal never came")
 		var zero T
 

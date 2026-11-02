@@ -26,7 +26,7 @@ func (s *Server) GetFileContents(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.File(instance, project, a.Reference, a.Path)
+	v, e := s.service.File(x, instance, project, a.Reference, a.Path)
 
 	if e != nil {
 		return s.answerWith(e, "")

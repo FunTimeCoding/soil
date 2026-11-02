@@ -13,6 +13,14 @@ func escapes(
 	o *types.Var,
 	match matcher,
 ) bool {
+	closures := closureVariables(p, body, o)
+	leaves := func(
+		p *packages.Package,
+		e ast.Expr,
+		o *types.Var,
+	) bool {
+		return match(p, e, o) || holdsClosure(p, e, o, closures)
+	}
 	var result bool
 	ast.Inspect(
 		body,
@@ -23,17 +31,29 @@ func escapes(
 
 			switch v := n.(type) {
 			case *ast.ReturnStmt:
-				result = anyMatches(p, v.Results, o, match)
+				result = anyMatches(p, v.Results, o, leaves)
 			case *ast.SendStmt:
-				result = match(p, v.Value, o)
+				result = leaves(p, v.Value, o)
 			case *ast.AssignStmt:
-				result = anyMatches(p, appended(p, v.Rhs), o, match)
+				result = anyMatches(p, appended(p, v.Rhs), o, match) ||
+					storesClosure(p, v, o, closures)
 			case *ast.CompositeLit:
-				result = anyMatches(p, elementValues(v.Elts), o, match)
+				result = anyMatches(p, elementValues(v.Elts), o, leaves)
 			case *ast.UnaryExpr:
 				result = v.Op == token.AND && match(p, v.X, o)
-			case *ast.FuncLit:
-				result = references(p, v.Body, o)
+			case *ast.CallExpr:
+				result = anyMatches(
+					p,
+					v.Args,
+					o,
+					func(
+						p *packages.Package,
+						e ast.Expr,
+						o *types.Var,
+					) bool {
+						return holdsClosure(p, e, o, closures)
+					},
+				)
 			}
 
 			return !result

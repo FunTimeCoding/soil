@@ -10,8 +10,10 @@ func LatestTag(path string) string {
 	r := MustOpen(path)
 	var result string
 	var latest time.Time
+	i := TagsIterator(r)
+	defer i.Close()
 	errors.PanicOnError(
-		TagsIterator(r).ForEach(
+		i.ForEach(
 			func(f *plumbing.Reference) error {
 				c := CommitFromHash(r, f.Hash())
 

@@ -12,7 +12,7 @@ func TestProjectsWithoutASearchListsEveryProject(t *testing.T) {
 	c := clients[constant.FixtureInstance]
 	c.SeedProject(1, "group", "app")
 	c.SeedProject(2, "group", "web")
-	projects, e := s.Projects(constant.FixtureInstance, "")
+	projects, e := s.Projects(t.Context(), constant.FixtureInstance, "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, projects)
 }
@@ -22,7 +22,7 @@ func TestProjectsWithASearchNarrows(t *testing.T) {
 	c := clients[constant.FixtureInstance]
 	c.SeedProject(1, "group", "app")
 	c.SeedProject(2, "group", "web")
-	projects, e := s.Projects(constant.FixtureInstance, "web")
+	projects, e := s.Projects(t.Context(), constant.FixtureInstance, "web")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, projects)
 	assert.String(t, "group/web", projects[0].CombinedName())

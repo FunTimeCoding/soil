@@ -1,8 +1,10 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
@@ -25,7 +27,13 @@ func startMachine(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			c.Terminal().Emit(c.Client().StartMachine(identifier, n))
+			c.Terminal().EmitValue(
+				c.Client().StartMachine(
+					context.Background(),
+					identifier,
+					&client.StartMachineParams{Instance: c.Instance(), Node: n},
+				),
+			)
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name (speeds up lookup)")

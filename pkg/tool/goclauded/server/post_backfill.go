@@ -9,10 +9,10 @@ func (s *Server) PostBackfill(
 	_ context.Context,
 	r server.PostBackfillRequestObject,
 ) (server.PostBackfillResponseObject, error) {
-	result := s.service.BackfillAllSessions()
+	result := s.transcript.BackfillAllSessions()
 
 	if r.Params.Cold != nil && *r.Params.Cold {
-		result = s.service.ColdBackfillAllSessions()
+		result = s.transcript.ColdBackfillAllSessions()
 	}
 
 	return server.PostBackfill200JSONResponse{

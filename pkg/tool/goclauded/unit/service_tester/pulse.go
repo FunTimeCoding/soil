@@ -9,7 +9,7 @@ func (o *Tester) Pulse(
 	sessionIdentifier string,
 	d constant.Delivery,
 ) bool {
-	delivered, e := o.Service.SendPulse(sessionIdentifier, "", "news", d)
+	delivered, e := o.Message.SendPulse(sessionIdentifier, "", "news", d)
 	assert.FatalOnError(o.t, e)
 
 	return delivered

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -21,7 +21,7 @@ func (c *Client) SendText(
 
 	r, f := c.client.Post(
 		c.base.Copy().Path("/sessions/%s/send", identifier).String(),
-		constant.Object,
+		webConstant.Object,
 		bytes.NewReader(body),
 	)
 

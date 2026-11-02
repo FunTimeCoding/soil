@@ -1,7 +1,7 @@
 package transcript_cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"path/filepath"
@@ -11,7 +11,7 @@ import (
 
 func (c *Cache) Sessions() []*session.Session {
 	files, e := filepath.Glob(
-		filepath.Join(c.Base(), join.Empty("*", constant.NotationLogExtension)),
+		filepath.Join(c.Base(), join.Empty("*", soil.NotationLogExtension)),
 	)
 
 	if e != nil {
@@ -23,7 +23,7 @@ func (c *Cache) Sessions() []*session.Session {
 	for _, f := range files {
 		identifier := strings.TrimSuffix(
 			filepath.Base(f),
-			constant.NotationLogExtension,
+			soil.NotationLogExtension,
 		)
 		s := c.cachedSession(identifier)
 

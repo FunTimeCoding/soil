@@ -1,7 +1,7 @@
 package string_constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,11 +20,11 @@ func collectFromConstantDirectory(
 	}
 
 	for _, n := range entries {
-		if n.IsDir() || !strings.HasSuffix(n.Name(), constant.GoExtension) {
+		if n.IsDir() || !strings.HasSuffix(n.Name(), soil.GoExtension) {
 			continue
 		}
 
-		if strings.HasSuffix(n.Name(), constant.TestSuffix) {
+		if strings.HasSuffix(n.Name(), soil.TestSuffix) {
 			continue
 		}
 

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web/pipeline_page"
 	"net/http"
@@ -20,10 +20,11 @@ func (s *Server) job(
 	}
 
 	v, f := s.service.JobView(
+		r.Context(),
 		instance,
-		queryInteger(r, constant.Project),
-		queryInteger(r, constant.Pipeline),
-		queryInteger(r, constant.Job),
+		queryInteger(r, argumentConstant.Project),
+		queryInteger(r, argumentConstant.Pipeline),
+		queryInteger(r, argumentConstant.Job),
 	)
 	errors.PanicOnError(f)
 	s.view.RenderFragment(w, pipeline_page.New(v).LogPane())

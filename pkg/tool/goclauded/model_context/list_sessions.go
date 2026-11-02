@@ -23,7 +23,7 @@ func (s *Server) listSessions(
 
 	limit := int(q.GetFloat(constant.Limit, 20))
 	offset := int(q.GetFloat(constant.Offset, 0))
-	sessions, e := s.service.EnrichedSessions(limit, offset)
+	sessions, e := s.roster.EnrichedSessions(limit, offset)
 
 	if e != nil {
 		return s.captureFail(e, soil.UnexpectedError)

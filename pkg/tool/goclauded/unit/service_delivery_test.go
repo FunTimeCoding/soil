@@ -133,7 +133,7 @@ func TestChannelCutsLongMessage(t *testing.T) {
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
 	s.SendImmediate(r2.Callsign, r1.Callsign, strings.Repeat("e", 5000))
-	drained, e := s.Service.DrainImmediateQueue("session-1", r1.Callsign)
+	drained, e := s.Message.DrainImmediateQueue("session-1", r1.Callsign)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, drained)
 	assert.StringContains(t, "…cut here - ", drained[0].Body)
@@ -143,7 +143,7 @@ func TestChannelCutsLongMessage(t *testing.T) {
 func TestNotificationOverLimitIsRefused(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
-	_, e := s.Service.SendNotification(
+	_, e := s.Message.SendNotification(
 		r1.Callsign,
 		"mattermost",
 		strings.Repeat("f", 501),
@@ -160,7 +160,7 @@ func TestNotificationOverLimitIsRefused(t *testing.T) {
 func TestInboundPulseOverLimitIsRefused(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
-	_, e := s.Service.SendPulse(
+	_, e := s.Message.SendPulse(
 		"session-1",
 		"",
 		strings.Repeat("g", 501),
@@ -172,7 +172,7 @@ func TestInboundPulseOverLimitIsRefused(t *testing.T) {
 func TestOutboundPulseIsNotCapped(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
-	_, e := s.Service.SendPulse(
+	_, e := s.Message.SendPulse(
 		"session-1",
 		r1.Callsign,
 		strings.Repeat("h", 501),

@@ -14,7 +14,7 @@ import (
 func TestARefusalCarriesTheReasonFromTheBody(t *testing.T) {
 	e := refusal.New(
 		"push document",
-		answered(http.StatusInternalServerError),
+		answered(t, http.StatusInternalServerError),
 		[]byte(`{"error":"disk full","event_identifier":"alfa"}`),
 	)
 	assert.True(t, unexpected.Is(e))
@@ -24,7 +24,7 @@ func TestARefusalCarriesTheReasonFromTheBody(t *testing.T) {
 func TestANotFoundRefusalIsNotFound(t *testing.T) {
 	e := refusal.New(
 		"fetch item",
-		answered(http.StatusNotFound),
+		answered(t, http.StatusNotFound),
 		[]byte(`{"error":"no such item"}`),
 	)
 	assert.True(t, not_found.Is(e))
@@ -34,7 +34,7 @@ func TestANotFoundRefusalIsNotFound(t *testing.T) {
 func TestAConflictRefusalIsAConflict(t *testing.T) {
 	e := refusal.New(
 		"unmute owner",
-		answered(http.StatusConflict),
+		answered(t, http.StatusConflict),
 		[]byte(`{"error":"owner not muted: alfa"}`),
 	)
 	assert.True(t, conflict.Is(e))
@@ -44,7 +44,7 @@ func TestAConflictRefusalIsAConflict(t *testing.T) {
 func TestAnUnavailableRefusalIsUnavailable(t *testing.T) {
 	e := refusal.New(
 		"hybrid lookup",
-		answered(http.StatusServiceUnavailable),
+		answered(t, http.StatusServiceUnavailable),
 		[]byte(`{"error":"embedder unreachable since 14:02"}`),
 	)
 	assert.True(t, unavailable.Is(e))
@@ -58,7 +58,7 @@ func TestAnUnavailableRefusalIsUnavailable(t *testing.T) {
 func TestAProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
 	e := refusal.New(
 		"list items",
-		answered(http.StatusBadGateway),
+		answered(t, http.StatusBadGateway),
 		[]byte(`{"error":"no healthy upstream"}`),
 	)
 	assert.True(t, unavailable.Is(e))
@@ -66,14 +66,14 @@ func TestAProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
 }
 
 func TestASuccessIsNoRefusal(t *testing.T) {
-	refusal.PanicOnFailure("notify", answered(http.StatusNoContent), nil)
+	refusal.PanicOnFailure("notify", answered(t, http.StatusNoContent), nil)
 	assert.PanicContains(
 		t,
 		"notify status: 500",
 		func() {
 			refusal.PanicOnFailure(
 				"notify",
-				answered(http.StatusInternalServerError),
+				answered(t, http.StatusInternalServerError),
 				nil,
 			)
 		},

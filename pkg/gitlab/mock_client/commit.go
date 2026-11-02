@@ -1,12 +1,14 @@
 package mock_client
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 	"github.com/funtimecoding/soil/pkg/gitlab/types/recorded_commit"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) Commit(
+	_ context.Context,
 	_ int64,
 	branch string,
 	message string,

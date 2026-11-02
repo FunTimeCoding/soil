@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"net/http"
 )
@@ -18,13 +18,14 @@ func (s *Server) retry(
 		return
 	}
 
-	project := queryInteger(r, constant.Project)
-	pipeline := queryInteger(r, constant.Pipeline)
-	requested := queryInteger(r, constant.Job)
-	replacement, e := s.service.Retry(instance, project, requested)
+	project := queryInteger(r, argumentConstant.Project)
+	pipeline := queryInteger(r, argumentConstant.Pipeline)
+	requested := queryInteger(r, argumentConstant.Job)
+	x := r.Context()
+	replacement, e := s.service.Retry(x, instance, project, requested)
 	errors.PanicOnError(e)
 	s.view.RenderFragment(
 		w,
-		s.detailRegion(instance, project, pipeline, replacement.Identifier),
+		s.detailRegion(x, instance, project, pipeline, replacement.Identifier),
 	)
 }

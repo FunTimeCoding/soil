@@ -1,9 +1,15 @@
 package gitlab
 
-import "github.com/funtimecoding/soil/pkg/gitlab/runner"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/runner"
+)
 
-func (c *Client) enrichRunner(r *runner.Runner) (*runner.Runner, error) {
-	g, e := c.GraphRunner(r.Identifier)
+func (c *Client) enrichRunner(
+	x context.Context,
+	r *runner.Runner,
+) (*runner.Runner, error) {
+	g, e := c.GraphRunner(x, r.Identifier)
 
 	if e != nil {
 		return nil, e

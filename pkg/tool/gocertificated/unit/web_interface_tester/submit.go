@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"net/url"
 	"strings"
@@ -21,7 +21,7 @@ func (o *Tester) Submit(
 		strings.NewReader(values.Encode()),
 	)
 	assert.FatalOnError(o.t, e)
-	r.Header.Set(constant.ContentType, constant.FormEncoded)
+	r.Header.Set(webConstant.ContentType, webConstant.FormEncoded)
 	web.Bearer(r, generativeConstant.ModelContextTestToken)
 	result, e := o.Server.Client().Do(r)
 	assert.FatalOnError(o.t, e)

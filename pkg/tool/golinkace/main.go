@@ -2,12 +2,12 @@ package golinkace
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/constant"
+	golinkacedConstant "github.com/funtimecoding/soil/pkg/tool/golinkaced/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,6 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	var host string
 	var port int
-	var linkaceHost string
 	c := command_context.New(terminal.New(s))
 	defer c.Close()
 	o := &cobra.Command{
@@ -30,9 +29,8 @@ func Main() {
 			c.Initialize(
 				host,
 				port,
-				environment.Exists(constant.DaemonInsecureEnvironment),
-				linkaceHost,
-				c.Terminal().Required(constant.DaemonTokenEnvironment),
+				environment.Exists(golinkacedConstant.InsecureEnvironment),
+				c.Terminal().Required(golinkacedConstant.TokenEnvironment),
 			)
 		},
 	}
@@ -40,7 +38,7 @@ func Main() {
 		&host,
 		"host",
 		environment.Fallback(
-			constant.DaemonHostEnvironment,
+			golinkacedConstant.HostEnvironment,
 			webConstant.Localhost,
 		),
 		"golinkaced host",
@@ -49,16 +47,10 @@ func Main() {
 		&port,
 		"port",
 		environment.FallbackInteger(
-			constant.DaemonPortEnvironment,
+			golinkacedConstant.PortEnvironment,
 			webConstant.ListenPort,
 		),
 		"golinkaced port",
-	)
-	o.PersistentFlags().StringVar(
-		&linkaceHost,
-		"linkace-host",
-		environment.Fallback(constant.LinkAceHostEnvironment, ""),
-		"LinkAce hostname for format URLs",
 	)
 	o.AddCommand(links(c))
 	o.AddCommand(lists(c))
@@ -86,5 +78,5 @@ func Main() {
 	o.AddCommand(addNote(c))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
-	errors.PanicOnError(o.Execute())
+	argument.CobraExecute(o)
 }

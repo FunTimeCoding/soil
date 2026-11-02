@@ -2,7 +2,7 @@ package link
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
@@ -29,7 +29,7 @@ func (l *Link) Format(f *option.Format) string {
 	title := l.Title
 
 	if f.UseColor {
-		title = constant.Cyan("%s", l.Title)
+		title = consoleConstant.Cyan("%s", l.Title)
 	}
 
 	s.DetailLink(l.Link, title, "")

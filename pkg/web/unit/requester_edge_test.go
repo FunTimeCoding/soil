@@ -37,9 +37,11 @@ func TestUnknownHostIsNotRetried(t *testing.T) {
 	client, attempts := newFailingClient(
 		&net.DNSError{Err: "no such host", Name: "echo.example"},
 	)
-	_, e := requester.New(locator.New("echo.example")).
+	owned := requester.New(locator.New("echo.example")).
 		WithClient(client).
-		WithBackoff(0).
+		WithBackoff(0)
+	defer owned.Close()
+	_, e := owned.
 		Bytes(request.Get("/items"))
 	assert.True(t, unreachable.Is(e))
 	assert.Integer(t, 1, int(attempts.Load()))
@@ -49,9 +51,11 @@ func TestRefusedConnectionIsRetried(t *testing.T) {
 	client, attempts := newFailingClient(
 		os.NewSyscallError("connect", syscall.ECONNREFUSED),
 	)
-	_, e := requester.New(locator.New("echo.example")).
+	owned := requester.New(locator.New("echo.example")).
 		WithClient(client).
-		WithBackoff(0).
+		WithBackoff(0)
+	defer owned.Close()
+	_, e := owned.
 		Bytes(request.Get("/items"))
 	assert.True(t, unreachable.Is(e))
 	assert.Integer(t, 3, int(attempts.Load()))

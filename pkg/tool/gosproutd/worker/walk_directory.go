@@ -3,7 +3,7 @@ package worker
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/types/scanned_file"
 	"os"
@@ -30,7 +30,7 @@ func (w *Watcher) walkDirectory() []scanned_file.File {
 					return nil
 				}
 
-				if !strings.HasSuffix(path, constant.MarkdownExtension) {
+				if !strings.HasSuffix(path, soil.MarkdownExtension) {
 					return nil
 				}
 
@@ -57,7 +57,7 @@ func (w *Watcher) walkDirectory() []scanned_file.File {
 					scanned_file.File{
 						Name: strings.TrimSuffix(
 							filepath.Base(path),
-							constant.MarkdownExtension,
+							soil.MarkdownExtension,
 						),
 						Path:        relative,
 						ContentHash: fmt.Sprintf("%x", sha256.Sum256(b)),

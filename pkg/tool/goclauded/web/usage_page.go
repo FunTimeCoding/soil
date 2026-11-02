@@ -12,8 +12,16 @@ import (
 
 func (s *Server) usagePage(
 	w http.ResponseWriter,
-	_ *http.Request,
+	q *http.Request,
 ) {
+	usage, _, e := s.usage.FindUsage()
+
+	if e != nil {
+		s.view.Answer(w, q, s.reporter, e)
+
+		return
+	}
+
 	s.view.RenderLivePage(
 		w,
 		constant.UsageTitle,
@@ -22,8 +30,8 @@ func (s *Server) usagePage(
 		html.H3(gomponents.Text(constant.UsageTitle)),
 		html.Div(
 			extended.StreamSwap(constant.UsageChart),
-			usage_page.Chart(s.service.UsageWindow()),
+			usage_page.Chart(s.usage.UsageWindow()),
 		),
-		usage_page.Note(s.service.Usage(), s.service.UtilizationCredential()),
+		usage_page.Note(usage, s.usage.UtilizationCredential()),
 	)
 }

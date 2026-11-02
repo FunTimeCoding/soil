@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/types/service"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/convert"
 	"testing"
@@ -12,8 +12,8 @@ func TestConvertServicePublishesThePackage(t *testing.T) {
 	v := convert.Service(
 		service.New(
 			"foxtrot.service",
-			constant.ServiceRunning,
-			constant.ServiceOriginVendor,
+			systemConstant.ServiceRunning,
+			systemConstant.ServiceOriginVendor,
 			"apt.example.org stable/main",
 			"foxtrot",
 			"1.2.3",
@@ -29,8 +29,8 @@ func TestConvertServiceWithoutAPackagePublishesEmpty(t *testing.T) {
 	v := convert.Service(
 		service.New(
 			"charlie.service",
-			constant.ServiceFailed,
-			constant.ServiceOriginLocal,
+			systemConstant.ServiceFailed,
+			systemConstant.ServiceOriginLocal,
 			"/etc/systemd/system",
 			"",
 			"",

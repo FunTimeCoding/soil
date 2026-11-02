@@ -41,7 +41,7 @@ func (s *Server) announce(
 	}
 
 	if cs := server.ClientSessionFromContext(x); cs != nil {
-		if f := s.service.BindModelContextSession(
+		if f := s.roster.BindModelContextSession(
 			name,
 			cs.SessionID(),
 		); f != nil {
@@ -59,7 +59,7 @@ func (s *Server) announce(
 		return s.captureFail(g, soil.UnexpectedError)
 	}
 
-	if f := s.service.Announce(
+	if f := s.roster.Announce(
 		c.SessionIdentifier,
 		name,
 		topic,
@@ -76,7 +76,7 @@ func (s *Server) announce(
 		join.NewLine(
 			[]string{
 				fmt.Sprintf("Announced as %s: %s", name, topic),
-				s.service.ContextPanel(x, c.SessionIdentifier),
+				s.memory.ContextPanel(x, c.SessionIdentifier),
 			},
 		),
 	)

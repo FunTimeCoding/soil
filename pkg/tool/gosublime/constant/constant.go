@@ -7,10 +7,3 @@ var Identity = identity.New(
 	"Sublime Text buffers - list, read, create, edit, open, save, close",
 	"gosublime <command>",
 )
-
-const (
-	HostEnvironment     = "GOSUBLIME_HOST"
-	PortEnvironment     = "GOSUBLIME_PORT"
-	InsecureEnvironment = "GOSUBLIME_INSECURE"
-	TokenEnvironment    = "GOSUBLIME_TOKEN"
-)

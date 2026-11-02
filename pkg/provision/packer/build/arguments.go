@@ -2,16 +2,16 @@ package build
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 )
 
 func (b *Build) arguments(headless bool) [][]string {
 	var processor string
 
 	switch b.architecture {
-	case constant.AMD64:
+	case systemConstant.AMD64:
 		processor = "host"
-	case constant.ARM64:
+	case systemConstant.ARM64:
 		processor = "cortex-a72"
 	}
 
@@ -23,7 +23,7 @@ func (b *Build) arguments(headless bool) [][]string {
 	}
 
 	switch b.architecture {
-	case constant.ARM64:
+	case systemConstant.ARM64:
 		result = append(result, []string{"-machine", "virt"})
 		result = append(result, []string{"-boot", "strict=off"})
 		result = append(result, []string{"-cpu", "cortex-a72"})

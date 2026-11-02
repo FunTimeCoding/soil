@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"io"
 	"testing"
+	"time"
 )
 
 func TestStatusReportsNothingWhenSound(t *testing.T) {
@@ -63,4 +64,20 @@ func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 	assert.FatalOnError(t, g)
 	assert.StringContains(t, "unowned_queue", string(body))
 	assert.StringContains(t, "Nobody", string(body))
+}
+
+func TestStatusFindsNoMissingTranscriptForASessionWithOne(t *testing.T) {
+	s := base.NewWithSessionFile(t, "doomed", "some-slug")
+	s.Store.Advance(constant.CompleteTimeoutWindow + time.Minute)
+	response, e := s.RESTClient(t).GetStatusWithResponse(t.Context())
+	assert.FatalOnError(t, e)
+	var missing []client.FindingEntry
+
+	for _, f := range response.JSON200.Findings {
+		if f.Kind == constant.MissingTranscriptKept {
+			missing = append(missing, f)
+		}
+	}
+
+	assert.Count(t, 0, missing)
 }

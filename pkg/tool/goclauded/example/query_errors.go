@@ -3,7 +3,7 @@ package example
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -16,7 +16,7 @@ func QueryErrors() {
 	directory, e := os.MkdirTemp("", "goclauded-query-errors-*")
 	errors.PanicOnError(e)
 	defer func() { errors.PanicOnError(os.RemoveAll(directory)) }()
-	path := filepath.Join(directory, constant.TestDatabase)
+	path := filepath.Join(directory, soil.TestDatabase)
 	d := lite.New(logger.New(context.Background()), path)
 	errors.PanicOnError(d.AutoMigrate(session.Stub()))
 	console.Line("=== Find on empty table (not found) ===")

@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -17,7 +17,7 @@ func restClient(t *testing.T) *client.ClientWithResponses {
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
-			web.BearerEditor(constant.ModelContextTestToken),
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	assert.FatalOnError(t, e)

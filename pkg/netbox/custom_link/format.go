@@ -1,7 +1,7 @@
 package custom_link
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
@@ -9,7 +9,7 @@ import (
 func (l *Link) Format(f *option.Format) string {
 	s := status.New(f)
 
-	if f.HasTag(constant.TagIdentifier) {
+	if f.HasTag(consoleConstant.TagIdentifier) {
 		s.Integer32(l.Identifier)
 	}
 

@@ -2,13 +2,10 @@ package command_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
-	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/client"
 )
 
 type Context struct {
-	host     string
-	client   *client.ClientWithResponses
+	client   *client.Client
 	terminal *terminal.Terminal
-	pool     *pool.Pool
 }

@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -11,12 +11,12 @@ func (s *Store) RemoveContext(
 	collection string,
 	pathPrefix string,
 ) bool {
-	if !strings.HasPrefix(pathPrefix, constant.Slash) {
-		pathPrefix = join.Empty(constant.Slash, pathPrefix)
+	if !strings.HasPrefix(pathPrefix, stringsConstant.Slash) {
+		pathPrefix = join.Empty(stringsConstant.Slash, pathPrefix)
 	}
 
-	if !strings.HasSuffix(pathPrefix, constant.Slash) {
-		pathPrefix = join.Empty(pathPrefix, constant.Slash)
+	if !strings.HasSuffix(pathPrefix, stringsConstant.Slash) {
+		pathPrefix = join.Empty(pathPrefix, stringsConstant.Slash)
 	}
 
 	result, e := s.database.Exec(

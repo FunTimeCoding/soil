@@ -6,13 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
 	"github.com/spf13/cobra"
-	"net/http"
 )
 
 func migrateCommand(
 	t *terminal.Terminal,
-	h *http.Client,
+	c face.Client,
 ) *cobra.Command {
 	var namespace string
 	var store string
@@ -25,12 +25,7 @@ func migrateCommand(
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := Migrate(
-				newInterfaceStore(interfaceClient(t, h)),
-				arguments[0],
-				namespace,
-				store,
-			)
+			r, e := Migrate(c, arguments[0], namespace, store)
 
 			if e != nil {
 				t.Exitf("%v\n", e)

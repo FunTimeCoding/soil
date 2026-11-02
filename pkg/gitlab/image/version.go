@@ -1,7 +1,7 @@
 package image
 
 import (
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"log"
 	"strings"
@@ -14,8 +14,8 @@ func (i *Image) Version() string {
 		log.Panicf("empty version: %+v", result)
 	}
 
-	if !strings.HasPrefix(result, constant.VersionPrefix) {
-		return key_value.Empty(constant.VersionPrefix, result)
+	if !strings.HasPrefix(result, gitConstant.VersionPrefix) {
+		return key_value.Empty(gitConstant.VersionPrefix, result)
 	}
 
 	return result

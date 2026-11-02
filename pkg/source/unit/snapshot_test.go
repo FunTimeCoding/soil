@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/snapshot"
 	"os"
@@ -49,7 +49,7 @@ func TestSnapshotIgnoresWhatTheModuleDoesNotBuild(t *testing.T) {
 	testutil.WriteFile(t, root, "vendor/a.go", "package a\n")
 	testutil.WriteFile(t, root, "nested/go.mod", "module nested\n")
 	testutil.WriteFile(t, root, "nested/a.go", "package a\n")
-	testutil.WriteFile(t, root, constant.ReadmeFile, "readme\n")
+	testutil.WriteFile(t, root, soil.ReadmeFile, "readme\n")
 	assert.Strings(t, nil, s.Changed(root))
 	testutil.WriteFile(t, root, "go.sum", "sum\n")
 	assert.Strings(t, []string{filepath.Join(root, "go.sum")}, s.Changed(root))

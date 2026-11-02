@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
 
@@ -17,7 +17,7 @@ func (s *Service) SetVirtualLabel(
 	}
 
 	return s.store.SetLabel(
-		constant.VirtualMachineAddress,
+		netboxConstant.VirtualMachineAddress,
 		m.Identifier,
 		key,
 		value,

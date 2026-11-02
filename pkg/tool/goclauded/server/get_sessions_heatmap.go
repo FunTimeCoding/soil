@@ -10,14 +10,14 @@ func (s *Server) GetSessionsHeatmap(
 	_ context.Context,
 	r server.GetSessionsHeatmapRequestObject,
 ) (server.GetSessionsHeatmapResponseObject, error) {
-	sessions := s.service.Sessions()
+	sessions := s.transcript.Sessions()
 	bash := r.Params.Bash != nil && *r.Params.Bash
 	counts := map[string]*server.HeatmapEntry{}
 	totalCalls := 0
 	sessionsWithCalls := 0
 
 	for _, session := range sessions {
-		calls := s.service.ToolCalls(session.Identifier)
+		calls := s.transcript.ToolCalls(session.Identifier)
 
 		if len(calls) == 0 {
 			continue

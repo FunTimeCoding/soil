@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/chunk_preview"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/preview_chunk"
@@ -18,7 +18,7 @@ func (s *Service) Preview(
 		s.reranker.Allowance(),
 		s.counter.Allowance(),
 	)
-	source := strings.HasSuffix(path, constant.GoExtension)
+	source := strings.HasSuffix(path, soil.GoExtension)
 
 	for i, c := range chunk.Document(body, path, s.reranker) {
 		first, last := lineRange(body, c)

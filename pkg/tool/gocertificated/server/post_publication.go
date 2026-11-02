@@ -8,10 +8,10 @@ import (
 )
 
 func (s *Server) PostPublication(
-	_ context.Context,
+	x context.Context,
 	_ server.PostPublicationRequestObject,
 ) (server.PostPublicationResponseObject, error) {
-	commit, change, e := s.service.Publish()
+	commit, change, e := s.service.Publish(x)
 
 	if unavailable.Is(e) {
 		return server.PostPublication503JSONResponse{Error: e.Error()}, nil

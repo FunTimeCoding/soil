@@ -22,7 +22,7 @@ func (s *Server) ListRegistryRepositories(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.RegistryRepositories(instance, project, false)
+	v, e := s.service.RegistryRepositories(x, instance, project, false)
 
 	if e != nil {
 		return s.answerWith(e, "")

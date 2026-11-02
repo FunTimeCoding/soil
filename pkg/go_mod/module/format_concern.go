@@ -1,7 +1,7 @@
 package module
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
@@ -14,7 +14,7 @@ func (m *Module) formatConcern(f *option.Format) string {
 	result := join.Comma(m.concern)
 
 	if f.UseColor {
-		result = constant.Yellow("%s", result)
+		result = consoleConstant.Yellow("%s", result)
 	}
 
 	return result

@@ -18,6 +18,7 @@ type Worker struct {
 	interval time.Duration
 	at       *time_of_day.Time
 	once     bool
+	delayed  bool
 	context  context.Context
 	cancel   context.CancelFunc
 	started  sync.Once

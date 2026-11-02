@@ -1,7 +1,7 @@
 package source
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"time"
 )
 
@@ -11,7 +11,7 @@ func New(
 	staleThreshold time.Duration,
 	staleMultiplier float64,
 	triageBoost float64,
-	severityWeights map[constant.Severity]float64,
+	severityWeights map[soil.Severity]float64,
 ) *Source {
 	if severityWeights == nil {
 		panic("nil severity weights")

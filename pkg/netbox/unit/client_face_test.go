@@ -5,13 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/netbox/face"
 	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
 func TestTheClientAndItsMockShareTheFace(t *testing.T) {
-	c := netbox.New(locator.New(constant.Localhost), "token")
+	c := netbox.New(locator.New(webConstant.Localhost), "token")
 	t.Cleanup(c.Close)
 	m := mock_client.New()
 	t.Cleanup(m.Close)

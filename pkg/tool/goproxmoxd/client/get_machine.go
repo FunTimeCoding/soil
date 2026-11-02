@@ -1,21 +1,25 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *Client) GetMachine(
+	x context.Context,
 	identifier int64,
-	node *string,
-) *response.Response {
-	result, e := c.client.GetMachineWithResponse(
-		c.context,
-		identifier,
-		&client.GetMachineParams{Instance: &c.instance, Node: node},
-	)
-	errors.PanicOnError(e)
+	p *client.GetMachineParams,
+) (*client.MachineDetail, error) {
+	r, e := c.client.GetMachineWithResponse(x, identifier, p)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("get machine", r.HTTPResponse, r.Body)
+	}
+
+	return r.JSON200, nil
 }

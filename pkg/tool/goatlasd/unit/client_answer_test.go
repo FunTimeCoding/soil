@@ -2,8 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
-	atlasConstant "github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/service_tester"
@@ -13,7 +13,7 @@ import (
 func TestTheClientReadsCollectedPlacements(t *testing.T) {
 	v := service_tester.New(t)
 	v.SeedInventory()
-	collector_tester.AddProcess(v.Process, atlasConstant.FixtureService, true)
+	collector_tester.AddProcess(v.Process, constant.FixtureService, true)
 	collector_tester.AddPod(
 		v.Kubernetes,
 		"alloy-a",
@@ -23,10 +23,14 @@ func TestTheClientReadsCollectedPlacements(t *testing.T) {
 	)
 	_, e := v.Service.Collect(t.Context())
 	assert.FatalOnError(t, e)
-	c := client_tester.New(t, v.Service, constant.ModelContextTestToken)
+	c := client_tester.New(
+		t,
+		v.Service,
+		generativeConstant.ModelContextTestToken,
+	)
 	placements, f := c.ListPlacements(
 		t.Context(),
-		atlasConstant.FixtureVirtualMachineNode,
+		constant.FixtureVirtualMachineNode,
 		"",
 		"",
 	)
@@ -57,7 +61,11 @@ func TestTheClientFiltersSightings(t *testing.T) {
 	)
 	_, e := v.Service.Collect(t.Context())
 	assert.FatalOnError(t, e)
-	c := client_tester.New(t, v.Service, constant.ModelContextTestToken)
+	c := client_tester.New(
+		t,
+		v.Service,
+		generativeConstant.ModelContextTestToken,
+	)
 	all, f := c.ListSightings(t.Context(), "", false)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, all)
@@ -71,7 +79,7 @@ func TestTheClientReachesTheDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
 		service_tester.New(t).Service,
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }

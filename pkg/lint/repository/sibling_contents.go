@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 	"path/filepath"
@@ -24,7 +24,7 @@ func siblingContents(directory string) []string {
 
 				if i.IsDir() ||
 					i.Mode()&os.ModeSymlink != 0 ||
-					strings.HasSuffix(path, constant.MarkdownExtension) {
+					strings.HasSuffix(path, soil.MarkdownExtension) {
 					return nil
 				}
 

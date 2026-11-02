@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -12,7 +12,7 @@ func LineOffset(
 	result := 0
 
 	for range line - 1 {
-		next := strings.Index(body[result:], constant.Unix)
+		next := strings.Index(body[result:], stringsConstant.Unix)
 
 		if next < 0 {
 			return result

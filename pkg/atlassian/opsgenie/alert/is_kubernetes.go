@@ -1,7 +1,7 @@
 package alert
 
-import "github.com/funtimecoding/soil/pkg/prometheus/constant"
+import prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 
 func (a *Alert) IsKubernetes() bool {
-	return a.Detail(constant.NamespaceLabel) != ""
+	return a.Detail(prometheusConstant.NamespaceLabel) != ""
 }

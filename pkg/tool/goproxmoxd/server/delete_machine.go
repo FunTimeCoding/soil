@@ -3,8 +3,11 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -23,7 +26,7 @@ func (s *Server) DeleteMachine(
 	}
 
 	if e != nil {
-		return server.DeleteMachine500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.DeleteMachine500JSONResponse(*s.answer(e)), nil
 	}
 
 	node := ""
@@ -40,16 +43,19 @@ func (s *Server) DeleteMachine(
 
 	e = s.service.DeleteMachine(instance, int(r.Identifier), node, purge)
 
-	if e != nil {
-		if not_found.Is(e) {
-			return server.DeleteMachine404JSONResponse{Error: e.Error()}, nil
-		}
-
-		if conflict.Is(e) {
-			return server.DeleteMachine409JSONResponse(*clientError(e)), nil
-		}
-
-		return server.DeleteMachine500JSONResponse(*s.captureDetail(e)), nil
+	switch {
+	case validation.Is(e):
+		return server.DeleteMachine400JSONResponse(*clientError(e)), nil
+	case not_found.Is(e):
+		return server.DeleteMachine404JSONResponse(*clientError(e)), nil
+	case forbidden.Is(e):
+		return server.DeleteMachine403JSONResponse(*clientError(e)), nil
+	case conflict.Is(e):
+		return server.DeleteMachine409JSONResponse(*clientError(e)), nil
+	case unavailable.Is(e):
+		return server.DeleteMachine503JSONResponse(*clientError(e)), nil
+	case e != nil:
+		return server.DeleteMachine500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.DeleteMachine200JSONResponse{TaskId: "deleted"}, nil

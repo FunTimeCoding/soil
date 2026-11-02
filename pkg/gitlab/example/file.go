@@ -1,26 +1,28 @@
 package example
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 )
 
 func File() {
 	a := argument.NewSimple("gitlab-file")
-	a.String(constant.Owner, "", "group or user")
-	a.String(constant.Repository, "", "repository name")
-	a.String(constant.Branch, "", "branch name")
-	a.String(constant.File, "", "file path")
+	a.String(argumentConstant.Owner, "", "group or user")
+	a.String(argumentConstant.Repository, "", "repository name")
+	a.String(argumentConstant.Branch, "", "branch name")
+	a.String(argumentConstant.File, "", "file path")
 	a.ParseSimple()
-	owner := a.GetString(constant.Owner)
-	repository := a.GetString(constant.Repository)
-	branch := a.GetString(constant.Branch)
-	file := a.GetString(constant.File)
+	owner := a.GetString(argumentConstant.Owner)
+	repository := a.GetString(argumentConstant.Repository)
+	branch := a.GetString(argumentConstant.Branch)
+	file := a.GetString(argumentConstant.File)
 	g := gitlab.NewEnvironment()
 	defer g.Close()
-	p := g.MustProjectByName(owner, repository)
-	f := g.MustFile(p.Identifier, branch, file)
+	x := context.Background()
+	p := g.MustProjectByName(x, owner, repository)
+	f := g.MustFile(x, p.Identifier, branch, file)
 	console.Format("File: %+v\n", f)
 }

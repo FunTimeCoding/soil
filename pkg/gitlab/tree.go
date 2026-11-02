@@ -1,11 +1,13 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/tree"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) Tree(
+	x context.Context,
 	project int64,
 	path string,
 	reference string,
@@ -32,7 +34,11 @@ func (c *Client) Tree(
 		o.Recursive = &recursive
 	}
 
-	result, r, e := c.client.Repositories.ListTree(project, o)
+	result, r, e := c.client.Repositories.ListTree(
+		project,
+		o,
+		gitlab.WithContext(x),
+	)
 
 	if r != nil && r.StatusCode == 404 {
 		return []*tree.Node{}, nil

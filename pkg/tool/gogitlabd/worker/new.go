@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -11,7 +12,7 @@ import (
 )
 
 func New(
-	refresh func() []error,
+	refresh func(context.Context) []error,
 	entries func() []*board_entry.Entry,
 	interval time.Duration,
 	y *prometheus.Registry,
@@ -26,6 +27,7 @@ func New(
 		[]string{constant.SourceLabel, "project", "ref", "status"},
 	)
 	y.MustRegister(g)
+	x, cancel := context.WithCancel(context.Background())
 
 	return &Worker{
 		refresh:  refresh,
@@ -35,6 +37,8 @@ func New(
 		reporter: r,
 		logger:   l,
 		recovery: recovery.New(l, r),
+		context:  x,
+		cancel:   cancel,
 		stop:     make(chan struct{}),
 		done:     make(chan struct{}),
 	}

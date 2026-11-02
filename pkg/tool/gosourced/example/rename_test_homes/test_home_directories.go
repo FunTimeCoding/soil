@@ -1,7 +1,7 @@
 package rename_test_homes
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"io/fs"
 	"path/filepath"
@@ -31,7 +31,7 @@ func testHomeDirectories(
 
 				if strings.HasPrefix(
 					entry.Name(),
-					constant.CurrentDirectory,
+					soil.CurrentDirectory,
 				) || entry.Name() == "testdata" {
 					return filepath.SkipDir
 				}

@@ -2,7 +2,7 @@ package conversations
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -13,7 +13,7 @@ func (s *Server) page(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	w.Header().Set(constant.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
 	errors.PanicOnError(
 		layout(
 			html.Div(

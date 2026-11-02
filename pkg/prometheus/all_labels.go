@@ -1,9 +1,9 @@
 package prometheus
 
-import "github.com/funtimecoding/soil/pkg/constant"
+import soil "github.com/funtimecoding/soil/pkg/constant"
 
 func (c *Client) AllLabels() ([]string, error) {
-	result, e := c.LabelNames([]string{}, constant.StartOfTime)
+	result, e := c.LabelNames([]string{}, soil.StartOfTime)
 
 	if e != nil {
 		return nil, e

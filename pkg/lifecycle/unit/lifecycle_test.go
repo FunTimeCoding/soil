@@ -19,12 +19,14 @@ import (
 
 func TestRunWorkerStartOrder(t *testing.T) {
 	var log []string
-	lifecycle.New(
+	owned := lifecycle.New(
 		logger.New(context.Background())).WithWorker(mock_worker.New("a", &log)).WithWorker(
 		mock_worker.New("b", &log),
 	).WithWorker(
 		mock_worker.New("c", &log),
-	).Run()
+	)
+	defer owned.Close()
+	owned.Run()
 	assert.Count(t, 3, log)
 	assert.String(t, "start:a", log[0])
 	assert.String(t, "start:b", log[1])
@@ -47,7 +49,9 @@ func TestStopWorkerReverseOrder(t *testing.T) {
 }
 
 func TestRunEmpty(t *testing.T) {
-	lifecycle.New(logger.New(context.Background())).Run()
+	owned := lifecycle.New(logger.New(context.Background()))
+	defer owned.Close()
+	owned.Run()
 }
 
 func TestStopEmpty(t *testing.T) {

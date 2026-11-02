@@ -1,11 +1,12 @@
 package clean
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/git/remote"
 	"github.com/funtimecoding/soil/pkg/gitlab"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/lab"
@@ -27,17 +28,18 @@ func Lab(
 	namespace, repository := git.ParseProject(remoteLocator.Path)
 	c := gitlab.New(
 		o.GitLabHost,
-		environment.Required(constant.TokenEnvironment),
+		environment.Required(gitlabConstant.TokenEnvironment),
 	)
 	defer c.Close()
-	p := c.MustProjectByName(namespace, repository)
+	x := context.Background()
+	p := c.MustProjectByName(x, namespace, repository)
 
 	if o.Verbose {
 		console.Format("Project: %d %s %s\n", p.Identifier, p.Namespace, p.Name)
 	}
 
-	lab.Pipeline(o, c, p)
-	lab.Registry(c, p)
-	lab.Package(c, p)
-	lab.Tag(c, p)
+	lab.Pipeline(x, o, c, p)
+	lab.Registry(x, c, p)
+	lab.Package(x, c, p)
+	lab.Tag(x, c, p)
 }

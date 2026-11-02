@@ -12,8 +12,10 @@ func newHubClient(
 	server string,
 ) *hub.Client {
 	t.Helper()
-
-	return hub.NewWithBase(
+	result := hub.NewWithBase(
 		upstream_tester.Locator(t, server).Base(constant.BasePath),
 	).WithBackoff(0)
+	t.Cleanup(result.Close)
+
+	return result
 }

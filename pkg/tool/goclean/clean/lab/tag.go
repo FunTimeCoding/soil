@@ -1,6 +1,7 @@
 package lab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
@@ -9,10 +10,11 @@ import (
 )
 
 func Tag(
+	x context.Context,
 	c face.GitLabClient,
 	p *project.Project,
 ) {
-	tags := c.MustTags(p.Identifier)
+	tags := c.MustTags(x, p.Identifier)
 
 	if len(tags) == 0 {
 		return
@@ -26,7 +28,7 @@ func Tag(
 		}
 
 		console.Format("Delete tag: %s\n", t.Name)
-		c.MustDeleteTag(p.Identifier, t.Name)
+		c.MustDeleteTag(x, p.Identifier, t.Name)
 	}
 
 	git.Fetch()

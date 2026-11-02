@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol"
 	"path"
 )
 
 func exportHelper(
-	s *service.Service,
+	s *symbol.Service,
 	directory string,
 	packagePath string,
 	targetPath string,

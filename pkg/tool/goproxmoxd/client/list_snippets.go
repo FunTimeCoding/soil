@@ -1,17 +1,24 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/response"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) ListSnippets() *response.Response {
-	result, e := c.client.ListSnippetsWithResponse(
-		c.context,
-		&client.ListSnippetsParams{Instance: &c.instance},
-	)
-	errors.PanicOnError(e)
+func (c *Client) ListSnippets(
+	x context.Context,
+	p *client.ListSnippetsParams,
+) ([]client.SnippetItem, error) {
+	r, e := c.client.ListSnippetsWithResponse(x, p)
 
-	return response.New(string(result.Body), result.StatusCode())
+	if e != nil {
+		return nil, e
+	}
+
+	if r.JSON200 == nil {
+		return nil, refusal.New("list snippets", r.HTTPResponse, r.Body)
+	}
+
+	return *r.JSON200, nil
 }

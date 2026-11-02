@@ -10,7 +10,7 @@ func (s *Server) GetDiff(
 	_ context.Context,
 	r server.GetDiffRequestObject,
 ) (server.GetDiffResponseObject, error) {
-	result, e := s.service.DiffSymbols(
+	result, e := s.diff.DiffSymbols(
 		r.Params.Module,
 		text(r.Params.From),
 		text(r.Params.To),

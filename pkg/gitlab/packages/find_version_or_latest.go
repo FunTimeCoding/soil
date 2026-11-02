@@ -1,7 +1,7 @@
 package packages
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 	"log"
 )
@@ -18,7 +18,7 @@ func FindVersionOrLatest(
 		return nil
 	}
 
-	if version == constant.LatestVersion {
+	if version == soil.LatestVersion {
 		return FindLatest(v)
 	}
 

@@ -19,7 +19,7 @@ func (s *Server) editSubmit(
 	identifier := r.PathValue(constant.Identifier)
 	alias := r.FormValue(constant.Alias)
 	description := r.FormValue(constant.Description)
-	session := s.service.Resolve(identifier)
+	session := s.transcript.Resolve(identifier)
 
 	if session.Identifier == "" {
 		return
@@ -28,7 +28,7 @@ func (s *Server) editSubmit(
 	a := edit_session.New()
 	a.Alias = &alias
 	a.Description = &description
-	errors.PanicOnError(s.service.EditSession(session.Identifier, a))
+	errors.PanicOnError(s.roster.EditSession(session.Identifier, a))
 	w.Header().Set(webConstant.ContentType, webConstant.MarkupUnicode)
 	w.Header().Set("HX-Trigger", "session-edited")
 	errors.PanicOnError(

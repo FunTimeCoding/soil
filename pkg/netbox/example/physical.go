@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/network"
 )
@@ -12,7 +12,7 @@ func Physical() {
 	defer n.Close()
 
 	for _, p := range n.MustPhysicalAddressesByHardware(
-		network.PhysicalAddress(constant.PhysicalTest0),
+		network.PhysicalAddress(soil.PhysicalTest0),
 	) {
 		console.Format("Read physical address: %+v\n", p)
 	}

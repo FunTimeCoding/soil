@@ -1,0 +1,40 @@
+package document
+
+import timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
+
+func (s *Service) SessionMetadata(
+	sessionIdentifier string,
+) (string, map[string][]string, error) {
+	session, found, e := s.store.FindSession(sessionIdentifier)
+
+	if e != nil {
+		return "", nil, e
+	}
+
+	if !found {
+		return "", nil, nil
+	}
+
+	name := session.Slug
+
+	if session.Alias != nil && *session.Alias != "" {
+		name = *session.Alias
+	}
+
+	if name == "" {
+		return "", nil, nil
+	}
+
+	result := map[string][]string{
+		"session_name": {name},
+		"session_id":   {sessionIdentifier},
+	}
+
+	if !session.StartedAt.IsZero() {
+		result["date"] = []string{
+			session.StartedAt.Format(timeConstant.DateYear),
+		}
+	}
+
+	return name, result, nil
+}

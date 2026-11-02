@@ -39,6 +39,7 @@ func New(
 			r,
 		)
 		t.Cleanup(argocdGuard.Close)
+		t.Cleanup(a.Close)
 	}
 
 	u := o.Usage()

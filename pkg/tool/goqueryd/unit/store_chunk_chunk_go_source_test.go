@@ -3,7 +3,7 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
@@ -19,7 +19,7 @@ func TestChunkGoSourceSplitsAtDeclarations(t *testing.T) {
 		body,
 		body,
 	)
-	chunks := chunk.Document(source, constant.MainFile, mock_reranker.New())
+	chunks := chunk.Document(source, soil.MainFile, newReranker(t))
 	assert.Greater(t, 1, len(chunks))
 	assert.StringContains(t, "package main", chunks[0].Text)
 	found := false
@@ -40,13 +40,13 @@ func TestChunkGoSourceFallsBackOnParseError(t *testing.T) {
 		"package main\n\nfunc broken {{{{\n%s",
 		strings.Repeat("text\n", 1000),
 	)
-	chunks := chunk.Document(invalid, "broken.go", mock_reranker.New())
+	chunks := chunk.Document(invalid, "broken.go", newReranker(t))
 	assert.Greater(t, 0, len(chunks))
 }
 
 func TestChunkGoSourceShortFile(t *testing.T) {
 	source := "package store\n\nfunc Hello() {}\n"
-	chunks := chunk.Document(source, "hello.go", mock_reranker.New())
+	chunks := chunk.Document(source, "hello.go", newReranker(t))
 	assert.Count(t, 1, chunks)
 	assert.String(t, source, chunks[0].Text)
 }

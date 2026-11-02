@@ -70,7 +70,10 @@ func Main() {
 
 `argument.NewInstance` takes the tool's identity, creates a scoped
 flag set, and wires `--help` from the identity. `Parse()` registers
-`--version`, parses, and exits cleanly on `--help` or `--version`. It also
+`--version`, parses, and exits cleanly on `--help` or `--version`. A flag
+it does not know is a usage error, not a crash: the error and the usage go
+to stderr and the tool exits 2, before any work and without a Sentry event.
+`ParseSimple` answers the same way. `Parse` also
 registers `--notation` unless the tool already has one; `--version --notation`
 prints the stamp as JSON (`pkg/stamp/report`), the same shape the lifecycle
 server's version route serves.
@@ -102,7 +105,7 @@ func Main() {
     o.AddCommand(createItem(c))
     argument.CobraInstrument(o, s)
     argument.CobraStamp(o, constant.Identity)
-    errors.PanicOnError(o.Execute())
+    argument.CobraExecute(o)
 }
 ```
 
@@ -121,6 +124,11 @@ flush.
 block every tool prints on `--version`, or the JSON report with `--notation`.
 Cobra handles `--help` natively. Identity provides `Use` and `Short` on the
 root command.
+
+`argument.CobraExecute` runs the root. An unknown flag on any command
+prints the error and that command's usage to stderr and exits 2. Any
+other error from `Execute` - a `RunE` failure, an unknown subcommand, a
+wrong argument count - still panics into the deferred `Flush`.
 No option struct - each subcommand owns its own flags.
 
 #### One file per subcommand

@@ -1,19 +1,21 @@
 package gosecret
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosecret/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"os"
 	"path/filepath"
 	"slices"
 )
 
 func Migrate(
-	s face.SecretStore,
+	s face.Client,
 	manifest string,
 	namespace string,
 	store string,
@@ -58,20 +60,30 @@ func Migrate(
 	result := &MigrateResult{
 		Path: join.Empty(namespace, constant.PathSeparator, m.Metadata.Name),
 	}
-	result.Keys, e = s.Put(result.Path, values)
+	x := context.Background()
+	put, e := s.PutSecret(
+		x,
+		&client.PutSecretParams{Path: result.Path},
+		client.PutSecretJSONRequestBody{Values: values},
+	)
 
 	if e != nil {
 		return nil, e
 	}
 
+	result.Keys = put.Keys
+
 	for k, v := range values {
-		stored, f := s.Reveal(result.Path, k)
+		stored, f := s.RevealSecret(
+			x,
+			&client.RevealSecretParams{Path: result.Path, Key: k},
+		)
 
 		if f != nil {
 			return nil, f
 		}
 
-		if stored != v {
+		if stored.Value != v {
 			return nil, fmt.Errorf(
 				"stored value differs from the manifest: %s",
 				k,

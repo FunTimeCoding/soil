@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/fact"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"golang.org/x/tools/go/packages"
+	"io"
 	"slices"
 )
 
@@ -13,13 +14,14 @@ func fullIndex(
 	directory string,
 	root string,
 	patterns []string,
+	notice io.Writer,
 ) (
 	[]*packages.Package,
 	map[string]bool,
 	*face.Set,
 	*unclosed_resource.Summaries,
 ) {
-	loaded, reported, reached := load(root, patterns)
+	loaded, reported, reached := load(root, patterns, notice)
 	w := index.New(directory, root, unclosed_resource.Kind())
 
 	return loaded,

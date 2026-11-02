@@ -515,9 +515,10 @@ A worker that holds nothing but time is a clock. The daemon builds it over
 one service operation per tick - goclauded's
 `worker.New(v.Reconcile, l, r, constant.ReconcileInterval)` on
 `pkg/worker` - and it keeps only what is its own: the ticker, its gauges,
-its stop channel and the recovery around the tick. Its `Close` waits for a
-tick in flight, so nothing the daemon closes next is still in use. No
-service holds a clock.
+its stop channel and the recovery around the tick. Its `Close` cancels the
+context the tick was handed and waits for a tick in flight, so nothing the
+daemon closes next is still in use; what a cancelled tick returns is not
+reported. No service holds a clock.
 
 The daemon hands its workers out through `Workers()`, guards first, so
 they run before anything calls through them, then its clocks:

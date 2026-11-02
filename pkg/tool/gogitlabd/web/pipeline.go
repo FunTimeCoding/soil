@@ -25,7 +25,13 @@ func (s *Server) pipeline(
 	project := queryInteger(r, argumentConstant.Project)
 	pipeline := queryInteger(r, argumentConstant.Pipeline)
 	requested := queryInteger(r, argumentConstant.Job)
-	detail := s.detailRegion(instance, project, pipeline, requested)
+	detail := s.detailRegion(
+		r.Context(),
+		instance,
+		project,
+		pipeline,
+		requested,
+	)
 
 	if s.view.IsExtendedRequest(r) {
 		s.view.RenderFragment(w, detail)

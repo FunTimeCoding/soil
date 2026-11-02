@@ -1,12 +1,16 @@
 package mock_client
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 )
 
-func (c *Client) MustRunners(all bool) []*runner.Runner {
-	result, e := c.Runners(all)
+func (c *Client) MustRunners(
+	x context.Context,
+	all bool,
+) []*runner.Runner {
+	result, e := c.Runners(x, all)
 	errors.PanicOnError(e)
 
 	return result

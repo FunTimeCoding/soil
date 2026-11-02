@@ -11,8 +11,8 @@ func (s *Server) GetSessionsBashDump(
 ) (server.GetSessionsBashDumpResponseObject, error) {
 	var result []string
 
-	for _, e := range s.service.Sessions() {
-		for _, c := range s.service.ToolCalls(e.Identifier) {
+	for _, e := range s.transcript.Sessions() {
+		for _, c := range s.transcript.ToolCalls(e.Identifier) {
 			if c.Name == "Bash" && c.Detail != "" {
 				result = append(result, c.Detail)
 			}

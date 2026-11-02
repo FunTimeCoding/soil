@@ -14,7 +14,7 @@ func (s *Server) dashboard(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
-	roster, e := s.roster()
+	roster, e := s.rosterSection()
 
 	if e != nil {
 		s.view.Answer(w, q, s.reporter, e)
@@ -30,6 +30,14 @@ func (s *Server) dashboard(
 		return
 	}
 
+	usage, _, g := s.usage.FindUsage()
+
+	if g != nil {
+		s.view.Answer(w, q, s.reporter, g)
+
+		return
+	}
+
 	s.view.RenderLivePageWithSummary(
 		w,
 		constant.DashboardTitle,
@@ -39,7 +47,7 @@ func (s *Server) dashboard(
 			constant.Activity,
 			constant.EventSummary,
 		),
-		usage_page.Summary(s.service.Usage()),
+		usage_page.Summary(usage),
 		html.H3(gomponents.Text("Roster")),
 		html.Div(extended.StreamSwap(constant.Roster), roster),
 		html.H3(gomponents.Text("Recent Activity")),

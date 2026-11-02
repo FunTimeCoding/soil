@@ -1,7 +1,7 @@
 package watcher
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"path/filepath"
 	"strings"
 )
@@ -9,11 +9,11 @@ import (
 func (w *Watcher) recordChange(path string) {
 	name := filepath.Base(path)
 
-	if !strings.HasSuffix(name, constant.NotationLogExtension) {
+	if !strings.HasSuffix(name, soil.NotationLogExtension) {
 		return
 	}
 
-	identifier := strings.TrimSuffix(name, constant.NotationLogExtension)
+	identifier := strings.TrimSuffix(name, soil.NotationLogExtension)
 
 	if strings.HasPrefix(path, w.harbor) {
 		if _, exists := w.changed[identifier]; !exists {

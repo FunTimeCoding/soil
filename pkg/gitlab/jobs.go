@@ -1,17 +1,18 @@
 package gitlab
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/forge"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
-func (c *Client) Jobs() ([]*job.Job, error) {
+func (c *Client) Jobs(x context.Context) ([]*job.Job, error) {
 	var result []*job.Job
 	cleanup := forge.AutoCleanup()
 	f := constant.Format
-	projects, e := c.PipelineProjects()
+	projects, e := c.PipelineProjects(x)
 
 	if e != nil {
 		return nil, e
@@ -22,7 +23,7 @@ func (c *Client) Jobs() ([]*job.Job, error) {
 			console.Format("Project: %s\n", p.Raw.NameWithNamespace)
 		}
 
-		jobs, g := c.ProjectJobs(p)
+		jobs, g := c.ProjectJobs(x, p)
 
 		if g != nil {
 			return nil, g
@@ -32,6 +33,7 @@ func (c *Client) Jobs() ([]*job.Job, error) {
 			if i > 0 {
 				if cleanup {
 					if h := c.DeletePipeline(
+						x,
 						p.Identifier,
 						j.Raw.Pipeline.ID,
 					); h != nil {

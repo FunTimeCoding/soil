@@ -9,17 +9,34 @@ import (
 	"time"
 )
 
+func TestNoUsageYetIsAbsentNotAFailure(t *testing.T) {
+	s := service_tester.New(t)
+	result, found, e := s.Usage.FindUsage()
+	assert.FatalOnError(t, e)
+	assert.False(t, found)
+	assert.True(t, result == nil)
+}
+
+func TestAFailedUsageReadIsAFailureNotAbsence(t *testing.T) {
+	s := service_tester.New(t)
+	s.Close()
+	_, found, e := s.Usage.FindUsage()
+	assert.NotNil(t, e)
+	assert.False(t, found)
+}
+
 func TestUsageHidesFableFromAnEarlierWeek(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(t, s.Service.RecordFable(34, "Wed 8:59 PM", nil))
+	assert.FatalOnError(t, s.Usage.RecordFable(34, "Wed 8:59 PM", nil))
 	s.Store.Advance(8 * 24 * time.Hour)
 	now := s.Store.Clock()()
 	assert.FatalOnError(
 		t,
-		s.Service.RecordRateLimits(0, 20, time.Time{}, now.Add(24*time.Hour)),
+		s.Usage.RecordRateLimits(0, 20, time.Time{}, now.Add(24*time.Hour)),
 	)
-	result := s.Service.Usage()
-	assert.FatalNotNil(t, result)
+	result, found, e := s.Usage.FindUsage()
+	assert.FatalOnError(t, e)
+	assert.True(t, found)
 	assert.False(t, result.HasFable())
 	assert.Integer(t, 20, result.SevenDayPercent)
 }
@@ -29,11 +46,12 @@ func TestUsageShowsFableFromThisWeek(t *testing.T) {
 	now := s.Store.Clock()()
 	assert.FatalOnError(
 		t,
-		s.Service.RecordRateLimits(0, 20, time.Time{}, now.Add(24*time.Hour)),
+		s.Usage.RecordRateLimits(0, 20, time.Time{}, now.Add(24*time.Hour)),
 	)
-	assert.FatalOnError(t, s.Service.RecordFable(34, "Wed 8:59 PM", nil))
-	result := s.Service.Usage()
-	assert.FatalNotNil(t, result)
+	assert.FatalOnError(t, s.Usage.RecordFable(34, "Wed 8:59 PM", nil))
+	result, found, e := s.Usage.FindUsage()
+	assert.FatalOnError(t, e)
+	assert.True(t, found)
 	assert.True(t, result.HasFable())
 	assert.Integer(t, 34, result.FablePercent)
 }
@@ -43,18 +61,22 @@ func TestUsageWithoutFiveHourHasNoSession(t *testing.T) {
 	now := s.Store.Clock()()
 	assert.FatalOnError(
 		t,
-		s.Service.RecordRateLimits(0, 23, time.Time{}, now.Add(24*time.Hour)),
+		s.Usage.RecordRateLimits(0, 23, time.Time{}, now.Add(24*time.Hour)),
 	)
-	result := s.Service.Usage()
-	assert.FatalNotNil(t, result)
+	result, found, e := s.Usage.FindUsage()
+	assert.FatalOnError(t, e)
+	assert.True(t, found)
 	assert.False(t, result.HasSession())
 	assert.Integer(t, 23, result.SevenDayPercent)
 }
 
 func TestUsagePageWeekOnlyRecordsNoFable(t *testing.T) {
 	s := service_tester.New(t)
-	s.Service.RecordUsagePage(
-		page.Parse(fixture.Read("claude", "usage-page-week.html")),
+	assert.FatalOnError(
+		t,
+		s.Usage.RecordUsagePage(
+			page.Parse(fixture.Read("claude", "usage-page-week.html")),
+		),
 	)
 	fable, e := s.Store.Store.LatestFableSnapshot()
 	assert.FatalOnError(t, e)
@@ -64,8 +86,11 @@ func TestUsagePageWeekOnlyRecordsNoFable(t *testing.T) {
 
 func TestUsagePageRecordsFableWhenSeen(t *testing.T) {
 	s := service_tester.New(t)
-	s.Service.RecordUsagePage(
-		page.Parse(fixture.Read("claude", "usage-page.html")),
+	assert.FatalOnError(
+		t,
+		s.Usage.RecordUsagePage(
+			page.Parse(fixture.Read("claude", "usage-page.html")),
+		),
 	)
 	fable, e := s.Store.Store.LatestFableSnapshot()
 	assert.FatalOnError(t, e)
@@ -76,8 +101,11 @@ func TestUsagePageRecordsFableWhenSeen(t *testing.T) {
 
 func TestUsagePageRecordsFableFromOpenWeek(t *testing.T) {
 	s := service_tester.New(t)
-	s.Service.RecordUsagePage(
-		page.Parse(fixture.Read("claude", "usage-page-week-open.html")),
+	assert.FatalOnError(
+		t,
+		s.Usage.RecordUsagePage(
+			page.Parse(fixture.Read("claude", "usage-page-week-open.html")),
+		),
 	)
 	fable, e := s.Store.Store.LatestFableSnapshot()
 	assert.FatalOnError(t, e)
@@ -88,13 +116,16 @@ func TestUsagePageRecordsFableFromOpenWeek(t *testing.T) {
 
 func TestUnreadableUsagePageCapturesOncePerEpisode(t *testing.T) {
 	s := service_tester.New(t)
-	s.Service.RecordUsagePage(nil)
-	s.Service.RecordUsagePage(nil)
-	s.Service.RecordUsagePage(nil)
+	assert.FatalOnError(t, s.Usage.RecordUsagePage(nil))
+	assert.FatalOnError(t, s.Usage.RecordUsagePage(nil))
+	assert.FatalOnError(t, s.Usage.RecordUsagePage(nil))
 	assert.Count(t, 1, s.Reporter.Events())
-	s.Service.RecordUsagePage(
-		page.Parse(fixture.Read("claude", "usage-page-week.html")),
+	assert.FatalOnError(
+		t,
+		s.Usage.RecordUsagePage(
+			page.Parse(fixture.Read("claude", "usage-page-week.html")),
+		),
 	)
-	s.Service.RecordUsagePage(nil)
+	assert.FatalOnError(t, s.Usage.RecordUsagePage(nil))
 	assert.Count(t, 2, s.Reporter.Events())
 }

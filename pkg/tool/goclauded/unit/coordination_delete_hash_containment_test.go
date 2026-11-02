@@ -20,7 +20,7 @@ func TestDeleteHashRendersOnDetailPage(t *testing.T) {
 		identifier,
 		map[string]any{"turn_count": 4, "lines": 20},
 	)
-	hash := s.Service.DeleteHash(identifier)
+	hash := s.Store.GetSession(identifier).DeleteHash()
 	response, e := s.Server.Client().Get(
 		s.Address(fmt.Sprintf("/sessions/%s", identifier)),
 	)
@@ -39,7 +39,9 @@ func TestDeleteHashStaysOutOfMachineSurfaces(t *testing.T) {
 		"11111111-2222-3333-4444-555555555555",
 		map[string]any{"turn_count": 4, "lines": 20},
 	)
-	hash := s.Service.DeleteHash("11111111-2222-3333-4444-555555555555")
+	hash := s.Store.GetSession(
+		"11111111-2222-3333-4444-555555555555",
+	).DeleteHash()
 	assert.Integer(t, 8, len(hash))
 	c := s.RESTClient(t)
 	detail, e := c.GetSessionDetailWithResponse(

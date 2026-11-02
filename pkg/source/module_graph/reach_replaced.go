@@ -1,7 +1,7 @@
 package module_graph
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/build"
 	"path/filepath"
@@ -42,7 +42,7 @@ func reachReplaced(
 
 		for module, directory := range replaced {
 			if p != module &&
-				!strings.HasPrefix(p, join.Empty(module, constant.Slash)) {
+				!strings.HasPrefix(p, join.Empty(module, stringsConstant.Slash)) {
 				continue
 			}
 

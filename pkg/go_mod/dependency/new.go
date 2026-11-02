@@ -1,6 +1,6 @@
 package dependency
 
-import "github.com/funtimecoding/soil/pkg/monitor/constant"
+import monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 
 func New(
 	path string,
@@ -8,7 +8,7 @@ func New(
 	directory string,
 ) *Dependency {
 	return &Dependency{
-		MonitorIdentifier: constant.GoLicense.StringIdentifier(path),
+		MonitorIdentifier: monitorConstant.GoLicense.StringIdentifier(path),
 		Path:              path,
 		Version:           version,
 		Directory:         directory,

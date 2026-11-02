@@ -1,7 +1,6 @@
 package gitlab
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
@@ -15,10 +14,7 @@ func New(
 	token string,
 	o ...Option,
 ) *Client {
-	result := &Client{
-		context:      context.Background(),
-		projectCache: make(map[int64]*project.Project),
-	}
+	result := &Client{projectCache: make(map[int64]*project.Project)}
 
 	for _, p := range o {
 		p(result)

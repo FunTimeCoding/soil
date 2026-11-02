@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
@@ -27,7 +27,7 @@ func (s *Server) retargetReferences(
 		moves = append(moves, path_move.New(m.From, m.To))
 	}
 
-	r, e := s.service.RetargetReferences(
+	r, e := s.reference.RetargetReferences(
 		turnContext(x),
 		directory,
 		moves,
@@ -35,7 +35,7 @@ func (s *Server) retargetReferences(
 	)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

@@ -3,7 +3,7 @@ package build
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/build/origin"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
@@ -12,16 +12,16 @@ func ModuleOrigin(
 	version string,
 ) (*origin.Origin, error) {
 	if version == "" {
-		version = constant.LatestVersion
+		version = soil.LatestVersion
 	}
 
 	r := run.New()
 	r.Panic = false
 	output := r.Start(
-		constant.Go,
-		constant.List,
-		constant.ModuleArgument,
-		constant.NotationArgument,
+		soil.Go,
+		soil.List,
+		soil.ModuleArgument,
+		soil.NotationArgument,
 		fmt.Sprintf("%s@%s", module, version),
 	)
 

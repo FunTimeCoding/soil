@@ -3,7 +3,7 @@ package claude
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/message"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
@@ -21,7 +21,7 @@ func (c *Client) ToolContext(
 ) []tool_context_result.Result {
 	path := filepath.Join(
 		c.base,
-		join.Empty(sessionIdentifier, constant.NotationLogExtension),
+		join.Empty(sessionIdentifier, soil.NotationLogExtension),
 	)
 	f, e := os.Open(path)
 
@@ -33,7 +33,7 @@ func (c *Client) ToolContext(
 	var messages []message.Message
 	var toolUses [][]string
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(nil, constant.NotationScanBuffer)
+	scanner.Buffer(nil, soil.NotationScanBuffer)
 
 	for scanner.Scan() {
 		var line notation.Line

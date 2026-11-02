@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -12,13 +12,13 @@ func (s *Server) GetSessionsFind(
 ) (server.GetSessionsFindResponseObject, error) {
 	var result []server.FindMatch
 
-	for _, m := range s.service.SessionsByTool(r.Params.Tool) {
+	for _, m := range s.transcript.SessionsByTool(r.Params.Tool) {
 		name := m.Session.Slug
-		e, found, f := s.service.FindSession(m.Session.Identifier)
+		e, found, f := s.roster.FindSession(m.Session.Identifier)
 
 		if f != nil {
 			return server.GetSessionsFind500JSONResponse(
-				*s.captureFail(f, constant.UnexpectedError),
+				*s.captureFail(f, soil.UnexpectedError),
 			), nil
 		}
 

@@ -3,7 +3,13 @@ package worker
 import "github.com/funtimecoding/soil/pkg/errors/classify"
 
 func (w *Worker) Poll() {
-	for _, e := range w.refresh() {
+	failures := w.refresh(w.context)
+
+	if w.context.Err() != nil {
+		return
+	}
+
+	for _, e := range failures {
 		if classify.Reportable(e) {
 			w.reporter.CaptureException(e)
 

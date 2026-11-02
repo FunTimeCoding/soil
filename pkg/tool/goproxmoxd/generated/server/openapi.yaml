@@ -50,6 +50,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to derive the address.
           content:
@@ -78,6 +90,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -114,6 +138,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -156,6 +192,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -187,6 +235,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -230,6 +290,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -288,6 +360,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -336,12 +420,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/snapshots:
     get:
       operationId: listMachineSnapshots
@@ -377,6 +479,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -429,12 +543,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/snapshots/{name}/rollback:
     post:
       operationId: rollbackMachineSnapshot
@@ -478,12 +610,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/snapshots/{name}:
     delete:
       operationId: deleteMachineSnapshot
@@ -527,12 +677,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/reconcile:
     post:
       operationId: reconcile
@@ -574,8 +742,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "503":
-          description: Netbox is unavailable.
+          description: The hypervisor or Netbox is unavailable.
           content:
             application/json:
               schema:
@@ -623,12 +797,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/stop:
     post:
       operationId: stopMachine
@@ -666,12 +858,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/shutdown:
     post:
       operationId: shutdownMachine
@@ -709,12 +919,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/reset:
     post:
       operationId: resetMachine
@@ -752,12 +980,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/nodes/{name}/networks:
     get:
       operationId: listNetworks
@@ -786,6 +1032,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -833,12 +1091,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/containers/{identifier}/stop:
     post:
       operationId: stopContainer
@@ -876,12 +1152,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/containers/{identifier}/shutdown:
     post:
       operationId: shutdownContainer
@@ -919,12 +1213,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/containers:
     get:
       operationId: listContainers
@@ -953,6 +1265,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -1000,6 +1324,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1041,6 +1377,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -1093,12 +1441,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/containers/{identifier}/snapshots/{name}/rollback:
     post:
       operationId: rollbackContainerSnapshot
@@ -1142,12 +1508,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/containers/{identifier}/snapshots/{name}:
     delete:
       operationId: deleteContainerSnapshot
@@ -1191,12 +1575,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/machines/{identifier}/clone:
     post:
       operationId: cloneMachine
@@ -1240,12 +1642,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: The guest is locked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/nodes/{name}/storages:
     get:
       operationId: listStorages
@@ -1274,6 +1694,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:
@@ -1322,6 +1754,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1350,6 +1794,12 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The host refused the file operation.
           content:
             application/json:
               schema:
@@ -1385,6 +1835,12 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The host refused the file operation.
           content:
             application/json:
               schema:
@@ -1425,6 +1881,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "403":
+          description: The host refused the file operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1456,6 +1918,12 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: The host refused the file operation.
           content:
             application/json:
               schema:
@@ -1504,6 +1972,18 @@ paths:
                 $ref: "#/components/schemas/Error"
         "404":
           description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "403":
+          description: Proxmox refused the permission.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The hypervisor is unavailable.
           content:
             application/json:
               schema:

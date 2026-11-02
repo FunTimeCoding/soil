@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
@@ -11,10 +11,10 @@ import (
 func TestStatusReportsPowerAndTheOperationsOffered(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
-		constant.PowerOn,
-		constant.PowerCycle,
-		constant.PowerOffSoft,
-		constant.PowerOffSoftGraceful,
+		bandConstant.PowerOn,
+		bandConstant.PowerCycle,
+		bandConstant.PowerOffSoft,
+		bandConstant.PowerOffSoftGraceful,
 	)
 	r, e := s.Client.GetStatusWithResponse(
 		t.Context(),

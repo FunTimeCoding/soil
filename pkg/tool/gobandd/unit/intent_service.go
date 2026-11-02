@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/band/constant"
+	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/band/mock_client"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
@@ -20,7 +20,7 @@ func intentService(t *testing.T) (
 	r := memory.New()
 	v, engines, n := service_tester.NewWithNetbox(t, r, "alfa")
 	engine := engines["alfa"]
-	engine.SetPower(constant.PowerOn, runningStates()...)
+	engine.SetPower(bandConstant.PowerOn, runningStates()...)
 
 	return v, n, engine, r
 }

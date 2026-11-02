@@ -17,12 +17,12 @@ func TestRenameRefusedWhenAFileKeepsChangingBeforeCommit(t *testing.T) {
 	)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	s := service_tester.NewService(t)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			testutil.WriteFile(t, d, "pkg/caller/run.go", caller)
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -54,7 +54,7 @@ func TestRenameRunsAgainAfterAFileChangedOnce(t *testing.T) {
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	s := service_tester.NewService(t)
 	edited := false
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			if edited {
 				return
@@ -64,7 +64,7 @@ func TestRenameRunsAgainAfterAFileChangedOnce(t *testing.T) {
 			testutil.WriteFile(t, d, "pkg/caller/run.go", caller)
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -90,7 +90,7 @@ func TestRenameRunsAgainAfterAFileChangedOnce(t *testing.T) {
 func TestRenameCommitsPastAChangeOutsideTheReach(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			testutil.WriteFile(
 				t,
@@ -100,7 +100,7 @@ func TestRenameCommitsPastAChangeOutsideTheReach(t *testing.T) {
 			)
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -122,7 +122,7 @@ func TestRenameCommitsPastAChangeOutsideTheReach(t *testing.T) {
 func TestRenameRefusedWhenAPackageStartsImportingTheTarget(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			testutil.WriteFile(
 				t,
@@ -132,7 +132,7 @@ func TestRenameRefusedWhenAPackageStartsImportingTheTarget(t *testing.T) {
 			)
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",
@@ -155,12 +155,12 @@ func TestRenameRefusedWhenAReplacingModuleChangesBeforeCommit(t *testing.T) {
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
 	consumer := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
 	s := replacingService(t, library, user)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			testutil.WriteFile(t, user, "pkg/user/user.go", consumer)
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -191,7 +191,7 @@ func TestRenameRefusedWhenAReplacingModuleChangesBeforeCommit(t *testing.T) {
 func TestRenameCommitsPastAReplacingModuleChangeOutsideTheReach(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	s := replacingService(t, library, user)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			testutil.WriteFile(
 				t,
@@ -201,7 +201,7 @@ func TestRenameCommitsPastAReplacingModuleChangeOutsideTheReach(t *testing.T) {
 			)
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -223,12 +223,12 @@ func TestRenameCommitsWhenNothingChanged(t *testing.T) {
 	d := renameFunctionFixture(t)
 	called := false
 	s := service_tester.NewService(t)
-	s.BeforeCommit(
+	s.Commit.BeforeCommit(
 		func() {
 			called = true
 		},
 	)
-	r, e := s.Rename(
+	r, e := s.Symbol.Rename(
 		t.Context(),
 		d,
 		"example/pkg/target",

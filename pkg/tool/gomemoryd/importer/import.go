@@ -1,7 +1,7 @@
 package importer
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"os"
@@ -42,7 +42,7 @@ func Import(
 	for _, entry := range entries {
 		if entry.IsDir() || !strings.HasSuffix(
 			entry.Name(),
-			constant.MarkdownExtension,
+			soil.MarkdownExtension,
 		) {
 			continue
 		}

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -19,7 +19,7 @@ func (c *Client) OpenFile(path string) (*view.View, error) {
 
 	r, f := c.client.Post(
 		c.base.Copy().Path("/open").String(),
-		constant.Object,
+		webConstant.Object,
 		bytes.NewReader(body),
 	)
 

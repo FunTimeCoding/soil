@@ -2,7 +2,7 @@ package pointer_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"slices"
 )
@@ -18,7 +18,7 @@ func Declaring(
 	) bool {
 		return slices.Contains(
 			declared,
-			join.Empty(directory, constant.Dot, name),
+			join.Empty(directory, stringsConstant.Dot, name),
 		)
 	}
 

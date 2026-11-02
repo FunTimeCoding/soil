@@ -22,7 +22,7 @@ func (s *Server) GetProject(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.Project(instance, project)
+	v, e := s.service.Project(x, instance, project)
 
 	if e != nil {
 		return s.answerWith(e, "")

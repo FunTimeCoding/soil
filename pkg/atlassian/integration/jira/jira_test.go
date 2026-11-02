@@ -12,7 +12,9 @@ import (
 )
 
 func TestSearchReadsThroughTheRequester(t *testing.T) {
-	result, e := jira.NewEnvironment().SearchLimitV3(
+	owned := jira.NewEnvironment()
+	defer owned.Close()
+	result, e := owned.SearchLimitV3(
 		1,
 		"project = %s ORDER BY created DESC",
 		environment.Required(constant.JiraDefaultProjectKeyEnvironment),
@@ -22,13 +24,17 @@ func TestSearchReadsThroughTheRequester(t *testing.T) {
 }
 
 func TestUnboundedSearchIsRefused(t *testing.T) {
-	_, e := jira.NewEnvironment().SearchLimitV3(1, "ORDER BY created DESC")
+	owned := jira.NewEnvironment()
+	defer owned.Close()
+	_, e := owned.SearchLimitV3(1, "ORDER BY created DESC")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "Unbounded JQL queries are not allowed", e.Error())
 }
 
 func TestLibraryClientsStillAnswer(t *testing.T) {
-	u, e := jira.NewEnvironment().User()
+	owned := jira.NewEnvironment()
+	defer owned.Close()
+	u, e := owned.User()
 	assert.FatalOnError(t, e)
 	assert.True(t, u != nil)
 }

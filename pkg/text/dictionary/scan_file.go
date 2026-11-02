@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"github.com/funtimecoding/soil/pkg/errors"
 	library "github.com/funtimecoding/soil/pkg/strings"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"strings"
 )
@@ -20,7 +20,7 @@ func ScanFile(
 
 	for s.Scan() {
 		b.WriteString(s.Text())
-		b.WriteString(constant.Unix)
+		b.WriteString(stringsConstant.Unix)
 	}
 
 	errors.PanicOnError(s.Err())
@@ -30,7 +30,11 @@ func ScanFile(
 	tokenize(
 		strings.ToLower(
 			splitDigit(
-				strings.ReplaceAll(library.SplitCase(raw), "_", constant.Space),
+				strings.ReplaceAll(
+					library.SplitCase(raw),
+					"_",
+					stringsConstant.Space,
+				),
 			),
 		),
 		token,

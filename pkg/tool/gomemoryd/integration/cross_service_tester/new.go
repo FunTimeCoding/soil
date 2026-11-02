@@ -2,7 +2,7 @@ package cross_service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
@@ -28,7 +28,7 @@ func New(t *testing.T) *Tester {
 	o.Query = func() face.Client {
 		return client.New(
 			locator.New(webConstant.Localhost).Insecure().Port(q.Port),
-			constant.ModelContextTestToken,
+			generativeConstant.ModelContextTestToken,
 		)
 	}
 	r := memory.New()

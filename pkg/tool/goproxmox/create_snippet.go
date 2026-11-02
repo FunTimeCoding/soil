@@ -1,6 +1,7 @@
 package goproxmox
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
@@ -17,8 +18,10 @@ func createSnippet(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			c.Terminal().Emit(
+			c.Terminal().EmitValue(
 				c.Client().CreateSnippet(
+					context.Background(),
+					&client.CreateSnippetParams{Instance: c.Instance()},
 					client.CreateSnippetJSONRequestBody{
 						Name:    a[0],
 						Content: content,

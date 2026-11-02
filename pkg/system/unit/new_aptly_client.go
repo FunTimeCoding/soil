@@ -12,6 +12,8 @@ func newAptlyClient(
 ) *aptly.Client {
 	t.Helper()
 	host, port := upstream_tester.HostPort(t, server)
+	result := aptly.New(host, port, true, "alfa", "bravo")
+	t.Cleanup(result.Close)
 
-	return aptly.New(host, port, true, "alfa", "bravo")
+	return result
 }

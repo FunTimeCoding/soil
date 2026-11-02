@@ -63,3 +63,19 @@ func TestChannelCallsignReleasesOnTheNextPrompt(t *testing.T) {
 		t.Fatal("callsign did not arrive after the prompt")
 	}
 }
+
+func TestChannelCallsignReleasesWhenTheDaemonCloses(t *testing.T) {
+	s := base.New(t)
+	s.Check("session-1")
+	s.Store.Advance(time.Minute)
+	result := channel_tester.Callsign(t, s, t.Context(), s.Store.Clock()())
+	s.AwaitSubscribers(1)
+	s.CloseDaemon()
+
+	select {
+	case name := <-result:
+		assert.String(t, "", name)
+	case <-time.After(2 * time.Second):
+		t.Fatal("callsign hold outlived the daemon")
+	}
+}

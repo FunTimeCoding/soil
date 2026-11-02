@@ -12,7 +12,7 @@ func TestEmptyRefusalAcceptsAHusk(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
 	r := s.Store.GetSession("husk")
-	result, e := s.Service.EmptyRefusal(r)
+	result, e := s.Session.EmptyRefusal(r)
 	assert.FatalOnError(t, e)
 	assert.True(t, result == nil)
 }
@@ -110,9 +110,9 @@ func TestEmptyRefusalNamesEventsBeyondLifecycle(t *testing.T) {
 func TestEmptyRefusalIgnoresLifecycleEvents(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
-	assert.FatalOnError(t, s.Service.CloseSession("husk", "logout"))
+	assert.FatalOnError(t, s.Roster.CloseSession("husk", "logout"))
 	r := s.Store.GetSession("husk")
-	result, e := s.Service.EmptyRefusal(r)
+	result, e := s.Session.EmptyRefusal(r)
 	assert.FatalOnError(t, e)
 	assert.True(t, result == nil)
 }

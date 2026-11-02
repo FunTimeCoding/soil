@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/console_tester"
 	"strings"
@@ -60,10 +61,17 @@ func TestCheckTimeout(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Client(t))
 	callsign := c.Register("session-1")
-	s.Announce("session-1", callsign, "working", "")
+	s.Announce(callsign, "working")
 	c.Check("session-1")
-	s.Store.Advance(2 * time.Hour)
-	s.Service.RunTimeoutSweep()
+	assert.FatalOnError(
+		t,
+		s.Store.Store.PushQueue(
+			"session-1",
+			callsign,
+			constant.QueueTimeout,
+			"1 hour since last turn. Removed from roster. Last topic: working",
+		),
+	)
 	output := c.Check("session-1")
 	assert.StringContains(
 		t,
@@ -88,13 +96,16 @@ func TestCheckCompletionActivity(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Client(t))
 	c.Register("session-1")
-	other := c.Register("session-2")
-	s.Announce("session-2", other, "indexing", "")
+	other := s.NewSession(t)
+	other.Announce(other.Name(), "indexing")
 	c.Check("session-1")
-	s.Complete("session-2", other, "indexing", "done")
+	other.MustCallTool(
+		constant.Complete,
+		map[string]any{constant.Message: "done"},
+	)
 	output := c.Check("session-1")
 	assert.StringContains(t, "Session activity", output)
-	assert.StringContains(t, other, output)
+	assert.StringContains(t, other.Name(), output)
 	assert.StringContains(t, "completed", output)
 }
 
@@ -106,7 +117,7 @@ func TestCheckReannounceAfterClearBindings(t *testing.T) {
 	c := console_tester.New(t, s.Client(t))
 	c.Register("session-2")
 	c.Check("session-2")
-	s.Service.ClearBindings()
+	s.Restart()
 	output := c.Check(a.UUID)
 	assert.StringContains(t, "Re-announce", output)
 }
@@ -117,11 +128,8 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 	c.Register("11111111-2222-3333-4444-555555555555")
 	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
 	assert.String(t, "Fable 5 18%", line)
-	record, found, e := s.Service.FindSession(
-		"11111111-2222-3333-4444-555555555555",
-	)
-	assert.FatalOnError(t, e)
-	assert.True(t, found)
+	record := s.Store.GetSession("11111111-2222-3333-4444-555555555555")
+	assert.FatalNotNil(t, record)
 	assert.Integer(t, 18, record.ContextPercent)
 	assert.Integer(t, 1000000, record.ContextWindow)
 	assert.String(t, "Fable 5", record.Model)

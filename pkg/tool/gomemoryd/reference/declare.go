@@ -1,7 +1,7 @@
 package reference
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/constant"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 )
@@ -20,7 +20,7 @@ func declare(
 			continue
 		}
 
-		dead = append(dead, NewFinding(base, constant.DeadPointerText))
+		dead = append(dead, NewFinding(base, lintConstant.DeadPointerText))
 	}
 
 	return result, dead

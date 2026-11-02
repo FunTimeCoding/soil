@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
@@ -42,7 +42,7 @@ func New(
 		mattermost.WithTeam("tango"),
 	)
 	m := http.NewServeMux()
-	guard.New(m, []string{constant.ModelContextTestToken}).TokenMount(
+	guard.New(m, []string{generativeConstant.ModelContextTestToken}).TokenMount(
 		webConstant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
@@ -60,7 +60,7 @@ func New(
 	host, port := network.SplitHostPort(s.Listener.Addr().String())
 	c := client.New(
 		locator.New(host).Port(port).Insecure(),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(c.Close)
 

@@ -22,7 +22,7 @@ func (s *Server) ListCommits(
 		return s.answerWith(e, "")
 	}
 
-	v, e := s.service.ListCommits(instance, project, a.Reference, 0)
+	v, e := s.service.ListCommits(x, instance, project, a.Reference, 0)
 
 	if e != nil {
 		return s.answerWith(e, "")

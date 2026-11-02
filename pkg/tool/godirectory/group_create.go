@@ -2,16 +2,14 @@ package godirectory
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func groupCreate(
-	c *client.ClientWithResponses,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
@@ -22,17 +20,12 @@ func groupCreate(
 			_ *cobra.Command,
 			a []string,
 		) {
-			result, e := c.PostGroupWithResponse(
-				context.Background(),
-				client.PostGroupJSONRequestBody{Name: a[0]},
+			t.EmitValue(
+				c.PostGroup(
+					context.Background(),
+					client.PostGroupJSONRequestBody{Name: a[0]},
+				),
 			)
-			errors.PanicOnError(e)
-
-			if result.JSON200 == nil {
-				t.Reject(result.Status(), result.Body)
-			}
-
-			console.Line(notation.MarshalIndent(result.JSON200))
 		},
 	}
 }

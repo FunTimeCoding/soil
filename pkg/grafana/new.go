@@ -2,7 +2,7 @@ package grafana
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/go-openapi/strfmt"
 	"github.com/grafana/grafana-openapi-client-go/client"
 )
@@ -18,7 +18,7 @@ func New(
 			&client.TransportConfig{
 				Host:     fmt.Sprintf("%s:%s", host, port),
 				BasePath: "/api",
-				Schemes:  []string{constant.Secure},
+				Schemes:  []string{webConstant.Secure},
 				APIKey:   token,
 				OrgID:    1,
 			},

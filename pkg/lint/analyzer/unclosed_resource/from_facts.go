@@ -12,10 +12,14 @@ func FromFacts(summaries []*fact.Summary) *Summaries {
 		self:     make(map[string]bool),
 		spent:    make(map[string]bool),
 		wraps:    make(map[string]map[int]bool),
+		yields:   make(map[string]map[int]map[string]bool),
+		draws:    make(map[string]map[int]map[string]bool),
 	}
 	delegate := make(map[string][]string)
 	forward := make(map[string][]fact.Forward)
 	wrapping := make(map[string][]fact.Forward)
+	yielding := make(map[string][]fact.FieldForward)
+	drawing := make(map[string][]fact.FieldForward)
 	arranging := make(map[string][]fact.Condition)
 	spentVia := make(map[string][]string)
 	lendsVia := make(map[string][]string)
@@ -42,6 +46,14 @@ func FromFacts(summaries []*fact.Summary) *Summaries {
 
 		for k, all := range s.Wraps {
 			wrapping[k] = append(wrapping[k], all...)
+		}
+
+		for k, all := range s.Yields {
+			yielding[k] = append(yielding[k], all...)
+		}
+
+		for k, all := range s.Draws {
+			drawing[k] = append(drawing[k], all...)
 		}
 
 		for k, all := range s.Arranging {
@@ -91,6 +103,10 @@ func FromFacts(summaries []*fact.Summary) *Summaries {
 					changed = true
 				}
 			}
+		}
+
+		if result.markFields(yielding, drawing) {
+			changed = true
 		}
 
 		for f, all := range wrapping {

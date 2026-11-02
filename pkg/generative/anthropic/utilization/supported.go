@@ -1,10 +1,10 @@
 package utilization
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"runtime"
 )
 
 func Supported() bool {
-	return runtime.GOOS == constant.Darwin || runtime.GOOS == constant.Linux
+	return runtime.GOOS == systemConstant.Darwin || runtime.GOOS == systemConstant.Linux
 }

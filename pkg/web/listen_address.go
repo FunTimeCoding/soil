@@ -9,5 +9,7 @@ func ListenAddress(
 	m *http.ServeMux,
 	address string,
 ) {
-	errors.PanicOnError(Server(m, address).ListenAndServe())
+	s := Server(m, address)
+	defer errors.PanicClose(s)
+	errors.PanicOnError(s.ListenAndServe())
 }

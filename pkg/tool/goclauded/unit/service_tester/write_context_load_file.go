@@ -2,7 +2,7 @@ package service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
@@ -15,7 +15,7 @@ func (o *Tester) WriteContextLoadFile(identifier string) {
 		os.WriteFile(
 			filepath.Join(
 				o.Harbor,
-				join.Empty(identifier, constant.NotationLogExtension),
+				join.Empty(identifier, soil.NotationLogExtension),
 			),
 			[]byte(fixture.Read("claude", "context-loads.jsonl")),
 			0o644,

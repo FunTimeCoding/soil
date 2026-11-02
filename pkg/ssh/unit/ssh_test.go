@@ -52,16 +52,15 @@ func TestPanicDefault(t *testing.T) {
 }
 
 func TestNotDialed(t *testing.T) {
-	assert.Panic(
-		t,
-		func() {
-			ssh.NewWithPassword("alfa", "localhost", "", false).Run("true")
-		},
-	)
+	c := ssh.NewWithPassword("alfa", "localhost", "", false)
+	defer c.Close()
+	assert.Panic(t, func() { c.Run("true") })
 }
 
 func TestDialUnreachable(t *testing.T) {
-	e := ssh.NewWithPassword("alfa", "unknown.invalid", "", false).Dial()
+	c := ssh.NewWithPassword("alfa", "unknown.invalid", "", false)
+	defer c.Close()
+	e := c.Dial()
 	assert.True(t, unreachable.Is(e))
 	assert.String(t, "unknown.invalid: unknown host", e.Error())
 }

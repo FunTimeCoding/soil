@@ -1,6 +1,7 @@
 package graph_query
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 )
@@ -9,8 +10,10 @@ import (
 func Query() {
 	c := gitlab.NewEnvironment()
 	defer c.Close()
+	x := context.Background()
 	runner := &RunnerResult{}
 	c.MustQuery(
+		x,
 		`query {
   runner(id: "gid://gitlab/Ci::Runner/1") {
     id description status runnerType
@@ -20,5 +23,5 @@ func Query() {
 		&runner,
 	)
 	console.Format("Response: %+v\n", runner)
-	console.Format("Runner: %+v\n", c.MustGraphRunner(1))
+	console.Format("Runner: %+v\n", c.MustGraphRunner(x, 1))
 }
