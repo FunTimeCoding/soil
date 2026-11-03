@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
@@ -21,6 +22,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/double"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
+	"github.com/prometheus/client_golang/prometheus"
 	"path/filepath"
 	"testing"
 )
@@ -73,7 +75,13 @@ func New(t *testing.T) *Tester {
 	)
 	result.Usage = usage.New(s.Store, d.Notifier, nil, s.Clock(), l, d.Reporter)
 	result.Search = search.New(s.Store, result.Index, d.Harbor)
-	result.Document = document.New(s.Store, d.Query, result.queryGuard, l)
+	result.Registry = prometheus.NewRegistry()
+	result.Document = document.New(
+		s.Store,
+		d.Query,
+		result.queryGuard,
+		metric.New(result.Registry),
+	)
 	result.Event = event.New(
 		s.Store,
 		result.Message,

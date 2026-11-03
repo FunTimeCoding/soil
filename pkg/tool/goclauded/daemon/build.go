@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
@@ -39,7 +40,7 @@ func (d *Daemon) build(
 	d.memory = memory.New(s, d.memoryPeer, d.memoryGuard, d.message, o.Clock, r)
 	d.usage = usage.New(s, n, d.browser, o.Clock, l, r)
 	d.search = search.New(s, x, o.Harbor)
-	d.document = document.New(s, d.query, d.queryGuard, l)
+	d.document = document.New(s, d.query, d.queryGuard, metric.New(y))
 	d.event = event.New(s, d.message, d.memory, d.document, n, o.Clock, r)
 	c := o.Claude()
 	cache := session_cache.New()

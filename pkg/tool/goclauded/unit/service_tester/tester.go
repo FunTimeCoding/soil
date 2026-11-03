@@ -18,6 +18,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/double"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
+	"github.com/prometheus/client_golang/prometheus"
 	"sync"
 	"testing"
 )
@@ -38,6 +39,7 @@ type Tester struct {
 	Index          *search_index.Index
 	Search         *search.Service
 	Document       *document.Service
+	Registry       *prometheus.Registry
 	searchDatabase *sql.DB
 	memoryGuard    *peer.Guard
 	queryGuard     *peer.Guard

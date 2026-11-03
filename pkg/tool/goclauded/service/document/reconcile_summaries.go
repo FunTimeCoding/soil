@@ -36,6 +36,12 @@ func (s *Service) ReconcileSummaries() []error {
 			failed = append(failed, g)
 
 			if connection.Classify(g) != nil {
+				s.metric.CountReconcile(
+					constant.SummaryCollection,
+					pushed,
+					len(failed),
+				)
+
 				return failed
 			}
 
@@ -45,15 +51,8 @@ func (s *Service) ReconcileSummaries() []error {
 		pushed++
 	}
 
-	if pushed > 0 {
-		s.logger.Structured(
-			"reconcile_summaries",
-			"pushed",
-			pushed,
-			"skipped",
-			skipped,
-		)
-	}
+	s.metric.CountReconcile(constant.SummaryCollection, pushed, len(failed))
+	s.metric.SetIndexed(constant.SummaryCollection, pushed+skipped)
 
 	return failed
 }

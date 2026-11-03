@@ -124,6 +124,11 @@ const (
 	CompletionCollection = "completions"
 	SummarySourceType    = "session-summary"
 	CompletionSourceType = "session-completion"
+
+	Collection    = "collection"
+	Outcome       = "outcome"
+	OutcomePushed = "pushed"
+	OutcomeFailed = "failed"
 )
 
 const (
