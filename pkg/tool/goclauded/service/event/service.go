@@ -1,7 +1,7 @@
 package event
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
@@ -17,5 +17,5 @@ type Service struct {
 	document *document.Service
 	notifier face.Notifier
 	clock    func() time.Time
-	reporter library.Reporter
+	reporter soilFace.Reporter
 }

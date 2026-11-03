@@ -4,16 +4,16 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func resolveSession(query string) string {
-	c := client.NewEnvironment()
+	c := goclauded.NewEnvironment()
 	defer c.Close()
 	r, matches, e := c.GetResolve(
 		context.Background(),
-		&generated.GetResolveParams{Query: query},
+		&client.GetResolveParams{Query: query},
 	)
 
 	if not_found.Is(e) {

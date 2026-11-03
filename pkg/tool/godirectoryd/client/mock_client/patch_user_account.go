@@ -7,8 +7,8 @@ import (
 
 func (c *Client) PatchUserAccount(
 	_ context.Context,
-	_ string,
-	_ client.PatchUserAccountJSONRequestBody,
+	account string,
+	b client.PatchUserAccountJSONRequestBody,
 ) (*client.User, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -17,5 +17,31 @@ func (c *Client) PatchUserAccount(
 		return nil, c.Failure
 	}
 
-	return new(client.User), nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	i, e := c.userIndex(account)
+
+	if e != nil {
+		return nil, e
+	}
+
+	u := c.UserList[i]
+
+	if b.Name != nil && *b.Name != "" {
+		u.Name = *b.Name
+	}
+
+	if b.Surname != nil && *b.Surname != "" {
+		u.Surname = *b.Surname
+	}
+
+	if b.Mail != nil && *b.Mail != "" {
+		u.Mail = *b.Mail
+	}
+
+	result := *u
+
+	return &result, nil
 }

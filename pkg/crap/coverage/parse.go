@@ -2,7 +2,7 @@ package coverage
 
 import (
 	"github.com/funtimecoding/soil/pkg/crap/constant"
-	library "github.com/funtimecoding/soil/pkg/strings"
+	soilStrings "github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"strings"
 )
@@ -24,7 +24,7 @@ func Parse(output string) map[string]float64 {
 		}
 
 		key := strings.TrimSuffix(fields[0], ":")
-		result[key] = library.MustToFloat(
+		result[key] = soilStrings.MustToFloat(
 			strings.TrimSuffix(fields[len(fields)-1], constant.Percent),
 		)
 	}

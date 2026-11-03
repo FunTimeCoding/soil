@@ -7,19 +7,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
-	confluenceUser "github.com/funtimecoding/soil/pkg/atlassian/confluence/user"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/user"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/issue_enricher"
-	issueOption "github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
-	alertOption "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
+	alert "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/override"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/rotation"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/schedule"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
-	opsgenieUser "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
+	opsgenie "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	rawSchedule "github.com/opsgenie/opsgenie-go-sdk-v2/schedule"
@@ -32,7 +32,7 @@ func TestEntities(t *testing.T) {
 	assert.NotNil(t, page.New(response.NewPage(), stringsConstant.UpperAlfa))
 	assert.NotNil(t, search_result.New(response.NewResult()))
 	assert.NotNil(t, space.New(response.NewSpace()))
-	assert.NotNil(t, confluenceUser.New(response.NewUser()))
+	assert.NotNil(t, user.New(response.NewUser()))
 	assert.NotNil(t, field_map.New([]jira.Field{}))
 	assert.NotNil(
 		t,
@@ -52,7 +52,7 @@ func TestEntities(t *testing.T) {
 	)
 	assert.NotNil(
 		t,
-		issueOption.New(
+		option.New(
 			stringsConstant.UpperAlfa,
 			stringsConstant.UpperBravo,
 			[]string{},
@@ -62,13 +62,13 @@ func TestEntities(t *testing.T) {
 	)
 	assert.NotNil(
 		t,
-		alertOption.New(nil, nil, stringsConstant.UpperAlfa, nil, nil, nil, nil),
+		alert.New(nil, nil, stringsConstant.UpperAlfa, nil, nil, nil, nil),
 	)
 	assert.NotNil(t, override.New(&rawSchedule.ScheduleOverride{}))
 	assert.NotNil(t, rotation.New(&rawSchedule.Rotation{}))
 	assert.NotNil(t, schedule.New(&rawSchedule.Schedule{}, nil))
 	assert.NotNil(t, team_map.New([]*team.Team{}))
 	assert.NotNil(t, team.New(&rawTeam.ListedTeams{}))
-	assert.NotNil(t, user_map.New([]*opsgenieUser.User{}))
-	assert.NotNil(t, opsgenieUser.New(&rawUser.User{}))
+	assert.NotNil(t, user_map.New([]*opsgenie.User{}))
+	assert.NotNil(t, opsgenie.New(&rawUser.User{}))
 }

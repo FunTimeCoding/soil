@@ -1,10 +1,10 @@
 package commit
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/source/inventory"
-	memoryFace "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/workspace"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
@@ -13,9 +13,9 @@ import (
 func New(
 	i *inventory.Inventory,
 	w *workspace.Service,
-	m memoryFace.Client,
+	m face.Client,
 	g *peer.Guard,
-	r face.Reporter,
+	r soilFace.Reporter,
 ) *Service {
 	return &Service{
 		inventory: i,

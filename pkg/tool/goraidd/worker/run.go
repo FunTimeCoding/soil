@@ -7,7 +7,11 @@ import (
 
 func (w *Worker) run() {
 	for _, p := range w.prepare {
-		w.recovery.Run(func() { w.report(p()) })
+		if w.context.Err() != nil {
+			return
+		}
+
+		w.recovery.Run(func() { w.report(p(w.context)) })
 	}
 
 	v, e := fsnotify.NewWatcher()
@@ -33,7 +37,7 @@ func (w *Worker) run() {
 				return
 			}
 
-			w.recovery.Run(func() { w.report(w.handle(event)) })
+			w.recovery.Run(func() { w.report(w.handle(w.context, event)) })
 		case f, okay := <-v.Errors:
 			if !okay {
 				return

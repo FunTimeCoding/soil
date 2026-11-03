@@ -3,7 +3,7 @@ package runner
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
@@ -25,9 +25,9 @@ type Runner struct {
 	cleanupFunction func()
 	changeFunction  func(value any) *change.Change
 	downstream      []face.Downstream
-	registry        library.ProcessRegistry
+	registry        soilFace.ProcessRegistry
 	logger          *logger.Logger
-	reporter        library.Reporter
+	reporter        soilFace.Reporter
 	recovery        *recovery.Recovery
 	syncFailures    int
 	trigger         chan trigger.Request

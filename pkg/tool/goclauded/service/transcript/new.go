@@ -1,7 +1,7 @@
 package transcript
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
@@ -20,7 +20,7 @@ func New(
 	sources func() []string,
 	exportPath string,
 	l *logger.Logger,
-	r library.Reporter,
+	r soilFace.Reporter,
 ) *Service {
 	return &Service{
 		store:      s,

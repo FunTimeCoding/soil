@@ -1,7 +1,7 @@
 package main
 
 import (
-	confluence "github.com/funtimecoding/soil/pkg/atlassian/confluence/example"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/example"
 	jira "github.com/funtimecoding/soil/pkg/atlassian/jira/example"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/example/search"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/example/token_check"
@@ -13,15 +13,15 @@ func main() {
 
 	if false {
 		jira.Changelog()
-		confluence.Overview()
-		confluence.Export()
-		confluence.Page()
-		confluence.Search()
-		confluence.Watch()
-		confluence.Label()
-		confluence.Search()
-		confluence.Space()
-		confluence.User()
+		example.Overview()
+		example.Export()
+		example.Page()
+		example.Search()
+		example.Watch()
+		example.Label()
+		example.Search()
+		example.Space()
+		example.User()
 		jira.Customer()
 		jira.Issue()
 		search.Search()

@@ -3,7 +3,7 @@ package dictionary
 import (
 	"bufio"
 	"github.com/funtimecoding/soil/pkg/errors"
-	library "github.com/funtimecoding/soil/pkg/strings"
+	soilStrings "github.com/funtimecoding/soil/pkg/strings"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"strings"
@@ -31,7 +31,7 @@ func ScanFile(
 		strings.ToLower(
 			splitDigit(
 				strings.ReplaceAll(
-					library.SplitCase(raw),
+					soilStrings.SplitCase(raw),
 					"_",
 					stringsConstant.Space,
 				),

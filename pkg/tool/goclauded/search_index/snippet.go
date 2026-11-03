@@ -1,7 +1,7 @@
 package search_index
 
 import (
-	soil "github.com/funtimecoding/soil/pkg/strings"
+	soilStrings "github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"strings"
@@ -29,8 +29,11 @@ func snippet(
 		start = 0
 	}
 
-	from := soil.AlignRuneStart(text, max(0, start-constant.SnippetRadius))
-	to := soil.AlignRuneStart(
+	from := soilStrings.AlignRuneStart(
+		text,
+		max(0, start-constant.SnippetRadius),
+	)
+	to := soilStrings.AlignRuneStart(
 		text,
 		min(len(text), start+length+constant.SnippetRadius),
 	)

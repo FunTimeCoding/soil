@@ -1,7 +1,7 @@
 package main
 
 import (
-	git "github.com/funtimecoding/soil/pkg/git/example"
+	"github.com/funtimecoding/soil/pkg/git/example"
 	github "github.com/funtimecoding/soil/pkg/github/example"
 	"github.com/funtimecoding/soil/pkg/gitlab/check/clean_job"
 	gitlab "github.com/funtimecoding/soil/pkg/gitlab/example"
@@ -13,7 +13,7 @@ func main() {
 
 	if false {
 		gitlab.Registry()
-		git.BuildInformation()
+		example.BuildInformation()
 		clean_job.Check()
 		gitlab.BranchRequest()
 		gitlab.CloneAll()

@@ -26,5 +26,17 @@ func ImportAliasSuggestion(t *testing.T) string {
 			"pkg/hotel/builtin.go",
 			"package hotel\n\nimport (\n\town \"testmodule/pkg/hotel/string\"\n\tindia \"testmodule/pkg/india/string\"\n)\n\nfunc Builtin() int {\n\treturn own.Hotel() + india.India()\n}\n",
 		).
+		File(
+			"pkg/echo/face/face.go",
+			"package face\n\ntype Client interface{}\n",
+		).
+		File(
+			"pkg/foxtrot/face/face.go",
+			"package face\n\ntype Source interface{}\n",
+		).
+		File(
+			"pkg/echo/service/service.go",
+			"package service\n\nimport (\n\techoFace \"testmodule/pkg/echo/face\"\n\t\"testmodule/pkg/foxtrot/face\"\n)\n\nfunc Service(echoFace.Client, face.Source) {}\n",
+		).
 		Directory()
 }

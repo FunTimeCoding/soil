@@ -8,12 +8,12 @@ import (
 )
 
 func NewDaily(
-	tick func() []error,
+	tick func(context.Context) []error,
 	l *logger.Logger,
 	r face.Reporter,
 	at *time_of_day.Time,
 ) *Worker {
-	result := New(func(context.Context) []error { return tick() }, l, r, 0)
+	result := New(tick, l, r, 0)
 	result.at = at
 
 	return result

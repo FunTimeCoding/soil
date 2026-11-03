@@ -1,10 +1,10 @@
 package daemon
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/service"
-	outpost "github.com/funtimecoding/soil/pkg/tool/gooutpostd/service"
+	system "github.com/funtimecoding/soil/pkg/system/service"
+	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/service"
 )
 
 func New() *Daemon {
-	return &Daemon{service: outpost.New(service.New())}
+	return &Daemon{service: service.New(system.New())}
 }

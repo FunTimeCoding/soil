@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	markServer "github.com/funtimecoding/soil/pkg/generative/mark/server"
+	mark "github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/server"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/identity"
@@ -16,7 +16,7 @@ import (
 func TestMarkServerSessionEndFiresOnClose(t *testing.T) {
 	var lock sync.Mutex
 	var ended []string
-	s := markServer.New(identity.Example(), memory.New()).WithSessionEnd(
+	s := mark.New(identity.Example(), memory.New()).WithSessionEnd(
 		func(session string) {
 			lock.Lock()
 			defer lock.Unlock()

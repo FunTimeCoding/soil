@@ -22,7 +22,7 @@ func TestTheClientListsLogsAndReports(t *testing.T) {
 	output := t.TempDir()
 	system.WriteFile(filepath.Join(output, "hotel.html"), []byte("h"), 0o600)
 	o := service_tester.NewOption(t, cache, output, service_tester.NewParser(t))
-	service_tester.NewService(t, o, memory.New()).SyncLogCache()
+	service_tester.NewService(t, o, memory.New()).SyncLogCache(t.Context())
 	c := mountedClient(t, o, generativeConstant.ModelContextTestToken)
 	logs, e := c.GetLogs(t.Context(), &client.GetLogsParams{})
 	assert.FatalOnError(t, e)

@@ -29,7 +29,7 @@ func New(
 	s.AbandonRunning()
 	result := &Daemon{
 		database:   d,
-		reaper:     reaper.New(r),
+		reaper:     reaper.New(r, y),
 		downstream: o.DownstreamClients(),
 	}
 	var targets []provisionFace.Downstream

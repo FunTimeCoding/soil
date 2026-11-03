@@ -2,17 +2,17 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
+	goagentd "github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/goagentd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/generated/client"
 	"testing"
 	"time"
 )
 
 func awaitServedDone(
 	t *testing.T,
-	c *client.Client,
-) generated.StatusResponse {
+	c *goagentd.Client,
+) client.StatusResponse {
 	t.Helper()
 	deadline := time.Now().Add(5 * time.Second)
 
@@ -29,5 +29,5 @@ func awaitServedDone(
 
 	t.Fatalf("run did not finish")
 
-	return generated.StatusResponse{}
+	return client.StatusResponse{}
 }

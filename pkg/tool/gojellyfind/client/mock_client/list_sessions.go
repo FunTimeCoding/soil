@@ -3,6 +3,7 @@ package mock_client
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
+	"slices"
 )
 
 func (c *Client) ListSessions(_ context.Context) ([]*client.Session, error) {
@@ -13,5 +14,9 @@ func (c *Client) ListSessions(_ context.Context) ([]*client.Session, error) {
 		return nil, c.Failure
 	}
 
-	return nil, nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	return slices.Clone(c.SessionList), nil
 }

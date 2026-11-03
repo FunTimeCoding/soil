@@ -2,9 +2,9 @@ package daemon
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	generated "github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/server"
+	gohabiticad "github.com/funtimecoding/soil/pkg/tool/gohabiticad/server"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -18,11 +18,11 @@ func (d *Daemon) Mount(
 ) {
 	g.TokenMount(
 		webConstant.InterfacePath,
-		generated.HandlerFromMux(
-			generated.NewStrictHandler(
-				server.New(d.service, r),
-				[]generated.StrictMiddlewareFunc{
-					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
+		server.HandlerFromMux(
+			server.NewStrictHandler(
+				gohabiticad.New(d.service, r),
+				[]server.StrictMiddlewareFunc{
+					web.RecordingMiddleware[server.StrictHandlerFunc](t),
 				},
 			),
 			http.NewServeMux(),

@@ -12,6 +12,6 @@ func RunImportAliasFixWithDirectory(
 	r *output.Results,
 ) {
 	w := workspace.New(diff, directory)
-	aliasThrough(patterns, directory, false, true, w, r)
+	aliasThrough(patterns, directory, newAliasMode(true, nil, nil), w, r)
 	finish(w, r)
 }

@@ -2,7 +2,7 @@ package ssh
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	processError "github.com/funtimecoding/soil/pkg/errors/command"
+	errorsCommand "github.com/funtimecoding/soil/pkg/errors/command"
 	"github.com/funtimecoding/soil/pkg/ssh/command"
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
@@ -50,7 +50,7 @@ func (c *Client) RunCommand(o *command.Command) *result.Result {
 	)
 
 	if e != nil {
-		r.Error = processError.New(text, r.OutputString, r.ErrorString, e)
+		r.Error = errorsCommand.New(text, r.OutputString, r.ErrorString, e)
 	}
 
 	if c.Panic {

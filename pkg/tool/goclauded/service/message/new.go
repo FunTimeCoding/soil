@@ -1,7 +1,7 @@
 package message
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
@@ -13,7 +13,7 @@ func New(
 	n face.Notifier,
 	stop *stopper.Stopper,
 	clock func() time.Time,
-	r library.Reporter,
+	r soilFace.Reporter,
 ) *Service {
 	return &Service{
 		store:    s,

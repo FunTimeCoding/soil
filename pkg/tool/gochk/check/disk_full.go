@@ -2,7 +2,7 @@ package check
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	stringLibrary "github.com/funtimecoding/soil/pkg/strings"
+	soilStrings "github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"strings"
@@ -16,7 +16,7 @@ func diskFull() {
 			continue
 		}
 
-		u := stringLibrary.MustToInteger(strings.TrimSuffix(p[len(p)-2], "%"))
+		u := soilStrings.MustToInteger(strings.TrimSuffix(p[len(p)-2], "%"))
 		point := p[0]
 
 		if u == 100 {

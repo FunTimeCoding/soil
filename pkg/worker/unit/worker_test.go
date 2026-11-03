@@ -2,6 +2,7 @@ package unit
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
@@ -94,7 +95,7 @@ func TestDailyWaitsForItsTimeInsteadOfTickingAtStart(t *testing.T) {
 	var ticks atomic.Int64
 	now := time.Now().UTC()
 	w := worker.NewDaily(
-		func() []error {
+		func(context.Context) []error {
 			ticks.Add(1)
 
 			return nil
@@ -109,9 +110,64 @@ func TestDailyWaitsForItsTimeInsteadOfTickingAtStart(t *testing.T) {
 	assert.Integer(t, int64(0), ticks.Load())
 }
 
+func TestADailyTickIsCancelledByClose(t *testing.T) {
+	entered := make(chan struct{})
+	seen := make(chan error, 1)
+	w := worker.NewDaily(
+		func(x context.Context) []error {
+			close(entered)
+
+			select {
+			case <-x.Done():
+				seen <- x.Err()
+			case <-time.After(time.Second):
+				seen <- nil
+			}
+
+			return nil
+		},
+		logger.New(t.Context()),
+		memory.New(),
+		time_of_day.New(9, 0, time.UTC),
+	)
+	go w.Poll()
+	<-entered
+	w.Close()
+	assert.True(t, errors.Is(<-seen, context.Canceled))
+}
+
+func TestACancelledDailyTickReportsNothing(t *testing.T) {
+	entered := make(chan struct{})
+	r := memory.New()
+	w := worker.NewDaily(
+		func(x context.Context) []error {
+			close(entered)
+
+			select {
+			case <-x.Done():
+			case <-time.After(time.Second):
+			}
+
+			return []error{fmt.Errorf("broken")}
+		},
+		logger.New(t.Context()),
+		r,
+		time_of_day.New(9, 0, time.UTC),
+	)
+	polled := make(chan struct{})
+	go func() {
+		w.Poll()
+		close(polled)
+	}()
+	<-entered
+	w.Close()
+	<-polled
+	assert.Count(t, 0, r.Events())
+}
+
 func TestDailyDelayReachesItsNextTime(t *testing.T) {
 	w := worker.NewDaily(
-		func() []error { return nil },
+		func(context.Context) []error { return nil },
 		logger.New(t.Context()),
 		memory.New(),
 		time_of_day.New(9, 0, time.UTC),

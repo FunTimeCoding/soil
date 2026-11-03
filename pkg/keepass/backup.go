@@ -3,7 +3,7 @@ package keepass
 import (
 	"errors"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"io"
 	"os"
 	"time"
@@ -17,7 +17,7 @@ func (c *Client) Backup(at time.Time) (string, error) {
 		return "", e
 	}
 
-	defer library.LogClose(source)
+	defer soilErrors.LogClose(source)
 	destination, e := os.Create(target)
 
 	if e != nil {

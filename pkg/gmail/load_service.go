@@ -3,7 +3,7 @@ package gmail
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gmail/constant"
-	keyValueJoin "github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	joinKeyValue "github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"google.golang.org/api/gmail/v1"
@@ -23,7 +23,7 @@ func (c *Client) loadService() *gmail.Service {
 		token,
 		join.Absolute(
 			c.directory,
-			keyValueJoin.Empty(strings.ToLower(name), constant.TokenSuffix),
+			joinKeyValue.Empty(strings.ToLower(name), constant.TokenSuffix),
 		),
 	)
 

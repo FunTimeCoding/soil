@@ -11,7 +11,7 @@ import (
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/system/join"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
@@ -26,7 +26,7 @@ func Log(
 
 	atRiskCutOff := environment.Required(constant.AtRiskCutOffEnvironment)
 	currentTeam := environment.Required(constant.TeamEnvironment)
-	start := timeLibrary.Parse(
+	start := soilTime.Parse(
 		timeConstant.DateYear,
 		environment.Required(constant.LinkStartDateEnvironment),
 	)

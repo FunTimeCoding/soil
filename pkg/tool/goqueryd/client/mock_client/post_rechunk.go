@@ -13,5 +13,7 @@ func (c *Client) PostRechunk(context.Context) (*client.RechunkResult, error) {
 		return nil, c.Failure
 	}
 
+	c.Rechunked++
+
 	return &client.RechunkResult{}, nil
 }

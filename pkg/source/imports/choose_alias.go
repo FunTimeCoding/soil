@@ -1,5 +1,7 @@
 package imports
 
+import "github.com/funtimecoding/soil/pkg/source/constant"
+
 func ChooseAlias(
 	importPath string,
 	modulePath string,
@@ -12,7 +14,13 @@ func ChooseAlias(
 		return ""
 	}
 
-	for _, c := range []string{s, Fallback(s, declaredName)} {
+	candidates := []string{s, Fallback(s, declaredName)}
+
+	if IsLayoutRoot(importPath) && declaredName != constant.ConstantPackage {
+		candidates = candidates[1:]
+	}
+
+	for _, c := range candidates {
 		if !taken(c) {
 			return c
 		}

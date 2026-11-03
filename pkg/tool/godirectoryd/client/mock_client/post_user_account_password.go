@@ -2,13 +2,14 @@ package mock_client
 
 import (
 	"context"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 )
 
 func (c *Client) PostUserAccountPassword(
 	_ context.Context,
-	_ string,
-	_ client.PostUserAccountPasswordJSONRequestBody,
+	account string,
+	b client.PostUserAccountPasswordJSONRequestBody,
 ) (*client.Receipt, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -17,5 +18,15 @@ func (c *Client) PostUserAccountPassword(
 		return nil, c.Failure
 	}
 
-	return new(client.Receipt), nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	if _, e := c.userIndex(account); e != nil {
+		return nil, e
+	}
+
+	c.Passwords[account] = b.Password
+
+	return &client.Receipt{Message: fmt.Sprintf("password set: %s", account)}, nil
 }

@@ -11,28 +11,23 @@ func decideCollision(
 	v *import_view.View,
 	declaredName string,
 	group []*import_entry.Entry,
+	chosen map[string]bool,
 ) []*import_decision.Decision {
-	var paths []string
-	plain := ""
-	standard := make(map[string]bool)
+	keeper, reason := collisionKeeper(v, declaredName, group)
+	refused := ""
 
 	for _, e := range group {
-		paths = append(paths, e.Path)
-		standard[e.Path] = e.Standard
-
-		if e.Local == declaredName {
-			plain = e.Path
+		if e.Path == keeper && e.Local != declaredName {
+			refused = refusal(v, group, nil, declaredName)
 		}
 	}
 
-	keeper, reason := Keeper(
-		v.PackagePath,
-		declaredName,
-		paths,
-		plain,
-		func(p string) bool { return standard[p] },
-	)
-	chosen := make(map[string]bool)
+	accepted := acceptedAliases(v, declaredName, keeper, group)
+
+	for e := range accepted {
+		chosen[e.Local] = true
+	}
+
 	var result []*import_decision.Decision
 
 	for _, e := range group {
@@ -48,9 +43,9 @@ func decideCollision(
 
 			d.Want = declaredName
 
-			if r := refusal(v, group, nil, declaredName); r != "" {
+			if refused != "" {
 				d.Kind = constant.DecisionRefused
-				d.Reason = r
+				d.Reason = refused
 
 				continue
 			}
@@ -60,14 +55,13 @@ func decideCollision(
 			continue
 		}
 
-		want := ChooseAlias(
-			e.Path,
-			e.Module,
-			declaredName,
-			func(c string) bool {
-				return c == declaredName || refusal(v, group, chosen, c) != ""
-			},
-		)
+		if refused != "" || accepted[e] {
+			d.Want = e.Local
+
+			continue
+		}
+
+		want := loserName(v, declaredName, group, chosen, e)
 
 		if want == "" {
 			d.Kind = constant.DecisionUnderivable

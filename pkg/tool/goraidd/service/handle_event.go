@@ -1,13 +1,17 @@
 package service
 
 import (
+	"context"
 	"github.com/fsnotify/fsnotify"
 	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"path/filepath"
 	"strings"
 )
 
-func (s *Service) HandleEvent(v fsnotify.Event) []error {
+func (s *Service) HandleEvent(
+	x context.Context,
+	v fsnotify.Event,
+) []error {
 	if !v.Has(fsnotify.Create) && !v.Has(fsnotify.Write) {
 		return nil
 	}
@@ -16,7 +20,7 @@ func (s *Service) HandleEvent(v fsnotify.Event) []error {
 
 	if filepath.Base(v.Name) == gw2Constant.LogFile {
 		s.logger.Structured("log_cache_sync")
-		result = append(result, s.SyncLogCache()...)
+		result = append(result, s.SyncLogCache(x)...)
 	}
 
 	if strings.HasSuffix(v.Name, gw2Constant.DetailedWvWKillSuffix) {

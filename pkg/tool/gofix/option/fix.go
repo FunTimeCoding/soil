@@ -5,7 +5,7 @@ type Fix struct {
 	Patterns     []string
 	Diff         bool
 	Full         bool
-	Realias      bool
+	Ours         []string
 	Index        string
 	Replacing    []string
 	BeforeCommit func()

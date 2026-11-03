@@ -4,12 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
+	"github.com/prometheus/client_golang/prometheus"
 	"testing"
 )
 
 func TestReaperInterruptSkipsVanishedProcess(t *testing.T) {
 	m := memory.New()
-	r := reaper.New(m)
+	r := reaper.New(m, prometheus.NewRegistry())
 	defer r.Close()
 	r.Add(1 << 30)
 	r.Interrupt()

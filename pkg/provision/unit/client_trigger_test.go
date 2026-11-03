@@ -11,9 +11,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/provision/client"
+	provision "github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
-	generated "github.com/funtimecoding/soil/pkg/provision/generated/client"
+	"github.com/funtimecoding/soil/pkg/provision/generated/client"
 	"github.com/funtimecoding/soil/pkg/provision/mock_runner"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
@@ -25,7 +25,7 @@ import (
 func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 	n := mock_runner.New()
 	s := newTriggerServer(t, n, memory.New())
-	c := client.New(
+	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
 		generativeConstant.ModelContextTestToken,
@@ -64,7 +64,7 @@ func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
 	n := mock_runner.New()
 	s := newTriggerServer(t, n, memory.New())
-	c := client.New(
+	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
 		generativeConstant.ModelContextTestToken,
@@ -81,17 +81,17 @@ func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
 func TestTriggerWithoutHostsFieldCarriesNoHosts(t *testing.T) {
 	n := mock_runner.New()
 	s := newTriggerServer(t, n, memory.New())
-	c, e := generated.NewClientWithResponses(
+	c, e := client.NewClientWithResponses(
 		s.Address(""),
-		generated.WithHTTPClient(s.Client()),
-		generated.WithRequestEditorFn(
+		client.WithHTTPClient(s.Client()),
+		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	assert.FatalOnError(t, e)
 	v, f := c.PostTriggerWithResponse(
 		context.Background(),
-		generated.TriggerRequest{Update: true, Changes: []string{"alfa"}},
+		client.TriggerRequest{Update: true, Changes: []string{"alfa"}},
 	)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 202, v.StatusCode())
@@ -102,7 +102,7 @@ func TestTriggerWithoutHostsFieldCarriesNoHosts(t *testing.T) {
 func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 	n := mock_runner.New()
 	s := newTriggerServer(t, n, memory.New())
-	c := client.New(webConstant.Localhost, s.Port, "bravo")
+	c := provision.New(webConstant.Localhost, s.Port, "bravo")
 	defer c.Close()
 	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
 	assert.True(t, unexpected.Is(e))
@@ -111,7 +111,7 @@ func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 }
 
 func TestClientTriggerToNobodyIsAConnectionFailure(t *testing.T) {
-	c := client.New(
+	c := provision.New(
 		webConstant.Localhost,
 		1,
 		generativeConstant.ModelContextTestToken,
@@ -129,7 +129,7 @@ func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 		mock_runner.New().WithFail(conflict.Format("run already queued")),
 		r,
 	)
-	c := client.New(
+	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
 		generativeConstant.ModelContextTestToken,
@@ -148,7 +148,7 @@ func TestClientTriggerOnAStoppedRunnerIsUnavailable(t *testing.T) {
 		mock_runner.New().WithFail(unavailable.Format(constant.RunnerStopped)),
 		r,
 	)
-	c := client.New(
+	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
 		generativeConstant.ModelContextTestToken,
@@ -163,7 +163,7 @@ func TestClientTriggerOnAStoppedRunnerIsUnavailable(t *testing.T) {
 func TestClientTriggerFailureIsCaptured(t *testing.T) {
 	r := memory.New()
 	s := newTriggerServer(t, mock_runner.New().WithFail(fmt.Errorf("alfa")), r)
-	c := client.New(
+	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
 		generativeConstant.ModelContextTestToken,

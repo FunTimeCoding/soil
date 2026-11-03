@@ -18,11 +18,20 @@ func decideCollisions(v *import_view.View) []*import_decision.Decision {
 		}
 	}
 
+	names := slices.Sorted(maps.Keys(byName))
+	chosen := make(map[string]bool)
+
+	for _, name := range names {
+		if len(byName[name]) > 1 {
+			chosen[name] = true
+		}
+	}
+
 	var result []*import_decision.Decision
 
-	for _, name := range slices.Sorted(maps.Keys(byName)) {
+	for _, name := range names {
 		if group := byName[name]; len(group) > 1 {
-			result = append(result, decideCollision(v, name, group)...)
+			result = append(result, decideCollision(v, name, group, chosen)...)
 		}
 	}
 

@@ -2,19 +2,19 @@ package main
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/usage"
-	anthropic "github.com/funtimecoding/soil/pkg/generative/anthropic/example"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/example"
 	embed "github.com/funtimecoding/soil/pkg/generative/embed/example"
 	gguf "github.com/funtimecoding/soil/pkg/generative/gguf/example"
 	langchain "github.com/funtimecoding/soil/pkg/generative/langchain/example"
 	"github.com/funtimecoding/soil/pkg/generative/langchain/example/function"
-	anthropicServer "github.com/funtimecoding/soil/pkg/generative/model_context/example/anthropic"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/example/anthropic"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark"
 	ollama "github.com/funtimecoding/soil/pkg/generative/ollama/example"
 	openai "github.com/funtimecoding/soil/pkg/generative/openai/example"
 )
 
 func main() {
-	anthropic.Utilization()
+	example.Utilization()
 
 	if false {
 		usage.Usage()
@@ -36,11 +36,11 @@ func main() {
 		openai.Official()
 		openai.Alternate()
 		openai.Client()
-		anthropic.Official()
-		anthropic.Alternate()
+		example.Official()
+		example.Alternate()
 		function.Function()
 		langchain.Local()
-		anthropicServer.Run()
+		anthropic.Run()
 		mark.Main()
 		gguf.Read()
 	}

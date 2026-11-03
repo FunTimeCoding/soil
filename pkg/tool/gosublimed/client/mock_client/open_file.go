@@ -7,7 +7,7 @@ import (
 
 func (c *Client) OpenFile(
 	_ context.Context,
-	_ client.OpenFileJSONRequestBody,
+	b client.OpenFileJSONRequestBody,
 ) (*client.View, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -16,5 +16,13 @@ func (c *Client) OpenFile(
 		return nil, c.Failure
 	}
 
-	return new(client.View), nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	result := client.View{ViewId: c.next, FilePath: b.FilePath}
+	c.next++
+	c.ViewList = append(c.ViewList, result)
+
+	return &result, nil
 }

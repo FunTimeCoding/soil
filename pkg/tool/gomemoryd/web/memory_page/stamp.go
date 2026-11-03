@@ -1,7 +1,7 @@
 package memory_page
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"time"
@@ -10,7 +10,7 @@ import (
 func stamp(value string) gomponents.Node {
 	return html.Small(
 		gomponents.Text(
-			library.FormatCompact(library.Parse(time.RFC3339, value)),
+			soilTime.FormatCompact(soilTime.Parse(time.RFC3339, value)),
 		),
 	)
 }

@@ -6,12 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/run/stream/mock_stream"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client/mock_client"
-	agent "github.com/funtimecoding/soil/pkg/tool/goagentd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -30,7 +30,7 @@ func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
 	running, e := c.GetStatus(t.Context())
 	assert.FatalOnError(t, e)
 	assert.String(t, "running", running.State)
-	d.Workers()[0].(face.Drainer).Interrupt()
+	d.Workers()[0].(soilFace.Drainer).Interrupt()
 	done := awaitServedDone(t, c)
 	assert.String(t, "done", done.State)
 	assert.String(t, "lima", *done.Result)
@@ -59,7 +59,7 @@ func TestARefusedTokenIsAnError(t *testing.T) {
 func TestTheClientAndItsMockKeepTheFace(t *testing.T) {
 	r := client.New(locator.New("localhost").Insecure(), "quebec")
 	m := mock_client.New()
-	clients := []agent.Client{r, m}
+	clients := []face.Client{r, m}
 
 	for _, c := range clients {
 		c.Close()

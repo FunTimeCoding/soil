@@ -10,17 +10,14 @@ import (
 func reportDecision(
 	d *import_decision.Decision,
 	filePath string,
-	realias bool,
 	r *output.Results,
 ) {
 	e := d.Entry
 	deAlias := d.Want == e.Declared
 	verb := "alias"
-	done := "re-aliased"
 
 	if deAlias {
 		verb = "de-alias"
-		done = "de-aliased"
 	}
 
 	switch d.Kind {
@@ -40,7 +37,7 @@ func reportDecision(
 		)
 	case sourceConstant.DecisionRename:
 		if d.Rule == sourceConstant.RuleConstant {
-			reportAlias(
+			addSuggestion(
 				r,
 				filePath,
 				fmt.Sprintf(
@@ -50,8 +47,6 @@ func reportDecision(
 					d.Want,
 					e.Path,
 				),
-				fmt.Sprintf("%s %s → %s (%s)", done, e.Local, d.Want, e.Path),
-				realias,
 			)
 
 			return

@@ -3,7 +3,7 @@ package service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	apps "k8s.io/api/apps/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"time"
@@ -45,21 +45,21 @@ func (t *Tester) AddDeployment(
 				},
 			},
 		},
-		v1.CreateOptions{},
+		meta.CreateOptions{},
 	)
 	errors.PanicOnError(e)
 	_, f := t.Clientset.AppsV1().Deployments(namespace).Create(
 		t.context(),
 		&apps.Deployment{
-			ObjectMeta: v1.ObjectMeta{Name: name, Namespace: namespace},
+			ObjectMeta: meta.ObjectMeta{Name: name, Namespace: namespace},
 			Spec: apps.DeploymentSpec{
 				Replicas: &r,
-				Selector: &v1.LabelSelector{
+				Selector: &meta.LabelSelector{
 					MatchLabels: map[string]string{"app": name},
 				},
 			},
 		},
-		v1.CreateOptions{},
+		meta.CreateOptions{},
 	)
 	errors.PanicOnError(f)
 }

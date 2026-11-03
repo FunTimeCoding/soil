@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/dropped"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/errors/unit/stalled"
@@ -88,6 +89,20 @@ func TestConnectionBrokenAnswerIsDropped(t *testing.T) {
 	)
 	assert.True(t, dropped.Is(f))
 	assert.String(t, "delta.example: connection dropped", f.Error())
+}
+
+func TestALostHttp2ConnectionIsDropped(t *testing.T) {
+	f := connection.Classify(
+		&url.Error{
+			Op:  "Get",
+			URL: "https://echo.example:8583/api/sessions?limit=50",
+			Err: errors.New(constant.ConnectionLost),
+		},
+	)
+	assert.True(t, dropped.Is(f))
+	assert.String(t, "echo.example:8583: connection dropped", f.Error())
+	assert.String(t, "/api/sessions", f.Path)
+	assert.Strings(t, []string{"dropped", "echo.example:8583"}, f.Fingerprint())
 }
 
 func TestConnectionLeavesOtherErrorsAlone(t *testing.T) {

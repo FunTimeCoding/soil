@@ -3,7 +3,7 @@ package usage_page
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/credential"
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
@@ -21,7 +21,10 @@ func Note(
 	if result != nil {
 		items = append(
 			items,
-			fmt.Sprintf("Updated %s", library.FormatCompact(result.LastUpdated)),
+			fmt.Sprintf(
+				"Updated %s",
+				soilTime.FormatCompact(result.LastUpdated),
+			),
 		)
 	}
 
@@ -30,7 +33,7 @@ func Note(
 			items,
 			fmt.Sprintf(
 				"credential expired %s, start a Claude Code session to refresh",
-				library.FormatCompact(c.ExpiresAt),
+				soilTime.FormatCompact(c.ExpiresAt),
 			),
 		)
 	}

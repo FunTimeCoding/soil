@@ -40,7 +40,8 @@ func kind(e error) (string, string) {
 		errors.Is(e, io.EOF),
 		errors.Is(e, syscall.ECONNRESET),
 		errors.Is(e, syscall.EPIPE),
-		strings.Contains(e.Error(), constant.StreamClosed):
+		strings.Contains(e.Error(), constant.StreamClosed),
+		strings.Contains(e.Error(), constant.ConnectionLost):
 
 		return constant.Dropped, constant.Broken
 	default:

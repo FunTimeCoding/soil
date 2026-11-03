@@ -2,12 +2,14 @@ package mock_client
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
+	"slices"
 )
 
 func (c *Client) GetTracks(
 	_ context.Context,
-	_ string,
+	identifier string,
 ) ([]*client.Item, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -16,5 +18,13 @@ func (c *Client) GetTracks(
 		return nil, c.Failure
 	}
 
-	return nil, nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	if identifier == "" {
+		return nil, not_found.New("album", identifier)
+	}
+
+	return slices.Clone(c.Tracks[identifier]), nil
 }

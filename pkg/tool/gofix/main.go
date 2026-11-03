@@ -23,11 +23,6 @@ func Main() {
 	a.Boolean("rename", false, "Variable letter rename mode")
 	a.Boolean("summary", false, "One line per modified file")
 	a.Boolean(
-		"realias",
-		false,
-		"Rewrite constant imports to the convention and report other alias collisions; without it the alias convention stays silent",
-	)
-	a.Boolean(
 		"full",
 		false,
 		"Load the whole module for the naming pass instead of the persisted per-package facts",
@@ -65,10 +60,9 @@ func Main() {
 		o.Patterns = patterns
 		o.Diff = diff
 		o.Full = a.GetBoolean("full")
-		o.Realias = a.GetBoolean("realias")
-		o.Replacing = inventory.LoadOptional(inventory.DefaultPath()).Replacing(
-			root,
-		)
+		i := inventory.LoadOptional(inventory.DefaultPath())
+		o.Replacing = i.Replacing(root)
+		o.Ours = i.ModulePaths()
 		RunDefault(o, s)
 	}
 

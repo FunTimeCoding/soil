@@ -1,7 +1,7 @@
 package conversations
 
 import (
-	moment "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 
@@ -12,5 +12,5 @@ func relativeTimestamp(timestamp string) string {
 		return timestamp
 	}
 
-	return moment.Relative(t)
+	return soilTime.Relative(t)
 }

@@ -20,8 +20,8 @@ func TestSyncingTheLogCacheRecordsEachFightOnce(t *testing.T) {
 		"20261024-203000.zevtc",
 	)
 	s := service_tester.New(t, cache, t.TempDir())
-	s.SyncLogCache()
-	s.SyncLogCache()
+	s.SyncLogCache(t.Context())
+	s.SyncLogCache(t.Context())
 	assert.Count(t, 2, s.Fights())
 }
 
@@ -37,7 +37,7 @@ func TestARecordedFightIsNotCountedAsNewAgain(t *testing.T) {
 func TestTheServiceStartsWithoutALogCache(t *testing.T) {
 	s := service_tester.New(t, t.TempDir(), t.TempDir())
 	assert.Count(t, 0, s.Fights())
-	failures := s.SyncLogCache()
+	failures := s.SyncLogCache(t.Context())
 	assert.Count(t, 1, failures)
 	assert.True(t, errors.Is(failures[0], fs.ErrNotExist))
 }

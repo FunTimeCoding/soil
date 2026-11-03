@@ -7,7 +7,7 @@ import (
 
 func (c *Client) CreateView(
 	_ context.Context,
-	_ client.CreateViewJSONRequestBody,
+	b client.CreateViewJSONRequestBody,
 ) (*client.View, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -16,5 +16,22 @@ func (c *Client) CreateView(
 		return nil, c.Failure
 	}
 
-	return new(client.View), nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	result := client.View{ViewId: c.next, Title: b.Title}
+
+	if b.Content != "" {
+		result.Text = new(b.Content)
+	}
+
+	if b.Syntax != nil {
+		result.Syntax = *b.Syntax
+	}
+
+	c.next++
+	c.ViewList = append(c.ViewList, result)
+
+	return &result, nil
 }

@@ -4,7 +4,7 @@ import (
 	"charm.land/bubbletea/v2"
 	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	library "github.com/funtimecoding/soil/pkg/runtime"
+	soilRuntime "github.com/funtimecoding/soil/pkg/runtime"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -18,7 +18,7 @@ func Run(
 	if log {
 		var path string
 
-		if library.RunningFromBinary() {
+		if soilRuntime.RunningFromBinary() {
 			switch runtime.GOOS {
 			case systemConstant.Darwin:
 				path = join.Absolute(

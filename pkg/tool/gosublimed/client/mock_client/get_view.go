@@ -7,7 +7,7 @@ import (
 
 func (c *Client) GetView(
 	_ context.Context,
-	_ int,
+	identifier int,
 ) (*client.View, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -16,5 +16,17 @@ func (c *Client) GetView(
 		return nil, c.Failure
 	}
 
-	return new(client.View), nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	i, e := c.index(identifier)
+
+	if e != nil {
+		return nil, e
+	}
+
+	result := c.ViewList[i]
+
+	return &result, nil
 }

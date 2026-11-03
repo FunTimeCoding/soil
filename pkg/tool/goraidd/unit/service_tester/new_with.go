@@ -1,9 +1,9 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/service"
-	parser "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
 	"testing"
 )
 
@@ -11,8 +11,8 @@ func NewWith(
 	t *testing.T,
 	logCachePath string,
 	outputPath string,
-	p parser.Client,
-	r face.Reporter,
+	p face.Client,
+	r soilFace.Reporter,
 ) *service.Service {
 	t.Helper()
 

@@ -210,14 +210,17 @@ and the child outlives its parent, it gets reparented to PID 1.
 Go's runtime does not reap adopted orphans, so they accumulate
 as zombies.
 
-`reaper.New(reporter)` starts a goroutine that calls
-`wait4(-1, WNOHANG)` every 30 seconds and reports each reaped
-process to Sentry. Register it as a lifecycle worker before
-other workers so it starts reaping before subprocesses begin.
+`reaper.New(reporter, registry)` reaps every 30 seconds each zombie it does
+not own and counts it on `reaper_reaped_total`, labelled by the command it
+ran, on the registry the daemon serves its metrics from. A reap is routine,
+not an anomaly, so it never reaches Sentry; zombies that linger are the node
+alert's to catch. The reporter is for a failed interrupt. Register it as a
+lifecycle worker before other workers so it starts reaping before
+subprocesses begin.
 
 ```go
 lifecycle.New(l).
-    WithWorker(reaper.New(r)).
+    WithWorker(reaper.New(r, m.Registry())).
     WithWorker(provisionRunner).
     WithServer(srv)
 ```

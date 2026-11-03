@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/ansible_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/daemon_tester"
 	"go.uber.org/goleak"
@@ -19,6 +20,12 @@ func TestTheDaemonHandsOutItsInventoryGuardFirst(t *testing.T) {
 		_, guard := w.(*peer.Guard)
 		assert.Boolean(t, n == 0, guard)
 	}
+}
+
+func TestTheDaemonCountsReapsOnItsRegistry(t *testing.T) {
+	f := ansible_tester.NewFixture(t, nil)
+	daemon_tester.Build(t, f)
+	assert.True(t, reaper.CountsOn(f.Registry))
 }
 
 func TestAnUnreachableInventoryIsLeftToTheGuard(t *testing.T) {

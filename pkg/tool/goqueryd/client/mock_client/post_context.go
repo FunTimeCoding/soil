@@ -7,10 +7,16 @@ import (
 
 func (c *Client) PostContext(
 	_ context.Context,
-	_ client.PostContextJSONRequestBody,
+	b client.PostContextJSONRequestBody,
 ) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
-	return c.Failure
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	c.ContextsAdded = append(c.ContextsAdded, b)
+
+	return nil
 }

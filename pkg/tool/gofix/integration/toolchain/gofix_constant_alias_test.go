@@ -117,10 +117,15 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	)
 }
 
-func TestConstantRealias(t *testing.T) {
+func TestConstantAliasFix(t *testing.T) {
 	directory := module_tester.ConstantAlias(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunRealiasFixWithDirectory([]string{"./..."}, directory, false, r)
+	gofix.RunConstantAliasFixWithDirectory(
+		[]string{"./..."},
+		directory,
+		false,
+		r,
+	)
 	t.Run(
 		"OwnIsPlainForeignCarriesItsDomain",
 		func(t *testing.T) {

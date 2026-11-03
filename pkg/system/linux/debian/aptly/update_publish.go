@@ -3,7 +3,7 @@ package aptly
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly/request"
-	web "github.com/funtimecoding/soil/pkg/web/requester/request"
+	requester "github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
 )
 
@@ -12,7 +12,7 @@ func (c *Client) UpdatePublish(
 	passphraseFile string,
 ) error {
 	_, e := c.requester.Bytes(
-		web.New(
+		requester.New(
 			http.MethodPut,
 			fmt.Sprintf("/api/publish/:./%s", distribution),
 		).WithNotation(

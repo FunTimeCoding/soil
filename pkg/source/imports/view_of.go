@@ -44,9 +44,16 @@ func ViewOf(
 		specs[e] = spec
 	}
 
-	return import_view.New(
+	result := import_view.New(
 		p.PkgPath,
 		entries,
 		func(name string) bool { return LocalTaken(p, file, name) },
-	), specs
+	)
+
+	if p.Module != nil {
+		own := p.Module.Path
+		result.Ours = func(modulePath string) bool { return modulePath == own }
+	}
+
+	return result, specs
 }

@@ -24,7 +24,7 @@ func TestMoveBesideAPackageLevelNameAliases(t *testing.T) {
 	assertCompiles(t, d)
 	assert.String(
 		t,
-		"package charlie\n\nimport example \"example/pkg/delta\"\n\nfunc Use() int {\n\treturn example.Moving()\n}\n",
+		"package charlie\n\nimport exampleDelta \"example/pkg/delta\"\n\nfunc Use() int {\n\treturn exampleDelta.Moving()\n}\n",
 		service_tester.ReadFixtureFile(t, d, "pkg/charlie/use.go"),
 	)
 }

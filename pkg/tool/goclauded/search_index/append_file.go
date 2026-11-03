@@ -3,7 +3,7 @@ package search_index
 import (
 	"bufio"
 	"errors"
-	library "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"io"
 	"os"
 )
@@ -18,10 +18,10 @@ func (x *Index) appendFile(
 		return
 	}
 
-	library.PanicOnError(e)
-	defer library.PanicClose(f)
+	soilErrors.PanicOnError(e)
+	defer soilErrors.PanicClose(f)
 	i, e := f.Stat()
-	library.PanicOnError(e)
+	soilErrors.PanicOnError(e)
 	consumed, turn := x.position(session)
 
 	if consumed == i.Size() {
@@ -30,14 +30,14 @@ func (x *Index) appendFile(
 
 	if consumed > i.Size() {
 		_, e = x.remove(session)
-		library.PanicOnError(e)
+		soilErrors.PanicOnError(e)
 		consumed, turn = 0, ""
 	}
 
 	_, e = f.Seek(consumed, io.SeekStart)
-	library.PanicOnError(e)
+	soilErrors.PanicOnError(e)
 	t, e := x.database.Begin()
-	library.PanicOnError(e)
+	soilErrors.PanicOnError(e)
 	defer rollback(t)
 	r := bufio.NewReader(f)
 
@@ -48,7 +48,7 @@ func (x *Index) appendFile(
 			break
 		}
 
-		library.PanicOnError(g)
+		soilErrors.PanicOnError(g)
 		consumed += int64(len(line))
 		entries, next := extract(line, session, turn)
 		turn = next
@@ -65,6 +65,6 @@ func (x *Index) appendFile(
 		consumed,
 		turn,
 	)
-	library.PanicOnError(e)
-	library.PanicOnError(t.Commit())
+	soilErrors.PanicOnError(e)
+	soilErrors.PanicOnError(t.Commit())
 }

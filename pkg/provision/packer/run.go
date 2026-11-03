@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/provision/packer/build"
-	stringJoin "github.com/funtimecoding/soil/pkg/strings/join"
+	strings "github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -51,7 +51,7 @@ func (c *Client) Run(
 		"cleanup",
 		template,
 	}
-	console.Format("Command: %s\n", stringJoin.Space(arguments...))
+	console.Format("Command: %s\n", strings.Space(arguments...))
 
 	if headless {
 		var connectCommand string

@@ -16,6 +16,7 @@ func (c *Client) DeleteCollection(
 		return false, c.Failure
 	}
 
+	c.CollectionsDeleted = append(c.CollectionsDeleted, *p)
 	deleted := false
 
 	for k, d := range c.documents {

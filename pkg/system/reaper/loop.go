@@ -11,7 +11,7 @@ func (r *Reaper) loop() {
 		case <-r.stop:
 			return
 		case <-ticker.C:
-			r.reap()
+			r.Reap()
 		}
 	}
 }

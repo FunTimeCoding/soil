@@ -4,11 +4,11 @@ import (
 	brave "github.com/funtimecoding/soil/pkg/brave/example"
 	chromium "github.com/funtimecoding/soil/pkg/chromium/example"
 	"github.com/funtimecoding/soil/pkg/chromium/example/frame_probe"
-	anthropic "github.com/funtimecoding/soil/pkg/generative/anthropic/site/example"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/site/example"
 )
 
 func main() {
-	anthropic.Dump()
+	example.Dump()
 
 	if false {
 		frame_probe.FrameProbe()

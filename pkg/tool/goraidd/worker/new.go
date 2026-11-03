@@ -9,11 +9,11 @@ import (
 )
 
 func New(
-	handle func(fsnotify.Event) []error,
+	handle func(context.Context, fsnotify.Event) []error,
 	paths []string,
 	l *logger.Logger,
 	r face.Reporter,
-	prepare ...func() []error,
+	prepare ...func(context.Context) []error,
 ) *Worker {
 	x, cancel := context.WithCancel(context.Background())
 

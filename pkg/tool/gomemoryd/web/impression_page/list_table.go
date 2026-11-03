@@ -1,7 +1,7 @@
 package impression_page
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -17,7 +17,7 @@ func listTable(impressions []record.Impression) gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				layout.TimeCell(library.Parse(time.RFC3339, i.CreatedAt)),
+				layout.TimeCell(soilTime.Parse(time.RFC3339, i.CreatedAt)),
 				html.Td(html.Em(gomponents.Text(i.Source))),
 				html.Td(gomponents.Text(i.Content)),
 			),

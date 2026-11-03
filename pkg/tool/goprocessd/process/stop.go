@@ -16,7 +16,7 @@ func (p *Process) Stop() error {
 	p.stoppedBySupervisor = true
 	e := terminateGroup(p.handle.Pid())
 
-	if e != nil {
+	if e != nil && !Exited(e) {
 		return e
 	}
 

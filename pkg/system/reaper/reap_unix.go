@@ -2,13 +2,10 @@
 
 package reaper
 
-import (
-	"fmt"
-	"syscall"
-)
+import "syscall"
 
-func (r *Reaper) reap() {
-	for pid, detail := range r.scan() {
+func (r *Reaper) Reap() {
+	for pid, detail := range r.zombies() {
 		if r.Contains(pid) {
 			continue
 		}
@@ -20,15 +17,6 @@ func (r *Reaper) reap() {
 			continue
 		}
 
-		r.reporter.CaptureWithContext(
-			fmt.Errorf("zombie reaped"),
-			"reaper",
-			map[string]any{
-				"pid":         reaped,
-				"exit_status": status.ExitStatus(),
-				"comm":        detail.Comm,
-				"ppid":        detail.Ppid,
-			},
-		)
+		r.reaped.WithLabelValues(detail.Comm).Inc()
 	}
 }

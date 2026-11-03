@@ -13,5 +13,15 @@ func (c *Client) GetGroup(_ context.Context) ([]*client.Group, error) {
 		return nil, c.Failure
 	}
 
-	return nil, nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	result := []*client.Group{}
+
+	for _, g := range c.GroupList {
+		result = append(result, groupCopy(g))
+	}
+
+	return result, nil
 }

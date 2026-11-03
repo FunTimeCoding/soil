@@ -1,7 +1,7 @@
 package issue
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 
@@ -11,7 +11,7 @@ func (i *Issue) ChangeTime() time.Time {
 	if u := i.LatestComment(); u != nil {
 		result = CommentTime(u)
 	} else {
-		result = library.PickLatest(
+		result = soilTime.PickLatest(
 			time.Time(i.Raw.Fields.Created),
 			time.Time(i.Raw.Fields.Updated),
 		)

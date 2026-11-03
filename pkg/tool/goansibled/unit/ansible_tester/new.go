@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/runner"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/service"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"testing"
 )
@@ -25,7 +26,7 @@ func New(
 	t.Cleanup(func() { relational.CloseMapper(m) })
 	migrate.AutoMigrate(m, constant.RunsTable)
 	s := store.New(m, constant.RunsTable)
-	p := reaper.New(result.Reporter)
+	p := reaper.New(result.Reporter, prometheus.NewRegistry())
 	p.Start()
 	t.Cleanup(p.Close)
 	r := runner.New(o, s, l, result.Reporter, p)

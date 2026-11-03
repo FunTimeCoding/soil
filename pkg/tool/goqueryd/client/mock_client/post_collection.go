@@ -7,10 +7,16 @@ import (
 
 func (c *Client) PostCollection(
 	_ context.Context,
-	_ client.PostCollectionJSONRequestBody,
+	b client.PostCollectionJSONRequestBody,
 ) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
-	return c.Failure
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	c.CollectionsAdded = append(c.CollectionsAdded, b)
+
+	return nil
 }

@@ -29,7 +29,7 @@ func build(
 	t.Cleanup(func() { relational.CloseMapper(m) })
 	migrate.AutoMigrate(m, constant.RunsTable)
 	s := store.New(m, constant.RunsTable)
-	p := reaper.New(result.Reporter)
+	p := reaper.New(result.Reporter, prometheus.NewRegistry())
 	p.Start()
 	t.Cleanup(p.Close)
 	r := runner.New(

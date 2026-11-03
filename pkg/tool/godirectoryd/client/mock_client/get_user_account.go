@@ -7,7 +7,7 @@ import (
 
 func (c *Client) GetUserAccount(
 	_ context.Context,
-	_ string,
+	account string,
 ) (*client.User, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -16,5 +16,17 @@ func (c *Client) GetUserAccount(
 		return nil, c.Failure
 	}
 
-	return new(client.User), nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	i, e := c.userIndex(account)
+
+	if e != nil {
+		return nil, e
+	}
+
+	result := *c.UserList[i]
+
+	return &result, nil
 }

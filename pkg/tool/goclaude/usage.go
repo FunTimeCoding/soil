@@ -3,7 +3,7 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 	"github.com/spf13/cobra"
@@ -74,7 +74,7 @@ func usage(c *command_context.Context) *cobra.Command {
 
 			console.Format(
 				"Updated  %s\n",
-				library.FormatCompact(r.LastUpdated),
+				soilTime.FormatCompact(r.LastUpdated),
 			)
 		},
 	}

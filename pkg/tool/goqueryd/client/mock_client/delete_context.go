@@ -7,7 +7,7 @@ import (
 
 func (c *Client) DeleteContext(
 	_ context.Context,
-	_ *client.DeleteContextParams,
+	p *client.DeleteContextParams,
 ) (bool, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -15,6 +15,8 @@ func (c *Client) DeleteContext(
 	if c.Failure != nil {
 		return false, c.Failure
 	}
+
+	c.ContextsDeleted = append(c.ContextsDeleted, *p)
 
 	return false, nil
 }

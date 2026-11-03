@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/text/template"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermost/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/client"
@@ -27,7 +27,7 @@ func Main() {
 	n := terminal.New(s)
 	c := client.NewEnvironment()
 	defer c.Close()
-	t := timeLibrary.Midnight(time.Now())
+	t := soilTime.Midnight(time.Now())
 	console.Format(
 		"Unresolved threads since %s\n",
 		t.Format(timeConstant.DateMinute),

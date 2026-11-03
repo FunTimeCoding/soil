@@ -3,8 +3,8 @@ package claim
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
+	gomonitord "github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
 )
 
 func (c *Connection) Serve(x context.Context) error {
@@ -16,9 +16,9 @@ func (c *Connection) Serve(x context.Context) error {
 		return unreachable.Format("claims not open")
 	}
 
-	return client.ReadClaims(
+	return gomonitord.ReadClaims(
 		b,
-		func(v []generated.Claim) {
+		func(v []client.Claim) {
 			select {
 			case c.updates <- Message{Claims: v}:
 			case <-x.Done():

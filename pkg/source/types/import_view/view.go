@@ -6,4 +6,5 @@ type View struct {
 	PackagePath string
 	Entries     []*import_entry.Entry
 	LocalTaken  func(string) bool
+	Ours        func(string) bool
 }

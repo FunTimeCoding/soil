@@ -3,7 +3,7 @@ package runner_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
@@ -21,7 +21,7 @@ import (
 func build(
 	t *testing.T,
 	hold func(),
-	registry library.ProcessRegistry,
+	registry soilFace.ProcessRegistry,
 	downstream face.Downstream,
 ) *Tester {
 	t.Helper()

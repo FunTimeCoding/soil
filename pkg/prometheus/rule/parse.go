@@ -2,7 +2,7 @@ package rule
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	stringLibrary "github.com/funtimecoding/soil/pkg/strings"
+	soilStrings "github.com/funtimecoding/soil/pkg/strings"
 	"strings"
 )
 
@@ -25,7 +25,7 @@ func (r *Rule) parse() *Rule {
 		case constant.DescriptionKey:
 			r.Description = strings.TrimSpace(string(v))
 		case constant.DurationKey:
-			r.Duration = stringLibrary.MustToInteger(string(v))
+			r.Duration = soilStrings.MustToInteger(string(v))
 		case constant.RunbookKey:
 			r.Runbook = string(v)
 		case constant.DocumentationKey:

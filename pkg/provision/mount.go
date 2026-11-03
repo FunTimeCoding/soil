@@ -1,10 +1,10 @@
 package provision
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
-	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
-	generated "github.com/funtimecoding/soil/pkg/provision/generated/server"
-	"github.com/funtimecoding/soil/pkg/provision/server"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/provision/generated/server"
+	provision "github.com/funtimecoding/soil/pkg/provision/server"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -12,18 +12,18 @@ import (
 )
 
 func Mount(
-	n provisionFace.Runner,
-	r face.Reporter,
-	t face.Recorder,
+	n face.Runner,
+	r soilFace.Reporter,
+	t soilFace.Recorder,
 	g *guard.Mux,
 ) {
 	g.TokenMount(
 		webConstant.InterfacePath,
-		generated.HandlerFromMux(
-			generated.NewStrictHandler(
-				server.New(n, r),
-				[]generated.StrictMiddlewareFunc{
-					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
+		server.HandlerFromMux(
+			server.NewStrictHandler(
+				provision.New(n, r),
+				[]server.StrictMiddlewareFunc{
+					web.RecordingMiddleware[server.StrictHandlerFunc](t),
 				},
 			),
 			http.NewServeMux(),

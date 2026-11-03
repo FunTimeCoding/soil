@@ -29,8 +29,18 @@ into the analyzer, not only a doc.
   `<path>/server/` - or subsystem plus name when that is taken. A directory
   whose name is banned or no identifier is skipped for the one above it:
   `apimachinery`, not `api`.
-- A third-party package whose path yields no usable name keeps the
-  alias it has.
+- **A package at the layout root takes the module name plus its own** when it
+  loses the plain name: `soilErrors` beside the standard `errors`, `soilTime`,
+  `soilFace`. The bare module name stays with the global `constant`.
+- **Colliding mocks all carry their owner**: every `mock_client` in a
+  collision takes `<owner>Mock`, the owner being the directory above it with
+  `client` and `unit` climbed past - `sshMock`, `goquerydMock`. A lone mock
+  stays plain.
+- A third-party package that loses the plain name keeps the alias it has; so
+  does one whose path yields no usable name. Third-party is any module outside
+  the gosourced inventory, or outside the file's own module without one.
 
 gofix and gosourced derive every one of these names from
-`pkg/source/imports`; `gofix --realias` applies the `constant` rule.
+`pkg/source/imports`. gofix applies the `constant` rule on every run, and
+among collisions the version pairs, the numbered fallbacks (`chain1`) and the
+layout-root packages; it suggests the rest.

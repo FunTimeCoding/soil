@@ -1,7 +1,7 @@
 package main
 
 import (
-	discord "github.com/funtimecoding/soil/pkg/chat/discord/example"
+	"github.com/funtimecoding/soil/pkg/chat/discord/example"
 	mattermost "github.com/funtimecoding/soil/pkg/chat/mattermost/example"
 	telegram "github.com/funtimecoding/soil/pkg/chat/telegram/example"
 )
@@ -14,7 +14,7 @@ func main() {
 		mattermost.Paging()
 		mattermost.Latest()
 		mattermost.Before()
-		discord.DeleteLoop()
+		example.DeleteLoop()
 		mattermost.Team()
 		mattermost.Dialog()
 		mattermost.Support()

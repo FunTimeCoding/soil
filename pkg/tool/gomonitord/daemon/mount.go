@@ -3,8 +3,8 @@ package daemon
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/server"
+	gomonitord "github.com/funtimecoding/soil/pkg/tool/gomonitord/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/stream"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -20,11 +20,11 @@ func (d *Daemon) Mount(
 ) {
 	g.TokenMount(
 		webConstant.InterfacePath,
-		generated.HandlerFromMux(
-			generated.NewStrictHandler(
-				server.New(d.service, r),
-				[]generated.StrictMiddlewareFunc{
-					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
+		server.HandlerFromMux(
+			server.NewStrictHandler(
+				gomonitord.New(d.service, r),
+				[]server.StrictMiddlewareFunc{
+					web.RecordingMiddleware[server.StrictHandlerFunc](t),
 				},
 			),
 			http.NewServeMux(),

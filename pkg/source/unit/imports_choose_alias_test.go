@@ -33,6 +33,45 @@ func TestChooseAliasFallsBackToSubsystemAndName(t *testing.T) {
 	)
 }
 
+func TestChooseAliasFallbackCamelsASnakeName(t *testing.T) {
+	assert.String(
+		t,
+		"clientMockClient",
+		imports.ChooseAlias(
+			"example.org/alfa/pkg/tool/goalfa/client/mock_client",
+			"example.org/alfa",
+			constant.MockPackage,
+			taken("client"),
+		),
+	)
+}
+
+func TestChooseAliasAtTheLayoutRootIsModulePlusName(t *testing.T) {
+	assert.String(
+		t,
+		"alfaErrors",
+		imports.ChooseAlias(
+			"example.org/alfa/pkg/errors",
+			"example.org/alfa",
+			"errors",
+			taken("errors"),
+		),
+	)
+}
+
+func TestChooseAliasAtTheLayoutRootLeavesTheBareModuleToConstant(t *testing.T) {
+	assert.String(
+		t,
+		"alfa",
+		imports.ChooseAlias(
+			"example.org/alfa/pkg/constant",
+			"example.org/alfa",
+			constant.ConstantPackage,
+			taken(constant.ConstantPackage),
+		),
+	)
+}
+
 func TestChooseAliasGivesUpWhenBothAreTaken(t *testing.T) {
 	assert.String(
 		t,

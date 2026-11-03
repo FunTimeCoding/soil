@@ -7,11 +7,33 @@ import (
 
 func (c *Client) SaveView(
 	_ context.Context,
-	_ int,
-	_ client.SaveViewJSONRequestBody,
+	identifier int,
+	b client.SaveViewJSONRequestBody,
 ) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
-	return c.Failure
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	if e := c.failures.Caller(); e != nil {
+		return e
+	}
+
+	i, e := c.index(identifier)
+
+	if e != nil {
+		return e
+	}
+
+	c.ViewList[i].FilePath = ""
+
+	if b.FilePath != nil {
+		c.ViewList[i].FilePath = *b.FilePath
+	}
+
+	c.ViewList[i].IsDirty = false
+
+	return nil
 }

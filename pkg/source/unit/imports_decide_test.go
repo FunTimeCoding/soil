@@ -74,6 +74,32 @@ func TestDecideIgnoresAnImportThatIsLeaving(t *testing.T) {
 	assert.True(t, d[0].Kind == constant.DecisionKeep)
 }
 
+func TestDecideLeavesTheLosersWhenTheKeeperIsRefused(t *testing.T) {
+	d := imports.Decide(
+		import_view.New(
+			"example.org/alfa/pkg/tool/goalfa/face/service",
+			[]*import_entry.Entry{
+				entry(
+					"example.org/alfa/pkg/tool/goalfa/definition/object",
+					"object",
+					"definition",
+				),
+				entry(
+					"example.org/alfa/pkg/tool/goalfa/store/object",
+					"object",
+					"repository",
+				),
+			},
+			taken("object"),
+		),
+	)
+	assert.Count(t, 2, d)
+	assert.True(t, d[0].Kind == constant.DecisionRefused)
+	assert.String(t, "local collision with \"object\"", d[0].Reason)
+	assert.True(t, d[1].Kind == constant.DecisionKeep)
+	assert.String(t, "repository", d[1].Want)
+}
+
 func TestDecideRefusesANameALocalHolds(t *testing.T) {
 	d := imports.Decide(
 		import_view.New(

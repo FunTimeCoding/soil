@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/provision/client/mock_client"
 	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/prometheus/client_golang/prometheus"
@@ -41,6 +42,17 @@ func TestTheDaemonHandsOutItsGuardsFirst(t *testing.T) {
 		_, guard := w.(*peer.Guard)
 		assert.Boolean(t, n < 2, guard)
 	}
+}
+
+func TestTheDaemonCountsReapsOnItsRegistry(t *testing.T) {
+	o := option.New()
+	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
+	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
+	o.DownstreamClients = func() []provisionFace.Client { return nil }
+	y := prometheus.NewRegistry()
+	d := daemon.New(o, logger.New(t.Context()), memory.New(), y)
+	t.Cleanup(d.Close)
+	assert.True(t, reaper.CountsOn(y))
 }
 
 func TestTheDaemonLeavesNothingRunning(t *testing.T) {

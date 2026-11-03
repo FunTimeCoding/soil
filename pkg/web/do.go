@@ -3,7 +3,7 @@ package web
 import (
 	"errors"
 	"fmt"
-	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
@@ -38,7 +38,7 @@ func Do(
 		return result, nil
 	}
 
-	libraryErrors.LogClose(result.Body)
+	soilErrors.LogClose(result.Body)
 
 	if result.StatusCode == http.StatusNotFound {
 		return nil, not_found.Format(

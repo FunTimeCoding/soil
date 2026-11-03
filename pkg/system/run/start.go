@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/command"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/trim"
@@ -56,7 +56,7 @@ func (r *Run) Start(s ...string) string {
 	}
 
 	if r.Panic && e != nil {
-		library.PanicOnError(r.Error)
+		soilErrors.PanicOnError(r.Error)
 	}
 
 	return r.OutputString

@@ -7,12 +7,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/daemon"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	d := daemon.New(newOption(t), logger.New(t.Context()), memory.New())
+	d := daemon.New(
+		newOption(t),
+		logger.New(t.Context()),
+		memory.New(),
+		prometheus.NewRegistry(),
+	)
 	t.Cleanup(d.Close)
 	v := model_context_server.New(
 		t,

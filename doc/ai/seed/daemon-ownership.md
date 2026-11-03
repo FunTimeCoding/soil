@@ -444,30 +444,43 @@ Leaks first - a client opened and never closed - then shape.
 
 ## Off the full shape
 
-- Daemon clients: surveyed by who builds a daemon's generated client outside
-  it, hand-built HTTP, and consumers defining a daemon's `GO*_HOST`; nothing
-  reaches a daemon over MCP. gotelemetryd has its client, and `pkg/telemetry`
-  sends through it, best-effort as before - a refused or stalled daemon costs
-  the command at most its timeout, and nothing fails. gosecretd, gosublimed,
+- Daemon clients: surveyed by who builds a daemon's generated client outside it,
+  hand-built HTTP, and consumers defining a daemon's `GO*_HOST`; nothing reaches
+  a daemon over MCP. gotelemetryd has its client, and `pkg/telemetry` sends
+  through it, best-effort as before - a refused or stalled daemon costs the
+  command at most its timeout, and nothing fails. gosecretd, gosublimed,
   gojellyfind, godirectoryd and golinkaced have theirs, and each CLI is on it
   through `EmitValue`: `gosecret reveal` and `gosublime read` still print the
-  bare value they promise for `$(...)`, `gosecret migrate` keeps its report,
-  and golinkace's colored views and `--linkace-host` are gone; four of its
-  deletes had printed success on a refusal. `pkg/linkace`'s `FromDaemon`
-  converters and `Format` methods have no caller in this module now; they stay
-  as exports until a consumer outside it is ruled out. The gomonitord claim
-  test reads through its typed client's `Claims`. A client exists but is gone
-  around by a consumer in another repository, wrapping goclauded's
-  generated client for its own short timeout - the typed client builds its
-  pool only through an unexported constructor, so it needs a timeout or
-  builder constructor first.
-  Rightly without one, as nothing reaches them over REST:
-  goalertmanagerd, goansibled, gochromed (its importers take its browser and
-  face, not the daemon), gocredentiald, godashboardd, gofirefoxd, gogated,
-  gogithubd, gogitlabd, goitermd, gokubernetesd (MCP only), goprometheusd,
-  gosaltd, gosentryd, gosproutd, goterraformd, and gocertificated and goflightd,
-  whose generated clients nothing imports
+  bare value they promise for `$(...)`, `gosecret migrate` keeps its report, and
+  golinkace's colored views and `--linkace-host` are gone; four of its deletes
+  had printed success on a refusal. `pkg/linkace`'s `FromDaemon` converters and
+  `Format` methods have no caller in this module now; they stay as exports until
+  a consumer outside it is ruled out. Of their mocks, gosecretd's, gosublimed's,
+  gojellyfind's and godirectoryd's hold state and answer as the served daemon
+  does, each held to it by one sequence run through both and compared answer for
+  answer; golinkaced's still answers stubs. An empty list is `[]` over REST, so
+  a mock answering nil differs. The comparison found the mock's own guess wrong
+  once: an empty identifier in the path never reaches the service's
+  required-field check - the route does not match, so the client meets
+  `not_found`, not `validation`. gojellyfind's writes record what they were
+  asked (`Played`, `Commanded`, `Volumes`), since a session's reads do not show
+  a play in the served daemon and Jellyfin's own timing is unsourced. The
+  gomonitord claim test reads through its typed client's `Claims`. A client
+  exists but is gone around by a consumer in another repository, wrapping
+  goclauded's generated client for its own short timeout - the typed client
+  builds its pool only through an unexported constructor, so it needs a timeout
+  or builder constructor first. Rightly without one, as nothing reaches them
+  over REST: goalertmanagerd, goansibled, gochromed (its importers take its
+  browser and face, not the daemon), gocredentiald, godashboardd, gofirefoxd,
+  gogated, gogithubd, gogitlabd, goitermd, gokubernetesd (MCP only),
+  goprometheusd, gosaltd, gosentryd, gosproutd, goterraformd, and gocertificated
+  and goflightd, whose generated clients nothing imports
 - Faces mirroring the service: gosecretd
+- gomonitord's daemon client predates the shape: no `face.Client`, no mock,
+  no context on its operations, and refusals as status text rather than
+  classes - its C loop, with the monitor's claim and listen as consumers.
+  golinkaced's mock still answers stubs; it takes gosublimed's shape and a
+  shared-answers test the way the other three did
 - `github.com/funtimecoding/soil/pkg/tool/gochromed/face.ChromiumSource` has
   no `Close`, so its owners close it through `face.Closer` - gochromed's own
   service and its consumers
@@ -512,6 +525,18 @@ Leaks first - a client opened and never closed - then shape.
   (Workers): `github.com/funtimecoding/soil/pkg/ticker`'s `Close` panics
   before `Start` and on a second call, and does not wait for a tick in
   flight; nothing in this repository builds on it any more
+- Clocks whose tick gets no context:
+  `github.com/funtimecoding/soil/pkg/worker`'s `NewEvery` wraps a
+  `func() []error`, so `Close` cannot cancel a tick in flight the way `New`'s
+  can (`NewDaily` now hands its tick the worker's context). Its own counted
+  campaign: `NewEvery` retires into `New`, which it equals once its tick takes a
+  context, daemon by daemon, each operation taking `x` and passing it to the
+  peer it reaches - not wrapped at the wiring, which would drop the context as
+  `NewEvery` does now. The census is 28 production ticks across 16 daemons, plus
+  14 test sites. 18 of the ticks are here: goflightd 3, gomattermostd 3,
+  goclauded 5, and goatlassiand, gogated, gonetboxd, gosecretd, goalertlogd,
+  godashboardd and gogithubd 1 each. The other 10 are in six daemons outside
+  this repository
 - A Mattermost that accepts the socket and stalls the handshake holds a
   hold's `Close` up to gorilla's 45 s `HandshakeTimeout`; gomattermostd's
   watcher still looks up an event's author over the client inside the

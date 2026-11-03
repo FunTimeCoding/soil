@@ -7,7 +7,7 @@ import (
 
 func (c *Client) PostIndex(
 	_ context.Context,
-	_ client.PostIndexJSONRequestBody,
+	b client.PostIndexJSONRequestBody,
 ) ([]*client.IndexResult, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
@@ -15,6 +15,8 @@ func (c *Client) PostIndex(
 	if c.Failure != nil {
 		return nil, c.Failure
 	}
+
+	c.Indexed = append(c.Indexed, b)
 
 	return nil, nil
 }

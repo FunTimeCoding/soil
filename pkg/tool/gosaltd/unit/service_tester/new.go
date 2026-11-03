@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/service"
+	"github.com/prometheus/client_golang/prometheus"
 	"testing"
 )
 
@@ -27,7 +28,7 @@ func New(
 	c := o.Master()
 	t.Cleanup(c.Close)
 	r := memory.New()
-	p := reaper.New(r)
+	p := reaper.New(r, prometheus.NewRegistry())
 	t.Cleanup(p.Close)
 	u := runner.New(o, s, logger.New(t.Context()), r, p, c)
 	t.Cleanup(

@@ -7,10 +7,16 @@ import (
 
 func (c *Client) PostTag(
 	_ context.Context,
-	_ client.PostTagJSONRequestBody,
+	b client.PostTagJSONRequestBody,
 ) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
-	return c.Failure
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	c.Tagged = append(c.Tagged, b)
+
+	return nil
 }

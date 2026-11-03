@@ -2,23 +2,24 @@ package gofix
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/source/types/import_decision"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
 
-func buildRealiasEdits(
+func buildAliasEdits(
 	p *packages.Package,
 	file *ast.File,
 	spec *ast.ImportSpec,
-	current string,
-	want string,
-	declaredName string,
+	d *import_decision.Decision,
 ) []Edit {
+	current := d.Entry.Local
+	want := d.Want
 	var result []Edit
 
 	switch {
-	case want == declaredName && spec.Name != nil:
+	case want == d.Entry.Declared && spec.Name != nil:
 		result = append(
 			result,
 			Edit{position: spec.Name.Pos(), end: spec.Path.Pos(), newText: ""},

@@ -11,8 +11,7 @@ import (
 func findImportAliasSuggestions(
 	fileSet *token.FileSet,
 	all []*packages.Package,
-	realias bool,
-	report bool,
+	m *aliasMode,
 	r *output.Results,
 ) ([]Edit, map[token.Pos]bool) {
 	var edits []Edit
@@ -33,32 +32,48 @@ func findImportAliasSuggestions(
 
 			seen[filePath] = true
 			v, specs := imports.ViewOf(p, file)
+			v.Ours = widenOurs(v.Ours, m.ours)
+			decisions := imports.Decide(v)
 
-			for _, d := range imports.Decide(v) {
+			for _, d := range decisions {
 				spec := specs[d.Entry]
 
 				if d.Rule == sourceConstant.RuleConstant {
 					handled[spec.Pos()] = true
 				}
 
-				if report {
-					reportDecision(d, filePath, realias, r)
+				if m.suggest {
+					reportDecision(d, filePath, r)
+
+					continue
 				}
 
-				if realias &&
-					d.Rule == sourceConstant.RuleConstant &&
+				if d.Rule == sourceConstant.RuleConstant &&
 					d.Kind == sourceConstant.DecisionRename {
-					edits = append(
-						edits,
-						buildRealiasEdits(
-							p,
-							file,
-							spec,
-							d.Entry.Local,
-							d.Want,
-							d.Entry.Declared,
-						)...,
-					)
+					reportAliasRename(d, filePath, r)
+					edits = append(edits, buildAliasEdits(p, file, spec, d)...)
+				}
+			}
+
+			if m.suggest {
+				continue
+			}
+
+			for _, g := range collisionGroups(decisions) {
+				if !m.applies(g) {
+					continue
+				}
+
+				for _, d := range g {
+					spec := specs[d.Entry]
+					handled[spec.Pos()] = true
+
+					if d.Kind == sourceConstant.DecisionRename {
+						reportAliasRename(d, filePath, r)
+						edits = append(
+							edits,
+							buildAliasEdits(p, file, spec, d)...)
+					}
 				}
 			}
 		}

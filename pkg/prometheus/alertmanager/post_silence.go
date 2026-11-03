@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/refusal"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/prometheus/alertmanager/api/v2/client/silence"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"time"
@@ -34,8 +34,8 @@ func (c *Client) PostSilence(
 					IsRegex: new(false),
 				},
 			},
-			StartsAt: new(library.Scan(start)),
-			EndsAt:   new(library.Scan(end)),
+			StartsAt: new(soilTime.Scan(start)),
+			EndsAt:   new(soilTime.Scan(end)),
 		},
 	}
 	r, e := c.client.Silence.PostSilences(p)

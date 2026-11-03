@@ -3,7 +3,7 @@ package search_index
 import (
 	"database/sql"
 	"errors"
-	library "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (x *Index) position(session string) (int64, string) {
@@ -18,7 +18,7 @@ func (x *Index) position(session string) (int64, string) {
 		return 0, ""
 	}
 
-	library.PanicOnError(e)
+	soilErrors.PanicOnError(e)
 
 	return consumed, turn
 }

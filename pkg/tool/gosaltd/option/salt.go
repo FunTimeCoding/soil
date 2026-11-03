@@ -7,6 +7,7 @@ import (
 
 type Salt struct {
 	Address         string
+	MetricAddress   string
 	ServiceTokens   []string
 	Repository      string
 	ClonePath       string

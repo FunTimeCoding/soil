@@ -2,4 +2,4 @@
 
 package reaper
 
-func (r *Reaper) reap() {}
+func (r *Reaper) Reap() {}

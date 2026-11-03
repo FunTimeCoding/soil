@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/time/day"
 	"github.com/funtimecoding/soil/pkg/time/minute"
@@ -44,12 +44,12 @@ func TestTime(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	assert.String(t, "1970-01-01 00:00", library.Format(soil.StartOfTime))
+	assert.String(t, "1970-01-01 00:00", soilTime.Format(soil.StartOfTime))
 }
 
 func TestFormatCompactToday(t *testing.T) {
 	now := time.Now()
-	assert.String(t, now.Local().Format("15:04"), library.FormatCompact(now))
+	assert.String(t, now.Local().Format("15:04"), soilTime.FormatCompact(now))
 }
 
 func TestFormatCompactOlder(t *testing.T) {
@@ -57,12 +57,12 @@ func TestFormatCompactOlder(t *testing.T) {
 	assert.String(
 		t,
 		yesterday.Local().Format("2006-01-02 15:04"),
-		library.FormatCompact(yesterday),
+		soilTime.FormatCompact(yesterday),
 	)
 }
 
 func TestParse(t *testing.T) {
-	result := library.Parse(constant.DateYear, "2019-01-01")
+	result := soilTime.Parse(constant.DateYear, "2019-01-01")
 	assert.Integer(t, 2019, result.Year())
 	assert.Integer(t, 1, int(result.Month()))
 	assert.Integer(t, 1, result.Day())
@@ -72,35 +72,35 @@ func TestMidnight(t *testing.T) {
 	assert.Any(
 		t,
 		time.Date(1970, 1, 1, 0, 0, 0, 0, time.Local),
-		library.Midnight(soil.StartOfTime),
+		soilTime.Midnight(soil.StartOfTime),
 	)
 }
 
 func TestOlderThan(t *testing.T) {
 	now := time.Now()
-	assert.False(t, library.OlderThan(now, 1))
+	assert.False(t, soilTime.OlderThan(now, 1))
 	fiveMinutesAgo := now.Add(-5 * time.Minute)
-	assert.True(t, library.OlderThan(fiveMinutesAgo, 1))
+	assert.True(t, soilTime.OlderThan(fiveMinutesAgo, 1))
 }
 
 func TestRelative(t *testing.T) {
 	now := time.Now()
-	assert.String(t, "just now", library.Relative(now.Add(-time.Second)))
-	assert.String(t, "5m ago", library.Relative(now.Add(-5*time.Minute)))
-	assert.String(t, "3h ago", library.Relative(now.Add(-3*time.Hour)))
-	assert.String(t, "2d ago", library.Relative(now.Add(-50*time.Hour)))
+	assert.String(t, "just now", soilTime.Relative(now.Add(-time.Second)))
+	assert.String(t, "5m ago", soilTime.Relative(now.Add(-5*time.Minute)))
+	assert.String(t, "3h ago", soilTime.Relative(now.Add(-3*time.Hour)))
+	assert.String(t, "2d ago", soilTime.Relative(now.Add(-50*time.Hour)))
 }
 
 func TestPublicHoliday(t *testing.T) {
-	assert.True(t, library.PublicHoliday(day.New(2024, time.November, 1)))
-	assert.False(t, library.PublicHoliday(day.New(2024, time.November, 2)))
+	assert.True(t, soilTime.PublicHoliday(day.New(2024, time.November, 1)))
+	assert.False(t, soilTime.PublicHoliday(day.New(2024, time.November, 2)))
 }
 
 func TestWorkDaysSince(t *testing.T) {
 	assert.Integer(
 		t,
 		3,
-		library.WeekDaysSince(
+		soilTime.WeekDaysSince(
 			day.New(2024, time.October, 25),
 			day.New(2024, time.October, 30),
 		),
@@ -147,7 +147,7 @@ func TestMonthsBetweenAcrossYears(t *testing.T) {
 	assert.Integer(
 		t,
 		16,
-		library.MonthsBetween(
+		soilTime.MonthsBetween(
 			day.New(2025, time.May, 24),
 			day.New(2026, time.October, 11),
 		),
@@ -158,7 +158,7 @@ func TestMonthsBetweenCountsOnTheSameDay(t *testing.T) {
 	assert.Integer(
 		t,
 		12,
-		library.MonthsBetween(
+		soilTime.MonthsBetween(
 			day.New(2025, time.October, 11),
 			day.New(2026, time.October, 11),
 		),
@@ -169,7 +169,7 @@ func TestMonthsBetweenWaitsForTheDay(t *testing.T) {
 	assert.Integer(
 		t,
 		11,
-		library.MonthsBetween(
+		soilTime.MonthsBetween(
 			day.New(2025, time.October, 12),
 			day.New(2026, time.October, 11),
 		),

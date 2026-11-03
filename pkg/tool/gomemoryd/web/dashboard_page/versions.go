@@ -1,7 +1,7 @@
 package dashboard_page
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web/memory_page"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -17,7 +17,7 @@ func (p *Page) Versions() gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				layout.TimeCell(library.Parse(time.RFC3339, v.ChangedAt)),
+				layout.TimeCell(soilTime.Parse(time.RFC3339, v.ChangedAt)),
 				html.Td(gomponents.Text(v.ChangeType)),
 				html.Td(
 					html.A(

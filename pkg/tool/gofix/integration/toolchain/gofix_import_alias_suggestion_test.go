@@ -13,7 +13,7 @@ import (
 func TestImportAliasSuggestion(t *testing.T) {
 	directory := module_tester.ImportAliasSuggestion(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunRealiasFixWithDirectory([]string{"./..."}, directory, false, r)
+	gofix.RunImportAliasFixWithDirectory([]string{"./..."}, directory, false, r)
 	t.Run(
 		"StandardLibraryKeepsThePlainName",
 		func(t *testing.T) {
@@ -21,7 +21,24 @@ func TestImportAliasSuggestion(t *testing.T) {
 				t,
 				r.Entries,
 				"pkg/delta/clock.go",
-				"suggest alias library → testmodule (testmodule/pkg/time; time keeps the name: stdlib)",
+				"suggest alias library → testmoduleTime (testmodule/pkg/time; time keeps the name: stdlib)",
+			)
+		},
+	)
+	t.Run(
+		"OwnKeepsThePlainName",
+		func(t *testing.T) {
+			assertPlanned(
+				t,
+				r.Entries,
+				"pkg/echo/service/service.go",
+				"suggest de-alias echoFace → face (own: testmodule/pkg/echo/face)",
+			)
+			assertPlanned(
+				t,
+				r.Entries,
+				"pkg/echo/service/service.go",
+				"suggest alias face → foxtrot (testmodule/pkg/foxtrot/face; testmodule/pkg/echo/face keeps the name: own)",
 			)
 		},
 	)
@@ -36,17 +53,30 @@ func TestImportAliasSuggestion(t *testing.T) {
 			)
 		},
 	)
-	t.Run(
-		"OtherCollisionsOnlySuggestEvenWhenRealiasing",
-		func(t *testing.T) {
-			assert.String(
-				t,
-				"package delta\n\nimport (\n\tlibrary \"testmodule/pkg/time\"\n\t\"time\"\n)\n\nfunc Clock() string {\n\treturn library.Stamp() + time.UTC.String()\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "pkg/delta/clock.go"),
-				),
-			)
-		},
+}
+
+func TestOtherCollisionsStayUntouchedAndSilentByDefault(t *testing.T) {
+	directory := module_tester.ImportAliasSuggestion(t)
+	r := output.NewResultsWithDirectory(directory)
+	gofix.RunConstantAliasFixWithDirectory(
+		[]string{"./..."},
+		directory,
+		false,
+		r,
 	)
+	assert.String(
+		t,
+		"package service\n\nimport (\n\techoFace \"testmodule/pkg/echo/face\"\n\t\"testmodule/pkg/foxtrot/face\"\n)\n\nfunc Service(echoFace.Client, face.Source) {}\n",
+		testutil.ReadFile(
+			t,
+			filepath.Join(directory, "pkg/echo/service/service.go"),
+		),
+	)
+
+	for _, c := range r.Entries {
+		if c.Path == "pkg/echo/service/service.go" ||
+			c.Path == "pkg/hotel/builtin.go" {
+			t.Errorf("unexpected concern %q on %s", c.Text, c.Path)
+		}
+	}
 }

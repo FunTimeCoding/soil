@@ -3,7 +3,7 @@ package service_tester
 import (
 	"fmt"
 	core "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"time"
 )
 
@@ -15,11 +15,11 @@ func (t *Tester) AddEvent(
 	involvedKind string,
 	involvedName string,
 ) {
-	now := v1.NewTime(time.Now())
+	now := meta.NewTime(time.Now())
 	_, e := t.Clientset.CoreV1().Events(namespace).Create(
 		t.context(),
 		&core.Event{
-			ObjectMeta: v1.ObjectMeta{
+			ObjectMeta: meta.ObjectMeta{
 				Name:      fmt.Sprintf("%s-%s", reason, involvedName),
 				Namespace: namespace,
 			},
@@ -33,7 +33,7 @@ func (t *Tester) AddEvent(
 			LastTimestamp: now,
 			Count:         1,
 		},
-		v1.CreateOptions{},
+		meta.CreateOptions{},
 	)
 
 	if e != nil {

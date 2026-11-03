@@ -2,13 +2,13 @@ package unit
 
 import (
 	"context"
-	standard "errors"
+	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
+	gomonitord "github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/base"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -18,20 +18,23 @@ import (
 
 func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 	s := base.New(t)
-	c := client.New(
+	c := gomonitord.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
 	x, cancel := context.WithCancel(context.Background())
 	t.Cleanup(cancel)
-	events := make(chan []generated.Claim, 8)
+	events := make(chan []client.Claim, 8)
 	ended := make(chan error, 1)
 	b, e := c.Listen(x)
 	assert.FatalOnError(t, e)
-	defer errors.LogClose(b)
+	defer soilErrors.LogClose(b)
 	go func() {
-		ended <- client.ReadClaims(b, func(v []generated.Claim) { events <- v })
+		ended <- gomonitord.ReadClaims(
+			b,
+			func(v []client.Claim) { events <- v },
+		)
 	}()
 	assert.Count(t, 0, nextEvent(t, events))
 	assert.FatalOnError(t, c.ClaimItem("jira-ABC-1", "alfa@host.example"))
@@ -41,11 +44,11 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 	assert.FatalOnError(t, c.Release("jira-ABC-1", "alfa@host.example"))
 	assert.Count(t, 0, nextEvent(t, events))
 	cancel()
-	assert.True(t, standard.Is(streamEnd(t, ended), context.Canceled))
+	assert.True(t, errors.Is(streamEnd(t, ended), context.Canceled))
 }
 
 func TestListenReportsAnUnreachableDaemon(t *testing.T) {
-	c := client.New(
+	c := gomonitord.New(
 		locator.New(webConstant.Localhost).Port(1).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
@@ -58,7 +61,7 @@ func TestListenReportsAnUnreachableDaemon(t *testing.T) {
 
 func TestListenRefusesAnUnknownToken(t *testing.T) {
 	s := base.New(t)
-	c := client.New(
+	c := gomonitord.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		"bogus",
 	)

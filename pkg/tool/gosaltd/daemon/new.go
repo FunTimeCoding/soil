@@ -11,18 +11,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/service"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func New(
 	o *option.Salt,
 	l *logger.Logger,
 	r face.Reporter,
+	y *prometheus.Registry,
 ) *Daemon {
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(d, constant.RunsTable)
 	s := store.New(d, constant.RunsTable)
 	s.AbandonRunning()
-	p := reaper.New(r)
+	p := reaper.New(r, y)
 	c := o.Master()
 	result := &Daemon{
 		database: d,

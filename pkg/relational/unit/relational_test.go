@@ -6,7 +6,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/constant"
@@ -33,32 +33,32 @@ func TestConstant(t *testing.T) {
 func TestNewCreatesParentAndAppliesParameters(t *testing.T) {
 	p := filepath.Join(t.TempDir(), "nested", soil.TestDatabase)
 	d := connection.New(logger.New(context.Background()), p)
-	defer func() { libraryErrors.PanicOnError(d.Close()) }()
+	defer func() { soilErrors.PanicOnError(d.Close()) }()
 	var enabled int
-	libraryErrors.PanicOnError(d.QueryRow("PRAGMA foreign_keys").Scan(&enabled))
+	soilErrors.PanicOnError(d.QueryRow("PRAGMA foreign_keys").Scan(&enabled))
 	assert.Integer(t, 1, enabled)
 	var journal string
-	libraryErrors.PanicOnError(d.QueryRow("PRAGMA journal_mode").Scan(&journal))
+	soilErrors.PanicOnError(d.QueryRow("PRAGMA journal_mode").Scan(&journal))
 	assert.String(t, "wal", journal)
 	assert.True(t, system.FileExists(p))
 }
 
 func TestNewMemoryIsolatesCalls(t *testing.T) {
 	first := connection.NewMemory()
-	defer func() { libraryErrors.PanicOnError(first.Close()) }()
+	defer func() { soilErrors.PanicOnError(first.Close()) }()
 	second := connection.NewMemory()
-	defer func() { libraryErrors.PanicOnError(second.Close()) }()
+	defer func() { soilErrors.PanicOnError(second.Close()) }()
 	_, e := first.Exec("CREATE TABLE probe (identifier INTEGER)")
-	libraryErrors.PanicOnError(e)
+	soilErrors.PanicOnError(e)
 	var count int
-	libraryErrors.PanicOnError(
+	soilErrors.PanicOnError(
 		second.QueryRow(
 			"SELECT count(*) FROM sqlite_master WHERE name = 'probe'",
 		).Scan(&count),
 	)
 	assert.Integer(t, 0, count)
 	var enabled int
-	libraryErrors.PanicOnError(
+	soilErrors.PanicOnError(
 		first.QueryRow("PRAGMA foreign_keys").Scan(&enabled),
 	)
 	assert.Integer(t, 1, enabled)
@@ -81,9 +81,7 @@ func TestNewMemoryEnforcesForeignKeys(t *testing.T) {
 	m := lite.NewMemory()
 	defer relational.CloseMapper(m)
 	var enabled int
-	libraryErrors.PanicOnError(
-		m.Raw("PRAGMA foreign_keys").Scan(&enabled).Error,
-	)
+	soilErrors.PanicOnError(m.Raw("PRAGMA foreign_keys").Scan(&enabled).Error)
 	assert.Integer(t, 1, enabled)
 }
 

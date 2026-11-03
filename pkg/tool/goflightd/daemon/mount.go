@@ -2,8 +2,8 @@ package daemon
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	generated "github.com/funtimecoding/soil/pkg/tool/goflightd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/server"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/generated/server"
+	goflightd "github.com/funtimecoding/soil/pkg/tool/goflightd/server"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -17,11 +17,11 @@ func (d *Daemon) Mount(
 ) {
 	g.TokenMount(
 		webConstant.InterfacePath,
-		generated.HandlerFromMux(
-			generated.NewStrictHandler(
-				server.New(d.service, r),
-				[]generated.StrictMiddlewareFunc{
-					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
+		server.HandlerFromMux(
+			server.NewStrictHandler(
+				goflightd.New(d.service, r),
+				[]server.StrictMiddlewareFunc{
+					web.RecordingMiddleware[server.StrictHandlerFunc](t),
 				},
 			),
 			http.NewServeMux(),

@@ -1,12 +1,13 @@
 package service
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"time"
 )
 
-func (s *Service) Cleanup() []error {
+func (s *Service) Cleanup(x context.Context) []error {
 	entries, e := os.ReadDir(s.elitePath)
 
 	if e != nil {
@@ -18,6 +19,10 @@ func (s *Service) Cleanup() []error {
 	var result []error
 
 	for _, n := range entries {
+		if x.Err() != nil {
+			break
+		}
+
 		i, f := n.Info()
 
 		if f != nil || i.ModTime().After(cutoff) {

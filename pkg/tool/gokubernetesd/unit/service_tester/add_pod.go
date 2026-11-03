@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester/pod"
 	core "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"time"
@@ -58,20 +58,20 @@ func (t *Tester) AddPod(p *pod.Pod) {
 				},
 			},
 		},
-		v1.CreateOptions{},
+		meta.CreateOptions{},
 	)
 	errors.PanicOnError(e)
 	_, f := t.Clientset.CoreV1().Pods(p.Namespace).Create(
 		t.context(),
 		&core.Pod{
-			ObjectMeta: v1.ObjectMeta{
+			ObjectMeta: meta.ObjectMeta{
 				Name:      p.Name,
 				Namespace: p.Namespace,
 				Labels:    p.Labels,
 			},
 			Status: core.PodStatus{Phase: core.PodPhase(p.Phase)},
 		},
-		v1.CreateOptions{},
+		meta.CreateOptions{},
 	)
 	errors.PanicOnError(f)
 }

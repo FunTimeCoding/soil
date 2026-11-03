@@ -1,7 +1,7 @@
 package history_page
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"github.com/funtimecoding/soil/pkg/web/component/load"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -19,7 +19,7 @@ func Row(
 
 	return html.Tr(
 		gomponents.If(edit, html.ID(mark(e.Identifier))),
-		layout.TimeCell(library.Parse(time.RFC3339, e.Timestamp)),
+		layout.TimeCell(soilTime.Parse(time.RFC3339, e.Timestamp)),
 		html.Td(gomponents.Text(timeline.FormatDescription(e))),
 		gomponents.If(
 			editable,

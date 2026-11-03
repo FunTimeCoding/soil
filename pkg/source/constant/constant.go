@@ -14,10 +14,16 @@ const (
 	KeeperPlain    = "already plain"
 	KeeperFirst    = "first by path"
 	KeeperVersion  = "version name"
+	KeeperMock     = "every mock carries its owner"
 )
 
 const ConstantPackage = "constant"
+const (
+	MockPackage = "mock_client"
+	MockSuffix  = "Mock"
+)
 
+var MockOwnerSkips = map[string]bool{"client": true, "unit": true}
 var LayoutRoots = map[string]bool{
 	"cmd":      true,
 	"internal": true,

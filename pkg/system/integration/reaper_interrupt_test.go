@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/prometheus/client_golang/prometheus"
 	"testing"
 	"time"
 )
@@ -14,7 +15,7 @@ func TestReaperInterruptStopsOwnedProcess(t *testing.T) {
 	windowsSkip(t)
 	owned := reporter.NewOptional(identity.Example().Name())
 	defer owned.Close()
-	r := reaper.New(owned)
+	r := reaper.New(owned, prometheus.NewRegistry())
 	defer r.Close()
 	c := run.New().NoPanic().WithRegistry(r)
 	finished := make(chan struct{})

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"os"
@@ -8,7 +9,7 @@ import (
 	"time"
 )
 
-func (s *Service) EnrichExisting() []error {
+func (s *Service) EnrichExisting(x context.Context) []error {
 	entries, e := os.ReadDir(s.elitePath)
 
 	if e != nil {
@@ -19,6 +20,10 @@ func (s *Service) EnrichExisting() []error {
 	var result []error
 
 	for _, t := range entries {
+		if x.Err() != nil {
+			break
+		}
+
 		n := t.Name()
 
 		if !strings.HasSuffix(n, gw2Constant.DetailedWvWKillSuffix) {

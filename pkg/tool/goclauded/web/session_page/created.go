@@ -1,7 +1,7 @@
 package session_page
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 
@@ -12,5 +12,5 @@ func created(value string) string {
 		return value
 	}
 
-	return library.FormatCompact(t)
+	return soilTime.FormatCompact(t)
 }

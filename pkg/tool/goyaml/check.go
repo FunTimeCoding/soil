@@ -2,7 +2,7 @@ package goyaml
 
 import (
 	"errors"
-	soil "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
 	"go.yaml.in/yaml/v3"
 	"io"
@@ -10,7 +10,7 @@ import (
 
 func Check(path string) error {
 	f := system.Open(path)
-	defer soil.PanicClose(f)
+	defer soilErrors.PanicClose(f)
 	d := yaml.NewDecoder(f)
 
 	for {

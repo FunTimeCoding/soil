@@ -4,6 +4,7 @@ import "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 
 type Ansible struct {
 	Address         string
+	MetricAddress   string
 	ServiceTokens   []string
 	Repository      string
 	ClonePath       string

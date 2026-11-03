@@ -3,7 +3,7 @@ package service_tester
 import (
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	"k8s.io/apimachinery/pkg/apis/meta/v1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (t *Tester) AddNode(
@@ -14,7 +14,7 @@ func (t *Tester) AddNode(
 	_, e := t.Clientset.CoreV1().Nodes().Create(
 		t.context(),
 		&core.Node{
-			ObjectMeta: v1.ObjectMeta{Name: name},
+			ObjectMeta: meta.ObjectMeta{Name: name},
 			Status: core.NodeStatus{
 				Allocatable: core.ResourceList{
 					core.ResourceCPU: *resource.NewMilliQuantity(
@@ -28,7 +28,7 @@ func (t *Tester) AddNode(
 				},
 			},
 		},
-		v1.CreateOptions{},
+		meta.CreateOptions{},
 	)
 
 	if e != nil {

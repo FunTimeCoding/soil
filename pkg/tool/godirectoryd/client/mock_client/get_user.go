@@ -13,5 +13,16 @@ func (c *Client) GetUser(_ context.Context) ([]*client.User, error) {
 		return nil, c.Failure
 	}
 
-	return nil, nil
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
+	result := []*client.User{}
+
+	for _, u := range c.UserList {
+		v := *u
+		result = append(result, &v)
+	}
+
+	return result, nil
 }

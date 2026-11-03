@@ -1,7 +1,10 @@
 package unit
 
 import (
+	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/dropped"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -27,6 +30,16 @@ func TestDoClassifiesOtherStatusAsUnexpected(t *testing.T) {
 	_, e := web.Do(s.Client(), web.NewGet(join.Empty(s.URL, "/broken")))
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 500", e.Error())
+}
+
+func TestDoReadsALostHttp2ConnectionAsDropped(t *testing.T) {
+	c, _ := newFailingClient(errors.New(errorsConstant.ConnectionLost))
+	_, e := web.Do(
+		c,
+		web.NewGet("https://foxtrot.example/wiki/rest/api/content/search"),
+	)
+	assert.True(t, dropped.Is(e))
+	assert.String(t, "foxtrot.example: connection dropped", e.Error())
 }
 
 func TestDoLeavesQueryOutOfTransportFailures(t *testing.T) {

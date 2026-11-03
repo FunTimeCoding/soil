@@ -1,7 +1,7 @@
 package memory_page
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/memory_list"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -26,7 +26,7 @@ func listTable(l *memory_list.List) gomponents.Node {
 				html.Td(html.Small(gomponents.Text(m.Description))),
 				html.Td(gomponents.Text(m.Type)),
 				html.Td(TagChips(m.Tags)),
-				layout.TimeCell(library.Parse(time.RFC3339, m.UpdatedAt)),
+				layout.TimeCell(soilTime.Parse(time.RFC3339, m.UpdatedAt)),
 			),
 		)
 	}

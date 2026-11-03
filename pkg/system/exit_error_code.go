@@ -2,7 +2,7 @@ package system
 
 import (
 	"errors"
-	errorLibrary "github.com/funtimecoding/soil/pkg/errors"
+	soilErrors "github.com/funtimecoding/soil/pkg/errors"
 	"os/exec"
 )
 
@@ -12,7 +12,7 @@ func ExitErrorCode(e error) int {
 			return f.ExitCode()
 		}
 
-		errorLibrary.PanicOnError(e)
+		soilErrors.PanicOnError(e)
 	}
 
 	return 0

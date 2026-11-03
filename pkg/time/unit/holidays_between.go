@@ -1,7 +1,7 @@
 package unit
 
 import (
-	library "github.com/funtimecoding/soil/pkg/time"
+	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 
@@ -12,7 +12,7 @@ func holidaysBetween(
 	var result []time.Time
 
 	for d := start; !d.After(end); d = d.AddDate(0, 0, 1) {
-		if library.PublicHoliday(d) {
+		if soilTime.PublicHoliday(d) {
 			result = append(result, d)
 		}
 	}

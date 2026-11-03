@@ -1,13 +1,13 @@
 package server
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
-	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/provision/face"
 )
 
 func New(
-	n provisionFace.Runner,
-	r face.Reporter,
+	n face.Runner,
+	r soilFace.Reporter,
 ) *Server {
 	return &Server{runner: n, reporter: r}
 }

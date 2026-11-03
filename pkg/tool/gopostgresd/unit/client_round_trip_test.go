@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/postgres/types/result"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	gopostgresd "github.com/funtimecoding/soil/pkg/tool/gopostgresd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
@@ -18,14 +18,14 @@ func TestTheClientReadsColumnsAndRowsThroughTheMount(t *testing.T) {
 		"SELECT a.id, b.id",
 		result.New([]string{"id", "id"}, [][]any{{1.0, 7.0}}),
 	)
-	c := client.New(
+	c := gopostgresd.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
 		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(c.Close)
 	v, e := c.Query(
 		t.Context(),
-		generated.QueryJSONRequestBody{
+		client.QueryJSONRequestBody{
 			Instance: new("alfa"),
 			Sql:      "SELECT a.id, b.id",
 		},
@@ -37,14 +37,14 @@ func TestTheClientReadsColumnsAndRowsThroughTheMount(t *testing.T) {
 
 func TestTheClientClassifiesARefusalThroughTheMount(t *testing.T) {
 	s, _, _, _ := served(t, syntaxRefusal())
-	c := client.New(
+	c := gopostgresd.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
 		generativeConstant.ModelContextTestToken,
 	)
 	t.Cleanup(c.Close)
 	_, e := c.Query(
 		t.Context(),
-		generated.QueryJSONRequestBody{Instance: new("alfa"), Sql: "SELEC 1"},
+		client.QueryJSONRequestBody{Instance: new("alfa"), Sql: "SELEC 1"},
 	)
 	assert.True(t, validation.Is(e))
 }

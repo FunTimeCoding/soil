@@ -1,7 +1,7 @@
 package transcript
 
 import (
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
@@ -20,5 +20,5 @@ type Service struct {
 	sources    func() []string
 	exportPath string
 	logger     *logger.Logger
-	reporter   library.Reporter
+	reporter   soilFace.Reporter
 }

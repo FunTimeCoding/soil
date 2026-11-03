@@ -2,8 +2,8 @@ package base
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	directory "github.com/funtimecoding/soil/pkg/directory/face"
-	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/directory/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
@@ -19,9 +19,9 @@ func NewService(
 	t *testing.T,
 	o *option.Option,
 	m *gorm.DB,
-	d directory.DirectoryClient,
+	d face.DirectoryClient,
 	l *logger.Logger,
-	r face.Reporter,
+	r soilFace.Reporter,
 ) *service.Service {
 	t.Helper()
 	migrate.AutoMigrate(m)

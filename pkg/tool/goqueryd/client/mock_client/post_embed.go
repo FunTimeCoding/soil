@@ -13,5 +13,7 @@ func (c *Client) PostEmbed(context.Context) (*client.EmbedResult, error) {
 		return nil, c.Failure
 	}
 
+	c.Embedded++
+
 	return &client.EmbedResult{}, nil
 }

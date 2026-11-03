@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
-	"k8s.io/api/networking/v1"
+	networking "k8s.io/api/networking/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
 )
@@ -31,13 +31,16 @@ func TestTheMockIssuesATriggeredCertificateOnlyWhenToldTo(t *testing.T) {
 func TestTheMockStoresTheNetworkPolicyItIsSent(t *testing.T) {
 	c := mock_client.New()
 	c.AddNetworkPolicy(
-		&v1.NetworkPolicy{
+		&networking.NetworkPolicy{
 			ObjectMeta: meta.ObjectMeta{Namespace: "alfa", Name: "bravo"},
 		},
 	)
 	p, e := c.NetworkPolicy("alfa", "bravo")
 	assert.FatalOnError(t, e)
-	p.Spec.Ingress = append(p.Spec.Ingress, v1.NetworkPolicyIngressRule{})
+	p.Spec.Ingress = append(
+		p.Spec.Ingress,
+		networking.NetworkPolicyIngressRule{},
+	)
 	assert.FatalOnError(t, c.UpdateNetworkPolicy(p))
 	q, f := c.NetworkPolicy("alfa", "bravo")
 	assert.FatalOnError(t, f)

@@ -2,7 +2,7 @@ package main
 
 import (
 	grafana "github.com/funtimecoding/soil/pkg/grafana/example"
-	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/example"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/example"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/example/notify"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/example"
 	loki "github.com/funtimecoding/soil/pkg/prometheus/loki/example"
@@ -12,13 +12,13 @@ func main() {
 	loki.QueryRange()
 
 	if false {
-		alertmanager.Alert()
-		alertmanager.Create()
-		alertmanager.DeleteSilence()
+		example.Alert()
+		example.Create()
+		example.DeleteSilence()
 		notify.Notify()
-		alertmanager.SetSilence()
-		alertmanager.Silence()
-		alertmanager.Status()
+		example.SetSilence()
+		example.Silence()
+		example.Status()
 		grafana.Read()
 		loki.Label()
 		loki.Query()

@@ -2,7 +2,7 @@ package runner_option
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/face"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
 )
@@ -20,5 +20,5 @@ type Option struct {
 	CleanupFunction func()
 	ChangeFunction  func(value any) *change.Change
 	Downstream      []face.Downstream
-	Registry        library.ProcessRegistry
+	Registry        soilFace.ProcessRegistry
 }
