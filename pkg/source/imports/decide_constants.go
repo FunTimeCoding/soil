@@ -20,17 +20,19 @@ func decideConstants(v *import_view.View) []*import_decision.Decision {
 
 	keeper := ConstantKeeper(v.PackagePath, paths)
 	chosen := make(map[string]bool)
+
+	for _, e := range group {
+		if want := constantWant(e, keeper); want != "" && e.Local == want {
+			chosen[want] = true
+		}
+	}
+
 	var result []*import_decision.Decision
 
 	for _, e := range group {
 		d := import_decision.New(e, constant.RuleConstant)
 		d.Keeper = keeper
-		want := constant.ConstantPackage
-
-		if e.Path != keeper {
-			want = ConstantAlias(e.Path, e.Module)
-		}
-
+		want := constantWant(e, keeper)
 		result = append(result, d)
 
 		if want == "" {
@@ -42,8 +44,6 @@ func decideConstants(v *import_view.View) []*import_decision.Decision {
 		d.Want = want
 
 		if e.Local == want {
-			chosen[want] = true
-
 			continue
 		}
 

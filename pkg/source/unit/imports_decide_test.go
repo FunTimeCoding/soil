@@ -46,6 +46,33 @@ func TestDecideForeignConstantCarriesItsDomain(t *testing.T) {
 	assert.True(t, d[0].Kind == constant.DecisionRename)
 }
 
+func TestDecideRefusesANameALaterConstantKeeps(t *testing.T) {
+	d := imports.Decide(
+		import_view.New(
+			"example.org/alfa/pkg/tool/goalfa",
+			[]*import_entry.Entry{
+				entry(
+					"example.org/alfa/pkg/web/constant",
+					constant.ConstantPackage,
+					constant.ConstantPackage,
+				),
+				import_entry.New(
+					"example.org/bravo/pkg/web/constant",
+					constant.ConstantPackage,
+					"webConstant",
+					"example.org/bravo",
+					false,
+				),
+			},
+			taken(),
+		),
+	)
+	assert.Count(t, 2, d)
+	assert.True(t, d[0].Kind == constant.DecisionRefused)
+	assert.String(t, "webConstant already given in this file", d[0].Reason)
+	assert.True(t, d[1].Kind == constant.DecisionKeep)
+}
+
 func TestDecideIgnoresAnImportThatIsLeaving(t *testing.T) {
 	arriving := entry(
 		"example.org/alfa/pkg/tool/goalfa/constant",
