@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
@@ -13,6 +14,23 @@ func TestAMissingPostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	r.Client.MustCallToolError(
 		constant.GetThreadReplies,
 		map[string]any{"post_id": "missing"},
+	)
+	assert.Count(t, 0, r.Server.Reporter.Events())
+}
+
+func TestDownloadingIntoAMissingDirectoryIsAnsweredQuietly(t *testing.T) {
+	r := model_context_tester.New(t, fileUpstream)
+	directory := filepath.Join(t.TempDir(), "absent")
+	assert.StringContains(
+		t,
+		fmt.Sprintf("directory does not exist: %s", directory),
+		r.Client.MustCallToolError(
+			constant.DownloadFile,
+			map[string]any{
+				"file_id": "alfa",
+				"path":    filepath.Join(directory, "alfa.txt"),
+			},
+		),
 	)
 	assert.Count(t, 0, r.Server.Reporter.Events())
 }

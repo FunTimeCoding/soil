@@ -2,9 +2,12 @@ package model_context
 
 import (
 	"context"
+	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -37,6 +40,13 @@ func (s *Server) DownloadFile(
 	}
 
 	e = os.WriteFile(path, b, 0644)
+
+	if errors.Is(e, fs.ErrNotExist) {
+		return s.answerWith(
+			validation.New("directory does not exist: %s", filepath.Dir(path)),
+			"write file",
+		)
+	}
 
 	if e != nil {
 		return s.answerWith(e, "write file")

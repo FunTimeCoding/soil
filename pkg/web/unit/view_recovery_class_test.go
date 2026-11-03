@@ -7,6 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/web/unit/failing_writer"
+	"maragu.dev/gomponents"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -46,6 +49,67 @@ func TestARecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
 	wrapped.ServeHTTP(recorder, request)
 	assert.Integer(t, http.StatusConflict, recorder.Code)
 	assert.String(t, "true", recorder.Header().Get(constant.NotificationItem))
+}
+
+func TestARenderToAClientThatLeftIsNotCaptured(t *testing.T) {
+	r := memory.New()
+	v := recoveryView()
+	wrapped := v.Recovery(r)(
+		http.HandlerFunc(
+			func(
+				w http.ResponseWriter,
+				_ *http.Request,
+			) {
+				v.RenderPage(w, "alfa", constant.RootPath)
+			},
+		),
+	)
+	w := failing_writer.New(brokenPipe())
+	wrapped.ServeHTTP(
+		w,
+		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
+	)
+	assert.Count(t, 0, r.Events())
+	assert.Integer(t, 1, w.Writes)
+}
+
+func TestAPushToAClientThatLeftIsNotCaptured(t *testing.T) {
+	r := memory.New()
+	wrapped := recoveryView().Recovery(r)(
+		http.HandlerFunc(
+			func(
+				w http.ResponseWriter,
+				_ *http.Request,
+			) {
+				layout.PushEvent(w, "alfa", gomponents.Text("bravo"))
+			},
+		),
+	)
+	wrapped.ServeHTTP(
+		failing_writer.New(brokenPipe()),
+		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
+	)
+	assert.Count(t, 0, r.Events())
+}
+
+func TestARenderWriteFaultIsStillCaptured(t *testing.T) {
+	r := memory.New()
+	v := recoveryView()
+	wrapped := v.Recovery(r)(
+		http.HandlerFunc(
+			func(
+				w http.ResponseWriter,
+				_ *http.Request,
+			) {
+				v.RenderPage(w, "alfa", constant.RootPath)
+			},
+		),
+	)
+	wrapped.ServeHTTP(
+		failing_writer.New(errors.New("disk full")),
+		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
+	)
+	assert.Count(t, 1, r.Events())
 }
 
 func TestARecoveredUnclassifiedErrorStaysAFaultAndIsCaptured(t *testing.T) {

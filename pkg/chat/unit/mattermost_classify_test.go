@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/dropped"
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
@@ -36,6 +37,18 @@ func TestAnUnknownStatusKeepsItsDetail(t *testing.T) {
 	d, okay := e.(*detail_error.Detail)
 	assert.True(t, okay)
 	assert.StringContains(t, "418", d.Status)
+}
+
+func TestATruncatedBodyIsDropped(t *testing.T) {
+	c := mattermost_client_tester.New(t, statusUpstream).Client
+	_, e := c.FindPost("truncated")
+	assert.True(t, dropped.Is(e))
+}
+
+func TestAnEmptyRefusalKeepsItsStatus(t *testing.T) {
+	c := mattermost_client_tester.New(t, statusUpstream).Client
+	_, e := c.FindPost("hollow")
+	assert.True(t, not_found.Is(e))
 }
 
 func TestATransportFailureKeepsItsCause(t *testing.T) {

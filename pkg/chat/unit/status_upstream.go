@@ -48,4 +48,26 @@ func statusUpstream(m *http.ServeMux) {
 			errors.PanicOnError(e)
 		},
 	)
+	m.HandleFunc(
+		"/api/v4/posts/hollow",
+		func(
+			w http.ResponseWriter,
+			_ *http.Request,
+		) {
+			w.WriteHeader(http.StatusNotFound)
+		},
+	)
+	m.HandleFunc(
+		"/api/v4/posts/truncated",
+		func(
+			w http.ResponseWriter,
+			_ *http.Request,
+		) {
+			w.Header().Set(webConstant.ContentType, webConstant.Object)
+			w.Header().Set("Content-Length", "64")
+			w.WriteHeader(http.StatusOK)
+			_, e := w.Write([]byte("{"))
+			errors.PanicOnError(e)
+		},
+	)
 }

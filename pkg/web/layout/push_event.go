@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
-	"github.com/funtimecoding/soil/pkg/system/writer"
 	"maragu.dev/gomponents"
 	"net/http"
 )
@@ -17,11 +16,11 @@ func PushEvent(
 ) {
 	var b bytes.Buffer
 	errors.PanicOnError(n.Render(&b))
-	writer.Print(w, "event: %s\n", name)
+	emit(w, "event: %s\n", name)
 
 	for _, l := range split.NewLine(b.String()) {
-		writer.Print(w, "data: %s\n", l)
+		emit(w, "data: %s\n", l)
 	}
 
-	writer.Print(w, stringsConstant.Unix)
+	emit(w, stringsConstant.Unix)
 }

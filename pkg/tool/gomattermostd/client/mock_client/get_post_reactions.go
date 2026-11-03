@@ -13,6 +13,10 @@ func (c *Client) GetPostReactions(
 		return nil, c.Failure
 	}
 
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
 	result, okay := c.Reactions[identifier]
 
 	if !okay {

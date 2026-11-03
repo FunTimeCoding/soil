@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
@@ -41,6 +42,10 @@ func WrapError(
 	}
 
 	if !okay {
+		if g := connection.Classify(e); g != nil {
+			return g
+		}
+
 		return e
 	}
 

@@ -2,12 +2,16 @@ package unit
 
 import (
 	"errors"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/dropped"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"net/http"
+	"net/url"
 	"testing"
 )
 
@@ -50,6 +54,24 @@ func TestAnUpstreamFailureKeepsItsDetail(t *testing.T) {
 	_, okay := errors.AsType[*detail_error.Detail](e)
 	assert.True(t, okay)
 	assert.StringContains(t, "Internal server error", e.Error())
+}
+
+func TestALostConnectionWithoutResponseIsDropped(t *testing.T) {
+	e := jira.WrapError(
+		nil,
+		fmt.Errorf(
+			"No response returned: %w",
+			&url.Error{
+				Op:  "Get",
+				URL: "https://jira.example.org/rest/api/2/search/jql",
+				Err: errors.New("http2: client connection lost"),
+			},
+		),
+	)
+	f, okay := errors.AsType[*connection.Failure](e)
+	assert.True(t, okay)
+	assert.True(t, dropped.Is(e))
+	assert.String(t, "jira.example.org", f.Host)
 }
 
 func TestAFailureWithoutResponseKeepsItsDetail(t *testing.T) {

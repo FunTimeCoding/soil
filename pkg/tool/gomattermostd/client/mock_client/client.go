@@ -1,6 +1,9 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
+import (
+	"github.com/funtimecoding/soil/pkg/failure"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
+)
 
 type Client struct {
 	Posts      map[string][]*client.Post
@@ -9,4 +12,5 @@ type Client struct {
 	Unresolved map[string][]client.Thread
 	Failure    error
 	Closed     int
+	failures   *failure.Failure
 }

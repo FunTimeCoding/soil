@@ -1,7 +1,7 @@
 package registry
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"net/http"
@@ -16,6 +16,6 @@ func (r *Registry) Serve() http.HandlerFunc {
 		results := r.Search(query)
 		fragment := palette.ResultList(results)
 		w.Header().Set(constant.ContentType, constant.MarkupUnicode)
-		errors.PanicOnError(fragment.Render(w))
+		web.PanicOnWriteError(fragment.Render(w))
 	}
 }

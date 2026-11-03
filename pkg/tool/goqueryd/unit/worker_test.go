@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -8,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
 	"github.com/prometheus/client_golang/prometheus"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -60,4 +62,46 @@ func TestTheWorkerCountsWhatItPrunes(t *testing.T) {
 	}
 
 	assert.Float(t, 1, prunedContents(g))
+}
+
+func TestTheWorkerCloseWaitsForTheRunningPoll(t *testing.T) {
+	entered := make(chan struct{})
+	release := make(chan struct{})
+	closed := make(chan struct{})
+	var completed atomic.Int64
+	w := worker.New(
+		func(context.Context) (int64, error) {
+			close(entered)
+			<-release
+			completed.Add(1)
+
+			return 0, nil
+		},
+		time.Hour,
+		logger.New(t.Context()),
+		prometheus.NewRegistry(),
+		memory.New(),
+	)
+	w.Start()
+	<-entered
+	go func() {
+		w.Close()
+		close(closed)
+	}()
+
+	select {
+	case <-closed:
+		t.Fatal("close returned while the poll was running")
+	case <-time.After(50 * time.Millisecond):
+	}
+
+	close(release)
+
+	select {
+	case <-closed:
+	case <-time.After(time.Second):
+		t.Fatal("close did not return after the poll finished")
+	}
+
+	assert.Integer(t, 1, int(completed.Load()))
 }

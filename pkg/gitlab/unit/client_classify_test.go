@@ -11,6 +11,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 	"testing"
 )
@@ -43,6 +45,29 @@ func TestAFailedPreconditionIsAConflict(t *testing.T) {
 func TestARateLimitedRequestIsUnavailable(t *testing.T) {
 	_, e := refusingProject(t, http.StatusTooManyRequests, "slow down").
 		Client.Project(t.Context(), 7)
+	assert.True(t, unavailable.Is(e))
+}
+
+func TestAnOutagePageIsUnavailable(t *testing.T) {
+	_, e := client_tester.New(
+		t,
+		func(m *http.ServeMux) {
+			m.HandleFunc(
+				"/api/v4/projects/7",
+				func(
+					w http.ResponseWriter,
+					_ *http.Request,
+				) {
+					web.TextHeader(w)
+					web.Write(
+						w,
+						http.StatusBadGateway,
+						"GitLab is not responding",
+					)
+				},
+			)
+		},
+	).Client.Project(t.Context(), 7)
 	assert.True(t, unavailable.Is(e))
 }
 

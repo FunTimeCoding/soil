@@ -2,7 +2,6 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/index"
 	"strings"
 	"time"
@@ -15,7 +14,13 @@ func (s *Store) Index(collection string) *index.Index {
 	r := index.Stub()
 
 	for _, relative := range globFiles(path, pattern) {
-		content := string(system.ReadBytes(path, relative))
+		b, present := readPresent(path, relative)
+
+		if !present {
+			continue
+		}
+
+		content := string(b)
 
 		if strings.TrimSpace(content) == "" {
 			continue

@@ -15,6 +15,10 @@ func (c *Client) GetIssue(
 		return nil, c.Failure
 	}
 
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
 	for _, i := range c.Found {
 		if i.Key == key {
 			return i, nil

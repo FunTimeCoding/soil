@@ -3,6 +3,7 @@ package mattermost
 import (
 	"errors"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
@@ -14,7 +15,17 @@ func wrapError(
 	r *model.Response,
 	e error,
 ) error {
-	if e == nil || r == nil || r.StatusCode == 0 {
+	if e == nil {
+		return nil
+	}
+
+	if r == nil || r.StatusCode < http.StatusBadRequest {
+		if f := connection.Classify(e); f != nil {
+			return f
+		}
+	}
+
+	if r == nil || r.StatusCode == 0 {
 		return e
 	}
 

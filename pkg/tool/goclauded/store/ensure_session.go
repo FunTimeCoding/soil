@@ -6,6 +6,8 @@ import (
 )
 
 func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
 	var i session.Session
 	result := s.database.Where("identifier = ?", identifier).Limit(1).Find(&i)
 

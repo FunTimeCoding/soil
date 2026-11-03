@@ -1,7 +1,7 @@
 package view
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"net/http"
@@ -21,5 +21,5 @@ func (v *View) RenderPageWithStatus(
 		Render()
 	w.Header().Set(constant.ContentType, constant.MarkupUnicode)
 	w.WriteHeader(status)
-	errors.PanicOnError(page.Render(w))
+	web.PanicOnWriteError(page.Render(w))
 }

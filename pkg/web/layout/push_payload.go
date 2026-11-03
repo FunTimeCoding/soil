@@ -3,7 +3,6 @@ package layout
 import (
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
-	"github.com/funtimecoding/soil/pkg/system/writer"
 	"net/http"
 )
 
@@ -14,14 +13,14 @@ func PushPayload(
 	payload string,
 ) {
 	if identifier != "" {
-		writer.Print(w, "id: %s\n", identifier)
+		emit(w, "id: %s\n", identifier)
 	}
 
-	writer.Print(w, "event: %s\n", name)
+	emit(w, "event: %s\n", name)
 
 	for _, l := range split.NewLine(payload) {
-		writer.Print(w, "data: %s\n", l)
+		emit(w, "data: %s\n", l)
 	}
 
-	writer.Print(w, stringsConstant.Unix)
+	emit(w, stringsConstant.Unix)
 }
