@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) deleteLink(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
@@ -18,7 +18,7 @@ func (s *Server) deleteLink(
 	}
 
 	if e := s.service.DeleteLink(identifier); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("link %s deleted", identifier)

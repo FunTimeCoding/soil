@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) processRestart(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ProcessRestart,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.Restart(a.Name); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(s.service.Statuses())

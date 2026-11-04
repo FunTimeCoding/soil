@@ -26,6 +26,22 @@ func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 	assert.String(t, "bravo", stored[0].ChannelIdentifier)
 }
 
+func TestSubscribeThreadAnswersTheLatestReply(t *testing.T) {
+	r := model_context_tester.New(t, repliedUpstream)
+	result := r.Client.MustCallToolNotation(
+		constant.SubscribeThread,
+		map[string]any{
+			constant.ParameterRoot:     "alfa",
+			constant.ParameterCallsign: "kilo",
+		},
+	)
+	latest, okay := result[constant.LatestReply].(map[string]any)
+	assert.True(t, okay)
+	assert.Any(t, "delta", latest["id"])
+	assert.Any(t, "latest reply", latest["message"])
+	assert.Any(t, "foxtrot", latest["username"])
+}
+
 func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	result := r.Client.MustCallToolNotation(
@@ -49,6 +65,36 @@ func TestSubscribeThreadIsIdempotent(t *testing.T) {
 	r.Client.MustCallTool(constant.SubscribeThread, arguments)
 	r.Client.MustCallTool(constant.SubscribeThread, arguments)
 	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("kilo")))
+}
+
+func TestSubscribeThreadStoresAQueuedDelivery(t *testing.T) {
+	r := model_context_tester.New(t, threadUpstream)
+	r.Client.MustCallTool(
+		constant.SubscribeThread,
+		map[string]any{
+			constant.ParameterRoot:     "alfa",
+			constant.ParameterCallsign: "kilo",
+			constant.ParameterDelivery: "queued",
+		},
+	)
+	assert.String(
+		t,
+		"queued",
+		r.Server.Store.MustByCallsign("kilo")[0].Delivery,
+	)
+}
+
+func TestSubscribeThreadRejectsAnUnknownDelivery(t *testing.T) {
+	r := model_context_tester.New(t, threadUpstream)
+	r.Client.MustCallToolError(
+		constant.SubscribeThread,
+		map[string]any{
+			constant.ParameterRoot:     "alfa",
+			constant.ParameterCallsign: "kilo",
+			constant.ParameterDelivery: "cruise",
+		},
+	)
+	assert.Count(t, 0, r.Server.Store.MustByCallsign("kilo"))
 }
 
 func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {

@@ -6,19 +6,19 @@ import (
 )
 
 func (s *Server) GetStatistics(
-	_ context.Context,
+	x context.Context,
 	_ server.GetStatisticsRequestObject,
 ) (server.GetStatisticsResponseObject, error) {
 	scopes, e := s.service.ScopeCounts()
 
 	if e != nil {
-		return server.GetStatistics500JSONResponse(*s.answer(e)), nil
+		return server.GetStatistics500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	tags, f := s.service.ListTags()
 
 	if f != nil {
-		return server.GetStatistics500JSONResponse(*s.answer(f)), nil
+		return server.GetStatistics500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	result := server.Statistics{
@@ -36,7 +36,7 @@ func (s *Server) GetStatistics(
 	membership, g := s.service.TagMembership()
 
 	if g != nil {
-		return server.GetStatistics500JSONResponse(*s.answer(g)), nil
+		return server.GetStatistics500JSONResponse(*s.answer(x, g)), nil
 	}
 
 	for _, one := range tags {

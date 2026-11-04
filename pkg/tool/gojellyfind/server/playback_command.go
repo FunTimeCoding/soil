@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PlaybackCommand(
-	_ context.Context,
+	x context.Context,
 	r server.PlaybackCommandRequestObject,
 ) (server.PlaybackCommandResponseObject, error) {
 	var seek int64
@@ -28,7 +28,7 @@ func (s *Server) PlaybackCommand(
 	}
 
 	if e != nil {
-		return server.PlaybackCommand500JSONResponse(*s.answer(e)), nil
+		return server.PlaybackCommand500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PlaybackCommand204Response{}, nil

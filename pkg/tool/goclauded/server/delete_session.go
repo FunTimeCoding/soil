@@ -7,12 +7,12 @@ import (
 )
 
 func (s *Server) DeleteSession(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteSessionRequestObject,
 ) (server.DeleteSessionResponseObject, error) {
 	if e := s.roster.ReleaseByCallsign(r.Callsign); e != nil {
 		return server.DeleteSession500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

@@ -11,5 +11,5 @@ func (d *Daemon) Mount(
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(d.service, d.readOnly, r, t).Mount(g)
+	model_context.New(d.service, d.armed, r, t).Mount(g)
 }

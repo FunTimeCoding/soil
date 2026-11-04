@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetChecklist(
-	_ context.Context,
+	x context.Context,
 	r server.GetChecklistRequestObject,
 ) (server.GetChecklistResponseObject, error) {
 	items, e := s.service.ReadChecklist(r.Key)
@@ -27,7 +27,7 @@ func (s *Server) GetChecklist(
 	}
 
 	if e != nil {
-		return server.GetChecklist500JSONResponse(*s.answer(e)), nil
+		return server.GetChecklist500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetChecklist200JSONResponse(convertChecklist(items)), nil

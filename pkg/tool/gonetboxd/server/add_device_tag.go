@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) AddDeviceTag(
-	_ context.Context,
+	x context.Context,
 	r server.AddDeviceTagRequestObject,
 ) (server.AddDeviceTagResponseObject, error) {
 	d, e := s.service.AddTag(r.Name, r.Tag)
@@ -28,7 +28,7 @@ func (s *Server) AddDeviceTag(
 	}
 
 	if e != nil {
-		return server.AddDeviceTag500JSONResponse(*s.captureDetail(e)), nil
+		return server.AddDeviceTag500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.AddDeviceTag200JSONResponse(*convert.Device(d)), nil

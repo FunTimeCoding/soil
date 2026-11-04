@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ResetMachine(
-	_ context.Context,
+	x context.Context,
 	r server.ResetMachineRequestObject,
 ) (server.ResetMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ResetMachine(
 	}
 
 	if e != nil {
-		return server.ResetMachine500JSONResponse(*s.answer(e)), nil
+		return server.ResetMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -53,7 +53,7 @@ func (s *Server) ResetMachine(
 	case unavailable.Is(e):
 		return server.ResetMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ResetMachine500JSONResponse(*s.answer(e)), nil
+		return server.ResetMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ResetMachine200JSONResponse{TaskId: taskIdentifier}, nil

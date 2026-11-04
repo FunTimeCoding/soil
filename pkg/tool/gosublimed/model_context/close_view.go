@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) CloseView(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CloseView,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.CloseView(int(a.ViewIdentifier)); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("view closed")

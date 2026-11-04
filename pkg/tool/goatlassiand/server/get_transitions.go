@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetTransitions(
-	_ context.Context,
+	x context.Context,
 	r server.GetTransitionsRequestObject,
 ) (server.GetTransitionsResponseObject, error) {
 	transitions, e := s.service.Transitions(r.Key)
@@ -27,7 +27,7 @@ func (s *Server) GetTransitions(
 	}
 
 	if e != nil {
-		return server.GetTransitions500JSONResponse(*s.answer(e)), nil
+		return server.GetTransitions500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]*server.JiraTransition, 0, len(transitions))

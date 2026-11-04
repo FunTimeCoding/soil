@@ -10,7 +10,7 @@ import (
 
 func New(
 	s *service.Service,
-	readOnly bool,
+	armed bool,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
@@ -21,13 +21,13 @@ func New(
 		).WithSessionEnd(chosen.Clear).Server(),
 		service:   s,
 		selection: chosen,
-		readOnly:  readOnly,
+		armed:     armed,
 		reporter:  r,
 	}
 	result.register()
 	result.registerResources()
 
-	if !readOnly {
+	if armed {
 		result.registerWrite()
 	}
 

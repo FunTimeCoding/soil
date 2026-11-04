@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ReadTab(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ReadTab,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.ReadTab(int(a.TabIdentifier), bool(a.Raw))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

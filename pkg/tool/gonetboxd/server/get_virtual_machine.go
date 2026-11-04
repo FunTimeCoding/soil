@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetVirtualMachine(
-	_ context.Context,
+	x context.Context,
 	r server.GetVirtualMachineRequestObject,
 ) (server.GetVirtualMachineResponseObject, error) {
 	m, labels, e := s.service.VirtualMachine(r.Name)
@@ -23,7 +23,7 @@ func (s *Server) GetVirtualMachine(
 	}
 
 	if e != nil {
-		return server.GetVirtualMachine500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetVirtualMachine500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.GetVirtualMachine200JSONResponse(

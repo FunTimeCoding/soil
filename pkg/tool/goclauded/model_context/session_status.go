@@ -17,7 +17,7 @@ func (s *Server) sessionStatus(
 	c, e := s.resolveCaller(x, constant.SessionStatus)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -29,7 +29,7 @@ func (s *Server) sessionStatus(
 	d, f := s.roster.SessionByCallsign(c.Callsign)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if d == nil {

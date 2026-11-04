@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) moveEntry(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Move,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.Move(a.Identifier, a.Group); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("moved")

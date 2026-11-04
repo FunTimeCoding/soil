@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) deleteHost(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := r.GetString(generativeConstant.ParameterIdentifier, "")
@@ -18,7 +18,7 @@ func (s *Server) deleteHost(
 		identifier,
 		r.GetBool(constant.ParameterApply, true),
 	); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(identifier)

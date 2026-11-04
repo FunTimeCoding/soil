@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) GetClaims(
-	_ context.Context,
+	x context.Context,
 	_ server.GetClaimsRequestObject,
 ) (server.GetClaimsResponseObject, error) {
 	v, e := s.service.Claims()
 
 	if e != nil {
-		return server.GetClaims500JSONResponse(*s.answer(e)), nil
+		return server.GetClaims500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetClaims200JSONResponse(convert.Claims(v)), nil

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) StartProcess(
-	_ context.Context,
+	x context.Context,
 	r server.StartProcessRequestObject,
 ) (server.StartProcessResponseObject, error) {
 	if e := s.service.Start(r.Name); e != nil {

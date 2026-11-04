@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateTask(
-	_ context.Context,
+	x context.Context,
 	r server.CreateTaskRequestObject,
 ) (server.CreateTaskResponseObject, error) {
 	c := request.New()
@@ -32,7 +32,7 @@ func (s *Server) CreateTask(
 	}
 
 	if e != nil {
-		return server.CreateTask500JSONResponse(*s.answer(e)), nil
+		return server.CreateTask500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreateTask201JSONResponse(*convert.Task(result)), nil

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetTag(
-	_ context.Context,
+	x context.Context,
 	r server.GetTagRequestObject,
 ) (server.GetTagResponseObject, error) {
 	collection := ""

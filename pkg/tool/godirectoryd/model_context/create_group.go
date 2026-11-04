@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) createGroup(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Group,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.CreateGroup(a.Name)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

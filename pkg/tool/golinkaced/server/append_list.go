@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) AppendList(
-	_ context.Context,
+	x context.Context,
 	r server.AppendListRequestObject,
 ) (server.AppendListResponseObject, error) {
 	result, f := s.service.AppendList(int(r.Identifier), r.Body.Name)
@@ -27,7 +27,7 @@ func (s *Server) AppendList(
 	}
 
 	if f != nil {
-		return server.AppendList500JSONResponse(*s.answer(f)), nil
+		return server.AppendList500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.AppendList200JSONResponse{

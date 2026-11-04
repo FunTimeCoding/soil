@@ -33,7 +33,7 @@ func (s *Server) renameSymbol(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, e := s.symbol.Rename(
@@ -47,7 +47,7 @@ func (s *Server) renameSymbol(
 	)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

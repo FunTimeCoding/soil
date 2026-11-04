@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createDeviceRole(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -25,7 +25,7 @@ func (s *Server) createDeviceRole(
 	)
 
 	if g != nil {
-		return s.captureFail(g, "device role not created")
+		return s.captureFail(x, g, "device role not created")
 	}
 
 	return response.SuccessAny(convert.DeviceRole(result))

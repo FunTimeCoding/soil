@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListSightings(
-	_ context.Context,
+	x context.Context,
 	r server.ListSightingsRequestObject,
 ) (server.ListSightingsResponseObject, error) {
 	var place string
@@ -24,7 +24,7 @@ func (s *Server) ListSightings(
 
 	if e != nil {
 		return server.ListSightings500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

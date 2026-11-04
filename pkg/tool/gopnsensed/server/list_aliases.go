@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListAliases(
-	_ context.Context,
+	x context.Context,
 	r server.ListAliasesRequestObject,
 ) (server.ListAliasesResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListAliases(
 	result, e := s.service.Aliases(phrase)
 
 	if e != nil {
-		return server.ListAliases500JSONResponse(*s.answer(e)), nil
+		return server.ListAliases500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListAliases200JSONResponse(convert.Aliases(result)), nil

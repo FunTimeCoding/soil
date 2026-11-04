@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) list(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	memoryType := q.GetString(constant.Type, "")
@@ -18,7 +18,7 @@ func (s *Server) list(
 	memories, e := s.service.ListMemories(memoryType, tag, scope, true)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(notation.MarshalIndent(memories))

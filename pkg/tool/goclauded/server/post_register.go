@@ -7,14 +7,14 @@ import (
 )
 
 func (s *Server) PostRegister(
-	_ context.Context,
+	x context.Context,
 	r server.PostRegisterRequestObject,
 ) (server.PostRegisterResponseObject, error) {
 	result, e := s.roster.Register(r.Body.Session)
 
 	if e != nil {
 		return server.PostRegister500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

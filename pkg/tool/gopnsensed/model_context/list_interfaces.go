@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listInterfaces(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Interfaces()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.NetworkInterfaces(result))

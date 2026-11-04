@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) addDeviceJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -27,7 +27,7 @@ func (s *Server) addDeviceJournalEntry(
 	result, h := s.service.AddDeviceJournalEntry(device, kind, comments)
 
 	if h != nil {
-		return s.captureFail(h, "journal entry not added to device")
+		return s.captureFail(x, h, "journal entry not added to device")
 	}
 
 	return response.SuccessAny(result)

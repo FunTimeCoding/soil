@@ -19,13 +19,13 @@ func (s *Server) queryRules(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	v, e := s.service.Rules(x, instance)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	ruleType := a.Type

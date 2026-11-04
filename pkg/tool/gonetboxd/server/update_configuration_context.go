@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) UpdateConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateConfigurationContextRequestObject,
 ) (server.UpdateConfigurationContextResponseObject, error) {
 	c := context_change.New()
@@ -42,7 +42,7 @@ func (s *Server) UpdateConfigurationContext(
 
 	if e != nil {
 		return server.UpdateConfigurationContext500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

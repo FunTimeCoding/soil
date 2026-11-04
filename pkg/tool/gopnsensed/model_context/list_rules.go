@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listRules(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Rules(
@@ -17,7 +17,7 @@ func (s *Server) listRules(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Rules(result))

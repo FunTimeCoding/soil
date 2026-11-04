@@ -7,14 +7,14 @@ import (
 )
 
 func (s *Server) PostRechunk(
-	_ context.Context,
+	x context.Context,
 	_ server.PostRechunkRequestObject,
 ) (server.PostRechunkResponseObject, error) {
 	documents, e := s.service.Rechunk()
 
 	if e != nil {
 		return server.PostRechunk500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

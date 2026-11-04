@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) listPackages(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListPackages,
 ) (*mcp.CallToolResult, error) {
 	listings, e := s.service.Packages(a.Name)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Listings(listings))

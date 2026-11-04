@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) listPages(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	space, f := r.RequireString(constant.SpaceIdentifier)
@@ -21,7 +21,7 @@ func (s *Server) listPages(
 	result, g := s.service.Pages(space, status)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	return response.SuccessAny(result)

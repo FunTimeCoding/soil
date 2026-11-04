@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) addTurn(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.AddTurn,
 ) (*mcp.CallToolResult, error) {
@@ -20,7 +20,7 @@ func (s *Server) addTurn(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("turn added")

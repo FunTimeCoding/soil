@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) DeleteClaim(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteClaimRequestObject,
 ) (server.DeleteClaimResponseObject, error) {
 	e := s.service.Release(r.Params.Item, r.Params.Owner)
@@ -17,7 +17,7 @@ func (s *Server) DeleteClaim(
 	}
 
 	if e != nil {
-		return server.DeleteClaim500JSONResponse(*s.answer(e)), nil
+		return server.DeleteClaim500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteClaim204Response{}, nil

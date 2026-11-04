@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createIssue(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	project, f := r.RequireString(constant.Project)
@@ -64,7 +64,7 @@ func (s *Server) createIssue(
 	)
 
 	if i != nil {
-		return s.answer(i)
+		return s.answer(x, i)
 	}
 
 	return response.SuccessAny(convert.JiraIssue(created))

@@ -13,7 +13,7 @@ import (
 )
 
 func (s *Server) DownloadFile(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DownloadFile,
 ) (*mcp.CallToolResult, error) {
@@ -24,13 +24,13 @@ func (s *Server) DownloadFile(
 	i, e := s.service.FileInformation(a.FileIdentifier)
 
 	if e != nil {
-		return s.answerWith(e, "file information")
+		return s.answerWith(x, e, "file information")
 	}
 
 	b, e := s.service.File(a.FileIdentifier)
 
 	if e != nil {
-		return s.answerWith(e, "file content")
+		return s.answerWith(x, e, "file content")
 	}
 
 	path := a.Path
@@ -43,13 +43,14 @@ func (s *Server) DownloadFile(
 
 	if errors.Is(e, fs.ErrNotExist) {
 		return s.answerWith(
+			x,
 			validation.New("directory does not exist: %s", filepath.Dir(path)),
 			"write file",
 		)
 	}
 
 	if e != nil {
-		return s.answerWith(e, "write file")
+		return s.answerWith(x, e, "write file")
 	}
 
 	return response.SuccessAny(

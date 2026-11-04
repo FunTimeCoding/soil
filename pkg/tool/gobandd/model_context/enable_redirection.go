@@ -16,13 +16,13 @@ func (s *Server) enableRedirection(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	enabled, f := s.service.EnableRedirection(instance)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	if len(enabled) == 0 {

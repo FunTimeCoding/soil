@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) getCertificate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Serial,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.BySerial(a.Serial)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Certificate(result))

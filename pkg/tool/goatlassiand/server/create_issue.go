@@ -64,7 +64,7 @@ func (s *Server) CreateIssue(
 	}
 
 	if e != nil {
-		return server.CreateIssue500JSONResponse(*s.answer(e)), nil
+		return server.CreateIssue500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreateIssue201JSONResponse(*convert.JiraIssue(created)), nil

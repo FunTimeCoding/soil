@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) UploadFile(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.UploadFile,
 ) (*mcp.CallToolResult, error) {
@@ -31,13 +31,13 @@ func (s *Server) UploadFile(
 	}
 
 	if e != nil {
-		return s.answerWith(e, "read file")
+		return s.answerWith(x, e, "read file")
 	}
 
 	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
 
 	if e != nil {
-		return s.answerWith(e, "channel")
+		return s.answerWith(x, e, "channel")
 	}
 
 	name := filepath.Base(a.Path)
@@ -50,7 +50,7 @@ func (s *Server) UploadFile(
 	p, f, e := s.service.UploadAndPost(ch, name, b, message)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

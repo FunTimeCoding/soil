@@ -16,7 +16,7 @@ func (s *Server) send(
 	c, e := s.resolveCaller(x, constant.Send)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -49,7 +49,7 @@ func (s *Server) send(
 			return response.Fail(f.Error())
 		}
 
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	return response.Success(sent(to, held, d))

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) getEntry(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Identifier,
 ) (*mcp.CallToolResult, error) {

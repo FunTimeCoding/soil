@@ -1,12 +1,10 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
-
 func (s *Store) SetMetadata(
 	collection string,
 	path string,
 	metadata map[string][]string,
-) {
+) error {
 	var identifier int
 	e := s.database.QueryRow(
 		"SELECT identifier FROM document WHERE collection = ? AND path = ?",
@@ -15,24 +13,28 @@ func (s *Store) SetMetadata(
 	).Scan(&identifier)
 
 	if e != nil {
-		return
+		return nil
 	}
 
-	_, e = s.database.Exec(
+	if _, f := s.database.Exec(
 		"DELETE FROM document_metadata WHERE document_identifier = ?",
 		identifier,
-	)
-	errors.PanicOnError(e)
+	); f != nil {
+		return f
+	}
 
 	for key, values := range metadata {
 		for _, value := range distinct(values) {
-			_, e = s.database.Exec(
+			if _, f := s.database.Exec(
 				"INSERT INTO document_metadata (document_identifier, key, value) VALUES (?, ?, ?)",
 				identifier,
 				key,
 				value,
-			)
-			errors.PanicOnError(e)
+			); f != nil {
+				return f
+			}
 		}
 	}
+
+	return nil
 }

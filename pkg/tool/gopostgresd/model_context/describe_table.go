@@ -20,13 +20,14 @@ func (s *Server) describeTable(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	v, e := s.service.DescribeTable(x, instance, a.Schema, a.Table)
 
 	if e != nil {
 		return s.answerWith(
+			x,
 			e,
 			fmt.Sprintf(
 				"database error on %s: table %s.%s not described",

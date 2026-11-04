@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListTables(
-	c context.Context,
+	x context.Context,
 	r server.ListTablesRequestObject,
 ) (server.ListTablesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListTables(
 	}
 
 	if e != nil {
-		return server.ListTables500JSONResponse(*s.answerWith(e, "")), nil
+		return server.ListTables500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	var schema string
@@ -35,7 +35,7 @@ func (s *Server) ListTables(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.ListTables(c, instance, schema)
+	rows, e := s.service.ListTables(x, instance, schema)
 
 	if validation.Is(e) {
 		return server.ListTables400JSONResponse(*clientError(e)), nil
@@ -54,7 +54,7 @@ func (s *Server) ListTables(
 	}
 
 	if e != nil {
-		return server.ListTables500JSONResponse(*s.answerWith(e, "")), nil
+		return server.ListTables500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	return server.ListTables200JSONResponse{

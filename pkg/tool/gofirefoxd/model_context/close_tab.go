@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) CloseTab(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CloseTab,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.CloseTab(int(a.TabIdentifier)); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("tab closed")

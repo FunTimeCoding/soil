@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetAlertsByIdentifier(
-	_ context.Context,
+	x context.Context,
 	r server.GetAlertsByIdentifierRequestObject,
 ) (server.GetAlertsByIdentifierResponseObject, error) {
 	var identifiers []uint
@@ -21,7 +21,7 @@ func (s *Server) GetAlertsByIdentifier(
 	records, e := s.service.AlertsByIdentifier(identifiers)
 
 	if e != nil {
-		return server.GetAlertsByIdentifier500JSONResponse(*s.answer(e)), nil
+		return server.GetAlertsByIdentifier500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetAlertsByIdentifier200JSONResponse(toResponse(records)), nil

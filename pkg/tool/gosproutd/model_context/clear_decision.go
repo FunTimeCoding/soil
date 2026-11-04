@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) clearDecision(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ClearDecision,
 ) (*mcp.CallToolResult, error) {

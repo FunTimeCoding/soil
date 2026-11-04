@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) SearchItems(
-	_ context.Context,
+	x context.Context,
 	r server.SearchItemsRequestObject,
 ) (server.SearchItemsResponseObject, error) {
 	var types []string
@@ -32,7 +32,7 @@ func (s *Server) SearchItems(
 	result, e := s.service.SearchItems(r.Params.Q, types, page, perPage)
 
 	if e != nil {
-		return server.SearchItems500JSONResponse(*s.answer(e)), nil
+		return server.SearchItems500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	rows := make([]server.Item, 0, len(result.Items))

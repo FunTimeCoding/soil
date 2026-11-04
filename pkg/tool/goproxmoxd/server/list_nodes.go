@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListNodes(
-	_ context.Context,
+	x context.Context,
 	r server.ListNodesRequestObject,
 ) (server.ListNodesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListNodes(
 	}
 
 	if e != nil {
-		return server.ListNodes500JSONResponse(*s.answer(e)), nil
+		return server.ListNodes500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	nodes, e := s.service.ListNodes(instance)
@@ -41,7 +41,7 @@ func (s *Server) ListNodes(
 	case unavailable.Is(e):
 		return server.ListNodes503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListNodes500JSONResponse(*s.answer(e)), nil
+		return server.ListNodes500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	pointers := convert.Nodes(nodes)

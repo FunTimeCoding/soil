@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) getPageChildren(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
@@ -20,7 +20,7 @@ func (s *Server) getPageChildren(
 	result, g := s.service.PageChildren(identifier)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	return response.SuccessAny(result)

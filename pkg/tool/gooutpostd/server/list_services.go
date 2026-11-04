@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListServices(
-	_ context.Context,
+	x context.Context,
 	r server.ListServicesRequestObject,
 ) (server.ListServicesResponseObject, error) {
 	var origin string
@@ -19,7 +19,7 @@ func (s *Server) ListServices(
 	v, e := s.service.Services(origin)
 
 	if e != nil {
-		return server.ListServices500JSONResponse(*s.answer(e)), nil
+		return server.ListServices500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListServices200JSONResponse(convert.Services(v)), nil

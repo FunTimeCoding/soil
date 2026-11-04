@@ -8,11 +8,11 @@ import (
 )
 
 func (s *Server) reconfigureDnsmasq(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.ReconfigureDnsmasq(); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(constant.ReconfigureDnsmasq)

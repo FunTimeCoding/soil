@@ -16,13 +16,13 @@ func (s *Server) ListContainers(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	containers, e := s.service.ListContainers(instance, a.Node)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	rows := make([]proxResponse.Container, len(containers))

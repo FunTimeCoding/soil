@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createChoiceSet(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -25,7 +25,7 @@ func (s *Server) createChoiceSet(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "choice set not created")
+		return s.captureFail(x, f, "choice set not created")
 	}
 
 	return response.SuccessAny(convert.ChoiceSet(result))

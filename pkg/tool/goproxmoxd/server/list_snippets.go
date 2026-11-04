@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListSnippets(
-	_ context.Context,
+	x context.Context,
 	r server.ListSnippetsRequestObject,
 ) (server.ListSnippetsResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -23,7 +23,7 @@ func (s *Server) ListSnippets(
 	}
 
 	if e != nil {
-		return server.ListSnippets500JSONResponse(*s.answer(e)), nil
+		return server.ListSnippets500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	entries, e := s.service.ListSnippets(instance)
@@ -34,7 +34,7 @@ func (s *Server) ListSnippets(
 	case forbidden.Is(e):
 		return server.ListSnippets403JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListSnippets500JSONResponse(*s.answer(e)), nil
+		return server.ListSnippets500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.ListSnippets200JSONResponse

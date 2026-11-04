@@ -18,7 +18,7 @@ func (s *Server) registerResources() {
 			mcp.WithMIMEType(webConstant.Markdown),
 		),
 		func(
-			_ context.Context,
+			x context.Context,
 			_ mcp.ReadResourceRequest,
 		) ([]mcp.ResourceContents, error) {
 			return []mcp.ResourceContents{

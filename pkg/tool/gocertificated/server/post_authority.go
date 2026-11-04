@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) PostAuthority(
-	_ context.Context,
+	x context.Context,
 	r server.PostAuthorityRequestObject,
 ) (server.PostAuthorityResponseObject, error) {
 	result, e := s.service.CreateAuthority(r.Body)
@@ -28,7 +28,7 @@ func (s *Server) PostAuthority(
 	}
 
 	if e != nil {
-		return server.PostAuthority500JSONResponse(*s.answer(e)), nil
+		return server.PostAuthority500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostAuthority200JSONResponse(*convert.Authority(result)), nil

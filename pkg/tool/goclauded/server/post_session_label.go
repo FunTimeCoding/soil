@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostSessionLabel(
-	_ context.Context,
+	x context.Context,
 	r server.PostSessionLabelRequestObject,
 ) (server.PostSessionLabelResponseObject, error) {
 	var from string
@@ -49,7 +49,7 @@ func (s *Server) PostSessionLabel(
 		}
 
 		return server.PostSessionLabel500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

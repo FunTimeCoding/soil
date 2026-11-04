@@ -11,14 +11,14 @@ import (
 )
 
 func (s *Server) retargetReferences(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a server.RetargetRequest,
 ) (*mcp.CallToolResult, error) {
 	reports, e := s.service.RetargetReferences(convert.MoveSet(&a), a.DryRun)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if len(reports) == 0 {

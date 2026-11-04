@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) SetPageStatus(
-	_ context.Context,
+	x context.Context,
 	r server.SetPageStatusRequestObject,
 ) (server.SetPageStatusResponseObject, error) {
 	if r.Body.Status != "current" && r.Body.Status != "draft" {
@@ -37,7 +37,7 @@ func (s *Server) SetPageStatus(
 	}
 
 	if e != nil {
-		return server.SetPageStatus500JSONResponse(*s.answer(e)), nil
+		return server.SetPageStatus500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.SetPageStatus200JSONResponse(

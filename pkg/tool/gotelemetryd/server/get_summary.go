@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetSummary(
-	_ context.Context,
+	x context.Context,
 	r server.GetSummaryRequestObject,
 ) (server.GetSummaryResponseObject, error) {
 	o := summary_option.New()
@@ -27,7 +27,7 @@ func (s *Server) GetSummary(
 	rows, e := s.service.Summary(o)
 
 	if e != nil {
-		return server.GetSummary500JSONResponse(*s.answer(e)), nil
+		return server.GetSummary500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	entries := make([]server.SummaryEntry, 0, len(rows))

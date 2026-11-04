@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) AddHost(
-	_ context.Context,
+	x context.Context,
 	r server.AddHostRequestObject,
 ) (server.AddHostResponseObject, error) {
 	identifier, e := s.service.AddHost(
@@ -21,7 +21,7 @@ func (s *Server) AddHost(
 	}
 
 	if e != nil {
-		return server.AddHost500JSONResponse(*s.answer(e)), nil
+		return server.AddHost500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.AddHost200JSONResponse(*convert.Identifier(identifier)), nil

@@ -16,7 +16,7 @@ func (s *Server) Events(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	result, f := s.service.Events(
@@ -33,7 +33,7 @@ func (s *Server) Events(
 	)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.SuccessAny(result)

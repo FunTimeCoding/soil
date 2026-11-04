@@ -44,7 +44,7 @@ func (s *Server) removeParameters(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, e := s.symbol.RemoveParameters(
@@ -55,7 +55,7 @@ func (s *Server) removeParameters(
 	)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

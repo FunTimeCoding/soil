@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) setPageStatus(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
@@ -33,7 +33,7 @@ func (s *Server) setPageStatus(
 	result, h := s.service.SetPageStatus(identifier, status)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.SuccessAny(result)

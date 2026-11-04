@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) SendKey(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SendKey,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) SendKey(
 		a.Keys,
 		time.Duration(a.Interval)*time.Second,
 	); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("sent keys: %s", join.Comma(a.Keys))

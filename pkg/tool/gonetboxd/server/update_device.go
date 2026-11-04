@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) UpdateDevice(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateDeviceRequestObject,
 ) (server.UpdateDeviceResponseObject, error) {
 	c := device_change.New()
@@ -43,7 +43,7 @@ func (s *Server) UpdateDevice(
 	}
 
 	if e != nil {
-		return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
+		return server.UpdateDevice500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.UpdateDevice200JSONResponse(*convert.Device(d)), nil

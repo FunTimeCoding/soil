@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ReadView(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ReadView,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.View(int(a.ViewIdentifier))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

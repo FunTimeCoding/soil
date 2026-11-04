@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) UpdateJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateJournalEntryRequestObject,
 ) (server.UpdateJournalEntryResponseObject, error) {
 	var kind string
@@ -34,7 +34,7 @@ func (s *Server) UpdateJournalEntry(
 	}
 
 	if e != nil {
-		return server.UpdateJournalEntry500JSONResponse(*s.captureDetail(e)), nil
+		return server.UpdateJournalEntry500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.UpdateJournalEntry200JSONResponse(

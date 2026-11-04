@@ -20,4 +20,5 @@ type Builder struct {
 	ping     time.Duration
 	observer prometheus.ObserverVec
 	socket   string
+	traced   bool
 }

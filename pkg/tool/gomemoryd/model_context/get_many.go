@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
@@ -12,6 +13,7 @@ import (
 )
 
 func (s *Server) getMany(
+	x context.Context,
 	raw string,
 	detail bool,
 ) (*mcp.CallToolResult, error) {
@@ -27,13 +29,13 @@ func (s *Server) getMany(
 		m, f := s.service.GetMemory(identifier)
 
 		if f != nil {
-			return s.answer(f)
+			return s.answer(x, f)
 		}
 
 		related, g := s.service.ListRelated(identifier)
 
 		if g != nil {
-			return s.answerWith(g, "load relations")
+			return s.answerWith(x, g, "load relations")
 		}
 
 		if detail {

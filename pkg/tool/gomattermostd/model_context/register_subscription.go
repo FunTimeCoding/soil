@@ -30,6 +30,13 @@ func (s *Server) registerSubscription() {
 					"Short name for the thread, shown in notifications",
 				),
 			),
+			mcp.WithString(
+				constant.ParameterDelivery,
+				mcp.Enum("immediate", "queued"),
+				mcp.Description(
+					"immediate (default) wakes the session through its channel; queued waits for its next prompt. A busy thread is coalesced into one digest per burst, and goclauded caps immediate deliveries per session",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.SubscribeThread),
 	)

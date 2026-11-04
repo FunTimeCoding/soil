@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) issueCertificate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.IssueCertificate,
 ) (*mcp.CallToolResult, error) {
@@ -24,7 +24,7 @@ func (s *Server) issueCertificate(
 	result, key, e := s.service.IssueCertificate(b)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	certificate := convert.Certificate(result)

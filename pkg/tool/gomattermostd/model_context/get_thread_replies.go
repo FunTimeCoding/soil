@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetThreadReplies(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetThreadReplies,
 ) (*mcp.CallToolResult, error) {
@@ -20,31 +20,19 @@ func (s *Server) GetThreadReplies(
 	parent, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	replies, f := s.service.Thread(parent)
 
 	if f != nil {
-		return s.answer(f)
+		return s.answer(x, f)
 	}
 
 	rows := make([]*mattermostResponse.Reply, len(replies))
 
 	for i, r := range replies {
-		rows[i] = mattermostResponse.NewReply(
-			r.Raw.Id,
-			r.Message,
-			formatTime(r.Create),
-		)
-
-		if r.User != nil {
-			rows[i].Username = r.User.Username
-		}
-
-		if len(r.Raw.FileIds) > 0 {
-			rows[i].FileIds = r.Raw.FileIds
-		}
+		rows[i] = replyRow(r)
 	}
 
 	return response.SuccessAny(

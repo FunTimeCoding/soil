@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) SetVolume(
-	_ context.Context,
+	x context.Context,
 	r server.SetVolumeRequestObject,
 ) (server.SetVolumeResponseObject, error) {
 	e := s.service.SetVolume(r.Identifier, r.Body.Level)
@@ -22,7 +22,7 @@ func (s *Server) SetVolume(
 	}
 
 	if e != nil {
-		return server.SetVolume500JSONResponse(*s.answer(e)), nil
+		return server.SetVolume500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.SetVolume204Response{}, nil

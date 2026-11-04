@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListChannels(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListChannels,
 ) (*mcp.CallToolResult, error) {
@@ -22,7 +22,7 @@ func (s *Server) ListChannels(
 	page, e := s.service.AllChannels(limit, a.Page*limit)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	rows := make([]*mattermostResponse.Channel, len(page))

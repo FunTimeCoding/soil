@@ -87,7 +87,7 @@ func (s *Service) applyPatternThrough(
 	qualifiers, i := resolveQualifiers(
 		replacementSpec,
 		symbol,
-		packageNames(all),
+		lookup.PackageNames(all),
 	)
 
 	if i != nil {

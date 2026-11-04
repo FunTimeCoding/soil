@@ -6,13 +6,13 @@ import (
 )
 
 func (s *Server) ListLibraries(
-	_ context.Context,
+	x context.Context,
 	_ server.ListLibrariesRequestObject,
 ) (server.ListLibrariesResponseObject, error) {
 	libraries, e := s.service.Libraries()
 
 	if e != nil {
-		return server.ListLibraries500JSONResponse(*s.answer(e)), nil
+		return server.ListLibraries500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.ListLibraries200JSONResponse

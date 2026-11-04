@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) updateChoiceSet(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -30,7 +30,7 @@ func (s *Server) updateChoiceSet(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "choice set not updated")
+		return s.captureFail(x, f, "choice set not updated")
 	}
 
 	return response.SuccessAny(convert.ChoiceSet(result))

@@ -6,13 +6,13 @@ import (
 )
 
 func (s *Server) GetSourcedMemories(
-	_ context.Context,
+	x context.Context,
 	r server.GetSourcedMemoriesRequestObject,
 ) (server.GetSourcedMemoriesResponseObject, error) {
 	memories, e := s.service.ListDocumentSourced(r.Params.Scope)
 
 	if e != nil {
-		return server.GetSourcedMemories500JSONResponse(*s.answer(e)), nil
+		return server.GetSourcedMemories500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]server.SourcedMemory, 0, len(memories))

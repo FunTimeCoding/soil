@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) EditLink(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.EditLink,
 ) (*mcp.CallToolResult, error) {
@@ -29,7 +29,7 @@ func (s *Server) EditLink(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

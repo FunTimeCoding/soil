@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) Snapshot(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Snapshot,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) Snapshot(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success(

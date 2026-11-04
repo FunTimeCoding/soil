@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostIndex(
-	_ context.Context,
+	x context.Context,
 	r server.PostIndexRequestObject,
 ) (server.PostIndexResponseObject, error) {
 	collection := ""
@@ -20,7 +20,7 @@ func (s *Server) PostIndex(
 
 	if e != nil {
 		return server.PostIndex500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

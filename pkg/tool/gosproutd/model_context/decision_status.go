@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) decisionStatus(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DecisionStatus,
 ) (*mcp.CallToolResult, error) {

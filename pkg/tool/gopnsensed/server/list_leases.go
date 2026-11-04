@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListLeases(
-	_ context.Context,
+	x context.Context,
 	r server.ListLeasesRequestObject,
 ) (server.ListLeasesResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListLeases(
 	result, e := s.service.Leases(phrase)
 
 	if e != nil {
-		return server.ListLeases500JSONResponse(*s.answer(e)), nil
+		return server.ListLeases500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListLeases200JSONResponse(convert.Leases(result)), nil

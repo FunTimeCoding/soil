@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) delete(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := r.GetFloat(constant.Identifier, 0)
@@ -18,7 +18,7 @@ func (s *Server) delete(
 	}
 
 	if e := s.service.Delete(uint(identifier)); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("Entry %d deleted successfully", int(identifier))

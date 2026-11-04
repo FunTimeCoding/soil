@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostContext(
-	_ context.Context,
+	x context.Context,
 	r server.PostContextRequestObject,
 ) (server.PostContextResponseObject, error) {
 	s.service.AddContext(

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetSessionTools(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionToolsRequestObject,
 ) (server.GetSessionToolsResponseObject, error) {
 	calls := s.transcript.ToolCalls(r.Identifier)

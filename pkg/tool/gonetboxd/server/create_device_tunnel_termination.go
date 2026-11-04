@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateDeviceTunnelTermination(
-	_ context.Context,
+	x context.Context,
 	r server.CreateDeviceTunnelTerminationRequestObject,
 ) (server.CreateDeviceTunnelTerminationResponseObject, error) {
 	t, e := s.service.CreateDeviceTunnelTermination(
@@ -41,7 +41,7 @@ func (s *Server) CreateDeviceTunnelTermination(
 
 	if e != nil {
 		return server.CreateDeviceTunnelTermination500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

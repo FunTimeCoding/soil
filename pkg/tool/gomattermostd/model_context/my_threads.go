@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) MyThreads(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.MyThreads,
 ) (*mcp.CallToolResult, error) {
@@ -35,7 +35,7 @@ func (s *Server) MyThreads(
 	threads, e := s.service.UserThreads(opts)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	var rows []*mattermostResponse.Thread

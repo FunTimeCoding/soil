@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) StopPortForward(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.StopPortForward,
 ) (*mcp.CallToolResult, error) {
@@ -17,7 +17,7 @@ func (s *Server) StopPortForward(
 	}
 
 	if e := s.service.StopPortForward(a.Identifier); e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("stopped port forward %s", a.Identifier)

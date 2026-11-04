@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) GetStatus(
-	_ context.Context,
+	x context.Context,
 	r server.GetStatusRequestObject,
 ) (server.GetStatusResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -25,7 +25,7 @@ func (s *Server) GetStatus(
 	}
 
 	if e != nil {
-		return server.GetStatus500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.GetStatus500JSONResponse(*s.captureFail(x, e, e.Error())), nil
 	}
 
 	v, f := s.service.Status(instance)
@@ -43,7 +43,7 @@ func (s *Server) GetStatus(
 	}
 
 	if f != nil {
-		return server.GetStatus500JSONResponse(*s.captureDetail(f)), nil
+		return server.GetStatus500JSONResponse(*s.captureDetail(x, f)), nil
 	}
 
 	return server.GetStatus200JSONResponse{

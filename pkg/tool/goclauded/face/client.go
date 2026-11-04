@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stream_event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
@@ -38,7 +39,7 @@ type Client interface {
 	GetStatus(x context.Context) (*client.StatusResponse, error)
 	GetTimeline(x context.Context, params *client.GetTimelineParams) ([]client.TimelineEntry, error)
 	GetUsage(x context.Context) (*client.UsageResponse, bool, error)
-	Notify(callsign string, source string, body string) error
+	Notify(callsign string, source string, body string, d constant.Delivery) error
 	PostAnnounce(x context.Context, body client.PostAnnounceJSONRequestBody) error
 	PostBackfill(x context.Context, params *client.PostBackfillParams) (*client.BackfillResponse, error)
 	PostEditSession(x context.Context, body client.PostEditSessionJSONRequestBody) error

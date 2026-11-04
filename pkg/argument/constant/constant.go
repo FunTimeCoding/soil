@@ -43,7 +43,6 @@ const (
 	OnUpgrade      = "on-upgrade"
 	Parallel       = "parallel"
 	Pretend        = "pretend"
-	ReadOnly       = "read-only"
 	Single         = "single"
 	Skip           = "skip"
 	Verbose        = "verbose"

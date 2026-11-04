@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteList(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteListRequestObject,
 ) (server.DeleteListResponseObject, error) {
 	e := s.service.DeleteList(int(r.Identifier))
@@ -27,7 +27,7 @@ func (s *Server) DeleteList(
 	}
 
 	if e != nil {
-		return server.DeleteList500JSONResponse(*s.answer(e)), nil
+		return server.DeleteList500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteList200Response{}, nil

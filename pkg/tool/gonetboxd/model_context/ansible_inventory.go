@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ansibleInventory(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.AnsibleInventory(
@@ -16,7 +16,7 @@ func (s *Server) ansibleInventory(
 	)
 
 	if e != nil {
-		return s.captureFail(e, "inventory not built")
+		return s.captureFail(x, e, "inventory not built")
 	}
 
 	return response.Success(result.Markup())

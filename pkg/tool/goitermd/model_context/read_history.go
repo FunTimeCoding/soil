@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ReadHistory(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ReadHistory,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.ReadHistory(a.SessionIdentifier, int(a.Count))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

@@ -24,6 +24,29 @@ func (s *Server) serve(
 		return
 	}
 
+	if s.gateway != 0 && s.page != "" {
+		w.WriteHeader(s.gateway)
+		write(w, s.page)
+
+		return
+	}
+
+	if s.gateway != 0 {
+		w.WriteHeader(s.gateway)
+		write(
+			w,
+			fmt.Sprintf(
+				"<html><head><title>%d %s</title></head><body><center><h1>%d %s</h1></center><hr><center>nginx</center></body></html>",
+				s.gateway,
+				http.StatusText(s.gateway),
+				s.gateway,
+				http.StatusText(s.gateway),
+			),
+		)
+
+		return
+	}
+
 	token := r.Header.Get(constant.SaltTokenHeader)
 	s.seen = append(s.seen, token)
 

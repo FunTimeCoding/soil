@@ -18,13 +18,13 @@ func (s *Server) listRoster(
 	_, e := s.resolveCaller(x, constant.Roster)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	sessions, e := s.roster.ListSessions()
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if len(sessions) == 0 {
@@ -40,13 +40,13 @@ func (s *Server) listRoster(
 	labels, f := s.label.LabelsBySessions(identifiers)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	pulses, g := s.message.LatestPulsesBySessions(identifiers)
 
 	if g != nil {
-		return s.captureFail(g, soil.UnexpectedError)
+		return s.captureFail(x, g, soil.UnexpectedError)
 	}
 
 	var lines []string

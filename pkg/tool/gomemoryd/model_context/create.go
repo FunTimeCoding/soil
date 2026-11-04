@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) create(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := q.RequireString(constant.MemoryName)
@@ -56,7 +56,7 @@ func (s *Server) create(
 	m, h := s.service.CreateMemory(o)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	created := s.withReferences(

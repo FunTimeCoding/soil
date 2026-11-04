@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) RemoveVirtualLabel(
-	_ context.Context,
+	x context.Context,
 	r server.RemoveVirtualLabelRequestObject,
 ) (server.RemoveVirtualLabelResponseObject, error) {
 	e := s.service.RemoveVirtualLabel(r.Name, r.Key)
@@ -32,7 +32,7 @@ func (s *Server) RemoveVirtualLabel(
 	}
 
 	if e != nil {
-		return server.RemoveVirtualLabel500JSONResponse(*s.captureDetail(e)), nil
+		return server.RemoveVirtualLabel500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.RemoveVirtualLabel204Response{}, nil

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostSessionPulse(
-	_ context.Context,
+	x context.Context,
 	r server.PostSessionPulseRequestObject,
 ) (server.PostSessionPulseResponseObject, error) {
 	delivered, e := s.message.SendPulse(
@@ -26,7 +26,7 @@ func (s *Server) PostSessionPulse(
 		}
 
 		return server.PostSessionPulse500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

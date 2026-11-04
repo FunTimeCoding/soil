@@ -19,7 +19,7 @@ func (s *Server) GetChannelCallsign(
 
 	if e != nil {
 		return server.GetChannelCallsign500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

@@ -15,7 +15,7 @@ func (s *Server) summarize(
 	c, e := s.resolveCaller(x, constant.Summarize)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -31,7 +31,7 @@ func (s *Server) summarize(
 	}
 
 	if f := s.event.Summarize(c.SessionIdentifier, c.Callsign, body); f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	return response.Success("Session summary recorded for %s", c.Callsign)

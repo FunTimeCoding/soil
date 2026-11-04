@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) StartContainer(
-	_ context.Context,
+	x context.Context,
 	r server.StartContainerRequestObject,
 ) (server.StartContainerResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) StartContainer(
 	}
 
 	if e != nil {
-		return server.StartContainer500JSONResponse(*s.answer(e)), nil
+		return server.StartContainer500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -53,7 +53,7 @@ func (s *Server) StartContainer(
 	case unavailable.Is(e):
 		return server.StartContainer503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.StartContainer500JSONResponse(*s.answer(e)), nil
+		return server.StartContainer500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.StartContainer200JSONResponse{TaskId: taskIdentifier}, nil

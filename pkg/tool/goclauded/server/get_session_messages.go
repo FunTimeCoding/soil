@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetSessionMessages(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionMessagesRequestObject,
 ) (server.GetSessionMessagesResponseObject, error) {
 	var result []server.SessionMessage

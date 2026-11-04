@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostSigningRequest(
-	_ context.Context,
+	x context.Context,
 	r server.PostSigningRequestRequestObject,
 ) (server.PostSigningRequestResponseObject, error) {
 	result, e := s.service.SignRequest(r.Body)
@@ -18,7 +18,7 @@ func (s *Server) PostSigningRequest(
 	}
 
 	if e != nil {
-		return server.PostSigningRequest500JSONResponse(*s.answer(e)), nil
+		return server.PostSigningRequest500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostSigningRequest200JSONResponse(

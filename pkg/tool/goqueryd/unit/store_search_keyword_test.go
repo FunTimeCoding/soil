@@ -100,7 +100,14 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata("test", "scoped.md", map[string][]string{"scope": {"alfa"}})
+	assert.FatalOnError(
+		t,
+		s.SetMetadata(
+			"test",
+			"scoped.md",
+			map[string][]string{"scope": {"alfa"}},
+		),
+	)
 	all := s.MustSearchKeyword("quasar", 10, "", false, nil)
 	assert.Count(t, 2, all)
 	filtered := s.MustSearchKeyword(
@@ -131,7 +138,14 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata("test", "target.md", map[string][]string{"scope": {"alfa"}})
+	assert.FatalOnError(
+		t,
+		s.SetMetadata(
+			"test",
+			"target.md",
+			map[string][]string{"scope": {"alfa"}},
+		),
+	)
 	top := s.MustSearchKeyword("quasar", 1, "", false, nil)
 	assert.Count(t, 1, top)
 	assert.String(t, "Noise", top[0].Title)
@@ -163,10 +177,13 @@ func TestSearchKeywordSourceTypeFilterDeferred(t *testing.T) {
 	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata(
-		"test",
-		"one.md",
-		map[string][]string{constant.SourceType: {"memory"}},
+	assert.FatalOnError(
+		t,
+		s.SetMetadata(
+			"test",
+			"one.md",
+			map[string][]string{constant.SourceType: {"memory"}},
+		),
 	)
 	results := s.MustSearchKeyword(
 		"quasar",

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) SearchUsers(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SearchUsers,
 ) (*mcp.CallToolResult, error) {
@@ -20,7 +20,7 @@ func (s *Server) SearchUsers(
 	users, e := s.service.SearchUsers(a.Query, 20)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	var rows []*mattermostResponse.UserMatch

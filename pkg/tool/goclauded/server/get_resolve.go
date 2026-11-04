@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) GetResolve(
-	_ context.Context,
+	x context.Context,
 	r server.GetResolveRequestObject,
 ) (server.GetResolveResponseObject, error) {
 	result, e := s.roster.ResolveSessionIdentifier(r.Params.Query)
 
 	if e != nil {
 		return server.GetResolve500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

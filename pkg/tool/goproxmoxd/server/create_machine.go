@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) CreateMachine(
-	_ context.Context,
+	x context.Context,
 	r server.CreateMachineRequestObject,
 ) (server.CreateMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -25,7 +25,7 @@ func (s *Server) CreateMachine(
 	}
 
 	if e != nil {
-		return server.CreateMachine500JSONResponse(*s.answer(e)), nil
+		return server.CreateMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	m := convertCreateMachine(r.Body)
@@ -41,7 +41,7 @@ func (s *Server) CreateMachine(
 	case unavailable.Is(e):
 		return server.CreateMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.CreateMachine500JSONResponse(*s.answer(e)), nil
+		return server.CreateMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	status := "created"

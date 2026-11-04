@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/failure"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -8,6 +9,7 @@ import (
 )
 
 func (s *Server) answer(
+	x context.Context,
 	w http.ResponseWriter,
 	e error,
 ) {
@@ -20,7 +22,7 @@ func (s *Server) answer(
 	result := failure.New(classify.Message(e, ""))
 
 	if classify.Reportable(e) {
-		result.EventIdentifier = s.reporter.CaptureException(e)
+		result.EventIdentifier = s.reporter.Capture(x, e)
 	}
 
 	web.ObjectHeader(w)

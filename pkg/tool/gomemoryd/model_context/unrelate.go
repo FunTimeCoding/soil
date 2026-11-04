@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) unrelate(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	sourceIdentifier := int64(q.GetFloat(constant.SourceIdentifier, 0))
@@ -22,7 +22,7 @@ func (s *Server) unrelate(
 	removed, e := s.service.DeleteRelation(sourceIdentifier, targetIdentifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if !removed {

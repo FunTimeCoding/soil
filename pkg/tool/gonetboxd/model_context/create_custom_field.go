@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) createCustomField(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -37,7 +37,7 @@ func (s *Server) createCustomField(
 	}
 
 	if g != nil {
-		return s.captureFail(g, "custom field not created")
+		return s.captureFail(x, g, "custom field not created")
 	}
 
 	return response.SuccessAny(convert.CustomField(result))

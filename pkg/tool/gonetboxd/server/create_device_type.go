@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateDeviceType(
-	_ context.Context,
+	x context.Context,
 	r server.CreateDeviceTypeRequestObject,
 ) (server.CreateDeviceTypeResponseObject, error) {
 	t, e := s.service.CreateDeviceType(r.Body.Model, r.Body.Manufacturer)
@@ -23,7 +23,7 @@ func (s *Server) CreateDeviceType(
 	}
 
 	if e != nil {
-		return server.CreateDeviceType500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateDeviceType500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateDeviceType201JSONResponse(*convert.DeviceType(t)), nil

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetSessionDetail(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionDetailRequestObject,
 ) (server.GetSessionDetailResponseObject, error) {
 	d, e := s.session.SessionDetail(r.Identifier)
@@ -21,7 +21,7 @@ func (s *Server) GetSessionDetail(
 
 	if e != nil {
 		return server.GetSessionDetail500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -118,7 +118,7 @@ func (s *Server) GetSessionDetail(
 
 	if labelError != nil {
 		return server.GetSessionDetail500JSONResponse(
-			*s.captureFail(labelError, soil.UnexpectedError),
+			*s.captureFail(x, labelError, soil.UnexpectedError),
 		), nil
 	}
 
@@ -136,7 +136,7 @@ func (s *Server) GetSessionDetail(
 
 	if pulseError != nil {
 		return server.GetSessionDetail500JSONResponse(
-			*s.captureFail(pulseError, soil.UnexpectedError),
+			*s.captureFail(x, pulseError, soil.UnexpectedError),
 		), nil
 	}
 

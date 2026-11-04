@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) EditPage(
-	_ context.Context,
+	x context.Context,
 	r server.EditPageRequestObject,
 ) (server.EditPageResponseObject, error) {
 	title := ""
@@ -57,7 +57,7 @@ func (s *Server) EditPage(
 	}
 
 	if e != nil {
-		return server.EditPage500JSONResponse(*s.answer(e)), nil
+		return server.EditPage500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.EditPage200JSONResponse(

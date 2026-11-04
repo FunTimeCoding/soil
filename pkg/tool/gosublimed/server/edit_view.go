@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) EditView(
-	_ context.Context,
+	x context.Context,
 	r server.EditViewRequestObject,
 ) (server.EditViewResponseObject, error) {
 	v, e := s.service.EditView(
@@ -35,7 +35,7 @@ func (s *Server) EditView(
 	}
 
 	if e != nil {
-		return server.EditView500JSONResponse(*s.answer(e)), nil
+		return server.EditView500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.EditView200JSONResponse(*convertView(v)), nil

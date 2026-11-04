@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListTunnelTerminations(
-	_ context.Context,
+	x context.Context,
 	_ server.ListTunnelTerminationsRequestObject,
 ) (server.ListTunnelTerminationsResponseObject, error) {
 	terminations, e := s.service.TunnelTerminations()
@@ -18,7 +18,9 @@ func (s *Server) ListTunnelTerminations(
 	}
 
 	if e != nil {
-		return server.ListTunnelTerminations500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListTunnelTerminations500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.ListTunnelTerminations200JSONResponse(

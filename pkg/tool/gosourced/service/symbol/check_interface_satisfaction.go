@@ -3,7 +3,6 @@ package symbol
 import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -12,10 +11,10 @@ import (
 func checkInterfaceSatisfaction(
 	all []*packages.Package,
 	set *token.FileSet,
-	t *removal.Target,
+	f *types.Func,
 	r *output.Results,
 ) {
-	receiver := t.Function.Type().(*types.Signature).Recv()
+	receiver := f.Type().(*types.Signature).Recv()
 
 	if receiver == nil {
 		return
@@ -48,7 +47,7 @@ func checkInterfaceSatisfaction(
 			declares := false
 
 			for m := range i.Methods() {
-				if m.Name() == t.Function.Name() {
+				if m.Name() == f.Name() {
 					declares = true
 				}
 			}
@@ -61,11 +60,11 @@ func checkInterfaceSatisfaction(
 			addPositionConcern(
 				r,
 				set,
-				t.Function.Pos(),
+				f.Pos(),
 				constant.ConcernValueUse,
 				false,
 				"%s satisfies %s.%s; its signature cannot change",
-				t.Function.Name(),
+				f.Name(),
 				p.PkgPath,
 				name,
 			)

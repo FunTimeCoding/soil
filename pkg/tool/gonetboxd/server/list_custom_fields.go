@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListCustomFields(
-	_ context.Context,
+	x context.Context,
 	_ server.ListCustomFieldsRequestObject,
 ) (server.ListCustomFieldsResponseObject, error) {
 	result, e := s.service.CustomFields()
@@ -18,7 +18,7 @@ func (s *Server) ListCustomFields(
 	}
 
 	if e != nil {
-		return server.ListCustomFields500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListCustomFields500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListCustomFields200JSONResponse(convert.CustomFields(result)),

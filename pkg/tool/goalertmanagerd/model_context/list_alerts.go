@@ -18,7 +18,7 @@ func (s *Server) listAlerts(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	f := alert_filter.New()
@@ -51,7 +51,7 @@ func (s *Server) listAlerts(
 	v, stat, e := s.service.Alerts(x, instance, f)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(

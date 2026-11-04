@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) EquipGear(
-	_ context.Context,
+	x context.Context,
 	r server.EquipGearRequestObject,
 ) (server.EquipGearResponseObject, error) {
 	result, e := s.service.Equip(r.Key)
@@ -28,7 +28,7 @@ func (s *Server) EquipGear(
 	}
 
 	if e != nil {
-		return server.EquipGear500JSONResponse(*s.answer(e)), nil
+		return server.EquipGear500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.EquipGear200JSONResponse(*convert.Gear(result)), nil

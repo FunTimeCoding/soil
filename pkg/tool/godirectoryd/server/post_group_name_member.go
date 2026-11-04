@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) PostGroupNameMember(
-	_ context.Context,
+	x context.Context,
 	r server.PostGroupNameMemberRequestObject,
 ) (server.PostGroupNameMemberResponseObject, error) {
 	result, e := s.service.AddMember(r.Name, r.Body.Account)
@@ -33,7 +33,7 @@ func (s *Server) PostGroupNameMember(
 	}
 
 	if e != nil {
-		return server.PostGroupNameMember500JSONResponse(*s.answer(e)), nil
+		return server.PostGroupNameMember500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostGroupNameMember200JSONResponse(*convert.Group(result)), nil

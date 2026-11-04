@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) searchEntries(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Search,
 ) (*mcp.CallToolResult, error) {

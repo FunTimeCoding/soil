@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) relate(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	sourceIdentifier := int64(q.GetFloat(constant.SourceIdentifier, 0))
@@ -27,7 +27,7 @@ func (s *Server) relate(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if relationType != "" {

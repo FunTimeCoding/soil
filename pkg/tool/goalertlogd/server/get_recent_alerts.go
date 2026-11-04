@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetRecentAlerts(
-	_ context.Context,
+	x context.Context,
 	r server.GetRecentAlertsRequestObject,
 ) (server.GetRecentAlertsResponseObject, error) {
 	now := time.Now()
@@ -25,7 +25,7 @@ func (s *Server) GetRecentAlerts(
 	records, e := s.service.RecentAlerts(start, end)
 
 	if e != nil {
-		return server.GetRecentAlerts500JSONResponse(*s.answer(e)), nil
+		return server.GetRecentAlerts500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetRecentAlerts200JSONResponse(toResponse(records)), nil

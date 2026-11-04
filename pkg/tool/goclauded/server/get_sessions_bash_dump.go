@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetSessionsBashDump(
-	_ context.Context,
+	x context.Context,
 	_ server.GetSessionsBashDumpRequestObject,
 ) (server.GetSessionsBashDumpResponseObject, error) {
 	var result []string

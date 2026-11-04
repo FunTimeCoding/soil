@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetTopAlerts(
-	_ context.Context,
+	x context.Context,
 	r server.GetTopAlertsRequestObject,
 ) (server.GetTopAlertsResponseObject, error) {
 	n := 25
@@ -31,7 +31,7 @@ func (s *Server) GetTopAlerts(
 	records, e := s.service.TopAlerts(n, start, end)
 
 	if e != nil {
-		return server.GetTopAlerts500JSONResponse(*s.answer(e)), nil
+		return server.GetTopAlerts500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetTopAlerts200JSONResponse(convert.TopAlerts(records)), nil

@@ -40,6 +40,9 @@ const (
 	ParameterRoot     = "root"
 	ParameterCallsign = "callsign"
 	ParameterAlias    = "alias"
+	ParameterDelivery = "delivery"
+	LatestReply       = "latest"
+	LatestReplyError  = "latest_error"
 
 	ExcerptLength    = 200
 	DigestBudget     = goclaudedConstant.DeliveryEntryLimit
@@ -52,6 +55,7 @@ const (
 	RosterPeer     = "goclauded"
 	DebounceWindow = 30 * time.Second
 	FlushTick      = time.Second
+	PendingRetryLimit = 10 * time.Minute
 	PurgeWindow    = 7 * 24 * time.Hour
 	PurgeInterval  = time.Hour
 

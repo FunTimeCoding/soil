@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetTags(
-	_ context.Context,
+	x context.Context,
 	_ server.GetTagsRequestObject,
 ) (server.GetTagsResponseObject, error) {
 	tags := s.service.ListSourceTypes()

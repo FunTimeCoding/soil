@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListNetworks(
-	_ context.Context,
+	x context.Context,
 	r server.ListNetworksRequestObject,
 ) (server.ListNetworksResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListNetworks(
 	}
 
 	if e != nil {
-		return server.ListNetworks500JSONResponse(*s.answer(e)), nil
+		return server.ListNetworks500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	networks, e := s.service.ListNetworks(instance, r.Name)
@@ -41,7 +41,7 @@ func (s *Server) ListNetworks(
 	case unavailable.Is(e):
 		return server.ListNetworks503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListNetworks500JSONResponse(*s.answer(e)), nil
+		return server.ListNetworks500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	pointers := convert.Networks(networks)

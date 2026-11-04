@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetTasks(
-	_ context.Context,
+	x context.Context,
 	r server.GetTasksRequestObject,
 ) (server.GetTasksResponseObject, error) {
 	var taskType string
@@ -29,7 +29,7 @@ func (s *Server) GetTasks(
 	}
 
 	if e != nil {
-		return server.GetTasks500JSONResponse(*s.answer(e)), nil
+		return server.GetTasks500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetTasks200JSONResponse(convert.Tasks(result)), nil

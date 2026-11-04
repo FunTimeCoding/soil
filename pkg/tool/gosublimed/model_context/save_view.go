@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) SaveView(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SaveView,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.SaveView(int(a.ViewIdentifier), a.FilePath); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("saved")

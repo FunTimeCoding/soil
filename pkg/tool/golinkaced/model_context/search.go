@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) Search(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Search,
 ) (*mcp.CallToolResult, error) {
 	r, e := s.service.Search(a.Query, a.Type)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	result := map[string]any{}

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteCustomField(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteCustomFieldRequestObject,
 ) (server.DeleteCustomFieldResponseObject, error) {
 	e := s.service.DeleteCustomField(r.Name)
@@ -32,7 +32,7 @@ func (s *Server) DeleteCustomField(
 	}
 
 	if e != nil {
-		return server.DeleteCustomField500JSONResponse(*s.captureDetail(e)), nil
+		return server.DeleteCustomField500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.DeleteCustomField204Response{}, nil

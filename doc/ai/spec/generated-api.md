@@ -156,7 +156,11 @@ generated client on a pool it owns, which `Close` closes. `New(locator,
 token)` builds it; `NewEnvironment()` resolves the tool's env family -
 `GO<TOOL>_HOST` falling back to localhost, `GO<TOOL>_PORT` optional,
 `GO<TOOL>_INSECURE` switching to http, `GO<TOOL>_TOKEN` required - with
-`locator.Environment`.
+`locator.Environment`. Its pool is built with `stall_client` and
+`Traced()`, so a call made inside a request carries that request's Sentry
+trace to the peer, and the peer's event joins the caller's trace. An
+external API client never sets it: the trace headers carry our release and
+trace identifiers, which leave our own daemons for no one.
 
 The interface is `face.Client` - the operations, `face.Reachable` and
 `Close` - which `client/mock_client` implements too.

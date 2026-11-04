@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetProfile(
-	_ context.Context,
+	x context.Context,
 	r server.GetProfileRequestObject,
 ) (server.GetProfileResponseObject, error) {
 	topic := ""
@@ -20,7 +20,7 @@ func (s *Server) GetProfile(
 	result, d, e := s.service.Profile(topic, "", showDetail)
 
 	if e != nil {
-		return server.GetProfile500JSONResponse(*s.answer(e)), nil
+		return server.GetProfile500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	visible := profile.NewResult(

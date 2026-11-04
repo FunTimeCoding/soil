@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetPageDraft(
-	_ context.Context,
+	x context.Context,
 	r server.GetPageDraftRequestObject,
 ) (server.GetPageDraftResponseObject, error) {
 	result, e := s.service.PageDraft(r.Identifier)
@@ -28,7 +28,7 @@ func (s *Server) GetPageDraft(
 	}
 
 	if e != nil {
-		return server.GetPageDraft500JSONResponse(*s.answer(e)), nil
+		return server.GetPageDraft500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetPageDraft200JSONResponse(

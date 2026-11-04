@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListRules(
-	_ context.Context,
+	x context.Context,
 	r server.ListRulesRequestObject,
 ) (server.ListRulesResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListRules(
 	result, e := s.service.Rules(phrase)
 
 	if e != nil {
-		return server.ListRules500JSONResponse(*s.answer(e)), nil
+		return server.ListRules500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListRules200JSONResponse(convert.Rules(result)), nil

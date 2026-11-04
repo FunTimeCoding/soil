@@ -40,7 +40,11 @@ func (s *Server) push(
 		metadata[constant.SourceType] = []string{sourceType}
 	}
 
-	warning := s.service.PushDocument(x, collection, path, body, metadata)
+	warning, h := s.service.PushDocument(x, collection, path, body, metadata)
+
+	if h != nil {
+		return s.captureFail(x, h, "push failed")
+	}
 
 	if warning != "" {
 		return response.Success("pushed %s/%s (%s)", collection, path, warning)

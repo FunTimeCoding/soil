@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) AddNote(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.AddNote,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.CreateNote(a.LinkIdentifier, a.Text)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

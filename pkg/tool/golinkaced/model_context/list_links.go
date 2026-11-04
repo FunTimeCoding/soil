@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListLinks(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListLinks,
 ) (*mcp.CallToolResult, error) {
@@ -17,7 +17,7 @@ func (s *Server) ListLinks(
 		r, e := s.service.LinksByListPage(a.List, p)
 
 		if e != nil {
-			return s.answer(e)
+			return s.answer(x, e)
 		}
 
 		return s.linkPage(r.Items, r.Total, a.Limit, a.Offset)
@@ -26,7 +26,7 @@ func (s *Server) ListLinks(
 	r, e := s.service.LinksPage(p)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return s.linkPage(r.Items, r.Total, a.Limit, a.Offset)

@@ -46,7 +46,7 @@ func (s *Server) Start() {
 		m = s.Middleware(m)
 	}
 
-	s.http = web.Server(m, s.Address)
+	s.http = web.Server(web.TraceMiddleware(m), s.Address)
 
 	if s.protected {
 		s.http.ReadTimeout = constant.ReadWriteTimeout

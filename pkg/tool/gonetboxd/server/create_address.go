@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateAddress(
-	_ context.Context,
+	x context.Context,
 	r server.CreateAddressRequestObject,
 ) (server.CreateAddressResponseObject, error) {
 	status := ""
@@ -38,7 +38,7 @@ func (s *Server) CreateAddress(
 	}
 
 	if e != nil {
-		return server.CreateAddress500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateAddress500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateAddress201JSONResponse{

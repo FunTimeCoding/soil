@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Fill(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Fill,
 ) (*mcp.CallToolResult, error) {
@@ -20,7 +20,7 @@ func (s *Server) Fill(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

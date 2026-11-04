@@ -6,11 +6,11 @@ import (
 )
 
 func (s *Server) ReconfigureDnsmasq(
-	_ context.Context,
+	x context.Context,
 	_ server.ReconfigureDnsmasqRequestObject,
 ) (server.ReconfigureDnsmasqResponseObject, error) {
 	if e := s.service.ReconfigureDnsmasq(); e != nil {
-		return server.ReconfigureDnsmasq500JSONResponse(*s.answer(e)), nil
+		return server.ReconfigureDnsmasq500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ReconfigureDnsmasq204Response{}, nil

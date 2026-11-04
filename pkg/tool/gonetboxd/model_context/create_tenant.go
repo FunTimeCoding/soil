@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createTenant(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) createTenant(
 	result, g := s.service.CreateTenant(name)
 
 	if g != nil {
-		return s.captureFail(g, "tenant not created")
+		return s.captureFail(x, g, "tenant not created")
 	}
 
 	return response.SuccessAny(convert.Tenant(result))

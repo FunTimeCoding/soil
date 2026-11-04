@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ReadBody(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ReadBody,
 ) (*mcp.CallToolResult, error) {
@@ -18,7 +18,7 @@ func (s *Server) ReadBody(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(

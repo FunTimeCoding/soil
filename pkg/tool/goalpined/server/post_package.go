@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostPackage(
-	_ context.Context,
+	x context.Context,
 	r server.PostPackageRequestObject,
 ) (server.PostPackageResponseObject, error) {
 	e := s.service.Upload(
@@ -23,7 +23,7 @@ func (s *Server) PostPackage(
 	}
 
 	if e != nil {
-		return server.PostPackage500JSONResponse(*s.answer(e)), nil
+		return server.PostPackage500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostPackage201Response{}, nil

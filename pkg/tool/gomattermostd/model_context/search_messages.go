@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) SearchMessages(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SearchMessages,
 ) (*mcp.CallToolResult, error) {
@@ -20,7 +20,7 @@ func (s *Server) SearchMessages(
 	posts, e := s.service.SearchPosts(a.Terms)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	var rows []*mattermostResponse.MessageMatch

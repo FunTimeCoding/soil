@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) createConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -47,7 +47,7 @@ func (s *Server) createConfigurationContext(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "configuration context not created")
+		return s.captureFail(x, f, "configuration context not created")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContext(result))

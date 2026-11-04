@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) removeDeviceTag(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -27,7 +27,7 @@ func (s *Server) removeDeviceTag(
 	result, h := s.service.RemoveTag(device, tag)
 
 	if h != nil {
-		return s.captureFail(h, "tag not removed from device")
+		return s.captureFail(x, h, "tag not removed from device")
 	}
 
 	return response.SuccessAny(convert.Device(result))

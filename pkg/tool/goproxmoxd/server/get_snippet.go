@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetSnippet(
-	_ context.Context,
+	x context.Context,
 	r server.GetSnippetRequestObject,
 ) (server.GetSnippetResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -24,7 +24,7 @@ func (s *Server) GetSnippet(
 	}
 
 	if e != nil {
-		return server.GetSnippet500JSONResponse(*s.answer(e)), nil
+		return server.GetSnippet500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	b, e := s.service.GetSnippet(instance, r.Name)
@@ -37,7 +37,7 @@ func (s *Server) GetSnippet(
 	case forbidden.Is(e):
 		return server.GetSnippet403JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.GetSnippet500JSONResponse(*s.answer(e)), nil
+		return server.GetSnippet500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetSnippet200JSONResponse{

@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) CreateView(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateView,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.CreateView(a.Title, a.Content, a.Syntax)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

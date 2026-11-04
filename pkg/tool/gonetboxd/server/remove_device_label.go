@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) RemoveDeviceLabel(
-	_ context.Context,
+	x context.Context,
 	r server.RemoveDeviceLabelRequestObject,
 ) (server.RemoveDeviceLabelResponseObject, error) {
 	e := s.service.RemoveDeviceLabel(r.Name, r.Key)
@@ -32,7 +32,7 @@ func (s *Server) RemoveDeviceLabel(
 	}
 
 	if e != nil {
-		return server.RemoveDeviceLabel500JSONResponse(*s.captureDetail(e)), nil
+		return server.RemoveDeviceLabel500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.RemoveDeviceLabel204Response{}, nil

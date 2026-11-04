@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) createClient(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateClient,
 ) (*mcp.CallToolResult, error) {
@@ -23,7 +23,7 @@ func (s *Server) createClient(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListVirtualMachines(
-	_ context.Context,
+	x context.Context,
 	_ server.ListVirtualMachinesRequestObject,
 ) (server.ListVirtualMachinesResponseObject, error) {
 	machines, grouped, e := s.service.VirtualMachines()
@@ -18,7 +18,7 @@ func (s *Server) ListVirtualMachines(
 	}
 
 	if e != nil {
-		return server.ListVirtualMachines500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListVirtualMachines500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListVirtualMachines200JSONResponse(

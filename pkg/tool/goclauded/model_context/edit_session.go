@@ -17,11 +17,11 @@ func (s *Server) editSession(
 	c, e := s.resolveCaller(x, constant.EditSession)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	target := q.GetString(constant.Target, "")
-	sessionIdentifier, failed, f := s.targetSession(c, target)
+	sessionIdentifier, failed, f := s.targetSession(x, c, target)
 
 	if failed != nil || f != nil {
 		return failed, f
@@ -59,7 +59,7 @@ func (s *Server) editSession(
 			return response.Fail(e.Error())
 		}
 
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	return response.Success("Session updated")

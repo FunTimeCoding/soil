@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) deleteEntry(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Identifier,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.Delete(a.Identifier); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("deleted")

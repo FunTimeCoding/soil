@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) createUser(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateUser,
 ) (*mcp.CallToolResult, error) {
@@ -21,7 +21,7 @@ func (s *Server) createUser(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

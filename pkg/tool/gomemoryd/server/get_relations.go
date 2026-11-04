@@ -7,19 +7,19 @@ import (
 )
 
 func (s *Server) GetRelations(
-	_ context.Context,
+	x context.Context,
 	r server.GetRelationsRequestObject,
 ) (server.GetRelationsResponseObject, error) {
 	relations, e := s.service.ListRelations()
 
 	if e != nil {
-		return server.GetRelations500JSONResponse(*s.answer(e)), nil
+		return server.GetRelations500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	hidden, e := s.service.HiddenIdentifiers()
 
 	if e != nil {
-		return server.GetRelations500JSONResponse(*s.answer(e)), nil
+		return server.GetRelations500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	typeFilter := ""

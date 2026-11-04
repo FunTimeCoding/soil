@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PlaybackCommand(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.PlaybackCommand,
 ) (*mcp.CallToolResult, error) {
@@ -20,7 +20,7 @@ func (s *Server) PlaybackCommand(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(fmt.Sprintf("%s sent", a.Command))

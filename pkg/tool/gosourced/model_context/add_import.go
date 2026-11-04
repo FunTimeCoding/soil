@@ -24,7 +24,7 @@ func (s *Server) addImport(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, e := s.file.AddImport(
@@ -37,7 +37,7 @@ func (s *Server) addImport(
 	)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	return response.Success(formatConcerns(r.Entries))

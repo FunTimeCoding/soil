@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) GetReports(
-	_ context.Context,
+	x context.Context,
 	_ server.GetReportsRequestObject,
 ) (server.GetReportsResponseObject, error) {
 	reports, e := s.service.Reports()
 
 	if e != nil {
 		return server.GetReports500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

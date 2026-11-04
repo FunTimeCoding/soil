@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listInterfaces(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) listInterfaces(
 	result, e := s.service.DeviceInterfaces(name)
 
 	if e != nil {
-		return s.serviceFail(e, "interfaces not retrieved")
+		return s.serviceFail(x, e, "interfaces not retrieved")
 	}
 
 	return response.SuccessAny(convert.Interfaces(result))

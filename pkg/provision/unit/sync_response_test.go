@@ -14,6 +14,7 @@ import (
 func TestAQueuedSyncIsAnsweredQuietly(t *testing.T) {
 	m := memory.New()
 	r, e := model_context.SyncResponse(
+		t.Context(),
 		m,
 		nil,
 		conflict.Format("sync already queued"),
@@ -25,7 +26,12 @@ func TestAQueuedSyncIsAnsweredQuietly(t *testing.T) {
 
 func TestAnUnexpectedSyncErrorIsCaptured(t *testing.T) {
 	m := memory.New()
-	_, e := model_context.SyncResponse(m, nil, errors.New("channel closed"))
+	_, e := model_context.SyncResponse(
+		t.Context(),
+		m,
+		nil,
+		errors.New("channel closed"),
+	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, m.Events())
 }
@@ -34,7 +40,7 @@ func TestAFailedSyncIsNotCapturedTwice(t *testing.T) {
 	m := memory.New()
 	result := update.NewResult()
 	result.Error = errors.New("sync failed")
-	r, e := model_context.SyncResponse(m, result, nil)
+	r, e := model_context.SyncResponse(t.Context(), m, result, nil)
 	assert.Nil(t, e)
 	assert.String(t, "sync failed", r.Content[0].(mcp.TextContent).Text)
 	assert.Count(t, 0, m.Events())

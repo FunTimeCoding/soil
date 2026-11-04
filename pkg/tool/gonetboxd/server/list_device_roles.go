@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListDeviceRoles(
-	_ context.Context,
+	x context.Context,
 	_ server.ListDeviceRolesRequestObject,
 ) (server.ListDeviceRolesResponseObject, error) {
 	roles, e := s.service.DeviceRoles()
@@ -18,7 +18,7 @@ func (s *Server) ListDeviceRoles(
 	}
 
 	if e != nil {
-		return server.ListDeviceRoles500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListDeviceRoles500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := make([]*server.DeviceRole, 0, len(roles))

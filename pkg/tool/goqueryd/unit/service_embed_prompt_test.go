@@ -11,7 +11,13 @@ import (
 func TestADocumentIsEmbeddedWithItsModelsDocumentPrompt(t *testing.T) {
 	m := newEmbedder(t)
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nzulu.\n",
+		nil,
+	)
 	assert.Strings(
 		t,
 		[]string{"search_document: # Alfa\n\nzulu.\n"},

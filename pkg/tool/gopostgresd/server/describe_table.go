@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) DescribeTable(
-	c context.Context,
+	x context.Context,
 	r server.DescribeTableRequestObject,
 ) (server.DescribeTableResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) DescribeTable(
 	}
 
 	if e != nil {
-		return server.DescribeTable500JSONResponse(*s.answerWith(e, "")), nil
+		return server.DescribeTable500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	var schema string
@@ -35,7 +35,7 @@ func (s *Server) DescribeTable(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.DescribeTable(c, instance, schema, r.Table)
+	rows, e := s.service.DescribeTable(x, instance, schema, r.Table)
 
 	if validation.Is(e) {
 		return server.DescribeTable400JSONResponse(*clientError(e)), nil
@@ -54,7 +54,7 @@ func (s *Server) DescribeTable(
 	}
 
 	if e != nil {
-		return server.DescribeTable500JSONResponse(*s.answerWith(e, "")), nil
+		return server.DescribeTable500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	return server.DescribeTable200JSONResponse{

@@ -24,7 +24,7 @@ func (s *Server) Describe(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	result, f := s.service.DescribeResource(
@@ -39,10 +39,10 @@ func (s *Server) Describe(
 	)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	m := map[string]any{"resource": result.Resource, "events": result.Events}
 
-	return s.formatMarkup(m, result.Filtered)
+	return s.formatMarkup(x, m, result.Filtered)
 }

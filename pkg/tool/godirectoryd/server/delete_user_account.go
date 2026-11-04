@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteUserAccount(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteUserAccountRequestObject,
 ) (server.DeleteUserAccountResponseObject, error) {
 	e := s.service.DeleteUser(r.Account)
@@ -28,7 +28,7 @@ func (s *Server) DeleteUserAccount(
 	}
 
 	if e != nil {
-		return server.DeleteUserAccount500JSONResponse(*s.answer(e)), nil
+		return server.DeleteUserAccount500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteUserAccount200JSONResponse{

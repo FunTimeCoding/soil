@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) minions(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Minions()
@@ -19,7 +19,7 @@ func (s *Server) minions(
 	}
 
 	if e != nil {
-		return s.captureFail(e, constant.MinionsFail)
+		return s.captureFail(x, e, constant.MinionsFail)
 	}
 
 	return response.SuccessAny(result)

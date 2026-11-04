@@ -20,7 +20,7 @@ func (s *Server) Top(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	q := request.Top{Namespace: a.Namespace, AllNamespaces: a.AllNamespaces}
@@ -30,7 +30,7 @@ func (s *Server) Top(
 		result, f := s.service.TopNodes(x, cluster)
 
 		if f != nil {
-			return s.captureDetail(f)
+			return s.captureDetail(x, f)
 		}
 
 		return response.SuccessAny(result)
@@ -39,7 +39,7 @@ func (s *Server) Top(
 			result, f := s.service.TopPodContainers(x, cluster, q)
 
 			if f != nil {
-				return s.captureDetail(f)
+				return s.captureDetail(x, f)
 			}
 
 			return response.SuccessAny(result)
@@ -48,7 +48,7 @@ func (s *Server) Top(
 		result, f := s.service.TopPods(x, cluster, q)
 
 		if f != nil {
-			return s.captureDetail(f)
+			return s.captureDetail(x, f)
 		}
 
 		return response.SuccessAny(result)

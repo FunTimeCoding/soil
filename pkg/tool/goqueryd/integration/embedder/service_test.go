@@ -14,7 +14,7 @@ func TestGoquerydEmbedsTheWholeManual(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		v.PushDocument(
+		v.MustPushDocument(
 			t.Context(),
 			"manual",
 			"manual.txt",
@@ -27,7 +27,7 @@ func TestGoquerydEmbedsTheWholeManual(t *testing.T) {
 
 func TestGoquerydRefusesTheDenseChunkItself(t *testing.T) {
 	v := newService(t)
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"dense",
 		"dense.md",

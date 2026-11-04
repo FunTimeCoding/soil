@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) listClient(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.Empty,
 ) (*mcp.CallToolResult, error) {
 	rows, e := s.service.ListClients()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Clients(rows))

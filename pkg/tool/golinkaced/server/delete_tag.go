@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteTag(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteTagRequestObject,
 ) (server.DeleteTagResponseObject, error) {
 	e := s.service.DeleteTag(int(r.Identifier))
@@ -27,7 +27,7 @@ func (s *Server) DeleteTag(
 	}
 
 	if e != nil {
-		return server.DeleteTag500JSONResponse(*s.answer(e)), nil
+		return server.DeleteTag500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteTag200Response{}, nil

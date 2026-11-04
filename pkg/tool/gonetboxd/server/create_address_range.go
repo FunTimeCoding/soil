@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateAddressRange(
-	_ context.Context,
+	x context.Context,
 	r server.CreateAddressRangeRequestObject,
 ) (server.CreateAddressRangeResponseObject, error) {
 	status := ""
@@ -40,7 +40,7 @@ func (s *Server) CreateAddressRange(
 	}
 
 	if e != nil {
-		return server.CreateAddressRange500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateAddressRange500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateAddressRange201JSONResponse(

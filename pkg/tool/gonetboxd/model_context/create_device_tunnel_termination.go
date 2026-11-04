@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createDeviceTunnelTermination(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	deviceName, e := r.RequireString(constant.Device)
@@ -44,7 +44,7 @@ func (s *Server) createDeviceTunnelTermination(
 	)
 
 	if i != nil {
-		return s.serviceFail(i, "tunnel termination not created")
+		return s.serviceFail(x, i, "tunnel termination not created")
 	}
 
 	return response.SuccessAny(convert.TunnelTermination(tt))

@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) rootCertificate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Authority(constant.RootAuthority)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("%s", result.Certificate)

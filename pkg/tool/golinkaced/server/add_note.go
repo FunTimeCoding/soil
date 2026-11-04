@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) AddNote(
-	_ context.Context,
+	x context.Context,
 	r server.AddNoteRequestObject,
 ) (server.AddNoteResponseObject, error) {
 	result, f := s.service.CreateNote(int(r.Body.LinkIdentifier), r.Body.Text)
@@ -32,7 +32,7 @@ func (s *Server) AddNote(
 	}
 
 	if f != nil {
-		return server.AddNote500JSONResponse(*s.answer(f)), nil
+		return server.AddNote500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.AddNote200JSONResponse{

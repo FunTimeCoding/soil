@@ -39,6 +39,7 @@ const (
 	EmbeddingPending  = "stored; embedding pending: %v"
 	EmbeddingRefused  = "stored; refused chunks skipped: %v"
 	EmbeddingDeferred = "pending embeddings wait: %v"
+	StoreBusy         = "store busy: %v"
 
 	Metadata    = "metadata"
 	Collection  = "collection"

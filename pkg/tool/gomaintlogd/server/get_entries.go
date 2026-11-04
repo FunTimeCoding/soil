@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetEntries(
-	_ context.Context,
+	x context.Context,
 	r server.GetEntriesRequestObject,
 ) (server.GetEntriesResponseObject, error) {
 	f := filter.New()
@@ -39,7 +39,7 @@ func (s *Server) GetEntries(
 	entries, e := s.service.Entries(f)
 
 	if e != nil {
-		return server.GetEntries500JSONResponse(*s.answer(e)), nil
+		return server.GetEntries500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetEntries200JSONResponse(toResponse(entries)), nil

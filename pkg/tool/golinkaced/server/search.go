@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Search(
-	_ context.Context,
+	x context.Context,
 	r server.SearchRequestObject,
 ) (server.SearchResponseObject, error) {
 	entityType := ""
@@ -28,7 +28,7 @@ func (s *Server) Search(
 	}
 
 	if e != nil {
-		return server.Search500JSONResponse(*s.answer(e)), nil
+		return server.Search500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := server.SearchResult{}

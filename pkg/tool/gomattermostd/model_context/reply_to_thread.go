@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ReplyToThread(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ReplyToThread,
 ) (*mcp.CallToolResult, error) {
@@ -23,19 +23,19 @@ func (s *Server) ReplyToThread(
 	ch, e := s.service.Channel(a.ChannelIdentifier)
 
 	if e != nil {
-		return s.answerWith(e, "channel")
+		return s.answerWith(x, e, "channel")
 	}
 
 	parent, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.answerWith(e, "post")
+		return s.answerWith(x, e, "post")
 	}
 
 	p, e := s.service.Reply(ch, parent, a.Message)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	result := map[string]any{

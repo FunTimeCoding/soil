@@ -7,5 +7,5 @@ func NewLong(
 	untrusted bool,
 	token string,
 ) *Client {
-	return newOnPool(stall_client.New().Long(), base, untrusted, token)
+	return newOnPool(stall_client.New().Traced().Long(), base, untrusted, token)
 }

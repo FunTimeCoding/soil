@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Play(
-	_ context.Context,
+	x context.Context,
 	r server.PlayRequestObject,
 ) (server.PlayResponseObject, error) {
 	var command string
@@ -34,7 +34,7 @@ func (s *Server) Play(
 	}
 
 	if e != nil {
-		return server.Play500JSONResponse(*s.answer(e)), nil
+		return server.Play500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.Play204Response{}, nil

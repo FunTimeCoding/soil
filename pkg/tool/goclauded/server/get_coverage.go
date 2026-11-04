@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetCoverage(
-	_ context.Context,
+	x context.Context,
 	_ server.GetCoverageRequestObject,
 ) (server.GetCoverageResponseObject, error) {
 	var servers []server.CoverageServer

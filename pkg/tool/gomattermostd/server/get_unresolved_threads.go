@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetUnresolvedThreads(
-	_ context.Context,
+	x context.Context,
 	r server.GetUnresolvedThreadsRequestObject,
 ) (server.GetUnresolvedThreadsResponseObject, error) {
 	threads, e := s.service.UnresolvedThreads(r.Name, r.Params.Since)
@@ -27,7 +27,7 @@ func (s *Server) GetUnresolvedThreads(
 	}
 
 	if e != nil {
-		return server.GetUnresolvedThreads500JSONResponse(*s.answer(e)), nil
+		return server.GetUnresolvedThreads500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetUnresolvedThreads200JSONResponse(

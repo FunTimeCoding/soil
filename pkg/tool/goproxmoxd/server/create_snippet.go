@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateSnippet(
-	_ context.Context,
+	x context.Context,
 	r server.CreateSnippetRequestObject,
 ) (server.CreateSnippetResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -24,7 +24,7 @@ func (s *Server) CreateSnippet(
 	}
 
 	if e != nil {
-		return server.CreateSnippet500JSONResponse(*s.answer(e)), nil
+		return server.CreateSnippet500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	volume, e := s.service.CreateSnippet(instance, r.Body.Name, r.Body.Content)
@@ -37,7 +37,7 @@ func (s *Server) CreateSnippet(
 	case forbidden.Is(e):
 		return server.CreateSnippet403JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.CreateSnippet500JSONResponse(*s.answer(e)), nil
+		return server.CreateSnippet500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreateSnippet200JSONResponse{

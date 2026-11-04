@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PostEditSession(
-	_ context.Context,
+	x context.Context,
 	r server.PostEditSessionRequestObject,
 ) (server.PostEditSessionResponseObject, error) {
 	a := edit_session.New()
@@ -26,7 +26,7 @@ func (s *Server) PostEditSession(
 		}
 
 		return server.PostEditSession500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

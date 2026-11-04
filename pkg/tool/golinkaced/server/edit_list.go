@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) EditList(
-	_ context.Context,
+	x context.Context,
 	r server.EditListRequestObject,
 ) (server.EditListResponseObject, error) {
 	patch := map[string]any{}
@@ -42,7 +42,7 @@ func (s *Server) EditList(
 	}
 
 	if f != nil {
-		return server.EditList500JSONResponse(*s.answer(f)), nil
+		return server.EditList500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.EditList200JSONResponse{

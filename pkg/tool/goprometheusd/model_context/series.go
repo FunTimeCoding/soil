@@ -16,13 +16,13 @@ func (s *Server) series(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	v, e := s.service.Series(x, instance)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(convert.TSDB(v))

@@ -55,7 +55,7 @@ func (s *Server) GetSearch(
 
 	if e != nil {
 		return server.GetSearch500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

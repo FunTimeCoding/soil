@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listHosts(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Hosts(
@@ -17,7 +17,7 @@ func (s *Server) listHosts(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Hosts(result))

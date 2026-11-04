@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listVirtualLabels(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -21,7 +21,7 @@ func (s *Server) listVirtualLabels(
 	labels, e := s.service.VirtualLabels(name)
 
 	if e != nil {
-		return s.serviceFail(e, "labels not listed for virtual machine")
+		return s.serviceFail(x, e, "labels not listed for virtual machine")
 	}
 
 	return response.SuccessAny(convert.Labels(labels))

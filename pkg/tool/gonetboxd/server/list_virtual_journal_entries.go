@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListVirtualJournalEntries(
-	_ context.Context,
+	x context.Context,
 	r server.ListVirtualJournalEntriesRequestObject,
 ) (server.ListVirtualJournalEntriesResponseObject, error) {
 	var limit int32
@@ -35,7 +35,7 @@ func (s *Server) ListVirtualJournalEntries(
 
 	if e != nil {
 		return server.ListVirtualJournalEntries500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

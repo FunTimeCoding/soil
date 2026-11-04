@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) processLog(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ProcessLog,
 ) (*mcp.CallToolResult, error) {
 	lines, older, e := s.service.Log(a.Name, a.All)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(map[string]any{"lines": lines, "older": older})

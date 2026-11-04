@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListPlatforms(
-	_ context.Context,
+	x context.Context,
 	_ server.ListPlatformsRequestObject,
 ) (server.ListPlatformsResponseObject, error) {
 	platforms, e := s.service.Platforms()
@@ -18,7 +18,7 @@ func (s *Server) ListPlatforms(
 	}
 
 	if e != nil {
-		return server.ListPlatforms500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListPlatforms500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListPlatforms200JSONResponse(convert.Platforms(platforms)), nil

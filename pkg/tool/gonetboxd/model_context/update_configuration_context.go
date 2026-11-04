@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) updateConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -40,7 +40,7 @@ func (s *Server) updateConfigurationContext(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "configuration context not updated")
+		return s.captureFail(x, f, "configuration context not updated")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContext(result))

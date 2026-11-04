@@ -15,11 +15,11 @@ func (s *Server) DeleteSnippet(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	if f := s.service.DeleteSnippet(instance, a.Name); f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.Success("deleted")

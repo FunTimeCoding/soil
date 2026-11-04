@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) delete(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	collection, e := q.RequireString(constant.Collection)
@@ -26,7 +26,7 @@ func (s *Server) delete(
 	deleted, g := s.service.DeleteDocument(collection, path)
 
 	if g != nil {
-		return s.captureFail(g, "delete failed")
+		return s.captureFail(x, g, "delete failed")
 	}
 
 	if !deleted {

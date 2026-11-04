@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) AddPageComment(
-	_ context.Context,
+	x context.Context,
 	r server.AddPageCommentRequestObject,
 ) (server.AddPageCommentResponseObject, error) {
 	e := s.service.AddPageComment(r.Identifier, r.Body.Body)
@@ -27,7 +27,7 @@ func (s *Server) AddPageComment(
 	}
 
 	if e != nil {
-		return server.AddPageComment500JSONResponse(*s.answer(e)), nil
+		return server.AddPageComment500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.AddPageComment204Response{}, nil

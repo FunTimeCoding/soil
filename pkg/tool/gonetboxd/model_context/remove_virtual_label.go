@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) removeVirtualLabel(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -24,7 +24,7 @@ func (s *Server) removeVirtualLabel(
 	}
 
 	if e := s.service.RemoveVirtualLabel(name, key); e != nil {
-		return s.serviceFail(e, "label not removed from virtual machine")
+		return s.serviceFail(x, e, "label not removed from virtual machine")
 	}
 
 	return response.Success("label removed")

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateWirelessNetwork(
-	_ context.Context,
+	x context.Context,
 	r server.CreateWirelessNetworkRequestObject,
 ) (server.CreateWirelessNetworkResponseObject, error) {
 	result, e := s.service.CreateWirelessNetwork(r.Body.Name)
@@ -23,7 +23,9 @@ func (s *Server) CreateWirelessNetwork(
 	}
 
 	if e != nil {
-		return server.CreateWirelessNetwork500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateWirelessNetwork500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.CreateWirelessNetwork201JSONResponse(

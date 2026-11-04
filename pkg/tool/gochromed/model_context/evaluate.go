@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) Evaluate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Evaluate,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) Evaluate(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(result)

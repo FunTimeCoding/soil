@@ -7,11 +7,11 @@ import (
 )
 
 func (s *Server) Monitoring(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.RunMonitor(); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

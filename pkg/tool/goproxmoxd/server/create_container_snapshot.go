@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) CreateContainerSnapshot(
-	_ context.Context,
+	x context.Context,
 	r server.CreateContainerSnapshotRequestObject,
 ) (server.CreateContainerSnapshotResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) CreateContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.CreateContainerSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.CreateContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -54,7 +54,7 @@ func (s *Server) CreateContainerSnapshot(
 	case unavailable.Is(e):
 		return server.CreateContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.CreateContainerSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.CreateContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreateContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

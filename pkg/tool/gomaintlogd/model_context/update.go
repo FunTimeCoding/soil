@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) update(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := r.GetFloat(constant.Identifier, 0)
@@ -55,7 +55,7 @@ func (s *Server) update(
 	result, f := s.service.Update(uint(identifier), c)
 
 	if f != nil {
-		return s.answer(f)
+		return s.answer(x, f)
 	}
 
 	return response.Success(

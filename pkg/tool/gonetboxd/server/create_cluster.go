@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateCluster(
-	_ context.Context,
+	x context.Context,
 	r server.CreateClusterRequestObject,
 ) (server.CreateClusterResponseObject, error) {
 	c, e := s.service.CreateCluster(r.Body.Name, r.Body.Type, r.Body.Site)
@@ -23,7 +23,7 @@ func (s *Server) CreateCluster(
 	}
 
 	if e != nil {
-		return server.CreateCluster500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateCluster500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := convert.Cluster(c)

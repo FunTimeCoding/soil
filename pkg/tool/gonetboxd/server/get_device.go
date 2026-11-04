@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetDevice(
-	_ context.Context,
+	x context.Context,
 	r server.GetDeviceRequestObject,
 ) (server.GetDeviceResponseObject, error) {
 	d, labels, e := s.service.Device(r.Name)
@@ -23,7 +23,7 @@ func (s *Server) GetDevice(
 	}
 
 	if e != nil {
-		return server.GetDevice500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetDevice500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.GetDevice200JSONResponse(*convert.LabeledDevice(d, labels)), nil

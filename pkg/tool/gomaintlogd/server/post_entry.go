@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostEntry(
-	_ context.Context,
+	x context.Context,
 	r server.PostEntryRequestObject,
 ) (server.PostEntryResponseObject, error) {
 	e := entry.New()
@@ -38,7 +38,7 @@ func (s *Server) PostEntry(
 	}
 
 	if f != nil {
-		return server.PostEntry500JSONResponse(*s.answer(f)), nil
+		return server.PostEntry500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.PostEntry200JSONResponse(toResponse([]entry.Entry{*e})[0]), nil

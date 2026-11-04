@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) updateEntry(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Update,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) updateEntry(
 	}
 
 	if e := s.service.Update(a.Identifier, fields); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("updated")

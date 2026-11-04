@@ -1,13 +1,17 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
+)
 
 func (s *Server) captureFail(
+	x context.Context,
 	e error,
 	message string,
 ) *server.ErrorResponse {
 	return &server.ErrorResponse{
 		Error:           message,
-		EventIdentifier: s.reporter.CaptureException(e),
+		EventIdentifier: s.reporter.Capture(x, e),
 	}
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createTunnel(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -34,7 +34,7 @@ func (s *Server) createTunnel(
 	t, h := s.service.CreateTunnel(name, encapsulation, groupName)
 
 	if h != nil {
-		return s.serviceFail(h, "tunnel not created")
+		return s.serviceFail(x, h, "tunnel not created")
 	}
 
 	return response.SuccessAny(convert.Tunnel(t))

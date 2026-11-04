@@ -34,7 +34,7 @@ func (s *Server) ToggleChecklistItem(
 	}
 
 	if e != nil {
-		return server.ToggleChecklistItem500JSONResponse(*s.answer(e)), nil
+		return server.ToggleChecklistItem500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ToggleChecklistItem200JSONResponse(

@@ -15,13 +15,13 @@ func (s *Server) GetSnippet(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	b, e := s.service.GetSnippet(instance, a.Name)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetMetadata(
-	_ context.Context,
+	x context.Context,
 	r server.GetMetadataRequestObject,
 ) (server.GetMetadataResponseObject, error) {
 	key := ""

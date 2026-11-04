@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetSessions(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionsRequestObject,
 ) (server.GetSessionsResponseObject, error) {
 	limit := 0
@@ -34,7 +34,7 @@ func (s *Server) GetSessions(
 
 	if e != nil {
 		return server.GetSessions500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -48,7 +48,7 @@ func (s *Server) GetSessions(
 
 	if f != nil {
 		return server.GetSessions500JSONResponse(
-			*s.captureFail(f, soil.UnexpectedError),
+			*s.captureFail(x, f, soil.UnexpectedError),
 		), nil
 	}
 

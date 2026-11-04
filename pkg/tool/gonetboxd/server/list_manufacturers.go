@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListManufacturers(
-	_ context.Context,
+	x context.Context,
 	_ server.ListManufacturersRequestObject,
 ) (server.ListManufacturersResponseObject, error) {
 	manufacturers, e := s.service.Manufacturers()
@@ -18,7 +18,7 @@ func (s *Server) ListManufacturers(
 	}
 
 	if e != nil {
-		return server.ListManufacturers500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListManufacturers500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := make([]*server.Manufacturer, 0, len(manufacturers))

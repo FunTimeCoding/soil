@@ -18,7 +18,7 @@ func (s *Server) ExecInPod(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	result, f := s.service.ExecInPod(
@@ -34,7 +34,7 @@ func (s *Server) ExecInPod(
 	)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	if result.Failed != nil {
@@ -46,7 +46,7 @@ func (s *Server) ExecInPod(
 			)
 		}
 
-		return s.captureFail(result.Failed, "exec in pod")
+		return s.captureFail(x, result.Failed, "exec in pod")
 	}
 
 	if result.Stderr != "" {

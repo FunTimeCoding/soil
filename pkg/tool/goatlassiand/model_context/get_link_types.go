@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) getLinkTypes(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	types, e := s.service.LinkTypes()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(types)

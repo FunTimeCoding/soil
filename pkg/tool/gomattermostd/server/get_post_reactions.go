@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetPostReactions(
-	_ context.Context,
+	x context.Context,
 	r server.GetPostReactionsRequestObject,
 ) (server.GetPostReactionsResponseObject, error) {
 	result, e := s.service.PostReactions(r.Identifier)
@@ -27,7 +27,7 @@ func (s *Server) GetPostReactions(
 	}
 
 	if e != nil {
-		return server.GetPostReactions500JSONResponse(*s.answer(e)), nil
+		return server.GetPostReactions500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetPostReactions200JSONResponse(result), nil

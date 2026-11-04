@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) EditTag(
-	_ context.Context,
+	x context.Context,
 	r server.EditTagRequestObject,
 ) (server.EditTagResponseObject, error) {
 	patch := map[string]any{}
@@ -38,7 +38,7 @@ func (s *Server) EditTag(
 	}
 
 	if f != nil {
-		return server.EditTag500JSONResponse(*s.answer(f)), nil
+		return server.EditTag500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.EditTag200JSONResponse{

@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
-	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strings"
@@ -22,29 +21,8 @@ func applyRemovals(
 	locals []*removal.Local,
 	r *output.Results,
 ) error {
-	decorated := func(
-		owner *packages.Package,
-		file *ast.File,
-		node ast.Node,
-	) (dst.Node, error) {
-		if _, e := decorations.DecorateFile(set, owner, file); e != nil {
-			return nil, e
-		}
-
-		d := decorations.DecoratedNode(owner, node)
-
-		if d == nil {
-			return nil, validation.New(
-				"no decorated node at %s",
-				set.Position(node.Pos()),
-			)
-		}
-
-		return d, nil
-	}
-
 	for _, t := range targets {
-		d, e := decorated(t.Owner, t.File, t.Declaration)
+		d, e := decorated(set, decorations, t.Owner, t.File, t.Declaration)
 
 		if e != nil {
 			return e
@@ -70,7 +48,7 @@ func applyRemovals(
 	}
 
 	for _, c := range calls {
-		d, e := decorated(c.Owner, c.File, c.Call)
+		d, e := decorated(set, decorations, c.Owner, c.File, c.Call)
 
 		if e != nil {
 			return e
@@ -94,13 +72,13 @@ func applyRemovals(
 			[]*packages.Package{l.Owner},
 			l.Statement.Pos(),
 		)
-		statement, e := decorated(l.Owner, file, l.Statement)
+		statement, e := decorated(set, decorations, l.Owner, file, l.Statement)
 
 		if e != nil {
 			return e
 		}
 
-		block, e := decorated(l.Owner, file, l.Block)
+		block, e := decorated(set, decorations, l.Owner, file, l.Block)
 
 		if e != nil {
 			return e

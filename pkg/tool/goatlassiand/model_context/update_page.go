@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) updatePage(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
@@ -33,7 +33,7 @@ func (s *Server) updatePage(
 	result, i := s.service.UpdatePage(identifier, title, body, message)
 
 	if i != nil {
-		return s.answer(i)
+		return s.answer(x, i)
 	}
 
 	return response.SuccessAny(result)

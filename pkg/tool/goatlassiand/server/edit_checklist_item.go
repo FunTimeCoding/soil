@@ -34,7 +34,7 @@ func (s *Server) EditChecklistItem(
 	}
 
 	if e != nil {
-		return server.EditChecklistItem500JSONResponse(*s.answer(e)), nil
+		return server.EditChecklistItem500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.EditChecklistItem200JSONResponse(convertChecklist(items)), nil

@@ -15,39 +15,49 @@ func (s *Service) PushDocument(
 	path string,
 	body string,
 	metadata map[string][]string,
-) string {
-	s.store.EnsurePushCollection(collection)
+) (string, error) {
+	if e := s.store.EnsurePushCollection(collection); e != nil {
+		return "", classifyWrite(e)
+	}
+
 	now := time.Now().UTC().Format(time.RFC3339)
 	hash := store.HashContent(body)
 	fresh := s.store.ActiveDocumentHash(collection, path) != hash
 
 	if fresh {
-		s.store.InsertContent(hash, body, now)
-		s.store.InsertDocument(
+		if e := s.store.InsertContent(hash, body, now); e != nil {
+			return "", classifyWrite(e)
+		}
+
+		if e := s.store.InsertDocument(
 			collection,
 			path,
 			store.ExtractTitle(body, path),
 			hash,
 			now,
-		)
+		); e != nil {
+			return "", classifyWrite(e)
+		}
 	}
 
 	if len(metadata) > 0 {
-		s.store.SetMetadata(collection, path, metadata)
+		if e := s.store.SetMetadata(collection, path, metadata); e != nil {
+			return "", classifyWrite(e)
+		}
 	}
 
 	if !fresh {
-		return ""
+		return "", nil
 	}
 
 	_, e := s.embedDocument(x, hash, path, body)
 
 	switch {
 	case e == nil:
-		return ""
+		return "", nil
 	case validation.Is(e):
-		return fmt.Sprintf(constant.EmbeddingRefused, e)
+		return fmt.Sprintf(constant.EmbeddingRefused, e), nil
 	default:
-		return fmt.Sprintf(constant.EmbeddingPending, e)
+		return fmt.Sprintf(constant.EmbeddingPending, e), nil
 	}
 }

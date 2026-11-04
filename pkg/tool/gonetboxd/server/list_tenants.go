@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListTenants(
-	_ context.Context,
+	x context.Context,
 	_ server.ListTenantsRequestObject,
 ) (server.ListTenantsResponseObject, error) {
 	tenants, e := s.service.Tenants()
@@ -17,7 +17,7 @@ func (s *Server) ListTenants(
 	}
 
 	if e != nil {
-		return server.ListTenants500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListTenants500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := make([]*server.Tenant, 0, len(tenants))

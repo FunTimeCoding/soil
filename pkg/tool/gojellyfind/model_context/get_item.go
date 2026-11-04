@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) GetItem(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetItem,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Item(a.Identifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

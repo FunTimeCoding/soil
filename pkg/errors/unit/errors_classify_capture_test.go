@@ -12,7 +12,12 @@ import (
 
 func TestCaptureShowsTheContextAndTheFault(t *testing.T) {
 	m := memory.New()
-	text, _ := classify.Capture(m, errors.New("disk full"), "load profile")
+	text, _ := classify.Capture(
+		t.Context(),
+		m,
+		errors.New("disk full"),
+		"load profile",
+	)
 	assert.String(t, "load profile: disk full", text)
 	assert.Count(t, 1, m.Events())
 	assert.String(t, "disk full", m.Events()[0].Error.Error())
@@ -20,7 +25,12 @@ func TestCaptureShowsTheContextAndTheFault(t *testing.T) {
 
 func TestCaptureNamesAKnownFault(t *testing.T) {
 	m := memory.New()
-	text, _ := classify.Capture(m, unreachable.Format("store unreachable"), "")
+	text, _ := classify.Capture(
+		t.Context(),
+		m,
+		unreachable.Format("store unreachable"),
+		"",
+	)
 	assert.String(t, "store unreachable", text)
 	assert.String(t, "store unreachable", m.Events()[0].Error.Error())
 }
@@ -28,6 +38,7 @@ func TestCaptureNamesAKnownFault(t *testing.T) {
 func TestCaptureTitlesAQuietClassAsAMissingBranch(t *testing.T) {
 	m := memory.New()
 	text, _ := classify.Capture(
+		t.Context(),
 		m,
 		not_found.Format("memory not found: 12"),
 		"load profile",

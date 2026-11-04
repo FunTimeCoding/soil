@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) AddLink(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.AddLink,
 ) (*mcp.CallToolResult, error) {
 	listIdentifier, e := s.resolveList(a.List)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	name := a.Name
@@ -27,7 +27,7 @@ func (s *Server) AddLink(
 	result, f := s.service.CreateLink(a.Link, name, listIdentifier, a.Tags)
 
 	if f != nil {
-		return s.answer(f)
+		return s.answer(x, f)
 	}
 
 	return response.SuccessAny(

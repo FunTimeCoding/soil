@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListContainers(
-	_ context.Context,
+	x context.Context,
 	r server.ListContainersRequestObject,
 ) (server.ListContainersResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListContainers(
 	}
 
 	if e != nil {
-		return server.ListContainers500JSONResponse(*s.answer(e)), nil
+		return server.ListContainers500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -47,7 +47,7 @@ func (s *Server) ListContainers(
 	case unavailable.Is(e):
 		return server.ListContainers503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListContainers500JSONResponse(*s.answer(e)), nil
+		return server.ListContainers500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	pointers := convert.Containers(containers)

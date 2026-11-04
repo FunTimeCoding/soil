@@ -7,14 +7,14 @@ import (
 )
 
 func (s *Server) DeleteDocument(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteDocumentRequestObject,
 ) (server.DeleteDocumentResponseObject, error) {
 	deleted, e := s.service.DeleteDocument(r.Params.Collection, r.Params.Path)
 
 	if e != nil {
 		return server.DeleteDocument500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

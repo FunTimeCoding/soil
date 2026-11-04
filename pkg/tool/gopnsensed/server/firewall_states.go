@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) FirewallStates(
-	_ context.Context,
+	x context.Context,
 	r server.FirewallStatesRequestObject,
 ) (server.FirewallStatesResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) FirewallStates(
 	result, e := s.service.States(phrase)
 
 	if e != nil {
-		return server.FirewallStates500JSONResponse(*s.answer(e)), nil
+		return server.FirewallStates500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.FirewallStates200JSONResponse(convert.States(result)), nil

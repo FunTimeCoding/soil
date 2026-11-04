@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createTag(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) createTag(
 	result, g := s.service.CreateTag(name)
 
 	if g != nil {
-		return s.captureFail(g, "tag not created")
+		return s.captureFail(x, g, "tag not created")
 	}
 
 	return response.SuccessAny(convert.Tag(result))

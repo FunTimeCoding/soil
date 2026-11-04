@@ -15,13 +15,13 @@ func (s *Server) CreateSnippet(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	volume, e := s.service.CreateSnippet(instance, a.Name, a.Content)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(

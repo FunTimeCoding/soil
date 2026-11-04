@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) RollbackMachineSnapshot(
-	_ context.Context,
+	x context.Context,
 	r server.RollbackMachineSnapshotRequestObject,
 ) (server.RollbackMachineSnapshotResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) RollbackMachineSnapshot(
 	}
 
 	if e != nil {
-		return server.RollbackMachineSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.RollbackMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -54,7 +54,7 @@ func (s *Server) RollbackMachineSnapshot(
 	case unavailable.Is(e):
 		return server.RollbackMachineSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.RollbackMachineSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.RollbackMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.RollbackMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

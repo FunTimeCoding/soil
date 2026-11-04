@@ -13,6 +13,7 @@ type Client struct {
 	notes          []*notify_call.Call
 	Pulses         []*pulse_call.Call
 	Failure        error
+	failures       map[string]error
 	ReleaseFailure error
 	Closed         int
 }

@@ -23,13 +23,13 @@ func (s *Server) GetCommit(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	v, e := s.service.ReadCommit(x, instance, project, a.Sha)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	return response.SuccessAny(v)

@@ -24,17 +24,17 @@ func (s *Server) CreateMachine(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	identifier, e := s.service.CreateMachine(instance, &a)
 
 	if e != nil {
 		if validation.Is(e) {
-			return s.captureDetail(e)
+			return s.captureDetail(x, e)
 		}
 
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createVirtualTunnelTermination(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	vmName, e := r.RequireString(constant.VirtualMachine)
@@ -44,7 +44,7 @@ func (s *Server) createVirtualTunnelTermination(
 	)
 
 	if i != nil {
-		return s.serviceFail(i, "tunnel termination not created")
+		return s.serviceFail(x, i, "tunnel termination not created")
 	}
 
 	return response.SuccessAny(convert.TunnelTermination(tt))

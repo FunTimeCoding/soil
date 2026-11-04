@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) PutSecret(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.PutSecret,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Merge(a.Path, a.Values)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(map[string]any{"path": a.Path, "keys": result})

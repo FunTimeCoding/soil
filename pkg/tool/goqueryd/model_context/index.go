@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) index(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	results, e := s.service.IndexCollections(
@@ -17,7 +17,7 @@ func (s *Server) index(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success(notation.MarshalIndent(results))

@@ -15,7 +15,7 @@ func (s *Server) moment(
 	c, e := s.resolveCaller(x, constant.Moment)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -31,7 +31,7 @@ func (s *Server) moment(
 	}
 
 	if f := s.event.Moment(c.SessionIdentifier, c.Callsign, line); f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	return response.Success("moment captured")

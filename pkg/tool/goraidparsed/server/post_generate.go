@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PostGenerate(
-	_ context.Context,
+	x context.Context,
 	r server.PostGenerateRequestObject,
 ) (server.PostGenerateResponseObject, error) {
 	date := time.Now()
@@ -29,7 +29,7 @@ func (s *Server) PostGenerate(
 	}
 
 	if e != nil {
-		return server.PostGenerate500JSONResponse(*s.answer(e)), nil
+		return server.PostGenerate500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostGenerate200JSONResponse{

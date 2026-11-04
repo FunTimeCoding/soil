@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) DeleteIssue(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DeleteIssue,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) DeleteIssue(
 	e := s.service.DeleteIssue(a.Identifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(nil)

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateChoiceSet(
-	_ context.Context,
+	x context.Context,
 	r server.CreateChoiceSetRequestObject,
 ) (server.CreateChoiceSetResponseObject, error) {
 	result, e := s.service.CreateChoiceSet(r.Body.Name, r.Body.Choices)
@@ -23,7 +23,7 @@ func (s *Server) CreateChoiceSet(
 	}
 
 	if e != nil {
-		return server.CreateChoiceSet500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateChoiceSet500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateChoiceSet201JSONResponse(*convert.ChoiceSet(result)), nil

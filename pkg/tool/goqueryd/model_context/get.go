@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) get(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	path, e := q.RequireString(constant.Path)
@@ -32,7 +32,7 @@ func (s *Server) get(
 	}
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.Success(notation.MarshalIndent(document))

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetSnapshots(
-	_ context.Context,
+	x context.Context,
 	r server.GetSnapshotsRequestObject,
 ) (server.GetSnapshotsResponseObject, error) {
 	start, end := timeRange(r.Params.Start, r.Params.End)
@@ -17,7 +17,7 @@ func (s *Server) GetSnapshots(
 	)
 
 	if e != nil {
-		return server.GetSnapshots500JSONResponse(*s.answer(e)), nil
+		return server.GetSnapshots500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetSnapshots200JSONResponse(toSnapshots(snapshots)), nil

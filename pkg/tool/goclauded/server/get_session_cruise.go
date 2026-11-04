@@ -7,14 +7,14 @@ import (
 )
 
 func (s *Server) GetSessionCruise(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionCruiseRequestObject,
 ) (server.GetSessionCruiseResponseObject, error) {
 	c, e := s.message.CruiseSetting(r.Identifier)
 
 	if e != nil {
 		return server.GetSessionCruise500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

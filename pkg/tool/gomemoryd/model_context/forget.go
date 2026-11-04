@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) forget(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := int64(q.GetFloat(constant.MemoryIdentifier, 0))
@@ -24,7 +24,7 @@ func (s *Server) forget(
 	e := s.service.ForgetMemory(identifier, q.GetString(constant.Source, ""))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("Forgot memory %d", identifier)

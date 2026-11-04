@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) listContexts(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	return response.Success(notation.MarshalIndent(s.service.ListContexts()))

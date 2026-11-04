@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetTags(
-	_ context.Context,
+	x context.Context,
 	r server.GetTagsRequestObject,
 ) (server.GetTagsResponseObject, error) {
 	page := 1
@@ -28,7 +28,7 @@ func (s *Server) GetTags(
 	}
 
 	if e != nil {
-		return server.GetTags500JSONResponse(*s.answer(e)), nil
+		return server.GetTags500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]server.Tag, len(v.Items))

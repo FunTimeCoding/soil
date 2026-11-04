@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) getGroup(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := int64(q.GetFloat(constant.MemoryIdentifier, 0))
@@ -23,7 +23,7 @@ func (s *Server) getGroup(
 	parent, children, e := s.service.GetMemoryGroup(identifier)
 
 	if e != nil {
-		return s.answerWith(e, "load memory group")
+		return s.answerWith(x, e, "load memory group")
 	}
 
 	members := map[int64]bool{parent.Identifier: true}
@@ -37,7 +37,7 @@ func (s *Server) getGroup(
 	edges, f := s.service.ListRelationsAmong(identifiers)
 
 	if f != nil {
-		return s.answerWith(f, "load group relations")
+		return s.answerWith(x, f, "load group relations")
 	}
 
 	relations := memoryResponse.GroupRelations(edges, members)

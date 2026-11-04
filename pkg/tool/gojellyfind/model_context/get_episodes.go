@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) GetEpisodes(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetEpisodes,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Episodes(a.SeriesIdentifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

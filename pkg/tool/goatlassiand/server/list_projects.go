@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListProjects(
-	_ context.Context,
+	x context.Context,
 	_ server.ListProjectsRequestObject,
 ) (server.ListProjectsResponseObject, error) {
 	result, e := s.service.Projects()
@@ -23,7 +23,7 @@ func (s *Server) ListProjects(
 	}
 
 	if e != nil {
-		return server.ListProjects500JSONResponse(*s.answer(e)), nil
+		return server.ListProjects500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListProjects200JSONResponse(convert.JiraProjects(result)), nil

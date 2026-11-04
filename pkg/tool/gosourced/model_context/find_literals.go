@@ -24,13 +24,13 @@ func (s *Server) findLiterals(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, literals, f := s.pattern.FindLiterals(directory, a.PackagePath, a.Type)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if literals == nil {

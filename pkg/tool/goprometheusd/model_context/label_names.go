@@ -18,7 +18,7 @@ func (s *Server) labelNames(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	var matches []string
@@ -42,7 +42,7 @@ func (s *Server) labelNames(
 	v, e := s.service.LabelNames(x, instance, matches, since)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(convert.LabelResult(v))

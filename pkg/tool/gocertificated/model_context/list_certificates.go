@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) listCertificates(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListCertificates,
 ) (*mcp.CallToolResult, error) {
@@ -37,7 +37,7 @@ func (s *Server) listCertificates(
 	result, e := s.service.Certificates(f)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Certificates(result))

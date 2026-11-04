@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteGroupNameMemberAccount(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteGroupNameMemberAccountRequestObject,
 ) (server.DeleteGroupNameMemberAccountResponseObject, error) {
 	result, e := s.service.RemoveMember(r.Name, r.Account)
@@ -35,7 +35,7 @@ func (s *Server) DeleteGroupNameMemberAccount(
 
 	if e != nil {
 		return server.DeleteGroupNameMemberAccount500JSONResponse(
-			*s.answer(e),
+			*s.answer(x, e),
 		), nil
 	}
 

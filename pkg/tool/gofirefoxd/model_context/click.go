@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) Click(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Click,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.Click(int(a.TabIdentifier), a.Selector)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

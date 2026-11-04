@@ -11,7 +11,7 @@ import (
 )
 
 func TestGettingAMissingPodAnswersWithoutAReport(t *testing.T) {
-	c, r := service_tester.New(t).Mounted(true)
+	c, r := service_tester.New(t).Mounted(false)
 	text, e := c.CallToolError(
 		constant.Get,
 		map[string]any{
@@ -34,7 +34,7 @@ func TestAForbiddenDeleteAnswersWithoutAReport(t *testing.T) {
 			errors.New("rbac denied"),
 		),
 	)
-	c, r := v.Mounted(false)
+	c, r := v.Mounted(true)
 	text, e := c.CallToolError(
 		constant.Delete,
 		map[string]any{
@@ -51,7 +51,7 @@ func TestAForbiddenDeleteAnswersWithoutAReport(t *testing.T) {
 func TestAnInvalidPatchAnswersWithoutAReport(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(kubernetesErrors.NewBadRequest("the patch is not valid"))
-	c, r := v.Mounted(false)
+	c, r := v.Mounted(true)
 	text, e := c.CallToolError(
 		constant.Patch,
 		map[string]any{
@@ -70,7 +70,7 @@ func TestAnInvalidPatchAnswersWithoutAReport(t *testing.T) {
 func TestAnUnexpectedClusterFailureIsReported(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(errors.New("etcd exploded"))
-	c, r := v.Mounted(true)
+	c, r := v.Mounted(false)
 	text, e := c.CallToolError(
 		constant.Get,
 		map[string]any{"resourceType": "pod", "namespace": "default"},

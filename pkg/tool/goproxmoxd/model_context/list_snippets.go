@@ -16,13 +16,13 @@ func (s *Server) ListSnippets(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	entries, e := s.service.ListSnippets(instance)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	rows := make([]proxResponse.Snippet, 0, len(entries))

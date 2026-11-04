@@ -1,11 +1,13 @@
 package response
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func CaptureFail(
+	x context.Context,
 	r face.Reporter,
 	e error,
 	message string,
@@ -13,7 +15,7 @@ func CaptureFail(
 	return FailAny(
 		map[string]any{
 			"error":            message,
-			"event_identifier": r.CaptureException(e),
+			"event_identifier": r.Capture(x, e),
 		},
 	)
 }

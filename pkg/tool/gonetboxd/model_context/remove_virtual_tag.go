@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) removeVirtualTag(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -27,7 +27,7 @@ func (s *Server) removeVirtualTag(
 	result, h := s.service.RemoveVirtualTag(name, tag)
 
 	if h != nil {
-		return s.captureFail(h, "tag not removed from virtual machine")
+		return s.captureFail(x, h, "tag not removed from virtual machine")
 	}
 
 	return response.SuccessAny(convert.VirtualMachine(result))

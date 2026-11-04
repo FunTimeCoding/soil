@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listClusters(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Clusters()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(convert.Clusters(result))

@@ -19,13 +19,13 @@ func (s *Server) ListNetworks(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	networks, e := s.service.ListNetworks(instance, a.Node)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(networks)

@@ -15,7 +15,7 @@ func TestSubscriptionsNeedGoclauded(t *testing.T) {
 	assert.False(t, s.Subscribing())
 	p, e := m.FindPost("alfa")
 	assert.FatalOnError(t, e)
-	_, _, f := s.Subscribe(p, "kilo", "")
+	_, _, f := s.Subscribe(p, "kilo", "", "")
 	assert.True(t, not_configured.Is(f))
 	_, g := s.Unsubscribe("kilo", "alfa")
 	assert.True(t, not_configured.Is(g))

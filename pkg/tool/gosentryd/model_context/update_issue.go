@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) UpdateIssue(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.UpdateIssue,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) UpdateIssue(
 	result, e := s.service.UpdateIssue(a.Identifier, a.Status, a.AssignedTo)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

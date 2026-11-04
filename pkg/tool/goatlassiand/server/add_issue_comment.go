@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) AddIssueComment(
-	_ context.Context,
+	x context.Context,
 	r server.AddIssueCommentRequestObject,
 ) (server.AddIssueCommentResponseObject, error) {
 	e := s.service.Comment(r.Key, r.Body.Body)
@@ -32,7 +32,7 @@ func (s *Server) AddIssueComment(
 	}
 
 	if e != nil {
-		return server.AddIssueComment500JSONResponse(*s.answer(e)), nil
+		return server.AddIssueComment500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.AddIssueComment204Response{}, nil

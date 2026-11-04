@@ -17,11 +17,11 @@ func (s *Server) UseCluster(
 	}
 
 	if _, e := s.service.ClusterByName(a.Cluster); e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	if e := s.selection.Select(x, a.Cluster); e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("active cluster set to %s", a.Cluster)

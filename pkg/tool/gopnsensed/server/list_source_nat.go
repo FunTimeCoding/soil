@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListSourceNat(
-	_ context.Context,
+	x context.Context,
 	r server.ListSourceNatRequestObject,
 ) (server.ListSourceNatResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListSourceNat(
 	result, e := s.service.SourceNatRules(phrase)
 
 	if e != nil {
-		return server.ListSourceNat500JSONResponse(*s.answer(e)), nil
+		return server.ListSourceNat500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListSourceNat200JSONResponse(

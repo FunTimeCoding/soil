@@ -18,7 +18,7 @@ func (s *Server) readMessage(
 	a argument.ReadMessage,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.resolveCaller(x, constant.ReadMessage); e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if len(a.Identifiers) == 0 {
@@ -34,7 +34,7 @@ func (s *Server) readMessage(
 	found, e := s.message.ReadMessages(identifiers)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	var lines []string

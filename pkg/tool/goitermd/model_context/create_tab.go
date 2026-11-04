@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) CreateTab(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.CreateTab,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.CreateTab()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

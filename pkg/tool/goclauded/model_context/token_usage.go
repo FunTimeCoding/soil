@@ -18,13 +18,13 @@ func (s *Server) tokenUsage(
 	_, e := s.resolveCaller(x, constant.TokenUsage)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	result, found, f := s.usage.FindUsage()
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if !found {

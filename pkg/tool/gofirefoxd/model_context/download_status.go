@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) DownloadStatus(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DownloadStatus,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.DownloadStatus(int(a.DownloadIdentifier))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

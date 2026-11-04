@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetItem(
-	_ context.Context,
+	x context.Context,
 	r server.GetItemRequestObject,
 ) (server.GetItemResponseObject, error) {
 	v, e := s.service.Item(r.Identifier)
@@ -17,7 +17,7 @@ func (s *Server) GetItem(
 	}
 
 	if e != nil {
-		return server.GetItem500JSONResponse(*s.answer(e)), nil
+		return server.GetItem500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetItem200JSONResponse(*convertItem(v)), nil

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) allocateStat(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	stat, f := r.RequireString(constant.Stat)
@@ -21,7 +21,7 @@ func (s *Server) allocateStat(
 	result, g := s.service.Allocate(stat)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	return response.SuccessAny(convert.Stats(result))

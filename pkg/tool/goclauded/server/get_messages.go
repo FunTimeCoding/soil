@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetMessages(
-	_ context.Context,
+	x context.Context,
 	r server.GetMessagesRequestObject,
 ) (server.GetMessagesResponseObject, error) {
 	var identifiers []uint
@@ -21,7 +21,7 @@ func (s *Server) GetMessages(
 
 	if e != nil {
 		return server.GetMessages500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

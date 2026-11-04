@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteBranch(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteBranchRequestObject,
 ) (server.DeleteBranchResponseObject, error) {
 	e := s.service.DeleteBranch(int(r.Identifier))
@@ -27,7 +27,7 @@ func (s *Server) DeleteBranch(
 	}
 
 	if e != nil {
-		return server.DeleteBranch500JSONResponse(*s.answer(e)), nil
+		return server.DeleteBranch500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteBranch200Response{}, nil

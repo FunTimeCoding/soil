@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) ScoreTask(
-	_ context.Context,
+	x context.Context,
 	r server.ScoreTaskRequestObject,
 ) (server.ScoreTaskResponseObject, error) {
 	result, e := s.service.Score(r.Identifier, string(r.Direction))
@@ -28,7 +28,7 @@ func (s *Server) ScoreTask(
 	}
 
 	if e != nil {
-		return server.ScoreTask500JSONResponse(*s.answer(e)), nil
+		return server.ScoreTask500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ScoreTask200JSONResponse(*convert.ScoreResult(result)), nil

@@ -7,7 +7,7 @@ var Identity = identity.New(
 	"Kubernetes cluster operations",
 	"gokubernetesd",
 ).WithInstructions(
-	"Kubernetes cluster operations - get resources, describe objects, read logs, view events, exec into pods. Multi-cluster with session-scoped cluster selection. Call list_clusters and use_cluster before other operations.",
+	"Kubernetes cluster operations - get resources, describe objects, read logs, view events. Armed with --arm, it also execs into pods, applies, patches, deletes, restarts rollouts and forwards ports. Multi-cluster with session-scoped cluster selection. Call list_clusters and use_cluster before other operations.",
 )
 
 const (

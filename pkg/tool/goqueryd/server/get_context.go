@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetContext(
-	_ context.Context,
+	x context.Context,
 	_ server.GetContextRequestObject,
 ) (server.GetContextResponseObject, error) {
 	entries := s.service.ListContexts()

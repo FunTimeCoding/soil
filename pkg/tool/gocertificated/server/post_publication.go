@@ -18,7 +18,7 @@ func (s *Server) PostPublication(
 	}
 
 	if e != nil {
-		return server.PostPublication500JSONResponse(*s.answer(e)), nil
+		return server.PostPublication500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := server.PublicationResponse{Pending: convert.Changes(change)}

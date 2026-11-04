@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetLinkTypes(
-	_ context.Context,
+	x context.Context,
 	_ server.GetLinkTypesRequestObject,
 ) (server.GetLinkTypesResponseObject, error) {
 	types, e := s.service.LinkTypes()
@@ -22,7 +22,7 @@ func (s *Server) GetLinkTypes(
 	}
 
 	if e != nil {
-		return server.GetLinkTypes500JSONResponse(*s.answer(e)), nil
+		return server.GetLinkTypes500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.GetLinkTypes200JSONResponse

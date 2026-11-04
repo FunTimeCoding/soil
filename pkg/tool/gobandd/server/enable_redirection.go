@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) EnableRedirection(
-	_ context.Context,
+	x context.Context,
 	r server.EnableRedirectionRequestObject,
 ) (server.EnableRedirectionResponseObject, error) {
 	instance, e := s.resolveInstance(r.Body.Instance)
@@ -26,7 +26,7 @@ func (s *Server) EnableRedirection(
 
 	if e != nil {
 		return server.EnableRedirection500JSONResponse(
-			*s.captureFail(e, e.Error()),
+			*s.captureFail(x, e, e.Error()),
 		), nil
 	}
 
@@ -45,7 +45,7 @@ func (s *Server) EnableRedirection(
 	}
 
 	if f != nil {
-		return server.EnableRedirection500JSONResponse(*s.captureDetail(f)), nil
+		return server.EnableRedirection500JSONResponse(*s.captureDetail(x, f)), nil
 	}
 
 	if enabled == nil {

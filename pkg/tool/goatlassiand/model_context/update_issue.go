@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) updateIssue(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -53,7 +53,7 @@ func (s *Server) updateIssue(
 	)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	return response.SuccessAny(

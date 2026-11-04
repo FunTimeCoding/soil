@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createDeviceType(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	model, f := r.RequireString(constant.Model)
@@ -27,7 +27,7 @@ func (s *Server) createDeviceType(
 	result, e := s.service.CreateDeviceType(model, manufacturer)
 
 	if e != nil {
-		return s.serviceFail(e, "device type not created")
+		return s.serviceFail(x, e, "device type not created")
 	}
 
 	return response.SuccessAny(convert.DeviceType(result))

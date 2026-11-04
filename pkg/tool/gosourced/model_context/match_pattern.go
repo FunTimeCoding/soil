@@ -28,7 +28,7 @@ func (s *Server) matchPattern(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, match, f := s.pattern.MatchPattern(
@@ -40,7 +40,7 @@ func (s *Server) matchPattern(
 	)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if match == nil {

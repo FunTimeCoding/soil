@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteGroupName(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteGroupNameRequestObject,
 ) (server.DeleteGroupNameResponseObject, error) {
 	e := s.service.DeleteGroup(r.Name)
@@ -28,7 +28,7 @@ func (s *Server) DeleteGroupName(
 	}
 
 	if e != nil {
-		return server.DeleteGroupName500JSONResponse(*s.answer(e)), nil
+		return server.DeleteGroupName500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteGroupName200JSONResponse{

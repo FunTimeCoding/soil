@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateDeviceRole(
-	_ context.Context,
+	x context.Context,
 	r server.CreateDeviceRoleRequestObject,
 ) (server.CreateDeviceRoleResponseObject, error) {
 	var virtualMachine bool
@@ -29,7 +29,7 @@ func (s *Server) CreateDeviceRole(
 	}
 
 	if e != nil {
-		return server.CreateDeviceRole500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateDeviceRole500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateDeviceRole201JSONResponse(*convert.DeviceRole(role)), nil

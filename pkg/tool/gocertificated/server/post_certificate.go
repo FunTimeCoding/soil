@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostCertificate(
-	_ context.Context,
+	x context.Context,
 	r server.PostCertificateRequestObject,
 ) (server.PostCertificateResponseObject, error) {
 	result, key, e := s.service.IssueCertificate(r.Body)
@@ -18,7 +18,7 @@ func (s *Server) PostCertificate(
 	}
 
 	if e != nil {
-		return server.PostCertificate500JSONResponse(*s.answer(e)), nil
+		return server.PostCertificate500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	response := convert.Certificate(result)

@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) Status(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.Status,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Status()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

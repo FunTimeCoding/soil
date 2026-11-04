@@ -16,7 +16,7 @@ func (s *Server) PortForward(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	f, g := s.service.PortForward(
@@ -32,7 +32,7 @@ func (s *Server) PortForward(
 	)
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.captureDetail(x, g)
 	}
 
 	return response.SuccessAny(

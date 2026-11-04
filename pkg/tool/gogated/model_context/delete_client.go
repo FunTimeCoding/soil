@@ -9,16 +9,16 @@ import (
 )
 
 func (s *Server) deleteClient(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Identifier,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.service.Client(a.Identifier); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if e := s.service.DeleteClient(a.Identifier); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(fmt.Sprintf("deleted client: %s", a.Identifier))

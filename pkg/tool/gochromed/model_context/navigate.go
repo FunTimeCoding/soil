@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) Navigate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Navigate,
 ) (*mcp.CallToolResult, error) {
@@ -17,7 +17,7 @@ func (s *Server) Navigate(
 		selector.New(a.TabIdentifier, "", ""),
 		a.Locator,
 	); e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("navigated to %s", a.Locator)

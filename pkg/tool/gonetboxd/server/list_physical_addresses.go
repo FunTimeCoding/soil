@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListPhysicalAddresses(
-	_ context.Context,
+	x context.Context,
 	_ server.ListPhysicalAddressesRequestObject,
 ) (server.ListPhysicalAddressesResponseObject, error) {
 	v, e := s.service.PhysicalAddresses()
@@ -18,7 +18,9 @@ func (s *Server) ListPhysicalAddresses(
 	}
 
 	if e != nil {
-		return server.ListPhysicalAddresses500JSONResponse(*s.captureDetail(e)),
+		return server.ListPhysicalAddresses500JSONResponse(
+				*s.captureDetail(x, e),
+			),
 			nil
 	}
 

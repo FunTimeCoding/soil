@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListDeviceTags(
-	_ context.Context,
+	x context.Context,
 	r server.ListDeviceTagsRequestObject,
 ) (server.ListDeviceTagsResponseObject, error) {
 	tags, e := s.service.DeviceTagNames(r.Name)
@@ -22,7 +22,7 @@ func (s *Server) ListDeviceTags(
 	}
 
 	if e != nil {
-		return server.ListDeviceTags500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListDeviceTags500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListDeviceTags200JSONResponse(tags), nil

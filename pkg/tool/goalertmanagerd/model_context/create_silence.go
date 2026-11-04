@@ -20,7 +20,7 @@ func (s *Server) createSilence(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	var d time.Duration
@@ -36,7 +36,7 @@ func (s *Server) createSilence(
 	v, e := s.service.CreateSilence(x, instance, a.Alert, a.Comment, d)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("silence created: %s", v)

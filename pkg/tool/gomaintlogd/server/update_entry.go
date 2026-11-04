@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) UpdateEntry(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateEntryRequestObject,
 ) (server.UpdateEntryResponseObject, error) {
 	c := change.New()
@@ -31,7 +31,7 @@ func (s *Server) UpdateEntry(
 	}
 
 	if e != nil {
-		return server.UpdateEntry500JSONResponse(*s.answer(e)), nil
+		return server.UpdateEntry500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.UpdateEntry200JSONResponse(

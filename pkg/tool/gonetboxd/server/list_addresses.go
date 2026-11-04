@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListAddresses(
-	_ context.Context,
+	x context.Context,
 	r server.ListAddressesRequestObject,
 ) (server.ListAddressesResponseObject, error) {
 	addresses, e := s.service.DeviceAddresses(r.Name)
@@ -23,7 +23,7 @@ func (s *Server) ListAddresses(
 	}
 
 	if e != nil {
-		return server.ListAddresses500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListAddresses500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListAddresses200JSONResponse(convert.Addresses(addresses)), nil

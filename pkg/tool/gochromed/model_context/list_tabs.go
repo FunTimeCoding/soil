@@ -10,14 +10,14 @@ import (
 )
 
 func (s *Server) ListTabs(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.ListTabs,
 ) (*mcp.CallToolResult, error) {
 	tabs, e := s.service.Tabs()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	var result []*tab_response.Response

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) setDeviceCustomField(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(constant.Device)
@@ -35,7 +35,7 @@ func (s *Server) setDeviceCustomField(
 	}
 
 	if g != nil {
-		return s.captureFail(g, "custom field not set")
+		return s.captureFail(x, g, "custom field not set")
 	}
 
 	return response.SuccessAny(convert.Device(result))

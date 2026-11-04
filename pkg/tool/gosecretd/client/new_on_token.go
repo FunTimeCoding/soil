@@ -14,7 +14,7 @@ func newOnToken(
 	l *locator.Locator,
 	token func() string,
 ) *Client {
-	p := stall_client.New().Build()
+	p := stall_client.New().Traced().Build()
 	c, e := client.NewClientWithResponses(
 		l.String(),
 		client.WithHTTPClient(p.Client()),

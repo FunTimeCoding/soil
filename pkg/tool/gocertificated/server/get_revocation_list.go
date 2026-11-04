@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetRevocationList(
-	_ context.Context,
+	x context.Context,
 	r server.GetRevocationListRequestObject,
 ) (server.GetRevocationListResponseObject, error) {
 	result, e := s.service.RevocationList(r.Params.Authority)
@@ -17,7 +17,7 @@ func (s *Server) GetRevocationList(
 	}
 
 	if e != nil {
-		return server.GetRevocationList500JSONResponse(*s.answer(e)), nil
+		return server.GetRevocationList500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetRevocationList200TextResponse(result), nil

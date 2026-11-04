@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateClusterType(
-	_ context.Context,
+	x context.Context,
 	r server.CreateClusterTypeRequestObject,
 ) (server.CreateClusterTypeResponseObject, error) {
 	t, e := s.service.CreateClusterType(r.Body.Name)
@@ -24,7 +24,7 @@ func (s *Server) CreateClusterType(
 	}
 
 	if e != nil {
-		return server.CreateClusterType500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateClusterType500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateClusterType201JSONResponse{

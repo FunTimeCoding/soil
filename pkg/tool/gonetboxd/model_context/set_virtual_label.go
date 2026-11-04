@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) setVirtualLabel(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -33,7 +33,7 @@ func (s *Server) setVirtualLabel(
 	result, e := s.service.SetVirtualLabel(name, key, value)
 
 	if e != nil {
-		return s.serviceFail(e, "label not set on virtual machine")
+		return s.serviceFail(x, e, "label not set on virtual machine")
 	}
 
 	return response.SuccessAny(convert.Label(result))

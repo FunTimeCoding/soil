@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) UpdateChoiceSet(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateChoiceSetRequestObject,
 ) (server.UpdateChoiceSetResponseObject, error) {
 	result, e := s.service.SetChoiceSetChoices(r.Name, r.Body.Choices)
@@ -28,7 +28,7 @@ func (s *Server) UpdateChoiceSet(
 	}
 
 	if e != nil {
-		return server.UpdateChoiceSet500JSONResponse(*s.captureDetail(e)), nil
+		return server.UpdateChoiceSet500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.UpdateChoiceSet200JSONResponse(*convert.ChoiceSet(result)), nil

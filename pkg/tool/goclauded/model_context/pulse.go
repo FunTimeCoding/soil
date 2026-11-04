@@ -15,7 +15,7 @@ func (s *Server) pulse(
 	c, e := s.resolveCaller(x, constant.Pulse)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	line, e := q.RequireString(constant.Line)
@@ -30,7 +30,7 @@ func (s *Server) pulse(
 		line,
 		constant.DeliveryQueued,
 	); f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	return response.Success("pulse sent")

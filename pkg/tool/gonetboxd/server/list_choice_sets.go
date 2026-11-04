@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListChoiceSets(
-	_ context.Context,
+	x context.Context,
 	_ server.ListChoiceSetsRequestObject,
 ) (server.ListChoiceSetsResponseObject, error) {
 	result, e := s.service.ChoiceSets()
@@ -18,7 +18,7 @@ func (s *Server) ListChoiceSets(
 	}
 
 	if e != nil {
-		return server.ListChoiceSets500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListChoiceSets500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListChoiceSets200JSONResponse(convert.ChoiceSets(result)), nil

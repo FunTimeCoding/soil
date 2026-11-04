@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListVirtualAddresses(
-	_ context.Context,
+	x context.Context,
 	r server.ListVirtualAddressesRequestObject,
 ) (server.ListVirtualAddressesResponseObject, error) {
 	addresses, e := s.service.VirtualMachineAddresses(r.Name)
@@ -23,7 +23,9 @@ func (s *Server) ListVirtualAddresses(
 	}
 
 	if e != nil {
-		return server.ListVirtualAddresses500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListVirtualAddresses500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.ListVirtualAddresses200JSONResponse(

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetLinkNotes(
-	_ context.Context,
+	x context.Context,
 	r server.GetLinkNotesRequestObject,
 ) (server.GetLinkNotesResponseObject, error) {
 	page := 1
@@ -33,7 +33,7 @@ func (s *Server) GetLinkNotes(
 	}
 
 	if e != nil {
-		return server.GetLinkNotes500JSONResponse(*s.answer(e)), nil
+		return server.GetLinkNotes500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]server.Note, len(v.Items))

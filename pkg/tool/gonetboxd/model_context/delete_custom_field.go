@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) deleteCustomField(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -25,7 +25,7 @@ func (s *Server) deleteCustomField(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "custom field not deleted")
+		return s.captureFail(x, f, "custom field not deleted")
 	}
 
 	return response.Success("custom field deleted")

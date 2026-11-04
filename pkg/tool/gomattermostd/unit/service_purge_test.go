@@ -39,6 +39,7 @@ func TestPurgeDropsStaleOnlyAndForgetsTheRoot(t *testing.T) {
 	assert.String(t, "kilo", notified[0].Callsign)
 	assert.StringContains(t, "papa", notified[0].Body)
 	assert.StringContains(t, "7 days", notified[0].Body)
+	assert.String(t, "queued", string(*notified[0].Delivery))
 }
 
 func TestPurgeIsQuietWhenNothingIsStale(t *testing.T) {

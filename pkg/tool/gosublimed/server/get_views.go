@@ -6,13 +6,13 @@ import (
 )
 
 func (s *Server) GetViews(
-	_ context.Context,
+	x context.Context,
 	_ server.GetViewsRequestObject,
 ) (server.GetViewsResponseObject, error) {
 	views, e := s.service.Views()
 
 	if e != nil {
-		return server.GetViews500JSONResponse(*s.answer(e)), nil
+		return server.GetViews500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make(server.GetViews200JSONResponse, 0, len(views))

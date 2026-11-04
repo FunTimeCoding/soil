@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) LinkIssues(
-	_ context.Context,
+	x context.Context,
 	r server.LinkIssuesRequestObject,
 ) (server.LinkIssuesResponseObject, error) {
 	linkType := "Relates"
@@ -38,7 +38,7 @@ func (s *Server) LinkIssues(
 	}
 
 	if e != nil {
-		return server.LinkIssues500JSONResponse(*s.answer(e)), nil
+		return server.LinkIssues500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.LinkIssues204Response{}, nil

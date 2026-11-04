@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) EditLink(
-	_ context.Context,
+	x context.Context,
 	r server.EditLinkRequestObject,
 ) (server.EditLinkResponseObject, error) {
 	o := edit_link_option.Option{}
@@ -55,7 +55,7 @@ func (s *Server) EditLink(
 	}
 
 	if e != nil {
-		return server.EditLink500JSONResponse(*s.answer(e)), nil
+		return server.EditLink500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.EditLink200JSONResponse{

@@ -1,7 +1,6 @@
 package message
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"unicode/utf8"
 )
@@ -9,13 +8,15 @@ import (
 func (s *Service) watchBudget(text string) {
 	characters := utf8.RuneCountInString(text)
 
-	if characters <= constant.DeliveryBudget {
+	if !s.metric.ObserveDelivery(characters) {
 		return
 	}
 
-	s.reporter.CaptureWithContext(
-		errors.New(constant.DeliveryOverBudget),
-		constant.DeliveryContextKey,
-		map[string]any{constant.DeliveryCharacters: characters},
+	s.logger.Structured(
+		constant.DeliveryOverBudget,
+		constant.DeliveryCharacters,
+		characters,
+		constant.DeliveryBudgetKey,
+		constant.DeliveryBudget,
 	)
 }

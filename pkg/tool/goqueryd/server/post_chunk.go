@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostChunk(
-	_ context.Context,
+	x context.Context,
 	r server.PostChunkRequestObject,
 ) (server.PostChunkResponseObject, error) {
 	p := s.service.Preview(r.Body.Path, r.Body.Body)
@@ -14,10 +14,10 @@ func (s *Server) PostChunk(
 
 	for i, c := range p.Chunks {
 		chunks[i] = server.PreviewChunk{
-			Index:      c.Index,
-			FirstLine:  c.FirstLine,
-			LastLine:   c.LastLine,
-			Bytes:      c.Bytes,
+			Index:       c.Index,
+			FirstLine:   c.FirstLine,
+			LastLine:    c.LastLine,
+			Bytes:       c.Bytes,
 			Tokens:      c.Tokens,
 			EmbedTokens: c.EmbedTokens,
 			Piece:       c.Piece,
@@ -29,8 +29,8 @@ func (s *Server) PostChunk(
 
 	sections := make([]server.PreviewSection, len(p.Sections))
 
-	for i, x := range p.Sections {
-		sections[i] = convertPreviewSection(x)
+	for i, section := range p.Sections {
+		sections[i] = convertPreviewSection(section)
 	}
 
 	return server.PostChunk200JSONResponse{

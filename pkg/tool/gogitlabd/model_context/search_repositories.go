@@ -19,13 +19,13 @@ func (s *Server) SearchRepositories(
 	instance, e := s.resolveInstance(x)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	v, e := s.service.Projects(x, instance, a.Query)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	return response.SuccessAny(v)

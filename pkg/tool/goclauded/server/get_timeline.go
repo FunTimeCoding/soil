@@ -30,7 +30,7 @@ func (s *Server) GetTimeline(
 
 	if timelineError != nil {
 		return server.GetTimeline500JSONResponse(
-			*s.captureFail(timelineError, soil.UnexpectedError),
+			*s.captureFail(x, timelineError, soil.UnexpectedError),
 		), nil
 	}
 

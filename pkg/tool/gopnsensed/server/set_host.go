@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) SetHost(
-	_ context.Context,
+	x context.Context,
 	r server.SetHostRequestObject,
 ) (server.SetHostResponseObject, error) {
 	e := s.service.SetHost(
@@ -27,7 +27,7 @@ func (s *Server) SetHost(
 	}
 
 	if e != nil {
-		return server.SetHost500JSONResponse(*s.answer(e)), nil
+		return server.SetHost500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.SetHost204Response{}, nil

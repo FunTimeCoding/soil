@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) scoreTask(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
@@ -23,7 +23,7 @@ func (s *Server) scoreTask(
 	result, g := s.service.Score(identifier, direction)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	return response.SuccessAny(convert.ScoreResult(result))

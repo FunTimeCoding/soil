@@ -9,12 +9,12 @@ import (
 )
 
 func (s *Server) deleteGroup(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Group,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.DeleteGroup(a.Name); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(fmt.Sprintf("deleted group: %s", a.Name))

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listPools(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Pools(
@@ -17,7 +17,7 @@ func (s *Server) listPools(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Pools(result))

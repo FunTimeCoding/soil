@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) GetCreateMeta(
-	_ context.Context,
+	x context.Context,
 	r server.GetCreateMetaRequestObject,
 ) (server.GetCreateMetaResponseObject, error) {
 	var expand []string
@@ -37,7 +37,7 @@ func (s *Server) GetCreateMeta(
 	}
 
 	if e != nil {
-		return server.GetCreateMeta500JSONResponse(*s.answer(e)), nil
+		return server.GetCreateMeta500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.GetCreateMeta200JSONResponse

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PostAnnounce(
-	_ context.Context,
+	x context.Context,
 	r server.PostAnnounceRequestObject,
 ) (server.PostAnnounceResponseObject, error) {
 	var files string
@@ -22,7 +22,7 @@ func (s *Server) PostAnnounce(
 
 	if e != nil {
 		return server.PostAnnounce500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -39,7 +39,7 @@ func (s *Server) PostAnnounce(
 		}
 
 		return server.PostAnnounce500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

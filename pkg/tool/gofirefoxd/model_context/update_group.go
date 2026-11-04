@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) UpdateGroup(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.UpdateGroup,
 ) (*mcp.CallToolResult, error) {
@@ -17,7 +17,7 @@ func (s *Server) UpdateGroup(
 		a.Title,
 		a.Color,
 	); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("group updated")

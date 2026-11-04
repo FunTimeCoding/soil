@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListHosts(
-	_ context.Context,
+	x context.Context,
 	r server.ListHostsRequestObject,
 ) (server.ListHostsResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListHosts(
 	result, e := s.service.Hosts(phrase)
 
 	if e != nil {
-		return server.ListHosts500JSONResponse(*s.answer(e)), nil
+		return server.ListHosts500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListHosts200JSONResponse(convert.Hosts(result)), nil

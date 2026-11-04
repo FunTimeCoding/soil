@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) Fill(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Fill,
 ) (*mcp.CallToolResult, error) {
@@ -25,7 +25,7 @@ func (s *Server) Fill(
 	v, e := s.service.Fill(r)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	if !r.Snapshot {

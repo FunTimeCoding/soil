@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ListPlaces(
-	_ context.Context,
+	x context.Context,
 	_ server.ListPlacesRequestObject,
 ) (server.ListPlacesResponseObject, error) {
 	v, e := s.service.Places()
 
 	if e != nil {
 		return server.ListPlaces500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

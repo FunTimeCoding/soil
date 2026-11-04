@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetSessionToolContext(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionToolContextRequestObject,
 ) (server.GetSessionToolContextResponseObject, error) {
 	surround := 1

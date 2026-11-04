@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"context"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/caller"
@@ -8,6 +9,7 @@ import (
 )
 
 func (s *Server) targetSession(
+	x context.Context,
 	c *caller.Caller,
 	target string,
 ) (string, *mcp.CallToolResult, error) {
@@ -26,7 +28,7 @@ func (s *Server) targetSession(
 	r, f := s.roster.ResolveSessionIdentifier(target)
 
 	if f != nil {
-		result, e := s.captureFail(f, soil.UnexpectedError)
+		result, e := s.captureFail(x, f, soil.UnexpectedError)
 
 		return "", result, e
 	}

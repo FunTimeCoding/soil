@@ -21,13 +21,13 @@ func (s *Server) query(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	v, e := s.service.Query(x, instance, a.Query, time.Now())
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(convert.QueryResult(v))

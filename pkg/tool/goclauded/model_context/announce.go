@@ -49,14 +49,14 @@ func (s *Server) announce(
 				return response.Fail(f.Error())
 			}
 
-			return s.captureFail(f, soil.UnexpectedError)
+			return s.captureFail(x, f, soil.UnexpectedError)
 		}
 	}
 
 	c, g := s.resolveCaller(x, constant.Announce)
 
 	if g != nil {
-		return s.captureFail(g, soil.UnexpectedError)
+		return s.captureFail(x, g, soil.UnexpectedError)
 	}
 
 	if f := s.roster.Announce(
@@ -69,7 +69,7 @@ func (s *Server) announce(
 			return response.Fail(f.Error())
 		}
 
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	return response.Success(

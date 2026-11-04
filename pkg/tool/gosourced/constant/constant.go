@@ -45,11 +45,15 @@ const (
 	RemoveImport         = "remove_import"
 	RetargetReferences   = "retarget_references"
 	RemoveParameters     = "remove_parameters"
+	AddParameters        = "add_parameters"
+	NameParameters       = "name_parameters"
 )
 
 const (
 	ConcernValidation      = "validation"
 	ConcernRemoved         = "removed"
+	ConcernAdded           = "added"
+	ConcernNamed           = "named"
 	ConcernValueUse        = "value_use"
 	ConcernStillUsed       = "still_used"
 	ConcernSideEffect      = "side_effect"

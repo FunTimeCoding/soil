@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) setHost(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := r.GetString(generativeConstant.ParameterIdentifier, "")
@@ -19,7 +19,7 @@ func (s *Server) setHost(
 		hostRequest(r),
 		r.GetBool(constant.ParameterApply, true),
 	); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(identifier)

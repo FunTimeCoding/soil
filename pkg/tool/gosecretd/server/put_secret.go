@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PutSecret(
-	_ context.Context,
+	x context.Context,
 	r server.PutSecretRequestObject,
 ) (server.PutSecretResponseObject, error) {
 	var values map[string]string
@@ -23,7 +23,7 @@ func (s *Server) PutSecret(
 	}
 
 	if e != nil {
-		return server.PutSecret500JSONResponse(*s.answer(e)), nil
+		return server.PutSecret500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PutSecret200JSONResponse{

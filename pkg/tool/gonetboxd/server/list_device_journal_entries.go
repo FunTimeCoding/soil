@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListDeviceJournalEntries(
-	_ context.Context,
+	x context.Context,
 	r server.ListDeviceJournalEntriesRequestObject,
 ) (server.ListDeviceJournalEntriesResponseObject, error) {
 	var limit int32
@@ -35,7 +35,7 @@ func (s *Server) ListDeviceJournalEntries(
 
 	if e != nil {
 		return server.ListDeviceJournalEntries500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

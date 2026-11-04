@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListMachines(
-	_ context.Context,
+	x context.Context,
 	r server.ListMachinesRequestObject,
 ) (server.ListMachinesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListMachines(
 	}
 
 	if e != nil {
-		return server.ListMachines500JSONResponse(*s.answer(e)), nil
+		return server.ListMachines500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -47,7 +47,7 @@ func (s *Server) ListMachines(
 	case unavailable.Is(e):
 		return server.ListMachines503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListMachines500JSONResponse(*s.answer(e)), nil
+		return server.ListMachines500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	pointers := convert.Machines(machines)

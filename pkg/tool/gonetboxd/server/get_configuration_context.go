@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r server.GetConfigurationContextRequestObject,
 ) (server.GetConfigurationContextResponseObject, error) {
 	result, e := s.service.ConfigurationContextByName(r.Name)
@@ -24,7 +24,7 @@ func (s *Server) GetConfigurationContext(
 
 	if e != nil {
 		return server.GetConfigurationContext500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

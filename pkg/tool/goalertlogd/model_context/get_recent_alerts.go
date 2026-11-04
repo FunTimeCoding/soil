@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) getRecentAlerts(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	now := time.Now()
@@ -40,7 +40,7 @@ func (s *Server) getRecentAlerts(
 	records, f := s.service.RecentAlerts(start, end)
 
 	if f != nil {
-		return s.answer(f)
+		return s.answer(x, f)
 	}
 
 	return response.Success(

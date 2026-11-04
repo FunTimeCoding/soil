@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetSessionsHeatmap(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionsHeatmapRequestObject,
 ) (server.GetSessionsHeatmapResponseObject, error) {
 	sessions := s.transcript.Sessions()

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostRevocation(
-	_ context.Context,
+	x context.Context,
 	r server.PostRevocationRequestObject,
 ) (server.PostRevocationResponseObject, error) {
 	result, e := s.service.Revoke(r.Serial)
@@ -18,7 +18,7 @@ func (s *Server) PostRevocation(
 	}
 
 	if e != nil {
-		return server.PostRevocation500JSONResponse(*s.answer(e)), nil
+		return server.PostRevocation500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostRevocation200JSONResponse(

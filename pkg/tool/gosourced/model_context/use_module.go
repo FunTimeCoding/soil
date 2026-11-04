@@ -21,7 +21,7 @@ func (s *Server) useModule(
 	}
 
 	if e := s.selection.Select(x, a.Module); e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("active module set to %s", a.Module)

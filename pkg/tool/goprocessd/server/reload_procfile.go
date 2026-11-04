@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ReloadProcfile(
-	_ context.Context,
+	x context.Context,
 	_ server.ReloadProcfileRequestObject,
 ) (server.ReloadProcfileResponseObject, error) {
 	e := s.service.ReloadProcfile()
@@ -17,7 +17,7 @@ func (s *Server) ReloadProcfile(
 	}
 
 	if e != nil {
-		return server.ReloadProcfile500JSONResponse(*s.answer(e)), nil
+		return server.ReloadProcfile500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ReloadProcfile204Response{}, nil

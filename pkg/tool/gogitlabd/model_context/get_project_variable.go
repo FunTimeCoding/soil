@@ -23,13 +23,13 @@ func (s *Server) GetProjectVariable(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	v, e := s.service.ProjectVariable(x, instance, project, a.Key)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	return response.SuccessAny(v)

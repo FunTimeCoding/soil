@@ -1,6 +1,7 @@
 package service
 
 import (
+	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest"
 	"time"
 )
@@ -31,6 +32,7 @@ func (s *Service) Purge() []error {
 		if f := s.notifier.Notify(
 			callsign,
 			digest.Dropped(labels, s.purge),
+			goclaudedConstant.DeliveryQueued,
 		); f != nil {
 			result = append(result, f)
 		}

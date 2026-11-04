@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetSessionsSearch(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionsSearchRequestObject,
 ) (server.GetSessionsSearchResponseObject, error) {
 	var kinds []string
@@ -26,7 +26,7 @@ func (s *Server) GetSessionsSearch(
 
 	if e != nil {
 		return server.GetSessionsSearch500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

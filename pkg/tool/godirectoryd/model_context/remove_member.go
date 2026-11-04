@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) removeMember(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Member,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.RemoveMember(a.Name, a.Account)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

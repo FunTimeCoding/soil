@@ -13,7 +13,7 @@ import (
 )
 
 func (s *Server) CloneMachine(
-	_ context.Context,
+	x context.Context,
 	r server.CloneMachineRequestObject,
 ) (server.CloneMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -27,7 +27,7 @@ func (s *Server) CloneMachine(
 	}
 
 	if e != nil {
-		return server.CloneMachine500JSONResponse(*s.answer(e)), nil
+		return server.CloneMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -73,7 +73,7 @@ func (s *Server) CloneMachine(
 	case unavailable.Is(e):
 		return server.CloneMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.CloneMachine500JSONResponse(*s.answer(e)), nil
+		return server.CloneMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	status := "cloned"

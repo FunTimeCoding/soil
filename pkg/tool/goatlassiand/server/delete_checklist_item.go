@@ -34,7 +34,7 @@ func (s *Server) DeleteChecklistItem(
 	}
 
 	if e != nil {
-		return server.DeleteChecklistItem500JSONResponse(*s.answer(e)), nil
+		return server.DeleteChecklistItem500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteChecklistItem200JSONResponse(

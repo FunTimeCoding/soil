@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteLink(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteLinkRequestObject,
 ) (server.DeleteLinkResponseObject, error) {
 	e := s.service.DeleteLink(r.Identifier)
@@ -27,7 +27,7 @@ func (s *Server) DeleteLink(
 	}
 
 	if e != nil {
-		return server.DeleteLink500JSONResponse(*s.answer(e)), nil
+		return server.DeleteLink500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteLink204Response{}, nil

@@ -2525,6 +2525,8 @@ type PostDocumentResponse struct {
 	JSON200 *PushOutcome
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *ErrorResponse
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -2535,6 +2537,11 @@ func (r PostDocumentResponse) GetJSON200() *PushOutcome {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r PostDocumentResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PostDocumentResponse) GetJSON503() *ErrorResponse {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -3742,6 +3749,13 @@ func ParsePostDocumentResponse(rsp *http.Response) (*PostDocumentResponse, error
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

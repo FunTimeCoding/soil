@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) WaitFor(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.WaitFor,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.WaitFor(int(a.TabIdentifier), a.Selector, int(a.Timeout))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

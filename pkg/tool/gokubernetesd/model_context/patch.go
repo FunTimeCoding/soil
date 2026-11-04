@@ -28,7 +28,7 @@ func (s *Server) Patch(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	f := s.service.PatchResource(
@@ -45,7 +45,7 @@ func (s *Server) Patch(
 	)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	namespace := a.Namespace

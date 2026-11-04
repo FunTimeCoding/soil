@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) getAuthority(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Name,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Authority(a.Name)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Authority(result))

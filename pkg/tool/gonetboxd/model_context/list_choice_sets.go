@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listChoiceSets(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.ChoiceSets()
 
 	if e != nil {
-		return s.captureFail(e, "choice sets not listed")
+		return s.captureFail(x, e, "choice sets not listed")
 	}
 
 	return response.SuccessAny(convert.ChoiceSets(result))

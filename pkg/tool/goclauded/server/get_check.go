@@ -7,18 +7,18 @@ import (
 )
 
 func (s *Server) GetCheck(
-	_ context.Context,
+	x context.Context,
 	r server.GetCheckRequestObject,
 ) (server.GetCheckResponseObject, error) {
 	if r.Params.Preview != nil && *r.Params.Preview {
-		return s.checkPreview(r.Params.Session)
+		return s.checkPreview(x, r.Params.Session)
 	}
 
 	result, checkError := s.message.Check(r.Params.Session)
 
 	if checkError != nil {
 		return server.GetCheck500JSONResponse(
-			*s.captureFail(checkError, soil.UnexpectedError),
+			*s.captureFail(x, checkError, soil.UnexpectedError),
 		), nil
 	}
 

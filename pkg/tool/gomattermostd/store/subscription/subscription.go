@@ -8,6 +8,7 @@ type Subscription struct {
 	RootIdentifier    string    `gorm:"index;column:root_identifier"`
 	ChannelIdentifier string    `gorm:"column:channel_identifier"`
 	Alias             string    `gorm:"column:alias"`
+	Delivery          string    `gorm:"column:delivery"`
 	LastEvent         time.Time `gorm:"column:last_event_at"`
 	CreatedAt         time.Time `gorm:"column:created_at"`
 }

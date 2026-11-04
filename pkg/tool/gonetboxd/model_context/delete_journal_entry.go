@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) deleteJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireInt(generativeConstant.ParameterIdentifier)
@@ -18,7 +18,7 @@ func (s *Server) deleteJournalEntry(
 	}
 
 	if e := s.service.DeleteJournalEntry(int32(identifier)); e != nil {
-		return s.captureFail(e, "journal entry not deleted")
+		return s.captureFail(x, e, "journal entry not deleted")
 	}
 
 	return response.Success("journal entry deleted")

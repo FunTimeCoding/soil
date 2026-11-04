@@ -19,12 +19,22 @@ func pushTestDocument(
 	body string,
 	sourceType string,
 ) error {
-	s.EnsurePushCollection(collection)
+	if e := s.EnsurePushCollection(collection); e != nil {
+		return e
+	}
+
 	now := "2024-01-01T00:00:00Z"
 	hash := store.HashContent(body)
 	title := store.ExtractTitle(body, path)
-	s.InsertContent(hash, body, now)
-	s.InsertDocument(collection, path, title, hash, now)
+
+	if e := s.InsertContent(hash, body, now); e != nil {
+		return e
+	}
+
+	if e := s.InsertDocument(collection, path, title, hash, now); e != nil {
+		return e
+	}
+
 	r := mock_reranker.New()
 	defer errors.LogClose(r)
 	chunks := chunk.Document(body, path, r)

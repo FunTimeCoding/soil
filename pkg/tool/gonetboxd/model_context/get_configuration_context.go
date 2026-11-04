@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) getConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -26,7 +26,7 @@ func (s *Server) getConfigurationContext(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "configuration context not read")
+		return s.captureFail(x, f, "configuration context not read")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContext(result))

@@ -42,7 +42,13 @@ func TestTheWorkerReportsAnUnexpectedEmbeddingFailure(t *testing.T) {
 		service_tester.NewOption(t, m, newReranker(t)),
 		r,
 	)
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nzulu.\n",
+		nil,
+	)
 	assert.Count(t, 0, r.Events())
 	w := worker.New(v.Maintain, time.Hour, l, prometheus.NewRegistry(), r)
 	w.Start()

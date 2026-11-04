@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) SearchItems(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SearchItems,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.SearchItems(a.Q, a.Types, a.Page, a.PerPage)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

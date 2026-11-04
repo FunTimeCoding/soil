@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetChannel(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetChannel,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) GetChannel(
 	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	result := map[string]any{

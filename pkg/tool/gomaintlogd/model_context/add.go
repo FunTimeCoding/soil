@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) add(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	action, f := r.RequireString(constant.Action)
@@ -53,7 +53,7 @@ func (s *Server) add(
 	}
 
 	if h := s.service.Add(e); h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.Success(

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetIssue(
-	_ context.Context,
+	x context.Context,
 	r server.GetIssueRequestObject,
 ) (server.GetIssueResponseObject, error) {
 	result, e := s.service.Issue(r.Key)
@@ -28,7 +28,7 @@ func (s *Server) GetIssue(
 	}
 
 	if e != nil {
-		return server.GetIssue500JSONResponse(*s.answer(e)), nil
+		return server.GetIssue500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	converted := convert.JiraIssue(result)

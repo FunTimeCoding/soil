@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createVirtualAddress(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	vmName, f := r.RequireString(constant.VirtualMachine)
@@ -38,7 +38,7 @@ func (s *Server) createVirtualAddress(
 	)
 
 	if e != nil {
-		return s.serviceFail(e, "address not assigned")
+		return s.serviceFail(x, e, "address not assigned")
 	}
 
 	return response.SuccessAny(convert.Address(result))

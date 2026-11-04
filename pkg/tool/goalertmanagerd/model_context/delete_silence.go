@@ -19,13 +19,13 @@ func (s *Server) deleteSilence(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	e = s.service.DeleteSilence(x, instance, a.Identifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("silence expired: %s", a.Identifier)

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateTag(
-	_ context.Context,
+	x context.Context,
 	r server.CreateTagRequestObject,
 ) (server.CreateTagResponseObject, error) {
 	result, f := s.service.CreateTag(r.Body.Name)
@@ -32,7 +32,7 @@ func (s *Server) CreateTag(
 	}
 
 	if f != nil {
-		return server.CreateTag500JSONResponse(*s.answer(f)), nil
+		return server.CreateTag500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.CreateTag200JSONResponse{

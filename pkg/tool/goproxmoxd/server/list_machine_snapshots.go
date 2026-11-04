@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListMachineSnapshots(
-	_ context.Context,
+	x context.Context,
 	r server.ListMachineSnapshotsRequestObject,
 ) (server.ListMachineSnapshotsResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListMachineSnapshots(
 	}
 
 	if e != nil {
-		return server.ListMachineSnapshots500JSONResponse(*s.answer(e)), nil
+		return server.ListMachineSnapshots500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -51,7 +51,7 @@ func (s *Server) ListMachineSnapshots(
 	case unavailable.Is(e):
 		return server.ListMachineSnapshots503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListMachineSnapshots500JSONResponse(*s.answer(e)), nil
+		return server.ListMachineSnapshots500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	converted := convert.MachineSnapshots(snapshots)

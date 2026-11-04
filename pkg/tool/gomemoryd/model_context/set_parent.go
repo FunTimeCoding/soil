@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) setParent(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := int64(q.GetFloat(constant.MemoryIdentifier, 0))
@@ -30,7 +30,7 @@ func (s *Server) setParent(
 	}
 
 	if e := s.service.SetParent(identifier, parentIdentifier); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if parentIdentifier == nil {

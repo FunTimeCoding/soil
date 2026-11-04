@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createEntry(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Create,
 ) (*mcp.CallToolResult, error) {
@@ -22,7 +22,7 @@ func (s *Server) createEntry(
 	identifier, e := s.service.Create(a.Group, a.Title, fields)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(fmt.Sprintf("created %s", identifier))

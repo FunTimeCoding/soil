@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) CreateView(
-	_ context.Context,
+	x context.Context,
 	r server.CreateViewRequestObject,
 ) (server.CreateViewResponseObject, error) {
 	var syntax string
@@ -18,7 +18,7 @@ func (s *Server) CreateView(
 	v, e := s.service.CreateView(r.Body.Title, r.Body.Content, syntax)
 
 	if e != nil {
-		return server.CreateView500JSONResponse(*s.answer(e)), nil
+		return server.CreateView500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreateView200JSONResponse(*convertView(v)), nil

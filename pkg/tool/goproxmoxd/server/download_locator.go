@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) DownloadLocator(
-	_ context.Context,
+	x context.Context,
 	r server.DownloadLocatorRequestObject,
 ) (server.DownloadLocatorResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -25,7 +25,7 @@ func (s *Server) DownloadLocator(
 	}
 
 	if e != nil {
-		return server.DownloadLocator500JSONResponse(*s.answer(e)), nil
+		return server.DownloadLocator500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	e = s.service.DownloadLocator(
@@ -47,7 +47,7 @@ func (s *Server) DownloadLocator(
 	case unavailable.Is(e):
 		return server.DownloadLocator503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.DownloadLocator500JSONResponse(*s.answer(e)), nil
+		return server.DownloadLocator500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	status := "downloaded"

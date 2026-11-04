@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetAlertsAfter(
-	_ context.Context,
+	x context.Context,
 	r server.GetAlertsAfterRequestObject,
 ) (server.GetAlertsAfterResponseObject, error) {
 	limit := constant.PageDefault
@@ -22,7 +22,7 @@ func (s *Server) GetAlertsAfter(
 	)
 
 	if e != nil {
-		return server.GetAlertsAfter500JSONResponse(*s.answer(e)), nil
+		return server.GetAlertsAfter500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetAlertsAfter200JSONResponse(toResponse(records)), nil

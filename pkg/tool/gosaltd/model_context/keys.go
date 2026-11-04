@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) keys(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Keys()
@@ -19,7 +19,7 @@ func (s *Server) keys(
 	}
 
 	if e != nil {
-		return s.captureFail(e, constant.KeysFail)
+		return s.captureFail(x, e, constant.KeysFail)
 	}
 
 	return response.SuccessAny(result)

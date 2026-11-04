@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) RollbackContainerSnapshot(
-	_ context.Context,
+	x context.Context,
 	r server.RollbackContainerSnapshotRequestObject,
 ) (server.RollbackContainerSnapshotResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) RollbackContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.RollbackContainerSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.RollbackContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -54,7 +54,7 @@ func (s *Server) RollbackContainerSnapshot(
 	case unavailable.Is(e):
 		return server.RollbackContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.RollbackContainerSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.RollbackContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.RollbackContainerSnapshot200JSONResponse{

@@ -15,7 +15,7 @@ func (s *Server) publish(
 	commit, change, e := s.service.Publish(x)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if commit == "" {

@@ -16,7 +16,7 @@ func (s *Server) Reconcile(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	p, e := s.service.Reconcile(x, instance, a.Full, a.Write)
@@ -26,7 +26,7 @@ func (s *Server) Reconcile(
 	}
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(p)

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createVirtualMachine(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -28,7 +28,7 @@ func (s *Server) createVirtualMachine(
 	result, e := s.service.CreateVirtualMachine(name, clusterName)
 
 	if e != nil {
-		return s.serviceFail(e, "virtual machine not created")
+		return s.serviceFail(x, e, "virtual machine not created")
 	}
 
 	return response.SuccessAny(convert.VirtualMachine(result))

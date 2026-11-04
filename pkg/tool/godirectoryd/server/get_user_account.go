@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetUserAccount(
-	_ context.Context,
+	x context.Context,
 	r server.GetUserAccountRequestObject,
 ) (server.GetUserAccountResponseObject, error) {
 	result, e := s.service.User(r.Account)
@@ -28,7 +28,7 @@ func (s *Server) GetUserAccount(
 	}
 
 	if e != nil {
-		return server.GetUserAccount500JSONResponse(*s.answer(e)), nil
+		return server.GetUserAccount500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetUserAccount200JSONResponse(*convert.User(result)), nil

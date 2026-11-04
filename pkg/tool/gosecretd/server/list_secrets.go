@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListSecrets(
-	_ context.Context,
+	x context.Context,
 	r server.ListSecretsRequestObject,
 ) (server.ListSecretsResponseObject, error) {
 	path := ""
@@ -23,7 +23,7 @@ func (s *Server) ListSecrets(
 	}
 
 	if e != nil {
-		return server.ListSecrets500JSONResponse(*s.answer(e)), nil
+		return server.ListSecrets500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListSecrets200JSONResponse{Path: path, Entries: result}, nil

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteComment(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteCommentRequestObject,
 ) (server.DeleteCommentResponseObject, error) {
 	e := s.service.DeleteComment(r.Key, r.Identifier)
@@ -27,7 +27,7 @@ func (s *Server) DeleteComment(
 	}
 
 	if e != nil {
-		return server.DeleteComment500JSONResponse(*s.answer(e)), nil
+		return server.DeleteComment500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteComment204Response{}, nil

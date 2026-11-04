@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CloseTab(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CloseTab,
 ) (*mcp.CallToolResult, error) {
@@ -18,7 +18,7 @@ func (s *Server) CloseTab(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("closed tab: %s", t.Title)

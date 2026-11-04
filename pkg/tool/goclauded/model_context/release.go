@@ -15,7 +15,7 @@ func (s *Server) release(
 	c, e := s.resolveCaller(x, constant.Release)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -25,7 +25,7 @@ func (s *Server) release(
 	}
 
 	if e := s.roster.Release(c.SessionIdentifier, c.Callsign); e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	return response.Success("Released")

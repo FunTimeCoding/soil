@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) DeleteCollection(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteCollectionRequestObject,
 ) (server.DeleteCollectionResponseObject, error) {
 	deleted := s.service.DeleteCollection(r.Params.Name)

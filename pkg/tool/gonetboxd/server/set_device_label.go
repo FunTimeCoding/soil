@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) SetDeviceLabel(
-	_ context.Context,
+	x context.Context,
 	r server.SetDeviceLabelRequestObject,
 ) (server.SetDeviceLabelResponseObject, error) {
 	result, e := s.service.SetDeviceLabel(r.Name, r.Key, r.Body.Value)
@@ -28,7 +28,7 @@ func (s *Server) SetDeviceLabel(
 	}
 
 	if e != nil {
-		return server.SetDeviceLabel500JSONResponse(*s.captureDetail(e)), nil
+		return server.SetDeviceLabel500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.SetDeviceLabel200JSONResponse(*convert.Label(result)), nil

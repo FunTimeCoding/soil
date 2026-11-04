@@ -35,7 +35,7 @@ func (s *Server) DownloadLocator(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	e = s.service.DownloadLocator(
@@ -48,7 +48,7 @@ func (s *Server) DownloadLocator(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("downloaded")

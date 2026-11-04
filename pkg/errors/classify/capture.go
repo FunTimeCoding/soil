@@ -1,22 +1,27 @@
 package classify
 
 import (
+	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/caller_left"
 	"github.com/funtimecoding/soil/pkg/face"
 )
 
 func Capture(
+	x context.Context,
 	r face.Reporter,
 	e error,
 	message string,
 ) (string, string) {
 	text := Message(e, message)
 
-	if c := Class(e); c != "" && !Reportable(e) {
-		return text, r.CaptureException(
-			fmt.Errorf("missing %s branch: %w", c, e),
-		)
+	if caller_left.Is(e) {
+		return text, ""
 	}
 
-	return text, r.CaptureException(e)
+	if c := Class(e); c != "" && !Reportable(e) {
+		return text, r.Capture(x, fmt.Errorf("missing %s branch: %w", c, e))
+	}
+
+	return text, r.Capture(x, e)
 }

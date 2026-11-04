@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) ClearLog(
-	_ context.Context,
+	x context.Context,
 	r server.ClearLogRequestObject,
 ) (server.ClearLogResponseObject, error) {
 	if e := s.service.ClearLog(r.Name); e != nil {

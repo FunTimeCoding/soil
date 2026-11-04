@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListVirtualInterfaces(
-	_ context.Context,
+	x context.Context,
 	r server.ListVirtualInterfacesRequestObject,
 ) (server.ListVirtualInterfacesResponseObject, error) {
 	interfaces, e := s.service.VirtualInterfaces(r.Name)
@@ -23,7 +23,9 @@ func (s *Server) ListVirtualInterfaces(
 	}
 
 	if e != nil {
-		return server.ListVirtualInterfaces500JSONResponse(*s.captureDetail(e)),
+		return server.ListVirtualInterfaces500JSONResponse(
+				*s.captureDetail(x, e),
+			),
 			nil
 	}
 

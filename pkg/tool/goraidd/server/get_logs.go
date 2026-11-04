@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetLogs(
-	_ context.Context,
+	x context.Context,
 	r server.GetLogsRequestObject,
 ) (server.GetLogsResponseObject, error) {
 	all := s.service.Fights()

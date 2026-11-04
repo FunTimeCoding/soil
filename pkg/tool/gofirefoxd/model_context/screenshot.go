@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) Screenshot(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Screenshot,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.Screenshot(int(a.TabIdentifier))
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

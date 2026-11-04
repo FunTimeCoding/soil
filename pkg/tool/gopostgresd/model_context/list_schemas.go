@@ -16,13 +16,14 @@ func (s *Server) listSchemas(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	v, e := s.service.ListSchemas(x, instance)
 
 	if e != nil {
 		return s.answerWith(
+			x,
 			e,
 			fmt.Sprintf("database error on %s: schemas not listed", instance),
 		)

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) auditEntries(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Audit,
 ) (*mcp.CallToolResult, error) {

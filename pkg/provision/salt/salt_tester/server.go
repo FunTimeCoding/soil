@@ -15,4 +15,6 @@ type Server struct {
 	answers  map[string]string
 	hold     chan struct{}
 	holding  chan struct{}
+	gateway  int
+	page     string
 }

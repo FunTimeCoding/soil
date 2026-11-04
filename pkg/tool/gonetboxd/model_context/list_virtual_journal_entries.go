@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listVirtualJournalEntries(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -26,6 +26,7 @@ func (s *Server) listVirtualJournalEntries(
 
 	if g != nil {
 		return s.captureFail(
+			x,
 			g,
 			"journal entries not listed for virtual machine",
 		)

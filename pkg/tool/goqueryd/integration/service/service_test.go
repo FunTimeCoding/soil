@@ -17,7 +17,7 @@ func TestCollectionFacets(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"a.md",
@@ -31,7 +31,7 @@ func TestCollectionFacets(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"b.md",
@@ -45,7 +45,7 @@ func TestCollectionFacets(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"c.md",
@@ -74,7 +74,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"a.md",
@@ -88,7 +88,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"b.md",
@@ -140,7 +140,7 @@ func TestEmbedAfterPush(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"embed-me.md",
@@ -215,7 +215,7 @@ func TestPushDocumentAppearsInList(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"first.md",
@@ -235,7 +235,7 @@ func TestPushDocumentAppearsInSearch(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"searchable.md",
@@ -257,12 +257,12 @@ func TestPushDocumentDedup(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(t.Context(), "notes", "first.md", body, nil),
+		s.Service.MustPushDocument(t.Context(), "notes", "first.md", body, nil),
 	)
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(t.Context(), "notes", "first.md", body, nil),
+		s.Service.MustPushDocument(t.Context(), "notes", "first.md", body, nil),
 	)
 	outcome, e := s.Service.ListDocuments("notes", nil, 0, 0, false)
 	assert.FatalOnError(t, e)
@@ -276,7 +276,7 @@ func TestPushDocumentUpdate(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"evolving.md",
@@ -287,7 +287,7 @@ func TestPushDocumentUpdate(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"notes",
 			"evolving.md",
@@ -307,7 +307,7 @@ func TestPushDocumentCreatesCollection(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.Service.PushDocument(
+		s.Service.MustPushDocument(
 			t.Context(),
 			"dynamic",
 			"auto.md",

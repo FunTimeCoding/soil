@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listTunnels(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Tunnels()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(convert.Tunnels(result))

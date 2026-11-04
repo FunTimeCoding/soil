@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listAliases(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Aliases(
@@ -17,7 +17,7 @@ func (s *Server) listAliases(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Aliases(result))

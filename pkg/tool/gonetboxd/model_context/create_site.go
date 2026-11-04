@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createSite(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) createSite(
 	result, g := s.service.CreateSite(name)
 
 	if g != nil {
-		return s.captureFail(g, "site not created")
+		return s.captureFail(x, g, "site not created")
 	}
 
 	return response.SuccessAny(convert.Site(result))

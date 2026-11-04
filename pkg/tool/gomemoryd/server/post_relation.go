@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostRelation(
-	_ context.Context,
+	x context.Context,
 	r server.PostRelationRequestObject,
 ) (server.PostRelationResponseObject, error) {
 	relationType := ""
@@ -20,7 +20,7 @@ func (s *Server) PostRelation(
 		r.Body.TargetIdentifier,
 		relationType,
 	); e != nil {
-		return server.PostRelation500JSONResponse(*s.answer(e)), nil
+		return server.PostRelation500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostRelation200Response{}, nil

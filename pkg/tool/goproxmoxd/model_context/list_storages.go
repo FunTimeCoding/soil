@@ -20,13 +20,13 @@ func (s *Server) ListStorages(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	storages, e := s.service.ListStorages(instance, a.Node)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	rows := make([]proxResponse.Storage, len(storages))

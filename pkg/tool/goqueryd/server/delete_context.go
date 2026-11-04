@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) DeleteContext(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteContextRequestObject,
 ) (server.DeleteContextResponseObject, error) {
 	deleted := s.service.RemoveContext(r.Params.Collection, r.Params.PathPrefix)

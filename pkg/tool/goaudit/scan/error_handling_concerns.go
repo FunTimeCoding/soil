@@ -102,7 +102,7 @@ func errorHandlingConcerns(
 					)
 				}
 
-				if code != "500" && r == "ErrorResponse" {
+				if code != "500" && code != "503" && r == "ErrorResponse" {
 					if isSuppressed(
 						suppress,
 						op.OperationIdentifier,

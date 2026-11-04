@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostMemory(
-	_ context.Context,
+	x context.Context,
 	r server.PostMemoryRequestObject,
 ) (server.PostMemoryResponseObject, error) {
 	m, e := s.service.CreateMemory(saveOption(*r.Body))
@@ -17,7 +17,7 @@ func (s *Server) PostMemory(
 			return server.PostMemory400JSONResponse{Error: e.Error()}, nil
 		}
 
-		return server.PostMemory500JSONResponse(*s.answer(e)), nil
+		return server.PostMemory500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostMemory200JSONResponse{Identifier: m.Identifier}, nil

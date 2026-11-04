@@ -15,6 +15,6 @@ type Daemon struct {
 	guards    map[string]*peer.Guard
 	forwards  *registry.Registry
 	service   *service.Service
-	readOnly  bool
+	armed     bool
 	closeOnce sync.Once
 }

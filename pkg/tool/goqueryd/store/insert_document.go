@@ -1,14 +1,12 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
-
 func (s *Store) InsertDocument(
 	collection string,
 	path string,
 	title string,
 	hash string,
 	now string,
-) {
+) error {
 	_, e := s.database.Exec(
 		`INSERT INTO document (collection, path, title, hash, created_at, modified_at)
 		VALUES (?, ?, ?, ?, ?, ?)
@@ -23,5 +21,6 @@ func (s *Store) InsertDocument(
 		now,
 		now,
 	)
-	errors.PanicOnError(e)
+
+	return e
 }

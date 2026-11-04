@@ -21,17 +21,17 @@ func (s *Server) UpdateMachine(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	e = s.service.UpdateMachine(instance, &a)
 
 	if e != nil {
 		if not_found.Is(e) || validation.Is(e) {
-			return s.captureDetail(e)
+			return s.captureDetail(x, e)
 		}
 
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("updated")

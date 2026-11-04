@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/observe_transport"
 	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
+	"github.com/funtimecoding/soil/pkg/web/trace_transport"
 	"github.com/funtimecoding/soil/pkg/web/verbose_transport"
 	"net"
 	"net/http"
@@ -50,6 +51,10 @@ func (b *Builder) Build() *pool.Pool {
 	}
 
 	var r http.RoundTripper = t
+
+	if b.traced {
+		r = trace_transport.New(t)
+	}
 
 	if b.basic {
 		r = basic_transport.New(b.user, b.password, r)

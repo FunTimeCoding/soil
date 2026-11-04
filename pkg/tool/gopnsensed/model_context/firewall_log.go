@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) firewallLog(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Log(
@@ -17,7 +17,7 @@ func (s *Server) firewallLog(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.LogEntries(result))

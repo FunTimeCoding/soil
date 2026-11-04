@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) SearchIssueEvents(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SearchIssueEvents,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) SearchIssueEvents(
 	result, e := s.service.IssueEvents(a.Identifier, a.Query, a.Limit, a.Cursor)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

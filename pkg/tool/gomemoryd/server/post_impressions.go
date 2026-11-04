@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostImpressions(
-	_ context.Context,
+	x context.Context,
 	r server.PostImpressionsRequestObject,
 ) (server.PostImpressionsResponseObject, error) {
 	source := ""
@@ -28,7 +28,7 @@ func (s *Server) PostImpressions(
 	)
 
 	if e != nil {
-		return server.PostImpressions500JSONResponse(*s.answer(e)), nil
+		return server.PostImpressions500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostImpressions200JSONResponse{Identifier: int(identifier)}, nil

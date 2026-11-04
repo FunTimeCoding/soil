@@ -9,12 +9,12 @@ import (
 )
 
 func (s *Server) setPassword(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SetPassword,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.SetPassword(a.Account, a.Password); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(fmt.Sprintf("password set: %s", a.Account))

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetVersions(
-	_ context.Context,
+	x context.Context,
 	r server.GetVersionsRequestObject,
 ) (server.GetVersionsResponseObject, error) {
 	limit := 50
@@ -24,13 +24,13 @@ func (s *Server) GetVersions(
 	versions, e := s.service.VersionsSince(r.Params.Since, limit, offset)
 
 	if e != nil {
-		return server.GetVersions500JSONResponse(*s.answer(e)), nil
+		return server.GetVersions500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	hidden, e := s.service.HiddenIdentifiers()
 
 	if e != nil {
-		return server.GetVersions500JSONResponse(*s.answer(e)), nil
+		return server.GetVersions500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	entries := make([]server.VersionEntry, 0, len(versions))

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetPackages(
-	_ context.Context,
+	x context.Context,
 	r server.GetPackagesRequestObject,
 ) (server.GetPackagesResponseObject, error) {
 	name := ""
@@ -19,7 +19,7 @@ func (s *Server) GetPackages(
 	listings, e := s.service.Packages(name)
 
 	if e != nil {
-		return server.GetPackages500JSONResponse(*s.answer(e)), nil
+		return server.GetPackages500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetPackages200JSONResponse(convert.Listings(listings)), nil

@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) FindReleases(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.FindReleases,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Releases(a.Query, a.Limit)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

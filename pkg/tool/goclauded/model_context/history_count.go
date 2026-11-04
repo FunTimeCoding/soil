@@ -16,13 +16,13 @@ func (s *Server) historyCount(
 	_, e := s.resolveCaller(x, constant.HistoryCount)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	count, e := s.event.CountEvents()
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	return response.Success(fmt.Sprintf("%d events", count))

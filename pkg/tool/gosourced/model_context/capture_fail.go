@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/load_failure"
@@ -9,11 +10,12 @@ import (
 )
 
 func (s *Server) captureFail(
+	x context.Context,
 	e error,
 	message string,
 ) (*mcp.CallToolResult, error) {
 	if conflict.Is(e) {
-		return response.Answer(s.reporter, e)
+		return response.Answer(x, s.reporter, e)
 	}
 
 	if failure, okay := load_failure.As(e); okay {
@@ -28,5 +30,5 @@ func (s *Server) captureFail(
 		}
 	}
 
-	return response.CaptureFail(s.reporter, e, message)
+	return response.CaptureFail(x, s.reporter, e, message)
 }

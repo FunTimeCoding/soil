@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostSessionsExport(
-	_ context.Context,
+	x context.Context,
 	_ server.PostSessionsExportRequestObject,
 ) (server.PostSessionsExportResponseObject, error) {
 	var paths []string

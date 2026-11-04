@@ -16,7 +16,7 @@ func (s *Server) ListClusters(
 	active, e := s.selection.Active(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	result := []response.ClusterEntry{}

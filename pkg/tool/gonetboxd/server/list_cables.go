@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListCables(
-	_ context.Context,
+	x context.Context,
 	_ server.ListCablesRequestObject,
 ) (server.ListCablesResponseObject, error) {
 	cables, e := s.service.Cables()
@@ -18,7 +18,7 @@ func (s *Server) ListCables(
 	}
 
 	if e != nil {
-		return server.ListCables500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListCables500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListCables200JSONResponse(convert.Cables(cables)), nil

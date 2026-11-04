@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) RemoveVirtualTag(
-	_ context.Context,
+	x context.Context,
 	r server.RemoveVirtualTagRequestObject,
 ) (server.RemoveVirtualTagResponseObject, error) {
 	vm, e := s.service.RemoveVirtualTag(r.Name, r.Tag)
@@ -32,7 +32,7 @@ func (s *Server) RemoveVirtualTag(
 	}
 
 	if e != nil {
-		return server.RemoveVirtualTag500JSONResponse(*s.captureDetail(e)), nil
+		return server.RemoveVirtualTag500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	entry := server.VirtualMachine{Identifier: vm.Identifier, Name: vm.Name}

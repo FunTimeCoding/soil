@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/index"
 	"strings"
@@ -44,13 +45,15 @@ func (s *Store) Index(collection string) *index.Index {
 					r.Unchanged++
 				}
 			} else {
-				s.InsertContent(hash, content, now)
+				errors.PanicOnError(s.InsertContent(hash, content, now))
 				s.updateDocument(existing.Identifier, title, hash, now)
 				r.Updated++
 			}
 		} else {
-			s.InsertContent(hash, content, now)
-			s.InsertDocument(collection, relative, title, hash, now)
+			errors.PanicOnError(s.InsertContent(hash, content, now))
+			errors.PanicOnError(
+				s.InsertDocument(collection, relative, title, hash, now),
+			)
 			r.Indexed++
 		}
 	}

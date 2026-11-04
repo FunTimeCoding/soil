@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) linkIssues(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -27,7 +27,7 @@ func (s *Server) linkIssues(
 	linkType := r.GetString(constant.LinkType, "Relates")
 
 	if h := s.service.LinkIssues(key, target, linkType); h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.Success("%s %s %s", key, linkType, target)

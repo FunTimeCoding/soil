@@ -20,7 +20,7 @@ func (s *Server) StartContainer(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	taskIdentifier, e := s.service.StartContainer(
@@ -31,10 +31,10 @@ func (s *Server) StartContainer(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return s.captureDetail(e)
+			return s.captureDetail(x, e)
 		}
 
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(map[string]string{"task_id": taskIdentifier})

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteNote(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteNoteRequestObject,
 ) (server.DeleteNoteResponseObject, error) {
 	e := s.service.DeleteNote(int(r.Identifier))
@@ -27,7 +27,7 @@ func (s *Server) DeleteNote(
 	}
 
 	if e != nil {
-		return server.DeleteNote500JSONResponse(*s.answer(e)), nil
+		return server.DeleteNote500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteNote200Response{}, nil

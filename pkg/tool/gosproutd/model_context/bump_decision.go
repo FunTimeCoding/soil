@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) bumpDecision(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.BumpDecision,
 ) (*mcp.CallToolResult, error) {

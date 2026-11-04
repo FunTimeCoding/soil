@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) GetChannelHistory(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetChannelHistory,
 ) (*mcp.CallToolResult, error) {
@@ -28,7 +28,7 @@ func (s *Server) GetChannelHistory(
 	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	var posts []*post.Post
@@ -45,7 +45,7 @@ func (s *Server) GetChannelHistory(
 		posts, g = s.service.PostsSince(ch, since)
 
 		if g != nil {
-			return s.answer(g)
+			return s.answer(x, g)
 		}
 
 		if len(posts) > limit {
@@ -56,7 +56,7 @@ func (s *Server) GetChannelHistory(
 		posts, g = s.service.LatestPosts(ch, limit)
 
 		if g != nil {
-			return s.answer(g)
+			return s.answer(x, g)
 		}
 	}
 

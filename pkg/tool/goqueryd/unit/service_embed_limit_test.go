@@ -18,7 +18,7 @@ func TestARefusedChunkLeavesTheRestOfItsDocumentEmbedded(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(t.Context(), "manual", "manual.txt", body, nil)
+	v.MustPushDocument(t.Context(), "manual", "manual.txt", body, nil)
 	assert.Integer(t, 2, v.MustStatus().TotalEmbeddings)
 }
 
@@ -45,7 +45,7 @@ func TestAChunkOverTheEmbedderWindowNeverReachesTheEmbedder(t *testing.T) {
 	o := service_tester.NewOption(t, m, newReranker(t))
 	o.EmbedCounter = func() face.EmbedCounter { return c }
 	v := service_tester.New(t, o, memory.New())
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"manual",
 		"manual.txt",
@@ -66,7 +66,7 @@ func TestARecordedRefusalIsNotRetried(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("Bravo archive header")
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"dense",
 		"dense.md",
@@ -84,7 +84,7 @@ func TestRechunkLeavesARefusedDocumentAlone(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"manual",
 		"manual.txt",
@@ -101,7 +101,7 @@ func TestFailedListsTheRefusedChunk(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"manual",
 		"manual.txt",
@@ -124,8 +124,20 @@ func TestFailedListsTheRefusedChunk(t *testing.T) {
 
 func TestPruneRemovesAnOldVersionOfAPushedDocument(t *testing.T) {
 	v := newService(t, newEmbedder(t), newReranker(t))
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nyankee.\n", nil)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nzulu.\n",
+		nil,
+	)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nyankee.\n",
+		nil,
+	)
 	assert.Integer(t, 1, v.MustStatus().TotalEmbeddings)
 	assert.Integer(t, 1, int(v.Prune()))
 	assert.Integer(t, 0, int(v.Prune()))
@@ -139,7 +151,7 @@ func TestPruneKeepsTheContentOfARefusedDocument(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("Bravo archive header")
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"dense",
 		"dense.md",
@@ -154,7 +166,7 @@ func TestDeletingADocumentClearsItsFailures(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(
+	v.MustPushDocument(
 		t.Context(),
 		"manual",
 		"manual.txt",

@@ -19,13 +19,13 @@ func (s *Server) ListCommits(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	v, e := s.service.ListCommits(x, instance, project, a.Reference, 0)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	return response.SuccessAny(v)

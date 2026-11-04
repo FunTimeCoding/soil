@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) SetVirtualInterfacePhysicalAddress(
-	_ context.Context,
+	x context.Context,
 	r server.SetVirtualInterfacePhysicalAddressRequestObject,
 ) (server.SetVirtualInterfacePhysicalAddressResponseObject, error) {
 	updated, e := s.service.SetVirtualInterfacePhysicalAddress(
@@ -40,7 +40,7 @@ func (s *Server) SetVirtualInterfacePhysicalAddress(
 
 	if e != nil {
 		return server.SetVirtualInterfacePhysicalAddress500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

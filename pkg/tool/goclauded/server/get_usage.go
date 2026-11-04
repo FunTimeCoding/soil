@@ -7,14 +7,14 @@ import (
 )
 
 func (s *Server) GetUsage(
-	_ context.Context,
+	x context.Context,
 	_ server.GetUsageRequestObject,
 ) (server.GetUsageResponseObject, error) {
 	result, found, e := s.usage.FindUsage()
 
 	if e != nil {
 		return server.GetUsage500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

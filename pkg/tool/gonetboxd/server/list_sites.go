@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListSites(
-	_ context.Context,
+	x context.Context,
 	_ server.ListSitesRequestObject,
 ) (server.ListSitesResponseObject, error) {
 	sites, e := s.service.Sites()
@@ -18,7 +18,7 @@ func (s *Server) ListSites(
 	}
 
 	if e != nil {
-		return server.ListSites500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListSites500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListSites200JSONResponse(convert.Sites(sites)), nil

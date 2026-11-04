@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetTracks(
-	_ context.Context,
+	x context.Context,
 	r server.GetTracksRequestObject,
 ) (server.GetTracksResponseObject, error) {
 	items, e := s.service.Tracks(r.Identifier)
@@ -17,7 +17,7 @@ func (s *Server) GetTracks(
 	}
 
 	if e != nil {
-		return server.GetTracks500JSONResponse(*s.answer(e)), nil
+		return server.GetTracks500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetTracks200JSONResponse(convertItems(items)), nil

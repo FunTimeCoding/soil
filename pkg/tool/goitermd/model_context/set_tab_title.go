@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) SetTabTitle(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SetTabTitle,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.SetTabTitle(a.TabIdentifier, a.Title); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("set title: %s", a.Title)

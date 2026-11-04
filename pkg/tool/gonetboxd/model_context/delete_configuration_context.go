@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) deleteConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -25,7 +25,7 @@ func (s *Server) deleteConfigurationContext(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "configuration context not deleted")
+		return s.captureFail(x, f, "configuration context not deleted")
 	}
 
 	return response.Success("configuration context deleted")

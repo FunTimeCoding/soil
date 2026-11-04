@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) CreateMachineSnapshot(
-	_ context.Context,
+	x context.Context,
 	r server.CreateMachineSnapshotRequestObject,
 ) (server.CreateMachineSnapshotResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) CreateMachineSnapshot(
 	}
 
 	if e != nil {
-		return server.CreateMachineSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.CreateMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -54,7 +54,7 @@ func (s *Server) CreateMachineSnapshot(
 	case unavailable.Is(e):
 		return server.CreateMachineSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.CreateMachineSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.CreateMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreateMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

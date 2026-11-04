@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) revokeCertificate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Serial,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Revoke(a.Serial)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Certificate(result))

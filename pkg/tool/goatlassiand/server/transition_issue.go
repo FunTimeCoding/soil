@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) TransitionIssue(
-	_ context.Context,
+	x context.Context,
 	r server.TransitionIssueRequestObject,
 ) (server.TransitionIssueResponseObject, error) {
 	e := s.service.Transition(r.Key, r.Body.TransitionIdentifier)
@@ -32,7 +32,7 @@ func (s *Server) TransitionIssue(
 	}
 
 	if e != nil {
-		return server.TransitionIssue500JSONResponse(*s.answer(e)), nil
+		return server.TransitionIssue500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.TransitionIssue204Response{}, nil

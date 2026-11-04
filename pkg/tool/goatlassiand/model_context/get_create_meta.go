@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) getCreateMeta(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	project, f := r.RequireString(constant.Project)
@@ -36,7 +36,7 @@ func (s *Server) getCreateMeta(
 	t, h := s.service.CreateMeta(project, issueType)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.SuccessAny(convert.JiraCreateMeta(t, expand))

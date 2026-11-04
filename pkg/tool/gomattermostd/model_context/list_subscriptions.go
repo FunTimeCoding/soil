@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListSubscriptions(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListSubscriptions,
 ) (*mcp.CallToolResult, error) {
@@ -20,7 +20,7 @@ func (s *Server) ListSubscriptions(
 	result, e := s.service.Subscriptions(a.Callsign)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	rows := make([]*mattermostResponse.Subscription, len(result))

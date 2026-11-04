@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostBackfill(
-	_ context.Context,
+	x context.Context,
 	r server.PostBackfillRequestObject,
 ) (server.PostBackfillResponseObject, error) {
 	result := s.transcript.BackfillAllSessions()

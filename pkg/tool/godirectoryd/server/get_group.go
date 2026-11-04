@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetGroup(
-	_ context.Context,
+	x context.Context,
 	_ server.GetGroupRequestObject,
 ) (server.GetGroupResponseObject, error) {
 	result, e := s.service.Groups()
@@ -23,7 +23,7 @@ func (s *Server) GetGroup(
 	}
 
 	if e != nil {
-		return server.GetGroup500JSONResponse(*s.answer(e)), nil
+		return server.GetGroup500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetGroup200JSONResponse(convert.Groups(result)), nil

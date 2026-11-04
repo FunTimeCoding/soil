@@ -25,7 +25,7 @@ func (s *Server) Reconcile(
 	}
 
 	if e != nil {
-		return server.Reconcile500JSONResponse(*s.answer(e)), nil
+		return server.Reconcile500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	p, e := s.service.Reconcile(
@@ -45,7 +45,7 @@ func (s *Server) Reconcile(
 	case unavailable.Is(e):
 		return server.Reconcile503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.Reconcile500JSONResponse(*s.answer(e)), nil
+		return server.Reconcile500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.Reconcile200JSONResponse(convertPlan(p)), nil

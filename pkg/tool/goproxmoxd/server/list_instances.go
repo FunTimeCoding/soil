@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) ListInstances(
-	_ context.Context,
+	x context.Context,
 	_ server.ListInstancesRequestObject,
 ) (server.ListInstancesResponseObject, error) {
 	var result server.ListInstances200JSONResponse

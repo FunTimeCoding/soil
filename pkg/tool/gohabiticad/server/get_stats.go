@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetStats(
-	_ context.Context,
+	x context.Context,
 	_ server.GetStatsRequestObject,
 ) (server.GetStatsResponseObject, error) {
 	result, e := s.service.UserStats()
@@ -23,7 +23,7 @@ func (s *Server) GetStats(
 	}
 
 	if e != nil {
-		return server.GetStats500JSONResponse(*s.answer(e)), nil
+		return server.GetStats500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetStats200JSONResponse(*convert.Stats(result)), nil

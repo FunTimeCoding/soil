@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) deleteCollection(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := q.RequireString(generativeConstant.ParameterName)

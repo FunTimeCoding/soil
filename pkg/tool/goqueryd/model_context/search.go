@@ -46,7 +46,7 @@ func (s *Server) search(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "search failed")
+		return s.captureFail(x, f, "search failed")
 	}
 
 	return response.Success(notation.MarshalIndent(outcome))

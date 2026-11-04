@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateCable(
-	_ context.Context,
+	x context.Context,
 	r server.CreateCableRequestObject,
 ) (server.CreateCableResponseObject, error) {
 	result, e := s.service.CreateCable(
@@ -28,7 +28,7 @@ func (s *Server) CreateCable(
 	}
 
 	if e != nil {
-		return server.CreateCable500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateCable500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateCable201JSONResponse(*convert.Cable(result)), nil

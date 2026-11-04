@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetIssue(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetIssue,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) GetIssue(
 	result, e := s.service.Issue(a.Identifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

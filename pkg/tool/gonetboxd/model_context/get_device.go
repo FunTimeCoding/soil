@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) getDevice(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) getDevice(
 	d, labels, e := s.service.Device(name)
 
 	if e != nil {
-		return s.serviceFail(e, "device not retrieved")
+		return s.serviceFail(x, e, "device not retrieved")
 	}
 
 	return response.SuccessAny(convert.LabeledDevice(d, labels))

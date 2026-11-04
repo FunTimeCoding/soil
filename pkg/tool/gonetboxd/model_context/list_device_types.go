@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listDeviceTypes(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.DeviceTypes()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(convert.DeviceTypes(result))

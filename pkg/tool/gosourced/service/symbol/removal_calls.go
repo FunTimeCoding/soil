@@ -74,7 +74,7 @@ func removalCalls(
 			)
 		}
 
-		checkInterfaceSatisfaction(all, set, t, r)
+		checkInterfaceSatisfaction(all, set, t.Function, r)
 	}
 
 	return result

@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) GetRedactedMemories(
-	_ context.Context,
+	x context.Context,
 	_ server.GetRedactedMemoriesRequestObject,
 ) (server.GetRedactedMemoriesResponseObject, error) {
 	identifiers, e := s.service.HiddenIdentifiers()
 
 	if e != nil {
-		return server.GetRedactedMemories500JSONResponse(*s.answer(e)), nil
+		return server.GetRedactedMemories500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]int64, 0, len(identifiers))

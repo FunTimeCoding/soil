@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ShowSecret(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ShowSecret,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Keys(a.Path)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(map[string]any{"path": a.Path, "keys": result})

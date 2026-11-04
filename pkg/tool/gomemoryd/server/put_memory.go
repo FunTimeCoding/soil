@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PutMemory(
-	_ context.Context,
+	x context.Context,
 	r server.PutMemoryRequestObject,
 ) (server.PutMemoryResponseObject, error) {
 	existing, e := s.service.GetMemory(r.Identifier)
@@ -19,7 +19,7 @@ func (s *Server) PutMemory(
 	}
 
 	if e != nil {
-		return server.PutMemory500JSONResponse(*s.answer(e)), nil
+		return server.PutMemory500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	o := save_option.New()
@@ -58,7 +58,7 @@ func (s *Server) PutMemory(
 	}
 
 	if f != nil {
-		return server.PutMemory500JSONResponse(*s.answer(f)), nil
+		return server.PutMemory500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.PutMemory200JSONResponse{Identifier: m.Identifier}, nil

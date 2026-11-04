@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) RestartAll(
-	_ context.Context,
+	x context.Context,
 	_ server.RestartAllRequestObject,
 ) (server.RestartAllResponseObject, error) {
 	count, e := s.service.RestartAll()

@@ -18,7 +18,7 @@ func (s *Server) embed(
 	}
 
 	if e != nil {
-		return s.captureFail(e, "embed failed")
+		return s.captureFail(x, e, "embed failed")
 	}
 
 	return response.Success(

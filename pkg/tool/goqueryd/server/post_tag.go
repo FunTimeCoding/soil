@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostTag(
-	_ context.Context,
+	x context.Context,
 	r server.PostTagRequestObject,
 ) (server.PostTagResponseObject, error) {
 	collection := ""

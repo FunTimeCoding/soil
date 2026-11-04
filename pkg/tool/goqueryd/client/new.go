@@ -9,5 +9,5 @@ func New(
 	l *locator.Locator,
 	token string,
 ) *Client {
-	return wrap(l, token, stall_client.New().Build())
+	return wrap(l, token, stall_client.New().Traced().Build())
 }

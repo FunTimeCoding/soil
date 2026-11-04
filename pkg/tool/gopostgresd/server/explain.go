@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) Explain(
-	c context.Context,
+	x context.Context,
 	r server.ExplainRequestObject,
 ) (server.ExplainResponseObject, error) {
 	instance, e := s.resolveInstance(r.Body.Instance)
@@ -26,11 +26,11 @@ func (s *Server) Explain(
 	}
 
 	if e != nil {
-		return server.Explain500JSONResponse(*s.answerWith(e, "")), nil
+		return server.Explain500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	rows, e := s.service.Explain(
-		c,
+		x,
 		instance,
 		r.Body.Sql,
 		r.Body.Analyze != nil && *r.Body.Analyze,
@@ -53,7 +53,7 @@ func (s *Server) Explain(
 	}
 
 	if e != nil {
-		return server.Explain500JSONResponse(*s.answerWith(e, "")), nil
+		return server.Explain500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	return server.Explain200JSONResponse{

@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) GetNodeStatus(
-	_ context.Context,
+	x context.Context,
 	r server.GetNodeStatusRequestObject,
 ) (server.GetNodeStatusResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) GetNodeStatus(
 	}
 
 	if e != nil {
-		return server.GetNodeStatus500JSONResponse(*s.answer(e)), nil
+		return server.GetNodeStatus500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result, e := s.service.GetNodeStatus(instance, r.Name)
@@ -41,7 +41,7 @@ func (s *Server) GetNodeStatus(
 	case unavailable.Is(e):
 		return server.GetNodeStatus503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.GetNodeStatus500JSONResponse(*s.answer(e)), nil
+		return server.GetNodeStatus500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetNodeStatus200JSONResponse(*convert.NodeStatus(result)), nil

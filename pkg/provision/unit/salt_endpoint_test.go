@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/provision/salt/salt_tester"
 	"net/http"
@@ -44,6 +45,39 @@ func TestRefusalCarriesTheParagraph(t *testing.T) {
 	assert.StringContains(
 		t,
 		"salt-api status: 500: An unexpected error occurred",
+		e.Error(),
+	)
+}
+
+func TestAGatewayTimeoutIsUnavailable(t *testing.T) {
+	s := salt_tester.New(t, "bravo")
+	c := newSaltClient(t, s.URL, "bravo")
+	assert.FatalOnError(t, c.Login(t.Context()))
+	s.Gateway(http.StatusGatewayTimeout)
+	_, e := c.ListJobs()
+	assert.True(t, unavailable.Is(e))
+	assert.StringContains(t, "salt-api status: 504", e.Error())
+}
+
+func TestABadGatewayIsUnavailable(t *testing.T) {
+	s := salt_tester.New(t, "bravo")
+	c := newSaltClient(t, s.URL, "bravo")
+	assert.FatalOnError(t, c.Login(t.Context()))
+	s.Gateway(http.StatusBadGateway)
+	_, e := c.ListJobs()
+	assert.True(t, unavailable.Is(e))
+}
+
+func TestAClassifiedStatusWinsOverTheParagraph(t *testing.T) {
+	s := salt_tester.New(t, "bravo")
+	c := newSaltClient(t, s.URL, "bravo")
+	assert.FatalOnError(t, c.Login(t.Context()))
+	s.Refuse(http.StatusServiceUnavailable, "salt master is restarting")
+	_, e := c.ListJobs()
+	assert.True(t, unavailable.Is(e))
+	assert.StringContains(
+		t,
+		"salt-api status: 503: salt master is restarting",
 		e.Error(),
 	)
 }

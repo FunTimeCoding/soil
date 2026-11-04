@@ -57,13 +57,16 @@ func New(t *testing.T) *Tester {
 		stop: stopper.New(),
 	}
 	t.Cleanup(result.Close)
+	result.Registry = prometheus.NewRegistry()
+	m := metric.New(result.Registry)
 	result.Label = label.New(s.Store, d.Notifier)
 	result.Message = message.New(
 		s.Store,
 		d.Notifier,
 		result.stop,
 		s.Clock(),
-		d.Reporter,
+		m,
+		l,
 	)
 	result.Memory = memory.New(
 		s.Store,
@@ -75,13 +78,7 @@ func New(t *testing.T) *Tester {
 	)
 	result.Usage = usage.New(s.Store, d.Notifier, nil, s.Clock(), l, d.Reporter)
 	result.Search = search.New(s.Store, result.Index, d.Harbor)
-	result.Registry = prometheus.NewRegistry()
-	result.Document = document.New(
-		s.Store,
-		d.Query,
-		result.queryGuard,
-		metric.New(result.Registry),
-	)
+	result.Document = document.New(s.Store, d.Query, result.queryGuard, m)
 	result.Event = event.New(
 		s.Store,
 		result.Message,

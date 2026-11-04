@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreatePrefix(
-	_ context.Context,
+	x context.Context,
 	r server.CreatePrefixRequestObject,
 ) (server.CreatePrefixResponseObject, error) {
 	site := ""
@@ -35,7 +35,7 @@ func (s *Server) CreatePrefix(
 	}
 
 	if e != nil {
-		return server.CreatePrefix500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreatePrefix500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreatePrefix201JSONResponse(*convert.Prefix(p)), nil

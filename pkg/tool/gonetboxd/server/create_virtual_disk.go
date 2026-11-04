@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateVirtualDisk(
-	_ context.Context,
+	x context.Context,
 	r server.CreateVirtualDiskRequestObject,
 ) (server.CreateVirtualDiskResponseObject, error) {
 	result, e := s.service.CreateVirtualDisk(r.Name, r.Body.Name, r.Body.Size)
@@ -28,7 +28,7 @@ func (s *Server) CreateVirtualDisk(
 	}
 
 	if e != nil {
-		return server.CreateVirtualDisk500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateVirtualDisk500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateVirtualDisk201JSONResponse(*convert.Disk(result)), nil

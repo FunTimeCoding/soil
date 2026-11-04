@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) transitionIssue(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -25,7 +25,7 @@ func (s *Server) transitionIssue(
 	}
 
 	if h := s.service.Transition(key, transition); h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.Success("transition applied")

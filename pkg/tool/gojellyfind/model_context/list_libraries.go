@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ListLibraries(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.ListLibraries,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Libraries()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

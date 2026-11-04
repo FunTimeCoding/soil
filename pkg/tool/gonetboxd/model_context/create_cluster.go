@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createCluster(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -34,7 +34,7 @@ func (s *Server) createCluster(
 	result, e := s.service.CreateCluster(name, typeName, siteName)
 
 	if e != nil {
-		return s.serviceFail(e, "cluster not created")
+		return s.serviceFail(x, e, "cluster not created")
 	}
 
 	return response.SuccessAny(convert.Cluster(result))

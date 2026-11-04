@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostSweep(
-	_ context.Context,
+	x context.Context,
 	_ server.PostSweepRequestObject,
 ) (server.PostSweepResponseObject, error) {
 	result := s.transcript.Sweep()

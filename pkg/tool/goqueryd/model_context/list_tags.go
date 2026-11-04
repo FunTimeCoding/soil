@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) listTags(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	tags := s.service.ListSourceTypes()

@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createAuthority(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateAuthority,
 ) (*mcp.CallToolResult, error) {
@@ -28,7 +28,7 @@ func (s *Server) createAuthority(
 	result, e := s.service.CreateAuthority(b)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Authority(result))

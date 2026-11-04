@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) searchPages(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	query, f := r.RequireString(generativeConstant.ParameterQuery)
@@ -20,7 +20,7 @@ func (s *Server) searchPages(
 	result, g := s.service.SearchPages(query)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	return response.SuccessAny(result)

@@ -21,7 +21,7 @@ func (t *Tool[T, P]) UseInstance(
 	}
 
 	if e := t.selection.Select(x, a.Instance); e != nil {
-		return response.Answer(t.reporter, e)
+		return response.Answer(x, t.reporter, e)
 	}
 
 	return response.Success("active instance set to %s", a.Instance)

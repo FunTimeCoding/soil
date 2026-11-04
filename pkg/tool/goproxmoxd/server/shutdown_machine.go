@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ShutdownMachine(
-	_ context.Context,
+	x context.Context,
 	r server.ShutdownMachineRequestObject,
 ) (server.ShutdownMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ShutdownMachine(
 	}
 
 	if e != nil {
-		return server.ShutdownMachine500JSONResponse(*s.answer(e)), nil
+		return server.ShutdownMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -53,7 +53,7 @@ func (s *Server) ShutdownMachine(
 	case unavailable.Is(e):
 		return server.ShutdownMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ShutdownMachine500JSONResponse(*s.answer(e)), nil
+		return server.ShutdownMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ShutdownMachine200JSONResponse{TaskId: taskIdentifier}, nil

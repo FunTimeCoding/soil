@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) RevealSecret(
-	_ context.Context,
+	x context.Context,
 	r server.RevealSecretRequestObject,
 ) (server.RevealSecretResponseObject, error) {
 	result, e := s.service.Reveal(r.Params.Path, r.Params.Key)
@@ -22,7 +22,7 @@ func (s *Server) RevealSecret(
 	}
 
 	if e != nil {
-		return server.RevealSecret500JSONResponse(*s.answer(e)), nil
+		return server.RevealSecret500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.RevealSecret200JSONResponse{

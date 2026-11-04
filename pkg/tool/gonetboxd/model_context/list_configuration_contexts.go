@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listConfigurationContexts(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.ConfigurationContexts()
 
 	if e != nil {
-		return s.captureFail(e, "configuration contexts not listed")
+		return s.captureFail(x, e, "configuration contexts not listed")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContexts(result))

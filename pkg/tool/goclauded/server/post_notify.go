@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PostNotify(
-	_ context.Context,
+	x context.Context,
 	r server.PostNotifyRequestObject,
 ) (server.PostNotifyResponseObject, error) {
 	delivered, e := s.message.SendNotification(
@@ -33,7 +33,7 @@ func (s *Server) PostNotify(
 		}
 
 		return server.PostNotify500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

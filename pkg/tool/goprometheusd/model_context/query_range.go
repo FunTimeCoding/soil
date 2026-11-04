@@ -26,7 +26,7 @@ func (s *Server) queryRange(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	start, e := parseDurationOrTime(a.Start)
@@ -59,7 +59,7 @@ func (s *Server) queryRange(
 	)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.SuccessAny(convert.QueryResult(v))

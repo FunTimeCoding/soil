@@ -1,8 +1,9 @@
 package message
 
 import (
-	soilFace "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"time"
@@ -13,5 +14,6 @@ type Service struct {
 	notifier face.Notifier
 	stop     *stopper.Stopper
 	clock    func() time.Time
-	reporter soilFace.Reporter
+	metric   *metric.Metric
+	logger   *logger.Logger
 }

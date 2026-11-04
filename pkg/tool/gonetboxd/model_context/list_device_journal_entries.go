@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listDeviceJournalEntries(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -25,7 +25,7 @@ func (s *Server) listDeviceJournalEntries(
 	)
 
 	if g != nil {
-		return s.captureFail(g, "journal entries not listed for device")
+		return s.captureFail(x, g, "journal entries not listed for device")
 	}
 
 	return response.SuccessAny(result)

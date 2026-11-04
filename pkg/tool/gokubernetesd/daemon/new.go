@@ -40,6 +40,6 @@ func New(
 		guards:   guards,
 		forwards: forwards,
 		service:  service.New(clusters, guards, store.New(d), forwards, r),
-		readOnly: o.ReadOnly,
+		armed:    o.Arm,
 	}
 }

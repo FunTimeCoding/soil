@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) ListStorages(
-	_ context.Context,
+	x context.Context,
 	r server.ListStoragesRequestObject,
 ) (server.ListStoragesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -25,7 +25,7 @@ func (s *Server) ListStorages(
 	}
 
 	if e != nil {
-		return server.ListStorages500JSONResponse(*s.answer(e)), nil
+		return server.ListStorages500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	storages, e := s.service.ListStorages(instance, r.Name)
@@ -40,7 +40,7 @@ func (s *Server) ListStorages(
 	case unavailable.Is(e):
 		return server.ListStorages503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListStorages500JSONResponse(*s.answer(e)), nil
+		return server.ListStorages500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.ListStorages200JSONResponse

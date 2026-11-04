@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostSessionEnd(
-	_ context.Context,
+	x context.Context,
 	r server.PostSessionEndRequestObject,
 ) (server.PostSessionEndResponseObject, error) {
 	reason := ""
@@ -18,7 +18,7 @@ func (s *Server) PostSessionEnd(
 
 	if e := s.roster.CloseSession(r.Body.Session, reason); e != nil {
 		return server.PostSessionEnd500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

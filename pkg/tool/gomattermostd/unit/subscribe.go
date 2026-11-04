@@ -18,6 +18,6 @@ func subscribe(
 	t.Helper()
 	p, e := m.FindPost(root)
 	assert.FatalOnError(t, e)
-	_, _, f := s.Subscribe(p, callsign, alias)
+	_, _, f := s.Subscribe(p, callsign, alias, "")
 	assert.FatalOnError(t, f)
 }

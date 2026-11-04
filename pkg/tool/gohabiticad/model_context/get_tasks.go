@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) getTasks(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	taskType := r.GetString(constant.TaskType, "")
 	result, e := s.service.Tasks(taskType)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Tasks(result))

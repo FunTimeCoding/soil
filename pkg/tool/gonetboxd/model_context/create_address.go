@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createAddress(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -38,7 +38,7 @@ func (s *Server) createAddress(
 	)
 
 	if e != nil {
-		return s.serviceFail(e, "address not assigned")
+		return s.serviceFail(x, e, "address not assigned")
 	}
 
 	return response.SuccessAny(convert.Address(result))

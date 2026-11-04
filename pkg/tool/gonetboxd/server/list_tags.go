@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListTags(
-	_ context.Context,
+	x context.Context,
 	_ server.ListTagsRequestObject,
 ) (server.ListTagsResponseObject, error) {
 	tags, e := s.service.Tags()
@@ -17,7 +17,7 @@ func (s *Server) ListTags(
 	}
 
 	if e != nil {
-		return server.ListTags500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListTags500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := make([]*server.Tag, 0, len(tags))

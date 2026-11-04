@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) DeleteMachine(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteMachineRequestObject,
 ) (server.DeleteMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) DeleteMachine(
 	}
 
 	if e != nil {
-		return server.DeleteMachine500JSONResponse(*s.answer(e)), nil
+		return server.DeleteMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -55,7 +55,7 @@ func (s *Server) DeleteMachine(
 	case unavailable.Is(e):
 		return server.DeleteMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.DeleteMachine500JSONResponse(*s.answer(e)), nil
+		return server.DeleteMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteMachine200JSONResponse{TaskId: "deleted"}, nil

@@ -25,7 +25,7 @@ func (s *Server) renamePackage(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, e := s.packages.RenamePackage(
@@ -37,7 +37,7 @@ func (s *Server) renamePackage(
 	)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

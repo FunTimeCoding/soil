@@ -19,7 +19,7 @@ func (s *Server) PostEmbed(
 
 	if e != nil {
 		return server.PostEmbed500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

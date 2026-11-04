@@ -1,12 +1,14 @@
 package response
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func AnswerWith(
+	x context.Context,
 	r face.Reporter,
 	e error,
 	message string,
@@ -20,7 +22,7 @@ func AnswerWith(
 	return FailAny(
 		map[string]any{
 			"error":            text,
-			"event_identifier": r.CaptureException(e),
+			"event_identifier": r.Capture(x, e),
 		},
 	)
 }

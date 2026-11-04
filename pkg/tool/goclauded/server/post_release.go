@@ -7,20 +7,20 @@ import (
 )
 
 func (s *Server) PostRelease(
-	_ context.Context,
+	x context.Context,
 	r server.PostReleaseRequestObject,
 ) (server.PostReleaseResponseObject, error) {
 	identifier, e := s.roster.ResolveByCallsign(r.Body.Callsign)
 
 	if e != nil {
 		return server.PostRelease500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
 	if e := s.roster.Release(identifier, r.Body.Callsign); e != nil {
 		return server.PostRelease500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

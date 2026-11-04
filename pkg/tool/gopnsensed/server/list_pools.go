@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListPools(
-	_ context.Context,
+	x context.Context,
 	r server.ListPoolsRequestObject,
 ) (server.ListPoolsResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListPools(
 	result, e := s.service.Pools(phrase)
 
 	if e != nil {
-		return server.ListPools500JSONResponse(*s.answer(e)), nil
+		return server.ListPools500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListPools200JSONResponse(convert.Pools(result)), nil

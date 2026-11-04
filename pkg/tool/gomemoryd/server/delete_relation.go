@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) DeleteRelation(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteRelationRequestObject,
 ) (server.DeleteRelationResponseObject, error) {
 	removed, e := s.service.DeleteRelation(
@@ -15,7 +15,7 @@ func (s *Server) DeleteRelation(
 	)
 
 	if e != nil {
-		return server.DeleteRelation500JSONResponse(*s.answer(e)), nil
+		return server.DeleteRelation500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	if !removed {

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) CloseView(
-	_ context.Context,
+	x context.Context,
 	r server.CloseViewRequestObject,
 ) (server.CloseViewResponseObject, error) {
 	e := s.service.CloseView(r.Id)
@@ -17,7 +17,7 @@ func (s *Server) CloseView(
 	}
 
 	if e != nil {
-		return server.CloseView500JSONResponse(*s.answer(e)), nil
+		return server.CloseView500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CloseView204Response{}, nil

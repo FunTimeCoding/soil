@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) RemoveDeviceTag(
-	_ context.Context,
+	x context.Context,
 	r server.RemoveDeviceTagRequestObject,
 ) (server.RemoveDeviceTagResponseObject, error) {
 	d, e := s.service.RemoveTag(r.Name, r.Tag)
@@ -33,7 +33,7 @@ func (s *Server) RemoveDeviceTag(
 	}
 
 	if e != nil {
-		return server.RemoveDeviceTag500JSONResponse(*s.captureDetail(e)), nil
+		return server.RemoveDeviceTag500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.RemoveDeviceTag200JSONResponse(*convert.Device(d)), nil

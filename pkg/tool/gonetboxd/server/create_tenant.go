@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateTenant(
-	_ context.Context,
+	x context.Context,
 	r server.CreateTenantRequestObject,
 ) (server.CreateTenantResponseObject, error) {
 	t, e := s.service.CreateTenant(r.Body.Name)
@@ -22,7 +22,7 @@ func (s *Server) CreateTenant(
 	}
 
 	if e != nil {
-		return server.CreateTenant500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateTenant500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateTenant201JSONResponse{

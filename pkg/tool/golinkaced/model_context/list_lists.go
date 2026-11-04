@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListLists(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListLists,
 ) (*mcp.CallToolResult, error) {
@@ -16,7 +16,7 @@ func (s *Server) ListLists(
 	r, e := s.service.ListsPage(p)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	result := make([]map[string]any, len(r.Items))

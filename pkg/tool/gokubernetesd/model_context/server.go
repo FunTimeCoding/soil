@@ -11,6 +11,6 @@ type Server struct {
 	server    *server.MCPServer
 	service   *service.Service
 	selection *selection.Selection
-	readOnly  bool
+	armed     bool
 	reporter  face.Reporter
 }

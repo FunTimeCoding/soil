@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) SearchChannels(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SearchChannels,
 ) (*mcp.CallToolResult, error) {
@@ -22,13 +22,13 @@ func (s *Server) SearchChannels(
 	me, e := s.service.Me()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	channels, e := s.service.SearchChannels(a.Query)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	var rows []*mattermostResponse.ChannelMatch

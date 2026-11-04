@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostSessionContext(
-	_ context.Context,
+	x context.Context,
 	r server.PostSessionContextRequestObject,
 ) (server.PostSessionContextResponseObject, error) {
 	window := 0
@@ -31,7 +31,7 @@ func (s *Server) PostSessionContext(
 			epochTimePointer(r.Body.FableReset),
 		); e != nil {
 			return server.PostSessionContext500JSONResponse(
-				*s.captureFail(e, soil.UnexpectedError),
+				*s.captureFail(x, e, soil.UnexpectedError),
 			), nil
 		}
 	}
@@ -53,7 +53,7 @@ func (s *Server) PostSessionContext(
 		epochTime(r.Body.SevenDayReset),
 	); e != nil {
 		return server.PostSessionContext500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

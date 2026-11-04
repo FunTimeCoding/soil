@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) getRun(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := uint(r.GetInt(constant.Identifier, 0))
@@ -21,7 +21,7 @@ func (s *Server) getRun(
 	result, e := s.service.Find(identifier)
 
 	if e != nil {
-		return s.captureFail(e, generativeConstant.RunLookupFail)
+		return s.captureFail(x, e, generativeConstant.RunLookupFail)
 	}
 
 	return response.SuccessAny(result)

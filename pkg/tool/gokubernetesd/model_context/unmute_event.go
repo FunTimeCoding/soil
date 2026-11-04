@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) UnmuteEvent(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.UnmuteEvent,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) UnmuteEvent(
 	e := s.service.UnmuteEvent(uint(a.Identifier))
 
 	if e != nil {
-		return s.captureFail(e, "delete mute rule")
+		return s.captureFail(x, e, "delete mute rule")
 	}
 
 	return response.Success("unmuted rule %d", a.Identifier)

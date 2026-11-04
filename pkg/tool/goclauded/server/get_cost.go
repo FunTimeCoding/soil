@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetCost(
-	_ context.Context,
+	x context.Context,
 	r server.GetCostRequestObject,
 ) (server.GetCostResponseObject, error) {
 	days := 1

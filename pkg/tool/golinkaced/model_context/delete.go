@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Delete(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Delete,
 ) (*mcp.CallToolResult, error) {
@@ -30,7 +30,7 @@ func (s *Server) Delete(
 	}
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

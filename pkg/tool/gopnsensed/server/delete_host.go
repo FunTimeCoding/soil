@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) DeleteHost(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteHostRequestObject,
 ) (server.DeleteHostResponseObject, error) {
 	e := s.service.DeleteHost(r.Identifier, apply(r.Params.Apply))
@@ -17,7 +17,7 @@ func (s *Server) DeleteHost(
 	}
 
 	if e != nil {
-		return server.DeleteHost500JSONResponse(*s.answer(e)), nil
+		return server.DeleteHost500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteHost204Response{}, nil

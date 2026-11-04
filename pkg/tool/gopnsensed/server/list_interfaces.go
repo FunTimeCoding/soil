@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) ListInterfaces(
-	_ context.Context,
+	x context.Context,
 	_ server.ListInterfacesRequestObject,
 ) (server.ListInterfacesResponseObject, error) {
 	result, e := s.service.Interfaces()
 
 	if e != nil {
-		return server.ListInterfaces500JSONResponse(*s.answer(e)), nil
+		return server.ListInterfaces500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListInterfaces200JSONResponse(

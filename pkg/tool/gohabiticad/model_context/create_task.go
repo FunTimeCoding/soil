@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createTask(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	taskType, f := r.RequireString(constant.TaskType)
@@ -32,7 +32,7 @@ func (s *Server) createTask(
 	result, h := s.service.CreateTask(body)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.SuccessAny(convert.Task(result))

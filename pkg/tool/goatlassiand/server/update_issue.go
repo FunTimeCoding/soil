@@ -79,7 +79,7 @@ func (s *Server) UpdateIssue(
 	}
 
 	if e != nil {
-		return server.UpdateIssue500JSONResponse(*s.answer(e)), nil
+		return server.UpdateIssue500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	diff := convert.JiraIssueDiff(

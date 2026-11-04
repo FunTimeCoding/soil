@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) EditNote(
-	_ context.Context,
+	x context.Context,
 	r server.EditNoteRequestObject,
 ) (server.EditNoteResponseObject, error) {
 	result, f := s.service.UpdateNote(int(r.Identifier), r.Body.Text)
@@ -32,7 +32,7 @@ func (s *Server) EditNote(
 	}
 
 	if f != nil {
-		return server.EditNote500JSONResponse(*s.answer(f)), nil
+		return server.EditNote500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.EditNote200JSONResponse{

@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) SetVolume(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SetVolume,
 ) (*mcp.CallToolResult, error) {
 	e := s.service.SetVolume(a.SessionIdentifier, a.Level)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(fmt.Sprintf("volume set to %d", a.Level))

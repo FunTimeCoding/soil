@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetSessionPeek(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionPeekRequestObject,
 ) (server.GetSessionPeekResponseObject, error) {
 	p := s.transcript.Peek(r.Identifier)

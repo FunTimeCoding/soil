@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) deleteComment(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -24,7 +24,7 @@ func (s *Server) deleteComment(
 	}
 
 	if e := s.service.DeleteComment(key, identifier); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("comment %s deleted", identifier)

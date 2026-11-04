@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) addHost(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, e := s.service.AddHost(
@@ -17,7 +17,7 @@ func (s *Server) addHost(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(identifier)

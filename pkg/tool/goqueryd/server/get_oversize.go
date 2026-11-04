@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetOversize(
-	_ context.Context,
+	x context.Context,
 	r server.GetOversizeRequestObject,
 ) (server.GetOversizeResponseObject, error) {
 	var collection string
@@ -20,7 +20,7 @@ func (s *Server) GetOversize(
 
 	if e != nil {
 		return server.GetOversize500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -31,8 +31,8 @@ func (s *Server) GetOversize(
 	}
 
 	return server.GetOversize200JSONResponse{
-		Model:     report.Model,
-		Window:    report.Window,
+		Model:          report.Model,
+		Window:         report.Window,
 		Allowance:      report.Allowance,
 		EmbedAllowance: report.EmbedAllowance,
 		Files:          files,

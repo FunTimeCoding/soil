@@ -24,7 +24,7 @@ func (s *Server) introduceConstructor(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, c, f := s.pattern.IntroduceConstructor(
@@ -39,7 +39,7 @@ func (s *Server) introduceConstructor(
 	)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if c == nil {

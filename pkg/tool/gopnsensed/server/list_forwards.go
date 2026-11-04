@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListForwards(
-	_ context.Context,
+	x context.Context,
 	r server.ListForwardsRequestObject,
 ) (server.ListForwardsResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListForwards(
 	result, e := s.service.Forwards(phrase)
 
 	if e != nil {
-		return server.ListForwards500JSONResponse(*s.answer(e)), nil
+		return server.ListForwards500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListForwards200JSONResponse(convert.Forwards(result)), nil

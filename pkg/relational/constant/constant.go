@@ -19,6 +19,8 @@ const (
 	LiteFileParameters   = "?_txlock=immediate&_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"
 	LiteMemoryParameters = "?_pragma=foreign_keys(1)"
 
+	LitePrimaryCodeMask = 0xff
+
 	LiteUniversalTable = "lite_universal_time"
 
 	PostgresAdministratorLocatorEnvironment = "POSTGRES_ADMINISTRATOR_LOCATOR"

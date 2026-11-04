@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PutClaim(
-	_ context.Context,
+	x context.Context,
 	r server.PutClaimRequestObject,
 ) (server.PutClaimResponseObject, error) {
 	c, e := s.service.ClaimItem(r.Body.Item, r.Body.Owner)
@@ -18,7 +18,7 @@ func (s *Server) PutClaim(
 	}
 
 	if e != nil {
-		return server.PutClaim500JSONResponse(*s.answer(e)), nil
+		return server.PutClaim500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PutClaim200JSONResponse(convert.Claim(c)), nil

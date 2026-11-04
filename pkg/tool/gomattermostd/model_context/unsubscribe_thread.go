@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) UnsubscribeThread(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.UnsubscribeThread,
 ) (*mcp.CallToolResult, error) {
@@ -23,7 +23,7 @@ func (s *Server) UnsubscribeThread(
 	removed, e := s.service.Unsubscribe(a.Callsign, a.Root)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if !removed {

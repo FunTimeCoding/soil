@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetTags(
-	_ context.Context,
+	x context.Context,
 	_ server.GetTagsRequestObject,
 ) (server.GetTagsResponseObject, error) {
 	result, e := s.service.Tags()
@@ -23,7 +23,7 @@ func (s *Server) GetTags(
 	}
 
 	if e != nil {
-		return server.GetTags500JSONResponse(*s.answer(e)), nil
+		return server.GetTags500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetTags200JSONResponse(convert.Tags(result)), nil

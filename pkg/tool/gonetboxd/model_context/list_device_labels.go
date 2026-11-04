@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listDeviceLabels(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -21,7 +21,7 @@ func (s *Server) listDeviceLabels(
 	labels, e := s.service.DeviceLabels(device)
 
 	if e != nil {
-		return s.serviceFail(e, "labels not listed for device")
+		return s.serviceFail(x, e, "labels not listed for device")
 	}
 
 	return response.SuccessAny(convert.Labels(labels))

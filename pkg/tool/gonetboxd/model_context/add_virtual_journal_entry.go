@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) addVirtualJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -27,7 +27,7 @@ func (s *Server) addVirtualJournalEntry(
 	result, h := s.service.AddVirtualJournalEntry(name, kind, comments)
 
 	if h != nil {
-		return s.captureFail(h, "journal entry not added to virtual machine")
+		return s.captureFail(x, h, "journal entry not added to virtual machine")
 	}
 
 	return response.SuccessAny(result)

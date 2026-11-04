@@ -8,12 +8,12 @@ import (
 )
 
 func (s *Server) Navigate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Navigate,
 ) (*mcp.CallToolResult, error) {
 	if e := s.service.Navigate(int(a.TabIdentifier), a.Locator); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("navigated to %s", a.Locator)

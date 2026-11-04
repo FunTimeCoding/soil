@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetView(
-	_ context.Context,
+	x context.Context,
 	r server.GetViewRequestObject,
 ) (server.GetViewResponseObject, error) {
 	v, e := s.service.View(r.Id)
@@ -17,7 +17,7 @@ func (s *Server) GetView(
 	}
 
 	if e != nil {
-		return server.GetView500JSONResponse(*s.answer(e)), nil
+		return server.GetView500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetView200JSONResponse(*convertView(v)), nil

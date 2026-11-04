@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) Evaluate(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Evaluate,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.Evaluate(int(a.TabIdentifier), a.Expression)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

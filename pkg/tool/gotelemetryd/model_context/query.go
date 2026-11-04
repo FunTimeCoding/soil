@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) query(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	o := query_option.New()
@@ -26,7 +26,7 @@ func (s *Server) query(
 	events, e := s.service.Query(o)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	entries := make([]response.Event, len(events))

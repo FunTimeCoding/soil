@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createTunnelGroup(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) createTunnelGroup(
 	g, f := s.service.CreateTunnelGroup(name)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.SuccessAny(convert.TunnelGroup(g))

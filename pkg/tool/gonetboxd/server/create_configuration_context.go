@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) CreateConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r server.CreateConfigurationContextRequestObject,
 ) (server.CreateConfigurationContextResponseObject, error) {
 	weight := constant.ConfigurationContextWeight
@@ -42,7 +42,7 @@ func (s *Server) CreateConfigurationContext(
 
 	if e != nil {
 		return server.CreateConfigurationContext500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

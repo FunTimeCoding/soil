@@ -6,13 +6,13 @@ import (
 )
 
 func (s *Server) ListSessions(
-	_ context.Context,
+	x context.Context,
 	_ server.ListSessionsRequestObject,
 ) (server.ListSessionsResponseObject, error) {
 	sessions, e := s.service.Sessions()
 
 	if e != nil {
-		return server.ListSessions500JSONResponse(*s.answer(e)), nil
+		return server.ListSessions500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.ListSessions200JSONResponse

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetSessionsFind(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionsFindRequestObject,
 ) (server.GetSessionsFindResponseObject, error) {
 	var result []server.FindMatch
@@ -18,7 +18,7 @@ func (s *Server) GetSessionsFind(
 
 		if f != nil {
 			return server.GetSessionsFind500JSONResponse(
-				*s.captureFail(f, soil.UnexpectedError),
+				*s.captureFail(x, f, soil.UnexpectedError),
 			), nil
 		}
 

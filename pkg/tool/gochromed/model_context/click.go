@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) Click(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Click,
 ) (*mcp.CallToolResult, error) {
@@ -22,7 +22,7 @@ func (s *Server) Click(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	if !observe {

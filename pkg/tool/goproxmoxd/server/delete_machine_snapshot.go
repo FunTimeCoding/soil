@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) DeleteMachineSnapshot(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteMachineSnapshotRequestObject,
 ) (server.DeleteMachineSnapshotResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) DeleteMachineSnapshot(
 	}
 
 	if e != nil {
-		return server.DeleteMachineSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.DeleteMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -54,7 +54,7 @@ func (s *Server) DeleteMachineSnapshot(
 	case unavailable.Is(e):
 		return server.DeleteMachineSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.DeleteMachineSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.DeleteMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

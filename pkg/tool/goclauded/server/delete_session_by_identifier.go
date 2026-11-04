@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) DeleteSessionByIdentifier(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteSessionByIdentifierRequestObject,
 ) (server.DeleteSessionByIdentifierResponseObject, error) {
 	confirm := ""
@@ -27,7 +27,7 @@ func (s *Server) DeleteSessionByIdentifier(
 		}
 
 		return server.DeleteSessionByIdentifier500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

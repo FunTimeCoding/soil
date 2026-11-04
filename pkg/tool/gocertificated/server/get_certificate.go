@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetCertificate(
-	_ context.Context,
+	x context.Context,
 	r server.GetCertificateRequestObject,
 ) (server.GetCertificateResponseObject, error) {
 	result, e := s.service.BySerial(r.Serial)
@@ -18,7 +18,7 @@ func (s *Server) GetCertificate(
 	}
 
 	if e != nil {
-		return server.GetCertificate500JSONResponse(*s.answer(e)), nil
+		return server.GetCertificate500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetCertificate200JSONResponse(

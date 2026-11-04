@@ -25,7 +25,7 @@ func (s *Server) renameModule(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, e := s.module.RenameModule(
@@ -38,7 +38,7 @@ func (s *Server) renameModule(
 	)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	var unfixed []*concern.Concern

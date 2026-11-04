@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) DeriveHardwareAddress(
-	_ context.Context,
+	x context.Context,
 	r server.DeriveHardwareAddressRequestObject,
 ) (server.DeriveHardwareAddressResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -25,7 +25,7 @@ func (s *Server) DeriveHardwareAddress(
 	}
 
 	if e != nil {
-		return server.DeriveHardwareAddress500JSONResponse(*s.answer(e)), nil
+		return server.DeriveHardwareAddress500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	address, holder, g := s.service.DeriveHardwareAddress(
@@ -43,7 +43,7 @@ func (s *Server) DeriveHardwareAddress(
 	case unavailable.Is(g):
 		return server.DeriveHardwareAddress503JSONResponse(*clientError(g)), nil
 	case g != nil:
-		return server.DeriveHardwareAddress500JSONResponse(*s.answer(g)), nil
+		return server.DeriveHardwareAddress500JSONResponse(*s.answer(x, g)), nil
 	}
 
 	return server.DeriveHardwareAddress200JSONResponse{

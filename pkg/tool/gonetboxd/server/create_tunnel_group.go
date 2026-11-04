@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateTunnelGroup(
-	_ context.Context,
+	x context.Context,
 	r server.CreateTunnelGroupRequestObject,
 ) (server.CreateTunnelGroupResponseObject, error) {
 	g, e := s.service.CreateTunnelGroup(r.Body.Name)
@@ -23,7 +23,7 @@ func (s *Server) CreateTunnelGroup(
 	}
 
 	if e != nil {
-		return server.CreateTunnelGroup500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateTunnelGroup500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateTunnelGroup201JSONResponse(*convert.TunnelGroup(g)), nil

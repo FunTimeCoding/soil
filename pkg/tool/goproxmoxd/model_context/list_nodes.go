@@ -16,13 +16,13 @@ func (s *Server) ListNodes(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	nodes, e := s.service.ListNodes(instance)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	rows := make([]proxResponse.Node, len(nodes))

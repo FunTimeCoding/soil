@@ -18,7 +18,7 @@ func (s *Server) listSessions(
 	_, e := s.resolveCaller(x, constant.ListSessions)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	limit := int(q.GetFloat(constant.Limit, 20))
@@ -26,7 +26,7 @@ func (s *Server) listSessions(
 	sessions, e := s.roster.EnrichedSessions(limit, offset)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if len(sessions) == 0 {

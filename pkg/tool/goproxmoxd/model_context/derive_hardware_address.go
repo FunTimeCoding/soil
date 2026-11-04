@@ -21,7 +21,7 @@ func (s *Server) DeriveHardwareAddress(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	address, holder, g := s.service.DeriveHardwareAddress(
@@ -34,7 +34,7 @@ func (s *Server) DeriveHardwareAddress(
 			return response.Fail("%s", g)
 		}
 
-		return s.captureDetail(g)
+		return s.captureDetail(x, g)
 	}
 
 	return response.SuccessAny(

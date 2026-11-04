@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) updateClient(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.UpdateClient,
 ) (*mcp.CallToolResult, error) {
@@ -24,7 +24,7 @@ func (s *Server) updateClient(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Client(result))

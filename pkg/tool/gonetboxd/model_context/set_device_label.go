@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) setDeviceLabel(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -33,7 +33,7 @@ func (s *Server) setDeviceLabel(
 	result, e := s.service.SetDeviceLabel(device, key, value)
 
 	if e != nil {
-		return s.serviceFail(e, "label not set on device")
+		return s.serviceFail(x, e, "label not set on device")
 	}
 
 	return response.SuccessAny(convert.Label(result))

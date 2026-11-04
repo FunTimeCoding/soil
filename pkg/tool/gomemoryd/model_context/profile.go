@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) profile(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, _, e := s.service.Profile(
@@ -18,7 +18,7 @@ func (s *Server) profile(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(result.Text)

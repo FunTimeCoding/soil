@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) RunCron(
-	_ context.Context,
+	x context.Context,
 	_ server.RunCronRequestObject,
 ) (server.RunCronResponseObject, error) {
 	result, e := s.service.Cron()
@@ -28,7 +28,7 @@ func (s *Server) RunCron(
 	}
 
 	if e != nil {
-		return server.RunCron500JSONResponse(*s.answer(e)), nil
+		return server.RunCron500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.RunCron200JSONResponse(*convert.CronResult(result)), nil

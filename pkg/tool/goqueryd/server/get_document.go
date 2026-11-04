@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetDocument(
-	_ context.Context,
+	x context.Context,
 	r server.GetDocumentRequestObject,
 ) (server.GetDocumentResponseObject, error) {
 	document, _, e := s.service.GetDocument(r.Params.Path)
@@ -24,7 +24,7 @@ func (s *Server) GetDocument(
 
 	if e != nil {
 		return server.GetDocument500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

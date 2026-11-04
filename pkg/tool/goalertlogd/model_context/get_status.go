@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) getStatus(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	status, e := s.service.Status()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	totalRecords := status.Total

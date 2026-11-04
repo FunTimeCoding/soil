@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) searchProjects(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	limit, f := r.RequireFloat(generativeConstant.ParameterLimit)
@@ -27,7 +27,7 @@ func (s *Server) searchProjects(
 	)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	var result []*server.JiraProject

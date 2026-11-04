@@ -19,13 +19,13 @@ func (s *Server) GetProject(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	v, e := s.service.Project(x, instance, project)
 
 	if e != nil {
-		return s.answerWith(e, "")
+		return s.answerWith(x, e, "")
 	}
 
 	return response.SuccessAny(v)

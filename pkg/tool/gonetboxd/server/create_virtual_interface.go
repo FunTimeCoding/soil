@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateVirtualInterface(
-	_ context.Context,
+	x context.Context,
 	r server.CreateVirtualInterfaceRequestObject,
 ) (server.CreateVirtualInterfaceResponseObject, error) {
 	i, e := s.service.CreateVirtualInterface(r.Name, r.Body.Name)
@@ -28,7 +28,9 @@ func (s *Server) CreateVirtualInterface(
 	}
 
 	if e != nil {
-		return server.CreateVirtualInterface500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateVirtualInterface500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.CreateVirtualInterface201JSONResponse(

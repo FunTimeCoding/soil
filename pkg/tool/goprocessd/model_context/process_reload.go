@@ -9,18 +9,18 @@ import (
 )
 
 func (s *Server) processReload(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ProcessReload,
 ) (*mcp.CallToolResult, error) {
 	switch a.Scope {
 	case constant.ProcfileScope:
 		if e := s.service.ReloadProcfile(); e != nil {
-			return s.answer(e)
+			return s.answer(x, e)
 		}
 	case constant.EnvironmentScope:
 		if e := s.service.ReloadEnvironment(); e != nil {
-			return s.answer(e)
+			return s.answer(x, e)
 		}
 	default:
 		return response.Fail(

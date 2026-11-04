@@ -11,6 +11,6 @@ func NewLocal(procfilePath string) *Client {
 	return build(
 		locator.New(constant.Identity.Name()).Insecure(),
 		"",
-		stall_client.New().Socket(socket.Path(procfilePath)).Build(),
+		stall_client.New().Traced().Socket(socket.Path(procfilePath)).Build(),
 	)
 }

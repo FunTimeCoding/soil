@@ -9,5 +9,5 @@ import (
 func newRequester(base *locator.Locator) *requester.Requester {
 	return requester.New(base).
 		WithClient(stall_client.New().Long().Build().Client()).
-		WithRefusal(refusal)
+		WithRefusal(refuse)
 }

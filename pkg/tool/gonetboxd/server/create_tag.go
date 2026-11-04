@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateTag(
-	_ context.Context,
+	x context.Context,
 	r server.CreateTagRequestObject,
 ) (server.CreateTagResponseObject, error) {
 	t, e := s.service.CreateTag(r.Body.Name)
@@ -22,7 +22,7 @@ func (s *Server) CreateTag(
 	}
 
 	if e != nil {
-		return server.CreateTag500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateTag500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateTag201JSONResponse{

@@ -31,6 +31,17 @@ every panic, and stays that way on purpose: on REST a quiet class reaching
 the 500 is a missing branch, captured as such (`README.md`, Answering an
 error).
 
+A write to a caller that has gone away is classified where it happens.
+Rendering a page or fragment and pushing an event write the response last,
+through `web.PanicOnWriteError`: a write that fails because the connection
+dropped - reset, broken pipe, a closed stream, by `connection.Classify` -
+panics as `caller_left`, and any other write failure panics as itself.
+`view.Recovery` returns on `caller_left` without a capture and without a
+failure page, since nobody is left to read either. `caller_left` answers
+`Expected() true`, so `classify.Reportable` keeps it out of Sentry wherever
+it travels. Render and push functions keep their signatures and return
+nothing: the write is their last step, and the recovery is its net.
+
 ## Worker and HTTP Recovery
 
 A worker's loop runs each iteration through `recovery.Recovery`

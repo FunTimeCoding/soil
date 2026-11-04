@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetLinks(
-	_ context.Context,
+	x context.Context,
 	r server.GetLinksRequestObject,
 ) (server.GetLinksResponseObject, error) {
 	page := 1
@@ -29,7 +29,7 @@ func (s *Server) GetLinks(
 		}
 
 		if e != nil {
-			return server.GetLinks500JSONResponse(*s.answer(e)), nil
+			return server.GetLinks500JSONResponse(*s.answer(x, e)), nil
 		}
 
 		result := make([]server.Link, len(links))
@@ -60,7 +60,7 @@ func (s *Server) GetLinks(
 	}
 
 	if e != nil {
-		return server.GetLinks500JSONResponse(*s.answer(e)), nil
+		return server.GetLinks500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]server.Link, len(v.Items))

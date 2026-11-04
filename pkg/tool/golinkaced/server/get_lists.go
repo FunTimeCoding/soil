@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetLists(
-	_ context.Context,
+	x context.Context,
 	r server.GetListsRequestObject,
 ) (server.GetListsResponseObject, error) {
 	page := 1
@@ -28,7 +28,7 @@ func (s *Server) GetLists(
 	}
 
 	if e != nil {
-		return server.GetLists500JSONResponse(*s.answer(e)), nil
+		return server.GetLists500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := make([]server.List, len(v.Items))

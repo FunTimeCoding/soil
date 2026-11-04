@@ -13,7 +13,7 @@ import (
 )
 
 func (s *Server) getIssue(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -25,7 +25,7 @@ func (s *Server) getIssue(
 	i, g := s.service.Issue(key)
 
 	if g != nil {
-		return s.answer(g)
+		return s.answer(x, g)
 	}
 
 	includeCustom := r.GetBool(constant.CustomFields, false)
@@ -37,7 +37,7 @@ func (s *Server) getIssue(
 		t, h = s.service.IssueType(i)
 
 		if h != nil {
-			return s.answerWith(h, "read project metadata")
+			return s.answerWith(x, h, "read project metadata")
 		}
 	}
 

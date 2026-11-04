@@ -15,7 +15,7 @@ func (s *Server) Argocd(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	if a.Name != "" {
@@ -27,16 +27,16 @@ func (s *Server) Argocd(
 		)
 
 		if f != nil {
-			return s.captureDetail(f)
+			return s.captureDetail(x, f)
 		}
 
-		return s.formatMarkup(result.Application, result.Filtered)
+		return s.formatMarkup(x, result.Application, result.Filtered)
 	}
 
 	result, f := s.service.ArgocdApplications(x, cluster)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.SuccessAny(result)

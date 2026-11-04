@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
@@ -22,13 +24,26 @@ func (s *Server) PostDocument(
 		metadata[constant.SourceType] = []string{*r.Body.SourceType}
 	}
 
-	warning := s.service.PushDocument(
+	warning, e := s.service.PushDocument(
 		x,
 		r.Body.Collection,
 		r.Body.Path,
 		r.Body.Body,
 		metadata,
 	)
+
+	if timeout.Is(e) {
+		return server.PostDocument503JSONResponse(
+			*s.captureFail(x, e, e.Error()),
+		), nil
+	}
+
+	if e != nil {
+		return server.PostDocument500JSONResponse(
+			*s.captureFail(x, e, soil.UnexpectedError),
+		), nil
+	}
+
 	result := server.PostDocument200JSONResponse{}
 
 	if warning != "" {

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) triggerRun(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	target := r.GetString(constant.Target, "")
@@ -28,7 +28,7 @@ func (s *Server) triggerRun(
 	e := s.service.Trigger(request)
 
 	if e != nil {
-		return response.Answer(s.reporter, e)
+		return response.Answer(x, s.reporter, e)
 	}
 
 	if synchronous {

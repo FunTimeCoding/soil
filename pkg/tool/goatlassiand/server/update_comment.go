@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) UpdateComment(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateCommentRequestObject,
 ) (server.UpdateCommentResponseObject, error) {
 	e := s.service.UpdateComment(r.Key, r.Identifier, r.Body.Body)
@@ -32,7 +32,7 @@ func (s *Server) UpdateComment(
 	}
 
 	if e != nil {
-		return server.UpdateComment500JSONResponse(*s.answer(e)), nil
+		return server.UpdateComment500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.UpdateComment204Response{}, nil

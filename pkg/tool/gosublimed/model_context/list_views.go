@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ListViews(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.ListViews,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.Views()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

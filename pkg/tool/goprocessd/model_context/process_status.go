@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) processStatus(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {

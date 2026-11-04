@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) loadGroup(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Load,
 ) (*mcp.CallToolResult, error) {

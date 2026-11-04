@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) DeleteEntry(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteEntryRequestObject,
 ) (server.DeleteEntryResponseObject, error) {
 	e := s.service.Delete(uint(r.Id))
@@ -17,7 +17,7 @@ func (s *Server) DeleteEntry(
 	}
 
 	if e != nil {
-		return server.DeleteEntry500JSONResponse(*s.answer(e)), nil
+		return server.DeleteEntry500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteEntry204Response{}, nil

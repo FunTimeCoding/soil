@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetChannelPosts(
-	_ context.Context,
+	x context.Context,
 	r server.GetChannelPostsRequestObject,
 ) (server.GetChannelPostsResponseObject, error) {
 	posts, e := s.service.ChannelPosts(r.Name, r.Params.Since)
@@ -27,7 +27,7 @@ func (s *Server) GetChannelPosts(
 	}
 
 	if e != nil {
-		return server.GetChannelPosts500JSONResponse(*s.answer(e)), nil
+		return server.GetChannelPosts500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetChannelPosts200JSONResponse(convertPosts(posts)), nil

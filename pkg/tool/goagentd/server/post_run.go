@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) PostRun(
-	_ context.Context,
+	x context.Context,
 	r server.PostRunRequestObject,
 ) (server.PostRunResponseObject, error) {
 	e := s.service.Run(r.Body.Intent)
@@ -30,5 +30,5 @@ func (s *Server) PostRun(
 		return server.PostRun503JSONResponse{Error: e.Error()}, nil
 	}
 
-	return server.PostRun500JSONResponse(*s.answer(e)), nil
+	return server.PostRun500JSONResponse(*s.answer(x, e)), nil
 }

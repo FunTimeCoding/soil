@@ -14,13 +14,17 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
-	a.Boolean(argumentConstant.ReadOnly, false, "Disable write operations")
+	a.Boolean(
+		argumentConstant.Arm,
+		false,
+		"Enable write operations against the clusters",
+	)
 	a.Database()
 	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.ReadOnly = a.GetBoolean(argumentConstant.ReadOnly)
+	o.Arm = a.GetBoolean(argumentConstant.Arm)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	Run(o, s)

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListBlocklists(
-	_ context.Context,
+	x context.Context,
 	r server.ListBlocklistsRequestObject,
 ) (server.ListBlocklistsResponseObject, error) {
 	var phrase string
@@ -19,7 +19,7 @@ func (s *Server) ListBlocklists(
 	result, e := s.service.Blocklists(phrase)
 
 	if e != nil {
-		return server.ListBlocklists500JSONResponse(*s.answer(e)), nil
+		return server.ListBlocklists500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListBlocklists200JSONResponse(convert.Blocklists(result)), nil

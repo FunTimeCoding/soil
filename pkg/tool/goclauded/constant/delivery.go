@@ -42,7 +42,7 @@ const (
 
 const (
 	DeliveryOverBudget = "hook delivery over budget"
-	DeliveryContextKey = "delivery"
 	DeliveryCharacters = "characters"
+	DeliveryBudgetKey  = "budget"
 	DeliveryRefused    = "%s is %d characters; summarize it to %d or fewer"
 )

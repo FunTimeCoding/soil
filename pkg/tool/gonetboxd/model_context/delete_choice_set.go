@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) deleteChoiceSet(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, e := r.RequireString(generativeConstant.ParameterName)
@@ -25,7 +25,7 @@ func (s *Server) deleteChoiceSet(
 	}
 
 	if f != nil {
-		return s.captureFail(f, "choice set not deleted")
+		return s.captureFail(x, f, "choice set not deleted")
 	}
 
 	return response.Success("choice set deleted")

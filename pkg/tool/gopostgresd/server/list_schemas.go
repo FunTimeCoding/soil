@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListSchemas(
-	c context.Context,
+	x context.Context,
 	r server.ListSchemasRequestObject,
 ) (server.ListSchemasResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,10 +26,10 @@ func (s *Server) ListSchemas(
 	}
 
 	if e != nil {
-		return server.ListSchemas500JSONResponse(*s.answerWith(e, "")), nil
+		return server.ListSchemas500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
-	rows, e := s.service.ListSchemas(c, instance)
+	rows, e := s.service.ListSchemas(x, instance)
 
 	if validation.Is(e) {
 		return server.ListSchemas400JSONResponse(*clientError(e)), nil
@@ -48,7 +48,7 @@ func (s *Server) ListSchemas(
 	}
 
 	if e != nil {
-		return server.ListSchemas500JSONResponse(*s.answerWith(e, "")), nil
+		return server.ListSchemas500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	return server.ListSchemas200JSONResponse{

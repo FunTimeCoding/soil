@@ -16,7 +16,7 @@ func (t *Tool[T, P]) ListInstances(
 	active, e := t.ActiveName(x)
 
 	if e != nil {
-		return response.Answer(t.reporter, e)
+		return response.Answer(x, t.reporter, e)
 	}
 
 	result := make([]*instance_response.Response, 0, len(t.inventory.Instances))

@@ -11,14 +11,14 @@ import (
 )
 
 func (s *Server) History(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.History,
 ) (*mcp.CallToolResult, error) {
 	h, e := s.service.History(selector.New(a.TabIdentifier, a.Title, a.Locator))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	var b strings.Builder

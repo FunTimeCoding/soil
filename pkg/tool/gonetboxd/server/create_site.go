@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateSite(
-	_ context.Context,
+	x context.Context,
 	r server.CreateSiteRequestObject,
 ) (server.CreateSiteResponseObject, error) {
 	i, e := s.service.CreateSite(r.Body.Name)
@@ -22,7 +22,7 @@ func (s *Server) CreateSite(
 	}
 
 	if e != nil {
-		return server.CreateSite500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateSite500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateSite201JSONResponse{

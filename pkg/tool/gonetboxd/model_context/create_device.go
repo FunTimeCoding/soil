@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createDevice(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -47,7 +47,7 @@ func (s *Server) createDevice(
 	)
 
 	if e != nil {
-		return s.serviceFail(e, "device not created")
+		return s.serviceFail(x, e, "device not created")
 	}
 
 	return response.SuccessAny(convert.Device(result))

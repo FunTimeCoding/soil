@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostReferencesRetarget(
-	_ context.Context,
+	x context.Context,
 	r server.PostReferencesRetargetRequestObject,
 ) (server.PostReferencesRetargetResponseObject, error) {
 	reports, e := s.service.RetargetReferences(
@@ -16,7 +16,7 @@ func (s *Server) PostReferencesRetarget(
 	)
 
 	if e != nil {
-		return server.PostReferencesRetarget500JSONResponse(*s.answer(e)), nil
+		return server.PostReferencesRetarget500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostReferencesRetarget200JSONResponse{

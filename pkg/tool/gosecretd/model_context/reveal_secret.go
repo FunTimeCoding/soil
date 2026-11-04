@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) RevealSecret(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.RevealSecret,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Reveal(a.Path, a.Key)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

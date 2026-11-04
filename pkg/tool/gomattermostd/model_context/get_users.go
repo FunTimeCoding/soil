@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetUsers(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetUsers,
 ) (*mcp.CallToolResult, error) {
@@ -28,7 +28,7 @@ func (s *Server) GetUsers(
 	users, e := s.service.Users(page, limit)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	rows := make([]*mattermostResponse.User, len(users))

@@ -24,7 +24,7 @@ func (s *Server) listCalls(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	limit := int(a.Limit)
@@ -36,7 +36,7 @@ func (s *Server) listCalls(
 	r, inventory, f := s.reference.ListCalls(directory, a.Region, limit)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if inventory == nil {

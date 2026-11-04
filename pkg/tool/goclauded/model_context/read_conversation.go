@@ -17,13 +17,13 @@ func (s *Server) readConversation(
 	a argument.ReadConversation,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.resolveCaller(x, constant.ReadConversation); e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	blocks, e := s.search.ReadConversation(a.Session, a.Around, int(a.Count))
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if len(blocks) == 0 {

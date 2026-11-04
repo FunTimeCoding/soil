@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) deleteChecklistItem(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -27,7 +27,7 @@ func (s *Server) deleteChecklistItem(
 	items, h := s.service.DeleteChecklistItem(key, int(index))
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.SuccessAny(items)

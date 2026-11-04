@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetHost(
-	_ context.Context,
+	x context.Context,
 	_ server.GetHostRequestObject,
 ) (server.GetHostResponseObject, error) {
 	h := s.service.Host()

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listDevices(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, grouped, e := s.service.Devices(
@@ -17,7 +17,7 @@ func (s *Server) listDevices(
 	)
 
 	if e != nil {
-		return s.serviceFail(e, "devices not listed")
+		return s.serviceFail(x, e, "devices not listed")
 	}
 
 	return response.SuccessAny(convert.LabeledDevices(result, grouped))

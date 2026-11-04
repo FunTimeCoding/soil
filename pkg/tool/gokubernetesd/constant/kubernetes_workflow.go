@@ -55,5 +55,5 @@ patch modifies an existing resource with a JSON body. Defaults
 to strategic merge patch. apply creates a resource from a YAML
 manifest - fails if the resource exists unless override: true.
 Both support dryRun: true to preview. These are write tools,
-hidden by --read-only.
+registered only when the daemon runs with --arm.
 `

@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) CreateTab(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateTab,
 ) (*mcp.CallToolResult, error) {
 	identifier, e := s.service.CreateTab(a.Locator)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(

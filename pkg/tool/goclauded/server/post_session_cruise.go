@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) PostSessionCruise(
-	_ context.Context,
+	x context.Context,
 	r server.PostSessionCruiseRequestObject,
 ) (server.PostSessionCruiseResponseObject, error) {
 	var pace time.Duration
@@ -31,7 +31,7 @@ func (s *Server) PostSessionCruise(
 		}
 
 		return server.PostSessionCruise500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -39,7 +39,7 @@ func (s *Server) PostSessionCruise(
 
 	if f != nil {
 		return server.PostSessionCruise500JSONResponse(
-			*s.captureFail(f, soil.UnexpectedError),
+			*s.captureFail(x, f, soil.UnexpectedError),
 		), nil
 	}
 

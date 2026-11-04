@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) SearchPages(
-	_ context.Context,
+	x context.Context,
 	r server.SearchPagesRequestObject,
 ) (server.SearchPagesResponseObject, error) {
 	result, e := s.service.SearchPages(r.Params.Query)
@@ -23,7 +23,7 @@ func (s *Server) SearchPages(
 	}
 
 	if e != nil {
-		return server.SearchPages500JSONResponse(*s.answer(e)), nil
+		return server.SearchPages500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.SearchPages200JSONResponse(convert.ConfluencePages(result)), nil

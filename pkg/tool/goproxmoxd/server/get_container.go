@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) GetContainer(
-	_ context.Context,
+	x context.Context,
 	r server.GetContainerRequestObject,
 ) (server.GetContainerResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) GetContainer(
 	}
 
 	if e != nil {
-		return server.GetContainer500JSONResponse(*s.answer(e)), nil
+		return server.GetContainer500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -47,7 +47,7 @@ func (s *Server) GetContainer(
 	case unavailable.Is(e):
 		return server.GetContainer503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.GetContainer500JSONResponse(*s.answer(e)), nil
+		return server.GetContainer500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetContainer200JSONResponse(*convert.ContainerDetail(ct)), nil

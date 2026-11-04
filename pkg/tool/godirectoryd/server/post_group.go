@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) PostGroup(
-	_ context.Context,
+	x context.Context,
 	r server.PostGroupRequestObject,
 ) (server.PostGroupResponseObject, error) {
 	result, e := s.service.CreateGroup(r.Body.Name)
@@ -33,7 +33,7 @@ func (s *Server) PostGroup(
 	}
 
 	if e != nil {
-		return server.PostGroup500JSONResponse(*s.answer(e)), nil
+		return server.PostGroup500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostGroup200JSONResponse(*convert.Group(result)), nil

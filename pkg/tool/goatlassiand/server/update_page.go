@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) UpdatePage(
-	_ context.Context,
+	x context.Context,
 	r server.UpdatePageRequestObject,
 ) (server.UpdatePageResponseObject, error) {
 	message := ""
@@ -39,7 +39,7 @@ func (s *Server) UpdatePage(
 	}
 
 	if e != nil {
-		return server.UpdatePage500JSONResponse(*s.answer(e)), nil
+		return server.UpdatePage500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.UpdatePage200JSONResponse(

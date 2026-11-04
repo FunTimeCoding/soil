@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListAddressRanges(
-	_ context.Context,
+	x context.Context,
 	_ server.ListAddressRangesRequestObject,
 ) (server.ListAddressRangesResponseObject, error) {
 	ranges, e := s.service.InternetAddressRanges()
@@ -18,7 +18,7 @@ func (s *Server) ListAddressRanges(
 	}
 
 	if e != nil {
-		return server.ListAddressRanges500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListAddressRanges500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListAddressRanges200JSONResponse(

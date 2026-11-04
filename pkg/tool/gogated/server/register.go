@@ -51,7 +51,7 @@ func (s *Server) register(
 	)
 
 	if e != nil {
-		s.answer(w, e)
+		s.answer(r.Context(), w, e)
 
 		return
 	}

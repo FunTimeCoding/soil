@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateVirtualTunnelTermination(
-	_ context.Context,
+	x context.Context,
 	r server.CreateVirtualTunnelTerminationRequestObject,
 ) (server.CreateVirtualTunnelTerminationResponseObject, error) {
 	t, e := s.service.CreateVirtualTunnelTermination(
@@ -41,7 +41,7 @@ func (s *Server) CreateVirtualTunnelTermination(
 
 	if e != nil {
 		return server.CreateVirtualTunnelTermination500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

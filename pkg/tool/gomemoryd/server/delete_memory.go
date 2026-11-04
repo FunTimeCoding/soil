@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) DeleteMemory(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteMemoryRequestObject,
 ) (server.DeleteMemoryResponseObject, error) {
 	source := ""
@@ -23,7 +23,7 @@ func (s *Server) DeleteMemory(
 	}
 
 	if e != nil {
-		return server.DeleteMemory500JSONResponse(*s.answer(e)), nil
+		return server.DeleteMemory500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteMemory200JSONResponse{Identifier: r.Identifier}, nil

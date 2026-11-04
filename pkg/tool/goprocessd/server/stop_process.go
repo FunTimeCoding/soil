@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) StopProcess(
-	_ context.Context,
+	x context.Context,
 	r server.StopProcessRequestObject,
 ) (server.StopProcessResponseObject, error) {
 	e := s.service.Stop(r.Name)
@@ -17,7 +17,7 @@ func (s *Server) StopProcess(
 	}
 
 	if e != nil {
-		return server.StopProcess500JSONResponse(*s.answer(e)), nil
+		return server.StopProcess500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.StopProcess204Response{}, nil

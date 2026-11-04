@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) AddVirtualJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r server.AddVirtualJournalEntryRequestObject,
 ) (server.AddVirtualJournalEntryResponseObject, error) {
 	var kind string
@@ -34,7 +34,9 @@ func (s *Server) AddVirtualJournalEntry(
 	}
 
 	if e != nil {
-		return server.AddVirtualJournalEntry500JSONResponse(*s.captureDetail(e)), nil
+		return server.AddVirtualJournalEntry500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.AddVirtualJournalEntry201JSONResponse(

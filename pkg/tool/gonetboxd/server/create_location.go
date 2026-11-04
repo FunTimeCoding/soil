@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateLocation(
-	_ context.Context,
+	x context.Context,
 	r server.CreateLocationRequestObject,
 ) (server.CreateLocationResponseObject, error) {
 	result, e := s.service.CreateLocation(r.Body.Name, r.Body.Site)
@@ -23,7 +23,7 @@ func (s *Server) CreateLocation(
 	}
 
 	if e != nil {
-		return server.CreateLocation500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateLocation500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateLocation201JSONResponse(*convert.Location(result)), nil

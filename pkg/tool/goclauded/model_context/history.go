@@ -20,7 +20,7 @@ func (s *Server) history(
 	_, e := s.resolveCaller(x, constant.History)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	a := argument.Timeline{
@@ -59,7 +59,7 @@ func (s *Server) history(
 	merged, f := s.event.Timeline(x, a)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if len(merged) == 0 {

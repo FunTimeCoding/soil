@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) search(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	query, e := q.RequireString(generativeConstant.ParameterQuery)
@@ -27,7 +27,7 @@ func (s *Server) search(
 	results, e := s.service.SearchMemories(query, limit, memoryType, tag, scope)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if q.GetBool(constant.Detail, false) {

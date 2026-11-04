@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) AddDeviceJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r server.AddDeviceJournalEntryRequestObject,
 ) (server.AddDeviceJournalEntryResponseObject, error) {
 	var kind string
@@ -34,7 +34,9 @@ func (s *Server) AddDeviceJournalEntry(
 	}
 
 	if e != nil {
-		return server.AddDeviceJournalEntry500JSONResponse(*s.captureDetail(e)), nil
+		return server.AddDeviceJournalEntry500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.AddDeviceJournalEntry201JSONResponse(

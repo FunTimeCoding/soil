@@ -33,7 +33,7 @@ func (s *Server) edit(
 	_, g := s.resolveCaller(x, constant.EditEvent)
 
 	if g != nil {
-		return s.captureFail(g, soil.UnexpectedError)
+		return s.captureFail(x, g, soil.UnexpectedError)
 	}
 
 	_, g = s.event.EditEvent(uint(identifier), message)
@@ -43,7 +43,7 @@ func (s *Server) edit(
 			return response.Fail(g.Error())
 		}
 
-		return s.captureFail(g, soil.UnexpectedError)
+		return s.captureFail(x, g, soil.UnexpectedError)
 	}
 
 	return response.Success(fmt.Sprintf("Updated event #%d", int(identifier)))

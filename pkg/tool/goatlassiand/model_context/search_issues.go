@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) searchIssues(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	query, f := r.RequireString(generativeConstant.ParameterQuery)
@@ -27,7 +27,7 @@ func (s *Server) searchIssues(
 	result, h := s.service.SearchIssues(query, new(int(limit)))
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.SuccessAny(convert.JiraIssues(result))

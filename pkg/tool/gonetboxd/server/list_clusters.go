@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListClusters(
-	_ context.Context,
+	x context.Context,
 	_ server.ListClustersRequestObject,
 ) (server.ListClustersResponseObject, error) {
 	clusters, e := s.service.Clusters()
@@ -17,7 +17,7 @@ func (s *Server) ListClusters(
 	}
 
 	if e != nil {
-		return server.ListClusters500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListClusters500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := make([]*server.Cluster, 0, len(clusters))

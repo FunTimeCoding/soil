@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetEvents(
-	_ context.Context,
+	x context.Context,
 	r server.GetEventsRequestObject,
 ) (server.GetEventsResponseObject, error) {
 	o := query_option.New()
@@ -48,7 +48,7 @@ func (s *Server) GetEvents(
 	events, e := s.service.Query(o)
 
 	if e != nil {
-		return server.GetEvents500JSONResponse(*s.answer(e)), nil
+		return server.GetEvents500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	entries := make([]server.EventEntry, 0, len(events))

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) pushDecision(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.PushDecision,
 ) (*mcp.CallToolResult, error) {
@@ -21,7 +21,7 @@ func (s *Server) pushDecision(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

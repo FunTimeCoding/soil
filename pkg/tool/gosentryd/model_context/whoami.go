@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) Whoami(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.Whoami,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Whoami()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

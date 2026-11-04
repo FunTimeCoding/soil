@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) ListSecrets(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListSecrets,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.List(a.Path)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

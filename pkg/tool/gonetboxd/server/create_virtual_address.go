@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateVirtualAddress(
-	_ context.Context,
+	x context.Context,
 	r server.CreateVirtualAddressRequestObject,
 ) (server.CreateVirtualAddressResponseObject, error) {
 	status := ""
@@ -38,7 +38,9 @@ func (s *Server) CreateVirtualAddress(
 	}
 
 	if e != nil {
-		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateVirtualAddress500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.CreateVirtualAddress201JSONResponse{

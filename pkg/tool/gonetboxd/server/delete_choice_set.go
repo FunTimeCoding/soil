@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteChoiceSet(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteChoiceSetRequestObject,
 ) (server.DeleteChoiceSetResponseObject, error) {
 	e := s.service.DeleteChoiceSet(r.Name)
@@ -32,7 +32,7 @@ func (s *Server) DeleteChoiceSet(
 	}
 
 	if e != nil {
-		return server.DeleteChoiceSet500JSONResponse(*s.captureDetail(e)), nil
+		return server.DeleteChoiceSet500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.DeleteChoiceSet204Response{}, nil

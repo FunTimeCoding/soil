@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetSessionWindow(
-	_ context.Context,
+	x context.Context,
 	r server.GetSessionWindowRequestObject,
 ) (server.GetSessionWindowResponseObject, error) {
 	count := 0
@@ -21,7 +21,7 @@ func (s *Server) GetSessionWindow(
 
 	if e != nil {
 		return server.GetSessionWindow500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

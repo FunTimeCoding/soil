@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) ListMutedEvents(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.ListMutedEvents,
 ) (*mcp.CallToolResult, error) {
 	rules, e := s.service.MuteRules()
 
 	if e != nil {
-		return s.captureFail(e, "list mute rules")
+		return s.captureFail(x, e, "list mute rules")
 	}
 
 	result := []response.MuteRuleEntry{}

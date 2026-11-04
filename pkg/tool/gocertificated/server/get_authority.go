@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetAuthority(
-	_ context.Context,
+	x context.Context,
 	r server.GetAuthorityRequestObject,
 ) (server.GetAuthorityResponseObject, error) {
 	result, e := s.service.Authority(r.Name)
@@ -18,7 +18,7 @@ func (s *Server) GetAuthority(
 	}
 
 	if e != nil {
-		return server.GetAuthority500JSONResponse(*s.answer(e)), nil
+		return server.GetAuthority500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetAuthority200JSONResponse(*convert.Authority(result)), nil

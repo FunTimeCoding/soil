@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListPrefixes(
-	_ context.Context,
+	x context.Context,
 	_ server.ListPrefixesRequestObject,
 ) (server.ListPrefixesResponseObject, error) {
 	prefixes, e := s.service.Prefixes()
@@ -18,7 +18,7 @@ func (s *Server) ListPrefixes(
 	}
 
 	if e != nil {
-		return server.ListPrefixes500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListPrefixes500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListPrefixes200JSONResponse(convert.Prefixes(prefixes)), nil

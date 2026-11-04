@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateDevice(
-	_ context.Context,
+	x context.Context,
 	r server.CreateDeviceRequestObject,
 ) (server.CreateDeviceResponseObject, error) {
 	var tags []string
@@ -42,7 +42,7 @@ func (s *Server) CreateDevice(
 	}
 
 	if e != nil {
-		return server.CreateDevice500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateDevice500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateDevice201JSONResponse(*convert.Device(d)), nil

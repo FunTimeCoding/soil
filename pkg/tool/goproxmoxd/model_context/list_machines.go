@@ -16,13 +16,13 @@ func (s *Server) ListMachines(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	machines, e := s.service.ListMachines(instance, a.Node)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	rows := make([]proxResponse.Machine, len(machines))

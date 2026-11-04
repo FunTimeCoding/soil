@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) GetStatus(
-	_ context.Context,
+	x context.Context,
 	_ server.GetStatusRequestObject,
 ) (server.GetStatusResponseObject, error) {
 	status, e := s.service.Status()
 
 	if e != nil {
-		return server.GetStatus500JSONResponse(*s.answer(e)), nil
+		return server.GetStatus500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := server.GetStatus200JSONResponse{

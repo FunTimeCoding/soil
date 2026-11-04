@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) ListPages(
-	_ context.Context,
+	x context.Context,
 	r server.ListPagesRequestObject,
 ) (server.ListPagesResponseObject, error) {
 	status := ""
@@ -34,7 +34,7 @@ func (s *Server) ListPages(
 	}
 
 	if e != nil {
-		return server.ListPages500JSONResponse(*s.answer(e)), nil
+		return server.ListPages500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListPages200JSONResponse(

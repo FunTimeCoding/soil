@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetStatus(
-	_ context.Context,
+	x context.Context,
 	_ server.GetStatusRequestObject,
 ) (server.GetStatusResponseObject, error) {
 	return server.GetStatus200JSONResponse{Status: "ok"}, nil

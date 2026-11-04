@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) SendText(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SendText,
 ) (*mcp.CallToolResult, error) {
@@ -17,7 +17,7 @@ func (s *Server) SendText(
 		a.Text,
 		a.SendEnter,
 	); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("sent: %s", a.Text)

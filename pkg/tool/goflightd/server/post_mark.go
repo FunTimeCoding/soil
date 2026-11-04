@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostMark(
-	_ context.Context,
+	x context.Context,
 	r server.PostMarkRequestObject,
 ) (server.PostMarkResponseObject, error) {
 	var label string
@@ -28,7 +28,7 @@ func (s *Server) PostMark(
 	}
 
 	if e != nil {
-		return server.PostMark500JSONResponse(*s.answer(e)), nil
+		return server.PostMark500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostMark201JSONResponse(*toMark(*v)), nil

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) editChecklistItem(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -33,7 +33,7 @@ func (s *Server) editChecklistItem(
 	items, i := s.service.EditChecklistItem(key, int(index), text)
 
 	if i != nil {
-		return s.answer(i)
+		return s.answer(x, i)
 	}
 
 	return response.SuccessAny(items)

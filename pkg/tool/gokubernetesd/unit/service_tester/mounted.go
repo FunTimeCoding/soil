@@ -11,11 +11,11 @@ import (
 )
 
 func (t *Tester) Mounted(
-	readOnly bool,
+	armed bool,
 ) (*model_context_client.Client, *memory.Memory) {
 	t.t.Helper()
 	r := memory.New()
-	t.Option.ReadOnly = readOnly
+	t.Option.Arm = armed
 	d := NewDaemon(t.t, t.Option, r)
 	v := model_context_server.New(
 		t.t,

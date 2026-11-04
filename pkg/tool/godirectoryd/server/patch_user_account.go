@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) PatchUserAccount(
-	_ context.Context,
+	x context.Context,
 	r server.PatchUserAccountRequestObject,
 ) (server.PatchUserAccountResponseObject, error) {
 	result, e := s.service.ModifyUser(
@@ -38,7 +38,7 @@ func (s *Server) PatchUserAccount(
 	}
 
 	if e != nil {
-		return server.PatchUserAccount500JSONResponse(*s.answer(e)), nil
+		return server.PatchUserAccount500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PatchUserAccount200JSONResponse(*convert.User(result)), nil

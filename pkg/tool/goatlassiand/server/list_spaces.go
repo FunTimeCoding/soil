@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListSpaces(
-	_ context.Context,
+	x context.Context,
 	_ server.ListSpacesRequestObject,
 ) (server.ListSpacesResponseObject, error) {
 	result, e := s.service.Spaces()
@@ -23,7 +23,7 @@ func (s *Server) ListSpaces(
 	}
 
 	if e != nil {
-		return server.ListSpaces500JSONResponse(*s.answer(e)), nil
+		return server.ListSpaces500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.ListSpaces200JSONResponse(convert.ConfluenceSpaces(result)), nil

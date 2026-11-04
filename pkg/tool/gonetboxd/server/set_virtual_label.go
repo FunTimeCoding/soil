@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) SetVirtualLabel(
-	_ context.Context,
+	x context.Context,
 	r server.SetVirtualLabelRequestObject,
 ) (server.SetVirtualLabelResponseObject, error) {
 	result, e := s.service.SetVirtualLabel(r.Name, r.Key, r.Body.Value)
@@ -28,7 +28,7 @@ func (s *Server) SetVirtualLabel(
 	}
 
 	if e != nil {
-		return server.SetVirtualLabel500JSONResponse(*s.captureDetail(e)), nil
+		return server.SetVirtualLabel500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.SetVirtualLabel200JSONResponse(*convert.Label(result)), nil

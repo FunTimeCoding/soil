@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListInterfaces(
-	_ context.Context,
+	x context.Context,
 	r server.ListInterfacesRequestObject,
 ) (server.ListInterfacesResponseObject, error) {
 	interfaces, e := s.service.DeviceInterfaces(r.Name)
@@ -23,7 +23,7 @@ func (s *Server) ListInterfaces(
 	}
 
 	if e != nil {
-		return server.ListInterfaces500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListInterfaces500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListInterfaces200JSONResponse(convert.Interfaces(interfaces)), nil

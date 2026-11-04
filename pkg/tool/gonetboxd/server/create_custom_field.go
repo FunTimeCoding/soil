@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateCustomField(
-	_ context.Context,
+	x context.Context,
 	r server.CreateCustomFieldRequestObject,
 ) (server.CreateCustomFieldResponseObject, error) {
 	var label string
@@ -38,7 +38,7 @@ func (s *Server) CreateCustomField(
 	}
 
 	if e != nil {
-		return server.CreateCustomField500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateCustomField500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateCustomField201JSONResponse(*convert.CustomField(result)),

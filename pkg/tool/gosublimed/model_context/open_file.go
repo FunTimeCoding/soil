@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) OpenFile(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.OpenFile,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.OpenFile(a.FilePath)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

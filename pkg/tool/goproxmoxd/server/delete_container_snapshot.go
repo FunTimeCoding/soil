@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) DeleteContainerSnapshot(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteContainerSnapshotRequestObject,
 ) (server.DeleteContainerSnapshotResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) DeleteContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -54,7 +54,7 @@ func (s *Server) DeleteContainerSnapshot(
 	case unavailable.Is(e):
 		return server.DeleteContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(e)), nil
+		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

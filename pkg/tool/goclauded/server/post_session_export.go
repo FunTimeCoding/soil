@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) PostSessionExport(
-	_ context.Context,
+	x context.Context,
 	r server.PostSessionExportRequestObject,
 ) (server.PostSessionExportResponseObject, error) {
 	e := s.transcript.Resolve(r.Identifier)

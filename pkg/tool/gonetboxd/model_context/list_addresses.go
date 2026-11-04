@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listAddresses(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) listAddresses(
 	result, g := s.service.DeviceAddresses(name)
 
 	if g != nil {
-		return s.captureFail(g, "addresses not retrieved")
+		return s.captureFail(x, g, "addresses not retrieved")
 	}
 
 	return response.SuccessAny(convert.Addresses(result))

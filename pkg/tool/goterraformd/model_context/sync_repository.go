@@ -7,10 +7,10 @@ import (
 )
 
 func (s *Server) syncRepository(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Sync()
 
-	return model_context.SyncResponse(s.reporter, result, e)
+	return model_context.SyncResponse(x, s.reporter, result, e)
 }

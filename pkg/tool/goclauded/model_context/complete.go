@@ -16,7 +16,7 @@ func (s *Server) complete(
 	c, e := s.resolveCaller(x, constant.Complete)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -34,7 +34,7 @@ func (s *Server) complete(
 	topic, f := s.roster.CompleteTask(c.Callsign)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if topic == "" {
@@ -53,7 +53,7 @@ func (s *Server) complete(
 		topic,
 		message,
 	); f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	return response.Success(fmt.Sprintf("Completed %s: %s", topic, message))

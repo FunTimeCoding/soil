@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) list(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	filter := filter.New()
@@ -56,7 +56,7 @@ func (s *Server) list(
 	entries, e := s.service.Entries(filter)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(

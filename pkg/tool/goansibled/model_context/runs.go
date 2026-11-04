@@ -11,14 +11,14 @@ import (
 )
 
 func (s *Server) runs(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	limit := r.GetInt(constant.Limit, 20)
 	result, e := s.service.Recent(limit)
 
 	if e != nil {
-		return s.captureFail(e, generativeConstant.RecentRunsFail)
+		return s.captureFail(x, e, generativeConstant.RecentRunsFail)
 	}
 
 	summaries := make([]model_context.RunSummary, len(result))

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListPlacements(
-	_ context.Context,
+	x context.Context,
 	r server.ListPlacementsRequestObject,
 ) (server.ListPlacementsResponseObject, error) {
 	var place string
@@ -31,7 +31,7 @@ func (s *Server) ListPlacements(
 
 	if e != nil {
 		return server.ListPlacements500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

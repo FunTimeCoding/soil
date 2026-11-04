@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) update(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, e := q.RequireFloat(constant.MemoryIdentifier)
@@ -26,7 +26,7 @@ func (s *Server) update(
 	existing, f := s.service.GetMemory(int64(identifier))
 
 	if f != nil {
-		return s.answer(f)
+		return s.answer(x, f)
 	}
 
 	o := save_option.New()
@@ -38,7 +38,7 @@ func (s *Server) update(
 	m, rewritten, h := s.service.UpdateMemory(int64(identifier), o)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.Success(

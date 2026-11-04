@@ -7,12 +7,12 @@ import (
 )
 
 func (s *Server) PostTurnEnd(
-	_ context.Context,
+	x context.Context,
 	r server.PostTurnEndRequestObject,
 ) (server.PostTurnEndResponseObject, error) {
 	if e := s.roster.StampTurnEnd(r.Body.Session); e != nil {
 		return server.PostTurnEnd500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

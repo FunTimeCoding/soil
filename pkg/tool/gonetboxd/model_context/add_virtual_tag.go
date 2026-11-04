@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) addVirtualTag(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(constant.VirtualMachine)
@@ -27,7 +27,7 @@ func (s *Server) addVirtualTag(
 	result, h := s.service.AddVirtualTag(name, tag)
 
 	if h != nil {
-		return s.captureFail(h, "tag not added to virtual machine")
+		return s.captureFail(x, h, "tag not added to virtual machine")
 	}
 
 	return response.SuccessAny(convert.VirtualMachine(result))

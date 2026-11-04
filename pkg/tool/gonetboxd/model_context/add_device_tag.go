@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) addDeviceTag(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -27,7 +27,7 @@ func (s *Server) addDeviceTag(
 	result, h := s.service.AddTag(device, tag)
 
 	if h != nil {
-		return s.captureFail(h, "tag not added to device")
+		return s.captureFail(x, h, "tag not added to device")
 	}
 
 	return response.SuccessAny(convert.Device(result))

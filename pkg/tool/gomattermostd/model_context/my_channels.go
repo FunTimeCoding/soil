@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) MyChannels(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.MyChannels,
 ) (*mcp.CallToolResult, error) {
@@ -24,7 +24,7 @@ func (s *Server) MyChannels(
 	channels, e := s.service.MyChannels()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	sort.Slice(

@@ -1,8 +1,8 @@
-package pattern
+package lookup
 
 import "golang.org/x/tools/go/packages"
 
-func packageNames(all []*packages.Package) map[string][]string {
+func PackageNames(all []*packages.Package) map[string][]string {
 	result := map[string][]string{}
 	seen := map[string]bool{}
 	queue := append([]*packages.Package{}, all...)

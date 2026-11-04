@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) DownloadFile(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DownloadFile,
 ) (*mcp.CallToolResult, error) {
 	v, e := s.service.DownloadFile(a.Locator, a.Path)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(v)

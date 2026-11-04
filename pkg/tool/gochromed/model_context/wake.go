@@ -9,14 +9,14 @@ import (
 )
 
 func (s *Server) Wake(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Wake,
 ) (*mcp.CallToolResult, error) {
 	t, e := s.service.Wake(selector.New(a.TabIdentifier, a.Title, a.Locator))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.Success("woke tab: %s", t.Title)

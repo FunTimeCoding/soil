@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) GetMachine(
-	_ context.Context,
+	x context.Context,
 	r server.GetMachineRequestObject,
 ) (server.GetMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) GetMachine(
 	}
 
 	if e != nil {
-		return server.GetMachine500JSONResponse(*s.answer(e)), nil
+		return server.GetMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -47,7 +47,7 @@ func (s *Server) GetMachine(
 	case unavailable.Is(e):
 		return server.GetMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.GetMachine500JSONResponse(*s.answer(e)), nil
+		return server.GetMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetMachine200JSONResponse(*convert.MachineDetail(vm)), nil

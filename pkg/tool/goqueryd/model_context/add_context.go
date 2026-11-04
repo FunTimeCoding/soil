@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) addContext(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	collection, e := q.RequireString(constant.Collection)

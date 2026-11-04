@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) AddLink(
-	_ context.Context,
+	x context.Context,
 	r server.AddLinkRequestObject,
 ) (server.AddLinkResponseObject, error) {
 	value := ""
@@ -33,7 +33,7 @@ func (s *Server) AddLink(
 	}
 
 	if e != nil {
-		return server.AddLink500JSONResponse(*s.answer(e)), nil
+		return server.AddLink500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	name := ""
@@ -61,7 +61,7 @@ func (s *Server) AddLink(
 	}
 
 	if f != nil {
-		return server.AddLink500JSONResponse(*s.answer(f)), nil
+		return server.AddLink500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.AddLink200JSONResponse{

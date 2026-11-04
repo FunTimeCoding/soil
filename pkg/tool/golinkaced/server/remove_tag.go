@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) RemoveTag(
-	_ context.Context,
+	x context.Context,
 	r server.RemoveTagRequestObject,
 ) (server.RemoveTagResponseObject, error) {
 	result, f := s.service.RemoveTag(int(r.Identifier), r.Body.Name)
@@ -27,7 +27,7 @@ func (s *Server) RemoveTag(
 	}
 
 	if f != nil {
-		return server.RemoveTag500JSONResponse(*s.answer(f)), nil
+		return server.RemoveTag500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.RemoveTag200JSONResponse{

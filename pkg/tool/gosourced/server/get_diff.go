@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetDiff(
-	_ context.Context,
+	x context.Context,
 	r server.GetDiffRequestObject,
 ) (server.GetDiffResponseObject, error) {
 	result, e := s.diff.DiffSymbols(
@@ -21,7 +21,7 @@ func (s *Server) GetDiff(
 	}
 
 	if e != nil {
-		return server.GetDiff500JSONResponse(*s.answer(e)), nil
+		return server.GetDiff500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	withText := r.Params.Text != nil && *r.Params.Text

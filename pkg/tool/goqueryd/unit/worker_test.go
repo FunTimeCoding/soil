@@ -43,8 +43,20 @@ func TestTheWorkerIndexesWhileTheEmbedderIsDown(t *testing.T) {
 
 func TestTheWorkerCountsWhatItPrunes(t *testing.T) {
 	v := newService(t, newEmbedder(t), newReranker(t))
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nyankee.\n", nil)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nzulu.\n",
+		nil,
+	)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nyankee.\n",
+		nil,
+	)
 	g := prometheus.NewRegistry()
 	w := worker.New(
 		v.Maintain,

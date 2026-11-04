@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetEpisodes(
-	_ context.Context,
+	x context.Context,
 	r server.GetEpisodesRequestObject,
 ) (server.GetEpisodesResponseObject, error) {
 	items, e := s.service.Episodes(r.Identifier)
@@ -22,7 +22,7 @@ func (s *Server) GetEpisodes(
 	}
 
 	if e != nil {
-		return server.GetEpisodes500JSONResponse(*s.answer(e)), nil
+		return server.GetEpisodes500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetEpisodes200JSONResponse(convertItems(items)), nil

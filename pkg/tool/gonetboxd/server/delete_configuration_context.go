@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteConfigurationContext(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteConfigurationContextRequestObject,
 ) (server.DeleteConfigurationContextResponseObject, error) {
 	e := s.service.DeleteConfigurationContext(r.Name)
@@ -34,7 +34,7 @@ func (s *Server) DeleteConfigurationContext(
 
 	if e != nil {
 		return server.DeleteConfigurationContext500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

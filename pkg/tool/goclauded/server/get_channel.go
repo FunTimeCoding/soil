@@ -14,7 +14,7 @@ func (s *Server) GetChannel(
 
 	if e != nil {
 		return server.GetChannel500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -33,7 +33,7 @@ func (s *Server) GetChannel(
 
 	if f != nil {
 		return server.GetChannel500JSONResponse(
-			*s.captureFail(f, soil.UnexpectedError),
+			*s.captureFail(x, f, soil.UnexpectedError),
 		), nil
 	}
 

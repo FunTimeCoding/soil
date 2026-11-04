@@ -32,7 +32,7 @@ func (s *Server) applyPattern(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	r, apply, f := s.pattern.ApplyPattern(
@@ -48,7 +48,7 @@ func (s *Server) applyPattern(
 	)
 
 	if f != nil {
-		return s.captureFail(f, soil.UnexpectedError)
+		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
 	if apply == nil {

@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) PostUser(
-	_ context.Context,
+	x context.Context,
 	r server.PostUserRequestObject,
 ) (server.PostUserResponseObject, error) {
 	result, e := s.service.CreateUser(
@@ -39,7 +39,7 @@ func (s *Server) PostUser(
 	}
 
 	if e != nil {
-		return server.PostUser500JSONResponse(*s.answer(e)), nil
+		return server.PostUser500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostUser200JSONResponse(*convert.User(result)), nil

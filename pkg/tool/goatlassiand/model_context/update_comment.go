@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) updateComment(
-	c context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(generativeConstant.ParameterKey)
@@ -30,7 +30,7 @@ func (s *Server) updateComment(
 	}
 
 	if e := s.service.UpdateComment(key, identifier, body); e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("comment %s updated", identifier)

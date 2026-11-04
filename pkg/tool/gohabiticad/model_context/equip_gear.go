@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) equipGear(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	key, f := r.RequireString(constant.Key)
@@ -21,7 +21,7 @@ func (s *Server) equipGear(
 	result, e := s.service.Equip(key)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Gear(result))

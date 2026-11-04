@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListDevices(
-	_ context.Context,
+	x context.Context,
 	r server.ListDevicesRequestObject,
 ) (server.ListDevicesResponseObject, error) {
 	query := ""
@@ -24,7 +24,7 @@ func (s *Server) ListDevices(
 	}
 
 	if e != nil {
-		return server.ListDevices500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListDevices500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListDevices200JSONResponse(

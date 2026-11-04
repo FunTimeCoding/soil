@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createVirtualInterface(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	vmName, f := r.RequireString(constant.VirtualMachine)
@@ -28,7 +28,7 @@ func (s *Server) createVirtualInterface(
 	result, e := s.service.CreateVirtualInterface(vmName, name)
 
 	if e != nil {
-		return s.serviceFail(e, "virtual interface not created")
+		return s.serviceFail(x, e, "virtual interface not created")
 	}
 
 	return response.SuccessAny(convert.VirtualInterface(result))

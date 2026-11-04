@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) listEntries(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ struct{},
 ) (*mcp.CallToolResult, error) {

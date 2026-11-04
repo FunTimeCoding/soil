@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) DeleteSnippet(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteSnippetRequestObject,
 ) (server.DeleteSnippetResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -24,7 +24,7 @@ func (s *Server) DeleteSnippet(
 	}
 
 	if e != nil {
-		return server.DeleteSnippet500JSONResponse(*s.answer(e)), nil
+		return server.DeleteSnippet500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	e = s.service.DeleteSnippet(instance, r.Name)
@@ -37,7 +37,7 @@ func (s *Server) DeleteSnippet(
 	case forbidden.Is(e):
 		return server.DeleteSnippet403JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.DeleteSnippet500JSONResponse(*s.answer(e)), nil
+		return server.DeleteSnippet500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeleteSnippet200JSONResponse{Status: "deleted"}, nil

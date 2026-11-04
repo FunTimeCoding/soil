@@ -13,7 +13,11 @@ import (
 
 func TestAnswerFailsAnUncapturedClassQuietly(t *testing.T) {
 	m := memory.New()
-	r, e := response.Answer(m, not_found.Format("post not found: 8"))
+	r, e := response.Answer(
+		t.Context(),
+		m,
+		not_found.Format("post not found: 8"),
+	)
 	assert.Nil(t, e)
 	assert.True(t, r.IsError)
 	assert.String(t, "post not found: 8", r.Content[0].(mcp.TextContent).Text)
@@ -22,7 +26,11 @@ func TestAnswerFailsAnUncapturedClassQuietly(t *testing.T) {
 
 func TestAnswerCapturesACapturedClassWithItsMessage(t *testing.T) {
 	m := memory.New()
-	r, e := response.Answer(m, not_configured.Format("no instance configured"))
+	r, e := response.Answer(
+		t.Context(),
+		m,
+		not_configured.Format("no instance configured"),
+	)
 	assert.Nil(t, e)
 	assert.True(t, r.IsError)
 	assert.StringContains(
@@ -35,7 +43,7 @@ func TestAnswerCapturesACapturedClassWithItsMessage(t *testing.T) {
 
 func TestAnswerCapturesTheUnclassifiedWithItsText(t *testing.T) {
 	m := memory.New()
-	r, e := response.Answer(m, errors.New("disk full"))
+	r, e := response.Answer(t.Context(), m, errors.New("disk full"))
 	assert.Nil(t, e)
 	assert.StringContains(
 		t,
@@ -48,6 +56,7 @@ func TestAnswerCapturesTheUnclassifiedWithItsText(t *testing.T) {
 func TestAnswerWithPutsTheContextBeforeAQuietClass(t *testing.T) {
 	m := memory.New()
 	r, e := response.AnswerWith(
+		t.Context(),
 		m,
 		not_found.Format("post not found: 8"),
 		"load post",
@@ -63,7 +72,12 @@ func TestAnswerWithPutsTheContextBeforeAQuietClass(t *testing.T) {
 
 func TestAnswerWithPutsTheContextBeforeAFault(t *testing.T) {
 	m := memory.New()
-	r, e := response.AnswerWith(m, errors.New("disk full"), "load post")
+	r, e := response.AnswerWith(
+		t.Context(),
+		m,
+		errors.New("disk full"),
+		"load post",
+	)
 	assert.Nil(t, e)
 	assert.StringContains(
 		t,

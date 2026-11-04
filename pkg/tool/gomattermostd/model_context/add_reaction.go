@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) AddReaction(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.AddReaction,
 ) (*mcp.CallToolResult, error) {
@@ -23,13 +23,13 @@ func (s *Server) AddReaction(
 	p, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	e = s.service.React(p, a.EmojiName)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

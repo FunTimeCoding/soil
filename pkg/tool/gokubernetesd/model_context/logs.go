@@ -26,7 +26,7 @@ func (s *Server) Logs(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	q := request.Logs{
@@ -43,7 +43,7 @@ func (s *Server) Logs(
 		logs, f := s.service.LogsAll(x, cluster, q)
 
 		if f != nil {
-			return s.captureDetail(f)
+			return s.captureDetail(x, f)
 		}
 
 		var sections []string
@@ -61,7 +61,7 @@ func (s *Server) Logs(
 	result, f := s.service.Logs(x, cluster, q)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.Success(result)

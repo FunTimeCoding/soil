@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetPageChildren(
-	_ context.Context,
+	x context.Context,
 	r server.GetPageChildrenRequestObject,
 ) (server.GetPageChildrenResponseObject, error) {
 	result, e := s.service.PageChildren(r.Identifier)
@@ -28,7 +28,7 @@ func (s *Server) GetPageChildren(
 	}
 
 	if e != nil {
-		return server.GetPageChildren500JSONResponse(*s.answer(e)), nil
+		return server.GetPageChildren500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetPageChildren200JSONResponse(

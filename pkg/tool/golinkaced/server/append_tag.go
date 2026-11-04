@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) AppendTag(
-	_ context.Context,
+	x context.Context,
 	r server.AppendTagRequestObject,
 ) (server.AppendTagResponseObject, error) {
 	result, f := s.service.AppendTag(int(r.Identifier), r.Body.Name)
@@ -27,7 +27,7 @@ func (s *Server) AppendTag(
 	}
 
 	if f != nil {
-		return server.AppendTag500JSONResponse(*s.answer(f)), nil
+		return server.AppendTag500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.AppendTag200JSONResponse{

@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) ListStorageContent(
-	_ context.Context,
+	x context.Context,
 	r server.ListStorageContentRequestObject,
 ) (server.ListStorageContentResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -25,7 +25,7 @@ func (s *Server) ListStorageContent(
 	}
 
 	if e != nil {
-		return server.ListStorageContent500JSONResponse(*s.answer(e)), nil
+		return server.ListStorageContent500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	content, e := s.service.ListStorageContent(instance, r.Name, r.Storage)
@@ -40,7 +40,7 @@ func (s *Server) ListStorageContent(
 	case unavailable.Is(e):
 		return server.ListStorageContent503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListStorageContent500JSONResponse(*s.answer(e)), nil
+		return server.ListStorageContent500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.ListStorageContent200JSONResponse

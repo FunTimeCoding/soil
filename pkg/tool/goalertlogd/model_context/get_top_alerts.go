@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) getTopAlerts(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	n := r.GetInt(constant.N, 25)
@@ -42,7 +42,7 @@ func (s *Server) getTopAlerts(
 	records, f := s.service.TopAlerts(n, start, end)
 
 	if f != nil {
-		return s.answer(f)
+		return s.answer(x, f)
 	}
 
 	return response.Success(

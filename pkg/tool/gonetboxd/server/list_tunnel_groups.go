@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListTunnelGroups(
-	_ context.Context,
+	x context.Context,
 	_ server.ListTunnelGroupsRequestObject,
 ) (server.ListTunnelGroupsResponseObject, error) {
 	groups, e := s.service.TunnelGroups()
@@ -18,7 +18,7 @@ func (s *Server) ListTunnelGroups(
 	}
 
 	if e != nil {
-		return server.ListTunnelGroups500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListTunnelGroups500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListTunnelGroups200JSONResponse(convert.TunnelGroups(groups)), nil

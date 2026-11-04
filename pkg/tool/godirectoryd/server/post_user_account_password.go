@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) PostUserAccountPassword(
-	_ context.Context,
+	x context.Context,
 	r server.PostUserAccountPasswordRequestObject,
 ) (server.PostUserAccountPasswordResponseObject, error) {
 	e := s.service.SetPassword(r.Account, r.Body.Password)
@@ -41,7 +41,7 @@ func (s *Server) PostUserAccountPassword(
 	}
 
 	if e != nil {
-		return server.PostUserAccountPassword500JSONResponse(*s.answer(e)), nil
+		return server.PostUserAccountPassword500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostUserAccountPassword200JSONResponse{

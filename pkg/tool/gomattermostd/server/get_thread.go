@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetThread(
-	_ context.Context,
+	x context.Context,
 	r server.GetThreadRequestObject,
 ) (server.GetThreadResponseObject, error) {
 	replies, e := s.service.ThreadOf(r.Identifier)
@@ -27,7 +27,7 @@ func (s *Server) GetThread(
 	}
 
 	if e != nil {
-		return server.GetThread500JSONResponse(*s.answer(e)), nil
+		return server.GetThread500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetThread200JSONResponse(convertPosts(replies)), nil

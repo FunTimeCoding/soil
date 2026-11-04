@@ -17,13 +17,13 @@ func (s *Server) searchConversations(
 	a argument.SearchConversations,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.resolveCaller(x, constant.SearchConversations); e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	found, e := s.search.SearchConversations(a.Query, a.Kinds, int(a.Limit))
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	var lines []string

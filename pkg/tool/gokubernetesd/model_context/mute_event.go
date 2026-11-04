@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) MuteEvent(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.MuteEvent,
 ) (*mcp.CallToolResult, error) {
@@ -19,7 +19,7 @@ func (s *Server) MuteEvent(
 	e := s.service.MuteEvent(a.Reason, a.Message, a.Cluster)
 
 	if e != nil {
-		return s.captureFail(e, "create mute rule")
+		return s.captureFail(x, e, "create mute rule")
 	}
 
 	if a.Cluster != "" {

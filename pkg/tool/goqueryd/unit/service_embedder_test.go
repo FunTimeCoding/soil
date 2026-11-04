@@ -13,7 +13,7 @@ func TestAPushIsEmbeddedWhileTheEmbedderAnswers(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		v.PushDocument(
+		v.MustPushDocument(
 			t.Context(),
 			"notes",
 			"alfa.md",
@@ -28,7 +28,7 @@ func TestAPushWhileTheEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
-	warning := v.PushDocument(
+	warning := v.MustPushDocument(
 		t.Context(),
 		"notes",
 		"alfa.md",
@@ -65,7 +65,13 @@ func TestAKeywordSearchNeedsNoEmbedder(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nzulu.\n",
+		nil,
+	)
 	o := search_option.New("zulu", 10)
 	o.Mode = "keyword"
 	found, e := v.Search(t.Context(), o)
@@ -77,7 +83,13 @@ func TestPendingDocumentsWaitWhileTheEmbedderIsDown(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
-	v.PushDocument(t.Context(), "notes", "alfa.md", "# Alfa\n\nzulu.\n", nil)
+	v.MustPushDocument(
+		t.Context(),
+		"notes",
+		"alfa.md",
+		"# Alfa\n\nzulu.\n",
+		nil,
+	)
 	_, e := v.Embed(t.Context())
 	assert.True(t, unavailable.Is(e))
 	assert.Integer(t, 1, v.MustStatus().PendingEmbeddings)

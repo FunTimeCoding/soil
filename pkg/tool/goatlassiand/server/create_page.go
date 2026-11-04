@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreatePage(
-	_ context.Context,
+	x context.Context,
 	r server.CreatePageRequestObject,
 ) (server.CreatePageResponseObject, error) {
 	result, e := s.service.CreatePage(
@@ -34,7 +34,7 @@ func (s *Server) CreatePage(
 	}
 
 	if e != nil {
-		return server.CreatePage500JSONResponse(*s.answer(e)), nil
+		return server.CreatePage500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.CreatePage201JSONResponse(

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListWirelessNetworks(
-	_ context.Context,
+	x context.Context,
 	_ server.ListWirelessNetworksRequestObject,
 ) (server.ListWirelessNetworksResponseObject, error) {
 	networks, e := s.service.WirelessNetworks()
@@ -18,7 +18,9 @@ func (s *Server) ListWirelessNetworks(
 	}
 
 	if e != nil {
-		return server.ListWirelessNetworks500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListWirelessNetworks500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.ListWirelessNetworks200JSONResponse(

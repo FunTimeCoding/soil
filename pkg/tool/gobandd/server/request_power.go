@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) RequestPower(
-	_ context.Context,
+	x context.Context,
 	r server.RequestPowerRequestObject,
 ) (server.RequestPowerResponseObject, error) {
 	instance, e := s.resolveInstance(r.Body.Instance)
@@ -26,7 +26,9 @@ func (s *Server) RequestPower(
 	}
 
 	if e != nil {
-		return server.RequestPower500JSONResponse(*s.captureFail(e, e.Error())), nil
+		return server.RequestPower500JSONResponse(
+			*s.captureFail(x, e, e.Error()),
+		), nil
 	}
 
 	requested, f := s.service.Power(
@@ -52,7 +54,7 @@ func (s *Server) RequestPower(
 	}
 
 	if f != nil {
-		return server.RequestPower500JSONResponse(*s.captureDetail(f)), nil
+		return server.RequestPower500JSONResponse(*s.captureDetail(x, f)), nil
 	}
 
 	return server.RequestPower200JSONResponse{

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) SaveView(
-	_ context.Context,
+	x context.Context,
 	r server.SaveViewRequestObject,
 ) (server.SaveViewResponseObject, error) {
 	var path string
@@ -28,7 +28,7 @@ func (s *Server) SaveView(
 	}
 
 	if e != nil {
-		return server.SaveView500JSONResponse(*s.answer(e)), nil
+		return server.SaveView500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.SaveView204Response{}, nil

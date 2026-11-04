@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeletePage(
-	_ context.Context,
+	x context.Context,
 	r server.DeletePageRequestObject,
 ) (server.DeletePageResponseObject, error) {
 	draft := r.Params.Draft != nil && *r.Params.Draft
@@ -28,7 +28,7 @@ func (s *Server) DeletePage(
 	}
 
 	if e != nil {
-		return server.DeletePage500JSONResponse(*s.answer(e)), nil
+		return server.DeletePage500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.DeletePage204Response{}, nil

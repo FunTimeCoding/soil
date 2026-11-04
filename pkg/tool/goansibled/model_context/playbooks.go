@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) playbooks(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	return response.SuccessAny(s.service.Playbooks())

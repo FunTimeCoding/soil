@@ -15,7 +15,7 @@ func (s *Server) Certificates(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	if a.Name != "" {
@@ -32,7 +32,7 @@ func (s *Server) Certificates(
 		)
 
 		if f != nil {
-			return s.captureDetail(f)
+			return s.captureDetail(x, f)
 		}
 
 		m := map[string]any{"certificate": result.Certificate}
@@ -41,13 +41,13 @@ func (s *Server) Certificates(
 			m["latestRequest"] = result.LatestRequest
 		}
 
-		return s.formatMarkup(m, result.Filtered)
+		return s.formatMarkup(x, m, result.Filtered)
 	}
 
 	result, f := s.service.Certificates(x, cluster)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.SuccessAny(result)

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListClusterTypes(
-	_ context.Context,
+	x context.Context,
 	_ server.ListClusterTypesRequestObject,
 ) (server.ListClusterTypesResponseObject, error) {
 	types, e := s.service.ClusterTypes()
@@ -18,7 +18,7 @@ func (s *Server) ListClusterTypes(
 	}
 
 	if e != nil {
-		return server.ListClusterTypes500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListClusterTypes500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := make([]*server.ClusterType, 0, len(types))

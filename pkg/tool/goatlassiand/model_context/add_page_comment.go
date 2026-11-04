@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) addPageComment(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
@@ -24,7 +24,7 @@ func (s *Server) addPageComment(
 	}
 
 	if h := s.service.AddPageComment(identifier, body); h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.Success("comment added")

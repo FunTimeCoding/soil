@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) CreateList(
-	_ context.Context,
+	x context.Context,
 	r server.CreateListRequestObject,
 ) (server.CreateListResponseObject, error) {
 	description := ""
@@ -38,7 +38,7 @@ func (s *Server) CreateList(
 	}
 
 	if f != nil {
-		return server.CreateList500JSONResponse(*s.answer(f)), nil
+		return server.CreateList500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.CreateList200JSONResponse{

@@ -1,6 +1,6 @@
 package store
 
-func (s *Store) EnsurePushCollection(name string) {
+func (s *Store) EnsurePushCollection(name string) error {
 	_, e := s.database.Exec(
 		`INSERT INTO collection (name, path, pattern, type)
 		VALUES (?, '', '', 'push')
@@ -8,7 +8,5 @@ func (s *Store) EnsurePushCollection(name string) {
 		name,
 	)
 
-	if e != nil {
-		panic(e)
-	}
+	return e
 }

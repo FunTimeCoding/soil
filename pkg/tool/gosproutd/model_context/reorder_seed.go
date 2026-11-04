@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) reorderSeed(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ReorderSeed,
 ) (*mcp.CallToolResult, error) {

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createManufacturer(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	name, f := r.RequireString(generativeConstant.ParameterName)
@@ -21,7 +21,7 @@ func (s *Server) createManufacturer(
 	result, g := s.service.CreateManufacturer(name)
 
 	if g != nil {
-		return s.captureFail(g, "manufacturer not created")
+		return s.captureFail(x, g, "manufacturer not created")
 	}
 
 	return response.SuccessAny(convert.Manufacturer(result))

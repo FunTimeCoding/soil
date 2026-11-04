@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) listBlocklists(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Blocklists(
@@ -17,7 +17,7 @@ func (s *Server) listBlocklists(
 	)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(convert.Blocklists(result))

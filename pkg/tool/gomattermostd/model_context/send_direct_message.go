@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) SendDirectMessage(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SendDirectMessage,
 ) (*mcp.CallToolResult, error) {
@@ -28,13 +28,13 @@ func (s *Server) SendDirectMessage(
 	}
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	p, e := s.service.DirectMessage(user, a.Message)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(

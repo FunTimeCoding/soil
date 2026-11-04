@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostSend(
-	_ context.Context,
+	x context.Context,
 	r server.PostSendRequestObject,
 ) (server.PostSendResponseObject, error) {
 	var to []string
@@ -22,7 +22,7 @@ func (s *Server) PostSend(
 
 	if e != nil {
 		return server.PostSend500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

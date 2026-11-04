@@ -15,13 +15,13 @@ func (s *Server) status(
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.resolveCaller(x, constant.Status); e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	findings, e := s.roster.Findings()
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	if len(findings) == 0 {

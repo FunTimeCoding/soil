@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listTags(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	tags, e := s.service.ListTags()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(notation.MarshalIndent(tags))

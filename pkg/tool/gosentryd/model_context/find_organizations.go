@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) FindOrganizations(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	_ argument.FindOrganizations,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Organizations()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.SuccessAny(result)

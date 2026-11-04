@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetUser(
-	_ context.Context,
+	x context.Context,
 	_ server.GetUserRequestObject,
 ) (server.GetUserResponseObject, error) {
 	result, e := s.service.Users()
@@ -23,7 +23,7 @@ func (s *Server) GetUser(
 	}
 
 	if e != nil {
-		return server.GetUser500JSONResponse(*s.answer(e)), nil
+		return server.GetUser500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetUser200JSONResponse(convert.Users(result)), nil

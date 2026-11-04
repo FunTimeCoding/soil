@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) tag(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier := int64(q.GetFloat(constant.MemoryIdentifier, 0))
@@ -45,7 +45,7 @@ func (s *Server) tag(
 		e := s.service.ReplaceTags(identifier, tags)
 
 		if e != nil {
-			return s.answerWith(e, "replace tags")
+			return s.answerWith(x, e, "replace tags")
 		}
 	}
 
@@ -59,7 +59,7 @@ func (s *Server) tag(
 		e := s.service.AddTags(identifier, tags)
 
 		if e != nil {
-			return s.answerWith(e, "add tags")
+			return s.answerWith(x, e, "add tags")
 		}
 	}
 
@@ -73,14 +73,14 @@ func (s *Server) tag(
 		e := s.service.RemoveTags(identifier, tags)
 
 		if e != nil {
-			return s.answerWith(e, "remove tags")
+			return s.answerWith(x, e, "remove tags")
 		}
 	}
 
 	m, e := s.service.GetMemory(identifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	stored := fmt.Sprintf("Memory %d tags: %v", identifier, m.Tags)

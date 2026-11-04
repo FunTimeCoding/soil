@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) AllocateStat(
-	_ context.Context,
+	x context.Context,
 	r server.AllocateStatRequestObject,
 ) (server.AllocateStatResponseObject, error) {
 	result, e := s.service.Allocate(string(r.Stat))
@@ -28,7 +28,7 @@ func (s *Server) AllocateStat(
 	}
 
 	if e != nil {
-		return server.AllocateStat500JSONResponse(*s.answer(e)), nil
+		return server.AllocateStat500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.AllocateStat200JSONResponse(*convert.Stats(result)), nil

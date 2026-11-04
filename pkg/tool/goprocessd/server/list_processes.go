@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) ListProcesses(
-	_ context.Context,
+	x context.Context,
 	_ server.ListProcessesRequestObject,
 ) (server.ListProcessesResponseObject, error) {
 	return server.ListProcesses200JSONResponse(

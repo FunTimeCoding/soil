@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetList(
-	_ context.Context,
+	x context.Context,
 	r server.GetListRequestObject,
 ) (server.GetListResponseObject, error) {
 	var metadata map[string]string
@@ -47,7 +47,7 @@ func (s *Server) GetList(
 
 	if e != nil {
 		return server.GetList500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

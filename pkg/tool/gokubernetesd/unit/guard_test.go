@@ -13,7 +13,6 @@ import (
 
 func TestGuard(t *testing.T) {
 	o := service_tester.NewOption(t, map[string]*cluster.Cluster{})
-	o.ReadOnly = true
 	r := memory.New()
 	d := service_tester.NewDaemon(t, o, r)
 	v := model_context_server.New(

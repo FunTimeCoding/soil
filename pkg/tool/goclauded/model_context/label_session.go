@@ -16,7 +16,7 @@ func (s *Server) labelSession(
 	c, e := s.resolveCaller(x, constant.Label)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	key, e := q.RequireString(constant.Key)
@@ -26,7 +26,7 @@ func (s *Server) labelSession(
 	}
 
 	target := q.GetString(constant.Target, "")
-	sessionIdentifier, failed, f := s.targetSession(c, target)
+	sessionIdentifier, failed, f := s.targetSession(x, c, target)
 
 	if failed != nil || f != nil {
 		return failed, f
@@ -40,7 +40,7 @@ func (s *Server) labelSession(
 		value, f := s.label.GetLabel(sessionIdentifier, key)
 
 		if f != nil {
-			return s.captureFail(f, soil.UnexpectedError)
+			return s.captureFail(x, f, soil.UnexpectedError)
 		}
 
 		if value == "" {
@@ -61,7 +61,7 @@ func (s *Server) labelSession(
 		)
 
 		if g != nil {
-			return s.captureFail(g, soil.UnexpectedError)
+			return s.captureFail(x, g, soil.UnexpectedError)
 		}
 
 		return response.Success(change)
@@ -85,7 +85,7 @@ func (s *Server) labelSession(
 	)
 
 	if h != nil {
-		return s.captureFail(h, soil.UnexpectedError)
+		return s.captureFail(x, h, soil.UnexpectedError)
 	}
 
 	return response.Success(

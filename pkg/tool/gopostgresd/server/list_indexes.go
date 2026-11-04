@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) ListIndexes(
-	c context.Context,
+	x context.Context,
 	r server.ListIndexesRequestObject,
 ) (server.ListIndexesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) ListIndexes(
 	}
 
 	if e != nil {
-		return server.ListIndexes500JSONResponse(*s.answerWith(e, "")), nil
+		return server.ListIndexes500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	var schema string
@@ -35,7 +35,7 @@ func (s *Server) ListIndexes(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.ListIndexes(c, instance, schema, r.Params.Table)
+	rows, e := s.service.ListIndexes(x, instance, schema, r.Params.Table)
 
 	if validation.Is(e) {
 		return server.ListIndexes400JSONResponse(*clientError(e)), nil
@@ -54,7 +54,7 @@ func (s *Server) ListIndexes(
 	}
 
 	if e != nil {
-		return server.ListIndexes500JSONResponse(*s.answerWith(e, "")), nil
+		return server.ListIndexes500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	return server.ListIndexes200JSONResponse{

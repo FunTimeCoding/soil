@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) UpdateVirtualMachine(
-	_ context.Context,
+	x context.Context,
 	r server.UpdateVirtualMachineRequestObject,
 ) (server.UpdateVirtualMachineResponseObject, error) {
 	c := machine_change.New()
@@ -49,7 +49,9 @@ func (s *Server) UpdateVirtualMachine(
 	}
 
 	if e != nil {
-		return server.UpdateVirtualMachine500JSONResponse(*s.captureDetail(e)), nil
+		return server.UpdateVirtualMachine500JSONResponse(
+			*s.captureDetail(x, e),
+		), nil
 	}
 
 	return server.UpdateVirtualMachine200JSONResponse(

@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -9,13 +10,14 @@ import (
 )
 
 func (s *Server) formatMarkup(
+	x context.Context,
 	object map[string]any,
 	filtered []string,
 ) (*mcp.CallToolResult, error) {
 	b, e := yaml.Marshal(object)
 
 	if e != nil {
-		return s.captureFail(e, "marshal yaml")
+		return s.captureFail(x, e, "marshal yaml")
 	}
 
 	if len(filtered) == 0 {

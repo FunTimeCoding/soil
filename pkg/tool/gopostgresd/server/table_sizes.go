@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) TableSizes(
-	c context.Context,
+	x context.Context,
 	r server.TableSizesRequestObject,
 ) (server.TableSizesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) TableSizes(
 	}
 
 	if e != nil {
-		return server.TableSizes500JSONResponse(*s.answerWith(e, "")), nil
+		return server.TableSizes500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	var schema string
@@ -35,7 +35,7 @@ func (s *Server) TableSizes(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.TableSizes(c, instance, schema)
+	rows, e := s.service.TableSizes(x, instance, schema)
 
 	if validation.Is(e) {
 		return server.TableSizes400JSONResponse(*clientError(e)), nil
@@ -54,7 +54,7 @@ func (s *Server) TableSizes(
 	}
 
 	if e != nil {
-		return server.TableSizes500JSONResponse(*s.answerWith(e, "")), nil
+		return server.TableSizes500JSONResponse(*s.answerWith(x, e, "")), nil
 	}
 
 	return server.TableSizes200JSONResponse{

@@ -12,7 +12,7 @@ import (
 )
 
 func (s *Server) StopMachine(
-	_ context.Context,
+	x context.Context,
 	r server.StopMachineRequestObject,
 ) (server.StopMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
@@ -26,7 +26,7 @@ func (s *Server) StopMachine(
 	}
 
 	if e != nil {
-		return server.StopMachine500JSONResponse(*s.answer(e)), nil
+		return server.StopMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	node := ""
@@ -53,7 +53,7 @@ func (s *Server) StopMachine(
 	case unavailable.Is(e):
 		return server.StopMachine503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.StopMachine500JSONResponse(*s.answer(e)), nil
+		return server.StopMachine500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.StopMachine200JSONResponse{TaskId: taskIdentifier}, nil

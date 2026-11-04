@@ -12,11 +12,11 @@ import (
 )
 
 func (s *Server) get(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	if ids := q.GetString(constant.MemoryIdentifiers, ""); ids != "" {
-		return s.getMany(ids, q.GetBool(constant.Detail, false))
+		return s.getMany(x, ids, q.GetBool(constant.Detail, false))
 	}
 
 	identifier := int64(q.GetFloat(constant.MemoryIdentifier, 0))
@@ -28,13 +28,13 @@ func (s *Server) get(
 	m, e := s.service.GetMemory(identifier)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	related, f := s.service.ListRelated(identifier)
 
 	if f != nil {
-		return s.answerWith(f, "load relations")
+		return s.answerWith(x, f, "load relations")
 	}
 
 	var history []record.Version
@@ -43,7 +43,7 @@ func (s *Server) get(
 		history, e = s.service.GetMemoryHistory(identifier)
 
 		if e != nil {
-			return s.answerWith(e, "load history")
+			return s.answerWith(x, e, "load history")
 		}
 	}
 

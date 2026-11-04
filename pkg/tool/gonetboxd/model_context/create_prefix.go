@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createPrefix(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	cidr, e := r.RequireString(constant.Prefix)
@@ -25,7 +25,7 @@ func (s *Server) createPrefix(
 	)
 
 	if f != nil {
-		return s.serviceFail(f, "prefix not created")
+		return s.serviceFail(x, f, "prefix not created")
 	}
 
 	return response.SuccessAny(convert.Prefix(p))

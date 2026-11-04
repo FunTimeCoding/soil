@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreateInterface(
-	_ context.Context,
+	x context.Context,
 	r server.CreateInterfaceRequestObject,
 ) (server.CreateInterfaceResponseObject, error) {
 	address := ""
@@ -33,7 +33,7 @@ func (s *Server) CreateInterface(
 	}
 
 	if e != nil {
-		return server.CreateInterface500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateInterface500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	result := server.Interface{Identifier: i.Identifier, Name: i.Name}

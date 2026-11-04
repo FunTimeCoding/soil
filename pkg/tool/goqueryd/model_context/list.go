@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) list(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	collection, e := q.RequireString(constant.Collection)
@@ -39,7 +39,7 @@ func (s *Server) list(
 	)
 
 	if f != nil {
-		return s.captureFail(f, "document listing failed")
+		return s.captureFail(x, f, "document listing failed")
 	}
 
 	return response.Success(notation.MarshalIndent(outcome))

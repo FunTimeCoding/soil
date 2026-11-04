@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) RestartProcess(
-	_ context.Context,
+	x context.Context,
 	r server.RestartProcessRequestObject,
 ) (server.RestartProcessResponseObject, error) {
 	e := s.service.Restart(r.Name)
@@ -17,7 +17,7 @@ func (s *Server) RestartProcess(
 	}
 
 	if e != nil {
-		return server.RestartProcess500JSONResponse(*s.answer(e)), nil
+		return server.RestartProcess500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.RestartProcess204Response{}, nil

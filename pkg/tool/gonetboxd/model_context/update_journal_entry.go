@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) updateJournalEntry(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	identifier, f := r.RequireInt(generativeConstant.ParameterIdentifier)
@@ -28,7 +28,7 @@ func (s *Server) updateJournalEntry(
 	result, g := s.service.UpdateJournalEntry(int32(identifier), kind, comments)
 
 	if g != nil {
-		return s.captureFail(g, "journal entry not updated")
+		return s.captureFail(x, g, "journal entry not updated")
 	}
 
 	return response.SuccessAny(result)

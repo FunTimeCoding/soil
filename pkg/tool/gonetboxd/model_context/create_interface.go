@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) createInterface(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -39,7 +39,7 @@ func (s *Server) createInterface(
 	)
 
 	if e != nil {
-		return s.serviceFail(e, "interface not created")
+		return s.serviceFail(x, e, "interface not created")
 	}
 
 	return response.SuccessAny(convert.Interface(result))

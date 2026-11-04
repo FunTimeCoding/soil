@@ -102,7 +102,7 @@ func TestDeliveryTrimsMemoryActivity(t *testing.T) {
 	assert.True(t, utf8.RuneCountInString(text) <= 2000)
 }
 
-func TestDeliveryOverBudgetReachesSentry(t *testing.T) {
+func TestDeliveryOverBudgetIsCountedNotCaptured(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 
@@ -123,9 +123,17 @@ func TestDeliveryOverBudgetReachesSentry(t *testing.T) {
 	}
 
 	s.Check("session-1")
-	events := s.Reporter.Events()
-	assert.Count(t, 1, events)
-	assert.String(t, "hook delivery over budget", events[0].Error.Error())
+	assert.Count(t, 0, s.Reporter.Events())
+	assert.Float(
+		t,
+		1,
+		sample(t, s.Registry, "goclauded_delivery_over_budget_total", nil),
+	)
+	assert.Integer(
+		t,
+		2,
+		int(histogramCount(t, s.Registry, "goclauded_delivery_characters")),
+	)
 }
 
 func TestChannelCutsLongMessage(t *testing.T) {

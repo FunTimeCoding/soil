@@ -20,13 +20,14 @@ func (s *Server) explain(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	v, e := s.service.Explain(x, instance, a.SQL, a.Analyze)
 
 	if e != nil {
 		return s.answerWith(
+			x,
 			e,
 			fmt.Sprintf("database error on %s: explain not executed", instance),
 		)

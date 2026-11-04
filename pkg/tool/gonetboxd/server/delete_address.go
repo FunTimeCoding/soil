@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteAddress(
-	_ context.Context,
+	x context.Context,
 	r server.DeleteAddressRequestObject,
 ) (server.DeleteAddressResponseObject, error) {
 	e := s.service.DeleteInternet(r.Identifier)
@@ -27,7 +27,7 @@ func (s *Server) DeleteAddress(
 	}
 
 	if e != nil {
-		return server.DeleteAddress500JSONResponse(*s.captureDetail(e)), nil
+		return server.DeleteAddress500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.DeleteAddress204Response{}, nil

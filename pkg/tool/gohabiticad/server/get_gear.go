@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetGear(
-	_ context.Context,
+	x context.Context,
 	_ server.GetGearRequestObject,
 ) (server.GetGearResponseObject, error) {
 	result, e := s.service.UserGear()
@@ -23,7 +23,7 @@ func (s *Server) GetGear(
 	}
 
 	if e != nil {
-		return server.GetGear500JSONResponse(*s.answer(e)), nil
+		return server.GetGear500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetGear200JSONResponse(*convert.Gear(result)), nil

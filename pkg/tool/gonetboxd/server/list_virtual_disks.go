@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) ListVirtualDisks(
-	_ context.Context,
+	x context.Context,
 	r server.ListVirtualDisksRequestObject,
 ) (server.ListVirtualDisksResponseObject, error) {
 	disks, e := s.service.VirtualDisks(r.Name)
@@ -23,7 +23,7 @@ func (s *Server) ListVirtualDisks(
 	}
 
 	if e != nil {
-		return server.ListVirtualDisks500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListVirtualDisks500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.ListVirtualDisks200JSONResponse(convert.Disks(disks)), nil

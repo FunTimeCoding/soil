@@ -16,7 +16,7 @@ func (s *Server) power(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	requested, f := s.service.Power(instance, operation, force)
@@ -26,7 +26,7 @@ func (s *Server) power(
 	}
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	return response.Success("%s requested on %s", requested, instance)

@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) GetFailed(
-	_ context.Context,
+	x context.Context,
 	r server.GetFailedRequestObject,
 ) (server.GetFailedResponseObject, error) {
 	var collection string
@@ -20,7 +20,7 @@ func (s *Server) GetFailed(
 
 	if e != nil {
 		return server.GetFailed500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
+			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 

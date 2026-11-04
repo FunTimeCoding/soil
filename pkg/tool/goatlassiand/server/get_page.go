@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) GetPage(
-	_ context.Context,
+	x context.Context,
 	r server.GetPageRequestObject,
 ) (server.GetPageResponseObject, error) {
 	result, e := s.service.Page(r.Identifier, false)
@@ -28,7 +28,7 @@ func (s *Server) GetPage(
 	}
 
 	if e != nil {
-		return server.GetPage500JSONResponse(*s.answer(e)), nil
+		return server.GetPage500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetPage200JSONResponse(*convert.ConfluencePageDetail(result)), nil

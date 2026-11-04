@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) SearchUsers(
-	_ context.Context,
+	x context.Context,
 	r server.SearchUsersRequestObject,
 ) (server.SearchUsersResponseObject, error) {
 	users, e := s.service.SearchUsers(r.Params.Query)
@@ -23,7 +23,7 @@ func (s *Server) SearchUsers(
 	}
 
 	if e != nil {
-		return server.SearchUsers500JSONResponse(*s.answer(e)), nil
+		return server.SearchUsers500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	var result server.SearchUsers200JSONResponse

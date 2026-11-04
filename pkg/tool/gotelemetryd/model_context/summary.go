@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) summary(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	o := summary_option.New()
@@ -22,7 +22,7 @@ func (s *Server) summary(
 	rows, e := s.service.Summary(o)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	entries := make([]response.Summary, len(rows))

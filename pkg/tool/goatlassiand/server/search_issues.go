@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) SearchIssues(
-	_ context.Context,
+	x context.Context,
 	r server.SearchIssuesRequestObject,
 ) (server.SearchIssuesResponseObject, error) {
 	result, e := s.service.SearchIssues(r.Params.Query, r.Params.Limit)
@@ -28,7 +28,7 @@ func (s *Server) SearchIssues(
 	}
 
 	if e != nil {
-		return server.SearchIssues500JSONResponse(*s.answer(e)), nil
+		return server.SearchIssues500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.SearchIssues200JSONResponse(convert.JiraIssues(result)), nil

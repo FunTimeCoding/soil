@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) createPage(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	space, e := r.RequireString(constant.SpaceIdentifier)
@@ -40,7 +40,7 @@ func (s *Server) createPage(
 	result, h := s.service.CreatePage(space, parent, title, body, draft)
 
 	if h != nil {
-		return s.answer(h)
+		return s.answer(x, h)
 	}
 
 	return response.SuccessAny(result)

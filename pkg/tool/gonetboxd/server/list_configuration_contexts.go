@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListConfigurationContexts(
-	_ context.Context,
+	x context.Context,
 	_ server.ListConfigurationContextsRequestObject,
 ) (server.ListConfigurationContextsResponseObject, error) {
 	result, e := s.service.ConfigurationContexts()
@@ -19,7 +19,7 @@ func (s *Server) ListConfigurationContexts(
 
 	if e != nil {
 		return server.ListConfigurationContexts500JSONResponse(
-				*s.captureDetail(e),
+				*s.captureDetail(x, e),
 			),
 			nil
 	}

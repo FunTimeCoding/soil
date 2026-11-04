@@ -5,15 +5,5 @@ func (r *Reporter) CaptureException(e error) string {
 		r.print(e, "", nil)
 	}
 
-	if r.hub == nil {
-		return ""
-	}
-
-	identifier := r.hub.CaptureException(e)
-
-	if identifier == nil {
-		return ""
-	}
-
-	return string(*identifier)
+	return r.send(r.hub, e)
 }

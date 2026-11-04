@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreatePlatform(
-	_ context.Context,
+	x context.Context,
 	r server.CreatePlatformRequestObject,
 ) (server.CreatePlatformResponseObject, error) {
 	result, e := s.service.CreatePlatform(r.Body.Name)
@@ -23,7 +23,7 @@ func (s *Server) CreatePlatform(
 	}
 
 	if e != nil {
-		return server.CreatePlatform500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreatePlatform500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreatePlatform201JSONResponse(*convert.Platform(result)), nil

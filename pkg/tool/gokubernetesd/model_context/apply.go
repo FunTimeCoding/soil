@@ -21,7 +21,7 @@ func (s *Server) Apply(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	result, f := s.service.ApplyResource(
@@ -36,7 +36,7 @@ func (s *Server) Apply(
 	)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.captureDetail(x, f)
 	}
 
 	prefix := "applied"

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetAnsibleInventory(
-	_ context.Context,
+	x context.Context,
 	r server.GetAnsibleInventoryRequestObject,
 ) (server.GetAnsibleInventoryResponseObject, error) {
 	field := constant.AnsibleField
@@ -24,7 +24,7 @@ func (s *Server) GetAnsibleInventory(
 	}
 
 	if e != nil {
-		return server.GetAnsibleInventory500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetAnsibleInventory500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.GetAnsibleInventory200TextResponse(result.Markup()), nil

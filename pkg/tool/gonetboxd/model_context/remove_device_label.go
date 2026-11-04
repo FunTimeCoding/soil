@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) removeDeviceLabel(
-	_ context.Context,
+	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	device, f := r.RequireString(constant.Device)
@@ -24,7 +24,7 @@ func (s *Server) removeDeviceLabel(
 	}
 
 	if e := s.service.RemoveDeviceLabel(device, key); e != nil {
-		return s.serviceFail(e, "label not removed from device")
+		return s.serviceFail(x, e, "label not removed from device")
 	}
 
 	return response.Success("label removed")

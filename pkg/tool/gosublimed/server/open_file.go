@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) OpenFile(
-	_ context.Context,
+	x context.Context,
 	r server.OpenFileRequestObject,
 ) (server.OpenFileResponseObject, error) {
 	v, e := s.service.OpenFile(r.Body.FilePath)
@@ -17,7 +17,7 @@ func (s *Server) OpenFile(
 	}
 
 	if e != nil {
-		return server.OpenFile500JSONResponse(*s.answer(e)), nil
+		return server.OpenFile500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.OpenFile200JSONResponse(*convertView(v)), nil

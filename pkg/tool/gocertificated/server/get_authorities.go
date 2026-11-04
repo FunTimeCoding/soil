@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) GetAuthorities(
-	_ context.Context,
+	x context.Context,
 	_ server.GetAuthoritiesRequestObject,
 ) (server.GetAuthoritiesResponseObject, error) {
 	result, e := s.service.Authorities()
 
 	if e != nil {
-		return server.GetAuthorities500JSONResponse(*s.answer(e)), nil
+		return server.GetAuthorities500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetAuthorities200JSONResponse(

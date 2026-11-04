@@ -17,10 +17,11 @@ func (s *Server) cruise(
 	c, e := s.resolveCaller(x, constant.CruiseTool)
 
 	if e != nil {
-		return s.captureFail(e, soil.UnexpectedError)
+		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
 	sessionIdentifier, failed, f := s.targetSession(
+		x,
 		c,
 		q.GetString(constant.Target, ""),
 	)
@@ -39,14 +40,14 @@ func (s *Server) cruise(
 				return response.Fail(g.Error())
 			}
 
-			return s.captureFail(g, soil.UnexpectedError)
+			return s.captureFail(x, g, soil.UnexpectedError)
 		}
 	}
 
 	setting, h := s.message.CruiseSetting(sessionIdentifier)
 
 	if h != nil {
-		return s.captureFail(h, soil.UnexpectedError)
+		return s.captureFail(x, h, soil.UnexpectedError)
 	}
 
 	return response.Success(cruiseLine(setting))

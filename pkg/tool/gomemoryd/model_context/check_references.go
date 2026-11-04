@@ -11,13 +11,13 @@ import (
 )
 
 func (s *Server) checkReferences(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	reports, e := s.service.ReferenceCensus()
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	if len(reports) == 0 {

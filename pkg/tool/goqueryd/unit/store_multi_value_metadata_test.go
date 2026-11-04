@@ -49,12 +49,15 @@ func TestTwoFiltersNarrowTogether(t *testing.T) {
 
 func TestReplaceRemovesDroppedValues(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	s.SetMetadata(
-		"test",
-		"alfa.md",
-		map[string][]string{
-			constant.FixtureTagKey: {constant.FixtureBuildValue},
-		},
+	assert.FatalOnError(
+		t,
+		s.SetMetadata(
+			"test",
+			"alfa.md",
+			map[string][]string{
+				constant.FixtureTagKey: {constant.FixtureBuildValue},
+			},
+		),
 	)
 	assert.Count(
 		t,
@@ -116,15 +119,18 @@ func TestPanelQueryShape(t *testing.T) {
 
 func TestRepeatedValueStoresOnce(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	s.SetMetadata(
-		"test",
-		"alfa.md",
-		map[string][]string{
-			constant.FixtureTagKey: {
-				constant.FixtureBuildValue,
-				constant.FixtureBuildValue,
+	assert.FatalOnError(
+		t,
+		s.SetMetadata(
+			"test",
+			"alfa.md",
+			map[string][]string{
+				constant.FixtureTagKey: {
+					constant.FixtureBuildValue,
+					constant.FixtureBuildValue,
+				},
 			},
-		},
+		),
 	)
 	filter := tagFilter(constant.FixtureBuildValue)
 	results := s.EnrichResults(

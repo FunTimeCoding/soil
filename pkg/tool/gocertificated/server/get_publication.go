@@ -7,13 +7,13 @@ import (
 )
 
 func (s *Server) GetPublication(
-	_ context.Context,
+	x context.Context,
 	_ server.GetPublicationRequestObject,
 ) (server.GetPublicationResponseObject, error) {
 	result, e := s.service.Pending()
 
 	if e != nil {
-		return server.GetPublication500JSONResponse(*s.answer(e)), nil
+		return server.GetPublication500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.GetPublication200JSONResponse(

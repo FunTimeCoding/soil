@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetLog(
-	_ context.Context,
+	x context.Context,
 	r server.GetLogRequestObject,
 ) (server.GetLogResponseObject, error) {
 	all := r.Params.All != nil && *r.Params.All

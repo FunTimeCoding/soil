@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) AddVirtualTag(
-	_ context.Context,
+	x context.Context,
 	r server.AddVirtualTagRequestObject,
 ) (server.AddVirtualTagResponseObject, error) {
 	vm, e := s.service.AddVirtualTag(r.Name, r.Tag)
@@ -27,7 +27,7 @@ func (s *Server) AddVirtualTag(
 	}
 
 	if e != nil {
-		return server.AddVirtualTag500JSONResponse(*s.captureDetail(e)), nil
+		return server.AddVirtualTag500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	entry := server.VirtualMachine{Identifier: vm.Identifier, Name: vm.Name}

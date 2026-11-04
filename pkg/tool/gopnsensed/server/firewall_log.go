@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) FirewallLog(
-	_ context.Context,
+	x context.Context,
 	r server.FirewallLogRequestObject,
 ) (server.FirewallLogResponseObject, error) {
 	var limit int
@@ -19,7 +19,7 @@ func (s *Server) FirewallLog(
 	result, e := s.service.Log(limit)
 
 	if e != nil {
-		return server.FirewallLog500JSONResponse(*s.answer(e)), nil
+		return server.FirewallLog500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.FirewallLog200JSONResponse(convert.LogEntries(result)), nil

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateManufacturer(
-	_ context.Context,
+	x context.Context,
 	r server.CreateManufacturerRequestObject,
 ) (server.CreateManufacturerResponseObject, error) {
 	m, e := s.service.CreateManufacturer(r.Body.Name)
@@ -24,7 +24,7 @@ func (s *Server) CreateManufacturer(
 	}
 
 	if e != nil {
-		return server.CreateManufacturer500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateManufacturer500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
 	return server.CreateManufacturer201JSONResponse{

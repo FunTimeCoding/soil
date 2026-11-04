@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) PostCollection(
-	_ context.Context,
+	x context.Context,
 	r server.PostCollectionRequestObject,
 ) (server.PostCollectionResponseObject, error) {
 	pattern := ""

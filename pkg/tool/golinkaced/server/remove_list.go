@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) RemoveList(
-	_ context.Context,
+	x context.Context,
 	r server.RemoveListRequestObject,
 ) (server.RemoveListResponseObject, error) {
 	result, f := s.service.RemoveList(int(r.Identifier), r.Body.Name)
@@ -27,7 +27,7 @@ func (s *Server) RemoveList(
 	}
 
 	if f != nil {
-		return server.RemoveList500JSONResponse(*s.answer(f)), nil
+		return server.RemoveList500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.RemoveList200JSONResponse{

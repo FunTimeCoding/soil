@@ -8,14 +8,14 @@ import (
 )
 
 func (s *Server) revocationList(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.Authority,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.RevocationList(a.Authority)
 
 	if e != nil {
-		return s.answer(e)
+		return s.answer(x, e)
 	}
 
 	return response.Success("%s", string(result))

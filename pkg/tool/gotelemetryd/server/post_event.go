@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) PostEvent(
-	_ context.Context,
+	x context.Context,
 	r server.PostEventRequestObject,
 ) (server.PostEventResponseObject, error) {
 	e := usage_event.New()
@@ -31,7 +31,7 @@ func (s *Server) PostEvent(
 	}
 
 	if f := s.service.Create(e); f != nil {
-		return server.PostEvent500JSONResponse(*s.answer(f)), nil
+		return server.PostEvent500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.PostEvent200JSONResponse{Id: int(e.Identifier)}, nil

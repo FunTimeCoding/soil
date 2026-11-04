@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) GetTokens(
-	_ context.Context,
+	x context.Context,
 	r server.GetTokensRequestObject,
 ) (server.GetTokensResponseObject, error) {
 	scope := ""
@@ -18,7 +18,7 @@ func (s *Server) GetTokens(
 	summary, e := s.service.MemoryTokenSummary(scope)
 
 	if e != nil {
-		return server.GetTokens500JSONResponse(*s.answer(e)), nil
+		return server.GetTokens500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	response := server.GetTokens200JSONResponse{

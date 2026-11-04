@@ -19,13 +19,13 @@ func (s *Server) GetNodeStatus(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	result, e := s.service.GetNodeStatus(instance, a.Node)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.captureDetail(x, e)
 	}
 
 	return response.SuccessAny(result)

@@ -8,13 +8,13 @@ import (
 )
 
 func (s *Server) listCustomFields(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.CustomFields()
 
 	if e != nil {
-		return s.captureFail(e, "custom fields not listed")
+		return s.captureFail(x, e, "custom fields not listed")
 	}
 
 	return response.SuccessAny(convert.CustomFields(result))
