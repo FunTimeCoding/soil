@@ -1,6 +1,7 @@
 package basic
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response/local_return"
@@ -15,6 +16,7 @@ func (c *Client) LocalClient(
 	var r response.Local
 
 	if e := c.Post(
+		context.Background(),
 		"",
 		salt_command_request.Request{
 			Client:     constant.SaltLocalClient,

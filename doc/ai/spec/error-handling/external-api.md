@@ -119,6 +119,13 @@ a per-package sentinel for the same class:
   (`infrastructure.md`, Peer Outages and Refusals). A client maps
   its upstream's 503 to it; the guard takes it as an outage and
   answers with its own verdict.
+- `reported` - a peer daemon answered with a failure it has
+  already captured: its body carries a non-empty
+  `event_identifier`. `refusal.New` produces it before the status
+  table, so a captured 500 never reaches Sentry a second time.
+  The message keeps the peer's reason and its event identifier,
+  the handle to the one event. An empty identifier means nothing
+  reached Sentry, and the caller still captures.
 - `timeout` - waiting ran out. `timeout.Is` also matches
   `context.DeadlineExceeded`.
 - `dropped` - the answer broke off mid-way: an unexpected EOF, a

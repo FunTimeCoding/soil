@@ -117,6 +117,7 @@ message does not depend on it:
 | `conflict` | 409 `Error` | tool failure | no |
 | `forbidden` | 403 `Error` | tool failure | no |
 | `unavailable` | 503 `Error` | tool failure | no - the guard reports the outage |
+| `reported` | 502 `Error` | tool failure | no - the peer captured it |
 | `unreachable`, `timeout`, `dropped` | 503 `ErrorResponse` | captured | yes |
 | `not_configured` | 500 `ErrorResponse` | captured | yes |
 | anything else | 500 `ErrorResponse` | captured | yes |

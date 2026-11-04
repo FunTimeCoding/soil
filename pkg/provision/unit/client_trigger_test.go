@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
@@ -170,7 +171,7 @@ func TestClientTriggerFailureIsCaptured(t *testing.T) {
 	)
 	defer c.Close()
 	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
-	assert.True(t, unexpected.Is(e))
-	assert.StringContains(t, "500", e.Error())
+	assert.True(t, reported.Is(e))
+	assert.StringContains(t, "reported as memory-1", e.Error())
 	assert.Count(t, 1, r.Events())
 }

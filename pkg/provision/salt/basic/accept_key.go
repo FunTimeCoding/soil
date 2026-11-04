@@ -1,6 +1,7 @@
 package basic
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
@@ -11,6 +12,7 @@ func (c *Client) AcceptKey(minion string) ([]string, error) {
 	var r response.Wheel
 
 	if e := c.Post(
+		context.Background(),
 		"",
 		salt_command_request.Request{
 			Client:   constant.SaltWheelClient,

@@ -2,14 +2,14 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"net/http"
 	"testing"
 )
 
-func TestARefusedPushIsUnexpectedWithItsReason(t *testing.T) {
+func TestARefusedPushIsReportedWithItsReason(t *testing.T) {
 	_, e := refusedClient(
 		t,
 		http.StatusInternalServerError,
@@ -22,8 +22,8 @@ func TestARefusedPushIsUnexpectedWithItsReason(t *testing.T) {
 			Body:       "# Charlie\n",
 		},
 	)
-	assert.True(t, unexpected.Is(e))
-	assert.String(t, "push document status: 500: disk full", e.Error())
+	assert.True(t, reported.Is(e))
+	assert.String(t, "push document: disk full (reported as bravo)", e.Error())
 }
 
 func TestARefusedListLeavesNoPartialResult(t *testing.T) {

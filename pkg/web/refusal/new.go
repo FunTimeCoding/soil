@@ -2,6 +2,7 @@ package refusal
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"net/http"
 )
@@ -12,6 +13,10 @@ func New(
 	body []byte,
 ) error {
 	reason := Reason(body, r.Status)
+
+	if event := Event(body); event != "" {
+		return reported.New(operation, reason, event)
+	}
 
 	if e := Status(
 		r.StatusCode,

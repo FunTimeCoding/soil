@@ -34,6 +34,31 @@ func Mount(g *guard.Mux) {
 	assertConcern(t, s[0], constant.StrictMiddlewareKey)
 }
 
+func TestRecordingMiddlewareDaemonMountFlagged(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("pkg/tool/gotestd/server/s.go", "package server\n")
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	v.WriteString(
+		"pkg/tool/gotestd/daemon/mount.go",
+		`package daemon
+
+func (d *Daemon) Mount(g *guard.Mux) {
+	g.TokenMount(
+		constant.InterfacePath,
+		generated.HandlerFromMux(
+			generated.NewStrictHandler(server.New(s, r), nil),
+			http.NewServeMux(),
+		),
+	)
+}
+`,
+	)
+	s := scan.Services(v, "test", audit_configuration.New())
+	assert.Integer(t, 1, len(s))
+	assertConcern(t, s[0], constant.StrictMiddlewareKey)
+}
+
 func TestRecordingMiddlewareInlineFlagged(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/server/s.go", "package server\n")

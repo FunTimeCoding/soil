@@ -4,15 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"go/ast"
-	"path/filepath"
 )
 
 func (s *Service) checkRecordingMiddleware(
 	v *virtual_file_system.System,
 	path string,
 ) {
-	for _, name := range []string{constant.MountFileName, "run.go"} {
-		f := parseWebFile(v, filepath.Join(path, name))
+	for _, name := range mountFiles(path) {
+		f := parseWebFile(v, name)
 
 		if f == nil {
 			continue

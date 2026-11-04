@@ -7,5 +7,5 @@ func (m *Memory) CaptureException(e error) string {
 	defer m.mutex.Unlock()
 	m.events = append(m.events, reported_event.New(e))
 
-	return ""
+	return m.identifier()
 }

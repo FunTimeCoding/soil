@@ -8,7 +8,10 @@ import (
 )
 
 func (s *Server) wait(r *http.Request) {
-	if strings.TrimPrefix(r.URL.Path, webConstant.RootPath) != constant.SaltKeysPath {
+	if path := strings.TrimPrefix(
+		r.URL.Path,
+		webConstant.RootPath,
+	); path != constant.SaltKeysPath && path != "" {
 		return
 	}
 

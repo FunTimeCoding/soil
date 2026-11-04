@@ -870,6 +870,8 @@ has `<path>/daemon/`, on every run: `missing_service`, `mixed_service`
 `<path>/service/`), `service_imports_mapper`, `run_builds_clock`,
 `run_builds_client`, `daemon_not_closed`, and `missing_service_mount`
 looking in `<path>/daemon/`; `surface_holds_daemon` runs everywhere.
+`root_route` and `strict_middleware` read the mounts in
+`<path>/daemon/mount.go` beside `<path>/mount.go` and `run.go`.
 `--daemon` or `daemon: true` arms only `missing_daemon`, which lists the
 daemons not yet converted. goanalyze's `forwarding_function.CheckDaemon`
 flags a daemon method that only forwards to the same method on a

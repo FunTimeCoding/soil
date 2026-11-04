@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"strings"
@@ -36,6 +37,29 @@ func TestRenameSendsItsMovesToMemories(t *testing.T) {
 	)
 	assert.Count(t, 1, moves.Symbols)
 	assert.String(t, "NewName", moves.Symbols[0].NewName)
+}
+
+func TestAMemoryFailureThePeerCapturedIsNotCapturedAgain(t *testing.T) {
+	d := renameFollowFixture(t)
+	p := base.New(t)
+	s, r := service_tester.WithMemoryPeer(t, p.MemoryClient(t))
+	result, e := s.Symbol.Rename(
+		t.Context(),
+		d,
+		"example/pkg/alfa",
+		"OldName",
+		"NewName",
+		"",
+		false,
+	)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, p.Reporter.Events())
+	assert.Count(t, 0, r.Events())
+	assert.StringContains(
+		t,
+		"memories not retargeted",
+		strings.Join(service_tester.ConcernText(result), "\n"),
+	)
 }
 
 func TestRenameCommitsWhileMemoriesAreDown(t *testing.T) {

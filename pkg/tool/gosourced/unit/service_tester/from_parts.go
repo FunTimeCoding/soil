@@ -1,13 +1,13 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/inventory"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
 	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/diff"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/file"
@@ -23,11 +23,11 @@ import (
 func fromParts(
 	t *testing.T,
 	i *inventory.Inventory,
-	m *mock_client.Client,
+	m face.Client,
+	r soilFace.Reporter,
 ) *Services {
 	t.Helper()
 	l := logger.New(t.Context())
-	r := memory.New()
 	g := peer.New(gomemorydConstant.Identity.Name(), m.Address(), m, l, r)
 	t.Cleanup(g.Close)
 	w := workspace.New(index.DefaultDirectory())

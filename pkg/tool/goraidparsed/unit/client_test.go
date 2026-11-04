@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fake_parser"
 	"path/filepath"
@@ -39,12 +39,12 @@ func TestNoFilesAreTheCallersMistake(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestAFailedGenerateIsUnexpected(t *testing.T) {
+func TestAFailedGenerateIsReported(t *testing.T) {
 	c := mountedClient(t, fake_parser.New(0, errors.New("echo parse failed")))
 	_, e := c.PostGenerate(
 		t.Context(),
 		[]string{inputFile(t, "echo.zevtc")},
 		nil,
 	)
-	assert.True(t, unexpected.Is(e))
+	assert.True(t, reported.Is(e))
 }

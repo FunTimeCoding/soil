@@ -17,6 +17,7 @@ const (
 	TimeoutClass       = "timeout"
 	DroppedClass       = "dropped"
 	NotConfiguredClass = "not_configured"
+	ReportedClass      = "reported"
 )
 
 var Answers = map[string]*answer.Answer{
@@ -31,4 +32,5 @@ var Answers = map[string]*answer.Answer{
 	TimeoutClass:       answer.NewCaptured(http.StatusServiceUnavailable),
 	DroppedClass:       answer.NewCaptured(http.StatusServiceUnavailable),
 	NotConfiguredClass: answer.NewCaptured(http.StatusInternalServerError),
+	ReportedClass:      answer.NewUncaptured(http.StatusBadGateway),
 }

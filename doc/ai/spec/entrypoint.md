@@ -292,7 +292,10 @@ the status is 400 or above. Both cases bypass the reporter: an uncaptured answer
 is one Sentry has no use for by design, and a captured failure was already
 captured daemon-side - the `event_identifier` in the body is the handle for it,
 so capturing again would duplicate one failure as two events. Only transport
-failures reach the reporter, through the normal panic path.
+failures reach the reporter, through the normal panic path. A daemon's client
+of another daemon follows the same rule: `refusal.New` turns a body carrying a
+non-empty `event_identifier` into the shared class `reported`, which is never
+captured again (`error-handling/external-api.md`).
 
 A Cobra CLI emits and exits through a `pkg/terminal` `Terminal` built in
 `Main` from the instrument (`t := terminal.New(s)`) and handed to each

@@ -8,6 +8,7 @@ const (
 	MaximumRetryAfter = 30 * time.Second
 	RetryAfter        = "Retry-After"
 	MaximumRefusal    = 64 << 10
+	EventField        = "event_identifier"
 )
 
 var NestedFields = []string{"message", "title", "detail"}

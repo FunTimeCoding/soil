@@ -71,6 +71,36 @@ func TestALoginNobodyAnswersIsAConnectionFailure(t *testing.T) {
 	assert.NotNil(t, connection.Classify(c.Login(t.Context())))
 }
 
+func TestAPostThatHangsEndsWithItsContext(t *testing.T) {
+	s := salt_tester.New(t, "bravo")
+	c := newSaltClient(t, s.URL, "bravo")
+	defer c.Close()
+	assert.FatalOnError(t, c.Login(t.Context()))
+	s.Hold()
+	defer s.Release()
+	x, cancel := context.WithCancel(t.Context())
+	posted := make(chan error, 1)
+	go func() {
+		var out any
+		posted <- c.Post(x, "", map[string]string{}, &out)
+	}()
+
+	select {
+	case <-s.Holding():
+	case <-time.After(10 * time.Second):
+		t.Fatal("the post never reached the master")
+	}
+
+	cancel()
+
+	select {
+	case e := <-posted:
+		assert.NotNil(t, e)
+	case <-time.After(10 * time.Second):
+		t.Fatal("the post did not end with its context")
+	}
+}
+
 func TestALoginThatHangsEndsWithItsContext(t *testing.T) {
 	release := make(chan struct{})
 	s := httptest.NewServer(

@@ -2,8 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
@@ -15,10 +17,22 @@ func TestARefusalCarriesTheReasonFromTheBody(t *testing.T) {
 	e := refusal.New(
 		"push document",
 		answered(t, http.StatusInternalServerError),
-		[]byte(`{"error":"disk full","event_identifier":"alfa"}`),
+		[]byte(`{"error":"disk full"}`),
 	)
 	assert.True(t, unexpected.Is(e))
+	assert.True(t, classify.Reportable(e))
 	assert.String(t, "push document status: 500: disk full", e.Error())
+}
+
+func TestACapturedRefusalIsReportedNotCapturedAgain(t *testing.T) {
+	e := refusal.New(
+		"push document",
+		answered(t, http.StatusInternalServerError),
+		[]byte(`{"error":"disk full","event_identifier":"alfa"}`),
+	)
+	assert.True(t, reported.Is(e))
+	assert.False(t, classify.Reportable(e))
+	assert.String(t, "push document: disk full (reported as alfa)", e.Error())
 }
 
 func TestANotFoundRefusalIsNotFound(t *testing.T) {

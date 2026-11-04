@@ -13,5 +13,5 @@ func (m *Memory) CaptureWithContext(
 	defer m.mutex.Unlock()
 	m.events = append(m.events, v)
 
-	return ""
+	return m.identifier()
 }

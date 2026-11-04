@@ -63,6 +63,37 @@ func Mount(g *guard.Mux) {
 	assertNoConcern(t, s[0], constant.RootRouteKey)
 }
 
+func TestRootRouteDaemonMountClean(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		scan_tester.RootSpec(),
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/constant/constant.go",
+		`package constant
+
+const RawPath = "/raw"
+`,
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/daemon/mount.go",
+		`package daemon
+
+func (d *Daemon) Mount(g *guard.Mux) {
+	g.TokenMount(constant.InterfacePath, h)
+	g.OpenMount(route.Get(constant.MetricsPath), h)
+	g.TokenMount(route.Get(testConstant.RawPath), h)
+}
+`,
+	)
+	s := scan.Services(v, "test", audit_configuration.New())
+	assert.Integer(t, 1, len(s))
+	assertNoConcern(t, s[0], constant.RootRouteKey)
+}
+
 func TestRootRouteSlashMountClean(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
