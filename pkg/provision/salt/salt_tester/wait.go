@@ -1,25 +1,20 @@
 package salt_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/provision/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"strings"
 )
 
 func (s *Server) wait(r *http.Request) {
-	if path := strings.TrimPrefix(
-		r.URL.Path,
-		webConstant.RootPath,
-	); path != constant.SaltKeysPath && path != "" {
-		return
-	}
-
 	s.mutex.Lock()
-	hold, holding := s.hold, s.holding
+	held, hold, holding := s.held, s.hold, s.holding
 	s.mutex.Unlock()
 
-	if hold == nil {
+	if hold == nil || strings.TrimPrefix(
+		r.URL.Path,
+		webConstant.RootPath,
+	) != held {
 		return
 	}
 

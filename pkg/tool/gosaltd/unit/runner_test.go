@@ -24,7 +24,7 @@ func TestRunnerImplementsDrainer(t *testing.T) {
 
 func TestCloseWaitsForTheKeySyncInFlight(t *testing.T) {
 	m := salt_tester.New(t, "bravo")
-	m.Hold()
+	m.HoldKeys()
 	host, port := upstream_tester.HostPort(t, m.URL)
 	o := newOption(t)
 	o.KeySyncInterval = 10 * time.Millisecond

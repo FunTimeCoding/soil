@@ -110,7 +110,7 @@ func TestAPostThatHangsEndsWithItsContext(t *testing.T) {
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
 	assert.FatalOnError(t, c.Login(t.Context()))
-	s.Hold()
+	s.HoldPost()
 	defer s.Release()
 	x, cancel := context.WithCancel(t.Context())
 	posted := make(chan error, 1)

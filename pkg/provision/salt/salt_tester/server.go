@@ -13,6 +13,7 @@ type Server struct {
 	valid    string
 	seen     []string
 	answers  map[string]string
+	held     string
 	hold     chan struct{}
 	holding  chan struct{}
 	gateway  int
