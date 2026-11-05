@@ -110,7 +110,7 @@ require (
 	k8s.io/client-go v0.37.2
 	k8s.io/metrics v0.37.2
 	maragu.dev/gomponents v1.4.0
-	modernc.org/sqlite v1.55.0
+	modernc.org/sqlite v1.61.1
 	mvdan.cc/sh/v3 v3.14.1
 	sigs.k8s.io/yaml v1.6.0
 )
