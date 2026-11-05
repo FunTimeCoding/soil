@@ -18,7 +18,7 @@ description conventions.
 
 ```
 goclaude session list              # find unnamed
-goclaude session list --detail     # calibrate tone
+goclaude session list --limit 10   # calibrate tone - JSON, read .alias and .description with jq
 goclaude session peek <id>         # overview with samples
 goclaude session print <id>        # full transcript
 goclaude session edit <id> ...     # save name + description

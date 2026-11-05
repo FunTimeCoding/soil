@@ -41,4 +41,5 @@ func TestStrayComment(t *testing.T) {
 	testutil.AssertBlockedContains(t, results, "prose and more")
 	testutil.AssertNotBlockedContains(t, results, "example.com/api")
 	testutil.AssertNotBlockedContains(t, results, "example.com/first")
+	testutil.AssertNotBlockedContains(t, results, "goanalyze:by-value")
 }

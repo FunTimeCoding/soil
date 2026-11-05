@@ -8,6 +8,11 @@ import _ "embed"
 //go:embed data.txt
 var Data string
 
+//goanalyze:by-value measured - copied on every step
+type Step struct {
+	Value int
+}
+
 // Helper returns true.
 func Helper() bool {
 	// noinspection SpellCheckingInspection

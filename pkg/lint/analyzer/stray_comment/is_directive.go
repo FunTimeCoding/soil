@@ -1,10 +1,14 @@
 package stray_comment
 
-import "strings"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"strings"
+)
 
 func isDirective(text string) bool {
 	for _, prefix := range []string{
-		"//go:",
+		constant.DirectivePrefix,
+		constant.ByValueDirective,
 		"//line ",
 		"//nolint",
 		"//sys",
