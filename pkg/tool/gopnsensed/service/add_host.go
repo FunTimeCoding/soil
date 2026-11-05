@@ -6,15 +6,20 @@ func (s *Service) AddHost(
 	h *request.Host,
 	apply bool,
 ) (string, error) {
-	result, e := s.source.AddHost(h)
+	return guarded(
+		s.guard,
+		func() (string, error) {
+			result, e := s.client.AddHost(h)
 
-	if e != nil {
-		return "", e
-	}
+			if e != nil {
+				return "", e
+			}
 
-	if f := s.reconfigureWhen(apply); f != nil {
-		return "", f
-	}
+			if f := s.reconfigureWhen(apply); f != nil {
+				return "", f
+			}
 
-	return result, nil
+			return result, nil
+		},
+	)
 }

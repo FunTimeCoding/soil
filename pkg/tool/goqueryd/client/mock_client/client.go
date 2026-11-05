@@ -18,6 +18,11 @@ type Client struct {
 	CollectionsDeleted []client.DeleteCollectionParams
 	ContextsAdded      []client.PostContextJSONRequestBody
 	ContextsDeleted    []client.DeleteContextParams
+	Queued             []string
+	EmbedResult        *client.EmbedResult
+	OversizeReport     *client.OversizeReport
+	FailedReport       *client.FailedReport
+	Preview            *client.ChunkPreview
 	Failure            error
 	Closed             int
 }

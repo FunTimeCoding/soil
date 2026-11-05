@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"net/http"
@@ -43,6 +44,22 @@ func TestAQueryTimeoutIsNotAVerdictOnThePeer(t *testing.T) {
 	assert.False(t, validation.Is(e))
 	assert.False(t, unavailable.Is(e))
 	assert.StringContains(t, "query timed out", e.Error())
+}
+
+func TestABadGatewayInFrontOfPrometheusIsUnavailable(t *testing.T) {
+	c := newRefusingClient(
+		t,
+		http.StatusBadGateway,
+		"<html><body><h1>502 Bad Gateway</h1></body></html>",
+	)
+	_, e := c.Query(constant.Up, time.Now())
+	assert.True(t, unavailable.Is(e))
+}
+
+func TestAPathPrometheusLacksIsUnexpected(t *testing.T) {
+	c := newRefusingClient(t, http.StatusNotFound, "404 page not found")
+	_, e := c.Query(constant.Up, time.Now())
+	assert.True(t, unexpected.Is(e))
 }
 
 func TestARefusedPostFallsBackToGet(t *testing.T) {

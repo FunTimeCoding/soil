@@ -18,5 +18,6 @@ const (
 	TokenPath        = "/var/run/secrets/kubernetes.io/serviceaccount/token"
 	RequestTimeout   = 10 * time.Second
 	SecretKind       = "secret"
+	NotReady         = "openbao at %s is sealed or not initialized"
 	RenewDenominator = 4
 )

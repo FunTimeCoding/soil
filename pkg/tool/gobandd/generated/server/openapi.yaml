@@ -281,10 +281,14 @@ components:
       type: object
       required:
       - instance
+      - power
       - requested
       properties:
         instance:
           type: string
+        power:
+          type: string
+          description: The power state the firmware reported when the request was made.
         requested:
           type: string
           description: The power state requested from the firmware.

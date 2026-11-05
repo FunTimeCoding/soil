@@ -7,5 +7,9 @@ func (c *Client) AddVirtualJournalEntry(
 	_ string,
 	_ string,
 ) (*journal_entry.Entry, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

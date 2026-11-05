@@ -2,13 +2,13 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/iterm"
+	"github.com/funtimecoding/soil/pkg/iterm/face"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/face"
 )
 
 func New() *Iterm {
 	return &Iterm{
-		Source:      func() face.ItermSource { return iterm.NewEnvironment() },
+		Source:      func() face.ItermClient { return iterm.NewEnvironment() },
 		KeyInterval: constant.KeyInterval,
 	}
 }

@@ -11,5 +11,9 @@ func (c *Client) CreateTunnelTermination(
 	_ int64,
 	_ string,
 ) (*tunnel_termination.Termination, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

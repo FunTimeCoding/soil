@@ -2,7 +2,7 @@ package model_context_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/mock_client"
+	"github.com/funtimecoding/soil/pkg/sublime/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
 	"testing"
 )

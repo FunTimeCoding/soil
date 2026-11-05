@@ -1,7 +1,11 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/mock_client"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/sublime/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/service"
 	"testing"
 )
@@ -11,6 +15,14 @@ func New(
 	c *mock_client.Client,
 ) *service.Service {
 	t.Helper()
+	g := peer.New(
+		constant.SublimePeer,
+		c.Address(),
+		c,
+		logger.New(t.Context()),
+		memory.New(),
+	)
+	t.Cleanup(g.Close)
 
-	return service.New(c)
+	return service.New(c, g)
 }

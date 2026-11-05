@@ -2,7 +2,6 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
@@ -31,7 +30,6 @@ func addContext(
 					},
 				),
 			)
-			console.Format("context added: %s %s\n", arguments[0], arguments[1])
 		},
 	}
 }

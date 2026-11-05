@@ -1,11 +1,13 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/face"
+	"github.com/funtimecoding/soil/pkg/iterm/face"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"time"
 )
 
 type Service struct {
-	source      face.ItermSource
+	client      face.ItermClient
+	guard       *peer.Guard
 	keyInterval time.Duration
 }

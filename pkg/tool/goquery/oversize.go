@@ -3,6 +3,7 @@ package goquery
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goquery/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -28,7 +29,7 @@ func oversize(
 
 			report, e := c.GetOversize(context.Background(), params)
 			t.EmitDone(e)
-			printOversize(report)
+			t.EmitValue(result.NewOversize(report), nil)
 
 			if len(report.Files) > 0 {
 				t.Exit(1)

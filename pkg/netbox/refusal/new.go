@@ -1,12 +1,9 @@
 package refusal
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"net/http"
 )
 
@@ -14,18 +11,12 @@ func New(
 	status int,
 	reason string,
 ) error {
-	switch status {
-	case http.StatusBadRequest:
-		return validation.New("%s", reason)
-	case http.StatusForbidden:
-		return forbidden.Format("%s", reason)
-	case http.StatusNotFound:
-		return not_found.Format("%s", reason)
-	case http.StatusConflict:
-		return conflict.Format("%s", reason)
-	case http.StatusServiceUnavailable:
-		return unavailable.Format("%s", reason)
-	default:
-		return unexpected.Format("netbox status %d: %s", status, reason)
+	if e := refusal.NewTable().With(
+		http.StatusBadRequest,
+		errorsConstant.ValidationClass,
+	).Classify(status, reason); e != nil {
+		return e
 	}
+
+	return unexpected.Format("netbox status %d: %s", status, reason)
 }

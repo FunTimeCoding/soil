@@ -1,8 +1,8 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
 	"github.com/funtimecoding/soil/pkg/iterm/session"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/mock_client"
 )
 
 func sessionClient(identifier string) *mock_client.Client {

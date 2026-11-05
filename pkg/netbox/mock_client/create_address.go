@@ -7,5 +7,9 @@ func (c *Client) CreateAddress(
 	_ string,
 	_ string,
 ) (*internet_address.Address, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

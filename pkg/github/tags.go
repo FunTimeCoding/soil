@@ -1,6 +1,9 @@
 package github
 
-import "github.com/google/go-github/v93/github"
+import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+	"github.com/google/go-github/v93/github"
+)
 
 func (c *Client) Tags(
 	owner string,
@@ -13,5 +16,5 @@ func (c *Client) Tags(
 		&github.ListOptions{PerPage: 1000},
 	)
 
-	return result, e
+	return result, refusal.Classify(e)
 }

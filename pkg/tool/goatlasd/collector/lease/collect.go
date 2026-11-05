@@ -18,7 +18,7 @@ func (c *Collector) Collect(
 		q,
 		func(x context.Context) error {
 			var f error
-			leases, f = c.opnsense.Leases(x, "")
+			leases, f = c.opnsense.ListLeases(x, "")
 
 			return f
 		},

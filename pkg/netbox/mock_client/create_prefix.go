@@ -10,5 +10,9 @@ func (c *Client) CreatePrefix(
 	_ *site.Site,
 	_ string,
 ) (*prefix.Prefix, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

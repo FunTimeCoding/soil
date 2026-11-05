@@ -6,10 +6,12 @@ import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func WrapError(
@@ -36,7 +38,11 @@ func WrapError(
 	}
 
 	if r != nil && r.Response != nil {
-		if g := refusal.Status(r.StatusCode, detail); g != nil {
+		if g := refusal.NewTable().
+			With(http.StatusBadRequest, errorsConstant.ValidationClass).
+			With(http.StatusForbidden, errorsConstant.ForbiddenClass).
+			With(http.StatusUnprocessableEntity, errorsConstant.ValidationClass).
+			Classify(r.StatusCode, detail); g != nil {
 			return g
 		}
 	}

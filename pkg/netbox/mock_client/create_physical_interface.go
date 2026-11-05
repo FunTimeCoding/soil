@@ -13,6 +13,10 @@ func (c *Client) CreatePhysicalInterface(
 	_ string,
 	i *network.Interface,
 ) (*physical_address.Address, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	c.record("CreatePhysicalInterface", i.Name, a.String())
 	v := netbox.NewMACAddressWithDefaults()
 	v.SetId(c.nextIdentifier())

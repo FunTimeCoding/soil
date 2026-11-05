@@ -27,9 +27,8 @@ const (
 	Status      = "status"
 	Identifier  = "id"
 
-	MinionsFail  = "list minions"
-	KeysFail     = "list keys"
-	NotConnected = "salt API not connected yet"
+	MinionsFail = "list minions"
+	KeysFail    = "list keys"
 
 	SaltPathEnvironment = "SALT_PATH"
 

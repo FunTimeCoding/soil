@@ -9,44 +9,44 @@ import (
 type Client interface {
 	face.Reachable
 	Address() string
-	Leases(
+	ListLeases(
 		x context.Context,
 		phrase string,
 	) ([]client.Lease, error)
-	Hosts(
+	ListHosts(
 		x context.Context,
 		phrase string,
 	) ([]client.Host, error)
-	Pools(
+	ListPools(
 		x context.Context,
 		phrase string,
 	) ([]client.Pool, error)
-	Rules(
+	ListRules(
 		x context.Context,
 		phrase string,
 	) ([]client.Rule, error)
-	Aliases(
+	ListAliases(
 		x context.Context,
 		phrase string,
 	) ([]client.Alias, error)
-	SourceNatRules(
+	ListSourceNat(
 		x context.Context,
 		phrase string,
 	) ([]client.SourceNatRule, error)
-	Forwards(
+	ListForwards(
 		x context.Context,
 		phrase string,
 	) ([]client.Forward, error)
-	Blocklists(
+	ListBlocklists(
 		x context.Context,
 		phrase string,
 	) ([]client.Blocklist, error)
-	Interfaces(x context.Context) ([]client.NetworkInterface, error)
-	Log(
+	ListInterfaces(x context.Context) ([]client.NetworkInterface, error)
+	FirewallLog(
 		x context.Context,
 		limit int,
 	) ([]client.LogEntry, error)
-	States(
+	FirewallStates(
 		x context.Context,
 		phrase string,
 	) ([]client.State, error)

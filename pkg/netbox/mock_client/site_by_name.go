@@ -7,6 +7,10 @@ import (
 )
 
 func (c *Client) SiteByName(n string) (*site.Site, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, s := range c.sites {
 		if s.Name == n {
 			return s, nil

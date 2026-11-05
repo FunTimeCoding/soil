@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/habitica"
 	"github.com/funtimecoding/soil/pkg/habitica/face"
 	"github.com/funtimecoding/soil/pkg/habitica/mock_client"
@@ -29,10 +29,10 @@ func TestARefusedUserReadReturnsTheError(t *testing.T) {
 	c := habitica.FromBasic(newClient(t, s.URL))
 	defer c.Close()
 	g, e := c.UserGear()
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, unexpected.Is(e))
 	assert.True(t, g == nil)
 	v, f := c.UserStats()
-	assert.True(t, forbidden.Is(f))
+	assert.True(t, unexpected.Is(f))
 	assert.True(t, v == nil)
-	assert.True(t, forbidden.Is(c.Reachable(t.Context())))
+	assert.True(t, unexpected.Is(c.Reachable(t.Context())))
 }

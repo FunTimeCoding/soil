@@ -16,6 +16,6 @@ func New(
 		requester: requester.New(base).
 			WithHeader(constant.UserHeader, userIdentifier).
 			WithAuthorizer(header.New(constant.TokenHeader, token)).
-			WithRefusal(classifyRefusal),
+			WithSubject("habitica"),
 	}
 }

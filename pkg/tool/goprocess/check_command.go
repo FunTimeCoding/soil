@@ -1,29 +1,29 @@
 package goprocess
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
 	"github.com/spf13/cobra"
 	"sort"
 )
 
-func checkCommand() *cobra.Command {
+func checkCommand(t *terminal.Terminal) *cobra.Command {
 	return &cobra.Command{
 		Use:   "check",
 		Short: "Validate Procfile and show entries",
-		RunE: func(
+		Run: func(
 			m *cobra.Command,
 			_ []string,
-		) error {
-			m.SilenceUsage = true
+		) {
 			procfilePath, e := m.Flags().GetString("file")
 			errors.PanicOnError(e)
-			entries, e := procfile.Parse(procfilePath)
+			entries, f := procfile.Parse(procfilePath)
 
-			if e != nil {
-				return e
+			if f != nil {
+				t.EmitDone(f)
+
+				return
 			}
 
 			names := make([]string, len(entries))
@@ -33,12 +33,7 @@ func checkCommand() *cobra.Command {
 			}
 
 			sort.Strings(names)
-			console.Format(
-				"valid procfile detected (%s)\n",
-				join.CommaSpace(names),
-			)
-
-			return nil
+			t.EmitValue(names, nil)
 		},
 	}
 }

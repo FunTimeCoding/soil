@@ -6,5 +6,9 @@ func (c *Client) SetDeviceStatus(
 	name string,
 	status string,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return c.changeDevice("SetDeviceStatus", name, status)
 }

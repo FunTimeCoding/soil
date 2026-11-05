@@ -11,14 +11,16 @@ func (s *Service) Devices(query string) (
 	map[int32][]*label.Label,
 	error,
 ) {
-	var result []*device.Device
-	var e error
+	result, e := guarded(
+		s.guard,
+		func() ([]*device.Device, error) {
+			if query != "" {
+				return s.client.DevicesByMatch(query)
+			}
 
-	if query != "" {
-		result, e = s.client.DevicesByMatch(query)
-	} else {
-		result, e = s.client.Devices()
-	}
+			return s.client.Devices()
+		},
+	)
 
 	if e != nil {
 		return nil, nil, e

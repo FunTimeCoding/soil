@@ -10,5 +10,10 @@ func (s *Service) Item(identifier string) (*item.Item, error) {
 		return nil, validation.New("id is required")
 	}
 
-	return s.source.Item(identifier)
+	return guarded(
+		s.guard,
+		func() (*item.Item, error) {
+			return s.client.Item(identifier)
+		},
+	)
 }

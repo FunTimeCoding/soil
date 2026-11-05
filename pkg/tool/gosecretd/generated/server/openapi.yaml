@@ -20,6 +20,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: OpenBao is unreachable or sealed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/secrets:
     get:
       operationId: listSecrets
@@ -49,6 +55,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: OpenBao is unreachable or sealed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/secret:
     get:
       operationId: showSecret
@@ -84,6 +96,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: OpenBao is unreachable or sealed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     put:
       operationId: putSecret
       parameters:
@@ -118,6 +136,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: OpenBao is unreachable or sealed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/secret/value:
     get:
       operationId: revealSecret
@@ -159,6 +183,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: OpenBao is unreachable or sealed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Status:

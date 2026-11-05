@@ -11,6 +11,10 @@ func (c *Client) CreateSelectionField(
 	label string,
 	choiceSet string,
 ) (*custom_field.Field, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	if _, e := c.ChoiceSetByName(choiceSet); e != nil {
 		return nil, e
 	}

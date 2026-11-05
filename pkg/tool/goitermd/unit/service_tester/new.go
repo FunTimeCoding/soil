@@ -1,7 +1,7 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/mock_client"
+	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/service"
 	"testing"
 )
@@ -12,5 +12,5 @@ func New(
 ) *service.Service {
 	t.Helper()
 
-	return service.New(c, 0)
+	return NewPaced(t, c, 0)
 }

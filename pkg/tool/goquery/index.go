@@ -2,7 +2,6 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
@@ -27,19 +26,7 @@ func index(
 				body.Collection = &collection
 			}
 
-			results, e := c.PostIndex(context.Background(), body)
-			t.EmitDone(e)
-
-			for _, v := range results {
-				console.Format(
-					"%s: indexed=%d updated=%d unchanged=%d removed=%d\n",
-					v.Collection,
-					v.Indexed,
-					v.Updated,
-					v.Unchanged,
-					v.Removed,
-				)
-			}
+			t.EmitValue(c.PostIndex(context.Background(), body))
 		},
 	}
 	result.Flags().StringVar(

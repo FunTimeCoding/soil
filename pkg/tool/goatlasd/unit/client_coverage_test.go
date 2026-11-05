@@ -3,9 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/server"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -13,7 +14,7 @@ import (
 func TestTheClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	methods := reflect.TypeFor[*client.Client]()
+	methods := reflect.TypeFor[face.Client]()
 	var missing []string
 
 	for _, p := range s.Paths.Map() {
@@ -29,5 +30,6 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 		}
 	}
 
+	slices.Sort(missing)
 	assert.String(t, "", strings.Join(missing, ", "))
 }

@@ -19,7 +19,7 @@ func (c *Collector) Collect(
 		q,
 		func(x context.Context) error {
 			var f error
-			processes, f = c.process.Processes(x)
+			processes, f = c.process.ListProcesses(x)
 
 			return f
 		},

@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/types/modal"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"github.com/funtimecoding/soil/pkg/peer/hold"
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
 	"time"
 )
 
@@ -21,7 +21,7 @@ type Model struct {
 	bottomBar      string
 	second         int
 	connect        bool
-	monitor        *client.Client
+	monitor        face.Client
 	hold           *hold.Hold
 	updates        chan claim.Message
 	claims         map[string][]string

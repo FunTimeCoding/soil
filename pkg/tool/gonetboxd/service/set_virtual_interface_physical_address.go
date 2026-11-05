@@ -13,11 +13,16 @@ func (s *Service) SetVirtualInterfacePhysicalAddress(
 		return nil, e
 	}
 
-	m, e := s.client.VirtualMachineByName(machine)
+	return guarded(
+		s.guard,
+		func() (*netbox.VMInterface, error) {
+			m, f := s.client.VirtualMachineByName(machine)
 
-	if e != nil {
-		return nil, e
-	}
+			if f != nil {
+				return nil, f
+			}
 
-	return s.client.UpdateVirtualInterface(m, interfaceName, h)
+			return s.client.UpdateVirtualInterface(m, interfaceName, h)
+		},
+	)
 }

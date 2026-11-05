@@ -1,0 +1,12 @@
+package service
+
+import "github.com/funtimecoding/soil/pkg/netbox/device"
+
+func (s *Service) deviceByName(name string) (*device.Device, error) {
+	return guarded(
+		s.guard,
+		func() (*device.Device, error) {
+			return s.client.DeviceByName(name)
+		},
+	)
+}

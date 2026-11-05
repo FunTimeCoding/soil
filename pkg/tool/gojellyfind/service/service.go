@@ -1,7 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
+import (
+	"github.com/funtimecoding/soil/pkg/jellyfin/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 type Service struct {
-	source face.JellyfinSource
+	client face.JellyfinClient
+	guard  *peer.Guard
 }

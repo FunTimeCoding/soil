@@ -2,7 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -24,18 +23,8 @@ func sessionBackfill(c *command_context.Context) *cobra.Command {
 				parameters.Cold = new(true)
 			}
 
-			r, e := c.Client().PostBackfill(context.Background(), parameters)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			console.Format(
-				"backfill: %d enriched, %d skipped\n",
-				r.Enriched,
-				r.Skipped,
+			c.Terminal().EmitValue(
+				c.Client().PostBackfill(context.Background(), parameters),
 			)
 		},
 	}

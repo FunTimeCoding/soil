@@ -4,9 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
-	"github.com/funtimecoding/soil/pkg/provision/salt"
+	saltFace "github.com/funtimecoding/soil/pkg/provision/salt/face"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
@@ -18,17 +18,17 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 	registry face.ProcessRegistry,
-	c *salt.Client,
+	c saltFace.SaltClient,
+	g *peer.Guard,
 ) *Runner {
 	result := &Runner{
 		store:           s,
 		salt:            c,
-		connected:       make(chan struct{}),
+		guard:           g,
 		keySyncInterval: o.KeySyncInterval,
 		logger:          l,
 		reporter:        r,
 		recovery:        recovery.New(l, r),
-		reacher:         reacher.New(r),
 	}
 	result.provision = runner.New(
 		runner_option.Option{
@@ -36,7 +36,7 @@ func New(
 			ClonePath:       o.ClonePath,
 			ToolPath:        o.SaltPath,
 			ApplyFunction:   result.apply,
-			SetupFunction:   result.connectLoop,
+			SetupFunction:   result.awaitMaster,
 			CleanupFunction: s.Cleanup,
 			Registry:        registry,
 		},

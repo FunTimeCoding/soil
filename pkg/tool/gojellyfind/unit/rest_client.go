@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/jellyfin/face"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/face"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -18,7 +18,7 @@ import (
 
 func restClient(
 	t *testing.T,
-	c face.JellyfinSource,
+	c face.JellyfinClient,
 	r *memory.Memory,
 ) *client.ClientWithResponses {
 	t.Helper()

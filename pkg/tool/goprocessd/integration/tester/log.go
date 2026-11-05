@@ -10,7 +10,7 @@ func (t *Tester) Log(
 	name string,
 	all bool,
 ) *client.Log {
-	result, e := t.Client.Log(context.Background(), name, all)
+	result, e := t.Client.GetLog(context.Background(), name, all)
 	errors.PanicOnError(e)
 
 	return result

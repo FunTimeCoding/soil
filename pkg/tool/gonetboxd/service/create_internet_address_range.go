@@ -8,5 +8,15 @@ func (s *Service) CreateInternetAddressRange(
 	status string,
 	description string,
 ) (*internet_address_range.Range, error) {
-	return s.client.CreateInternetAddressRange(start, end, status, description)
+	return guarded(
+		s.guard,
+		func() (*internet_address_range.Range, error) {
+			return s.client.CreateInternetAddressRange(
+				start,
+				end,
+				status,
+				description,
+			)
+		},
+	)
 }

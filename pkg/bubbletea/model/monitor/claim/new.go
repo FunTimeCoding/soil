@@ -1,9 +1,9 @@
 package claim
 
-import "github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
+import "github.com/funtimecoding/soil/pkg/tool/gomonitord/face"
 
 func New(
-	c *client.Client,
+	c face.Client,
 	updates chan Message,
 ) *Connection {
 	return &Connection{client: c, updates: updates}

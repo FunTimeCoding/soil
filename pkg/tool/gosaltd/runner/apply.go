@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
+	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response/local_return"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"slices"
 	"strings"
@@ -30,7 +31,15 @@ func (r *Runner) apply(
 	r.store.Create(record)
 	r.logger.Structured("highstate_start", constant.Target, target)
 	start := time.Now()
-	result, e := r.salt.Highstate(target)
+	var result map[string]local_return.LocalReturn
+	e := r.attempt(
+		func() error {
+			var f error
+			result, f = r.salt.Highstate(target)
+
+			return f
+		},
+	)
 	record.DurationMillisecond = time.Since(start).Milliseconds()
 
 	if e != nil {

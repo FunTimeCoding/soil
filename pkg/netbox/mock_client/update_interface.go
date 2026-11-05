@@ -13,5 +13,9 @@ func (c *Client) UpdateInterface(
 	_ netbox.InterfaceTypeValue,
 	_ net.HardwareAddr,
 ) (*network.Interface, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

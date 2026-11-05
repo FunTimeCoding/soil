@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
 )
@@ -17,6 +18,10 @@ func (s *Server) ListPools(
 	}
 
 	result, e := s.service.Pools(phrase)
+
+	if unavailable.Is(e) {
+		return server.ListPools503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.ListPools500JSONResponse(*s.answer(x, e)), nil

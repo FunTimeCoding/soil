@@ -1,6 +1,9 @@
 package github
 
-import "github.com/google/go-github/v93/github"
+import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+	"github.com/google/go-github/v93/github"
+)
 
 func (c *Client) Notifications() ([]*github.Notification, error) {
 	result, _, e := c.client.Activity.ListNotifications(
@@ -8,5 +11,5 @@ func (c *Client) Notifications() ([]*github.Notification, error) {
 		&github.NotificationListOptions{},
 	)
 
-	return result, e
+	return result, refusal.Classify(e)
 }

@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/mock_client"
+	"github.com/funtimecoding/soil/pkg/jellyfin/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/daemon_tester"
 	"go.uber.org/goleak"
 	"testing"

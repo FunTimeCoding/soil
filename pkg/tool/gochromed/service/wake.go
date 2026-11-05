@@ -12,7 +12,11 @@ func (s *Service) Wake(v *selector.Selector) (*tab.Tab, error) {
 		return nil, e
 	}
 
-	if f := s.source.Wake(t.Identifier); f != nil {
+	if f := s.attempt(
+		func() error {
+			return s.source.Wake(t.Identifier)
+		},
+	); f != nil {
 		return nil, f
 	}
 

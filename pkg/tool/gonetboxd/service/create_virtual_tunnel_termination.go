@@ -11,28 +11,33 @@ func (s *Service) CreateVirtualTunnelTermination(
 	interfaceName string,
 	role string,
 ) (*tunnel_termination.Termination, error) {
-	t, e := s.client.TunnelByName(tunnel)
+	return guarded(
+		s.guard,
+		func() (*tunnel_termination.Termination, error) {
+			t, e := s.client.TunnelByName(tunnel)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	m, e := s.client.VirtualMachineByName(machine)
+			m, e := s.client.VirtualMachineByName(machine)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	i, e := s.client.VirtualMachineInterfaceByName(m, interfaceName)
+			i, e := s.client.VirtualMachineInterfaceByName(m, interfaceName)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateTunnelTermination(
-		t,
-		netboxConstant.VirtualInterfaceAddress,
-		int64(i.GetId()),
-		role,
+			return s.client.CreateTunnelTermination(
+				t,
+				netboxConstant.VirtualInterfaceAddress,
+				int64(i.GetId()),
+				role,
+			)
+		},
 	)
 }

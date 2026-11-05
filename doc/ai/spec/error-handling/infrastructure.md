@@ -130,6 +130,9 @@ once with `errors/unavailable`.
 A peer goes down two ways, and each comes back the way it failed. A
 transport failure is a peer that does not answer, so the guard probes it
 back through `Reachable` on a backoff (`ProbeMinimum` to `ProbeMaximum`).
+`Reachable` reads the state the calls depend on: a store whose health
+answers while it is sealed or on standby would restore the guard on the
+probe and open it again on the next call, once per request.
 An `unavailable` from the call itself - the upstream's own 503, or a
 guarded daemon passing on its guard's verdict - is a peer that answers
 and refuses, where `Reachable` would pass while every operation fails.
@@ -152,6 +155,19 @@ through `Attempt`. `Do` is `Attempt` that also reports each distinct
 refusal itself, once per reason, without seeing its class, so a quiet
 `not_found` or `validation` reaches Sentry; it is for a caller that
 reports nothing itself.
+
+A service calling a peer holds the peer's full face beside its guard, both
+built by the daemon, and runs each call through `Attempt` inside the
+operation - a `guarded[T]` helper for a call returning a value, `attempt`
+for one returning only an error, each passing the operation's context to
+`Attempt` - with no adapter type between the face and the guard. A tick
+collecting from several peers returns each failure on its own:
+`errors.Join` classifies as its first matching branch, so one outage would
+hide a real failure beside it.
+
+`Close` stops the probe loop only: `Attempt` still runs calls, so a
+daemon may flush through a guard the lifecycle already closed, and a
+peer down at close is never probed back.
 
 ### Held connections
 
@@ -176,6 +192,12 @@ serves, the outage's start and reason while down. A type that is already a
 worker, with a `Close` of its own, is held through `hold/adapter`, which
 builds a `face.Connection` from three functions. `Done` closes when the loop
 has stopped, for a consumer that must close a channel the session feeds.
+
+A pool holding a connection between calls - an SSH shell, where an HTTP
+client redials per request - forgets one that answered `dropped` through
+`go:pkg/inventory/pool`'s `Forget`, which drops the client only while the
+pool still holds that one. The error still reaches the caller, nothing is
+retried, and the next call redials.
 
 ## Sentry Enrichment Providers
 

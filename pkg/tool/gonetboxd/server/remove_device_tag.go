@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
@@ -24,12 +24,12 @@ func (s *Server) RemoveDeviceTag(
 		return server.RemoveDeviceTag400JSONResponse(*clientError(e)), nil
 	}
 
-	if forbidden.Is(e) {
-		return server.RemoveDeviceTag403JSONResponse(*clientError(e)), nil
-	}
-
 	if conflict.Is(e) {
 		return server.RemoveDeviceTag409JSONResponse(*clientError(e)), nil
+	}
+
+	if unavailable.Is(e) {
+		return server.RemoveDeviceTag503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

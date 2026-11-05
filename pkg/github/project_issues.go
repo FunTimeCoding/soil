@@ -1,6 +1,9 @@
 package github
 
-import "github.com/google/go-github/v93/github"
+import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+	"github.com/google/go-github/v93/github"
+)
 
 func (c *Client) ProjectIssues(
 	owner string,
@@ -8,5 +11,5 @@ func (c *Client) ProjectIssues(
 ) ([]*github.Issue, error) {
 	result, _, e := c.client.Issues.ListByRepo(c.context, owner, name, nil)
 
-	return result, e
+	return result, refusal.Classify(e)
 }

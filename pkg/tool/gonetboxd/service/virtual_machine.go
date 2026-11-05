@@ -11,7 +11,7 @@ func (s *Service) VirtualMachine(name string) (
 	[]*label.Label,
 	error,
 ) {
-	m, e := s.client.VirtualMachineByName(name)
+	m, e := s.virtualMachineByName(name)
 
 	if e != nil {
 		return nil, nil, e

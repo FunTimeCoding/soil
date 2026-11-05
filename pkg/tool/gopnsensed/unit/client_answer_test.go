@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/opnsense/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_source"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/missing_host"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/rejecting_host"
@@ -14,8 +14,8 @@ import (
 )
 
 func TestTheClientReadsTheDaemon(t *testing.T) {
-	c := client_tester.New(t, mock_source.New())
-	_, e := c.Leases(context.Background(), "")
+	c := client_tester.New(t, mock_client.New())
+	_, e := c.ListLeases(context.Background(), "")
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }
@@ -38,7 +38,7 @@ func TestTheClientAnswersAnUnknownHostAsNotFound(t *testing.T) {
 }
 
 func TestTheClientAcceptsANoContentWrite(t *testing.T) {
-	c := client_tester.New(t, mock_source.New())
+	c := client_tester.New(t, mock_client.New())
 	assert.FatalOnError(
 		t,
 		c.SetHost(context.Background(), "alfa", client.HostRequest{}, false),

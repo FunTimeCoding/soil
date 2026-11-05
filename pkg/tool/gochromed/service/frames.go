@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Service) frames(identifier string) []*tab.Tab {
-	tabs, e := s.source.Tabs()
+	tabs, e := guarded(s.guard, s.source.Tabs)
 
 	if e != nil {
 		return nil

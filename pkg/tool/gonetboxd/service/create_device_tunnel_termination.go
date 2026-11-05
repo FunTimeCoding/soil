@@ -11,28 +11,33 @@ func (s *Service) CreateDeviceTunnelTermination(
 	interfaceName string,
 	role string,
 ) (*tunnel_termination.Termination, error) {
-	t, e := s.client.TunnelByName(tunnel)
+	return guarded(
+		s.guard,
+		func() (*tunnel_termination.Termination, error) {
+			t, e := s.client.TunnelByName(tunnel)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	d, e := s.client.DeviceByName(device)
+			d, e := s.client.DeviceByName(device)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	i, e := s.client.DeviceInterfaceByName(d, interfaceName)
+			i, e := s.client.DeviceInterfaceByName(d, interfaceName)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateTunnelTermination(
-		t,
-		netboxConstant.InterfaceAddress,
-		int64(i.Identifier),
-		role,
+			return s.client.CreateTunnelTermination(
+				t,
+				netboxConstant.InterfaceAddress,
+				int64(i.Identifier),
+				role,
+			)
+		},
 	)
 }

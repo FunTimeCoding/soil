@@ -105,7 +105,10 @@ type ContextRequest struct {
 
 // CostResponse defines model for CostResponse.
 type CostResponse struct {
-	Cost   float64       `json:"cost"`
+	Cost float64 `json:"cost"`
+
+	// Days The trailing window the cost covers, in days.
+	Days   int           `json:"days"`
 	Models *[]ModelUsage `json:"models,omitempty"`
 }
 
@@ -297,6 +300,9 @@ type ModelUsage struct {
 	Input         int     `json:"input"`
 	Model         string  `json:"model"`
 	Output        int     `json:"output"`
+
+	// UnknownModel The model has no price of its own, so its cost uses Sonnet rates.
+	UnknownModel bool `json:"unknownModel"`
 }
 
 // NotifyRequest defines model for NotifyRequest.

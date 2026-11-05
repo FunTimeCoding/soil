@@ -2,21 +2,23 @@ package goprocess
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goprocess/result"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 )
 
 func restartAll(
 	x context.Context,
 	c face.Client,
-) error {
+	t *terminal.Terminal,
+) {
 	count, e := c.RestartAll(x)
 
 	if e != nil {
-		return e
+		t.EmitDone(e)
+
+		return
 	}
 
-	console.Format("restarting %d processes in the background\n", count)
-
-	return nil
+	t.EmitValue(result.NewRestart(count), nil)
 }

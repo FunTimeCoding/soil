@@ -2,7 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -18,48 +17,12 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			h, e := c.Client().GetSessionsHeatmap(
-				context.Background(),
-				&client.GetSessionsHeatmapParams{Bash: &bash},
+			c.Terminal().EmitValue(
+				c.Client().GetSessionsHeatmap(
+					context.Background(),
+					&client.GetSessionsHeatmapParams{Bash: &bash},
+				),
 			)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			if len(h.Entries) == 0 {
-				console.Line("no tool calls found")
-
-				return
-			}
-
-			label := "tools"
-
-			if bash {
-				label = "commands"
-			}
-
-			console.Format(
-				"%d sessions (%d with tool calls), %d total calls, %d distinct %s\n\n",
-				h.SessionCount,
-				h.SessionsWithCalls,
-				h.TotalCalls,
-				len(h.Entries),
-				label,
-			)
-			console.Format("%-40s %6s %8s\n", "Tool", "Calls", "Sessions")
-			console.Format("%-40s %6s %8s\n", "----", "-----", "--------")
-
-			for _, entry := range h.Entries {
-				console.Format(
-					"%-40s %6d %8d\n",
-					entry.Name,
-					entry.Calls,
-					entry.Sessions,
-				)
-			}
 		},
 	}
 	result.Flags().BoolVar(

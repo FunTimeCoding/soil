@@ -16,6 +16,8 @@ var Identity = identity.New(
 const (
 	TargetTimeout = 10 * time.Second
 
+	ChromiumPeer = "chromium browser"
+
 	DownloadDirectoryEnvironment = "CHROME_DOWNLOAD_DIRECTORY"
 
 	ListTabs   = "list_tabs"

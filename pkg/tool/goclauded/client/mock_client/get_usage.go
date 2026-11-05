@@ -6,5 +6,13 @@ import (
 )
 
 func (c *Client) GetUsage(_ context.Context) (*client.UsageResponse, bool, error) {
-	return &client.UsageResponse{}, true, c.Failure
+	if c.Failure != nil {
+		return nil, false, c.Failure
+	}
+
+	if c.UsageMissing {
+		return nil, false, nil
+	}
+
+	return &client.UsageResponse{}, true, nil
 }

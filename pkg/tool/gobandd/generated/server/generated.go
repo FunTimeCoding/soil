@@ -113,6 +113,9 @@ type PowerRequestOperation string
 type PowerResult struct {
 	Instance string `json:"instance"`
 
+	// Power The power state the firmware reported when the request was made.
+	Power string `json:"power"`
+
 	// Requested The power state requested from the firmware.
 	Requested string `json:"requested"`
 }
@@ -884,28 +887,28 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request, param
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7FhRj9Q2EP4rltvHcHst9KHbp7ai7Um0nI5KPCCEvMkkMSSeYE82ilD+e2XHyTob797Rwh1SeWLx2Z5v",
-	"vpn5ZpwPPMW6QQWKDN9+4CYtoRbu51OtUdsfjcYGNElwyzAtU98A33JDWqqCD0PCNbxvpYaMb1/5ba+T",
-	"aRvu3kJKfEjGe2/ANKgM3P3+hMMeFL2RGSiSuYQ7g4icjOG6UoaESiOQSjQURaREDbejcLuS8ZaY4ecN",
-	"aEES1dpyjjoNLewQKxAqtA2qra0VQ0ITT7gpW8qwU9yC2CGGNg/INeStEZW9IAOTatmMAPjLsmdUArMO",
-	"gCHWYVtlbGcX8tZA9hMTOwOKWFeCYjLYINIUGoLsgkfsGRIEa2t/l8Aa7EAztyFiWZh3bjWXuu6EBpaj",
-	"jliIUz7SN1mPcX9tjd+MFs/Qn0Eu2or4NheVgeTIi19b8l6g9j/SPq2A7aDCzsHHMcaqYKY3BDWTyhCI",
-	"jGFuXbR/kMSo1NgWJXv254vAxyDoMsjRJYYpe5l1/YI9d+uiGsOEquoZKmDTeSYNS1Hlsmj1iYhhmJX/",
-	"JsmOQnK470wcjCP5OAyh15FMdsGzRm7LrnkryzXWi7S6PaVmEKHJmCs3kEkNqcVwMrHuLY7DbQDjjIMS",
-	"uypG6ctSEOuEYaaTlJaQMVTsEaukIVCgE2ZSDaCYAb2XKbBHDOqG+hE+7EH3VNpkF5UGkfX2KotaEtQm",
-	"Gl6/ILQW/XEF3DlgkzuxcL0gQa1ZUyD2Qlb22JqE67HWp4Q2S4EaddAwhd3HuZbahqjinWZqQUsgf6Ah",
-	"JlTGMqyFVC5nHBhQhVQ24RvUZKL1fbaopniuTQbJM0edeX7jmnXg6UQ6gUhLX6dL7c+QaVmUZKlMnJ9d",
-	"2S96jm9KC56/1ZDzLf9mc5hsNn6s2RxabYR/ByFKR6NxL41EZf8fF6GZlZiTMi1ZsGVMmKlESmEmAtkj",
-	"uypFlTBDqEUBCdshlYltLJk0xywH/dWV3ZuTdftiLMsAxGxTqlNKGATR3+8xr+//C6hD/c4LLeajh2uj",
-	"/oJzPpCsAVs66YMBY0PB/D6Lv5aqJQjzXCqCAvQ5UXAldRTbFZErVEFtLMO+4uhQ0FNqJYGoLOpirUuD",
-	"q9AcXbZJsirEC9wJlVlMe9Bm5OS7i8uLS19lSjSSb/ljt5TwRlDpCmIjGrmZHHcrBTh6ZwRXGd/yZ9LQ",
-	"1bzLOjeO6O7E95eX9p8UFXmJEk1TydQd37w1Y96PZeYa3F2qcZ64V8Vo3V8G/+eqCjodq4USBdR2EB21",
-	"zlzYU0MyejuXcuN1c+mq78vXPipedX7BrP8oJ8/5thgsh2Uakm5h+I8E38G2a+0RKo/HorQUqoBYE7Ni",
-	"MyT8ySfENr4qI6iu1F5UMjuMNhi0WA/j8eeHYclZJdfUZ8L3iYf05D6YmUZCJJZjq6ao/Hg/dMxJkSEY",
-	"BwLzHHRIBmQ+l9zQMyT8h0+dMvMHgwjI34S0jYwwTOUgwz2iB8seaVirtB1zrPQvhOpocIjL1VPXjG4W",
-	"zeZzaFbk5XLPyrV+mpwgudOSwM5R9jkCGpgCyMYcGFt3OHU8nIh91a21bj2QNJxIiy9TFsz8KI2Oar8D",
-	"+WerHfO0qIFAG7599am/Jkh7yfsWdM+nL47hCH2g5fgp/vozioR3PcLzdTDLJ2GoE+ZncfeKPG4NX6Xh",
-	"/y0NGsTIw4qlL1EihuGfAAAA//8=",
+	"7FhNb9w2EP0rBNujYrtNeuj21BZpayBtDKdADkEQcMXRionEUcjRLhaB/nvBD2mpFdd22sQO0JyyoUnO",
+	"mzczb4b6wEtsO9SgyfLVB27LGlrhfz41Bo370RnswJACvwzjMu074CtuySi94cNQcAPve2VA8tWruO11",
+	"MW7D9VsoiQ9FuPcabIfawt3vLzhsQdMbJUGTqhTcGUTmZA7XpbYkdJmBVKOlLCItWrgdhd9VhFtyhp93",
+	"YAQp1EvLFZoytbBGbEDo1DbovnVWLAlDvOC27kniTnMHYo2Y2jwgN1D1VjTuAgm2NKoLAPjLes+oBuYc",
+	"AEtsh30j2dotVL0F+RMTawua2K4GzVSyQZQldATyjGfsWRIES2t/18A63IFhfkPGsrDv/GqlTLsTBliF",
+	"JmMhT3mgb7Se4/7KGb8OFm+gX0Il+ob4qhKNheLIi197il6giT/KfdkAW0ODOw8fQ4z1htm9JWiZ0pZA",
+	"SIaVc9H9QRGj2mC/qdmzP18kPiZBV0mOzjGM2cuc62fsuV8XTQgT6mbPUAMbzzNlWYm6UpvenIgYpln5",
+	"b5LsKCSH+26Ig/UkH4ch9XqB0/N9t8yacshAh4ZABnZmSScsa4WELCVxk/PnNnPTVlYZbGfWb8/eyd/R",
+	"u9R0jr1rkMpA6bCczOV7S53hNoD5IIMW6yZH7ctahLjYnaKyBslQs0esUZZAgymYLQ2AZhbMVpXAHjFo",
+	"O9oH+LAFs6fa1ZdoDAi5d1c51IqgtdmMigvCGLE/Lro7B250JxeuFySot0sKxFaoxh1bknAV5GWsITvP",
+	"5yC9lmncfZxrpevBOt/cxq43B/IHWmJCSyaxFUr7nPFgQG+UHkvLZuvnxjoe47k0mSTPFHUW+c3L5IGn",
+	"E+kEoqxjvc7bjURm1KYmR2Xh/dzV+1mbi31wxvO3Biq+4t+cH4ap8zhJnR+6e4b/SbyWsmZwq6xC7f6f",
+	"22AOrOScVGXNki0hYcYSqYUdCWSP3KoSTcEsoREbKNgaqS5cL5PKHrOctHRfdm9O1u2LUJYJiMmm0qcU",
+	"MQlivD9iXt7/F9AOzbsouFgFD5dG4wU3+UCqBezppA8WrAsFi/sc/lbpniDNc6UJNmBuEgVfUkexXRC5",
+	"QJXUxjzsC44OBX3oHAdRmdXFUpcGX6EV+mxT5FSIb3AttHSYtmBs4OS7s4uzi1hlWnSKr/hjv1TwTlDt",
+	"C+JcdOp8dNyvbMDTOyG4lHzFnylLl9Mu51x4FfgT319cuH9K1BQlSnRdo0p//PytDXkfysw3uLtU4zTk",
+	"L4rRuT8P/s9Nk3Q61gotNtC62TdonT1zp4YieDuVchd1c+5q7MtX837+C8r9Rzl5k2+zWXaYpyGZHob/",
+	"SPAdbPvWnqHyeDwqa6E3kGtiTmyGgj/5hNjCQzaD6lJvRaPkYbTBpMVGGI8/PwxHziK5xj6TTqcR0pP7",
+	"YGYcCZFYhb0eo/Lj/dAxJYVEsB4EVhWYlAyQMZf80DMU/IdPnTLTN4oMyN+Eco2MME3lJMMjogfLHmVZ",
+	"r40bc5z0z4TqaHDIy9VT34yuZ83mc2hW5uVyz8q1fJqcIHlnFIGbo9xzBAwwDSBDDoTWnU4dDydiX3Vr",
+	"qVsPJA0n0uLLlAU7PUqzo9rvQPHZ6sY8I1ogMJavXn3qrwnKXfK+B7Pn40fOdIQ+0HL8FH/9GUUiup7h",
+	"+SqZ5Ys01AWLs7h/RR63hq/S8P+WBgMi8LBg6UuUiGH4JwAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

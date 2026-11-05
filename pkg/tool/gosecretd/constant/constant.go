@@ -39,3 +39,5 @@ const (
 	ReachableGauge = "openbao_reachable"
 	ReachableHelp  = "Whether OpenBao answered its health check, 1 when it did."
 )
+
+const OpenbaoPeer = "openbao upstream"

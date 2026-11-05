@@ -1,5 +1,5 @@
 package service
 
 func (s *Service) ReconfigureDnsmasq() error {
-	return s.source.ReconfigureDnsmasq()
+	return s.attempt(s.client.ReconfigureDnsmasq)
 }

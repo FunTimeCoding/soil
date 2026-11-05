@@ -3,8 +3,9 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"net/http"
 	"testing"
@@ -43,11 +44,20 @@ func TestAConflictIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestARefusedTokenIsForbidden(t *testing.T) {
+func TestAPermissionTheTokenLacksIsUnexpected(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusForbidden,
 		`{"detail":"You do not have permission to perform this action."}`,
 	).Sites()
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, unexpected.Is(e))
+}
+
+func TestABadGatewayInFrontOfNetboxIsUnavailable(t *testing.T) {
+	_, e := refusingNetbox(
+		t,
+		http.StatusBadGateway,
+		"<html><body><h1>502 Bad Gateway</h1></body></html>",
+	).Sites()
+	assert.True(t, unavailable.Is(e))
 }

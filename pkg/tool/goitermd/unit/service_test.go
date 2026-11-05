@@ -9,13 +9,16 @@ import (
 )
 
 func TestReadHistoryDefaultsTheCount(t *testing.T) {
-	v, e := service_tester.New(t, sessionClient("alfa")).ReadHistory("alfa", 0)
+	c := sessionClient("alfa")
+	defer c.Close()
+	v, e := service_tester.New(t, c).ReadHistory("alfa", 0)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 50, v.TotalScrollback)
 }
 
 func TestSendKeysSendsEveryKeyInOrder(t *testing.T) {
 	c := sessionClient("alfa")
+	defer c.Close()
 	assert.FatalOnError(
 		t,
 		service_tester.New(t, c).SendKeys(
@@ -28,22 +31,23 @@ func TestSendKeysSendsEveryKeyInOrder(t *testing.T) {
 }
 
 func TestSendKeysNamesTheFailingStep(t *testing.T) {
-	e := service_tester.New(t, sessionClient("alfa")).SendKeys(
-		"bravo",
-		[]string{"up"},
-		0,
-	)
+	c := sessionClient("alfa")
+	defer c.Close()
+	e := service_tester.New(t, c).SendKeys("bravo", []string{"up"}, 0)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "step 1: session bravo not found", e.Error())
 }
 
 func TestSendKeysRequiresKeys(t *testing.T) {
-	e := service_tester.New(t, sessionClient("alfa")).SendKeys("alfa", nil, 0)
+	c := sessionClient("alfa")
+	defer c.Close()
+	e := service_tester.New(t, c).SendKeys("alfa", nil, 0)
 	assert.True(t, validation.Is(e))
 }
 
 func TestSendTextFollowsWithEnterWhenAsked(t *testing.T) {
 	c := sessionClient("alfa")
+	defer c.Close()
 	assert.FatalOnError(
 		t,
 		service_tester.New(t, c).SendText("alfa", "ls -la", true),
@@ -52,15 +56,15 @@ func TestSendTextFollowsWithEnterWhenAsked(t *testing.T) {
 }
 
 func TestSendTextRequiresText(t *testing.T) {
-	e := service_tester.New(t, sessionClient("alfa")).SendText(
-		"alfa",
-		"",
-		false,
-	)
+	c := sessionClient("alfa")
+	defer c.Close()
+	e := service_tester.New(t, c).SendText("alfa", "", false)
 	assert.True(t, validation.Is(e))
 }
 
 func TestSetTabTitleRequiresATitle(t *testing.T) {
-	e := service_tester.New(t, sessionClient("alfa")).SetTabTitle("tab-1", "")
+	c := sessionClient("alfa")
+	defer c.Close()
+	e := service_tester.New(t, c).SetTabTitle("tab-1", "")
 	assert.True(t, validation.Is(e))
 }

@@ -16,6 +16,12 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/View"
+        "503":
+          description: The Sublime plugin is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list views.
           content:
@@ -37,6 +43,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/View"
+        "503":
+          description: The Sublime plugin is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create view.
           content:
@@ -65,6 +77,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "503":
+          description: The Sublime plugin is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read view.
           content:
@@ -84,6 +102,12 @@ paths:
           description: View closed.
         "404":
           description: No view with this identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The Sublime plugin is unavailable.
           content:
             application/json:
               schema:
@@ -134,6 +158,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "503":
+          description: The Sublime plugin is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit view.
           content:
@@ -170,6 +200,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "503":
+          description: The Sublime plugin is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to save view.
           content:
@@ -194,6 +230,12 @@ paths:
                 $ref: "#/components/schemas/View"
         "400":
           description: file_path missing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The Sublime plugin is unavailable.
           content:
             application/json:
               schema:

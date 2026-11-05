@@ -9,6 +9,7 @@ func (d *Daemon) Close() {
 				d.clock.Close()
 			}
 
+			d.guard.Close()
 			d.client.Close()
 			relational.CloseMapper(d.database)
 		},

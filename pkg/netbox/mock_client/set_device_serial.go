@@ -6,5 +6,9 @@ func (c *Client) SetDeviceSerial(
 	name string,
 	serial string,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return c.changeDevice("SetDeviceSerial", name, serial)
 }

@@ -3,6 +3,7 @@ package daemon
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/provision/migrate"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/relational"
@@ -26,13 +27,15 @@ func New(
 	s.AbandonRunning()
 	p := reaper.New(r, y)
 	c := o.Master()
+	g := peer.New(constant.SaltPeer, c.Address(), c, l, r)
 	result := &Daemon{
 		database: d,
 		reaper:   p,
 		salt:     c,
-		runner:   runner.New(o, s, l, r, p, c),
+		guard:    g,
+		runner:   runner.New(o, s, l, r, p, c, g),
 	}
-	result.service = service.New(s, result.runner, c)
+	result.service = service.New(s, result.runner, c, g)
 
 	return result
 }

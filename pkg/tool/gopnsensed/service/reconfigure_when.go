@@ -5,5 +5,5 @@ func (s *Service) reconfigureWhen(apply bool) error {
 		return nil
 	}
 
-	return s.source.ReconfigureDnsmasq()
+	return s.client.ReconfigureDnsmasq()
 }

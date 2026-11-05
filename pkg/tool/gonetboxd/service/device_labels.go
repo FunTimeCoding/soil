@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Service) DeviceLabels(device string) ([]*label.Label, error) {
-	d, e := s.client.DeviceByName(device)
+	d, e := s.deviceByName(device)
 
 	if e != nil {
 		return nil, e

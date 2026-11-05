@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
 )
 
@@ -16,6 +17,10 @@ func (s *Server) CreateView(
 	}
 
 	v, e := s.service.CreateView(r.Body.Title, r.Body.Content, syntax)
+
+	if unavailable.Is(e) {
+		return server.CreateView503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.CreateView500JSONResponse(*s.answer(x, e)), nil

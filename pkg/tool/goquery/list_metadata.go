@@ -27,15 +27,7 @@ func listMetadata(
 				params.Key = &key
 			}
 
-			found, e := c.GetMetadata(context.Background(), params)
-			t.EmitDone(e)
-			var facets []client.Facet
-
-			for _, f := range found {
-				facets = append(facets, *f)
-			}
-
-			printFacets(&facets)
+			t.EmitValue(c.GetMetadata(context.Background(), params))
 		},
 	}
 	result.Flags().StringVar(

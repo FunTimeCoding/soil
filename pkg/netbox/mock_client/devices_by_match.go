@@ -6,6 +6,10 @@ import (
 )
 
 func (c *Client) DevicesByMatch(s string) ([]*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	var result []*device.Device
 
 	for _, d := range c.devices {

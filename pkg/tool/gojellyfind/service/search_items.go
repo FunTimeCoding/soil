@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gojellyfind/types/search"
+import (
+	"github.com/funtimecoding/soil/pkg/jellyfin/item"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/types/search"
+)
 
 func (s *Service) SearchItems(
 	term string,
@@ -9,7 +12,16 @@ func (s *Service) SearchItems(
 	perPage int,
 ) (*search.Result, error) {
 	p := max(page, 1)
-	items, total, e := s.source.SearchItems(term, types, p, perPage)
+	var items []*item.Item
+	var total int
+	e := s.attempt(
+		func() error {
+			var f error
+			items, total, f = s.client.SearchItems(term, types, p, perPage)
+
+			return f
+		},
+	)
 
 	if e != nil {
 		return nil, e

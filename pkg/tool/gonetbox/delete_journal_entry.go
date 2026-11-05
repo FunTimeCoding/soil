@@ -2,7 +2,6 @@ package gonetbox
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
@@ -27,7 +26,6 @@ func deleteJournalEntry(
 			t.EmitDone(
 				c.DeleteJournalEntry(context.Background(), int32(identifier)),
 			)
-			console.Line("journal entry deleted")
 		},
 	}
 }

@@ -10,5 +10,10 @@ func (s *Service) Episodes(seriesIdentifier string) ([]*item.Item, error) {
 		return nil, validation.New("series_id is required")
 	}
 
-	return s.source.Episodes(seriesIdentifier)
+	return guarded(
+		s.guard,
+		func() ([]*item.Item, error) {
+			return s.client.Episodes(seriesIdentifier)
+		},
+	)
 }

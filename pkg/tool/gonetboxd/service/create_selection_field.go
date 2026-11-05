@@ -7,5 +7,10 @@ func (s *Service) CreateSelectionField(
 	label string,
 	choiceSet string,
 ) (*custom_field.Field, error) {
-	return s.client.CreateSelectionField(name, label, choiceSet)
+	return guarded(
+		s.guard,
+		func() (*custom_field.Field, error) {
+			return s.client.CreateSelectionField(name, label, choiceSet)
+		},
+	)
 }

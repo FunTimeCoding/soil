@@ -11,6 +11,6 @@ func New(base *locator.Locator) *Client {
 		requester: requester.New(base).WithHeader(
 			constant.AnthropicBetaHeader,
 			constant.AnthropicUtilizationBeta,
-		).WithRefusal(classifyRefusal),
+		).WithSubject("utilization"),
 	}
 }

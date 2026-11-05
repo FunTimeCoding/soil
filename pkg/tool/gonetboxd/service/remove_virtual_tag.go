@@ -6,5 +6,10 @@ func (s *Service) RemoveVirtualTag(
 	name string,
 	tag string,
 ) (*virtual_machine.Machine, error) {
-	return s.client.RemoveVirtualTag(name, tag)
+	return guarded(
+		s.guard,
+		func() (*virtual_machine.Machine, error) {
+			return s.client.RemoveVirtualTag(name, tag)
+		},
+	)
 }

@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -19,11 +19,17 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
+			if name == "" && description == "" {
+				c.Terminal().EmitDone(
+					validation.New("provide --name or --description"),
+				)
+
+				return
+			}
+
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
@@ -37,28 +43,9 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 				body.Description = &description
 			}
 
-			if body.Name == nil && body.Description == nil {
-				console.Line("provide --name or --description")
-
-				return
-			}
-
-			if e := c.Client().PostEditSession(
-				context.Background(),
-				body,
-			); e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			if name != "" {
-				console.Format("renamed: %s → %s\n", identifier, name)
-			}
-
-			if description != "" {
-				console.Format("described: %s\n", identifier)
-			}
+			c.Terminal().EmitDone(
+				c.Client().PostEditSession(context.Background(), body),
+			)
 		},
 	}
 	result.Flags().StringVar(&name, "name", "", "Set display name")

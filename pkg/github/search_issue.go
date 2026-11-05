@@ -3,6 +3,7 @@ package github
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/github/issue"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 )
 
 func (c *Client) SearchIssue(
@@ -16,7 +17,7 @@ func (c *Client) SearchIssue(
 	result, _, e := c.client.Search.Issues(c.context, query, nil)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return issue.NewSlice(result.Issues), nil

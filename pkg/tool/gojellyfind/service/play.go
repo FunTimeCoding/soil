@@ -20,10 +20,14 @@ func (s *Service) Play(
 		playCommand = "PlayNow"
 	}
 
-	return s.source.Play(
-		sessionIdentifier,
-		itemIdentifiers,
-		playCommand,
-		startPositionTicks,
+	return s.attempt(
+		func() error {
+			return s.client.Play(
+				sessionIdentifier,
+				itemIdentifiers,
+				playCommand,
+				startPositionTicks,
+			)
+		},
 	)
 }

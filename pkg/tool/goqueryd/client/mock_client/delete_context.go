@@ -18,5 +18,11 @@ func (c *Client) DeleteContext(
 
 	c.ContextsDeleted = append(c.ContextsDeleted, *p)
 
+	for _, a := range c.ContextsAdded {
+		if a.Collection == p.Collection && a.PathPrefix == p.PathPrefix {
+			return true, nil
+		}
+	}
+
 	return false, nil
 }

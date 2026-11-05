@@ -32,10 +32,6 @@ boundary. The surface answers what arrives through `answer` and
 itself. Where an upstream answers with an opaque body or an HTML error
 page, its status line is all the message there is.
 
-Daemons not yet moved may still carry a `captureDetail` reading a
-library's error type at the surface, as gonetboxd's
-`common.ExtractMessage` does.
-
 ## Sentinel classification
 
 The default posture (500, Sentry, best-effort message) applies to
@@ -141,6 +137,10 @@ a per-package sentinel for the same class:
   too. An upstream's own well-formed error message is neither
   this nor `unexpected` - pass it through.
 
+A sentinel moving to a shared class moves every branch testing it in
+the same change, or each one falls through to a captured 500. An empty
+list is not `not_found`: it answers empty.
+
 Multi-instance daemons resolve their session-scoped instance
 through `go:pkg/inventory.Resolve`, which produces `not_found`,
 `not_selected` and `not_configured`. Every session-scoped choice - an
@@ -157,13 +157,38 @@ store or client method, as `not_found.New(kind, identifier)`; so is a
 delete or update the driver reports as zero rows affected without an
 error. No surface tests a driver sentinel.
 
+A client returns classified errors. A recover stays only around a
+dependency that still panics, turning the panic into a captured error: a
+client panicking on every failure, recovered at the service, answers
+every failure as one captured 500. A write whose confirmation timed out
+against an external party may have happened, so it answers a captured
+fault saying so and asking to check before retrying - a blind retry can
+repeat it - and a create that cannot find its new identifier answers the
+same, never success with an empty one.
+
 A client classifies at its lowest layer, from the response status
 rather than the error a library decoded - a proxy's HTML 503 decodes to
-nothing. `go:pkg/web/refusal/Status` is the one table, applied by the
-requester's refusal (`request.WithRefusal`, or the client's default) or
-at each call site of a library that returns its response beside the
-error; a 401 is the daemon's own credential refused, a captured fault,
-never `forbidden`. A transport failure keeps its cause - the client
+nothing. One table classifies every upstream
+(`go:pkg/web/refusal/Table`): 404 is `not_found`, 409 `conflict`, 429,
+502, 503 and 504 `unavailable` once the retries are spent, and 400, 401,
+403, 422 and every other status `unexpected`. A 401 or 403 is the
+daemon's own credential or its privileges refused - a captured fault,
+never `forbidden` - unless the client knows its upstream's 403 to be
+about a resource the caller chose, and then it sets that row. The
+requester carries the table (`WithStatus(http.StatusForbidden,
+errorsConstant.ForbiddenClass)`); a library that returns its response
+beside the error applies it at each call site, `refusal.Status` for the
+default or `refusal.NewTable().With(...).Classify` with the client's rows
+(GitLab, Jira, Mattermost, Ollama, OpenAI, Alertmanager, NetBox,
+Prometheus). A default row its upstream's source contradicts goes with
+`Without`: Prometheus answers 503 for a query timeout as well as while
+starting, and 404 only from its router, for a path the client wrote, so
+neither is `unavailable` or `not_found` there. A body that
+changes what a status means - a refused token inside a 403 - is read by
+the client's refusal hook (`WithRefusal`), which runs before the table.
+Our own daemons answer through `refusal.NewDaemonTable`, where 400 and
+422 are `validation` and 403 `forbidden`: a daemon's status is already
+its classified answer. A transport failure keeps its cause - the client
 returns the `connection.Failure` that `connection.Classify` builds,
 never an `unreachable` built from the error's text, so the guard, the
 Sentry fingerprint and the surface all read the same kind and host. An
@@ -171,19 +196,22 @@ upstream client that no daemon of ours stands in front of has a
 `Reachable` of its own, one cheap authenticated call, so its guard's
 probe proves the token as well as the host.
 
-What an upstream answers is checked, not assumed - by a read through
-the deployed tool, a direct call with the daemon's own credentials, or
-an example (`../example.md`) with synthetic values - and the same answer
-can mean different things per call:
+What an upstream answers is checked, not assumed - by its source read at
+the deployed version, a read through the deployed tool, a direct call
+with the daemon's own credentials, or an example (`../example.md`) with
+synthetic values; a closed-source peer is probed live with harmless
+requests. A class no source or probe shows is not mapped on a guess. The
+same answer can mean different things per call:
 
 - **A status that means the caller on some calls.** An upstream 400 is
   usually the daemon's own malformed request, so the requester's default
   reads it as `unexpected`. Where one call's 400 is seen to be the
   caller's - an invalid value passed straight through - that request
-  carries its own refusal (`request.WithRefusal`) turning it into
-  `validation` with the upstream's message; every other call keeps the
-  default. A status the upstream sends for the caller's mistake and for
-  ours alike stays opt-in per call (Habitica's 400 on allocate); one
+  sets its own row (`request.WithStatus(http.StatusBadRequest,
+  errorsConstant.ValidationClass)`), turning it into `validation` with
+  the upstream's message; every other call keeps the default. A status
+  the upstream sends for the caller's mistake and for ours alike stays
+  opt-in per call (Habitica's 400 on allocate); one
   only the caller can cause is classified for every call (LinkAce's 400
   and 422).
 - **An answer that means different things per call.** OPNsense answers

@@ -1,22 +1,28 @@
 package goquery
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goquery/constant"
 )
 
 func printWords(
+	t *terminal.Terminal,
 	verb string,
 	words []string,
-) {
+) bool {
 	if len(words) == 0 {
-		return
+		return false
 	}
 
-	if len(words) > constant.WordListLimit {
+	cut := len(words) > constant.WordListLimit
+
+	if cut {
 		words = append(words[:constant.WordListLimit], "...")
 	}
 
-	console.Format("    %s: %s\n", verb, join.Space(words...))
+	t.Line(fmt.Sprintf("    %s: %s", verb, join.Space(words...)))
+
+	return cut
 }

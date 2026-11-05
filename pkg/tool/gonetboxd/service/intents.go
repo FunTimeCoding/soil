@@ -6,33 +6,38 @@ import (
 )
 
 func (s *Service) Intents() ([]*intent.Intent, error) {
-	devices, e := s.client.Devices()
+	return guarded(
+		s.guard,
+		func() ([]*intent.Intent, error) {
+			devices, e := s.client.Devices()
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	machines, f := s.client.VirtualMachines()
+			machines, f := s.client.VirtualMachines()
 
-	if f != nil {
-		return nil, f
-	}
+			if f != nil {
+				return nil, f
+			}
 
-	result := make([]*intent.Intent, 0, len(devices)+len(machines))
+			result := make([]*intent.Intent, 0, len(devices)+len(machines))
 
-	for _, d := range devices {
-		result = append(
-			result,
-			intent.New(constant.DeviceKind, d.Name, d.Status),
-		)
-	}
+			for _, d := range devices {
+				result = append(
+					result,
+					intent.New(constant.DeviceKind, d.Name, d.Status),
+				)
+			}
 
-	for _, m := range machines {
-		result = append(
-			result,
-			intent.New(constant.MachineKind, m.Name, m.Status),
-		)
-	}
+			for _, m := range machines {
+				result = append(
+					result,
+					intent.New(constant.MachineKind, m.Name, m.Status),
+				)
+			}
 
-	return result, nil
+			return result, nil
+		},
+	)
 }

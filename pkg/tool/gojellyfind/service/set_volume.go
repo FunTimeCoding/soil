@@ -14,5 +14,9 @@ func (s *Service) SetVolume(
 		return validation.New("level must be between 0 and 100")
 	}
 
-	return s.source.SetVolume(sessionIdentifier, level)
+	return s.attempt(
+		func() error {
+			return s.client.SetVolume(sessionIdentifier, level)
+		},
+	)
 }

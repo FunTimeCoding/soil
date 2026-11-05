@@ -7,5 +7,10 @@ func (s *Service) DeviceJournalEntries(
 	limit int32,
 	offset int32,
 ) ([]*journal_entry.Entry, error) {
-	return s.client.DeviceJournalEntries(device, limit, offset)
+	return guarded(
+		s.guard,
+		func() ([]*journal_entry.Entry, error) {
+			return s.client.DeviceJournalEntries(device, limit, offset)
+		},
+	)
 }

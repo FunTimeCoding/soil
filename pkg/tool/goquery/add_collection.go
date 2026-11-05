@@ -2,7 +2,6 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
@@ -32,7 +31,6 @@ func addCollection(
 			}
 
 			t.EmitDone(c.PostCollection(context.Background(), body))
-			console.Format("collection %s added\n", arguments[0])
 		},
 	}
 	result.Flags().StringVar(

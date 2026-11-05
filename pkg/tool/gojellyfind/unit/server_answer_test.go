@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/jellyfin/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/rejecting_command"
 	"testing"
 )

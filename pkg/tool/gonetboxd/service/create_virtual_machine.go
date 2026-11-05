@@ -6,11 +6,16 @@ func (s *Service) CreateVirtualMachine(
 	name string,
 	cluster string,
 ) (*virtual_machine.Machine, error) {
-	c, e := s.client.ClusterByName(cluster)
+	return guarded(
+		s.guard,
+		func() (*virtual_machine.Machine, error) {
+			c, e := s.client.ClusterByName(cluster)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateVirtualMachine(name, c)
+			return s.client.CreateVirtualMachine(name, c)
+		},
+	)
 }

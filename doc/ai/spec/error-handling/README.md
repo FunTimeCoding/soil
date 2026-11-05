@@ -146,6 +146,14 @@ one captures it. A transport failure that reaches a surface without a guard in
 front has nobody else to report it, so the surface captures it - and one that
 keeps arriving names a call path that wants a guard.
 
+Who wrote the request decides whose move a refusal is. A refusal of a
+request the daemon composed - its own catalogue SQL, a protocol message it
+built - is ours and captured, whatever status the peer chose for it. A
+refusal of what the caller wrote - their query, the configuration they sent
+on a create - is theirs and answers quietly. A client that knows which calls
+carry the caller's input classifies the refusal on those requests only
+(`external-api.md`, Translate at the boundary).
+
 The last row is where every error starts. Classifying one moves it into a
 row above it - by a shared class from `pkg/errors` (`external-api.md`,
 Shared error classes), or for a one-off type by answering

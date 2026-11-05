@@ -13,17 +13,22 @@ func (s *Service) SetInterfacePhysicalAddress(
 		return nil, e
 	}
 
-	d, e := s.client.DeviceByName(device)
+	return guarded(
+		s.guard,
+		func() (*network.Interface, error) {
+			d, f := s.client.DeviceByName(device)
 
-	if e != nil {
-		return nil, e
-	}
+			if f != nil {
+				return nil, f
+			}
 
-	i, e := s.client.DeviceInterfaceByName(d, interfaceName)
+			i, f := s.client.DeviceInterfaceByName(d, interfaceName)
 
-	if e != nil {
-		return nil, e
-	}
+			if f != nil {
+				return nil, f
+			}
 
-	return s.client.UpdateInterface(d, interfaceName, i.Type, h)
+			return s.client.UpdateInterface(d, interfaceName, i.Type, h)
+		},
+	)
 }

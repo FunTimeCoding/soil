@@ -83,7 +83,7 @@ netbox_status{kind="device",name="alfa",status="active"} 1
 
 func TestAnUnavailableNetboxIsOnlyLogged(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = unavailable.Format("netbox restarting")
+	c.Failure = errors.New("netbox answered nonsense")
 	r := memory.New()
 	w := worker.New(
 		service_tester.Service(t, c).Intents,
@@ -94,8 +94,8 @@ func TestAnUnavailableNetboxIsOnlyLogged(t *testing.T) {
 	)
 	defer w.Close()
 	w.Poll()
-	assert.Count(t, 0, r.Events())
-	c.Failure = errors.New("netbox answered nonsense")
+	assert.Count(t, 1, r.Events())
+	c.Failure = unavailable.Format("netbox restarting")
 	w.Poll()
 	assert.Count(t, 1, r.Events())
 }

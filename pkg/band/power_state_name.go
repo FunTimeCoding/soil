@@ -1,28 +1,30 @@
 package band
 
+import "github.com/funtimecoding/soil/pkg/band/constant"
+
 func PowerStateName(state int) string {
 	switch state {
-	case 2:
+	case constant.PowerOn:
 		return "on"
 	case 3, 4:
 		return "sleep"
-	case 5:
+	case constant.PowerCycle:
 		return "power cycle"
 	case 6:
 		return "off hard"
 	case 7:
 		return "hibernate"
-	case 8:
+	case constant.PowerOffSoft:
 		return "off soft"
-	case 10:
+	case constant.PowerReset:
 		return "reset"
 	case 11:
 		return "diagnostic interrupt"
-	case 12:
+	case constant.PowerOffSoftGraceful:
 		return "off soft graceful"
 	case 13:
 		return "off hard graceful"
-	case 14:
+	case constant.PowerResetGraceful:
 		return "reset graceful"
 	case 15:
 		return "power cycle graceful"

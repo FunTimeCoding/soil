@@ -5,6 +5,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
-func (c *Client) GetCost(_ context.Context, _ *client.GetCostParams) (*client.CostResponse, error) {
-	return &client.CostResponse{}, c.Failure
+func (c *Client) GetCost(
+	_ context.Context,
+	p *client.GetCostParams,
+) (*client.CostResponse, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	result := &client.CostResponse{Days: 1}
+
+	if p != nil && p.Days != nil {
+		result.Days = *p.Days
+	}
+
+	return result, nil
 }

@@ -16,3 +16,9 @@ var Identity = identity.New(
 const (
 	OwnerEnvironment = "GITHUB_EXPORTER_OWNER"
 )
+
+const (
+	GitHubPeer    = "github upstream"
+	GitHubAddress = "api.github.com"
+	OwnerNotFound = "github owner %s not found"
+)

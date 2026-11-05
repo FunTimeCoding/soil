@@ -11,13 +11,17 @@ func (s *Service) SendText(
 		return validation.New("text is required")
 	}
 
-	if e := s.source.SendText(identifier, text); e != nil {
-		return e
-	}
+	return s.attempt(
+		func() error {
+			if e := s.client.SendText(identifier, text); e != nil {
+				return e
+			}
 
-	if enter {
-		return s.source.SendKey(identifier, "enter")
-	}
+			if enter {
+				return s.client.SendKey(identifier, "enter")
+			}
 
-	return nil
+			return nil
+		},
+	)
 }

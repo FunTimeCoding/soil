@@ -2,7 +2,6 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/spf13/cobra"
@@ -19,17 +18,7 @@ func listContexts(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			contexts, e := c.GetContext(context.Background())
-			t.EmitDone(e)
-
-			for _, v := range contexts {
-				console.Format(
-					"%s  %s  %s\n",
-					v.Collection,
-					v.PathPrefix,
-					v.Description,
-				)
-			}
+			t.EmitValue(c.GetContext(context.Background()))
 		},
 	}
 }

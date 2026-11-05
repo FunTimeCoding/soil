@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/opnsense/mock_client"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_source"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -18,7 +18,7 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			daemon_tester.New(t, mock_source.New()).Mount(
+			daemon_tester.New(t, mock_client.New()).Mount(
 				memory.New(),
 				mock_recorder.New(),
 				g,

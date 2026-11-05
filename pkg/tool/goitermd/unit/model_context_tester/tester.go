@@ -2,7 +2,7 @@ package model_context_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/mock_client"
+	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/base"
 	"testing"
 )

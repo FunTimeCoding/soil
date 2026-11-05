@@ -6,11 +6,16 @@ func (s *Service) CreateDeviceType(
 	model string,
 	manufacturer string,
 ) (*device_type.Type, error) {
-	m, e := s.client.ManufacturerByName(manufacturer)
+	return guarded(
+		s.guard,
+		func() (*device_type.Type, error) {
+			m, e := s.client.ManufacturerByName(manufacturer)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateDeviceType(model, m)
+			return s.client.CreateDeviceType(model, m)
+		},
+	)
 }

@@ -2,12 +2,10 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 func search(
@@ -56,26 +54,7 @@ func search(
 				params.Metadata = &metadata
 			}
 
-			outcome, e := c.GetSearch(context.Background(), params)
-			t.EmitDone(e)
-
-			for _, v := range outcome.Results {
-				console.Format("%.4f  %s  %s", v.Score, v.Path, v.Title)
-
-				if v.Metadata != nil && len(*v.Metadata) > 0 {
-					console.Format("  %s", formatMetadata(*v.Metadata))
-				}
-
-				console.Line()
-
-				if detail && v.Body != nil && *v.Body != "" {
-					for _, line := range strings.Split(*v.Body, "\n") {
-						console.Format("    %s\n", line)
-					}
-				}
-			}
-
-			printFacets(outcome.Facets)
+			t.EmitValue(c.GetSearch(context.Background(), params))
 		},
 	}
 	result.Flags().IntVar(&limit, "limit", 10, "Maximum number of results")

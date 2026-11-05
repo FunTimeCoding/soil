@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
+	saltFace "github.com/funtimecoding/soil/pkg/provision/salt/face"
 	"github.com/funtimecoding/soil/pkg/provision/salt/salt_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
@@ -28,7 +29,7 @@ func TestCloseWaitsForTheKeySyncInFlight(t *testing.T) {
 	host, port := upstream_tester.HostPort(t, m.URL)
 	o := newOption(t)
 	o.KeySyncInterval = 10 * time.Millisecond
-	o.Master = func() *salt.Client {
+	o.Master = func() saltFace.SaltClient {
 		return salt.New(host, port, "alfa", "bravo", salt.WithInsecure())
 	}
 	_, r := service_tester.New(t, o)

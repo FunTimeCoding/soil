@@ -6,6 +6,10 @@ import (
 )
 
 func (c *Client) DeleteChoiceSet(name string) error {
+	if c.Failure != nil {
+		return c.Failure
+	}
+
 	v, e := c.ChoiceSetByName(name)
 
 	if e != nil {

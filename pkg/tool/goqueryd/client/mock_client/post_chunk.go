@@ -16,5 +16,9 @@ func (c *Client) PostChunk(
 		return nil, c.Failure
 	}
 
+	if c.Preview != nil {
+		return c.Preview, nil
+	}
+
 	return &client.ChunkPreview{}, nil
 }

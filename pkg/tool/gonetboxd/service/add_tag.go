@@ -6,5 +6,10 @@ func (s *Service) AddTag(
 	deviceName string,
 	tag string,
 ) (*device.Device, error) {
-	return s.client.AddTag(deviceName, tag)
+	return guarded(
+		s.guard,
+		func() (*device.Device, error) {
+			return s.client.AddTag(deviceName, tag)
+		},
+	)
 }

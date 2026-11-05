@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/server"
 	"strings"
 )
@@ -30,6 +31,10 @@ func (s *Server) SearchItems(
 	}
 
 	result, e := s.service.SearchItems(r.Params.Q, types, page, perPage)
+
+	if unavailable.Is(e) {
+		return server.SearchItems503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.SearchItems500JSONResponse(*s.answer(x, e)), nil

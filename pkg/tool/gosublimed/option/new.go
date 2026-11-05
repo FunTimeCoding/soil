@@ -2,11 +2,11 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/sublime"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+	"github.com/funtimecoding/soil/pkg/sublime/face"
 )
 
 func New() *Sublime {
 	return &Sublime{
-		Source: func() face.SublimeSource { return sublime.NewEnvironment() },
+		Source: func() face.SublimeClient { return sublime.NewEnvironment() },
 	}
 }

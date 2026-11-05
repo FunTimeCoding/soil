@@ -8,17 +8,22 @@ func (s *Service) CreateAddress(
 	address string,
 	status string,
 ) (*internet_address.Address, error) {
-	d, e := s.client.DeviceByName(device)
+	return guarded(
+		s.guard,
+		func() (*internet_address.Address, error) {
+			d, e := s.client.DeviceByName(device)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	i, e := s.client.DeviceInterfaceByName(d, interfaceName)
+			i, e := s.client.DeviceInterfaceByName(d, interfaceName)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateAddress(i.Identifier, address, status)
+			return s.client.CreateAddress(i.Identifier, address, status)
+		},
+	)
 }

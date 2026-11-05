@@ -12,6 +12,10 @@ func (c *Client) CreateConfigurationContext(
 	payload map[string]any,
 	a *configuration_assignment.Assignment,
 ) (*configuration_context.Context, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	v := configuration_record.New()
 	v.Identifier = c.nextIdentifier()
 	v.Name = name

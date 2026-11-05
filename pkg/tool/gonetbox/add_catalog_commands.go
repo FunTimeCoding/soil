@@ -2,11 +2,11 @@ package gonetbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
-func addCatalogCommands(t *terminal.Terminal, c *client.Client, o *cobra.Command) {
+func addCatalogCommands(t *terminal.Terminal, c face.Client, o *cobra.Command) {
 	o.AddCommand(listAddressRanges(c, t))
 	o.AddCommand(createAddressRange(c, t))
 	o.AddCommand(listLocations(c, t))

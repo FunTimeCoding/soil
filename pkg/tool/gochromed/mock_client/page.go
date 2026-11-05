@@ -1,11 +1,11 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/face"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_page"
+	"github.com/funtimecoding/soil/pkg/chromium/face"
+	"github.com/funtimecoding/soil/pkg/chromium/protocol/mock_protocol"
 )
 
-func (c *Client) Page(identifier string) face.Page {
+func (c *Client) Page(identifier string) face.ProtocolClient {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -13,5 +13,5 @@ func (c *Client) Page(identifier string) face.Page {
 		return p
 	}
 
-	return mock_page.New()
+	return mock_protocol.New()
 }

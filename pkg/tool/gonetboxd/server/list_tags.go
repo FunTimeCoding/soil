@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -12,8 +12,8 @@ func (s *Server) ListTags(
 ) (server.ListTagsResponseObject, error) {
 	tags, e := s.service.Tags()
 
-	if forbidden.Is(e) {
-		return server.ListTags403JSONResponse(*clientError(e)), nil
+	if unavailable.Is(e) {
+		return server.ListTags503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

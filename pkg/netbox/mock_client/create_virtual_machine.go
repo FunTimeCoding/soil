@@ -9,5 +9,9 @@ func (c *Client) CreateVirtualMachine(
 	_ string,
 	_ *cluster.Cluster,
 ) (*virtual_machine.Machine, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

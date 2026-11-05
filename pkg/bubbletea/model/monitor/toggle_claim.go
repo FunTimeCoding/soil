@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"charm.land/bubbletea/v2"
+	"context"
 	"slices"
 )
 
@@ -18,12 +19,13 @@ func (m *Model) toggleClaim() tea.Cmd {
 	held := slices.Contains(m.claims[identifier], owner)
 
 	return func() tea.Msg {
+		x := context.Background()
 		var e error
 
 		if held {
-			e = c.Release(identifier, owner)
+			e = c.DeleteClaim(x, identifier, owner)
 		} else {
-			e = c.ClaimItem(identifier, owner)
+			_, e = c.PutClaim(x, identifier, owner)
 		}
 
 		if e != nil {

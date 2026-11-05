@@ -6,9 +6,11 @@ import (
 )
 
 func (c *Client) GetRelations(
-	context.Context,
-	*client.GetRelationsParams,
+	_ context.Context,
+	p *client.GetRelationsParams,
 ) ([]client.Relation, error) {
+	c.RelationCalls = append(c.RelationCalls, p)
+
 	if c.Failure != nil {
 		return nil, c.Failure
 	}

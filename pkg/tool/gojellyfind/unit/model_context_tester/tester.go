@@ -2,7 +2,7 @@ package model_context_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/mock_client"
+	"github.com/funtimecoding/soil/pkg/jellyfin/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/base"
 	"testing"
 )

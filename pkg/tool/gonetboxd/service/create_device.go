@@ -13,33 +13,38 @@ func (s *Service) CreateDevice(
 	tenantName string,
 	tags []string,
 ) (*device.Device, error) {
-	r, e := s.client.DeviceRoleByName(role)
+	return guarded(
+		s.guard,
+		func() (*device.Device, error) {
+			r, e := s.client.DeviceRoleByName(role)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	t, e := s.client.DeviceTypeByName(deviceType)
+			t, e := s.client.DeviceTypeByName(deviceType)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	i, e := s.client.SiteByName(site)
+			i, e := s.client.SiteByName(site)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	var n *tenant.Tenant
+			var n *tenant.Tenant
 
-	if tenantName != "" {
-		n, e = s.client.TenantByName(tenantName)
+			if tenantName != "" {
+				n, e = s.client.TenantByName(tenantName)
 
-		if e != nil {
-			return nil, e
-		}
-	}
+				if e != nil {
+					return nil, e
+				}
+			}
 
-	return s.client.CreateDevice(name, r, tags, t, i, n)
+			return s.client.CreateDevice(name, r, tags, t, i, n)
+		},
+	)
 }

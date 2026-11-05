@@ -15,5 +15,5 @@ func (c *Client) PostRechunk(context.Context) (*client.RechunkResult, error) {
 
 	c.Rechunked++
 
-	return &client.RechunkResult{}, nil
+	return &client.RechunkResult{Documents: c.Queued}, nil
 }

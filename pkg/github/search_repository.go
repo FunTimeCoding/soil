@@ -2,6 +2,7 @@ package github
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 	"github.com/funtimecoding/soil/pkg/github/repository"
 )
 
@@ -16,7 +17,7 @@ func (c *Client) SearchRepository(
 	result, _, e := c.client.Search.Repositories(c.context, query, nil)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return repository.NewSlice(result.Repositories), nil

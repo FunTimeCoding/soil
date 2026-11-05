@@ -6,5 +6,10 @@ func (s *Service) SetVirtualMachineCustomFields(
 	name string,
 	fields map[string]any,
 ) (*virtual_machine.Machine, error) {
-	return s.client.SetVirtualMachineCustomFields(name, fields)
+	return guarded(
+		s.guard,
+		func() (*virtual_machine.Machine, error) {
+			return s.client.SetVirtualMachineCustomFields(name, fields)
+		},
+	)
 }

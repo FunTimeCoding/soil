@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/jellyfin/item"
 	"github.com/funtimecoding/soil/pkg/jellyfin/library"
+	"github.com/funtimecoding/soil/pkg/jellyfin/mock_client"
 	"github.com/funtimecoding/soil/pkg/jellyfin/session"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/mock_client"
 )
 
 func seedServed(c *mock_client.Client) {

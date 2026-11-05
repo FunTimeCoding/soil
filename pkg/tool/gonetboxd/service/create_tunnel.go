@@ -7,11 +7,16 @@ func (s *Service) CreateTunnel(
 	encapsulation string,
 	group string,
 ) (*tunnel.Tunnel, error) {
-	g, e := s.client.TunnelGroupByName(group)
+	return guarded(
+		s.guard,
+		func() (*tunnel.Tunnel, error) {
+			g, e := s.client.TunnelGroupByName(group)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateTunnel(name, encapsulation, g)
+			return s.client.CreateTunnel(name, encapsulation, g)
+		},
+	)
 }

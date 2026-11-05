@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -21,11 +20,5 @@ func New(
 	)
 	errors.PanicOnError(e)
 
-	return &Client{
-		context: context.Background(),
-		client:  c,
-		pool:    p,
-		base:    l.String(),
-		token:   token,
-	}
+	return &Client{client: c, base: l, token: token, pool: p}
 }

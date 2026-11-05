@@ -7,6 +7,7 @@ func (d *Daemon) Close() {
 		func() {
 			d.runner.Close()
 			<-d.runner.Finished()
+			d.guard.Close()
 			d.salt.Close()
 			d.reaper.Close()
 			relational.CloseMapper(d.database)

@@ -4,9 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/opnsense/face"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -17,7 +17,7 @@ import (
 
 func NewWith(
 	t *testing.T,
-	s face.OpnsenseSource,
+	s face.OpnsenseClient,
 	r *memory.Memory,
 ) *client.Client {
 	t.Helper()

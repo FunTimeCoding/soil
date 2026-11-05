@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -18,9 +18,8 @@ func (s *Server) CreateManufacturer(
 			nil
 	}
 
-	if forbidden.Is(e) {
-		return server.CreateManufacturer403JSONResponse(*clientError(e)),
-			nil
+	if unavailable.Is(e) {
+		return server.CreateManufacturer503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

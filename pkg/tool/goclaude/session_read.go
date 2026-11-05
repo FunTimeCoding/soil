@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -21,8 +21,6 @@ func sessionRead(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
@@ -51,15 +49,18 @@ func sessionRead(c *command_context.Context) *cobra.Command {
 					marker = " <- hit"
 				}
 
-				console.Format(
-					"[%s %s %s %s]%s\n%s\n\n",
-					b.At,
-					b.Role,
-					b.Kind,
-					b.Identifier,
-					marker,
-					b.Text,
+				c.Terminal().Line(
+					fmt.Sprintf(
+						"[%s %s %s %s]%s",
+						b.At,
+						b.Role,
+						b.Kind,
+						b.Identifier,
+						marker,
+					),
 				)
+				c.Terminal().Line(b.Text)
+				c.Terminal().Line()
 			}
 		},
 	}

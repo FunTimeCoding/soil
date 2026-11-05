@@ -3,6 +3,7 @@ package github
 import (
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/image"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 )
 
 func (c *Client) PackageVersions(packageName string) ([]*image.Image, error) {
@@ -14,7 +15,7 @@ func (c *Client) PackageVersions(packageName string) ([]*image.Image, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return image.NewSlice(result), nil

@@ -10,5 +10,9 @@ func (s *Service) SetTabTitle(
 		return validation.New("title is required")
 	}
 
-	return s.source.SetTabTitle(tabIdentifier, title)
+	return s.attempt(
+		func() error {
+			return s.client.SetTabTitle(tabIdentifier, title)
+		},
+	)
 }

@@ -3,6 +3,8 @@ package daemon
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/watch"
@@ -15,11 +17,13 @@ func New(
 	r face.Reporter,
 	y *prometheus.Registry,
 ) *Daemon {
-	s := o.Source()
-	v := service.New(s)
+	c := o.Source()
+	g := peer.New(constant.OpenbaoPeer, c.Address(), c, l, r)
+	v := service.New(c, g)
 
 	return &Daemon{
-		source:  s,
+		client:  c,
+		guard:   g,
 		service: v,
 		watch:   watch.New(v.Status, y, l, r),
 	}

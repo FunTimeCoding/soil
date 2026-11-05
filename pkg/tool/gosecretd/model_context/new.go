@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
-	secret "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/service"
 )
 
 func New(
-	v secret.Secrets,
+	v *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {

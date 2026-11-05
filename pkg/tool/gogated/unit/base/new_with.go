@@ -8,7 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/server"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/store"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -21,15 +22,18 @@ func NewWith(
 ) *Server {
 	t.Helper()
 	o := NewOption(t)
+	o.Directory = func() face.DirectoryClient { return d }
 	l := logger.New(context.Background())
 	r := memory.New()
+	v := daemon.New(o, l, r)
+	t.Cleanup(v.Close)
 	m := lite.New(l, o.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(m) })
 	s := NewService(t, o, m, d, l, r)
 	h := model_context_server.New(
 		t,
 		func(_ *http.ServeMux, g *guard.Mux) {
-			server.New(s, r).Mount(g)
+			v.Mount(r, mock_recorder.New(), g)
 		},
 	)
 	result := &Server{

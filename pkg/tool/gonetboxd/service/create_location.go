@@ -6,5 +6,10 @@ func (s *Service) CreateLocation(
 	name string,
 	siteName string,
 ) (*location.Location, error) {
-	return s.client.CreateLocation(name, siteName)
+	return guarded(
+		s.guard,
+		func() (*location.Location, error) {
+			return s.client.CreateLocation(name, siteName)
+		},
+	)
 }

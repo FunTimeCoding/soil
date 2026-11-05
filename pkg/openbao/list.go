@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/openbao/constant"
+	"github.com/funtimecoding/soil/pkg/openbao/refusal"
 	"slices"
 )
 
@@ -17,7 +18,7 @@ func (c *Client) List(path string) ([]string, error) {
 	)
 
 	if e != nil {
-		return nil, fmt.Errorf("list secrets: %w", e)
+		return nil, fmt.Errorf("list secrets: %w", refusal.Classify(e))
 	}
 
 	if s == nil {

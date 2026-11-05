@@ -1,7 +1,6 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web/bookmark_page"
 	"net/http"
@@ -9,10 +8,16 @@ import (
 
 func (s *Server) bookmarks(
 	w http.ResponseWriter,
-	_ *http.Request,
+	r *http.Request,
 ) {
 	result, e := s.service.Bookmarks()
-	errors.PanicOnError(e)
+
+	if e != nil {
+		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
 	s.view.RenderPageWithSummary(
 		w,
 		constant.BookmarkTitle,

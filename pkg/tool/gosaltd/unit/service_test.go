@@ -1,28 +1,28 @@
 package unit
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
+	"github.com/funtimecoding/soil/pkg/provision/salt/face"
 	"github.com/funtimecoding/soil/pkg/provision/salt/salt_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"testing"
 	"time"
 )
 
-func TestKeysBeforeConnectingAnswersNotConnected(t *testing.T) {
+func TestKeysWhileTheMasterIsDownAnswerUnavailable(t *testing.T) {
 	v, _ := service_tester.New(t, newOption(t))
 	_, e := v.Keys()
-	assert.True(t, errors.Is(e, constant.ErrorNotConnected))
+	assert.True(t, unavailable.Is(e))
 }
 
 func TestKeysAfterLoginAnswerTheMastersKeys(t *testing.T) {
 	m := salt_tester.New(t, "bravo")
 	host, port := upstream_tester.HostPort(t, m.URL)
 	o := newOption(t)
-	o.Master = func() *salt.Client {
+	o.Master = func() face.SaltClient {
 		return salt.New(host, port, "alfa", "bravo", salt.WithInsecure())
 	}
 	v, r := service_tester.New(t, o)

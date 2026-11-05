@@ -3,8 +3,9 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/reported"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusing_source"
@@ -39,10 +40,13 @@ func TestTheClientAnswersARejectedCreateAsValidation(t *testing.T) {
 	assert.StringContains(t, "slug: exists", e.Error())
 }
 
-func TestTheClientAnswersARefusedTokenAsForbidden(t *testing.T) {
+func TestTheClientAnswersARefusedTokenAsReported(t *testing.T) {
 	_, e := client_tester.New(
 		t,
-		refusing_source.New(forbidden.Format("no permission")),
+		refusing_source.New(
+			unexpected.Format("netbox status 403: no permission"),
+		),
 	).CreateSite(context.Background(), "alfa")
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, reported.Is(e))
+	assert.StringContains(t, "netbox status 403: no permission", e.Error())
 }

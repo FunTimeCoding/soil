@@ -10,6 +10,10 @@ func (c *Client) CreateCable(
 	a *network.Interface,
 	b *network.Interface,
 ) (*cable.Cable, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	c.record("CreateCable", a.Name, b.Name)
 	v := netbox.NewCableWithDefaults()
 	v.SetId(c.nextIdentifier())

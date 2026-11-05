@@ -14,5 +14,10 @@ func (s *Service) List(path string) ([]string, error) {
 		}
 	}
 
-	return s.source.List(path)
+	return guarded(
+		s.guard,
+		func() ([]string, error) {
+			return s.client.List(path)
+		},
+	)
 }

@@ -1,10 +1,10 @@
 package iterm
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"fmt"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"net/http"
 )
 
@@ -12,19 +12,17 @@ func statusError(
 	operation string,
 	r *http.Response,
 ) error {
-	switch r.StatusCode {
-	case http.StatusNotFound:
-		return not_found.Format("%s: %s", operation, reason(r))
-	case http.StatusUnprocessableEntity:
-		return validation.New("%s: %s", operation, reason(r))
-	case http.StatusServiceUnavailable:
-		return unavailable.Format("%s: %s", operation, reason(r))
-	default:
-		return unexpected.Format(
-			"%s: %d: %s",
-			operation,
-			r.StatusCode,
-			reason(r),
-		)
+	text := reason(r)
+
+	if e := refusal.NewTable().With(
+		http.StatusUnprocessableEntity,
+		errorsConstant.ValidationClass,
+	).Classify(
+		r.StatusCode,
+		fmt.Sprintf("%s: %s", operation, text),
+	); e != nil {
+		return e
 	}
+
+	return unexpected.Format("%s: %d: %s", operation, r.StatusCode, text)
 }

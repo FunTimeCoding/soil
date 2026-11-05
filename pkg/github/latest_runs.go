@@ -1,6 +1,7 @@
 package github
 
 import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 	"github.com/funtimecoding/soil/pkg/github/run"
 	"github.com/google/go-github/v93/github"
 )
@@ -16,7 +17,7 @@ func (c *Client) LatestRuns(owner, repo string) ([]*run.Run, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return run.NewSlice(page.WorkflowRuns), nil

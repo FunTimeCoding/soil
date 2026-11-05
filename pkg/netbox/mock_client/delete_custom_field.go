@@ -8,6 +8,10 @@ import (
 )
 
 func (c *Client) DeleteCustomField(name string) error {
+	if c.Failure != nil {
+		return c.Failure
+	}
+
 	before := len(c.fields)
 	c.fields = slices.DeleteFunc(
 		c.fields,

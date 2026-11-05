@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/types/edit"
@@ -32,6 +33,10 @@ func (s *Server) EditView(
 
 	if conflict.Is(e) {
 		return server.EditView409JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.EditView503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

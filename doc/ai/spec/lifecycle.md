@@ -66,7 +66,9 @@ on a worker that was never started - the lifecycle closes everything
 registered, and tests close workers they only call into - so anything
 `Close` uses is created in the constructor, not in `Start`. It must also
 be safe twice: a worker the daemon builds is closed by the lifecycle and
-again by the daemon (`service-tool.md`, Workers).
+again by the daemon (`service-tool.md`, Workers). A client's `Close` stops
+what it started - a WebSocket, a keep-alive, a reconnect loop - and,
+under the lock that loop takes, refuses work after it.
 
 ## Draining Workers
 

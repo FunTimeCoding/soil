@@ -19,7 +19,7 @@ func (s *Server) power(
 		return s.captureDetail(x, e)
 	}
 
-	requested, f := s.service.Power(instance, operation, force)
+	change, f := s.service.Power(instance, operation, force)
 
 	if validation.Is(f) || conflict.Is(f) {
 		return response.Fail("%s", f)
@@ -29,5 +29,10 @@ func (s *Server) power(
 		return s.captureDetail(x, f)
 	}
 
-	return response.Success("%s requested on %s", requested, instance)
+	return response.Success(
+		"%s requested on %s (was %s)",
+		change.Requested,
+		instance,
+		change.Power,
+	)
 }

@@ -6,10 +6,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/types/edit"
 )
 
-func (s *Service) EditView(e *edit.Edit) (*view.View, error) {
-	if e.Old == "" {
+func (s *Service) EditView(change *edit.Edit) (*view.View, error) {
+	if change.Old == "" {
 		return nil, validation.New("old_string is required")
 	}
 
-	return s.source.EditView(e.Identifier, e.Old, e.New, e.All)
+	return guarded(
+		s.guard,
+		func() (*view.View, error) {
+			return s.client.EditView(
+				change.Identifier,
+				change.Old,
+				change.New,
+				change.All,
+			)
+		},
+	)
 }

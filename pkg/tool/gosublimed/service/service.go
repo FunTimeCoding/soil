@@ -1,7 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+import (
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/sublime/face"
+)
 
 type Service struct {
-	source face.SublimeSource
+	client face.SublimeClient
+	guard  *peer.Guard
 }

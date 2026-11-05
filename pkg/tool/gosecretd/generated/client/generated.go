@@ -601,6 +601,8 @@ type ShowSecretResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -621,6 +623,11 @@ func (r ShowSecretResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ShowSecretResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ShowSecretResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -661,6 +668,8 @@ type PutSecretResponse struct {
 	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -676,6 +685,11 @@ func (r PutSecretResponse) GetJSON400() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r PutSecretResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PutSecretResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -718,6 +732,8 @@ type RevealSecretResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -738,6 +754,11 @@ func (r RevealSecretResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r RevealSecretResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r RevealSecretResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -778,6 +799,8 @@ type ListSecretsResponse struct {
 	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -793,6 +816,11 @@ func (r ListSecretsResponse) GetJSON400() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListSecretsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListSecretsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -831,6 +859,8 @@ type GetStatusResponse struct {
 	JSON200 *Status
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -841,6 +871,11 @@ func (r GetStatusResponse) GetJSON200() *Status {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetStatusResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetStatusResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -980,6 +1015,13 @@ func ParseShowSecretResponse(rsp *http.Response) (*ShowSecretResponse, error) {
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1019,6 +1061,13 @@ func ParsePutSecretResponse(rsp *http.Response) (*PutSecretResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -1067,6 +1116,13 @@ func ParseRevealSecretResponse(rsp *http.Response) (*RevealSecretResponse, error
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1107,6 +1163,13 @@ func ParseListSecretsResponse(rsp *http.Response) (*ListSecretsResponse, error) 
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1139,6 +1202,13 @@ func ParseGetStatusResponse(rsp *http.Response) (*GetStatusResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

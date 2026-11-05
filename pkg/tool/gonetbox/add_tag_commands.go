@@ -2,11 +2,11 @@ package gonetbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
-func addTagCommands(t *terminal.Terminal, c *client.Client, o *cobra.Command) {
+func addTagCommands(t *terminal.Terminal, c face.Client, o *cobra.Command) {
 	o.AddCommand(listTags(c, t))
 	o.AddCommand(createTag(c, t))
 	o.AddCommand(addDeviceTag(c, t))

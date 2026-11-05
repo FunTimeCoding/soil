@@ -37,7 +37,7 @@ func TestShutdownToolWithForceCutsPower(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"off soft requested on alfa",
+		"off soft requested on alfa (was on)",
 		c.MustCallTool(
 			constant.Shutdown,
 			map[string]any{constant.ForceParameter: true},

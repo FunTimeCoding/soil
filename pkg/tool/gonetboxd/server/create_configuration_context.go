@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
@@ -36,8 +36,11 @@ func (s *Server) CreateConfigurationContext(
 		return server.CreateConfigurationContext400JSONResponse(*clientError(e)), nil
 	}
 
-	if forbidden.Is(e) {
-		return server.CreateConfigurationContext403JSONResponse(*clientError(e)), nil
+	if unavailable.Is(e) {
+		return server.CreateConfigurationContext503JSONResponse{
+				Error: e.Error(),
+			},
+			nil
 	}
 
 	if e != nil {

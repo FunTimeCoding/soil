@@ -13,5 +13,10 @@ func (s *Service) ReadHistory(
 		count = constant.HistoryCount
 	}
 
-	return s.source.ReadHistory(identifier, count)
+	return guarded(
+		s.guard,
+		func() (*history.History, error) {
+			return s.client.ReadHistory(identifier, count)
+		},
+	)
 }

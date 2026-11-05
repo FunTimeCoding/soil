@@ -7,5 +7,10 @@ func (s *Service) AddVirtualJournalEntry(
 	kind string,
 	comments string,
 ) (*journal_entry.Entry, error) {
-	return s.client.AddVirtualJournalEntry(machine, kind, comments)
+	return guarded(
+		s.guard,
+		func() (*journal_entry.Entry, error) {
+			return s.client.AddVirtualJournalEntry(machine, kind, comments)
+		},
+	)
 }

@@ -7,63 +7,28 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/spf13/cobra"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
-	var host string
-	var port int
-	c := command_context.New(terminal.New(s))
-	o := &cobra.Command{
-		Use:   constant.Identity.Usage(),
-		Short: constant.Identity.Description(),
-		PersistentPreRun: func(
-			_ *cobra.Command,
-			_ []string,
-		) {
-			c.Initialize(
-				host,
-				port,
-				environment.Exists(constant.InsecureEnvironment),
-				environment.Exists(constant.UntrustedEnvironment),
-				c.Terminal().Required(constant.TokenEnvironment),
-			)
-		},
-		PersistentPostRun: func(
-			_ *cobra.Command,
-			_ []string,
-		) {
-			c.Close()
-		},
-	}
-	o.PersistentFlags().StringVar(
-		&host,
-		"host",
-		environment.Fallback(constant.HostEnvironment, webConstant.Localhost),
-		"goclauded host",
+	t := terminal.New(s)
+	token := t.Required(constant.TokenEnvironment)
+	base := locator.Environment(
+		constant.HostEnvironment,
+		constant.PortEnvironment,
+		constant.InsecureEnvironment,
+	).String()
+	untrusted := environment.Exists(constant.UntrustedEnvironment)
+	c := command_context.New(
+		t,
+		client.New(base, untrusted, token),
+		client.NewLong(base, untrusted, token),
 	)
-	o.PersistentFlags().IntVar(
-		&port,
-		"port",
-		environment.FallbackInteger(constant.PortEnvironment, 0),
-		"goclauded port",
-	)
-	o.AddCommand(sessionBranch(c))
-	o.AddCommand(messageBranch(c))
-	o.AddCommand(register(c))
-	o.AddCommand(sessionEnd(c))
-	o.AddCommand(turnEnd(c))
-	o.AddCommand(status(c))
-	o.AddCommand(check(c))
-	o.AddCommand(statusLine(c))
-	o.AddCommand(guard.New(c.Terminal()))
-	o.AddCommand(serveChannel(c, s.Reporter()))
-	o.AddCommand(usage(c))
-	o.AddCommand(cost(c))
+	defer c.Close()
+	o := New(c, s.Reporter())
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	argument.CobraExecute(o)

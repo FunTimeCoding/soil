@@ -10,7 +10,12 @@ func (s *Service) Keys(path string) ([]string, error) {
 		return nil, e
 	}
 
-	values, e := s.source.Read(path)
+	values, e := guarded(
+		s.guard,
+		func() (map[string]string, error) {
+			return s.client.Read(path)
+		},
+	)
 
 	if e != nil {
 		return nil, e

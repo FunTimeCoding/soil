@@ -2,9 +2,8 @@ package goband
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goband/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goband/plan"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/spf13/cobra"
 )
@@ -23,42 +22,19 @@ func redirection(x *Context) *cobra.Command {
 			v := readStatus(x, instance)
 			pending := pendingRedirection(v)
 
-			if len(pending) == 0 {
-				x.Terminal.Line(
-					fmt.Sprintf("Redirection already enabled on %s", v.Instance),
+			if len(pending) == 0 || !confirmed {
+				x.Terminal.EmitValue(
+					plan.NewRedirection(v.Instance, pending),
+					nil,
 				)
 
 				return
 			}
 
-			if !confirmed {
-				x.Terminal.Line(
-					fmt.Sprintf(
-						"Would enable %s on %s. Pass --yes to execute.",
-						join.CommaSpace(pending),
-						v.Instance,
-					),
-				)
-
-				return
-			}
-
-			r, e := x.Client.EnableRedirection(
-				context.Background(),
-				client.RedirectionRequest{Instance: &v.Instance},
-			)
-
-			if e != nil {
-				x.Terminal.Exitln(e)
-
-				return
-			}
-
-			x.Terminal.Line(
-				fmt.Sprintf(
-					"Enabled %s on %s",
-					join.CommaSpace(r.Enabled),
-					r.Instance,
+			x.Terminal.EmitValue(
+				x.Client.EnableRedirection(
+					context.Background(),
+					client.RedirectionRequest{Instance: &v.Instance},
 				),
 			)
 		},

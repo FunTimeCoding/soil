@@ -7,5 +7,6 @@ import (
 
 type Server struct {
 	Reporter *memory.Memory
+	LitePath string
 	*model_context_server.Server
 }

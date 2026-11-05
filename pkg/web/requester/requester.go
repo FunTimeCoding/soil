@@ -2,6 +2,7 @@ package requester
 
 import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/funtimecoding/soil/pkg/web/requester/face"
 	"golang.org/x/time/rate"
 	"net/http"
@@ -15,6 +16,9 @@ type Requester struct {
 	header     map[string]string
 	authorizer face.Authorizer
 	refusal    func(int, []byte) error
+	table      *refusal.Table
+	reason     refusal.Reader
+	subject    string
 	backoff    time.Duration
 	pace       *rate.Limiter
 }

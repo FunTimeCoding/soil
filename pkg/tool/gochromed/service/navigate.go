@@ -19,5 +19,9 @@ func (s *Service) Navigate(
 		return e
 	}
 
-	return s.source.Page(t.Identifier).Navigate(l)
+	return s.attempt(
+		func() error {
+			return s.source.Page(t.Identifier).Navigate(l)
+		},
+	)
 }

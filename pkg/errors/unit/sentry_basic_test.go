@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
@@ -100,7 +99,7 @@ func TestRefusalCarriesSentryDetail(t *testing.T) {
 	)
 	var out map[string]any
 	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
 		"You do not have permission to perform this action.",
@@ -119,7 +118,7 @@ func TestARejectedQueryIsValidation(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestAnExpiredTokenIsForbidden(t *testing.T) {
+func TestAnExpiredTokenIsAFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -127,7 +126,7 @@ func TestAnExpiredTokenIsForbidden(t *testing.T) {
 	)
 	var out map[string]any
 	e := newSentryClient(t, s.URL).Get("auth", nil, &out)
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, unexpected.Is(e))
 }
 
 func TestAConflictingUpdateIsConflict(t *testing.T) {

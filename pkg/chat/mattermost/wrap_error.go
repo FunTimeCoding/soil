@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
@@ -36,10 +37,11 @@ func wrapError(
 		reason = f.Message
 	}
 
-	if g := refusal.Status(r.StatusCode, reason); g != nil {
+	if g := refusal.NewTable().
+		With(http.StatusForbidden, errorsConstant.ForbiddenClass).
+		Classify(r.StatusCode, reason); g != nil {
 		return g
 	}
-
 	status := fmt.Sprintf("%d %s", r.StatusCode, http.StatusText(r.StatusCode))
 
 	if !okay {

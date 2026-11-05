@@ -11,9 +11,7 @@ func (c *Client) Post(
 	v url.Values,
 	body any,
 ) error {
-	q := request.New(http.MethodPost, path).
-		WithParameters(v).
-		WithRefusal(c.refusal)
+	q := c.classified(request.New(http.MethodPost, path).WithParameters(v))
 
 	if body != nil {
 		q.WithNotation(body)

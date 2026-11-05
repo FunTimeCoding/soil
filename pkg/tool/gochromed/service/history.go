@@ -12,5 +12,5 @@ func (s *Service) History(v *selector.Selector) (*history.Result, error) {
 		return nil, e
 	}
 
-	return s.source.Page(t.Identifier).History()
+	return guarded(s.guard, s.source.Page(t.Identifier).History)
 }

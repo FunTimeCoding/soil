@@ -10,6 +10,7 @@ var Identity = identity.New(
 	"Sublime Text editor - read, edit, and create buffers. Scratch buffers persist across plugin reloads and Sublime restarts.",
 )
 
+const SublimePeer = "sublime plugin"
 const (
 	ListViews  = "list_views"
 	ReadView   = "read_view"

@@ -15,6 +15,16 @@ test files live is `test-placement.md`.
 - **No defensive programming in tests** - "should work or blow up".
   Extract logic into helpers that panic instead of returning errors;
   helpers return only success values.
+- **A new test is proven by breaking what it guards** - break the code
+  path, not its inputs, keep it compiling, watch the test fail, restore.
+  `go test -overlay` breaks without touching the tree. One break at a
+  time: a break that panics aborts the package and hides every other
+  verdict. A break the test survives names a branch no test reaches, or
+  code nothing needs.
+- **A filter test keeps a row and drops a row**, and counts the rows
+  directly - a filter dropping everything passes a test asserting only
+  the drop, and a read that deletes what it filters hides a missing
+  cleanup.
 
 ## Service First
 
@@ -86,25 +96,42 @@ func New(t *testing.T) (*loan.Service, *mock_client.Client) {
 A surface test builds the daemon from the option - the factory returning the
 mock, `LitePath` a file in `t.TempDir()` - closes it on cleanup, and goes served
 through `Mount`. The daemon closes the mock it was handed through the factory,
-so no caller holds one it never closes - data the mock should carry before the
-daemon starts goes in as values, not as a mock the caller built. A pooled
-client's factory answers per instance, so a pooled tester takes the instance
-names and returns one mock per name. A served test reading the store beside the
-daemon opens its own connection on the option's `LitePath`. Nothing builds a
-surface over hand-wired services. A guarded service's test shares one reporter
-between the guard and the caller, so the events it counts are the ones the
-daemon would send. A fake upstream - an HTTP server answering the client's real
-requests with their content type - stays for testing a client's own wire
-handling, in the client's package. That package's test also holds the client and
-its mock to the face, both in one `[]face.Client`, and a daemon client's to its
-embedded spec (`GetSpec`), failing on any operation the client lacks.
+so what the mock and the store carry before the daemon starts goes in as seeded
+values, and a served test reading the store beside the daemon opens its own
+connection on the option's `LitePath`. A pooled client's factory answers per
+instance, so a pooled tester takes the instance names and returns one mock per
+name. Nothing builds a surface over hand-wired services. A guarded service's
+test shares one reporter between the guard and the caller, so the events it
+counts are the ones the daemon would send.
+
+A mock answers as the client does: never `nil, nil` where the client returns a
+value, an unseeded query with an empty result, absence as the daemon answers
+it. A double it replaces keeps its old default by seeding it. A mock that only
+ever stands in for the client hides the client's own bugs, so each success path
+also goes once through the real client against the served daemon. A double with
+a `Close` is the test's to close: one helper builds it and closes it on cleanup.
+A client too costly to build per test is shared behind a lease whose `Close`
+does nothing, closed in `TestMain` after `m.Run()`. A fleet's fixtures become
+the face's seeded data through one translator, proven by loading every fixture
+back.
+
+A fake upstream - an HTTP server answering the client's real requests with
+their content type - stays for testing a client's own wire handling, in the
+client's package; a browser-scraping client is tested through a page serving a
+captured fixture's HTML. That package's test also holds the client and its mock
+to the face, both in one `[]face.Client`. A daemon client's coverage test
+reflects on `face.Client` and checks it against the embedded spec (`GetSpec`),
+failing on any operation the face lacks; a method name differs from its
+operation only by an explicit mapping in the test (gonetboxd's
+`GetAnsibleInventory` as `AnsibleInventoryMarkup`). The client and mock follow
+by compile through the face test.
 
 ## Poll Cycle Testing
 
 Test poll logic directly by calling `Poll()` - no goroutine or ticker needed:
 
 ```go
-w := worker.New(c, s, 1*time.Minute)
+w := worker.New(v.Poll, l, r, time.Minute)
 w.Poll()
 records := s.ByName("HighMemory")
 assert.Count(t, 1, records)
@@ -118,6 +145,31 @@ to it through the daemon's generated REST client on `s.Client()`, which
 parses typed responses - no hand-rolled JSON getters. A raw lifecycle
 server (`system.FindUnusedPort`, `assert.Listen`) is for testing the
 lifecycle itself.
+
+A not-found answer through the daemon client cannot tell a missing record
+from a missing route - the route's own 404 reads as `not_found` too - so the
+double records what it was asked and the test asserts the ask.
+
+## Peer Guard Tests
+
+A guarded daemon has an outage table (`go:pkg/web/outage_tester`): every
+REST operation and MCP tool against a peer that is down, each expecting
+`unavailable` and no capture. Each operation meets a fresh daemon built
+by the caller's `serve` on one shared reporter, so no operation inherits a
+guard another one opened, and an operation swallowing its peer's error
+shows by name.
+
+A quiet class reads the same guarded or not, so an outage test cannot prove
+the guard; what only the guard does can - the next call failing at once,
+without asking the peer. The double fails as the client does: a dial failure
+is a `connection.Failure` (a hand-built `net.OpError` classifies only around
+a real errno, `os.NewSyscallError("connect", syscall.ECONNREFUSED)`), where a
+bare `unreachable` error passes through as a refusal and the guard never
+opens. The guard answers `unavailable` on the call that opens the outage and
+reports it only after `Lasting`, so a fast test counts the peer's calls, not
+the reporter's events. A guard comes back only through its probe loop, on a
+real timer from `ProbeMinimum`, so a test that needs the peer back fails a
+call with a fault the guard passes through untouched.
 
 ## HTTP Clients
 

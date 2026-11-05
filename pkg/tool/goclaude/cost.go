@@ -2,8 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -19,44 +17,12 @@ func cost(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.Client().GetCost(
-				context.Background(),
-				&client.GetCostParams{Days: &days},
+			c.Terminal().EmitValue(
+				c.Client().GetCost(
+					context.Background(),
+					&client.GetCostParams{Days: &days},
+				),
 			)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			if r.Models == nil || len(*r.Models) == 0 {
-				console.Format("No token usage in the last %d day(s).\n", days)
-
-				return
-			}
-
-			for _, u := range *r.Models {
-				marker := ""
-
-				if !pricing.KnownModel(u.Model) {
-					marker = " (unknown model, sonnet rates)"
-				}
-
-				console.Format(
-					"  %-8s %d calls, %s input, %s output, %s cache-write, %s cache-read, $%.2f%s\n",
-					u.Model,
-					u.Calls,
-					pricing.FormatTokens(u.Input),
-					pricing.FormatTokens(u.Output),
-					pricing.FormatTokens(u.CacheCreation),
-					pricing.FormatTokens(u.CacheRead),
-					u.Cost,
-					marker,
-				)
-			}
-
-			console.Format("\nTotal: $%.2f over %d day(s)\n", r.Cost, days)
 		},
 	}
 	result.Flags().IntVar(&days, "days", 1, "trailing window in days")

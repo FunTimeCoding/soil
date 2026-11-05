@@ -2,9 +2,11 @@ package refusal
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"net/http"
 )
 
 func Classify(e error) error {
@@ -24,7 +26,10 @@ func Classify(e error) error {
 
 	text := reason(e, code)
 
-	if classified := refusal.Status(
+	if classified := refusal.NewTable().With(
+		http.StatusBadRequest,
+		errorsConstant.ValidationClass,
+	).Classify(
 		code,
 		join.Empty("alertmanager: ", text),
 	); classified != nil {

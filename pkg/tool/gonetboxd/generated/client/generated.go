@@ -7070,10 +7070,10 @@ type ListAddressRangesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*AddressRange
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7081,14 +7081,14 @@ func (r ListAddressRangesResponse) GetJSON200() *[]*AddressRange {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListAddressRangesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListAddressRangesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListAddressRangesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7127,10 +7127,10 @@ type CreateAddressRangeResponse struct {
 	JSON201 *AddressRange
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -7143,14 +7143,14 @@ func (r CreateAddressRangeResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateAddressRangeResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateAddressRangeResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateAddressRangeResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7187,22 +7187,17 @@ type DeleteAddressResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DeleteAddressResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteAddressResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
@@ -7213,6 +7208,11 @@ func (r DeleteAddressResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r DeleteAddressResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r DeleteAddressResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7249,10 +7249,10 @@ type ListCablesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Cable
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7260,14 +7260,14 @@ func (r ListCablesResponse) GetJSON200() *[]*Cable {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListCablesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListCablesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListCablesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7306,10 +7306,10 @@ type CreateCableResponse struct {
 	JSON201 *Cable
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -7322,14 +7322,14 @@ func (r CreateCableResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateCableResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateCableResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateCableResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7366,10 +7366,10 @@ type ListChoiceSetsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*ChoiceSet
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7377,14 +7377,14 @@ func (r ListChoiceSetsResponse) GetJSON200() *[]*ChoiceSet {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListChoiceSetsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListChoiceSetsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListChoiceSetsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7423,10 +7423,10 @@ type CreateChoiceSetResponse struct {
 	JSON201 *ChoiceSet
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -7439,14 +7439,14 @@ func (r CreateChoiceSetResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateChoiceSetResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateChoiceSetResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateChoiceSetResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7483,24 +7483,19 @@ type DeleteChoiceSetResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DeleteChoiceSetResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteChoiceSetResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -7516,6 +7511,11 @@ func (r DeleteChoiceSetResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r DeleteChoiceSetResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r DeleteChoiceSetResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7552,22 +7552,17 @@ type GetChoiceSetResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *ChoiceSet
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetChoiceSetResponse) GetJSON200() *ChoiceSet {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetChoiceSetResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -7578,6 +7573,11 @@ func (r GetChoiceSetResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetChoiceSetResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetChoiceSetResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7616,12 +7616,12 @@ type UpdateChoiceSetResponse struct {
 	JSON200 *ChoiceSet
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7634,11 +7634,6 @@ func (r UpdateChoiceSetResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r UpdateChoiceSetResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r UpdateChoiceSetResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -7647,6 +7642,11 @@ func (r UpdateChoiceSetResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r UpdateChoiceSetResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r UpdateChoiceSetResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7683,10 +7683,10 @@ type ListClusterTypesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*ClusterType
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7694,14 +7694,14 @@ func (r ListClusterTypesResponse) GetJSON200() *[]*ClusterType {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListClusterTypesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListClusterTypesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListClusterTypesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7740,10 +7740,10 @@ type CreateClusterTypeResponse struct {
 	JSON201 *ClusterType
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -7756,14 +7756,14 @@ func (r CreateClusterTypeResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateClusterTypeResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateClusterTypeResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateClusterTypeResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7800,10 +7800,10 @@ type ListClustersResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Cluster
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7811,14 +7811,14 @@ func (r ListClustersResponse) GetJSON200() *[]*Cluster {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListClustersResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListClustersResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListClustersResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7857,10 +7857,10 @@ type CreateClusterResponse struct {
 	JSON201 *Cluster
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -7873,14 +7873,14 @@ func (r CreateClusterResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateClusterResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateClusterResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateClusterResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7917,10 +7917,10 @@ type ListConfigurationContextsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*ConfigurationContext
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -7928,14 +7928,14 @@ func (r ListConfigurationContextsResponse) GetJSON200() *[]*ConfigurationContext
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListConfigurationContextsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListConfigurationContextsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListConfigurationContextsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -7974,12 +7974,12 @@ type CreateConfigurationContextResponse struct {
 	JSON201 *ConfigurationContext
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -7992,11 +7992,6 @@ func (r CreateConfigurationContextResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateConfigurationContextResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateConfigurationContextResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -8005,6 +8000,11 @@ func (r CreateConfigurationContextResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateConfigurationContextResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateConfigurationContextResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8041,24 +8041,19 @@ type DeleteConfigurationContextResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DeleteConfigurationContextResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteConfigurationContextResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -8074,6 +8069,11 @@ func (r DeleteConfigurationContextResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r DeleteConfigurationContextResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r DeleteConfigurationContextResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8110,22 +8110,17 @@ type GetConfigurationContextResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *ConfigurationContext
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetConfigurationContextResponse) GetJSON200() *ConfigurationContext {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetConfigurationContextResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -8136,6 +8131,11 @@ func (r GetConfigurationContextResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetConfigurationContextResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetConfigurationContextResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8174,12 +8174,12 @@ type UpdateConfigurationContextResponse struct {
 	JSON200 *ConfigurationContext
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -8192,11 +8192,6 @@ func (r UpdateConfigurationContextResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r UpdateConfigurationContextResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r UpdateConfigurationContextResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -8205,6 +8200,11 @@ func (r UpdateConfigurationContextResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r UpdateConfigurationContextResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r UpdateConfigurationContextResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8241,10 +8241,10 @@ type ListCustomFieldsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*CustomField
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -8252,14 +8252,14 @@ func (r ListCustomFieldsResponse) GetJSON200() *[]*CustomField {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListCustomFieldsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListCustomFieldsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListCustomFieldsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8298,12 +8298,12 @@ type CreateCustomFieldResponse struct {
 	JSON201 *CustomField
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -8316,11 +8316,6 @@ func (r CreateCustomFieldResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateCustomFieldResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateCustomFieldResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -8329,6 +8324,11 @@ func (r CreateCustomFieldResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateCustomFieldResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateCustomFieldResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8365,24 +8365,19 @@ type DeleteCustomFieldResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DeleteCustomFieldResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteCustomFieldResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -8398,6 +8393,11 @@ func (r DeleteCustomFieldResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r DeleteCustomFieldResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r DeleteCustomFieldResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8434,10 +8434,10 @@ type ListDeviceRolesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*DeviceRole
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -8445,14 +8445,14 @@ func (r ListDeviceRolesResponse) GetJSON200() *[]*DeviceRole {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListDeviceRolesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListDeviceRolesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListDeviceRolesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8491,10 +8491,10 @@ type CreateDeviceRoleResponse struct {
 	JSON201 *DeviceRole
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -8507,14 +8507,14 @@ func (r CreateDeviceRoleResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateDeviceRoleResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateDeviceRoleResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateDeviceRoleResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8551,10 +8551,10 @@ type ListDeviceTypesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*DeviceType
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -8562,14 +8562,14 @@ func (r ListDeviceTypesResponse) GetJSON200() *[]*DeviceType {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListDeviceTypesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListDeviceTypesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListDeviceTypesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8608,10 +8608,10 @@ type CreateDeviceTypeResponse struct {
 	JSON201 *DeviceType
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -8624,14 +8624,14 @@ func (r CreateDeviceTypeResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateDeviceTypeResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateDeviceTypeResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateDeviceTypeResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8668,10 +8668,10 @@ type ListDevicesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Device
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -8679,14 +8679,14 @@ func (r ListDevicesResponse) GetJSON200() *[]*Device {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListDevicesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListDevicesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListDevicesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8725,10 +8725,10 @@ type CreateDeviceResponse struct {
 	JSON201 *Device
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -8741,14 +8741,14 @@ func (r CreateDeviceResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateDeviceResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateDeviceResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateDeviceResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8785,22 +8785,17 @@ type GetDeviceResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Device
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetDeviceResponse) GetJSON200() *Device {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetDeviceResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -8811,6 +8806,11 @@ func (r GetDeviceResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetDeviceResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetDeviceResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8849,12 +8849,12 @@ type UpdateDeviceResponse struct {
 	JSON200 *Device
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -8867,11 +8867,6 @@ func (r UpdateDeviceResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r UpdateDeviceResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r UpdateDeviceResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -8880,6 +8875,11 @@ func (r UpdateDeviceResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r UpdateDeviceResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r UpdateDeviceResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8916,22 +8916,17 @@ type ListAddressesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Address
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListAddressesResponse) GetJSON200() *[]*Address {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListAddressesResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -8942,6 +8937,11 @@ func (r ListAddressesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListAddressesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListAddressesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -8980,12 +8980,12 @@ type CreateAddressResponse struct {
 	JSON201 *Address
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -8998,11 +8998,6 @@ func (r CreateAddressResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateAddressResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateAddressResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9011,6 +9006,11 @@ func (r CreateAddressResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateAddressResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateAddressResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9047,22 +9047,17 @@ type ListInterfacesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Interface
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListInterfacesResponse) GetJSON200() *[]*Interface {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListInterfacesResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -9073,6 +9068,11 @@ func (r ListInterfacesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListInterfacesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListInterfacesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9111,12 +9111,12 @@ type CreateInterfaceResponse struct {
 	JSON201 *Interface
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -9129,11 +9129,6 @@ func (r CreateInterfaceResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateInterfaceResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateInterfaceResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9142,6 +9137,11 @@ func (r CreateInterfaceResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateInterfaceResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateInterfaceResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9180,12 +9180,12 @@ type SetInterfacePhysicalAddressResponse struct {
 	JSON200 *PhysicalAddress
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -9198,11 +9198,6 @@ func (r SetInterfacePhysicalAddressResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r SetInterfacePhysicalAddressResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r SetInterfacePhysicalAddressResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9211,6 +9206,11 @@ func (r SetInterfacePhysicalAddressResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r SetInterfacePhysicalAddressResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SetInterfacePhysicalAddressResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9247,22 +9247,17 @@ type ListDeviceJournalEntriesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*JournalEntry
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListDeviceJournalEntriesResponse) GetJSON200() *[]*JournalEntry {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListDeviceJournalEntriesResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -9273,6 +9268,11 @@ func (r ListDeviceJournalEntriesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListDeviceJournalEntriesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListDeviceJournalEntriesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9311,12 +9311,12 @@ type AddDeviceJournalEntryResponse struct {
 	JSON201 *JournalEntry
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -9329,11 +9329,6 @@ func (r AddDeviceJournalEntryResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r AddDeviceJournalEntryResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r AddDeviceJournalEntryResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9342,6 +9337,11 @@ func (r AddDeviceJournalEntryResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r AddDeviceJournalEntryResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r AddDeviceJournalEntryResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9378,22 +9378,17 @@ type ListDeviceLabelsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Label
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListDeviceLabelsResponse) GetJSON200() *[]*Label {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListDeviceLabelsResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -9404,6 +9399,11 @@ func (r ListDeviceLabelsResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListDeviceLabelsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListDeviceLabelsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9440,24 +9440,19 @@ type RemoveDeviceLabelResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r RemoveDeviceLabelResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r RemoveDeviceLabelResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -9473,6 +9468,11 @@ func (r RemoveDeviceLabelResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r RemoveDeviceLabelResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r RemoveDeviceLabelResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9511,12 +9511,12 @@ type SetDeviceLabelResponse struct {
 	JSON200 *Label
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -9529,11 +9529,6 @@ func (r SetDeviceLabelResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r SetDeviceLabelResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r SetDeviceLabelResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9542,6 +9537,11 @@ func (r SetDeviceLabelResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r SetDeviceLabelResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SetDeviceLabelResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9578,22 +9578,17 @@ type ListDeviceTagsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]string
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListDeviceTagsResponse) GetJSON200() *[]string {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListDeviceTagsResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -9604,6 +9599,11 @@ func (r ListDeviceTagsResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListDeviceTagsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListDeviceTagsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9642,14 +9642,14 @@ type RemoveDeviceTagResponse struct {
 	JSON200 *Device
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -9660,11 +9660,6 @@ func (r RemoveDeviceTagResponse) GetJSON200() *Device {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r RemoveDeviceTagResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r RemoveDeviceTagResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -9680,6 +9675,11 @@ func (r RemoveDeviceTagResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r RemoveDeviceTagResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r RemoveDeviceTagResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9718,12 +9718,12 @@ type AddDeviceTagResponse struct {
 	JSON200 *Device
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -9736,11 +9736,6 @@ func (r AddDeviceTagResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r AddDeviceTagResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r AddDeviceTagResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9749,6 +9744,11 @@ func (r AddDeviceTagResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r AddDeviceTagResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r AddDeviceTagResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9787,12 +9787,12 @@ type CreateDeviceTunnelTerminationResponse struct {
 	JSON201 *TunnelTermination
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -9805,11 +9805,6 @@ func (r CreateDeviceTunnelTerminationResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateDeviceTunnelTerminationResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateDeviceTunnelTerminationResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -9818,6 +9813,11 @@ func (r CreateDeviceTunnelTerminationResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateDeviceTunnelTerminationResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateDeviceTunnelTerminationResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9852,20 +9852,20 @@ func (r CreateDeviceTunnelTerminationResponse) ContentType() string {
 type GetAnsibleInventoryResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetAnsibleInventoryResponse) GetJSON403() *Error {
-	return r.JSON403
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetAnsibleInventoryResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetAnsibleInventoryResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9902,22 +9902,17 @@ type DeleteJournalEntryResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DeleteJournalEntryResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteJournalEntryResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
@@ -9928,6 +9923,11 @@ func (r DeleteJournalEntryResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r DeleteJournalEntryResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r DeleteJournalEntryResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -9966,10 +9966,10 @@ type UpdateJournalEntryResponse struct {
 	JSON200 *JournalEntry
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -9982,14 +9982,14 @@ func (r UpdateJournalEntryResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r UpdateJournalEntryResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r UpdateJournalEntryResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r UpdateJournalEntryResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10026,10 +10026,10 @@ type ListLocationsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Location
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10037,14 +10037,14 @@ func (r ListLocationsResponse) GetJSON200() *[]*Location {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListLocationsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListLocationsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListLocationsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10083,10 +10083,10 @@ type CreateLocationResponse struct {
 	JSON201 *Location
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10099,14 +10099,14 @@ func (r CreateLocationResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateLocationResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateLocationResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateLocationResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10143,10 +10143,10 @@ type ListManufacturersResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Manufacturer
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10154,14 +10154,14 @@ func (r ListManufacturersResponse) GetJSON200() *[]*Manufacturer {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListManufacturersResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListManufacturersResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListManufacturersResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10200,10 +10200,10 @@ type CreateManufacturerResponse struct {
 	JSON201 *Manufacturer
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10216,14 +10216,14 @@ func (r CreateManufacturerResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateManufacturerResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateManufacturerResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateManufacturerResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10260,10 +10260,10 @@ type ListPhysicalAddressesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]PhysicalAddressOwner
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10271,14 +10271,14 @@ func (r ListPhysicalAddressesResponse) GetJSON200() *[]PhysicalAddressOwner {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListPhysicalAddressesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListPhysicalAddressesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListPhysicalAddressesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10315,10 +10315,10 @@ type ListPlatformsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Platform
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10326,14 +10326,14 @@ func (r ListPlatformsResponse) GetJSON200() *[]*Platform {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListPlatformsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListPlatformsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListPlatformsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10372,10 +10372,10 @@ type CreatePlatformResponse struct {
 	JSON201 *Platform
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10388,14 +10388,14 @@ func (r CreatePlatformResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreatePlatformResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreatePlatformResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreatePlatformResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10432,10 +10432,10 @@ type ListPrefixesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Prefix
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10443,14 +10443,14 @@ func (r ListPrefixesResponse) GetJSON200() *[]*Prefix {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListPrefixesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListPrefixesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListPrefixesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10489,10 +10489,10 @@ type CreatePrefixResponse struct {
 	JSON201 *Prefix
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10505,14 +10505,14 @@ func (r CreatePrefixResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreatePrefixResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreatePrefixResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreatePrefixResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10549,10 +10549,10 @@ type ListSitesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Site
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10560,14 +10560,14 @@ func (r ListSitesResponse) GetJSON200() *[]*Site {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListSitesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListSitesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListSitesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10606,10 +10606,10 @@ type CreateSiteResponse struct {
 	JSON201 *Site
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10622,14 +10622,14 @@ func (r CreateSiteResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateSiteResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateSiteResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateSiteResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10666,10 +10666,10 @@ type ListTagsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Tag
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10677,14 +10677,14 @@ func (r ListTagsResponse) GetJSON200() *[]*Tag {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListTagsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListTagsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListTagsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10723,10 +10723,10 @@ type CreateTagResponse struct {
 	JSON201 *Tag
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10739,14 +10739,14 @@ func (r CreateTagResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateTagResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateTagResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateTagResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10783,10 +10783,10 @@ type ListTenantsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Tenant
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10794,14 +10794,14 @@ func (r ListTenantsResponse) GetJSON200() *[]*Tenant {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListTenantsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListTenantsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListTenantsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10840,10 +10840,10 @@ type CreateTenantResponse struct {
 	JSON201 *Tenant
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10856,14 +10856,14 @@ func (r CreateTenantResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateTenantResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateTenantResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateTenantResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10900,10 +10900,10 @@ type ListTunnelGroupsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*TunnelGroup
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -10911,14 +10911,14 @@ func (r ListTunnelGroupsResponse) GetJSON200() *[]*TunnelGroup {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListTunnelGroupsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListTunnelGroupsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListTunnelGroupsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -10957,10 +10957,10 @@ type CreateTunnelGroupResponse struct {
 	JSON201 *TunnelGroup
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -10973,14 +10973,14 @@ func (r CreateTunnelGroupResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateTunnelGroupResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateTunnelGroupResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateTunnelGroupResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11017,10 +11017,10 @@ type ListTunnelTerminationsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*TunnelTermination
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -11028,14 +11028,14 @@ func (r ListTunnelTerminationsResponse) GetJSON200() *[]*TunnelTermination {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListTunnelTerminationsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListTunnelTerminationsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListTunnelTerminationsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11072,10 +11072,10 @@ type ListTunnelsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Tunnel
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -11083,14 +11083,14 @@ func (r ListTunnelsResponse) GetJSON200() *[]*Tunnel {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListTunnelsResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListTunnelsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListTunnelsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11129,10 +11129,10 @@ type CreateTunnelResponse struct {
 	JSON201 *Tunnel
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -11145,14 +11145,14 @@ func (r CreateTunnelResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateTunnelResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateTunnelResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateTunnelResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11189,10 +11189,10 @@ type ListVirtualMachinesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*VirtualMachine
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -11200,14 +11200,14 @@ func (r ListVirtualMachinesResponse) GetJSON200() *[]*VirtualMachine {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListVirtualMachinesResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListVirtualMachinesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListVirtualMachinesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11246,10 +11246,10 @@ type CreateVirtualMachineResponse struct {
 	JSON201 *VirtualMachine
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -11262,14 +11262,14 @@ func (r CreateVirtualMachineResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateVirtualMachineResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateVirtualMachineResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateVirtualMachineResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11306,22 +11306,17 @@ type GetVirtualMachineResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *VirtualMachine
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetVirtualMachineResponse) GetJSON200() *VirtualMachine {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetVirtualMachineResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -11332,6 +11327,11 @@ func (r GetVirtualMachineResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetVirtualMachineResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetVirtualMachineResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11370,12 +11370,12 @@ type UpdateVirtualMachineResponse struct {
 	JSON200 *VirtualMachine
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -11388,11 +11388,6 @@ func (r UpdateVirtualMachineResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r UpdateVirtualMachineResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r UpdateVirtualMachineResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -11401,6 +11396,11 @@ func (r UpdateVirtualMachineResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r UpdateVirtualMachineResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r UpdateVirtualMachineResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11437,22 +11437,17 @@ type ListVirtualAddressesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Address
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualAddressesResponse) GetJSON200() *[]*Address {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListVirtualAddressesResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -11463,6 +11458,11 @@ func (r ListVirtualAddressesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListVirtualAddressesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListVirtualAddressesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11501,12 +11501,12 @@ type CreateVirtualAddressResponse struct {
 	JSON201 *Address
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -11519,11 +11519,6 @@ func (r CreateVirtualAddressResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateVirtualAddressResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateVirtualAddressResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -11532,6 +11527,11 @@ func (r CreateVirtualAddressResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateVirtualAddressResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateVirtualAddressResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11568,22 +11568,17 @@ type ListVirtualDisksResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*VirtualDisk
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualDisksResponse) GetJSON200() *[]*VirtualDisk {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListVirtualDisksResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -11594,6 +11589,11 @@ func (r ListVirtualDisksResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListVirtualDisksResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListVirtualDisksResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11632,12 +11632,12 @@ type CreateVirtualDiskResponse struct {
 	JSON201 *VirtualDisk
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -11650,11 +11650,6 @@ func (r CreateVirtualDiskResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateVirtualDiskResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateVirtualDiskResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -11663,6 +11658,11 @@ func (r CreateVirtualDiskResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateVirtualDiskResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateVirtualDiskResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11699,22 +11699,17 @@ type ListVirtualInterfacesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Interface
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualInterfacesResponse) GetJSON200() *[]*Interface {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListVirtualInterfacesResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -11725,6 +11720,11 @@ func (r ListVirtualInterfacesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListVirtualInterfacesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListVirtualInterfacesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11763,12 +11763,12 @@ type CreateVirtualInterfaceResponse struct {
 	JSON201 *VirtualInterface
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -11781,11 +11781,6 @@ func (r CreateVirtualInterfaceResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateVirtualInterfaceResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateVirtualInterfaceResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -11794,6 +11789,11 @@ func (r CreateVirtualInterfaceResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateVirtualInterfaceResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateVirtualInterfaceResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11832,12 +11832,12 @@ type SetVirtualInterfacePhysicalAddressResponse struct {
 	JSON200 *PhysicalAddress
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -11850,11 +11850,6 @@ func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -11863,6 +11858,11 @@ func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11899,22 +11899,17 @@ type ListVirtualJournalEntriesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*JournalEntry
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualJournalEntriesResponse) GetJSON200() *[]*JournalEntry {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListVirtualJournalEntriesResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -11925,6 +11920,11 @@ func (r ListVirtualJournalEntriesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListVirtualJournalEntriesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListVirtualJournalEntriesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -11963,12 +11963,12 @@ type AddVirtualJournalEntryResponse struct {
 	JSON201 *JournalEntry
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -11981,11 +11981,6 @@ func (r AddVirtualJournalEntryResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r AddVirtualJournalEntryResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r AddVirtualJournalEntryResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -11994,6 +11989,11 @@ func (r AddVirtualJournalEntryResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r AddVirtualJournalEntryResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r AddVirtualJournalEntryResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12030,22 +12030,17 @@ type ListVirtualLabelsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Label
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualLabelsResponse) GetJSON200() *[]*Label {
 	return r.JSON200
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListVirtualLabelsResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -12056,6 +12051,11 @@ func (r ListVirtualLabelsResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListVirtualLabelsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListVirtualLabelsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12092,24 +12092,19 @@ type RemoveVirtualLabelResponse struct {
 	HTTPResponse *http.Response
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r RemoveVirtualLabelResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r RemoveVirtualLabelResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -12125,6 +12120,11 @@ func (r RemoveVirtualLabelResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r RemoveVirtualLabelResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r RemoveVirtualLabelResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12163,12 +12163,12 @@ type SetVirtualLabelResponse struct {
 	JSON200 *Label
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -12181,11 +12181,6 @@ func (r SetVirtualLabelResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r SetVirtualLabelResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r SetVirtualLabelResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -12194,6 +12189,11 @@ func (r SetVirtualLabelResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r SetVirtualLabelResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SetVirtualLabelResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12232,14 +12232,14 @@ type RemoveVirtualTagResponse struct {
 	JSON200 *VirtualMachine
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -12250,11 +12250,6 @@ func (r RemoveVirtualTagResponse) GetJSON200() *VirtualMachine {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r RemoveVirtualTagResponse) GetJSON400() *Error {
 	return r.JSON400
-}
-
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r RemoveVirtualTagResponse) GetJSON403() *Error {
-	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -12270,6 +12265,11 @@ func (r RemoveVirtualTagResponse) GetJSON409() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r RemoveVirtualTagResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r RemoveVirtualTagResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12308,12 +12308,12 @@ type AddVirtualTagResponse struct {
 	JSON200 *VirtualMachine
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -12326,11 +12326,6 @@ func (r AddVirtualTagResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r AddVirtualTagResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r AddVirtualTagResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -12339,6 +12334,11 @@ func (r AddVirtualTagResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r AddVirtualTagResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r AddVirtualTagResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12377,12 +12377,12 @@ type CreateVirtualTunnelTerminationResponse struct {
 	JSON201 *TunnelTermination
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -12395,11 +12395,6 @@ func (r CreateVirtualTunnelTerminationResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateVirtualTunnelTerminationResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
 func (r CreateVirtualTunnelTerminationResponse) GetJSON404() *Error {
 	return r.JSON404
@@ -12408,6 +12403,11 @@ func (r CreateVirtualTunnelTerminationResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateVirtualTunnelTerminationResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateVirtualTunnelTerminationResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12444,10 +12444,10 @@ type ListWirelessNetworksResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*WirelessNetwork
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -12455,14 +12455,14 @@ func (r ListWirelessNetworksResponse) GetJSON200() *[]*WirelessNetwork {
 	return r.JSON200
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r ListWirelessNetworksResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListWirelessNetworksResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListWirelessNetworksResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -12501,10 +12501,10 @@ type CreateWirelessNetworkResponse struct {
 	JSON201 *WirelessNetwork
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
@@ -12517,14 +12517,14 @@ func (r CreateWirelessNetworkResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateWirelessNetworkResponse) GetJSON403() *Error {
-	return r.JSON403
-}
-
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r CreateWirelessNetworkResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreateWirelessNetworkResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -13974,19 +13974,19 @@ func ParseListAddressRangesResponse(rsp *http.Response) (*ListAddressRangesRespo
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14021,19 +14021,19 @@ func ParseCreateAddressRangeResponse(rsp *http.Response) (*CreateAddressRangeRes
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14064,13 +14064,6 @@ func ParseDeleteAddressResponse(rsp *http.Response) (*DeleteAddressResponse, err
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14084,6 +14077,13 @@ func ParseDeleteAddressResponse(rsp *http.Response) (*DeleteAddressResponse, err
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14111,19 +14111,19 @@ func ParseListCablesResponse(rsp *http.Response) (*ListCablesResponse, error) {
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14158,19 +14158,19 @@ func ParseCreateCableResponse(rsp *http.Response) (*CreateCableResponse, error) 
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14198,19 +14198,19 @@ func ParseListChoiceSetsResponse(rsp *http.Response) (*ListChoiceSetsResponse, e
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14245,19 +14245,19 @@ func ParseCreateChoiceSetResponse(rsp *http.Response) (*CreateChoiceSetResponse,
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14288,13 +14288,6 @@ func ParseDeleteChoiceSetResponse(rsp *http.Response) (*DeleteChoiceSetResponse,
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14315,6 +14308,13 @@ func ParseDeleteChoiceSetResponse(rsp *http.Response) (*DeleteChoiceSetResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14342,13 +14342,6 @@ func ParseGetChoiceSetResponse(rsp *http.Response) (*GetChoiceSetResponse, error
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14362,6 +14355,13 @@ func ParseGetChoiceSetResponse(rsp *http.Response) (*GetChoiceSetResponse, error
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14396,13 +14396,6 @@ func ParseUpdateChoiceSetResponse(rsp *http.Response) (*UpdateChoiceSetResponse,
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14416,6 +14409,13 @@ func ParseUpdateChoiceSetResponse(rsp *http.Response) (*UpdateChoiceSetResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14443,19 +14443,19 @@ func ParseListClusterTypesResponse(rsp *http.Response) (*ListClusterTypesRespons
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14490,19 +14490,19 @@ func ParseCreateClusterTypeResponse(rsp *http.Response) (*CreateClusterTypeRespo
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14530,19 +14530,19 @@ func ParseListClustersResponse(rsp *http.Response) (*ListClustersResponse, error
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14577,19 +14577,19 @@ func ParseCreateClusterResponse(rsp *http.Response) (*CreateClusterResponse, err
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14617,19 +14617,19 @@ func ParseListConfigurationContextsResponse(rsp *http.Response) (*ListConfigurat
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14664,13 +14664,6 @@ func ParseCreateConfigurationContextResponse(rsp *http.Response) (*CreateConfigu
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14684,6 +14677,13 @@ func ParseCreateConfigurationContextResponse(rsp *http.Response) (*CreateConfigu
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14714,13 +14714,6 @@ func ParseDeleteConfigurationContextResponse(rsp *http.Response) (*DeleteConfigu
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14741,6 +14734,13 @@ func ParseDeleteConfigurationContextResponse(rsp *http.Response) (*DeleteConfigu
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14768,13 +14768,6 @@ func ParseGetConfigurationContextResponse(rsp *http.Response) (*GetConfiguration
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14788,6 +14781,13 @@ func ParseGetConfigurationContextResponse(rsp *http.Response) (*GetConfiguration
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14822,13 +14822,6 @@ func ParseUpdateConfigurationContextResponse(rsp *http.Response) (*UpdateConfigu
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14842,6 +14835,13 @@ func ParseUpdateConfigurationContextResponse(rsp *http.Response) (*UpdateConfigu
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14869,19 +14869,19 @@ func ParseListCustomFieldsResponse(rsp *http.Response) (*ListCustomFieldsRespons
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14916,13 +14916,6 @@ func ParseCreateCustomFieldResponse(rsp *http.Response) (*CreateCustomFieldRespo
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14936,6 +14929,13 @@ func ParseCreateCustomFieldResponse(rsp *http.Response) (*CreateCustomFieldRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -14966,13 +14966,6 @@ func ParseDeleteCustomFieldResponse(rsp *http.Response) (*DeleteCustomFieldRespo
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -14993,6 +14986,13 @@ func ParseDeleteCustomFieldResponse(rsp *http.Response) (*DeleteCustomFieldRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15020,19 +15020,19 @@ func ParseListDeviceRolesResponse(rsp *http.Response) (*ListDeviceRolesResponse,
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15067,19 +15067,19 @@ func ParseCreateDeviceRoleResponse(rsp *http.Response) (*CreateDeviceRoleRespons
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15107,19 +15107,19 @@ func ParseListDeviceTypesResponse(rsp *http.Response) (*ListDeviceTypesResponse,
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15154,19 +15154,19 @@ func ParseCreateDeviceTypeResponse(rsp *http.Response) (*CreateDeviceTypeRespons
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15194,19 +15194,19 @@ func ParseListDevicesResponse(rsp *http.Response) (*ListDevicesResponse, error) 
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15241,19 +15241,19 @@ func ParseCreateDeviceResponse(rsp *http.Response) (*CreateDeviceResponse, error
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15281,13 +15281,6 @@ func ParseGetDeviceResponse(rsp *http.Response) (*GetDeviceResponse, error) {
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15301,6 +15294,13 @@ func ParseGetDeviceResponse(rsp *http.Response) (*GetDeviceResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15335,13 +15335,6 @@ func ParseUpdateDeviceResponse(rsp *http.Response) (*UpdateDeviceResponse, error
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15355,6 +15348,13 @@ func ParseUpdateDeviceResponse(rsp *http.Response) (*UpdateDeviceResponse, error
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15382,13 +15382,6 @@ func ParseListAddressesResponse(rsp *http.Response) (*ListAddressesResponse, err
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15402,6 +15395,13 @@ func ParseListAddressesResponse(rsp *http.Response) (*ListAddressesResponse, err
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15436,13 +15436,6 @@ func ParseCreateAddressResponse(rsp *http.Response) (*CreateAddressResponse, err
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15456,6 +15449,13 @@ func ParseCreateAddressResponse(rsp *http.Response) (*CreateAddressResponse, err
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15483,13 +15483,6 @@ func ParseListInterfacesResponse(rsp *http.Response) (*ListInterfacesResponse, e
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15503,6 +15496,13 @@ func ParseListInterfacesResponse(rsp *http.Response) (*ListInterfacesResponse, e
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15537,13 +15537,6 @@ func ParseCreateInterfaceResponse(rsp *http.Response) (*CreateInterfaceResponse,
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15557,6 +15550,13 @@ func ParseCreateInterfaceResponse(rsp *http.Response) (*CreateInterfaceResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15591,13 +15591,6 @@ func ParseSetInterfacePhysicalAddressResponse(rsp *http.Response) (*SetInterface
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15611,6 +15604,13 @@ func ParseSetInterfacePhysicalAddressResponse(rsp *http.Response) (*SetInterface
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15638,13 +15638,6 @@ func ParseListDeviceJournalEntriesResponse(rsp *http.Response) (*ListDeviceJourn
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15658,6 +15651,13 @@ func ParseListDeviceJournalEntriesResponse(rsp *http.Response) (*ListDeviceJourn
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15692,13 +15692,6 @@ func ParseAddDeviceJournalEntryResponse(rsp *http.Response) (*AddDeviceJournalEn
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15712,6 +15705,13 @@ func ParseAddDeviceJournalEntryResponse(rsp *http.Response) (*AddDeviceJournalEn
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15739,13 +15739,6 @@ func ParseListDeviceLabelsResponse(rsp *http.Response) (*ListDeviceLabelsRespons
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15759,6 +15752,13 @@ func ParseListDeviceLabelsResponse(rsp *http.Response) (*ListDeviceLabelsRespons
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15789,13 +15789,6 @@ func ParseRemoveDeviceLabelResponse(rsp *http.Response) (*RemoveDeviceLabelRespo
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15816,6 +15809,13 @@ func ParseRemoveDeviceLabelResponse(rsp *http.Response) (*RemoveDeviceLabelRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15850,13 +15850,6 @@ func ParseSetDeviceLabelResponse(rsp *http.Response) (*SetDeviceLabelResponse, e
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15870,6 +15863,13 @@ func ParseSetDeviceLabelResponse(rsp *http.Response) (*SetDeviceLabelResponse, e
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15897,13 +15897,6 @@ func ParseListDeviceTagsResponse(rsp *http.Response) (*ListDeviceTagsResponse, e
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15917,6 +15910,13 @@ func ParseListDeviceTagsResponse(rsp *http.Response) (*ListDeviceTagsResponse, e
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -15951,13 +15951,6 @@ func ParseRemoveDeviceTagResponse(rsp *http.Response) (*RemoveDeviceTagResponse,
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -15978,6 +15971,13 @@ func ParseRemoveDeviceTagResponse(rsp *http.Response) (*RemoveDeviceTagResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16012,13 +16012,6 @@ func ParseAddDeviceTagResponse(rsp *http.Response) (*AddDeviceTagResponse, error
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -16032,6 +16025,13 @@ func ParseAddDeviceTagResponse(rsp *http.Response) (*AddDeviceTagResponse, error
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16066,13 +16066,6 @@ func ParseCreateDeviceTunnelTerminationResponse(rsp *http.Response) (*CreateDevi
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -16086,6 +16079,13 @@ func ParseCreateDeviceTunnelTerminationResponse(rsp *http.Response) (*CreateDevi
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16106,19 +16106,19 @@ func ParseGetAnsibleInventoryResponse(rsp *http.Response) (*GetAnsibleInventoryR
 	}
 
 	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16149,13 +16149,6 @@ func ParseDeleteJournalEntryResponse(rsp *http.Response) (*DeleteJournalEntryRes
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -16169,6 +16162,13 @@ func ParseDeleteJournalEntryResponse(rsp *http.Response) (*DeleteJournalEntryRes
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16203,19 +16203,19 @@ func ParseUpdateJournalEntryResponse(rsp *http.Response) (*UpdateJournalEntryRes
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16243,19 +16243,19 @@ func ParseListLocationsResponse(rsp *http.Response) (*ListLocationsResponse, err
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16290,19 +16290,19 @@ func ParseCreateLocationResponse(rsp *http.Response) (*CreateLocationResponse, e
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16330,19 +16330,19 @@ func ParseListManufacturersResponse(rsp *http.Response) (*ListManufacturersRespo
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16377,19 +16377,19 @@ func ParseCreateManufacturerResponse(rsp *http.Response) (*CreateManufacturerRes
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16417,19 +16417,19 @@ func ParseListPhysicalAddressesResponse(rsp *http.Response) (*ListPhysicalAddres
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16457,19 +16457,19 @@ func ParseListPlatformsResponse(rsp *http.Response) (*ListPlatformsResponse, err
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16504,19 +16504,19 @@ func ParseCreatePlatformResponse(rsp *http.Response) (*CreatePlatformResponse, e
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16544,19 +16544,19 @@ func ParseListPrefixesResponse(rsp *http.Response) (*ListPrefixesResponse, error
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16591,19 +16591,19 @@ func ParseCreatePrefixResponse(rsp *http.Response) (*CreatePrefixResponse, error
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16631,19 +16631,19 @@ func ParseListSitesResponse(rsp *http.Response) (*ListSitesResponse, error) {
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16678,19 +16678,19 @@ func ParseCreateSiteResponse(rsp *http.Response) (*CreateSiteResponse, error) {
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16718,19 +16718,19 @@ func ParseListTagsResponse(rsp *http.Response) (*ListTagsResponse, error) {
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16765,19 +16765,19 @@ func ParseCreateTagResponse(rsp *http.Response) (*CreateTagResponse, error) {
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16805,19 +16805,19 @@ func ParseListTenantsResponse(rsp *http.Response) (*ListTenantsResponse, error) 
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16852,19 +16852,19 @@ func ParseCreateTenantResponse(rsp *http.Response) (*CreateTenantResponse, error
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16892,19 +16892,19 @@ func ParseListTunnelGroupsResponse(rsp *http.Response) (*ListTunnelGroupsRespons
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16939,19 +16939,19 @@ func ParseCreateTunnelGroupResponse(rsp *http.Response) (*CreateTunnelGroupRespo
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -16979,19 +16979,19 @@ func ParseListTunnelTerminationsResponse(rsp *http.Response) (*ListTunnelTermina
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17019,19 +17019,19 @@ func ParseListTunnelsResponse(rsp *http.Response) (*ListTunnelsResponse, error) 
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17066,19 +17066,19 @@ func ParseCreateTunnelResponse(rsp *http.Response) (*CreateTunnelResponse, error
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17106,19 +17106,19 @@ func ParseListVirtualMachinesResponse(rsp *http.Response) (*ListVirtualMachinesR
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17153,19 +17153,19 @@ func ParseCreateVirtualMachineResponse(rsp *http.Response) (*CreateVirtualMachin
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17193,13 +17193,6 @@ func ParseGetVirtualMachineResponse(rsp *http.Response) (*GetVirtualMachineRespo
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17213,6 +17206,13 @@ func ParseGetVirtualMachineResponse(rsp *http.Response) (*GetVirtualMachineRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17247,13 +17247,6 @@ func ParseUpdateVirtualMachineResponse(rsp *http.Response) (*UpdateVirtualMachin
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17267,6 +17260,13 @@ func ParseUpdateVirtualMachineResponse(rsp *http.Response) (*UpdateVirtualMachin
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17294,13 +17294,6 @@ func ParseListVirtualAddressesResponse(rsp *http.Response) (*ListVirtualAddresse
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17314,6 +17307,13 @@ func ParseListVirtualAddressesResponse(rsp *http.Response) (*ListVirtualAddresse
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17348,13 +17348,6 @@ func ParseCreateVirtualAddressResponse(rsp *http.Response) (*CreateVirtualAddres
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17368,6 +17361,13 @@ func ParseCreateVirtualAddressResponse(rsp *http.Response) (*CreateVirtualAddres
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17395,13 +17395,6 @@ func ParseListVirtualDisksResponse(rsp *http.Response) (*ListVirtualDisksRespons
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17415,6 +17408,13 @@ func ParseListVirtualDisksResponse(rsp *http.Response) (*ListVirtualDisksRespons
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17449,13 +17449,6 @@ func ParseCreateVirtualDiskResponse(rsp *http.Response) (*CreateVirtualDiskRespo
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17469,6 +17462,13 @@ func ParseCreateVirtualDiskResponse(rsp *http.Response) (*CreateVirtualDiskRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17496,13 +17496,6 @@ func ParseListVirtualInterfacesResponse(rsp *http.Response) (*ListVirtualInterfa
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17516,6 +17509,13 @@ func ParseListVirtualInterfacesResponse(rsp *http.Response) (*ListVirtualInterfa
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17550,13 +17550,6 @@ func ParseCreateVirtualInterfaceResponse(rsp *http.Response) (*CreateVirtualInte
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17570,6 +17563,13 @@ func ParseCreateVirtualInterfaceResponse(rsp *http.Response) (*CreateVirtualInte
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17604,13 +17604,6 @@ func ParseSetVirtualInterfacePhysicalAddressResponse(rsp *http.Response) (*SetVi
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17624,6 +17617,13 @@ func ParseSetVirtualInterfacePhysicalAddressResponse(rsp *http.Response) (*SetVi
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17651,13 +17651,6 @@ func ParseListVirtualJournalEntriesResponse(rsp *http.Response) (*ListVirtualJou
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17671,6 +17664,13 @@ func ParseListVirtualJournalEntriesResponse(rsp *http.Response) (*ListVirtualJou
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17705,13 +17705,6 @@ func ParseAddVirtualJournalEntryResponse(rsp *http.Response) (*AddVirtualJournal
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17725,6 +17718,13 @@ func ParseAddVirtualJournalEntryResponse(rsp *http.Response) (*AddVirtualJournal
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17752,13 +17752,6 @@ func ParseListVirtualLabelsResponse(rsp *http.Response) (*ListVirtualLabelsRespo
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17772,6 +17765,13 @@ func ParseListVirtualLabelsResponse(rsp *http.Response) (*ListVirtualLabelsRespo
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17802,13 +17802,6 @@ func ParseRemoveVirtualLabelResponse(rsp *http.Response) (*RemoveVirtualLabelRes
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17829,6 +17822,13 @@ func ParseRemoveVirtualLabelResponse(rsp *http.Response) (*RemoveVirtualLabelRes
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17863,13 +17863,6 @@ func ParseSetVirtualLabelResponse(rsp *http.Response) (*SetVirtualLabelResponse,
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17883,6 +17876,13 @@ func ParseSetVirtualLabelResponse(rsp *http.Response) (*SetVirtualLabelResponse,
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17917,13 +17917,6 @@ func ParseRemoveVirtualTagResponse(rsp *http.Response) (*RemoveVirtualTagRespons
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17944,6 +17937,13 @@ func ParseRemoveVirtualTagResponse(rsp *http.Response) (*RemoveVirtualTagRespons
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -17978,13 +17978,6 @@ func ParseAddVirtualTagResponse(rsp *http.Response) (*AddVirtualTagResponse, err
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -17998,6 +17991,13 @@ func ParseAddVirtualTagResponse(rsp *http.Response) (*AddVirtualTagResponse, err
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -18032,13 +18032,6 @@ func ParseCreateVirtualTunnelTerminationResponse(rsp *http.Response) (*CreateVir
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -18052,6 +18045,13 @@ func ParseCreateVirtualTunnelTerminationResponse(rsp *http.Response) (*CreateVir
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -18079,19 +18079,19 @@ func ParseListWirelessNetworksResponse(rsp *http.Response) (*ListWirelessNetwork
 		}
 		response.JSON200 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -18126,19 +18126,19 @@ func ParseCreateWirelessNetworkResponse(rsp *http.Response) (*CreateWirelessNetw
 		}
 		response.JSON400 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON403 = &dest
-
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

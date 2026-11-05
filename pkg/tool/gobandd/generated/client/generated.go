@@ -107,6 +107,9 @@ type PowerRequestOperation string
 type PowerResult struct {
 	Instance string `json:"instance"`
 
+	// Power The power state the firmware reported when the request was made.
+	Power string `json:"power"`
+
 	// Requested The power state requested from the firmware.
 	Requested string `json:"requested"`
 }

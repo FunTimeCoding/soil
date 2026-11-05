@@ -7,5 +7,10 @@ func (s *Service) VirtualJournalEntries(
 	limit int32,
 	offset int32,
 ) ([]*journal_entry.Entry, error) {
-	return s.client.VirtualJournalEntries(machine, limit, offset)
+	return guarded(
+		s.guard,
+		func() ([]*journal_entry.Entry, error) {
+			return s.client.VirtualJournalEntries(machine, limit, offset)
+		},
+	)
 }

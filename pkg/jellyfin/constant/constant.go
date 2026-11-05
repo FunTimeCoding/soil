@@ -9,4 +9,6 @@ const (
 
 	ItemFields = "Name,Overview,Genres,CommunityRating,ProductionYear,RunTimeTicks,OfficialRating,SeriesName,IndexNumber,ParentIndexNumber"
 	ItemKind   = "item"
+
+	ReachablePath = "/System/Info"
 )

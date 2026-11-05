@@ -1,7 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
+import (
+	"github.com/funtimecoding/soil/pkg/opnsense/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 type Service struct {
-	source face.OpnsenseSource
+	client face.OpnsenseClient
+	guard  *peer.Guard
 }

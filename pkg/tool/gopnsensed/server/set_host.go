@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
@@ -24,6 +25,10 @@ func (s *Server) SetHost(
 
 	if not_found.Is(e) {
 		return server.SetHost404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.SetHost503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

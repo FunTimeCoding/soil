@@ -11,5 +11,10 @@ func (s *Service) CreateConfigurationContext(
 	payload map[string]any,
 	a *configuration_assignment.Assignment,
 ) (*configuration_context.Context, error) {
-	return s.client.CreateConfigurationContext(name, weight, payload, a)
+	return guarded(
+		s.guard,
+		func() (*configuration_context.Context, error) {
+			return s.client.CreateConfigurationContext(name, weight, payload, a)
+		},
+	)
 }

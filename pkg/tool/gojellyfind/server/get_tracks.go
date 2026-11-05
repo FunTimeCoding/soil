@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/server"
 )
@@ -14,6 +15,10 @@ func (s *Server) GetTracks(
 
 	if validation.Is(e) {
 		return server.GetTracks400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.GetTracks503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

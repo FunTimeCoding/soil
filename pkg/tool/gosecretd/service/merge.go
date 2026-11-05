@@ -19,19 +19,24 @@ func (s *Service) Merge(
 		return nil, validation.New("values are required")
 	}
 
-	result, e := s.source.Read(path)
+	return guarded(
+		s.guard,
+		func() ([]string, error) {
+			result, e := s.client.Read(path)
 
-	if not_found.Is(e) {
-		result = map[string]string{}
-	} else if e != nil {
-		return nil, e
-	}
+			if not_found.Is(e) {
+				result = map[string]string{}
+			} else if e != nil {
+				return nil, e
+			}
 
-	maps.Copy(result, values)
+			maps.Copy(result, values)
 
-	if f := s.source.Put(path, result); f != nil {
-		return nil, f
-	}
+			if f := s.client.Put(path, result); f != nil {
+				return nil, f
+			}
 
-	return slices.Sorted(maps.Keys(result)), nil
+			return slices.Sorted(maps.Keys(result)), nil
+		},
+	)
 }

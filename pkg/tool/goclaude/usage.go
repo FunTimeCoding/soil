@@ -2,12 +2,9 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
-	soilTime "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 	"github.com/spf13/cobra"
-	"time"
 )
 
 func usage(c *command_context.Context) *cobra.Command {
@@ -22,60 +19,18 @@ func usage(c *command_context.Context) *cobra.Command {
 			j, found, e := c.Client().GetUsage(context.Background())
 
 			if e != nil {
-				c.Terminal().Exitln(e)
+				c.Terminal().EmitDone(e)
 
 				return
 			}
 
 			if !found {
-				console.Line("No usage data yet.")
+				c.Terminal().EmitDone(not_found.Format("no usage data yet"))
 
 				return
 			}
 
-			var fableResetAt time.Time
-
-			if j.FableResetAt != nil {
-				fableResetAt = *j.FableResetAt
-			}
-
-			r := usage_result.New(
-				j.FiveHourPercent,
-				j.FiveHourReset,
-				j.SevenDayPercent,
-				j.SevenDayReset,
-				j.FablePercent,
-				j.FableReset,
-				fableResetAt,
-				j.LastUpdated,
-			)
-
-			if r.HasSession() {
-				console.Format(
-					"Session  %2d%%   resets %s\n",
-					r.FiveHourPercent,
-					r.FiveHourResetText(),
-				)
-			}
-
-			console.Format(
-				"Weekly   %2d%%   resets %s\n",
-				r.SevenDayPercent,
-				r.SevenDayResetText(),
-			)
-
-			if r.HasFable() {
-				console.Format(
-					"Fable    %2d%%   resets %s\n",
-					r.FablePercent,
-					r.FableResetText(),
-				)
-			}
-
-			console.Format(
-				"Updated  %s\n",
-				soilTime.FormatCompact(r.LastUpdated),
-			)
+			c.Terminal().EmitValue(j, nil)
 		},
 	}
 }

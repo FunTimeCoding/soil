@@ -1,9 +1,9 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/gosublimed/face"
+import "github.com/funtimecoding/soil/pkg/sublime/face"
 
 type Sublime struct {
 	Address       string
 	ServiceTokens []string
-	Source        func() face.SublimeSource
+	Source        func() face.SublimeClient
 }

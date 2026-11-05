@@ -7,5 +7,10 @@ func (s *Service) CreateView(
 	content string,
 	syntax string,
 ) (*view.View, error) {
-	return s.source.CreateView(title, content, syntax)
+	return guarded(
+		s.guard,
+		func() (*view.View, error) {
+			return s.client.CreateView(title, content, syntax)
+		},
+	)
 }

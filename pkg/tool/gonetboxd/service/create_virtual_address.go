@@ -8,17 +8,22 @@ func (s *Service) CreateVirtualAddress(
 	address string,
 	status string,
 ) (*internet_address.Address, error) {
-	m, e := s.client.VirtualMachineByName(machine)
+	return guarded(
+		s.guard,
+		func() (*internet_address.Address, error) {
+			m, e := s.client.VirtualMachineByName(machine)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	i, e := s.client.VirtualMachineInterfaceByName(m, interfaceName)
+			i, e := s.client.VirtualMachineInterfaceByName(m, interfaceName)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateVirtualAddress(i.GetId(), address, status)
+			return s.client.CreateVirtualAddress(i.GetId(), address, status)
+		},
+	)
 }

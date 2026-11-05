@@ -7,11 +7,16 @@ import (
 )
 
 type Client struct {
-	Impressions []impression_call.Call
-	Retargets   []*move_set.Set
-	Redacted    map[int64]bool
-	Stats       *client.Statistics
-	Edges       []client.Relation
-	Failure     error
-	Closed      int
+	Impressions   []impression_call.Call
+	Retargets     []*move_set.Set
+	Redacted      map[int64]bool
+	Stats         *client.Statistics
+	Edges         []client.Relation
+	Profile       *client.ProfileResponse
+	Tokens        *client.TokenSummary
+	ProfileCalls  []*client.GetProfileParams
+	TokenCalls    []*client.GetTokensParams
+	RelationCalls []*client.GetRelationsParams
+	Failure       error
+	Closed        int
 }

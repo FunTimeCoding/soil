@@ -26,6 +26,7 @@ func (s *Server) GetTokens(
 		Block:       spread(summary.Block),
 		Description: spread(summary.Description),
 		Withheld:    summary.Withheld,
+		Memories:    len(summary.Statistic),
 	}
 
 	for _, t := range summary.Statistic {

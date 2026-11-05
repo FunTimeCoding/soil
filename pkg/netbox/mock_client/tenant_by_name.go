@@ -7,6 +7,10 @@ import (
 )
 
 func (c *Client) TenantByName(n string) (*tenant.Tenant, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, t := range c.tenants {
 		if t.Name == n {
 			return t, nil

@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -15,7 +16,7 @@ func holdStore(
 	t.Helper()
 	holder := connection.New(logger.New(t.Context()), path)
 	t.Cleanup(func() { errors.PanicClose(holder) })
-	held, e := holder.BeginTx(t.Context(), nil)
+	held, e := holder.BeginTx(context.WithoutCancel(t.Context()), nil)
 	assert.FatalOnError(t, e)
 	t.Cleanup(func() { assert.FatalOnError(t, held.Rollback()) })
 }

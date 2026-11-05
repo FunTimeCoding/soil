@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
@@ -100,7 +101,7 @@ func TestPostIsSentOnce(t *testing.T) {
 	_, e := newRequester(t, s.URL).Bytes(
 		request.PostForm("/items", url.Values{"name": {"alfa"}}),
 	)
-	assert.True(t, unexpected.Is(e))
+	assert.True(t, unavailable.Is(e))
 	assert.Count(t, 1, seen())
 }
 

@@ -31,32 +31,35 @@ func TestTheClientReachesTheSocket(t *testing.T) {
 
 func TestRestartProcess(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "alfa"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "alfa"),
+	)
 	s.Wait(t, "alfa", s.Running)
 }
 
 func TestStopProcess(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")
-	assert.FatalOnError(t, s.Client.Stop(context.Background(), "alfa"))
+	assert.FatalOnError(t, s.Client.StopProcess(context.Background(), "alfa"))
 	s.Wait(t, "", s.Running)
 }
 
 func TestStartStoppedProcess(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")
-	assert.FatalOnError(t, s.Client.Stop(context.Background(), "alfa"))
+	assert.FatalOnError(t, s.Client.StopProcess(context.Background(), "alfa"))
 	s.Wait(t, "", s.Running)
-	assert.FatalOnError(t, s.Client.Start(context.Background(), "alfa"))
+	assert.FatalOnError(t, s.Client.StartProcess(context.Background(), "alfa"))
 	s.Wait(t, "alfa", s.Running)
 }
 
 func TestAnUnknownProcessIsNotFound(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")
 	x := context.Background()
-	assert.True(t, not_found.Is(s.Client.Restart(x, "nonexistent")))
-	assert.True(t, not_found.Is(s.Client.Stop(x, "nonexistent")))
-	assert.True(t, not_found.Is(s.Client.Start(x, "nonexistent")))
+	assert.True(t, not_found.Is(s.Client.RestartProcess(x, "nonexistent")))
+	assert.True(t, not_found.Is(s.Client.StopProcess(x, "nonexistent")))
+	assert.True(t, not_found.Is(s.Client.StartProcess(x, "nonexistent")))
 	assert.True(t, not_found.Is(s.Client.ClearLog(x, "nonexistent")))
-	_, e := s.Client.Log(x, "nonexistent", false)
+	_, e := s.Client.GetLog(x, "nonexistent", false)
 	assert.True(t, not_found.Is(e))
 }
 
@@ -84,9 +87,15 @@ func TestASecondWaveIsAConflict(t *testing.T) {
 func TestRestartingEveryProcessOneByOneLeavesThemRunning(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "alfa"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "alfa"),
+	)
 	s.Wait(t, "alfa,bravo", s.Running)
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "bravo"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "bravo"),
+	)
 	s.Wait(t, "alfa,bravo", s.Running)
 	time.Sleep(time.Second)
 	assert.String(t, "alfa,bravo", s.Running())
@@ -144,7 +153,10 @@ func TestReloadEnvironment(t *testing.T) {
 	s.WaitLog(t, "original", "alfa")
 	s.WriteEnvrc("export TEST_VALUE=updated\n")
 	assert.FatalOnError(t, s.Client.ReloadEnvironment(context.Background()))
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "alfa"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "alfa"),
+	)
 	s.WaitLog(t, "updated", "alfa")
 }
 
@@ -158,7 +170,10 @@ func TestReloadEnvironmentRemovesVanishedExport(t *testing.T) {
 	s.WaitLog(t, "removed=ghost", "alfa")
 	s.WriteEnvrc("export TEST_OTHER=1\n")
 	assert.FatalOnError(t, s.Client.ReloadEnvironment(context.Background()))
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "alfa"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "alfa"),
+	)
 	s.WaitLog(t, "removed=gone", "alfa")
 }
 
@@ -170,7 +185,10 @@ func TestLogCapturesOutput(t *testing.T) {
 func TestLogShowsCurrentGenerationAfterRestart(t *testing.T) {
 	s := tester.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
 	s.WaitLog(t, "mark", "alfa")
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "alfa"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "alfa"),
+	)
 	s.WaitLog(t, "mark", "alfa")
 	l := s.Log("alfa", false)
 	text := join.NewLine(l.Lines)
@@ -182,7 +200,10 @@ func TestLogShowsCurrentGenerationAfterRestart(t *testing.T) {
 func TestLogAllShowsEveryGeneration(t *testing.T) {
 	s := tester.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
 	s.WaitLog(t, "mark", "alfa")
-	assert.FatalOnError(t, s.Client.Restart(context.Background(), "alfa"))
+	assert.FatalOnError(
+		t,
+		s.Client.RestartProcess(context.Background(), "alfa"),
+	)
 	s.WaitLog(t, "mark", "alfa")
 	text := join.NewLine(s.Log("alfa", true).Lines)
 	assert.Integer(t, 2, strings.Count(text, "mark"))

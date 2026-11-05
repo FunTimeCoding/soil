@@ -529,12 +529,15 @@ components:
           $ref: "#/components/schemas/ProfileDetail"
     TokenSummary:
       type: object
-      required: [statistic, block, description, withheld]
+      required: [statistic, block, description, withheld, memories]
       properties:
         statistic:
           type: array
           items:
             $ref: "#/components/schemas/TokenStatistic"
+        memories:
+          type: integer
+          description: Every memory in the scope, withheld ones included.
         block:
           $ref: "#/components/schemas/Spread"
         description:
@@ -573,6 +576,7 @@ components:
           type: integer
         total:
           type: integer
+          description: The sum over every memory in the scope, withheld ones included; for block, the tokens if every block were loaded.
     ProfileDetail:
       type: object
       required: [budget, always_tokens, index_tokens, index_trimmed, completion_tokens, completions_trimmed, impression_tokens, impressions_trimmed, relevant_tokens, relevant_trimmed, total_tokens, hidden]
@@ -707,6 +711,7 @@ components:
           type: string
         source_scope:
           type: string
+          description: Absent for the default scope.
         target_identifier:
           type: integer
           format: int64
@@ -714,8 +719,10 @@ components:
           type: string
         target_scope:
           type: string
+          description: Absent for the default scope.
         type:
           type: string
+          description: Absent for an untyped relation.
         created_at:
           type: string
     NamedCount:

@@ -29,7 +29,11 @@ func (s *Service) Click(
 
 	p := s.source.Page(t.Identifier)
 
-	if g := p.ClickNode(node); g != nil {
+	if g := s.attempt(
+		func() error {
+			return p.ClickNode(node)
+		},
+	); g != nil {
 		return nil, g
 	}
 

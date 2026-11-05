@@ -21,9 +21,13 @@ func (s *Service) Evaluate(
 
 	var result any
 
-	if f := s.source.Page(t.Identifier).EvaluatePromise(
-		expression,
-		&result,
+	if f := s.attempt(
+		func() error {
+			return s.source.Page(t.Identifier).EvaluatePromise(
+				expression,
+				&result,
+			)
+		},
 	); f != nil {
 		return nil, f
 	}

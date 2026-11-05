@@ -1,22 +1,39 @@
 package runner
 
-func (r *Runner) keySync() {
-	keys := r.salt.MustKeys()
-	accepted := make(map[string]bool, len(keys.Minions))
+func (r *Runner) keySync() error {
+	return r.attempt(
+		func() error {
+			keys, e := r.salt.Keys()
 
-	for _, m := range keys.Minions {
-		accepted[m] = true
-	}
+			if e != nil {
+				return e
+			}
 
-	for _, m := range keys.MinionsDenied {
-		if accepted[m] {
-			r.logger.Structured("key_delete", "minion", m)
-			r.salt.MustDeleteKey(m)
-		}
-	}
+			accepted := make(map[string]bool, len(keys.Minions))
 
-	for _, m := range keys.MinionsPre {
-		r.logger.Structured("key_accept", "minion", m)
-		r.salt.MustAcceptKey(m)
-	}
+			for _, m := range keys.Minions {
+				accepted[m] = true
+			}
+
+			for _, m := range keys.MinionsDenied {
+				if accepted[m] {
+					r.logger.Structured("key_delete", "minion", m)
+
+					if _, f := r.salt.DeleteKey(m); f != nil {
+						return f
+					}
+				}
+			}
+
+			for _, m := range keys.MinionsPre {
+				r.logger.Structured("key_accept", "minion", m)
+
+				if _, f := r.salt.AcceptKey(m); f != nil {
+					return f
+				}
+			}
+
+			return nil
+		},
+	)
 }

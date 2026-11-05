@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/journal_entry"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -33,7 +34,7 @@ func (c *Client) addJournalEntry(
 		Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return journal_entry.New(result), nil

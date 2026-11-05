@@ -3,6 +3,7 @@ package github
 import (
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/container"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 	"github.com/google/go-github/v93/github"
 )
 
@@ -16,7 +17,7 @@ func (c *Client) Packages(user string) ([]*container.Container, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return container.NewSlice(result), nil

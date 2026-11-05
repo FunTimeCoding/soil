@@ -1,6 +1,9 @@
 package github
 
-import "github.com/funtimecoding/soil/pkg/github/workflow"
+import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+	"github.com/funtimecoding/soil/pkg/github/workflow"
+)
 
 func (c *Client) Workflows(
 	owner string,
@@ -9,7 +12,7 @@ func (c *Client) Workflows(
 	result, _, e := c.client.Actions.ListWorkflows(c.context, owner, name, nil)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return workflow.NewSlice(result.Workflows), nil

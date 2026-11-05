@@ -1,8 +1,9 @@
 package refusing
 
 import (
+	"fmt"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"net/http"
 )
@@ -17,10 +18,14 @@ func classify(
 
 	reason := refusal.Reason(body, http.StatusText(status))
 
-	switch status {
-	case http.StatusBadRequest, http.StatusUnprocessableEntity:
-		return validation.New("prometheus: %s", reason)
-	default:
-		return unexpected.Format("prometheus status: %d: %s", status, reason)
+	if e := refusal.NewTable().
+		Without(http.StatusNotFound).
+		Without(http.StatusServiceUnavailable).
+		With(http.StatusBadRequest, errorsConstant.ValidationClass).
+		With(http.StatusUnprocessableEntity, errorsConstant.ValidationClass).
+		Classify(status, fmt.Sprintf("prometheus: %s", reason)); e != nil {
+		return e
 	}
+
+	return unexpected.Format("prometheus status: %d: %s", status, reason)
 }

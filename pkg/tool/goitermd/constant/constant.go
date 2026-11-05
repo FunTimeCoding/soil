@@ -10,6 +10,7 @@ var Identity = identity.New(
 	"iTerm2 terminal workspace - read screens, send text and keys, manage tabs. Check job_name and command_line before sending to avoid unintended commands on production sessions.",
 )
 
+const ItermPeer = "iterm bridge"
 const (
 	ListSessions = "list_sessions"
 	ReadScreen   = "read_screen"

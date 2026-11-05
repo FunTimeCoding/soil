@@ -1912,10 +1912,14 @@ components:
       type: object
       required:
       - cost
+      - days
       properties:
         cost:
           type: number
           format: double
+        days:
+          type: integer
+          description: The trailing window the cost covers, in days.
         models:
           type: array
           items:
@@ -1932,9 +1936,13 @@ components:
       - cache5Minute
       - cache1Hour
       - cost
+      - unknownModel
       properties:
         model:
           type: string
+        unknownModel:
+          type: boolean
+          description: The model has no price of its own, so its cost uses Sonnet rates.
         calls:
           type: integer
         input:

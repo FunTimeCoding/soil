@@ -159,6 +159,7 @@ const (
 )
 
 const ScopeNameKey = "name"
+const NetBoxPeer = "netbox upstream"
 const (
 	StatusActive  = "active"
 	StatusOffline = "offline"

@@ -12,7 +12,7 @@ func (s *Service) Screenshot(v *selector.Selector) (*saved.Saved, error) {
 		return nil, e
 	}
 
-	b, f := s.source.Page(t.Identifier).Screenshot()
+	b, f := guarded(s.guard, s.source.Page(t.Identifier).Screenshot)
 
 	if f != nil {
 		return nil, f

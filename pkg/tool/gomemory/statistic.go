@@ -2,17 +2,11 @@ package gomemory
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func statistic(
-	l *face.Client,
-	t *terminal.Terminal,
-) *cobra.Command {
+func statistic(x *Context) *cobra.Command {
 	var scope string
 	c := &cobra.Command{
 		Use:   "statistic",
@@ -27,15 +21,9 @@ func statistic(
 				params.Scope = &scope
 			}
 
-			r, e := (*l).GetTokens(context.Background(), params)
-
-			if e != nil {
-				t.Exitln(e)
-
-				return
-			}
-
-			fmt.Print(statisticTable(r))
+			x.Terminal.EmitValue(
+				x.Client.GetTokens(context.Background(), params),
+			)
 		},
 	}
 	c.Flags().StringVar(&scope, "scope", "", "memory scope")

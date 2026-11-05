@@ -11,6 +11,10 @@ func (c *Client) CreateInterface(
 	name string,
 	t netbox.InterfaceTypeValue,
 ) (*network.Interface, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	result := c.SeedInterface(d, name)
 	result.Type = t
 

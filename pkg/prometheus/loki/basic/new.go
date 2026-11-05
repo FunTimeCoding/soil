@@ -16,7 +16,8 @@ func New(
 	return &Client{
 		requester: requester.New(base).
 			WithAuthorizer(basic.New(user, password)).
-			WithRefusal(refusal),
+			WithSubject("loki").
+			WithReason(reason),
 		base:    base,
 		verbose: verbose,
 	}

@@ -1,21 +1,20 @@
 package goclaude
 
-import "github.com/funtimecoding/soil/pkg/console"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/terminal"
+)
 
 func printPeekEntry(
+	t *terminal.Terminal,
 	userText string,
 	assistantContext *string,
 	limit int,
 ) {
-	console.Line(userText)
+	t.Line(userText)
 
 	if limit > 0 && assistantContext != nil && *assistantContext != "" {
-		text := *assistantContext
-
-		if len(text) > limit {
-			text = text[:limit]
-		}
-
-		console.Format("  → %s\n", text)
+		text, _ := cutRunes(*assistantContext, limit)
+		t.Line(fmt.Sprintf("  → %s", text))
 	}
 }

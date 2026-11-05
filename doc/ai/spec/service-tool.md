@@ -56,6 +56,11 @@ only along consistency boundaries (`store/<aggregate>/`, see Stores). Split
 by what each set touches, not by kind of operation: a package per noun
 stays small; a package per concern moves the bulk down a level.
 
+goaudit holds a daemon with `<path>/daemon/` to this layout on every run
+(`missing_service`, `mixed_service`, `service_imports_mapper`,
+`run_builds_clock`, `run_builds_client`, `daemon_not_closed`,
+`missing_service_mount`); `surface_holds_daemon` runs everywhere.
+
 ## Entry Point
 
 See `entrypoint.md` for `main`, `Main()`, and sentry setup.
@@ -158,8 +163,12 @@ func Run(o *option.Library, i face.Instrument) {
 
 `Mount` is the daemon's method, in `daemon/mount.go`, and owns everything
 the daemon serves: the token-guarded REST tree, the MCP mount, and the web
-mount when present. It hands each surface the services that surface calls -
-then reporter, recorder, version, and the `*guard.Mux` last:
+mount when present. It hands each surface the services that surface calls,
+and takes only what its surfaces need beside them - here reporter,
+recorder and version - with the `*guard.Mux` last. A web the daemon built
+in `New` for its recovery leaves `Mount` only the mux. A daemon serving a
+second listener has a mount method per listener (`MountLocal`,
+`MountBridge`) beside `Mount`:
 
 ```go
 func (d *Daemon) Mount(
@@ -378,14 +387,15 @@ Every daemon has one `daemon.Daemon`, small ones included. It is the only
 owner `Run` holds: it builds everything else and closes what it built. It
 does no work of its own.
 
-The daemon takes configuration - the option, a logger, a reporter, and a
-metric registry when its workers export gauges - and builds the rest: the
-database (`relational.Open`, `migrate.AutoMigrate`, then each store over
-it, `database.md`), its clients, pools and peer guards, then each service
-from the parts that service uses. Its `Close` closes everything it built
-and nothing it was given. A daemon that owns nothing - a reader over the
-local system, paths and a logger - has no `Close`, and `Run` defers
-nothing.
+The daemon takes configuration - the option, a logger, a reporter, and a metric
+registry when its workers export gauges - and builds the rest: the database
+(`relational.Open`, `migrate.AutoMigrate`, then each store over it,
+`database.md`), its clients, pools and peer guards, then each service from the
+parts that service uses. It holds each thing it owns in one field - the same
+guard in two fields reads as an owner never closed. Its `Close` closes
+everything it built and nothing it was given. A daemon that owns nothing - a
+reader over the local system, paths and a logger - has no `Close`, and `Run`
+defers nothing.
 
 A daemon is never handed a finished client, in a parameter or an option
 function: whoever closes a handed client closes something it did not
@@ -440,15 +450,20 @@ watching - is that service's own field. A view gathering several services -
 a member's page with their loans and holds - is a service of its own, built
 with the services it reads, named for what it shows.
 
-The service validates. A surface parses its request into plain values,
-calls one operation, and answers the error's class
-(`error-handling/README.md`); a check that lived in a route moves into the
-service, where every surface shares it. A surface holds the services it
-calls and nothing beside them - no client, store or guard of its own to
-reach around them, and never the daemon. The daemon keeps no method that
-only forwards to a service: each surface is handed the service itself. The
-daemon's work belongs in a service, never in a worker or the daemon: a tick
-or an event calls one operation that returns its outcomes.
+The service validates. A surface parses its request into plain values, calls one
+operation, and answers the error's class (`error-handling/README.md`); a check
+that lived in a route moves into the service, where every surface shares it. An
+update gets the record, applies the change, checks and saves - a change applied
+inside the store hides the result from the check - and sets only the fields it
+was sent. A write that may still be refused is staged and moved into place once
+every check passed. A value joined into a path, a URL, a selector or a script is
+checked as the narrowest shape it can be - a bare name, a bare number - since an
+encoded `%2e%2e` passes `http.ServeMux`'s cleaning. A surface holds the services
+it calls and nothing beside them - no client, store or guard of its own to reach
+around them, and never the daemon. The daemon keeps no method that only forwards
+to a service: each surface is handed the service itself. The daemon's work
+belongs in a service, never in a worker or the daemon: a tick or an event calls
+one operation that returns its outcomes.
 
 A service test builds that service from its parts and the services it was
 built with; a surface test goes served through `Mount` (`testing.md`).
@@ -457,7 +472,8 @@ Nothing builds a surface over hand-wired services.
 ## Stores
 
 A store borrows the mapper the daemon opened and has no `Close`
-(`database.md`, Store Shape). One store serves a daemon whose tables
+(`database.md`, Store Shape). It saves and fires nothing: the service
+notifies after a write that succeeded. One store serves a daemon whose tables
 commit independently. Where some tables must commit together and others
 never do, the store splits along those consistency boundaries - one store
 per aggregate, `store/<aggregate>/` - and a transaction never spans two.
@@ -540,7 +556,9 @@ their `Close` is safe twice (`lifecycle.md`).
 
 A daemon `go<tool>d` pairs with a CLI `go<tool>`, which talks to it
 through the daemon client in `<toold>/client/` - the one client other
-daemons use too (`generated-api.md`, The Daemon Client).
+daemons use too (`generated-api.md`, The Daemon Client). A rule deciding
+what the daemon's data means - which threads count as unresolved - is a
+daemon operation, never the CLI's, so every caller gets the same answer.
 
 ## External API Client
 

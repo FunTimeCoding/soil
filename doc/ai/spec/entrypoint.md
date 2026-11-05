@@ -301,7 +301,8 @@ A Cobra CLI emits and exits through a `pkg/terminal` `Terminal` built in
 `Main` from the instrument (`t := terminal.New(s)`) and handed to each
 subcommand beside its client. `t.Emit(response)` prints the body to stdout,
 or at 400 and above to stderr and exits `1`; `t.Exitln` and `t.Exitf` write
-to stderr and exit `1`, `t.Exit` exits with a code. A typed client's
+to stderr and exit `1`, `t.Exit` exits with a code, and `t.Noticeln`
+writes a notice to stderr without ending the command. A typed client's
 response is checked before its `JSON200` is read - `t.Reject(r.Status(),
 r.Body)` when it is nil. `t.Blockln` is for a protocol exit that is neither
 success nor failure, such as a hook refusing a tool call: the command records

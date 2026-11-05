@@ -10,7 +10,7 @@ func (s *Service) SetDeviceLabel(
 	key string,
 	value string,
 ) (*label.Label, error) {
-	d, e := s.client.DeviceByName(device)
+	d, e := s.deviceByName(device)
 
 	if e != nil {
 		return nil, e

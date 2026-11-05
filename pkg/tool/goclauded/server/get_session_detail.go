@@ -106,6 +106,7 @@ func (s *Server) GetSessionDetail(
 					Cache5Minute:  t.Cache5Minute,
 					Cache1Hour:    t.Cache1Hour,
 					Cost:          pricing.Cost(model, t),
+					UnknownModel:  !pricing.KnownModel(model),
 				},
 			)
 		}

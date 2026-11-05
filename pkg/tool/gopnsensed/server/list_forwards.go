@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
 )
@@ -17,6 +18,10 @@ func (s *Server) ListForwards(
 	}
 
 	result, e := s.service.Forwards(phrase)
+
+	if unavailable.Is(e) {
+		return server.ListForwards503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.ListForwards500JSONResponse(*s.answer(x, e)), nil

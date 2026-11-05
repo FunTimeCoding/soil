@@ -12,7 +12,11 @@ func (s *Service) CloseTab(v *selector.Selector) (*tab.Tab, error) {
 		return nil, e
 	}
 
-	if f := s.source.CloseTab(t.Identifier); f != nil {
+	if f := s.attempt(
+		func() error {
+			return s.source.CloseTab(t.Identifier)
+		},
+	); f != nil {
 		return nil, f
 	}
 

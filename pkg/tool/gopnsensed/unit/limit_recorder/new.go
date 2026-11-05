@@ -1,7 +1,7 @@
 package limit_recorder
 
-import "github.com/funtimecoding/soil/pkg/tool/gopnsensed/mock_source"
+import "github.com/funtimecoding/soil/pkg/opnsense/mock_client"
 
 func New() *Client {
-	return &Client{Client: mock_source.New()}
+	return &Client{Client: mock_client.New()}
 }

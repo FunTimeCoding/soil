@@ -6,9 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/openbao/mock_client"
 	"github.com/funtimecoding/soil/pkg/openbao/status"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/watch"
 	"github.com/prometheus/client_golang/prometheus"
@@ -19,8 +19,10 @@ import (
 
 func TestWatchReportsAnUnsealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
+	c := mock_client.New()
+	defer c.Close()
 	owned := watch.New(
-		service_tester.New(t, mock_client.New()).Status,
+		service_tester.New(t, c).Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),
@@ -34,6 +36,7 @@ func TestWatchReportsAnUnsealedStore(t *testing.T) {
 func TestWatchReportsASealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
+	defer c.Close()
 	c.Seal()
 	owned := watch.New(
 		service_tester.New(t, c).Status,
@@ -49,6 +52,7 @@ func TestWatchReportsASealedStore(t *testing.T) {
 func TestWatchReportsAnUnreachableStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
+	defer c.Close()
 	c.FailHealth(errors.New("connection refused"))
 	owned := watch.New(
 		service_tester.New(t, c).Status,

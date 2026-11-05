@@ -6,5 +6,9 @@ import (
 )
 
 func (c *Client) VirtualMachineInterfaces(_ *virtual_machine.Machine) ([]*network.Interface, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

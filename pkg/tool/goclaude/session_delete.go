@@ -23,19 +23,13 @@ func sessionDelete(c *command_context.Context) *cobra.Command {
 				parameters.Confirm = &confirm
 			}
 
-			r, e := c.Client().DeleteSessionByIdentifier(
-				context.Background(),
-				arguments[0],
-				parameters,
+			c.Terminal().EmitValue(
+				c.Client().DeleteSessionByIdentifier(
+					context.Background(),
+					arguments[0],
+					parameters,
+				),
 			)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			printDeleteReceipt(r)
 		},
 	}
 	result.Flags().StringVar(

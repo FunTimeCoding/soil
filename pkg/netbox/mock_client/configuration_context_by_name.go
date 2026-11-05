@@ -9,6 +9,10 @@ import (
 func (c *Client) ConfigurationContextByName(
 	n string,
 ) (*configuration_context.Context, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, v := range c.contexts {
 		if v.Name == n {
 			return v, nil

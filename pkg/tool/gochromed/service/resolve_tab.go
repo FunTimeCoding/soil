@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Service) resolveTab(v *selector.Selector) (*tab.Tab, error) {
-	tabs, e := s.source.Tabs()
+	tabs, e := guarded(s.guard, s.source.Tabs)
 
 	if e != nil {
 		return nil, e

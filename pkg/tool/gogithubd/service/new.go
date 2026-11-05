@@ -1,10 +1,14 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gogithubd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/github/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func New(
-	s face.RunSource,
+	c face.GitHubClient,
+	g *peer.Guard,
 	owner string,
 ) *Service {
-	return &Service{source: s, owner: owner}
+	return &Service{client: c, guard: g, owner: owner}
 }

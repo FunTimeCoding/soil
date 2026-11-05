@@ -29,8 +29,11 @@ func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	)
 	d := gomonitord.NewEnvironment()
 	defer d.Close()
-	assert.FatalOnError(t, d.ClaimItem("jira-GONE-1", owner))
-	assert.FatalOnError(t, d.ClaimItem("jira-GONE-1", "someone@elsewhere"))
+	x := t.Context()
+	_, e := d.PutClaim(x, "jira-GONE-1", owner)
+	assert.FatalOnError(t, e)
+	_, f := d.PutClaim(x, "jira-GONE-1", "someone@elsewhere")
+	assert.FatalOnError(t, f)
 	m.Update(
 		claim.Message{
 			Claims: []client.Claim{
@@ -50,8 +53,8 @@ func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	present.Label = present.Identifier
 	_, c := m.Update(fetch.Message{Items: []*item.Item{present}})
 	runCommand(c)
-	r, e := d.Claims()
-	assert.FatalOnError(t, e)
+	r, g := d.GetClaims(x)
+	assert.FatalOnError(t, g)
 	assert.Count(t, 1, r)
 	assert.String(t, "someone@elsewhere", r[0].Owner)
 }

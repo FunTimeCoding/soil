@@ -2,7 +2,6 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
@@ -30,8 +29,6 @@ func deleteCollection(
 			if !deleted {
 				t.Exitf("collection not found: %s\n", arguments[0])
 			}
-
-			console.Format("collection %s deleted\n", arguments[0])
 		},
 	}
 }

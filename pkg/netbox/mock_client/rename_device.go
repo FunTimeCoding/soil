@@ -10,6 +10,10 @@ func (c *Client) RenameDevice(
 	name string,
 	newName string,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for i, d := range c.devices {
 		if d.Name != name {
 			continue

@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
 )
@@ -11,6 +12,10 @@ func (s *Server) ListInterfaces(
 	_ server.ListInterfacesRequestObject,
 ) (server.ListInterfacesResponseObject, error) {
 	result, e := s.service.Interfaces()
+
+	if unavailable.Is(e) {
+		return server.ListInterfaces503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.ListInterfaces500JSONResponse(*s.answer(x, e)), nil

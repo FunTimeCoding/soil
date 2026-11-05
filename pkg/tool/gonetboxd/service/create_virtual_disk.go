@@ -7,5 +7,10 @@ func (s *Service) CreateVirtualDisk(
 	name string,
 	size int32,
 ) (*virtual_disk.Disk, error) {
-	return s.client.CreateVirtualDisk(machine, name, size)
+	return guarded(
+		s.guard,
+		func() (*virtual_disk.Disk, error) {
+			return s.client.CreateVirtualDisk(machine, name, size)
+		},
+	)
 }

@@ -10,5 +10,10 @@ func (s *Service) OpenFile(path string) (*view.View, error) {
 		return nil, validation.New("file_path is required")
 	}
 
-	return s.source.OpenFile(path)
+	return guarded(
+		s.guard,
+		func() (*view.View, error) {
+			return s.client.OpenFile(path)
+		},
+	)
 }

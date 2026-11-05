@@ -1,8 +1,9 @@
 package requester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"fmt"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
@@ -26,19 +27,26 @@ func (r *Requester) refuse(
 		}
 	}
 
-	if response.StatusCode == http.StatusNotFound {
-		return not_found.Format(
-			"resource not found: %s%s",
-			q.URL.Host,
-			q.URL.Path,
-		)
+	class := r.table.Class(response.StatusCode)
+
+	if c, okay := o.Statuses[response.StatusCode]; okay {
+		class = c
 	}
 
-	return unexpected.Format(
-		"%s%s status: %d: %s",
-		q.URL.Host,
-		q.URL.Path,
-		response.StatusCode,
-		refusal.Reason(body, response.Status),
+	reason := r.reason(body, response.Status)
+
+	if class == errorsConstant.ValidationClass {
+		return refusal.Classed(class, reason)
+	}
+
+	subject := r.subject
+
+	if subject == "" {
+		subject = join.Empty(q.URL.Host, q.URL.Path)
+	}
+
+	return refusal.Classed(
+		class,
+		fmt.Sprintf("%s status: %d: %s", subject, response.StatusCode, reason),
 	)
 }

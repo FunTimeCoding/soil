@@ -18,7 +18,7 @@ func New(
 		return reported.New(operation, reason, event)
 	}
 
-	if e := Status(
+	if e := NewDaemonTable().Classify(
 		r.StatusCode,
 		fmt.Sprintf("%s: %s", operation, reason),
 	); e != nil {

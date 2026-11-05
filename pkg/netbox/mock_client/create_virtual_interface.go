@@ -9,5 +9,9 @@ func (c *Client) CreateVirtualInterface(
 	_ *virtual_machine.Machine,
 	_ string,
 ) (*netbox.VMInterface, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

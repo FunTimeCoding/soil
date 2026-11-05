@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -22,8 +22,8 @@ func (s *Server) AddVirtualTag(
 		return server.AddVirtualTag400JSONResponse(*clientError(e)), nil
 	}
 
-	if forbidden.Is(e) {
-		return server.AddVirtualTag403JSONResponse(*clientError(e)), nil
+	if unavailable.Is(e) {
+		return server.AddVirtualTag503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

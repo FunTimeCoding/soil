@@ -9,23 +9,23 @@ import (
 type Client interface {
 	face.Reachable
 	Address() string
-	Processes(x context.Context) ([]client.Process, error)
-	Start(
+	ListProcesses(x context.Context) ([]client.Process, error)
+	StartProcess(
 		x context.Context,
 		name string,
 	) error
-	Stop(
+	StopProcess(
 		x context.Context,
 		name string,
 	) error
-	Restart(
+	RestartProcess(
 		x context.Context,
 		name string,
 	) error
 	RestartAll(x context.Context) (int, error)
 	ReloadProcfile(x context.Context) error
 	ReloadEnvironment(x context.Context) error
-	Log(
+	GetLog(
 		x context.Context,
 		name string,
 		all bool,

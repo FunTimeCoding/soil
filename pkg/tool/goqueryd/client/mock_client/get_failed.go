@@ -16,5 +16,9 @@ func (c *Client) GetFailed(
 		return nil, c.Failure
 	}
 
+	if c.FailedReport != nil {
+		return c.FailedReport, nil
+	}
+
 	return &client.FailedReport{}, nil
 }

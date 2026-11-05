@@ -37,6 +37,7 @@ func TestAGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	assert.String(t, "off soft graceful", r.JSON200.Requested)
+	assert.String(t, "on", r.JSON200.Power)
 	assert.Integers(t, []int{12}, s.Alfa.Requested())
 }
 

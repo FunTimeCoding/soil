@@ -16,6 +16,10 @@ func (c *Client) CreateDevice(
 	_ *site.Site,
 	n *tenant.Tenant,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	result := newDevice(c.nextIdentifier(), name, tags, n)
 	c.devices = append(c.devices, result)
 

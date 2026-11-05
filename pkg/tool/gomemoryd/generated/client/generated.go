@@ -165,11 +165,17 @@ type Relation struct {
 	CreatedAt        *string `json:"created_at,omitempty"`
 	SourceIdentifier int64   `json:"source_identifier"`
 	SourceName       string  `json:"source_name"`
+
+	// SourceScope Absent for the default scope.
 	SourceScope      *string `json:"source_scope,omitempty"`
 	TargetIdentifier int64   `json:"target_identifier"`
 	TargetName       string  `json:"target_name"`
-	TargetScope      *string `json:"target_scope,omitempty"`
-	Type             *string `json:"type,omitempty"`
+
+	// TargetScope Absent for the default scope.
+	TargetScope *string `json:"target_scope,omitempty"`
+
+	// Type Absent for an untyped relation.
+	Type *string `json:"type,omitempty"`
 }
 
 // RetargetChange defines model for RetargetChange.
@@ -216,7 +222,9 @@ type Spread struct {
 	Median      int `json:"median"`
 	Ninetieth   int `json:"ninetieth"`
 	NinetyNinth int `json:"ninety_ninth"`
-	Total       int `json:"total"`
+
+	// Total The sum over every memory in the scope, withheld ones included; for block, the tokens if every block were loaded.
+	Total int `json:"total"`
 }
 
 // Statistics defines model for Statistics.
@@ -244,9 +252,12 @@ type TokenStatistic struct {
 
 // TokenSummary defines model for TokenSummary.
 type TokenSummary struct {
-	Block       Spread           `json:"block"`
-	Description Spread           `json:"description"`
-	Statistic   []TokenStatistic `json:"statistic"`
+	Block       Spread `json:"block"`
+	Description Spread `json:"description"`
+
+	// Memories Every memory in the scope, withheld ones included.
+	Memories  int              `json:"memories"`
+	Statistic []TokenStatistic `json:"statistic"`
 
 	// Withheld Memories counted in the spreads but withheld from the listing.
 	Withheld int `json:"withheld"`

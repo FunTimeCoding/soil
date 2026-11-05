@@ -19,28 +19,37 @@ func Main() {
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
 	}
-	o.AddCommand(queryCommand("leases", "List DHCP leases", c.Leases, t))
-	o.AddCommand(queryCommand("hosts", "List host entries", c.Hosts, t))
-	o.AddCommand(queryCommand("pools", "List DHCP pools", c.Pools, t))
-	o.AddCommand(queryCommand("rules", "List firewall rules", c.Rules, t))
-	o.AddCommand(queryCommand("aliases", "List firewall aliases", c.Aliases, t))
+	o.AddCommand(queryCommand("leases", "List DHCP leases", c.ListLeases, t))
+	o.AddCommand(queryCommand("hosts", "List host entries", c.ListHosts, t))
+	o.AddCommand(queryCommand("pools", "List DHCP pools", c.ListPools, t))
+	o.AddCommand(queryCommand("rules", "List firewall rules", c.ListRules, t))
+	o.AddCommand(
+		queryCommand("aliases", "List firewall aliases", c.ListAliases, t),
+	)
+	o.AddCommand(
+		queryCommand("source-nat", "List source NAT rules", c.ListSourceNat, t),
+	)
 	o.AddCommand(
 		queryCommand(
-			"source-nat",
-			"List source NAT rules",
-			c.SourceNatRules,
+			"forwards",
+			"List Unbound query forwards",
+			c.ListForwards,
 			t,
 		),
 	)
 	o.AddCommand(
-		queryCommand("forwards", "List Unbound query forwards", c.Forwards, t),
-	)
-	o.AddCommand(
-		queryCommand("blocklists", "List Unbound blocklists", c.Blocklists, t),
+		queryCommand(
+			"blocklists",
+			"List Unbound blocklists",
+			c.ListBlocklists,
+			t,
+		),
 	)
 	o.AddCommand(interfaces(c, t))
 	o.AddCommand(log(c, t))
-	o.AddCommand(queryCommand("states", "Query the state table", c.States, t))
+	o.AddCommand(
+		queryCommand("states", "Query the state table", c.FirewallStates, t),
+	)
 	o.AddCommand(addHost(c, t))
 	o.AddCommand(setHost(c, t))
 	o.AddCommand(deleteHost(c, t))

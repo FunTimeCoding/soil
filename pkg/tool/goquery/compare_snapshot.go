@@ -21,6 +21,7 @@ func compareSnapshot(
 	}
 
 	return compareWords(
+		t,
 		system.ReadFile(filepath.Dir(stored), filepath.Base(stored)),
 		body,
 	)

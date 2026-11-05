@@ -2,11 +2,11 @@ package gonetbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
-func addBuildCommands(t *terminal.Terminal, c *client.Client, o *cobra.Command) {
+func addBuildCommands(t *terminal.Terminal, c face.Client, o *cobra.Command) {
 	o.AddCommand(listWirelessNetworks(c, t))
 	o.AddCommand(createWirelessNetwork(c, t))
 	o.AddCommand(listSites(c, t))

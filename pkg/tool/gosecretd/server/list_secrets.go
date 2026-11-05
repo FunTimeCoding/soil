@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/server"
 )
@@ -20,6 +21,10 @@ func (s *Server) ListSecrets(
 
 	if validation.Is(e) {
 		return server.ListSecrets400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.ListSecrets503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

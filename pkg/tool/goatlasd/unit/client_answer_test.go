@@ -23,11 +23,7 @@ func TestTheClientReadsCollectedPlacements(t *testing.T) {
 	)
 	_, e := v.Service.Collect(t.Context())
 	assert.FatalOnError(t, e)
-	c := client_tester.New(
-		t,
-		v.Service,
-		generativeConstant.ModelContextTestToken,
-	)
+	c := client_tester.New(t, v, generativeConstant.ModelContextTestToken)
 	placements, f := c.ListPlacements(
 		t.Context(),
 		constant.FixtureVirtualMachineNode,
@@ -61,11 +57,7 @@ func TestTheClientFiltersSightings(t *testing.T) {
 	)
 	_, e := v.Service.Collect(t.Context())
 	assert.FatalOnError(t, e)
-	c := client_tester.New(
-		t,
-		v.Service,
-		generativeConstant.ModelContextTestToken,
-	)
+	c := client_tester.New(t, v, generativeConstant.ModelContextTestToken)
 	all, f := c.ListSightings(t.Context(), "", false)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, all)
@@ -78,14 +70,14 @@ func TestTheClientFiltersSightings(t *testing.T) {
 func TestTheClientReachesTheDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
-		service_tester.New(t).Service,
+		service_tester.New(t),
 		generativeConstant.ModelContextTestToken,
 	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
 func TestTheClientRefusesAWrongToken(t *testing.T) {
-	c := client_tester.New(t, service_tester.New(t).Service, "wrong")
+	c := client_tester.New(t, service_tester.New(t), "wrong")
 	assert.Error(t, c.Reachable(t.Context()))
 	_, e := c.ListPlaces(t.Context())
 	assert.Error(t, e)

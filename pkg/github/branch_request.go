@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/pull_request"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/google/go-github/v93/github"
 )
@@ -33,7 +34,7 @@ func (c *Client) BranchRequest(
 	}
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	if len(result) == 0 {

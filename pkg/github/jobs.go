@@ -1,6 +1,9 @@
 package github
 
-import "github.com/funtimecoding/soil/pkg/github/job"
+import (
+	"github.com/funtimecoding/soil/pkg/github/job"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+)
 
 func (c *Client) Jobs(
 	owner string,
@@ -16,7 +19,7 @@ func (c *Client) Jobs(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return job.NewSlice(result.Jobs), nil

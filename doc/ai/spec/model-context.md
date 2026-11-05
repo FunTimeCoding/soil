@@ -70,8 +70,8 @@ when a Go field is renamed.
 ### The floor under it
 
 `response.SuccessAny` removes the entity-wrapper `Raw` field at any
-depth before marshalling, so a tool that has not been converted yet
-no longer ships its whole upstream object to the model. That is a
+depth before marshalling, so no tool ships its whole upstream object
+to the model. That is a
 floor, not a licence: `Raw` is one field, and a domain object still
 carries every other curated field, including nested ones repeated
 per element. `convert/` remains where a response shape is decided.
@@ -338,13 +338,9 @@ helper rather than writing `mcp.WithBoolean` inline - that is the
 whole point of them existing.
 
 They are not synonyms and must not be merged. `raw` adds a field;
-`unfiltered` stops a service removing fields. gokubernetesd carried
-one name over three different behaviours until the descriptions
-disagreed with each other - two tools filtering object noise, one
-including muted events, one claiming a sync filter its code never
-implemented. The two that were genuinely about noise now share
-`option.Unfiltered()`; the muting one became `include_muted`, which
-is the `include_*` idiom for "show the class hidden by default".
+`unfiltered` stops a service removing fields. A parameter showing a
+class hidden by default is neither: it is an `include_*` parameter,
+gokubernetesd's `include_muted` for muted events.
 
 A tool-specific widener stays tool-specific: `IncludeMuted` lives in
 `pkg/tool/gokubernetesd/constant/`, not in `generative/`, which also

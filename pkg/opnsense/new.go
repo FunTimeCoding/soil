@@ -16,13 +16,10 @@ func New(
 	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(key, "key")
 	errors.FatalOnEmpty(secret, "secret")
+	l := locator.New(host).Base(constant.Base)
 
 	return &Client{
-		basic: basic.New(
-			locator.New(host).Base(constant.Base),
-			key,
-			secret,
-			untrusted,
-		),
+		basic:   basic.New(l, key, secret, untrusted),
+		address: l.Address(),
 	}
 }

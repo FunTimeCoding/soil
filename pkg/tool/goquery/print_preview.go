@@ -2,7 +2,7 @@ package goquery
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
@@ -19,22 +19,25 @@ func printPreview(
 		client.PostChunkJSONRequestBody{Path: name, Body: body},
 	)
 	t.EmitDone(e)
-	printPreviewSections(p.Sections, p.Allowance)
-	console.Format("windows\n")
+	printPreviewSections(t, p.Sections, p.Allowance)
+	t.Line("windows")
 	over := 0
 
 	for _, k := range p.Chunks {
-		over += printPreviewChunk(k, p.Allowance, p.EmbedAllowance)
+		over += printPreviewChunk(t, k, p.Allowance, p.EmbedAllowance)
 	}
 
-	console.Format(
-		"\n%d chunks, %d over %d tokens (%s, window %d) or the embedder's %d\n",
-		len(p.Chunks),
-		over,
-		p.Allowance,
-		p.Model,
-		p.Window,
-		p.EmbedAllowance,
+	t.Line()
+	t.Line(
+		fmt.Sprintf(
+			"%d chunks, %d over %d tokens (%s, window %d) or the embedder's %d",
+			len(p.Chunks),
+			over,
+			p.Allowance,
+			p.Model,
+			p.Window,
+			p.EmbedAllowance,
+		),
 	)
 
 	return over

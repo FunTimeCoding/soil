@@ -1,6 +1,9 @@
 package github
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+)
 
 func (c *Client) DeleteTag(
 	owner string,
@@ -14,5 +17,5 @@ func (c *Client) DeleteTag(
 		fmt.Sprintf("refs/tags/%s", name),
 	)
 
-	return e
+	return refusal.Classify(e)
 }

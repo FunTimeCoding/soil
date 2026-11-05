@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/face"
 	"github.com/spf13/cobra"
 	"strings"
 )
 
 func updateIssue(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var summary string

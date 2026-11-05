@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/journal_entry"
+	"github.com/funtimecoding/soil/pkg/netbox/refusal"
 )
 
 func (c *Client) journalEntries(
@@ -25,7 +26,7 @@ func (c *Client) journalEntries(
 		Execute()
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return journal_entry.NewSlice(result.Results), nil

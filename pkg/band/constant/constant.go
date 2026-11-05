@@ -25,6 +25,7 @@ const (
 	PowerOn              = 2
 	PowerCycle           = 5
 	PowerOffSoft         = 8
+	PowerReset           = 10
 	PowerOffSoftGraceful = 12
 	PowerResetGraceful   = 14
 

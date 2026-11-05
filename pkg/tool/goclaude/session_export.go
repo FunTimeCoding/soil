@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -18,23 +18,17 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 			arguments []string,
 		) {
 			if all {
-				r, e := c.Client().PostSessionsExport(context.Background())
-
-				if e != nil {
-					c.Terminal().Exitln(e)
-
-					return
-				}
-
-				for _, path := range r.Paths {
-					console.Format("exported: %s\n", path)
-				}
+				c.Terminal().EmitValue(
+					c.Client().PostSessionsExport(context.Background()),
+				)
 
 				return
 			}
 
 			if len(arguments) == 0 {
-				console.Line("provide a session id or use --all")
+				c.Terminal().EmitDone(
+					validation.New("provide a session id or use --all"),
+				)
 
 				return
 			}
@@ -42,25 +36,12 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
-			r, e := c.Client().PostSessionExport(
-				context.Background(),
-				identifier,
+			c.Terminal().EmitValue(
+				c.Client().PostSessionExport(context.Background(), identifier),
 			)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			for _, path := range r.Paths {
-				console.Format("exported: %s\n", path)
-			}
 		},
 	}
 	result.Flags().BoolVar(&all, "all", false, "Export all sessions")

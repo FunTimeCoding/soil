@@ -1,8 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gogithubd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/github/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 type Service struct {
-	source face.RunSource
+	client face.GitHubClient
+	guard  *peer.Guard
 	owner  string
 }

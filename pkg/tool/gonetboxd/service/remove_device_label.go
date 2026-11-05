@@ -6,7 +6,7 @@ func (s *Service) RemoveDeviceLabel(
 	device string,
 	key string,
 ) error {
-	d, e := s.client.DeviceByName(device)
+	d, e := s.deviceByName(device)
 
 	if e != nil {
 		return e

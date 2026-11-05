@@ -359,12 +359,18 @@ func (c *Client) Get(path string, params map[string]string, out any) error {
 
 ### Errors
 
-Every method returns its error: 404 is `not_found`, other refusals
-`unexpected` with the site's reason, transport failures classified
-and free of query strings. A CLI or example calls the `Must` twin.
-An API that refuses in its own shape - HTML, a 200 with an error
-envelope - reads it with `WithRefusal` or checks the envelope after
-decoding.
+Every method returns its error, classified by the requester's table:
+404 is `not_found`, 409 `conflict`, 429 and the gateway statuses
+`unavailable`, everything else `unexpected`, each with the message
+`"<subject> status: <code>: <reason>"`; transport failures are
+classified and free of query strings. `basic.New` sets only what
+differs from the table - a row (`WithStatus`), the reason reader for an
+API that refuses in HTML or plain text (`WithReason`), the subject
+(`WithSubject`, default the request's host and path) - and keeps
+`WithRefusal` for a body that changes what a status means. A
+`validation` row answers with the upstream's reason alone, since it is
+the caller's to read. A 200 with an error envelope is checked after
+decoding. A CLI or example calls the `Must` twin.
 
 ### Wrapping into entities
 

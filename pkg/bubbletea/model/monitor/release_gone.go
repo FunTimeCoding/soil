@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"charm.land/bubbletea/v2"
+	"context"
 	"slices"
 )
 
@@ -33,7 +34,11 @@ func (m *Model) releaseGone() tea.Cmd {
 
 	return func() tea.Msg {
 		for _, identifier := range gone {
-			if e := c.Release(identifier, owner); e != nil {
+			if e := c.DeleteClaim(
+				context.Background(),
+				identifier,
+				owner,
+			); e != nil {
 				return addToastMessage(e.Error())
 			}
 		}

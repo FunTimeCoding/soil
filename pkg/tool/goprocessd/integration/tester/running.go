@@ -7,7 +7,7 @@ import (
 )
 
 func (t *Tester) Running() string {
-	v, e := t.Client.Processes(context.Background())
+	v, e := t.Client.ListProcesses(context.Background())
 	errors.PanicOnError(e)
 	var result []string
 

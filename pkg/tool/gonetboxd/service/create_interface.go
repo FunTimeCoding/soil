@@ -23,29 +23,38 @@ func (s *Service) CreateInterface(
 		}
 	}
 
-	d, e := s.client.DeviceByName(device)
+	return guarded(
+		s.guard,
+		func() (*network.Interface, error) {
+			d, e := s.client.DeviceByName(device)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	result, e := s.client.CreateInterface(
-		d,
-		name,
-		netbox.InterfaceTypeValue(interfaceType),
+			result, e := s.client.CreateInterface(
+				d,
+				name,
+				netbox.InterfaceTypeValue(interfaceType),
+			)
+
+			if e != nil {
+				return nil, e
+			}
+
+			if h == nil {
+				return result, nil
+			}
+
+			if _, f := s.client.CreatePhysicalInterface(
+				h,
+				"",
+				result,
+			); f != nil {
+				return nil, f
+			}
+
+			return result, nil
+		},
 	)
-
-	if e != nil {
-		return nil, e
-	}
-
-	if h == nil {
-		return result, nil
-	}
-
-	if _, f := s.client.CreatePhysicalInterface(h, "", result); f != nil {
-		return nil, f
-	}
-
-	return result, nil
 }

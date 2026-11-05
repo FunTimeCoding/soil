@@ -1,9 +1,12 @@
 package github
 
-import "github.com/google/go-github/v93/github"
+import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+	"github.com/google/go-github/v93/github"
+)
 
 func (c *Client) Repositories(owner string) ([]*github.Repository, error) {
 	result, _, e := c.client.Repositories.ListByUser(c.context, owner, nil)
 
-	return result, e
+	return result, refusal.Classify(e)
 }

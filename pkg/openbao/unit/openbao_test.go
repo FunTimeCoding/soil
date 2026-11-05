@@ -9,7 +9,8 @@ import (
 
 func TestHealthNeedsNoLogin(t *testing.T) {
 	u := upstream_tester.New(t)
-	s := client(t, u, "alfa-jwt").MustHealth()
+	s, e := client(t, u, "alfa-jwt").Health()
+	assert.FatalOnError(t, e)
 	assert.True(t, s.Initialized)
 	assert.False(t, s.Sealed)
 	assert.String(t, "2.7.1", s.Version)
@@ -20,8 +21,10 @@ func TestLoginHappensOnceAndCarriesTheToken(t *testing.T) {
 	u := upstream_tester.New(t)
 	c := client(t, u, "alfa-jwt")
 	defer c.Close()
-	c.MustList("alfa")
-	c.MustRead("alfa/bravo")
+	_, e := c.List("alfa")
+	assert.FatalOnError(t, e)
+	_, f := c.Read("alfa/bravo")
+	assert.FatalOnError(t, f)
 	assert.Integer(t, 1, u.Logins())
 	assert.Strings(t, []string{"", "alfa-token", "alfa-token"}, u.Tokens())
 }
@@ -32,27 +35,23 @@ func TestRefusedLoginFailsTheCall(t *testing.T) {
 }
 
 func TestListSortsKeys(t *testing.T) {
-	assert.Strings(
-		t,
-		[]string{"bravo", "charlie/"},
-		client(t, upstream_tester.New(t), "alfa-jwt").MustList("alfa"),
-	)
+	keys, e := client(t, upstream_tester.New(t), "alfa-jwt").List("alfa")
+	assert.FatalOnError(t, e)
+	assert.Strings(t, []string{"bravo", "charlie/"}, keys)
 }
 
 func TestListOfAMissingPathIsEmpty(t *testing.T) {
-	assert.Count(
-		t,
-		0,
-		client(t, upstream_tester.New(t), "alfa-jwt").MustList("missing"),
-	)
+	keys, e := client(t, upstream_tester.New(t), "alfa-jwt").List("missing")
+	assert.FatalOnError(t, e)
+	assert.Count(t, 0, keys)
 }
 
 func TestReadReturnsEveryKey(t *testing.T) {
-	assert.Any(
-		t,
-		map[string]string{"DELTA": "echo", "FOXTROT": "golf"},
-		client(t, upstream_tester.New(t), "alfa-jwt").MustRead("alfa/bravo"),
+	values, e := client(t, upstream_tester.New(t), "alfa-jwt").Read(
+		"alfa/bravo",
 	)
+	assert.FatalOnError(t, e)
+	assert.Any(t, map[string]string{"DELTA": "echo", "FOXTROT": "golf"}, values)
 }
 
 func TestReadOfAMissingSecretIsNotFound(t *testing.T) {
@@ -62,9 +61,12 @@ func TestReadOfAMissingSecretIsNotFound(t *testing.T) {
 
 func TestPutSendsTheValuesAsTheSecretBody(t *testing.T) {
 	u := upstream_tester.New(t)
-	client(t, u, "alfa-jwt").MustPut(
-		"alfa/bravo",
-		map[string]string{"DELTA": "echo"},
+	assert.FatalOnError(
+		t,
+		client(t, u, "alfa-jwt").Put(
+			"alfa/bravo",
+			map[string]string{"DELTA": "echo"},
+		),
 	)
 	assert.Any(t, map[string]any{"DELTA": "echo"}, u.Written()["data"])
 }

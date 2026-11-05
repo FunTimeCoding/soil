@@ -1,12 +1,12 @@
 package protocol
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/face"
 )
 
 func New(
-	c *chromium.Client,
+	c face.ChromiumClient,
 	tab string,
 ) *Protocol {
 	t := c.MustTabByHost(tab)

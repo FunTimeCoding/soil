@@ -6,5 +6,9 @@ func (c *Client) SetDevicePrimaryAddress(
 	name string,
 	address string,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return c.changeDevice("SetDevicePrimaryAddress", name, address)
 }

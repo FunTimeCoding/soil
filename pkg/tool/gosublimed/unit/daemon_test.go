@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/mock_client"
+	"github.com/funtimecoding/soil/pkg/sublime/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/daemon_tester"
 	"go.uber.org/goleak"
 	"testing"

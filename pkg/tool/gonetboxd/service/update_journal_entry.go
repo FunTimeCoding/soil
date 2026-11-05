@@ -7,5 +7,10 @@ func (s *Service) UpdateJournalEntry(
 	kind string,
 	comments string,
 ) (*journal_entry.Entry, error) {
-	return s.client.UpdateJournalEntry(identifier, kind, comments)
+	return guarded(
+		s.guard,
+		func() (*journal_entry.Entry, error) {
+			return s.client.UpdateJournalEntry(identifier, kind, comments)
+		},
+	)
 }

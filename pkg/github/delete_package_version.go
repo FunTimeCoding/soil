@@ -1,6 +1,9 @@
 package github
 
-import "github.com/funtimecoding/soil/pkg/github/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+)
 
 func (c *Client) DeletePackageVersion(
 	packageName string,
@@ -14,5 +17,5 @@ func (c *Client) DeletePackageVersion(
 		versionIdentifier,
 	)
 
-	return e
+	return refusal.Classify(e)
 }

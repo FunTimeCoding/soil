@@ -2,7 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -25,7 +24,7 @@ func sessionBashDump(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, command := range r.Commands {
-				console.Line(command)
+				c.Terminal().Line(command)
 			}
 		},
 	}

@@ -1,15 +1,15 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/face"
+	"github.com/funtimecoding/soil/pkg/chromium/face"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/view"
 )
 
 func (s *Service) observe(
 	identifier string,
-	p face.Page,
+	p face.ProtocolClient,
 ) (*view.View, error) {
-	nodes, e := p.Snapshot()
+	nodes, e := guarded(s.guard, p.Snapshot)
 
 	if e != nil {
 		return nil, e

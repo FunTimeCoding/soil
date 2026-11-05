@@ -10,6 +10,10 @@ func (c *Client) DeviceInterfaceByName(
 	d *device.Device,
 	name string,
 ) (*network.Interface, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, i := range c.interfaces[d.Identifier] {
 		if i.Name == name {
 			return i, nil

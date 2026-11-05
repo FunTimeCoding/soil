@@ -17,15 +17,19 @@ func (s *Service) SendKeys(
 
 	interval = max(interval, s.keyInterval)
 
-	for i, key := range keys {
-		if i > 0 {
-			time.Sleep(interval)
-		}
+	return s.attempt(
+		func() error {
+			for i, key := range keys {
+				if i > 0 {
+					time.Sleep(interval)
+				}
 
-		if e := s.source.SendKey(identifier, key); e != nil {
-			return fmt.Errorf("step %d: %w", i+1, e)
-		}
-	}
+				if e := s.client.SendKey(identifier, key); e != nil {
+					return fmt.Errorf("step %d: %w", i+1, e)
+				}
+			}
 
-	return nil
+			return nil
+		},
+	)
 }

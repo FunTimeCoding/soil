@@ -2,7 +2,6 @@ package gonetbox
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
@@ -27,7 +26,6 @@ func removeVirtualLabel(
 					arguments[1],
 				),
 			)
-			console.Line("label removed")
 		},
 	}
 }

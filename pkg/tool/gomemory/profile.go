@@ -2,17 +2,12 @@ package gomemory
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
-func profile(
-	l *face.Client,
-	t *terminal.Terminal,
-) *cobra.Command {
+func profile(x *Context) *cobra.Command {
 	var topic string
 	var detail bool
 	c := &cobra.Command{
@@ -32,19 +27,15 @@ func profile(
 				params.Detail = &detail
 			}
 
-			r, e := (*l).GetProfile(context.Background(), params)
+			r, e := x.Client.GetProfile(context.Background(), params)
 
-			if e != nil {
-				t.Exitln(e)
+			if e != nil || detail {
+				x.Terminal.EmitValue(r, e)
 
 				return
 			}
 
-			fmt.Print(r.Text)
-
-			if r.Detail != nil {
-				fmt.Print(budgetTable(r.Detail, r))
-			}
+			x.Terminal.Line(strings.TrimSuffix(r.Text, "\n"))
 		},
 	}
 	c.Flags().StringVar(

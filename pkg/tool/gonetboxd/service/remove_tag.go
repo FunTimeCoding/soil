@@ -6,5 +6,10 @@ func (s *Service) RemoveTag(
 	deviceName string,
 	tag string,
 ) (*device.Device, error) {
-	return s.client.RemoveTag(deviceName, tag)
+	return guarded(
+		s.guard,
+		func() (*device.Device, error) {
+			return s.client.RemoveTag(deviceName, tag)
+		},
+	)
 }

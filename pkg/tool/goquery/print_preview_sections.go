@@ -1,12 +1,15 @@
 package goquery
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"strings"
 )
 
 func printPreviewSections(
+	t *terminal.Terminal,
 	sections []client.PreviewSection,
 	allowance int,
 ) {
@@ -14,10 +17,10 @@ func printPreviewSections(
 		return
 	}
 
-	console.Format("sections\n")
+	t.Line("sections")
 
 	for _, x := range sections {
-		console.Format(
+		line := fmt.Sprintf(
 			"  %s%-*s lines %d-%d  %d tokens",
 			strings.Repeat("  ", max(x.Level-1, 0)),
 			48-2*max(x.Level-1, 0),
@@ -28,23 +31,27 @@ func printPreviewSections(
 		)
 
 		if x.Tokens <= allowance {
-			console.Line()
+			t.Line(line)
 
 			continue
 		}
 
-		console.Format("  OVER by %d\n", x.Tokens-allowance)
+		t.Line(
+			join.Empty(line, fmt.Sprintf("  OVER by %d", x.Tokens-allowance)),
+		)
 
 		for _, b := range x.Blocks {
-			console.Format(
-				"      %-12s lines %d-%d  %d tokens\n",
-				b.Kind,
-				b.FirstLine,
-				b.LastLine,
-				b.Tokens,
+			t.Line(
+				fmt.Sprintf(
+					"      %-12s lines %d-%d  %d tokens",
+					b.Kind,
+					b.FirstLine,
+					b.LastLine,
+					b.Tokens,
+				),
 			)
 		}
 	}
 
-	console.Line()
+	t.Line()
 }

@@ -3,6 +3,9 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/tool/goband/plan"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
 )
@@ -16,11 +19,16 @@ func TestDryRunSaysWhenAShutdownWouldBeRefused(t *testing.T) {
 	)
 	output, _, code := run(t, s, "shutdown", "--instance", "alfa")
 	assert.Integer(t, 0, code)
-	assert.StringContains(
+	var p plan.Power
+	notation.MustDecode(output, &p, false)
+	assert.String(t, "alfa", p.Instance)
+	assert.NotNil(t, p.Refusal)
+	assert.String(
 		t,
-		"Would be refused: off soft graceful not offered",
-		output,
+		"off soft graceful not offered: LMS on the host registers it; force cuts power instead",
+		*p.Refusal,
 	)
+	assert.String(t, "", p.Description)
 	assert.Count(t, 0, s.Alfa.Requested())
 }
 
@@ -33,10 +41,14 @@ func TestDryRunDescribesAnAcceptedShutdown(t *testing.T) {
 	)
 	output, _, code := run(t, s, "shutdown", "--instance", "alfa")
 	assert.Integer(t, 0, code)
-	assert.StringContains(
+	var p plan.Power
+	notation.MustDecode(output, &p, false)
+	assert.String(t, "alfa", p.Instance)
+	assert.Nil(t, p.Refusal)
+	assert.String(
 		t,
-		"Would ask the operating system to shut down through LMS. Pass --yes to execute.",
-		output,
+		"Would ask the operating system to shut down through LMS. Pass --yes to execute, then poll status - if the machine never goes down, the operating system is not answering and --force is the remaining option.",
+		p.Description,
 	)
 	assert.Count(t, 0, s.Alfa.Requested())
 }
@@ -50,7 +62,11 @@ func TestShutdownWithYesRequestsOffSoftGraceful(t *testing.T) {
 	)
 	output, _, code := run(t, s, "shutdown", "--instance", "alfa", "--yes")
 	assert.Integer(t, 0, code)
-	assert.StringContains(t, "off soft graceful requested on alfa", output)
+	var r client.PowerResult
+	notation.MustDecode(output, &r, false)
+	assert.String(t, "alfa", r.Instance)
+	assert.String(t, "off soft graceful", r.Requested)
+	assert.String(t, "on", r.Power)
 	assert.Integers(t, []int{12}, s.Alfa.Requested())
 }
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/openbao/constant"
+	"github.com/funtimecoding/soil/pkg/openbao/refusal"
 )
 
 func (c *Client) Put(
@@ -23,7 +24,7 @@ func (c *Client) Put(
 	}
 
 	if _, e := c.client.KVv2(constant.Mount).Put(x, path, payload); e != nil {
-		return fmt.Errorf("put secret: %w", e)
+		return fmt.Errorf("put secret: %w", refusal.Classify(e))
 	}
 
 	return nil

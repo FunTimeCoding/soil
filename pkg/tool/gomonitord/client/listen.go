@@ -15,7 +15,7 @@ func (c *Client) Listen(x context.Context) (io.ReadCloser, error) {
 	q, e := http.NewRequestWithContext(
 		x,
 		http.MethodGet,
-		join.Empty(c.base, constant.StreamPath),
+		join.Empty(c.base.String(), constant.StreamPath),
 		nil,
 	)
 

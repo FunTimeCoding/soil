@@ -9,6 +9,10 @@ func (c *Client) SetConfigurationContextWeight(
 	name string,
 	weight int32,
 ) (*configuration_context.Context, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	v, e := c.ConfigurationContextByName(name)
 
 	if e != nil {

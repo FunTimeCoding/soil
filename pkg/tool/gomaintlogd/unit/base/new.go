@@ -22,6 +22,7 @@ func New(t *testing.T) *Server {
 	t.Cleanup(d.Close)
 	result := &Server{
 		Reporter: r,
+		LitePath: o.LitePath,
 		Server: model_context_server.New(
 			t,
 			func(

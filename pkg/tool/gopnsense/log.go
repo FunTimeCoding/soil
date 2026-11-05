@@ -19,7 +19,7 @@ func log(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.EmitValue(c.Log(context.Background(), limit))
+			t.EmitValue(c.FirewallLog(context.Background(), limit))
 		},
 	}
 	result.Flags().IntVar(&limit, "limit", 0, "maximum number of records")

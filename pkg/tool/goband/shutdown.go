@@ -32,10 +32,6 @@ func shutdown(x *Context) *cobra.Command {
 				confirmed,
 				description,
 			)
-
-			if confirmed && !forced {
-				x.Terminal.Line(constant.GracefulFollowUp)
-			}
 		},
 	}
 	f := result.Flags()

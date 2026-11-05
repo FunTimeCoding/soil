@@ -5,6 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
-func (c *Client) GetSessionMessages(_ context.Context, _ string) (*client.MessagesResponse, error) {
-	return &client.MessagesResponse{}, c.Failure
+func (c *Client) GetSessionMessages(
+	_ context.Context,
+	_ string,
+) (*client.MessagesResponse, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	return &client.MessagesResponse{Messages: c.Messages}, nil
 }

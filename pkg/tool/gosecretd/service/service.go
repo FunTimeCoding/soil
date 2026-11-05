@@ -1,7 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/openbao/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 type Service struct {
-	source face.SecretSource
+	client face.OpenbaoClient
+	guard  *peer.Guard
 }

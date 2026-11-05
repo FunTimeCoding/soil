@@ -3,12 +3,12 @@ package goatlassian
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/face"
 	"github.com/spf13/cobra"
 )
 
 func listProjects(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{

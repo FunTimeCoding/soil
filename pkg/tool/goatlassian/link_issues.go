@@ -2,14 +2,13 @@ package goatlassian
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/face"
 	"github.com/spf13/cobra"
 )
 
 func linkIssues(
-	c *client.Client,
+	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var linkType string
@@ -29,7 +28,6 @@ func linkIssues(
 					linkType,
 				),
 			)
-			console.Format("linked %s to %s\n", arguments[0], arguments[1])
 		},
 	}
 	result.Flags().StringVar(

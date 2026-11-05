@@ -17,7 +17,9 @@
   client (`<path>/mock_client/`). A face split into parts keeps the parts'
   names in a one-provider face and prefixes them with the provider in a
   shared one. A daemon's client keeps `face.Client` in `<path>/face/`
-  (`generated-api.md`).
+  (`generated-api.md`). A face has no escape to the client's internals
+  (`Basic()`, `Nested()`): each thing a consumer reached through one
+  becomes a method on the client.
 - **Mock convention** - hand-rolled structs in `mock_*` sub-packages
   near the real implementation (e.g., `<path>/mock_notifier/`,
   `<path>/mock_client/`). One file per method. Methods to manipulate state

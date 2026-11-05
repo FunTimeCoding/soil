@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -19,7 +20,7 @@ import (
 func TestTheClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	methods := reflect.TypeFor[*client.Client]()
+	methods := reflect.TypeFor[face.Client]()
 	var missing []string
 
 	for _, p := range s.Paths.Map() {
@@ -35,7 +36,8 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 		}
 	}
 
-	assert.Strings(t, nil, missing)
+	slices.Sort(missing)
+	assert.String(t, "", strings.Join(missing, ", "))
 }
 
 func TestTheClientAndMockHoldTheFace(t *testing.T) {

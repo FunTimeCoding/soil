@@ -8,29 +8,34 @@ func (s *Service) CreateCable(
 	deviceB string,
 	interfaceB string,
 ) (*cable.Cable, error) {
-	a, e := s.client.DeviceByName(deviceA)
+	return guarded(
+		s.guard,
+		func() (*cable.Cable, error) {
+			a, e := s.client.DeviceByName(deviceA)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	sideA, e := s.client.DeviceInterfaceByName(a, interfaceA)
+			sideA, e := s.client.DeviceInterfaceByName(a, interfaceA)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	b, e := s.client.DeviceByName(deviceB)
+			b, e := s.client.DeviceByName(deviceB)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	sideB, e := s.client.DeviceInterfaceByName(b, interfaceB)
+			sideB, e := s.client.DeviceInterfaceByName(b, interfaceB)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateCable(sideA, sideB)
+			return s.client.CreateCable(sideA, sideB)
+		},
+	)
 }

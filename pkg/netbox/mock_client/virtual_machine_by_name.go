@@ -7,6 +7,10 @@ import (
 )
 
 func (c *Client) VirtualMachineByName(n string) (*virtual_machine.Machine, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, m := range c.machines {
 		if m.Name == n {
 			return m, nil

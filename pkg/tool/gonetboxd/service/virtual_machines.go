@@ -11,7 +11,12 @@ func (s *Service) VirtualMachines() (
 	map[int32][]*label.Label,
 	error,
 ) {
-	result, e := s.client.VirtualMachines()
+	result, e := guarded(
+		s.guard,
+		func() ([]*virtual_machine.Machine, error) {
+			return s.client.VirtualMachines()
+		},
+	)
 
 	if e != nil {
 		return nil, nil, e

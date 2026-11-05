@@ -2,7 +2,8 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -19,11 +20,25 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
+			from := 0
+			to := 0
+
+			if turns != "" {
+				okay := false
+				from, to, okay = parseTurnRange(turns)
+
+				if !okay {
+					c.Terminal().EmitDone(
+						validation.New("invalid --turns range: %s", turns),
+					)
+
+					return
+				}
+			}
+
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
@@ -59,20 +74,6 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				turnNumbers = append(turnNumbers, turn)
 			}
 
-			from := 0
-			to := 0
-
-			if turns != "" {
-				okay := false
-				from, to, okay = parseTurnRange(turns)
-
-				if !okay {
-					console.Format("invalid --turns range: %s\n", turns)
-
-					return
-				}
-			}
-
 			if tail > 0 {
 				from = turn - tail + 1
 
@@ -83,22 +84,22 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				to = turn
 			}
 
+			t := c.Terminal()
+
 			for i, m := range messages {
 				if from > 0 && (turnNumbers[i] < from || turnNumbers[i] > to) {
 					continue
 				}
 
 				if m.Role == "user" {
-					console.Format(
-						"## user [%d]\n\n%s\n\n",
-						turnNumbers[i],
-						m.Text,
-					)
-
-					continue
+					t.Line(fmt.Sprintf("## user [%d]", turnNumbers[i]))
+				} else {
+					t.Line(fmt.Sprintf("## %s", m.Role))
 				}
 
-				console.Format("## %s\n\n%s\n\n", m.Role, m.Text)
+				t.Line()
+				t.Line(m.Text)
+				t.Line()
 			}
 		},
 	}

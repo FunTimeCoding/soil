@@ -17,9 +17,8 @@ const (
 
 const (
 	StartDescription         = "Would power the machine on - the firmware only offers this while it is off. Pass --yes to execute."
-	ShutdownDescription      = "Would ask the operating system to shut down through LMS. Pass --yes to execute."
+	ShutdownDescription      = "Would ask the operating system to shut down through LMS. Pass --yes to execute, then poll status - if the machine never goes down, the operating system is not answering and --force is the remaining option."
 	ShutdownForceDescription = "Would cut power below the operating system - it gets no chance to shut down. Pass --yes to execute."
-	RebootDescription        = "Would ask the operating system to restart through LMS. Pass --yes to execute."
+	RebootDescription        = "Would ask the operating system to restart through LMS. Pass --yes to execute, then poll status - if the machine never goes down, the operating system is not answering and --force is the remaining option."
 	RebootForceDescription   = "Would power cycle below the operating system - it gets no chance to shut down. Pass --yes to execute."
-	GracefulFollowUp         = "Poll status - if the machine never goes down, the operating system is not answering and --force is the remaining option."
 )

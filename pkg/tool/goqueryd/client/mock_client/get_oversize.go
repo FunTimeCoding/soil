@@ -16,5 +16,9 @@ func (c *Client) GetOversize(
 		return nil, c.Failure
 	}
 
+	if c.OversizeReport != nil {
+		return c.OversizeReport, nil
+	}
+
 	return &client.OversizeReport{}, nil
 }

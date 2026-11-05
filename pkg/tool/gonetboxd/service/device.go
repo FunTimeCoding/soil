@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Service) Device(name string) (*device.Device, []*label.Label, error) {
-	d, e := s.client.DeviceByName(name)
+	d, e := s.deviceByName(name)
 
 	if e != nil {
 		return nil, nil, e

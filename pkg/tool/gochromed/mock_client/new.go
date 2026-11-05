@@ -1,13 +1,13 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/soil/pkg/failure"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/face"
+	"github.com/funtimecoding/soil/pkg/chromium/face"
+	"github.com/funtimecoding/soil/pkg/chromium/mock_client"
 )
 
 func New() *Client {
-	result := &Client{pages: make(map[string]face.Page)}
-	result.failures = failure.New(result.Tabs)
-
-	return result
+	return &Client{
+		Client: mock_client.New(),
+		pages:  make(map[string]face.ProtocolClient),
+	}
 }

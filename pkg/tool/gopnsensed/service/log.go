@@ -10,5 +10,10 @@ func (s *Service) Log(limit int) ([]*log_entry.Entry, error) {
 		limit = constant.DefaultLogLimit
 	}
 
-	return s.source.Log(limit)
+	return guarded(
+		s.guard,
+		func() ([]*log_entry.Entry, error) {
+			return s.client.Log(limit)
+		},
+	)
 }

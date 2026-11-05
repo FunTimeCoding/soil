@@ -3,10 +3,12 @@ package refusal
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/openai/openai-go/v3"
+	"net/http"
 )
 
 func Classify(e error) error {
@@ -24,7 +26,10 @@ func Classify(e error) error {
 		return e
 	}
 
-	if classified := refusal.Status(
+	if classified := refusal.NewTable().With(
+		http.StatusBadRequest,
+		errorsConstant.ValidationClass,
+	).Classify(
 		s.StatusCode,
 		join.Empty("openai: ", s.Message),
 	); classified != nil {

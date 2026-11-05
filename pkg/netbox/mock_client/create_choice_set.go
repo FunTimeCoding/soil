@@ -9,6 +9,10 @@ func (c *Client) CreateChoiceSet(
 	name string,
 	choices []string,
 ) (*choice_set.Set, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	v := choice_set_record.New()
 	v.Identifier = c.nextIdentifier()
 	v.Name = name

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/migrate"
@@ -23,12 +24,14 @@ func New(
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(d)
 	c := o.Source(m.Upstream(constant.Identity))
+	g := peer.New(constant.NetBoxPeer, c.Address(), c, l, r)
 	result := &Daemon{
 		database: d,
 		client:   c,
-		service:  service.New(store.New(d), c),
+		guard:    g,
+		service:  service.New(store.New(d), c, g),
 	}
-	result.web = web.New(result.service)
+	result.web = web.New(result.service, r)
 
 	if o.PowerIntent {
 		result.clock = worker.New(

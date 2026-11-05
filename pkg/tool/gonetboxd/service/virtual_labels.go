@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Service) VirtualLabels(machine string) ([]*label.Label, error) {
-	m, e := s.client.VirtualMachineByName(machine)
+	m, e := s.virtualMachineByName(machine)
 
 	if e != nil {
 		return nil, e

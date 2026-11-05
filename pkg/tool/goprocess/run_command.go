@@ -2,12 +2,16 @@ package goprocess
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 	"github.com/spf13/cobra"
 	"strings"
 )
 
-func runCommand() *cobra.Command {
+func runCommand(
+	open func(procfile string) face.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "run COMMAND [ARGUMENTS...]",
 		Short: "Send a command to the running server",
@@ -30,17 +34,15 @@ Commands:
 `,
 		),
 		Args: cobra.MinimumNArgs(1),
-		RunE: func(
+		Run: func(
 			m *cobra.Command,
 			arguments []string,
-		) error {
-			m.SilenceUsage = true
+		) {
 			procfilePath, e := m.Flags().GetString("file")
 			errors.PanicOnError(e)
-			c := client.NewLocal(procfilePath)
+			c := open(procfilePath)
 			defer c.Close()
-
-			return Dispatch(c, arguments[0], arguments[1:])
+			Dispatch(c, t, arguments[0], arguments[1:])
 		},
 	}
 }

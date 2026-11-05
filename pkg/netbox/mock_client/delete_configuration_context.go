@@ -6,6 +6,10 @@ import (
 )
 
 func (c *Client) DeleteConfigurationContext(name string) error {
+	if c.Failure != nil {
+		return c.Failure
+	}
+
 	v, e := c.ConfigurationContextByName(name)
 
 	if e != nil {

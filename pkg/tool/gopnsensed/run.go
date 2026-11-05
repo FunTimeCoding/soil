@@ -2,6 +2,7 @@ package gopnsensed
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -19,9 +20,17 @@ func Run(
 	s face.Instrument,
 ) {
 	r := s.Reporter()
-	d := daemon.New(o)
+	l := logger.New(context.Background())
+	d := daemon.New(o, l, r)
 	defer d.Close()
-	lifecycle.New(logger.New(context.Background())).WithServer(
+	errors.PanicOnError(d.Wait(context.Background()))
+	c := lifecycle.New(l)
+
+	for _, w := range d.Workers() {
+		c.WithWorker(w)
+	}
+
+	c.WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

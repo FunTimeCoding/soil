@@ -12,7 +12,7 @@ func (s *Service) ReadBody(v *selector.Selector) (*saved.Saved, error) {
 		return nil, e
 	}
 
-	body, f := s.source.Page(t.Identifier).Body()
+	body, f := guarded(s.guard, s.source.Page(t.Identifier).Body)
 
 	if f != nil {
 		return nil, f

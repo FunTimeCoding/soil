@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/server"
 )
 
@@ -10,6 +11,10 @@ func (s *Server) ListLibraries(
 	_ server.ListLibrariesRequestObject,
 ) (server.ListLibrariesResponseObject, error) {
 	libraries, e := s.service.Libraries()
+
+	if unavailable.Is(e) {
+		return server.ListLibraries503JSONResponse{Error: e.Error()}, nil
+	}
 
 	if e != nil {
 		return server.ListLibraries500JSONResponse(*s.answer(x, e)), nil

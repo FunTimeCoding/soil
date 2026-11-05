@@ -15,4 +15,5 @@ type Request struct {
 	Body        []byte
 	ContentType string
 	Refusal     func(int, []byte) error
+	Statuses    map[int]string
 }

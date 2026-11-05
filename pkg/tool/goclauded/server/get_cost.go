@@ -21,7 +21,7 @@ func (s *Server) GetCost(
 	to := time.Now().UTC()
 	from := to.Add(-time.Duration(days) * 24 * time.Hour)
 	usage := s.transcript.UsageBetween(from, to)
-	result := server.CostResponse{}
+	result := server.CostResponse{Days: days}
 
 	if len(usage) == 0 {
 		return server.GetCost200JSONResponse(result), nil
@@ -52,6 +52,7 @@ func (s *Server) GetCost(
 				Cache5Minute:  t.Cache5Minute,
 				Cache1Hour:    t.Cache1Hour,
 				Cost:          cost,
+				UnknownModel:  !pricing.KnownModel(model),
 			},
 		)
 	}

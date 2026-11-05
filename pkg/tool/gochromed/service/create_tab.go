@@ -7,5 +7,10 @@ func (s *Service) CreateTab(l string) (string, error) {
 		return "", validation.New("url is required")
 	}
 
-	return s.source.CreateTab(l)
+	return guarded(
+		s.guard,
+		func() (string, error) {
+			return s.source.CreateTab(l)
+		},
+	)
 }

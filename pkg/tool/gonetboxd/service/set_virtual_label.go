@@ -10,7 +10,7 @@ func (s *Service) SetVirtualLabel(
 	key string,
 	value string,
 ) (*label.Label, error) {
-	m, e := s.client.VirtualMachineByName(machine)
+	m, e := s.virtualMachineByName(machine)
 
 	if e != nil {
 		return nil, e

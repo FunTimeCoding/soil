@@ -3,7 +3,6 @@ package goclaude
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -23,8 +22,6 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
@@ -43,44 +40,35 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 				return
 			}
 
+			t := c.Terminal()
 			results := response.Results
 
 			if len(results) == 0 {
-				console.Format("no tool calls matching %q\n", arguments[1])
+				t.Line(fmt.Sprintf("no tool calls matching %q", arguments[1]))
 
 				return
 			}
 
 			for i, r := range results {
 				if i > 0 {
-					console.Line(strings.Repeat("─", 60))
+					t.Line(strings.Repeat("─", 60))
 				}
 
-				console.Format("### %s\n\n", r.ToolName)
+				t.Line(fmt.Sprintf("### %s", r.ToolName))
+				t.Line()
 
 				if r.Before != nil {
 					for _, m := range *r.Before {
-						text := m.Text
-
-						if len(text) > 300 {
-							text = fmt.Sprintf("%s…", text[:300])
-						}
-
-						console.Format("**%s:** %s\n\n", m.Role, text)
+						printContextMessage(t, m)
 					}
 				}
 
-				console.Format("**→ %s called**\n\n", r.ToolName)
+				t.Line(fmt.Sprintf("**→ %s called**", r.ToolName))
+				t.Line()
 
 				if r.After != nil {
 					for _, m := range *r.After {
-						text := m.Text
-
-						if len(text) > 300 {
-							text = fmt.Sprintf("%s…", text[:300])
-						}
-
-						console.Format("**%s:** %s\n\n", m.Role, text)
+						printContextMessage(t, m)
 					}
 				}
 			}

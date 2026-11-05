@@ -4,8 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/client"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/client/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 )
@@ -13,7 +17,7 @@ import (
 func TestTheClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	methods := reflect.TypeFor[*client.Client]()
+	methods := reflect.TypeFor[face.Client]()
 	var missing []string
 
 	for _, p := range s.Paths.Map() {
@@ -29,5 +33,15 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 		}
 	}
 
+	slices.Sort(missing)
 	assert.String(t, "", strings.Join(missing, ", "))
+}
+
+func TestTheClientAndMockHoldTheFace(t *testing.T) {
+	c := client.New(locator.New("goraidparsed.test"), "token")
+	defer c.Close()
+	m := mock_client.New()
+	defer m.Close()
+	faces := []face.Client{c, m}
+	assert.Count(t, 2, faces)
 }

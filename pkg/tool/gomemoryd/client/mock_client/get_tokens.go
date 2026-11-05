@@ -6,11 +6,17 @@ import (
 )
 
 func (c *Client) GetTokens(
-	context.Context,
-	*client.GetTokensParams,
+	_ context.Context,
+	p *client.GetTokensParams,
 ) (*client.TokenSummary, error) {
+	c.TokenCalls = append(c.TokenCalls, p)
+
 	if c.Failure != nil {
 		return nil, c.Failure
+	}
+
+	if c.Tokens != nil {
+		return c.Tokens, nil
 	}
 
 	return &client.TokenSummary{}, nil

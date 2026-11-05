@@ -7,6 +7,10 @@ import (
 )
 
 func (c *Client) DeviceTypeByName(n string) (*device_type.Type, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, t := range c.types {
 		if t.Model == n {
 			return t, nil

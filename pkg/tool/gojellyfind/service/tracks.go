@@ -10,5 +10,10 @@ func (s *Service) Tracks(albumIdentifier string) ([]*item.Item, error) {
 		return nil, validation.New("album_id is required")
 	}
 
-	return s.source.Tracks(albumIdentifier)
+	return guarded(
+		s.guard,
+		func() ([]*item.Item, error) {
+			return s.client.Tracks(albumIdentifier)
+		},
+	)
 }

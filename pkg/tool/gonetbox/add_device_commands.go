@@ -2,11 +2,11 @@ package gonetbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/spf13/cobra"
 )
 
-func addDeviceCommands(t *terminal.Terminal, c *client.Client, o *cobra.Command) {
+func addDeviceCommands(t *terminal.Terminal, c face.Client, o *cobra.Command) {
 	o.AddCommand(listDevices(c, t))
 	o.AddCommand(getDevice(c, t))
 	o.AddCommand(getVirtualMachine(c, t))

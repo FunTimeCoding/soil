@@ -11,5 +11,9 @@ func (c *Client) UpdateVirtualInterface(
 	_ string,
 	_ net.HardwareAddr,
 ) (*netbox.VMInterface, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

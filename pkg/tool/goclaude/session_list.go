@@ -2,7 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
@@ -10,7 +9,6 @@ import (
 
 func sessionList(c *command_context.Context) *cobra.Command {
 	var peek bool
-	var detail bool
 	var unnamed bool
 	var limit int
 	var offset int
@@ -36,68 +34,9 @@ func sessionList(c *command_context.Context) *cobra.Command {
 				params.Offset = &offset
 			}
 
-			r, e := c.Client().GetSessions(context.Background(), params)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			for _, s := range r.Sessions {
-				ts := formatTimestamp(s.Timestamp)
-				alias := ""
-
-				if s.Alias != nil {
-					alias = *s.Alias
-				}
-
-				slug := ""
-
-				if s.Slug != nil {
-					slug = *s.Slug
-				}
-
-				poolName := ""
-
-				if s.Name != nil {
-					poolName = *s.Name
-				}
-
-				displayName := slug
-				marker := " "
-
-				if alias != "" {
-					displayName = alias
-					marker = "*"
-				}
-
-				shortIdentifier := s.Identifier
-
-				if len(shortIdentifier) > 8 {
-					shortIdentifier = shortIdentifier[:8]
-				}
-
-				console.Format(
-					"%s  %s  %-7s %5d  %s %s",
-					ts,
-					shortIdentifier,
-					poolName,
-					s.Lines,
-					marker,
-					displayName,
-				)
-
-				if peek && s.Preview != nil {
-					console.Format("  %s", *s.Preview)
-				}
-
-				if detail && s.Description != nil && *s.Description != "" {
-					console.Format("\n    %s", *s.Description)
-				}
-
-				console.Line()
-			}
+			c.Terminal().EmitValue(
+				c.Client().GetSessions(context.Background(), params),
+			)
 		},
 	}
 	result.Flags().BoolVar(
@@ -106,7 +45,6 @@ func sessionList(c *command_context.Context) *cobra.Command {
 		false,
 		"Show first user message preview",
 	)
-	result.Flags().BoolVar(&detail, "detail", false, "Show descriptions")
 	result.Flags().BoolVar(
 		&unnamed,
 		"unnamed",

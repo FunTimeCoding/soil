@@ -100,8 +100,7 @@ idle sweeper reaps a client that left without either. A client holding its
 event stream open is never reaped; the heartbeat keeps it fresh.
 
 Selection rides on the session of the legacy protocol versions, which soil's
-MCP setup pins. Protocol version 2026-07-28 drops protocol-level sessions, so
-moving to it needs another home for the choice.
+MCP setup pins.
 
 ### Server Instructions
 

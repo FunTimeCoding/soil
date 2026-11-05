@@ -2,9 +2,12 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
+	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
@@ -18,6 +21,8 @@ func resolveSession(
 	)
 
 	if not_found.Is(e) {
+		c.Terminal().Exitln(not_found.New(goclaudedConstant.SessionKind, query))
+
 		return ""
 	}
 
@@ -28,11 +33,13 @@ func resolveSession(
 	}
 
 	if len(matches) > 0 {
-		console.Format(
-			"ambiguous: %q matches %d sessions\n",
-			query,
-			len(matches),
-		)
+		lines := []string{
+			fmt.Sprintf(
+				"ambiguous: %q matches %d sessions",
+				query,
+				len(matches),
+			),
+		}
 
 		for _, m := range matches {
 			name := ""
@@ -41,20 +48,19 @@ func resolveSession(
 				name = *m.Name
 			}
 
-			alias := ""
+			display := "(discovered)"
 
-			if m.Alias != nil {
-				alias = *m.Alias
+			if m.Alias != nil && *m.Alias != "" {
+				display = *m.Alias
 			}
 
-			display := alias
-
-			if display == "" {
-				display = "(discovered)"
-			}
-
-			console.Format("  %s  %-7s  %s\n", m.Identifier[:8], name, display)
+			lines = append(
+				lines,
+				fmt.Sprintf("  %s  %-7s  %s", m.Identifier[:8], name, display),
+			)
 		}
+
+		c.Terminal().Exitln(validation.New("%s", join.NewLine(lines)))
 
 		return ""
 	}

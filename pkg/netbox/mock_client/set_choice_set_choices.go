@@ -6,6 +6,10 @@ func (c *Client) SetChoiceSetChoices(
 	name string,
 	choices []string,
 ) (*choice_set.Set, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	v, e := c.ChoiceSetByName(name)
 
 	if e != nil {

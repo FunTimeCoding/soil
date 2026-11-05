@@ -29,7 +29,11 @@ func (s *Service) Fill(r *fill.Fill) (*view.View, error) {
 
 	p := s.source.Page(t.Identifier)
 
-	if g := p.FillNode(node, r.Value, r.Direct); g != nil {
+	if g := s.attempt(
+		func() error {
+			return p.FillNode(node, r.Value, r.Direct)
+		},
+	); g != nil {
 		return nil, g
 	}
 

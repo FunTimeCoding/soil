@@ -1,9 +1,11 @@
 package daemon_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/iterm/face"
+	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/option"
 	"testing"
 )
@@ -14,9 +16,9 @@ func New(
 ) *daemon.Daemon {
 	t.Helper()
 	o := option.New()
-	o.Source = func() face.ItermSource { return c }
+	o.Source = func() face.ItermClient { return c }
 	o.KeyInterval = 0
-	result := daemon.New(o)
+	result := daemon.New(o, logger.New(t.Context()), memory.New())
 	t.Cleanup(result.Close)
 
 	return result

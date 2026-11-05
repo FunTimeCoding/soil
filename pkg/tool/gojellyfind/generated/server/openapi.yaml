@@ -24,6 +24,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/items:
     get:
       operationId: searchItems
@@ -63,6 +69,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/items/{identifier}:
     get:
       operationId: getItem
@@ -92,6 +104,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/items/{identifier}/episodes:
     get:
       operationId: getEpisodes
@@ -131,6 +149,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/items/{identifier}/tracks:
     get:
       operationId: getTracks
@@ -164,6 +188,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/sessions:
     get:
       operationId: listSessions
@@ -184,6 +214,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/sessions/{identifier}/play:
     post:
       operationId: play
@@ -221,6 +257,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/sessions/{identifier}/command:
     post:
       operationId: playbackCommand
@@ -258,6 +300,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/sessions/{identifier}/volume:
     post:
       operationId: setVolume
@@ -295,6 +343,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: Jellyfin is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Library:

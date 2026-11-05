@@ -2,6 +2,7 @@ package github
 
 import (
 	"github.com/funtimecoding/soil/pkg/github/issue"
+	"github.com/funtimecoding/soil/pkg/github/refusal"
 	"github.com/google/go-github/v93/github"
 )
 
@@ -12,7 +13,7 @@ func (c *Client) Issues() ([]*issue.Issue, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return issue.NewSlice(result), nil

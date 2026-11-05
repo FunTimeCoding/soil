@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/soil/pkg/provision/salt"
+	"github.com/funtimecoding/soil/pkg/provision/salt/face"
 	"time"
 )
 
@@ -15,5 +15,5 @@ type Salt struct {
 	PostgresLocator string
 	LitePath        string
 	KeySyncInterval time.Duration
-	Master          func() *salt.Client
+	Master          func() face.SaltClient
 }

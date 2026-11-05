@@ -1,7 +1,13 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/openbao/face"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
-func New(s face.SecretSource) *Service {
-	return &Service{source: s}
+func New(
+	c face.OpenbaoClient,
+	g *peer.Guard,
+) *Service {
+	return &Service{client: c, guard: g}
 }

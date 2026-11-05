@@ -1,10 +1,10 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+import "github.com/funtimecoding/soil/pkg/openbao/face"
 
 type Secret struct {
 	Address       string
 	MetricAddress string
 	ServiceTokens []string
-	Source        func() face.SecretSource
+	Source        func() face.OpenbaoClient
 }

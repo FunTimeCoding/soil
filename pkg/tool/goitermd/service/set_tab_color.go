@@ -6,5 +6,9 @@ func (s *Service) SetTabColor(
 	green int,
 	blue int,
 ) error {
-	return s.source.SetTabColor(sessionIdentifier, red, green, blue)
+	return s.attempt(
+		func() error {
+			return s.client.SetTabColor(sessionIdentifier, red, green, blue)
+		},
+	)
 }

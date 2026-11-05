@@ -6,5 +6,9 @@ func (c *Client) SetDeviceTenant(
 	name string,
 	tenantName string,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return c.changeDevice("SetDeviceTenant", name, tenantName)
 }

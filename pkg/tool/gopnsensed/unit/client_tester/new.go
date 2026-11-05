@@ -2,14 +2,14 @@ package client_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/opnsense/face"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	s face.OpnsenseSource,
+	s face.OpnsenseClient,
 ) *client.Client {
 	t.Helper()
 

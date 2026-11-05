@@ -3,6 +3,7 @@ package service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/provision/migrate"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/relational"
@@ -30,7 +31,10 @@ func New(
 	r := memory.New()
 	p := reaper.New(r, prometheus.NewRegistry())
 	t.Cleanup(p.Close)
-	u := runner.New(o, s, logger.New(t.Context()), r, p, c)
+	l := logger.New(t.Context())
+	g := peer.New(constant.SaltPeer, c.Address(), c, l, r)
+	t.Cleanup(g.Close)
+	u := runner.New(o, s, l, r, p, c, g)
 	t.Cleanup(
 		func() {
 			u.Close()
@@ -38,5 +42,5 @@ func New(
 		},
 	)
 
-	return service.New(s, u, c), u
+	return service.New(s, u, c, g), u
 }

@@ -6,5 +6,10 @@ func (s *Service) CreateChoiceSet(
 	name string,
 	choices []string,
 ) (*choice_set.Set, error) {
-	return s.client.CreateChoiceSet(name, choices)
+	return guarded(
+		s.guard,
+		func() (*choice_set.Set, error) {
+			return s.client.CreateChoiceSet(name, choices)
+		},
+	)
 }

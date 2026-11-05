@@ -9,6 +9,10 @@ func (c *Client) SetDeviceCustomFields(
 	name string,
 	fields map[string]any,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	d, e := c.DeviceByName(name)
 
 	if e != nil {

@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -13,8 +13,8 @@ func (s *Server) ListVirtualMachines(
 ) (server.ListVirtualMachinesResponseObject, error) {
 	machines, grouped, e := s.service.VirtualMachines()
 
-	if forbidden.Is(e) {
-		return server.ListVirtualMachines403JSONResponse(*clientError(e)), nil
+	if unavailable.Is(e) {
+		return server.ListVirtualMachines503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

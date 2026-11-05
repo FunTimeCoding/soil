@@ -1,33 +1,55 @@
 package goquery
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/goquery/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/section/comparison"
 )
 
 func compareWords(
+	t *terminal.Terminal,
 	before string,
 	after string,
 ) int {
 	c := comparison.Compare(before, after)
-	console.Format("\ncompared with snapshot\n")
+	t.Line()
+	t.Line("compared with snapshot")
+	cut := 0
 
 	for _, x := range c.Changes {
-		console.Format(
-			"  %s: removed %d, added %d\n",
-			label(x.Title),
-			x.RemovedCount,
-			x.AddedCount,
+		t.Line(
+			fmt.Sprintf(
+				"  %s: removed %d, added %d",
+				label(x.Title),
+				x.RemovedCount,
+				x.AddedCount,
+			),
 		)
-		printWords("removed", x.Removed)
-		printWords("added", x.Added)
+		removed := printWords(t, "removed", x.Removed)
+
+		if printWords(t, "added", x.Added) || removed {
+			cut++
+		}
 	}
 
-	console.Format(
-		"  overall: removed %d, added %d words\n",
-		c.Removed,
-		c.Added,
+	t.Line(
+		fmt.Sprintf(
+			"  overall: removed %d, added %d words",
+			c.Removed,
+			c.Added,
+		),
 	)
+
+	if cut > 0 {
+		t.Noticeln(
+			fmt.Sprintf(
+				"word lists cut at %d in %d sections",
+				constant.WordListLimit,
+				cut,
+			),
+		)
+	}
 
 	return c.Removed + c.Added
 }

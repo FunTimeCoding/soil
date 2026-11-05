@@ -885,6 +885,8 @@ type SearchItemsResponse struct {
 	JSON200 *SearchResult
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -895,6 +897,11 @@ func (r SearchItemsResponse) GetJSON200() *SearchResult {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r SearchItemsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SearchItemsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -935,6 +942,8 @@ type GetItemResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -950,6 +959,11 @@ func (r GetItemResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetItemResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetItemResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -992,6 +1006,8 @@ type GetEpisodesResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -1012,6 +1028,11 @@ func (r GetEpisodesResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetEpisodesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetEpisodesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1052,6 +1073,8 @@ type GetTracksResponse struct {
 	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -1067,6 +1090,11 @@ func (r GetTracksResponse) GetJSON400() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetTracksResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetTracksResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1105,6 +1133,8 @@ type ListLibrariesResponse struct {
 	JSON200 *[]*Library
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -1115,6 +1145,11 @@ func (r ListLibrariesResponse) GetJSON200() *[]*Library {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListLibrariesResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListLibrariesResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1153,6 +1188,8 @@ type ListSessionsResponse struct {
 	JSON200 *[]*Session
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -1163,6 +1200,11 @@ func (r ListSessionsResponse) GetJSON200() *[]*Session {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r ListSessionsResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListSessionsResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1203,6 +1245,8 @@ type PlaybackCommandResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
@@ -1218,6 +1262,11 @@ func (r PlaybackCommandResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r PlaybackCommandResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PlaybackCommandResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1258,6 +1307,8 @@ type PlayResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
@@ -1273,6 +1324,11 @@ func (r PlayResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r PlayResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PlayResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1313,6 +1369,8 @@ type SetVolumeResponse struct {
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
@@ -1328,6 +1386,11 @@ func (r SetVolumeResponse) GetJSON404() *Error {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r SetVolumeResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SetVolumeResponse) GetJSON503() *Error {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -1519,6 +1582,13 @@ func ParseSearchItemsResponse(rsp *http.Response) (*SearchItemsResponse, error) 
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1558,6 +1628,13 @@ func ParseGetItemResponse(rsp *http.Response) (*GetItemResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -1606,6 +1683,13 @@ func ParseGetEpisodesResponse(rsp *http.Response) (*GetEpisodesResponse, error) 
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1646,6 +1730,13 @@ func ParseGetTracksResponse(rsp *http.Response) (*GetTracksResponse, error) {
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1679,6 +1770,13 @@ func ParseListLibrariesResponse(rsp *http.Response) (*ListLibrariesResponse, err
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1711,6 +1809,13 @@ func ParseListSessionsResponse(rsp *http.Response) (*ListSessionsResponse, error
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -1755,6 +1860,13 @@ func ParsePlaybackCommandResponse(rsp *http.Response) (*PlaybackCommandResponse,
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1798,6 +1910,13 @@ func ParsePlayResponse(rsp *http.Response) (*PlayResponse, error) {
 		}
 		response.JSON500 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
 	}
 
 	return response, nil
@@ -1840,6 +1959,13 @@ func ParseSetVolumeResponse(rsp *http.Response) (*SetVolumeResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

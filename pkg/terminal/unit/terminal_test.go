@@ -7,6 +7,16 @@ import (
 	"testing"
 )
 
+func TestNoticelnWritesToFailureWithoutEndingTheCommand(t *testing.T) {
+	f := newFixture()
+	f.terminal.Line("alfa")
+	f.terminal.Noticeln("bravo", 2)
+	assert.String(t, "alfa\n", f.output.String())
+	assert.String(t, "bravo 2\n", f.failure.String())
+	assert.Count(t, 0, f.exits)
+	assert.Count(t, 0, f.ends.Outcomes)
+}
+
 func TestASuccessfulResponseIsPrintedWithoutExiting(t *testing.T) {
 	f := newFixture()
 	f.terminal.Emit(response.New("alfa", http.StatusOK))

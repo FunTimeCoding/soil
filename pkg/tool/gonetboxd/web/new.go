@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -11,7 +12,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(v *service.Service) *Server {
+func New(
+	v *service.Service,
+	t face.Reporter,
+) *Server {
 	r := registry.New()
 	r.Register(
 		palette.NewCommand(
@@ -23,6 +27,7 @@ func New(v *service.Service) *Server {
 
 	return &Server{
 		service:  v,
+		reporter: t,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).

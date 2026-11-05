@@ -1,11 +1,12 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/classify_refusal"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/requester"
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
+	"net/http"
 )
 
 func New(
@@ -17,7 +18,11 @@ func New(
 		requester: requester.New(base).
 			WithAuthorizer(basic.New(user, token)).
 			WithHeader(webConstant.Accept, webConstant.Object).
-			WithRefusal(classify_refusal.Refusal),
+			WithStatus(http.StatusForbidden, errorsConstant.ForbiddenClass).
+			WithStatus(
+				http.StatusUnprocessableEntity,
+				errorsConstant.ValidationClass,
+			),
 		base: base,
 	}
 }

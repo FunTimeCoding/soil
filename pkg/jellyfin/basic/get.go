@@ -11,7 +11,7 @@ func (c *Client) Get(
 	out any,
 ) error {
 	return c.requester.Notation(
-		request.Get(path).WithParameters(v).WithRefusal(c.refusal),
+		c.classified(request.Get(path).WithParameters(v)),
 		out,
 	)
 }

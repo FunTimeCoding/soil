@@ -7,6 +7,10 @@ import (
 )
 
 func (c *Client) DeviceRoleByName(n string) (*device_role.Role, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, r := range c.roles {
 		if r.Name == n {
 			return r, nil

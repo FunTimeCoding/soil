@@ -7,17 +7,22 @@ func (s *Service) CreateCluster(
 	clusterType string,
 	site string,
 ) (*cluster.Cluster, error) {
-	t, e := s.client.ClusterTypeByName(clusterType)
+	return guarded(
+		s.guard,
+		func() (*cluster.Cluster, error) {
+			t, e := s.client.ClusterTypeByName(clusterType)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	i, e := s.client.SiteByName(site)
+			i, e := s.client.SiteByName(site)
 
-	if e != nil {
-		return nil, e
-	}
+			if e != nil {
+				return nil, e
+			}
 
-	return s.client.CreateCluster(name, t, i)
+			return s.client.CreateCluster(name, t, i)
+		},
+	)
 }

@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/stream"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -83,7 +84,7 @@ func TestMarkupRefusalFallsBackToTheStatus(t *testing.T) {
 		"<html><body><h1>502 Bad Gateway</h1></body></html>",
 	)
 	e := newLokiClient(t, s.URL).Push(stream.New(map[string]string{}))
-	assert.True(t, unexpected.Is(e))
+	assert.True(t, unavailable.Is(e))
 	assert.StringNotContains(t, "<html>", e.Error())
 	assert.StringContains(t, "status: 502", e.Error())
 }

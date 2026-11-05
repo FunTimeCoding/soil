@@ -3,21 +3,19 @@ package goprocess
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goprocess/constant"
-	"github.com/spf13/cobra"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
-	o := &cobra.Command{
-		Use:           constant.Identity.Usage(),
-		Short:         constant.Identity.Description(),
-		SilenceErrors: true,
-	}
-	o.PersistentFlags().StringP("file", "f", "Procfile", "path to Procfile")
-	o.AddCommand(checkCommand())
-	o.AddCommand(runCommand())
+	o := New(
+		func(procfile string) face.Client { return client.NewLocal(procfile) },
+		terminal.New(s),
+	)
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	argument.CobraExecute(o)

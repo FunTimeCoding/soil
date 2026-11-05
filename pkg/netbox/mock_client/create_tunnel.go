@@ -10,5 +10,9 @@ func (c *Client) CreateTunnel(
 	_ string,
 	_ *tunnel_group.Group,
 ) (*tunnel.Tunnel, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

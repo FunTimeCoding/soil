@@ -1,10 +1,10 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/tool/gochromed/face"
+import "github.com/funtimecoding/soil/pkg/chromium/face"
 
 func (c *Client) SetPage(
 	identifier string,
-	p face.Page,
+	p face.ProtocolClient,
 ) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()

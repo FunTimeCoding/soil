@@ -1,7 +1,7 @@
 package browser
 
-import "github.com/funtimecoding/soil/pkg/chromium"
+import "github.com/funtimecoding/soil/pkg/chromium/face"
 
-func New(c *chromium.Client) *Browser {
-	return &Browser{Client: c}
+func New(c face.ChromiumClient) *Browser {
+	return &Browser{ChromiumClient: c}
 }

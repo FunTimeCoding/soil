@@ -6,6 +6,10 @@ func (c *Client) SetConfigurationContextPayload(
 	name string,
 	payload map[string]any,
 ) (*configuration_context.Context, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	v, e := c.ConfigurationContextByName(name)
 
 	if e != nil {

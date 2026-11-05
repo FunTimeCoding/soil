@@ -87,6 +87,12 @@ the conversion untouched. Output that must not depend on the reader's
 zone - an API field, a hash input - converts explicitly with
 `.UTC().Format(...)`, because reads arrive local.
 
+A date-only filter bound keeps its semantics as a time: `from` includes
+its day and `to` excludes it, which midnight reproduces. An aggregate over
+a time column has no declared type, so sqlite answers it as text that
+will not scan into `time.Time`; read the newest row's typed column
+instead.
+
 ## Postgres Query Mode
 
 Both postgres openers force pgx to `QueryExecModeExec`: every query
@@ -100,9 +106,9 @@ breaks every cached plan on that table with `cached plan must not
 change result type` (SQLSTATE 0A000) - and because gorm selects
 `*`, any column drop qualifies. The error fires once per cached
 statement per connection, then heals - which means an idle pooled
-connection can ambush a caller hours after the schema change. At
-fleet traffic the per-query parse cost of exec mode is
-unmeasurable; the ambush class is gone entirely.
+connection can ambush a caller hours after the schema change. Exec
+mode caches no plan to ambush anyone, and at fleet traffic its
+per-query parse cost is unmeasurable.
 
 Exec mode does not make live schema changes safe: a binary whose
 model still references a dropped column fails regardless of query
@@ -148,15 +154,17 @@ openers are silent - test noise is not essential logging.
 
 ## Store Shape
 
-Backend resolution happens at the edge; the store is backend-agnostic
-and takes the mapper it is given. Whoever opens the mapper - the daemon -
-closes it with `relational.CloseMapper`; each store borrows it and has no
-`Close`. A daemon whose tables must commit together in some places and
-never in others has one store per consistency boundary, and a transaction
-never spans two (`service-tool.md`, Stores). Migration lives beside them,
-in the daemon's `<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)`
-that the daemon calls before building its stores, so schema history -
-renames, drops, backfills - stays out of the store:
+Backend resolution happens at the edge; the store is backend-agnostic and takes
+the mapper it is given. Our stores open only through `pkg/relational`;
+`pkg/postgres` is the client for postgres instances a daemon inspects, never a
+second way to open a store. Whoever opens the mapper - the daemon - closes it
+with `relational.CloseMapper`; each store borrows it and has no `Close`. A
+daemon whose tables must commit together in some places and never in others has
+one store per consistency boundary, and a transaction never spans two
+(`service-tool.md`, Stores). Migration lives beside them, in the daemon's
+`<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)` that the daemon calls
+before building its stores, so schema history - renames, drops, backfills -
+stays out of the store:
 
 ```go
 func AutoMigrate(d *gorm.DB) {

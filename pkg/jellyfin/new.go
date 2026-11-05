@@ -10,7 +10,7 @@ func New(
 	port int,
 	token string,
 ) *Client {
-	return &Client{
-		basic: basic.New(locator.New(host).Port(port).Insecure(), token),
-	}
+	l := locator.New(host).Port(port).Insecure()
+
+	return &Client{basic: basic.New(l, token), address: l.Address()}
 }

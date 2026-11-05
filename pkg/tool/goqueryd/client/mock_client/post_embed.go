@@ -15,5 +15,9 @@ func (c *Client) PostEmbed(context.Context) (*client.EmbedResult, error) {
 
 	c.Embedded++
 
+	if c.EmbedResult != nil {
+		return c.EmbedResult, nil
+	}
+
 	return &client.EmbedResult{}, nil
 }

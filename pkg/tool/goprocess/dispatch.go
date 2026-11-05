@@ -3,36 +3,53 @@ package goprocess
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 )
 
 func Dispatch(
 	c face.Client,
+	t *terminal.Terminal,
 	command string,
 	arguments []string,
-) error {
+) {
 	x := context.Background()
 
 	switch command {
 	case "start":
-		return each(arguments, func(n string) error { return c.Start(x, n) })
+		t.EmitDone(
+			each(
+				arguments,
+				func(n string) error { return c.StartProcess(x, n) },
+			),
+		)
 	case "stop":
-		return each(arguments, func(n string) error { return c.Stop(x, n) })
+		t.EmitDone(
+			each(
+				arguments,
+				func(n string) error { return c.StopProcess(x, n) },
+			),
+		)
 	case "restart":
-		return each(arguments, func(n string) error { return c.Restart(x, n) })
+		t.EmitDone(
+			each(
+				arguments,
+				func(n string) error { return c.RestartProcess(x, n) },
+			),
+		)
 	case "restart-all":
-		return restartAll(x, c)
+		restartAll(x, c, t)
 	case "reload-procfile":
-		return c.ReloadProcfile(x)
+		t.EmitDone(c.ReloadProcfile(x))
 	case "reload-environment":
-		return c.ReloadEnvironment(x)
+		t.EmitDone(c.ReloadEnvironment(x))
 	case "log":
-		return log(x, c, arguments)
+		log(x, c, t, arguments)
 	case "list":
-		return list(x, c)
+		list(x, c, t)
 	case "status":
-		return status(x, c)
+		t.EmitValue(c.ListProcesses(x))
 	default:
-		return validation.New("unknown command %s", command)
+		t.EmitDone(validation.New("unknown command %s", command))
 	}
 }

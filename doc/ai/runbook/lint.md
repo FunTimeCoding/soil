@@ -100,6 +100,26 @@ goanalyze while a scoped golint reports nothing, so check with
 goanalyze between rounds. Findings in files you never opened, inside
 that subtree, are yours.
 
+### What the fixers and analyzers do to new code
+
+- gofix removes an import alias where nothing collides and renames
+  `err*` helpers; a file named after the old identifier then fails
+  goanalyze, so rename the file with it
+- golint sorts imports. A body left with an empty import block becomes
+  `import ()` or a file that no longer parses, and a half-merged `var`
+  block is left for gofix to settle - grep for `^import ()` after it
+  runs on generated files
+- goanalyze keeps `<path>/constant/` free of behaviour and each package
+  to one receiver type: a value check goes in the service over constant
+  slices. A test value equal to any constant's value collides under
+  `string_constant`, and goaudit allows `<path>/constant/` only directly
+  under `pkg/<domain>` or `pkg/tool/<name>`, so a test package's values
+  stay literals
+- Against another repository, golint, gofix and goanalyze take
+  `--root` and goaudit takes the root as an argument. `goaudit --daemon`
+  (or `daemon: true`) also arms `missing_daemon`, listing the daemons
+  not yet on `<path>/daemon/`
+
 ### Changing a check
 
 Fix every finding a changed or new analyzer

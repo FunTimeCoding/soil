@@ -7,6 +7,10 @@ import (
 )
 
 func (c *Client) ChoiceSetByName(n string) (*choice_set.Set, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	for _, v := range c.sets {
 		if v.Name == n {
 			return v, nil

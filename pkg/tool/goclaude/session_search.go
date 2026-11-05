@@ -2,9 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
-	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
 	"strings"
@@ -33,57 +31,9 @@ func sessionSearch(c *command_context.Context) *cobra.Command {
 				parameters.Limit = &limit
 			}
 
-			found, e := c.Client().GetSessionsSearch(
-				context.Background(),
-				parameters,
+			c.Terminal().EmitValue(
+				c.Client().GetSessionsSearch(context.Background(), parameters),
 			)
-
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			if found.Indexed < found.Total {
-				console.Format(
-					"indexing %d/%d conversations - results may be incomplete\n",
-					found.Indexed,
-					found.Total,
-				)
-			}
-
-			if len(found.Conversations) == 0 {
-				console.Format("no conversation holds every term\n")
-
-				return
-			}
-
-			for _, v := range found.Conversations {
-				name := v.Name
-
-				if name == "" {
-					name = goclaudedConstant.UnnamedSession
-				}
-
-				console.Format(
-					"%4d  %.8s  %s  %s\n",
-					v.Count,
-					v.Session,
-					name,
-					v.Latest,
-				)
-
-				for _, h := range v.Hits {
-					console.Format(
-						"      %s %-9s %-7s %s\n        %s\n",
-						h.At,
-						h.Role,
-						h.Kind,
-						h.Identifier,
-						h.Snippet,
-					)
-				}
-			}
 		},
 	}
 	result.Flags().StringSliceVar(

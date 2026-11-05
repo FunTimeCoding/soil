@@ -18,7 +18,12 @@ func (s *Service) Reveal(
 		return "", validation.New("key is required")
 	}
 
-	values, e := s.source.Read(path)
+	values, e := guarded(
+		s.guard,
+		func() (map[string]string, error) {
+			return s.client.Read(path)
+		},
+	)
 
 	if e != nil {
 		return "", e

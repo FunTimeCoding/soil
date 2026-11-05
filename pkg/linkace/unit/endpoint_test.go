@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
@@ -76,7 +75,7 @@ func TestRefusalCarriesLinkAceMessage(t *testing.T) {
 	assert.StringContains(t, "The url field is required.", e.Error())
 }
 
-func TestARefusedTokenIsForbidden(t *testing.T) {
+func TestARefusedTokenIsAFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -84,10 +83,10 @@ func TestARefusedTokenIsForbidden(t *testing.T) {
 	)
 	var out map[string]any
 	e := newClient(t, s.URL).Get("lists", nil, &out)
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, unexpected.Is(e))
 }
 
-func TestAForbiddenActionIsForbidden(t *testing.T) {
+func TestARefusedActionIsAFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusForbidden,
@@ -95,7 +94,7 @@ func TestAForbiddenActionIsForbidden(t *testing.T) {
 	)
 	var out map[string]any
 	e := newClient(t, s.URL).Get("lists", nil, &out)
-	assert.True(t, forbidden.Is(e))
+	assert.True(t, unexpected.Is(e))
 }
 
 func TestAConflictIsConflict(t *testing.T) {

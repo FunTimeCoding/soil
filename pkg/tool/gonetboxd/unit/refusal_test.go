@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusing_source"
@@ -18,10 +18,13 @@ func TestARejectedCreateIsBadRequestWithoutSentry(t *testing.T) {
 	assert.Integer(t, 0, events)
 }
 
-func TestARefusedTokenIsForbiddenWithoutSentry(t *testing.T) {
-	status, events := refusedCreate(t, forbidden.Format("no permission"))
-	assert.Integer(t, http.StatusForbidden, status)
-	assert.Integer(t, 0, events)
+func TestARefusedTokenIsCaptured(t *testing.T) {
+	status, events := refusedCreate(
+		t,
+		unexpected.Format("netbox status 403: no permission"),
+	)
+	assert.Integer(t, http.StatusInternalServerError, status)
+	assert.Integer(t, 1, events)
 }
 
 func TestAConflictWithoutAConflictAnswerIsCaptured(t *testing.T) {

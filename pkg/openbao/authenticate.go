@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/openbao/constant"
+	"github.com/funtimecoding/soil/pkg/openbao/refusal"
 	"github.com/openbao/openbao/api/auth/kubernetes/v2"
 	"time"
 )
@@ -32,7 +33,7 @@ func (c *Client) authenticate(x context.Context) error {
 	s, f := c.client.Auth().Login(x, a)
 
 	if f != nil {
-		return fmt.Errorf("log in: %w", f)
+		return fmt.Errorf("log in: %w", refusal.Classify(f))
 	}
 
 	lease := time.Duration(s.Auth.LeaseDuration) * time.Second

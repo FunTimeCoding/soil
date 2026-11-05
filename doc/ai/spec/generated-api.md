@@ -144,12 +144,13 @@ func (s *Server) GetIssue(
 
 ## The Daemon Client
 
-A daemon has one client, `client/`, and everything that talks to the
-daemon uses it: its own CLI, other daemons, and tests through
-`client/mock_client`. A second shape - a CLI on the generated client, a
-wrapper that relays raw bodies - is a second client in waiting. The
-external API client a daemon uses toward its upstream is a different
-thing, at `pkg/<domain>/` (`service-tool.md`).
+A daemon something reaches over REST has one client, `client/`, and everything
+that talks to the daemon uses it: its own CLI, other daemons, and tests through
+`client/mock_client`. A daemon nothing reaches over REST - MCP only, web only,
+consumed over OIDC - has none. A second shape - a CLI on the generated client, a
+wrapper that relays raw bodies - is a second client in waiting. The external API
+client a daemon uses toward its upstream is a different thing, at
+`pkg/<domain>/` (`service-tool.md`).
 
 `client.Client` is the struct, the package's one receiver: it wraps the
 generated client on a pool it owns, which `Close` closes. `New(locator,
@@ -200,6 +201,20 @@ it to every subcommand. A subcommand prints what an operation returned
 with `terminal.EmitValue(value, error)` - the value as compact JSON, or
 the classified error as its exit - and an operation answering 204 with
 `terminal.EmitDone(error)`.
+
+The line runs between results and documents. A result - a list, a state,
+counts, an entity - is JSON. Where a text view printed extras beside a
+list (a header, counts, totals, notes), the value is an object: the list
+and a summary carrying them. A condition with a name is a typed field, and
+a `warnings` list appears only where the answer is incomplete or stale,
+never instead of an error exit. A document - a transcript, a log, prose, a
+preview, a markup or file format meant for a reader or a redirect - prints
+as the document itself through `t.Line`, with its selection and
+truncation kept, since wrapping it in JSON helps no reader. A document
+that is incomplete, such as a running job's log, says so in one notice
+line on stderr, so a pipe receives only the document. Its failures still
+exit through the terminal. An entity that carries transcripts is a
+result, not a document.
 
 ## Mounting
 
@@ -336,6 +351,9 @@ marshaling (the type alias loses its custom MarshalJSON) - use a
 - Don't edit `generated.go` - regenerate from the spec instead
 - Don't call the generated client outside `client/` - the CLI and other
   daemons go through the daemon client
+- Don't decode a non-JSON answer through the typed response - oapi-codegen
+  decodes by content type, so a YAML body declared as a string fails to
+  unmarshal; that operation reads the raw body
 - Don't manually register routes that the spec already defines -
   let `HandlerFromMux` do it
 - Don't register routes in the run.go callback - everything the

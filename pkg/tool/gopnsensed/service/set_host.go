@@ -7,9 +7,13 @@ func (s *Service) SetHost(
 	h *request.Host,
 	apply bool,
 ) error {
-	if e := s.source.SetHost(identifier, h); e != nil {
-		return e
-	}
+	return s.attempt(
+		func() error {
+			if e := s.client.SetHost(identifier, h); e != nil {
+				return e
+			}
 
-	return s.reconfigureWhen(apply)
+			return s.reconfigureWhen(apply)
+		},
+	)
 }

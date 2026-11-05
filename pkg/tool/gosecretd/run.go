@@ -2,6 +2,7 @@ package gosecretd
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -25,6 +26,7 @@ func Run(
 	m := metric.New()
 	d := daemon.New(o, l, r, m.Registry())
 	defer d.Close()
+	errors.PanicOnError(d.Wait(context.Background()))
 	c := lifecycle.New(l)
 
 	for _, w := range d.Workers() {

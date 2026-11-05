@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/openbao/constant"
+	"github.com/funtimecoding/soil/pkg/openbao/refusal"
 	"github.com/openbao/openbao/api/v2"
 )
 
@@ -23,7 +24,7 @@ func (c *Client) Read(path string) (map[string]string, error) {
 	}
 
 	if e != nil {
-		return nil, fmt.Errorf("read secret: %w", e)
+		return nil, fmt.Errorf("read secret: %w", refusal.Classify(e))
 	}
 
 	result := map[string]string{}

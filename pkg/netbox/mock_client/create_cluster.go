@@ -11,5 +11,9 @@ func (c *Client) CreateCluster(
 	_ *cluster_type.Type,
 	_ *site.Site,
 ) (*cluster.Cluster, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return nil, nil
 }

@@ -18,7 +18,7 @@ func interfaces(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			t.EmitValue(c.Interfaces(context.Background()))
+			t.EmitValue(c.ListInterfaces(context.Background()))
 		},
 	}
 }

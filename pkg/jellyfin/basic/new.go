@@ -14,11 +14,13 @@ func New(
 	token string,
 ) *Client {
 	return &Client{
-		requester: requester.New(base).WithAuthorizer(
-			header.New(
-				webConstant.Authorization,
-				fmt.Sprintf(constant.TokenFormat, token),
-			),
-		),
+		requester: requester.New(base).
+			WithAuthorizer(
+				header.New(
+					webConstant.Authorization,
+					fmt.Sprintf(constant.TokenFormat, token),
+				),
+			).
+			WithSubject("jellyfin"),
 	}
 }

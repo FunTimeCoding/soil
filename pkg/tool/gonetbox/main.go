@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
-	"github.com/spf13/cobra"
 )
 
 func Main() {
@@ -15,15 +14,7 @@ func Main() {
 	t := terminal.New(s)
 	c := client.NewEnvironment()
 	defer c.Close()
-	o := &cobra.Command{
-		Use:   constant.Identity.Usage(),
-		Short: constant.Identity.Description(),
-	}
-	addDeviceCommands(t, c, o)
-	addCatalogCommands(t, c, o)
-	addBuildCommands(t, c, o)
-	addTagCommands(t, c, o)
-	addNetworkCommands(t, c, o)
+	o := New(c, t)
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	argument.CobraExecute(o)

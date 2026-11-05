@@ -2,47 +2,45 @@ package client_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/client"
-	generated "github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/server"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	v *service.Service,
+	v *service_tester.Tester,
 	token string,
 ) *client.Client {
 	t.Helper()
-	m := http.NewServeMux()
-	guard.New(m, []string{generativeConstant.ModelContextTestToken}).TokenMount(
-		webConstant.InterfacePath,
-		generated.HandlerFromMux(
-			generated.NewStrictHandler(
-				server.New(v, memory.New()),
-				[]generated.StrictMiddlewareFunc{
-					web.RecordingMiddleware[generated.StrictHandlerFunc](
-						mock_recorder.New(),
-					),
-				},
-			),
-			http.NewServeMux(),
-		),
+	r := memory.New()
+	d := daemon.New(
+		v.Option,
+		logger.New(t.Context()),
+		r,
+		prometheus.NewRegistry(),
 	)
-	s := httptest.NewServer(m)
+	t.Cleanup(d.Close)
+	s := model_context_server.New(
+		t,
+		func(_ *http.ServeMux, g *guard.Mux) {
+			d.Mount(r, mock_recorder.New(), g)
+		},
+	)
 	t.Cleanup(s.Close)
-	host, port := network.SplitHostPort(s.Listener.Addr().String())
-	result := client.New(locator.New(host).Port(port).Insecure(), token)
+	result := client.New(
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		token,
+	)
 	t.Cleanup(result.Close)
 
 	return result

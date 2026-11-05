@@ -15,9 +15,13 @@ func (s *Service) PlaybackCommand(
 		return validation.New("command is required")
 	}
 
-	return s.source.PlaybackCommand(
-		sessionIdentifier,
-		command,
-		seekPositionTicks,
+	return s.attempt(
+		func() error {
+			return s.client.PlaybackCommand(
+				sessionIdentifier,
+				command,
+				seekPositionTicks,
+			)
+		},
 	)
 }

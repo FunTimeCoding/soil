@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	secret "github.com/funtimecoding/soil/pkg/tool/gosecretd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/service"
 )
 
 type Server struct {
-	service  secret.Secrets
+	service  *service.Service
 	reporter face.Reporter
 }

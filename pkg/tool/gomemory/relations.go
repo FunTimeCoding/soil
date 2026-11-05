@@ -2,22 +2,13 @@ package gomemory
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gomemory/result"
 	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
-	"os"
-	"text/tabwriter"
 )
 
-func relations(
-	l *face.Client,
-	t *terminal.Terminal,
-) *cobra.Command {
+func relations(x *Context) *cobra.Command {
 	var relationType string
 	var untyped bool
 	var scope string
@@ -42,33 +33,15 @@ func relations(
 				params.Scope = &scope
 			}
 
-			rows, e := (*l).GetRelations(context.Background(), params)
+			rows, e := x.Client.GetRelations(context.Background(), params)
 
 			if e != nil {
-				t.Exitln(e)
+				x.Terminal.EmitDone(e)
 
 				return
 			}
 
-			w := tabwriter.NewWriter(os.Stdout, 0, 4, 2, ' ', 0)
-			_, e = fmt.Fprintln(w, "SOURCE\tSCOPE\tTYPE\tTARGET\tSCOPE")
-			errors.PanicOnError(e)
-
-			for _, row := range rows {
-				_, e = fmt.Fprintf(
-					w,
-					"%s\t%s\t%s\t%s\t%s\n",
-					row.SourceName,
-					scopeLabel(row.SourceScope),
-					typeLabel(row.Type),
-					row.TargetName,
-					scopeLabel(row.TargetScope),
-				)
-				errors.PanicOnError(e)
-			}
-
-			errors.PanicFlush(w)
-			console.Format("%d relations\n", len(rows))
+			x.Terminal.EmitValue(result.NewRelations(rows), nil)
 		},
 	}
 	c.Flags().StringVar(&relationType, "type", "", "filter by relation type")

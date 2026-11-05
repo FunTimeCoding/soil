@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
 )
 
@@ -14,6 +15,10 @@ func (s *Server) GetView(
 
 	if not_found.Is(e) {
 		return server.GetView404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if unavailable.Is(e) {
+		return server.GetView503JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {

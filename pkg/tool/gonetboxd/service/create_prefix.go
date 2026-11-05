@@ -10,16 +10,21 @@ func (s *Service) CreatePrefix(
 	siteName string,
 	description string,
 ) (*prefix.Prefix, error) {
-	var i *site.Site
+	return guarded(
+		s.guard,
+		func() (*prefix.Prefix, error) {
+			var i *site.Site
 
-	if siteName != "" {
-		var e error
-		i, e = s.client.SiteByName(siteName)
+			if siteName != "" {
+				var e error
+				i, e = s.client.SiteByName(siteName)
 
-		if e != nil {
-			return nil, e
-		}
-	}
+				if e != nil {
+					return nil, e
+				}
+			}
 
-	return s.client.CreatePrefix(cidr, i, description)
+			return s.client.CreatePrefix(cidr, i, description)
+		},
+	)
 }

@@ -2,7 +2,6 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -22,8 +21,6 @@ func sessionCruise(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
@@ -51,13 +48,7 @@ func sessionCruise(c *command_context.Context) *cobra.Command {
 				)
 			}
 
-			if e != nil {
-				c.Terminal().Exitln(e)
-
-				return
-			}
-
-			console.Line(CruiseSummary(r))
+			c.Terminal().EmitValue(r, e)
 		},
 	}
 	result.Flags().IntVar(

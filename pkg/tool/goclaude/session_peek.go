@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/spf13/cobra"
@@ -20,8 +20,6 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c, arguments[0])
 
 			if identifier == "" {
-				console.Format("session not found: %s\n", arguments[0])
-
 				return
 			}
 
@@ -33,15 +31,18 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 				return
 			}
 
+			t := c.Terminal()
 			lines := p.LineCount
 			total := len(p.Entries)
-			console.Format(
-				"%d lines, %d user messages\n",
-				lines,
-				p.UserMessageCount,
+			t.Line(
+				fmt.Sprintf(
+					"%d lines, %d user messages",
+					lines,
+					p.UserMessageCount,
+				),
 			)
-			printToolSummary(p.TotalToolCalls, p.ToolCounts)
-			console.Line()
+			printToolSummary(t, p.TotalToolCalls, p.ToolCounts)
+			t.Line()
 
 			if total == 0 {
 				return
@@ -59,6 +60,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 					}
 
 					printPeekEntry(
+						t,
 						entry.UserText,
 						entry.AssistantContext,
 						limit,
@@ -93,28 +95,34 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, entry := range p.Entries[:head] {
-				printPeekEntry(entry.UserText, entry.AssistantContext, midLimit)
+				printPeekEntry(
+					t,
+					entry.UserText,
+					entry.AssistantContext,
+					midLimit,
+				)
 			}
 
 			if samples > 0 && middle > 0 {
 				step := middle / samples
-				console.Format("--- (%d messages) ---\n", middle)
+				t.Line(fmt.Sprintf("--- (%d messages) ---", middle))
 
 				for i := 0; i < samples; i++ {
 					idx := head + i*step
 					entry := p.Entries[idx]
 					printPeekEntry(
+						t,
 						entry.UserText,
 						entry.AssistantContext,
 						midLimit,
 					)
 				}
 			} else if middle > 0 {
-				console.Format("--- (%d messages) ---\n", middle)
+				t.Line(fmt.Sprintf("--- (%d messages) ---", middle))
 			}
 
 			if tail > 0 {
-				console.Format("---\n")
+				t.Line("---")
 
 				for j, entry := range p.Entries[total-tail:] {
 					limit := midLimit
@@ -124,6 +132,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 					}
 
 					printPeekEntry(
+						t,
 						entry.UserText,
 						entry.AssistantContext,
 						limit,

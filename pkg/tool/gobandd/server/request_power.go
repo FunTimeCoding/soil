@@ -31,7 +31,7 @@ func (s *Server) RequestPower(
 		), nil
 	}
 
-	requested, f := s.service.Power(
+	change, f := s.service.Power(
 		instance,
 		string(r.Body.Operation),
 		r.Body.Force != nil && *r.Body.Force,
@@ -59,6 +59,7 @@ func (s *Server) RequestPower(
 
 	return server.RequestPower200JSONResponse{
 		Instance:  instance,
-		Requested: requested,
+		Power:     change.Power,
+		Requested: change.Requested,
 	}, nil
 }

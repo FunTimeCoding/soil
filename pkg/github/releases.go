@@ -1,6 +1,9 @@
 package github
 
-import "github.com/funtimecoding/soil/pkg/github/release"
+import (
+	"github.com/funtimecoding/soil/pkg/github/refusal"
+	"github.com/funtimecoding/soil/pkg/github/release"
+)
 
 func (c *Client) Releases(
 	namespace string,
@@ -14,7 +17,7 @@ func (c *Client) Releases(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, refusal.Classify(e)
 	}
 
 	return release.NewSlice(result), nil

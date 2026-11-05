@@ -6,5 +6,9 @@ func (c *Client) SetDeviceDescription(
 	name string,
 	description string,
 ) (*device.Device, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
 	return c.changeDevice("SetDeviceDescription", name, description)
 }
