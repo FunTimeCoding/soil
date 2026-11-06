@@ -225,6 +225,21 @@ func TestAnAlternativePostsTheSameFieldsElsewhereAfterThePrimary(t *testing.T) {
 	)
 }
 
+func TestAConfirmAsksBeforeThePrimaryAndSparesTheAlternatives(t *testing.T) {
+	assert.StringContains(
+		t,
+		`<div class="entry-buttons"><button type="submit" onclick="return confirm(&#34;Sure?&#34;)">Go</button><button type="submit" class="entry-alternative" formaction="/skip" formnovalidate>Skip</button></div>`,
+		renderedNode(
+			t,
+			entry.New("/alfa", "Go").
+				Confirm("Sure?").
+				Alternative("/skip", "Skip").
+				Swap("#charlie", constant.SwapOuter).
+				Node(),
+		),
+	)
+}
+
 func TestSuggestionsOfferAListBesideTheField(t *testing.T) {
 	assert.StringContains(
 		t,

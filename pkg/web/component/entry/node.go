@@ -1,6 +1,7 @@
 package entry
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
@@ -26,6 +27,13 @@ func (e *Entry) Node() gomponents.Node {
 	button := html.Button(
 		html.Type(constant.FormSubmit),
 		gomponents.If(e.buttonClass != "", html.Class(e.buttonClass)),
+		gomponents.If(
+			e.confirm != "",
+			gomponents.Attr(
+				"onclick",
+				fmt.Sprintf("return confirm(%q)", e.confirm),
+			),
+		),
 		gomponents.Text(e.submit),
 	)
 

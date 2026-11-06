@@ -15,6 +15,7 @@ type Entry struct {
 	previewTarget string
 	heading       string
 	alert         string
+	confirm       string
 	inline        bool
 	record        bool
 	reset         bool
