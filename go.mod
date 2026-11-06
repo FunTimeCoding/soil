@@ -82,7 +82,7 @@ require (
 	github.com/sirupsen/logrus v1.10.2
 	github.com/slok/go-http-metrics v0.13.0
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/pflag v1.0.10
+	github.com/spf13/pflag v1.1.0
 	github.com/studio-b12/gowebdav v0.13.0
 	github.com/tmc/langchaingo v0.1.15
 	github.com/tobischo/gokeepasslib/v3 v3.7.1
