@@ -26,7 +26,7 @@ func (s *Store) Subscribe(
 		return &existing, nil
 	}
 
-	result := subscription.New()
+	result := subscription.Stub()
 	result.Name = name
 	result.Kinds = join.Comma(kinds)
 	result.CreatedAt = now

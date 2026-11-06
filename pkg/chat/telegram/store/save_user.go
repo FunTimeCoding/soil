@@ -6,7 +6,7 @@ func (s *Store) SaveUser(
 	identifier int64,
 	name string,
 ) error {
-	u := user.New()
+	u := user.Stub()
 	u.Name = name
 	u.Identifier = identifier
 

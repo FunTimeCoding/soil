@@ -1,5 +1,5 @@
 package usage_event
 
-func New() *Event {
+func Stub() *Event {
 	return &Event{}
 }

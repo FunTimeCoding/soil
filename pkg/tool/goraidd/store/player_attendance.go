@@ -12,13 +12,13 @@ import (
 func (s *Store) PlayerAttendance(since time.Time) []record.Attendance {
 	var available int64
 	errors.PanicOnError(
-		s.mapper.Model(raid.New()).
+		s.mapper.Model(raid.Stub()).
 			Where("date >= ?", since).
 			Count(&available).Error,
 	)
 	var rows []record.Attendance
 	errors.PanicOnError(
-		s.mapper.Model(player_fight_statistic.New()).
+		s.mapper.Model(player_fight_statistic.Stub()).
 			Select(
 				constant.AccountColumn,
 				"string_agg(DISTINCT name, ', ' ORDER BY name) as characters",

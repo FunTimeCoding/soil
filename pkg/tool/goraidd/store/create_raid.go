@@ -16,7 +16,7 @@ func (s *Store) CreateRaid(filenames []string) uint {
 			Order("timestamp ASC").
 			First(&firstFight).Error,
 	)
-	r := raid.New()
+	r := raid.Stub()
 	r.Name = fmt.Sprintf(
 		"Raid %s",
 		firstFight.Timestamp.Format(timeConstant.DateYear),
@@ -24,7 +24,7 @@ func (s *Store) CreateRaid(filenames []string) uint {
 	r.Date = firstFight.Timestamp
 	errors.PanicOnError(s.mapper.Create(r).Error)
 	errors.PanicOnError(
-		s.mapper.Model(fight.New()).
+		s.mapper.Model(fight.Stub()).
 			Where("filename IN ?", filenames).
 			Update("raid_id", r.Identifier).Error,
 	)

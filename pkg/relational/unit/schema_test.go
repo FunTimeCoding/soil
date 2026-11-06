@@ -61,6 +61,50 @@ func TestARenamedTableKeepsItsRows(t *testing.T) {
 	assert.False(t, d.Migrator().HasTable(constant.FixtureOldTable))
 }
 
+func TestARenamedIndexFollowsItsTable(t *testing.T) {
+	d := lite.NewMemory()
+	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
+	errors.PanicOnError(d.Exec(constant.FixtureCreateIndex).Error)
+	errors.PanicOnError(d.Exec(constant.FixtureNoteRow).Error)
+	schema.RenameTable(d, constant.FixtureOldTable, constant.FixtureNewTable)
+	renames := map[string]string{
+		constant.FixtureOldIndex: constant.FixtureNewIndex,
+	}
+	schema.RenameIndexes(d, constant.FixtureNewTable, renames)
+	schema.RenameIndexes(d, constant.FixtureNewTable, renames)
+	m := d.Migrator()
+	assert.True(
+		t,
+		m.HasIndex(constant.FixtureNewTable, constant.FixtureNewIndex),
+	)
+	assert.False(
+		t,
+		m.HasIndex(constant.FixtureNewTable, constant.FixtureOldIndex),
+	)
+	var body string
+	errors.PanicOnError(d.Raw(constant.FixtureMovedBody).Scan(&body).Error)
+	assert.String(t, "kept", body)
+}
+
+func TestAnIndexRenameOntoAnExistingIndexFails(t *testing.T) {
+	d := lite.NewMemory()
+	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
+	errors.PanicOnError(d.Exec(constant.FixtureCreateIndex).Error)
+	errors.PanicOnError(d.Exec(constant.FixtureCreateNewIndex).Error)
+	assert.Panic(
+		t,
+		func() {
+			schema.RenameIndexes(
+				d,
+				constant.FixtureOldTable,
+				map[string]string{
+					constant.FixtureOldIndex: constant.FixtureNewIndex,
+				},
+			)
+		},
+	)
+}
+
 func TestADroppedColumnAndTableAreGone(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)

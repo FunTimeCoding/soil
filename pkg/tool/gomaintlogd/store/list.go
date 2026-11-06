@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Store) List(f *filter.Filter) ([]entry.Entry, error) {
-	q := s.database.Model(entry.New())
+	q := s.database.Model(entry.Stub())
 
 	if f != nil {
 		if f.System != "" {

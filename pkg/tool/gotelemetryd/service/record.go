@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Service) Record(e *record.Record) {
-	u := usage_event.New()
+	u := usage_event.Stub()
 	u.Tool = e.Tool
 	u.Surface = e.Surface
 	u.Actor = e.Actor

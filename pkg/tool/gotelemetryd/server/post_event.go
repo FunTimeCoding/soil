@@ -11,7 +11,7 @@ func (s *Server) PostEvent(
 	x context.Context,
 	r server.PostEventRequestObject,
 ) (server.PostEventResponseObject, error) {
-	e := usage_event.New()
+	e := usage_event.Stub()
 	e.Tool = r.Body.Tool
 	e.Surface = r.Body.Surface
 	e.Actor = r.Body.Actor

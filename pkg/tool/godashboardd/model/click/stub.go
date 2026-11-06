@@ -1,5 +1,5 @@
 package click
 
-func New() *Click {
+func Stub() *Click {
 	return &Click{}
 }

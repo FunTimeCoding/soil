@@ -191,7 +191,10 @@ when the column itself has to change, rename it in the same change as the
 tag.
 
 Schema changes go through `go:pkg/relational/schema`: `RenameColumns`,
-`RenameTable`, `DropColumns` and `DropTable`. Each acts only while there
+`RenameTable`, `RenameIndexes`, `DropColumns` and `DropTable`. A table rename
+leaves gorm's `idx_<table>_<column>` indexes under the old table's name, and
+AutoMigrate then builds the new names beside them, so the indexes are renamed
+in the same step. Each acts only while there
 is something to act on, so it runs on every start and passes over a store
 that is already migrated, and each fails loudly - a rename onto a name that
 already exists panics rather than leaving the data behind. A rename runs

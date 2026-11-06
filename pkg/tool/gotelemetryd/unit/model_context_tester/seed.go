@@ -11,7 +11,7 @@ func (o *Tester) Seed(
 	surface string,
 	actor string,
 ) {
-	e := usage_event.New()
+	e := usage_event.Stub()
 	e.Tool = tool
 	e.Surface = surface
 	e.Actor = actor

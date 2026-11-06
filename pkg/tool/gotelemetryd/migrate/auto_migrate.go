@@ -7,5 +7,5 @@ import (
 )
 
 func AutoMigrate(d *gorm.DB) {
-	errors.PanicOnError(d.AutoMigrate(usage_event.New()))
+	errors.PanicOnError(d.AutoMigrate(usage_event.Stub()))
 }

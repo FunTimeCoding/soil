@@ -6,7 +6,7 @@ func (s *Store) SaveChannel(
 	identifier int64,
 	name string,
 ) error {
-	h := channel.New()
+	h := channel.Stub()
 	h.Name = name
 	h.Identifier = identifier
 

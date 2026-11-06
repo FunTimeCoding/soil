@@ -11,7 +11,7 @@ func (s *Server) PostEntry(
 	x context.Context,
 	r server.PostEntryRequestObject,
 ) (server.PostEntryResponseObject, error) {
-	e := entry.New()
+	e := entry.Stub()
 	e.Action = r.Body.Action
 	e.User = r.Body.User
 

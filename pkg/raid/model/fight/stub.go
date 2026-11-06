@@ -1,5 +1,5 @@
 package fight
 
-func New() *Fight {
+func Stub() *Fight {
 	return &Fight{}
 }

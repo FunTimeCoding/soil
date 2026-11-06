@@ -11,7 +11,7 @@ func (s *Store) Summaries() ([]summary.Summary, error) {
 	var groups []label_group.Group
 
 	if e := s.mapper.
-		Model(click.New()).
+		Model(click.Stub()).
 		Select("label, count(*) as count, max(id) as newest").
 		Group(constant.LabelColumn).
 		Order("count DESC").
@@ -21,7 +21,7 @@ func (s *Store) Summaries() ([]summary.Summary, error) {
 	var result []summary.Summary
 
 	for _, g := range groups {
-		c := click.New()
+		c := click.Stub()
 
 		if e := s.mapper.First(c, g.Newest).Error; e != nil {
 			return nil, e

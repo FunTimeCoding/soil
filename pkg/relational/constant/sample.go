@@ -11,6 +11,10 @@ const (
 	FixtureNoteRow        = "INSERT INTO old_notes (identifier, body, draft) VALUES (1, 'kept', 'gone')"
 	FixtureRenamedContent = "SELECT content FROM old_notes WHERE identifier = 1"
 	FixtureMovedBody      = "SELECT body FROM notes WHERE identifier = 1"
+	FixtureOldIndex       = "idx_old_notes_body"
+	FixtureNewIndex       = "idx_notes_body"
+	FixtureCreateIndex    = "CREATE INDEX idx_old_notes_body ON old_notes (body)"
+	FixtureCreateNewIndex = "CREATE INDEX idx_notes_body ON old_notes (draft)"
 )
 
 const (

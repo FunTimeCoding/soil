@@ -1,5 +1,5 @@
 package player_fight_statistic
 
-func New() *Statistic {
+func Stub() *Statistic {
 	return &Statistic{}
 }

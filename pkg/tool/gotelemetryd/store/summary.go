@@ -24,7 +24,7 @@ func (s *Store) Summary(o *summary_option.Option) ([]summary_row.Row, error) {
 		groupClause = "tool, outcome"
 	}
 
-	query := s.mapper.Model(usage_event.New()).
+	query := s.mapper.Model(usage_event.Stub()).
 		Select(selectClause).
 		Group(groupClause).
 		Order("count DESC")

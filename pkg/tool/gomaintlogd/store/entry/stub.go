@@ -1,5 +1,5 @@
 package entry
 
-func New() *Entry {
+func Stub() *Entry {
 	return &Entry{}
 }

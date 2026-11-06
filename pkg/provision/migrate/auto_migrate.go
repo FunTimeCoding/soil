@@ -10,5 +10,5 @@ func AutoMigrate(
 	d *gorm.DB,
 	tableName string,
 ) {
-	errors.PanicOnError(d.Table(tableName).AutoMigrate(run.New()))
+	errors.PanicOnError(d.Table(tableName).AutoMigrate(run.Stub()))
 }

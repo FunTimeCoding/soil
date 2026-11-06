@@ -8,7 +8,7 @@ func (s *Store) SetLabel(
 	key string,
 	value string,
 ) (*label.Label, error) {
-	result := label.New()
+	result := label.Stub()
 	e := s.database.
 		Where(
 			"object_type = ? AND object_identifier = ? AND key = ?",

@@ -15,6 +15,6 @@ func (s *Store) Cleanup() {
 				"created_at < ?",
 				time.Now().Add(-constant.StoreRetentionAge),
 			).
-			Delete(run.New()).Error,
+			Delete(run.Stub()).Error,
 	)
 }

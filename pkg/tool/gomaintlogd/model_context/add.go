@@ -26,7 +26,7 @@ func (s *Server) add(
 		return response.Fail("user is required: %v", g)
 	}
 
-	e := entry.New()
+	e := entry.Stub()
 	e.Action = action
 	e.User = user
 

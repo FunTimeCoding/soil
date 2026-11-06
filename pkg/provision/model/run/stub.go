@@ -1,5 +1,5 @@
 package run
 
-func New() *Run {
+func Stub() *Run {
 	return &Run{}
 }

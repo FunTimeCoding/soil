@@ -103,6 +103,11 @@ const (
 )
 
 const (
+	StubConstructor = "Stub"
+	GormTag         = `gorm:"`
+)
+
+const (
 	MaxLineLength = 80
 	TabWidth      = 4
 )

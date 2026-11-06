@@ -67,11 +67,11 @@ func (s *Store) EnrichFight(
 	}
 
 	s.mapper.Where("filename = ?", fightRow.Filename).
-		Delete(player_fight_statistic.New())
+		Delete(player_fight_statistic.Stub())
 	stats := elite_parser.Extract(f)
 
 	for _, stat := range stats {
-		row := player_fight_statistic.New()
+		row := player_fight_statistic.Stub()
 		row.Filename = fightRow.Filename
 		row.Account = stat.Identity.Account
 		row.Name = stat.Identity.Name

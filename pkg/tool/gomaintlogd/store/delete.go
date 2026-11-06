@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Store) Delete(identifier uint) error {
-	result := s.database.Delete(entry.New(), identifier)
+	result := s.database.Delete(entry.Stub(), identifier)
 
 	if result.Error != nil {
 		return fmt.Errorf("delete entry: %w", result.Error)

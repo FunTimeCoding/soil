@@ -12,7 +12,7 @@ func (o *Tester) SeedOutcome(
 	outcome string,
 	detail string,
 ) {
-	e := usage_event.New()
+	e := usage_event.Stub()
 	e.Tool = tool
 	e.Surface = constant.SurfaceCommandLine
 	e.Actor = actor

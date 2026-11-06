@@ -8,7 +8,7 @@ import (
 func (s *Store) Count() (int, error) {
 	var result int64
 
-	if e := s.database.Model(entry.New()).Count(&result).Error; e != nil {
+	if e := s.database.Model(entry.Stub()).Count(&result).Error; e != nil {
 		return 0, fmt.Errorf("count entries: %w", e)
 	}
 

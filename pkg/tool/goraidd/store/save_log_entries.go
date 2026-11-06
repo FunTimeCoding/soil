@@ -9,7 +9,7 @@ func (s *Store) SaveLogEntries(logs []*log.Log) int {
 	result := 0
 
 	for _, l := range logs {
-		f := fight.New()
+		f := fight.Stub()
 		f.Filename = l.Raw.FileName
 		f.Timestamp = l.Time
 		f.MapIdentifier = l.Raw.MapIdentifier

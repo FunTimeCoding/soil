@@ -11,7 +11,7 @@ func modeLoad(
 	c *tool_call.Call,
 	tag string,
 ) *context_load.Load {
-	result := context_load.New()
+	result := context_load.Stub()
 	result.SessionIdentifier = sessionIdentifier
 	result.CallIdentifier = c.Identifier
 	result.Reference = tag

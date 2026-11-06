@@ -17,7 +17,7 @@ func (s *Server) addSubmit(
 	r *http.Request,
 ) {
 	errors.PanicOnError(r.ParseForm())
-	e := entry.New()
+	e := entry.Stub()
 	e.Action = r.FormValue(constant.Action)
 	e.User = r.FormValue(constant.User)
 	e.System = r.FormValue(constant.System)

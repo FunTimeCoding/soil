@@ -28,7 +28,7 @@ func seedDuplicateSummaries(t *testing.T) string {
 			d.Exec(
 				"INSERT INTO summary (session_identifier, name, body) VALUES (?, ?, ?)",
 				"session-1",
-				"Esme",
+				"Cedar",
 				body,
 			).Error,
 		)

@@ -9,9 +9,9 @@ import (
 )
 
 func New(m *gorm.DB) *Store {
-	errors.PanicOnError(m.AutoMigrate(raid.New()))
-	errors.PanicOnError(m.AutoMigrate(fight.New()))
-	errors.PanicOnError(m.AutoMigrate(player_fight_statistic.New()))
+	errors.PanicOnError(m.AutoMigrate(raid.Stub()))
+	errors.PanicOnError(m.AutoMigrate(fight.Stub()))
+	errors.PanicOnError(m.AutoMigrate(player_fight_statistic.Stub()))
 
 	return &Store{mapper: m}
 }

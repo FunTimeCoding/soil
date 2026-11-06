@@ -1,5 +1,5 @@
 package raid
 
-func New() *Raid {
+func Stub() *Raid {
 	return &Raid{}
 }

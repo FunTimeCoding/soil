@@ -76,7 +76,7 @@ func TestEmptyRefusalNamesPulses(t *testing.T) {
 func TestEmptyRefusalNamesContextLoads(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("held")
-	load := context_load.New()
+	load := context_load.Stub()
 	load.SessionIdentifier = "held"
 	load.CallIdentifier = "call-1"
 	load.Reference = "memory-1"
