@@ -20,7 +20,7 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.10.4
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/chromedp/cdproto v0.159.2
-	github.com/chromedp/chromedp v0.22.1
+	github.com/chromedp/chromedp v0.23.0
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
 	github.com/coreos/go-semver v0.3.1
@@ -64,7 +64,7 @@ require (
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nwaples/rardecode/v2 v2.4.6
 	github.com/oapi-codegen/runtime v1.8.0
-	github.com/ollama/ollama v0.40.14
+	github.com/ollama/ollama v0.40.15
 	github.com/openai/openai-go/v3 v3.96.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
@@ -82,14 +82,14 @@ require (
 	github.com/sirupsen/logrus v1.10.2
 	github.com/slok/go-http-metrics v0.13.0
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/pflag v1.0.10
+	github.com/spf13/pflag v1.1.0
 	github.com/studio-b12/gowebdav v0.13.0
 	github.com/tmc/langchaingo v0.1.15
 	github.com/tobischo/gokeepasslib/v3 v3.7.1
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.15
-	gitlab.com/gitlab-org/api/client-go/v3 v3.43.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.44.0
 	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/crypto v0.58.0
