@@ -10,9 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -25,25 +23,16 @@ func Run(
 	d := daemon.New(o, l, r, m.Registry())
 	defer d.Close()
 	c := lifecycle.New(l)
-
-	for _, w := range d.Workers() {
-		c.WithWorker(w)
-	}
-
+	c.WithWorkers(d.Workers()...)
 	c.WithServer(
-		server.New(
-			constant.Identity,
-			o.MetricAddress,
-			func(x *http.ServeMux) {
-				x.Handle(webConstant.MetricsPath, m.Exporter())
-			},
-		),
+		server.New(constant.Identity, &o.Metric, r, m.Mount),
 	).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(x *http.ServeMux) {
-				d.Mount(r, s.Recorder(), guard.New(x, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, s.Recorder(), g)
 			},
 		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()

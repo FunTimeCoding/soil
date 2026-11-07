@@ -10,9 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -25,25 +23,16 @@ func Run(
 	d := daemon.New(o, l, r, e.Registry())
 	defer d.Close()
 	c := lifecycle.New(l)
-
-	for _, w := range d.Workers() {
-		c.WithWorker(w)
-	}
-
+	c.WithWorkers(d.Workers()...)
 	c.WithServer(
-		server.New(
-			constant.Identity,
-			o.MetricAddress,
-			func(x *http.ServeMux) {
-				x.Handle(webConstant.MetricsPath, e.Exporter())
-			},
-		),
+		server.New(constant.Identity, &o.Metric, r, e.Mount),
 	).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, i.Recorder(), g)
 			},
 		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()

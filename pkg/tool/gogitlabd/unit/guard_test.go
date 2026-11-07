@@ -13,6 +13,7 @@ func TestGuard(t *testing.T) {
 	v := startServer(t, d, r)
 	defer v.Close()
 	v.VerifyBase(t)
+	v.VerifyFavicon(t)
 	v.VerifyOpen(t, constant.BoardPath)
 	v.VerifyOpen(t, "/event")
 	v.VerifyModelContext(t)

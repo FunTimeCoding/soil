@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -24,9 +23,10 @@ func Run(
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, g)
 			},
 		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()

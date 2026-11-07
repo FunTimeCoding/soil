@@ -273,8 +273,10 @@ conflict on the same mux.
 
 ### The mux in run.go
 
-run.go builds one `guard.Mux` per lifecycle server from the service
-tokens `Main` read with `web.ServiceTokens()`, and hands it to `d.Mount`
+run.go builds its server with `server.New(constant.Identity, &o.Web, r, ...)`,
+which makes one `guard.Mux` from the service tokens `Main` read through
+`o.Read(a)`, with sign-on when the option carries it, and hands it to
+`d.Mount`
 (`service-tool.md`, Run Function). `Mount` is the production surface
 the guard battery starts (`testing.md`); a route registered in the
 run.go callback escapes both the guard and the battery.

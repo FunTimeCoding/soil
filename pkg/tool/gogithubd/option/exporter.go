@@ -1,10 +1,13 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/github/face"
+import (
+	"github.com/funtimecoding/soil/pkg/github/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Exporter struct {
-	MetricAddress string
-	Owner         string
-	Verbose       bool
-	Source        func() face.GitHubClient
+	Metric  option.Web
+	Owner   string
+	Verbose bool
+	Source  func() face.GitHubClient
 }

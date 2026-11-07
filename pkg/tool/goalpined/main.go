@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -16,8 +15,7 @@ func Main() {
 	a.Web()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.SignatureKey = environment.Required(constant.SignatureKeyEnvironment)
 	Run(o, i)
 }

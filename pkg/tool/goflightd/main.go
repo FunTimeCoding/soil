@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -22,10 +21,9 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Predicate = a.GetString(constant.PredicateFlag)
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	Run(o, s)
 }

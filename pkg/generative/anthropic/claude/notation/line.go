@@ -3,14 +3,15 @@ package notation
 import "encoding/json"
 
 type Line struct {
-	Identifier    string          `json:"uuid"`
-	Type          string          `json:"type"`
-	Slug          string          `json:"slug"`
-	Timestamp     string          `json:"timestamp"`
-	Session       string          `json:"sessionId"`
-	Request       string          `json:"requestId"`
-	WorkDirectory string          `json:"cwd"`
-	Branch        string          `json:"gitBranch"`
-	Meta          bool            `json:"isMeta"`
-	Message       json.RawMessage `json:"message"`
+	Identifier    string              `json:"uuid"`
+	Type          string              `json:"type"`
+	Slug          string              `json:"slug"`
+	Timestamp     string              `json:"timestamp"`
+	Session       string              `json:"sessionId"`
+	Request       string              `json:"requestId"`
+	WorkDirectory string              `json:"cwd"`
+	Branch        string              `json:"gitBranch"`
+	Meta          bool                `json:"isMeta"`
+	Message       json.RawMessage     `json:"message"`
+	Permission    *PermissionDecision `json:"permissionDecision"`
 }

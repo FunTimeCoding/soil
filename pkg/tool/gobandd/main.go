@@ -12,7 +12,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -27,8 +26,7 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.Inventory = inventory.Load[instance.Instance](
 		a.GetString(argumentConstant.Inventory),
 	)

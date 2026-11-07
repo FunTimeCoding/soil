@@ -2,12 +2,12 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"io"
 )
 
 type Agent struct {
-	Address       string
-	ServiceTokens []string
-	Workspace     string
-	Stream        func(string, io.Writer, ...string) face.Stream
+	option.Web
+	Workspace string
+	Stream    func(string, io.Writer, ...string) face.Stream
 }

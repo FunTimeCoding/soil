@@ -2,14 +2,11 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -17,32 +14,13 @@ func New(
 	v *service.Service,
 	n face.EventNotifier,
 ) *Server {
-	r := registry.New()
-	r.Register(
-		palette.NewCommand(
-			constant.DashboardTitle,
-			constant.DashboardPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.RecentTitle,
-			constant.RecentPath,
-			webConstant.PaletteNavigate,
-		),
-	)
-
 	return &Server{
 		service:  v,
 		notifier: n,
-		registry: r,
 		view: view.New(
-			layout.New(constant.Identity).
-				WithTheme(webConstant.ThemeSentinel).
-				WithStyle(
-					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
-				).
+			layout.New(constant.Identity, webConstant.ThemeSentinel, favicon).
+				WithStyle(constant.InlineStyle).
 				WithLiveEndpoint(webConstant.LivePath).
-				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

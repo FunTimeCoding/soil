@@ -1,11 +1,13 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Ansible struct {
-	Address         string
-	MetricAddress   string
-	ServiceTokens   []string
+	option.Web
+	Metric          option.Web
 	Repository      string
 	ClonePath       string
 	AnsiblePath     string

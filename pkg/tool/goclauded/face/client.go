@@ -27,6 +27,7 @@ type Client interface {
 	GetSessionDetail(x context.Context, identifier string) (*client.SessionDetailResponse, error)
 	GetSessionLabel(x context.Context, identifier string) (*client.SessionLabelResponse, error)
 	GetSessionMessages(x context.Context, identifier string) (*client.MessagesResponse, error)
+	GetPermissions(x context.Context, params *client.GetPermissionsParams) (*client.PermissionReport, error)
 	GetSessionPeek(x context.Context, identifier string) (*client.PeekResponse, error)
 	GetSessionToolContext(x context.Context, identifier string, params *client.GetSessionToolContextParams) (*client.ToolContextResponse, error)
 	GetSessionTools(x context.Context, identifier string) (*client.ToolsResponse, error)

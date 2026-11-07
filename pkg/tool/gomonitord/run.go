@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -25,9 +24,10 @@ func Run(
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, i.Recorder(), g)
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

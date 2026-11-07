@@ -7,13 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"time"
 )
 
 type Option struct {
-	Address             string
-	MetricAddress       string
-	ServiceTokens       []string
+	option.Web
+	Metric              option.Web
 	LitePath            string
 	SessionExportPath   string
 	Harbor              string

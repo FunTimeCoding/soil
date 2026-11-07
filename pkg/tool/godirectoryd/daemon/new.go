@@ -17,13 +17,7 @@ func New(
 ) *Daemon {
 	d := o.Source()
 	g := peer.New(constant.DirectoryPeer, o.Host, d, l, r)
-	a := authorizationClient(o).WithReporter(r)
 	s := service.New(d, g)
 
-	return &Daemon{
-		guard:         g,
-		authorization: a,
-		service:       s,
-		web:           web.New(s, a),
-	}
+	return &Daemon{guard: g, service: s, web: web.New(s)}
 }

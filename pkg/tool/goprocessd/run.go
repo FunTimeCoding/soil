@@ -12,7 +12,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -24,24 +23,22 @@ func Run(
 	d := daemon.New(o)
 	defer d.Close()
 	l := lifecycle.New(logger.New(context.Background()))
-
-	for _, w := range d.Workers() {
-		l.WithWorker(w)
-	}
-
+	l.WithWorkers(d.Workers()...)
 	l.WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, t, guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, t, g)
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).WithServer(
 		server.New(
 			constant.Identity,
-			"",
-			func(m *http.ServeMux) { d.MountLocal(r, t, m) },
+			&o.Local,
+			r,
+			func(g *guard.Mux) { d.MountLocal(r, t, g) },
 		).WithListener(socket.Listen(socket.Path(o.ProcfilePath))).
 			WithMiddleware(web.RecoveryMiddleware(r)),
 	)

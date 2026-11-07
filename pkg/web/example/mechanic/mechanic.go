@@ -9,8 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/option"
 )
 
 func Mechanic(
@@ -23,10 +22,9 @@ func Mechanic(
 	lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			address,
-			func(m *http.ServeMux) {
-				u.Mount(guard.New(m, []string{constant.MechanicToken}))
-			},
+			option.New(address, constant.MechanicToken),
+			r,
+			u.Mount,
 		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

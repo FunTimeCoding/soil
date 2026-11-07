@@ -7,7 +7,6 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	g.Open(route.Get(webConstant.PalettePath), s.registry.Serve())
+	s.view.Mount(g)
 	g.Open(route.Get(webConstant.RootPattern), s.bookmarks)
-	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

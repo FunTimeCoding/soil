@@ -19,11 +19,6 @@ func NewOption(
 	result.LogCachePath = logCachePath
 	result.ElitePath = t.TempDir()
 	result.OutputPath = outputPath
-	result.Issuer = "https://gate.example.org"
-	result.ClientIdentifier = "tester"
-	result.ClientSecret = "tester-secret"
-	result.EncryptionSecret = "tester-encryption-secret"
-	result.PublicLocator = "https://raid.example.org"
 	result.Parser = func() face.Client { return p }
 
 	return result

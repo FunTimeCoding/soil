@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	g.Open(route.Get(webConstant.PalettePath), s.registry.Serve())
+	s.view.Mount(g)
 	g.Open(
 		route.Get(webConstant.PalettePath, constant.MemoriesPath),
 		s.paletteMemories,
@@ -31,5 +31,4 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(constant.StatisticPath), s.statisticPage)
 	g.Open(route.Get(constant.ImpressionsPath), s.impressionsPage)
 	g.Open(route.Get(webConstant.SearchPath), s.searchPage)
-	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

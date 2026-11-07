@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -31,7 +32,7 @@ func New(
 	errors.PanicOnError(os.WriteFile(o.EnvrcPath, []byte(envrcContent), 0755))
 	d := daemon.New(o)
 	m := http.NewServeMux()
-	d.MountLocal(memory.New(), mock_recorder.New(), m)
+	d.MountLocal(memory.New(), mock_recorder.New(), guard.New(m, nil))
 	l := socket.Listen(socket.Path(o.ProcfilePath))
 	h := &http.Server{Handler: m}
 	go func() { errors.PanicOnUnclean(h.Serve(l)) }()

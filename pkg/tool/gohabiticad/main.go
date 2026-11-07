@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -17,8 +16,7 @@ func Main() {
 	a.Web()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.Host = environment.Required(habiticaConstant.HostEnvironment)
 	Run(o, s)
 }

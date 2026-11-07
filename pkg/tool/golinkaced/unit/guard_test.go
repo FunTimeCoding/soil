@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ func TestGuard(t *testing.T) {
 	d := daemon_tester.New(t, service_tester.NewSource(t), memory.New())
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)

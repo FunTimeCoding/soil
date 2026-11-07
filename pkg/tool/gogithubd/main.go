@@ -22,7 +22,7 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.MetricAddress = a.MetricAddress()
+	o.Metric.Address = a.MetricAddress()
 	o.Owner = a.GetString(argumentConstant.Owner)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	Run(o, s)

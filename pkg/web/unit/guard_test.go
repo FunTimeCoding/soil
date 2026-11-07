@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
 	"net/http"
@@ -93,6 +94,26 @@ func TestSessionWithoutMiddlewarePanics(t *testing.T) {
 	)
 }
 
-func TestNewWithoutTokensPanics(t *testing.T) {
-	assert.Panic(t, func() { guard.New(http.NewServeMux(), nil) })
+func TestATokenlessGuardRefusesEveryProtectedRoute(t *testing.T) {
+	tokenless := func() *guard.Mux {
+		return guard.New(http.NewServeMux(), nil).WithSession(
+			func(next http.HandlerFunc) http.HandlerFunc { return next },
+		)
+	}
+	assert.Panic(
+		t,
+		func() { tokenless().Token("GET /target", web_tester.Serve) },
+	)
+	assert.Panic(
+		t,
+		func() { tokenless().Session("GET /target", web_tester.Serve) },
+	)
+	m := http.NewServeMux()
+	guard.New(m, nil).Open("GET /target", web_tester.Serve)
+	assert.Integer(t, http.StatusOK, served(m, "/target").Code)
+	assert.Integer(
+		t,
+		http.StatusNotFound,
+		served(m, constant.ReachablePath).Code,
+	)
 }

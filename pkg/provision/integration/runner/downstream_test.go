@@ -17,7 +17,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -25,10 +24,7 @@ func TestApplyWithChangesTriggersDownstream(t *testing.T) {
 	n := mock_runner.New()
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			provision.Mount(n, memory.New(), mock_recorder.New(), g)
 		},
 	)
@@ -74,10 +70,7 @@ func TestRefusedDownstreamIsCaptured(t *testing.T) {
 	n := mock_runner.New()
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			provision.Mount(n, memory.New(), mock_recorder.New(), g)
 		},
 	)

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -15,7 +14,6 @@ func Main() {
 	a.Web()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	Run(o, s)
 }

@@ -13,7 +13,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -29,9 +28,8 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
-	o.MetricAddress = a.MetricAddress()
+	o.Read(a)
+	o.Metric.Address = a.MetricAddress()
 	o.Inventory = inventory.Load[instance.Instance](
 		a.GetString(argumentConstant.Inventory),
 	)

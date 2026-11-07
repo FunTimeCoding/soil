@@ -7,17 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			daemon_tester.New(t, mock_client.New()).Mount(
 				memory.New(),
 				mock_recorder.New(),

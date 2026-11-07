@@ -12,4 +12,6 @@ func (s *Server) Close() {
 	if s.listener != nil {
 		errors.LogReclose(s.listener)
 	}
+
+	s.release()
 }

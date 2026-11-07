@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"sync"
 	"testing"
 )
@@ -25,10 +24,7 @@ func TestMarkServerSessionEndFiresOnClose(t *testing.T) {
 	).Server()
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			server.New(s).Setup(g)
 		},
 	)

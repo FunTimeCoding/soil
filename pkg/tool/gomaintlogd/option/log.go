@@ -1,8 +1,9 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/web/option"
+
 type Log struct {
-	Address         string
-	ServiceTokens   []string
+	option.Web
 	PostgresLocator string
 	LitePath        string
 }

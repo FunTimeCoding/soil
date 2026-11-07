@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -18,10 +17,7 @@ func New(t *testing.T) *Server {
 	r := memory.New()
 	v := model_context_server.New(
 		t,
-		func(
-			m *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

@@ -12,7 +12,6 @@ import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 	"testing"
 )
 
@@ -29,7 +28,7 @@ func NewReported(
 	)
 	s := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

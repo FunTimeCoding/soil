@@ -1,10 +1,12 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Server struct {
-	Address         string
-	ServiceTokens   []string
+	option.Web
 	Arm             bool
 	PostgresLocator string
 	LitePath        string

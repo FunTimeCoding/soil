@@ -1,57 +1,20 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/service"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(
-	v *service.Service,
-	a *client.Client,
-) *Server {
-	r := registry.New()
-	r.Register(
-		palette.NewCommand(
-			constant.DashboardTitle,
-			webConstant.RootPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.PlacementsTitle,
-			constant.PlacementsPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.SightingsTitle,
-			constant.SightingsPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			webConstant.SignOutTitle,
-			webConstant.SignOutPath,
-			webConstant.PaletteAction,
-		),
-	)
-
+func New(v *service.Service) *Server {
 	return &Server{
-		service:       v,
-		authorization: a,
-		palette:       r,
+		service: v,
 		view: view.New(
-			layout.New(constant.Identity).
-				WithTheme(webConstant.ThemeTerritory).
-				WithStyle(
-					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
-				).
-				WithCommandPalette(webConstant.PalettePath).
+			layout.New(constant.Identity, webConstant.ThemeTerritory, favicon).
+				WithStyle(constant.InlineStyle).
 				WithItems(
 					navigation_item.New(
 						webConstant.RootPath,

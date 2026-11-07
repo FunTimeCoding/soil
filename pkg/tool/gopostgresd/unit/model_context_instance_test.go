@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -19,10 +18,7 @@ func TestModelContextSchemasNeedASelectedInstance(t *testing.T) {
 	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)

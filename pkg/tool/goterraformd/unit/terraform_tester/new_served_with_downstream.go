@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
-	"net/http"
 	"testing"
 )
 
@@ -36,10 +35,7 @@ func NewServedWithDownstream(
 
 	result.served = model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(result.Reporter, mock_recorder.New(), g)
 		},
 	)

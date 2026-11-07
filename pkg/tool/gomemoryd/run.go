@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -22,17 +21,14 @@ func Run(
 	d := daemon.New(o, l, r)
 	defer d.Close()
 	c := lifecycle.New(l)
-
-	for _, w := range d.Workers() {
-		c.WithWorker(w)
-	}
-
+	c.WithWorkers(d.Workers()...)
 	c.WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, i.Recorder(), g)
 			},
 		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()

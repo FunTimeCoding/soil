@@ -7,6 +7,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
+	s.view.Mount(g)
 	g.OpenMount(route.Get(constant.LivePath), s.event())
 	g.Open(route.Get(constant.RootPath), s.swap)
 	g.Open(route.Get(constant.TriggerPath), s.trigger)

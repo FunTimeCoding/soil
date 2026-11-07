@@ -1,9 +1,11 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/opnsense/face"
+import (
+	"github.com/funtimecoding/soil/pkg/opnsense/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Opnsense struct {
-	Address       string
-	ServiceTokens []string
-	Source        func() face.OpnsenseClient
+	option.Web
+	Source func() face.OpnsenseClient
 }

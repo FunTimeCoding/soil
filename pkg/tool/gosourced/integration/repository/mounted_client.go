@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 	"testing"
 )
 
@@ -25,10 +24,7 @@ func mountedClient(
 	d, _ := daemon_tester.New(t, i)
 	s := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)

@@ -17,7 +17,7 @@ func New(
 	return &Server{
 		notifier: n,
 		view: view.New(
-			layout.New(identity.Example()).
+			layout.New(identity.Example(), "", nil).
 				WithExtended(extended).
 				WithServerSide(serverSide).
 				WithLiveEndpoint(constant.LivePath).

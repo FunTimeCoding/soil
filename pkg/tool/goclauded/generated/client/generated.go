@@ -330,6 +330,26 @@ type PeekResponse struct {
 	UserMessageCount int         `json:"userMessageCount"`
 }
 
+// PermissionReport defines model for PermissionReport.
+type PermissionReport struct {
+	Cleared  int             `json:"cleared"`
+	Days     int             `json:"days"`
+	Declined int             `json:"declined"`
+	Prompts  int             `json:"prompts"`
+	Rows     []PermissionRow `json:"rows"`
+	Sessions int             `json:"sessions"`
+}
+
+// PermissionRow defines model for PermissionRow.
+type PermissionRow struct {
+	Blocker  string    `json:"blocker"`
+	Commands []string  `json:"commands"`
+	Last     time.Time `json:"last"`
+	Prompts  int       `json:"prompts"`
+	Reason   string    `json:"reason"`
+	Sessions int       `json:"sessions"`
+}
+
 // PulseEntry defines model for PulseEntry.
 type PulseEntry struct {
 	Body      string  `json:"body"`
@@ -608,6 +628,11 @@ type GetMessagesParams struct {
 	Identifier []int `form:"identifier" json:"identifier"`
 }
 
+// GetPermissionsParams defines parameters for GetPermissions.
+type GetPermissionsParams struct {
+	Days *int `form:"days,omitempty" json:"days,omitempty"`
+}
+
 // GetResolveParams defines parameters for GetResolve.
 type GetResolveParams struct {
 	Query string `form:"query" json:"query"`
@@ -808,6 +833,9 @@ type ClientInterface interface {
 	// PostNotify performs a POST /api/notify (the `PostNotify` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostNotify(ctx context.Context, body PostNotifyJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetPermissions performs a GET /api/permissions (the `GetPermissions` operationId) request.
+	GetPermissions(ctx context.Context, params *GetPermissionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostRegisterWithBody performs a POST /api/register (the `PostRegister` operationId) request,
 	// with any type of body and a specified content type.
@@ -1093,6 +1121,19 @@ func (c *Client) PostNotifyWithBody(ctx context.Context, contentType string, bod
 // Takes a body of the `application/json` content type.
 func (c *Client) PostNotify(ctx context.Context, body PostNotifyJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostNotifyRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetPermissions performs a GET /api/permissions (the `GetPermissions` operationId) request.
+func (c *Client) GetPermissions(ctx context.Context, params *GetPermissionsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetPermissionsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2104,6 +2145,60 @@ func NewPostNotifyRequestWithBody(server string, contentType string, body io.Rea
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetPermissionsRequest constructs an http.Request for the GetPermissions method
+func NewGetPermissionsRequest(server string, params *GetPermissionsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/permissions")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Days != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "days", *params.Days, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -3637,6 +3732,11 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostNotifyWithResponse(ctx context.Context, body PostNotifyJSONRequestBody, reqEditors ...RequestEditorFn) (*PostNotifyResponse, error)
 
+	// GetPermissionsWithResponse performs a GET /api/permissions (the `GetPermissions` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetPermissionsWithResponse(ctx context.Context, params *GetPermissionsParams, reqEditors ...RequestEditorFn) (*GetPermissionsResponse, error)
+
 	// PostRegisterWithBodyWithResponse performs a POST /api/register (the `PostRegister` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -4288,6 +4388,54 @@ func (r PostNotifyResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostNotifyResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetPermissionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *PermissionReport
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetPermissionsResponse) GetJSON200() *PermissionReport {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetPermissionsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetPermissionsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetPermissionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetPermissionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetPermissionsResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -5979,6 +6127,17 @@ func (c *ClientWithResponses) PostNotifyWithResponse(ctx context.Context, body P
 	return ParsePostNotifyResponse(rsp)
 }
 
+// GetPermissionsWithResponse performs a GET /api/permissions (the `GetPermissions` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetPermissionsWithResponse(ctx context.Context, params *GetPermissionsParams, reqEditors ...RequestEditorFn) (*GetPermissionsResponse, error) {
+	rsp, err := c.GetPermissions(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetPermissionsResponse(rsp)
+}
+
 // PostRegisterWithBodyWithResponse performs a POST /api/register (the `PostRegister` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -6745,6 +6904,39 @@ func ParsePostNotifyResponse(rsp *http.Response) (*PostNotifyResponse, error) {
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetPermissionsResponse parses an HTTP response from a GetPermissionsWithResponse call
+func ParseGetPermissionsResponse(rsp *http.Response) (*GetPermissionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetPermissionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PermissionReport
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

@@ -6,12 +6,8 @@ import (
 	"strings"
 )
 
-func themeName(c *ast.CallExpr) string {
-	if len(c.Args) == 0 {
-		return constant.UnknownTheme
-	}
-
-	s, okay := c.Args[0].(*ast.SelectorExpr)
+func themeName(e ast.Expr) string {
+	s, okay := e.(*ast.SelectorExpr)
 
 	if !okay {
 		return constant.UnknownTheme

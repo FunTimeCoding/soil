@@ -14,6 +14,7 @@ func TestGuard(t *testing.T) {
 		memory.New(),
 	)
 	w.VerifyBase(t)
+	w.VerifyFavicon(t)
 	w.VerifyGuarded(t, "/api/status")
 	w.VerifyOpen(t, constant.DashboardPath)
 	w.VerifyModelContext(t)

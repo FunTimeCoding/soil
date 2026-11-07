@@ -1,8 +1,10 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/web/option"
+
 type Option struct {
-	ProcfilePath  string
-	EnvrcPath     string
-	Address       string
-	ServiceTokens []string
+	option.Web
+	Local        option.Web
+	ProcfilePath string
+	EnvrcPath    string
 }

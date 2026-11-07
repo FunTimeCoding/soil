@@ -6,6 +6,12 @@ import (
 )
 
 const CoverageRecentWindow = 30 * 24 * time.Hour
+const (
+	PermissionWindowDays     = 7
+	PermissionSampleCommands = 3
+	PermissionCommandLength  = 400
+	PermissionReasonPrefix   = "bashMiss:"
+)
 const CallsignReleaseWindow = 7 * 24 * time.Hour
 const SevenDayWindow = 7 * 24 * time.Hour
 const UsagePageUnreadable = "usage page carries no weekly meter"
@@ -228,6 +234,8 @@ const (
 	ConversationsPath  = "/conversations"
 	CoverageTitle      = "Coverage"
 	CoveragePath       = "/coverage"
+	PermissionsTitle   = "Permissions"
+	PermissionsPath    = "/permissions"
 	UsageTitle         = "Usage"
 	UsagePath          = "/usage"
 	UsageChart         = "usage_chart"

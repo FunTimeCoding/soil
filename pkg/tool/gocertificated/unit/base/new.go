@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -20,12 +20,10 @@ func New(t *testing.T) *Server {
 		Daemon:   d,
 		Forge:    f,
 		Reporter: r,
-		Server: model_context_server.New(
+		Server: model_context_server.NewSignedOn(
 			t,
-			func(
-				_ *http.ServeMux,
-				g *guard.Mux,
-			) {
+			authorization_tester.Client,
+			func(g *guard.Mux) {
 				d.Mount(r, mock_recorder.New(), g)
 			},
 		),

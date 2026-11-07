@@ -30,9 +30,8 @@ func New(
 			l,
 			r,
 		),
-		authorization: authorizationClient(o).WithReporter(r),
-		logger:        l,
-		reporter:      r,
+		logger:   l,
+		reporter: r,
 	}
 	v := service.New(
 		store.New(d),
@@ -44,7 +43,7 @@ func New(
 		l,
 	)
 	result.service = v
-	result.web = web.New(v, result.authorization, r)
+	result.web = web.New(v, r)
 	result.watcher = worker.New(
 		v.HandleEvent,
 		v.WatchedPaths(),

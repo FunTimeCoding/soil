@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/base"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"go.uber.org/goleak"
 	"net/http"
 	"net/http/httptest"
@@ -31,7 +32,7 @@ func TestTheDaemonLeavesNothingRunningWithTheExtensionConnected(t *testing.T) {
 	o.Client = func() face.FirefoxClient { return c }
 	d := daemon.New(o)
 	m := http.NewServeMux()
-	d.MountBridge(m)
+	d.MountBridge(guard.New(m, nil))
 	s := httptest.NewServer(m)
 	x := fake_extension.Connect(t, s.URL)
 	defer x.Disconnect()

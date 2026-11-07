@@ -25,60 +25,26 @@ func (c *Client) ToolCalls(sessionIdentifier string) []*tool_call.Call {
 
 	defer errors.PanicClose(f)
 	var result []*tool_call.Call
+	pending := map[string]*tool_call.Call{}
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(nil, soil.NotationScanBuffer)
 
 	for scanner.Scan() {
 		var line notation.Line
 
-		if json.Unmarshal(scanner.Bytes(), &line) != nil {
+		if json.Unmarshal(scanner.Bytes(), &line) != nil ||
+			line.Message == nil {
 			continue
 		}
 
-		if line.Type != "assistant" {
-			continue
-		}
-
-		if line.Message == nil {
-			continue
-		}
-
-		var m notation.Message
-
-		if json.Unmarshal(line.Message, &m) != nil {
-			continue
-		}
-
-		var blocks []json.RawMessage
-
-		if json.Unmarshal(m.Content, &blocks) != nil {
-			continue
-		}
-
-		for _, raw := range blocks {
-			var b notation.ContentBlock
-
-			if json.Unmarshal(raw, &b) != nil {
-				continue
+		switch line.Type {
+		case "assistant":
+			for _, call := range lineCalls(&line) {
+				pending[call.Identifier] = call
+				result = append(result, call)
 			}
-
-			if b.Type != "tool_use" {
-				continue
-			}
-
-			var detail string
-
-			if b.Name == "Bash" {
-				var input notation.BashInput
-
-				if json.Unmarshal(b.Input, &input) == nil {
-					detail = input.Command
-				}
-			}
-
-			call := tool_call.New(b.Name, b.Identifier, line.Timestamp)
-			call.Detail = detail
-			result = append(result, call)
+		case "user":
+			recordDecision(pending, &line)
 		}
 	}
 

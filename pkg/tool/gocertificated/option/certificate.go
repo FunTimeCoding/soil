@@ -1,10 +1,12 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/gitlab/face"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Certificate struct {
-	Address            string
-	ServiceTokens      []string
+	option.Web
 	PostgresLocator    string
 	LitePath           string
 	Project            string
@@ -12,10 +14,5 @@ type Certificate struct {
 	AuthorityDirectory string
 	SecretAuthority    string
 	SecretPath         string
-	Issuer             string
-	ClientIdentifier   string
-	ClientSecret       string
-	EncryptionSecret   string
-	PublicLocator      string
 	Forge              func() face.GitLabClient
 }

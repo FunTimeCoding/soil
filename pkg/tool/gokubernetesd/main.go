@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -22,8 +21,7 @@ func Main() {
 	a.Database()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.Arm = a.GetBoolean(argumentConstant.Arm)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)

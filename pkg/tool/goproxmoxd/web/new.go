@@ -1,15 +1,12 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -17,26 +14,12 @@ func New(
 	i *instance.Inventory,
 	v *service.Service,
 ) *Server {
-	r := registry.New()
-	r.Register(
-		palette.NewCommand(
-			constant.FloorTitle,
-			constant.FloorPath,
-			webConstant.PaletteNavigate,
-		),
-	)
-
 	return &Server{
 		inventory: i,
 		service:   v,
-		registry: r,
 		view: view.New(
-			layout.New(constant.Identity).
-				WithTheme(webConstant.ThemeForge).
-				WithStyle(
-					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
-				).
-				WithCommandPalette(webConstant.PalettePath).
+			layout.New(constant.Identity, webConstant.ThemeForge, favicon).
+				WithStyle(constant.InlineStyle).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(

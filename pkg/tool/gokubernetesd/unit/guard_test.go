@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -17,7 +16,7 @@ func TestGuard(t *testing.T) {
 	d := service_tester.NewDaemon(t, o, r)
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

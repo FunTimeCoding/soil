@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/mock_runner"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -19,10 +18,7 @@ func newTriggerServer(
 	t.Helper()
 	result := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			provision.Mount(n, r, mock_recorder.New(), g)
 		},
 	)

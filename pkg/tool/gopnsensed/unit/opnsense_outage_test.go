@@ -12,7 +12,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -38,10 +37,7 @@ func TestAnOpnsenseOutageFailsTheToolWithoutACapture(t *testing.T) {
 	m := memory.New()
 	s := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			daemon_tester.New(t, c).Mount(m, mock_recorder.New(), g)
 		},
 	)

@@ -90,7 +90,7 @@ func Read(
 				s.recordUsage(line.Request, &m)
 			}
 
-			for _, b := range blocks(m.Content) {
+			for _, b := range claude.Blocks(m.Content) {
 				if b.Type == constant.ClaudeToolUseBlock &&
 					follow(b.Name, followed) {
 					s.recordCall(&b, line.Timestamp)
@@ -110,7 +110,7 @@ func Read(
 			continue
 		}
 
-		for _, b := range blocks(m.Content) {
+		for _, b := range claude.Blocks(m.Content) {
 			if b.Type != constant.ClaudeToolResultBlock {
 				continue
 			}

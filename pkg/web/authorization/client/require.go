@@ -1,18 +1,23 @@
 package client
 
-import "net/http"
+import (
+	"github.com/funtimecoding/soil/pkg/web/guard"
+	"net/http"
+)
 
 func (c *Client) Require(next http.HandlerFunc) http.HandlerFunc {
 	return func(
 		w http.ResponseWriter,
 		r *http.Request,
 	) {
-		if c.Subject(r) == "" {
+		subject := c.Subject(r)
+
+		if subject == "" {
 			http.Redirect(w, r, c.signInPath, http.StatusFound)
 
 			return
 		}
 
-		next(w, r)
+		next(w, guard.WithSubject(r, subject))
 	}
 }

@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/shared_reranker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
-	"net/http"
 	"testing"
 )
 
@@ -33,10 +32,7 @@ func New(t *testing.T) *Server {
 		daemon: d,
 		Server: model_context_server.New(
 			t,
-			func(
-				_ *http.ServeMux,
-				g *guard.Mux,
-			) {
+			func(g *guard.Mux) {
 				d.Mount(r, mock_recorder.New(), g)
 			},
 		),

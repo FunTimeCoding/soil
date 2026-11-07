@@ -18,11 +18,6 @@ func New(
 	t.Helper()
 	o := option.New()
 	o.Host = "directory.test"
-	o.Issuer = "https://gate.example.org"
-	o.ClientIdentifier = "tester"
-	o.ClientSecret = "tester-secret"
-	o.EncryptionSecret = "tester-encryption-secret"
-	o.PublicLocator = "https://directory.example.org"
 	o.Source = func() face.DirectoryClient { return c }
 	result := daemon.New(o, logger.New(t.Context()), r)
 	t.Cleanup(result.Close)

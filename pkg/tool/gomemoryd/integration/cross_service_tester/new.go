@@ -14,7 +14,6 @@ import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 	"path/filepath"
 	"testing"
 )
@@ -35,7 +34,7 @@ func New(t *testing.T) *Tester {
 	v := daemon.New(o, logger.New(t.Context()), r)
 	memoryServer := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			v.Mount(r, mock_recorder.New(), g)
 		},
 	)

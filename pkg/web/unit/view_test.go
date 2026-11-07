@@ -32,7 +32,7 @@ func TestRecoveryPage(t *testing.T) {
 
 func TestBrandLinksHome(t *testing.T) {
 	body := web_tester.RenderBrand(
-		layout.New(identity.New("test", "test tool", "test")),
+		layout.New(identity.New("test", "test tool", "test"), "", nil),
 	)
 	assert.True(
 		t,
@@ -43,7 +43,7 @@ func TestBrandLinksHome(t *testing.T) {
 
 func TestLiveBrandCarriesConnectionDot(t *testing.T) {
 	body := web_tester.RenderBrand(
-		layout.New(identity.New("test", "test tool", "test")).
+		layout.New(identity.New("test", "test tool", "test"), "", nil).
 			WithLiveEndpoint(constant.LivePath),
 	)
 	assert.True(

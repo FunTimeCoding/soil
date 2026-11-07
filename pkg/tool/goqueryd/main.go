@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -21,9 +20,8 @@ func Main() {
 	a.Lite()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.MetricAddress = a.MetricAddress()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Metric.Address = a.MetricAddress()
+	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.EmbedTarget = environment.Required(
 		generativeConstant.EmbedTargetEnvironment,

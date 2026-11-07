@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 	"time"
 )
@@ -18,10 +17,7 @@ func TestAMasterOutageFailsTheToolWithoutACapture(t *testing.T) {
 	d := newDownDaemon(t, r)
 	s := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

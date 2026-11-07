@@ -8,11 +8,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/prometheus/client_golang/prometheus"
-	"net/http"
 	"testing"
 )
 
@@ -30,9 +30,10 @@ func New(
 		prometheus.NewRegistry(),
 	)
 	t.Cleanup(d.Close)
-	s := model_context_server.New(
+	s := model_context_server.NewSignedOn(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		authorization_tester.Client,
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

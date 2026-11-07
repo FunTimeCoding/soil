@@ -1,9 +1,11 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/sublime/face"
+import (
+	"github.com/funtimecoding/soil/pkg/sublime/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Sublime struct {
-	Address       string
-	ServiceTokens []string
-	Source        func() face.SublimeClient
+	option.Web
+	Source func() face.SublimeClient
 }

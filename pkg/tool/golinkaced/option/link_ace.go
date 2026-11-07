@@ -1,9 +1,11 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/linkace/face"
+import (
+	"github.com/funtimecoding/soil/pkg/linkace/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type LinkAce struct {
-	Address       string
-	ServiceTokens []string
-	Source        func() face.LinkAceClient
+	option.Web
+	Source func() face.LinkAceClient
 }

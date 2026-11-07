@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/rejecting_host"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -17,10 +16,7 @@ func TestARejectedHostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	m := memory.New()
 	s := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			daemon_tester.New(t, rejecting_host.New()).Mount(
 				m,
 				mock_recorder.New(),

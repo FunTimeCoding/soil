@@ -5,20 +5,15 @@ import (
 	nextcloud "github.com/funtimecoding/soil/pkg/nextcloud/face"
 	metric "github.com/funtimecoding/soil/pkg/prometheus/face"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/web/option"
 )
 
 type Dashboard struct {
-	Address          string
-	Board            *board.Board
-	PostgresLocator  string
-	LitePath         string
-	Issuer           string
-	ClientIdentifier string
-	ClientSecret     string
-	EncryptionSecret string
-	PublicLocator    string
-	ServiceTokens    []string
-	Prometheus       func() metric.PrometheusClient
-	Argocd           func() kubernetes.ArgocdClient
-	Usage            func() nextcloud.UsageClient
+	option.Web
+	Board           *board.Board
+	PostgresLocator string
+	LitePath        string
+	Prometheus      func() metric.PrometheusClient
+	Argocd          func() kubernetes.ArgocdClient
+	Usage           func() nextcloud.UsageClient
 }

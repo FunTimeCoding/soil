@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -25,10 +24,7 @@ func mounted(
 	d := daemon.New(o, logger.New(context.Background()), r)
 	result := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

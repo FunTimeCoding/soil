@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -18,8 +17,7 @@ func Main() {
 	a.Lite()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.SeedDirectory = environment.Required(constant.SeedDirectoryEnvironment)
 	Run(o, s)

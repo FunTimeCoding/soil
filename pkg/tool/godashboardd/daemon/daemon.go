@@ -10,7 +10,6 @@ import (
 	metric "github.com/funtimecoding/soil/pkg/prometheus/face"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -23,7 +22,6 @@ type Daemon struct {
 	argocdGuard     *peer.Guard
 	usage           nextcloud.UsageClient
 	usageGuard      *peer.Guard
-	authorization   *client.Client
 	notifier        *notifier.Notifier
 	service         *service.Service
 	web             *web.Server

@@ -7,9 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 	"testing"
 )
 
@@ -21,9 +21,10 @@ func mountedClient(
 	t.Helper()
 	r := memory.New()
 	d := service_tester.NewDaemon(t, o, r)
-	s := model_context_server.New(
+	s := model_context_server.NewSignedOn(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		authorization_tester.Client,
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

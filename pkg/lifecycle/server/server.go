@@ -13,6 +13,7 @@ type Server struct {
 	Setup        func(*http.ServeMux)
 	Middleware   func(http.Handler) http.Handler
 	identity     *identity.Tool
+	release      func()
 	Address      string
 	listener     net.Listener
 	protected    bool

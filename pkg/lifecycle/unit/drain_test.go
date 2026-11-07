@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/constant"
@@ -14,6 +15,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/worker"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"testing"
@@ -113,9 +116,10 @@ func TestServerShutdownCountsAgainstGrace(t *testing.T) {
 		WithServer(
 			server.New(
 				identity.Example(),
-				"",
-				func(m *http.ServeMux) {
-					m.HandleFunc(
+				option.New(""),
+				memory.New(),
+				func(g *guard.Mux) {
+					g.Open(
 						"/hold",
 						func(
 							_ http.ResponseWriter,

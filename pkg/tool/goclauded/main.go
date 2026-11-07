@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -22,9 +21,8 @@ func Main() {
 	a.Metric()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.MetricAddress = a.MetricAddress()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Metric.Address = a.MetricAddress()
+	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.SessionExportPath = environment.Required(
 		constant.SessionExportPathEnvironment,

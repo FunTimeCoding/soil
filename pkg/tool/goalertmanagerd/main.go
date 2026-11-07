@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/types/instance"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -23,8 +22,7 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.Inventory = inventory.Load[instance.Instance](
 		a.GetString(argumentConstant.Inventory),
 	)

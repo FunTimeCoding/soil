@@ -25,7 +25,6 @@ func New(
 	project, e := f.ResolveProject(context.Background(), o.Project)
 	errors.PanicOnError(e)
 	g := peer.New(constant.ForgePeer, "", f, l, r)
-	a := authorizationClient(o).WithReporter(r)
 	s := service.New(
 		store.New(d),
 		g,
@@ -40,11 +39,10 @@ func New(
 	)
 
 	return &Daemon{
-		database:      d,
-		forge:         f,
-		guard:         g,
-		authorization: a,
-		service:       s,
-		web:           web.New(s, a, r),
+		database: d,
+		forge:    f,
+		guard:    g,
+		service:  s,
+		web:      web.New(s, r),
 	}
 }

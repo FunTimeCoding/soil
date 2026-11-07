@@ -2,15 +2,15 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"time"
 )
 
 type Flight struct {
-	Address         string
+	option.Web
 	PostgresLocator string
 	LitePath        string
 	Predicate       string
-	ServiceTokens   []string
 	Retention       time.Duration
 	Clock           func() time.Time
 	Command         func(s ...string) (string, error)

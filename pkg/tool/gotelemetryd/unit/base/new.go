@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -25,10 +24,7 @@ func New(t *testing.T) *Server {
 	t.Cleanup(func() { relational.CloseMapper(m) })
 	h := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(r, g)
 		},
 	)

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -15,10 +14,9 @@ func Main() {
 	a.Web()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
 	o.ParserPath = "/opt/parser"
 	o.TemplatePath = "/opt/template/TW5_Top_Stat_Parse.html"
 	o.OutputPath = "/srv/gw2-report"
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	Run(o, s)
 }

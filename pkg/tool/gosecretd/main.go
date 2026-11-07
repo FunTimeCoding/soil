@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -16,8 +15,7 @@ func Main() {
 	a.Metric()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.MetricAddress = a.MetricAddress()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Metric.Address = a.MetricAddress()
+	o.Read(a)
 	Run(o, s)
 }

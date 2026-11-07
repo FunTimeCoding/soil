@@ -3,47 +3,17 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
-	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(
-	v *service.Service,
-	a *client.Client,
-) *Server {
-	r := registry.New()
-	r.Register(
-		palette.NewCommand(
-			constant.UserTitle,
-			constant.UserPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.GroupTitle,
-			constant.GroupPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			webConstant.SignOutTitle,
-			webConstant.SignOutPath,
-			webConstant.PaletteAction,
-		),
-	)
-
+func New(v *service.Service) *Server {
 	return &Server{
-		service:       v,
-		authorization: a,
-		registry:      r,
+		service: v,
 		view: view.New(
-			layout.New(constant.Identity).
-				WithTheme(webConstant.ThemePhosphor).
-				WithStyle(webConstant.ComponentStyle).
-				WithCommandPalette(webConstant.PalettePath).
+			layout.New(constant.Identity, webConstant.ThemePhosphor, favicon).
 				WithItems(
 					navigation_item.New(constant.UserPath, constant.UserTitle),
 					navigation_item.New(

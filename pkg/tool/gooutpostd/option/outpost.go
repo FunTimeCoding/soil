@@ -1,6 +1,7 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/web/option"
+
 type Outpost struct {
-	Address       string
-	ServiceTokens []string
+	option.Web
 }

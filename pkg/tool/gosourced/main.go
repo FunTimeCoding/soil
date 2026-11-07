@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -22,8 +21,7 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	Run(o, s)
 }

@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -13,5 +12,4 @@ type Server struct {
 	authorization *client.Client
 	reporter      face.Reporter
 	view          *view.View
-	registry      *registry.Registry
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -22,17 +21,14 @@ func Run(
 	d := daemon.New(o, l, r)
 	defer d.Close()
 	c := lifecycle.New(l)
-
-	for _, w := range d.Workers() {
-		c.WithWorker(w)
-	}
-
+	c.WithWorkers(d.Workers()...)
 	c.WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(g)
 			},
 		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()

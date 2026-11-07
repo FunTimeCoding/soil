@@ -28,7 +28,6 @@ func New(
 		prometheusGuard: peer.New(constant.PrometheusPeer, p.Address(), p, l, r),
 		argocd:          o.Argocd(),
 		usage:           o.Usage(),
-		authorization:   authorizationClient(o).WithReporter(r),
 		notifier:        notifier.New(),
 		logger:          l,
 		reporter:        r,
@@ -65,13 +64,7 @@ func New(
 		result.usageGuard,
 		result.notifier,
 	)
-	result.web = web.New(
-		result.service,
-		o.Board,
-		result.authorization,
-		result.notifier,
-		r,
-	)
+	result.web = web.New(result.service, o.Board, result.notifier, r)
 
 	return result
 }

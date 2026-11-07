@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/integers"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
@@ -12,7 +13,8 @@ import (
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/option"
 )
 
 func main() {
@@ -20,12 +22,15 @@ func main() {
 	lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			join.Empty(
-				stringsConstant.Colon,
-				integers.ToString(metricConstant.Port),
+			option.New(
+				join.Empty(
+					stringsConstant.Colon,
+					integers.ToString(metricConstant.Port),
+				),
 			),
-			func(x *http.ServeMux) {
-				x.Handle(webConstant.MetricsPath, m.Exporter())
+			memory.New(),
+			func(g *guard.Mux) {
+				g.OpenMount(webConstant.MetricsPath, m.Exporter())
 			},
 		),
 	).RunUntilSignal()

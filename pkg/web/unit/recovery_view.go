@@ -7,5 +7,7 @@ import (
 )
 
 func recoveryView() *view.View {
-	return view.New(layout.New(identity.New("test", "test tool", "test")))
+	return view.New(
+		layout.New(identity.New("test", "test tool", "test"), "", nil),
+	)
 }

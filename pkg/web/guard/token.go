@@ -9,6 +9,7 @@ func (g *Mux) Token(
 	pattern string,
 	serve http.HandlerFunc,
 ) {
+	g.requireTokens(pattern)
 	g.mux.HandleFunc(
 		pattern,
 		func(

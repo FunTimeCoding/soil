@@ -1,11 +1,13 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/firefox/face"
+import (
+	"github.com/funtimecoding/soil/pkg/firefox/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Firefox struct {
-	Address           string
+	option.Web
 	DownloadDirectory string
-	ServiceTokens     []string
-	BridgePort        int
+	Bridge            option.Web
 	Client            func() face.FirefoxClient
 }

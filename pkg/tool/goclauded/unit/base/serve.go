@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
-	"net/http"
 	"path/filepath"
 	"testing"
 	"time"
@@ -39,10 +38,7 @@ func serve(
 		Store:  s,
 		Server: model_context_server.New(
 			t,
-			func(
-				_ *http.ServeMux,
-				m *guard.Mux,
-			) {
+			func(m *guard.Mux) {
 				g.Mount(d.Reporter, hold, mock_recorder.New(), m)
 			},
 		),

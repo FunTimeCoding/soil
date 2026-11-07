@@ -22,12 +22,13 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.DownloadDirectory = environment.Fallback(
 		constant.DownloadDirectoryEnvironment,
 		os.TempDir(),
 	)
-	o.BridgePort = a.RequiredInteger(constant.BridgePortFlag)
+	o.Bridge.Address = web.AddressPort(
+		a.RequiredInteger(constant.BridgePortFlag),
+	)
 	Run(o, s)
 }

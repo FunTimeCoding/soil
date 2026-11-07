@@ -15,6 +15,6 @@ func New(
 	return &Server{
 		service:  s,
 		reporter: r,
-		view:     view.New(layout.New(constant.Identity)),
+		view:     view.New(layout.New(constant.Identity, "", nil)),
 	}
 }

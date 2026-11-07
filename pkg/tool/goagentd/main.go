@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -21,8 +20,7 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
 	o.Workspace = a.GetString("workspace")
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	Run(o, s)
 }

@@ -13,5 +13,6 @@ func New(o *option.Alpine) *Daemon {
 			o.SignatureKey,
 			o.Indexer(),
 		),
+		packageRoot: o.PackageRoot,
 	}
 }

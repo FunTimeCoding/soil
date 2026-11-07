@@ -9,6 +9,8 @@ func (g *Mux) Session(
 	pattern string,
 	serve http.HandlerFunc,
 ) {
+	g.requireTokens(pattern)
+
 	if g.session == nil {
 		log.Panicf("guard: session route %s without WithSession", pattern)
 	}

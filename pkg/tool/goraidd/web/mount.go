@@ -9,8 +9,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	s.authorization.Mount(g)
-	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
+	s.view.Mount(g)
 	g.Session(route.Get(webConstant.RootPattern), s.logs)
 	g.Session(route.Post(constant.GeneratePath), s.generate)
 	g.Session(route.Get(constant.ReportsPath), s.reports)
@@ -24,6 +23,5 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Session(route.Post(constant.CreateRaidPath), s.createRaid)
 	g.Session(route.Get(constant.PlayersPath), s.players)
 	g.Session(route.Get(constant.PlayersPath, "/{account}"), s.playerDetail)
-	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 	g.OpenMount(route.Get(constant.StaticPath), http.FileServerFS(staticFiles))
 }

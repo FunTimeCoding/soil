@@ -10,6 +10,7 @@ func TestGuard(t *testing.T) {
 	s := base.New(t)
 	c := s.Server
 	c.VerifyBase(t)
+	c.VerifyFavicon(t)
 	c.VerifyGuarded(t, "/api/alerts")
 	c.VerifyGuarded(t, "/api/status")
 	c.VerifyOpen(t, constant.DashboardPath)

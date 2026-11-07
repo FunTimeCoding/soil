@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/base"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -17,7 +17,7 @@ func TestGuard(t *testing.T) {
 	t.Cleanup(d.Close)
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
@@ -25,7 +25,8 @@ func TestGuard(t *testing.T) {
 	v.VerifyBase(t)
 	v.VerifyOpen(t, "/jwks")
 	v.VerifyOpenPost(t, "/token")
-	v.VerifyOpen(t, "/favicon.ico")
+	v.VerifyFavicon(t)
 	v.VerifyModelContext(t)
 	v.VerifySignIn(t)
+	v.VerifySession(t, webConstant.PalettePath)
 }

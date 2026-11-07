@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/getsentry/sentry-go"
 	"net/http"
@@ -16,8 +17,8 @@ import (
 func TestAnIncomingTraceIsOnTheRequestHub(t *testing.T) {
 	p := serveTrace(
 		t,
-		func(m *http.ServeMux) {
-			m.HandleFunc(
+		func(g *guard.Mux) {
+			g.Open(
 				"GET /trace",
 				func(
 					w http.ResponseWriter,
@@ -59,8 +60,8 @@ func TestAnOutgoingRequestCarriesTheIncomingTrace(t *testing.T) {
 	defer o.Close()
 	p := serveTrace(
 		t,
-		func(m *http.ServeMux) {
-			m.HandleFunc(
+		func(g *guard.Mux) {
+			g.Open(
 				"GET /call",
 				func(
 					_ http.ResponseWriter,

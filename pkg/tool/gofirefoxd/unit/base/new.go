@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -24,10 +23,7 @@ func New(t *testing.T) *Server {
 	r := memory.New()
 	h := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

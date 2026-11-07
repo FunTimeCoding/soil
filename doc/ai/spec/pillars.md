@@ -60,10 +60,11 @@ func Run(o *option.Config, i face.Instrument) {
         WithServer(
             server.New(
                 constant.Identity,
-                o.Address,
-                func(m *http.ServeMux) {
+                &o.Web,
+                r,
+                func(g *guard.Mux) {
                     // domain deps first - see service-tool.md
-                    Mount(r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
+                    Mount(r, i.Recorder(), o.Version, g)
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
         ).

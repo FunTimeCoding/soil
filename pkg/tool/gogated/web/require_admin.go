@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"net/url"
 )
@@ -43,6 +44,6 @@ func (s *Server) requireAdmin(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		next(w, r)
+		next(w, guard.WithSubject(r, subject))
 	}
 }

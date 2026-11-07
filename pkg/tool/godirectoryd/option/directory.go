@@ -1,15 +1,12 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/directory/face"
+import (
+	"github.com/funtimecoding/soil/pkg/directory/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Directory struct {
-	Address          string
-	ServiceTokens    []string
-	Issuer           string
-	ClientIdentifier string
-	ClientSecret     string
-	EncryptionSecret string
-	PublicLocator    string
-	Host             string
-	Source           func() face.DirectoryClient
+	option.Web
+	Host   string
+	Source func() face.DirectoryClient
 }

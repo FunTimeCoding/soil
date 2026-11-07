@@ -196,7 +196,8 @@ A change to a shared client's lifecycle runs every consumer's suite under
 
 Every guarded daemon has `<path>/unit/guard_test.go` (package
 `unit`): it starts the production `Mount` on a dynamic port via
-`generative/model_context_server.New(t, setup)` and asserts the full
+`generative/model_context_server.New(t, setup)` - `NewSignedOn` for a daemon
+that signs on - and asserts the full
 auth contract with the battery methods, mirroring the mount surface:
 
 - `VerifyBase` — health and version open, and `route:/api/reachable` 401
@@ -215,19 +216,18 @@ auth contract with the battery methods, mirroring the mount surface:
   where route existence needs pinning (the other verbs accept any
   non-401, so a dead route passes them)
 
-The battery never invokes tool or REST handlers, but every
-dependency still enters as something callable: external API
-clients as their full mocks through the factories on the option the
-service is built from, daemon-internal dependencies as empty
-constructions (`inventory.New()`, in-memory stores). Nil is never
-passed - mocks exist so nothing downstream needs a nil check. The
-`nil_dependency` analyzer holds this for `face` interfaces passed to a
-`New…` constructor; a genuinely optional dependency is set by a `With…`
-method. Daemons with a test base run the guard test through it, over the
-real service with the mock clients inside. Session (SSO) web surfaces
-assert their favicon open and their
-dashboard with `VerifySession`; a page whose handler reaches an
-external client the battery cannot serve, or a live stream that
-holds its headers, is not worth the wait. Tests pass
-`constant.DefaultVersion` where a mount takes a version.
+The battery never invokes tool or REST handlers, but every dependency still
+enters as something callable: external API clients as their full mocks through
+the factories on the option the service is built from, daemon-internal
+dependencies as empty constructions (`inventory.New()`, in-memory stores). Nil
+is never passed - mocks exist so nothing downstream needs a nil check. The
+`nil_dependency` analyzer holds this for `face` interfaces passed to a `New…`
+constructor; a genuinely optional dependency is set by a `With…` method. Daemons
+with a test base run the guard test through it, over the real service with the
+mock clients inside. Every web surface asserts its favicon with `VerifyFavicon`,
+a 200 carrying `image/png` - `VerifyOpen` only shows a route needs no sign-on,
+and a missing route passes it. Session (SSO) surfaces assert their dashboard
+with `VerifySession`; a page whose handler reaches an external client the
+battery cannot serve, or a live stream that holds its headers, is not worth the
+wait. Tests pass `constant.DefaultVersion` where a mount takes a version.
 

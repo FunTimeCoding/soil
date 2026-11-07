@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -25,10 +24,7 @@ func mounted(
 	d := daemon.New(o, logger.New(t.Context()))
 	result := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			m *guard.Mux,
-		) {
+		func(m *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), m)
 		},
 	)

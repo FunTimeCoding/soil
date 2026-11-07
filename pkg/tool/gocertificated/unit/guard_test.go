@@ -10,7 +10,7 @@ func TestGuard(t *testing.T) {
 	c := s.Server
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, "/api/certificates")
-	c.VerifyOpen(t, "/favicon.ico")
+	c.VerifyFavicon(t)
 	c.VerifyModelContext(t)
 	c.VerifySignIn(t)
 }

@@ -8,8 +8,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	s.authorization.Mount(g)
-	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
+	s.view.Mount(g)
 	g.Session(route.Get(webConstant.RootPattern), s.dashboard)
 	g.Session(route.Get(constant.AuthoritiesPath), s.authorities)
 	g.Session(route.Get(constant.CertificatesPath), s.certificates)
@@ -22,5 +21,4 @@ func (s *Server) Mount(g *guard.Mux) {
 	)
 	g.Session(route.Post(constant.PublishPath), s.publishSubmit)
 	g.Open(route.Get(constant.RootPath), s.root)
-	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

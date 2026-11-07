@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -24,10 +23,7 @@ func New(
 	owner, _ := daemon_tester.New(t, i)
 	v := model_context_server.New(
 		t,
-		func(
-			m *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			owner.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)

@@ -2,15 +2,12 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -19,42 +16,13 @@ func New(
 	a *client.Client,
 	f face.Reporter,
 ) *Server {
-	r := registry.New()
-	r.Register(
-		palette.NewCommand(
-			constant.ClientsTitle,
-			constant.ClientsPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.CreateTitle,
-			constant.CreatePath,
-			webConstant.PaletteAction,
-		),
-		palette.NewCommand(
-			constant.SessionsTitle,
-			constant.SessionsPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.SignOutTitle,
-			webConstant.SignOutPath,
-			webConstant.PaletteAction,
-		),
-	)
-
 	return &Server{
 		service:       s,
 		authorization: a,
 		reporter:      f,
-		registry:      r,
 		view: view.New(
-			layout.New(constant.Identity).
-				WithTheme(webConstant.ThemeAmethyst).
-				WithStyle(
-					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
-				).
-				WithCommandPalette("/palette").
+			layout.New(constant.Identity, webConstant.ThemeAmethyst, favicon).
+				WithStyle(constant.InlineStyle).
 				WithItems(
 					navigation_item.New(
 						constant.ClientsPath,

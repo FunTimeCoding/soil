@@ -32,17 +32,13 @@ func New(
 	k := o.Kubernetes()
 	kg := peer.New(constant.SourceKubernetes, k.Configuration().Host, k, l, r)
 	result := &Daemon{
-		database:      d,
-		authorization: authorizationClient(o).WithReporter(r),
-		netbox:        n,
-		netboxGuard:   ng,
-		guards:        []*peer.Guard{kg},
-		collectors: []atlas.Collector{
-			kubernetes.New(k, kg),
-			label.New(n, ng),
-		},
-		logger:   l,
-		reporter: r,
+		database:    d,
+		netbox:      n,
+		netboxGuard: ng,
+		guards:      []*peer.Guard{kg},
+		collectors:  []atlas.Collector{kubernetes.New(k, kg), label.New(n, ng)},
+		logger:      l,
+		reporter:    r,
 	}
 
 	if o.Process != nil {
@@ -65,7 +61,7 @@ func New(
 		result.lease,
 		o.Retention,
 	)
-	result.web = web.New(result.service, result.authorization)
+	result.web = web.New(result.service)
 	result.clock = worker.New(result.service.Collect, o.Interval, l, y, r)
 
 	return result

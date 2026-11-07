@@ -12,7 +12,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"path/filepath"
 	"testing"
 )
@@ -42,7 +41,7 @@ func newWith(
 		Reporter: r,
 		Server: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(g *guard.Mux) {
 				v.Mount(r, mock_recorder.New(), g)
 			},
 		),

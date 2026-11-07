@@ -398,6 +398,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/permissions:
+    get:
+      operationId: getPermissions
+      parameters:
+      - name: days
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        "200":
+          description: Permission prompts of the last days, ranked by what blocked them.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PermissionReport"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/coverage:
     get:
       operationId: getCoverage
@@ -1691,6 +1714,55 @@ components:
           type: integer
         sessions:
           type: integer
+    PermissionReport:
+      type: object
+      required:
+      - days
+      - sessions
+      - prompts
+      - declined
+      - cleared
+      - rows
+      properties:
+        days:
+          type: integer
+        sessions:
+          type: integer
+        prompts:
+          type: integer
+        declined:
+          type: integer
+        cleared:
+          type: integer
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/PermissionRow"
+    PermissionRow:
+      type: object
+      required:
+      - blocker
+      - prompts
+      - sessions
+      - reason
+      - last
+      - commands
+      properties:
+        blocker:
+          type: string
+        prompts:
+          type: integer
+        sessions:
+          type: integer
+        reason:
+          type: string
+        last:
+          type: string
+          format: date-time
+        commands:
+          type: array
+          items:
+            type: string
     CoverageResponse:
       type: object
       required:

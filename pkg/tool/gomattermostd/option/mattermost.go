@@ -4,12 +4,12 @@ import (
 	chat "github.com/funtimecoding/soil/pkg/chat/face"
 	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
+	webOption "github.com/funtimecoding/soil/pkg/web/option"
 	"time"
 )
 
 type Mattermost struct {
-	Address          string
-	ServiceTokens    []string
+	webOption.Web
 	LitePath         string
 	PostgresLocator  string
 	Mattermost       func() chat.MattermostClient

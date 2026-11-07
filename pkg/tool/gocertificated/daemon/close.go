@@ -12,6 +12,5 @@ func (d *Daemon) Close() {
 		c.Close()
 	}
 
-	d.authorization.Close()
 	relational.CloseMapper(d.database)
 }

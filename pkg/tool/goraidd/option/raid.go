@@ -1,19 +1,16 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Raid struct {
-	Address          string
-	PostgresLocator  string
-	LitePath         string
-	LogCachePath     string
-	ElitePath        string
-	OutputPath       string
-	Issuer           string
-	ClientIdentifier string
-	ClientSecret     string
-	EncryptionSecret string
-	PublicLocator    string
-	ServiceTokens    []string
-	Parser           func() face.Client
+	option.Web
+	PostgresLocator string
+	LitePath        string
+	LogCachePath    string
+	ElitePath       string
+	OutputPath      string
+	Parser          func() face.Client
 }

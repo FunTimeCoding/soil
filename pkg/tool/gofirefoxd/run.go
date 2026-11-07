@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -24,15 +23,17 @@ func Run(
 	lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			constant.Identity,
-			web.AddressPort(o.BridgePort),
+			&o.Bridge,
+			r,
 			d.MountBridge,
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, s.Recorder(), guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, s.Recorder(), g)
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()

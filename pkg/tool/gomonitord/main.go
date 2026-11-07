@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -17,8 +16,7 @@ func Main() {
 	a.Database()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	Run(o, s)

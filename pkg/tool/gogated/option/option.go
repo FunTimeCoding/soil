@@ -1,9 +1,12 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/directory/face"
+import (
+	"github.com/funtimecoding/soil/pkg/directory/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Option struct {
-	Address               string
+	option.Web
 	PostgresLocator       string
 	LitePath              string
 	Secret                string
@@ -12,6 +15,5 @@ type Option struct {
 	Issuer                string
 	AdminClientIdentifier string
 	AdminClientSecret     string
-	ServiceTokens         []string
 	Directory             func() face.DirectoryClient
 }

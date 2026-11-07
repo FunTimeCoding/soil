@@ -24,11 +24,6 @@ func NewOption(
 	result := option.New()
 	result.Board = b
 	result.LitePath = filepath.Join(t.TempDir(), "godashboardd.db")
-	result.Issuer = "https://gate.example.org"
-	result.ClientIdentifier = "tester"
-	result.ClientSecret = "tester-secret"
-	result.EncryptionSecret = "tester-encryption-secret"
-	result.PublicLocator = "https://dashboard.example.org"
 	result.Prometheus = func() metric.PrometheusClient { return p }
 
 	if a != nil {

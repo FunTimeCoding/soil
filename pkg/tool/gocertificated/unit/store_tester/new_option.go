@@ -21,11 +21,6 @@ func NewOption(
 	o.AuthorityDirectory = constant.FixtureAuthorityDirectory
 	o.SecretAuthority = constant.FixtureClusterAuthority
 	o.SecretPath = constant.FixtureSecretPath
-	o.Issuer = "https://gate.example.org"
-	o.ClientIdentifier = "tester"
-	o.ClientSecret = "tester-secret"
-	o.EncryptionSecret = "tester-encryption-secret"
-	o.PublicLocator = "https://certificate.example.org"
 	o.Forge = func() face.GitLabClient { return f }
 
 	return o

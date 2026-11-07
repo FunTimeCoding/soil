@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/mock_worker"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"io"
 	"net/http"
@@ -63,8 +66,9 @@ func TestRunServerResponds(t *testing.T) {
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			"",
-			func(_ *http.ServeMux) {},
+			option.New(""),
+			memory.New(),
+			func(_ *guard.Mux) {},
 		).WithListener(n),
 	)
 	l.Run()
@@ -86,8 +90,9 @@ func TestRunServerVersion(t *testing.T) {
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			"",
-			func(_ *http.ServeMux) {},
+			option.New(""),
+			memory.New(),
+			func(_ *guard.Mux) {},
 		).WithListener(n),
 	)
 	l.Run()
@@ -110,8 +115,9 @@ func TestStopServerShutsDown(t *testing.T) {
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			"",
-			func(_ *http.ServeMux) {},
+			option.New(""),
+			memory.New(),
+			func(_ *guard.Mux) {},
 		).WithListener(n),
 	)
 	l.Run()
@@ -125,8 +131,9 @@ func TestRunServerMiddleware(t *testing.T) {
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			fmt.Sprintf(":%d", p),
-			func(_ *http.ServeMux) {},
+			option.New(fmt.Sprintf(":%d", p)),
+			memory.New(),
+			func(_ *guard.Mux) {},
 		).WithMiddleware(
 			func(h http.Handler) http.Handler {
 				return http.HandlerFunc(
@@ -161,8 +168,9 @@ func TestRunMixedOrder(t *testing.T) {
 		logger.New(context.Background())).WithWorker(mock_worker.New("a", &log)).WithServer(
 		server.New(
 			identity.Example(),
-			"",
-			func(_ *http.ServeMux) {
+			option.New(""),
+			memory.New(),
+			func(_ *guard.Mux) {
 				log = append(log, "start:server")
 			},
 		).WithListener(n),

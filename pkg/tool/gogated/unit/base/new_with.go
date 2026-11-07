@@ -12,7 +12,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogated/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/store"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -32,7 +31,7 @@ func NewWith(
 	s := NewService(t, o, m, d, l, r)
 	h := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			v.Mount(r, mock_recorder.New(), g)
 		},
 	)

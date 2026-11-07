@@ -26,14 +26,16 @@ func scanFrontend(
 		constant.UnknownTheme,
 		v.Has(filepath.Join(web, constant.FaviconFile)),
 	)
-	theme := parse.FindMethods(construct, constant.ThemeMethod)
+	name, _ := parse.ImportName(construct, constant.LayoutImport)
+	layouts := parse.FindCalls(construct, name, "New")
 
-	if len(theme) > 0 {
-		f.Theme = themeName(theme[0])
+	if len(layouts) > 0 && len(layouts[0].Args) > 1 {
+		f.Theme = themeName(layouts[0].Args[1])
 	}
 
 	f.Style = len(parse.FindMethods(construct, constant.StyleMethod)) > 0
-	f.Palette = len(parse.FindMethods(construct, constant.PaletteMethod)) > 0
+	f.Palette = len(parse.FindMethods(construct, constant.ItemsMethod))+
+		len(parse.FindMethods(construct, constant.CommandsMethod)) > 0
 	f.Live = len(parse.FindMethods(construct, constant.LiveMethod)) > 0
 	items := parse.FindMethods(construct, constant.ItemsMethod)
 
@@ -47,24 +49,9 @@ func scanFrontend(
 		return f
 	}
 
-	for _, c := range parse.FindMethods(mount, constant.RouteMethod) {
-		if len(c.Args) == 0 {
-			continue
-		}
-
-		route, okay := parse.StringValue(c.Args[0])
-
-		if !okay {
-			continue
-		}
-
-		if route == constant.PaletteRoute {
-			f.PaletteRoute = true
-		}
-
-		if route == constant.FaviconRoute {
-			f.FaviconRoute = true
-		}
+	if mountsView(mount) {
+		f.PaletteRoute = true
+		f.FaviconRoute = true
 	}
 
 	return f

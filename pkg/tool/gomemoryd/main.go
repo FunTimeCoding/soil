@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -18,8 +17,7 @@ func Main() {
 	a.Lite()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.HiddenTag = environment.Fallback(constant.HiddenTagEnvironment, "")
 	o.ReferenceRoot = environment.Fallback(

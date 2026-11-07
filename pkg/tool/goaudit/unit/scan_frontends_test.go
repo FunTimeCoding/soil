@@ -52,3 +52,30 @@ func TestFrontendsReportsMissingRoutes(t *testing.T) {
 	assert.Boolean(t, false, f[0].Favicon)
 	assert.Boolean(t, false, f[0].FaviconRoute)
 }
+
+func TestAFrontendWithNothingToListHasNoPalette(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/web/new.go",
+		constant.FixtureFrontendPlainSample,
+	)
+	f := frontends(v)
+	assert.Integer(t, 1, len(f))
+	assert.Boolean(t, false, f[0].Palette)
+	assert.String(t, "?", f[0].Theme)
+}
+
+func TestOnlyTheViewsMountServesTheIconAndPalette(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/web/new.go",
+		constant.FixtureFrontendNewSample,
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/web/mount.go",
+		constant.FixtureFrontendSignOnMount,
+	)
+	f := frontends(v)
+	assert.Boolean(t, false, f[0].PaletteRoute)
+	assert.Boolean(t, false, f[0].FaviconRoute)
+}

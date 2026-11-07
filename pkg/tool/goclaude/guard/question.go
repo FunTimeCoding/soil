@@ -3,18 +3,18 @@ package guard
 import "strings"
 
 func Question(command string) string {
-	calls, e := gitCalls(command)
-
-	if e != nil {
-		return ""
-	}
-
 	var reasons []string
 
-	for _, c := range calls {
-		if a := c.Ask(); a != "" {
-			reasons = append(reasons, a)
+	if calls, e := gitCalls(command); e == nil {
+		for _, c := range calls {
+			if a := c.Ask(); a != "" {
+				reasons = append(reasons, a)
+			}
 		}
+	}
+
+	if r := ripgrepQuestion(command); r != "" {
+		reasons = append(reasons, r)
 	}
 
 	return strings.Join(reasons, "; ")

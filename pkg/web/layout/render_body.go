@@ -28,7 +28,7 @@ func (p *Page) renderBody() []gomponents.Node {
 
 		navigation = append(navigation, p.navigation...)
 
-		if p.paletteEndpoint != "" {
+		if p.HasCommandPalette() {
 			navigation = append(
 				navigation,
 				html.Li(
@@ -92,10 +92,10 @@ func (p *Page) renderBody() []gomponents.Node {
 	mainAttrs = append(mainAttrs, gomponents.Group(p.content))
 	body = append(body, html.Main(mainAttrs...))
 
-	if p.paletteEndpoint != "" {
+	if p.HasCommandPalette() {
 		body = append(
 			body,
-			commandPalette(p.paletteEndpoint),
+			commandPalette(constant.PalettePath),
 			html.Script(gomponents.Raw(constant.PaletteScript)),
 		)
 	}

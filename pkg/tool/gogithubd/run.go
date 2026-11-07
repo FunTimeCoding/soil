@@ -10,8 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"net/http"
 )
 
 func Run(
@@ -24,18 +22,10 @@ func Run(
 	d := daemon.New(o, l, r, m)
 	defer d.Close()
 	c := lifecycle.New(l)
-
-	for _, w := range d.Workers() {
-		c.WithWorker(w)
-	}
-
+	c.WithWorkers(d.Workers()...)
 	c.WithServer(
-		server.New(
-			constant.Identity,
-			o.MetricAddress,
-			func(x *http.ServeMux) {
-				x.Handle(webConstant.MetricsPath, m.Exporter())
-			},
-		).WithVerbose(o.Verbose),
+		server.New(constant.Identity, &o.Metric, r, m.Mount).WithVerbose(
+			o.Verbose,
+		),
 	).RunUntilSignal()
 }

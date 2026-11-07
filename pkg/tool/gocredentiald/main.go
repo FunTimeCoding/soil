@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/keychain"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/option"
-	"github.com/funtimecoding/soil/pkg/web"
 	"strings"
 )
 
@@ -19,8 +18,7 @@ func Main() {
 	a.Web()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.Database = environment.Required(keepassConstant.DatabaseEnvironment)
 
 	if revealed := environment.Optional(

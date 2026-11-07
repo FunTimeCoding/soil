@@ -10,6 +10,7 @@ func TestGuard(t *testing.T) {
 	s := base.New(t)
 	c := s.Server
 	c.VerifyBase(t)
+	c.VerifyFavicon(t)
 	c.VerifyOpen(t, constant.FloorPath)
 	c.VerifyOpen(t, "/event")
 	c.VerifyModelContext(t)

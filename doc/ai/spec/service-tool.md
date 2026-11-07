@@ -73,9 +73,31 @@ a := argument.NewInstance(constant.Identity)
 a.Web()
 a.Parse()
 o := option.New()
-o.Address = a.Address()
+o.Read(a)
 Run(o)
 ```
+
+Every serving daemon's option struct embeds soil's `option.Web`
+(`pkg/web/option`), so `o.Address`, `o.ServiceTokens` and `o.Authorization`
+read as its own fields. `Read` fills the listen address from `a.Address()` and
+the tokens from `SERVICE_TOKEN`. A daemon with sign-on defaults
+`Authorization` to `client.NewEnvironment` in `option.New()`; the client reads
+`AUTHORIZATION_ISSUER`, its identifier, secret and encryption secret, and
+`PUBLIC_LOCATOR` itself.
+
+Every lifecycle server takes the one shape
+`server.New(identity, &o.Web, r, setup)`, and the option's values decide the
+guarding: its tokens guard `Token` and `Session` routes, and with no tokens - a
+metrics exporter's `o.Metric` - the guard takes `Open` routes only and refuses a
+protected one at mount, so nothing private can start unguarded. A second
+listener is a named `option.Web` on the daemon's option, filled in `main` or
+defaulted in `option.New()` (`o.Metric`, gobotd's `o.Public`, goalpined's
+`o.Files`), and what it serves mounts itself -
+`server.New(constant.Identity, &o.Metric, r, m.Mount)`, `d.MountFiles` - so
+`run.go` only wires. A set `Authorization` adds sign-on, built with the reporter
+`r` and closed with the server. The test battery builds its guard the same way:
+`model_context_server.New` with the test token, and
+`NewSignedOn(t, authorization_tester.Client, setup)` for a daemon that signs on.
 
 `a.Web()` registers `--port` and `--bind-address`. Each resolves
 through the chain flag > environment > default: `--port` falls back
@@ -90,14 +112,14 @@ the live resolved default.
   environment ConfigMap and keep the port default
 - A local daemon that serves remote clients on other hosts passes
   `--bind-address 0.0.0.0` in its launch entry
-- The option struct carries `Address string` - the joined listen
-  string from `a.Address()` - not a bare port
+- The option carries `Address` - the joined listen string from
+  `a.Address()` - not a bare port
 
 Daemons that expose a Prometheus exporter also call `a.Metric()` -
 registers `--metric-port` with chain `METRIC_PORT` > 9090. The
-option struct carries `MetricAddress string` from
-`a.MetricAddress()`; `Run` mounts the exporter on its own lifecycle
-server at that address, binding all interfaces. Locally co-hosted
+option carries `Metric option.Web`, its address from `a.MetricAddress()`;
+`Run` serves `m.Mount` - the exporter, open - on its own lifecycle server
+there, binding all interfaces. Locally co-hosted
 exporter daemons each get a unique `--metric-port` in the Procfile,
 like `--port`.
 
@@ -122,18 +144,14 @@ func Run(o *option.Library, i face.Instrument) {
     d := daemon.New(o, l, r)
     defer d.Close()
     errors.PanicOnError(d.Wait(context.Background()))
-    c := lifecycle.New(l)
-
-    for _, w := range d.Workers() {
-        c.WithWorker(w)
-    }
-
+    c := lifecycle.New(l).WithWorkers(d.Workers()...)
     c.WithServer(
         server.New(
             constant.Identity,
-            o.Address,
-            func(m *http.ServeMux) {
-                d.Mount(r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
+            &o.Web,
+            r,
+            func(g *guard.Mux) {
+                d.Mount(r, i.Recorder(), o.Version, g)
             },
         ).WithMiddleware(web.RecoveryMiddleware(r)),
     ).RunUntilSignal()
@@ -274,31 +292,21 @@ mapping stays in the service, next to the sentinel.
 
 The `Server` holds a `*view.View` constructed in `New`. The view wraps
 a `*layout.Page` template configured with the daemon's identity, theme,
-style, and navigation items. Handlers call `s.view.RenderPage` for full pages
-and `s.view.RenderFragment` for HTMX partials.
+icon, style, and navigation items. Handlers call `s.view.RenderPage` for full
+pages and `s.view.RenderFragment` for HTMX partials.
 
 ```go
 type Server struct {
-    service  *service.Service
-    view     *view.View
-    registry *registry.Registry
+    service *service.Service
+    view    *view.View
 }
 
 func New(v *service.Service) *Server {
-    r := registry.New()
-    r.Register(
-        palette.NewCommand(constant.DashboardTitle, constant.DashboardPath, webConstant.PaletteNavigate),
-        palette.NewCommand(constant.EntriesTitle, constant.EntriesPath, webConstant.PaletteNavigate),
-    )
-
     return &Server{
-        service:  v,
-        registry: r,
+        service: v,
         view: view.New(
-            layout.New(constant.Identity).
-                WithTheme(theme.Archive).
-                WithStyle(inlineCSS).
-                WithCommandPalette("/palette").
+            layout.New(constant.Identity, webConstant.ThemeArchive, favicon).
+                WithStyle(constant.InlineStyle).
                 WithItems(
                     navigation_item.New(constant.DashboardPath, constant.DashboardTitle),
                     navigation_item.New(constant.EntriesPath, constant.EntriesTitle),
@@ -307,6 +315,15 @@ func New(v *service.Service) *Server {
     }
 }
 ```
+
+The layout writes the shared component style ahead of the daemon's own, and
+carries the command palette whenever it has something to list: its navigation
+items are the palette's commands, `WithCommands` adds the rest (actions,
+links, entries built at start), and a request that came through a signed
+session also gets Sign out. A layout with neither, like gogated's sign-in
+pages, has no palette. The web `Mount` serves both with `s.view.Mount(g)`: the
+favicon open, and the palette behind sign-on exactly when the guard has a
+session.
 
 #### Summary strip and live updates
 
@@ -363,9 +380,11 @@ downstream repos.
 Key conventions:
 - `Mount()` takes a `guard.Mux` and registers all routes through its verbs using
   method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on
-  non-SSO services; SSO services call `s.authorization.Mount(g)` first, which
-  installs the client's session check and opens the auth trio, and register
-  their protected routes with `g.Session` (favicon stays `Open`). A service
+  non-SSO services. Sign-on is in the guard before `Mount` runs: `o.Web.Guard`
+  installs the client's session check and opens the auth trio whenever the
+  option's `Authorization` is set, and SSO services register their protected
+  routes with `g.Session`; the session puts the signed-in subject on the
+  request (`guard.Subject`). A service
   whose session check differs, the way gogated's admin check does, calls
   `g.WithSession` itself and opens the client's three methods directly. A
   session route also answers to the service bearer token, so the tokens that

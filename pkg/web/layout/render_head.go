@@ -16,6 +16,14 @@ func (p *Page) renderHead(title string) []gomponents.Node {
 			html.Content("width=device-width, initial-scale=1"),
 		),
 		html.TitleEl(gomponents.Text(title)),
+		gomponents.If(
+			len(p.favicon) > 0,
+			html.Link(
+				html.Rel("icon"),
+				html.Type(constant.Graphic),
+				html.Href(constant.FaviconPath),
+			),
+		),
 		html.Link(html.Rel("stylesheet"), html.Href(constant.Pico)),
 		html.StyleEl(gomponents.Raw(constant.BaseStyle)),
 		html.StyleEl(gomponents.Raw(constant.NotificationStyle)),
@@ -39,9 +47,11 @@ func (p *Page) renderHead(title string) []gomponents.Node {
 		head = append(head, html.StyleEl(gomponents.Raw(p.theme)))
 	}
 
-	if p.paletteEndpoint != "" {
+	if p.HasCommandPalette() {
 		head = append(head, html.StyleEl(gomponents.Raw(constant.PaletteStyle)))
 	}
+
+	head = append(head, html.StyleEl(gomponents.Raw(constant.ComponentStyle)))
 
 	if p.style != "" {
 		head = append(head, html.StyleEl(gomponents.Raw(p.style)))

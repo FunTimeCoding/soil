@@ -38,11 +38,6 @@ func New(t *testing.T) *Tester {
 	l := logger.New(context.Background())
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "atlas.db")
-	o.Issuer = "https://gate.example.org"
-	o.ClientIdentifier = "tester"
-	o.ClientSecret = "tester-secret"
-	o.EncryptionSecret = "tester-encryption-secret"
-	o.PublicLocator = "https://atlas.example.org"
 	o.Retention = constant.FixtureRetention
 	o.Interval = constant.FixtureInterval
 	o.ProcessPlace = constant.FixtureVirtualMachineNode

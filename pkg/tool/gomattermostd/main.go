@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	monitorOption "github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -19,8 +18,7 @@ func Main() {
 	a.Database()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.Connector = client.NewOptional

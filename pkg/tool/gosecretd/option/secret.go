@@ -1,10 +1,12 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/openbao/face"
+import (
+	"github.com/funtimecoding/soil/pkg/openbao/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Secret struct {
-	Address       string
-	MetricAddress string
-	ServiceTokens []string
-	Source        func() face.OpenbaoClient
+	option.Web
+	Metric option.Web
+	Source func() face.OpenbaoClient
 }

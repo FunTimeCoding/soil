@@ -15,8 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/example/mechanic"
-	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"testing"
 )
 
@@ -27,10 +26,9 @@ func serve(t *testing.T) string {
 	b := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(
 			identity.Example(),
-			"",
-			func(m *http.ServeMux) {
-				u.Mount(guard.New(m, []string{constant.MechanicToken}))
-			},
+			option.New("", constant.MechanicToken),
+			memory.New(),
+			u.Mount,
 		).WithListener(n).WithMiddleware(u.Recovery(memory.New())),
 	)
 	b.Run()

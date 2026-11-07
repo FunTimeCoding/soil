@@ -1,10 +1,12 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/habitica/face"
+import (
+	"github.com/funtimecoding/soil/pkg/habitica/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Habitica struct {
-	Address       string
-	ServiceTokens []string
-	Host          string
-	Source        func() face.HabiticaClient
+	option.Web
+	Host   string
+	Source func() face.HabiticaClient
 }

@@ -2,14 +2,11 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -20,32 +17,13 @@ func New(
 	n face.EventNotifier,
 	f face.Reporter,
 ) *Server {
-	r := registry.New()
-	r.Register(
-		palette.NewCommand(
-			constant.DashboardTitle,
-			constant.DashboardPath,
-			webConstant.PaletteNavigate,
-		),
-		palette.NewCommand(
-			constant.SessionsTitle,
-			constant.SessionsPath,
-			webConstant.PaletteNavigate,
-		),
-	)
-
 	return &Server{
 		service:  s,
 		notifier: n,
 		reporter: f,
-		registry: r,
 		view: view.New(
-			layout.New(constant.Identity).
-				WithTheme(webConstant.ThemeSprout).
-				WithStyle(
-					join.Empty(webConstant.ComponentStyle, constant.InlineStyle),
-				).
-				WithCommandPalette(webConstant.PalettePath).
+			layout.New(constant.Identity, webConstant.ThemeSprout, favicon).
+				WithStyle(constant.InlineStyle).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

@@ -3,12 +3,12 @@ package option
 import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/face"
 	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 )
 
 type Terraform struct {
-	Address           string
-	ServiceTokens     []string
-	MetricAddress     string
+	option.Web
+	Metric            option.Web
 	Repository        string
 	ClonePath         string
 	TerraformPath     string

@@ -2,13 +2,13 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"time"
 )
 
 type Log struct {
-	Address         string
-	ServiceTokens   []string
-	MetricAddress   string
+	option.Web
+	Metric          option.Web
 	PostgresLocator string
 	LitePath        string
 	Retention       time.Duration

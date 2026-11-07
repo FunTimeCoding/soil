@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/daemon"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 	"testing"
 )
 
@@ -20,10 +19,7 @@ func mountedClient(
 	t.Helper()
 	s := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)

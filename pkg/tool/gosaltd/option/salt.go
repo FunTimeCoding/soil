@@ -2,13 +2,13 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/provision/salt/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"time"
 )
 
 type Salt struct {
-	Address         string
-	MetricAddress   string
-	ServiceTokens   []string
+	option.Web
+	Metric          option.Web
 	Repository      string
 	ClonePath       string
 	SaltPath        string

@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 	"strings"
 )
 
@@ -25,9 +24,8 @@ func Main() {
 	a.String(argumentConstant.ClonePath, "", "Local repository path")
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
-	o.MetricAddress = a.MetricAddress()
+	o.Read(a)
+	o.Metric.Address = a.MetricAddress()
 	o.Repository = a.Required(argumentConstant.Repository)
 	o.ClonePath = a.Required(argumentConstant.ClonePath)
 	o.TerraformPath = environment.Required(constant.TerraformPathEnvironment)

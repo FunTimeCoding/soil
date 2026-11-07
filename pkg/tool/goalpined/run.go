@@ -6,13 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -26,21 +24,13 @@ func Run(
 	lifecycle.New(l).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(m *http.ServeMux) {
-				d.Mount(r, t, guard.New(m, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, t, g)
 			},
 		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).WithServer(
-		server.New(
-			constant.Identity,
-			constant.FileAddress,
-			func(m *http.ServeMux) {
-				m.Handle(
-					stringsConstant.Slash,
-					http.FileServer(http.Dir(o.PackageRoot)),
-				)
-			},
-		),
+		server.New(constant.Identity, &o.Files, r, d.MountFiles),
 	).RunUntilSignal()
 }

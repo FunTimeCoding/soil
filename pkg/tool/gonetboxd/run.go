@@ -11,9 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func Run(
@@ -27,25 +25,16 @@ func Run(
 	defer d.Close()
 	errors.PanicOnError(d.Wait(context.Background()))
 	c := lifecycle.New(l)
-
-	for _, w := range d.Workers() {
-		c.WithWorker(w)
-	}
-
+	c.WithWorkers(d.Workers()...)
 	c.WithServer(
-		server.New(
-			constant.Identity,
-			o.MetricAddress,
-			func(x *http.ServeMux) {
-				x.Handle(webConstant.MetricsPath, m.Exporter())
-			},
-		),
+		server.New(constant.Identity, &o.Metric, r, m.Mount),
 	).WithServer(
 		server.New(
 			constant.Identity,
-			o.Address,
-			func(x *http.ServeMux) {
-				d.Mount(r, i.Recorder(), guard.New(x, o.ServiceTokens))
+			&o.Web,
+			r,
+			func(g *guard.Mux) {
+				d.Mount(r, i.Recorder(), g)
 			},
 		).WithMiddleware(d.Recovery(r)),
 	).RunUntilSignal()

@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -30,9 +29,8 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.ServiceTokens = web.ServiceTokens()
-	o.MetricAddress = a.MetricAddress()
+	o.Read(a)
+	o.Metric.Address = a.MetricAddress()
 	o.Repository = a.Required(argumentConstant.Repository)
 	o.ClonePath = a.Required(argumentConstant.ClonePath)
 	o.AnsiblePath = environment.Required(constant.AnsiblePathEnvironment)

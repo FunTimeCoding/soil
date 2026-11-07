@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 )
 
 func (t *Tester) Mounted(
@@ -19,7 +18,7 @@ func (t *Tester) Mounted(
 	d := NewDaemon(t.t, t.Option, r)
 	v := model_context_server.New(
 		t.t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

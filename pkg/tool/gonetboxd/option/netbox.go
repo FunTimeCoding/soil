@@ -2,13 +2,13 @@ package option
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Netbox struct {
-	Address         string
-	MetricAddress   string
-	ServiceTokens   []string
+	option.Web
+	Metric          option.Web
 	LitePath        string
 	PostgresLocator string
 	PowerIntent     bool

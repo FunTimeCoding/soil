@@ -10,12 +10,12 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
+	s.view.Mount(g)
 	item := "/{identifier}"
 	edit := join.Empty(item, stringsConstant.Slash, constant.EditAction)
 	pulse := join.Empty(item, stringsConstant.Slash, constant.PulseAction)
 	cruise := join.Empty(item, stringsConstant.Slash, constant.CruiseAction)
 	remove := join.Empty(item, stringsConstant.Slash, constant.DeleteAction)
-	g.Open(route.Get(webConstant.PalettePath), s.registry.Serve())
 	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
 	g.OpenMount(route.Get(webConstant.LivePath), s.live())
 	g.Token(route.Get(constant.EventStreamPath), s.eventStream())
@@ -28,6 +28,7 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Post(constant.SessionsPath, remove), s.sessionDeleteAction)
 	g.Open(route.Get(constant.ActivityPath), s.activityPage)
 	g.Open(route.Get(constant.CoveragePath), s.coveragePage)
+	g.Open(route.Get(constant.PermissionsPath), s.permissionsPage)
 	g.Open(route.Get(constant.StatusPath), s.statusPage)
 	g.Open(route.Get(constant.UsagePath), s.usagePage)
 	g.Open(route.Get(constant.MessagesPath), s.messagesPage)
@@ -35,6 +36,5 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(constant.HistoryPath, item), s.historyRow)
 	g.Open(route.Get(constant.HistoryPath, edit), s.historyEditForm)
 	g.Open(route.Post(constant.HistoryPath, edit), s.historyEditSubmit)
-	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 	s.conversations.Mount(g)
 }

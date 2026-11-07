@@ -3,6 +3,7 @@ package daemon
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/route"
 	"net/http"
 )
@@ -10,9 +11,9 @@ import (
 func (d *Daemon) MountLocal(
 	r face.Reporter,
 	t face.Recorder,
-	m *http.ServeMux,
+	g *guard.Mux,
 ) {
-	m.HandleFunc(
+	g.Open(
 		route.Get(webConstant.ReachablePath),
 		func(
 			w http.ResponseWriter,
@@ -21,5 +22,5 @@ func (d *Daemon) MountLocal(
 			w.WriteHeader(http.StatusNoContent)
 		},
 	)
-	m.Handle(webConstant.InterfacePath, interfaceTree(d.service, r, t))
+	g.OpenMount(webConstant.InterfacePath, interfaceTree(d.service, r, t))
 }

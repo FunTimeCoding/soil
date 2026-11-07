@@ -10,17 +10,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
 func TestModelContextAlertsNeedASelectedInstance(t *testing.T) {
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			healthyDaemon(t, "alfa", "bravo").Mount(
 				memory.New(),
 				mock_recorder.New(),

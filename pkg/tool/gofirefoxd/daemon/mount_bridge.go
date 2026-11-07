@@ -2,9 +2,9 @@ package daemon
 
 import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 )
 
-func (d *Daemon) MountBridge(m *http.ServeMux) {
-	m.Handle(webConstant.RootPath, d.client)
+func (d *Daemon) MountBridge(g *guard.Mux) {
+	g.OpenMount(webConstant.RootPath, d.client)
 }

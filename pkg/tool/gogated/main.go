@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -21,7 +20,6 @@ func Main() {
 	a.Database()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Secret = environment.Required(constant.SecretEnvironment)
@@ -36,7 +34,7 @@ func Main() {
 	o.AdminClientSecret = environment.Required(
 		constant.AdminClientSecretEnvironment,
 	)
-	o.ServiceTokens = web.ServiceTokens()
+	o.Read(a)
 
 	if environment.Exists(directoryConstant.HostEnvironment) {
 		o.Directory = func() face.DirectoryClient { return directory.NewEnvironment() }

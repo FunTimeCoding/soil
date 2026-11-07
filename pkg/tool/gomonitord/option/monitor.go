@@ -1,8 +1,9 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/web/option"
+
 type Monitor struct {
-	Address         string
-	ServiceTokens   []string
+	option.Web
 	PostgresLocator string
 	LitePath        string
 }

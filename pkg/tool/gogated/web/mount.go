@@ -10,11 +10,11 @@ import (
 
 func (s *Server) Mount(g *guard.Mux) {
 	g.WithSession(s.requireAdmin)
-	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
 	a := s.authorization
 	g.Open(route.Get(webConstant.SignInPath), a.SignIn)
 	g.Open(route.Get(webConstant.CallbackPath), a.Callback)
 	g.Open(route.Get(webConstant.SignOutPath), a.SignOut)
+	s.view.Mount(g)
 	g.Session(route.Get(webConstant.RootPattern), s.clients)
 	g.Session(route.Get(constant.CreatePath), s.create)
 	g.Session(route.Post(constant.CreatePath), s.createSubmit)
@@ -44,5 +44,4 @@ func (s *Server) Mount(g *guard.Mux) {
 		),
 		s.deleteSession,
 	)
-	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

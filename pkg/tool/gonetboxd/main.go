@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main() {
@@ -19,9 +18,8 @@ func Main() {
 	a.Database()
 	a.Parse()
 	o := option.New()
-	o.Address = a.Address()
-	o.MetricAddress = a.MetricAddress()
-	o.ServiceTokens = web.ServiceTokens()
+	o.Metric.Address = a.MetricAddress()
+	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.PowerIntent = environment.Exists(constant.PowerIntentEnvironment)

@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -15,15 +14,13 @@ func TestGuard(t *testing.T) {
 	d := newDaemon(t, service_tester.NewSource(t))
 	v := model_context_server.New(
 		t,
-		func(
-			_ *http.ServeMux,
-			g *guard.Mux,
-		) {
+		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Close()
 	v.VerifyBase(t)
+	v.VerifyFavicon(t)
 	v.VerifyOpen(t, constant.BookmarkPath)
 	v.VerifyModelContext(t)
 }

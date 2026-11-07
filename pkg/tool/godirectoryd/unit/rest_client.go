@@ -10,9 +10,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"net/http"
 	"testing"
 )
 
@@ -23,9 +23,10 @@ func restClient(
 ) *client.ClientWithResponses {
 	t.Helper()
 	d := daemon_tester.New(t, c, r)
-	s := model_context_server.New(
+	s := model_context_server.NewSignedOn(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		authorization_tester.Client,
+		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)

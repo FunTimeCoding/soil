@@ -1,9 +1,11 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/jellyfin/face"
+import (
+	"github.com/funtimecoding/soil/pkg/jellyfin/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Jellyfin struct {
-	Address       string
-	ServiceTokens []string
-	Source        func() face.JellyfinClient
+	option.Web
+	Source func() face.JellyfinClient
 }

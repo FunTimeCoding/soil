@@ -1,12 +1,14 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+	"github.com/funtimecoding/soil/pkg/web/option"
+)
 
 type Parser struct {
-	Address       string
-	ParserPath    string
-	TemplatePath  string
-	OutputPath    string
-	ServiceTokens []string
-	TopStats      func(path string) face.TopStatsParser
+	option.Web
+	ParserPath   string
+	TemplatePath string
+	OutputPath   string
+	TopStats     func(path string) face.TopStatsParser
 }
