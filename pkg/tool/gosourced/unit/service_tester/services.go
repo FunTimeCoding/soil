@@ -1,6 +1,7 @@
 package service_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/diff"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/file"
@@ -14,6 +15,7 @@ import (
 
 type Services struct {
 	Workspace *workspace.Service
+	Census    *census.Service
 	Commit    *commit.Service
 	Diff      *diff.Service
 	File      *file.Service

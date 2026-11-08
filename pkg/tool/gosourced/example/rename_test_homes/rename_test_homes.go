@@ -2,6 +2,7 @@ package rename_test_homes
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/example/offline_service"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/packages"
 	"os"
@@ -21,7 +22,7 @@ func RenameTestHomes() {
 	s := packages.New(w, c)
 
 	for _, relative := range testHomeDirectories(directory, "unit_test") {
-		renameTestHome(s, directory, module, relative, "unit")
+		renameTestHome(s, directory, module, relative, constant.UnitSegment)
 	}
 
 	for _, relative := range testHomeDirectories(
@@ -29,7 +30,13 @@ func RenameTestHomes() {
 		"integration_test",
 	) {
 		if hasGoFiles(directory, relative) {
-			renameTestHome(s, directory, module, relative, "integration")
+			renameTestHome(
+				s,
+				directory,
+				module,
+				relative,
+				constant.IntegrationSegment,
+			)
 
 			continue
 		}

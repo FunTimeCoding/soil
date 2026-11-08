@@ -13,6 +13,7 @@ const (
 	FromFlag   = "from"
 	ToFlag     = "to"
 	TextFlag   = "text"
+	MethodFlag = "method"
 )
 
 const (

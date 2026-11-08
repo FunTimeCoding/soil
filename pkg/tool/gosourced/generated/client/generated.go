@@ -15,6 +15,67 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Census defines model for Census.
+type Census struct {
+	Fields  []string       `json:"fields"`
+	Methods []CensusMethod `json:"methods"`
+	Package string         `json:"package"`
+	Type    string         `json:"type"`
+}
+
+// CensusCaller defines model for CensusCaller.
+type CensusCaller struct {
+	Count    int    `json:"count"`
+	Function string `json:"function"`
+
+	// Kind production, support, test or internal.
+	Kind    string `json:"kind"`
+	Package string `json:"package"`
+}
+
+// CensusMethod defines model for CensusMethod.
+type CensusMethod struct {
+	// Atomically It opens a transaction through the store's Atomically.
+	Atomically bool           `json:"atomically"`
+	Callers    []CensusCaller `json:"callers"`
+
+	// Calls Methods of the type it calls, through free functions too.
+	Calls []string `json:"calls"`
+
+	// Fields Receiver fields it reads.
+	Fields []string `json:"fields"`
+	File   string   `json:"file"`
+
+	// Functions Free functions of the package it reaches.
+	Functions []string `json:"functions"`
+	Name      string   `json:"name"`
+
+	// Packages The module's other packages it references.
+	Packages []string `json:"packages"`
+
+	// Reach The tables with every method it calls, transitively.
+	Reach  CensusTables `json:"reach"`
+	Tables CensusTables `json:"tables"`
+
+	// TransactionStep It takes the transaction store as a parameter.
+	TransactionStep bool `json:"transaction_step"`
+
+	// Uses Methods it calls on the module's other types, by type.
+	Uses []CensusUse `json:"uses"`
+}
+
+// CensusTables defines model for CensusTables.
+type CensusTables struct {
+	Read    []string `json:"read"`
+	Written []string `json:"written"`
+}
+
+// CensusUse defines model for CensusUse.
+type CensusUse struct {
+	Methods []string `json:"methods"`
+	Type    string   `json:"type"`
+}
+
 // ClassCount defines model for ClassCount.
 type ClassCount struct {
 	Class string `json:"class"`
@@ -65,6 +126,17 @@ type ModuleRange struct {
 
 	// To The staged index when empty.
 	To string `json:"to"`
+}
+
+// GetCensusParams defines parameters for GetCensus.
+type GetCensusParams struct {
+	Module string `form:"module" json:"module"`
+
+	// Package Full import path of the package declaring the type.
+	Package string `form:"package" json:"package"`
+
+	// Type The struct type whose methods are counted.
+	Type string `form:"type" json:"type"`
 }
 
 // GetDiffParams defines parameters for GetDiff.
@@ -155,8 +227,24 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
+	// GetCensus performs a GET /api/census (the `GetCensus` operationId) request.
+	GetCensus(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetDiff performs a GET /api/diff (the `GetDiff` operationId) request.
 	GetDiff(ctx context.Context, params *GetDiffParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+// GetCensus performs a GET /api/census (the `GetCensus` operationId) request.
+func (c *Client) GetCensus(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCensusRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 // GetDiff performs a GET /api/diff (the `GetDiff` operationId) request.
@@ -170,6 +258,72 @@ func (c *Client) GetDiff(ctx context.Context, params *GetDiffParams, reqEditors 
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewGetCensusRequest constructs an http.Request for the GetCensus method
+func NewGetCensusRequest(server string, params *GetCensusParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/census")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "module", params.Module, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "package", params.Package, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "type", params.Type, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewGetDiffRequest constructs an http.Request for the GetDiff method
@@ -302,10 +456,77 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
+	// GetCensusWithResponse performs a GET /api/census (the `GetCensus` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetCensusWithResponse(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*GetCensusResponse, error)
+
 	// GetDiffWithResponse performs a GET /api/diff (the `GetDiff` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetDiffWithResponse(ctx context.Context, params *GetDiffParams, reqEditors ...RequestEditorFn) (*GetDiffResponse, error)
+}
+
+type GetCensusResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Census
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetCensusResponse) GetJSON200() *Census {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetCensusResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetCensusResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetCensusResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetCensusResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCensusResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCensusResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetCensusResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 type GetDiffResponse struct {
@@ -363,6 +584,17 @@ func (r GetDiffResponse) ContentType() string {
 	return ""
 }
 
+// GetCensusWithResponse performs a GET /api/census (the `GetCensus` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetCensusWithResponse(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*GetCensusResponse, error) {
+	rsp, err := c.GetCensus(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCensusResponse(rsp)
+}
+
 // GetDiffWithResponse performs a GET /api/diff (the `GetDiff` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -372,6 +604,53 @@ func (c *ClientWithResponses) GetDiffWithResponse(ctx context.Context, params *G
 		return nil, err
 	}
 	return ParseGetDiffResponse(rsp)
+}
+
+// ParseGetCensusResponse parses an HTTP response from a GetCensusWithResponse call
+func ParseGetCensusResponse(rsp *http.Response) (*GetCensusResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCensusResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Census
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseGetDiffResponse parses an HTTP response from a GetDiffWithResponse call

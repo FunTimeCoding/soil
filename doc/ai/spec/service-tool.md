@@ -167,10 +167,10 @@ func Run(o *option.Library, i face.Instrument) {
 - The listen address is `o.Address` from `a.Address()`; a surface without
   flags (examples, callback servers) uses `web.AddressPort`, the same
   `BIND_ADDRESS` > loopback chain - never format one by hand
-- The server callback builds one `guard.Mux` and hands it to `d.Mount` -
-  routes register there, never on the mux. `guard.New` mounts
-  `route:/api/reachable` itself, the peer probe route
-  (`error-handling/infrastructure.md`, The probe route)
+- `server.New` builds the one `guard.Mux` from the option and hands it to the
+  setup, which hands it to `d.Mount` - routes register there, never on the mux.
+  A guard with tokens mounts `route:/api/reachable` itself, the peer probe
+  route (`error-handling/infrastructure.md`, The probe route)
 - The daemon's `Close` is deferred before the lifecycle starts, so it
   closes after every worker and server has
 - A daemon with required peers is waited on next, before the lifecycle
@@ -249,7 +249,7 @@ pkg/tool/go<tool>d/web/
 ├── new.go              # New(deps) *Server - constructs view
 ├── mount.go            # (s *Server) Mount(g *guard.Mux)
 ├── recovery.go         # (s *Server) Recovery(r) - delegates to view.Recovery
-├── constant.go         # inlineCSS (component CSS specific to this service)
+├── favicon.go          # embeds favicon.png beside it, layout.New's icon
 ├── <route>.go          # handler method: dashboard(), alerts()
 └── <component>.go      # HTML builder: alerts_table.go, add_form.go
 ```

@@ -61,6 +61,7 @@ func New(
 		migrateForeignKeys(d)
 	}
 
+	migrateLabelSet(d)
 	migrateSummarySession(d)
 
 	return &Store{database: d, clock: clock}

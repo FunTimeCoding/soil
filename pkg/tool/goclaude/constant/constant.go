@@ -37,6 +37,9 @@ const (
 	NoGuardEnvironment = "CLAUDE_NO_GUARD"
 
 	StatusLineDumpFile = "/tmp/goclaude-status-line.json"
+
+	PreCompactEvent  = "PreCompact"
+	PostCompactEvent = "PostCompact"
 )
 
 const (

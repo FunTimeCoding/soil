@@ -23,6 +23,12 @@ func (s *Server) PostSessionLabel(
 		value = *r.Body.Value
 	}
 
+	var action server.LabelAction
+
+	if r.Body.Action != nil {
+		action = *r.Body.Action
+	}
+
 	var change string
 	var e error
 
@@ -35,8 +41,16 @@ func (s *Server) PostSessionLabel(
 			*r.Body.Expect,
 			value,
 		)
-	case value == "":
-		change, e = s.label.DeleteLabel(r.Identifier, from, "", r.Body.Key)
+	case action == server.Add:
+		change, e = s.label.AddLabel(r.Identifier, from, "", r.Body.Key, value)
+	case action == server.Remove:
+		change, e = s.label.RemoveLabel(
+			r.Identifier,
+			from,
+			"",
+			r.Body.Key,
+			value,
+		)
 	default:
 		change, e = s.label.SetLabel(r.Identifier, from, "", r.Body.Key, value)
 	}

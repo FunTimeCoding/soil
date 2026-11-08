@@ -40,7 +40,11 @@ func TestDeleteSessionCascadesChildRecords(t *testing.T) {
 		t,
 		s.Store.UpsertSummary("session-1", "Ash", "test summary body"),
 	)
-	_, f := s.Store.SetLabel("session-1", "role", "reviewer")
+	_, f := s.Store.SetLabel(
+		"session-1",
+		constant.FixtureLabelKey,
+		[]string{"reviewer"},
+	)
 	assert.FatalOnError(t, f)
 	assert.FatalOnError(t, s.Store.SendPulse("session-1", "Ash", "test pulse"))
 	completions := s.CompletionsBySession("session-1")

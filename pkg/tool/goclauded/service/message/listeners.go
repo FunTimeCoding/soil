@@ -3,6 +3,7 @@ package message
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"slices"
 )
 
 func (s *Service) listeners(name string) ([]*session.Session, error) {
@@ -21,13 +22,13 @@ func (s *Service) listeners(name string) ([]*session.Session, error) {
 			continue
 		}
 
-		value, f := s.store.GetLabel(v.Identifier, constant.BroadcastLabel)
+		values, f := s.store.GetLabel(v.Identifier, constant.BroadcastLabel)
 
 		if f != nil {
 			return nil, f
 		}
 
-		if value == constant.BroadcastOff {
+		if slices.Contains(values, constant.BroadcastOff) {
 			continue
 		}
 

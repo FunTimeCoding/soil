@@ -81,7 +81,11 @@ func TestDeleteReceiptReportsWhatWentAway(t *testing.T) {
 		t,
 		s.Store.Store.UpsertSummary("rich", r.Callsign, "summary body"),
 	)
-	_, f := s.Store.Store.SetLabel("rich", "role", "reviewer")
+	_, f := s.Store.Store.SetLabel(
+		"rich",
+		constant.FixtureLabelKey,
+		[]string{"reviewer"},
+	)
 	assert.FatalOnError(t, f)
 	assert.FatalOnError(
 		t,

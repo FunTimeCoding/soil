@@ -27,6 +27,7 @@ const (
 	UtilizationPollInterval = 5 * time.Minute
 )
 const RosterStaleAfter = 45 * time.Minute
+const DaemonStarted = "started"
 const (
 	PageSize        = 20
 	HistoryPageSize = 10
@@ -160,6 +161,12 @@ const (
 	Past         = "past"
 	Now          = "now"
 	UnsetMarker  = "(unset)"
+	LabelNotSet    = "%s (not set)"
+	LabelUnchanged = "%s %s (unchanged)"
+	LabelAdd       = "add"
+	LabelRemove    = "remove"
+	LabelHeld      = "label %s already holds a value, nothing written"
+	LabelNotHeld   = "label %s does not hold %q, nothing written"
 	ChangeArrow  = "→"
 	LegacyChange = "change"
 )
@@ -220,6 +227,19 @@ const (
 )
 
 const (
+	Compaction           = "compaction"
+	Phase                = "phase"
+	Trigger              = "trigger"
+	CompactionNotice     = "%s %s compacting"
+	CompactionTrigger    = " (%s)"
+	CompactionTopic      = " - %s"
+	CompactionTopicLimit = 300
+	CompactionUnknown    = "unknown compaction phase %q"
+	CompactionWatchLabel = "role"
+	CompactionWatchValue = "lead"
+)
+
+const (
 	AutocompleteOff = "off"
 
 	DashboardTitle     = "Dashboard"
@@ -249,6 +269,9 @@ const (
 	FixtureTopic  = "topic"
 	FixtureTarget = "target"
 	FixtureBefore = "before"
+
+	FixtureLabelKey   = "role"
+	FixtureCompatible = "lead"
 )
 
 const FixtureChannelHold = 50 * time.Millisecond

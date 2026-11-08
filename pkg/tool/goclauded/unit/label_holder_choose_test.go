@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/label_holder_tester"
 	"testing"
 	"time"
@@ -83,6 +84,50 @@ func TestFreshSessionsWaitForTheirTurns(t *testing.T) {
 		label_holder_tester.Active("settled", ""),
 	)
 	assert.String(t, "settled", plan.Adopt)
+}
+
+func TestAHolderIsFoundAmongSeveralValues(t *testing.T) {
+	plan := label_holder_tester.Choose(
+		label_holder_tester.Active("a", "lead,watch"),
+	)
+	assert.String(t, "a", plan.Holder)
+	assert.String(t, "", plan.Adopt)
+}
+
+func TestAnIdleHolderReleasesOnlyItsOwnValue(t *testing.T) {
+	plan := label_holder_tester.Choose(
+		label_holder_tester.Idle("gone", "lead,Watch"),
+	)
+	assert.Count(t, 1, plan.Unset)
+	assert.String(t, "Watch", plan.Unset[0].Value)
+}
+
+func TestAdoptionTakesASessionHoldingOnlyACompatibleValue(t *testing.T) {
+	plan := label_holder_tester.ChooseBeside(
+		constant.FixtureCompatible,
+		label_holder_tester.Active("a", "Lead"),
+		label_holder_tester.Active("b", ""),
+	)
+	assert.String(t, "a", plan.Adopt)
+}
+
+func TestAdoptionSkipsASessionHoldingAnyOtherValueBesideACompatibleOne(
+	t *testing.T,
+) {
+	plan := label_holder_tester.ChooseBeside(
+		constant.FixtureCompatible,
+		label_holder_tester.Active("a", "lead,none"),
+		label_holder_tester.Active("b", ""),
+	)
+	assert.String(t, "b", plan.Adopt)
+}
+
+func TestAdoptionWithNothingCompatibleSkipsASessionHoldingAValue(t *testing.T) {
+	plan := label_holder_tester.Choose(
+		label_holder_tester.Active("a", constant.FixtureCompatible),
+		label_holder_tester.Active("b", ""),
+	)
+	assert.String(t, "b", plan.Adopt)
 }
 
 func TestEmptyRosterHoldsNobody(t *testing.T) {

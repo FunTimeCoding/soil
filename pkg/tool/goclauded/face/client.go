@@ -11,6 +11,7 @@ import (
 )
 
 type Client interface {
+	AddLabel(sessionIdentifier string, key string, value string, from string) error
 	Address() string
 	ClaimLabel(sessionIdentifier string, key string, value string, from string) (bool, error)
 	Close()
@@ -43,6 +44,7 @@ type Client interface {
 	Notify(callsign string, source string, body string, d constant.Delivery) error
 	PostAnnounce(x context.Context, body client.PostAnnounceJSONRequestBody) error
 	PostBackfill(x context.Context, params *client.PostBackfillParams) (*client.BackfillResponse, error)
+	PostCompaction(x context.Context, body client.PostCompactionJSONRequestBody) error
 	PostEditSession(x context.Context, body client.PostEditSessionJSONRequestBody) error
 	PostNotify(x context.Context, body client.PostNotifyJSONRequestBody) (*client.DeliveryResponse, error)
 	PostRegister(x context.Context, body client.PostRegisterJSONRequestBody) (*client.RegisterResponse, error)
@@ -63,7 +65,7 @@ type Client interface {
 	Reachable(x context.Context) error
 	RecentSessions(limit int) ([]*target.Target, error)
 	ReleaseLabel(sessionIdentifier string, key string, value string, from string) (bool, error)
-	RemoveLabel(sessionIdentifier string, key string, from string) error
+	RemoveLabel(sessionIdentifier string, key string, value string, from string) error
 	SetLabel(sessionIdentifier string, key string, value string, from string) error
 	Subscribe(name string, kinds []string, l *logger.Logger, r face.Reporter) (<-chan *stream_event.Event, func())
 }

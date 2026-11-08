@@ -52,8 +52,181 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/census:
+    get:
+      operationId: getCensus
+      parameters:
+      - name: module
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: package
+        in: query
+        required: true
+        description: Full import path of the package declaring the type.
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: true
+        description: The struct type whose methods are counted.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: >-
+            Every method of the type - its callers by kind, what it calls,
+            reads and uses, the tables its store calls read and write, and
+            the same with what it calls.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Census"
+        "400":
+          description: Unknown package, or the type is not a struct.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Unknown module.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The packages could not be loaded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    Census:
+      type: object
+      required:
+      - package
+      - type
+      - fields
+      - methods
+      properties:
+        package:
+          type: string
+        type:
+          type: string
+        fields:
+          type: array
+          items:
+            type: string
+        methods:
+          type: array
+          items:
+            $ref: "#/components/schemas/CensusMethod"
+    CensusMethod:
+      type: object
+      required:
+      - name
+      - file
+      - callers
+      - calls
+      - functions
+      - fields
+      - uses
+      - packages
+      - atomically
+      - transaction_step
+      - tables
+      - reach
+      properties:
+        name:
+          type: string
+        file:
+          type: string
+        callers:
+          type: array
+          items:
+            $ref: "#/components/schemas/CensusCaller"
+        calls:
+          description: Methods of the type it calls, through free functions too.
+          type: array
+          items:
+            type: string
+        functions:
+          description: Free functions of the package it reaches.
+          type: array
+          items:
+            type: string
+        fields:
+          description: Receiver fields it reads.
+          type: array
+          items:
+            type: string
+        uses:
+          description: Methods it calls on the module's other types, by type.
+          type: array
+          items:
+            $ref: "#/components/schemas/CensusUse"
+        packages:
+          description: The module's other packages it references.
+          type: array
+          items:
+            type: string
+        atomically:
+          description: It opens a transaction through the store's Atomically.
+          type: boolean
+        transaction_step:
+          description: It takes the transaction store as a parameter.
+          type: boolean
+        tables:
+          $ref: "#/components/schemas/CensusTables"
+        reach:
+          description: The tables with every method it calls, transitively.
+          allOf:
+          - $ref: "#/components/schemas/CensusTables"
+    CensusCaller:
+      type: object
+      required:
+      - kind
+      - package
+      - function
+      - count
+      properties:
+        kind:
+          description: production, support, test or internal.
+          type: string
+        package:
+          type: string
+        function:
+          type: string
+        count:
+          type: integer
+    CensusUse:
+      type: object
+      required:
+      - type
+      - methods
+      properties:
+        type:
+          type: string
+        methods:
+          type: array
+          items:
+            type: string
+    CensusTables:
+      type: object
+      required:
+      - read
+      - written
+      properties:
+        read:
+          type: array
+          items:
+            type: string
+        written:
+          type: array
+          items:
+            type: string
     DiffResponse:
       type: object
       required:

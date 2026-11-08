@@ -3,6 +3,7 @@ package daemon
 import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/diff"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/file"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module"
@@ -16,6 +17,7 @@ import (
 type Daemon struct {
 	memory    face.Client
 	guard     *peer.Guard
+	census    *census.Service
 	diff      *diff.Service
 	file      *file.Service
 	module    *module.Service

@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/option"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/diff"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/file"
@@ -31,6 +32,7 @@ func New(
 	return &Daemon{
 		memory:    m,
 		guard:     g,
+		census:    census.New(w),
 		diff:      diff.New(o.Inventory, u),
 		file:      file.New(c),
 		module:    u,

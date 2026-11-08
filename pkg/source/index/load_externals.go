@@ -2,7 +2,6 @@ package index
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"golang.org/x/tools/go/packages"
 )
 
@@ -10,20 +9,39 @@ func (w *Workspace) loadExternals(
 	paths []string,
 	syntax bool,
 ) {
-	mode := packages.NeedName | packages.NeedTypes
+	mode := packages.NeedName | packages.NeedImports | packages.NeedDeps
 
-	if syntax {
-		mode = packages.LoadSyntax
+	if !syntax {
+		mode |= packages.NeedTypes
 	}
 
-	c := &packages.Config{
-		Mode:       mode,
-		Dir:        w.root,
-		BuildFlags: resolve.BuildFlags(w.root),
-	}
-	loaded, e := packages.Load(c, paths...)
+	closure, e := packages.Load(w.externalConfiguration(mode), paths...)
 	errors.PanicOnError(e)
-	seen := make(map[string]bool)
+	packages.Visit(
+		closure,
+		nil,
+		func(p *packages.Package) {
+			if _, workspace := w.graph.Nodes[p.PkgPath]; workspace {
+				return
+			}
+
+			w.storeImports(p)
+
+			if !syntax && p.Types != nil {
+				w.storeExternal(p.Types)
+			}
+		},
+	)
+
+	if !syntax {
+		return
+	}
+
+	loaded, e := packages.Load(
+		w.externalConfiguration(packages.LoadSyntax),
+		paths...,
+	)
+	errors.PanicOnError(e)
 
 	for _, p := range loaded {
 		if p.Types == nil {
@@ -31,9 +49,8 @@ func (w *Workspace) loadExternals(
 		}
 
 		w.storeExternal(p.Types)
-		w.storeExternals(p.Types, seen)
 
-		if syntax && p.TypesInfo != nil {
+		if p.TypesInfo != nil {
 			w.storeSyntaxExternal(p)
 		}
 	}

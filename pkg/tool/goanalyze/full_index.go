@@ -22,11 +22,11 @@ func fullIndex(
 	*unclosed_resource.Summaries,
 ) {
 	loaded, reported, reached := load(root, patterns, notice)
-	w := index.New(directory, root, unclosed_resource.Kind())
+	w := index.New(directory, root, unclosed_resource.Kind(), face.Kind())
 
 	return loaded,
 		reported,
-		face.New(loaded),
+		face.NewWithIndex(w, loaded),
 		unclosed_resource.NewSummaries(
 			slices.Concat(loaded, reached),
 			index.Externals[*fact.Summary](w, unclosed_resource.Kind())...,

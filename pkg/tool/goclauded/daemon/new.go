@@ -56,7 +56,7 @@ func New(
 
 	result.build(o, l, r, y)
 	result.startup.Prepare()
-	l.Structured("started", "elapsed", time.Since(start).Seconds())
+	l.Structured(constant.DaemonStarted, "elapsed", time.Since(start).Seconds())
 
 	return result
 }

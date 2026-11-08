@@ -51,6 +51,23 @@ func TestIndexKeepsExternalsPerKind(t *testing.T) {
 	assert.Integer(t, stored, external)
 }
 
+func TestIndexKeepsAnExternalWholeBehindItsImporter(t *testing.T) {
+	directory := kind_tester.ImporterModule(t)
+	names := kind_tester.ScopeNames("names")
+	var encoding []string
+
+	for _, p := range index.Externals[*string](
+		index.New(t.TempDir(), directory, names),
+		names,
+	) {
+		if fields := strings.Fields(*p); fields[0] == "encoding" {
+			encoding = fields[1:]
+		}
+	}
+
+	assert.True(t, slices.Contains(encoding, "TextMarshaler"))
+}
+
 func TestIndexReferencesNeedNoKind(t *testing.T) {
 	directory := kind_tester.Module(t)
 	r := index.New(t.TempDir(), directory).References()

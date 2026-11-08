@@ -40,7 +40,7 @@ func (s *Server) registerSession() {
 		mcp.NewTool(
 			constant.Label,
 			mcp.WithDescription(
-				"Set, get, or remove a session label. Pass value to set, empty string to remove, omit to get current value.",
+				"Read or change a session label. A label holds a set of values, written comma-separated (role=lead,on_call). Pass value to replace the whole set, add or remove to change one value, nothing to read it.",
 			),
 			mcp.WithString(
 				constant.Key,
@@ -50,8 +50,16 @@ func (s *Server) registerSession() {
 			mcp.WithString(
 				constant.Value,
 				mcp.Description(
-					"Label value. Pass to set, empty string to remove, omit to get.",
+					"Replaces the whole set with these comma-separated values; empty string clears the key.",
 				),
+			),
+			mcp.WithString(
+				constant.LabelAdd,
+				mcp.Description("Adds one value beside the others."),
+			),
+			mcp.WithString(
+				constant.LabelRemove,
+				mcp.Description("Removes one value."),
 			),
 			mcp.WithString(
 				constant.Target,

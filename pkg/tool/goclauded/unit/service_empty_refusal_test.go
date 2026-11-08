@@ -58,7 +58,11 @@ func TestEmptyRefusalNamesSummary(t *testing.T) {
 func TestEmptyRefusalNamesLabels(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("held")
-	_, e := s.Store.Store.SetLabel("held", "role", "reviewer")
+	_, e := s.Store.Store.SetLabel(
+		"held",
+		constant.FixtureLabelKey,
+		[]string{"reviewer"},
+	)
 	assert.FatalOnError(t, e)
 	assert.String(t, "session has labels", s.RefusalFor("held"))
 }

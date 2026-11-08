@@ -22,6 +22,67 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Census defines model for Census.
+type Census struct {
+	Fields  []string       `json:"fields"`
+	Methods []CensusMethod `json:"methods"`
+	Package string         `json:"package"`
+	Type    string         `json:"type"`
+}
+
+// CensusCaller defines model for CensusCaller.
+type CensusCaller struct {
+	Count    int    `json:"count"`
+	Function string `json:"function"`
+
+	// Kind production, support, test or internal.
+	Kind    string `json:"kind"`
+	Package string `json:"package"`
+}
+
+// CensusMethod defines model for CensusMethod.
+type CensusMethod struct {
+	// Atomically It opens a transaction through the store's Atomically.
+	Atomically bool           `json:"atomically"`
+	Callers    []CensusCaller `json:"callers"`
+
+	// Calls Methods of the type it calls, through free functions too.
+	Calls []string `json:"calls"`
+
+	// Fields Receiver fields it reads.
+	Fields []string `json:"fields"`
+	File   string   `json:"file"`
+
+	// Functions Free functions of the package it reaches.
+	Functions []string `json:"functions"`
+	Name      string   `json:"name"`
+
+	// Packages The module's other packages it references.
+	Packages []string `json:"packages"`
+
+	// Reach The tables with every method it calls, transitively.
+	Reach  CensusTables `json:"reach"`
+	Tables CensusTables `json:"tables"`
+
+	// TransactionStep It takes the transaction store as a parameter.
+	TransactionStep bool `json:"transaction_step"`
+
+	// Uses Methods it calls on the module's other types, by type.
+	Uses []CensusUse `json:"uses"`
+}
+
+// CensusTables defines model for CensusTables.
+type CensusTables struct {
+	Read    []string `json:"read"`
+	Written []string `json:"written"`
+}
+
+// CensusUse defines model for CensusUse.
+type CensusUse struct {
+	Methods []string `json:"methods"`
+	Type    string   `json:"type"`
+}
+
 // ClassCount defines model for ClassCount.
 type ClassCount struct {
 	Class string `json:"class"`
@@ -74,6 +135,17 @@ type ModuleRange struct {
 	To string `json:"to"`
 }
 
+// GetCensusParams defines parameters for GetCensus.
+type GetCensusParams struct {
+	Module string `form:"module" json:"module"`
+
+	// Package Full import path of the package declaring the type.
+	Package string `form:"package" json:"package"`
+
+	// Type The struct type whose methods are counted.
+	Type string `form:"type" json:"type"`
+}
+
 // GetDiffParams defines parameters for GetDiff.
 type GetDiffParams struct {
 	Module string `form:"module" json:"module"`
@@ -91,6 +163,9 @@ type GetDiffParams struct {
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (GET /api/census)
+	GetCensus(w http.ResponseWriter, r *http.Request, params GetCensusParams)
+
 	// (GET /api/diff)
 	GetDiff(w http.ResponseWriter, r *http.Request, params GetDiffParams)
 }
@@ -103,6 +178,65 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// GetCensus operation middleware
+func (siw *ServerInterfaceWrapper) GetCensus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCensusParams
+
+	// ------------- Required query parameter "module" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "module", r.URL.Query(), &params.Module, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "module"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "module", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "package" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "package", r.URL.Query(), &params.Package, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "package"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "package", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "type" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "type", r.URL.Query(), &params.Type, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "type"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "type", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCensus(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // GetDiff operation middleware
 func (siw *ServerInterfaceWrapper) GetDiff(w http.ResponseWriter, r *http.Request) {
@@ -297,8 +431,73 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/diff", wrapper.GetDiff)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/census", wrapper.GetCensus)
 
 	return m
+}
+
+type GetCensusRequestObject struct {
+	Params GetCensusParams
+}
+
+type GetCensusResponseObject interface {
+	VisitGetCensusResponse(w http.ResponseWriter) error
+}
+
+type GetCensus200JSONResponse Census
+
+func (response GetCensus200JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCensus400JSONResponse Error
+
+func (response GetCensus400JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCensus404JSONResponse Error
+
+func (response GetCensus404JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCensus500JSONResponse ErrorResponse
+
+func (response GetCensus500JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type GetDiffRequestObject struct {
@@ -354,6 +553,9 @@ func (response GetDiff500JSONResponse) VisitGetDiffResponse(w http.ResponseWrite
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (GET /api/census)
+	GetCensus(ctx context.Context, request GetCensusRequestObject) (GetCensusResponseObject, error)
+
 	// (GET /api/diff)
 	GetDiff(ctx context.Context, request GetDiffRequestObject) (GetDiffResponseObject, error)
 }
@@ -397,6 +599,32 @@ type strictHandler struct {
 	options     StrictHTTPServerOptions
 }
 
+// GetCensus operation middleware
+func (sh *strictHandler) GetCensus(w http.ResponseWriter, r *http.Request, params GetCensusParams) {
+	var request GetCensusRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCensus(ctx, request.(GetCensusRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCensus")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCensusResponseObject); ok {
+		if err := validResponse.VisitGetCensusResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetDiff operation middleware
 func (sh *strictHandler) GetDiff(w http.ResponseWriter, r *http.Request, params GetDiffParams) {
 	var request GetDiffRequestObject
@@ -428,20 +656,29 @@ func (sh *strictHandler) GetDiff(w http.ResponseWriter, r *http.Request, params 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"rFZPb/s2DP0qgjZgFy/Jtt8uvg2/FluBDQO67VQUhWLRsVpZdCU6aVD4uw+UnP9KkG692ZJIPj6ST3qX",
-	"FbYdOnAUZPkuQ9VAq+LnV6tC+Iq9I/7rPHbgyUDcq3iPP2jdgSxlIG/cQg6FrDYG445xBAvwchgK6eG1",
-	"Nx60LB9GD5vzj8XmPM6foSL2dGPq+h5Chy5ABgHbxS9D0MaPbz3UspTfTHcpTcd8pnvJDNtYynu15n9w",
-	"5Ee/V3m7deTXOUe1x/apd53ygdPcc3dC1LFpi7q3CYOGUHnTkUEnS3k/sibGE4KDCGpAGLcER+jXghpF",
-	"omqUW4AWS/DBoBNzoBWAi0dphcLD0vBGEMppsQIPgnNT7HtlqBGGJrK4joE/IpZ7DphLhvA/sXDcI6nG",
-	"u/ocE3wYaMdhrp1SzT7QyRyKN5S1f9ayfLhMyO9YqViw4bGQrrdWzS3IknwPnCa80cfagfBzYmfHLsuP",
-	"9+hP+YHN8hHiI7/p2Fm/5+f4nP9CAjf3k9HgyNQGrgaRsczh2pJ2Aqk2FrKIXmCdXbfGwRWSx+ZF8j7a",
-	"5HDtT9YptLEnTyA41eYxpz46VJS/GxCBFGuFcRrexKoBJ6DtaM0CcJnkGGmcjuj+NAk2Ma6OkckQsykX",
-	"GLD3VRzTUaBkKX+YzCYzhokdONUZWcqf4lIhO0VNzHmqOjPVpq75ZwFxjpiTWL07LUv5KxBfFtHIqxYI",
-	"fIhDYzjGaw+eiU8UjRoh95PiQSnGqy/bZaeSnJRUEG4kNKpyIX67/eXmiM4ciJG9/xmSsIjifqGWueCE",
-	"Hwt95yrbaxCgqmZ7yYR1O0f7XRAsbeJ7oQR3tOA6CawjLA2VValMCeeqQXuwnMAqrUEXwlAQtfGBkqe4",
-	"5aHFJeizmbCsZnKZI1pQTg4siH7UnthMP85m6fXgCNI7RXWdNUkKps8h6cHO4SXZPXigxKY/5O2vSFGi",
-	"5OxdPOHu/zL78mmoko5n4PzjXhyu3PiMEOi3ICKGnz+RmUPNz2BhBdo9RyrsrRYOScx5WekJ2wzD8G8A",
-	"AAD//w==",
+	"xFhBj9tGD/0rhL4PyEXJbtv04luQpG2ABgW2m1MQBLMSZU1WmlFmKDtGsP+9IGcsydbIsZs0uWllDfnI",
+	"4Xsk93NW2LazBg35bPU580WNrZLH52h8L0+dsx060ih/VRqbUp40YSsPtOswW2WenDbr7CHfv1DOqR3/",
+	"3SLV9ujQ/x1W2Sr739WI4Cq6vwq+X8uplL1OFfdqjSd8z354yDOHH3vtsMxWbwcL8ft8H9aI9d3g1t59",
+	"wILYdsD1XDUNunlmCtsbmrjWhnCNjg9WvSlIW5NEfK9NyT+U6Aunu/Ad2y57OZSD77vOOsqB0BNYB2za",
+	"GdU8yfK5veXsHCVBHOeTXAww8xjMchLi5cySoMi2ulBNs5uH9IrAdmg8KCCnjFfiDKh2tl/XQDWCJ+vw",
+	"kYdng5lJiHfWNqgMgyjkDi6tqHhziYpie36OOETpwVaCjk+BJpCv8wF45RBhnzsPZC2DPp8eI6UOvd9g",
+	"gXqDDsIH7NmhKv2l1ps0UwbEc8+/HUYUw4+FEnEUNV6IxKg2jSQaTgC5rRFaW/YNF4WlGt0eRUxHhQ5N",
+	"cSkSgS/l2jR/Vdnq7TnVc6vuGvTZw7s8AZLkR9hqqgE36HYQhGRaLlzzmvQGuaoZVTC4usR5nk2o894T",
+	"dkmekbpHH2p2wjRhFygmYKecapHQpfnVezxBh31MIOyd3RCb8znc7eTp4Ga+HOgbj/MbOxIuKaRY2aMW",
+	"7Fk8reyJsEtIk1rLp1qVSOtwP/tyWRbD2+EiD8WQ2XpZp9w6TYTmkkNHuRGfo6Fl0JzoGeJUp/4i6PNa",
+	"bmy0J/tro7x/vm+jR92Vf0vCWey7RwCChVOt7YWuqhv0nTWp3Mi5C1rOGEwiZ2jIRbtnWXtpyO2S8u5s",
+	"+743nXIeLyy2QNtk4wlZi8T2wE6E6dps0JB1O6BaERS1MmssYYPOs8DcIW0RgyjQ1oLDjfbSQpQpYYsO",
+	"gWNTbFukUtPZ8vBasNyww2QR2n+VheMaCXc83s9xgg8djTlMlVO4swsqmV2d35X+tIWSC+OOZPqmYRXK",
+	"VuR65DDxE11IY/ttfCdpl8yPczYxR+P+9Wk9CZ8t2l3m8ZL9PEMu7ve6REO60ng2iMTJFK4haYmlamFG",
+	"u8dd8n2jDZ4heXx86JNyJoVryqw5tFiTMwiL01yoo/mI5EmxVmhT4ifY1mgA2452iR1mod0zEjE/D4KP",
+	"aFOJZ9LE2czW1tveFULTKFDZKvvpyfWTa4bJq4jqdLbKfpFXPBpQLTFfqU5fFcMCvEZhEmdF7u9Vma2y",
+	"35HiiswH4zDlhTia/Xzs0XHyQ5qiTmTTwJgseVy5k5U2m8r7pgHd8ioIjPV4Li+xaBQfHpYVEdcEmnHl",
+	"+wo44U5dX1BYjLa19RjHXg9KtL43hOUSijgRnA/hHX8caC0X8/P1dWjMhjCMAKrrGh1YdvXBB6qN9r48",
+	"fYZKOozz5XScn26Cj0GThzh+8rjLC3UOW+6M49gvK5v0P55A83A8bAt8PMzkYZzmT0OndJowl0fZilWL",
+	"oV8e2JYl4uk3zEEQ5EQK3ph7Y7dmX2k5WDdZiD0YS6BiMURUT78fqsAt8fvrt87G0EYS/m9H7nmu9aaU",
+	"RNwhNFaVXPcPckrkpNRVdUpMePb8flJyEwczILufyGTIy+GPl89eHKlzCkQU4690STaP//ZZbA1J4bCX",
+	"uX5liqYvEXiNG2ZWv2vvbPPIA09K8BgUcIMEvqc9y4OgqvBPOH6xrW1z8DqAVWWJZS50rrTzFCzJTw5b",
+	"uzkhgTylJWIZVvH/VPMO9p1Egf8tKQopWRztfxTfWYP2IH4M98ft5oD8rOKB+g8P/wQAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

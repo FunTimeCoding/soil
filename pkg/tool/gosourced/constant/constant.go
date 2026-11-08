@@ -33,6 +33,7 @@ const (
 	ChangeVisibility     = "change_visibility"
 	RenameSymbol         = "rename_symbol"
 	RenameSymbols        = "rename_symbols"
+	RenameReceivers      = "rename_receivers"
 	MoveSymbol           = "move_symbol"
 	MoveSymbols          = "move_symbols"
 	ExtractType          = "extract_type"
@@ -139,6 +140,48 @@ const (
 	CommitAttempts = 3
 	LoadSettled    = 10 * time.Minute
 )
+
+const (
+	GormPath            = "gorm.io/gorm"
+	GormType            = "DB"
+	TableNameMethod     = "TableName"
+	AtomicallyMethod    = "Atomically"
+	CallerProduction    = "production"
+	CallerSupport       = "support"
+	CallerTest          = "test"
+	CallerInternal      = "internal"
+	PackageScope        = "<package scope>"
+	TestFileSuffix      = "_test.go"
+	UnitSegment         = "unit"
+	IntegrationSegment  = "integration"
+	CensusTypeParameter = "type"
+)
+
+var GormReadVerbs = []string{
+	"Find",
+	"First",
+	"Take",
+	"Last",
+	"Count",
+	"Pluck",
+	"Scan",
+	"Row",
+	"Rows",
+	"FirstOrCreate",
+}
+
+var GormDestinationVerbs = []string{"Scan", "Pluck"}
+var GormWriteVerbs = []string{
+	"Save",
+	"Create",
+	"CreateInBatches",
+	"Update",
+	"Updates",
+	"UpdateColumn",
+	"UpdateColumns",
+	"Delete",
+	"FirstOrCreate",
+}
 
 const (
 	OperationWrite         = "write"

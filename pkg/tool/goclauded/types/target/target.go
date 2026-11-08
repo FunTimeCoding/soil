@@ -10,5 +10,5 @@ type Target struct {
 	LastPromptAt  *time.Time
 	LastTurnEndAt *time.Time
 	ClosedAt      *time.Time
-	Labels        map[string]string
+	Labels        map[string][]string
 }

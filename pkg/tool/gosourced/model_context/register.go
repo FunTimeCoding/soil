@@ -8,6 +8,7 @@ func (s *Server) register() {
 	s.registerConstructors()
 	s.registerNames()
 	s.registerRenameSymbols()
+	s.registerRenameReceivers()
 	s.registerParameters()
 	s.registerMoveSymbol()
 	s.registerMoveSymbols()

@@ -2,6 +2,7 @@ package file_identity
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -17,7 +18,7 @@ func checkTestFile(
 	for _, d := range file.Decls {
 		f, okay := d.(*ast.FuncDecl)
 
-		if !okay || isTestFunction(f) {
+		if !okay || lint.IsTestFunction(f) {
 			continue
 		}
 

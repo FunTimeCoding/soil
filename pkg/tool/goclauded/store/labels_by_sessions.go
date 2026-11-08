@@ -17,6 +17,8 @@ func (s *Store) LabelsBySessions(
 	var rows []label.Label
 	e := s.database.Where("session_identifier IN ?", sessionIdentifiers).Order(
 		constant.Key,
+	).Order(
+		constant.Value,
 	).Find(
 		&rows,
 	).Error

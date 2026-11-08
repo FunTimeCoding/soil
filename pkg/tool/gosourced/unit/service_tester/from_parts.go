@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/inventory"
 	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/diff"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/file"
@@ -36,6 +37,7 @@ func fromParts(
 
 	return &Services{
 		Workspace: w,
+		Census:    census.New(w),
 		Commit:    c,
 		Diff:      diff.New(i, u),
 		File:      file.New(c),

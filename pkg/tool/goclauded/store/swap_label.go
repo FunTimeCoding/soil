@@ -40,7 +40,16 @@ func (s *Store) SwapLabel(
 
 		return result.RowsAffected > 0, result.Error
 	default:
-		result := match.Model(label.Stub()).Update(constant.Value, value)
+		result := match.Where(
+			`NOT EXISTS (
+				SELECT 1 FROM label AS other
+				WHERE other.session_identifier = ? AND other.key = ?
+				AND other.value = ?
+			)`,
+			sessionIdentifier,
+			key,
+			value,
+		).Model(label.Stub()).Update(constant.Value, value)
 
 		return result.RowsAffected > 0, result.Error
 	}

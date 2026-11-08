@@ -62,6 +62,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/compaction:
+    post:
+      operationId: postCompaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompactionRequest"
+      responses:
+        "200":
+          description: Compaction recorded and its watchers told.
+        "400":
+          description: Unknown compaction phase.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/check:
     get:
       operationId: getCheck
@@ -1157,6 +1181,23 @@ components:
       properties:
         session:
           type: string
+    CompactionRequest:
+      type: object
+      required:
+      - session
+      - phase
+      properties:
+        session:
+          type: string
+        phase:
+          $ref: "#/components/schemas/CompactionPhase"
+        trigger:
+          type: string
+    CompactionPhase:
+      type: string
+      enum:
+      - started
+      - finished
     RegisterResponse:
       type: object
       required:
@@ -1306,10 +1347,12 @@ components:
         key:
           type: string
         value:
-          description: Empty or omitted removes the label.
+          description: Comma-separated values. With set, the whole set; empty or omitted clears the key. With add or remove, one value.
           type: string
+        action:
+          $ref: "#/components/schemas/LabelAction"
         expect:
-          description: Write only while the label currently holds this value; empty means only while the key is absent. Omitted writes unconditionally. A failed condition answers 409.
+          description: Swap one value - replace expect with value, only while the key holds expect, and an empty value removes it; an empty expect writes value only while the key holds nothing. Omitted applies action unconditionally. A failed condition answers 409.
           type: string
         from:
           description: Actor name for the event log.
@@ -1385,6 +1428,13 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/LabelEntry"
+    LabelAction:
+      type: string
+      description: set replaces the key's whole set, add adds one value, remove removes one. Absent means set.
+      enum:
+      - set
+      - add
+      - remove
     LabelEntry:
       type: object
       required:

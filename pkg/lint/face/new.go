@@ -10,6 +10,7 @@ func New(loaded []*packages.Package) *Set {
 		byMethod: make(map[string][]*fact.Interface),
 		known:    make(map[string]bool),
 	}
+	result.Add(universe())
 	seen := make(map[string]bool)
 
 	for _, p := range loaded {

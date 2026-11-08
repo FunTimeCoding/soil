@@ -6,6 +6,10 @@ import (
 )
 
 type Client interface {
+	GetCensus(
+		x context.Context,
+		p *client.GetCensusParams,
+	) (client.Census, error)
 	GetDiff(
 		x context.Context,
 		p *client.GetDiffParams,

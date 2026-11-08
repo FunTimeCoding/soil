@@ -1,38 +1,40 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
+	"gorm.io/gorm"
 )
 
 func (s *Store) SetLabel(
 	sessionIdentifier string,
 	key string,
-	value string,
-) (string, error) {
-	var existing label.Label
-	result := s.database.Where(
-		"session_identifier = ? AND key = ?",
-		sessionIdentifier,
-		key,
-	).Limit(1).Find(&existing)
+	values []string,
+) ([]string, error) {
+	old, e := s.GetLabel(sessionIdentifier, key)
 
-	if result.Error != nil {
-		return "", result.Error
+	if e != nil {
+		return nil, e
 	}
 
-	if result.RowsAffected > 0 {
-		old := existing.Value
+	return old, s.database.Transaction(
+		func(t *gorm.DB) error {
+			if f := t.Where(
+				"session_identifier = ? AND key = ?",
+				sessionIdentifier,
+				key,
+			).Delete(label.Stub()).Error; f != nil {
+				return f
+			}
 
-		if old == value {
-			return old, nil
-		}
+			for _, v := range values {
+				if g := t.Create(
+					label.New(sessionIdentifier, key, v),
+				).Error; g != nil {
+					return g
+				}
+			}
 
-		return old, s.database.Model(&existing).Update(
-			constant.Value,
-			value,
-		).Error
-	}
-
-	return "", s.database.Create(label.New(sessionIdentifier, key, value)).Error
+			return nil
+		},
+	)
 }

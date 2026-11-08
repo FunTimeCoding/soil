@@ -23,8 +23,6 @@ func (w *Workspace) compute(
 		byPath[p.PkgPath] = p
 	}
 
-	seen := make(map[string]bool)
-
 	for _, path := range g.Order {
 		if done[path] || failed[path] {
 			continue
@@ -68,7 +66,6 @@ func (w *Workspace) compute(
 		}
 
 		done[path] = true
-		w.storeExternals(p.Types, seen)
 	}
 
 	for _, path := range paths {

@@ -19,7 +19,7 @@ func Main() {
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
 	}
-	o.AddCommand(diff(c, t))
+	o.AddCommand(census(c, t), diff(c, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	argument.CobraExecute(o)

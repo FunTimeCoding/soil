@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
+	"slices"
 )
 
 func (s *Server) labelSession(
@@ -32,15 +33,15 @@ func (s *Server) labelSession(
 		return failed, f
 	}
 
-	targetName := target
-	arguments := q.GetArguments()
-	raw, hasValue := arguments[constant.Value]
+	_, set := q.GetArguments()[constant.Value]
+	add := q.GetString(constant.LabelAdd, "")
+	remove := q.GetString(constant.LabelRemove, "")
 
-	if !hasValue {
-		value, f := s.label.GetLabel(sessionIdentifier, key)
+	if !set && add == "" && remove == "" {
+		value, g := s.label.GetLabel(sessionIdentifier, key)
 
-		if f != nil {
-			return s.captureFail(x, f, soil.UnexpectedError)
+		if g != nil {
+			return s.captureFail(x, g, soil.UnexpectedError)
 		}
 
 		if value == "" {
@@ -50,39 +51,16 @@ func (s *Server) labelSession(
 		return response.Success("%s=%s", key, value)
 	}
 
-	value, _ := raw.(string)
+	writes := add != "" || q.GetString(constant.Value, "") != ""
 
-	if value == "" {
-		change, g := s.label.DeleteLabel(
-			sessionIdentifier,
-			c.Callsign,
-			targetName,
+	if writes && slices.Contains(constant.ReservedLabelKeys, key) {
+		return response.Fail(
+			"reserved key %q - session metadata belongs in edit_session",
 			key,
 		)
-
-		if g != nil {
-			return s.captureFail(x, g, soil.UnexpectedError)
-		}
-
-		return response.Success(change)
 	}
 
-	for _, reserved := range constant.ReservedLabelKeys {
-		if key == reserved {
-			return response.Fail(
-				"reserved key %q - session metadata belongs in edit_session",
-				key,
-			)
-		}
-	}
-
-	change, h := s.label.SetLabel(
-		sessionIdentifier,
-		c.Callsign,
-		targetName,
-		key,
-		value,
-	)
+	change, h := s.changeLabel(sessionIdentifier, c.Callsign, target, key, q)
 
 	if h != nil {
 		return s.captureFail(x, h, soil.UnexpectedError)

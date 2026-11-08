@@ -7,6 +7,7 @@ import (
 
 type Client struct {
 	mutex   sync.Mutex
+	Census  client.Census
 	Diff    client.DiffResponse
 	Asked   []string
 	Failure error

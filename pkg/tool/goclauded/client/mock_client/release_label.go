@@ -1,5 +1,7 @@
 package mock_client
 
+import "slices"
+
 func (c *Client) ReleaseLabel(
 	sessionIdentifier string,
 	key string,
@@ -19,11 +21,18 @@ func (c *Client) ReleaseLabel(
 
 	s := c.find(sessionIdentifier)
 
-	if s == nil || s.Labels[key] != value {
+	if s == nil || !slices.Contains(s.Labels[key], value) {
 		return false, nil
 	}
 
-	delete(s.Labels, key)
+	s.Labels[key] = slices.DeleteFunc(
+		s.Labels[key],
+		func(v string) bool { return v == value },
+	)
+
+	if len(s.Labels[key]) == 0 {
+		delete(s.Labels, key)
+	}
 
 	return true, nil
 }

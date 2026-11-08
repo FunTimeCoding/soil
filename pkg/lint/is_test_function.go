@@ -1,11 +1,11 @@
-package file_identity
+package lint
 
 import (
 	"go/ast"
 	"strings"
 )
 
-func isTestFunction(f *ast.FuncDecl) bool {
+func IsTestFunction(f *ast.FuncDecl) bool {
 	if f.Recv != nil {
 		return false
 	}

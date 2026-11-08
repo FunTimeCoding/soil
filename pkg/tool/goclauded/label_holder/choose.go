@@ -2,7 +2,6 @@ package label_holder
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
-	"strings"
 	"time"
 )
 
@@ -14,9 +13,9 @@ func Choose(
 	result := &Plan{}
 
 	for _, t := range targets {
-		value := t.Labels[r.Key]
+		value := t.Held(r.Key, r.Value)
 
-		if !strings.EqualFold(value, r.Value) {
+		if value == "" {
 			continue
 		}
 
@@ -37,7 +36,7 @@ func Choose(
 	}
 
 	for _, t := range targets {
-		if !Active(t, now, r.IdleThreshold) || t.Labels[r.Key] != "" {
+		if !Active(t, now, r.IdleThreshold) || !Adoptable(t, r) {
 			continue
 		}
 

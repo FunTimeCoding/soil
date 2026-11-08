@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -110,7 +111,7 @@ func TestRenamePackageClauseReportsATestOnlyPackage(t *testing.T) {
 		t.Context(),
 		d,
 		"example/pkg/alfa",
-		"unit",
+		constant.UnitSegment,
 		false,
 	)
 	assert.FatalOnError(t, e)

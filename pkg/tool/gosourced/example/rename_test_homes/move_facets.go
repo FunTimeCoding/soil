@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/packages"
 	"log"
 	"os"
@@ -19,7 +20,7 @@ func moveFacets(
 	relative string,
 ) {
 	source := filepath.Join(directory, relative)
-	target := filepath.Join(filepath.Dir(source), "integration")
+	target := filepath.Join(filepath.Dir(source), constant.IntegrationSegment)
 	errors.PanicOnError(os.MkdirAll(target, 0750))
 	entries, e := os.ReadDir(source)
 	errors.PanicOnError(e)

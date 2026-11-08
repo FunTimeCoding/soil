@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"testing"
 )
@@ -23,7 +24,34 @@ func TestRecentSessionsCarriesLabels(t *testing.T) {
 	assert.True(t, len(targets) > 0)
 	found := targetByIdentifier(targets, a.UUID)
 	assert.NotNil(t, found)
-	assert.String(t, "staging", found.Labels["environment"])
+	assert.Any(t, []string{"staging"}, found.Labels["environment"])
+}
+
+func TestRecentSessionsCarriesEveryValueOfAKey(t *testing.T) {
+	s := base.New(t)
+	a := s.NewSession(t)
+	a.Announce(a.Name(), "working")
+	a.CheckLive()
+	c := s.Client(t)
+	assert.FatalOnError(
+		t,
+		c.SetLabel(
+			a.UUID,
+			constant.FixtureLabelKey,
+			"on_call,lead",
+			"reconciler",
+		),
+	)
+	targets, e := c.RecentSessions(25)
+	assert.FatalOnError(t, e)
+	found := targetByIdentifier(targets, a.UUID)
+	assert.NotNil(t, found)
+	assert.Any(
+		t,
+		[]string{"lead", "on_call"},
+		found.Labels[constant.FixtureLabelKey],
+	)
+	assert.True(t, found.Holds(constant.FixtureLabelKey, "LEAD"))
 }
 
 func TestRecentSessionsCarriesActivityTime(t *testing.T) {

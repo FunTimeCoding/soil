@@ -23,7 +23,7 @@ func Apply(
 		return p.Holder, errors.Join(failures...)
 	}
 
-	claimed, e := l.ClaimLabel(p.Adopt, r.Key, r.Value, from)
+	claimed, e := adopt(l, p.Adopt, r, from)
 
 	if e != nil {
 		failures = append(failures, e)

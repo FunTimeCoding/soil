@@ -1,8 +1,12 @@
 package label
 
+import "github.com/funtimecoding/soil/pkg/strings/join"
+
 func (s *Service) GetLabel(
 	sessionIdentifier string,
 	key string,
 ) (string, error) {
-	return s.store.GetLabel(sessionIdentifier, key)
+	values, e := s.store.GetLabel(sessionIdentifier, key)
+
+	return join.Comma(values), e
 }

@@ -21,6 +21,7 @@ func New(
 	result.AddCommand(register(c))
 	result.AddCommand(sessionEnd(c))
 	result.AddCommand(turnEnd(c))
+	result.AddCommand(compaction(c))
 	result.AddCommand(status(c))
 	result.AddCommand(check(c))
 	result.AddCommand(statusLine(c))

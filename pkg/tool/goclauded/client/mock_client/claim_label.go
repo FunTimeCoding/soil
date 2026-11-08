@@ -15,11 +15,11 @@ func (c *Client) ClaimLabel(
 
 	s := c.find(sessionIdentifier)
 
-	if s == nil || s.Labels[key] != "" {
+	if s == nil || len(s.Labels[key]) > 0 {
 		return false, nil
 	}
 
-	s.Labels[key] = value
+	s.Labels[key] = []string{value}
 
 	return true, nil
 }

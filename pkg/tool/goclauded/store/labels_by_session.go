@@ -13,6 +13,8 @@ func (s *Store) LabelsBySession(sessionIdentifier string) ([]label.Label, error)
 		sessionIdentifier,
 	).Order(
 		constant.Key,
+	).Order(
+		constant.Value,
 	).Find(
 		&result,
 	).Error

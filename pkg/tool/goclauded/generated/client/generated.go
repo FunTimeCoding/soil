@@ -17,6 +17,24 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Defines values for CompactionPhase.
+const (
+	Finished CompactionPhase = "finished"
+	Started  CompactionPhase = "started"
+)
+
+// Valid indicates whether the value is a known member of the CompactionPhase enum.
+func (e CompactionPhase) Valid() bool {
+	switch e {
+	case Finished:
+		return true
+	case Started:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CruiseRequestMode.
 const (
 	Off   CruiseRequestMode = "off"
@@ -59,6 +77,27 @@ func (e Delivery) Valid() bool {
 	}
 }
 
+// Defines values for LabelAction.
+const (
+	Add    LabelAction = "add"
+	Remove LabelAction = "remove"
+	Set    LabelAction = "set"
+)
+
+// Valid indicates whether the value is a known member of the LabelAction enum.
+func (e LabelAction) Valid() bool {
+	switch e {
+	case Add:
+		return true
+	case Remove:
+		return true
+	case Set:
+		return true
+	default:
+		return false
+	}
+}
+
 // AnnounceRequest defines model for AnnounceRequest.
 type AnnounceRequest struct {
 	Callsign string    `json:"callsign"`
@@ -88,6 +127,16 @@ type CheckResponse struct {
 	Changed  bool         `json:"changed"`
 	Context  string       `json:"context"`
 	Entries  []QueueEntry `json:"entries"`
+}
+
+// CompactionPhase defines model for CompactionPhase.
+type CompactionPhase string
+
+// CompactionRequest defines model for CompactionRequest.
+type CompactionRequest struct {
+	Phase   CompactionPhase `json:"phase"`
+	Session string          `json:"session"`
+	Trigger *string         `json:"trigger,omitempty"`
 }
 
 // ContextRequest defines model for ContextRequest.
@@ -245,6 +294,9 @@ type HeatmapResponse struct {
 	TotalCalls        int            `json:"totalCalls"`
 }
 
+// LabelAction set replaces the key's whole set, add adds one value, remove removes one. Absent means set.
+type LabelAction string
+
 // LabelEntry defines model for LabelEntry.
 type LabelEntry struct {
 	Key   string `json:"key"`
@@ -253,14 +305,17 @@ type LabelEntry struct {
 
 // LabelRequest defines model for LabelRequest.
 type LabelRequest struct {
-	// Expect Write only while the label currently holds this value; empty means only while the key is absent. Omitted writes unconditionally. A failed condition answers 409.
+	// Action set replaces the key's whole set, add adds one value, remove removes one. Absent means set.
+	Action *LabelAction `json:"action,omitempty"`
+
+	// Expect Swap one value - replace expect with value, only while the key holds expect, and an empty value removes it; an empty expect writes value only while the key holds nothing. Omitted applies action unconditionally. A failed condition answers 409.
 	Expect *string `json:"expect,omitempty"`
 
 	// From Actor name for the event log.
 	From *string `json:"from,omitempty"`
 	Key  string  `json:"key"`
 
-	// Value Empty or omitted removes the label.
+	// Value Comma-separated values. With set, the whole set; empty or omitted clears the key. With add or remove, one value.
 	Value *string `json:"value,omitempty"`
 }
 
@@ -690,6 +745,9 @@ type GetTimelineParams struct {
 // PostAnnounceJSONRequestBody defines body for PostAnnounce for application/json ContentType.
 type PostAnnounceJSONRequestBody = AnnounceRequest
 
+// PostCompactionJSONRequestBody defines body for PostCompaction for application/json ContentType.
+type PostCompactionJSONRequestBody = CompactionRequest
+
 // PostNotifyJSONRequestBody defines body for PostNotify for application/json ContentType.
 type PostNotifyJSONRequestBody = NotifyRequest
 
@@ -816,6 +874,14 @@ type ClientInterface interface {
 
 	// GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 	GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostCompactionWithBody performs a POST /api/compaction (the `PostCompaction` operationId) request,
+	// with any type of body and a specified content type.
+	PostCompactionWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostCompaction performs a POST /api/compaction (the `PostCompaction` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostCompaction(ctx context.Context, body PostCompactionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetCost performs a GET /api/cost (the `GetCost` operationId) request.
 	GetCost(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1054,6 +1120,34 @@ func (c *Client) GetChannelCallsign(ctx context.Context, params *GetChannelCalls
 // GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 func (c *Client) GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCheckRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostCompactionWithBody performs a POST /api/compaction (the `PostCompaction` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostCompactionWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostCompactionRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostCompaction performs a POST /api/compaction (the `PostCompaction` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostCompaction(ctx context.Context, body PostCompactionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostCompactionRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1970,6 +2064,46 @@ func NewGetCheckRequest(server string, params *GetCheckParams) (*http.Request, e
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewPostCompactionRequest calls the generic PostCompaction builder with application/json body
+func NewPostCompactionRequest(server string, body PostCompactionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostCompactionRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostCompactionRequestWithBody constructs an http.Request for the PostCompaction method, with any body, and a specified content type
+func NewPostCompactionRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/compaction")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -3707,6 +3841,16 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetCheckWithResponse(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*GetCheckResponse, error)
 
+	// PostCompactionWithBodyWithResponse performs a POST /api/compaction (the `PostCompaction` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostCompactionWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostCompactionResponse, error)
+
+	// PostCompactionWithResponse performs a POST /api/compaction (the `PostCompaction` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostCompactionWithResponse(ctx context.Context, body PostCompactionJSONRequestBody, reqEditors ...RequestEditorFn) (*PostCompactionResponse, error)
+
 	// GetCostWithResponse performs a GET /api/cost (the `GetCost` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -4182,6 +4326,54 @@ func (r GetCheckResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetCheckResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostCompactionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostCompactionResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostCompactionResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostCompactionResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostCompactionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostCompactionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostCompactionResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -6072,6 +6264,28 @@ func (c *ClientWithResponses) GetCheckWithResponse(ctx context.Context, params *
 	return ParseGetCheckResponse(rsp)
 }
 
+// PostCompactionWithBodyWithResponse performs a POST /api/compaction (the `PostCompaction` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostCompactionWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostCompactionResponse, error) {
+	rsp, err := c.PostCompactionWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostCompactionResponse(rsp)
+}
+
+// PostCompactionWithResponse performs a POST /api/compaction (the `PostCompaction` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostCompactionWithResponse(ctx context.Context, body PostCompactionJSONRequestBody, reqEditors ...RequestEditorFn) (*PostCompactionResponse, error) {
+	rsp, err := c.PostCompaction(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostCompactionResponse(rsp)
+}
+
 // GetCostWithResponse performs a GET /api/cost (the `GetCost` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6758,6 +6972,42 @@ func ParseGetCheckResponse(rsp *http.Response) (*GetCheckResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostCompactionResponse parses an HTTP response from a PostCompactionWithResponse call
+func ParsePostCompactionResponse(rsp *http.Response) (*PostCompactionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostCompactionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

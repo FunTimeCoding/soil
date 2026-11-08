@@ -117,6 +117,29 @@ or concept it populates, then its variant. Small-to-big forms
 (`GitHubPrefix` populating an `ImagePrefix` field) are the drift
 to correct when touched.
 
+## Prepositions
+
+A preposition where a noun should be names the argument list instead
+of the thing: `PriceOf(item)`, `UserByName(name)`, `valueAt(series,
+second)`. The noun that should answer for itself became an argument,
+and the preposition marks where its receiver went. The query moves
+onto its noun (`item.Price()`), a lookup's parameter names its key
+(`User(name)`), a role becomes a qualifier (`AuthoredPosts(author)`),
+and a from-and-until pair becomes one noun, a window. An act is a verb,
+and the noun it lands on owns it: `RemoveFromList` is `list.Remove`. A
+method that never reads its receiver says the same from the other side:
+it is a function, or a method of what it reads.
+
+Two analyzers report these, not yet registered: `preposition_name`
+over declared names - functions, methods, interface methods, types and
+struct fields, never parameters or locals - and `unread_receiver`. The
+words and the places they count are `pkg/lint/constant/preposition.go`.
+Outside the first: interface implementations, test functions, yes/no
+states (a bool field, or a bool answer taking no argument), moments (a
+field ending in `At` or holding a time, and a function answering a
+time, then at most a bool and an error, in that order), and constants and
+variables.
+
 ## Ordering variants
 
 Query and store methods that differ only in ordering are separate
