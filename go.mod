@@ -31,7 +31,7 @@ require (
 	github.com/dustin/go-humanize v1.1.0
 	github.com/fatih/color v1.19.0
 	github.com/fsnotify/fsnotify v1.10.1
-	github.com/getkin/kin-openapi v0.152.0
+	github.com/getkin/kin-openapi v0.153.0
 	github.com/getsentry/sentry-go v0.50.0
 	github.com/glebarez/go-sqlite v1.23.0
 	github.com/glebarez/sqlite v1.11.0
@@ -65,7 +65,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.6
 	github.com/oapi-codegen/runtime v1.8.0
 	github.com/ollama/ollama v0.40.15
-	github.com/openai/openai-go/v3 v3.96.0
+	github.com/openai/openai-go/v3 v3.97.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
@@ -89,7 +89,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.15
-	gitlab.com/gitlab-org/api/client-go/v3 v3.44.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.46.0
 	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v3 v3.0.6
 	golang.org/x/crypto v0.58.0
@@ -110,7 +110,7 @@ require (
 	k8s.io/client-go v0.37.2
 	k8s.io/metrics v0.37.2
 	maragu.dev/gomponents v1.4.0
-	modernc.org/sqlite v1.61.1
+	modernc.org/sqlite v1.62.0
 	mvdan.cc/sh/v3 v3.14.1
 	sigs.k8s.io/yaml v1.6.0
 )
@@ -259,8 +259,6 @@ require (
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/ncruces/go-strftime v1.1.0 // indirect
-	github.com/oasdiff/yaml v0.1.1 // indirect
-	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/oklog/run v1.2.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.2 // indirect
@@ -338,7 +336,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
-	go.yaml.in/yaml/v4 v4.0.0-rc.4 // indirect
+	go.yaml.in/yaml/v4 v4.0.0 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/sync v0.24.0 // indirect
 	golang.org/x/term v0.47.0 // indirect
@@ -358,7 +356,7 @@ require (
 	k8s.io/kube-openapi v0.0.0-20260721132016-d427ff9ee9ad // indirect
 	k8s.io/streaming v0.37.2 // indirect
 	k8s.io/utils v0.0.0-20260626114624-be93311217bd // indirect
-	modernc.org/libc v1.79.0 // indirect
+	modernc.org/libc v1.80.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.12.1 // indirect
 	sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730 // indirect

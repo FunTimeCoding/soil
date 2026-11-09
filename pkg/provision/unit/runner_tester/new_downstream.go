@@ -11,5 +11,5 @@ func NewDownstream(
 ) *Tester {
 	t.Helper()
 
-	return build(t, func() {}, nil, d)
+	return build(t, func() {}, nil, d, false)
 }

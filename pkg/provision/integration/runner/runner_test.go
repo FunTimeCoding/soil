@@ -116,9 +116,27 @@ func TestCloneFilemodeOff(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
 	c := run.New()
-	c.Directory = s.ClonePath
+	c.Directory = s.CloneDirectory
 	c.Start("git", "config", "core.filemode")
 	assert.String(t, "false", strings.TrimSpace(c.OutputString))
+}
+
+func TestForcedCloneWithCopyModesKeepsObjectModes(t *testing.T) {
+	s := runner_tester.NewWithCopyModes(t)
+	s.ForceClone()
+
+	for _, m := range s.ObjectModes() {
+		assert.Integer(t, 0o444, int(m))
+	}
+}
+
+func TestForcedCloneWithoutCopyModesLeavesCopiedModes(t *testing.T) {
+	s := runner_tester.New(t)
+	s.ForceClone()
+
+	for _, m := range s.ObjectModes() {
+		assert.True(t, m&0o200 != 0)
+	}
 }
 
 func TestSyncNoChanges(t *testing.T) {
@@ -132,14 +150,18 @@ func TestSyncNoChanges(t *testing.T) {
 func TestSyncRemovesStaleIndexLock(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
-	lock := filepath.Join(s.ClonePath, constant.RunnerIndexLock)
+	lock := filepath.Join(s.CloneDirectory, constant.RunnerIndexLock)
 	system.WriteFile(lock, nil, 0o644)
 	s.PushCommit("tracked.txt", "after lock")
 	result := s.Sync()
 	assert.True(t, result.Changed)
 	assert.Nil(t, result.Error)
 	assert.False(t, system.FileExists(lock))
-	assert.String(t, "after lock", system.ReadFile(s.ClonePath, "tracked.txt"))
+	assert.String(
+		t,
+		"after lock",
+		system.ReadFile(s.CloneDirectory, "tracked.txt"),
+	)
 }
 
 func TestSyncHealsLocalDrift(t *testing.T) {
@@ -150,7 +172,7 @@ func TestSyncHealsLocalDrift(t *testing.T) {
 	assert.True(t, result.Changed)
 	assert.Nil(t, result.Error)
 	system.WriteFile(
-		filepath.Join(s.ClonePath, "tracked.txt"),
+		filepath.Join(s.CloneDirectory, "tracked.txt"),
 		[]byte("drift"),
 		0o755,
 	)
@@ -158,16 +180,21 @@ func TestSyncHealsLocalDrift(t *testing.T) {
 	result = s.Sync()
 	assert.True(t, result.Changed)
 	assert.Nil(t, result.Error)
-	assert.String(t, "second", system.ReadFile(s.ClonePath, "tracked.txt"))
+	assert.String(t, "second", system.ReadFile(s.CloneDirectory, "tracked.txt"))
 }
 
 func TestSyncHealsCorruptRepository(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
-	assert.FatalOnError(t, os.RemoveAll(filepath.Join(s.ClonePath, ".git")))
+	assert.FatalOnError(
+		t,
+		os.RemoveAll(filepath.Join(s.CloneDirectory, ".git")),
+	)
 	first := s.Sync()
 	assert.Error(t, first.Error)
-	quarantined, e := filepath.Glob(join.Empty(s.ClonePath, ".quarantine.*"))
+	quarantined, e := filepath.Glob(
+		join.Empty(s.CloneDirectory, ".quarantine.*"),
+	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, quarantined)
 	second := s.Sync()
@@ -183,7 +210,9 @@ func TestRepeatedFetchFailureForcesCloneOnValidRepository(t *testing.T) {
 		assert.Error(t, s.Sync().Error)
 	}
 
-	quarantined, e := filepath.Glob(join.Empty(s.ClonePath, ".quarantine.*"))
+	quarantined, e := filepath.Glob(
+		join.Empty(s.CloneDirectory, ".quarantine.*"),
+	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, quarantined)
 	assert.Nil(t, s.Sync().Error)
@@ -193,14 +222,14 @@ func TestQuarantinePrunesThoseOlderThanItsRetention(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
 	expired := join.Empty(
-		s.ClonePath,
+		s.CloneDirectory,
 		constant.RunnerQuarantineSuffix,
 		time.Now().UTC().Add(-8*24*time.Hour).Format(
 			constant.RunnerQuarantineFormat,
 		),
 	)
 	recent := join.Empty(
-		s.ClonePath,
+		s.CloneDirectory,
 		constant.RunnerQuarantineSuffix,
 		time.Now().UTC().Add(-24*time.Hour).Format(
 			constant.RunnerQuarantineFormat,
@@ -214,7 +243,9 @@ func TestQuarantinePrunesThoseOlderThanItsRetention(t *testing.T) {
 		assert.Error(t, s.Sync().Error)
 	}
 
-	quarantined, e := filepath.Glob(join.Empty(s.ClonePath, ".quarantine.*"))
+	quarantined, e := filepath.Glob(
+		join.Empty(s.CloneDirectory, ".quarantine.*"),
+	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, quarantined)
 	assert.False(t, system.DirectoryExists(expired))
@@ -226,7 +257,9 @@ func TestFetchFailureBelowThresholdKeepsRepository(t *testing.T) {
 	s.WaitForApply(1)
 	s.BreakRemote()
 	assert.Error(t, s.Sync().Error)
-	quarantined, e := filepath.Glob(join.Empty(s.ClonePath, ".quarantine.*"))
+	quarantined, e := filepath.Glob(
+		join.Empty(s.CloneDirectory, ".quarantine.*"),
+	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, quarantined)
 }

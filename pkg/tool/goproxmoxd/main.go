@@ -21,11 +21,7 @@ func Main() {
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Metric()
-	a.String(
-		argumentConstant.Inventory,
-		constant.Identity.InventoryPath(),
-		"Inventory file path",
-	)
+	a.Inventory()
 	a.Parse()
 	o := option.New()
 	o.Read(a)

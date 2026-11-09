@@ -4,7 +4,7 @@ import "time"
 
 const (
 	PluginEnvironment = "MONITOR_PLUGINS"
-	FileEnvironment   = "MONITOR_FILE"
+	PathEnvironment   = "MONITOR_PATH"
 	ManualEnvironment = "MONITOR_MANUAL"
 
 	NotationReportLimit int = 10

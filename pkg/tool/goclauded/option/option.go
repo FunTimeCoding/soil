@@ -13,19 +13,19 @@ import (
 
 type Option struct {
 	option.Web
-	Metric              option.Web
-	LitePath            string
-	SessionExportPath   string
-	Harbor              string
-	MonitorUsage        bool
-	UtilizationFallback bool
-	Clock               func() time.Time
-	Claude              func() face.ClaudeSource
-	Memory              func() memoryd.Client
-	Query               func() queryd.Client
-	Notifier            func() face.Notifier
-	Browser             func() *chromium.Client
-	Sources             func() []string
-	Utilization         func() generative.AnthropicClient
-	Credential          func() *credential.Credential
+	Metric                 option.Web
+	LitePath               string
+	SessionExportDirectory string
+	Harbor                 string
+	MonitorUsage           bool
+	UtilizationFallback    bool
+	Clock                  func() time.Time
+	Claude                 func() face.ClaudeSource
+	Memory                 func() memoryd.Client
+	Query                  func() queryd.Client
+	Notifier               func() face.Notifier
+	Browser                func() *chromium.Client
+	Sources                func() []string
+	Utilization            func() generative.AnthropicClient
+	Credential             func() *credential.Credential
 }

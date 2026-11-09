@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus"
+	"time"
 )
 
 func LabelName() {
@@ -14,6 +15,7 @@ func LabelName() {
 	for _, l := range c.MustLabelNames(
 		[]string{},
 		soil.Epoch,
+		time.Time{},
 	).Values {
 		console.Format("  %s\n", l)
 	}

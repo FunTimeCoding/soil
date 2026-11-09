@@ -30,7 +30,7 @@ const (
 	MinionsFail = "list minions"
 	KeysFail    = "list keys"
 
-	SaltPathEnvironment = "SALT_PATH"
+	SaltDirectoryEnvironment = "SALT_DIRECTORY"
 
 	SaltPeer = "salt"
 

@@ -9,8 +9,9 @@ import (
 func New(
 	start time.Time,
 	end time.Time,
+	now time.Time,
 	rate []rate_snapshot.Snapshot,
 	fable []fable_snapshot.Snapshot,
 ) *Window {
-	return &Window{Start: start, End: end, Rate: rate, Fable: fable}
+	return &Window{Start: start, End: end, Now: now, Rate: rate, Fable: fable}
 }

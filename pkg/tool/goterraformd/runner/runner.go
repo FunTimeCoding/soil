@@ -12,20 +12,20 @@ import (
 )
 
 type Runner struct {
-	provision      *runner.Runner
-	store          *store.Store
-	clonePath      string
-	terraformPath  string
-	executable     string
-	hostname       string
-	namespace      string
-	started        time.Time
-	logger         *logger.Logger
-	reporter       face.Reporter
-	registry       face.ProcessRegistry
-	metrics        *metric.Metric
-	kubernetes     kubernetesFace.KubernetesClient
-	stateNamespace string
-	stateLeaseName string
-	pending        *change.Change
+	provision          *runner.Runner
+	store              *store.Store
+	cloneDirectory     string
+	terraformDirectory string
+	executable         string
+	hostname           string
+	namespace          string
+	started            time.Time
+	logger             *logger.Logger
+	reporter           face.Reporter
+	registry           face.ProcessRegistry
+	metrics            *metric.Metric
+	kubernetes         kubernetesFace.KubernetesClient
+	stateNamespace     string
+	stateLeaseName     string
+	pending            *change.Change
 }

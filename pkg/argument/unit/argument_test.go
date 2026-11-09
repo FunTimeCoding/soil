@@ -6,6 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/identity"
+	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	relationalConstant "github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -197,4 +199,83 @@ func TestWebFlagOverridesEnvironment(t *testing.T) {
 	assert.Integer(t, 7000, a.GetInteger(constant.Port))
 	assert.String(t, "192.168.0.1", a.GetString(constant.BindAddress))
 	assert.String(t, "192.168.0.1:7000", a.Address())
+}
+
+func TestInventoryEnvironmentOverridesDefault(t *testing.T) {
+	t.Setenv(inventoryConstant.PathEnvironment, "/etc/gotest/gotestd.yaml")
+	a := testInstance(t)
+	a.Inventory()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.String(
+		t,
+		"/etc/gotest/gotestd.yaml",
+		a.GetString(constant.Inventory),
+	)
+}
+
+func TestInventoryFlagOverridesEnvironment(t *testing.T) {
+	t.Setenv(inventoryConstant.PathEnvironment, "/etc/gotest/gotestd.yaml")
+	a := testInstance(t)
+	a.Inventory()
+	assert.Nil(t, a.ParseArguments([]string{"--inventory", "/explicit.yaml"}))
+	assert.String(t, "/explicit.yaml", a.GetString(constant.Inventory))
+}
+
+func TestRepositoryEnvironmentOverridesDefault(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerRepositoryEnvironment, "git@host:a/b.git")
+	a := testInstance(t)
+	a.Repository()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.String(t, "git@host:a/b.git", a.GetString(constant.Repository))
+}
+
+func TestRepositoryFlagOverridesEnvironment(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerRepositoryEnvironment, "git@host:a/b.git")
+	a := testInstance(t)
+	a.Repository()
+	assert.Nil(
+		t,
+		a.ParseArguments([]string{"--repository", "git@host:c/d.git"}),
+	)
+	assert.String(t, "git@host:c/d.git", a.GetString(constant.Repository))
+}
+
+func TestCloneDirectoryEnvironmentOverridesDefault(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerCloneDirectoryEnvironment, "/srv/clone")
+	a := testInstance(t)
+	a.CloneDirectory()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.String(t, "/srv/clone", a.GetString(constant.CloneDirectory))
+}
+
+func TestCloneDirectoryFlagOverridesEnvironment(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerCloneDirectoryEnvironment, "/srv/clone")
+	a := testInstance(t)
+	a.CloneDirectory()
+	assert.Nil(t, a.ParseArguments([]string{"--clone-directory", "/explicit"}))
+	assert.String(t, "/explicit", a.GetString(constant.CloneDirectory))
+}
+
+func TestCopyModesDefaultsOff(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerCopyModesEnvironment, "")
+	a := testInstance(t)
+	a.CopyModes()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.False(t, a.GetBoolean(constant.CopyModes))
+}
+
+func TestCopyModesEnvironmentTurnsOn(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerCopyModesEnvironment, "1")
+	a := testInstance(t)
+	a.CopyModes()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.True(t, a.GetBoolean(constant.CopyModes))
+}
+
+func TestCopyModesFlagOverridesEnvironment(t *testing.T) {
+	t.Setenv(provisionConstant.RunnerCopyModesEnvironment, "1")
+	a := testInstance(t)
+	a.CopyModes()
+	assert.Nil(t, a.ParseArguments([]string{"--copy-modes=false"}))
+	assert.False(t, a.GetBoolean(constant.CopyModes))
 }

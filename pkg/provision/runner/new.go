@@ -19,7 +19,8 @@ func New(
 
 	return &Runner{
 		repository:      c.Repository,
-		clonePath:       c.ClonePath,
+		cloneDirectory:  c.CloneDirectory,
+		copyModes:       c.CopyModes,
 		toolPath:        c.ToolPath,
 		applyFunction:   c.ApplyFunction,
 		initFunction:    c.InitFunction,

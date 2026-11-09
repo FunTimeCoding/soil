@@ -65,8 +65,8 @@ func NewFixture(
 	o := option.New()
 	o.LitePath = filepath.Join(base, "runs.db")
 	o.Repository = remote
-	o.ClonePath = clone
-	o.AnsiblePath = "."
+	o.CloneDirectory = clone
+	o.AnsibleDirectory = "."
 	o.Playbook = []string{constant.FixturePlaybook}
 
 	if inventory != nil {

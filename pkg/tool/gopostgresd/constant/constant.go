@@ -50,6 +50,7 @@ const (
 	BackupKind              = "backup"
 	BackupParameter         = "backup"
 	BackupDirectoryArgument = "backup-directory"
+	BackupDirectoryUsage    = "Directory holding each instance's backups"
 	BackupNameLayout        = "2006-01-02T15-04-05"
 	BackupExtension         = ".dump"
 	ChecksumExtension       = ".sha256"
@@ -62,6 +63,7 @@ const (
 
 	PasswordEnvironment        = "PGPASSWORD"
 	ApplicationNameEnvironment = "PGAPPNAME"
+	BackupDirectoryEnvironment = "BACKUP_DIRECTORY"
 	ApplicationNameParameter   = "application_name"
 	RestoreApplicationName     = "gopostgresd restore"
 

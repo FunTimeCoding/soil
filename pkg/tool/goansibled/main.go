@@ -17,23 +17,17 @@ func Main() {
 	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Web()
-	a.Metric()
-	a.Database()
-	a.String(argumentConstant.Repository, "", "Git repository URL")
-	a.String(argumentConstant.ClonePath, "", "Local repository path")
-	a.String(
-		argumentConstant.Playbook,
-		"",
-		"Comma-separated playbook paths relative to ansible path",
-	)
+	Arguments(a)
 	a.Parse()
 	o := option.New()
 	o.Read(a)
 	o.Metric.Address = a.MetricAddress()
 	o.Repository = a.Required(argumentConstant.Repository)
-	o.ClonePath = a.Required(argumentConstant.ClonePath)
-	o.AnsiblePath = environment.Required(constant.AnsiblePathEnvironment)
+	o.CloneDirectory = a.Required(argumentConstant.CloneDirectory)
+	o.CopyModes = a.GetBoolean(argumentConstant.CopyModes)
+	o.AnsibleDirectory = environment.Required(
+		constant.AnsibleDirectoryEnvironment,
+	)
 	o.Playbook = a.Slice(argumentConstant.Playbook)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)

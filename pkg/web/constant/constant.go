@@ -32,6 +32,6 @@ const (
 	CertificateName               = "certificate"
 	CertificateFileName           = "certificate.pem"
 	CertificateKeyName            = "key.pem"
-	CertificateFileEnvironment    = "CERTIFICATE_FILE"
-	CertificateKeyFileEnvironment = "CERTIFICATE_KEY_FILE"
+	CertificatePathEnvironment    = "CERTIFICATE_PATH"
+	CertificateKeyPathEnvironment = "CERTIFICATE_KEY_PATH"
 )

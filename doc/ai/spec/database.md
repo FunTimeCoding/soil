@@ -183,6 +183,9 @@ s := store.New(m)
 
 ## Migrations
 
+A migration is never a reason to keep a worse name; this section is how the
+rename is paid for.
+
 `AutoMigrate` adds columns and never renames or drops them. A changed
 `column:` tag therefore creates a fresh empty column and leaves the data
 in the old one, silently, until reads come back empty. When a rename

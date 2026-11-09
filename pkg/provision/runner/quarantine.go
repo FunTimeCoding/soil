@@ -11,11 +11,11 @@ import (
 
 func (r *Runner) quarantine() {
 	target := join.Empty(
-		r.clonePath,
+		r.cloneDirectory,
 		constant.RunnerQuarantineSuffix,
 		time.Now().UTC().Format(constant.RunnerQuarantineFormat),
 	)
-	errors.PanicOnError(os.Rename(r.clonePath, target))
+	errors.PanicOnError(os.Rename(r.cloneDirectory, target))
 	r.reporter.CaptureException(
 		fmt.Errorf("repository quarantined: %s", target),
 	)

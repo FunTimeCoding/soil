@@ -19,6 +19,7 @@ func TestIsPath(t *testing.T) {
 	assert.True(t, pointer.IsPath("https://example.org/page"))
 	assert.True(t, pointer.IsPath("go:fmt.Println"))
 	assert.True(t, pointer.IsPath("go:Whatever"))
+	assert.True(t, pointer.IsPath("doc/guide/Bravo Charlie.md"))
 	assert.False(t, pointer.IsPath(constant.SchemeGo))
 	assert.False(t, pointer.IsPath(""))
 	assert.False(t, pointer.IsPath("word"))

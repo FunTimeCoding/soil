@@ -9,7 +9,7 @@ import (
 func collect(paths []string) []string {
 	result := paths
 
-	if s := environment.Optional(constant.FileEnvironment); s != "" {
+	if s := environment.Optional(constant.PathEnvironment); s != "" {
 		result = append(result, split.Comma(s)...)
 	}
 

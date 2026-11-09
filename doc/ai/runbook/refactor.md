@@ -19,6 +19,8 @@ is the procedure.
   package too, or a twin only those reach reads as dead. A name-level
   grep only proves a zero. A method gaining an error return still
   compiles where a caller discards the result - errcheck finds those
+- A renamed field is checked for reflection by name (`FieldByName`, string
+  keys naming fields), which no compiler follows
 - Read a peer client's constructor before placing a start-up lookup: a
   constructor that already calls the peer has decided it
 - Size a test migration by its doubles, not its files
@@ -28,6 +30,8 @@ is the procedure.
 - One change at a time, each leaving soil and every consumer building
   and tested. A consumer keeps building through a transitional variadic
   while its call sites move new-beside-old
+- A behaviour change follows the move: tests pin today's behaviour, the
+  moves land under them, then each behaviour step flips its own pins
 - A full face over a large client is generated: a program reading the
   client's AST writes the face and trivial mock files as new files,
   refusing to overwrite stateful ones. Must twins copy the client's body;

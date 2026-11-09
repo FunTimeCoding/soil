@@ -82,6 +82,10 @@ Singular, even when the value is a comma-separated list:
 avoid-plurals rule applies to env var names too - a list-valued
 variable does not earn a plural.
 
+A path's suffix says what it points at: `_PATH` names a file and `_DIRECTORY`
+a directory, spelled out. `_FILE` keeps only the sense of a value read from
+that file (`POSTGRES_PASSWORD_FILE`), never a plain path.
+
 Transport and trust are separate axes and never share a variable:
 
 - `*_INSECURE` selects http instead of https - a locator concern,
@@ -204,6 +208,9 @@ letters fit obvious types in local variables and struct receivers
 (the type already documents the receiver); function parameters prefer
 descriptive names - callers read the signature without seeing the
 body. Avoid `-ing` and plural forms in names.
+
+A local that would shadow an imported package takes a letter; the package
+keeps its name.
 
 ## Single-character collision fallback
 

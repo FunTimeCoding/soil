@@ -88,8 +88,8 @@ func fixture(
 	o.LitePath = result.litePath
 	o.Cluster = func() face.KubernetesClient { return c }
 	o.Repository = remote
-	o.ClonePath = clone
-	o.TerraformPath = "."
+	o.CloneDirectory = clone
+	o.TerraformDirectory = "."
 	o.Executable = executable
 	o.Hostname = hostname
 	o.Namespace = constant.StateNamespace

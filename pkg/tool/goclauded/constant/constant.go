@@ -77,10 +77,10 @@ const (
 )
 
 const (
-	SessionExportPathEnvironment = "SESSION_EXPORT_PATH"
-	MonitorUsageEnvironment      = "CLAUDE_MONITOR_USAGE"
-	UsageEndpointEnvironment     = "CLAUDE_USAGE_ENDPOINT"
-	CoverageRootEnvironment      = "CLAUDE_COVERAGE_ROOT"
+	SessionExportDirectoryEnvironment = "SESSION_EXPORT_DIRECTORY"
+	MonitorUsageEnvironment           = "CLAUDE_MONITOR_USAGE"
+	UsageEndpointEnvironment          = "CLAUDE_USAGE_ENDPOINT"
+	CoverageRootEnvironment           = "CLAUDE_COVERAGE_ROOT"
 )
 
 const (

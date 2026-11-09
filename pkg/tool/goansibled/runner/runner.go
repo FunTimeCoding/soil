@@ -9,13 +9,13 @@ import (
 )
 
 type Runner struct {
-	provision   *runner.Runner
-	store       *store.Store
-	playbook    []string
-	clonePath   string
-	ansiblePath string
-	logger      *logger.Logger
-	reporter    soilFace.Reporter
-	registry    soilFace.ProcessRegistry
-	inventory   face.InventoryMarkup
+	provision        *runner.Runner
+	store            *store.Store
+	playbook         []string
+	cloneDirectory   string
+	ansibleDirectory string
+	logger           *logger.Logger
+	reporter         soilFace.Reporter
+	registry         soilFace.ProcessRegistry
+	inventory        face.InventoryMarkup
 }

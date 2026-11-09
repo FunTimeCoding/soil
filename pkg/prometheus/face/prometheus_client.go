@@ -23,19 +23,22 @@ type PrometheusClient interface {
 	) (bool, error)
 	LabelNames(
 		matches []string,
-		since time.Time,
+		start time.Time,
+		end time.Time,
 	) (*label_result.Result, error)
 	LabelValues(
 		label string,
 		matches []string,
-		since time.Time,
+		start time.Time,
+		end time.Time,
 	) (*label_result.Result, error)
 	Metadata(metric string) (map[string][]v1.Metadata, error)
 	MustAllLabels() []string
 	MustAllMetrics() []string
 	MustLabelNames(
 		matches []string,
-		since time.Time,
+		start time.Time,
+		end time.Time,
 	) *label_result.Result
 	MustMetadata(metric string) map[string][]v1.Metadata
 	MustQuery(

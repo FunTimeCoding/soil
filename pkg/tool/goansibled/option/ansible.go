@@ -7,12 +7,13 @@ import (
 
 type Ansible struct {
 	option.Web
-	Metric          option.Web
-	Repository      string
-	ClonePath       string
-	AnsiblePath     string
-	Playbook        []string
-	PostgresLocator string
-	LitePath        string
-	Inventory       func() face.Client
+	Metric           option.Web
+	Repository       string
+	CloneDirectory   string
+	CopyModes        bool
+	AnsibleDirectory string
+	Playbook         []string
+	PostgresLocator  string
+	LitePath         string
+	Inventory        func() face.Client
 }

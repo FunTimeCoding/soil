@@ -7,9 +7,10 @@ import (
 
 func (c *Client) LabelNames(
 	matches []string,
-	since time.Time,
+	start time.Time,
+	end time.Time,
 ) (*label_result.Result, error) {
-	v, w, n, e := c.client.LabelNames(c.context, matches, since, time.Now())
+	v, w, n, e := c.client.LabelNames(c.context, matches, start, end)
 
 	if e != nil {
 		return nil, e

@@ -3,7 +3,6 @@ package goaudit
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
@@ -21,7 +20,7 @@ func Run(o *option.Audit) {
 
 	for _, root := range o.Roots {
 		lint.Header(constant.Identity.Name(), root, "")
-		v := virtual_file_system.From(root)
+		v := scan.Tree(root)
 		repo := filepath.Base(root)
 		services := scan.Services(v, repo, configuration)
 

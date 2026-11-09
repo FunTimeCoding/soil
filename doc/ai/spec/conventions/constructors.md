@@ -1,8 +1,14 @@
 # Constructors
 
-- **`New()` in `new.go`** - zero-arg or with params, one per package.
+- **`New()` in `new.go`** - zero-arg or with params, one per own package.
   Zero-arg `New()` is appropriate when call sites use different field
-  combinations (callers set fields after construction).
+  combinations (callers set fields after construction). Positional while
+  the call reads; beyond that, a blank `New()` plus field assignments, or a
+  chain, chosen per type.
+- **A bag's structs take `NewFoo` in `new_foo.go`** - each struct something
+  builds, the role struct too (`NewInput` in an `input` bag). A decode shape
+  only the decoder fills gets none. Constructors are functions, so they never
+  taint a bag (`../package-design.md`).
 - **A second word behind `New` can mean a package is missing.** When
   the qualifier names a **thing** - `NewStoreTester` - that word is
   the package it is asking for: extract `store_tester/` with a plain

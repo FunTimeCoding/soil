@@ -17,9 +17,9 @@ func NewEnvironment() *Client {
 		environment.Required(constant.GroupFilterEnvironment),
 	)
 
-	if environment.Exists(constant.AuthorityEnvironment) {
+	if environment.Exists(constant.AuthorityPathEnvironment) {
 		result = result.WithAuthority(
-			environment.Required(constant.AuthorityEnvironment),
+			environment.Required(constant.AuthorityPathEnvironment),
 		)
 	}
 

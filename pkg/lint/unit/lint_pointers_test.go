@@ -61,6 +61,23 @@ func TestPointersDead(t *testing.T) {
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
 }
 
+func TestPointersDeadWithSpace(t *testing.T) {
+	line := "Read `doc/guide/Bravo Charlie.md` first."
+	l := pointer_tester.Checker()(
+		stringsConstant.UpperAlfa,
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
+}
+
+func TestPointersExistingWithSpace(t *testing.T) {
+	l := pointer_tester.Checker("doc/guide/Bravo Charlie.md")(
+		stringsConstant.UpperAlfa,
+		strings.NewReader("Read `doc/guide/Bravo Charlie.md` first.\n"),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
 func TestPointersAbsolute(t *testing.T) {
 	line := "Notes at `/Users/example/notes.md` today."
 	l := pointer_tester.Checker()(

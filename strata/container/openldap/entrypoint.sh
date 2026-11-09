@@ -8,9 +8,9 @@ attribute() {
     fi
 }
 
-state=${LDAP_STATE_PATH:-/var/lib/openldap}
+state=${LDAP_STATE_DIRECTORY:-/var/lib/openldap}
 template=${LDAP_CONFIG_TEMPLATE:-/etc/openldap/config.ldif.template}
-seed=${LDAP_SEED_PATH:-/etc/openldap/seed}
+seed=${LDAP_SEED_DIRECTORY:-/etc/openldap/seed}
 urls=${LDAP_LISTEN_URLS:-ldap:/// ldapi:///}
 level=${LDAP_DEBUG_LEVEL:-256}
 config=$state/slapd.d
@@ -47,11 +47,11 @@ if [ ! -f "$config/cn=config.ldif" ]; then
         -e "s|@RUN_PATH@|$run|g" \
         "$template" \
         | attribute @TLS_CERTIFICATE@ olcTLSCertificateFile \
-            "$LDAP_CERTIFICATE_FILE" \
+            "$LDAP_CERTIFICATE_PATH" \
         | attribute @TLS_KEY@ olcTLSCertificateKeyFile \
-            "$LDAP_CERTIFICATE_KEY_FILE" \
+            "$LDAP_CERTIFICATE_KEY_PATH" \
         | attribute @TLS_AUTHORITY@ olcTLSCACertificateFile \
-            "$LDAP_AUTHORITY_FILE" \
+            "$LDAP_AUTHORITY_PATH" \
         > /tmp/config.ldif
     slapadd -n0 -F "$config" -l /tmp/config.ldif
     rm /tmp/config.ldif

@@ -13,10 +13,11 @@ import (
 )
 
 type Runner struct {
-	repository    string
-	clonePath     string
-	toolPath      string
-	applyFunction func(
+	repository     string
+	cloneDirectory string
+	copyModes      bool
+	toolPath       string
+	applyFunction  func(
 		parameters map[string]any,
 		triggerSource string,
 	) any

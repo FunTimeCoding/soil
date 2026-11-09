@@ -23,5 +23,5 @@ func (s *Service) UsageWindow() *usage_window.Window {
 		return nil
 	}
 
-	return usage_window.New(start, end, rate, fable)
+	return usage_window.New(start, end, s.clock(), rate, fable)
 }

@@ -41,7 +41,7 @@ const (
 	KubernetesConfigurationPath = ".kube/config"
 	LicensePath                 = "license"
 	LimitPath                   = "limit"
-	MarkdownPath               = "markdown"
+	MarkdownPath                = "markdown"
 	MemoryPath                  = "memory"
 	NotationPath                = "notation"
 	SearchPath                  = "search"

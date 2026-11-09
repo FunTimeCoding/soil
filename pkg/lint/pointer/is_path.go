@@ -6,8 +6,12 @@ import (
 )
 
 func IsPath(s string) bool {
-	if s == "" || strings.ContainsAny(s, constant.HorizontalWhitespace) {
+	if s == "" {
 		return false
+	}
+
+	if strings.ContainsAny(s, constant.HorizontalWhitespace) {
+		return isSpacedPath(s)
 	}
 
 	if strings.Contains(s, "/") {

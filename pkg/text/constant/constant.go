@@ -8,7 +8,7 @@ const (
 	DictionaryFile = "dictionary.dic"
 	MinimumStem    = 3
 
-	WikiPathEnvironment = "WIKI_PATH"
+	WikiDirectoryEnvironment = "WIKI_DIRECTORY"
 )
 
 const (

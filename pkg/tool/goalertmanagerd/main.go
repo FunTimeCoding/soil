@@ -15,11 +15,7 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
-	a.String(
-		argumentConstant.Inventory,
-		constant.Identity.InventoryPath(),
-		"Inventory file path",
-	)
+	a.Inventory()
 	a.Parse()
 	o := option.New()
 	o.Read(a)

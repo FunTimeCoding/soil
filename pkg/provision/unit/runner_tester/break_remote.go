@@ -8,7 +8,7 @@ import (
 func (o *Tester) BreakRemote() {
 	o.t.Helper()
 	c := run.New()
-	c.Directory = o.ClonePath
+	c.Directory = o.CloneDirectory
 	c.Start(
 		"git",
 		"config",

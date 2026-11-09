@@ -9,13 +9,13 @@ import (
 )
 
 type Tester struct {
-	t         *testing.T
-	Runner    *runner.Runner
-	Reporter  *memory.Memory
-	ClonePath string
-	remote    string
-	applied   []*apply_call.Call
-	mutex     sync.Mutex
-	gate      chan struct{}
-	release   sync.Once
+	t              *testing.T
+	Runner         *runner.Runner
+	Reporter       *memory.Memory
+	CloneDirectory string
+	remote         string
+	applied        []*apply_call.Call
+	mutex          sync.Mutex
+	gate           chan struct{}
+	release        sync.Once
 }

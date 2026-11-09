@@ -33,8 +33,9 @@ func New(
 	result.provision = runner.New(
 		runner_option.Option{
 			Repository:      o.Repository,
-			ClonePath:       o.ClonePath,
-			ToolPath:        o.SaltPath,
+			CloneDirectory:  o.CloneDirectory,
+			CopyModes:       o.CopyModes,
+			ToolPath:        o.SaltDirectory,
 			ApplyFunction:   result.apply,
 			SetupFunction:   result.awaitMaster,
 			CleanupFunction: s.Cleanup,

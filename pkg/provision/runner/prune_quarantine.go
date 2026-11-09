@@ -11,7 +11,7 @@ import (
 )
 
 func (r *Runner) pruneQuarantine() {
-	prefix := join.Empty(r.clonePath, constant.RunnerQuarantineSuffix)
+	prefix := join.Empty(r.cloneDirectory, constant.RunnerQuarantineSuffix)
 	paths, e := filepath.Glob(join.Empty(prefix, "*"))
 	errors.PanicOnError(e)
 

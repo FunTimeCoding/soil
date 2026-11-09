@@ -9,15 +9,10 @@ import (
 func (c *Client) LabelValues(
 	label string,
 	matches []string,
-	since time.Time,
+	start time.Time,
+	end time.Time,
 ) (*label_result.Result, error) {
-	v, w, n, e := c.client.LabelValues(
-		c.context,
-		label,
-		matches,
-		since,
-		time.Now(),
-	)
+	v, w, n, e := c.client.LabelValues(c.context, label, matches, start, end)
 
 	if e != nil {
 		return nil, e

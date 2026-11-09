@@ -23,6 +23,7 @@ func build(
 	hold func(),
 	registry soilFace.ProcessRegistry,
 	downstream face.Downstream,
+	copyModes bool,
 ) *Tester {
 	t.Helper()
 	base := t.TempDir()
@@ -49,15 +50,16 @@ func build(
 	c.Directory = clone
 	c.Start("git", "push", "origin", constant.RunnerBranch)
 	result := &Tester{
-		t:         t,
-		ClonePath: clone,
-		remote:    remote,
-		Reporter:  memory.New(),
+		t:              t,
+		CloneDirectory: clone,
+		remote:         remote,
+		Reporter:       memory.New(),
 	}
 	o := runner_option.Option{
-		Repository: remote,
-		ClonePath:  clone,
-		ToolPath:   ".",
+		Repository:     remote,
+		CloneDirectory: clone,
+		CopyModes:      copyModes,
+		ToolPath:       ".",
 		ApplyFunction: func(
 			parameters map[string]any,
 			triggerSource string,

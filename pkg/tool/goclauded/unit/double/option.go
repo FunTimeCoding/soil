@@ -14,7 +14,7 @@ func (s *Set) Option(
 ) *option.Option {
 	result := option.New()
 	result.LitePath = litePath
-	result.SessionExportPath = s.t.TempDir()
+	result.SessionExportDirectory = s.t.TempDir()
 	result.Harbor = s.Harbor
 	result.Clock = clock
 	result.Claude = func() face.ClaudeSource { return s.Client }

@@ -17,7 +17,7 @@ func (r *Runner) planApply(
 	record *run.Run,
 	target string,
 ) error {
-	directory := filepath.Join(r.clonePath, r.terraformPath)
+	directory := filepath.Join(r.cloneDirectory, r.terraformDirectory)
 	scratch := system.TemporaryDirectory(constant.PlanPattern)
 	defer system.Remove(scratch)
 	file := filepath.Join(scratch, constant.PlanFile)

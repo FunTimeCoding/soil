@@ -8,9 +8,10 @@ import (
 
 func (c *Client) MustLabelNames(
 	matches []string,
-	since time.Time,
+	start time.Time,
+	end time.Time,
 ) *label_result.Result {
-	result, e := c.LabelNames(matches, since)
+	result, e := c.LabelNames(matches, start, end)
 	errors.PanicOnError(e)
 
 	return result

@@ -25,27 +25,28 @@ func New(
 	downstream []provisionFace.Downstream,
 ) *Runner {
 	result := &Runner{
-		store:          s,
-		clonePath:      o.ClonePath,
-		terraformPath:  o.TerraformPath,
-		executable:     o.Executable,
-		hostname:       o.Hostname,
-		namespace:      o.Namespace,
-		started:        time.Now(),
-		logger:         l,
-		reporter:       r,
-		registry:       registry,
-		kubernetes:     k,
-		stateNamespace: o.StateNamespace,
-		stateLeaseName: o.StateLease,
+		store:              s,
+		cloneDirectory:     o.CloneDirectory,
+		terraformDirectory: o.TerraformDirectory,
+		executable:         o.Executable,
+		hostname:           o.Hostname,
+		namespace:          o.Namespace,
+		started:            time.Now(),
+		logger:             l,
+		reporter:           r,
+		registry:           registry,
+		kubernetes:         k,
+		stateNamespace:     o.StateNamespace,
+		stateLeaseName:     o.StateLease,
 	}
 	result.metrics = metric.New(y, result.stateLease)
 	result.seedLastSuccess()
 	result.provision = runner.New(
 		runner_option.Option{
 			Repository:      o.Repository,
-			ClonePath:       o.ClonePath,
-			ToolPath:        o.TerraformPath,
+			CloneDirectory:  o.CloneDirectory,
+			CopyModes:       o.CopyModes,
+			ToolPath:        o.TerraformDirectory,
 			ApplyFunction:   result.apply,
 			InitFunction:    result.terraformInit,
 			CleanupFunction: s.Cleanup,

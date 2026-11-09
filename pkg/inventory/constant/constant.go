@@ -6,6 +6,9 @@ const (
 
 	ListInstances = "list_instances"
 	UseInstance   = "use_instance"
+
+	PathEnvironment = "INVENTORY_PATH"
+	PathUsage       = "Inventory file path"
 )
 
 const (

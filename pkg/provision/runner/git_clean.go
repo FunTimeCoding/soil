@@ -7,7 +7,7 @@ import (
 )
 
 func (r *Runner) gitClean() {
-	lock := filepath.Join(r.clonePath, constant.RunnerIndexLock)
+	lock := filepath.Join(r.cloneDirectory, constant.RunnerIndexLock)
 
 	if !system.FileExists(lock) {
 		return

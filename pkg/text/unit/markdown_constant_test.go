@@ -7,5 +7,5 @@ import (
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(t, "WIKI_PATH", constant.WikiPathEnvironment)
+	assert.String(t, "WIKI_DIRECTORY", constant.WikiDirectoryEnvironment)
 }

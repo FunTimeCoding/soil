@@ -8,9 +8,10 @@ import (
 func (c *Client) LabelValues(
 	_ string,
 	_ []string,
-	since time.Time,
+	start time.Time,
+	end time.Time,
 ) (*label_result.Result, error) {
-	c.record(since)
+	c.record(start, end)
 
 	if c.Failure != nil {
 		return nil, c.Failure

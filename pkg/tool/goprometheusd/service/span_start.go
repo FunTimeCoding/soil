@@ -5,8 +5,11 @@ import (
 	"time"
 )
 
-func (s *Service) spanStart(span time.Duration) time.Time {
-	result, _ := window.Whole().Bound(s.clock(), span).Start()
+func spanStart(
+	now time.Time,
+	span time.Duration,
+) time.Time {
+	result, _ := window.Whole().Bound(now, span).Start()
 
 	return result
 }

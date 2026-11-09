@@ -6,7 +6,7 @@ import (
 )
 
 func (r *Runner) terraformInit() {
-	directory := filepath.Join(r.clonePath, r.terraformPath)
+	directory := filepath.Join(r.cloneDirectory, r.terraformDirectory)
 	r.logger.Structured("terraform_init")
 	c := r.newRun().NoPanic()
 	c.Directory = directory

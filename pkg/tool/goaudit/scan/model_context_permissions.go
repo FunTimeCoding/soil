@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/claude_settings"
@@ -83,10 +82,7 @@ func ModelContextPermissions(
 			continue
 		}
 
-		names, concerns := RegisteredTools(
-			virtual_file_system.From(resolved),
-			path,
-		)
+		names, concerns := RegisteredTools(Tree(resolved), path)
 		result = append(result, concerns...)
 		registered := make(map[string]bool)
 

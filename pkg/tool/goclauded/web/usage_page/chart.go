@@ -7,7 +7,6 @@ import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
-	"time"
 )
 
 func Chart(window *usage_window.Window) gomponents.Node {
@@ -31,7 +30,7 @@ func Chart(window *usage_window.Window) gomponents.Node {
 	}
 
 	return chart.New(window.Start, window.End).
-		WithNow(time.Now()).
+		WithNow(window.Now).
 		WithSeries(weekly, fable).
 		WithGuide().
 		WithProjection().

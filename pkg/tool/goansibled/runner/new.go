@@ -17,19 +17,20 @@ func New(
 	registry face.ProcessRegistry,
 ) *Runner {
 	result := &Runner{
-		store:       s,
-		playbook:    o.Playbook,
-		clonePath:   o.ClonePath,
-		ansiblePath: o.AnsiblePath,
-		logger:      l,
-		reporter:    r,
-		registry:    registry,
+		store:            s,
+		playbook:         o.Playbook,
+		cloneDirectory:   o.CloneDirectory,
+		ansibleDirectory: o.AnsibleDirectory,
+		logger:           l,
+		reporter:         r,
+		registry:         registry,
 	}
 	result.provision = runner.New(
 		runner_option.Option{
 			Repository:      o.Repository,
-			ClonePath:       o.ClonePath,
-			ToolPath:        o.AnsiblePath,
+			CloneDirectory:  o.CloneDirectory,
+			CopyModes:       o.CopyModes,
+			ToolPath:        o.AnsibleDirectory,
 			ApplyFunction:   result.apply,
 			CleanupFunction: s.Cleanup,
 			Registry:        registry,

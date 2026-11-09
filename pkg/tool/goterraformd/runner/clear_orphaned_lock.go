@@ -21,7 +21,7 @@ func (r *Runner) clearOrphanedLock() {
 	}
 
 	c := r.newRun().NoPanic()
-	c.Directory = filepath.Join(r.clonePath, r.terraformPath)
+	c.Directory = filepath.Join(r.cloneDirectory, r.terraformDirectory)
 	c.Start(
 		r.executable,
 		constant.ForceUnlock,

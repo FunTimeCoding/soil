@@ -8,10 +8,11 @@ import (
 )
 
 type Option struct {
-	Repository    string
-	ClonePath     string
-	ToolPath      string
-	ApplyFunction func(
+	Repository     string
+	CloneDirectory string
+	CopyModes      bool
+	ToolPath       string
+	ApplyFunction  func(
 		parameters map[string]any,
 		triggerSource string,
 	) any

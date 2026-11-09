@@ -24,8 +24,8 @@ func Main() {
 	o.Metric.Address = a.MetricAddress()
 	o.Read(a)
 	o.LitePath = a.GetString(argumentConstant.Lite)
-	o.SessionExportPath = environment.Required(
-		constant.SessionExportPathEnvironment,
+	o.SessionExportDirectory = environment.Required(
+		constant.SessionExportDirectoryEnvironment,
 	)
 	o.Harbor = claude.New().Base()
 	o.MonitorUsage = environment.Exists(constant.MonitorUsageEnvironment) &&

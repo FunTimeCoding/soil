@@ -13,14 +13,15 @@ func (s *Service) LabelNames(
 	matches []string,
 	span time.Duration,
 ) (*label_result.Result, error) {
-	since := s.spanStart(span)
+	now := s.clock()
+	start := spanStart(now, span)
 
 	return guarded(
 		s,
 		x,
 		instance,
 		func(c face.PrometheusClient) (*label_result.Result, error) {
-			return c.LabelNames(matches, since)
+			return c.LabelNames(matches, start, now)
 		},
 	)
 }

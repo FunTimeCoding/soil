@@ -41,6 +41,13 @@ const (
 	RunnerStagePattern  = "provision-clone-"
 	RunnerStageSuffix   = ".stage"
 
+	RunnerCopyModesEnvironment      = "COPY_MODES"
+	RunnerCopyModesUsage            = "Set each installed clone entry to its mode in the local clone"
+	RunnerRepositoryEnvironment     = "REPOSITORY"
+	RunnerRepositoryUsage           = "Git repository URL"
+	RunnerCloneDirectoryEnvironment = "CLONE_DIRECTORY"
+	RunnerCloneDirectoryUsage       = "Local repository directory"
+
 	RunnerConsecutive = "consecutive"
 	RunnerError       = "error"
 	RunnerStderr      = "stderr"

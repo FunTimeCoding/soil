@@ -20,15 +20,19 @@ func Main() {
 	a.Web()
 	a.Metric()
 	a.Database()
-	a.String(argumentConstant.Repository, "", "Git repository URL")
-	a.String(argumentConstant.ClonePath, "", "Local repository path")
+	a.Repository()
+	a.CloneDirectory()
+	a.CopyModes()
 	a.Parse()
 	o := option.New()
 	o.Read(a)
 	o.Metric.Address = a.MetricAddress()
 	o.Repository = a.Required(argumentConstant.Repository)
-	o.ClonePath = a.Required(argumentConstant.ClonePath)
-	o.TerraformPath = environment.Required(constant.TerraformPathEnvironment)
+	o.CloneDirectory = a.Required(argumentConstant.CloneDirectory)
+	o.CopyModes = a.GetBoolean(argumentConstant.CopyModes)
+	o.TerraformDirectory = environment.Required(
+		constant.TerraformDirectoryEnvironment,
+	)
 	o.Hostname = system.Hostname()
 
 	if system.FileExists(kubernetesConstant.NamespacePath) {

@@ -13,8 +13,9 @@ const (
 	HeatmapTitle   = "Heatmap"
 	HeatmapPath    = "/heatmap"
 
-	BoardUsage = "Board definition file path"
-	BoardFile  = "godashboardd.yaml"
+	BoardUsage           = "Board definition file path"
+	BoardFile            = "godashboardd.yaml"
+	BoardPathEnvironment = "BOARD_PATH"
 
 	PendingValue = "–"
 

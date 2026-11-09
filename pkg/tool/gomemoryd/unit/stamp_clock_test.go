@@ -10,6 +10,35 @@ import (
 	"testing"
 )
 
+func TestRelationStampRunsOnServiceClock(t *testing.T) {
+	s := base.NewWith(t, windowNow)
+	c := s.MemoryClient(t)
+	target, e := c.PostMemory(
+		t.Context(),
+		client.PostMemoryJSONRequestBody{
+			Name:        "clocked target",
+			Content:     "clocked target content",
+			Description: "clocked target memory",
+			Type:        new("feedback"),
+		},
+	)
+	assert.FatalOnError(t, e)
+	assert.FatalOnError(
+		t,
+		c.PostRelation(
+			t.Context(),
+			client.PostRelationJSONRequestBody{
+				SourceIdentifier: clockedMemory(t, s),
+				TargetIdentifier: target.Identifier,
+			},
+		),
+	)
+	relations, f := s.Store().ListRelations()
+	assert.FatalOnError(t, f)
+	assert.Count(t, 1, relations)
+	assert.String(t, "2026-08-16T20:00:00Z", relations[0].CreatedAt)
+}
+
 func TestMemoryCreateStampRunsOnServiceClock(t *testing.T) {
 	s := base.NewWith(t, windowNow)
 	m, e := s.Store().GetMemory(clockedMemory(t, s))

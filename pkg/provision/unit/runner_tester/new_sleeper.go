@@ -18,6 +18,7 @@ func NewSleeper(t *testing.T) *Tester {
 		},
 		r,
 		nil,
+		false,
 	)
 	t.Cleanup(r.Interrupt)
 

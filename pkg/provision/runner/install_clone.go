@@ -10,13 +10,17 @@ import (
 
 func (r *Runner) installClone(stage string) {
 	defer r.removeStage(stage)
-	next := join.Empty(r.clonePath, constant.RunnerStageSuffix)
+	next := join.Empty(r.cloneDirectory, constant.RunnerStageSuffix)
 	r.removeStage(next)
 	system.CopyDirectory(stage, next)
 
-	if system.DirectoryExists(r.clonePath) {
+	if r.copyModes {
+		copyModes(stage, next)
+	}
+
+	if system.DirectoryExists(r.cloneDirectory) {
 		r.quarantine()
 	}
 
-	errors.PanicOnError(os.Rename(next, r.clonePath))
+	errors.PanicOnError(os.Rename(next, r.cloneDirectory))
 }

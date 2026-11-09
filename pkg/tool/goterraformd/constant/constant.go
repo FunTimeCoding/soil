@@ -35,11 +35,11 @@ const (
 	LockContext      = "terraform_lock"
 	DownstreamPeer   = "downstream"
 
-	TerraformPathEnvironment   = "TERRAFORM_PATH"
-	DownstreamEnvironment      = "DOWNSTREAM_HOST"
-	DownstreamTokenEnvironment = "DOWNSTREAM_TOKEN" // #nosec G101 not a hardcoded secret
-	StateNamespaceEnvironment  = "TERRAFORM_STATE_NAMESPACE"
-	StateLeaseEnvironment      = "TERRAFORM_STATE_LEASE"
+	TerraformDirectoryEnvironment = "TERRAFORM_DIRECTORY"
+	DownstreamEnvironment         = "DOWNSTREAM_HOST"
+	DownstreamTokenEnvironment    = "DOWNSTREAM_TOKEN" // #nosec G101 not a hardcoded secret
+	StateNamespaceEnvironment     = "TERRAFORM_STATE_NAMESPACE"
+	StateLeaseEnvironment         = "TERRAFORM_STATE_LEASE"
 
 	StateNamespace = "terraform"
 	StateLease     = "lock-tfstate-default-state"

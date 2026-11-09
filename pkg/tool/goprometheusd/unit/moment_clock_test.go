@@ -27,7 +27,7 @@ func TestLabelNamesStartRunsOnServiceClock(t *testing.T) {
 	c, m := clockedInstance(t)
 	c.MustCallTool(constant.LabelNames, map[string]any{})
 	moments := m.Moments()
-	assert.Count(t, 1, moments)
+	assert.Count(t, 2, moments)
 	assert.String(
 		t,
 		"2026-08-16T19:00:00Z",
@@ -35,15 +35,39 @@ func TestLabelNamesStartRunsOnServiceClock(t *testing.T) {
 	)
 }
 
+func TestLabelNamesEndRunsOnServiceClock(t *testing.T) {
+	c, m := clockedInstance(t)
+	c.MustCallTool(constant.LabelNames, map[string]any{})
+	moments := m.Moments()
+	assert.Count(t, 2, moments)
+	assert.String(
+		t,
+		"2026-08-16T20:00:00Z",
+		moments[1].UTC().Format(time.RFC3339),
+	)
+}
+
 func TestLabelValuesStartRunsOnServiceClock(t *testing.T) {
 	c, m := clockedInstance(t)
 	c.MustCallTool(constant.LabelValues, map[string]any{"label": "job"})
 	moments := m.Moments()
-	assert.Count(t, 1, moments)
+	assert.Count(t, 2, moments)
 	assert.String(
 		t,
 		"2026-08-16T19:00:00Z",
 		moments[0].UTC().Format(time.RFC3339),
+	)
+}
+
+func TestLabelValuesEndRunsOnServiceClock(t *testing.T) {
+	c, m := clockedInstance(t)
+	c.MustCallTool(constant.LabelValues, map[string]any{"label": "job"})
+	moments := m.Moments()
+	assert.Count(t, 2, moments)
+	assert.String(
+		t,
+		"2026-08-16T20:00:00Z",
+		moments[1].UTC().Format(time.RFC3339),
 	)
 }
 

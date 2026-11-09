@@ -14,17 +14,7 @@ func Main() {
 	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Web()
-	a.String(
-		argumentConstant.Inventory,
-		constant.Identity.InventoryPath(),
-		"Inventory file path",
-	)
-	a.String(
-		constant.BackupDirectoryArgument,
-		"",
-		"Directory holding each instance's backups",
-	)
+	Arguments(a)
 	a.Parse()
 	o := option.New()
 	o.Read(a)

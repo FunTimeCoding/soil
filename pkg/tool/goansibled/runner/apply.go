@@ -13,7 +13,7 @@ func (r *Runner) apply(
 	parameters map[string]any,
 	triggerSource string,
 ) any {
-	directory := filepath.Join(r.clonePath, r.ansiblePath)
+	directory := filepath.Join(r.cloneDirectory, r.ansibleDirectory)
 	head := r.provision.CurrentHead()
 	playbooks := r.playbook
 

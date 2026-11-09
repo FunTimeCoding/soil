@@ -20,7 +20,9 @@ test files live is `test-placement.md`.
   `go test -overlay` breaks without touching the tree. One break at a
   time: a break that panics aborts the package and hides every other
   verdict. A break the test survives names a branch no test reaches, or
-  code nothing needs.
+  code nothing needs. A break run reads its silences: `no tests to run` is a
+  pattern that matched nothing, and a break whose pattern no longer matches
+  broke nothing - both read green.
 - **A filter test keeps a row and drops a row**, and counts the rows
   directly - a filter dropping everything passes a test asserting only
   the drop, and a read that deletes what it filters hides a missing
@@ -28,21 +30,12 @@ test files live is `test-placement.md`.
 
 ## Test names
 
-A test name is chopped, not a sentence: it says what the code does in the
-words that carry the meaning, and drops the articles (a, an, the).
-`TestAHeldConnectionIsUnavailableUntilItServes` is
-`TestHeldConnectionIsUnavailableUntilItServes`;
-`TestAnOpenAIServerThatListsItsModelsIsReachable` is
-`TestOpenAIServerThatListsItsModelsIsReachable`, and its tail goes too -
-`TestOpenAIServerIsReachable` - since the verdict already tells it from
-`TestOpenAIServerThatRefusesIsNotReachable`; a tail stays when another test
-in the package needs it. Two tests of one behaviour at different layers
-carry the layer, not an article: `TestRenderCutsLongMessage` beside
-`TestDeliveryCutsLongMessage`. Prepositions stay when they carry meaning -
-`preposition_name` doesn't read test names. The `test_article` analyzer flags
-an article inside a `Test` function's name - not its last segment, where a
-single capital is a label (`TestDoorA`); the rest of the chopping is the
-writer's.
+A test name is chopped: the words that carry the meaning, no articles
+(`test_article` flags them), and no tail the verdict already tells apart -
+`TestOpenAIServerIsReachable` beside
+`TestOpenAIServerThatRefusesIsNotReachable`. Two tests of one behaviour at
+different layers carry the layer. Prepositions stay when they carry meaning;
+`preposition_name` doesn't read test names.
 
 ## Service First
 

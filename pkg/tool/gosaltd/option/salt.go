@@ -10,8 +10,9 @@ type Salt struct {
 	option.Web
 	Metric          option.Web
 	Repository      string
-	ClonePath       string
-	SaltPath        string
+	CloneDirectory  string
+	CopyModes       bool
+	SaltDirectory   string
 	PostgresLocator string
 	LitePath        string
 	KeySyncInterval time.Duration

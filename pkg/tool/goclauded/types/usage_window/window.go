@@ -9,6 +9,7 @@ import (
 type Window struct {
 	Start time.Time
 	End   time.Time
+	Now   time.Time
 	Rate  []rate_snapshot.Snapshot
 	Fable []fable_snapshot.Snapshot
 }

@@ -23,7 +23,9 @@ const (
 	Status      = "status"
 	Identifier  = "id"
 
-	AnsiblePathEnvironment = "ANSIBLE_PATH"
+	AnsibleDirectoryEnvironment = "ANSIBLE_DIRECTORY"
+	AnsiblePlaybookEnvironment  = "ANSIBLE_PLAYBOOK"
+	PlaybookUsage               = "Comma-separated playbook paths relative to the ansible directory"
 
 	Command          = "ansible-playbook"
 	InventoryFlag    = "-i"

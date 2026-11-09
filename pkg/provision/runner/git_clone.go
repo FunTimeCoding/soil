@@ -3,7 +3,7 @@ package runner
 import "github.com/funtimecoding/soil/pkg/system"
 
 func (r *Runner) gitClone() {
-	if system.DirectoryExists(r.clonePath) && r.validRepository() {
+	if system.DirectoryExists(r.cloneDirectory) && r.validRepository() {
 		r.gitConfigure()
 		r.gitClean()
 		r.gitFetch()

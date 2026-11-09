@@ -7,7 +7,7 @@ func (r *Runner) gitDiffLog(
 	new string,
 ) string {
 	c := r.newRun()
-	c.Directory = r.clonePath
+	c.Directory = r.cloneDirectory
 	c.Start(
 		"git",
 		"log",
