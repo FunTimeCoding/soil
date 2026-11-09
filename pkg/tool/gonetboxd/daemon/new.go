@@ -34,6 +34,7 @@ func New(
 	result.web = web.New(result.service, r)
 
 	if o.PowerIntent {
+		result.service.WithPowerIntent()
 		result.clock = worker.New(
 			result.service.Intents,
 			constant.IntentInterval,

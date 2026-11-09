@@ -20,6 +20,11 @@ func (s *Service) AnsibleInventory(
 				return nil, f
 			}
 
+			if s.powerIntent {
+				machines = activeMachines(machines)
+				devices = activeDevices(devices)
+			}
+
 			return ansible_inventory.New(field, machines, devices), nil
 		},
 	)

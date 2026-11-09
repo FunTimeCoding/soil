@@ -7,7 +7,8 @@ import (
 )
 
 type Service struct {
-	client face.NetBoxClient
-	guard  *peer.Guard
-	store  *store.Store
+	client      face.NetBoxClient
+	guard       *peer.Guard
+	store       *store.Store
+	powerIntent bool
 }
