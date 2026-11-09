@@ -10,5 +10,5 @@ func (s *Server) captureFail(
 	e error,
 	message string,
 ) (*mcp.CallToolResult, error) {
-	return s.answerWith(x, e, message)
+	return s.answerMessage(x, e, message)
 }

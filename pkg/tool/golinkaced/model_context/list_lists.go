@@ -12,7 +12,7 @@ func (s *Server) ListLists(
 	_ mcp.CallToolRequest,
 	a argument.ListLists,
 ) (*mcp.CallToolResult, error) {
-	p := pageFromOffset(a.Offset, a.Limit)
+	p := offsetPage(a.Offset, a.Limit)
 	r, e := s.service.ListsPage(p)
 
 	if e != nil {

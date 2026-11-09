@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAnUnreachableHostFailsFastWithoutBeingAskedAgain(t *testing.T) {
+func TestUnreachableHostFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	v, engines := service_tester.New(t, memory.New(), "alfa", "bravo")
 	alfa := engines["alfa"]
 	alfa.Fail(refusedConnection())

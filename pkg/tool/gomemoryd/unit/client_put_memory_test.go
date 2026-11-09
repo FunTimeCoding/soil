@@ -12,6 +12,7 @@ import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"testing"
+	"time"
 )
 
 func TestPutMemoryWithDescriptionOnly(t *testing.T) {
@@ -20,7 +21,7 @@ func TestPutMemoryWithDescriptionOnly(t *testing.T) {
 	o.Name = "pace"
 	o.Content = "Original body."
 	o.Description = "a test"
-	identifier, e := s.Store().CreateMemory(o)
+	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	c, f := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),
@@ -50,7 +51,7 @@ func TestPutMemoryWithEmptyContentSetsIt(t *testing.T) {
 	o.Name = "pace"
 	o.Content = "Original body."
 	o.Description = "a test"
-	identifier, e := s.Store().CreateMemory(o)
+	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	c, f := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),

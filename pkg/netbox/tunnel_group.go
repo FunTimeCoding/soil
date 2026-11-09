@@ -1,0 +1,23 @@
+package netbox
+
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/tunnel_group"
+)
+
+func (c *Client) TunnelGroup(n string) (*tunnel_group.Group, error) {
+	result, e := c.TunnelGroups()
+
+	if e != nil {
+		return nil, e
+	}
+
+	for _, g := range result {
+		if g.Name == n {
+			return g, nil
+		}
+	}
+
+	return nil, not_found.New(constant.TunnelGroupKind, n)
+}

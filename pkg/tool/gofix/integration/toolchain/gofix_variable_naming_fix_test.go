@@ -13,12 +13,7 @@ import (
 func TestVariableNamingFix(t *testing.T) {
 	directory := module_tester.VariableNaming(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunVariableNamingFixWithDirectory(
-		[]string{"./..."},
-		directory,
-		false,
-		r,
-	)
+	gofix.RunVariableNamingFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"WrongSingleLetter",
 		func(t *testing.T) {

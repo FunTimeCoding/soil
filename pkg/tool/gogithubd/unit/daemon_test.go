@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
+func TestDaemonClosesClientItBuilt(t *testing.T) {
 	c := mock_client.New()
 	o := option.New()
 	o.Source = func() face.GitHubClient { return c }
@@ -24,7 +24,7 @@ func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
 	assert.Integer(t, 1, c.Closed)
 }
 
-func TestTheClockGaugesTheOwnersLatestRuns(t *testing.T) {
+func TestClockGaugesOwnersLatestRuns(t *testing.T) {
 	s := mock_client.New()
 	s.AddRun("bravo", workflowRun(1, "main", "completed", "failure"))
 	s.AddRun("bravo", workflowRun(2, "main", "completed", "success"))
@@ -51,7 +51,7 @@ github_workflow_run_status{branch="main",conclusion="success",owner="alfa",repo=
 	)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	s := mock_client.New()
 	o := option.New()

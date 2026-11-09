@@ -16,7 +16,7 @@ import (
 
 type CustomizationClient interface {
 	Bookmarks() ([]*bookmark.Bookmark, error)
-	ChoiceSetByName(n string) (*choice_set.Set, error)
+	ChoiceSet(n string) (*choice_set.Set, error)
 	ChoiceSets() ([]*choice_set.Set, error)
 	CreateChoiceSet(
 		name string,
@@ -42,7 +42,7 @@ type CustomizationClient interface {
 		name string,
 		fields map[string]any,
 	) (*virtual_machine.Machine, error)
-	ConfigurationContextByName(
+	ConfigurationContext(
 		n string,
 	) (*configuration_context.Context, error)
 	ConfigurationContexts() ([]*configuration_context.Context, error)
@@ -66,7 +66,7 @@ type CustomizationClient interface {
 		weight int32,
 	) (*configuration_context.Context, error)
 	ConfigurationTemplates() ([]*configuration_template.Template, error)
-	CustomFieldByName(n string) (*custom_field.Field, error)
+	CustomField(n string) (*custom_field.Field, error)
 	CustomLinks() ([]*custom_link.Link, error)
 	ExportTemplates() ([]*export_template.Template, error)
 	MustBookmarks() []*bookmark.Bookmark

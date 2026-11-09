@@ -18,6 +18,6 @@ func TestAnnounceClearsPendingTimeout(t *testing.T) {
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	s.Announce("session-1", r.Callsign, "back again", "")
 	r = s.Check("session-1")
-	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)
+	timeouts := fixture.KindEntries(r.Entries, constant.QueueTimeout)
 	assert.Count(t, 0, timeouts)
 }

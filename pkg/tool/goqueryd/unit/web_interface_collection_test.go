@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheSecondPageOfACollectionLoads(t *testing.T) {
+func TestSecondPageOfCollectionLoads(t *testing.T) {
 	s, c := servedWeb(t)
 
 	for i := range 21 {
@@ -32,7 +32,7 @@ func TestTheSecondPageOfACollectionLoads(t *testing.T) {
 	assert.Integer(t, 1, strings.Count(second, `href="/documents/`))
 }
 
-func TestAMissingDocumentIsNotFoundWithLinkedSuggestions(t *testing.T) {
+func TestMissingDocumentIsNotFoundWithLinkedSuggestions(t *testing.T) {
 	s, c := servedWeb(t)
 	pushDocument(t, c, "pushed", "alfa.md", "# Alfa\n\nbody")
 	status, page := servedPage(t, s, document_page.Path("pushed/alfa"))

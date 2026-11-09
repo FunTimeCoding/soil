@@ -40,6 +40,13 @@ func (r *Resolver) resolveSpan(
 		result.Reason = constant.ReasonPattern
 
 		return result
+	case constant.PointerClassTest:
+		return r.resolveTestName(c.Span)
+	case constant.PointerClassBareSymbol:
+		result := pointer.NewResolution(constant.VerdictTallied)
+		result.Reason = constant.ReasonBareSymbol
+
+		return result
 	case constant.PointerClassAbsolute:
 		return pointer.NewResolution(constant.VerdictAbsolute)
 	case constant.PointerClassSibling:

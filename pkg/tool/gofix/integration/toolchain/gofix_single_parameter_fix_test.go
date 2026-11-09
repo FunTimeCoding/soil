@@ -13,12 +13,7 @@ import (
 func TestSingleParameterFix(t *testing.T) {
 	directory := module_tester.SingleParameter(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunSingleParameterFixWithDirectory(
-		[]string{"./..."},
-		directory,
-		false,
-		r,
-	)
+	gofix.RunSingleParameterFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"MethodCollapsed",
 		func(t *testing.T) {
@@ -77,14 +72,14 @@ func TestSingleParameterFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
 			assert.Integer(t, 2, len(applied))
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"method.go",
 				7,
 				"collapsed single parameter",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"function.go",
@@ -98,12 +93,7 @@ func TestSingleParameterFix(t *testing.T) {
 func TestSingleParameterFixWithTestFiles(t *testing.T) {
 	directory := module_tester.SingleParameterWithTests(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunSingleParameterFixWithDirectory(
-		[]string{"./..."},
-		directory,
-		false,
-		r,
-	)
+	gofix.RunSingleParameterFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"NotCorrupted",
 		func(t *testing.T) {

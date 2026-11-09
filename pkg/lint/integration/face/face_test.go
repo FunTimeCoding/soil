@@ -17,7 +17,7 @@ func TestDirectlyImportedInterfaceIsImplemented(t *testing.T) {
 	assert.True(t, face.New(o.Loaded).Implements(o.Method("MarshalJSON")))
 }
 
-func TestIndexSeesAnInterfaceBehindItsImporter(t *testing.T) {
+func TestIndexSeesInterfaceBehindItsImporter(t *testing.T) {
 	o := face_tester.New(t)
 	assert.True(
 		t,
@@ -27,7 +27,7 @@ func TestIndexSeesAnInterfaceBehindItsImporter(t *testing.T) {
 	)
 }
 
-func TestWorkspaceSeesAnInterfaceBehindItsImporter(t *testing.T) {
+func TestWorkspaceSeesInterfaceBehindItsImporter(t *testing.T) {
 	o := face_tester.New(t)
 	assert.True(
 		t,

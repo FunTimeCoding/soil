@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownItemIsAnsweredNotFound(t *testing.T) {
+func TestUnknownItemIsAnsweredNotFound(t *testing.T) {
 	m := memory.New()
 	r, e := restClient(t, mock_client.New(), m).GetItemWithResponse(
 		context.Background(),
@@ -22,7 +22,7 @@ func TestAnUnknownItemIsAnsweredNotFound(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestARejectedCommandIsAnsweredAsBadRequest(t *testing.T) {
+func TestRejectedCommandIsAnsweredAsBadRequest(t *testing.T) {
 	m := memory.New()
 	r, e := restClient(
 		t,
@@ -52,7 +52,7 @@ func TestPlayWithoutItemsIsAnsweredAsBadRequest(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAVolumeOutOfRangeIsAnsweredAsBadRequest(t *testing.T) {
+func TestVolumeOutOfRangeIsAnsweredAsBadRequest(t *testing.T) {
 	m := memory.New()
 	r, e := restClient(t, mock_client.New(), m).SetVolumeWithResponse(
 		context.Background(),

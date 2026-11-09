@@ -6,15 +6,13 @@ import (
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
-	"time"
 )
 
 func (s *Server) players(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	since := time.Now().AddDate(0, -1, 0)
-	rows := s.service.PlayerAttendance(since)
+	rows := s.service.PlayerAttendance()
 	s.view.RenderPage(
 		w,
 		constant.PlayersTitle,

@@ -5,5 +5,5 @@ func NewManual(
 	before string,
 	reason string,
 ) *Change {
-	return &Change{Line: line, Before: before, Reason: reason}
+	return &Change{Line: line, Old: before, Reason: reason}
 }

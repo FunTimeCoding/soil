@@ -17,22 +17,10 @@ func Hooks(
 	h.AddBeforeAny(
 		func(
 			_ context.Context,
-			identifier any,
+			_ any,
 			m mcp.MCPMethod,
 			a any,
 		) {
-			if q, okay := a.(*mcp.InitializeRequest); okay {
-				l.Info(q.Method)
-
-				return
-			}
-
-			if q, okay := a.(*mcp.ListToolsRequest); okay {
-				l.Info(q.Method)
-
-				return
-			}
-
 			if q, okay := a.(*mcp.CallToolRequest); okay {
 				l.Info(
 					fmt.Sprintf("%s %s", q.Method, q.Params.Name),
@@ -43,29 +31,7 @@ func Hooks(
 				return
 			}
 
-			if q, okay := a.(*mcp.PaginatedRequest); okay {
-				l.Info(fmt.Sprintf("PaginatedRequest: %s", q.Method))
-				LogParameter(l, &q.Request)
-
-				return
-			}
-
-			if q, okay := a.(*mcp.Request); okay {
-				l.Info(fmt.Sprintf("Request: %s", q.Method))
-				LogParameter(l, q)
-
-				return
-			}
-
-			l.Error(
-				fmt.Sprintf("Unexpected type: %T", a),
-				constant.MarkIdentifierKey,
-				identifier,
-				"method",
-				m,
-				"value",
-				a,
-			)
+			l.Info(string(m))
 		},
 	)
 

@@ -12,5 +12,8 @@ func New() *Resolver {
 		Routes:        noRoutes,
 		Headings:      noHeadings,
 		Declares:      declaresAnything,
+		DeclaresType:  declaresAnything,
+		Tests:         present,
+		TestElsewhere: absentIn,
 	}
 }

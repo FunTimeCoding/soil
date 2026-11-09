@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestASilentCommandPrintsNothing(t *testing.T) {
+func TestSilentCommandPrintsNothing(t *testing.T) {
 	for _, arguments := range silentCommands() {
 		c := newMock(t)
 		var output, failure string
@@ -28,7 +28,7 @@ func TestASilentCommandPrintsNothing(t *testing.T) {
 	}
 }
 
-func TestAFailedCommandExitsWithItsMessage(t *testing.T) {
+func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range append(
 		silentCommands(),
 		[]string{"run", "restart-all"},
@@ -44,14 +44,14 @@ func TestAFailedCommandExitsWithItsMessage(t *testing.T) {
 	}
 }
 
-func TestStopReachesTheProcess(t *testing.T) {
+func TestStopReachesProcess(t *testing.T) {
 	c := newMock(t)
 	_, _, code := run(t, c, "run", "stop", "alfa")
 	assert.Integer(t, 0, code)
 	assert.False(t, c.ProcessList[0].Running)
 }
 
-func TestRestartAllEmitsTheCount(t *testing.T) {
+func TestRestartAllEmitsCount(t *testing.T) {
 	output, _, code := run(t, newMock(t), "run", "restart-all")
 	assert.Integer(t, 0, code)
 	var r result.Restart
@@ -59,7 +59,7 @@ func TestRestartAllEmitsTheCount(t *testing.T) {
 	assert.Integer(t, 2, r.Restarting)
 }
 
-func TestListEmitsTheNames(t *testing.T) {
+func TestListEmitsNames(t *testing.T) {
 	output, _, code := run(t, newMock(t), "run", soil.List)
 	assert.Integer(t, 0, code)
 	var names []string
@@ -67,7 +67,7 @@ func TestListEmitsTheNames(t *testing.T) {
 	assert.Strings(t, []string{"alfa", "bravo"}, names)
 }
 
-func TestStatusEmitsTheProcesses(t *testing.T) {
+func TestStatusEmitsProcesses(t *testing.T) {
 	output, _, code := run(t, newMock(t), "run", "status")
 	assert.Integer(t, 0, code)
 	var processes []client.Process
@@ -77,7 +77,7 @@ func TestStatusEmitsTheProcesses(t *testing.T) {
 	assert.False(t, processes[1].Running)
 }
 
-func TestLogPrintsTheLinesAndTheOlderHintApart(t *testing.T) {
+func TestLogPrintsLinesAndOlderHintApart(t *testing.T) {
 	c := newMock(t)
 	c.Logs["alfa"] = []string{"kilo", "lima"}
 	c.Older["alfa"] = 3
@@ -97,19 +97,19 @@ func TestLogAllAsksForEverythingAndPrintsNoHint(t *testing.T) {
 	assert.String(t, "", failure)
 }
 
-func TestAnUnknownProcessIsNotFound(t *testing.T) {
+func TestUnknownProcessIsNotFound(t *testing.T) {
 	_, failure, code := run(t, newMock(t), "run", "restart", "charlie")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "charlie", failure)
 }
 
-func TestAnUnknownCommandIsRefused(t *testing.T) {
+func TestUnknownCommandIsRefused(t *testing.T) {
 	_, failure, code := run(t, newMock(t), "run", "wipe")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "unknown command wipe", failure)
 }
 
-func TestCheckEmitsTheSortedEntryNames(t *testing.T) {
+func TestCheckEmitsSortedEntryNames(t *testing.T) {
 	path := join.Join(t.TempDir(), "Procfile")
 	system.SaveFile(path, "bravo: sleep 1\nalfa: sleep 1\n")
 	output, _, code := run(t, newMock(t), "--file", path, "check")

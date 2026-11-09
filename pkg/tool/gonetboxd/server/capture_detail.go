@@ -6,5 +6,5 @@ import (
 )
 
 func (s *Server) captureDetail(x context.Context, e error) *server.ErrorResponse {
-	return s.answerWith(x, e, "")
+	return s.answerMessage(x, e, "")
 }

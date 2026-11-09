@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheClientCoversEveryOperation(t *testing.T) {
+func TestClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	methods := reflect.TypeFor[face.Client]()

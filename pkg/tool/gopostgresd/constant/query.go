@@ -1,6 +1,21 @@
 package constant
 
 const (
+	ConnectedSessionsQuery = `
+SELECT coalesce(application_name, ''), usename,
+       coalesce(host(client_addr), 'local'),
+       to_char(backend_start AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"')
+FROM pg_stat_activity
+WHERE datname = current_database()
+  AND pid <> pg_backend_pid()
+  AND application_name NOT LIKE $1
+ORDER BY backend_start`
+	DatabaseExistsQuery     = `SELECT 1 FROM pg_database WHERE datname = $1`
+	CreateDatabaseStatement = "CREATE DATABASE %s"
+	OwnApplicationPattern   = "%s%%"
+)
+
+const (
 	ListSchemasQuery = `
 SELECT schema_name, schema_owner
 FROM information_schema.schemata

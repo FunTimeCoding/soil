@@ -5,9 +5,12 @@ import (
 	"time"
 )
 
-func (s *Store) Resolve(fingerprint string) error {
+func (s *Store) Resolve(
+	fingerprint string,
+	at time.Time,
+) error {
 	return s.database.
 		Model(record.Stub()).
 		Where("fingerprint = ? AND ended_at IS NULL", fingerprint).
-		Update("ended_at", time.Now()).Error
+		Update("ended_at", at).Error
 }

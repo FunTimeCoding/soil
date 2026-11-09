@@ -6,7 +6,7 @@ func (s *Service) ChoiceSetByName(n string) (*choice_set.Set, error) {
 	return guarded(
 		s.guard,
 		func() (*choice_set.Set, error) {
-			return s.client.ChoiceSetByName(n)
+			return s.client.ChoiceSet(n)
 		},
 	)
 }

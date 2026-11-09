@@ -35,7 +35,7 @@ func (s *Server) getMany(
 		related, g := s.service.ListRelated(identifier)
 
 		if g != nil {
-			return s.answerWith(x, g, "load relations")
+			return s.answerMessage(x, g, "load relations")
 		}
 
 		if detail {

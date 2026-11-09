@@ -9,7 +9,7 @@ func (s *Server) detail(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	e, f := s.entryFromQuery(r)
+	e, f := s.queryEntry(r)
 
 	if f != nil {
 		s.view.Answer(w, r, s.reporter, f)

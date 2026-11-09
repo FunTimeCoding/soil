@@ -10,13 +10,13 @@ func (s *Service) CreateCluster(
 	return guarded(
 		s.guard,
 		func() (*cluster.Cluster, error) {
-			t, e := s.client.ClusterTypeByName(clusterType)
+			t, e := s.client.ClusterType(clusterType)
 
 			if e != nil {
 				return nil, e
 			}
 
-			i, e := s.client.SiteByName(site)
+			i, e := s.client.Site(site)
 
 			if e != nil {
 				return nil, e

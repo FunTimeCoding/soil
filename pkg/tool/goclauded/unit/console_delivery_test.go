@@ -10,7 +10,7 @@ import (
 	"unicode/utf8"
 )
 
-func TestCheckCutsALongMessageThroughTheHook(t *testing.T) {
+func TestCheckCutsLongMessageThroughHook(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Client(t))
 	receiver := c.Register("session-1")
@@ -23,7 +23,7 @@ func TestCheckCutsALongMessageThroughTheHook(t *testing.T) {
 	assert.True(t, utf8.RuneCountInString(output) <= 2000)
 }
 
-func TestReadMessagesThroughTheCommandLine(t *testing.T) {
+func TestReadMessagesThroughCommandLine(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Client(t))
 	m := s.Store.SendMessage("Ash", "Cedar", "an answer")

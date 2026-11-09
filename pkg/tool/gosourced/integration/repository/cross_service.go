@@ -59,5 +59,5 @@ func crossService(t *testing.T) *service_tester.Services {
 		{Name: "lib", Directory: l.Clone},
 	}
 
-	return service_tester.ForInventory(t, i)
+	return service_tester.InventoryServices(t, i)
 }

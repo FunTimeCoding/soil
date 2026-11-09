@@ -10,7 +10,7 @@ func (c *Client) RemoveVirtualTag(
 	name string,
 	tag string,
 ) (*virtual_machine.Machine, error) {
-	vm, e := c.VirtualMachineByName(name)
+	vm, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

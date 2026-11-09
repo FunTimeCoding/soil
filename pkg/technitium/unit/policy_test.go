@@ -19,11 +19,11 @@ func TestPolicyEncodeJoinsRowsWithCommaSeparatedTypes(t *testing.T) {
 	)
 }
 
-func TestPolicyEncodeOfNothingClearsTheTable(t *testing.T) {
+func TestPolicyEncodeOfNothingClearsTable(t *testing.T) {
 	assert.String(t, "false", policy.Encode(nil))
 }
 
-func TestPolicyUpsertReplacesTheSameKeyAndDomain(t *testing.T) {
+func TestPolicyUpsertReplacesSameKeyAndDomain(t *testing.T) {
 	v := policy.Upsert(
 		[]*policy.Policy{policy.New("alfa", "*.alfa.example", []string{"A"})},
 		policy.New("alfa", "*.alfa.example", []string{"A", "TXT"}),

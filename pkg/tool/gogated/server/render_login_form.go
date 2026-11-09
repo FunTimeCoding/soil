@@ -74,5 +74,5 @@ func (s *Server) renderLoginForm(
 		html.Button(html.Type("submit"), gomponents.Text("Sign in")),
 	)
 	content = append(content, html.Form(form...))
-	s.view.RenderPageWithStatus(w, status, "Sign in", "/authorize", content...)
+	s.view.RenderStatusPage(w, status, "Sign in", "/authorize", content...)
 }

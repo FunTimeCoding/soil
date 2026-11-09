@@ -62,7 +62,7 @@ func TestNameParametersNamesEveryBlankContext(t *testing.T) {
 	)
 }
 
-func TestNameParametersCoversASubtree(t *testing.T) {
+func TestNameParametersCoversSubtree(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("name-parameters/src"),
@@ -88,7 +88,7 @@ func TestNameParametersCoversASubtree(t *testing.T) {
 	)
 }
 
-func TestNameParametersNamesOnlyTheListedFunctions(t *testing.T) {
+func TestNameParametersNamesOnlyListedFunctions(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("name-parameters/src"),
@@ -148,18 +148,18 @@ func TestNameParametersDryRunWritesNothing(t *testing.T) {
 	)
 }
 
-func TestNameParametersRefusesANameTheBodyDeclares(t *testing.T) {
+func TestNameParametersRefusesNameBodyDeclares(t *testing.T) {
 	assertNamingRefused(t, "already uses x", "Declared")
 }
 
-func TestNameParametersRefusesShadowingAPackageName(t *testing.T) {
+func TestNameParametersRefusesShadowingPackageName(t *testing.T) {
 	assertNamingRefused(t, "already uses x", "Outer")
 }
 
-func TestNameParametersRefusesAResultOfThatName(t *testing.T) {
+func TestNameParametersRefusesResultOfThatName(t *testing.T) {
 	assertNamingRefused(t, "already uses x", "Result")
 }
 
-func TestNameParametersRefusesAnAmbiguousSignature(t *testing.T) {
+func TestNameParametersRefusesAmbiguousSignature(t *testing.T) {
 	assertNamingRefused(t, "ambiguous", "Twice")
 }

@@ -53,7 +53,7 @@ func TestFrontendsReportsMissingRoutes(t *testing.T) {
 	assert.Boolean(t, false, f[0].FaviconRoute)
 }
 
-func TestAFrontendWithNothingToListHasNoPalette(t *testing.T) {
+func TestFrontendWithNothingToListHasNoPalette(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"pkg/tool/gotestd/web/new.go",
@@ -65,7 +65,7 @@ func TestAFrontendWithNothingToListHasNoPalette(t *testing.T) {
 	assert.String(t, "?", f[0].Theme)
 }
 
-func TestOnlyTheViewsMountServesTheIconAndPalette(t *testing.T) {
+func TestOnlyViewsMountServesIconAndPalette(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"pkg/tool/gotestd/web/new.go",

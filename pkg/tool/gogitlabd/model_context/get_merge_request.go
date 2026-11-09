@@ -23,13 +23,13 @@ func (s *Server) GetMergeRequest(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.MergeRequest(x, instance, project, a.MergeRequest)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return response.SuccessAny(v)

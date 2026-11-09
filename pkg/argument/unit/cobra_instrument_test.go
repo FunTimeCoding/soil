@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestANestedCommandIsRecordedByItsFullPath(t *testing.T) {
+func TestNestedCommandIsRecordedByItsFullPath(t *testing.T) {
 	root := &cobra.Command{Use: "gotest"}
 	group := &cobra.Command{Use: "character"}
 	group.AddCommand(
@@ -21,7 +21,7 @@ func TestANestedCommandIsRecordedByItsFullPath(t *testing.T) {
 	)
 }
 
-func TestTheRootsOwnPreRunStillRuns(t *testing.T) {
+func TestRootsOwnPreRunStillRuns(t *testing.T) {
 	ran := false
 	root := &cobra.Command{
 		Use: "gotest",

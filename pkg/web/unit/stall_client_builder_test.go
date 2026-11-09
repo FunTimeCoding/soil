@@ -39,14 +39,14 @@ func TestStallClientTimeoutReachesBothViews(t *testing.T) {
 	assert.Duration(t, 5*time.Second, p.Halting().Timeout)
 }
 
-func TestStallClientViewsShareTheTransport(t *testing.T) {
+func TestStallClientViewsShareTransport(t *testing.T) {
 	p := stall_client.New().Build()
 	defer p.Close()
 	assert.True(t, p.Client().Transport == p.Transport())
 	assert.True(t, p.Halting().Transport == p.Transport())
 }
 
-func TestStallClientHaltingStopsAtTheRedirect(t *testing.T) {
+func TestStallClientHaltingStopsAtRedirect(t *testing.T) {
 	s := httptest.NewServer(
 		http.RedirectHandler("/elsewhere", http.StatusFound),
 	)

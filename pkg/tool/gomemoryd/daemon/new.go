@@ -39,6 +39,7 @@ func New(
 		result.guard,
 		o.HiddenTag,
 		o.ReferenceRoot,
+		o.Clock,
 		r,
 	)
 	result.web = web.New(result.service, r)

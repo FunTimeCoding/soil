@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
+func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource()
 	c.Failure = refusedConnection()
 	m := memory.New()
@@ -25,7 +25,7 @@ func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestARefusedServiceAccountIsAnsweredAsForbidden(t *testing.T) {
+func TestRefusedServiceAccountIsAnsweredAsForbidden(t *testing.T) {
 	c := service_tester.NewSource()
 	c.Failure = forbidden.Format(
 		"directory cn=admin: %s",

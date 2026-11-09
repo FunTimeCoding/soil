@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	c := netbox.New(locator.New(webConstant.Localhost), "token")
 	t.Cleanup(c.Close)
 	m := mock_client.New()

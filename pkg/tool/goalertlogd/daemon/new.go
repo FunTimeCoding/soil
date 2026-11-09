@@ -29,7 +29,14 @@ func New(
 		alertmanager: a,
 		guard:        peer.New(constant.AlertmanagerPeer, a.Address(), a, l, r),
 	}
-	result.service = service.New(store.New(d), a, result.guard, o.Retention, n)
+	result.service = service.New(
+		store.New(d),
+		a,
+		result.guard,
+		o.Retention,
+		o.Clock,
+		n,
+	)
 	result.web = web.New(result.service, n)
 	result.clock = worker.New(
 		result.service.Record,

@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestPrintShowsTheWindowEachThreadAndItsSummary(t *testing.T) {
+func TestPrintShowsWindowEachThreadAndItsSummary(t *testing.T) {
 	var output bytes.Buffer
 	var failure bytes.Buffer
 	gomattermost.Print(

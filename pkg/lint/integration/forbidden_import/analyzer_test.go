@@ -31,11 +31,11 @@ func TestBlocked(t *testing.T) {
 		t.Fatalf("write stub go.mod: %s", e)
 	}
 
-	p, results := testutil.LoadFromDirectory(t, temporary)
+	p, results := testutil.LoadDirectory(t, temporary)
 	forbidden_import.Check(p, results)
 	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(t, results, "pflag")
 	testutil.AssertBlockedContains(t, results, "testify")
-	testutil.AssertBlockedAt(t, results, "flag_import.go", 3)
-	testutil.AssertBlockedAt(t, results, "testify_import.go", 3)
+	testutil.AssertLineBlocked(t, results, "flag_import.go", 3)
+	testutil.AssertLineBlocked(t, results, "testify_import.go", 3)
 }

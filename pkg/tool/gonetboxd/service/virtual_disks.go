@@ -6,7 +6,7 @@ func (s *Service) VirtualDisks(machine string) ([]*virtual_disk.Disk, error) {
 	return guarded(
 		s.guard,
 		func() ([]*virtual_disk.Disk, error) {
-			m, e := s.client.VirtualMachineByName(machine)
+			m, e := s.client.VirtualMachine(machine)
 
 			if e != nil {
 				return nil, e

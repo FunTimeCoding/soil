@@ -11,14 +11,14 @@ import (
 	"testing"
 )
 
-func TestAnAnsweringBridgeIsReachable(t *testing.T) {
+func TestAnsweringBridgeIsReachable(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		bridge(t, http.StatusOK, `{"sessions":[]}`).Reachable(t.Context()),
 	)
 }
 
-func TestARestartingBridgeIsUnavailable(t *testing.T) {
+func TestRestartingBridgeIsUnavailable(t *testing.T) {
 	e := bridge(
 		t,
 		http.StatusServiceUnavailable,
@@ -27,7 +27,7 @@ func TestARestartingBridgeIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestSessionsFromARestartingBridgeAreUnavailable(t *testing.T) {
+func TestSessionsFromRestartingBridgeAreUnavailable(t *testing.T) {
 	_, e := bridge(
 		t,
 		http.StatusServiceUnavailable,
@@ -36,7 +36,7 @@ func TestSessionsFromARestartingBridgeAreUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestTheItermClientAndItsMockShareTheFace(t *testing.T) {
+func TestItermClientAndItsMockShareFace(t *testing.T) {
 	f := reflect.TypeFor[face.ItermClient]()
 	assert.True(t, reflect.TypeFor[*iterm.Client]().Implements(f))
 	assert.True(t, reflect.TypeFor[*mock_client.Client]().Implements(f))

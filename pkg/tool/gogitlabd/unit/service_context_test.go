@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestACallerWhoLeftTakesTheForgeCallWithIt(t *testing.T) {
+func TestCallerWhoLeftTakesForgeCallWithIt(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	clients[constant.FixtureInstance].SeedProject(1, "group", "app")
 	x, cancel := context.WithCancel(t.Context())

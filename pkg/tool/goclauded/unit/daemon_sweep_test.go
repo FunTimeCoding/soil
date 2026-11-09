@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestASessionPastItsWindowIsNotSweptWhenTheDaemonStarts(t *testing.T) {
+func TestSessionPastItsWindowIsNotSweptWhenDaemonStarts(t *testing.T) {
 	o, _, _ := newDaemonOption(t)
 	s := store_tester.NewOnFile(t, o.LitePath)
 	r := s.EnsureSession("session-1")

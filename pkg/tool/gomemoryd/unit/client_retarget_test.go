@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestARetargetWithoutAReferenceRootSaysSo(t *testing.T) {
+func TestRetargetWithoutReferenceRootSaysSo(t *testing.T) {
 	c := base.New(t).MemoryClient(t)
 	_, e := c.PostReferencesRetarget(
 		t.Context(),

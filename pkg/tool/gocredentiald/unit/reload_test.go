@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestAnUnreadableChangeIsAnsweredFromTheCopyLoadedBefore(t *testing.T) {
+func TestUnreadableChangeIsAnsweredFromCopyLoadedBefore(t *testing.T) {
 	path := fixtureDatabase(t)
 	r := memory.New()
 	c := served(t, path, r)
@@ -42,7 +42,7 @@ func TestEachUnreadableChangeIsReportedOnce(t *testing.T) {
 	assert.Count(t, 2, r.Events())
 }
 
-func TestAReadableChangeAfterAnUnreadableOneIsLoaded(t *testing.T) {
+func TestReadableChangeAfterUnreadableOneIsLoaded(t *testing.T) {
 	path := fixtureDatabase(t)
 	s := openReported(t, path, nil, memory.New())
 	corrupt(t, path, time.Now().Add(time.Hour))
@@ -55,7 +55,7 @@ func TestAReadableChangeAfterAnUnreadableOneIsLoaded(t *testing.T) {
 	assert.Count(t, 4, s.List())
 }
 
-func TestAWriteOnAnUnreadableChangeIsAConflict(t *testing.T) {
+func TestWriteOnUnreadableChangeIsConflict(t *testing.T) {
 	path := fixtureDatabase(t)
 	s := openReported(t, path, nil, memory.New())
 	identifier := s.Search("forge")[0].Identifier
@@ -69,7 +69,7 @@ func TestAWriteOnAnUnreadableChangeIsAConflict(t *testing.T) {
 	assert.String(t, "hunter2", password)
 }
 
-func TestAConflictIsAnsweredWithoutAnEvent(t *testing.T) {
+func TestConflictIsAnsweredWithoutEvent(t *testing.T) {
 	path := fixtureDatabase(t)
 	r := memory.New()
 	c := served(t, path, r)
@@ -85,7 +85,7 @@ func TestAConflictIsAnsweredWithoutAnEvent(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAMissingFileIsReportedEachTimeItGoes(t *testing.T) {
+func TestMissingFileIsReportedEachTimeItGoes(t *testing.T) {
 	path := fixtureDatabase(t)
 	kept := join.Empty(path, ".kept")
 	r := memory.New()

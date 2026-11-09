@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUnavailableConfluenceIsUnavailable(t *testing.T) {
+func TestUnavailableConfluenceIsUnavailable(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusServiceUnavailable,
@@ -22,7 +22,7 @@ func TestAnUnavailableConfluenceIsUnavailable(t *testing.T) {
 	assert.StringContains(t, "under maintenance", e.Error())
 }
 
-func TestARejectedConfluenceTokenStaysAFault(t *testing.T) {
+func TestRejectedConfluenceTokenStaysFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,

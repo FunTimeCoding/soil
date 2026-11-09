@@ -17,7 +17,7 @@ func TestReporterClosesWithoutStart(t *testing.T) {
 	r.RecoverFlush(nil)
 }
 
-func TestReporterClosesTheClientItStarted(t *testing.T) {
+func TestReporterClosesClientItStarted(t *testing.T) {
 	t.Setenv(constant.LocatorEnvironment, "https://key@sentry.example/1")
 	t.Cleanup(func() { sentry.CurrentHub().BindClient(nil) })
 	r := reporter.New(stringsConstant.LowerAlfa).Start()

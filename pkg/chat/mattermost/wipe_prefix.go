@@ -11,13 +11,11 @@ func (c *Client) WipePrefix(
 ) {
 	me := c.MustMe()
 
-	for _, post := range c.MustPosts(h).Posts {
-		if strings.HasPrefix(post.Message, prefix) {
-			if post.UserId != me.Id {
-				continue
-			}
-
-			c.MustDeletePost(post)
+	for _, p := range c.MustRecentPosts(h, 0) {
+		if !strings.HasPrefix(p.Raw.Message, prefix) || p.Raw.UserId != me.Id {
+			continue
 		}
+
+		c.MustDeletePost(p.Raw)
 	}
 }

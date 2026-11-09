@@ -19,7 +19,7 @@ func (s *Server) dashboard(
 		return
 	}
 
-	s.view.RenderLivePageWithSummary(
+	s.view.RenderSummaryLivePage(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,

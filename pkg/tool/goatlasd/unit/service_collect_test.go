@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestCollectKeepsSourcesAfterAFailingOne(t *testing.T) {
+func TestCollectKeepsSourcesAfterFailingOne(t *testing.T) {
 	v := service_tester.New(t)
 	v.SeedInventory()
 	v.Kubernetes.Failure = errors.New("pod list refused")
@@ -26,7 +26,7 @@ func TestCollectKeepsSourcesAfterAFailingOne(t *testing.T) {
 	assert.String(t, "echo", placed[0].PlaceName)
 }
 
-func TestCollectKeepsTheFailingSourcePlacements(t *testing.T) {
+func TestCollectKeepsFailingSourcePlacements(t *testing.T) {
 	v := service_tester.New(t)
 	v.SeedInventory()
 	collector_tester.AddProcess(v.Process, constant.FixtureService, true)
@@ -41,7 +41,7 @@ func TestCollectKeepsTheFailingSourcePlacements(t *testing.T) {
 	assert.Count(t, 1, placed)
 }
 
-func TestCollectFailsWithoutTheInventory(t *testing.T) {
+func TestCollectFailsWithoutInventory(t *testing.T) {
 	v := service_tester.New(t)
 	v.Netbox.Failure = errors.New("device list refused")
 	_, e := v.Service.Collect(t.Context())

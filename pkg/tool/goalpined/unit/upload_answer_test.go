@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestABodyThatIsNotAPackageIsRefusedQuietly(t *testing.T) {
+func TestBodyThatIsNotPackageIsRefusedQuietly(t *testing.T) {
 	o := service_tester.New(t)
 	r := memory.New()
 	v := mountedReported(t, o.Option, r)
@@ -32,7 +32,7 @@ func TestABodyThatIsNotAPackageIsRefusedQuietly(t *testing.T) {
 	)
 }
 
-func TestAMissingSignatureKeyIsCaptured(t *testing.T) {
+func TestMissingSignatureKeyIsCaptured(t *testing.T) {
 	o := service_tester.New(t)
 	assert.FatalOnError(
 		t,
@@ -53,7 +53,7 @@ func TestAMissingSignatureKeyIsCaptured(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAFailedIndexIsCaptured(t *testing.T) {
+func TestFailedIndexIsCaptured(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = errors.Format("index packages", "apk")
 	r := memory.New()
@@ -71,7 +71,7 @@ func TestAFailedIndexIsCaptured(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAnEmptyRootListsNothing(t *testing.T) {
+func TestEmptyRootListsNothing(t *testing.T) {
 	o := service_tester.New(t)
 	assert.False(t, system.FileExists(o.PackageRoot))
 	result, e := o.Service.Packages("")

@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheUsageClientAndItsMockShareTheFace(t *testing.T) {
+func TestUsageClientAndItsMockShareFace(t *testing.T) {
 	c := client.New("nextcloud.test", 443, true, "token")
 	defer c.Close()
 	m := mock_client.New()
@@ -19,7 +19,7 @@ func TestTheUsageClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestARefusedUsageIsNotReachable(t *testing.T) {
+func TestRefusedUsageIsNotReachable(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusUnauthorized, "")
 	host, port := upstream_tester.HostPort(t, s.URL)
 	c := client.New(host, port, false, "token")

@@ -14,19 +14,19 @@ func (s *Service) CreateVirtualTunnelTermination(
 	return guarded(
 		s.guard,
 		func() (*tunnel_termination.Termination, error) {
-			t, e := s.client.TunnelByName(tunnel)
+			t, e := s.client.Tunnel(tunnel)
 
 			if e != nil {
 				return nil, e
 			}
 
-			m, e := s.client.VirtualMachineByName(machine)
+			m, e := s.client.VirtualMachine(machine)
 
 			if e != nil {
 				return nil, e
 			}
 
-			i, e := s.client.VirtualMachineInterfaceByName(m, interfaceName)
+			i, e := s.client.VirtualMachineInterface(m, interfaceName)
 
 			if e != nil {
 				return nil, e

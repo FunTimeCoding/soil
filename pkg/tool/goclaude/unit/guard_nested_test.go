@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestVerdictBlocksSupplyChainInsideAShellString(t *testing.T) {
+func TestVerdictBlocksSupplyChainInsideShellString(t *testing.T) {
 	assert.String(
 		t,
 		"npx is blocked (supply-chain guard) - it downloads and executes npm packages on demand",
@@ -24,7 +24,7 @@ func TestVerdictBlocksSupplyChainInsideAShellString(t *testing.T) {
 	)
 }
 
-func TestVerdictBlocksBsdFlagsInsideAShellString(t *testing.T) {
+func TestVerdictBlocksBsdFlagsInsideShellString(t *testing.T) {
 	assert.String(
 		t,
 		"sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead",

@@ -20,7 +20,7 @@ func TestConfigurationContextReadsPayload(t *testing.T) {
 		netbox.WithServer(s.URL),
 	)
 	defer c.Close()
-	v, e := c.ConfigurationContextByName("alfa")
+	v, e := c.ConfigurationContext("alfa")
 	assert.FatalOnError(t, e)
 	assert.Any(t, map[string]any{"bravo": "charlie"}, v.Payload)
 	assert.Integer(t, 1000, v.Weight)
@@ -87,6 +87,6 @@ func TestUnknownConfigurationContextIsNotFound(t *testing.T) {
 		netbox.WithServer(s.URL),
 	)
 	defer c.Close()
-	_, e := c.ConfigurationContextByName("delta")
+	_, e := c.ConfigurationContext("delta")
 	assert.True(t, not_found.Is(e))
 }

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestSendNotificationRefusesACallsignNobodyHolds(t *testing.T) {
+func TestSendNotificationRefusesCallsignNobodyHolds(t *testing.T) {
 	s := service_tester.New(t)
 	_, e := s.Message.SendNotification(
 		"Nobody",
@@ -22,7 +22,7 @@ func TestSendNotificationRefusesACallsignNobodyHolds(t *testing.T) {
 	assert.StringContains(t, "Nobody", e.Error())
 }
 
-func TestSendNotificationReachesTheHolder(t *testing.T) {
+func TestSendNotificationReachesHolder(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
 	_, f := s.Message.SendNotification(
@@ -36,6 +36,6 @@ func TestSendNotificationReachesTheHolder(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(drained.Entries, constant.QueueNotification),
+		fixture.KindEntries(drained.Entries, constant.QueueNotification),
 	)
 }

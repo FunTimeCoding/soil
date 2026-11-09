@@ -56,7 +56,7 @@ func TestOtherErrorsKeepDefaultGrouping(t *testing.T) {
 	assert.Count(t, 0, transport.Events()[0].Fingerprint)
 }
 
-func TestWrappedConnectionFailureLosesTheQuery(t *testing.T) {
+func TestWrappedConnectionFailureLosesQuery(t *testing.T) {
 	h, transport := newRecordingHub(t)
 	defer transport.Close()
 	h.CaptureException(fmt.Errorf("search: %w", refused()))

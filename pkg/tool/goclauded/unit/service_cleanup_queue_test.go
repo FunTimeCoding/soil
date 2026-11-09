@@ -17,7 +17,7 @@ func TestCleanupQueueRemovesConsumedEntries(t *testing.T) {
 	s.Store.Advance(25 * time.Hour)
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
-	announces := fixture.EntriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := fixture.KindEntries(r.Entries, constant.QueueSessionAnnounce)
 	assert.Count(t, 0, announces)
 }
 
@@ -28,6 +28,6 @@ func TestCleanupQueuePreservesUnconsumedEntries(t *testing.T) {
 	s.Store.Advance(25 * time.Hour)
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
-	announces := fixture.EntriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := fixture.KindEntries(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 }

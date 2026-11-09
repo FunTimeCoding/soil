@@ -9,12 +9,12 @@ import (
 	"testing"
 )
 
-func TestTheClientReachesGoalertlogd(t *testing.T) {
+func TestClientReachesGoalertlogd(t *testing.T) {
 	s := base.New(t)
 	assert.FatalOnError(t, s.AlertClient(t).Reachable(t.Context()))
 }
 
-func TestARefusedTokenIsNotReachable(t *testing.T) {
+func TestRefusedTokenIsNotReachable(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),

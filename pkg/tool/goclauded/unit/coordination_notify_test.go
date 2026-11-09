@@ -24,7 +24,7 @@ func TestNotifyReachesSessionViaQueue(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	check := a.CheckLive()
-	notifications := clientEntriesByKind(
+	notifications := clientKindEntries(
 		check.Entries,
 		constant.QueueNotification,
 	)
@@ -49,13 +49,13 @@ func TestNotifyConsumedOnDrain(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	first := a.CheckLive()
-	notifications := clientEntriesByKind(
+	notifications := clientKindEntries(
 		first.Entries,
 		constant.QueueNotification,
 	)
 	assert.Count(t, 1, notifications)
 	second := a.CheckLive()
-	notifications = clientEntriesByKind(
+	notifications = clientKindEntries(
 		second.Entries,
 		constant.QueueNotification,
 	)

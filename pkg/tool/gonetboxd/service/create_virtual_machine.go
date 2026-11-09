@@ -9,7 +9,7 @@ func (s *Service) CreateVirtualMachine(
 	return guarded(
 		s.guard,
 		func() (*virtual_machine.Machine, error) {
-			c, e := s.client.ClusterByName(cluster)
+			c, e := s.client.Cluster(cluster)
 
 			if e != nil {
 				return nil, e

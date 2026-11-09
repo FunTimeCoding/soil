@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheUserIsFetchedOnFirstNeed(t *testing.T) {
+func TestUserIsFetchedOnFirstNeed(t *testing.T) {
 	var users atomic.Int64
 	var assignee atomic.Value
 	r := client_tester.New(
@@ -49,7 +49,7 @@ func TestTheUserIsFetchedOnFirstNeed(t *testing.T) {
 	assert.Any(t, "42", assignee.Load())
 }
 
-func TestAUserLookupRefusedIsAnError(t *testing.T) {
+func TestUserLookupRefusedIsError(t *testing.T) {
 	r := client_tester.New(
 		t,
 		func(m *http.ServeMux) {

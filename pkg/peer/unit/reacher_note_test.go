@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestANotedOutageLogsItsEdgesButNeverReports(t *testing.T) {
+func TestNotedOutageLogsItsEdgesButNeverReports(t *testing.T) {
 	c := fake_clock.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
@@ -27,7 +27,7 @@ func TestANotedOutageLogsItsEdgesButNeverReports(t *testing.T) {
 	assert.NotNil(t, up)
 }
 
-func TestANotedRefusalComesBackOncePerReason(t *testing.T) {
+func TestNotedRefusalComesBackOncePerReason(t *testing.T) {
 	m := memory.New()
 	r := reacher.New(m)
 	_, e := r.Note("ilo", errors.Format("iLO error", "0x003C"))

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesWhatItBuiltOnce(t *testing.T) {
+func TestDaemonClosesWhatItBuiltOnce(t *testing.T) {
 	p := newPrometheus(t)
 	u := newUsage(t)
 	d := daemon.New(
@@ -26,7 +26,7 @@ func TestTheDaemonClosesWhatItBuiltOnce(t *testing.T) {
 	assert.Integer(t, 1, u.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	p := prometheus.New()
 	u := usage.New()
@@ -51,7 +51,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestTheDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
+func TestDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
 	d := daemon.New(
 		service_tester.NewOption(
 			t,

@@ -66,7 +66,7 @@ func TestIndexRemovedDocument(t *testing.T) {
 	assert.Integer(t, 1, status.TotalDocuments)
 }
 
-func TestARemovedDocumentLeavesNothingBehind(t *testing.T) {
+func TestRemovedDocumentLeavesNothingBehind(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
 	directory := t.TempDir()
 	store_tester.WriteFixture(t, directory, "keep.md", "# Keep\n\nStays.\n")

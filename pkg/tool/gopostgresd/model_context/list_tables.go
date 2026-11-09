@@ -19,10 +19,10 @@ func (s *Server) listTables(
 		return s.captureDetail(x, e)
 	}
 
-	v, e := s.service.ListTables(x, instance, a.Schema)
+	v, e := s.catalog.ListTables(x, instance, a.Schema)
 
 	if e != nil {
-		return s.answerWith(
+		return s.answerMessage(
 			x,
 			e,
 			fmt.Sprintf(

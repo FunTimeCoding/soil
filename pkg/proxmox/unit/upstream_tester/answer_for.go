@@ -8,5 +8,5 @@ func (u *Upstream) AnswerFor(
 	line string,
 	body string,
 ) {
-	u.AnswerWith(join.Space(method, path), line, body)
+	u.AnswerMessage(join.Space(method, path), line, body)
 }

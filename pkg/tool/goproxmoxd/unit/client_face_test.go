@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	c := client.New(locator.New("goproxmoxd.test"), "token")
 	defer c.Close()
 	m := mock_client.New()

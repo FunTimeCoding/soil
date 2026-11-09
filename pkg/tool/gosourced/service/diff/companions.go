@@ -21,10 +21,10 @@ func (s *Service) companions(
 		}
 
 		p := modulePathOnDisk(m.Directory)
-		from, inBefore := was[p]
-		next, inAfter := now[p]
+		from, inWas := was[p]
+		next, inNow := now[p]
 
-		if p == "" || !inBefore || !inAfter || from == "" {
+		if p == "" || !inWas || !inNow || from == "" {
 			continue
 		}
 

@@ -10,11 +10,11 @@ func TestTrim(t *testing.T) {
 	assert.String(t, "0.0.0", semver.Trim("v0.0.0"))
 }
 
-func TestPrefixAddsTheMissingPrefix(t *testing.T) {
+func TestPrefixAddsMissingPrefix(t *testing.T) {
 	assert.String(t, "v0.0.0", semver.Prefix("0.0.0"))
 }
 
-func TestPrefixKeepsAnExistingPrefix(t *testing.T) {
+func TestPrefixKeepsExistingPrefix(t *testing.T) {
 	assert.String(t, "v0.0.0", semver.Prefix("v0.0.0"))
 }
 

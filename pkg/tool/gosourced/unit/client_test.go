@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockKeepTheFace(t *testing.T) {
+func TestClientAndItsMockKeepFace(t *testing.T) {
 	r := client.New(locator.New("localhost").Insecure(), "india")
 	m := mock_client.New()
 	clients := []face.Client{r, m}

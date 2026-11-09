@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestReadHistoryDefaultsTheCount(t *testing.T) {
+func TestReadHistoryDefaultsCount(t *testing.T) {
 	c := sessionClient("alfa")
 	defer c.Close()
 	v, e := service_tester.New(t, c).ReadHistory("alfa", 0)
@@ -30,7 +30,7 @@ func TestSendKeysSendsEveryKeyInOrder(t *testing.T) {
 	assert.Strings(t, []string{"ctrl+c", "up", "return"}, c.Keys("alfa"))
 }
 
-func TestSendKeysNamesTheFailingStep(t *testing.T) {
+func TestSendKeysNamesFailingStep(t *testing.T) {
 	c := sessionClient("alfa")
 	defer c.Close()
 	e := service_tester.New(t, c).SendKeys("bravo", []string{"up"}, 0)
@@ -62,7 +62,7 @@ func TestSendTextRequiresText(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestSetTabTitleRequiresATitle(t *testing.T) {
+func TestSetTabTitleRequiresTitle(t *testing.T) {
 	c := sessionClient("alfa")
 	defer c.Close()
 	e := service_tester.New(t, c).SetTabTitle("tab-1", "")

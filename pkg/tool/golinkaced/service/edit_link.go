@@ -9,7 +9,7 @@ func (s *Service) EditLink(
 	identifier int,
 	o edit_link_option.Option,
 ) (*link.Link, error) {
-	existing, e := s.linkByIdentifier(identifier)
+	existing, e := s.link(identifier)
 
 	if e != nil {
 		return nil, e

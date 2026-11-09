@@ -24,13 +24,13 @@ func (s *Server) CancelPipelineJob(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.CancelJob(x, instance, project, a.Job)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	if a.Raw {

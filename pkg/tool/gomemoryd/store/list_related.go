@@ -46,7 +46,7 @@ func (s *Store) ListRelated(identifier int64) ([]record.Related, error) {
 	}
 
 	for i := range result {
-		result[i].Tags = s.tagsForMemory(result[i].Identifier)
+		result[i].Tags = s.memoryTags(result[i].Identifier)
 	}
 
 	return result, nil

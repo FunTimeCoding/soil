@@ -6,7 +6,7 @@ func (s *Service) deviceByName(name string) (*device.Device, error) {
 	return guarded(
 		s.guard,
 		func() (*device.Device, error) {
-			return s.client.DeviceByName(name)
+			return s.client.Device(name)
 		},
 	)
 }

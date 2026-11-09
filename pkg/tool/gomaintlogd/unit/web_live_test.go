@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestTheLiveDashboardHearsAWrite(t *testing.T) {
+func TestLiveDashboardHearsWrite(t *testing.T) {
 	s := base.New(t)
 	x, cancel := context.WithTimeout(t.Context(), 10*time.Second)
 	defer cancel()

@@ -23,13 +23,13 @@ func (s *Server) GetPipeline(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.Pipeline(x, instance, project, a.Pipeline)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return response.SuccessAny(v)

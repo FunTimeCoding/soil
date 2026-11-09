@@ -15,7 +15,7 @@ func (s *Summaries) disposesArgument(
 		return s.invokedDisposes(p, l, c, o)
 	}
 
-	f := calleeOf(p, c)
+	f := callee(p, c)
 
 	if f == nil {
 		return false

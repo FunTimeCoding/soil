@@ -25,7 +25,7 @@ func (s *Service) RetargetReferences(
 	}
 
 	for _, m := range moves {
-		for _, p := range []string{m.From, m.To} {
+		for _, p := range []string{m.Old, m.New} {
 			if !system.InsideDirectory(directory, modulePath(directory, p)) {
 				return commit.FailValidation(
 					refused,
@@ -42,7 +42,7 @@ func (s *Service) RetargetReferences(
 		dryRun,
 		func(d string, out *sink.Sink) (*output.Results, error) {
 			for _, m := range moves {
-				out.Relocate(modulePath(d, m.From), modulePath(d, m.To))
+				out.Relocate(modulePath(d, m.Old), modulePath(d, m.New))
 			}
 
 			return output.NewResultsWithDirectory(d), nil

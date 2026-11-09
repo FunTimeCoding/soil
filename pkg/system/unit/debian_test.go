@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestAptlyClientSatisfiesTheRepositoryFace(t *testing.T) {
+func TestAptlyClientSatisfiesRepositoryFace(t *testing.T) {
 	var v face.Repository = aptly.New(
 		"host.example",
 		443,
@@ -27,7 +27,7 @@ func TestAptlyClientSatisfiesTheRepositoryFace(t *testing.T) {
 	assert.NotNil(t, v)
 }
 
-func TestAptlyMockSatisfiesTheRepositoryFace(t *testing.T) {
+func TestAptlyMockSatisfiesRepositoryFace(t *testing.T) {
 	var v face.Repository = mock_client.New()
 	assert.NotNil(t, v)
 }
@@ -42,7 +42,7 @@ func TestAptlyMockServesSeededVersions(t *testing.T) {
 	assert.String(t, "1.2.5", v[0])
 }
 
-func TestAptlyMockLatestVersionTakesTheFirst(t *testing.T) {
+func TestAptlyMockLatestVersionTakesFirst(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.SeedVersions("stable", "foxtrot", "1.2.5", "1.2.3")
@@ -51,7 +51,7 @@ func TestAptlyMockLatestVersionTakesTheFirst(t *testing.T) {
 	assert.String(t, "1.2.5", v)
 }
 
-func TestAptlyMockReportsAnAbsentPackage(t *testing.T) {
+func TestAptlyMockReportsAbsentPackage(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	v, e := c.LatestVersion("stable", "absent")
@@ -67,7 +67,7 @@ func TestAptlyMockPropagatesFailure(t *testing.T) {
 	assert.NotNil(t, e)
 }
 
-func TestPackageVersionsReadsTheAptlyKeyFormat(t *testing.T) {
+func TestPackageVersionsReadsAptlyKeyFormat(t *testing.T) {
 	v := aptly.PackageVersions(packageKeys(), "foxtrot")
 	assert.Count(t, 3, v)
 	assert.String(t, "1.2.1", v[0])
@@ -78,7 +78,7 @@ func TestPackageVersionsRefusesAnotherPackage(t *testing.T) {
 	assert.Count(t, 2, aptly.PackageVersions(packageKeys(), "gohw"))
 }
 
-func TestPackageVersionsRefusesAnAbsentPackage(t *testing.T) {
+func TestPackageVersionsRefusesAbsentPackage(t *testing.T) {
 	assert.Count(t, 0, aptly.PackageVersions(packageKeys(), "gooutpostd"))
 }
 

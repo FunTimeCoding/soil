@@ -49,9 +49,33 @@ func (s *Service) renameThrough(
 		return nil, e
 	}
 
+	if renamesFamily(all, packagePath, renames) {
+		all, set, e = s.workspace.Whole(directory, packagePath)
+
+		if e != nil {
+			return nil, e
+		}
+	}
+
 	var planned []*plannedRename
 
 	for _, n := range renames {
+		d, _, f := lookup.FindDeclaration(
+			all,
+			packagePath,
+			n.OldName,
+			n.Receiver,
+		)
+
+		if f == nil && isInterfaceMethod(d) {
+			planned = append(
+				planned,
+				s.planFamily(directory, all, set, d.(*types.Func), n, r)...,
+			)
+
+			continue
+		}
+
 		if p := s.checkRename(directory, all, set, packagePath, n, r); p != nil {
 			planned = append(planned, p)
 		}

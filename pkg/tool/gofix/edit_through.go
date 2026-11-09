@@ -13,7 +13,7 @@ func editThrough(
 	directory string,
 	w *workspace.Workspace,
 ) {
-	grouped := groupByFile(fileSet, edits, directory)
+	grouped := fileEdits(fileSet, edits, directory)
 
 	for path, fileEdits := range grouped {
 		sort.Slice(

@@ -24,7 +24,7 @@ A panic inside a peer guard's `Attempt` unwinds through it before the
 builder recovers it: the guard releases a trial it admitted and
 records no outcome, since a panic is a bug here rather than evidence
 about the peer, so the next caller is admitted
-(`TestAPanickingTrialLeavesTheNextTrialAdmitted`).
+(`TestPanickingTrialLeavesNextTrialAdmitted`).
 
 Whether Sentry hears of an error is its class, in the table in
 `README.md` (Answering an error); this leaf is how a handler builds
@@ -45,28 +45,28 @@ if f != nil {
 }
 ```
 
-## Everything else: answer and answerWith
+## Everything else: answer and answerMessage
 
 Every other error a handler meets - from a service, a store, a client,
 even local file I/O - goes to one of two private methods on the Server
 struct, each in its own file:
 
 ```go
-// answer_with.go
-func (s *Server) answerWith(
+// answer_message.go
+func (s *Server) answerMessage(
     e error,
     message string,
 ) (*mcp.CallToolResult, error) {
-    return response.AnswerWith(s.reporter, e, message)
+    return response.AnswerMessage(s.reporter, e, message)
 }
 
 // answer.go
 func (s *Server) answer(e error) (*mcp.CallToolResult, error) {
-    return s.answerWith(e, "")
+    return s.answerMessage(e, "")
 }
 ```
 
-`response.AnswerWith` reads the class table. A quiet class fails the
+`response.AnswerMessage` reads the class table. A quiet class fails the
 tool with the message alone; anything captured goes to Sentry and
 answers structured JSON carrying `error` and `event_identifier`, so the
 model can look the event up through the Sentry tools in the same
@@ -82,14 +82,14 @@ if e != nil {
 }
 ```
 
-`answerWith` is for a tool that does several things, where the context
+`answerMessage` is for a tool that does several things, where the context
 says which one failed - adding, removing or replacing tags in one call.
 A single-step tool answers `answer(e)`; restating the tool's own name is
 not a context.
 
 A step a daemon must run before every answer - gosentryd records the
 reacher's outage episodes - sits in `answer` before it hands over, so a
-site that needs the step never calls `answerWith` directly.
+site that needs the step never calls `answerMessage` directly.
 
 An inline class branch before the answer goes when the answer says the
 same or better; one that re-words or re-classes the error stays.

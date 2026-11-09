@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAnEmbeddingRecordsTheStoreModel(t *testing.T) {
+func TestEmbeddingRecordsStoreModel(t *testing.T) {
 	d := connection.NewMemory()
 	defer errors.PanicClose(d)
 	s := store.New(d, "nomic-embed-text-v1.5.f16")

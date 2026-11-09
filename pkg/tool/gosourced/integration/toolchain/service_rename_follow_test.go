@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestRenameMovesAFunctionsFile(t *testing.T) {
+func TestRenameMovesFunctionsFile(t *testing.T) {
 	d := renameFollowFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -32,7 +32,7 @@ func TestRenameMovesAFunctionsFile(t *testing.T) {
 	)
 }
 
-func TestRenameMovesATypesFile(t *testing.T) {
+func TestRenameMovesTypesFile(t *testing.T) {
 	d := renameFollowFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -49,7 +49,7 @@ func TestRenameMovesATypesFile(t *testing.T) {
 	assert.False(t, system.FileExists(filepath.Join(d, "pkg/alfa/old_type.go")))
 }
 
-func TestRenameLeavesAFileWithTwoIdentities(t *testing.T) {
+func TestRenameLeavesFileWithTwoIdentities(t *testing.T) {
 	d := renameFollowFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -69,7 +69,7 @@ func TestRenameLeavesAFileWithTwoIdentities(t *testing.T) {
 	)
 }
 
-func TestRenameLeavesAFileWhoseNameIsTaken(t *testing.T) {
+func TestRenameLeavesFileWhoseNameIsTaken(t *testing.T) {
 	d := renameFollowFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -95,7 +95,7 @@ func TestRenameLeavesAFileWhoseNameIsTaken(t *testing.T) {
 	)
 }
 
-func TestAVisibilityFlipLeavesTheFile(t *testing.T) {
+func TestVisibilityFlipLeavesFile(t *testing.T) {
 	d := renameFollowFixture(t)
 	r, e := service_tester.NewService(t).Symbol.ChangeVisibility(
 		t.Context(),
@@ -114,7 +114,7 @@ func TestAVisibilityFlipLeavesTheFile(t *testing.T) {
 	)
 }
 
-func TestARenameDryRunLeavesTheFile(t *testing.T) {
+func TestRenameDryRunLeavesFile(t *testing.T) {
 	d := renameFollowFixture(t)
 	_, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),

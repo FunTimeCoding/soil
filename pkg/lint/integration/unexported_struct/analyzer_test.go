@@ -10,8 +10,8 @@ func TestFlagsEveryUnexportedStruct(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/flagged")
 	unexported_struct.Check(p, results)
 	testutil.AssertBlocked(t, results, 2)
-	testutil.AssertBlockedAt(t, results, "plan.go", 3)
-	testutil.AssertBlockedAt(t, results, "worker.go", 3)
+	testutil.AssertLineBlocked(t, results, "plan.go", 3)
+	testutil.AssertLineBlocked(t, results, "worker.go", 3)
 	testutil.AssertBlockedContains(t, results, "struct plan is unexported")
 }
 

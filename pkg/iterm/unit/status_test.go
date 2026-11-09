@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownKeyIsValidation(t *testing.T) {
+func TestUnknownKeyIsValidation(t *testing.T) {
 	e := bridge(
 		t,
 		http.StatusUnprocessableEntity,
@@ -24,7 +24,7 @@ func TestAnUnknownKeyIsValidation(t *testing.T) {
 	)
 }
 
-func TestAKeyToAnUnknownSessionIsNotFound(t *testing.T) {
+func TestKeyToUnknownSessionIsNotFound(t *testing.T) {
 	e := bridge(
 		t,
 		http.StatusNotFound,
@@ -34,7 +34,7 @@ func TestAKeyToAnUnknownSessionIsNotFound(t *testing.T) {
 	assert.String(t, "send key: session not found", e.Error())
 }
 
-func TestATabWithoutAWindowIsUnavailable(t *testing.T) {
+func TestTabWithoutWindowIsUnavailable(t *testing.T) {
 	_, e := bridge(
 		t,
 		http.StatusServiceUnavailable,
@@ -44,7 +44,7 @@ func TestATabWithoutAWindowIsUnavailable(t *testing.T) {
 	assert.String(t, "create tab: no window", e.Error())
 }
 
-func TestAMalformedRequestIsAFault(t *testing.T) {
+func TestMalformedRequestIsFault(t *testing.T) {
 	e := bridge(
 		t,
 		http.StatusBadRequest,

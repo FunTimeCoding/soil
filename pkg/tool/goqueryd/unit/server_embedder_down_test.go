@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestASearchWhileTheEmbedderIsDownAnswers503WithoutAReport(t *testing.T) {
+func TestSearchWhileEmbedderIsDownAnswers503WithoutReport(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	r := memory.New()
@@ -25,7 +25,7 @@ func TestASearchWhileTheEmbedderIsDownAnswers503WithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAPushWhileTheEmbedderIsDownAnswersItsWarning(t *testing.T) {
+func TestPushWhileEmbedderIsDownAnswersItsWarning(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	c := mountedClient(

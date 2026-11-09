@@ -32,7 +32,7 @@ func TestOversizedLineDoesNotStopExtraction(t *testing.T) {
 		),
 	)
 	s.Transcript.EnrichSession("oversized-session")
-	loads, e := s.Transcript.ContextLoadsBySession(
+	loads, e := s.Transcript.SessionContextLoads(
 		t.Context(),
 		"oversized-session",
 	)

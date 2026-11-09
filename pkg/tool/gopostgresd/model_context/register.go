@@ -100,4 +100,54 @@ func (s *Server) register() {
 		),
 		mcp.NewTypedToolHandler(s.tableSizes),
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.CreateBackup,
+			mcp.WithDescription(
+				"Dump the active instance's database to a new backup with pg_dump; a large database takes minutes",
+			),
+		),
+		mcp.NewTypedToolHandler(s.createBackup),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ListBackups,
+			mcp.WithDescription(
+				"List the active instance's backups, newest first",
+			),
+		),
+		mcp.NewTypedToolHandler(s.listBackups),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.RestoreBackup,
+			mcp.WithDescription(
+				"Restore a backup of the active instance into a new database, or in place when the target is the instance's own database and no other session is connected",
+			),
+			mcp.WithString(
+				constant.BackupParameter,
+				mcp.Required(),
+				mcp.Description("Backup name, as list_backups shows it"),
+			),
+			mcp.WithString(
+				"target",
+				mcp.Description(
+					"Database to restore into (default: a new <database>_restore_<backup>)",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.restoreBackup),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.DeleteBackup,
+			mcp.WithDescription("Delete a backup of the active instance"),
+			mcp.WithString(
+				constant.BackupParameter,
+				mcp.Required(),
+				mcp.Description("Backup name, as list_backups shows it"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.deleteBackup),
+	)
 }

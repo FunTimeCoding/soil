@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheSnippetRoutesAnswerAMissingSnippetNotFound(t *testing.T) {
+func TestSnippetRoutesAnswerMissingSnippetNotFound(t *testing.T) {
 	s := base.New(t)
 	c, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),

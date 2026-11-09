@@ -5,8 +5,11 @@ import (
 	"time"
 )
 
-func (s *Store) CreateMemory(o *save_option.Option) (int64, error) {
-	now := time.Now().UTC().Format(time.RFC3339)
+func (s *Store) CreateMemory(
+	o *save_option.Option,
+	at time.Time,
+) (int64, error) {
+	now := at.UTC().Format(time.RFC3339)
 	t, e := s.database.Begin()
 
 	if e != nil {

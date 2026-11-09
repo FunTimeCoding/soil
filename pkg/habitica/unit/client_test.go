@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheHabiticaClientAndItsMockShareTheFace(t *testing.T) {
+func TestHabiticaClientAndItsMockShareFace(t *testing.T) {
 	c := habitica.New("habitica.example", "alfa-user", "bravo-token")
 	defer c.Close()
 	m := mock_client.New()
@@ -20,7 +20,7 @@ func TestTheHabiticaClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestARefusedUserReadReturnsTheError(t *testing.T) {
+func TestRefusedUserReadReturnsError(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,

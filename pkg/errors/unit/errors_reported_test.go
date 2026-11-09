@@ -21,7 +21,7 @@ func TestReportedClassifiesByType(t *testing.T) {
 	assert.False(t, reported.Is(errors.New("disk full")))
 }
 
-func TestAReportedFailureAnswersBadGatewayUncaptured(t *testing.T) {
+func TestReportedFailureAnswersBadGatewayUncaptured(t *testing.T) {
 	e := reported.New("retarget references", "disk full", "alfa")
 	assert.String(t, "reported", classify.Class(e))
 	assert.Integer(t, http.StatusBadGateway, classify.Answer(e).Status)

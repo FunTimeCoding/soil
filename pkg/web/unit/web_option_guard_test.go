@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheGuardMountsSignOnOnlyWhenTheOptionCarriesIt(t *testing.T) {
+func TestGuardMountsSignOnOnlyWhenOptionCarriesIt(t *testing.T) {
 	signed := option.New("", "token")
 	signed.Authorization = authorization_tester.Client
 	m := http.NewServeMux()

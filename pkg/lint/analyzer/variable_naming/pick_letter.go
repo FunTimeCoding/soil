@@ -6,7 +6,7 @@ func pickLetter(
 	t types.Type,
 	taken map[string]bool,
 ) string {
-	for _, letter := range lettersForType(t) {
+	for _, letter := range typeLetters(t) {
 		if !taken[letter] {
 			return letter
 		}

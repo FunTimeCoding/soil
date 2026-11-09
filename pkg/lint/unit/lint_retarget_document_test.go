@@ -120,7 +120,7 @@ func TestRetargetBracedSplitIsLeftForHand(t *testing.T) {
 	assert.String(t, "braced span needs a hand edit", changes[0].Reason)
 }
 
-func TestRetargetKeepsTheFragment(t *testing.T) {
+func TestRetargetKeepsFragment(t *testing.T) {
 	after, _ := lint.RetargetDocument(
 		pointer_tester.Resolver("doc/alfa.md"),
 		"doc/note.md",
@@ -142,7 +142,7 @@ func TestRetargetLeavesProseAndUnrelatedPaths(t *testing.T) {
 	assert.Count(t, 0, changes)
 }
 
-func TestRetargetRenamedSymbolLeavesALongerName(t *testing.T) {
+func TestRetargetRenamedSymbolLeavesLongerName(t *testing.T) {
 	after, _ := lint.RetargetDocument(
 		pointer_tester.Resolver(),
 		"doc/note.md",

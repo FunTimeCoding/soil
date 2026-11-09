@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestADocumentIsEmbeddedWithItsModelsDocumentPrompt(t *testing.T) {
+func TestDocumentIsEmbeddedWithItsModelsDocumentPrompt(t *testing.T) {
 	m := newEmbedder(t)
 	v := newService(t, m, newReranker(t))
 	v.MustPushDocument(
@@ -25,7 +25,7 @@ func TestADocumentIsEmbeddedWithItsModelsDocumentPrompt(t *testing.T) {
 	)
 }
 
-func TestAQueryIsEmbeddedWithItsModelsQueryPrompt(t *testing.T) {
+func TestQueryIsEmbeddedWithItsModelsQueryPrompt(t *testing.T) {
 	m := newEmbedder(t)
 	v := newService(t, m, newReranker(t))
 	_, e := v.Search(t.Context(), search_option.New("zulu", 10))
@@ -33,7 +33,7 @@ func TestAQueryIsEmbeddedWithItsModelsQueryPrompt(t *testing.T) {
 	assert.Strings(t, []string{"search_query: zulu"}, m.Inputs())
 }
 
-func TestAnUnknownEmbedModelNamesTheKnownOnes(t *testing.T) {
+func TestUnknownEmbedModelNamesKnownOnes(t *testing.T) {
 	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
 	o.EmbedModel = "unknown"
 	assert.PanicContains(

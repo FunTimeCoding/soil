@@ -58,7 +58,7 @@ func TestLiveBrandCarriesConnectionDot(t *testing.T) {
 
 func TestRenderPageWithSummary(t *testing.T) {
 	recorder := httptest.NewRecorder()
-	recoveryView().RenderPageWithSummary(
+	recoveryView().RenderSummaryPage(
 		recorder,
 		"Dashboard",
 		constant.RootPath,

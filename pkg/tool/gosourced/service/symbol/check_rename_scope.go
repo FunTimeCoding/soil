@@ -27,7 +27,7 @@ func checkRenameScope(
 
 		for _, file := range loaded.Syntax {
 			if o := loaded.TypesInfo.Scopes[file].Lookup(newName); o != nil {
-				return lookup.TakenAt(set, newName, o.Pos())
+				return lookup.TakenMessage(set, newName, o.Pos())
 			}
 		}
 	}
@@ -46,7 +46,7 @@ func checkRenameScope(
 		_, shadow := scope.LookupParent(newName, f.Ident.Pos())
 
 		if shadow != nil && shadow.Parent() != types.Universe {
-			return lookup.TakenAt(set, newName, f.Ident.Pos())
+			return lookup.TakenMessage(set, newName, f.Ident.Pos())
 		}
 	}
 

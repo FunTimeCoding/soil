@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheArgocdClientAndItsMockShareTheFace(t *testing.T) {
+func TestArgocdClientAndItsMockShareFace(t *testing.T) {
 	c := argocd.New("argocd.test", 443, true, "token")
 	defer c.Close()
 	m := mock_client.New()
@@ -19,7 +19,7 @@ func TestTheArgocdClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestAnArgocdThatListsItsApplicationsIsReachable(t *testing.T) {
+func TestArgocdThatListsItsApplicationsIsReachable(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"items":[]}`)
 	c := newArgocdClient(t, s.URL)
 	defer c.Close()

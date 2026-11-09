@@ -9,14 +9,14 @@ import (
 	"testing"
 )
 
-func TestCacheReusesAnUnchangedWorkspace(t *testing.T) {
+func TestCacheReusesUnchangedWorkspace(t *testing.T) {
 	directory := kind_tester.Module(t)
 	c := cache.New(t.TempDir())
 	first := c.Workspace(directory)
 	assert.True(t, first == c.Workspace(directory))
 }
 
-func TestCacheRebuildsAfterAnEdit(t *testing.T) {
+func TestCacheRebuildsAfterEdit(t *testing.T) {
 	directory := kind_tester.Module(t)
 	c := cache.New(t.TempDir())
 	first := c.Workspace(directory)
@@ -29,7 +29,7 @@ func TestCacheRebuildsAfterAnEdit(t *testing.T) {
 	assert.False(t, first == c.Workspace(directory))
 }
 
-func TestCacheRebuildsAfterAnEditInAReplacedModule(t *testing.T) {
+func TestCacheRebuildsAfterEditInReplacedModule(t *testing.T) {
 	library, user := replacedModules(t)
 	c := cache.New(t.TempDir())
 	first := c.Workspace(user)

@@ -59,7 +59,7 @@ func TestRestLabelReadsBack(t *testing.T) {
 	)
 }
 
-func TestRestLabelReadIsEmptyForAnUnknownSession(t *testing.T) {
+func TestRestLabelReadIsEmptyForUnknownSession(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	read, e := a.RestClient.GetSessionLabelWithResponse(

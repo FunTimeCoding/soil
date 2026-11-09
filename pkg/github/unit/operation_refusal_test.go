@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestEveryOperationClassifiesAMissingResource(t *testing.T) {
+func TestEveryOperationClassifiesMissingResource(t *testing.T) {
 	c := refusingGithub(t, http.StatusNotFound, nil, `{"message":"Not Found"}`)
 	operations := map[string]func() error{
 		"ActionRepository": func() error {
@@ -148,7 +148,7 @@ func TestEveryOperationClassifiesAMissingResource(t *testing.T) {
 	assert.String(t, "", strings.Join(missed, ", "))
 }
 
-func TestABranchRequestDuringAnOutageIsUnavailable(t *testing.T) {
+func TestBranchRequestDuringOutageIsUnavailable(t *testing.T) {
 	c := refusingGithub(
 		t,
 		http.StatusServiceUnavailable,

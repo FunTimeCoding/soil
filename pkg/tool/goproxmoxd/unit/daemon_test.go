@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsOneGuardPerHypervisorOutBeforeThePoller(t *testing.T) {
+func TestDaemonHandsOneGuardPerHypervisorOutBeforePoller(t *testing.T) {
 	alfa := mock_client.New()
 	defer alfa.Close()
 	bravo := mock_client.New()
@@ -35,7 +35,7 @@ func TestTheDaemonHandsOneGuardPerHypervisorOutBeforeThePoller(t *testing.T) {
 	assert.False(t, third)
 }
 
-func TestTheDaemonHandsEveryGuardOutBeforeItsClocks(t *testing.T) {
+func TestDaemonHandsEveryGuardOutBeforeItsClocks(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	d := daemon_tester.NewWithNetbox(
@@ -53,7 +53,7 @@ func TestTheDaemonHandsEveryGuardOutBeforeItsClocks(t *testing.T) {
 	assert.False(t, third)
 }
 
-func TestClosingTheDaemonClosesEveryClientItBuilt(t *testing.T) {
+func TestClosingDaemonClosesEveryClientItBuilt(t *testing.T) {
 	alfa := mock_client.New()
 	defer alfa.Close()
 	bravo := mock_client.New()
@@ -71,7 +71,7 @@ func TestClosingTheDaemonClosesEveryClientItBuilt(t *testing.T) {
 	assert.Integer(t, 1, n.Closed)
 }
 
-func TestClosingTheDaemonClosesTheShellsItDialled(t *testing.T) {
+func TestClosingDaemonClosesShellsItDialled(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	h := sshMock.New()
@@ -95,7 +95,7 @@ func TestClosingTheDaemonClosesTheShellsItDialled(t *testing.T) {
 	assert.Integer(t, 1, h.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	before := goleak.IgnoreCurrent()

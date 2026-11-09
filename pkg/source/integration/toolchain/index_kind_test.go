@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestIndexComputesAKindOnlyWhenRequested(t *testing.T) {
+func TestIndexComputesKindOnlyWhenRequested(t *testing.T) {
 	directory := kind_tester.Module(t)
 	store := t.TempDir()
 	var alfaExtracted, alfaExternal, bravoExtracted, bravoExternal int
@@ -51,7 +51,7 @@ func TestIndexKeepsExternalsPerKind(t *testing.T) {
 	assert.Integer(t, stored, external)
 }
 
-func TestIndexKeepsAnExternalWholeBehindItsImporter(t *testing.T) {
+func TestIndexKeepsExternalWholeBehindItsImporter(t *testing.T) {
 	directory := kind_tester.ImporterModule(t)
 	names := kind_tester.ScopeNames("names")
 	var encoding []string

@@ -39,7 +39,7 @@ func TestSnapshotReportsChangedAddedAndRemovedFiles(t *testing.T) {
 	)
 }
 
-func TestSnapshotIgnoresWhatTheModuleDoesNotBuild(t *testing.T) {
+func TestSnapshotIgnoresWhatModuleDoesNotBuild(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteFile(t, root, "go.mod", "module example\n")
 	s := snapshot.Take(root)

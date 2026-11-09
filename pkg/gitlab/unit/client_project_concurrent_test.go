@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestConcurrentProjectLookupsShareTheCache(t *testing.T) {
+func TestConcurrentProjectLookupsShareCache(t *testing.T) {
 	var hits atomic.Int64
 	r := client_tester.New(
 		t,

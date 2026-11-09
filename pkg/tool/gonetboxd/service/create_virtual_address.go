@@ -11,13 +11,13 @@ func (s *Service) CreateVirtualAddress(
 	return guarded(
 		s.guard,
 		func() (*internet_address.Address, error) {
-			m, e := s.client.VirtualMachineByName(machine)
+			m, e := s.client.VirtualMachine(machine)
 
 			if e != nil {
 				return nil, e
 			}
 
-			i, e := s.client.VirtualMachineInterfaceByName(m, interfaceName)
+			i, e := s.client.VirtualMachineInterface(m, interfaceName)
 
 			if e != nil {
 				return nil, e

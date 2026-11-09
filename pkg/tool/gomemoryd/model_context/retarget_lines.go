@@ -16,27 +16,17 @@ func retargetLines(reports []*retarget_report.Report) []string {
 			case c.Reason != "":
 				result = append(
 					result,
-					fmt.Sprintf(
-						"  line %d: %s - %s",
-						c.Line,
-						c.Before,
-						c.Reason,
-					),
+					fmt.Sprintf("  line %d: %s - %s", c.Line, c.Old, c.Reason),
 				)
 			case c.Line == 0:
 				result = append(
 					result,
-					fmt.Sprintf("  base: %s → %s", c.Before, c.After),
+					fmt.Sprintf("  base: %s → %s", c.Old, c.New),
 				)
 			default:
 				result = append(
 					result,
-					fmt.Sprintf(
-						"  line %d: %s → %s",
-						c.Line,
-						c.Before,
-						c.After,
-					),
+					fmt.Sprintf("  line %d: %s → %s", c.Line, c.Old, c.New),
 				)
 			}
 		}

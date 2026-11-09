@@ -30,7 +30,7 @@ func valueTransfers(
 		var result []resource_transfer.Transfer
 
 		for _, a := range assignedValues(p, body, o) {
-			if l := literalOf(a); l != nil {
+			if l := literal(a); l != nil {
 				result = append(result, literalTransfers(p, l)...)
 			}
 		}

@@ -42,5 +42,5 @@ func (s *Service) RevocationList(name string) ([]byte, error) {
 		)
 	}
 
-	return a.RevocationList(entry), nil
+	return a.RevocationList(entry, s.clock()), nil
 }

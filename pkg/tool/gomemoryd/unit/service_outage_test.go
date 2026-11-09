@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAWriteSavesWhileGoquerydIsAway(t *testing.T) {
+func TestWriteSavesWhileGoquerydIsAway(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = unavailable.Format("goqueryd down")
 	m, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
@@ -21,7 +21,7 @@ func TestAWriteSavesWhileGoquerydIsAway(t *testing.T) {
 	assert.Count(t, 0, o.Reporter.Events())
 }
 
-func TestTheGuardHoldsCallsOffAfterAnOutage(t *testing.T) {
+func TestGuardHoldsCallsOffAfterOutage(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = unavailable.Format("goqueryd down")
 	_, e := o.Service.CreateMemory(scopedOption("first", ""))
@@ -32,7 +32,7 @@ func TestTheGuardHoldsCallsOffAfterAnOutage(t *testing.T) {
 	assert.Count(t, 0, o.Indexer.Pushed)
 }
 
-func TestReconcileIndexesWhatAWriteMissed(t *testing.T) {
+func TestReconcileIndexesWhatWriteMissed(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = validation.New("refused")
 	m, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
@@ -48,7 +48,7 @@ func TestReconcileIndexesWhatAWriteMissed(t *testing.T) {
 	)
 }
 
-func TestReconcileUnindexesAForgottenMemory(t *testing.T) {
+func TestReconcileUnindexesForgottenMemory(t *testing.T) {
 	o := service_tester.New(t)
 	m, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
 	assert.FatalOnError(t, e)
@@ -65,7 +65,7 @@ func TestReconcileUnindexesAForgottenMemory(t *testing.T) {
 	)
 }
 
-func TestReconcileStopsAtAnOutage(t *testing.T) {
+func TestReconcileStopsAtOutage(t *testing.T) {
 	o := service_tester.New(t)
 	_, e := o.Service.CreateMemory(scopedOption("first", ""))
 	assert.FatalOnError(t, e)
@@ -77,7 +77,7 @@ func TestReconcileStopsAtAnOutage(t *testing.T) {
 	assert.True(t, unavailable.Is(failed[0]))
 }
 
-func TestAWriteThatIndexesReportsNothing(t *testing.T) {
+func TestWriteThatIndexesReportsNothing(t *testing.T) {
 	o := service_tester.New(t)
 	m, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
 	assert.FatalOnError(t, e)
@@ -85,7 +85,7 @@ func TestAWriteThatIndexesReportsNothing(t *testing.T) {
 	assert.Count(t, 0, o.Reporter.Events())
 }
 
-func TestAWriteReportsAFailureNobodyElseReports(t *testing.T) {
+func TestWriteReportsFailureNobodyElseReports(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = fmt.Errorf("goqueryd answered nonsense")
 	_, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
@@ -93,7 +93,7 @@ func TestAWriteReportsAFailureNobodyElseReports(t *testing.T) {
 	assert.Count(t, 1, o.Reporter.Events())
 }
 
-func TestProfileLeavesTheTopicOutWhileGoquerydIsAway(t *testing.T) {
+func TestProfileLeavesTopicOutWhileGoquerydIsAway(t *testing.T) {
 	o := service_tester.New(t)
 	_, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
 	assert.FatalOnError(t, e)
@@ -107,7 +107,7 @@ func TestProfileLeavesTheTopicOutWhileGoquerydIsAway(t *testing.T) {
 	assert.Count(t, 0, result.Relevant)
 }
 
-func TestProfileReportsAFailureThatIsNoOutageAndStillAnswers(t *testing.T) {
+func TestProfileReportsFailureThatIsNoOutageAndStillAnswers(t *testing.T) {
 	o := service_tester.New(t)
 	_, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
 	assert.FatalOnError(t, e)

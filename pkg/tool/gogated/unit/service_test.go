@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestOnlyTheSuperUserIsAdministrator(t *testing.T) {
+func TestOnlySuperUserIsAdministrator(t *testing.T) {
 	b := base.New(t)
 	row, e := b.Store.UserByMail(constant.FixtureMail)
 	assert.FatalOnError(t, e)
@@ -30,7 +30,7 @@ func TestOnlyTheSuperUserIsAdministrator(t *testing.T) {
 	assert.False(t, administrator(t, b, ""))
 }
 
-func TestAFailingStoreIsNotAnAnswerAboutTheAdministrator(t *testing.T) {
+func TestFailingStoreIsNotAnswerAboutAdministrator(t *testing.T) {
 	b := base.New(t)
 	relational.CloseMapper(b.Database)
 	_, e := b.Service.IsAdministrator("anyone")
@@ -59,7 +59,7 @@ func TestCleanDropsOnlyExpiredLoginSessions(t *testing.T) {
 	assert.String(t, fresh, rows[0].Identifier)
 }
 
-func TestACleanTickReportsEachFailure(t *testing.T) {
+func TestCleanTickReportsEachFailure(t *testing.T) {
 	b := base.New(t)
 	relational.CloseMapper(b.Database)
 	r := memory.New()

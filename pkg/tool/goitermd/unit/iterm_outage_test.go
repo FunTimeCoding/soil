@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnItermOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestItermOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.Failure = refusedDial()
 	c := s.Connect(t)
@@ -27,7 +27,7 @@ func TestAnItermOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestTheDaemonHandsOutTheItermGuard(t *testing.T) {
+func TestDaemonHandsOutItermGuard(t *testing.T) {
 	_, okay := daemon_tester.New(t, mock_client.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

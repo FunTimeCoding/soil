@@ -8,7 +8,13 @@ import (
 func (c *Client) LabelValues(
 	_ string,
 	_ []string,
-	_ time.Time,
+	since time.Time,
 ) (*label_result.Result, error) {
-	return nil, c.Failure
+	c.record(since)
+
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	return label_result.New([]string{}, nil, nil), nil
 }

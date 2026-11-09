@@ -10,7 +10,7 @@ func (c *Client) DeleteChoiceSet(name string) error {
 		return c.Failure
 	}
 
-	v, e := c.ChoiceSetByName(name)
+	v, e := c.ChoiceSet(name)
 
 	if e != nil {
 		return e

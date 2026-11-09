@@ -64,7 +64,7 @@ func TestPostWithoutBodySendsNothing(t *testing.T) {
 	assert.String(t, "", string(b))
 }
 
-func TestABadRequestIsValidation(t *testing.T) {
+func TestBadRequestIsValidation(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -76,7 +76,7 @@ func TestABadRequestIsValidation(t *testing.T) {
 	assert.String(t, "One or more validation errors occurred.", e.Error())
 }
 
-func TestABadRequestElsewhereIsAFault(t *testing.T) {
+func TestBadRequestElsewhereIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -87,7 +87,7 @@ func TestABadRequestElsewhereIsAFault(t *testing.T) {
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestAnUnauthorizedRequestIsUnexpected(t *testing.T) {
+func TestUnauthorizedRequestIsUnexpected(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,

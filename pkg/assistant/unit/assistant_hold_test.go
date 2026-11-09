@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAStartingHomeAssistantIsWaitedOut(t *testing.T) {
+func TestStartingHomeAssistantIsWaitedOut(t *testing.T) {
 	f := fake_assistant.New(t)
 	f.Refuse(2)
 	r := memory.New()
@@ -22,7 +22,7 @@ func TestAStartingHomeAssistantIsWaitedOut(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARestartedHomeAssistantIsSubscribedAgain(t *testing.T) {
+func TestRestartedHomeAssistantIsSubscribedAgain(t *testing.T) {
 	f := fake_assistant.New(t)
 	r := memory.New()
 	received := make(chan *message.Message, 8)
@@ -40,7 +40,7 @@ func TestARestartedHomeAssistantIsSubscribedAgain(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARefusedTokenIsReportedOnce(t *testing.T) {
+func TestRefusedTokenIsReportedOnce(t *testing.T) {
 	f := fake_assistant.New(t)
 	f.RefuseToken()
 	r := memory.New()

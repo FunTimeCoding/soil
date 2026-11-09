@@ -51,7 +51,7 @@ func TestChunkGoSourceShortFile(t *testing.T) {
 	assert.String(t, source, chunks[0].Text)
 }
 
-func TestChunkGoSourceSplitsAShortFileOverTheAllowance(t *testing.T) {
+func TestChunkGoSourceSplitsShortFileOverAllowance(t *testing.T) {
 	r := mock_reranker.New()
 	defer errors.PanicClose(r)
 	r.SetAllowance(10)
@@ -67,7 +67,7 @@ func TestChunkGoSourceSplitsAShortFileOverTheAllowance(t *testing.T) {
 	assert.String(t, "func Charlie() {\n\treturn\n}\n", chunks[3].Text)
 }
 
-func TestChunkGoSourceKeepsAShortFileAtTheAllowance(t *testing.T) {
+func TestChunkGoSourceKeepsShortFileAtAllowance(t *testing.T) {
 	source := "package store\n\nfunc Alfa() {\n\treturn\n}\n\nfunc Bravo() {\n\treturn\n}\n\nfunc Charlie() {\n\treturn\n}\n"
 	r := mock_reranker.New()
 	defer errors.PanicClose(r)

@@ -21,7 +21,7 @@ func callSinks(
 				return true
 			}
 
-			g := calleeOf(p, c)
+			g := callee(p, c)
 
 			if g == nil {
 				return true

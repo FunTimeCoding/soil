@@ -25,6 +25,7 @@ func (s *Service) SignRequest(
 	r.Kind = constant.CertificateKind(b.Kind)
 	r.Name = n
 	r.Host = host(q)
+	r.Start = s.clock()
 	r.ValidDay = validDay(b.ValidDay)
 
 	return s.save(

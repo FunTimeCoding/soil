@@ -45,7 +45,7 @@ func (s *Server) tag(
 		e := s.service.ReplaceTags(identifier, tags)
 
 		if e != nil {
-			return s.answerWith(x, e, "replace tags")
+			return s.answerMessage(x, e, "replace tags")
 		}
 	}
 
@@ -59,7 +59,7 @@ func (s *Server) tag(
 		e := s.service.AddTags(identifier, tags)
 
 		if e != nil {
-			return s.answerWith(x, e, "add tags")
+			return s.answerMessage(x, e, "add tags")
 		}
 	}
 
@@ -73,7 +73,7 @@ func (s *Server) tag(
 		e := s.service.RemoveTags(identifier, tags)
 
 		if e != nil {
-			return s.answerWith(x, e, "remove tags")
+			return s.answerMessage(x, e, "remove tags")
 		}
 	}
 

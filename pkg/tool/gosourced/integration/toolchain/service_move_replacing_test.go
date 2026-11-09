@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMoveSymbolsRequalifiesAReplacingModule(t *testing.T) {
+func TestMoveSymbolsRequalifiesReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
@@ -39,7 +39,7 @@ func TestMoveSymbolsRequalifiesAReplacingModule(t *testing.T) {
 	assert.StringContains(t, "return target.Local() + lib.Helper()", clash)
 }
 
-func TestMoveSymbolsToANewPackageRequalifiesAReplacingModule(t *testing.T) {
+func TestMoveSymbolsToNewPackageRequalifiesReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
@@ -62,7 +62,7 @@ func TestMoveSymbolsToANewPackageRequalifiesAReplacingModule(t *testing.T) {
 	)
 }
 
-func TestMoveSymbolsByFileRequalifiesAReplacingModule(t *testing.T) {
+func TestMoveSymbolsByFileRequalifiesReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
@@ -89,7 +89,7 @@ func TestMoveSymbolsByFileRequalifiesAReplacingModule(t *testing.T) {
 	assert.StringContains(t, "\tsource.Widget\n", widget)
 }
 
-func TestExtractTypeRequalifiesAReplacingModule(t *testing.T) {
+func TestExtractTypeRequalifiesReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	r, e := replacingService(t, library, user).Symbol.ExtractType(
 		t.Context(),
@@ -110,7 +110,7 @@ func TestExtractTypeRequalifiesAReplacingModule(t *testing.T) {
 	assert.StringContains(t, "return w.Run() + source.Limit", widget)
 }
 
-func TestMoveSymbolsRequalifiesAReplacingModuleOnTheWholeLoad(t *testing.T) {
+func TestMoveSymbolsRequalifiesReplacingModuleOnWholeLoad(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
 	s := replacingService(t, library, user)
 	s.Workspace.UseFullLoad()
@@ -135,9 +135,9 @@ func TestMoveSymbolsRequalifiesAReplacingModuleOnTheWholeLoad(t *testing.T) {
 	)
 }
 
-func TestMoveSymbolsDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
+func TestMoveSymbolsDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "move-replacer")
-	before := treeOf(t, user)
+	before := directoryTree(t, user)
 	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
@@ -152,7 +152,7 @@ func TestMoveSymbolsDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(t, before, treeOf(t, user))
+	assert.String(t, before, directoryTree(t, user))
 	assert.StringContains(
 		t,
 		"pkg/user/user.go: Helper → target.Helper",

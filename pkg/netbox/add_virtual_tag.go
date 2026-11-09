@@ -10,13 +10,13 @@ func (c *Client) AddVirtualTag(
 	name string,
 	tag string,
 ) (*virtual_machine.Machine, error) {
-	_, e := c.TagByName(tag)
+	_, e := c.Tag(tag)
 
 	if e != nil {
 		return nil, e
 	}
 
-	vm, f := c.VirtualMachineByName(name)
+	vm, f := c.VirtualMachine(name)
 
 	if f != nil {
 		return nil, f

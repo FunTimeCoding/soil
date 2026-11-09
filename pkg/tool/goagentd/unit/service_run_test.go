@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestARunReturnsTheAgentOutput(t *testing.T) {
+func TestRunReturnsAgentOutput(t *testing.T) {
 	var arguments []string
 	o := service_tester.New(
 		t,
@@ -38,7 +38,7 @@ func TestARunReturnsTheAgentOutput(t *testing.T) {
 	assert.Strings(t, []string{"claude", "--print", "charlie"}, arguments)
 }
 
-func TestAnEmptyIntentIsRefused(t *testing.T) {
+func TestEmptyIntentIsRefused(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	o := service_tester.New(t, service_tester.Fixed(stream))
@@ -46,7 +46,7 @@ func TestAnEmptyIntentIsRefused(t *testing.T) {
 	assert.String(t, "idle", string(o.Service.Status().State))
 }
 
-func TestASecondRunWhileRunningConflicts(t *testing.T) {
+func TestSecondRunWhileRunningConflicts(t *testing.T) {
 	s := mock_stream.New(nil, true, nil)
 	defer s.Close()
 	o := service_tester.New(t, service_tester.Fixed(s))
@@ -56,7 +56,7 @@ func TestASecondRunWhileRunningConflicts(t *testing.T) {
 	service_tester.AwaitDone(t, o.Service)
 }
 
-func TestAFailedRunCarriesTheAgentError(t *testing.T) {
+func TestFailedRunCarriesAgentError(t *testing.T) {
 	o := service_tester.New(
 		t,
 		func(
@@ -82,7 +82,7 @@ func TestAFailedRunCarriesTheAgentError(t *testing.T) {
 	)
 }
 
-func TestShutdownWaitsForTheRunThenInterrupts(t *testing.T) {
+func TestShutdownWaitsForRunThenInterrupts(t *testing.T) {
 	s := mock_stream.New(nil, true, nil)
 	defer s.Close()
 	o := service_tester.New(t, service_tester.Fixed(s))
@@ -109,7 +109,7 @@ func TestShutdownWaitsForTheRunThenInterrupts(t *testing.T) {
 	assert.String(t, "done", string(o.Service.Status().State))
 }
 
-func TestAnIdleRunnerFinishesOnClose(t *testing.T) {
+func TestIdleRunnerFinishesOnClose(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	o := service_tester.New(t, service_tester.Fixed(stream))
@@ -122,7 +122,7 @@ func TestAnIdleRunnerFinishesOnClose(t *testing.T) {
 	}
 }
 
-func TestALaunchThatPanicsEndsTheRun(t *testing.T) {
+func TestLaunchThatPanicsEndsRun(t *testing.T) {
 	r := memory.New()
 	o := service_tester.NewWith(
 		t,

@@ -19,13 +19,13 @@ func (s *Server) ListRegistryRepositories(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.RegistryRepositories(x, instance, project, false)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return response.SuccessAny(v)

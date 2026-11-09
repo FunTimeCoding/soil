@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnOutageMarksTheGuardDownWithoutAnEarlyCapture(t *testing.T) {
+func TestOutageMarksGuardDownWithoutEarlyCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = &net.OpError{
 		Op:  "dial",

@@ -13,7 +13,7 @@ func (s *Service) ResolveList(value string) (int, error) {
 		return identifier, nil
 	}
 
-	l, f := s.ListByName(value)
+	l, f := s.List(value)
 
 	if f != nil {
 		return 0, f

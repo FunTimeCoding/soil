@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAStaleReadSnapshotWritingIsBusy(t *testing.T) {
+func TestStaleReadSnapshotWritingIsBusy(t *testing.T) {
 	d := connection.New(
 		logger.New(t.Context()),
 		filepath.Join(t.TempDir(), constant.FixtureLiteFile),

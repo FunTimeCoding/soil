@@ -16,7 +16,7 @@ func TestBranch(t *testing.T) {
 			&gitlab.Branch{
 				Name:   stringsConstant.UpperAlfa,
 				Merged: false,
-				Commit: &gitlab.Commit{CreatedAt: new(soil.StartOfTime)},
+				Commit: &gitlab.Commit{CreatedAt: new(soil.Epoch)},
 			},
 		),
 	)

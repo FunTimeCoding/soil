@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "maintenance.db")

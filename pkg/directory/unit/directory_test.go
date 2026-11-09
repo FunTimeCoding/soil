@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheDirectoryClientAndItsMockShareTheFace(t *testing.T) {
+func TestDirectoryClientAndItsMockShareFace(t *testing.T) {
 	faces := []face.DirectoryClient{
 		directory.New("directory.test", "dc=test"),
 		mock_client.New("dc=test"),
@@ -19,7 +19,7 @@ func TestTheDirectoryClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestARefusedDialIsAnOutage(t *testing.T) {
+func TestRefusedDialIsOutage(t *testing.T) {
 	c := directory.New("127.0.0.1", "dc=test").
 		WithInsecure().
 		WithPort(system.FindUnusedPort(19500)).

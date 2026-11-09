@@ -9,7 +9,7 @@ func (c *Client) RenameVirtualMachine(
 	name string,
 	newName string,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownItemIsAnsweredQuietlyOverModelContext(t *testing.T) {
+func TestUnknownItemIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := s.ContextServer.Connect(t)

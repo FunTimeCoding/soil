@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAddParametersThroughTheTool(t *testing.T) {
+func TestAddParametersThroughTool(t *testing.T) {
 	o := model_context_tester.New(
 		t,
 		"../../service/testdata/add-parameters/src",
@@ -36,7 +36,7 @@ func TestAddParametersThroughTheTool(t *testing.T) {
 	assert.StringContains(t, `target.Answer(x, "a", 1)`, string(caller))
 }
 
-func TestNameParametersThroughTheTool(t *testing.T) {
+func TestNameParametersThroughTool(t *testing.T) {
 	o := model_context_tester.New(
 		t,
 		"../../service/testdata/name-parameters/src",
@@ -61,7 +61,7 @@ func TestNameParametersThroughTheTool(t *testing.T) {
 	assert.StringContains(t, "\tx context.Context,\n", string(source))
 }
 
-func TestAddParametersToolRefusesWithoutAnArgument(t *testing.T) {
+func TestAddParametersToolRefusesWithoutArgument(t *testing.T) {
 	o := model_context_tester.New(
 		t,
 		"../../service/testdata/add-parameters/src",

@@ -32,7 +32,7 @@ func flowingDelegate(
 		o, okay := p.TypesInfo.Defs[i].(*types.Var)
 
 		if okay && flowsToResult(p, body, o) {
-			return calleeOf(p, call)
+			return callee(p, call)
 		}
 	}
 

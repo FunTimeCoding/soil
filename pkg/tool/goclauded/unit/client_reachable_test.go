@@ -9,12 +9,12 @@ import (
 	"testing"
 )
 
-func TestClientReachesTheServer(t *testing.T) {
+func TestClientReachesServer(t *testing.T) {
 	s := base.New(t)
 	assert.FatalOnError(t, s.Client(t).Reachable(context.Background()))
 }
 
-func TestClientReachableRefusesAWrongToken(t *testing.T) {
+func TestClientReachableRefusesWrongToken(t *testing.T) {
 	s := base.New(t)
 	c := client.New(fmt.Sprintf("http://localhost:%d", s.Port), false, "wrong")
 	defer c.Close()

@@ -9,8 +9,8 @@ func New(
 	from *revision.Revision,
 	to *revision.Revision,
 ) *Report {
-	before := byKey(from.Symbols)
-	after := byKey(to.Symbols)
+	before := keySymbols(from.Symbols)
+	after := keySymbols(to.Symbols)
 	pairs := samePairs(before, after)
 	pairs = append(pairs, namePairs(before, after)...)
 	pairs = append(pairs, receiverPairs(before, after, pairs)...)

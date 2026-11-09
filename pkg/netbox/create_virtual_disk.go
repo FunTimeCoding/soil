@@ -11,7 +11,7 @@ func (c *Client) CreateVirtualDisk(
 	name string,
 	size int32,
 ) (*virtual_disk.Disk, error) {
-	m, e := c.VirtualMachineByName(machine)
+	m, e := c.VirtualMachine(machine)
 
 	if e != nil {
 		return nil, e

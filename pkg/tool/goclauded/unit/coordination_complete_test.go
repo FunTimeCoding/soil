@@ -17,7 +17,7 @@ func TestCompleteToolReachesSessionActivity(t *testing.T) {
 		map[string]any{constant.Message: "search index and refresh implemented"},
 	)
 	r := a.CheckLive()
-	completions := clientEntriesByKind(r.Entries, constant.QueueSessionComplete)
+	completions := clientKindEntries(r.Entries, constant.QueueSessionComplete)
 	assert.True(t, len(completions) > 0)
 	assert.StringContains(t, "building search index", completions[0].Body)
 }
@@ -48,7 +48,7 @@ func TestCompleteAndReannounce(t *testing.T) {
 	)
 	a.Announce(a.Name(), "second task")
 	r := a.CheckLive()
-	announces := clientEntriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := clientKindEntries(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 	assert.StringContains(t, "second task", announces[len(announces)-1].Body)
 }

@@ -21,7 +21,7 @@ func (c *Client) PostReferencesRetarget(
 	}
 
 	for _, m := range moves.Paths {
-		body.Paths = append(body.Paths, client.PathMove{From: m.From, To: m.To})
+		body.Paths = append(body.Paths, client.PathMove{From: m.Old, To: m.New})
 	}
 
 	for _, m := range moves.Symbols {

@@ -26,8 +26,8 @@ pkg/tool/go<tool>d/
 │   ├── new.go                 # New(deps, r face.Reporter) *Server
 │   ├── mount.go               # Mount(g *guard.Mux) - HTTP transport setup
 │   ├── register.go            # register() - wires all tools to the MCPServer
-│   ├── answer_with.go         # answerWith(e error, message string)
-│   ├── answer.go              # answer(e error) - answerWith without context
+│   ├── answer_message.go      # answerMessage(e error, message string)
+│   ├── answer.go              # answer(e error) - answerMessage without context
 │   └── <tool_name>.go         # One file per tool function (get_alerts.go, etc.)
 └── server/
 ```
@@ -276,7 +276,7 @@ This works but the typed handler pattern is preferred for new tools.
 ## Response Conventions
 
 Tool function files use `response.Fail` for request parsing, `answer`
-and `answerWith` for every other error, `response.SuccessAny` for JSON
+and `answerMessage` for every other error, `response.SuccessAny` for JSON
 results, and `response.Success` for plain text results:
 
 ```go
@@ -295,7 +295,7 @@ func (s *Server) getAlerts(
 }
 ```
 
-`answer` and `answerWith` live in their own files - the shape is in
+`answer` and `answerMessage` live in their own files - the shape is in
 `error-handling/mcp.md`.
 
 ### Quick reference
@@ -310,7 +310,7 @@ func (s *Server) getAlerts(
 - Text results: `response.Success("comment added")`
 - Request parsing errors: `response.Fail("message: %v", err)` - wraps
   `mcp.NewToolResultError`
-- Every other error: `s.answer(e)`, or `s.answerWith(e, step)` when the tool
+- Every other error: `s.answer(e)`, or `s.answerMessage(e, step)` when the tool
   does several things and the step tells which failed - answered by class
 - Error variables progress `e`, `f`, `g`, `h`, `i` - never reuse the same
   letter. See `naming.md`.

@@ -9,7 +9,7 @@ func (s *Service) CreateDeviceType(
 	return guarded(
 		s.guard,
 		func() (*device_type.Type, error) {
-			m, e := s.client.ManufacturerByName(manufacturer)
+			m, e := s.client.Manufacturer(manufacturer)
 
 			if e != nil {
 				return nil, e

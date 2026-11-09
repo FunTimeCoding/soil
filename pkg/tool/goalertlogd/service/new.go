@@ -13,6 +13,7 @@ func New(
 	a prometheus.AlertmanagerClient,
 	g *peer.Guard,
 	retention time.Duration,
+	clock func() time.Time,
 	n face.EventNotifier,
 ) *Service {
 	return &Service{
@@ -20,6 +21,7 @@ func New(
 		alertmanager: a,
 		guard:        g,
 		retention:    retention,
+		clock:        clock,
 		notifier:     n,
 	}
 }

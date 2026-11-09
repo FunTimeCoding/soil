@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestASublimeOutageIsAnsweredUnavailableWithoutACaptureOverRest(
+func TestSublimeOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	s := base.New(t)
@@ -28,7 +28,7 @@ func TestASublimeOutageIsAnsweredUnavailableWithoutACaptureOverRest(
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestASublimeOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestSublimeOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.Failure = refusedDial()
 	c := s.Connect(t)
@@ -41,12 +41,12 @@ func TestASublimeOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestTheDaemonHandsOutTheSublimeGuard(t *testing.T) {
+func TestDaemonHandsOutSublimeGuard(t *testing.T) {
 	_, okay := daemon_tester.New(t, mock_client.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
-func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
+func TestDaemonClosesClientItBuilt(t *testing.T) {
 	c := mock_client.New()
 	daemon_tester.New(t, c).Close()
 	assert.Integer(t, 1, c.Closed())

@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestDryRunSaysWhenAShutdownWouldBeRefused(t *testing.T) {
+func TestDryRunSaysWhenShutdownWouldBeRefused(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
 		bandConstant.PowerOn,
@@ -32,7 +32,7 @@ func TestDryRunSaysWhenAShutdownWouldBeRefused(t *testing.T) {
 	assert.Count(t, 0, s.Alfa.Requested())
 }
 
-func TestDryRunDescribesAnAcceptedShutdown(t *testing.T) {
+func TestDryRunDescribesAcceptedShutdown(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
 		bandConstant.PowerOn,
@@ -70,7 +70,7 @@ func TestShutdownWithYesRequestsOffSoftGraceful(t *testing.T) {
 	assert.Integers(t, []int{12}, s.Alfa.Requested())
 }
 
-func TestARefusedShutdownExitsWithTheDaemonsMessage(t *testing.T) {
+func TestRefusedShutdownExitsWithDaemonsMessage(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
 		bandConstant.PowerOn,
@@ -83,7 +83,7 @@ func TestARefusedShutdownExitsWithTheDaemonsMessage(t *testing.T) {
 	assert.Count(t, 0, s.Alfa.Requested())
 }
 
-func TestStartWithoutAnInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
+func TestStartWithoutInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
 	s := base.New(t)
 	_, failure, code := run(t, s, "start", "--yes")
 	assert.Integer(t, 1, code)

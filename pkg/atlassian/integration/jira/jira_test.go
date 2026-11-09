@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestSearchReadsThroughTheRequester(t *testing.T) {
+func TestSearchReadsThroughRequester(t *testing.T) {
 	owned := jira.NewEnvironment()
 	defer owned.Close()
 	result, e := owned.SearchLimitV3(

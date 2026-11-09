@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestAnIncomingTraceIsOnTheRequestHub(t *testing.T) {
+func TestIncomingTraceIsOnRequestHub(t *testing.T) {
 	p := serveTrace(
 		t,
 		func(g *guard.Mux) {
@@ -43,7 +43,7 @@ func TestAnIncomingTraceIsOnTheRequestHub(t *testing.T) {
 	assert.StringNotContains(t, "0123456789abcdef0123456789abcdef", fresh)
 }
 
-func TestAnOutgoingRequestCarriesTheIncomingTrace(t *testing.T) {
+func TestOutgoingRequestCarriesIncomingTrace(t *testing.T) {
 	var seen string
 	d := httptest.NewServer(
 		http.HandlerFunc(

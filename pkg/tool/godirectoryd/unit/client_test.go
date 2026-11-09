@@ -18,7 +18,7 @@ import (
 	"testing"
 )
 
-func TestTheClientCoversEveryOperation(t *testing.T) {
+func TestClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	methods := reflect.TypeFor[face.Client]()
@@ -41,7 +41,7 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 	assert.String(t, "", strings.Join(missing, ", "))
 }
 
-func TestTheClientAndMockHoldTheFace(t *testing.T) {
+func TestClientAndMockHoldFace(t *testing.T) {
 	c := client.New(locator.New("godirectoryd.test"), "token")
 	defer c.Close()
 	m := mock_client.New()
@@ -52,7 +52,7 @@ func TestTheClientAndMockHoldTheFace(t *testing.T) {
 	}
 }
 
-func TestTheClientRoundTripsThroughTheDaemon(t *testing.T) {
+func TestClientRoundTripsThroughDaemon(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := client.New(

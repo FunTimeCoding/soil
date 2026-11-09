@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestGetSendsCredentialsAndUnwrapsTheEnvelope(t *testing.T) {
+func TestGetSendsCredentialsAndUnwrapsEnvelope(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,
@@ -63,13 +63,13 @@ func TestPostSendsParametersAndNotation(t *testing.T) {
 	assert.String(t, `{"text":"delta"}`, string(b))
 }
 
-func TestPostDiscardIgnoresTheAnswer(t *testing.T) {
+func TestPostDiscardIgnoresAnswer(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, "not notation")
 	assert.FatalOnError(t, newClient(t, s.URL).PostDiscard("/cron"))
 	assert.String(t, "/api/v3/cron", last().URL.Path)
 }
 
-func TestRefusalCarriesTheMessage(t *testing.T) {
+func TestRefusalCarriesMessage(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -81,7 +81,7 @@ func TestRefusalCarriesTheMessage(t *testing.T) {
 	assert.StringContains(t, "echo refused", e.Error())
 }
 
-func TestAForbiddenAnswerIsAFault(t *testing.T) {
+func TestForbiddenAnswerIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusForbidden,
@@ -92,7 +92,7 @@ func TestAForbiddenAnswerIsAFault(t *testing.T) {
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestAConflictIsConflict(t *testing.T) {
+func TestConflictIsConflict(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusConflict,
@@ -102,7 +102,7 @@ func TestAConflictIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestAnAnswerOtherThanTheClassesStaysUnexpected(t *testing.T) {
+func TestAnswerOtherThanClassesStaysUnexpected(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusInternalServerError,
@@ -124,7 +124,7 @@ func TestMissingTaskIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestABadRequestIsValidation(t *testing.T) {
+func TestBadRequestIsValidation(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -136,7 +136,7 @@ func TestABadRequestIsValidation(t *testing.T) {
 	assert.String(t, `"bravo" is not a valid Stat.`, e.Error())
 }
 
-func TestABadRequestElsewhereIsAFault(t *testing.T) {
+func TestBadRequestElsewhereIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,

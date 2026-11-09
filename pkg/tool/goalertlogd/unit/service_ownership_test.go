@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestTheDaemonClosesWhatItBuilt(t *testing.T) {
+func TestDaemonClosesWhatItBuilt(t *testing.T) {
 	c := service_tester.NewAlertmanager(t)
 	d := service_tester.NewDaemon(
 		t,
@@ -28,7 +28,7 @@ func TestTheDaemonClosesWhatItBuilt(t *testing.T) {
 	assert.Integer(t, 1, c.Closed)
 }
 
-func TestTheDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
+func TestDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 	workers := service_tester.NewDaemon(
 		t,
 		service_tester.NewOption(
@@ -44,7 +44,7 @@ func TestTheDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 	assert.True(t, clock)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := service_tester.NewOption(
 		service_tester.DatabasePath(t),
 		service_tester.NewAlertmanager(t),
@@ -65,26 +65,27 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestARecordStampsTheLastPollAndNotifies(t *testing.T) {
+func TestRecordStampsLastPollAndNotifies(t *testing.T) {
 	n := notifier.New()
 	changes := n.Subscribe()
 	defer n.Unsubscribe(changes)
+	now := time.Date(2026, time.November, 2, 6, 0, 0, 0, time.UTC)
 	v := service_tester.NewServiceWith(
 		t,
 		service_tester.DatabasePath(t),
 		service_tester.NewAlertmanager(t),
 		constant.Retention,
+		func() time.Time { return now },
 		n,
 	)
 	assert.True(t, v.LastPoll().IsZero())
-	now := time.Date(2026, time.November, 2, 6, 0, 0, 0, time.UTC)
-	_, e := v.Record(now)
+	_, e := v.Record()
 	assert.FatalOnError(t, e)
 	assert.True(t, v.LastPoll().Equal(now))
 	assert.Integer(t, 1, len(changes))
 }
 
-func TestAFailedRecordStillStampsAndNotifies(t *testing.T) {
+func TestFailedRecordStillStampsAndNotifies(t *testing.T) {
 	c := service_tester.NewAlertmanager(t)
 	c.Fail(errors.Format("alertmanager refused", "test"))
 	n := notifier.New()
@@ -95,15 +96,16 @@ func TestAFailedRecordStillStampsAndNotifies(t *testing.T) {
 		service_tester.DatabasePath(t),
 		c,
 		constant.Retention,
+		time.Now,
 		n,
 	)
-	_, e := v.Record(time.Now())
+	_, e := v.Record()
 	assert.NotNil(t, e)
 	assert.False(t, v.LastPoll().IsZero())
 	assert.Integer(t, 1, len(changes))
 }
 
-func TestARecordReportsWhatItChanged(t *testing.T) {
+func TestRecordReportsWhatItChanged(t *testing.T) {
 	c := service_tester.NewAlertmanager(t)
 	c.Add(
 		alert.NewBasic(
@@ -122,23 +124,23 @@ func TestARecordReportsWhatItChanged(t *testing.T) {
 		),
 	)
 	v := service_tester.NewService(t, service_tester.DatabasePath(t), c)
-	o, e := v.Record(time.Now())
+	o, e := v.Record()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, o.Created)
 	assert.Integer(t, 2, o.Firing)
 	assert.Integer(t, 2, o.Total)
 	c.Remove("abc123")
-	p, f := v.Record(time.Now())
+	p, f := v.Record()
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 0, p.Created)
 	assert.Integer(t, 1, p.Firing)
 	assert.Integer(t, 2, p.Total)
 }
 
-func TestAFailedAlertmanagerReadIsReturned(t *testing.T) {
+func TestFailedAlertmanagerReadIsReturned(t *testing.T) {
 	c := service_tester.NewAlertmanager(t)
 	c.Fail(errors.Format("alertmanager refused", "test"))
 	v := service_tester.NewService(t, service_tester.DatabasePath(t), c)
-	_, e := v.Record(time.Now())
+	_, e := v.Record()
 	assert.StringContains(t, "alertmanager refused", e.Error())
 }

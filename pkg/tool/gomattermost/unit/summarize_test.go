@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestEachThreadCarriesTheSummaryOfItsOwnLog(t *testing.T) {
+func TestEachThreadCarriesSummaryOfItsOwnLog(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Unresolved["juliett"] = []client.Thread{
@@ -44,7 +44,7 @@ func TestEachThreadCarriesTheSummaryOfItsOwnLog(t *testing.T) {
 	)
 }
 
-func TestNothingUnresolvedIsAnEmptyList(t *testing.T) {
+func TestNothingUnresolvedIsEmptyList(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Unresolved["juliett"] = []client.Thread{}
@@ -56,7 +56,7 @@ func TestNothingUnresolvedIsAnEmptyList(t *testing.T) {
 	assert.Count(t, 0, o.Prompts)
 }
 
-func TestAnUnavailableModelIsReturnedAsAnError(t *testing.T) {
+func TestUnavailableModelIsReturnedAsError(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Unresolved["juliett"] = []client.Thread{
@@ -72,7 +72,7 @@ func TestAnUnavailableModelIsReturnedAsAnError(t *testing.T) {
 	assert.Count(t, 1, o.Prompts)
 }
 
-func TestAFailedThreadListAsksTheModelNothing(t *testing.T) {
+func TestFailedThreadListAsksModelNothing(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Failure = errors.New("foxtrot")

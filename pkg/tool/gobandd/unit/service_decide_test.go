@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestShutdownAsksTheOperatingSystemByDefault(t *testing.T) {
+func TestShutdownAsksOperatingSystemByDefault(t *testing.T) {
 	state, e := service.Decide(
 		constant.OperationShutdown,
 		false,
@@ -30,7 +30,7 @@ func TestShutdownWithForceCutsPower(t *testing.T) {
 	assert.Integer(t, 8, state)
 }
 
-func TestRebootAsksTheOperatingSystemByDefault(t *testing.T) {
+func TestRebootAsksOperatingSystemByDefault(t *testing.T) {
 	state, e := service.Decide(constant.OperationReboot, false, runningStates())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 14, state)
@@ -42,18 +42,18 @@ func TestRebootWithForcePowerCycles(t *testing.T) {
 	assert.Integer(t, 5, state)
 }
 
-func TestGracefulShutdownNeverFallsBackToACut(t *testing.T) {
+func TestGracefulShutdownNeverFallsBackToCut(t *testing.T) {
 	_, e := service.Decide(constant.OperationShutdown, false, hardStates())
 	assert.True(t, conflict.Is(e))
 	assert.StringContains(t, "force cuts power instead", e.Error())
 }
 
-func TestGracefulRebootNeverFallsBackToACycle(t *testing.T) {
+func TestGracefulRebootNeverFallsBackToCycle(t *testing.T) {
 	_, e := service.Decide(constant.OperationReboot, false, hardStates())
 	assert.True(t, conflict.Is(e))
 }
 
-func TestGracefulShutdownOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
+func TestGracefulShutdownOfMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 	_, e := service.Decide(
 		constant.OperationShutdown,
 		false,
@@ -67,7 +67,7 @@ func TestGracefulShutdownOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 	)
 }
 
-func TestGracefulRebootOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
+func TestGracefulRebootOfMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 	_, e := service.Decide(
 		constant.OperationReboot,
 		false,
@@ -81,12 +81,12 @@ func TestGracefulRebootOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 	)
 }
 
-func TestStartIsRefusedWhileTheMachineRuns(t *testing.T) {
+func TestStartIsRefusedWhileMachineRuns(t *testing.T) {
 	_, e := service.Decide(constant.OperationStart, false, runningStates())
 	assert.True(t, conflict.Is(e))
 }
 
-func TestStartPowersOnAMachineThatIsOff(t *testing.T) {
+func TestStartPowersOnMachineThatIsOff(t *testing.T) {
 	state, e := service.Decide(
 		constant.OperationStart,
 		false,
@@ -96,7 +96,7 @@ func TestStartPowersOnAMachineThatIsOff(t *testing.T) {
 	assert.Integer(t, 2, state)
 }
 
-func TestAnUnknownOperationIsTheCallersMistake(t *testing.T) {
+func TestUnknownOperationIsCallersMistake(t *testing.T) {
 	_, e := service.Decide("hibernate", false, runningStates())
 	assert.True(t, validation.Is(e))
 }

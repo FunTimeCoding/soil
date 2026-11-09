@@ -9,8 +9,10 @@ import (
 	"time"
 )
 
-func (a *Authority) RevocationList(v []x509.RevocationListEntry) []byte {
-	now := time.Now()
+func (a *Authority) RevocationList(
+	v []x509.RevocationListEntry,
+	now time.Time,
+) []byte {
 	t := &x509.RevocationList{}
 	t.Number = newSerial()
 	t.ThisUpdate = now

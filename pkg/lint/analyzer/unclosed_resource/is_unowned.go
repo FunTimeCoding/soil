@@ -11,7 +11,7 @@ func (s *Summaries) isUnowned(
 	body *ast.BlockStmt,
 	c resource_candidate.Candidate,
 ) bool {
-	f := calleeOf(p, c.Call)
+	f := callee(p, c.Call)
 
 	return isBorrowed(p, body, c, s) ||
 		s.arrangesFor(f) ||

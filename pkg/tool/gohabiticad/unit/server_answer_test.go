@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
+func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = &net.OpError{
 		Op:  "dial",
@@ -32,7 +32,7 @@ func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnExpiredTokenIsAnsweredAsForbiddenWithoutACapture(t *testing.T) {
+func TestExpiredTokenIsAnsweredAsForbiddenWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("habitica: %s", "token expired")
 	m := memory.New()
@@ -42,7 +42,7 @@ func TestAnExpiredTokenIsAnsweredAsForbiddenWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAConflictingCronIsAnsweredAsConflict(t *testing.T) {
+func TestConflictingCronIsAnsweredAsConflict(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = conflict.Format("habitica: %s", "cron already run")
 	m := memory.New()

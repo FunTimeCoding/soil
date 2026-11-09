@@ -54,7 +54,7 @@ func (s *Service) Profile(
 		}
 	}
 
-	childrenByParent := map[int64][]string{}
+	parentChildren := map[int64][]string{}
 
 	for parent, children := range childSummaries {
 		slices.SortStableFunc(
@@ -72,13 +72,13 @@ func (s *Service) Profile(
 			names = append(names, m.Name)
 		}
 
-		childrenByParent[parent] = names
+		parentChildren[parent] = names
 	}
 
 	alwaysTokens := 0
 
 	for i := range always {
-		if children, found := childrenByParent[always[i].Identifier]; found {
+		if children, found := parentChildren[always[i].Identifier]; found {
 			always[i].Children = children
 		}
 
@@ -103,7 +103,7 @@ func (s *Service) Profile(
 			continue
 		}
 
-		if children, found := childrenByParent[m.Identifier]; found {
+		if children, found := parentChildren[m.Identifier]; found {
 			m.Children = children
 		}
 

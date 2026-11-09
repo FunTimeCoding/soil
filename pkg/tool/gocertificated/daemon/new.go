@@ -36,6 +36,7 @@ func New(
 			o.SecretAuthority,
 			o.SecretPath,
 		),
+		o.Clock,
 	)
 
 	return &Daemon{

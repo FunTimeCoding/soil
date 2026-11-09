@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestParseOriginReadsTheCommitAndTime(t *testing.T) {
+func TestParseOriginReadsCommitAndTime(t *testing.T) {
 	v := build.ParseOrigin(originOutput())
 	assert.String(t, "v0.11.156", v.Version)
 	assert.String(t, "72ce25dbd0b797a65759efe648f5838cc9709481", v.Hash)
@@ -25,7 +25,7 @@ func TestParseOriginRefusesGarbage(t *testing.T) {
 	assert.Nil(t, build.ParseOrigin("not json"))
 }
 
-func TestAMainFileBuildsItsPackage(t *testing.T) {
+func TestMainFileBuildsItsPackage(t *testing.T) {
 	assert.String(t, "./cmd/golint", build.Package("cmd/golint/main.go"))
 }
 

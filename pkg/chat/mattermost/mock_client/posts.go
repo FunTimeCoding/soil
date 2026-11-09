@@ -1,20 +1,28 @@
 package mock_client
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
+	"github.com/mattermost/mattermost/server/public/model"
+	"time"
+)
 
-func (c *Client) Posts(h *model.Channel) (*model.PostList, error) {
+func (c *Client) Posts(
+	h *model.Channel,
+	since time.Time,
+) ([]*post.Post, error) {
 	if c.Failure != nil {
 		return nil, c.Failure
 	}
 
-	result := model.NewPostList()
+	var raw []*model.Post
 
 	for _, p := range c.post {
-		if p.ChannelId == h.Id {
-			result.AddPost(p)
-			result.AddOrder(p.Id)
+		if p.ChannelId == h.Id && !time.UnixMilli(p.CreateAt).Before(since) {
+			raw = append(raw, p)
 		}
 	}
 
-	return result, nil
+	post.Sort(raw)
+
+	return post.NewSlice(raw), nil
 }

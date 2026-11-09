@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestAnAccessDeniedFaultIsForbidden(t *testing.T) {
+func TestAccessDeniedFaultIsForbidden(t *testing.T) {
 	c := band.New(
 		faulting(t, http.StatusBadRequest, constant.FixtureAccessDeniedFault),
 		constant.DefaultUser,
@@ -25,7 +25,7 @@ func TestAnAccessDeniedFaultIsForbidden(t *testing.T) {
 	assert.True(t, forbidden.Is(e))
 }
 
-func TestASenderFaultOfOurOwnEnvelopeIsOursToLookAt(t *testing.T) {
+func TestSenderFaultOfOurOwnEnvelopeIsOursToLookAt(t *testing.T) {
 	c := band.New(
 		faulting(
 			t,
@@ -41,7 +41,7 @@ func TestASenderFaultOfOurOwnEnvelopeIsOursToLookAt(t *testing.T) {
 	assert.False(t, validation.Is(e))
 }
 
-func TestATimedOutFaultIsUnavailable(t *testing.T) {
+func TestTimedOutFaultIsUnavailable(t *testing.T) {
 	c := band.New(
 		faulting(
 			t,
@@ -56,7 +56,7 @@ func TestATimedOutFaultIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAProxysServiceUnavailableIsUnavailable(t *testing.T) {
+func TestProxysServiceUnavailableIsUnavailable(t *testing.T) {
 	c := band.New(
 		faulting(t, http.StatusServiceUnavailable, ""),
 		constant.DefaultUser,
@@ -67,7 +67,7 @@ func TestAProxysServiceUnavailableIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestARefusedCredentialIsOursToLookAt(t *testing.T) {
+func TestRefusedCredentialIsOursToLookAt(t *testing.T) {
 	c := band.New(
 		faulting(t, http.StatusUnauthorized, ""),
 		constant.DefaultUser,
@@ -78,7 +78,7 @@ func TestARefusedCredentialIsOursToLookAt(t *testing.T) {
 	assert.True(t, classify.Reportable(e))
 }
 
-func TestARefusedDialIsAConnectionFailure(t *testing.T) {
+func TestRefusedDialIsConnectionFailure(t *testing.T) {
 	c := band.New("http://127.0.0.1:1", constant.DefaultUser, "secret")
 	t.Cleanup(c.Close)
 	_, e := c.PowerState()

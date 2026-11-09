@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAQuietClassIsAnsweredWithoutACaptureOverModelContext(t *testing.T) {
+func TestQuietClassIsAnsweredWithoutCaptureOverModelContext(t *testing.T) {
 	m := memory.New()
 	servedTools(t, service_tester.NewSource(), m).MustCallToolError(
 		constant.DeleteUser,
@@ -18,7 +18,7 @@ func TestAQuietClassIsAnsweredWithoutACaptureOverModelContext(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnUnclassifiedFailureIsCapturedOverModelContext(t *testing.T) {
+func TestUnclassifiedFailureIsCapturedOverModelContext(t *testing.T) {
 	c := service_tester.NewSource()
 	c.Failure = errors.New("directory answered nonsense")
 	m := memory.New()

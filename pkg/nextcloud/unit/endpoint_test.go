@@ -33,7 +33,7 @@ func TestPropfindRefusalIsUnexpected(t *testing.T) {
 	assert.StringContains(t, "status: 401", e.Error())
 }
 
-func TestUsageSendsTheTokenAndReadsCounts(t *testing.T) {
+func TestUsageSendsTokenAndReadsCounts(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,

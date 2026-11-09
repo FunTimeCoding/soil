@@ -32,7 +32,7 @@ func TestGaugePublishesEveryKind(t *testing.T) {
 	}
 }
 
-func TestGaugeCarriesTheCountNotTheFindingTally(t *testing.T) {
+func TestGaugeCarriesCountNotFindingTally(t *testing.T) {
 	s := service_tester.New(t)
 
 	for i := 0; i < 3; i++ {
@@ -90,7 +90,7 @@ func TestGaugeResetsWhenFindingResolves(t *testing.T) {
 	assert.Float(t, 0, value(t, r, constant.UnownedQueue))
 }
 
-func TestGaugeReportsAFailedPoll(t *testing.T) {
+func TestGaugeReportsFailedPoll(t *testing.T) {
 	m := memory.New()
 	g := gauge.New(
 		func() ([]*finding.Finding, error) {

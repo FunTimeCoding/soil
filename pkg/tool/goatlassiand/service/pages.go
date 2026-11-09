@@ -9,7 +9,7 @@ func (s *Service) Pages(
 	return guarded(
 		s.confluenceGuard,
 		func() ([]*page.Page, error) {
-			return s.confluence.PagesBySpace(space, status)
+			return s.confluence.SpacePages(space, status)
 		},
 	)
 }

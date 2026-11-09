@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAnUnsetTokenizerNamesTheFetch(t *testing.T) {
+func TestUnsetTokenizerNamesFetch(t *testing.T) {
 	t.Setenv(constant.EmbedTokenizerEnvironment, "")
 	_, e := embed_counter.NewEnvironment()
 	assert.StringContains(t, "EMBED_TOKENIZER not set", e.Error())
@@ -20,7 +20,7 @@ func TestAnUnsetTokenizerNamesTheFetch(t *testing.T) {
 	)
 }
 
-func TestAMissingTokenizerNamesTheFetchToItsPath(t *testing.T) {
+func TestMissingTokenizerNamesFetchToItsPath(t *testing.T) {
 	path := filepath.Join(t.TempDir(), constant.RerankTokenizerFile)
 	t.Setenv(constant.EmbedTokenizerEnvironment, path)
 	_, e := embed_counter.NewEnvironment()

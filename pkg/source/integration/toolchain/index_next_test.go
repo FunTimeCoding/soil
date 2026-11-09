@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestNextAnswersLikeAFreshWorkspace(t *testing.T) {
+func TestNextAnswersLikeFreshWorkspace(t *testing.T) {
 	directory := reference_tester.Module(t)
 	store := t.TempDir()
 	start := reference_tester.Target(t, directory, "Server", "Start")

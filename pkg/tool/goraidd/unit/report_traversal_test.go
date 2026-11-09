@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestDeletingAReportStaysInsideTheReportDirectory(t *testing.T) {
+func TestDeletingReportStaysInsideReportDirectory(t *testing.T) {
 	base := t.TempDir()
 	output := filepath.Join(base, "reports")
 	system.EnsurePathExists(output)

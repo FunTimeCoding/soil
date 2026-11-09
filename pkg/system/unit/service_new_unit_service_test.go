@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestNewUnitServiceCarriesTheOwningPackage(t *testing.T) {
+func TestNewUnitServiceCarriesOwningPackage(t *testing.T) {
 	v := service.NewUnit(
 		"foxtrot.service",
 		constant.ServiceRunning,

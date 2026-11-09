@@ -167,7 +167,7 @@ func TestRunWritersStderr(t *testing.T) {
 	assert.String(t, "", r.ErrorString)
 }
 
-func TestProcessKillIsNotAnError(t *testing.T) {
+func TestProcessKillIsNotError(t *testing.T) {
 	windowsSkip(t)
 	p := run.New().Open("sleep", "30")
 	assert.Nil(t, p.Kill())

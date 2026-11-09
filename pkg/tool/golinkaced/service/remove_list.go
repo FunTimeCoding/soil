@@ -12,7 +12,7 @@ func (s *Service) RemoveList(
 		return nil, e
 	}
 
-	existing, f := s.linkByIdentifier(linkIdentifier)
+	existing, f := s.link(linkIdentifier)
 
 	if f != nil {
 		return nil, f

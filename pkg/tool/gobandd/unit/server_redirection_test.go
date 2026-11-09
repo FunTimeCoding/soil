@@ -22,7 +22,7 @@ func TestEnableRedirectionWritesOnlyWhatIsMissing(t *testing.T) {
 	assert.Strings(t, []string{"listener", "screen service"}, s.Alfa.Writes())
 }
 
-func TestEnableRedirectionLeavesAnEnabledButOfflineScreenServiceAlone(
+func TestEnableRedirectionLeavesEnabledButOfflineScreenServiceAlone(
 	t *testing.T,
 ) {
 	s := base.New(t)

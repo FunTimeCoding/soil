@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersEveryViewAsTheDaemonDoes(t *testing.T) {
+func TestMockAnswersEveryViewAsDaemonDoes(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New("localhost").Port(s.Port).Insecure(),
@@ -25,7 +25,7 @@ func TestTheMockAnswersEveryViewAsTheDaemonDoes(t *testing.T) {
 	assert.Strings(t, served, viewAnswers(t.Context(), m))
 }
 
-func TestTheMockFailsOnlyTheMethodItIsToldTo(t *testing.T) {
+func TestMockFailsOnlyMethodItIsToldTo(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.Fail(m.GetView, errors.New("view refused"))

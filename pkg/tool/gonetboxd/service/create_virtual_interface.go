@@ -9,7 +9,7 @@ func (s *Service) CreateVirtualInterface(
 	return guarded(
 		s.guard,
 		func() (*netbox.VMInterface, error) {
-			m, e := s.client.VirtualMachineByName(machine)
+			m, e := s.client.VirtualMachine(machine)
 
 			if e != nil {
 				return nil, e

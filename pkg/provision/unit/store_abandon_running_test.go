@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAbandonRunningFailsOnlyTheRunsLeftRunning(t *testing.T) {
+func TestAbandonRunningFailsOnlyRunsLeftRunning(t *testing.T) {
 	m := lite.NewMemory()
 	t.Cleanup(func() { relational.CloseMapper(m) })
 	migrate.AutoMigrate(m, "runs")

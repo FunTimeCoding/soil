@@ -8,7 +8,7 @@ func (s *Service) virtualMachineByName(
 	return guarded(
 		s.guard,
 		func() (*virtual_machine.Machine, error) {
-			return s.client.VirtualMachineByName(name)
+			return s.client.VirtualMachine(name)
 		},
 	)
 }

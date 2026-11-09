@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSetReplacesTheWholeSet(t *testing.T) {
+func TestSetReplacesWholeSet(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "on_call,lead")
@@ -27,7 +27,7 @@ func TestSetReadsBackSortedWithoutRepeats(t *testing.T) {
 	assert.String(t, "lead,on_call", labelled(t, s, constant.FixtureLabelKey))
 }
 
-func TestAnEmptySetClearsTheKey(t *testing.T) {
+func TestEmptySetClearsKey(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "on_call,lead")
@@ -35,7 +35,7 @@ func TestAnEmptySetClearsTheKey(t *testing.T) {
 	assert.String(t, "", labelled(t, s, constant.FixtureLabelKey))
 }
 
-func TestAddKeepsTheOtherValues(t *testing.T) {
+func TestAddKeepsOtherValues(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "on_call")
@@ -59,7 +59,7 @@ func TestRemoveTakesOnlyItsValue(t *testing.T) {
 	assert.String(t, "on_call", labelled(t, s, constant.FixtureLabelKey))
 }
 
-func TestTheEventCarriesBothWholeSets(t *testing.T) {
+func TestEventCarriesBothWholeSets(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "on_call")
@@ -74,7 +74,7 @@ func TestTheEventCarriesBothWholeSets(t *testing.T) {
 	assert.String(t, "lead,on_call", events[0].Metadata[constant.Now])
 }
 
-func TestAddingAHeldValueLogsNothing(t *testing.T) {
+func TestAddingHeldValueLogsNothing(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel(
@@ -95,7 +95,7 @@ func TestAddingAHeldValueLogsNothing(t *testing.T) {
 	)
 }
 
-func TestTheSurfaceSeesOneEntryPerKeyInCommaForm(t *testing.T) {
+func TestSurfaceSeesOneEntryPerKeyInCommaForm(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "on_call,lead")
@@ -109,7 +109,7 @@ func TestTheSurfaceSeesOneEntryPerKeyInCommaForm(t *testing.T) {
 	assert.String(t, "lead,on_call", labels[1].Value)
 }
 
-func TestAQuietSessionWithSeveralValuesStaysQuiet(t *testing.T) {
+func TestQuietSessionWithSeveralValuesStaysQuiet(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-2")
 	s.Check("session-1")

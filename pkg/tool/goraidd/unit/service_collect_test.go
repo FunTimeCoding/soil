@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestSyncingTheLogCacheRecordsEachFightOnce(t *testing.T) {
+func TestSyncingLogCacheRecordsEachFightOnce(t *testing.T) {
 	cache := t.TempDir()
 	service_tester.WriteLogCache(
 		cache,
@@ -25,7 +25,7 @@ func TestSyncingTheLogCacheRecordsEachFightOnce(t *testing.T) {
 	assert.Count(t, 2, s.Fights())
 }
 
-func TestARecordedFightIsNotCountedAsNewAgain(t *testing.T) {
+func TestRecordedFightIsNotCountedAsNewAgain(t *testing.T) {
 	s := store.New(lite.NewMemory())
 	logs := log.NewSlice(
 		[]*response.Log{{FileName: "20261024-201500.zevtc", MapIdentifier: 38}},
@@ -34,7 +34,7 @@ func TestARecordedFightIsNotCountedAsNewAgain(t *testing.T) {
 	assert.Integer(t, 0, s.SaveLogEntries(logs))
 }
 
-func TestTheServiceStartsWithoutALogCache(t *testing.T) {
+func TestServiceStartsWithoutLogCache(t *testing.T) {
 	s := service_tester.New(t, t.TempDir(), t.TempDir())
 	assert.Count(t, 0, s.Fights())
 	failures := s.SyncLogCache(t.Context())

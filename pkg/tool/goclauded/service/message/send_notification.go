@@ -17,7 +17,7 @@ func (s *Service) SendNotification(
 		return false, f
 	}
 
-	holder, e := s.store.SessionByCallsign(callsign)
+	holder, e := s.store.CallsignSession(callsign)
 
 	if e != nil {
 		return false, e

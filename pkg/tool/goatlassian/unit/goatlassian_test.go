@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAWriteWithoutAResultPrintsNothingOnSuccess(t *testing.T) {
+func TestWriteWithoutResultPrintsNothingOnSuccess(t *testing.T) {
 	for _, arguments := range writes() {
 		c := mock_client.New()
 		var output, failure string
@@ -26,7 +26,7 @@ func TestAWriteWithoutAResultPrintsNothingOnSuccess(t *testing.T) {
 	}
 }
 
-func TestAFailedWriteExitsWithItsMessage(t *testing.T) {
+func TestFailedWriteExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range writes() {
 		c := mock_client.New()
 		c.Failure = errors.New("foxtrot")
@@ -37,7 +37,7 @@ func TestAFailedWriteExitsWithItsMessage(t *testing.T) {
 	}
 }
 
-func TestSearchIssuesEmitsTheIssues(t *testing.T) {
+func TestSearchIssuesEmitsIssues(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Found = []*client.JiraIssue{{Key: "ALFA-1"}}

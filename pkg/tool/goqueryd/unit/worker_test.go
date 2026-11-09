@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func TestTheWorkerIndexesWhileTheEmbedderIsDown(t *testing.T) {
+func TestWorkerIndexesWhileEmbedderIsDown(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
@@ -41,7 +41,7 @@ func TestTheWorkerIndexesWhileTheEmbedderIsDown(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestTheWorkerCountsWhatItPrunes(t *testing.T) {
+func TestWorkerCountsWhatItPrunes(t *testing.T) {
 	v := newService(t, newEmbedder(t), newReranker(t))
 	v.MustPushDocument(
 		t.Context(),
@@ -76,7 +76,7 @@ func TestTheWorkerCountsWhatItPrunes(t *testing.T) {
 	assert.Float(t, 1, prunedContents(g))
 }
 
-func TestTheWorkerCloseWaitsForTheRunningPoll(t *testing.T) {
+func TestWorkerCloseWaitsForRunningPoll(t *testing.T) {
 	entered := make(chan struct{})
 	release := make(chan struct{})
 	closed := make(chan struct{})

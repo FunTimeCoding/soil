@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRefusedExchangeAnswersWithTheProviderReason(t *testing.T) {
+func TestRefusedExchangeAnswersWithProviderReason(t *testing.T) {
 	s := newFakeIssuer(t)
 	r := memory.New()
 	owned := newAuthorizationClient(s.URL, r)

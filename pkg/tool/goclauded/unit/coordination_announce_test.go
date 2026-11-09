@@ -12,7 +12,7 @@ func TestAnnounceReachesSessionActivity(t *testing.T) {
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "reviewing proposals")
 	r := a.CheckLive()
-	announces := clientEntriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := clientKindEntries(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 	assert.StringContains(t, "reviewing proposals", announces[0].Body)
 }
@@ -24,7 +24,7 @@ func TestAnnounceReannounce(t *testing.T) {
 	a.CheckLive()
 	a.Announce(a.Name(), "second topic")
 	r := a.CheckLive()
-	announces := clientEntriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := clientKindEntries(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 	assert.StringContains(t, "second topic", announces[0].Body)
 }

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestLatestKeepsTheNewestCompletedRun(t *testing.T) {
+func TestLatestKeepsNewestCompletedRun(t *testing.T) {
 	s := mock_client.New()
 	defer s.Close()
 	s.AddRun("bravo", workflowRun(1, "main", "completed", "failure"))
@@ -28,7 +28,7 @@ func TestLatestKeepsTheNewestCompletedRun(t *testing.T) {
 	)
 }
 
-func TestLatestSkipsARunInProgress(t *testing.T) {
+func TestLatestSkipsRunInProgress(t *testing.T) {
 	s := mock_client.New()
 	defer s.Close()
 	s.AddRun("bravo", workflowRun(1, "main", "completed", "success"))

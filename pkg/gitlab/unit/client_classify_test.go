@@ -17,38 +17,38 @@ import (
 	"testing"
 )
 
-func TestAMissingProjectIsNotFound(t *testing.T) {
+func TestMissingProjectIsNotFound(t *testing.T) {
 	_, e := refusingProject(t, http.StatusNotFound, "404 Project Not Found").
 		Client.Project(t.Context(), 7)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "Not Found", e.Error())
 }
 
-func TestAForbiddenProjectIsForbidden(t *testing.T) {
+func TestForbiddenProjectIsForbidden(t *testing.T) {
 	_, e := refusingProject(t, http.StatusForbidden, "403 Forbidden").
 		Client.Project(t.Context(), 7)
 	assert.True(t, forbidden.Is(e))
 }
 
-func TestAnUnprocessableRequestIsTheCallersMistake(t *testing.T) {
+func TestUnprocessableRequestIsCallersMistake(t *testing.T) {
 	_, e := refusingProject(t, http.StatusUnprocessableEntity, "name is taken").
 		Client.Project(t.Context(), 7)
 	assert.True(t, validation.Is(e))
 }
 
-func TestAFailedPreconditionIsAConflict(t *testing.T) {
+func TestFailedPreconditionIsConflict(t *testing.T) {
 	_, e := refusingProject(t, http.StatusPreconditionFailed, "modified since").
 		Client.Project(t.Context(), 7)
 	assert.True(t, conflict.Is(e))
 }
 
-func TestARateLimitedRequestIsUnavailable(t *testing.T) {
+func TestRateLimitedRequestIsUnavailable(t *testing.T) {
 	_, e := refusingProject(t, http.StatusTooManyRequests, "slow down").
 		Client.Project(t.Context(), 7)
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAnOutagePageIsUnavailable(t *testing.T) {
+func TestOutagePageIsUnavailable(t *testing.T) {
 	_, e := client_tester.New(
 		t,
 		func(m *http.ServeMux) {
@@ -71,14 +71,14 @@ func TestAnOutagePageIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAnUnauthorizedTokenIsOursToLookAt(t *testing.T) {
+func TestUnauthorizedTokenIsOursToLookAt(t *testing.T) {
 	_, e := refusingProject(t, http.StatusUnauthorized, "401 Unauthorized").
 		Client.Project(t.Context(), 7)
 	assert.True(t, classify.Reportable(e))
 	assert.False(t, forbidden.Is(e))
 }
 
-func TestARefusedDialIsAConnectionFailure(t *testing.T) {
+func TestRefusedDialIsConnectionFailure(t *testing.T) {
 	c := gitlab.New(
 		"127.0.0.1:1",
 		"test-token",

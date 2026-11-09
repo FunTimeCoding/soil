@@ -21,7 +21,7 @@ func (s *Server) dashboard(
 		return
 	}
 
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,

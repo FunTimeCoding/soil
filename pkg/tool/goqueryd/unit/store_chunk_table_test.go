@@ -17,7 +17,7 @@ func TestTableOverAllowanceSplitsBetweenRows(t *testing.T) {
 	assert.String(t, "\nClosing paragraph.\n", chunks[4].Text)
 }
 
-func TestTablePiecesCoverTheSourceContiguously(t *testing.T) {
+func TestTablePiecesCoverSourceContiguously(t *testing.T) {
 	chunks := tableChunks(t, 40)
 
 	for i := 1; i < 4; i++ {
@@ -35,7 +35,7 @@ func TestTablePiecesCoverTheSourceContiguously(t *testing.T) {
 	)
 }
 
-func TestTableThatTipsItsWindowOverLeavesTheText(t *testing.T) {
+func TestTableThatTipsItsWindowOverLeavesText(t *testing.T) {
 	chunks := tableChunks(t, 50)
 	assert.Count(t, 4, chunks)
 	assert.String(
@@ -47,7 +47,7 @@ func TestTableThatTipsItsWindowOverLeavesTheText(t *testing.T) {
 	assert.StringContains(t, "(part 2 of 2, rows 5–6 of 6)", chunks[2].Text)
 }
 
-func TestTableWithinAllowanceStaysInTheText(t *testing.T) {
+func TestTableWithinAllowanceStaysInText(t *testing.T) {
 	chunks := tableChunks(t, 100)
 	assert.Count(t, 1, chunks)
 	assert.String(

@@ -36,7 +36,7 @@ func (s *Server) list(
 			return response.Fail("invalid since format: %v", parseFail)
 		}
 
-		filter.Since = i
+		filter.Window.WithStart(i)
 	}
 
 	if until := r.GetString(constant.Until, ""); until != "" {
@@ -46,7 +46,7 @@ func (s *Server) list(
 			return response.Fail("invalid until format: %v", parseFail)
 		}
 
-		filter.Until = u
+		filter.Window.WithEnd(u)
 	}
 
 	if l := r.GetFloat(generativeConstant.ParameterLimit, 0); l > 0 {

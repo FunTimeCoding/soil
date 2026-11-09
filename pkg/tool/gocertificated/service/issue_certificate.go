@@ -24,6 +24,7 @@ func (s *Service) IssueCertificate(
 	r.Kind = constant.CertificateKind(b.Kind)
 	r.Name = n
 	r.Host = slice(b.Host)
+	r.Start = s.clock()
 	r.ValidDay = validDay(b.ValidDay)
 	m := a.Issue(r)
 	result, f := s.save(m, r.Kind, "", b.Authority)

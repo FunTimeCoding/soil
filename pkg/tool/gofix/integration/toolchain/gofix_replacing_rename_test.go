@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestExportedRenameReachesAReplacingModule(t *testing.T) {
+func TestExportedRenameReachesReplacingModule(t *testing.T) {
 	for _, full := range []bool{false, true} {
 		library := module_tester.ReplacedLibrary(t)
 		user := module_tester.ReplacingUser(
@@ -35,7 +35,7 @@ func TestExportedRenameReachesAReplacingModule(t *testing.T) {
 	}
 }
 
-func TestExportedRenameDiffLeavesAReplacingModule(t *testing.T) {
+func TestExportedRenameDiffLeavesReplacingModule(t *testing.T) {
 	library := module_tester.ReplacedLibrary(t)
 	source := "package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMsg()\n}\n"
 	user := module_tester.ReplacingUser(t, library, source)
@@ -62,7 +62,7 @@ func TestExportedRenameDiffLeavesAReplacingModule(t *testing.T) {
 	)
 }
 
-func TestExportedRenameRefusedWhenAReplacingModuleFailsToLoad(t *testing.T) {
+func TestExportedRenameRefusedWhenReplacingModuleFailsToLoad(t *testing.T) {
 	library := module_tester.ReplacedLibrary(t)
 	user := module_tester.ReplacingUser(
 		t,

@@ -59,8 +59,8 @@ func TestCompletionTableHookContext(t *testing.T) {
 	)
 	r := b.CheckLive()
 	assert.True(t, r.Changed)
-	completions := clientEntriesByKind(r.Entries, constant.QueueSessionComplete)
-	updates := clientEntriesByKind(r.Entries, constant.QueueSessionUpdate)
+	completions := clientKindEntries(r.Entries, constant.QueueSessionComplete)
+	updates := clientKindEntries(r.Entries, constant.QueueSessionUpdate)
 	assert.True(t, len(completions) > 0)
 	assert.True(t, len(updates) > 0)
 }

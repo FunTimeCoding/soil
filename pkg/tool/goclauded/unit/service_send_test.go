@@ -14,7 +14,7 @@ func TestSend(t *testing.T) {
 	r1 := s.Store.EnsureSession("session-1")
 	r2 := s.Check("session-2")
 	s.Send(r1.Callsign, r2.Callsign, "heads up, touching auth")
-	entries := fixture.EntriesByKind(
+	entries := fixture.KindEntries(
 		s.Check("session-2").Entries,
 		constant.QueueMessage,
 	)
@@ -29,7 +29,7 @@ func TestSendBroadcast(t *testing.T) {
 	r1 := s.Store.EnsureSession("session-1")
 	s.Check("session-2")
 	s.Send(r1.Callsign, "", "deploying now")
-	entries := fixture.EntriesByKind(
+	entries := fixture.KindEntries(
 		s.Check("session-2").Entries,
 		constant.QueueMessage,
 	)
@@ -56,7 +56,7 @@ func TestSendReachesEveryNamedRecipient(t *testing.T) {
 		assert.Count(
 			t,
 			1,
-			fixture.EntriesByKind(
+			fixture.KindEntries(
 				s.Check(session).Entries,
 				constant.QueueMessage,
 			),
@@ -64,7 +64,7 @@ func TestSendReachesEveryNamedRecipient(t *testing.T) {
 	}
 }
 
-func TestAnUnknownRecipientRefusesTheWholeSend(t *testing.T) {
+func TestUnknownRecipientRefusesWholeSend(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
@@ -78,14 +78,14 @@ func TestAnUnknownRecipientRefusesTheWholeSend(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		fixture.EntriesByKind(
+		fixture.KindEntries(
 			s.Check("session-2").Entries,
 			constant.QueueMessage,
 		),
 	)
 }
 
-func TestABroadcastSkipsItsSenderAndQuietSessions(t *testing.T) {
+func TestBroadcastSkipsItsSenderAndQuietSessions(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	s.Check("session-2")
@@ -101,7 +101,7 @@ func TestABroadcastSkipsItsSenderAndQuietSessions(t *testing.T) {
 	s.Send(r1.Callsign, "", "charlie")
 	count := func(session string) int {
 		return len(
-			fixture.EntriesByKind(
+			fixture.KindEntries(
 				s.Check(session).Entries,
 				constant.QueueMessage,
 			),
@@ -112,7 +112,7 @@ func TestABroadcastSkipsItsSenderAndQuietSessions(t *testing.T) {
 	assert.Integer(t, 0, count("session-3"))
 }
 
-func TestANamedQuietSessionIsStillReached(t *testing.T) {
+func TestNamedQuietSessionIsStillReached(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
@@ -128,7 +128,7 @@ func TestANamedQuietSessionIsStillReached(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(
+		fixture.KindEntries(
 			s.Check("session-2").Entries,
 			constant.QueueMessage,
 		),

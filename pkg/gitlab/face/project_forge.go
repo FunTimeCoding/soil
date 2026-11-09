@@ -21,7 +21,7 @@ type ProjectForge interface {
 		x context.Context,
 		identifier string,
 	) (int64, error)
-	GroupByName(
+	Group(
 		x context.Context,
 		s string,
 	) (*gitlab.Group, error)

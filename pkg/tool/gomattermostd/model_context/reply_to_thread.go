@@ -23,13 +23,13 @@ func (s *Server) ReplyToThread(
 	ch, e := s.service.Channel(a.ChannelIdentifier)
 
 	if e != nil {
-		return s.answerWith(x, e, "channel")
+		return s.answerMessage(x, e, "channel")
 	}
 
 	parent, e := s.service.FindPost(a.PostIdentifier)
 
 	if e != nil {
-		return s.answerWith(x, e, "post")
+		return s.answerMessage(x, e, "post")
 	}
 
 	p, e := s.service.Reply(ch, parent, a.Message)

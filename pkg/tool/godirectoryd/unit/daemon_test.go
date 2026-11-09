@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestWaitAnswersOnceTheDirectoryAnswers(t *testing.T) {
+func TestWaitAnswersOnceDirectoryAnswers(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		daemon_tester.New(t, service_tester.NewSource(), memory.New()).
@@ -17,7 +17,7 @@ func TestWaitAnswersOnceTheDirectoryAnswers(t *testing.T) {
 	)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d := daemon_tester.New(t, service_tester.NewSource(), memory.New())
 	workers := d.Workers()

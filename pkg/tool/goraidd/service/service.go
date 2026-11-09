@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/face"
+	"time"
 )
 
 type Service struct {
@@ -15,4 +16,5 @@ type Service struct {
 	logCachePath string
 	elitePath    string
 	outputPath   string
+	clock        func() time.Time
 }

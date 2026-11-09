@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestGetUnwrapsTheEnvelope(t *testing.T) {
+func TestGetUnwrapsEnvelope(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,
@@ -36,7 +36,7 @@ func TestGetUnwrapsTheEnvelope(t *testing.T) {
 	)
 }
 
-func TestPostSendsTheFormInTheBody(t *testing.T) {
+func TestPostSendsFormInBody(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,
@@ -110,7 +110,7 @@ func TestInvalidTokenIsUnexpected(t *testing.T) {
 	assert.StringContains(t, "technitium invalid-token:", e.Error())
 }
 
-func TestRefusalCarriesTheErrorMessage(t *testing.T) {
+func TestRefusalCarriesErrorMessage(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -125,7 +125,7 @@ func TestRefusalCarriesTheErrorMessage(t *testing.T) {
 	)
 }
 
-func TestUntrustedReachesASelfSignedServer(t *testing.T) {
+func TestUntrustedReachesSelfSignedServer(t *testing.T) {
 	s := httptest.NewTLSServer(
 		http.HandlerFunc(
 			func(

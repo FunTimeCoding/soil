@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestRetargetTreeRewritesOnlyWhatMentionsTheMove(t *testing.T) {
+func TestRetargetTreeRewritesOnlyWhatMentionsMove(t *testing.T) {
 	d := t.TempDir()
 	note := "See `pkg/alfa/run.go` and `pkg/bravo/stay.go`.\n"
 	testutil.WriteFile(t, d, "doc/note.md", note)

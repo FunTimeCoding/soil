@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestAReapedChildMovesTheCounterAndCapturesNothing(t *testing.T) {
+func TestReapedChildMovesCounterAndCapturesNothing(t *testing.T) {
 	windowsSkip(t)
 	child := run.New().Open("true").Pid()
 	m := memory.New()

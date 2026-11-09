@@ -29,7 +29,7 @@ func TestPoolForgetClosesAndRebuilds(t *testing.T) {
 	assert.Integer(t, 0, second.Closed)
 }
 
-func TestPoolForgetKeepsAClientRebuiltSince(t *testing.T) {
+func TestPoolForgetKeepsClientRebuiltSince(t *testing.T) {
 	var built []*client_tester.Client
 	p := pool.New(
 		instance_tester.Inventory("alfa"),

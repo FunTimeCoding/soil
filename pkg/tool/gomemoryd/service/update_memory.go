@@ -20,7 +20,7 @@ func (s *Service) UpdateMemory(
 	}
 
 	keepStored(o, existing)
-	rewritten, e := s.store.UpdateMemory(identifier, o)
+	rewritten, e := s.store.UpdateMemory(identifier, o, s.clock())
 
 	if e != nil {
 		return nil, nil, e

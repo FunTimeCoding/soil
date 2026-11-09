@@ -14,9 +14,9 @@ import (
 	"testing"
 )
 
-func TestAGuestConfigurationThatDoesNotExistIsNotFound(t *testing.T) {
+func TestGuestConfigurationThatDoesNotExistIsNotFound(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith(
+	u.AnswerMessage(
 		"/nodes/alfa/qemu/999/status/current",
 		"500 Configuration file 'nodes/alfa/qemu-server/999.conf' does not exist",
 		"",
@@ -27,9 +27,9 @@ func TestAGuestConfigurationThatDoesNotExistIsNotFound(t *testing.T) {
 	assert.StringContains(t, "999.conf' does not exist", e.Error())
 }
 
-func TestALockedGuestIsAConflict(t *testing.T) {
+func TestLockedGuestIsConflict(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith(
+	u.AnswerMessage(
 		"/nodes/alfa/qemu/101/status/start",
 		"500 VM is locked (backup)",
 		"",
@@ -39,9 +39,9 @@ func TestALockedGuestIsAConflict(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestAPermissionCheckIsForbiddenAndStillNotAuthorized(t *testing.T) {
+func TestPermissionCheckIsForbiddenAndStillNotAuthorized(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith(
+	u.AnswerMessage(
 		"/nodes/alfa/qemu/101/status/current",
 		"403 Permission check failed (/vms/101, VM.Audit)",
 		"",
@@ -52,9 +52,9 @@ func TestAPermissionCheckIsForbiddenAndStillNotAuthorized(t *testing.T) {
 	assert.True(t, luthermonson.IsNotAuthorized(e))
 }
 
-func TestANodeIsFoundWithoutAuditPermission(t *testing.T) {
+func TestNodeIsFoundWithoutAuditPermission(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith(
+	u.AnswerMessage(
 		"/nodes/alfa/status",
 		"403 Permission check failed (/, Sys.Audit)",
 		"",
@@ -64,10 +64,10 @@ func TestANodeIsFoundWithoutAuditPermission(t *testing.T) {
 	assert.String(t, "alfa", n.Name)
 }
 
-func TestABadRequestTheCallerConfiguredIsValidation(t *testing.T) {
+func TestBadRequestCallerConfiguredIsValidation(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith("/nodes/alfa/status", "200 OK", `{"data":{}}`)
-	u.AnswerWith(
+	u.AnswerMessage("/nodes/alfa/status", "200 OK", `{"data":{}}`)
+	u.AnswerMessage(
 		"/nodes/alfa/qemu",
 		"400 Parameter verification failed.",
 		`{"data":null,"errors":{"memory":"type check ('integer') failed"}}`,
@@ -84,10 +84,10 @@ func TestABadRequestTheCallerConfiguredIsValidation(t *testing.T) {
 	assert.StringContains(t, "memory: type check", f.Error())
 }
 
-func TestABadRequestOnAnUpdateOrACloneIsValidation(t *testing.T) {
+func TestBadRequestOnUpdateOrCloneIsValidation(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith("/nodes/alfa/status", "200 OK", `{"data":{}}`)
-	u.AnswerWith(
+	u.AnswerMessage("/nodes/alfa/status", "200 OK", `{"data":{}}`)
+	u.AnswerMessage(
 		"/nodes/alfa/qemu/101/status/current",
 		"200 OK",
 		`{"data":{"vmid":101,"name":"alfa"}}`,
@@ -99,7 +99,7 @@ func TestABadRequestOnAnUpdateOrACloneIsValidation(t *testing.T) {
 		"400 Parameter verification failed.",
 		`{"data":null,"errors":{"cores":"value must be at least 1"}}`,
 	)
-	u.AnswerWith(
+	u.AnswerMessage(
 		"/nodes/alfa/qemu/101/clone",
 		"400 Parameter verification failed.",
 		`{"data":null,"errors":{"name":"invalid format"}}`,
@@ -121,9 +121,9 @@ func TestABadRequestOnAnUpdateOrACloneIsValidation(t *testing.T) {
 	assert.True(t, validation.Is(g))
 }
 
-func TestABadRequestTheDaemonWroteIsUnexpected(t *testing.T) {
+func TestBadRequestDaemonWroteIsUnexpected(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith(
+	u.AnswerMessage(
 		"/nodes/alfa/qemu",
 		"400 Parameter verification failed.",
 		`{"data":null,"errors":{"full":"value must be boolean"}}`,
@@ -136,20 +136,20 @@ func TestABadRequestTheDaemonWroteIsUnexpected(t *testing.T) {
 
 func TestAnyOtherServerErrorIsUnexpectedWithItsReason(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith("/cluster/resources", "500 cfs lock timeout", "")
+	u.AnswerMessage("/cluster/resources", "500 cfs lock timeout", "")
 	var v map[string]any
 	e := proxmox.Get(u.Client(), "/cluster/resources", &v)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "cfs lock timeout", e.Error())
 }
 
-func TestTheVersionReadSaysTheHypervisorIsReachable(t *testing.T) {
+func TestVersionReadSaysHypervisorIsReachable(t *testing.T) {
 	u := upstream_tester.New(t)
-	u.AnswerWith("/version", "200 OK", `{"data":{"version":"9.2.3"}}`)
+	u.AnswerMessage("/version", "200 OK", `{"data":{"version":"9.2.3"}}`)
 	assert.FatalOnError(t, u.Client().Reachable(t.Context()))
 }
 
-func TestAClosedPortIsUnreachable(t *testing.T) {
+func TestClosedPortIsUnreachable(t *testing.T) {
 	c := proxmox.New(
 		"127.0.0.1",
 		proxmox.WithToken("alfa@pve!test", "secret"),

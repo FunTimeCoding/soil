@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRequiringFindsAPinnedConsumer(t *testing.T) {
+func TestRequiringFindsPinnedConsumer(t *testing.T) {
 	library := t.TempDir()
 	user := t.TempDir()
 	other := t.TempDir()

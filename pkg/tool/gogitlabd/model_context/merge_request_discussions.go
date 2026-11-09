@@ -23,7 +23,7 @@ func (s *Server) MergeRequestDiscussions(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.MergeRequestDiscussions(
@@ -34,7 +34,7 @@ func (s *Server) MergeRequestDiscussions(
 	)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return response.SuccessAny(v)

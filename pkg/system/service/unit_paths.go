@@ -14,7 +14,7 @@ func unitPaths() map[string]string {
 			continue
 		}
 
-		for _, name := range system.FilesByExtension(
+		for _, name := range system.ExtensionFiles(
 			directory,
 			constant.UnitSuffix,
 		) {

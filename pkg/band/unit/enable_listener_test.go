@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestListenerPutBindsTheEnvelopePrefix(t *testing.T) {
+func TestListenerPutBindsEnvelopePrefix(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,

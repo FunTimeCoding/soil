@@ -38,7 +38,7 @@ func TestApplySendsHostEventsDownstream(t *testing.T) {
 	assert.Count(t, 8, triggered[0].Addresses)
 }
 
-func TestARestartingDownstreamIsHeldOffAndNotCaptured(t *testing.T) {
+func TestRestartingDownstreamIsHeldOffAndNotCaptured(t *testing.T) {
 	d := mock_client.New("alfa:8080")
 	defer d.Close()
 	d.Fail(d.PostTrigger, unavailable.Format(provisionConstant.RunnerStopped))

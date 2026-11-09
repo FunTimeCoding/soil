@@ -18,7 +18,7 @@ func (s *Server) bookmarks(
 		return
 	}
 
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.BookmarkTitle,
 		constant.BookmarkPath,

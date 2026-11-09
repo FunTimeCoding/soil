@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheAlertmanagerClientAndItsMockShareTheFace(t *testing.T) {
+func TestAlertmanagerClientAndItsMockShareFace(t *testing.T) {
 	c := alertmanager.New("127.0.0.1", 0, false, "", "")
 	t.Cleanup(c.Close)
 	m := mock_client.New()

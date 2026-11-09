@@ -6,16 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/distinguished_name"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/issue_request"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/material"
+	"time"
 )
 
 func NewRoot(
 	name *distinguished_name.Name,
 	year int,
+	start time.Time,
 ) *Authority {
 	policy.New(constant.KindRoot).Validate(name)
 	r := issue_request.New()
 	r.Kind = constant.KindRoot
 	r.Name = name
+	r.Start = start
 	r.ValidYear = year
 	t := newTemplate(r)
 	k := newKey()

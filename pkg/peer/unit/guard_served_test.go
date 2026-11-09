@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAnUpstreamUnavailableMarksTheGuardDown(t *testing.T) {
+func TestUpstreamUnavailableMarksGuardDown(t *testing.T) {
 	r := memory.New()
 	g := peer.New(
 		"kilo",
@@ -37,7 +37,7 @@ func TestAnUpstreamUnavailableMarksTheGuardDown(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAProbeDoesNotBringAnUnavailablePeerBack(t *testing.T) {
+func TestProbeDoesNotBringUnavailablePeerBack(t *testing.T) {
 	p := new(SwitchablePeer)
 	g := peer.New(
 		"oscar",
@@ -62,7 +62,7 @@ func TestAProbeDoesNotBringAnUnavailablePeerBack(t *testing.T) {
 	assert.Integer(t, 0, p.Probes())
 }
 
-func TestTheNextSuccessfulCallBringsAnUnavailablePeerBack(t *testing.T) {
+func TestNextSuccessfulCallBringsUnavailablePeerBack(t *testing.T) {
 	c := fake_clock.New()
 	p := new(SwitchablePeer)
 	g := peer.New(
@@ -103,7 +103,7 @@ func TestTheNextSuccessfulCallBringsAnUnavailablePeerBack(t *testing.T) {
 	assert.Integer(t, 0, p.Probes())
 }
 
-func TestAPanickingTrialLeavesTheNextTrialAdmitted(t *testing.T) {
+func TestPanickingTrialLeavesNextTrialAdmitted(t *testing.T) {
 	c := fake_clock.New()
 	g := peer.New(
 		"papa",
@@ -140,7 +140,7 @@ func TestAPanickingTrialLeavesTheNextTrialAdmitted(t *testing.T) {
 	assert.Nil(t, g.Unavailable())
 }
 
-func TestALastingUnavailablePeerIsCapturedOnce(t *testing.T) {
+func TestLastingUnavailablePeerIsCapturedOnce(t *testing.T) {
 	c := fake_clock.New()
 	r := memory.New()
 	g := peer.New(
@@ -162,7 +162,7 @@ func TestALastingUnavailablePeerIsCapturedOnce(t *testing.T) {
 	assert.StringContains(t, "mike down for 5m0s", r.Events()[0].Error.Error())
 }
 
-func TestOnlyOneTrialReachesAnUnavailablePeer(t *testing.T) {
+func TestOnlyOneTrialReachesUnavailablePeer(t *testing.T) {
 	c := fake_clock.New()
 	g := peer.New(
 		"november",

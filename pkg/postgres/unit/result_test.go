@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestAResultKeepsDuplicateColumnsInOrder(t *testing.T) {
+func TestResultKeepsDuplicateColumnsInOrder(t *testing.T) {
 	r := result.New([]string{"id", "id"}, [][]any{{1, 7}, {2, 9}})
 	assert.Count(t, 2, r.Columns)
 	assert.Any(t, 7, r.Rows[0][1])

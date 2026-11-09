@@ -12,7 +12,7 @@ func Page() {
 	p := c.DefaultPage()
 
 	if false {
-		a := c.MustPageBySpaceAndName(s, stringsConstant.UpperCharlie)
+		a := c.MustSpacePage(s, stringsConstant.UpperCharlie)
 		c.MustDelete(a.Identifier)
 		c.MustImport(s, p, "fixture/wiki/example/", "Charlie.json")
 	}

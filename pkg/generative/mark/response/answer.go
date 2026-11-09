@@ -11,5 +11,5 @@ func Answer(
 	r face.Reporter,
 	e error,
 ) (*mcp.CallToolResult, error) {
-	return AnswerWith(x, r, e, "")
+	return AnswerMessage(x, r, e, "")
 }

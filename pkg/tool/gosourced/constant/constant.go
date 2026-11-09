@@ -63,6 +63,7 @@ const (
 	ConcernWrittenOnly     = "written_only"
 	ConcernConcurrentWrite = "concurrent_write"
 	ConcernRenamed         = "renamed"
+	ConcernFamily          = "family"
 	ConcernMoved           = "moved"
 	ConcernRetargeted      = "retargeted"
 	ConcernReferenceLeft   = "reference_left"

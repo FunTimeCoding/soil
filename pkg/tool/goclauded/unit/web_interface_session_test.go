@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestThePulseFormSitsOutsideTheLiveRegion(t *testing.T) {
+func TestPulseFormSitsOutsideLiveRegion(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
 	page := body(t, s.Server, session_page.Path("session-1"))
@@ -32,7 +32,7 @@ func TestDashboardActivityIsReadOnly(t *testing.T) {
 	markup_tester.AssertCount(t, 0, page, `a[href$="/edit"]`)
 }
 
-func TestAnUnknownSessionIsNotFound(t *testing.T) {
+func TestUnknownSessionIsNotFound(t *testing.T) {
 	s := base.New(t)
 	assert.Integer(
 		t,

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheLinkAceClientAndItsMockShareTheFace(t *testing.T) {
+func TestLinkAceClientAndItsMockShareFace(t *testing.T) {
 	c := linkace.New("linkace.example", "alfa-token")
 	defer c.Close()
 	m := mock_client.New()

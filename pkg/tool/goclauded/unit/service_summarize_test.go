@@ -17,7 +17,7 @@ func TestSummarize(t *testing.T) {
 		"Fixed the auth race condition",
 	)
 	assert.FatalOnError(t, e)
-	body := s.Store.SummaryBySession("session-1")
+	body := s.Store.SessionSummary("session-1")
 	assert.String(t, "Fixed the auth race condition", body)
 	events := s.Store.Events(
 		event_query.New().Kind(constant.Summarize).SetLimit(10),
@@ -36,6 +36,6 @@ func TestSummarizeReplace(t *testing.T) {
 		t,
 		s.Event.Summarize("session-1", "Cedar", "revised summary"),
 	)
-	body := s.Store.SummaryBySession("session-1")
+	body := s.Store.SessionSummary("session-1")
 	assert.String(t, "revised summary", body)
 }

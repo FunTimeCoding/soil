@@ -14,7 +14,7 @@ func extractTakes(
 	o *types.Func,
 	summary *fact.Summary,
 ) {
-	r := receiverOf(p, f)
+	r := receiver(p, f)
 
 	if r == nil {
 		return
@@ -45,7 +45,7 @@ func extractTakes(
 					target = index.X
 				}
 
-				field := fieldOfReceiver(p, target, r)
+				field := receiverField(p, target, r)
 
 				if field == "" {
 					continue

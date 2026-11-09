@@ -18,7 +18,7 @@ import (
 	"testing"
 )
 
-func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
+func TestClientRunsAndReadsAgent(t *testing.T) {
 	s := mock_stream.New([]string{"lima"}, true, nil)
 	defer s.Close()
 	d := daemon_tester.New(t, service_tester.Fixed(s))
@@ -36,7 +36,7 @@ func TestTheClientRunsAndReadsTheAgent(t *testing.T) {
 	assert.String(t, "lima", *done.Result)
 }
 
-func TestTheClientHearsAClosingRunner(t *testing.T) {
+func TestClientHearsClosingRunner(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	d := daemon_tester.New(t, service_tester.Fixed(stream))
@@ -45,7 +45,7 @@ func TestTheClientHearsAClosingRunner(t *testing.T) {
 	assert.True(t, unavailable.Is(c.PostRun(t.Context(), "oscar")))
 }
 
-func TestARefusedTokenIsAnError(t *testing.T) {
+func TestRefusedTokenIsError(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	d := daemon_tester.New(t, service_tester.Fixed(stream))
@@ -56,7 +56,7 @@ func TestARefusedTokenIsAnError(t *testing.T) {
 	assert.NotNil(t, c.Reachable(t.Context()))
 }
 
-func TestTheClientAndItsMockKeepTheFace(t *testing.T) {
+func TestClientAndItsMockKeepFace(t *testing.T) {
 	r := client.New(locator.New("localhost").Insecure(), "quebec")
 	m := mock_client.New()
 	clients := []face.Client{r, m}

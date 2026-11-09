@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRemovingOneMemoryFilterKeepsTheOthers(t *testing.T) {
+func TestRemovingOneMemoryFilterKeepsOthers(t *testing.T) {
 	l := memory_list.New("feedback", "shared", "work", 1, 20)
 	page := renderList(t, l)
 	assert.StringContains(
@@ -21,7 +21,7 @@ func TestRemovingOneMemoryFilterKeepsTheOthers(t *testing.T) {
 	)
 }
 
-func TestMemoryPagerCarriesTheFilters(t *testing.T) {
+func TestMemoryPagerCarriesFilters(t *testing.T) {
 	l := memory_list.New("", "shared", "", 2, 20)
 	l.Total = 45
 	page := renderList(t, l)
@@ -30,7 +30,7 @@ func TestMemoryPagerCarriesTheFilters(t *testing.T) {
 	assert.StringContains(t, `href="/memories?page=3&amp;tag=shared"`, page)
 }
 
-func TestTheChosenScopeIsCurrent(t *testing.T) {
+func TestChosenScopeIsCurrent(t *testing.T) {
 	l := memory_list.New("", "", "work", 1, 20)
 	l.Scopes = []string{"", "work"}
 	page := renderList(t, l)

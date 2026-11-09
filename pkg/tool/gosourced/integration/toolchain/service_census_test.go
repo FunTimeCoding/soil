@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheCensusListsEveryMethodOfTheType(t *testing.T) {
+func TestCensusListsEveryMethodOfType(t *testing.T) {
 	d := prepareCensus(t)
 	c, e := service_tester.NewService(t).Census.Census(
 		d,
@@ -33,7 +33,7 @@ func TestTheCensusListsEveryMethodOfTheType(t *testing.T) {
 	assert.Count(t, 0, q.Reach.Written)
 }
 
-func TestTheCensusCountsCallersByKind(t *testing.T) {
+func TestCensusCountsCallersByKind(t *testing.T) {
 	d := prepareCensus(t)
 	c, e := service_tester.NewService(t).Census.Census(
 		d,
@@ -66,7 +66,7 @@ func TestTheCensusCountsCallersByKind(t *testing.T) {
 	)
 }
 
-func TestTheCensusReadsTheReceiverThroughFreeFunctions(t *testing.T) {
+func TestCensusReadsReceiverThroughFreeFunctions(t *testing.T) {
 	d := prepareCensus(t)
 	c, e := service_tester.NewService(t).Census.Census(
 		d,
@@ -85,7 +85,7 @@ func TestTheCensusReadsTheReceiverThroughFreeFunctions(t *testing.T) {
 	assert.Strings(t, []string{"clock"}, now.Fields)
 }
 
-func TestTheCensusDerivesTablesFromTheGormCalls(t *testing.T) {
+func TestCensusDerivesTablesFromGormCalls(t *testing.T) {
 	d := prepareCensus(t)
 	c, e := service_tester.NewService(t).Census.Census(
 		d,
@@ -109,7 +109,7 @@ func TestTheCensusDerivesTablesFromTheGormCalls(t *testing.T) {
 	)
 }
 
-func TestTheCensusMarksTheTransaction(t *testing.T) {
+func TestCensusMarksTransaction(t *testing.T) {
 	d := prepareCensus(t)
 	c, e := service_tester.NewService(t).Census.Census(
 		d,
@@ -128,7 +128,7 @@ func TestTheCensusMarksTheTransaction(t *testing.T) {
 	assert.Strings(t, []string{"sent_receipts"}, step.Tables.Written)
 }
 
-func TestTheCensusRefusesATypeThatIsNotAStruct(t *testing.T) {
+func TestCensusRefusesTypeThatIsNotStruct(t *testing.T) {
 	d := prepareCensus(t)
 	_, e := service_tester.NewService(t).Census.Census(
 		d,

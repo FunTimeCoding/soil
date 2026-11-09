@@ -107,7 +107,7 @@ func TestRefusalCarriesSentryDetail(t *testing.T) {
 	)
 }
 
-func TestARejectedQueryIsValidation(t *testing.T) {
+func TestRejectedQueryIsValidation(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -118,7 +118,7 @@ func TestARejectedQueryIsValidation(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestAnExpiredTokenIsAFault(t *testing.T) {
+func TestExpiredTokenIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -129,7 +129,7 @@ func TestAnExpiredTokenIsAFault(t *testing.T) {
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestAConflictingUpdateIsConflict(t *testing.T) {
+func TestConflictingUpdateIsConflict(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusConflict,

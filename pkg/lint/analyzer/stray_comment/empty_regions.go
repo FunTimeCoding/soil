@@ -12,14 +12,14 @@ func emptyRegions(file *ast.File) []Region {
 				if len(t.List) == 0 {
 					result = append(
 						result,
-						Region{From: t.Lbrace, To: t.Rbrace},
+						Region{Start: t.Lbrace, End: t.Rbrace},
 					)
 				}
 			case *ast.InterfaceType:
 				if len(t.Methods.List) == 0 {
 					result = append(
 						result,
-						Region{From: t.Methods.Opening, To: t.Methods.Closing},
+						Region{Start: t.Methods.Opening, End: t.Methods.Closing},
 					)
 				}
 			case *ast.SwitchStmt:

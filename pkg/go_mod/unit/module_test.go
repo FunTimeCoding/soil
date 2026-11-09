@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestModuleTakesTheLatestReleaseFromTheUpdate(t *testing.T) {
+func TestModuleTakesLatestReleaseFromUpdate(t *testing.T) {
 	m := modules(
 		`{"Path": "a", "Version": "v1.0.0", "Time": "2020-01-04T00:00:00Z", "Update": {"Path": "a", "Version": "v1.1.0", "Time": "2026-09-01T00:00:00Z"}}`,
 	)[0]
@@ -17,7 +17,7 @@ func TestModuleTakesTheLatestReleaseFromTheUpdate(t *testing.T) {
 	assert.False(t, m.HasConcerns())
 }
 
-func TestModuleIsStaleAtTheThreshold(t *testing.T) {
+func TestModuleIsStaleAtThreshold(t *testing.T) {
 	m := modules(
 		`{"Path": "a", "Version": "v1.0.0", "Time": "2025-10-11T00:00:00Z"}`,
 	)[0]
@@ -25,7 +25,7 @@ func TestModuleIsStaleAtTheThreshold(t *testing.T) {
 	assert.True(t, m.HasConcern(constant.ReleaseStale))
 }
 
-func TestModuleIsFreshBelowTheThreshold(t *testing.T) {
+func TestModuleIsFreshBelowThreshold(t *testing.T) {
 	m := modules(
 		`{"Path": "a", "Version": "v1.0.0", "Time": "2025-10-12T00:00:00Z"}`,
 	)[0]

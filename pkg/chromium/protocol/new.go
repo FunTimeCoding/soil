@@ -9,7 +9,7 @@ func New(
 	c face.ChromiumClient,
 	tab string,
 ) *Protocol {
-	t := c.MustTabByHost(tab)
+	t := c.MustHostTab(tab)
 
 	if t == nil {
 		panic(constant.TabNotFound)

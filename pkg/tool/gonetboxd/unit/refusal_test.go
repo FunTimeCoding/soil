@@ -12,13 +12,13 @@ import (
 	"testing"
 )
 
-func TestARejectedCreateIsBadRequestWithoutSentry(t *testing.T) {
+func TestRejectedCreateIsBadRequestWithoutSentry(t *testing.T) {
 	status, events := refusedCreate(t, validation.New("slug: exists"))
 	assert.Integer(t, http.StatusBadRequest, status)
 	assert.Integer(t, 0, events)
 }
 
-func TestARefusedTokenIsCaptured(t *testing.T) {
+func TestRefusedTokenIsCaptured(t *testing.T) {
 	status, events := refusedCreate(
 		t,
 		unexpected.Format("netbox status 403: no permission"),
@@ -27,13 +27,13 @@ func TestARefusedTokenIsCaptured(t *testing.T) {
 	assert.Integer(t, 1, events)
 }
 
-func TestAConflictWithoutAConflictAnswerIsCaptured(t *testing.T) {
+func TestConflictWithoutConflictAnswerIsCaptured(t *testing.T) {
 	status, events := refusedCreate(t, conflict.Format("dependent objects"))
 	assert.Integer(t, http.StatusInternalServerError, status)
 	assert.Integer(t, 1, events)
 }
 
-func TestARejectedCreateIsAQuietToolFailure(t *testing.T) {
+func TestRejectedCreateIsQuietToolFailure(t *testing.T) {
 	r := memory.New()
 	s := newNetboxServer(
 		t,

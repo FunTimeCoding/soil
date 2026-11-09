@@ -9,14 +9,14 @@ import (
 	"testing"
 )
 
-func TestADeadTokenFailsTheProbe(t *testing.T) {
+func TestDeadTokenFailsProbe(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusUnauthorized, "")
 	e := newJellyfin(t, s.URL).Reachable(t.Context())
 	assert.NotNil(t, e)
 	assert.String(t, "/System/Info", last().URL.Path)
 }
 
-func TestARestartingJellyfinIsUnavailable(t *testing.T) {
+func TestRestartingJellyfinIsUnavailable(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusServiceUnavailable,
@@ -26,7 +26,7 @@ func TestARestartingJellyfinIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestARefusedRequestIsAFault(t *testing.T) {
+func TestRefusedRequestIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusForbidden, "")
 	_, e := newJellyfin(t, s.URL).Sessions()
 	assert.True(t, unexpected.Is(e))

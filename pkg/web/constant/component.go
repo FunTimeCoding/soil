@@ -73,6 +73,7 @@ const (
 	CardLinkClass      = "card-link"
 	CardSubtitleClass  = "card-subtitle"
 	CardMetaClass      = "card-meta"
+	CardClampClass     = "card-clamp"
 	CardFooterClass    = "card-footer"
 	CardAccentVariable = "--card-accent"
 	CardArtClass       = "card-art"

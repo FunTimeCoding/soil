@@ -25,7 +25,7 @@ func (c *Client) tokenFlow(
 	}
 
 	c.callback.Start()
-	code := c.callback.WaitForCallback()
+	code := c.callback.WaitCallback()
 	console.Format("Callback code: %s\n", code)
 
 	return c.exchange(o, code)

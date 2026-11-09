@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestStallClientSocketDialsThePath(t *testing.T) {
+func TestStallClientSocketDialsPath(t *testing.T) {
 	directory, e := os.MkdirTemp("/tmp", "socket")
 	assert.FatalOnError(t, e)
 	t.Cleanup(func() { assert.FatalOnError(t, os.RemoveAll(directory)) })

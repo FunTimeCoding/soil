@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
-	"time"
 )
 
 func (s *Service) Revoke(serial string) (*record.Record, error) {
@@ -18,7 +17,7 @@ func (s *Service) Revoke(serial string) (*record.Record, error) {
 		return nil, not_found.New(constant.SerialParameter, serial)
 	}
 
-	if f := s.store.Revoke(serial, time.Now()); f != nil {
+	if f := s.store.Revoke(serial, s.clock()); f != nil {
 		return nil, f
 	}
 

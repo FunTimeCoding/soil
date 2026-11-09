@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheCensusKeepsOnlyTheAskedMethod(t *testing.T) {
+func TestCensusKeepsOnlyAskedMethod(t *testing.T) {
 	c := client.Census{
 		Type:    "Service",
 		Methods: []client.CensusMethod{{Name: "Place"}, {Name: "Settle"}},

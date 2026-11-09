@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockKeepTheBandFace(t *testing.T) {
+func TestClientAndItsMockKeepBandFace(t *testing.T) {
 	c := band.New("http://alfa.example:16992", constant.DefaultUser, "secret")
 	t.Cleanup(c.Close)
 	m := mock_client.New()

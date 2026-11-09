@@ -19,7 +19,7 @@ func (s *Server) GetRepositoryTree(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.Tree(
@@ -33,7 +33,7 @@ func (s *Server) GetRepositoryTree(
 	)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return response.SuccessAny(v)

@@ -20,7 +20,7 @@ func LocalTaken(
 			continue
 		}
 
-		if !positionInFile(p.Fset, file, ident.Pos()) {
+		if !filePosition(p.Fset, file, ident.Pos()) {
 			continue
 		}
 

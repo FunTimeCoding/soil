@@ -27,7 +27,7 @@ func (s *Server) labelNames(
 		matches = strings.Split(a.Matches, ",")
 	}
 
-	since := time.Now().Add(-1 * time.Hour)
+	span := time.Hour
 
 	if a.Since != "" {
 		d, f := time.ParseDuration(a.Since)
@@ -36,10 +36,10 @@ func (s *Server) labelNames(
 			return response.Fail("invalid since: %s", f)
 		}
 
-		since = time.Now().Add(-d)
+		span = d
 	}
 
-	v, e := s.service.LabelNames(x, instance, matches, since)
+	v, e := s.service.LabelNames(x, instance, matches, span)
 
 	if e != nil {
 		return s.captureDetail(x, e)

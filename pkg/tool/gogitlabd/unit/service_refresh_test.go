@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRefreshNotifiesOnlyWhenTheBoardMoves(t *testing.T) {
+func TestRefreshNotifiesOnlyWhenBoardMoves(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
 	seedForge(c, 1, "app")

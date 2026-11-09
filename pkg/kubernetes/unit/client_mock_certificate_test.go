@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheMockIssuesATriggeredCertificateOnlyWhenToldTo(t *testing.T) {
+func TestMockIssuesTriggeredCertificateOnlyWhenToldTo(t *testing.T) {
 	c := mock_client.New()
 	c.AddCertificate("alfa", "bravo", "charlie")
 	assert.FatalOnError(t, c.TriggerCertificateIssuance("alfa", "bravo"))
@@ -28,7 +28,7 @@ func TestTheMockIssuesATriggeredCertificateOnlyWhenToldTo(t *testing.T) {
 	assert.True(t, not_found.Is(c.TriggerCertificateIssuance("alfa", "delta")))
 }
 
-func TestTheMockStoresTheNetworkPolicyItIsSent(t *testing.T) {
+func TestMockStoresNetworkPolicyItIsSent(t *testing.T) {
 	c := mock_client.New()
 	c.AddNetworkPolicy(
 		&networking.NetworkPolicy{
@@ -49,7 +49,7 @@ func TestTheMockStoresTheNetworkPolicyItIsSent(t *testing.T) {
 	assert.True(t, not_found.Is(g))
 }
 
-func TestTheMockFailsOneMethodAlone(t *testing.T) {
+func TestMockFailsOneMethodAlone(t *testing.T) {
 	c := mock_client.New()
 	c.AddCertificate("alfa", "bravo", "charlie")
 	c.Fail(c.TriggerCertificateIssuance, unexpected.Format("refused"))

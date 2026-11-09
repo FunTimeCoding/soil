@@ -60,7 +60,7 @@ func removalTargets(
 
 		seen[f.FullName()] = true
 		owner, file := lookup.FindOwningFile(all, f.Pos())
-		declaration := functionDeclarationAt(file, f.Pos())
+		declaration := functionDeclaration(file, f.Pos())
 
 		if declaration == nil || declaration.Body == nil {
 			refuse("%s has no body to rewrite", f.FullName())

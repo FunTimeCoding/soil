@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestAWindowReceivesClaimsThroughTheHold(t *testing.T) {
+func TestWindowReceivesClaimsThroughHold(t *testing.T) {
 	s := base.New(t)
 	g := nextClaimMessage(
 		t,
@@ -26,7 +26,7 @@ func TestAWindowReceivesClaimsThroughTheHold(t *testing.T) {
 	assert.Nil(t, g.Error)
 }
 
-func TestAClosingWindowReleasesANoticeNobodyReads(t *testing.T) {
+func TestClosingWindowReleasesNoticeNobodyReads(t *testing.T) {
 	s := base.New(t)
 	m := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
@@ -56,7 +56,7 @@ func TestAClosingWindowReleasesANoticeNobodyReads(t *testing.T) {
 	}
 }
 
-func TestAWindowShowsARefusedClaimStream(t *testing.T) {
+func TestWindowShowsRefusedClaimStream(t *testing.T) {
 	s := base.New(t)
 	r := memory.New()
 	g := nextClaimMessage(t, s.Port, "bogus", r)

@@ -29,7 +29,7 @@ func sourceReferencesMoved(
 					return true
 				}
 
-				if insideMoved(entries, ident.Pos()) {
+				if movedContains(entries, ident.Pos()) {
 					return true
 				}
 

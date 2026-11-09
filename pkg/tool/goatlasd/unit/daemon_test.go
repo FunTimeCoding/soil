@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
+func TestDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
 	d := daemon.New(
 		service_tester.New(t).Option,
 		logger.New(context.Background()),
@@ -23,7 +23,7 @@ func TestTheDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
 	assert.Count(t, 5, d.Workers())
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := service_tester.New(t).Option
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(

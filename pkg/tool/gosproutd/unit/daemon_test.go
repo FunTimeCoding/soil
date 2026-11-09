@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestTheDaemonClosesTwice(t *testing.T) {
+func TestDaemonClosesTwice(t *testing.T) {
 	d := daemon.New(
 		store_tester.NewOption(t, time.Now, notifier.New()),
 		logger.New(t.Context()),
@@ -26,7 +26,7 @@ func TestTheDaemonClosesTwice(t *testing.T) {
 	d.Close()
 }
 
-func TestTheDaemonHandsOutItsWatcher(t *testing.T) {
+func TestDaemonHandsOutItsWatcher(t *testing.T) {
 	d := daemon.New(
 		store_tester.NewOption(t, time.Now, notifier.New()),
 		logger.New(t.Context()),
@@ -39,7 +39,7 @@ func TestTheDaemonHandsOutItsWatcher(t *testing.T) {
 	assert.True(t, watcher)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	o := store_tester.NewOption(t, time.Now, notifier.New())
 	o.SeedDirectory = t.TempDir()
@@ -58,7 +58,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestTheWatcherSyncsWhatItFindsAtStart(t *testing.T) {
+func TestWatcherSyncsWhatItFindsAtStart(t *testing.T) {
 	directory := t.TempDir()
 	assert.FatalOnError(
 		t,
@@ -87,7 +87,7 @@ func TestTheWatcherSyncsWhatItFindsAtStart(t *testing.T) {
 	}
 }
 
-func TestTheWatcherClosesOnlyAfterItsSyncReturns(t *testing.T) {
+func TestWatcherClosesOnlyAfterItsSyncReturns(t *testing.T) {
 	entered := make(chan struct{})
 	release := make(chan struct{})
 	w := worker.New(

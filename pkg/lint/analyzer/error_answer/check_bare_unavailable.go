@@ -21,7 +21,7 @@ func checkBareUnavailable(
 		func(n ast.Node) bool {
 			e, okay := n.(ast.Expr)
 
-			if !okay || statusOf(p, e) != http.StatusServiceUnavailable {
+			if !okay || status(p, e) != http.StatusServiceUnavailable {
 				return true
 			}
 

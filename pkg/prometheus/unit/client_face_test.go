@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	c := prometheus.New("127.0.0.1", 0, false, "", "")
 	t.Cleanup(c.Close)
 	m := mock_client.New()
@@ -21,7 +21,7 @@ func TestTheClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestTheMockAnswersWhatWasSeeded(t *testing.T) {
+func TestMockAnswersWhatWasSeeded(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	r := query_result.New(nil, nil, nil)
@@ -35,7 +35,7 @@ func TestTheMockAnswersWhatWasSeeded(t *testing.T) {
 	assert.Float(t, 0.25, value)
 }
 
-func TestTheMockFailsEveryCallOnFailure(t *testing.T) {
+func TestMockFailsEveryCallOnFailure(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	m.SeedFloat("free", 0.25)

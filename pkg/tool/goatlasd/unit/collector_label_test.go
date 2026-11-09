@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestLabelPlacesOnTheObjectCarryingIt(t *testing.T) {
+func TestLabelPlacesOnObjectCarryingIt(t *testing.T) {
 	f := collector_tester.NewNetbox(t)
 	collector_tester.AddDevice(
 		f,

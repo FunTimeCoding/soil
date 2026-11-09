@@ -42,7 +42,7 @@ func keptByReceiver(
 					target = index.X
 				}
 
-				if fieldOfReceiver(p, target, receiver) == "" {
+				if receiverField(p, target, receiver) == "" {
 					continue
 				}
 

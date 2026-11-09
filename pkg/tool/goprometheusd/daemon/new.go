@@ -26,6 +26,6 @@ func New(
 		inventory: o.Inventory,
 		pool:      p,
 		selection: selection.New(),
-		service:   service.New(p),
+		service:   service.New(p, o.Clock),
 	}
 }

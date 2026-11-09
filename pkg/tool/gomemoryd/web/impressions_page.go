@@ -18,8 +18,9 @@ func (s *Server) impressionsPage(
 		days = constant.DefaultImpressionDays
 	}
 
-	since := time.Now().Add(-time.Duration(days) * 24 * time.Hour).UTC()
-	impressions, f := s.service.RecentImpressions(since.Format(time.RFC3339))
+	impressions, f := s.service.RecentImpressions(
+		time.Duration(days) * 24 * time.Hour,
+	)
 
 	if f != nil {
 		s.view.Answer(w, q, s.reporter, f)

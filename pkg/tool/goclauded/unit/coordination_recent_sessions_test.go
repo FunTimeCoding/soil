@@ -22,12 +22,12 @@ func TestRecentSessionsCarriesLabels(t *testing.T) {
 	targets, f := s.Client(t).RecentSessions(25)
 	assert.FatalOnError(t, f)
 	assert.True(t, len(targets) > 0)
-	found := targetByIdentifier(targets, a.UUID)
+	found := identifiedTarget(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.Any(t, []string{"staging"}, found.Labels["environment"])
 }
 
-func TestRecentSessionsCarriesEveryValueOfAKey(t *testing.T) {
+func TestRecentSessionsCarriesEveryValueOfKey(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -44,7 +44,7 @@ func TestRecentSessionsCarriesEveryValueOfAKey(t *testing.T) {
 	)
 	targets, e := c.RecentSessions(25)
 	assert.FatalOnError(t, e)
-	found := targetByIdentifier(targets, a.UUID)
+	found := identifiedTarget(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.Any(
 		t,
@@ -61,7 +61,7 @@ func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 	a.CheckLive()
 	targets, e := s.Client(t).RecentSessions(25)
 	assert.FatalOnError(t, e)
-	found := targetByIdentifier(targets, a.UUID)
+	found := identifiedTarget(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.False(t, found.LastSeen.IsZero())
 }
@@ -73,7 +73,7 @@ func TestRecentSessionsKeepsUnlabelledSessions(t *testing.T) {
 	a.CheckLive()
 	targets, e := s.Client(t).RecentSessions(25)
 	assert.FatalOnError(t, e)
-	found := targetByIdentifier(targets, a.UUID)
+	found := identifiedTarget(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.Integer(t, 0, len(found.Labels))
 }

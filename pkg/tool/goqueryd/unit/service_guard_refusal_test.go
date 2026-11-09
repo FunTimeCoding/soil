@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-func TestARefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
+func TestRefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
 	m := newEmbedder(t)
 	m.FailEmbedding(errors.New("embedder exploded"))
 	r := memory.New()
@@ -32,7 +32,7 @@ func TestARefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestTheWorkerReportsAnUnexpectedEmbeddingFailure(t *testing.T) {
+func TestWorkerReportsUnexpectedEmbeddingFailure(t *testing.T) {
 	m := newEmbedder(t)
 	m.FailEmbedding(errors.New("embedder exploded"))
 	r := memory.New()
@@ -63,7 +63,7 @@ func TestTheWorkerReportsAnUnexpectedEmbeddingFailure(t *testing.T) {
 	assert.StringContains(t, "embedder exploded", r.Events()[0].Error.Error())
 }
 
-func TestTheWorkerLeavesAQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
+func TestWorkerLeavesQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
 	m := newEmbedder(t)
 	m.FailEmbedding(validation.New("input too long"))
 	r := memory.New()

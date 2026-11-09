@@ -2,6 +2,7 @@ package store
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
@@ -10,8 +11,7 @@ import (
 
 func (s *Store) Top(
 	n int,
-	start time.Time,
-	end time.Time,
+	w *window.Window,
 ) ([]top.Record, error) {
 	var rows []top.Row
 	q := s.database.
@@ -26,10 +26,17 @@ func (s *Store) Top(
 				MAX(severity) AS severity`,
 				averageSecondsExpression(s.database),
 			),
-		).
-		Where("started_at >= ? AND started_at < ?", start, end).
-		Group(constant.NameColumn).
-		Order("count DESC, name")
+		)
+
+	if start, started := w.Start(); started {
+		q = q.Where("started_at >= ?", start)
+	}
+
+	if end, ended := w.End(); ended {
+		q = q.Where("started_at < ?", end)
+	}
+
+	q = q.Group(constant.NameColumn).Order("count DESC, name")
 
 	if n > 0 {
 		q = q.Limit(n)

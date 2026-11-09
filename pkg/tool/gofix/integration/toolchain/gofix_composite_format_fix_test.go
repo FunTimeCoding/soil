@@ -13,7 +13,7 @@ import (
 func TestCompositeFormatFix(t *testing.T) {
 	directory := module_tester.CompositeFormat(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunCompositeFormatFixWithDirectory([]string{"./..."}, directory, r)
+	gofix.RunCompositeFormatFix([]string{"./..."}, directory, r)
 	t.Run(
 		"SharedLine",
 		func(t *testing.T) {
@@ -133,64 +133,70 @@ func TestCompositeFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
 			assert.Integer(t, 10, len(applied))
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"shared_line.go",
 				4,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"first_on_brace_line.go",
 				4,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"nested_calls.go",
 				12,
 				"formatted composite literal",
 			)
-			assertResultAt(t, applied, "nested_calls.go", 13, "formatted call")
-			assertResultAt(
+			assertLineResult(
+				t,
+				applied,
+				"nested_calls.go",
+				13,
+				"formatted call",
+			)
+			assertLineResult(
 				t,
 				applied,
 				"compliant.go",
 				8,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"single_line_long.go",
 				6,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"map_collapses.go",
 				4,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"multi_line_element.go",
 				4,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"multi_line_element.go",
 				5,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"collapse_short_slice.go",

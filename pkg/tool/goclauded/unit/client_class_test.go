@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientClassifiesAnUnknownCallsign(t *testing.T) {
+func TestClientClassifiesUnknownCallsign(t *testing.T) {
 	s := base.New(t)
 	_, e := s.Client(t).PostNotify(
 		t.Context(),
@@ -21,7 +21,7 @@ func TestTheClientClassifiesAnUnknownCallsign(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestTheClientReadsTheStatus(t *testing.T) {
+func TestClientReadsStatus(t *testing.T) {
 	s := base.New(t)
 	_, e := s.Client(t).GetStatus(t.Context())
 	assert.FatalOnError(t, e)

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestPackagesReadsTheIndexesUnderTheRoot(t *testing.T) {
+func TestPackagesReadsIndexesUnderRoot(t *testing.T) {
 	o := service_tester.New(t)
 	index_tester.WriteIndex(
 		filepath.Join(o.PackageRoot, "v3.21", "main", "x86_64"),

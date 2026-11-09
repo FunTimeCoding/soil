@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestClosingTheDaemonClosesEveryInstanceClient(t *testing.T) {
+func TestClosingDaemonClosesEveryInstanceClient(t *testing.T) {
 	d, clients := daemon_tester.New(
 		t,
 		memory.New(),
@@ -21,7 +21,7 @@ func TestClosingTheDaemonClosesEveryInstanceClient(t *testing.T) {
 	assert.Integer(t, 1, clients[constant.FixtureOtherInstance].Closed)
 }
 
-func TestTheDaemonHandsItsGuardsAndThenItsClockToTheLifecycle(t *testing.T) {
+func TestDaemonHandsItsGuardsAndThenItsClockToLifecycle(t *testing.T) {
 	d, _ := daemon_tester.New(
 		t,
 		memory.New(),
@@ -31,14 +31,14 @@ func TestTheDaemonHandsItsGuardsAndThenItsClockToTheLifecycle(t *testing.T) {
 	assert.Count(t, 3, d.Workers())
 }
 
-func TestTheDaemonClosesItsClockAfterTheLifecycleDid(t *testing.T) {
+func TestDaemonClosesItsClockAfterLifecycleDid(t *testing.T) {
 	d, _ := daemon_tester.New(t, memory.New(), constant.FixtureInstance)
 	w := d.Workers()
 	w[len(w)-1].Close()
 	d.Close()
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d, _ := daemon_tester.New(
 		t,

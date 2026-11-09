@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRetargetAfterTheMoveHappened(t *testing.T) {
+func TestRetargetAfterMoveHappened(t *testing.T) {
 	after, _ := lint.RetargetDocument(
 		pointer_tester.Resolver("pkg/bravo/run.go"),
 		"doc/note.md",
@@ -18,7 +18,7 @@ func TestRetargetAfterTheMoveHappened(t *testing.T) {
 	assert.String(t, "Read `pkg/bravo/run.go` first.\n", after)
 }
 
-func TestRetargetMovedBaseAfterTheMove(t *testing.T) {
+func TestRetargetMovedBaseAfterMove(t *testing.T) {
 	after, _ := lint.RetargetDocument(
 		pointer_tester.Resolver(
 			"pkg/bravo",
@@ -36,7 +36,7 @@ func TestRetargetMovedBaseAfterTheMove(t *testing.T) {
 	)
 }
 
-func TestRetargetLeavesADeadPathThatNoMoveExplains(t *testing.T) {
+func TestRetargetLeavesDeadPathThatNoMoveExplains(t *testing.T) {
 	content := "Read `pkg/charlie/run.go` first.\n"
 	after, changes := lint.RetargetDocument(
 		pointer_tester.Resolver("pkg/bravo/run.go"),

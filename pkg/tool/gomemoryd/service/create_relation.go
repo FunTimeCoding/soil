@@ -20,5 +20,6 @@ func (s *Service) CreateRelation(
 		sourceIdentifier,
 		targetIdentifier,
 		relationType,
+		s.clock(),
 	)
 }

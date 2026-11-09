@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestABrokenCallerNamesItself(t *testing.T) {
+func TestBrokenCallerNamesItself(t *testing.T) {
 	d := renameFunctionFixture(t)
 	testutil.WriteFile(
 		t,
@@ -34,7 +34,7 @@ func TestABrokenCallerNamesItself(t *testing.T) {
 	assert.False(t, failure.Settled)
 }
 
-func TestABrokenCallerNobodyTouchesIsSettled(t *testing.T) {
+func TestBrokenCallerNobodyTouchesIsSettled(t *testing.T) {
 	d := renameFunctionFixture(t)
 	testutil.WriteFile(
 		t,
@@ -61,7 +61,7 @@ func TestABrokenCallerNobodyTouchesIsSettled(t *testing.T) {
 	assert.True(t, failure.Settled)
 }
 
-func TestABrokenPackageOutsideTheReachDoesNotBlock(t *testing.T) {
+func TestBrokenPackageOutsideReachDoesNotBlock(t *testing.T) {
 	d := renameFunctionFixture(t)
 	testutil.WriteFile(
 		t,
@@ -87,7 +87,7 @@ func TestABrokenPackageOutsideTheReachDoesNotBlock(t *testing.T) {
 	)
 }
 
-func TestABrokenPackageOutsideTheReachDoesNotBlockAWholeLoad(t *testing.T) {
+func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
 	d := renameFunctionFixture(t)
 	testutil.WriteFile(
 		t,
@@ -115,7 +115,7 @@ func TestABrokenPackageOutsideTheReachDoesNotBlockAWholeLoad(t *testing.T) {
 	)
 }
 
-func TestABrokenPackageOutsideTheReachInAReplacingModuleDoesNotBlock(t *testing.T) {
+func TestBrokenPackageOutsideReachInReplacingModuleDoesNotBlock(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	testutil.WriteFile(
 		t,

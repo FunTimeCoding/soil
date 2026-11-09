@@ -10,7 +10,7 @@ func (c *Client) VirtualJournalEntries(
 	limit int32,
 	offset int32,
 ) ([]*journal_entry.Entry, error) {
-	m, e := c.VirtualMachineByName(machine)
+	m, e := c.VirtualMachine(machine)
 
 	if e != nil {
 		return nil, e

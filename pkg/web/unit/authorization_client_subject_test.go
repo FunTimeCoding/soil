@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestRequireHandsTheSignedInSubjectOn(t *testing.T) {
+func TestRequireHandsSignedInSubjectOn(t *testing.T) {
 	c := authorization_tester.Client()
 	t.Cleanup(c.Close)
 	var seen string

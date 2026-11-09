@@ -14,6 +14,9 @@ const (
 	ReasonSystem     Reason = "system"
 	ReasonUnanchored Reason = "unanchored"
 	ReasonUnknown    Reason = "unknown"
+	ReasonTest       Reason = "test_name"
+	ReasonMember     Reason = "member"
+	ReasonBareSymbol Reason = "bare_symbol"
 )
 
 type Reason string

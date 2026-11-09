@@ -12,5 +12,6 @@ type Log struct {
 	PostgresLocator string
 	LitePath        string
 	Retention       time.Duration
+	Clock           func() time.Time
 	Alertmanager    func() face.AlertmanagerClient
 }

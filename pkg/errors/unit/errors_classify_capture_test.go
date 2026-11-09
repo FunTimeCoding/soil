@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestCaptureShowsTheContextAndTheFault(t *testing.T) {
+func TestCaptureShowsContextAndFault(t *testing.T) {
 	m := memory.New()
 	text, _ := classify.Capture(
 		t.Context(),
@@ -23,7 +23,7 @@ func TestCaptureShowsTheContextAndTheFault(t *testing.T) {
 	assert.String(t, "disk full", m.Events()[0].Error.Error())
 }
 
-func TestCaptureNamesAKnownFault(t *testing.T) {
+func TestCaptureNamesKnownFault(t *testing.T) {
 	m := memory.New()
 	text, _ := classify.Capture(
 		t.Context(),
@@ -35,7 +35,7 @@ func TestCaptureNamesAKnownFault(t *testing.T) {
 	assert.String(t, "store unreachable", m.Events()[0].Error.Error())
 }
 
-func TestCaptureTitlesAQuietClassAsAMissingBranch(t *testing.T) {
+func TestCaptureTitlesQuietClassAsMissingBranch(t *testing.T) {
 	m := memory.New()
 	text, _ := classify.Capture(
 		t.Context(),

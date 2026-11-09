@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestConvertServicePublishesThePackage(t *testing.T) {
+func TestConvertServicePublishesPackage(t *testing.T) {
 	v := convert.Service(
 		service.New(
 			"foxtrot.service",
@@ -25,7 +25,7 @@ func TestConvertServicePublishesThePackage(t *testing.T) {
 	assert.String(t, "1.2.3", *v.Version)
 }
 
-func TestConvertServiceWithoutAPackagePublishesEmpty(t *testing.T) {
+func TestConvertServiceWithoutPackagePublishesEmpty(t *testing.T) {
 	v := convert.Service(
 		service.New(
 			"charlie.service",

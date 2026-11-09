@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestTheWorkerExportsEachObjectsStatus(t *testing.T) {
+func TestWorkerExportsEachObjectsStatus(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.SeedDevice("alfa").Status = "active"
 	c.SeedDevice("bravo").Status = "offline"
@@ -49,7 +49,7 @@ netbox_status{kind="virtual_machine",name="charlie",status="offline"} 1
 	)
 }
 
-func TestAChangedStatusLeavesNoStaleSeries(t *testing.T) {
+func TestChangedStatusLeavesNoStaleSeries(t *testing.T) {
 	c := service_tester.NewSource(t)
 	d := c.SeedDevice("alfa")
 	d.Status = "offline"
@@ -81,7 +81,7 @@ netbox_status{kind="device",name="alfa",status="active"} 1
 	)
 }
 
-func TestAnUnavailableNetboxIsOnlyLogged(t *testing.T) {
+func TestUnavailableNetboxIsOnlyLogged(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = errors.New("netbox answered nonsense")
 	r := memory.New()
@@ -100,7 +100,7 @@ func TestAnUnavailableNetboxIsOnlyLogged(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAQuietFailureIsOnlyLogged(t *testing.T) {
+func TestQuietFailureIsOnlyLogged(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = not_found.Format("no devices endpoint")
 	r := memory.New()

@@ -15,7 +15,7 @@ func replacingService(
 	i := inventory.New()
 	i.Add("lib", library)
 	i.Add("user", user)
-	result := service_tester.ForInventory(t, i)
+	result := service_tester.InventoryServices(t, i)
 	result.Workspace.UseIndex(service_tester.IndexDirectory())
 
 	return result

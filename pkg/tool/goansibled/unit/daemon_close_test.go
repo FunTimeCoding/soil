@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestCloseWaitsForTheRunInFlightToRecordItself(t *testing.T) {
+func TestCloseWaitsForRunInFlightToRecordItself(t *testing.T) {
 	s, d := daemon_tester.New(t)
 	s.Hold()
 	daemon_tester.Start(d)
@@ -37,7 +37,7 @@ func TestCloseWaitsForTheRunInFlightToRecordItself(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestStartAbandonsARunAPreviousProcessLeftRunning(t *testing.T) {
+func TestStartAbandonsRunPreviousProcessLeftRunning(t *testing.T) {
 	s, d := daemon_tester.New(t)
 	s.Hold()
 	daemon_tester.Start(d)

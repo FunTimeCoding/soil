@@ -10,7 +10,7 @@ func (c *Client) DeleteConfigurationContext(name string) error {
 		return c.Failure
 	}
 
-	v, e := c.ConfigurationContextByName(name)
+	v, e := c.ConfigurationContext(name)
 
 	if e != nil {
 		return e

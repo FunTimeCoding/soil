@@ -18,7 +18,7 @@ func TestForbiddenClassifiesByType(t *testing.T) {
 	assert.False(t, forbidden.Is(nil))
 }
 
-func TestForbiddenAnswersAnUncaptured403(t *testing.T) {
+func TestForbiddenAnswersUncaptured403(t *testing.T) {
 	e := fmt.Errorf("close: %w", forbidden.Format("not armed"))
 	assert.String(t, "forbidden", classify.Class(e))
 	assert.Integer(t, http.StatusForbidden, classify.Answer(e).Status)

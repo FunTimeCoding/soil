@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheHubClientsSatisfyTheFace(t *testing.T) {
+func TestHubClientsSatisfyFace(t *testing.T) {
 	var c face.DockerHubClient = hub.New()
 	defer c.Close()
 	var m face.DockerHubClient = mock_client.New()
@@ -17,7 +17,7 @@ func TestTheHubClientsSatisfyTheFace(t *testing.T) {
 	assert.NotNil(t, m)
 }
 
-func TestTheMockAnswersSeededTagsAndMissesLikeTheClient(t *testing.T) {
+func TestMockAnswersSeededTagsAndMissesLikeClient(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.SeedTags("library/foxtrot", "1.0-alpine")

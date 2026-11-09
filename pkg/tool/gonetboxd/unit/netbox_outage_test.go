@@ -14,9 +14,7 @@ import (
 	"testing"
 )
 
-func TestANetBoxOutageIsAnsweredUnavailableWithoutACaptureOverRest(
-	t *testing.T,
-) {
+func TestNetBoxOutageIsAnsweredUnavailableWithoutCaptureOverRest(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = refusedDial()
 	r := memory.New()
@@ -32,7 +30,7 @@ func TestANetBoxOutageIsAnsweredUnavailableWithoutACaptureOverRest(
 	assert.Count(t, 0, r.Events())
 }
 
-func TestANetBoxOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestNetBoxOutageFailsToolWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = refusedDial()
 	r := memory.New()
@@ -46,7 +44,7 @@ func TestANetBoxOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestANetBoxOutageAnswersTheBookmarkPageUnavailable(t *testing.T) {
+func TestNetBoxOutageAnswersBookmarkPageUnavailable(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = refusedDial()
 	r := memory.New()
@@ -58,7 +56,7 @@ func TestANetBoxOutageAnswersTheBookmarkPageUnavailable(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestTheDaemonHandsOutTheNetBoxGuardFirst(t *testing.T) {
+func TestDaemonHandsOutNetBoxGuardFirst(t *testing.T) {
 	o := service_tester.NewOption(t, service_tester.NewSource(t))
 	o.PowerIntent = true
 	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())

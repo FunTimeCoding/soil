@@ -9,9 +9,9 @@ import (
 	"testing"
 )
 
-func TestARedirectForNamesItsFormBesideTheMessage(t *testing.T) {
+func TestRedirectForNamesItsFormBesideMessage(t *testing.T) {
 	w := httptest.NewRecorder()
-	form.RedirectFor(
+	form.IdentifierRedirect(
 		w,
 		httptest.NewRequest(http.MethodPost, "/alfa", nil),
 		"/alfa",
@@ -27,7 +27,7 @@ func TestARedirectForNamesItsFormBesideTheMessage(t *testing.T) {
 	)
 }
 
-func TestOnlyTheFailedFormSeesTheMessage(t *testing.T) {
+func TestOnlyFailedFormSeesMessage(t *testing.T) {
 	r := httptest.NewRequest(
 		http.MethodGet,
 		"/alfa?error=charlie&form=bravo",
@@ -38,7 +38,7 @@ func TestOnlyTheFailedFormSeesTheMessage(t *testing.T) {
 	assert.String(t, "", form.PageError(r))
 }
 
-func TestAPageErrorIsOneNoFormClaims(t *testing.T) {
+func TestPageErrorIsOneNoFormClaims(t *testing.T) {
 	r := httptest.NewRequest(http.MethodGet, "/alfa?error=charlie", nil)
 	assert.String(t, "charlie", form.PageError(r))
 	assert.String(t, "", form.Failed(r, "bravo"))

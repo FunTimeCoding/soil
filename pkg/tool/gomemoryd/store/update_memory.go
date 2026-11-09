@@ -12,8 +12,9 @@ import (
 func (s *Store) UpdateMemory(
 	identifier int64,
 	o *save_option.Option,
+	at time.Time,
 ) ([]int64, error) {
-	now := time.Now().UTC().Format(time.RFC3339)
+	now := at.UTC().Format(time.RFC3339)
 	t, e := s.database.Begin()
 
 	if e != nil {

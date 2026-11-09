@@ -26,7 +26,7 @@ func conditionClasses(
 	}
 
 	if x, okay := e.(*ast.CallExpr); okay {
-		if c := classOf(p, x); c != "" {
+		if c := class(p, x); c != "" {
 			return []string{c}
 		}
 	}

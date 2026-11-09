@@ -28,7 +28,7 @@ func OllamaSession() {
 	var messages []*message.Message
 
 	if false {
-		messages = t.MessagesByChannel(c)
+		messages = t.ChannelMessages(c)
 
 		if len(messages) > 0 {
 			console.Line("Messages already in channel")

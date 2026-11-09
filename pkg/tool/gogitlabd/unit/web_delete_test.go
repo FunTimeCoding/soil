@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestADeleteWhoseRefreshFailsStillAnswersAndReports(t *testing.T) {
+func TestDeleteWhoseRefreshFailsStillAnswersAndReports(t *testing.T) {
 	r := memory.New()
 	d, clients := daemon_tester.New(t, r, constant.FixtureInstance)
 	clients[constant.FixtureInstance].FailProjects(errors.New("unreachable"))

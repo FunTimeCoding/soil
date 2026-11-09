@@ -19,4 +19,5 @@ func (r *Runner) quarantine() {
 	r.reporter.CaptureException(
 		fmt.Errorf("repository quarantined: %s", target),
 	)
+	r.pruneQuarantine()
 }

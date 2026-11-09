@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestARefreshFillsTheFloor(t *testing.T) {
+func TestRefreshFillsFloor(t *testing.T) {
 	c := worker_tester.PopulatedClient("test")
 	defer c.Close()
 	s := service_tester.ContainerService(t, c)
@@ -23,7 +23,7 @@ func TestARefreshFillsTheFloor(t *testing.T) {
 	assert.True(t, f.Guests[1].Unbacked)
 }
 
-func TestARefreshNotifiesOnlyWhenTheFloorChanges(t *testing.T) {
+func TestRefreshNotifiesOnlyWhenFloorChanges(t *testing.T) {
 	c := worker_tester.PopulatedClient("test")
 	defer c.Close()
 	s := service_tester.ContainerService(t, c)

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheProfileLeavesHiddenMemoriesOut(t *testing.T) {
+func TestProfileLeavesHiddenMemoriesOut(t *testing.T) {
 	c := base.NewHidden(t, "private").MemoryClient(t)
 	x := t.Context()
 	_, e := c.PostMemory(

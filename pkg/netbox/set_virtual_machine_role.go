@@ -9,13 +9,13 @@ func (c *Client) SetVirtualMachineRole(
 	name string,
 	roleName string,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e
 	}
 
-	r, f := c.DeviceRoleByName(roleName)
+	r, f := c.DeviceRole(roleName)
 
 	if f != nil {
 		return nil, f

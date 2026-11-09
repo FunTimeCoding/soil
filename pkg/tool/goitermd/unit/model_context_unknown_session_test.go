@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAKeyToAnUnknownSessionIsAnsweredQuietly(t *testing.T) {
+func TestKeyToUnknownSessionIsAnsweredQuietly(t *testing.T) {
 	o := model_context_tester.New(t)
 	defer o.Close()
 	assert.String(

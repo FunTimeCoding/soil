@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestARefusedPushIsReportedWithItsReason(t *testing.T) {
+func TestRefusedPushIsReportedWithItsReason(t *testing.T) {
 	_, e := refusedClient(
 		t,
 		http.StatusInternalServerError,
@@ -26,7 +26,7 @@ func TestARefusedPushIsReportedWithItsReason(t *testing.T) {
 	assert.String(t, "push document: disk full (reported as bravo)", e.Error())
 }
 
-func TestARefusedListLeavesNoPartialResult(t *testing.T) {
+func TestRefusedListLeavesNoPartialResult(t *testing.T) {
 	outcome, e := refusedClient(
 		t,
 		http.StatusServiceUnavailable,

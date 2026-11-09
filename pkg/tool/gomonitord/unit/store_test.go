@@ -17,7 +17,7 @@ func TestClaimingTwiceKeepsOneClaim(t *testing.T) {
 	assert.Count(t, 1, v)
 }
 
-func TestTwoOwnersClaimTheSameItem(t *testing.T) {
+func TestTwoOwnersClaimSameItem(t *testing.T) {
 	s := newStore(t, notifier.New())
 	_, e := s.ClaimItem("jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)
@@ -28,7 +28,7 @@ func TestTwoOwnersClaimTheSameItem(t *testing.T) {
 	assert.Count(t, 2, v)
 }
 
-func TestReleaseRemovesOnlyTheOwnersClaim(t *testing.T) {
+func TestReleaseRemovesOnlyOwnersClaim(t *testing.T) {
 	s := newStore(t, notifier.New())
 	_, e := s.ClaimItem("jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)

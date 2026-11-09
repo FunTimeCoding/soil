@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestTheClientAnswersAFailedUsageReadAsAFailure(t *testing.T) {
+func TestClientAnswersFailedUsageReadAsFailure(t *testing.T) {
 	s := base.New(t)
 	s.CloseDaemon()
 	_, found, e := s.Client(t).GetUsage(t.Context())
@@ -18,7 +18,7 @@ func TestTheClientAnswersAFailedUsageReadAsAFailure(t *testing.T) {
 	assert.Count(t, 1, s.Reporter.Events())
 }
 
-func TestTheClientAnswersNoUsageAsAbsent(t *testing.T) {
+func TestClientAnswersNoUsageAsAbsent(t *testing.T) {
 	s := base.New(t)
 	r, found, e := s.Client(t).GetUsage(t.Context())
 	assert.FatalOnError(t, e)
@@ -26,7 +26,7 @@ func TestTheClientAnswersNoUsageAsAbsent(t *testing.T) {
 	assert.True(t, r == nil)
 }
 
-func TestTheClientReadsRecordedUsage(t *testing.T) {
+func TestClientReadsRecordedUsage(t *testing.T) {
 	s := base.New(t)
 	now := s.Store.Clock()()
 	s.Store.Store.SaveRateSnapshot(0, 20, time.Time{}, now.Add(24*time.Hour))
@@ -36,7 +36,7 @@ func TestTheClientReadsRecordedUsage(t *testing.T) {
 	assert.Integer(t, 20, r.SevenDayPercent)
 }
 
-func TestTheClientAnswersAReleasedCallsignHoldAsAbsent(t *testing.T) {
+func TestClientAnswersReleasedCallsignHoldAsAbsent(t *testing.T) {
 	s := base.NewWithHold(t, constant.FixtureChannelHold)
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)
@@ -52,7 +52,7 @@ func TestTheClientAnswersAReleasedCallsignHoldAsAbsent(t *testing.T) {
 	assert.True(t, r == nil)
 }
 
-func TestTheClientReturnsTheMatchesOfAnAmbiguousQuery(t *testing.T) {
+func TestClientReturnsMatchesOfAmbiguousQuery(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("abc-1111")
 	s.Store.EnsureSession("abc-2222")
@@ -65,7 +65,7 @@ func TestTheClientReturnsTheMatchesOfAnAmbiguousQuery(t *testing.T) {
 	assert.Count(t, 2, matches)
 }
 
-func TestTheClientResolvesAUniqueQuery(t *testing.T) {
+func TestClientResolvesUniqueQuery(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("abc-1111")
 	r, matches, e := s.Client(t).GetResolve(

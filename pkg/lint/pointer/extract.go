@@ -17,7 +17,7 @@ func Extract(line string) []*Candidate {
 			continue
 		}
 
-		if IsPath(part) {
+		if IsPath(part) || IsTestName(part) || IsBareSymbol(part) {
 			result = append(result, NewSpan(part))
 		}
 	}

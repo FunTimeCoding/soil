@@ -57,7 +57,7 @@ func TestLockFromLivePodIsKept(t *testing.T) {
 	assert.Count(t, 0, o.Messages())
 }
 
-func TestLockFromOutsideTheClusterIsKept(t *testing.T) {
+func TestLockFromOutsideClusterIsKept(t *testing.T) {
 	c := mock_client.New().WithLease(
 		terraform_tester.HeldLease(
 			constant.FixtureLaptop,

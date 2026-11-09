@@ -23,13 +23,13 @@ func (s *Server) DeleteProjectVariable(
 	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	e = s.service.DeleteProjectVariable(x, instance, project, a.Key)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return mcp.NewToolResultText("deleted"), nil

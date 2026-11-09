@@ -16,7 +16,7 @@ func flipReferenced(
 		}
 
 		for _, f := range references[entry] {
-			if insideMoved(entries, f.Ident.Pos()) {
+			if movedContains(entries, f.Ident.Pos()) {
 				continue
 			}
 

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestAnOutageKeepsItsStartAndReason(t *testing.T) {
+func TestOutageKeepsItsStartAndReason(t *testing.T) {
 	since := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
 	e := unavailable.New("alfa", since, "not connected")
 	assert.String(
@@ -19,7 +19,7 @@ func TestAnOutageKeepsItsStartAndReason(t *testing.T) {
 	assert.String(t, "not connected", e.Reason)
 }
 
-func TestAFormattedOutageHasNoStart(t *testing.T) {
+func TestFormattedOutageHasNoStart(t *testing.T) {
 	e := unavailable.Format("bravo is down")
 	assert.String(t, "bravo is down", e.Error())
 	assert.True(t, e.Since.IsZero())

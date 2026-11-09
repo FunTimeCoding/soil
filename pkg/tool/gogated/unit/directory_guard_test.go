@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestADirectoryOutageHoldsTheNextLoginOff(t *testing.T) {
+func TestDirectoryOutageHoldsNextLoginOff(t *testing.T) {
 	d := &countedDirectory{Client: mock_client.New("")}
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	d.Failure = directoryDown()

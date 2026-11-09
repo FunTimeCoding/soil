@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnUnreachableClusterFailsFastWithoutBeingCalledAgain(t *testing.T) {
+func TestUnreachableClusterFailsFastWithoutBeingCalledAgain(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(refusedConnection())
 	list := request.List{ResourceType: "pod", Namespace: "default"}
@@ -24,7 +24,7 @@ func TestAnUnreachableClusterFailsFastWithoutBeingCalledAgain(t *testing.T) {
 	assert.Integer(t, calls, v.DynamicCalls())
 }
 
-func TestOneUnreachableClusterLeavesTheOthersAnswering(t *testing.T) {
+func TestOneUnreachableClusterLeavesOthersAnswering(t *testing.T) {
 	down := service_tester.New(t)
 	down.RefuseAll(refusedConnection())
 	up := service_tester.New(t)
@@ -45,7 +45,7 @@ func TestOneUnreachableClusterLeavesTheOthersAnswering(t *testing.T) {
 	assert.FatalOnError(t, f)
 }
 
-func TestAClusterThatFailsDiscoveryRecoversOnTheNextCall(t *testing.T) {
+func TestClusterThatFailsDiscoveryRecoversOnNextCall(t *testing.T) {
 	c := cluster.New(
 		"mike",
 		recovering_clientset.New(

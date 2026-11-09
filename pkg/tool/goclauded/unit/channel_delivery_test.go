@@ -23,7 +23,7 @@ func TestChannelDeliveryHoldsWhileNothingIsPending(t *testing.T) {
 	}
 }
 
-func TestChannelDeliveryReturnsWhenAnImmediateEntryArrives(t *testing.T) {
+func TestChannelDeliveryReturnsWhenImmediateEntryArrives(t *testing.T) {
 	s := base.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
@@ -42,7 +42,7 @@ func TestChannelDeliveryReturnsWhenAnImmediateEntryArrives(t *testing.T) {
 	}
 }
 
-func TestChannelDeliveryIgnoresADeferredEntry(t *testing.T) {
+func TestChannelDeliveryIgnoresDeferredEntry(t *testing.T) {
 	s := base.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")

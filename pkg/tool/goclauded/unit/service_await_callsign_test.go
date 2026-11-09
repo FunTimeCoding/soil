@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestAwaitCallsignHoldsUntilTheSessionTakesAPrompt(t *testing.T) {
+func TestAwaitCallsignHoldsUntilSessionTakesPrompt(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("session-1")
 	assert.String(
@@ -19,7 +19,7 @@ func TestAwaitCallsignHoldsUntilTheSessionTakesAPrompt(t *testing.T) {
 	)
 }
 
-func TestAwaitCallsignReturnsOnAPromptAfterTheChannelStarted(t *testing.T) {
+func TestAwaitCallsignReturnsOnPromptAfterChannelStarted(t *testing.T) {
 	s := service_tester.New(t)
 	since := s.Store.Clock()().Add(-time.Second)
 	r := s.Check("session-1")
@@ -30,7 +30,7 @@ func TestAwaitCallsignReturnsOnAPromptAfterTheChannelStarted(t *testing.T) {
 	)
 }
 
-func TestAwaitCallsignIgnoresAPromptOlderThanTheChannel(t *testing.T) {
+func TestAwaitCallsignIgnoresPromptOlderThanChannel(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)
@@ -53,7 +53,7 @@ func TestAwaitCallsignNeedsNoAnnounce(t *testing.T) {
 	)
 }
 
-func TestAwaitCallsignWakesOnTheNextPrompt(t *testing.T) {
+func TestAwaitCallsignWakesOnNextPrompt(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
 	s.Store.Advance(time.Minute)
@@ -80,7 +80,7 @@ func TestAwaitCallsignWakesOnTheNextPrompt(t *testing.T) {
 	}
 }
 
-func TestAwaitCallsignReleasesWhenTheCallerGoesAway(t *testing.T) {
+func TestAwaitCallsignReleasesWhenCallerGoesAway(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("session-1")
 	x, cancel := context.WithCancel(context.Background())
@@ -99,7 +99,7 @@ func TestAwaitCallsignReleasesWhenTheCallerGoesAway(t *testing.T) {
 	}
 }
 
-func TestAwaitCallsignReleasesWhenTheServiceStops(t *testing.T) {
+func TestAwaitCallsignReleasesWhenServiceStops(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("session-1")
 	result := make(chan string, 1)

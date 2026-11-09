@@ -96,8 +96,12 @@ func TestRenameProductionSymbolRewritesTestFile(t *testing.T) {
 		"pkg/target/calculate.go",
 	)
 	assert.StringContains(t, "func Calculate(", declaration)
-	inTest := service_tester.ReadFixtureFile(t, d, "pkg/target/compute_test.go")
-	assert.StringContains(t, "Calculate()", inTest)
+	testFile := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/compute_test.go",
+	)
+	assert.StringContains(t, "Calculate()", testFile)
 	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assert.StringContains(t, "target.Calculate()", crossPackage)
 }

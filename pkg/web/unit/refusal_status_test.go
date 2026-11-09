@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUpstreamsOwnRefusalsHaveNoClass(t *testing.T) {
+func TestUpstreamsOwnRefusalsHaveNoClass(t *testing.T) {
 	for _, status := range []int{
 		http.StatusBadRequest,
 		http.StatusUnauthorized,
@@ -21,7 +21,7 @@ func TestAnUpstreamsOwnRefusalsHaveNoClass(t *testing.T) {
 	}
 }
 
-func TestADaemonsUnprocessableStatusIsTheCallersMistake(t *testing.T) {
+func TestDaemonsUnprocessableStatusIsCallersMistake(t *testing.T) {
 	e := refusal.NewDaemonTable().Classify(
 		http.StatusUnprocessableEntity,
 		"title is missing",
@@ -30,7 +30,7 @@ func TestADaemonsUnprocessableStatusIsTheCallersMistake(t *testing.T) {
 	assert.String(t, "title is missing", e.Error())
 }
 
-func TestADaemonsForbiddenStatusIsForbidden(t *testing.T) {
+func TestDaemonsForbiddenStatusIsForbidden(t *testing.T) {
 	assert.True(
 		t,
 		forbidden.Is(
@@ -39,21 +39,21 @@ func TestADaemonsForbiddenStatusIsForbidden(t *testing.T) {
 	)
 }
 
-func TestARateLimitIsUnavailable(t *testing.T) {
+func TestRateLimitIsUnavailable(t *testing.T) {
 	assert.True(
 		t,
 		unavailable.Is(refusal.Status(http.StatusTooManyRequests, "slow down")),
 	)
 }
 
-func TestABadGatewayIsUnavailable(t *testing.T) {
+func TestBadGatewayIsUnavailable(t *testing.T) {
 	assert.True(
 		t,
 		unavailable.Is(refusal.Status(http.StatusBadGateway, "upstream gone")),
 	)
 }
 
-func TestAGatewayTimeoutIsUnavailable(t *testing.T) {
+func TestGatewayTimeoutIsUnavailable(t *testing.T) {
 	assert.True(
 		t,
 		unavailable.Is(
@@ -62,6 +62,6 @@ func TestAGatewayTimeoutIsUnavailable(t *testing.T) {
 	)
 }
 
-func TestAnUnknownStatusHasNoClass(t *testing.T) {
+func TestUnknownStatusHasNoClass(t *testing.T) {
 	assert.Nil(t, refusal.Status(http.StatusTeapot, "short and stout"))
 }

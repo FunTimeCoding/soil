@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestSubsystemIsTheParentDirectory(t *testing.T) {
+func TestSubsystemIsParentDirectory(t *testing.T) {
 	assert.String(
 		t,
 		"web",
@@ -17,7 +17,7 @@ func TestSubsystemIsTheParentDirectory(t *testing.T) {
 	)
 }
 
-func TestSubsystemAtTheLayoutRootIsTheModuleName(t *testing.T) {
+func TestSubsystemAtLayoutRootIsModuleName(t *testing.T) {
 	assert.String(
 		t,
 		"alfa",
@@ -25,7 +25,7 @@ func TestSubsystemAtTheLayoutRootIsTheModuleName(t *testing.T) {
 	)
 }
 
-func TestSubsystemClimbsPastABannedName(t *testing.T) {
+func TestSubsystemClimbsPastBannedName(t *testing.T) {
 	assert.String(
 		t,
 		"machinery",
@@ -36,7 +36,7 @@ func TestSubsystemClimbsPastABannedName(t *testing.T) {
 	)
 }
 
-func TestSubsystemClimbsPastANameThatIsNoIdentifier(t *testing.T) {
+func TestSubsystemClimbsPastNameThatIsNoIdentifier(t *testing.T) {
 	assert.String(
 		t,
 		"bravo",
@@ -47,7 +47,7 @@ func TestSubsystemClimbsPastANameThatIsNoIdentifier(t *testing.T) {
 	)
 }
 
-func TestSubsystemOfAModuleRootIsEmpty(t *testing.T) {
+func TestSubsystemOfModuleRootIsEmpty(t *testing.T) {
 	assert.String(
 		t,
 		"",
@@ -55,7 +55,7 @@ func TestSubsystemOfAModuleRootIsEmpty(t *testing.T) {
 	)
 }
 
-func TestSubsystemNeverClimbsAboveTheModule(t *testing.T) {
+func TestSubsystemNeverClimbsAboveModule(t *testing.T) {
 	assert.String(
 		t,
 		"",
@@ -66,6 +66,6 @@ func TestSubsystemNeverClimbsAboveTheModule(t *testing.T) {
 	)
 }
 
-func TestSubsystemOfTheStandardLibrary(t *testing.T) {
+func TestSubsystemOfStandardLibrary(t *testing.T) {
 	assert.String(t, "crypto", imports.Subsystem("crypto/rand", ""))
 }

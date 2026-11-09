@@ -191,8 +191,10 @@ type CoverageTool struct {
 
 // CruiseRequest defines model for CruiseRequest.
 type CruiseRequest struct {
-	Mode        CruiseRequestMode `json:"mode"`
-	PaceMinutes *int              `json:"pace_minutes,omitempty"`
+	Mode CruiseRequestMode `json:"mode"`
+
+	// PaceMinutes Minutes between wakes, for paced mode - a whole number from 1 to 60.
+	PaceMinutes *int `json:"pace_minutes,omitempty"`
 }
 
 // CruiseRequestMode defines model for CruiseRequest.Mode.

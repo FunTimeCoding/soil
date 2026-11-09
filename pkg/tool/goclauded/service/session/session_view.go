@@ -22,7 +22,7 @@ func (s *Service) SessionView(
 		return nil, e
 	}
 
-	loads, f := s.transcript.ContextLoadsBySession(x, d.Identifier)
+	loads, f := s.transcript.SessionContextLoads(x, d.Identifier)
 
 	if unavailable.Is(f) {
 		result.LoadsHidden = f.Error()
@@ -32,7 +32,7 @@ func (s *Service) SessionView(
 
 	result.Loads = loads
 
-	if result.Pulses, e = s.message.PulsesBySession(d.Identifier); e != nil {
+	if result.Pulses, e = s.message.SessionPulses(d.Identifier); e != nil {
 		return nil, e
 	}
 

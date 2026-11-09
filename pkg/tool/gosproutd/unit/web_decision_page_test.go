@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheGridPreservesEveryCard(t *testing.T) {
+func TestGridPreservesEveryCard(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -37,7 +37,7 @@ func TestTheGridPreservesEveryCard(t *testing.T) {
 	)
 }
 
-func TestAnOpenedCardKeepsItsFormsOutsideTheLiveRegions(t *testing.T) {
+func TestOpenedCardKeepsItsFormsOutsideLiveRegions(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,

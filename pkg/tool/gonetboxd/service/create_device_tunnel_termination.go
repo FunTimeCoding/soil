@@ -14,19 +14,19 @@ func (s *Service) CreateDeviceTunnelTermination(
 	return guarded(
 		s.guard,
 		func() (*tunnel_termination.Termination, error) {
-			t, e := s.client.TunnelByName(tunnel)
+			t, e := s.client.Tunnel(tunnel)
 
 			if e != nil {
 				return nil, e
 			}
 
-			d, e := s.client.DeviceByName(device)
+			d, e := s.client.Device(device)
 
 			if e != nil {
 				return nil, e
 			}
 
-			i, e := s.client.DeviceInterfaceByName(d, interfaceName)
+			i, e := s.client.DeviceInterface(d, interfaceName)
 
 			if e != nil {
 				return nil, e

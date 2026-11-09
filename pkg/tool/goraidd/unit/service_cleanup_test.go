@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestACancelledCleanupRemovesNothing(t *testing.T) {
+func TestCancelledCleanupRemovesNothing(t *testing.T) {
 	o := service_tester.NewOption(
 		t,
 		t.TempDir(),

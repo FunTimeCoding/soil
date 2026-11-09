@@ -43,7 +43,7 @@ func checkChains(
 				return true
 			}
 
-			if f := calleeOf(p, c); f == nil || s.selfFor(f) || s.lendsFor(f) ||
+			if f := callee(p, c); f == nil || s.selfFor(f) || s.lendsFor(f) ||
 				s.isReleasing(p, selector) {
 				return true
 			}

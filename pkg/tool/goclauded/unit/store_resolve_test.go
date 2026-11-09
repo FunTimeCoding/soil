@@ -9,14 +9,14 @@ import (
 func TestResolveByName(t *testing.T) {
 	s := store_tester.New(t)
 	r := s.EnsureSession("session-1")
-	resolved, e := s.Store.ResolveByCallsign(r.Callsign)
+	resolved, e := s.Store.ResolveCallsign(r.Callsign)
 	assert.FatalOnError(t, e)
 	assert.String(t, "session-1", resolved)
 }
 
 func TestResolveByNameNotFound(t *testing.T) {
 	s := store_tester.New(t)
-	resolved, e := s.Store.ResolveByCallsign("nonexistent")
+	resolved, e := s.Store.ResolveCallsign("nonexistent")
 	assert.FatalOnError(t, e)
 	assert.String(t, "", resolved)
 }
@@ -59,14 +59,14 @@ func TestAliasOwnerNotFound(t *testing.T) {
 func TestSessionByName(t *testing.T) {
 	s := store_tester.New(t)
 	r := s.EnsureSession("session-1")
-	result, e := s.Store.SessionByCallsign(r.Callsign)
+	result, e := s.Store.CallsignSession(r.Callsign)
 	assert.FatalOnError(t, e)
 	assert.String(t, "session-1", result.Identifier)
 }
 
 func TestSessionByNameNotFound(t *testing.T) {
 	s := store_tester.New(t)
-	result, e := s.Store.SessionByCallsign("nonexistent")
+	result, e := s.Store.CallsignSession("nonexistent")
 	assert.FatalOnError(t, e)
 	assert.True(t, result == nil)
 }

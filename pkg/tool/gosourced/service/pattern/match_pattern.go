@@ -78,7 +78,7 @@ func (s *Service) MatchPattern(
 	var entries []*pattern_site.Entry
 
 	for _, reference := range lookup.ObjectReferences(all, isAnchor) {
-		file := lookup.SyntaxFileAt(reference.Package, reference.Ident.Pos())
+		file := lookup.SyntaxFile(reference.Package, reference.Ident.Pos())
 
 		if file == nil {
 			continue
@@ -106,7 +106,7 @@ func (s *Service) MatchPattern(
 			continue
 		}
 
-		entry, i := s.siteEntryFor(
+		entry, i := s.siteEntry(
 			directory,
 			set,
 			contents,

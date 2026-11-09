@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestCloseFlushesAnEventStillBeingDispatched(t *testing.T) {
+func TestCloseFlushesEventStillBeingDispatched(t *testing.T) {
 	asked := make(chan struct{}, 1)
 	release := make(chan struct{})
 	var releasing sync.Once

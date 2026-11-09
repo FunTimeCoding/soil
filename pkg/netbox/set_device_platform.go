@@ -9,13 +9,13 @@ func (c *Client) SetDevicePlatform(
 	name string,
 	platformName string,
 ) (*device.Device, error) {
-	d, e := c.DeviceByName(name)
+	d, e := c.Device(name)
 
 	if e != nil {
 		return nil, e
 	}
 
-	p, f := c.PlatformByName(platformName)
+	p, f := c.Platform(platformName)
 
 	if f != nil {
 		return nil, f

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	c, e := postgres.New("postgres://alfa:bravo@127.0.0.1:1/charlie")
 	assert.FatalOnError(t, e)
 	t.Cleanup(c.Close)

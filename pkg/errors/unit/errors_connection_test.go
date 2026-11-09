@@ -91,7 +91,7 @@ func TestConnectionBrokenAnswerIsDropped(t *testing.T) {
 	assert.String(t, "delta.example: connection dropped", f.Error())
 }
 
-func TestALostHttp2ConnectionIsDropped(t *testing.T) {
+func TestLostHttp2ConnectionIsDropped(t *testing.T) {
 	f := connection.Classify(
 		&url.Error{
 			Op:  "Get",

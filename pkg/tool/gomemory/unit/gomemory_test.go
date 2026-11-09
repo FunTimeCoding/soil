@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestProfileEmitsTheProfileAndPassesTopicAndDetail(t *testing.T) {
+func TestProfileEmitsProfileAndPassesTopicAndDetail(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Profile = &client.ProfileResponse{Text: "alfa"}
@@ -36,7 +36,7 @@ func TestProfileWithoutFlagsSendsNoTopicOrDetail(t *testing.T) {
 	assert.Nil(t, c.ProfileCalls[0].Detail)
 }
 
-func TestProfilePrintsTheRenderedDocument(t *testing.T) {
+func TestProfilePrintsRenderedDocument(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Profile = &client.ProfileResponse{Text: "# always\n\nalfa\n"}
@@ -46,7 +46,7 @@ func TestProfilePrintsTheRenderedDocument(t *testing.T) {
 	assert.String(t, "# always\n\nalfa\n", output)
 }
 
-func TestAFailedProfileExitsWithItsMessage(t *testing.T) {
+func TestFailedProfileExitsWithItsMessage(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Failure = errors.New("foxtrot")
@@ -56,7 +56,7 @@ func TestAFailedProfileExitsWithItsMessage(t *testing.T) {
 	assert.StringContains(t, "foxtrot", failure)
 }
 
-func TestStatisticEmitsTheSummaryForTheScope(t *testing.T) {
+func TestStatisticEmitsSummaryForScope(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Tokens = &client.TokenSummary{Withheld: 3, Memories: 5}
@@ -71,7 +71,7 @@ func TestStatisticEmitsTheSummaryForTheScope(t *testing.T) {
 	assert.String(t, "kilo", *c.TokenCalls[0].Scope)
 }
 
-func TestRelationsEmitsTheEdges(t *testing.T) {
+func TestRelationsEmitsEdges(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Edges = []client.Relation{{SourceName: "alfa", TargetName: "bravo"}}
@@ -99,7 +99,7 @@ func TestRelationsEmitsTheEdges(t *testing.T) {
 	assert.String(t, "kilo", *c.RelationCalls[0].Scope)
 }
 
-func TestRelationsUntypedAsksForTheUntypedFilter(t *testing.T) {
+func TestRelationsUntypedAsksForUntypedFilter(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	_, _, code := run(t, c, "relations", "--untyped")
@@ -109,7 +109,7 @@ func TestRelationsUntypedAsksForTheUntypedFilter(t *testing.T) {
 	assert.String(t, "untyped", *c.RelationCalls[0].Type)
 }
 
-func TestAFailedCallExitsWithItsMessage(t *testing.T) {
+func TestFailedCallExitsWithItsMessage(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Failure = errors.New("foxtrot")

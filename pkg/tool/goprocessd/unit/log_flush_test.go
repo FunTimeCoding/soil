@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestALineWithoutNewlineIsFlushedAfterTheTimeout(t *testing.T) {
+func TestLineWithoutNewlineIsFlushedAfterTimeout(t *testing.T) {
 	reader, writer, e := os.Pipe()
 	assert.FatalOnError(t, e)
 	defer errors.PanicClose(reader)

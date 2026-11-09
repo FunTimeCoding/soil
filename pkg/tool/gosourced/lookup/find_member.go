@@ -32,6 +32,10 @@ func findMember(
 		)
 	}
 
+	if i, isInterface := named.Underlying().(*types.Interface); isInterface {
+		return interfaceMethod(i, p, symbol, receiver)
+	}
+
 	for i := range named.NumMethods() {
 		m := named.Method(i)
 

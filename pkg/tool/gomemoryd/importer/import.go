@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func Import(
@@ -75,7 +76,7 @@ func Import(
 		o.Content = parsed.Content
 		o.Description = parsed.Description
 		o.Type = parsed.Type
-		_, e = s.CreateMemory(o)
+		_, e = s.CreateMemory(o, time.Now())
 
 		if e != nil {
 			return nil, e

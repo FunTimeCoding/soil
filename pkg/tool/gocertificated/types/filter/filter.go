@@ -1,11 +1,11 @@
 package filter
 
-import "time"
+import "github.com/funtimecoding/soil/pkg/time/window"
 
 type Filter struct {
 	Authority string
 	Kind      string
-	Before    *time.Time
+	Window    *window.Window
 	Revoked   *bool
 	Limit     int
 }

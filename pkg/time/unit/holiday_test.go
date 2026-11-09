@@ -61,7 +61,7 @@ func TestPublicHolidayCalendarFrom2024To2027(t *testing.T) {
 			day.New(2027, time.December, 25),
 			day.New(2027, time.December, 26),
 		},
-		holidaysBetween(
+		holidays(
 			day.New(2024, time.November, 1),
 			day.New(2027, time.December, 31),
 		),

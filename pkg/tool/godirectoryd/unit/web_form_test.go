@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestAFailedFormKeepsItsAlertAndValuesAtTheForm(t *testing.T) {
+func TestFailedFormKeepsItsAlertAndValuesAtForm(t *testing.T) {
 	s := base.New(t)
 	var location string
 

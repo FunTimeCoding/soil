@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
+func TestDaemonClosesClientItBuilt(t *testing.T) {
 	c := mock_client.New()
 	o := option.New()
 	o.Source = func() face.OpnsenseClient { return c }
@@ -21,7 +21,7 @@ func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
 	assert.Integer(t, 1, c.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	c := mock_client.New()
 	before := goleak.IgnoreCurrent()
 	daemon_tester.New(t, c).Close()

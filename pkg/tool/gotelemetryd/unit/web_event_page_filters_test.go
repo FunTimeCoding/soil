@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRemovingOneFilterKeepsTheOthers(t *testing.T) {
+func TestRemovingOneFilterKeepsOthers(t *testing.T) {
 	o := query_option.New()
 	o.Tool = "alfa"
 	o.Kind = "bravo"

@@ -18,7 +18,7 @@ func (s *Service) UnresolvedThreads(
 				return nil, e
 			}
 
-			posts, f := s.mattermost.PostsSince(h, since)
+			posts, f := s.mattermost.Posts(h, since)
 
 			if f != nil {
 				return nil, f

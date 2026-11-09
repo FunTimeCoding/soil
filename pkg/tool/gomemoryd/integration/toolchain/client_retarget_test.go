@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheClientRoundTripsARetarget(t *testing.T) {
+func TestClientRoundTripsRetarget(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteFile(t, root, "pkg/bravo/run.go", "package bravo\n")
 	c := base.NewRooted(t, root).MemoryClient(t)
@@ -34,5 +34,5 @@ func TestTheClientRoundTripsARetarget(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, reports)
 	assert.String(t, "plain", reports[0].Name)
-	assert.String(t, "pkg/bravo/run.go", reports[0].Changes[0].After)
+	assert.String(t, "pkg/bravo/run.go", reports[0].Changes[0].New)
 }

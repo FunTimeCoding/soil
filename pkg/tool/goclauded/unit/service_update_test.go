@@ -26,7 +26,7 @@ func TestUpdate(t *testing.T) {
 		event_query.New().Kind(constant.Update).SetLimit(10),
 	)
 	assert.Count(t, 1, events)
-	completions := s.Store.CompletionsBySession("session-1")
+	completions := s.Store.SessionCompletions("session-1")
 	assert.Count(t, 1, completions)
 	assert.String(t, "new scope", completions[0].Topic)
 	assert.String(t, "completed initial work", completions[0].Summary)

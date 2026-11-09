@@ -17,7 +17,7 @@ func (s *Server) setPasswordSubmit(
 	e := s.service.SetPassword(account, r.FormValue(constant.PasswordField))
 
 	if e != nil {
-		form.RedirectFor(
+		form.IdentifierRedirect(
 			w,
 			r,
 			constant.UserPath,

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAQuietRefusalIsNotCapturedByTheGuard(t *testing.T) {
+func TestQuietRefusalIsNotCapturedByGuard(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("%q is not a valid Stat.", "bravo")
 	m := memory.New()

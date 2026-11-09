@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestARefusedRegistrationIsNotReported(t *testing.T) {
+func TestRefusedRegistrationIsNotReported(t *testing.T) {
 	o := tester.New(t)
 	status := o.RegisterRaw(t, map[string]any{"client_name": "no-redirect"})
 	assert.Integer(t, http.StatusBadRequest, status)

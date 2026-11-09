@@ -18,7 +18,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsOutItsGuardsFirst(t *testing.T) {
+func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
 	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
@@ -44,7 +44,7 @@ func TestTheDaemonHandsOutItsGuardsFirst(t *testing.T) {
 	}
 }
 
-func TestTheDaemonCountsReapsOnItsRegistry(t *testing.T) {
+func TestDaemonCountsReapsOnItsRegistry(t *testing.T) {
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
 	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
@@ -55,7 +55,7 @@ func TestTheDaemonCountsReapsOnItsRegistry(t *testing.T) {
 	assert.True(t, reaper.CountsOn(y))
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
 	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }

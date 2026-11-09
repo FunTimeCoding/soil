@@ -29,7 +29,7 @@ func TestClassifyKeepsCallerErrorsOut(t *testing.T) {
 	)
 }
 
-func TestClassifyNamesTheClass(t *testing.T) {
+func TestClassifyNamesClass(t *testing.T) {
 	assert.String(
 		t,
 		"not_found",
@@ -40,7 +40,7 @@ func TestClassifyNamesTheClass(t *testing.T) {
 	assert.String(t, "", classify.Class(errors.New("connection reset")))
 }
 
-func TestClassifyMessagePutsTheContextFirst(t *testing.T) {
+func TestClassifyMessagePutsContextFirst(t *testing.T) {
 	assert.String(
 		t,
 		"post failed: post not found: 8",
@@ -61,7 +61,7 @@ func TestClassifyMessagePutsTheContextFirst(t *testing.T) {
 	)
 }
 
-func TestClassifyMessageWithoutContextIsTheError(t *testing.T) {
+func TestClassifyMessageWithoutContextIsError(t *testing.T) {
 	assert.String(
 		t,
 		"post not found: 8",

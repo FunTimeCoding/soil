@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-func TestALivePathInBackticksPasses(t *testing.T) {
+func TestLivePathInBackticksPasses(t *testing.T) {
 	assert.Count(t, 0, check("See `doc/real.md` first."))
 }
 
-func TestADeadPathInBackticksIsReported(t *testing.T) {
+func TestDeadPathInBackticksIsReported(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -23,7 +23,7 @@ func TestADeadPathInBackticksIsReported(t *testing.T) {
 	)
 }
 
-func TestAPathInProseAsksForBackticks(t *testing.T) {
+func TestPathInProseAsksForBackticks(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -36,7 +36,7 @@ func TestAPathInProseAsksForBackticks(t *testing.T) {
 	)
 }
 
-func TestProsePunctuationIsNotPartOfThePath(t *testing.T) {
+func TestProsePunctuationIsNotPartOfPath(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -53,7 +53,7 @@ func TestProsePunctuationIsNotPartOfThePath(t *testing.T) {
 	)
 }
 
-func TestASiblingPathInProseKeepsItsParentPrefix(t *testing.T) {
+func TestSiblingPathInProseKeepsItsParentPrefix(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -66,11 +66,11 @@ func TestASiblingPathInProseKeepsItsParentPrefix(t *testing.T) {
 	)
 }
 
-func TestALocatorInProseIsNotAPath(t *testing.T) {
+func TestLocatorInProseIsNotPath(t *testing.T) {
 	assert.Count(t, 0, check("Docs at https://example.com/doc/real.md."))
 }
 
-func TestACitedMemoryThatExistsPasses(t *testing.T) {
+func TestCitedMemoryThatExistsPasses(t *testing.T) {
 	assert.Count(
 		t,
 		0,
@@ -78,7 +78,7 @@ func TestACitedMemoryThatExistsPasses(t *testing.T) {
 	)
 }
 
-func TestACitedMemoryThatIsMissingIsReported(t *testing.T) {
+func TestCitedMemoryThatIsMissingIsReported(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -91,11 +91,11 @@ func TestACitedMemoryThatIsMissingIsReported(t *testing.T) {
 	)
 }
 
-func TestALiveHeadingPasses(t *testing.T) {
+func TestLiveHeadingPasses(t *testing.T) {
 	assert.Count(t, 0, check("See `doc/real.md#usage` first."))
 }
 
-func TestADeadHeadingIsReportedWithTheNearest(t *testing.T) {
+func TestDeadHeadingIsReportedWithNearest(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -108,7 +108,7 @@ func TestADeadHeadingIsReportedWithTheNearest(t *testing.T) {
 	)
 }
 
-func TestAHeadingOnADeadPathReportsThePath(t *testing.T) {
+func TestHeadingOnDeadPathReportsPath(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -121,11 +121,11 @@ func TestAHeadingOnADeadPathReportsThePath(t *testing.T) {
 	)
 }
 
-func TestABareNameUnderABaseResolves(t *testing.T) {
+func TestBareNameUnderBaseResolves(t *testing.T) {
 	assert.Count(t, 0, checkUnder("See `real.md` first.", "doc"))
 }
 
-func TestADeadBareNameUnderABaseIsReported(t *testing.T) {
+func TestDeadBareNameUnderBaseIsReported(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -135,11 +135,11 @@ func TestADeadBareNameUnderABaseIsReported(t *testing.T) {
 	)
 }
 
-func TestABareNameTriesEveryBase(t *testing.T) {
+func TestBareNameTriesEveryBase(t *testing.T) {
 	assert.Count(t, 0, checkUnder("See `real.go` and `real.md`.", "doc", "pkg"))
 }
 
-func TestAHeadingUnderABaseIsChecked(t *testing.T) {
+func TestHeadingUnderBaseIsChecked(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -152,7 +152,7 @@ func TestAHeadingUnderABaseIsChecked(t *testing.T) {
 	)
 }
 
-func TestADeadBaseIsReported(t *testing.T) {
+func TestDeadBaseIsReported(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{
@@ -162,7 +162,7 @@ func TestADeadBaseIsReported(t *testing.T) {
 	)
 }
 
-func TestAnIdentifierUnderABaseIsNotAPath(t *testing.T) {
+func TestIdentifierUnderBaseIsNotPath(t *testing.T) {
 	assert.Count(
 		t,
 		0,
@@ -170,11 +170,11 @@ func TestAnIdentifierUnderABaseIsNotAPath(t *testing.T) {
 	)
 }
 
-func TestABareNameWithoutABaseIsNotChecked(t *testing.T) {
+func TestBareNameWithoutBaseIsNotChecked(t *testing.T) {
 	assert.Count(t, 0, check("See `gone.md` first."))
 }
 
-func TestAFragmentOnANonMarkdownTargetIsReported(t *testing.T) {
+func TestFragmentOnNonMarkdownTargetIsReported(t *testing.T) {
 	assert.Any(
 		t,
 		[]*reference.Finding{

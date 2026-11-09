@@ -11,7 +11,7 @@ import (
 )
 
 func (s *Server) live() http.HandlerFunc {
-	return layout.HandleServerSideEventWithRequest(
+	return layout.HandleRequestServerSideEvent(
 		s.notifier,
 		func(
 			w http.ResponseWriter,
@@ -33,7 +33,7 @@ func (s *Server) live() http.HandlerFunc {
 			}
 
 			if subs.Has(constant.Roster) {
-				s.push(w, constant.Roster, s.rosterSection)
+				s.pushRoster(w)
 			}
 
 			if subs.Has(constant.Activity) {
@@ -49,7 +49,7 @@ func (s *Server) live() http.HandlerFunc {
 			identifier := q.URL.Query().Get(constant.EventSession)
 
 			if subs.Has(constant.Pulse) && identifier != "" {
-				pulses, e := s.message.PulsesBySession(identifier)
+				pulses, e := s.message.SessionPulses(identifier)
 
 				if e != nil {
 					s.reporter.CaptureException(e)

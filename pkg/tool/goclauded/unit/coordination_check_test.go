@@ -43,7 +43,7 @@ func TestCheckRecentActivity(t *testing.T) {
 		map[string]any{constant.Message: "indexing done"},
 	)
 	check := b.CheckLive()
-	completions := clientEntriesByKind(
+	completions := clientKindEntries(
 		check.Entries,
 		constant.QueueSessionComplete,
 	)
@@ -71,7 +71,7 @@ func TestCheckRecentActivityLive(t *testing.T) {
 	)
 	check := b.CheckLive()
 	assert.True(t, check.Changed)
-	completions := clientEntriesByKind(
+	completions := clientKindEntries(
 		check.Entries,
 		constant.QueueSessionComplete,
 	)
@@ -92,6 +92,6 @@ func TestCheckRecentActivityUpdate(t *testing.T) {
 		},
 	)
 	check := b.CheckLive()
-	updates := clientEntriesByKind(check.Entries, constant.QueueSessionUpdate)
+	updates := clientKindEntries(check.Entries, constant.QueueSessionUpdate)
 	assert.True(t, len(updates) > 0)
 }

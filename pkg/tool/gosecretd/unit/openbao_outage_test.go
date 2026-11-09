@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnOpenbaoOutageIsAnsweredUnavailableWithoutACaptureOverRest(
+func TestOpenbaoOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	s := base.New(t)
@@ -31,7 +31,7 @@ func TestAnOpenbaoOutageIsAnsweredUnavailableWithoutACaptureOverRest(
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestAnOpenbaoOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestOpenbaoOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	s.MockClient.Failure = refusedDial()
@@ -45,7 +45,7 @@ func TestAnOpenbaoOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestTheDaemonHandsOutTheOpenbaoGuardFirst(t *testing.T) {
+func TestDaemonHandsOutOpenbaoGuardFirst(t *testing.T) {
 	d := newOpenbaoDaemon(t)
 	_, okay := d.Workers()[0].(*peer.Guard)
 	assert.True(t, okay)

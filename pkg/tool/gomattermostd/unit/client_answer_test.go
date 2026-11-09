@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAnUnknownChannelIsNotFound(t *testing.T) {
+func TestUnknownChannelIsNotFound(t *testing.T) {
 	r := client_tester.New(
 		t,
 		func(m *http.ServeMux) {
@@ -43,7 +43,7 @@ func TestAnUnknownChannelIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAnUpstreamFailureIsNotNotFound(t *testing.T) {
+func TestUpstreamFailureIsNotNotFound(t *testing.T) {
 	r := client_tester.New(
 		t,
 		func(m *http.ServeMux) {
@@ -75,7 +75,7 @@ func TestAnUpstreamFailureIsNotNotFound(t *testing.T) {
 	assert.StringContains(t, "Invalid or expired session.", e.Error())
 }
 
-func TestAnUnknownPostHasNoReactions(t *testing.T) {
+func TestUnknownPostHasNoReactions(t *testing.T) {
 	r := client_tester.New(
 		t,
 		func(m *http.ServeMux) {
@@ -98,7 +98,7 @@ func TestAnUnknownPostHasNoReactions(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestTheClientReachesTheDaemon(t *testing.T) {
+func TestClientReachesDaemon(t *testing.T) {
 	r := client_tester.New(t, func(*http.ServeMux) {})
 	assert.FatalOnError(t, r.Client.Reachable(context.Background()))
 }

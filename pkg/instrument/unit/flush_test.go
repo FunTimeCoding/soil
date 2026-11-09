@@ -29,7 +29,7 @@ func TestFlushDeliversReportedEvent(t *testing.T) {
 	assert.StringNotContains(t, "sentry flush fail", l.String())
 }
 
-func TestCloseDeliversEventsQueuedBehindASlowSend(t *testing.T) {
+func TestCloseDeliversEventsQueuedBehindSlowSend(t *testing.T) {
 	received := sentry_receiver.NewDelayed(t, 20*time.Millisecond)
 	i := instrument.New(
 		identity.New(

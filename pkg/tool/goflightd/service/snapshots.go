@@ -1,14 +1,14 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/time/window"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/snapshot"
-	"time"
 )
 
 func (s *Service) Snapshots(
-	start time.Time,
-	end time.Time,
+	w *window.Window,
 	limit int,
 ) ([]snapshot.Snapshot, error) {
-	return s.store.SnapshotsByTimeRange(start, end, limit)
+	return s.store.Snapshots(w.Bound(s.clock(), constant.QuerySpan), limit)
 }

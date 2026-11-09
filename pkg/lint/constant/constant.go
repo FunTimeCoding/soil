@@ -9,6 +9,9 @@ const (
 	SummaryKind       = "resource_summary"
 	ReceiverArgument  = -1
 	CloseMethod       = "Close"
+	ReachableMethod   = "Reachable"
+	PeerPackage       = "github.com/funtimecoding/soil/pkg/peer"
+	GuardType         = "Guard"
 	SyncPackage       = "sync"
 	TimePackage       = "time"
 	TimeType          = "Time"

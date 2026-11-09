@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAChipIsASpanALinkOrAButton(t *testing.T) {
+func TestChipIsSpanLinkOrButton(t *testing.T) {
 	assert.String(
 		t,
 		`<span class="chip">alfa</span>`,
@@ -30,7 +30,7 @@ func TestAChipIsASpanALinkOrAButton(t *testing.T) {
 	)
 }
 
-func TestAToggleChipIsAPressableButtonCarryingItsHooks(t *testing.T) {
+func TestToggleChipIsPressableButtonCarryingItsHooks(t *testing.T) {
 	assert.String(
 		t,
 		`<button type="button" aria-pressed="true" class="chip toggle active" title="charlie help" data-tag="charlie" onclick="toggleTag(this)">charlie</button>`,
@@ -51,7 +51,7 @@ func TestAToggleChipIsAPressableButtonCarryingItsHooks(t *testing.T) {
 	)
 }
 
-func TestACurrentLinkChipCarriesTheActiveLookAndTheMark(t *testing.T) {
+func TestCurrentLinkChipCarriesActiveLookAndMark(t *testing.T) {
 	assert.String(
 		t,
 		`<a href="/golf" class="chip active" aria-current="true">golf</a>`,

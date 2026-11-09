@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestARefusedTelemetryDaemonCostsTheCommandNothing(t *testing.T) {
+func TestRefusedTelemetryDaemonCostsCommandNothing(t *testing.T) {
 	s := httptest.NewServer(http.NotFoundHandler())
 	host, port := upstream_tester.HostPort(t, s.URL)
 	s.Close()
@@ -33,7 +33,7 @@ func TestARefusedTelemetryDaemonCostsTheCommandNothing(t *testing.T) {
 	assert.True(t, time.Since(started) < constant.CommandLineTimeout)
 }
 
-func TestAStalledTelemetryDaemonHoldsTheCommandOnlyToItsTimeout(t *testing.T) {
+func TestStalledTelemetryDaemonHoldsCommandOnlyToItsTimeout(t *testing.T) {
 	release := make(chan struct{})
 	s := httptest.NewServer(
 		http.HandlerFunc(

@@ -50,12 +50,12 @@ the 500 as a missing branch.
 
 Everything else answers 500 - or the status its class names, such as
 503 for a transport failure no guard stands in front of - through
-`answer` and `answerWith`, private methods on the Server struct that
+`answer` and `answerMessage`, private methods on the Server struct that
 fill the generated `ErrorResponse` from `classify.Capture`:
 
 ```go
-// answer_with.go
-func (s *Server) answerWith(
+// answer_message.go
+func (s *Server) answerMessage(
     e error,
     message string,
 ) *server.ErrorResponse {
@@ -66,7 +66,7 @@ func (s *Server) answerWith(
 
 // answer.go
 func (s *Server) answer(e error) *server.ErrorResponse {
-    return s.answerWith(e, "")
+    return s.answerMessage(e, "")
 }
 ```
 

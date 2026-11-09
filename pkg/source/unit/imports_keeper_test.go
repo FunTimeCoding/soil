@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestKeeperIsTheStandardLibrary(t *testing.T) {
+func TestKeeperIsStandardLibrary(t *testing.T) {
 	keeper, reason := imports.Keeper(
 		"example.org/alfa/pkg/time/clock",
 		"time",
@@ -19,7 +19,7 @@ func TestKeeperIsTheStandardLibrary(t *testing.T) {
 	assert.String(t, "stdlib", reason)
 }
 
-func TestKeeperIsTheImportSharingTheLongestPath(t *testing.T) {
+func TestKeeperIsImportSharingLongestPath(t *testing.T) {
 	keeper, reason := imports.Keeper(
 		"example.org/alfa/pkg/tool/goalfa/server",
 		constant.ConstantPackage,
@@ -34,7 +34,7 @@ func TestKeeperIsTheImportSharingTheLongestPath(t *testing.T) {
 	assert.String(t, "own", reason)
 }
 
-func TestKeeperOnATieIsTheDeeperPackage(t *testing.T) {
+func TestKeeperOnTieIsDeeperPackage(t *testing.T) {
 	keeper, reason := imports.Keeper(
 		"example.org/alfa/pkg/tool/goalfa",
 		constant.ConstantPackage,
@@ -49,7 +49,7 @@ func TestKeeperOnATieIsTheDeeperPackage(t *testing.T) {
 	assert.String(t, "deeper", reason)
 }
 
-func TestKeeperOnEqualDepthIsTheOneAlreadyPlain(t *testing.T) {
+func TestKeeperOnEqualDepthIsOneAlreadyPlain(t *testing.T) {
 	keeper, reason := imports.Keeper(
 		"example.org/alfa/pkg/tool/goalfa",
 		constant.ConstantPackage,
@@ -64,7 +64,7 @@ func TestKeeperOnEqualDepthIsTheOneAlreadyPlain(t *testing.T) {
 	assert.String(t, "already plain", reason)
 }
 
-func TestKeeperOtherwiseIsTheFirstByPath(t *testing.T) {
+func TestKeeperOtherwiseIsFirstByPath(t *testing.T) {
 	keeper, reason := imports.Keeper(
 		"example.org/alfa/pkg/tool/goalfa",
 		constant.ConstantPackage,

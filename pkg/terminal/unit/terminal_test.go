@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestNoticelnWritesToFailureWithoutEndingTheCommand(t *testing.T) {
+func TestNoticelnWritesToFailureWithoutEndingCommand(t *testing.T) {
 	f := newFixture()
 	f.terminal.Line("alfa")
 	f.terminal.Noticeln("bravo", 2)
@@ -17,7 +17,7 @@ func TestNoticelnWritesToFailureWithoutEndingTheCommand(t *testing.T) {
 	assert.Count(t, 0, f.ends.Outcomes)
 }
 
-func TestASuccessfulResponseIsPrintedWithoutExiting(t *testing.T) {
+func TestSuccessfulResponseIsPrintedWithoutExiting(t *testing.T) {
 	f := newFixture()
 	f.terminal.Emit(response.New("alfa", http.StatusOK))
 	assert.String(t, "alfa\n", f.output.String())
@@ -26,7 +26,7 @@ func TestASuccessfulResponseIsPrintedWithoutExiting(t *testing.T) {
 	assert.Count(t, 0, f.ends.Outcomes)
 }
 
-func TestARejectedResponseGoesToFailureAndExitsOne(t *testing.T) {
+func TestRejectedResponseGoesToFailureAndExitsOne(t *testing.T) {
 	f := newFixture()
 	f.terminal.Emit(response.New("not found", http.StatusNotFound))
 	assert.String(t, "", f.output.String())
@@ -43,14 +43,14 @@ func TestExitfWritesToFailureAndExitsOne(t *testing.T) {
 	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
-func TestExitZeroEndsTheCommandAsSucceeded(t *testing.T) {
+func TestExitZeroEndsCommandAsSucceeded(t *testing.T) {
 	f := newFixture()
 	f.terminal.Exit(0)
 	assert.Integers(t, []int{0}, f.exits)
 	assert.Strings(t, []string{"success"}, f.ends.Outcomes)
 }
 
-func TestBlocklnWritesToFailureAndEndsTheCommandAsBlocked(t *testing.T) {
+func TestBlocklnWritesToFailureAndEndsCommandAsBlocked(t *testing.T) {
 	f := newFixture()
 	f.terminal.Blockln(2, "alfa")
 	assert.String(t, "", f.output.String())
@@ -67,21 +67,21 @@ func TestRejectJoinsStatusAndBody(t *testing.T) {
 	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
-func TestRejectWithoutBodyPrintsTheStatus(t *testing.T) {
+func TestRejectWithoutBodyPrintsStatus(t *testing.T) {
 	f := newFixture()
 	f.terminal.Reject("502 Bad Gateway", nil)
 	assert.String(t, "502 Bad Gateway\n", f.failure.String())
 	assert.Integers(t, []int{1}, f.exits)
 }
 
-func TestRequiredReturnsASetVariable(t *testing.T) {
+func TestRequiredReturnsSetVariable(t *testing.T) {
 	t.Setenv("TERMINAL_ALFA", "bravo")
 	f := newFixture()
 	assert.String(t, "bravo", f.terminal.Required("TERMINAL_ALFA"))
 	assert.Count(t, 0, f.exits)
 }
 
-func TestRequiredExitsOneWhenTheVariableIsUnset(t *testing.T) {
+func TestRequiredExitsOneWhenVariableIsUnset(t *testing.T) {
 	t.Setenv("TERMINAL_ALFA", "")
 	f := newFixture()
 	f.terminal.Required("TERMINAL_ALFA")
@@ -91,7 +91,7 @@ func TestRequiredExitsOneWhenTheVariableIsUnset(t *testing.T) {
 	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
-func TestAnEmptyBodyPrintsNothing(t *testing.T) {
+func TestEmptyBodyPrintsNothing(t *testing.T) {
 	f := newFixture()
 	f.terminal.Emit(response.New("", http.StatusNoContent))
 	assert.String(t, "", f.output.String())

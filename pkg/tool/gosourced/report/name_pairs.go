@@ -11,8 +11,8 @@ func namePairs(
 	before map[string]*symbol.Symbol,
 	after map[string]*symbol.Symbol,
 ) []*entry.Entry {
-	removed := byMember(before)
-	added := byMember(after)
+	removed := memberSymbols(before)
+	added := memberSymbols(after)
 	var result []*entry.Entry
 
 	for _, member := range slices.Sorted(maps.Keys(removed)) {

@@ -18,7 +18,7 @@ func (s *Server) GetLinkNotes(
 		page = int(*r.Params.Page)
 	}
 
-	v, e := s.service.NotesByLinkPage(int(r.Identifier), page)
+	v, e := s.service.LinkNotesPage(int(r.Identifier), page)
 
 	if not_found.Is(e) {
 		return server.GetLinkNotes404JSONResponse{Error: e.Error()}, nil

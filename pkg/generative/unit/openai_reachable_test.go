@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAnOpenAIServerThatListsItsModelsIsReachable(t *testing.T) {
+func TestOpenAIServerThatListsItsModelsIsReachable(t *testing.T) {
 	var path string
 	s := httptest.NewServer(
 		http.HandlerFunc(
@@ -35,7 +35,7 @@ func TestAnOpenAIServerThatListsItsModelsIsReachable(t *testing.T) {
 	assert.String(t, "/v1/models", path)
 }
 
-func TestAnOpenAIServerThatRefusesIsNotReachable(t *testing.T) {
+func TestOpenAIServerThatRefusesIsNotReachable(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,

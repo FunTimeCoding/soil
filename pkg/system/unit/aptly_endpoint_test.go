@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestPackagesReadsTheList(t *testing.T) {
+func TestPackagesReadsList(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,
@@ -28,7 +28,7 @@ func TestPackagesReadsTheList(t *testing.T) {
 	assert.String(t, "bravo", password)
 }
 
-func TestRefusedPackagesIsAnErrorNotAPanic(t *testing.T) {
+func TestRefusedPackagesIsErrorNotPanic(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -52,7 +52,7 @@ func TestUploadSendsMultipart(t *testing.T) {
 	)
 }
 
-func TestMissingUploadFileIsAnError(t *testing.T) {
+func TestMissingUploadFileIsError(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusOK, "")
 	e := newAptlyClient(t, s.URL).Upload("golf", "/nonexistent/hotel.deb")
 	assert.True(t, e != nil)

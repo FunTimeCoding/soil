@@ -35,7 +35,7 @@ func (s *Server) MyChannels(
 	)
 
 	if a.Since != "" {
-		since, f := parseSince(a.Since)
+		since, f := parseMoment(a.Since)
 
 		if f != nil {
 			return response.Fail("invalid since format: %v", f)

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestTheFlushNotifiesEverySubscriberAndTouchesTheRoot(t *testing.T) {
+func TestFlushNotifiesEverySubscriberAndTouchesRoot(t *testing.T) {
 	asked := make(chan struct{}, 1)
 	release := make(chan struct{})
 	close(release)
@@ -37,7 +37,7 @@ func TestTheFlushNotifiesEverySubscriberAndTouchesTheRoot(t *testing.T) {
 	assert.StringContains(t, "[alfa]", lima[0].Body)
 }
 
-func TestARootInsideItsWindowWaitsForCloseToFlush(t *testing.T) {
+func TestRootInsideItsWindowWaitsForCloseToFlush(t *testing.T) {
 	asked := make(chan struct{}, 1)
 	release := make(chan struct{})
 	close(release)

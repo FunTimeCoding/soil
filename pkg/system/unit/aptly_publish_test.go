@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestAptlyPublishSignsTheDistribution(t *testing.T) {
+func TestAptlyPublishSignsDistribution(t *testing.T) {
 	var seen aptlySeen
 	c := fakeAptly(
 		t,

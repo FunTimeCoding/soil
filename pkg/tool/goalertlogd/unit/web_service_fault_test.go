@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAStoreFaultCarriesItsOwnText(t *testing.T) {
+func TestStoreFaultCarriesItsOwnText(t *testing.T) {
 	o := web_service_tester.New(t)
 	o.Daemon().Close()
 	r, e := o.Client.GetAlertsWithResponse(

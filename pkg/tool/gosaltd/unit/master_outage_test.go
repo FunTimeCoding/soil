@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestAMasterOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestMasterOutageFailsToolWithoutCapture(t *testing.T) {
 	r := memory.New()
 	d := newDownDaemon(t, r)
 	s := model_context_server.New(
@@ -32,7 +32,7 @@ func TestAMasterOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestTheKeySyncStaysQuietWhileTheMasterIsDown(t *testing.T) {
+func TestKeySyncStaysQuietWhileMasterIsDown(t *testing.T) {
 	r := memory.New()
 	d := newDownDaemon(t, r)
 	workers := d.Workers()
@@ -50,7 +50,7 @@ func TestTheKeySyncStaysQuietWhileTheMasterIsDown(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestTheDaemonHandsOutTheMasterGuardFirst(t *testing.T) {
+func TestDaemonHandsOutMasterGuardFirst(t *testing.T) {
 	_, okay := newDownDaemon(t, memory.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

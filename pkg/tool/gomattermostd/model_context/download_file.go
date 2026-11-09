@@ -24,13 +24,13 @@ func (s *Server) DownloadFile(
 	i, e := s.service.FileInformation(a.FileIdentifier)
 
 	if e != nil {
-		return s.answerWith(x, e, "file information")
+		return s.answerMessage(x, e, "file information")
 	}
 
 	b, e := s.service.File(a.FileIdentifier)
 
 	if e != nil {
-		return s.answerWith(x, e, "file content")
+		return s.answerMessage(x, e, "file content")
 	}
 
 	path := a.Path
@@ -42,7 +42,7 @@ func (s *Server) DownloadFile(
 	e = os.WriteFile(path, b, 0644)
 
 	if errors.Is(e, fs.ErrNotExist) {
-		return s.answerWith(
+		return s.answerMessage(
 			x,
 			validation.New("directory does not exist: %s", filepath.Dir(path)),
 			"write file",
@@ -50,7 +50,7 @@ func (s *Server) DownloadFile(
 	}
 
 	if e != nil {
-		return s.answerWith(x, e, "write file")
+		return s.answerMessage(x, e, "write file")
 	}
 
 	return response.SuccessAny(

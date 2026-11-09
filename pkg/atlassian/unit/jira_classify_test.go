@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownIssueIsNotFound(t *testing.T) {
+func TestUnknownIssueIsNotFound(t *testing.T) {
 	e := jira.WrapError(
 		jiraFailure(
 			http.StatusNotFound,
@@ -29,7 +29,7 @@ func TestAnUnknownIssueIsNotFound(t *testing.T) {
 	assert.StringContains(t, "Issue does not exist", e.Error())
 }
 
-func TestARejectedRequestIsValidation(t *testing.T) {
+func TestRejectedRequestIsValidation(t *testing.T) {
 	e := jira.WrapError(
 		jiraFailure(
 			http.StatusBadRequest,
@@ -41,7 +41,7 @@ func TestARejectedRequestIsValidation(t *testing.T) {
 	assert.StringContains(t, "Comment body can not be empty!", e.Error())
 }
 
-func TestAnUpstreamFailureKeepsItsDetail(t *testing.T) {
+func TestUpstreamFailureKeepsItsDetail(t *testing.T) {
 	e := jira.WrapError(
 		jiraFailure(
 			http.StatusInternalServerError,
@@ -56,7 +56,7 @@ func TestAnUpstreamFailureKeepsItsDetail(t *testing.T) {
 	assert.StringContains(t, "Internal server error", e.Error())
 }
 
-func TestALostConnectionWithoutResponseIsDropped(t *testing.T) {
+func TestLostConnectionWithoutResponseIsDropped(t *testing.T) {
 	e := jira.WrapError(
 		nil,
 		fmt.Errorf(
@@ -74,7 +74,7 @@ func TestALostConnectionWithoutResponseIsDropped(t *testing.T) {
 	assert.String(t, "jira.example.org", f.Host)
 }
 
-func TestAFailureWithoutResponseKeepsItsDetail(t *testing.T) {
+func TestFailureWithoutResponseKeepsItsDetail(t *testing.T) {
 	_, f := jiraFailure(http.StatusNotFound, []string{"alfa"}, nil)
 	e := jira.WrapError(nil, f)
 	assert.False(t, not_found.Is(e))

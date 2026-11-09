@@ -45,10 +45,10 @@ func TestClientCloseDropsIdleConnections(t *testing.T) {
 	defer c.Close()
 	a, e := net.ParseMAC(constant.FixturePhysicalAddress)
 	assert.FatalOnError(t, e)
-	_, e = c.PhysicalAddressesByHardware(a)
+	_, e = c.HardwarePhysicalAddresses(a)
 	assert.FatalOnError(t, e)
 	c.Close()
-	_, e = c.PhysicalAddressesByHardware(a)
+	_, e = c.HardwarePhysicalAddresses(a)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, int64(2), opened.Load())
 }

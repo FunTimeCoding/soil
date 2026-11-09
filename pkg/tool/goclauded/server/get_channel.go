@@ -10,7 +10,7 @@ func (s *Server) GetChannel(
 	x context.Context,
 	r server.GetChannelRequestObject,
 ) (server.GetChannelResponseObject, error) {
-	holder, e := s.roster.SessionByCallsign(r.Params.Callsign)
+	holder, e := s.roster.CallsignSession(r.Params.Callsign)
 
 	if e != nil {
 		return server.GetChannel500JSONResponse(

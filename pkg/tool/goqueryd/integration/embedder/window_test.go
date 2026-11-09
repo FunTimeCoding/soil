@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestEveryManualChunkFitsTheEmbedder(t *testing.T) {
+func TestEveryManualChunkFitsEmbedder(t *testing.T) {
 	assertEmbedded(
 		t,
 		newEmbedder(t),
@@ -19,7 +19,7 @@ func TestEveryManualChunkFitsTheEmbedder(t *testing.T) {
 	)
 }
 
-func TestTheOllamaClientRefusesTheDenseChunk(t *testing.T) {
+func TestOllamaClientRefusesDenseChunk(t *testing.T) {
 	assertRefused(
 		t,
 		newOllamaEmbedder(t),
@@ -28,7 +28,7 @@ func TestTheOllamaClientRefusesTheDenseChunk(t *testing.T) {
 	)
 }
 
-func TestTheOllamaClientRefusesTheGoDeclaration(t *testing.T) {
+func TestOllamaClientRefusesGoDeclaration(t *testing.T) {
 	assertRefused(
 		t,
 		newOllamaEmbedder(t),

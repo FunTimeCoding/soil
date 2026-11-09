@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestCloseClosesTheLinkAceClient(t *testing.T) {
+func TestCloseClosesLinkAceClient(t *testing.T) {
 	c := service_tester.NewSource(t)
 	daemon_tester.New(t, c, memory.New()).Close()
 	assert.Integer(t, 1, c.Closed)
@@ -28,7 +28,7 @@ func TestWaitAnswersOnceLinkAceAnswers(t *testing.T) {
 	)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	c := mock_client.New()
 	o := option.New()

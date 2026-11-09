@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAnInvalidStatIsAnsweredQuietlyOverModelContext(t *testing.T) {
+func TestInvalidStatIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("%q is not a valid Stat.", "bravo")
 	d := daemon_tester.New(t, c)

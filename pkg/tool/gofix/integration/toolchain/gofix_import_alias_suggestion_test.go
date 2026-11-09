@@ -13,7 +13,7 @@ import (
 func TestImportAliasSuggestion(t *testing.T) {
 	directory := module_tester.ImportAliasSuggestion(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunImportAliasFixWithDirectory([]string{"./..."}, directory, false, r)
+	gofix.RunImportAliasFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"StandardLibraryKeepsThePlainName",
 		func(t *testing.T) {
@@ -58,12 +58,7 @@ func TestImportAliasSuggestion(t *testing.T) {
 func TestOtherCollisionsStayUntouchedAndSilentByDefault(t *testing.T) {
 	directory := module_tester.ImportAliasSuggestion(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunConstantAliasFixWithDirectory(
-		[]string{"./..."},
-		directory,
-		false,
-		r,
-	)
+	gofix.RunConstantAliasFix([]string{"./..."}, directory, false, r)
 	assert.String(
 		t,
 		"package service\n\nimport (\n\techoFace \"testmodule/pkg/echo/face\"\n\t\"testmodule/pkg/foxtrot/face\"\n)\n\nfunc Service(echoFace.Client, face.Source) {}\n",

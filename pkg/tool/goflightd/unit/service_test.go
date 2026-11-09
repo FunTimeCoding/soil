@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-func TestTheWorkerClosesTwice(t *testing.T) {
+func TestWorkerClosesTwice(t *testing.T) {
 	s := service_tester.New(t)
 	w := worker.NewEvery(
 		s.Service.Prune,
@@ -30,7 +30,7 @@ func TestTheWorkerClosesTwice(t *testing.T) {
 	w.Close()
 }
 
-func TestABluetoothSampleRecordsOnlyChanges(t *testing.T) {
+func TestBluetoothSampleRecordsOnlyChanges(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
 	assert.Count(t, 0, s.Service.SampleBluetooth())
@@ -40,7 +40,7 @@ func TestABluetoothSampleRecordsOnlyChanges(t *testing.T) {
 	assert.Integer(t, 2, v.Snapshots)
 }
 
-func TestAWirelessSampleRecordsOnlyChanges(t *testing.T) {
+func TestWirelessSampleRecordsOnlyChanges(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Answer(constant.Sudo, constant.WirelessSample)
 	assert.True(t, s.Service.WirelessAvailable())
@@ -51,7 +51,7 @@ func TestAWirelessSampleRecordsOnlyChanges(t *testing.T) {
 	assert.Integer(t, 6, v.Snapshots)
 }
 
-func TestAFailedCommandIsLoggedNotReported(t *testing.T) {
+func TestFailedCommandIsLoggedNotReported(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Fail(constant.SystemProfiler, errors.Format("exit", 1))
 	s.System.Fail(constant.Sudo, errors.Format("exit", 1))
@@ -68,7 +68,7 @@ func TestAFailedCommandIsLoggedNotReported(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestAFailingStoreIsReportedByTheWorker(t *testing.T) {
+func TestFailingStoreIsReportedByWorker(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
 	s.CloseStore()
@@ -105,7 +105,7 @@ func TestPruneDropsWhatIsPastRetention(t *testing.T) {
 	assert.Integer(t, 0, v.Snapshots)
 }
 
-func TestAFailingStoreIsAnsweredAndReported(t *testing.T) {
+func TestFailingStoreIsAnsweredAndReported(t *testing.T) {
 	s := base.New(t)
 	assert.FatalOnError(t, s.Mapper.Migrator().DropTable(event.Stub()))
 	r, e := s.Client.GetStatusWithResponse(context.Background())
@@ -115,7 +115,7 @@ func TestAFailingStoreIsAnsweredAndReported(t *testing.T) {
 	assert.Count(t, 1, s.Reporter.Events())
 }
 
-func TestAMarkWithoutLabelIsRefused(t *testing.T) {
+func TestMarkWithoutLabelIsRefused(t *testing.T) {
 	s := base.New(t)
 	r, e := s.Client.PostMarkWithResponse(
 		context.Background(),

@@ -10,13 +10,13 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesOnce(t *testing.T) {
+func TestDaemonClosesOnce(t *testing.T) {
 	d := daemon.New(base.NewOption(t), logger.New(t.Context()), memory.New())
 	d.Close()
 	d.Close()
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(base.NewOption(t), logger.New(t.Context()), memory.New())
 	workers := d.Workers()
@@ -33,7 +33,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestADaemonWithoutADirectoryHandsOutOnlyItsClock(t *testing.T) {
+func TestDaemonWithoutDirectoryHandsOutOnlyItsClock(t *testing.T) {
 	d := daemon.New(base.NewOption(t), logger.New(t.Context()), memory.New())
 	t.Cleanup(d.Close)
 	assert.Count(t, 1, d.Workers())

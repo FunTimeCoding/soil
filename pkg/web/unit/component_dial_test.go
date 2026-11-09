@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestADialIsATrackWithACenter(t *testing.T) {
+func TestDialIsTrackWithCenter(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="dial" style="--dial-background: #111"><div class="dial-center"><strong>alfa</strong></div></div>`,
@@ -21,7 +21,7 @@ func TestADialIsATrackWithACenter(t *testing.T) {
 	)
 }
 
-func TestAFillCoversTheTrackUpToItsShare(t *testing.T) {
+func TestFillCoversTrackUpToItsShare(t *testing.T) {
 	assert.StringContains(
 		t,
 		`style="--dial-background: conic-gradient(#222 0deg 90.0deg, #111 90.0deg 360deg)"`,
@@ -39,7 +39,7 @@ func TestAFillCoversTheTrackUpToItsShare(t *testing.T) {
 	)
 }
 
-func TestArcsLayerOverTheTrack(t *testing.T) {
+func TestArcsLayerOverTrack(t *testing.T) {
 	assert.StringContains(
 		t,
 		`style="--dial-background: conic-gradient(transparent 0deg 36.0deg, #333 36.0deg 72.0deg, transparent 72.0deg 360deg), #111"`,
@@ -47,7 +47,7 @@ func TestArcsLayerOverTheTrack(t *testing.T) {
 	)
 }
 
-func TestMarkersTurnFromTheTop(t *testing.T) {
+func TestMarkersTurnFromTop(t *testing.T) {
 	ring := renderedNode(
 		t,
 		dial.New("#111").

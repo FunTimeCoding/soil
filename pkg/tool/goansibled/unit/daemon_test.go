@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsOutItsInventoryGuardFirst(t *testing.T) {
+func TestDaemonHandsOutItsInventoryGuardFirst(t *testing.T) {
 	f := ansible_tester.NewFixture(t, nil)
 	f.UnreachableInventory()
 	workers := daemon_tester.Build(t, f).Workers()
@@ -22,13 +22,13 @@ func TestTheDaemonHandsOutItsInventoryGuardFirst(t *testing.T) {
 	}
 }
 
-func TestTheDaemonCountsReapsOnItsRegistry(t *testing.T) {
+func TestDaemonCountsReapsOnItsRegistry(t *testing.T) {
 	f := ansible_tester.NewFixture(t, nil)
 	daemon_tester.Build(t, f)
 	assert.True(t, reaper.CountsOn(f.Registry))
 }
 
-func TestAnUnreachableInventoryIsLeftToTheGuard(t *testing.T) {
+func TestUnreachableInventoryIsLeftToGuard(t *testing.T) {
 	f := ansible_tester.NewFixture(t, nil)
 	f.UnreachableInventory()
 	daemon_tester.Start(daemon_tester.Build(t, f))
@@ -38,7 +38,7 @@ func TestAnUnreachableInventoryIsLeftToTheGuard(t *testing.T) {
 	assert.Count(t, 0, f.Reporter.Events())
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	f := ansible_tester.NewFixture(t, nil)
 	f.UnreachableInventory()
 	before := goleak.IgnoreCurrent()

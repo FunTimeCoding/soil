@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsTasksAndTags(t *testing.T) {
+func TestClientReadsTasksAndTags(t *testing.T) {
 	m := service_tester.NewSource(t)
 	daily := task.Stub()
 	daily.Identifier = "task-1"
@@ -41,7 +41,7 @@ func TestTheClientReadsTasksAndTags(t *testing.T) {
 	assert.String(t, "deploy", tags[0].Name)
 }
 
-func TestTheClientCreatesATask(t *testing.T) {
+func TestClientCreatesTask(t *testing.T) {
 	c := client_tester.New(
 		t,
 		service_tester.NewSource(t),
@@ -52,7 +52,7 @@ func TestTheClientCreatesATask(t *testing.T) {
 	assert.String(t, "Ship loop C", v.Text)
 }
 
-func TestTheClientAnswersARefusedStatAsValidation(t *testing.T) {
+func TestClientAnswersRefusedStatAsValidation(t *testing.T) {
 	m := service_tester.NewSource(t)
 	m.Failure = validation.New("%q is not a valid Stat.", "per")
 	c := client_tester.New(t, m, generativeConstant.ModelContextTestToken)
@@ -60,7 +60,7 @@ func TestTheClientAnswersARefusedStatAsValidation(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestTheClientReachesTheDaemon(t *testing.T) {
+func TestClientReachesDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
 		service_tester.NewSource(t),
@@ -69,7 +69,7 @@ func TestTheClientReachesTheDaemon(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestTheClientRefusesAWrongToken(t *testing.T) {
+func TestClientRefusesWrongToken(t *testing.T) {
 	c := client_tester.New(t, service_tester.NewSource(t), "wrong")
 	assert.Error(t, c.Reachable(t.Context()))
 	_, e := c.GetTags(t.Context())

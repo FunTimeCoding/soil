@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestAQuietPanicRendersWithoutAReport(t *testing.T) {
+func TestQuietPanicRendersWithoutReport(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
 	recoveryView().Recovery(r)(
@@ -30,7 +30,7 @@ func TestAQuietPanicRendersWithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAFaultingPanicIsReported(t *testing.T) {
+func TestFaultingPanicIsReported(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
 	recoveryView().Recovery(r)(
@@ -46,7 +46,7 @@ func TestAFaultingPanicIsReported(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAnAnswerCarriesTheStatusOfItsClass(t *testing.T) {
+func TestAnswerCarriesStatusOfItsClass(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
 	recoveryView().Answer(
@@ -60,7 +60,7 @@ func TestAnAnswerCarriesTheStatusOfItsClass(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAnAnswerToAFaultIsReported(t *testing.T) {
+func TestAnswerToFaultIsReported(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
 	recoveryView().Answer(

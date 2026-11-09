@@ -13,7 +13,7 @@ func (c *Client) CreateSelectionField(
 	label string,
 	choiceSet string,
 ) (*custom_field.Field, error) {
-	s, e := c.ChoiceSetByName(choiceSet)
+	s, e := c.ChoiceSet(choiceSet)
 
 	if e != nil {
 		return nil, e

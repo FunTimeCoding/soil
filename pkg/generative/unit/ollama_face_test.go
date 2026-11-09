@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestOllamaClientImplementsTheFace(t *testing.T) {
+func TestOllamaClientImplementsFace(t *testing.T) {
 	assert.True(
 		t,
 		reflect.TypeFor[*ollama.Client]().Implements(
@@ -18,7 +18,7 @@ func TestOllamaClientImplementsTheFace(t *testing.T) {
 	)
 }
 
-func TestOllamaMockImplementsTheFace(t *testing.T) {
+func TestOllamaMockImplementsFace(t *testing.T) {
 	assert.True(
 		t,
 		reflect.TypeFor[*mock_client.Client]().Implements(

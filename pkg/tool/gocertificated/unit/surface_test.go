@@ -55,7 +55,7 @@ func TestIssuedCertificateReturnsItsKeyOnce(t *testing.T) {
 	)
 }
 
-func TestRootCertificateToolServesTheAnchor(t *testing.T) {
+func TestRootCertificateToolServesAnchor(t *testing.T) {
 	o := model_context_tester.New(t)
 	o.CreateRoot()
 	assert.StringContains(
@@ -65,7 +65,7 @@ func TestRootCertificateToolServesTheAnchor(t *testing.T) {
 	)
 }
 
-func TestPublishThroughToolsCommitsTheChain(t *testing.T) {
+func TestPublishThroughToolsCommitsChain(t *testing.T) {
 	o := model_context_tester.New(t)
 	o.CreateRoot()
 	o.CreateCluster()
@@ -110,7 +110,7 @@ func TestExistingFileIsUpdatedNotCreated(t *testing.T) {
 	assert.String(t, "update", string(*o.Forge.Commits()[0].Actions[0].Action))
 }
 
-func TestSecondPublishOnlyCarriesTheNewAuthority(t *testing.T) {
+func TestSecondPublishOnlyCarriesNewAuthority(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	o.Publish()
@@ -149,7 +149,7 @@ func TestLeafCertificatesAreNeverPublished(t *testing.T) {
 	assert.Integer(t, 6, len(commit[0].Actions))
 }
 
-func TestOnlyTheNamedAuthorityBecomesASecret(t *testing.T) {
+func TestOnlyNamedAuthorityBecomesSecret(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	o.Publish()
@@ -163,7 +163,7 @@ func TestOnlyTheNamedAuthorityBecomesASecret(t *testing.T) {
 	)
 }
 
-func TestClusterAuthorityDeliversTheSecretPair(t *testing.T) {
+func TestClusterAuthorityDeliversSecretPair(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	o.CreateCluster()
@@ -182,7 +182,7 @@ func TestClusterAuthorityDeliversTheSecretPair(t *testing.T) {
 	)
 }
 
-func TestDeliveredSecretIsATlsManifest(t *testing.T) {
+func TestDeliveredSecretIsTlsManifest(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	o.CreateCluster()
@@ -223,7 +223,7 @@ func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 	assert.True(t, result.InSync)
 }
 
-func TestEmptyDashboardInvitesTheRoot(t *testing.T) {
+func TestEmptyDashboardInvitesRoot(t *testing.T) {
 	o := web_interface_tester.New(t)
 	assert.StringContains(
 		t,
@@ -241,7 +241,7 @@ func TestEveryPageRenders(t *testing.T) {
 	o.Page(constant.IssueCertificatePath)
 }
 
-func TestRootIsCreatedThroughTheForm(t *testing.T) {
+func TestRootIsCreatedThroughForm(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.Submit(constant.CreateAuthorityPath, rootValues())
 	assert.StringContains(
@@ -251,7 +251,7 @@ func TestRootIsCreatedThroughTheForm(t *testing.T) {
 	)
 }
 
-func TestFormRejectionKeepsTheValues(t *testing.T) {
+func TestFormRejectionKeepsValues(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.Submit(constant.CreateAuthorityPath, rootValues())
 	page := o.Submit(constant.CreateAuthorityPath, rootValues())
@@ -275,7 +275,7 @@ func TestIssuedKeyIsShownOnceThenNeverAgain(t *testing.T) {
 	)
 }
 
-func TestPublishButtonCommitsTheChain(t *testing.T) {
+func TestPublishButtonCommitsChain(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.Submit(constant.CreateAuthorityPath, rootValues())
 	assert.StringContains(
@@ -292,7 +292,7 @@ func TestPublishButtonCommitsTheChain(t *testing.T) {
 	)
 }
 
-func TestRootPathServesTheAnchorAsText(t *testing.T) {
+func TestRootPathServesAnchorAsText(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.Submit(constant.CreateAuthorityPath, rootValues())
 	assert.StringContains(t, "BEGIN CERTIFICATE", o.Page(constant.RootPath))

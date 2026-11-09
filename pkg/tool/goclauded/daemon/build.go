@@ -54,6 +54,7 @@ func (d *Daemon) build(
 		o.Harbor,
 		o.Sources,
 		o.SessionExportPath,
+		o.Clock,
 		l,
 		r,
 	)

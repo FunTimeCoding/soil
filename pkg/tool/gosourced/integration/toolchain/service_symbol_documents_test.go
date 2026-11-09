@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRenameRetargetsTheSymbolAndItsFile(t *testing.T) {
+func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
 	d := renameFollowFixture(t)
 	testutil.WriteFile(
 		t,
@@ -33,7 +33,7 @@ func TestRenameRetargetsTheSymbolAndItsFile(t *testing.T) {
 	)
 }
 
-func TestRenameMethodRetargetsTheQualifiedName(t *testing.T) {
+func TestRenameMethodRetargetsQualifiedName(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("rename-method/src"),
@@ -62,7 +62,7 @@ func TestRenameMethodRetargetsTheQualifiedName(t *testing.T) {
 	)
 }
 
-func TestMoveRetargetsTheExportedSymbol(t *testing.T) {
+func TestMoveRetargetsExportedSymbol(t *testing.T) {
 	d := moveVisibilityFixture(t)
 	testutil.WriteFile(t, d, "doc/note.md", "See `go:pkg/alfa.lone`.\n")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(

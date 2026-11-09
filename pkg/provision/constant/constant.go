@@ -33,8 +33,9 @@ const (
 
 	RunnerIndexLock = ".git/index.lock"
 
-	RunnerQuarantineSuffix = ".quarantine."
-	RunnerQuarantineFormat = "20060102T150405Z"
+	RunnerQuarantineSuffix    = ".quarantine."
+	RunnerQuarantineFormat    = "20060102T150405Z"
+	RunnerQuarantineRetention = 7 * 24 * time.Hour
 
 	RunnerHealThreshold = 3
 	RunnerStagePattern  = "provision-clone-"
@@ -42,6 +43,7 @@ const (
 
 	RunnerConsecutive = "consecutive"
 	RunnerError       = "error"
+	RunnerStderr      = "stderr"
 	RunnerStopped     = "runner stopped"
 
 	SaltHostEnvironment           = "SALT_HOST"

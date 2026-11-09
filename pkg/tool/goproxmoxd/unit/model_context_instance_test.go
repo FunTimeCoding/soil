@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestModelContextNodesFollowTheSelectedInstance(t *testing.T) {
+func TestModelContextNodesFollowSelectedInstance(t *testing.T) {
 	a := mock_client.New()
 	defer a.Close()
 	a.AddNode("alfa-node")

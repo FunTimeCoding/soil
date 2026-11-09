@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"testing"
 	"time"
@@ -20,7 +21,7 @@ func TestTopAggregates(t *testing.T) {
 		t.Fatalf("create: %v", e)
 	}
 
-	if e := s.Resolve("resolved1"); e != nil {
+	if e := s.Resolve("resolved1", time.Now()); e != nil {
 		t.Fatalf("resolve: %v", e)
 	}
 
@@ -34,7 +35,10 @@ func TestTopAggregates(t *testing.T) {
 	); e != nil {
 		t.Fatalf("create: %v", e)
 	}
-	result, e := s.Top(0, time.Now().Add(-time.Hour), time.Now().Add(time.Hour))
+	result, e := s.Top(
+		0,
+		window.New(time.Now().Add(-time.Hour), time.Now().Add(time.Hour)),
+	)
 
 	if e != nil {
 		t.Fatalf("top: %v", e)

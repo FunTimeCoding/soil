@@ -10,7 +10,7 @@ func (s *Server) PostRelease(
 	x context.Context,
 	r server.PostReleaseRequestObject,
 ) (server.PostReleaseResponseObject, error) {
-	identifier, e := s.roster.ResolveByCallsign(r.Body.Callsign)
+	identifier, e := s.roster.ResolveCallsign(r.Body.Callsign)
 
 	if e != nil {
 		return server.PostRelease500JSONResponse(

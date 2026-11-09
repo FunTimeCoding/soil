@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestTheClientRoundTripsAMemory(t *testing.T) {
+func TestClientRoundTripsMemory(t *testing.T) {
 	c := base.New(t).MemoryClient(t)
 	x := t.Context()
 	scope := "alfa"
@@ -54,7 +54,7 @@ func TestTheClientRoundTripsAMemory(t *testing.T) {
 	assert.Count(t, 0, gone)
 }
 
-func TestTheClientRoundTripsARelation(t *testing.T) {
+func TestClientRoundTripsRelation(t *testing.T) {
 	c := base.New(t).MemoryClient(t)
 	x := t.Context()
 	first, e := c.PostMemory(
@@ -104,7 +104,7 @@ func TestTheClientRoundTripsARelation(t *testing.T) {
 	assert.Count(t, 0, left)
 }
 
-func TestTheClientReadsProfileTokensAndStatistics(t *testing.T) {
+func TestClientReadsProfileTokensAndStatistics(t *testing.T) {
 	c := base.New(t).MemoryClient(t)
 	x := t.Context()
 	_, e := c.PostMemory(
@@ -130,7 +130,7 @@ func TestTheClientReadsProfileTokensAndStatistics(t *testing.T) {
 	assert.FatalOnError(t, c.PostImpressions(x, "held", "test", time.Now()))
 }
 
-func TestTheClientClassifiesRefusals(t *testing.T) {
+func TestClientClassifiesRefusals(t *testing.T) {
 	c := base.New(t).MemoryClient(t)
 	x := t.Context()
 	_, e := c.DeleteMemory(x, 9999, &client.DeleteMemoryParams{})

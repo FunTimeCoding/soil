@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestRenameRefusesAMethodSatisfyingAnInterface(t *testing.T) {
+func TestRenameRefusesMethodSatisfyingInterface(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
 	)
-	before := treeOf(t, d)
+	before := directoryTree(t, d)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -29,10 +29,10 @@ func TestRenameRefusesAMethodSatisfyingAnInterface(t *testing.T) {
 		r,
 		"Size satisfies example/pkg/shape.Sizer - renaming it breaks that interface",
 	)
-	assert.String(t, before, treeOf(t, d))
+	assert.String(t, before, directoryTree(t, d))
 }
 
-func TestRenameRefusesAMethodSatisfyingAStandardInterface(t *testing.T) {
+func TestRenameRefusesMethodSatisfyingStandardInterface(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
@@ -50,7 +50,7 @@ func TestRenameRefusesAMethodSatisfyingAStandardInterface(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "String satisfies fmt.Stringer")
 }
 
-func TestRenameRefusesAnInterfaceMethod(t *testing.T) {
+func TestRenameOfInterfaceMethodRenamesItsImplementation(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
@@ -65,15 +65,20 @@ func TestRenameRefusesAnInterfaceMethod(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, e)
-	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(
+	testutil.AssertBlocked(t, r, 0)
+	assert.StringContains(
 		t,
-		r,
-		"method or field Size not found on Sizer",
+		"func (b *Box) Area() int",
+		service_tester.ReadFixtureFile(t, d, "pkg/box/box.go"),
+	)
+	assert.StringContains(
+		t,
+		"s.Area()",
+		service_tester.ReadFixtureFile(t, d, "pkg/use/use.go"),
 	)
 }
 
-func TestRenameAllowsAMethodNoInterfaceNames(t *testing.T) {
+func TestRenameAllowsMethodNoInterfaceNames(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("rename-interface/src"),
@@ -96,7 +101,7 @@ func TestRenameAllowsAMethodNoInterfaceNames(t *testing.T) {
 	)
 }
 
-func TestRenameRefusesAMethodSatisfyingAReplacingModuleInterface(t *testing.T) {
+func TestRenameRefusesMethodSatisfyingReplacingModuleInterface(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	testutil.WriteFile(
 		t,

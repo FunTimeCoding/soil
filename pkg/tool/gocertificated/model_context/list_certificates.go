@@ -31,7 +31,7 @@ func (s *Server) listCertificates(
 			return response.Fail("expires_before is not a timestamp: %v", e)
 		}
 
-		f.Before = &before
+		f.Window.WithEnd(before)
 	}
 
 	result, e := s.service.Certificates(f)

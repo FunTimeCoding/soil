@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestEveryToolFailsOnAnItermOutage(t *testing.T) {
+func TestEveryToolFailsOnItermOutage(t *testing.T) {
 	r := memory.New()
 	var unanswered []string
 

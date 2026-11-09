@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestSearchPartialWordMatches(t *testing.T) {
@@ -14,7 +15,7 @@ func TestSearchPartialWordMatches(t *testing.T) {
 	o.Name = "scripted rewrites"
 	o.Content = "scripted rewrites bypass the read guard"
 	o.Type = "feedback"
-	_, e := s.Store().CreateMemory(o)
+	_, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	target := "/search?query=scr"
 	assert.StringContains(
@@ -30,14 +31,14 @@ func TestSearchOmitsHiddenMemories(t *testing.T) {
 	visible.Name = "scripted reads"
 	visible.Content = "scripted reads stay visible"
 	visible.Type = "feedback"
-	_, e := s.Store().CreateMemory(visible)
+	_, e := s.Store().CreateMemory(visible, time.Now())
 	assert.FatalOnError(t, e)
 	hidden := save_option.New()
 	hidden.Name = "scripted rewrites"
 	hidden.Content = "scripted rewrites stay hidden"
 	hidden.Type = "feedback"
 	hidden.Tags = []string{"private"}
-	_, f := s.Store().CreateMemory(hidden)
+	_, f := s.Store().CreateMemory(hidden, time.Now())
 	assert.FatalOnError(t, f)
 	target := "/search?query=scr"
 

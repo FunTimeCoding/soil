@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownViewIsNotFound(t *testing.T) {
+func TestUnknownViewIsNotFound(t *testing.T) {
 	_, e := bridge(
 		t,
 		http.StatusNotFound,
@@ -20,7 +20,7 @@ func TestAnUnknownViewIsNotFound(t *testing.T) {
 	assert.String(t, "read view: view not found", e.Error())
 }
 
-func TestAMissingStringIsValidation(t *testing.T) {
+func TestMissingStringIsValidation(t *testing.T) {
 	_, e := bridge(
 		t,
 		http.StatusBadRequest,
@@ -30,7 +30,7 @@ func TestAMissingStringIsValidation(t *testing.T) {
 	assert.String(t, "edit view: old_string not found in buffer", e.Error())
 }
 
-func TestAnAmbiguousEditIsConflict(t *testing.T) {
+func TestAmbiguousEditIsConflict(t *testing.T) {
 	_, e := bridge(
 		t,
 		http.StatusConflict,
@@ -44,7 +44,7 @@ func TestAnAmbiguousEditIsConflict(t *testing.T) {
 	)
 }
 
-func TestAnUnknownStatusIsAFault(t *testing.T) {
+func TestUnknownStatusIsFault(t *testing.T) {
 	e := bridge(t, http.StatusInternalServerError, `{"error": "boom"}`).
 		CloseView(7)
 	assert.True(t, unexpected.Is(e))

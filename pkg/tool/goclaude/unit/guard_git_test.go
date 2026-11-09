@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestVerdictBlocksAGitWriterWithAnExpandedPath(t *testing.T) {
+func TestVerdictBlocksGitWriterWithExpandedPath(t *testing.T) {
 	assert.String(
 		t,
 		"git reset with a path from an expansion, a glob or stdin, or with nothing after --, cannot be read before it runs - write every path out literally",
@@ -110,7 +110,7 @@ func TestVerdictLetsGitReadersThrough(t *testing.T) {
 	assert.String(t, "", guard.Question("git status --short -- pkg"))
 }
 
-func TestQuestionAsksForALiteralGitTreeWriter(t *testing.T) {
+func TestQuestionAsksForLiteralGitTreeWriter(t *testing.T) {
 	assert.String(t, "", guard.Verdict("darwin", "git mv pkg/a.go pkg/b.go"))
 	assert.String(
 		t,
@@ -138,7 +138,7 @@ func TestGitStashReadsPassUnasked(t *testing.T) {
 	assert.String(t, "", guard.Question("git stash show \"$ref\""))
 }
 
-func TestQuestionNamesTheGitStashVerb(t *testing.T) {
+func TestQuestionNamesGitStashVerb(t *testing.T) {
 	assert.String(
 		t,
 		"git stash pop rewrites the shared index or work tree: everything it covers",
@@ -161,7 +161,7 @@ func TestGitMoveDryRunPassesUnasked(t *testing.T) {
 	)
 }
 
-func TestVerdictReadsGitInsideAShellString(t *testing.T) {
+func TestVerdictReadsGitInsideShellString(t *testing.T) {
 	assert.String(
 		t,
 		"git commit writes history - staging, committing and publishing belong to the user; leave it to them",
@@ -184,7 +184,7 @@ func TestVerdictReadsGitInsideAShellString(t *testing.T) {
 	)
 }
 
-func TestVerdictBlocksGitHiddenInAnUnreadableString(t *testing.T) {
+func TestVerdictBlocksGitHiddenInUnreadableString(t *testing.T) {
 	assert.String(
 		t,
 		"git inside a shell string or eval that cannot be read before it runs - run git directly, with every path written out",

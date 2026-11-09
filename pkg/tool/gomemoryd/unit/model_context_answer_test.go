@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAQuietClassIsAnsweredWithItsOwnText(t *testing.T) {
+func TestQuietClassIsAnsweredWithItsOwnText(t *testing.T) {
 	s := model_context_tester.New(t)
 	assert.String(
 		t,

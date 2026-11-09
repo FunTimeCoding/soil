@@ -6,7 +6,7 @@ func (c *Client) DeleteInterfaceByName(
 	d *device.Device,
 	name string,
 ) error {
-	i, e := c.DeviceInterfaceByName(d, name)
+	i, e := c.DeviceInterface(d, name)
 
 	if e != nil {
 		return e

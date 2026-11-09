@@ -20,7 +20,7 @@ func (c *Client) UpdateVirtualInterface(
 		return nil, e
 	}
 
-	i, f := c.VirtualMachineInterfaceByName(vm, name)
+	i, f := c.VirtualMachineInterface(vm, name)
 
 	if f != nil {
 		return nil, f

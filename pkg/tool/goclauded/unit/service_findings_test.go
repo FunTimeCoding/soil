@@ -21,7 +21,7 @@ func TestFindingsCleanState(t *testing.T) {
 
 func TestFindingsPoolExhausted(t *testing.T) {
 	s := service_tester.New(t)
-	assert.Count(t, 0, s.FindingsByKind(constant.PoolExhausted))
+	assert.Count(t, 0, s.KindFindings(constant.PoolExhausted))
 
 	for i := 0; ; i++ {
 		r := s.Register(fmt.Sprintf("fill-%d", i))
@@ -31,7 +31,7 @@ func TestFindingsPoolExhausted(t *testing.T) {
 		}
 	}
 
-	result := s.FindingsByKind(constant.PoolExhausted)
+	result := s.KindFindings(constant.PoolExhausted)
 	assert.Count(t, 1, result)
 	assert.String(t, "", result[0].Subject)
 }
@@ -39,10 +39,10 @@ func TestFindingsPoolExhausted(t *testing.T) {
 func TestFindingsIgnoreLiveSessionAwaitingSweep(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("running")
-	assert.Count(t, 0, s.FindingsByKind(constant.MissingTranscriptEmpty))
-	assert.Count(t, 0, s.FindingsByKind(constant.MissingTranscriptKept))
+	assert.Count(t, 0, s.KindFindings(constant.MissingTranscriptEmpty))
+	assert.Count(t, 0, s.KindFindings(constant.MissingTranscriptKept))
 	s.Store.Advance(31 * time.Minute)
-	assert.Count(t, 1, s.FindingsByKind(constant.MissingTranscriptEmpty))
+	assert.Count(t, 1, s.KindFindings(constant.MissingTranscriptEmpty))
 }
 
 func TestFindingsMissingTranscriptSplit(t *testing.T) {
@@ -51,10 +51,10 @@ func TestFindingsMissingTranscriptSplit(t *testing.T) {
 	s.Store.EnsureSession("named")
 	s.Store.Store.UpdateFields("named", map[string]any{"alias": "kept-by-hand"})
 	s.Store.Advance(31 * time.Minute)
-	empty := s.FindingsByKind(constant.MissingTranscriptEmpty)
+	empty := s.KindFindings(constant.MissingTranscriptEmpty)
 	assert.Count(t, 1, empty)
 	assert.String(t, "husk", empty[0].Subject)
-	kept := s.FindingsByKind(constant.MissingTranscriptKept)
+	kept := s.KindFindings(constant.MissingTranscriptKept)
 	assert.Count(t, 1, kept)
 	assert.String(t, "named", kept[0].Subject)
 	assert.String(t, "session has an alias", kept[0].Detail)
@@ -65,9 +65,9 @@ func TestFindingsOrphanTrackerState(t *testing.T) {
 	s.WriteSessionFile("vanished", "some-slug")
 	s.Transcript.PopulateCache()
 	s.Transcript.CheckConsistency()
-	assert.Count(t, 0, s.FindingsByKind(constant.OrphanTrackerState))
+	assert.Count(t, 0, s.KindFindings(constant.OrphanTrackerState))
 	assert.FatalOnError(t, s.Store.Store.DeleteSession("vanished"))
-	result := s.FindingsByKind(constant.OrphanTrackerState)
+	result := s.KindFindings(constant.OrphanTrackerState)
 	assert.Count(t, 1, result)
 	assert.String(t, "vanished", result[0].Subject)
 }
@@ -83,7 +83,7 @@ func TestFindingsUnownedQueue(t *testing.T) {
 			"orphaned",
 		),
 	)
-	result := s.FindingsByKind(constant.UnownedQueue)
+	result := s.KindFindings(constant.UnownedQueue)
 	assert.Count(t, 1, result)
 	assert.String(t, "", result[0].Subject)
 	assert.Integer(t, 1, result[0].Count)
@@ -96,7 +96,7 @@ func TestFindingsUnownedNotification(t *testing.T) {
 		t,
 		s.Store.Store.SendNotification("", "Nobody", "Dale", "orphaned"),
 	)
-	result := s.FindingsByKind(constant.UnownedNotification)
+	result := s.KindFindings(constant.UnownedNotification)
 	assert.Count(t, 1, result)
 	assert.String(t, "", result[0].Subject)
 	assert.StringContains(t, "Nobody", result[0].Detail)
@@ -105,9 +105,9 @@ func TestFindingsUnownedNotification(t *testing.T) {
 func TestFindingsStaleCallsign(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.RegisterActive("lingering")
-	assert.Count(t, 0, s.FindingsByKind(constant.StaleCallsign))
+	assert.Count(t, 0, s.KindFindings(constant.StaleCallsign))
 	s.Store.Advance(8 * 24 * time.Hour)
-	result := s.FindingsByKind(constant.StaleCallsign)
+	result := s.KindFindings(constant.StaleCallsign)
 	assert.Count(t, 1, result)
 	assert.String(t, r.Callsign, result[0].Subject)
 }
@@ -116,7 +116,7 @@ func TestFindingsStaleCallsignClearedBySweep(t *testing.T) {
 	s := service_tester.New(t)
 	s.RegisterActive("lingering")
 	s.Store.Advance(8 * 24 * time.Hour)
-	assert.Count(t, 1, s.FindingsByKind(constant.StaleCallsign))
+	assert.Count(t, 1, s.KindFindings(constant.StaleCallsign))
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
-	assert.Count(t, 0, s.FindingsByKind(constant.StaleCallsign))
+	assert.Count(t, 0, s.KindFindings(constant.StaleCallsign))
 }

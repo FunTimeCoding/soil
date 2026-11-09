@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheServiceKeepsUsersAndGroups(t *testing.T) {
+func TestServiceKeepsUsersAndGroups(t *testing.T) {
 	v := service_tester.New(t, service_tester.NewSource(), memory.New())
 	u, e := v.CreateUser("alfa", "Alfa", "Person", "alfa@example.test", "")
 	assert.FatalOnError(t, e)
@@ -25,7 +25,7 @@ func TestTheServiceKeepsUsersAndGroups(t *testing.T) {
 	assert.True(t, conflict.Is(i))
 }
 
-func TestAQuietRefusalIsNotCapturedByTheGuard(t *testing.T) {
+func TestQuietRefusalIsNotCapturedByGuard(t *testing.T) {
 	m := memory.New()
 	v := service_tester.New(t, service_tester.NewSource(), m)
 	_, e := v.User("ghost")
@@ -35,7 +35,7 @@ func TestAQuietRefusalIsNotCapturedByTheGuard(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnOutageIsAnsweredAsUnavailableByTheService(t *testing.T) {
+func TestOutageIsAnsweredAsUnavailableByService(t *testing.T) {
 	c := service_tester.NewSource()
 	c.Failure = refusedConnection()
 	m := memory.New()

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestARefusedPowerRequestSendsNothingToTheEngine(t *testing.T) {
+func TestRefusedPowerRequestSendsNothingToEngine(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
@@ -24,7 +24,7 @@ func TestARefusedPowerRequestSendsNothingToTheEngine(t *testing.T) {
 	assert.Count(t, 0, s.Alfa.Requested())
 }
 
-func TestAGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
+func TestGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
@@ -41,7 +41,7 @@ func TestAGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	assert.Integers(t, []int{12}, s.Alfa.Requested())
 }
 
-func TestAForcedRebootRequestsAPowerCycle(t *testing.T) {
+func TestForcedRebootRequestsPowerCycle(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
@@ -58,7 +58,7 @@ func TestAForcedRebootRequestsAPowerCycle(t *testing.T) {
 	assert.Count(t, 0, s.Bravo.Requested())
 }
 
-func TestPowerWithoutAnInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
+func TestPowerWithoutInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
 	s.Bravo.SetPower(bandConstant.PowerOn, runningStates()...)

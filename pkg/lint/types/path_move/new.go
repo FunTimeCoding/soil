@@ -4,5 +4,5 @@ func New(
 	from string,
 	to string,
 ) *Move {
-	return &Move{From: from, To: to}
+	return &Move{Old: from, New: to}
 }

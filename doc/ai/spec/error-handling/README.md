@@ -162,10 +162,10 @@ honours - and only once it has been seen enough to know what it means.
 
 ## Leaves
 
-- [mcp.md](mcp.md) - answer and answerWith on MCP, response.Fail for
+- [mcp.md](mcp.md) - answer and answerMessage on MCP, response.Fail for
   request parsing, detail_error
 - [rest.md](rest.md) - strict server schemas, the 4xx body, answer and
-  answerWith on REST
+  answerMessage on REST
 - [external-api.md](external-api.md) - default posture, sentinel
   classification, translating at the client boundary, message format
 - [infrastructure.md](infrastructure.md) - store methods, web handler

@@ -6,17 +6,17 @@ import (
 	"testing"
 )
 
-func TestBranchesAnsweringAgainstTheTable(t *testing.T) {
+func TestBranchesAnsweringAgainstTable(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/example")
 	p.PkgPath = "example.test/pkg/tool/sample/model_context"
 	error_answer.Check(p, results)
 	testutil.AssertBlocked(t, results, 6)
-	testutil.AssertBlockedAt(t, results, "predicate.go", 8)
-	testutil.AssertBlockedAt(t, results, "tool.go", 22)
-	testutil.AssertBlockedAt(t, results, "tool.go", 26)
-	testutil.AssertBlockedAt(t, results, "tool.go", 39)
-	testutil.AssertBlockedAt(t, results, "rest.go", 19)
-	testutil.AssertBlockedAt(t, results, "rest.go", 28)
+	testutil.AssertLineBlocked(t, results, "predicate.go", 8)
+	testutil.AssertLineBlocked(t, results, "tool.go", 22)
+	testutil.AssertLineBlocked(t, results, "tool.go", 26)
+	testutil.AssertLineBlocked(t, results, "tool.go", 39)
+	testutil.AssertLineBlocked(t, results, "rest.go", 19)
+	testutil.AssertLineBlocked(t, results, "rest.go", 28)
 	testutil.AssertBlockedContains(
 		t,
 		results,

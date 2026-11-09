@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestRedirectionDryRunNamesThePendingWrites(t *testing.T) {
+func TestRedirectionDryRunNamesPendingWrites(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetRedirection(false, 3)
 	output, _, code := run(t, s, "redirection", "--instance", "alfa")

@@ -2,27 +2,25 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
-	"time"
 )
 
 func (s *Server) GetRecentAlerts(
 	x context.Context,
 	r server.GetRecentAlertsRequestObject,
 ) (server.GetRecentAlertsResponseObject, error) {
-	now := time.Now()
-	start := now.Add(-1 * time.Hour)
-	end := now
+	w := window.Whole()
 
 	if r.Params.Start != nil {
-		start = *r.Params.Start
+		w.WithStart(*r.Params.Start)
 	}
 
 	if r.Params.End != nil {
-		end = *r.Params.End
+		w.WithEnd(*r.Params.End)
 	}
 
-	records, e := s.service.RecentAlerts(start, end)
+	records, e := s.service.RecentAlerts(w)
 
 	if e != nil {
 		return server.GetRecentAlerts500JSONResponse(*s.answer(x, e)), nil

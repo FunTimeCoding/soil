@@ -15,7 +15,7 @@ func (c *Client) CreateSelectionField(
 		return nil, c.Failure
 	}
 
-	if _, e := c.ChoiceSetByName(choiceSet); e != nil {
+	if _, e := c.ChoiceSet(choiceSet); e != nil {
 		return nil, e
 	}
 

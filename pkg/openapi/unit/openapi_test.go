@@ -12,7 +12,7 @@ import (
 
 func TestConvertTime(t *testing.T) {
 	i := strfmt.NewDateTime()
-	errors.PanicOnError(i.Scan(soil.StartOfTime))
+	errors.PanicOnError(i.Scan(soil.Epoch))
 	assert.String(
 		t,
 		"1970-01-01T00:00:00Z",

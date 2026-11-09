@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestDeletingASessionWithATranscriptNeedsConfirmation(t *testing.T) {
+func TestDeletingSessionWithTranscriptNeedsConfirmation(t *testing.T) {
 	s := base.NewWithSessionFile(t, "doomed", "some-slug")
 	r, e := s.RESTClient(t).DeleteSessionByIdentifierWithResponse(
 		t.Context(),

@@ -255,7 +255,7 @@ func TestStatusLineRateSnapshotDedupe(t *testing.T) {
 	assert.Integer(t, int(first.Identifier), int(second.Identifier))
 }
 
-func TestTurnEndThroughTheHookCommand(t *testing.T) {
+func TestTurnEndThroughHookCommand(t *testing.T) {
 	s := base.New(t)
 	c := console_tester.New(t, s.Client(t))
 	c.Register("session-1")

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestGetSendsBasicAuthToTheLocator(t *testing.T) {
+func TestGetSendsBasicAuthToLocator(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"total":3}`)
 	c := newJiraClient(t, s.URL)
 	defer c.Close()
@@ -37,7 +37,7 @@ func TestGetSendsBasicAuthToTheLocator(t *testing.T) {
 	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
-func TestGetPathJoinsTheHost(t *testing.T) {
+func TestGetPathJoinsHost(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"issueLinkTypes":[]}`)
 	var out map[string]any
 	assert.FatalOnError(
@@ -78,7 +78,7 @@ func TestMissingIssueIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestBytesReturnsTheRawAnswer(t *testing.T) {
+func TestBytesReturnsRawAnswer(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusOK, `{"key":"ALFA-1"}`)
 	c := newJiraClient(t, s.URL)
 	defer c.Close()

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestPushRejectsAQuestionOverTheLimit(t *testing.T) {
+func TestPushRejectsQuestionOverLimit(t *testing.T) {
 	s := service_tester.New(t)
 	_, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -23,7 +23,7 @@ func TestPushRejectsAQuestionOverTheLimit(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestPushAcceptsAQuestionAtTheLimit(t *testing.T) {
+func TestPushAcceptsQuestionAtLimit(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -36,7 +36,7 @@ func TestPushAcceptsAQuestionAtTheLimit(t *testing.T) {
 	assert.NotNil(t, d)
 }
 
-func TestPushRejectsAMissingDefaultAction(t *testing.T) {
+func TestPushRejectsMissingDefaultAction(t *testing.T) {
 	s := service_tester.New(t)
 	_, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -61,7 +61,7 @@ func TestRejectedPushIsNotStored(t *testing.T) {
 	assert.Count(t, 0, s.Service.Decisions(stringsConstant.LowerAlfa))
 }
 
-func TestTurnRejectsContentOverTheLimit(t *testing.T) {
+func TestTurnRejectsContentOverLimit(t *testing.T) {
 	s := service_tester.New(t)
 	d, f := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -79,7 +79,7 @@ func TestTurnRejectsContentOverTheLimit(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestSessionTurnsStopAtTheLimit(t *testing.T) {
+func TestSessionTurnsStopAtLimit(t *testing.T) {
 	s := service_tester.New(t)
 	d, f := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,

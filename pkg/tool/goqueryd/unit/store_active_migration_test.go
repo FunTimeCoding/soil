@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestMigrationDropsTheActiveColumnAndItsRemovedRows(t *testing.T) {
+func TestMigrationDropsActiveColumnAndItsRemovedRows(t *testing.T) {
 	database := connection.NewMemory()
 	defer errors.PanicClose(database)
 

@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestACloseCancelsTheStartUpStepInFlightAndSkipsTheRest(t *testing.T) {
+func TestCloseCancelsStartUpStepInFlightAndSkipsRest(t *testing.T) {
 	entered := make(chan struct{})
 	seen := make(chan error, 1)
 	var later atomic.Int64

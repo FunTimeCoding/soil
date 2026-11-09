@@ -19,7 +19,7 @@ func goFiles(
 			continue
 		}
 
-		if Skipped(o, p) {
+		if Skipped(o.Skips, p) {
 			if o.Verbose {
 				console.Format("Skip go file: %s\n", p)
 			}

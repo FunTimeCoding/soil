@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	queryFace "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+	"time"
 )
 
 func New(
@@ -13,6 +14,7 @@ func New(
 	g *peer.Guard,
 	hiddenTag string,
 	referenceRoot string,
+	clock func() time.Time,
 	r face.Reporter,
 ) *Service {
 	return &Service{
@@ -22,5 +24,6 @@ func New(
 		guard:         g,
 		hiddenTag:     hiddenTag,
 		referenceRoot: referenceRoot,
+		clock:         clock,
 	}
 }

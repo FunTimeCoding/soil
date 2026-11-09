@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheMockIssueFailsOnItsOwn(t *testing.T) {
+func TestMockIssueFailsOnItsOwn(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	m.Found = []*client.JiraIssue{{Key: "ALFA-1"}}

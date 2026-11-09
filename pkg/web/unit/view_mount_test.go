@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheViewMountsThePaletteBehindSignOnOnlyWhereThereIsSignOn(t *testing.T) {
+func TestViewMountsPaletteBehindSignOnOnlyWhereThereIsSignOn(t *testing.T) {
 	v := view.New(
 		layout.New(identity.New("test", "test tool", "test"), "", []byte("png")).
 			WithItems(navigation_item.New("/alfa", "Alfa")),

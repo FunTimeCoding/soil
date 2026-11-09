@@ -25,8 +25,8 @@ type NetworkClient interface {
 		role string,
 	) (*tunnel_termination.Termination, error)
 	CreateWirelessNetwork(ssid string) (*wireless_network.Network, error)
-	TunnelByName(n string) (*tunnel.Tunnel, error)
-	TunnelGroupByName(n string) (*tunnel_group.Group, error)
+	Tunnel(n string) (*tunnel.Tunnel, error)
+	TunnelGroup(n string) (*tunnel_group.Group, error)
 	TunnelGroups() ([]*tunnel_group.Group, error)
 	Tunnels() ([]*tunnel.Tunnel, error)
 	TunnelTerminations() ([]*tunnel_termination.Termination, error)

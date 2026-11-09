@@ -23,10 +23,10 @@ func (s *Server) describeTable(
 		return s.captureDetail(x, e)
 	}
 
-	v, e := s.service.DescribeTable(x, instance, a.Schema, a.Table)
+	v, e := s.catalog.DescribeTable(x, instance, a.Schema, a.Table)
 
 	if e != nil {
-		return s.answerWith(
+		return s.answerMessage(
 			x,
 			e,
 			fmt.Sprintf(

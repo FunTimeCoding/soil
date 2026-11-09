@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsABody(t *testing.T) {
+func TestClientReadsBody(t *testing.T) {
 	spaces, e := client_tester.New(t, mock_client.New()).ListSpaces(
 		context.Background(),
 	)
@@ -18,7 +18,7 @@ func TestTheClientReadsABody(t *testing.T) {
 	assert.Count(t, 0, spaces)
 }
 
-func TestTheClientAcceptsNoContent(t *testing.T) {
+func TestClientAcceptsNoContent(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		client_tester.New(t, mock_client.New()).TransitionIssue(
@@ -29,7 +29,7 @@ func TestTheClientAcceptsNoContent(t *testing.T) {
 	)
 }
 
-func TestTheClientRefusesAFailedWrite(t *testing.T) {
+func TestClientRefusesFailedWrite(t *testing.T) {
 	e := client_tester.New(
 		t,
 		failing_jira.New(detail_error.New("Transition is not valid", "400")),

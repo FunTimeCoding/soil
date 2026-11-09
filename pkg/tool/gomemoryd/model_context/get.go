@@ -34,7 +34,7 @@ func (s *Server) get(
 	related, f := s.service.ListRelated(identifier)
 
 	if f != nil {
-		return s.answerWith(x, f, "load relations")
+		return s.answerMessage(x, f, "load relations")
 	}
 
 	var history []record.Version
@@ -43,7 +43,7 @@ func (s *Server) get(
 		history, e = s.service.GetMemoryHistory(identifier)
 
 		if e != nil {
-			return s.answerWith(x, e, "load history")
+			return s.answerMessage(x, e, "load history")
 		}
 	}
 

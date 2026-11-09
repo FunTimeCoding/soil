@@ -3,6 +3,7 @@ package model_context_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
+	"time"
 )
 
 func (o *Tester) EmptyContentParent() int64 {
@@ -13,7 +14,7 @@ func (o *Tester) EmptyContentParent() int64 {
 	p.Description = "document description"
 	p.Type = "reference"
 	p.ProvenanceFile = "canon/Document.yaml"
-	identifier, e := o.Store().CreateMemory(p)
+	identifier, e := o.Store().CreateMemory(p, time.Now())
 	assert.FatalOnError(o.t, e)
 
 	return identifier

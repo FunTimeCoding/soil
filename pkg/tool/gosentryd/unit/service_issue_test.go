@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestUpdateIssueChangesTheStoredStatus(t *testing.T) {
+func TestUpdateIssueChangesStoredStatus(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.AddIssue("100", "41", constant.UnresolvedStatus)
 	s := service_tester.Service(t, c)
@@ -33,7 +33,7 @@ func TestDeletedIssueIsNotFound(t *testing.T) {
 	assert.String(t, "200", remaining[0].Identifier)
 }
 
-func TestUpdatingAMissingIssueIsNotFound(t *testing.T) {
+func TestUpdatingMissingIssueIsNotFound(t *testing.T) {
 	_, e := service_tester.Service(t, service_tester.NewSource(t)).UpdateIssue(
 		"999",
 		constant.ResolvedStatus,

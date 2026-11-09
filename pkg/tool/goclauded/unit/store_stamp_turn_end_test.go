@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestStampTurnEndRecordsTheBoundary(t *testing.T) {
+func TestStampTurnEndRecordsBoundary(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
 	assert.True(t, s.GetSession("session-1").LastTurnEndAt == nil)

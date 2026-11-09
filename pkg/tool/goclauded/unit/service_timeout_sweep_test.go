@@ -40,7 +40,7 @@ func TestInactivitySweepFiresOnStaleLog(t *testing.T) {
 	assert.True(t, e.TimedOut != "")
 }
 
-func TestHalfAnHourQuietIsNoTimeout(t *testing.T) {
+func TestHalfHourQuietIsNoTimeout(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
 	s.Announce("session-1", r.Callsign, "still working", "")
@@ -48,10 +48,10 @@ func TestHalfAnHourQuietIsNoTimeout(t *testing.T) {
 	s.Store.Advance(30 * time.Minute)
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
-	assert.Count(t, 0, fixture.EntriesByKind(r.Entries, constant.QueueTimeout))
+	assert.Count(t, 0, fixture.KindEntries(r.Entries, constant.QueueTimeout))
 }
 
-func TestATimeoutIsDeliveredOnce(t *testing.T) {
+func TestTimeoutIsDeliveredOnce(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
 	s.Announce("session-1", r.Callsign, "working", "")
@@ -62,17 +62,17 @@ func TestATimeoutIsDeliveredOnce(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(first.Entries, constant.QueueTimeout),
+		fixture.KindEntries(first.Entries, constant.QueueTimeout),
 	)
 	second := s.Check("session-1")
 	assert.Count(
 		t,
 		0,
-		fixture.EntriesByKind(second.Entries, constant.QueueTimeout),
+		fixture.KindEntries(second.Entries, constant.QueueTimeout),
 	)
 }
 
-func TestATimeoutIsLoggedForOthers(t *testing.T) {
+func TestTimeoutIsLoggedForOthers(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
 	s.Announce("session-1", r.Callsign, "going quiet", "")

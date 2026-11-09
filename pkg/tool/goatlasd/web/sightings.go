@@ -18,7 +18,7 @@ func (s *Server) sightings(
 		constant.UnclaimedValue
 	v, e := s.service.MatchingSightings("", unclaimed)
 	errors.PanicOnError(e)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.SightingsTitle,
 		constant.SightingsPath,

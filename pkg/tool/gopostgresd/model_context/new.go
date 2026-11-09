@@ -7,11 +7,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/backup"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/catalog"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/query"
 )
 
 func New(
-	s *service.Service,
+	s *catalog.Service,
+	q *query.Service,
+	b *backup.Service,
 	i *instance.Inventory,
 	n *selection.Selection,
 	r face.Reporter,
@@ -21,7 +25,9 @@ func New(
 		server: server.New(constant.Identity, r).WithInstructions(
 			instance_tool.Instructions(constant.Identity, len(i.Instances)),
 		).WithRecorder(t).WithSessionEnd(n.Clear).Server(),
-		service:   s,
+		catalog:   s,
+		sql:       q,
+		backup:    b,
 		instances: instance_tool.New(i, n, r),
 		reporter:  r,
 	}

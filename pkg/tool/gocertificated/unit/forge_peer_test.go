@@ -45,7 +45,7 @@ func TestForgeFaultIsCaptured(t *testing.T) {
 	assert.Count(t, 1, s.Reporter.Events())
 }
 
-func TestForgeOutageRefusesTheToolQuietly(t *testing.T) {
+func TestForgeOutageRefusesToolQuietly(t *testing.T) {
 	o := model_context_tester.New(t)
 	o.CreateRoot()
 	o.Server.Forge.Fail(refusedConnection())

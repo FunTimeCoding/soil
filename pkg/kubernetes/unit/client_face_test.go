@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	c, e := client.FromConfiguration(
 		&rest.Config{Host: "https://kubernetes.test"},
 		constant.InCluster,
@@ -20,7 +20,7 @@ func TestTheClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestTheMockServesRawClients(t *testing.T) {
+func TestMockServesRawClients(t *testing.T) {
 	m := mock_client.New()
 	assert.NotNil(t, m.Nested())
 	assert.NotNil(t, m.Dynamic())

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestGeneratingHandsTheEliteFilesToTheParser(t *testing.T) {
+func TestGeneratingHandsEliteFilesToParser(t *testing.T) {
 	p := service_tester.NewParser(t)
 	v := mountedGenerate(t, p, memory.New())
 	status, _ := postGenerate(t, v, "WvW/20261024-201500.zevtc")
@@ -26,7 +26,7 @@ func TestGeneratingHandsTheEliteFilesToTheParser(t *testing.T) {
 	)
 }
 
-func TestADownParserAnswersWithoutAReportAndFailsFast(t *testing.T) {
+func TestDownParserAnswersWithoutReportAndFailsFast(t *testing.T) {
 	p := service_tester.NewParser(t)
 	p.Fail(
 		&net.OpError{
@@ -46,7 +46,7 @@ func TestADownParserAnswersWithoutAReportAndFailsFast(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAMissingInputAnswersNotFoundWithoutAReport(t *testing.T) {
+func TestMissingInputAnswersNotFoundWithoutReport(t *testing.T) {
 	p := service_tester.NewParser(t)
 	p.Fail(not_found.New("input file", "foxtrot.json"))
 	r := memory.New()
@@ -55,7 +55,7 @@ func TestAMissingInputAnswersNotFoundWithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAFailedGenerationIsReported(t *testing.T) {
+func TestFailedGenerationIsReported(t *testing.T) {
 	p := service_tester.NewParser(t)
 	p.Fail(unexpected.Format("generate report status: 500: golf"))
 	r := memory.New()

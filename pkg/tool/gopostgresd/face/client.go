@@ -7,6 +7,15 @@ import (
 
 type Client interface {
 	Close()
+	CreateBackup(
+		x context.Context,
+		body client.CreateBackupJSONRequestBody,
+	) (*client.Backup, error)
+	DeleteBackup(
+		x context.Context,
+		name string,
+		params *client.DeleteBackupParams,
+	) error
 	DescribeTable(
 		x context.Context,
 		table string,
@@ -20,6 +29,10 @@ type Client interface {
 		x context.Context,
 		params *client.ListIndexesParams,
 	) (*client.QueryResult, error)
+	ListBackups(
+		x context.Context,
+		params *client.ListBackupsParams,
+	) (*client.BackupList, error)
 	ListInstances(x context.Context) ([]client.Instance, error)
 	ListSchemas(
 		x context.Context,
@@ -34,6 +47,11 @@ type Client interface {
 		body client.QueryJSONRequestBody,
 	) (*client.QueryResult, error)
 	Reachable(x context.Context) error
+	RestoreBackup(
+		x context.Context,
+		name string,
+		body client.RestoreBackupJSONRequestBody,
+	) (*client.RestoreResult, error)
 	TableSizes(
 		x context.Context,
 		params *client.TableSizesParams,

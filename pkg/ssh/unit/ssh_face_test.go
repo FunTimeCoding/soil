@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockKeepTheSSHFace(t *testing.T) {
+func TestClientAndItsMockKeepSSHFace(t *testing.T) {
 	c := ssh.NewWithPassword("alfa", "alfa.example", "secret", false)
 	m := mock_client.New()
 	clients := []face.SSHClient{c, m}

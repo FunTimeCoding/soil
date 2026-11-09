@@ -15,14 +15,14 @@ type ChromiumClient interface {
 	CloseTab(identifier string) error
 	Context() context.Context
 	CreateTab(l string) (string, error)
-	MustTabByHost(s string) *tab.Tab
+	MustHostTab(s string) *tab.Tab
 	MustTabs() []*tab.Tab
 	Run(steps ...chromedp.Action[chromedp.Void]) error
 	RunContext(
 		o context.Context,
 		steps ...chromedp.Action[chromedp.Void],
 	) error
-	TabByHost(s string) (*tab.Tab, error)
+	HostTab(s string) (*tab.Tab, error)
 	Tabs() ([]*tab.Tab, error)
 	TargetContext(identifier string) (context.Context, error)
 	TargetCount() int

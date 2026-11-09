@@ -60,7 +60,7 @@ func (s *Server) plate(
 			plate_page.PagesSection(constant.WatchedPagesTitle, p.Watched),
 		),
 	)
-	s.view.RenderLivePageWithSummary(
+	s.view.RenderSummaryLivePage(
 		w,
 		constant.PlateTitle,
 		constant.PlatePath,

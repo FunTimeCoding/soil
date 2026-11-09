@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestABareCardIsANamedArticle(t *testing.T) {
+func TestBareCardIsNamedArticle(t *testing.T) {
 	assert.String(
 		t,
 		`<article class="card"><div class="card-body"><header class="card-head"><h4>Alfa</h4></header></div></article>`,
@@ -16,7 +16,7 @@ func TestABareCardIsANamedArticle(t *testing.T) {
 	)
 }
 
-func TestACardFillsEverySlotItIsGiven(t *testing.T) {
+func TestCardFillsEverySlotItIsGiven(t *testing.T) {
 	assert.String(
 		t,
 		`<article id="card-bravo" class="card card-side card-hero" style="--card-accent: #4a7fb5" data-search="bravo worker"><div class="card-visual"><img src="/bravo.png" alt="Bravo" loading="lazy"></div><div class="card-body"><header class="card-head"><i>dot</i><h1><a class="card-link" href="/bravo">Bravo</a></h1><b>canary</b></header><p class="card-subtitle">worker</p><p class="card-meta">staging</p><p>state</p><footer class="card-footer"><button>restart</button></footer></div></article>`,
@@ -42,7 +42,7 @@ func TestACardFillsEverySlotItIsGiven(t *testing.T) {
 	)
 }
 
-func TestACardWithoutPortraitFallsBackToItsEmblem(t *testing.T) {
+func TestCardWithoutPortraitFallsBackToItsEmblem(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<article class="card card-art"><div class="card-visual card-fallback">⚙</div>`,
@@ -50,7 +50,7 @@ func TestACardWithoutPortraitFallsBackToItsEmblem(t *testing.T) {
 	)
 }
 
-func TestATaskCardMarksItselfBesideItsSize(t *testing.T) {
+func TestTaskCardMarksItselfBesideItsSize(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<article class="card card-compact card-task extra">`,

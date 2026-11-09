@@ -28,7 +28,7 @@ func spends(
 			case *ast.ReturnStmt:
 				if len(v.Results) == 1 && results.Len() > 1 {
 					c, isCall := ast.Unparen(v.Results[0]).(*ast.CallExpr)
-					spent = isCall && calleeOf(p, c) != nil
+					spent = isCall && callee(p, c) != nil
 					found = true
 
 					return spent

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestABusyEngineAnswersUnavailable(t *testing.T) {
+func TestBusyEngineAnswersUnavailable(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.Fail(unavailable.Format("band power: fault the service is busy"))
 	r, e := s.Client.GetStatusWithResponse(
@@ -21,7 +21,7 @@ func TestABusyEngineAnswersUnavailable(t *testing.T) {
 	assert.StringContains(t, "the service is busy", r.JSON503.Error)
 }
 
-func TestAnEngineRefusingTheAccountAnswersForbidden(t *testing.T) {
+func TestEngineRefusingAccountAnswersForbidden(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.Fail(forbidden.Format("band power: fault access denied"))
 	r, e := s.Client.RequestPowerWithResponse(

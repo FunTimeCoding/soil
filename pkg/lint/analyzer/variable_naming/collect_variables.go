@@ -15,11 +15,11 @@ func collectVariables(
 		func(n ast.Node) bool {
 			switch node := n.(type) {
 			case *ast.AssignStmt:
-				collectFromAssign(y, node, &result)
+				collectAssign(y, node, &result)
 			case *ast.RangeStmt:
-				collectFromRange(y, node, &result)
+				collectRange(y, node, &result)
 			case *ast.DeclStmt:
-				collectFromVariableDeclaration(y, node, &result)
+				collectVariableDeclaration(y, node, &result)
 			}
 
 			return true

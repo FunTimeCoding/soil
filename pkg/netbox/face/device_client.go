@@ -17,7 +17,7 @@ type DeviceClient interface {
 		s *site.Site,
 		n *tenant.Tenant,
 	) (*device.Device, error)
-	DeviceByName(n string) (*device.Device, error)
+	Device(n string) (*device.Device, error)
 	Devices() ([]*device.Device, error)
 	DevicesByMatch(s string) ([]*device.Device, error)
 	RenameDevice(
@@ -64,7 +64,7 @@ type DeviceClient interface {
 		s *site.Site,
 		n *tenant.Tenant,
 	) *device.Device
-	MustDeviceByName(n string) *device.Device
+	MustDevice(n string) *device.Device
 	MustDevices() []*device.Device
 	MustDevicesByMatch(s string) []*device.Device
 	MustDevicesByName(s string) []*device.Device

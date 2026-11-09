@@ -1,22 +1,23 @@
 package server
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/time/window"
+	"time"
+)
 
 func timeRange(
 	start *time.Time,
 	end *time.Time,
-) (time.Time, time.Time) {
-	to := time.Now()
-
-	if end != nil {
-		to = *end
-	}
-
-	from := to.Add(-1 * time.Hour)
+) *window.Window {
+	result := window.Whole()
 
 	if start != nil {
-		from = *start
+		result.WithStart(*start)
 	}
 
-	return from, to
+	if end != nil {
+		result.WithEnd(*end)
+	}
+
+	return result
 }

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestThePaletteListsTheItemsThenTheExtras(t *testing.T) {
+func TestPaletteListsItemsThenExtras(t *testing.T) {
 	r := paletteAnswer(t, paletteView(), true)
 	assert.Integer(t, http.StatusOK, r.Code)
 	assert.StringContains(t, "Alfa", r.Body.String())
@@ -21,12 +21,12 @@ func TestThePaletteListsTheItemsThenTheExtras(t *testing.T) {
 	assert.StringNotContains(t, "Sign out", r.Body.String())
 }
 
-func TestASignedSessionAlsoGetsSignOut(t *testing.T) {
+func TestSignedSessionAlsoGetsSignOut(t *testing.T) {
 	r := paletteAnswer(t, paletteView(), false)
 	assert.StringContains(t, "Sign out", r.Body.String())
 }
 
-func TestALayoutWithNothingToListHasNoPalette(t *testing.T) {
+func TestLayoutWithNothingToListHasNoPalette(t *testing.T) {
 	i := identity.New("test", "test tool", "test")
 	plain := layout.New(i, "", nil)
 	assert.StringNotContains(t, `id="palette"`, web_tester.RenderBrand(plain))

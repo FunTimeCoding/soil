@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestAnOpenAIRefusedBodyIsAValidationError(t *testing.T) {
+func TestOpenAIRefusedBodyIsValidationError(t *testing.T) {
 	e := openaiEmbedding(
 		t,
 		http.StatusBadRequest,
@@ -24,7 +24,7 @@ func TestAnOpenAIRefusedBodyIsAValidationError(t *testing.T) {
 	assert.StringContains(t, "Invalid body", e.Error())
 }
 
-func TestAnOpenAIServerErrorIsUnexpectedAndNotRetried(t *testing.T) {
+func TestOpenAIServerErrorIsUnexpectedAndNotRetried(t *testing.T) {
 	var calls atomic.Int64
 	s, _ := upstream_tester.New(t, http.StatusOK, "")
 	s.Config.Handler = http.HandlerFunc(
@@ -43,7 +43,7 @@ func TestAnOpenAIServerErrorIsUnexpectedAndNotRetried(t *testing.T) {
 	assert.Integer(t, 1, int(calls.Load()))
 }
 
-func TestABusyOpenAIServerIsUnavailable(t *testing.T) {
+func TestBusyOpenAIServerIsUnavailable(t *testing.T) {
 	e := openaiEmbedding(
 		t,
 		http.StatusServiceUnavailable,

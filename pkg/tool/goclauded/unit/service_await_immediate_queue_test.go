@@ -24,7 +24,7 @@ func TestAwaitImmediateQueueReturnsEntriesAlreadyWaiting(t *testing.T) {
 	assert.String(t, "message", drained[0].Kind)
 }
 
-func TestAwaitImmediateQueueReturnsNothingWhenTheQueueIsEmpty(t *testing.T) {
+func TestAwaitImmediateQueueReturnsNothingWhenQueueIsEmpty(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	assert.Count(
@@ -34,7 +34,7 @@ func TestAwaitImmediateQueueReturnsNothingWhenTheQueueIsEmpty(t *testing.T) {
 	)
 }
 
-func TestAwaitImmediateQueueWakesWhenAnEntryArrivesDuringTheWait(t *testing.T) {
+func TestAwaitImmediateQueueWakesWhenEntryArrivesDuringWait(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
@@ -58,7 +58,7 @@ func TestAwaitImmediateQueueWakesWhenAnEntryArrivesDuringTheWait(t *testing.T) {
 	}
 }
 
-func TestAwaitImmediateQueueReleasesWhenTheServiceStops(t *testing.T) {
+func TestAwaitImmediateQueueReleasesWhenServiceStops(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	result := make(chan []queue.Entry, 1)

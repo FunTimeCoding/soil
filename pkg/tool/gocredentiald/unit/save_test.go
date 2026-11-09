@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAFailedSaveLeavesTheEntriesReadable(t *testing.T) {
+func TestFailedSaveLeavesEntriesReadable(t *testing.T) {
 	path := fixtureDatabase(t)
 	c := keepass.MustNew(path, "secret")
 	readOnly(t, filepath.Dir(path))
@@ -21,7 +21,7 @@ func TestAFailedSaveLeavesTheEntriesReadable(t *testing.T) {
 	assert.String(t, "hunter2", c.ByTitle("Forge").GetPassword())
 }
 
-func TestASaveOverAChangeOnDiskIsAConflict(t *testing.T) {
+func TestSaveOverChangeOnDiskIsConflict(t *testing.T) {
 	path := fixtureDatabase(t)
 	c := keepass.MustNew(path, "secret")
 	at := time.Now().Add(time.Hour)
@@ -29,7 +29,7 @@ func TestASaveOverAChangeOnDiskIsAConflict(t *testing.T) {
 	assert.True(t, conflict.Is(c.Save()))
 }
 
-func TestAFailedWriteIsNotKeptInMemory(t *testing.T) {
+func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
 	path := fixtureDatabase(t)
 	s := openReported(t, path, nil, memory.New())
 	identifier := s.Search("forge")[0].Identifier
@@ -42,7 +42,7 @@ func TestAFailedWriteIsNotKeptInMemory(t *testing.T) {
 	assert.String(t, "hunter2", password)
 }
 
-func TestAFailedBackupRefusesTheWrite(t *testing.T) {
+func TestFailedBackupRefusesWrite(t *testing.T) {
 	path := fixtureDatabase(t)
 	at := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
 	s := openAt(t, path, at)
@@ -59,7 +59,7 @@ func TestAFailedBackupRefusesTheWrite(t *testing.T) {
 	assert.String(t, "hunter2", password)
 }
 
-func TestAFailedSaveLeavesNoTemporaryFile(t *testing.T) {
+func TestFailedSaveLeavesNoTemporaryFile(t *testing.T) {
 	path := fixtureDatabase(t)
 	c := keepass.MustNew(path, "secret")
 	i, e := os.Stat(path)

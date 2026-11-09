@@ -29,7 +29,7 @@ func TestGetV2PathSendsBasicAuth(t *testing.T) {
 	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
-func TestGetPathUsesTheOldBase(t *testing.T) {
+func TestGetPathUsesOldBase(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{}`)
 	var out map[string]any
 	assert.FatalOnError(
@@ -39,7 +39,7 @@ func TestGetPathUsesTheOldBase(t *testing.T) {
 	assert.String(t, "/wiki/rest/api/user/current", last().URL.Path)
 }
 
-func TestNextFollowsTheCursorWithCredentials(t *testing.T) {
+func TestNextFollowsCursorWithCredentials(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"results":[]}`)
 	c := newConfluenceClient(t, s.URL)
 	defer c.Close()
@@ -55,7 +55,7 @@ func TestNextFollowsTheCursorWithCredentials(t *testing.T) {
 	assert.True(t, okay)
 }
 
-func TestPostV2PathSendsTheBody(t *testing.T) {
+func TestPostV2PathSendsBody(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"id":"7"}`)
 	var out map[string]string
 	assert.FatalOnError(
@@ -89,7 +89,7 @@ func TestPutV2PathUsesItsVerb(t *testing.T) {
 	assert.String(t, http.MethodPut, last().Method)
 }
 
-func TestPostOldPathAcceptsAnEmptyAnswer(t *testing.T) {
+func TestPostOldPathAcceptsEmptyAnswer(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, "")
 	assert.FatalOnError(
 		t,
@@ -118,7 +118,7 @@ func TestMissingPageIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestRefusalCarriesTheVersionTwoTitle(t *testing.T) {
+func TestRefusalCarriesVersionTwoTitle(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -130,7 +130,7 @@ func TestRefusalCarriesTheVersionTwoTitle(t *testing.T) {
 	assert.StringContains(t, "status: 400: Invalid space identifier", e.Error())
 }
 
-func TestRefusalCarriesTheOldMessage(t *testing.T) {
+func TestRefusalCarriesOldMessage(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusForbidden,

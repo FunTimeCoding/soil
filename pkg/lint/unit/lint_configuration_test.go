@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestCheckReflowSkipsAConfiguredDirectory(t *testing.T) {
+func TestCheckReflowSkipsConfiguredDirectory(t *testing.T) {
 	long := join.Empty(strings.Repeat("word ", 17), "end\n")
 	v := virtual_file_system.New()
 	v.WriteString("pkg/runbook/Alert.md", long)

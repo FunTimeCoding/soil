@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestApplicationsSendTheToken(t *testing.T) {
+func TestApplicationsSendToken(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"items":[]}`)
 	_, e := newArgocdClient(t, s.URL).Applications()
 	assert.FatalOnError(t, e)
@@ -22,7 +22,7 @@ func TestApplicationsSendTheToken(t *testing.T) {
 	)
 }
 
-func TestRefusalCarriesTheReason(t *testing.T) {
+func TestRefusalCarriesReason(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusForbidden,

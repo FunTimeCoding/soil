@@ -6,7 +6,7 @@ func (s *Service) VirtualInterfaces(machine string) ([]*network.Interface, error
 	return guarded(
 		s.guard,
 		func() ([]*network.Interface, error) {
-			m, e := s.client.VirtualMachineByName(machine)
+			m, e := s.client.VirtualMachine(machine)
 
 			if e != nil {
 				return nil, e

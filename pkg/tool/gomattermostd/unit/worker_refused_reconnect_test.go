@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestWatcherRetriesARefusedReconnectAndReportsItOnce(t *testing.T) {
+func TestWatcherRetriesRefusedReconnectAndReportsItOnce(t *testing.T) {
 	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))

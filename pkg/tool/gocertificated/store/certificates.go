@@ -17,8 +17,8 @@ func (s *Store) Certificates(f *filter.Filter) ([]record.Record, error) {
 		d = d.Where("kind = ?", f.Kind)
 	}
 
-	if f.Before != nil {
-		d = d.Where("not_after < ?", *f.Before)
+	if end, ended := f.Window.End(); ended {
+		d = d.Where("not_after < ?", end)
 	}
 
 	d = revocationClause(d, f.Revoked)

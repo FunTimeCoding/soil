@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAddsAndRemovesOneValue(t *testing.T) {
+func TestClientAddsAndRemovesOneValue(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -34,7 +34,7 @@ func TestTheClientAddsAndRemovesOneValue(t *testing.T) {
 	assert.String(t, "lead", a.Label(constant.FixtureLabelKey))
 }
 
-func TestTheLabelToolAddsBesideAndReadsTheCommaForm(t *testing.T) {
+func TestLabelToolAddsBesideAndReadsCommaForm(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")

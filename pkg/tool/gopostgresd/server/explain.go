@@ -26,10 +26,10 @@ func (s *Server) Explain(
 	}
 
 	if e != nil {
-		return server.Explain500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.Explain500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
-	rows, e := s.service.Explain(
+	rows, e := s.query.Explain(
 		x,
 		instance,
 		r.Body.Sql,
@@ -53,7 +53,7 @@ func (s *Server) Explain(
 	}
 
 	if e != nil {
-		return server.Explain500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.Explain500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	return server.Explain200JSONResponse{

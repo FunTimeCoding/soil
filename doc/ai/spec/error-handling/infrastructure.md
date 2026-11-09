@@ -163,7 +163,11 @@ for one returning only an error, each passing the operation's context to
 `Attempt` - with no adapter type between the face and the guard. A tick
 collecting from several peers returns each failure on its own:
 `errors.Join` classifies as its first matching branch, so one outage would
-hide a real failure beside it.
+hide a real failure beside it. The `unguarded_peer` analyzer holds the rule:
+a face beside a guard - a field or a parameter - is used, called or handed
+on as a method value, only inside `Attempt`, `Do` or a function of the
+package wrapping them; a helper whose every caller is inside counts as
+inside, and a method with no error result is not a peer call.
 
 `Close` stops the probe loop only: `Attempt` still runs calls, so a
 daemon may flush through a guard the lifecycle already closed, and a

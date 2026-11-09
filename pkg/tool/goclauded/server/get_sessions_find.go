@@ -12,7 +12,7 @@ func (s *Server) GetSessionsFind(
 ) (server.GetSessionsFindResponseObject, error) {
 	var result []server.FindMatch
 
-	for _, m := range s.transcript.SessionsByTool(r.Params.Tool) {
+	for _, m := range s.transcript.ToolSessions(r.Params.Tool) {
 		name := m.Session.Slug
 		e, found, f := s.roster.FindSession(m.Session.Identifier)
 

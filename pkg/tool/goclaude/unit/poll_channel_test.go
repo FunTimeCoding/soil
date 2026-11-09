@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestPollChannelStallsOnceAtTheThreshold(t *testing.T) {
+func TestPollChannelStallsOnceAtThreshold(t *testing.T) {
 	c := stubServer(
 		t,
 		constant.FixtureChannelEntry,
@@ -35,7 +35,7 @@ func TestPollChannelStallsOnceAtTheThreshold(t *testing.T) {
 	)
 }
 
-func TestPollChannelResumesAndDeliversAfterAStall(t *testing.T) {
+func TestPollChannelResumesAndDeliversAfterStall(t *testing.T) {
 	c := stubServer(
 		t,
 		constant.FixtureChannelEntry,
@@ -59,7 +59,7 @@ func TestPollChannelResumesAndDeliversAfterAStall(t *testing.T) {
 	assert.String(t, "Ash: hello", messages[0].Content)
 }
 
-func TestPollChannelSuccessResetsTheCount(t *testing.T) {
+func TestPollChannelSuccessResetsCount(t *testing.T) {
 	c := stubServer(
 		t,
 		constant.FixtureChannelEntry,

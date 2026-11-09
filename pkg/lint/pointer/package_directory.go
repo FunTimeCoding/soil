@@ -1,6 +1,7 @@
 package pointer
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
@@ -8,7 +9,7 @@ import (
 )
 
 func PackageDirectory(s string) string {
-	trimmed := strings.TrimSuffix(Normalize(s), "()")
+	trimmed := strings.TrimSuffix(Normalize(s), constant.CallSuffix)
 	directory := ""
 	base := trimmed
 

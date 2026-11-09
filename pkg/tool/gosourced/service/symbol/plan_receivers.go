@@ -88,8 +88,8 @@ func planReceivers(
 					Method: method,
 					Idents: receiverUses(p, method, field.Names[0], receiver),
 					Label:  label,
-					From:   field.Names[0].Name,
-					To:     n.Name,
+					Old:    field.Names[0].Name,
+					New:    n.Name,
 				},
 			)
 		}

@@ -9,7 +9,7 @@ func (s *Store) enrichMetadata(
 	results []result.Search,
 	identifiers []int,
 ) {
-	metadata := s.metadataByDocuments(identifiers)
+	metadata := s.documentsMetadata(identifiers)
 
 	for i := range results {
 		results[i].Metadata = metadata[identifiers[i]]

@@ -17,7 +17,7 @@ import (
 	"testing"
 )
 
-func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
+func TestWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	s := base.New(t)
 	connectTo(t, s.Port)
 	m := monitor.New(true, memory.New())

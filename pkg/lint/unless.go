@@ -13,7 +13,7 @@ func Unless(
 		path string,
 		r io.Reader,
 	) *file_report.Report {
-		if SkippedBy(skips, path) {
+		if Skipped(skips, path) {
 			return file_report.New(path, r).Finalize()
 		}
 

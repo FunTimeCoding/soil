@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesBothClientsItBuilt(t *testing.T) {
+func TestDaemonClosesBothClientsItBuilt(t *testing.T) {
 	j := service_tester.NewJira(t)
 	c := service_tester.NewConfluence(t)
 	d := service_tester.NewDaemon(
@@ -28,7 +28,7 @@ func TestTheDaemonClosesBothClientsItBuilt(t *testing.T) {
 	assert.Integer(t, 1, c.Closed)
 }
 
-func TestTheDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
+func TestDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
 	workers := service_tester.NewDaemon(
 		t,
 		service_tester.NewOption(
@@ -46,7 +46,7 @@ func TestTheDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
 	}
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := service_tester.NewOption(
 		service_tester.NewJira(t),
 		service_tester.NewConfluence(t),
@@ -68,7 +68,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestARefreshFillsThePlateAndNotifiesOnlyOnChange(t *testing.T) {
+func TestRefreshFillsPlateAndNotifiesOnlyOnChange(t *testing.T) {
 	j := service_tester.NewJira(t)
 	j.Issues = []*issue.Issue{
 		issue.New(issue.Raw("ALFA-1"), issue.FixtureOption()),
@@ -92,7 +92,7 @@ func TestARefreshFillsThePlateAndNotifiesOnlyOnChange(t *testing.T) {
 	assert.Integer(t, 0, len(changes))
 }
 
-func TestAFailedRefreshIsReportableAndKeepsThePlate(t *testing.T) {
+func TestFailedRefreshIsReportableAndKeepsPlate(t *testing.T) {
 	v := service_tester.NewService(
 		t,
 		failing_jira.New(errors.Format("search refused", "ALFA")),
@@ -106,7 +106,7 @@ func TestAFailedRefreshIsReportableAndKeepsThePlate(t *testing.T) {
 	assert.Count(t, 0, v.CurrentPlate().Issues)
 }
 
-func TestAnOutageIsLeftToTheGuard(t *testing.T) {
+func TestOutageIsLeftToGuard(t *testing.T) {
 	v := service_tester.NewService(
 		t,
 		failing_jira.New(refusedConnection()),

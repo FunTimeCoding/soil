@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockKeepTheForge(t *testing.T) {
+func TestClientAndItsMockKeepForge(t *testing.T) {
 	r := client_tester.New(t, func(*http.ServeMux) {})
 	m := mock_client.New()
 	forges := []face.GitLabClient{r.Client, m}

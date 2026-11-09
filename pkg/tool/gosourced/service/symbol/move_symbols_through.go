@@ -251,7 +251,7 @@ func (s *Service) moveSymbolsThrough(
 
 	for _, entry := range entries {
 		for _, f := range references[entry] {
-			if insideMoved(entries, f.Ident.Pos()) {
+			if movedContains(entries, f.Ident.Pos()) {
 				if entry.Flipped {
 					renames[f.Ident] = entry.NewName
 				}

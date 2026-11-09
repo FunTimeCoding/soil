@@ -1,0 +1,21 @@
+package mock_client
+
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+)
+
+func (c *Client) DeviceType(n string) (*device_type.Type, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	for _, t := range c.types {
+		if t.Model == n {
+			return t, nil
+		}
+	}
+
+	return nil, not_found.New(constant.DeviceTypeKind, n)
+}

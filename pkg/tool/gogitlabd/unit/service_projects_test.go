@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestProjectsWithoutASearchListsEveryProject(t *testing.T) {
+func TestProjectsWithoutSearchListsEveryProject(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
 	c.SeedProject(1, "group", "app")
@@ -17,7 +17,7 @@ func TestProjectsWithoutASearchListsEveryProject(t *testing.T) {
 	assert.Count(t, 2, projects)
 }
 
-func TestProjectsWithASearchNarrows(t *testing.T) {
+func TestProjectsWithSearchNarrows(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
 	c.SeedProject(1, "group", "app")

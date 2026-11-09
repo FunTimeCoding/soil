@@ -15,7 +15,7 @@ func checkModule(
 ) *output.Results {
 	t.Helper()
 	directory := testutil.PrepareTestPackage(t, source)
-	p, results := testutil.LoadFromDirectory(t, directory)
+	p, results := testutil.LoadDirectory(t, directory)
 	all, _, e := resolve.LoadPackages(directory, "./...")
 	assert.FatalOnError(t, e)
 	unclosed_resource.Check(p, results, unclosed_resource.NewSummaries(all))

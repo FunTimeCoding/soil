@@ -26,7 +26,7 @@ func TestMatchReachesIntoIdentifiers(t *testing.T) {
 	assert.Integer(t, 1, len(s.Match("var innerSprocketCount int")))
 }
 
-func TestMatchReportsEveryTermOnTheLine(t *testing.T) {
+func TestMatchReportsEveryTermOnLine(t *testing.T) {
 	s := scan.New([]string{"widget", "Sprocket"})
 	found := s.Match("widget and Sprocket together")
 	assert.Integer(t, 2, len(found))

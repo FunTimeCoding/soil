@@ -37,7 +37,7 @@ func (s *Server) addSubmit(
 		return
 	}
 
-	s.view.RenderFragmentWithStatus(
+	s.view.RenderStatusFragment(
 		w,
 		entry_page.AddForm(url.Values{}, ""),
 		fmt.Sprintf("Entry added: %s by %s", e.Action, e.User),

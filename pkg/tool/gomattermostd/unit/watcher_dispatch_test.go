@@ -132,7 +132,7 @@ func TestWatcherForgetStopsMatching(t *testing.T) {
 	assert.Count(t, 0, o.Watcher.Drain())
 }
 
-func TestWatcherDueHoldsARootInsideItsWindow(t *testing.T) {
+func TestWatcherDueHoldsRootInsideItsWindow(t *testing.T) {
 	o := worker_tester.NewDispatchWatcher(t)
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("foxtrot", "Foxtrot")
@@ -159,7 +159,7 @@ func TestWatcherDueHoldsARootInsideItsWindow(t *testing.T) {
 	assert.Count(t, 0, o.Watcher.Drain())
 }
 
-func TestWatcherDueCoalescesARootsEvents(t *testing.T) {
+func TestWatcherDueCoalescesRootsEvents(t *testing.T) {
 	o := worker_tester.NewDispatchWatcher(t)
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("foxtrot", "Foxtrot")

@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestASnippetRoundTripsThroughTheService(t *testing.T) {
+func TestSnippetRoundTripsThroughService(t *testing.T) {
 	s, _ := service_tester.SnippetService(t)
 	volume, e := s.CreateSnippet("test", "alfa.yaml", "#cloud-config")
 	assert.FatalOnError(t, e)
@@ -28,7 +28,7 @@ func TestASnippetRoundTripsThroughTheService(t *testing.T) {
 	assert.Count(t, 0, empty)
 }
 
-func TestASnippetListingLeavesDirectoriesOut(t *testing.T) {
+func TestSnippetListingLeavesDirectoriesOut(t *testing.T) {
 	s, h := service_tester.SnippetService(t)
 	h.AddDirectory("/var/lib/vz/snippets/bravo")
 	_, e := s.CreateSnippet("test", "alfa.yaml", "#cloud-config")
@@ -42,7 +42,7 @@ func TestASnippetListingLeavesDirectoriesOut(t *testing.T) {
 	assert.String(t, "alfa.yaml", listed[0].Name())
 }
 
-func TestADroppedShellIsRedialledOnTheNextCall(t *testing.T) {
+func TestDroppedShellIsRedialledOnNextCall(t *testing.T) {
 	s, shells := service_tester.RedialService(t)
 	defer shells.Close()
 	_, e := s.ListSnippets("test")
@@ -57,7 +57,7 @@ func TestADroppedShellIsRedialledOnTheNextCall(t *testing.T) {
 	assert.Integer(t, 1, first.Closed)
 }
 
-func TestAShellFailingOtherwiseIsKept(t *testing.T) {
+func TestShellFailingOtherwiseIsKept(t *testing.T) {
 	s, shells := service_tester.RedialService(t)
 	defer shells.Close()
 	_, e := s.GetSnippet("test", "alfa.yaml")
@@ -68,7 +68,7 @@ func TestAShellFailingOtherwiseIsKept(t *testing.T) {
 	assert.Integer(t, 0, shells.Built[0].Closed)
 }
 
-func TestASnippetNameLeavingTheDirectoryIsRefused(t *testing.T) {
+func TestSnippetNameLeavingDirectoryIsRefused(t *testing.T) {
 	s, h := service_tester.SnippetService(t)
 	_, e := s.CreateSnippet("test", "../alfa", "#cloud-config")
 	assert.True(t, validation.Is(e))
@@ -80,14 +80,14 @@ func TestASnippetNameLeavingTheDirectoryIsRefused(t *testing.T) {
 	assert.Count(t, 0, held)
 }
 
-func TestAMissingSnippetIsNotFound(t *testing.T) {
+func TestMissingSnippetIsNotFound(t *testing.T) {
 	s, _ := service_tester.SnippetService(t)
 	_, e := s.GetSnippet("test", "alfa.yaml")
 	assert.True(t, not_found.Is(e))
 	assert.True(t, not_found.Is(s.DeleteSnippet("test", "alfa.yaml")))
 }
 
-func TestAShellFailureReachesTheCaller(t *testing.T) {
+func TestShellFailureReachesCaller(t *testing.T) {
 	s, h := service_tester.SnippetService(t)
 	h.Fail(h.WriteFile, dropped.Format("connection dropped"))
 	_, e := s.CreateSnippet("test", "alfa.yaml", "#cloud-config")
@@ -97,7 +97,7 @@ func TestAShellFailureReachesTheCaller(t *testing.T) {
 	assert.True(t, dropped.Is(e))
 }
 
-func TestASnippetWithoutANameOrContentIsRefused(t *testing.T) {
+func TestSnippetWithoutNameOrContentIsRefused(t *testing.T) {
 	s, _ := service_tester.SnippetService(t)
 	_, e := s.CreateSnippet("test", "", "#cloud-config")
 	assert.True(t, validation.Is(e))

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAnInterruptBeforeTheLaunchKillsTheAgent(t *testing.T) {
+func TestInterruptBeforeLaunchKillsAgent(t *testing.T) {
 	s := mock_stream.New(nil, true, nil)
 	launching := make(chan struct{})
 	release := make(chan struct{})
@@ -38,7 +38,7 @@ func TestAnInterruptBeforeTheLaunchKillsTheAgent(t *testing.T) {
 	assert.Integer(t, 1, s.Killed())
 }
 
-func TestAnAgentAlreadyGoneIsNotReported(t *testing.T) {
+func TestAgentAlreadyGoneIsNotReported(t *testing.T) {
 	r := memory.New()
 	stream := stubborn_stream.New(os.ErrProcessDone)
 	t.Cleanup(stream.Close)
@@ -49,7 +49,7 @@ func TestAnAgentAlreadyGoneIsNotReported(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAKillThatFailsIsReported(t *testing.T) {
+func TestKillThatFailsIsReported(t *testing.T) {
 	r := memory.New()
 	stream := stubborn_stream.New(errors.New("operation not permitted"))
 	t.Cleanup(stream.Close)

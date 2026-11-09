@@ -9,7 +9,7 @@ func (c *Client) DeviceInterfaceExists(
 	d *device.Device,
 	name string,
 ) (bool, error) {
-	_, e := c.DeviceInterfaceByName(d, name)
+	_, e := c.DeviceInterface(d, name)
 
 	if e != nil {
 		if not_found.Is(e) {

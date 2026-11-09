@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestTheUtilizationClientReadsWithTheBearer(t *testing.T) {
+func TestUtilizationClientReadsWithBearer(t *testing.T) {
 	var bearer string
 	var beta string
 	c := utilizationUpstream(
@@ -33,7 +33,7 @@ func TestTheUtilizationClientReadsWithTheBearer(t *testing.T) {
 	assert.String(t, "oauth-2025-04-20", beta)
 }
 
-func TestAnOverloadedUtilizationAnswerIsUnavailable(t *testing.T) {
+func TestOverloadedUtilizationAnswerIsUnavailable(t *testing.T) {
 	c := utilizationUpstream(
 		t,
 		func(w http.ResponseWriter, _ *http.Request) {
@@ -44,7 +44,7 @@ func TestAnOverloadedUtilizationAnswerIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestARefusedCredentialIsNoOutage(t *testing.T) {
+func TestRefusedCredentialIsNoOutage(t *testing.T) {
 	c := utilizationUpstream(
 		t,
 		func(w http.ResponseWriter, _ *http.Request) {
@@ -57,7 +57,7 @@ func TestARefusedCredentialIsNoOutage(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestAnyAnswerMakesTheUtilizationHostReachable(t *testing.T) {
+func TestAnyAnswerMakesUtilizationHostReachable(t *testing.T) {
 	c := utilizationUpstream(
 		t,
 		func(w http.ResponseWriter, _ *http.Request) {
@@ -67,13 +67,13 @@ func TestAnyAnswerMakesTheUtilizationHostReachable(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestAGoneUtilizationHostIsUnreachable(t *testing.T) {
+func TestGoneUtilizationHostIsUnreachable(t *testing.T) {
 	c := utilization.New(closedLocator(t))
 	defer c.Close()
 	assert.True(t, unreachable.Is(c.Reachable(t.Context())))
 }
 
-func TestTheUtilizationClientAndMockHoldTheFace(t *testing.T) {
+func TestUtilizationClientAndMockHoldFace(t *testing.T) {
 	c := utilization.New(closedLocator(t))
 	defer c.Close()
 	m := mock_client.New()

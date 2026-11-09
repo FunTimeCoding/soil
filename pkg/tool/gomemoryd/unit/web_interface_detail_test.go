@@ -8,16 +8,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web/memory_page"
 	"strings"
 	"testing"
+	"time"
 )
 
-func TestHiddenDetailReadsLikeAMissingOne(t *testing.T) {
+func TestHiddenDetailReadsLikeMissingOne(t *testing.T) {
 	s := base.NewHidden(t, "private")
 	o := save_option.New()
 	o.Name = "zulu"
 	o.Content = "zulu content"
 	o.Type = "feedback"
 	o.Tags = []string{"private"}
-	identifier, e := s.Store().CreateMemory(o)
+	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	hidden := body(t, s.Server, memory_page.Path(identifier), false)
 	missing := body(t, s.Server, memory_page.Path(identifier+1), false)

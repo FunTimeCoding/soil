@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestParsePolicyTakesTheInstalledVersionSource(t *testing.T) {
+func TestParsePolicyTakesInstalledVersionSource(t *testing.T) {
 	v := service.ParsePolicy(policyOutput())
 	assert.String(t, "1.2.3", v["foxtrot"].Version)
 	assert.String(t, "https://apt.example.org", v["foxtrot"].Origin)

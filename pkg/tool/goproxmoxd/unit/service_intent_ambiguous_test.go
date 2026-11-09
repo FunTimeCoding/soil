@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestASameNamedGuestIsNeverReconciled(t *testing.T) {
+func TestSameNamedGuestIsNeverReconciled(t *testing.T) {
 	c, machines := ambiguousFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
@@ -19,7 +19,7 @@ func TestASameNamedGuestIsNeverReconciled(t *testing.T) {
 	assert.Count(t, 0, n.UpdatedMachines)
 }
 
-func TestASameNamedGuestIsNeverRecordedOnStart(t *testing.T) {
+func TestSameNamedGuestIsNeverRecordedOnStart(t *testing.T) {
 	c, machines := ambiguousFloor()
 	defer c.Close()
 	m := memory.New()

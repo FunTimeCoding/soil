@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) DeleteConfigurationContext(name string) error {
-	v, e := c.ConfigurationContextByName(name)
+	v, e := c.ConfigurationContext(name)
 
 	if e != nil {
 		return e

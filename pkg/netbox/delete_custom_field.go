@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) DeleteCustomField(name string) error {
-	v, e := c.CustomFieldByName(name)
+	v, e := c.CustomField(name)
 
 	if e != nil {
 		return e

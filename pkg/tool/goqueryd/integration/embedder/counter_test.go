@@ -12,11 +12,11 @@ import (
 	"testing"
 )
 
-func TestTheCounterAllowsTheWindowLessSpecials(t *testing.T) {
+func TestCounterAllowsWindowLessSpecials(t *testing.T) {
 	assert.Integer(t, 2046, newCounter(t).Allowance())
 }
 
-func TestTheCounterSeesTheDenseChunkOverTheWindow(t *testing.T) {
+func TestCounterSeesDenseChunkOverWindow(t *testing.T) {
 	assert.Greater(
 		t,
 		2046,
@@ -24,7 +24,7 @@ func TestTheCounterSeesTheDenseChunkOverTheWindow(t *testing.T) {
 	)
 }
 
-func TestTheCounterSeesTheGoDeclarationOverTheWindow(t *testing.T) {
+func TestCounterSeesGoDeclarationOverWindow(t *testing.T) {
 	assert.Greater(
 		t,
 		2046,
@@ -38,7 +38,7 @@ func TestTheCounterSeesTheGoDeclarationOverTheWindow(t *testing.T) {
 	)
 }
 
-func TestTheCounterFitsEveryManualChunk(t *testing.T) {
+func TestCounterFitsEveryManualChunk(t *testing.T) {
 	c := newCounter(t)
 
 	for _, k := range chunk.Document(

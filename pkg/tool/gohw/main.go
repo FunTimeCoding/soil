@@ -22,7 +22,7 @@ func Main() {
 	n := netbox.NewEnvironment()
 	defer n.Close()
 
-	if n.MustDeviceByName(hostname) != nil {
+	if n.MustDevice(hostname) != nil {
 		return
 	}
 
@@ -30,10 +30,10 @@ func Main() {
 		consoleConstant.TagIdentifier,
 	)
 	console.Format("Hostname: %s\n", hostname)
-	console.Format("Role: %s\n", n.MustDeviceRoleByName("default").Format(f))
-	console.Format("Type: %s\n", n.MustDeviceTypeByName("default").Format(f))
-	console.Format("Site: %s\n", n.MustSiteByName("default").Format(f))
-	console.Format("Tenant: %s\n", n.MustTenantByName("default").Format(f))
+	console.Format("Role: %s\n", n.MustDeviceRole("default").Format(f))
+	console.Format("Type: %s\n", n.MustDeviceType("default").Format(f))
+	console.Format("Site: %s\n", n.MustSite("default").Format(f))
+	console.Format("Tenant: %s\n", n.MustTenant("default").Format(f))
 	ip, mask, e := primaryInterface()
 
 	if e != nil {

@@ -19,7 +19,7 @@ import (
 	"testing"
 )
 
-func TestTheClientCoversEveryOperation(t *testing.T) {
+func TestClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	methods := reflect.TypeFor[face.Client]()
@@ -42,7 +42,7 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 	assert.String(t, "", strings.Join(missing, ", "))
 }
 
-func TestTheClientAndMockHoldTheFace(t *testing.T) {
+func TestClientAndMockHoldFace(t *testing.T) {
 	c := client.New(locator.New("golinkaced.test"), "token")
 	defer c.Close()
 	m := mock_client.New()
@@ -53,7 +53,7 @@ func TestTheClientAndMockHoldTheFace(t *testing.T) {
 	}
 }
 
-func TestTheClientRoundTripsThroughTheDaemon(t *testing.T) {
+func TestClientRoundTripsThroughDaemon(t *testing.T) {
 	source := service_tester.NewSource(t)
 	c := client.New(
 		locator.New("localhost").Port(
@@ -70,7 +70,7 @@ func TestTheClientRoundTripsThroughTheDaemon(t *testing.T) {
 	assert.True(t, not_found.Is(c.DeleteLink(x, 12)))
 }
 
-func TestTheClientReadsEveryDeleteAnsweredAsDone(t *testing.T) {
+func TestClientReadsEveryDeleteAnsweredAsDone(t *testing.T) {
 	c := client.New(
 		locator.New("localhost").Port(
 			servedPort(t, service_tester.NewSource(t), memory.New()),

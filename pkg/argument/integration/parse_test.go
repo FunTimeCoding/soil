@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownFlagPrintsUsageAndExitsTwo(t *testing.T) {
+func TestUnknownFlagPrintsUsageAndExitsTwo(t *testing.T) {
 	if arguments := os.Getenv(constant.FixtureArgumentsEnvironment); arguments != "" {
 		os.Args = split.Space(arguments)
 		a := argument.NewInstance(
@@ -29,7 +29,7 @@ func TestAnUnknownFlagPrintsUsageAndExitsTwo(t *testing.T) {
 	assert.StringContains(t, "--bravo", r.ErrorString)
 }
 
-func TestASimpleInstanceRefusesAnUnknownFlagWithExitTwo(t *testing.T) {
+func TestSimpleInstanceRefusesUnknownFlagWithExitTwo(t *testing.T) {
 	if arguments := os.Getenv(constant.FixtureArgumentsEnvironment); arguments != "" {
 		os.Args = split.Space(arguments)
 		a := argument.NewSimple("alfa")
@@ -45,7 +45,7 @@ func TestASimpleInstanceRefusesAnUnknownFlagWithExitTwo(t *testing.T) {
 	assert.StringContains(t, "--bravo", r.ErrorString)
 }
 
-func TestASimpleInstanceAnswersHelpWithExitZero(t *testing.T) {
+func TestSimpleInstanceAnswersHelpWithExitZero(t *testing.T) {
 	if arguments := os.Getenv(constant.FixtureArgumentsEnvironment); arguments != "" {
 		os.Args = split.Space(arguments)
 		a := argument.NewSimple("alfa")

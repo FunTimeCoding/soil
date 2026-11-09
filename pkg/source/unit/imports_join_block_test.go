@@ -20,12 +20,12 @@ func TestJoinBlockMergesGroupsSorted(t *testing.T) {
 	)
 }
 
-func TestJoinBlockLeavesASingleBlock(t *testing.T) {
+func TestJoinBlockLeavesSingleBlock(t *testing.T) {
 	source := "package alfa\n\nimport (\n\t\"example.org/m/pkg/bravo\"\n\t\"fmt\"\n)\n"
 	assert.String(t, source, string(imports.JoinBlock([]byte(source))))
 }
 
-func TestJoinBlockLeavesACommentedBlock(t *testing.T) {
+func TestJoinBlockLeavesCommentedBlock(t *testing.T) {
 	source := "package alfa\n\nimport (\n\t\"fmt\"\n\n\t// the bravo group\n\t\"example.org/m/pkg/bravo\"\n)\n"
 	assert.String(t, source, string(imports.JoinBlock([]byte(source))))
 }

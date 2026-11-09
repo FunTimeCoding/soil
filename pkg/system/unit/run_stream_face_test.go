@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheStreamAndItsMockShareTheFace(t *testing.T) {
+func TestStreamAndItsMockShareFace(t *testing.T) {
 	s := run.New().Stream("true")
 	assert.FatalOnError(t, s.Wait())
 	m := mock_stream.New(nil, false, nil)

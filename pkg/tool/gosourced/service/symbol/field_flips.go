@@ -33,7 +33,7 @@ func fieldFlips(
 		outside := false
 
 		for _, f := range references {
-			if !insideMoved(entries, f.Ident.Pos()) {
+			if !movedContains(entries, f.Ident.Pos()) {
 				outside = true
 
 				break

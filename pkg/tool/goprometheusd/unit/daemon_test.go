@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsOneGuardPerInstanceToTheLifecycle(t *testing.T) {
+func TestDaemonHandsOneGuardPerInstanceToLifecycle(t *testing.T) {
 	d := daemon_tester.New(
 		t,
 		map[string]*mock_client.Client{
@@ -19,7 +19,7 @@ func TestTheDaemonHandsOneGuardPerInstanceToTheLifecycle(t *testing.T) {
 	assert.Count(t, 2, d.Workers())
 }
 
-func TestClosingTheDaemonClosesEveryInstanceClient(t *testing.T) {
+func TestClosingDaemonClosesEveryInstanceClient(t *testing.T) {
 	alfa := mock_client.New()
 	bravo := mock_client.New()
 	d := daemon_tester.New(
@@ -31,7 +31,7 @@ func TestClosingTheDaemonClosesEveryInstanceClient(t *testing.T) {
 	assert.Integer(t, 1, bravo.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	clients := map[string]*mock_client.Client{
 		"alfa":  mock_client.New(),
 		"bravo": mock_client.New(),

@@ -15,7 +15,7 @@ func relativeSet(
 	for _, m := range moves.Paths {
 		paths = append(
 			paths,
-			path_move.New(rootRelative(root, m.From), rootRelative(root, m.To)),
+			path_move.New(rootRelative(root, m.Old), rootRelative(root, m.New)),
 		)
 	}
 

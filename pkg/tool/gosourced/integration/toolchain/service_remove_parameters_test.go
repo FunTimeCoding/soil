@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestRemoveParametersFollowsAChainThroughTheBatch(t *testing.T) {
+func TestRemoveParametersFollowsChainThroughBatch(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("remove-parameters/src"),
@@ -111,11 +111,11 @@ func TestRemoveParametersDryRunWritesNothing(t *testing.T) {
 	)
 }
 
-func TestRemoveParametersRefusesAParameterStillUsed(t *testing.T) {
+func TestRemoveParametersRefusesParameterStillUsed(t *testing.T) {
 	assertRemovalRefused(t, "parameter version of Used is still used", "Used")
 }
 
-func TestRemoveParametersRefusesPassingOnOutsideTheBatch(t *testing.T) {
+func TestRemoveParametersRefusesPassingOnOutsideBatch(t *testing.T) {
 	assertRemovalRefused(
 		t,
 		"parameter version of Forward is still used",
@@ -123,11 +123,11 @@ func TestRemoveParametersRefusesPassingOnOutsideTheBatch(t *testing.T) {
 	)
 }
 
-func TestRemoveParametersRefusesAFunctionUsedAsAValue(t *testing.T) {
+func TestRemoveParametersRefusesFunctionUsedAsValue(t *testing.T) {
 	assertRemovalRefused(t, "Valued is used as a value", "Valued")
 }
 
-func TestRemoveParametersRefusesDroppingACall(t *testing.T) {
+func TestRemoveParametersRefusesDroppingCall(t *testing.T) {
 	assertRemovalRefused(
 		t,
 		"dropping the argument current() would remove a call",
@@ -135,7 +135,7 @@ func TestRemoveParametersRefusesDroppingACall(t *testing.T) {
 	)
 }
 
-func TestRemoveParametersRefusesRemovingALocalThatCalls(t *testing.T) {
+func TestRemoveParametersRefusesRemovingLocalThatCalls(t *testing.T) {
 	assertRemovalRefused(
 		t,
 		"removing the unused local version would remove a call",
@@ -143,7 +143,7 @@ func TestRemoveParametersRefusesRemovingALocalThatCalls(t *testing.T) {
 	)
 }
 
-func TestRemoveParametersRefusesAMethodSatisfyingAnInterface(t *testing.T) {
+func TestRemoveParametersRefusesMethodSatisfyingInterface(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("remove-parameters-interface/src"),
@@ -169,7 +169,7 @@ func TestRemoveParametersRefusesAMethodSatisfyingAnInterface(t *testing.T) {
 	)
 }
 
-func TestRemoveParametersRefusesAnUnknownParameter(t *testing.T) {
+func TestRemoveParametersRefusesUnknownParameter(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("remove-parameters/src"),
@@ -191,7 +191,7 @@ func TestRemoveParametersRefusesAnUnknownParameter(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "has no parameter missing")
 }
 
-func TestRemoveParametersRewritesAReplacingModule(t *testing.T) {
+func TestRemoveParametersRewritesReplacingModule(t *testing.T) {
 	for _, full := range []bool{false, true} {
 		library, user := prepareReplacedLibrary(t, "remove-parameters-replacer")
 		s := replacingService(t, library, user)
@@ -221,7 +221,7 @@ func TestRemoveParametersRewritesAReplacingModule(t *testing.T) {
 	}
 }
 
-func TestRemoveParametersRefusesASideEffectInAReplacingModule(t *testing.T) {
+func TestRemoveParametersRefusesSideEffectInReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "remove-parameters-replacer")
 	testutil.WriteFile(
 		t,
@@ -250,7 +250,7 @@ func TestRemoveParametersRefusesASideEffectInAReplacingModule(t *testing.T) {
 	)
 }
 
-func TestRemoveParametersRefusesAValueUseInAReplacingModule(t *testing.T) {
+func TestRemoveParametersRefusesValueUseInReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "remove-parameters-replacer")
 	testutil.WriteFile(
 		t,

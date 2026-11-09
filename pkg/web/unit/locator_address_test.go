@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAddressNamesTheHostAndPort(t *testing.T) {
+func TestAddressNamesHostAndPort(t *testing.T) {
 	assert.String(
 		t,
 		"example.org:8443",
@@ -16,7 +16,7 @@ func TestAddressNamesTheHostAndPort(t *testing.T) {
 	assert.String(t, "example.org", locator.New(constant.Example).Address())
 }
 
-func TestAddressLeavesTheCredentialsOut(t *testing.T) {
+func TestAddressLeavesCredentialsOut(t *testing.T) {
 	assert.String(
 		t,
 		"example.org",

@@ -18,7 +18,7 @@ func (s *Service) ChannelPosts(
 				return nil, e
 			}
 
-			return s.mattermost.PostsSince(h, since)
+			return s.mattermost.Posts(h, since)
 		},
 	)
 }

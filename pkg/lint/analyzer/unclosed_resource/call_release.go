@@ -14,9 +14,9 @@ func callRelease(
 ) []fact.Release {
 	var result []fact.Release
 
-	if f := calleeOf(p, c); f != nil {
+	if f := callee(p, c); f != nil {
 		for i, a := range c.Args {
-			if field := fieldOfReceiver(p, a, r); field != "" {
+			if field := receiverField(p, a, r); field != "" {
 				result = append(
 					result,
 					fact.Release{
@@ -58,7 +58,7 @@ func callRelease(
 		)
 	}
 
-	field := fieldOfReceiver(p, selector.X, r)
+	field := receiverField(p, selector.X, r)
 
 	if field == "" {
 		return result

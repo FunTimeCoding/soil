@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheTokenSummaryCountsWithheldMemories(t *testing.T) {
+func TestTokenSummaryCountsWithheldMemories(t *testing.T) {
 	c := base.NewHidden(t, "private").MemoryClient(t)
 	x := t.Context()
 	_, e := c.PostMemory(

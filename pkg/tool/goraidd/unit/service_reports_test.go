@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestReportsListOnlyTheGeneratedPages(t *testing.T) {
+func TestReportsListOnlyGeneratedPages(t *testing.T) {
 	output := t.TempDir()
 	system.WriteFile(filepath.Join(output, "alfa.html"), []byte("a"), 0o600)
 	system.WriteFile(filepath.Join(output, "bravo.txt"), []byte("b"), 0o600)
@@ -22,17 +22,17 @@ func TestReportsListOnlyTheGeneratedPages(t *testing.T) {
 	assert.String(t, "alfa.html", reports[0].Name)
 }
 
-func TestDeletingAMissingReportIsNotFound(t *testing.T) {
+func TestDeletingMissingReportIsNotFound(t *testing.T) {
 	s := service_tester.New(t, t.TempDir(), t.TempDir())
 	assert.True(t, not_found.Is(s.DeleteReport("delta.html")))
 }
 
-func TestDeletingAMissingReportAnswersNotFound(t *testing.T) {
+func TestDeletingMissingReportAnswersNotFound(t *testing.T) {
 	v := mountedReports(t, t.TempDir())
 	assert.Integer(t, http.StatusNotFound, deleteReport(t, v, "echo.html"))
 }
 
-func TestGeneratingReadsTheEliteFileOfEachLog(t *testing.T) {
+func TestGeneratingReadsEliteFileOfEachLog(t *testing.T) {
 	s := service_tester.New(t, t.TempDir(), t.TempDir())
 	files := s.EliteFiles([]string{"WvW/20261024-201500.zevtc"})
 	assert.Count(t, 1, files)

@@ -10,13 +10,13 @@ import (
 	"testing"
 )
 
-func TestAnUnknownIssueIsAnsweredNotFoundUncaptured(t *testing.T) {
+func TestUnknownIssueIsAnsweredNotFoundUncaptured(t *testing.T) {
 	m, e := getIssue(t, not_found.Format("Issue does not exist"))
 	assert.True(t, not_found.Is(e))
 	assert.Count(t, 0, m.Events())
 }
 
-func TestARejectedQueryIsAnsweredBadRequestUncaptured(t *testing.T) {
+func TestRejectedQueryIsAnsweredBadRequestUncaptured(t *testing.T) {
 	c, m := client_tester.NewReported(
 		t,
 		failing_jira.New(validation.New("Error in the JQL Query")),

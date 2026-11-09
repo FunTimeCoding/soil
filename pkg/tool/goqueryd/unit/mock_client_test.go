@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheMockRecordsEachWrite(t *testing.T) {
+func TestMockRecordsEachWrite(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	assert.Count(t, 0, writeEach(t, m))
@@ -27,7 +27,7 @@ func TestTheMockRecordsEachWrite(t *testing.T) {
 	assert.Count(t, 0, m.Deleted)
 }
 
-func TestAFailingMockRecordsNoWrite(t *testing.T) {
+func TestFailingMockRecordsNoWrite(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.Failure = errors.New("down")

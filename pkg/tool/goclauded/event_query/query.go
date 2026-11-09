@@ -1,10 +1,9 @@
 package event_query
 
-import "time"
+import "github.com/funtimecoding/soil/pkg/time/window"
 
 type Query struct {
-	since  time.Time
-	before time.Time
+	window *window.Window
 	kinds  []string
 	limit  int
 	offset int

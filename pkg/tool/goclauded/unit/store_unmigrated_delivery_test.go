@@ -21,7 +21,7 @@ func TestUnkeyedRowStillReachesItsCallsignHolder(t *testing.T) {
 	assert.String(t, "written before the backfill", drained[0].Body)
 }
 
-func TestUnkeyedRowIsNotReachedWithoutACallsign(t *testing.T) {
+func TestUnkeyedRowIsNotReachedWithoutCallsign(t *testing.T) {
 	s := store_tester.New(t)
 	s.AddSession("holder", "Jade", nil, "2026-09-01 10:00:00+00:00")
 	s.AddQueueRow(
@@ -34,7 +34,7 @@ func TestUnkeyedRowIsNotReachedWithoutACallsign(t *testing.T) {
 	assert.Count(t, 0, drained)
 }
 
-func TestKeyedRowIsNeverReachedByTheFallback(t *testing.T) {
+func TestKeyedRowIsNeverReachedByFallback(t *testing.T) {
 	s := store_tester.New(t)
 	s.AddSession("first", "Frost", nil, "2026-09-01 10:00:00+00:00")
 	assert.FatalOnError(

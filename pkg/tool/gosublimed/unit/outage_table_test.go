@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestEveryOperationAnswersASublimeOutageUnavailable(t *testing.T) {
+func TestEveryOperationAnswersSublimeOutageUnavailable(t *testing.T) {
 	r := memory.New()
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
@@ -38,7 +38,7 @@ func TestEveryOperationAnswersASublimeOutageUnavailable(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestEveryToolFailsOnASublimeOutage(t *testing.T) {
+func TestEveryToolFailsOnSublimeOutage(t *testing.T) {
 	r := memory.New()
 	var unanswered []string
 

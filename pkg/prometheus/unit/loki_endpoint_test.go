@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestQueryRangeSendsTheWindow(t *testing.T) {
+func TestQueryRangeSendsWindow(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,
@@ -47,7 +47,7 @@ func TestFailedStatusIsUnexpected(t *testing.T) {
 	assert.StringContains(t, "loki status: error", e.Error())
 }
 
-func TestPlainTextRefusalKeepsTheReason(t *testing.T) {
+func TestPlainTextRefusalKeepsReason(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
@@ -62,7 +62,7 @@ func TestPlainTextRefusalKeepsTheReason(t *testing.T) {
 	)
 }
 
-func TestPushPostsTheStreams(t *testing.T) {
+func TestPushPostsStreams(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusNoContent, "")
 	v := stream.New(map[string]string{"application": "delta"})
 	v.Add(time.Unix(300, 0), "echo")
@@ -77,7 +77,7 @@ func TestPushPostsTheStreams(t *testing.T) {
 	assert.StringContains(t, `"echo"`, string(b))
 }
 
-func TestMarkupRefusalFallsBackToTheStatus(t *testing.T) {
+func TestMarkupRefusalFallsBackToStatus(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadGateway,

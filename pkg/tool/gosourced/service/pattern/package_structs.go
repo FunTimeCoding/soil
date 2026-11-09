@@ -18,7 +18,7 @@ func packageStructs(p *packages.Package) ([]string, []string) {
 			continue
 		}
 
-		if file := lookup.SyntaxFileAt(p, t.Pos()); file != nil && ast.IsGenerated(file) {
+		if file := lookup.SyntaxFile(p, t.Pos()); file != nil && ast.IsGenerated(file) {
 			continue
 		}
 

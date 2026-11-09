@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesWhatItBuilt(t *testing.T) {
+func TestDaemonClosesWhatItBuilt(t *testing.T) {
 	p := service_tester.NewParser(t)
 	d := service_tester.NewDaemon(
 		t,
@@ -23,7 +23,7 @@ func TestTheDaemonClosesWhatItBuilt(t *testing.T) {
 	assert.Integer(t, 1, p.Closed)
 }
 
-func TestTheDaemonHandsOutItsGuardWatcherAndCleanupClock(t *testing.T) {
+func TestDaemonHandsOutItsGuardWatcherAndCleanupClock(t *testing.T) {
 	workers := service_tester.NewDaemon(
 		t,
 		service_tester.NewOption(
@@ -43,7 +43,7 @@ func TestTheDaemonHandsOutItsGuardWatcherAndCleanupClock(t *testing.T) {
 	assert.True(t, clock)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	p := service_tester.NewParser(t)
 	d := service_tester.NewDaemon(

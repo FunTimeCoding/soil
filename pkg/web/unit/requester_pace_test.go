@@ -24,7 +24,7 @@ func TestPaceSpacesRequests(t *testing.T) {
 	assert.Count(t, 3, seen())
 }
 
-func TestPaceSpacesARetry(t *testing.T) {
+func TestPaceSpacesRetry(t *testing.T) {
 	s, seen := newScriptedServer(
 		t,
 		"bravo",

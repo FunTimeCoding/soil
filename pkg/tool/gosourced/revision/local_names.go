@@ -32,7 +32,7 @@ func localNames(n ast.Node) map[string]bool {
 				}
 			case *ast.BlockStmt:
 				for _, statement := range c.List {
-					for _, name := range declaredInStatement(statement) {
+					for _, name := range statementDeclarations(statement) {
 						result[name] = true
 					}
 				}

@@ -18,7 +18,7 @@ func isBorrowed(
 		return false
 	}
 
-	if f := calleeOf(p, c.Call); f != nil && f.Signature().Recv() != nil &&
+	if f := callee(p, c.Call); f != nil && f.Signature().Recv() != nil &&
 		!isInterfaceMethod(f) {
 		if s.selfFor(f) {
 			return s.chainBorrowed(p, body, selector.X)

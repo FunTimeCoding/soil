@@ -1,12 +1,11 @@
 package filter
 
-import "time"
+import "github.com/funtimecoding/soil/pkg/time/window"
 
 type Filter struct {
 	System  string
 	Service string
 	User    string
-	Since   time.Time
-	Until   time.Time
+	Window  *window.Window
 	Limit   int
 }

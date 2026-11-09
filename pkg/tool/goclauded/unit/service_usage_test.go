@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestNoUsageYetIsAbsentNotAFailure(t *testing.T) {
+func TestNoUsageYetIsAbsentNotFailure(t *testing.T) {
 	s := service_tester.New(t)
 	result, found, e := s.Usage.FindUsage()
 	assert.FatalOnError(t, e)
@@ -17,7 +17,7 @@ func TestNoUsageYetIsAbsentNotAFailure(t *testing.T) {
 	assert.True(t, result == nil)
 }
 
-func TestAFailedUsageReadIsAFailureNotAbsence(t *testing.T) {
+func TestFailedUsageReadIsFailureNotAbsence(t *testing.T) {
 	s := service_tester.New(t)
 	s.Close()
 	_, found, e := s.Usage.FindUsage()
@@ -25,7 +25,7 @@ func TestAFailedUsageReadIsAFailureNotAbsence(t *testing.T) {
 	assert.False(t, found)
 }
 
-func TestUsageHidesFableFromAnEarlierWeek(t *testing.T) {
+func TestUsageHidesFableFromEarlierWeek(t *testing.T) {
 	s := service_tester.New(t)
 	assert.FatalOnError(t, s.Usage.RecordFable(34, "Wed 8:59 PM", nil))
 	s.Store.Advance(8 * 24 * time.Hour)

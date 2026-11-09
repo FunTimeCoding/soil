@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestAPrintingReporterStillSendsToSentry(t *testing.T) {
+func TestPrintingReporterStillSendsToSentry(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, "{}")
 	var b bytes.Buffer
 	r := sendingReporter(
@@ -32,7 +32,7 @@ func TestAPrintingReporterStillSendsToSentry(t *testing.T) {
 	assert.StringContains(t, "alfa: embed refused", b.String())
 }
 
-func TestAPrintingReporterPrintsACapturedException(t *testing.T) {
+func TestPrintingReporterPrintsCapturedException(t *testing.T) {
 	var b bytes.Buffer
 	r := printingReporter(t, &b)
 	r.CaptureException(fmt.Errorf("embed refused"))
@@ -48,14 +48,14 @@ func TestAPrintingReporterPrintsACapturedException(t *testing.T) {
 	)
 	assert.StringContains(
 		t,
-		"TestAPrintingReporterPrintsACapturedException",
+		"TestPrintingReporterPrintsCapturedException",
 		b.String(),
 	)
 	assert.StringContains(t, "· 2 more frames: testing, runtime\n", b.String())
 	assert.False(t, strings.Contains(b.String(), "sentry/reporter"))
 }
 
-func TestAPrintingReporterPrintsTheCaptureContext(t *testing.T) {
+func TestPrintingReporterPrintsCaptureContext(t *testing.T) {
 	var b bytes.Buffer
 	r := printingReporter(t, &b)
 	r.CaptureWithContext(
@@ -67,19 +67,19 @@ func TestAPrintingReporterPrintsTheCaptureContext(t *testing.T) {
 	assert.StringContains(t, "  request model bravo\n", b.String())
 }
 
-func TestAPrintingReporterPrintsARecoveredPanic(t *testing.T) {
+func TestPrintingReporterPrintsRecoveredPanic(t *testing.T) {
 	var b bytes.Buffer
 	r := printingReporter(t, &b)
 	r.Recover("charlie broke")
 	assert.StringContains(t, "alfa: charlie broke", b.String())
 	assert.StringContains(
 		t,
-		"TestAPrintingReporterPrintsARecoveredPanic",
+		"TestPrintingReporterPrintsRecoveredPanic",
 		b.String(),
 	)
 }
 
-func TestAReporterWithoutPrintPrintsNothing(t *testing.T) {
+func TestReporterWithoutPrintPrintsNothing(t *testing.T) {
 	t.Setenv(constant.LocatorEnvironment, "http://key@localhost:9/1")
 	t.Cleanup(func() { sentry.CurrentHub().BindClient(nil) })
 	var b bytes.Buffer

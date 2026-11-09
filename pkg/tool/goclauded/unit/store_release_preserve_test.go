@@ -10,7 +10,7 @@ import (
 func TestReleasePreservesSession(t *testing.T) {
 	s := store_tester.New(t)
 	r := s.EnsureSession("session-1")
-	assert.FatalOnError(t, s.Store.ReleaseByCallsign(r.Callsign))
+	assert.FatalOnError(t, s.Store.ReleaseCallsign(r.Callsign))
 	e := s.GetSession("session-1")
 	assert.True(t, e != nil)
 	assert.String(t, r.Callsign, e.Name)
@@ -32,7 +32,7 @@ func TestReleaseFreesCallsign(t *testing.T) {
 	}
 
 	released := callsigns[0]
-	assert.FatalOnError(t, s.Store.ReleaseByCallsign(released))
+	assert.FatalOnError(t, s.Store.ReleaseCallsign(released))
 	r := s.EnsureSession("after-release")
 	assert.String(t, released, r.Callsign)
 }

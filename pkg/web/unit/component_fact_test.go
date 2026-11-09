@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAFactTableLabelsEachRow(t *testing.T) {
+func TestFactTableLabelsEachRow(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="facts"><tbody><tr><th scope="row">Alfa</th><td>bravo</td></tr></tbody></table>`,
@@ -16,7 +16,7 @@ func TestAFactTableLabelsEachRow(t *testing.T) {
 	)
 }
 
-func TestASectionSpansBothColumns(t *testing.T) {
+func TestSectionSpansBothColumns(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="facts"><tbody><tr class="section"><th colspan="2">Charlie</th></tr><tr><th scope="row">Alfa</th><td>bravo</td></tr></tbody></table>`,
@@ -24,7 +24,7 @@ func TestASectionSpansBothColumns(t *testing.T) {
 	)
 }
 
-func TestAFactValueCanBeMarkup(t *testing.T) {
+func TestFactValueCanBeMarkup(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<tr><th scope="row">Alfa</th><td><a href="/delta">delta</a></td></tr>`,

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestDeleteRegistryPathRemovesThePathAndItsCache(t *testing.T) {
+func TestDeleteRegistryPathRemovesPathAndItsCache(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
 	c.SeedRegistryRepository(7, 1, "group/app")
@@ -33,7 +33,7 @@ func TestDeleteRegistryPathRemovesThePathAndItsCache(t *testing.T) {
 	assert.String(t, "group/other", remaining[0].Path)
 }
 
-func TestDeleteRegistryPathWithoutACacheDeletesWhatExists(t *testing.T) {
+func TestDeleteRegistryPathWithoutCacheDeletesWhatExists(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	clients[constant.FixtureInstance].SeedRegistryRepository(7, 1, "group/app")
 	deleted, e := s.DeleteRegistryPath(

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRenameRefusedWhenAFileKeepsChangingBeforeCommit(t *testing.T) {
+func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
 	d := renameFunctionFixture(t)
 	declaration := service_tester.ReadFixtureFile(
 		t,
@@ -49,7 +49,7 @@ func TestRenameRefusedWhenAFileKeepsChangingBeforeCommit(t *testing.T) {
 	)
 }
 
-func TestRenameRunsAgainAfterAFileChangedOnce(t *testing.T) {
+func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
 	d := renameFunctionFixture(t)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	s := service_tester.NewService(t)
@@ -87,7 +87,7 @@ func TestRenameRunsAgainAfterAFileChangedOnce(t *testing.T) {
 	)
 }
 
-func TestRenameCommitsPastAChangeOutsideTheReach(t *testing.T) {
+func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(
@@ -119,7 +119,7 @@ func TestRenameCommitsPastAChangeOutsideTheReach(t *testing.T) {
 	)
 }
 
-func TestRenameRefusedWhenAPackageStartsImportingTheTarget(t *testing.T) {
+func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
 	d := renameFunctionFixture(t)
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(
@@ -150,7 +150,7 @@ func TestRenameRefusedWhenAPackageStartsImportingTheTarget(t *testing.T) {
 	)
 }
 
-func TestRenameRefusedWhenAReplacingModuleChangesBeforeCommit(t *testing.T) {
+func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
 	consumer := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
@@ -188,7 +188,7 @@ func TestRenameRefusedWhenAReplacingModuleChangesBeforeCommit(t *testing.T) {
 	)
 }
 
-func TestRenameCommitsPastAReplacingModuleChangeOutsideTheReach(t *testing.T) {
+func TestRenameCommitsPastReplacingModuleChangeOutsideReach(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "rename-replacer")
 	s := replacingService(t, library, user)
 	s.Commit.BeforeCommit(

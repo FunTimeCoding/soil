@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestABareMarkerSuppressesEveryKey(t *testing.T) {
+func TestBareMarkerSuppressesEveryKey(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses("// goanalyze:ignore", "forbidden_call"),
@@ -17,7 +17,7 @@ func TestABareMarkerSuppressesEveryKey(t *testing.T) {
 	)
 }
 
-func TestAKeyedMarkerSuppressesOnlyItsKey(t *testing.T) {
+func TestKeyedMarkerSuppressesOnlyItsKey(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses(
@@ -34,7 +34,7 @@ func TestAKeyedMarkerSuppressesOnlyItsKey(t *testing.T) {
 	)
 }
 
-func TestAMarkerWithoutSpaceAfterTheSlashesSuppresses(t *testing.T) {
+func TestMarkerWithoutSpaceAfterSlashesSuppresses(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses(
@@ -44,7 +44,7 @@ func TestAMarkerWithoutSpaceAfterTheSlashesSuppresses(t *testing.T) {
 	)
 }
 
-func TestTrailingWhitespaceDoesNotChangeTheKey(t *testing.T) {
+func TestTrailingWhitespaceDoesNotChangeKey(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses(
@@ -54,7 +54,7 @@ func TestTrailingWhitespaceDoesNotChangeTheKey(t *testing.T) {
 	)
 }
 
-func TestAMarkerAfterASecurityDirectiveSuppresses(t *testing.T) {
+func TestMarkerAfterSecurityDirectiveSuppresses(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses(
@@ -71,7 +71,7 @@ func TestAMarkerAfterASecurityDirectiveSuppresses(t *testing.T) {
 	)
 }
 
-func TestABareMarkerAfterASecurityDirectiveSuppressesEveryKey(t *testing.T) {
+func TestBareMarkerAfterSecurityDirectiveSuppressesEveryKey(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses(
@@ -81,7 +81,7 @@ func TestABareMarkerAfterASecurityDirectiveSuppressesEveryKey(t *testing.T) {
 	)
 }
 
-func TestASecurityDirectiveAloneSuppressesNothing(t *testing.T) {
+func TestSecurityDirectiveAloneSuppressesNothing(t *testing.T) {
 	assert.False(
 		t,
 		suppress.CommentSuppresses("// #nosec G204", "forbidden_call"),
@@ -95,7 +95,7 @@ func TestOneOfSeveralKeyedMarkersSuppresses(t *testing.T) {
 	assert.False(t, suppress.CommentSuppresses(text, "struct_literal"))
 }
 
-func TestAMarkerFollowedByProseSuppressesEveryKey(t *testing.T) {
+func TestMarkerFollowedByProseSuppressesEveryKey(t *testing.T) {
 	assert.True(
 		t,
 		suppress.CommentSuppresses(
@@ -105,7 +105,7 @@ func TestAMarkerFollowedByProseSuppressesEveryKey(t *testing.T) {
 	)
 }
 
-func TestTheMarkerInsideAWordDoesNotSuppress(t *testing.T) {
+func TestMarkerInsideWordDoesNotSuppress(t *testing.T) {
 	assert.False(
 		t,
 		suppress.CommentSuppresses(
@@ -122,7 +122,7 @@ func TestTheMarkerInsideAWordDoesNotSuppress(t *testing.T) {
 	)
 }
 
-func TestAKeyMustMatchExactly(t *testing.T) {
+func TestKeyMustMatchExactly(t *testing.T) {
 	assert.False(
 		t,
 		suppress.CommentSuppresses(
@@ -139,7 +139,7 @@ func TestAKeyMustMatchExactly(t *testing.T) {
 	)
 }
 
-func TestABlockCommentDoesNotSuppress(t *testing.T) {
+func TestBlockCommentDoesNotSuppress(t *testing.T) {
 	assert.False(
 		t,
 		suppress.CommentSuppresses(

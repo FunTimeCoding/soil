@@ -11,5 +11,6 @@ type Server struct {
 	Daemon   *daemon.Daemon
 	Forge    *mock_client.Client
 	Reporter *memory.Memory
+	LitePath string
 	*model_context_server.Server
 }

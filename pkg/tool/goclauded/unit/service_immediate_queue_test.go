@@ -20,7 +20,7 @@ func TestChannelDrainLeavesDeferredEntries(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(remaining.Entries, constant.QueueMessage),
+		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
@@ -37,7 +37,7 @@ func TestChannelDrainTakesImmediateEntries(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		fixture.EntriesByKind(remaining.Entries, constant.QueueMessage),
+		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
@@ -53,7 +53,7 @@ func TestBroadcastIsNeverImmediate(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(remaining.Entries, constant.QueueMessage),
+		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
@@ -69,6 +69,6 @@ func TestRosterActivityIsNeverImmediate(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(remaining.Entries, constant.QueueSessionAnnounce),
+		fixture.KindEntries(remaining.Entries, constant.QueueSessionAnnounce),
 	)
 }

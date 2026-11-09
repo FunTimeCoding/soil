@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestDeliveryOrdersTheSections(t *testing.T) {
+func TestDeliveryOrdersSections(t *testing.T) {
 	m := storedMessage(7, "Dale", "hello")
 	assert.String(
 		t,
@@ -53,7 +53,7 @@ Messages:
 	)
 }
 
-func TestDeliveryCutsALongMessage(t *testing.T) {
+func TestRenderCutsLongMessage(t *testing.T) {
 	m := storedMessage(12, "Ash", strings.Repeat("a", 5000))
 	assert.String(
 		t,
@@ -72,7 +72,7 @@ func TestDeliveryCutsALongMessage(t *testing.T) {
 	)
 }
 
-func TestDeliveryWaitsBelowTheCutFloor(t *testing.T) {
+func TestRenderWaitsBelowCutFloor(t *testing.T) {
 	var entries []*queue.Entry
 	stored := storedMessages(4, "Blair", strings.Repeat("c", 3000))
 
@@ -134,7 +134,7 @@ func TestDeliveryTrimsMemoryBeforeMessages(t *testing.T) {
 	)
 }
 
-func TestDeliveryKeepsTheMemoryHeaderWhenNothingFits(t *testing.T) {
+func TestDeliveryKeepsMemoryHeaderWhenNothingFits(t *testing.T) {
 	body := strings.Repeat("e", 2500)
 	assert.String(
 		t,
@@ -159,7 +159,7 @@ func TestDeliveryKeepsTheMemoryHeaderWhenNothingFits(t *testing.T) {
 	)
 }
 
-func TestDeliveryKeepsAMessageWithoutARowInline(t *testing.T) {
+func TestDeliveryKeepsMessageWithoutRowInline(t *testing.T) {
 	body := strings.Repeat("d", 2500)
 	assert.String(
 		t,

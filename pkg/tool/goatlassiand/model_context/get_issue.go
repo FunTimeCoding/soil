@@ -37,7 +37,7 @@ func (s *Server) getIssue(
 		t, h = s.service.IssueType(i)
 
 		if h != nil {
-			return s.answerWith(x, h, "read project metadata")
+			return s.answerMessage(x, h, "read project metadata")
 		}
 	}
 

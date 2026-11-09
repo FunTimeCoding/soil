@@ -25,7 +25,7 @@ func releasedFrom(
 		}
 
 		visited[name] = true
-		r := receiverOf(p, f)
+		r := receiver(p, f)
 
 		if r == nil {
 			continue

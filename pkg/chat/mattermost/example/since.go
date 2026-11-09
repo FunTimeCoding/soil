@@ -24,7 +24,7 @@ func Since() {
 		time.Now().Location(),
 	)
 	errors.PanicOnError(e)
-	posts := m.MustPostsSince(c, t)
+	posts := m.MustPosts(c, t)
 	roots := 0
 	replies := 0
 

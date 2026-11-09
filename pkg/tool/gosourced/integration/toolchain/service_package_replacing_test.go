@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestMovePackageRetargetsAReplacingModule(t *testing.T) {
+func TestMovePackageRetargetsReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	r, e := replacingService(t, library, user).Packages.MovePackage(
 		t.Context(),
@@ -47,7 +47,7 @@ func TestMovePackageRetargetsAReplacingModule(t *testing.T) {
 	)
 }
 
-func TestRenamePackageRenamesQualifiersInAReplacingModule(t *testing.T) {
+func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	r, e := replacingService(t, library, user).Packages.RenamePackage(
 		t.Context(),
@@ -78,7 +78,7 @@ func TestRenamePackageRenamesQualifiersInAReplacingModule(t *testing.T) {
 	assert.StringContains(t, "return figure.New()", aliased)
 }
 
-func TestRenamePackageClauseRenamesQualifiersInAReplacingModule(t *testing.T) {
+func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	r, e := replacingService(t, library, user).Packages.RenamePackageClause(
 		t.Context(),
@@ -100,9 +100,7 @@ func TestRenamePackageClauseRenamesQualifiersInAReplacingModule(t *testing.T) {
 	)
 }
 
-func TestRenamePackageRefusedWhenTheNameIsTakenInAReplacingModule(
-	t *testing.T,
-) {
+func TestRenamePackageRefusedWhenNameIsTakenInReplacingModule(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	testutil.WriteFile(
 		t,
@@ -128,7 +126,7 @@ func TestRenamePackageRefusedWhenTheNameIsTakenInAReplacingModule(
 	)
 }
 
-func TestMovePackageReachesAReplacingModuleThroughASubpackage(t *testing.T) {
+func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/user")))
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/aliased")))
@@ -148,9 +146,9 @@ func TestMovePackageReachesAReplacingModuleThroughASubpackage(t *testing.T) {
 	)
 }
 
-func TestMovePackageDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
+func TestMovePackageDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	library, user := prepareReplacedLibrary(t, "package-replacer")
-	before := treeOf(t, user)
+	before := directoryTree(t, user)
 	r, e := replacingService(t, library, user).Packages.MovePackage(
 		t.Context(),
 		library,
@@ -160,7 +158,7 @@ func TestMovePackageDryRunLeavesAReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(t, before, treeOf(t, user))
+	assert.String(t, before, directoryTree(t, user))
 	assert.True(t, system.FileExists(filepath.Join(library, "shape/shape.go")))
 	assert.StringContains(
 		t,

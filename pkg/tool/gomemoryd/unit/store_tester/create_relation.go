@@ -1,6 +1,9 @@
 package store_tester
 
-import "github.com/funtimecoding/soil/pkg/assert"
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"time"
+)
 
 func (o *Tester) CreateRelation(
 	sourceIdentifier int64,
@@ -9,6 +12,11 @@ func (o *Tester) CreateRelation(
 	o.t.Helper()
 	assert.FatalOnError(
 		o.t,
-		o.Store.CreateRelation(sourceIdentifier, targetIdentifier, ""),
+		o.Store.CreateRelation(
+			sourceIdentifier,
+			targetIdentifier,
+			"",
+			time.Now(),
+		),
 	)
 }

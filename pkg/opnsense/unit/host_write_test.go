@@ -31,7 +31,7 @@ func TestAddHostRejectionIsValidation(t *testing.T) {
 	assert.StringContains(t, "host.ip: bad address", e.Error())
 }
 
-func TestAddHostFailingWithoutValidationsIsAFault(t *testing.T) {
+func TestAddHostFailingWithoutValidationsIsFault(t *testing.T) {
 	s := canned(`{"result":"failed"}`)
 	defer s.Close()
 	_, e := client(t, s).AddHost(request.New())
@@ -43,7 +43,7 @@ func TestAddHostFailingWithoutValidationsIsAFault(t *testing.T) {
 	)
 }
 
-func TestSetHostOnAnUnknownEntryIsNotFound(t *testing.T) {
+func TestSetHostOnUnknownEntryIsNotFound(t *testing.T) {
 	s := canned(`{"result":"failed"}`)
 	defer s.Close()
 	e := client(t, s).SetHost(

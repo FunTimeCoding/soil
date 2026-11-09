@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMoveBesideAPackageLevelNameAliases(t *testing.T) {
+func TestMoveBesidePackageLevelNameAliases(t *testing.T) {
 	d := moveScopeFixture(t)
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
@@ -29,7 +29,7 @@ func TestMoveBesideAPackageLevelNameAliases(t *testing.T) {
 	)
 }
 
-func TestMoveUnderAShadowedImportRefuses(t *testing.T) {
+func TestMoveUnderShadowedImportRefuses(t *testing.T) {
 	d := moveScopeFixture(t)
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),

@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-func TestTheDaemonClosesBothPeerClientsOnce(t *testing.T) {
+func TestDaemonClosesBothPeerClientsOnce(t *testing.T) {
 	o, m, q := newDaemonOption(t)
 	defer m.Close()
 	defer q.Close()
@@ -35,7 +35,7 @@ func TestTheDaemonClosesBothPeerClientsOnce(t *testing.T) {
 	assert.Integer(t, 1, q.Closed)
 }
 
-func TestTheUtilizationFallbackGuardsItsPeer(t *testing.T) {
+func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {
 	o, _, _ := newDaemonOption(t)
 	u := mock_client.New()
 	o.UtilizationFallback = true
@@ -59,7 +59,7 @@ func TestTheUtilizationFallbackGuardsItsPeer(t *testing.T) {
 	assert.Integer(t, 1, u.Closed)
 }
 
-func TestTheUtilizationClockReadsTheOptionsCredential(t *testing.T) {
+func TestUtilizationClockReadsOptionsCredential(t *testing.T) {
 	o, _, _ := newDaemonOption(t)
 	u := mock_client.New()
 	u.Result = utilization.Parse(
@@ -91,7 +91,7 @@ func TestTheUtilizationClockReadsTheOptionsCredential(t *testing.T) {
 	assert.Integer(t, 22, r.SevenDayPercent)
 }
 
-func TestTheDaemonHandsOutItsGuardsFirst(t *testing.T) {
+func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 	o, _, _ := newDaemonOption(t)
 	d := daemon.New(
 		o,
@@ -109,7 +109,7 @@ func TestTheDaemonHandsOutItsGuardsFirst(t *testing.T) {
 	}
 }
 
-func TestTheDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
+func TestDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
 	o, _, _ := newDaemonOption(t)
 	s := store_tester.NewOnFile(t, o.LitePath)
 	r := s.EnsureSession("session-1")
@@ -124,7 +124,7 @@ func TestTheDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
 	assert.String(t, "", s.GetSession("session-1").ModelContextSession)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o, _, _ := newDaemonOption(t)
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(

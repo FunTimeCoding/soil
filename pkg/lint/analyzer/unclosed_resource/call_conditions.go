@@ -22,7 +22,7 @@ func callConditions(
 		}
 	}
 
-	f := calleeOf(p, c)
+	f := callee(p, c)
 
 	if f == nil {
 		return result

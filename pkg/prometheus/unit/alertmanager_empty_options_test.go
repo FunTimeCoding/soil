@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAnEmptyFilterSendsNoQuery(t *testing.T) {
+func TestEmptyFilterSendsNoQuery(t *testing.T) {
 	c, queries := newServingAlertmanager(
 		t,
 		constant.FixtureSuppressedAndUnratedAlerts,
@@ -24,7 +24,7 @@ func TestAnEmptyFilterSendsNoQuery(t *testing.T) {
 	assert.String(t, "", (*queries)[0])
 }
 
-func TestAnOptionForAllKeepsEveryAlert(t *testing.T) {
+func TestOptionForAllKeepsEveryAlert(t *testing.T) {
 	c, _ := newServingAlertmanager(
 		t,
 		constant.FixtureSuppressedAndUnratedAlerts,
@@ -36,7 +36,7 @@ func TestAnOptionForAllKeepsEveryAlert(t *testing.T) {
 	assert.Count(t, 2, v)
 }
 
-func TestAnEmptyOptionDropsSuppressedAndUnratedAlerts(t *testing.T) {
+func TestEmptyOptionDropsSuppressedAndUnratedAlerts(t *testing.T) {
 	c, _ := newServingAlertmanager(
 		t,
 		constant.FixtureSuppressedAndUnratedAlerts,

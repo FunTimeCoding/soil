@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestARestartingOpnsenseIsUnavailable(t *testing.T) {
+func TestRestartingOpnsenseIsUnavailable(t *testing.T) {
 	s := refusing(http.StatusServiceUnavailable)
 	defer s.Close()
 	_, e := client(t, s).Leases("")

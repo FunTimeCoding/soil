@@ -14,12 +14,12 @@ func apply(
 	var best *path_move.Move
 
 	for _, m := range moves {
-		if target != m.From &&
-			!strings.HasPrefix(target, join.Empty(m.From, stringsConstant.Slash)) {
+		if target != m.Old &&
+			!strings.HasPrefix(target, join.Empty(m.Old, stringsConstant.Slash)) {
 			continue
 		}
 
-		if best == nil || len(m.From) > len(best.From) {
+		if best == nil || len(m.Old) > len(best.Old) {
 			best = m
 		}
 	}
@@ -28,5 +28,5 @@ func apply(
 		return target, false
 	}
 
-	return join.Empty(best.To, target[len(best.From):]), true
+	return join.Empty(best.New, target[len(best.Old):]), true
 }

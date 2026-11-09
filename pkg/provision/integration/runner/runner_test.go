@@ -189,6 +189,38 @@ func TestRepeatedFetchFailureForcesCloneOnValidRepository(t *testing.T) {
 	assert.Nil(t, s.Sync().Error)
 }
 
+func TestQuarantinePrunesThoseOlderThanItsRetention(t *testing.T) {
+	s := runner_tester.New(t)
+	s.WaitForApply(1)
+	expired := join.Empty(
+		s.ClonePath,
+		constant.RunnerQuarantineSuffix,
+		time.Now().UTC().Add(-8*24*time.Hour).Format(
+			constant.RunnerQuarantineFormat,
+		),
+	)
+	recent := join.Empty(
+		s.ClonePath,
+		constant.RunnerQuarantineSuffix,
+		time.Now().UTC().Add(-24*time.Hour).Format(
+			constant.RunnerQuarantineFormat,
+		),
+	)
+	system.MakeDirectory(expired)
+	system.MakeDirectory(recent)
+	s.BreakRemote()
+
+	for range constant.RunnerHealThreshold {
+		assert.Error(t, s.Sync().Error)
+	}
+
+	quarantined, e := filepath.Glob(join.Empty(s.ClonePath, ".quarantine.*"))
+	assert.FatalOnError(t, e)
+	assert.Count(t, 2, quarantined)
+	assert.False(t, system.DirectoryExists(expired))
+	assert.True(t, system.DirectoryExists(recent))
+}
+
 func TestFetchFailureBelowThresholdKeepsRepository(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)

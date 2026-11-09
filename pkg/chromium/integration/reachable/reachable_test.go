@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestBrowserAndMockHoldTheChromiumSource(t *testing.T) {
+func TestBrowserAndMockHoldChromiumSource(t *testing.T) {
 	s := base.New(t)
 
 	for _, f := range []face.ChromiumSource{
@@ -23,7 +23,7 @@ func TestBrowserAndMockHoldTheChromiumSource(t *testing.T) {
 	}
 }
 
-func TestReachableAnswersWhileTheBrowserRuns(t *testing.T) {
+func TestReachableAnswersWhileBrowserRuns(t *testing.T) {
 	s := base.New(t)
 	assert.FatalOnError(t, s.Client.Reachable(context.Background()))
 }

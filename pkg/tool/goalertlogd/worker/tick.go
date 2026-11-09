@@ -8,7 +8,7 @@ func (w *Worker) tick() []error {
 	defer func() {
 		w.metrics.PollDuration.Observe(time.Since(start).Seconds())
 	}()
-	o, e := w.record(start)
+	o, e := w.record()
 
 	if e != nil {
 		return []error{e}

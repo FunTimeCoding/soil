@@ -77,7 +77,7 @@ func logSightings(s *allianceLog) {
 	sort.Strings(neverSeen)
 
 	for _, name := range neverSeen {
-		labels := GuildsOfMember(s.guildReport, name)
+		labels := MemberGuilds(s.guildReport, name)
 
 		if len(labels) == 0 {
 			labels = append(labels, "no-guild")

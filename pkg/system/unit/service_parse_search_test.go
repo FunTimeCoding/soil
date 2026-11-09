@@ -16,6 +16,6 @@ func TestParseSearchMapsPathToPackage(t *testing.T) {
 	assert.String(t, "foxtrot", v["/lib/systemd/system/foxtrot.service"])
 }
 
-func TestParseSearchRefusesTheNotFoundLine(t *testing.T) {
+func TestParseSearchRefusesNotFoundLine(t *testing.T) {
 	assert.Integer(t, 2, len(service.ParseSearch(searchOutput())))
 }

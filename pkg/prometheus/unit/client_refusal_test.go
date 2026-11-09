@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestABadQueryIsTheCallersMistake(t *testing.T) {
+func TestBadQueryIsCallersMistake(t *testing.T) {
 	c := newRefusingClient(
 		t,
 		http.StatusBadRequest,
@@ -22,7 +22,7 @@ func TestABadQueryIsTheCallersMistake(t *testing.T) {
 	assert.StringContains(t, "parse error at char 4", e.Error())
 }
 
-func TestAQueryThatCannotExecuteIsTheCallersMistake(t *testing.T) {
+func TestQueryThatCannotExecuteIsCallersMistake(t *testing.T) {
 	c := newRefusingClient(
 		t,
 		http.StatusUnprocessableEntity,
@@ -33,7 +33,7 @@ func TestAQueryThatCannotExecuteIsTheCallersMistake(t *testing.T) {
 	assert.StringContains(t, "many-to-many matching not allowed", e.Error())
 }
 
-func TestAQueryTimeoutIsNotAVerdictOnThePeer(t *testing.T) {
+func TestQueryTimeoutIsNotVerdictOnPeer(t *testing.T) {
 	c := newRefusingClient(
 		t,
 		http.StatusServiceUnavailable,
@@ -46,7 +46,7 @@ func TestAQueryTimeoutIsNotAVerdictOnThePeer(t *testing.T) {
 	assert.StringContains(t, "query timed out", e.Error())
 }
 
-func TestABadGatewayInFrontOfPrometheusIsUnavailable(t *testing.T) {
+func TestBadGatewayInFrontOfPrometheusIsUnavailable(t *testing.T) {
 	c := newRefusingClient(
 		t,
 		http.StatusBadGateway,
@@ -56,13 +56,13 @@ func TestABadGatewayInFrontOfPrometheusIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAPathPrometheusLacksIsUnexpected(t *testing.T) {
+func TestPathPrometheusLacksIsUnexpected(t *testing.T) {
 	c := newRefusingClient(t, http.StatusNotFound, "404 page not found")
 	_, e := c.Query(constant.Up, time.Now())
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestARefusedPostFallsBackToGet(t *testing.T) {
+func TestRefusedPostFallsBackToGet(t *testing.T) {
 	c := newRefusingClient(t, http.StatusForbidden, "")
 	result, e := c.Query(constant.Up, time.Now())
 	assert.FatalOnError(t, e)

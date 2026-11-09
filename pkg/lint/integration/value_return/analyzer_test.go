@@ -9,14 +9,14 @@ func TestBlocked(t *testing.T) {
 	testutil.AssertBlocked(t, checked(t), 5)
 }
 
-func TestAMarkedTypeIsNotFlagged(t *testing.T) {
+func TestMarkedTypeIsNotFlagged(t *testing.T) {
 	testutil.AssertNotBlockedContains(t, checked(t), "MarkedByValue")
 }
 
-func TestADirectiveWithoutAReasonIsStillFlagged(t *testing.T) {
+func TestDirectiveWithoutReasonIsStillFlagged(t *testing.T) {
 	testutil.AssertBlockedContains(t, checked(t), "BareDirectiveByValue")
 }
 
-func TestATypeDeclaredBesideAMarkedOneIsStillFlagged(t *testing.T) {
+func TestTypeDeclaredBesideMarkedOneIsStillFlagged(t *testing.T) {
 	testutil.AssertBlockedContains(t, checked(t), "UnmarkedByValue")
 }

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestSettledAnswerOfALiveSessionIsSent(t *testing.T) {
+func TestSettledAnswerOfLiveSessionIsSent(t *testing.T) {
 	s := cross_service_tester.New(t)
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()
@@ -29,7 +29,7 @@ func TestSettledAnswerOfALiveSessionIsSent(t *testing.T) {
 	)
 }
 
-func TestPollingClearsTheBacklogSoNothingFires(t *testing.T) {
+func TestPollingClearsBacklogSoNothingFires(t *testing.T) {
 	s := cross_service_tester.New(t)
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()
@@ -51,7 +51,7 @@ func TestPollingClearsTheBacklogSoNothingFires(t *testing.T) {
 	)
 }
 
-func TestCoordinatorReportsWorkingAfterAPrompt(t *testing.T) {
+func TestCoordinatorReportsWorkingAfterPrompt(t *testing.T) {
 	s := cross_service_tester.New(t)
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()
@@ -73,7 +73,7 @@ func TestCoordinatorReportsIdleAfterTurnEnd(t *testing.T) {
 	assert.True(t, target.LastTurnEndAt.After(*target.LastPromptAt))
 }
 
-func TestSessionWithoutTheHookReportsUnknown(t *testing.T) {
+func TestSessionWithoutHookReportsUnknown(t *testing.T) {
 	s := cross_service_tester.New(t)
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()
@@ -81,7 +81,7 @@ func TestSessionWithoutTheHookReportsUnknown(t *testing.T) {
 	assert.True(t, s.Target(a.UUID).LastTurnEndAt == nil)
 }
 
-func TestSproutReachesTheCoordinator(t *testing.T) {
+func TestSproutReachesCoordinator(t *testing.T) {
 	s := cross_service_tester.New(t)
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()

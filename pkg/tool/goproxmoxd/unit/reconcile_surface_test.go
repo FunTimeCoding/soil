@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheReconcileToolAnswersAPlan(t *testing.T) {
+func TestReconcileToolAnswersPlan(t *testing.T) {
 	o := model_context_tester.New(t)
 	result := o.Client.MustCallTool(
 		constant.Reconcile,
@@ -22,7 +22,7 @@ func TestTheReconcileToolAnswersAPlan(t *testing.T) {
 	assert.StringContains(t, `"written": false`, result)
 }
 
-func TestTheReconcileRouteAnswersAPlan(t *testing.T) {
+func TestReconcileRouteAnswersPlan(t *testing.T) {
 	s := base.New(t)
 	c, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),

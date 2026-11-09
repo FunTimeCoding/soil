@@ -18,7 +18,7 @@ func spentValue(
 		return okay && assignedOnce(p, body, o) &&
 			closes(p, body, o, nil)
 	case *ast.CallExpr:
-		return calleeOf(p, v) != nil
+		return callee(p, v) != nil
 	}
 
 	return false

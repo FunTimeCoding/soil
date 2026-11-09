@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) entryMissing(w http.ResponseWriter) {
-	s.view.RenderPageWithStatus(
+	s.view.RenderStatusPage(
 		w,
 		http.StatusNotFound,
 		constant.EntryTitle,

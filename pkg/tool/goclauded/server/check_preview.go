@@ -10,7 +10,7 @@ func (s *Server) checkPreview(
 	x context.Context,
 	sessionIdentifier string,
 ) (server.GetCheckResponseObject, error) {
-	callsign, e := s.roster.CallsignBySessionIdentifier(sessionIdentifier)
+	callsign, e := s.roster.SessionCallsign(sessionIdentifier)
 
 	if e != nil {
 		return server.GetCheck500JSONResponse(

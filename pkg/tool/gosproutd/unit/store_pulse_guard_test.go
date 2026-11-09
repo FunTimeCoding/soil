@@ -14,7 +14,7 @@ func TestAnsweredDecisionsStartUnpulsed(t *testing.T) {
 	assert.Count(t, 2, s.Store.UnpulsedAnswers(stringsConstant.LowerAlfa))
 }
 
-func TestPulsingABatchEmptiesIt(t *testing.T) {
+func TestPulsingBatchEmptiesIt(t *testing.T) {
 	s := store_tester.New(t)
 	s.Answered("first?")
 	s.Answered("second?")
@@ -22,7 +22,7 @@ func TestPulsingABatchEmptiesIt(t *testing.T) {
 	assert.Count(t, 0, s.Store.UnpulsedAnswers(stringsConstant.LowerAlfa))
 }
 
-func TestANewAnswerAfterPulsingTriggersAgain(t *testing.T) {
+func TestNewAnswerAfterPulsingTriggersAgain(t *testing.T) {
 	s := store_tester.New(t)
 	s.Answered("first?")
 	s.Store.MarkPulsed(stringsConstant.LowerAlfa)
@@ -30,7 +30,7 @@ func TestANewAnswerAfterPulsingTriggersAgain(t *testing.T) {
 	assert.Count(t, 1, s.Store.UnpulsedAnswers(stringsConstant.LowerAlfa))
 }
 
-func TestPollingAlsoStopsTheTrigger(t *testing.T) {
+func TestPollingAlsoStopsTrigger(t *testing.T) {
 	s := store_tester.New(t)
 	s.Answered("first?")
 	s.Store.MarkSeen(stringsConstant.LowerAlfa)

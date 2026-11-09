@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestARejectedWriteIsValidation(t *testing.T) {
+func TestRejectedWriteIsValidation(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusBadRequest,
@@ -25,7 +25,7 @@ func TestARejectedWriteIsValidation(t *testing.T) {
 	)
 }
 
-func TestAMissingObjectIsNotFound(t *testing.T) {
+func TestMissingObjectIsNotFound(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusNotFound,
@@ -35,7 +35,7 @@ func TestAMissingObjectIsNotFound(t *testing.T) {
 	assert.String(t, "No Site matches the given query.", e.Error())
 }
 
-func TestAConflictIsConflict(t *testing.T) {
+func TestConflictIsConflict(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusConflict,
@@ -44,7 +44,7 @@ func TestAConflictIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestAPermissionTheTokenLacksIsUnexpected(t *testing.T) {
+func TestPermissionTokenLacksIsUnexpected(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusForbidden,
@@ -53,7 +53,7 @@ func TestAPermissionTheTokenLacksIsUnexpected(t *testing.T) {
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestABadGatewayInFrontOfNetboxIsUnavailable(t *testing.T) {
+func TestBadGatewayInFrontOfNetboxIsUnavailable(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusBadGateway,

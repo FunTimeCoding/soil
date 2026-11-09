@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestOwnerOfFindsTheUnmergedSpelling(t *testing.T) {
+func TestOwnerOfFindsUnmergedSpelling(t *testing.T) {
 	assert.String(
 		t,
 		"foxtrot",
@@ -17,7 +17,7 @@ func TestOwnerOfFindsTheUnmergedSpelling(t *testing.T) {
 	)
 }
 
-func TestOwnerOfFindsTheMergedSpelling(t *testing.T) {
+func TestOwnerOfFindsMergedSpelling(t *testing.T) {
 	assert.String(
 		t,
 		"avahi-daemon",
@@ -30,7 +30,7 @@ func TestOwnerOfFindsTheMergedSpelling(t *testing.T) {
 	)
 }
 
-func TestOwnerOfRefusesAnUnownedPath(t *testing.T) {
+func TestOwnerOfRefusesUnownedPath(t *testing.T) {
 	assert.String(
 		t,
 		"",

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestClearWithHeardRecordsTheConversationAnswer(t *testing.T) {
+func TestClearWithHeardRecordsConversationAnswer(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -72,7 +72,7 @@ func TestConversationAnswerResolvesAsAnswerNotDefault(t *testing.T) {
 	)
 }
 
-func TestHeardNeverOverwritesAQueueAnswer(t *testing.T) {
+func TestHeardNeverOverwritesQueueAnswer(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -93,7 +93,7 @@ func TestHeardNeverOverwritesAQueueAnswer(t *testing.T) {
 	assert.String(t, "queue", string(r.AnswerChannel))
 }
 
-func TestClearWithoutHeardStillTakesTheDefault(t *testing.T) {
+func TestClearWithoutHeardStillTakesDefault(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,

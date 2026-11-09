@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestATurnIsImmediateWhenIdle(t *testing.T) {
+func TestTurnIsImmediateWhenIdle(t *testing.T) {
 	s := turn.New(time.Second)
 	g, e := s.Take(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
@@ -34,7 +34,7 @@ func TestTurnsRotateBetweenSessions(t *testing.T) {
 	assert.Strings(t, []string{"alfa one", "bravo one", "alfa two"}, order)
 }
 
-func TestABoundedWaitAnswersBusy(t *testing.T) {
+func TestBoundedWaitAnswersBusy(t *testing.T) {
 	s := turn.New(10 * time.Millisecond)
 	holder, e := s.Take(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
@@ -44,7 +44,7 @@ func TestABoundedWaitAnswersBusy(t *testing.T) {
 	assert.Integer(t, 0, s.Waiting())
 }
 
-func TestACancelledWaiterLeavesTheQueue(t *testing.T) {
+func TestCancelledWaiterLeavesQueue(t *testing.T) {
 	s := turn.New(time.Minute)
 	holder, e := s.Take(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
@@ -54,7 +54,7 @@ func TestACancelledWaiterLeavesTheQueue(t *testing.T) {
 		_, f := s.Take(x, "bravo")
 		done <- f
 	}()
-	waitForQueue(t, s, 1)
+	waitQueue(t, s, 1)
 	cancel()
 	assert.String(t, "context canceled", (<-done).Error())
 	assert.Integer(t, 0, s.Waiting())

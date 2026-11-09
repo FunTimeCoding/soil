@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestOnlyEditsGitStillSeesChangedAreInTheReach(t *testing.T) {
+func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteFile(t, root, "alfa.go", "package alfa\n")

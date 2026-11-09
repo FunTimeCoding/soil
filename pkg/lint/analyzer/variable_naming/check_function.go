@@ -14,8 +14,8 @@ func checkFunction(
 	f *ast.FuncDecl,
 ) {
 	variables := collectVariables(p.TypesInfo, f.Body)
-	collectFromParams(p.TypesInfo, f, &variables)
-	collectFromReceiver(p.TypesInfo, f, &variables)
+	collectParams(p.TypesInfo, f, &variables)
+	collectReceiver(p.TypesInfo, f, &variables)
 	applyParameterExemptions(variables)
 
 	if len(variables) == 0 {

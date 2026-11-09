@@ -29,7 +29,7 @@ func New(
 	c := client.NewHTTPClient(nil)
 	b := stall_client.New().Build()
 	t := transport.New(
-		web.HostPortFromLocator(connection.String()),
+		web.LocatorHostPort(connection.String()),
 		client.DefaultBasePath,
 		[]string{scheme},
 	)

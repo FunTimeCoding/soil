@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientRoundTripsADocument(t *testing.T) {
+func TestClientRoundTripsDocument(t *testing.T) {
 	c := servedClient(t)
 	x := t.Context()
 	metadata := map[string][]string{"scope": {"alfa"}}
@@ -82,7 +82,7 @@ func TestTheClientRoundTripsADocument(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(x))
 }
 
-func TestTheClientAnswersEachClass(t *testing.T) {
+func TestClientAnswersEachClass(t *testing.T) {
 	c := servedClient(t)
 	x := t.Context()
 	_, e := c.GetDocument(

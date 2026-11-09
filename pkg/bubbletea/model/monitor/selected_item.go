@@ -9,5 +9,5 @@ func (m *Model) selectedItem() *item.Item {
 		return nil
 	}
 
-	return m.itemByLabel(r[0])
+	return m.labelItem(r[0])
 }

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientRoundTripsAnEntry(t *testing.T) {
+func TestClientRoundTripsEntry(t *testing.T) {
 	c := base.New(t).MaintenanceClient(t)
 	x := t.Context()
 	system := "worker1"
@@ -39,7 +39,7 @@ func TestTheClientRoundTripsAnEntry(t *testing.T) {
 	assert.Integer(t, 0, status.TotalEntries)
 }
 
-func TestTheClientClassifiesRefusals(t *testing.T) {
+func TestClientClassifiesRefusals(t *testing.T) {
 	c := base.New(t).MaintenanceClient(t)
 	x := t.Context()
 	assert.True(t, not_found.Is(c.DeleteEntry(x, 9999)))

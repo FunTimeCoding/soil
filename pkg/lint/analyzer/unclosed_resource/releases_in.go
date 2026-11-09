@@ -22,7 +22,7 @@ func releasesIn(
 			case *ast.AssignStmt:
 				result = append(result, assertedRelease(p, body, v, r)...)
 			case *ast.RangeStmt:
-				if field := fieldOfReceiver(p, v.X, r); field != "" {
+				if field := receiverField(p, v.X, r); field != "" {
 					result = append(result, fact.Release{Field: field})
 				}
 			}

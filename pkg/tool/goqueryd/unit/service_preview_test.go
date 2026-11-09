@@ -24,7 +24,7 @@ func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
 	assert.Integer(t, 12, p.Chunks[2].LastLine)
 }
 
-func TestPreviewCountsEachWindowForTheEmbedder(t *testing.T) {
+func TestPreviewCountsEachWindowForEmbedder(t *testing.T) {
 	r := newReranker(t)
 	r.SetAllowance(40)
 	p := newService(t, newEmbedder(t), r).Preview(
@@ -37,7 +37,7 @@ func TestPreviewCountsEachWindowForTheEmbedder(t *testing.T) {
 	assert.Integer(t, 6, p.Chunks[0].EmbedTokens)
 }
 
-func TestPreviewNamesTheLinesWhereAHeadingFixesAWindow(t *testing.T) {
+func TestPreviewNamesLinesWhereHeadingFixesWindow(t *testing.T) {
 	c := windowPreview(t, 560, strings.Repeat(constant.FixtureWindowLine, 200))
 	assert.Integer(t, 600, c.Tokens)
 	assert.True(t, c.CutChecked)
@@ -47,14 +47,14 @@ func TestPreviewNamesTheLinesWhereAHeadingFixesAWindow(t *testing.T) {
 	assert.Integer(t, 113, c.CutLines[18])
 }
 
-func TestPreviewMarksAWindowNoHeadingCanFix(t *testing.T) {
+func TestPreviewMarksWindowNoHeadingCanFix(t *testing.T) {
 	c := windowPreview(t, 400, strings.Repeat(constant.FixtureWindowLine, 200))
 	assert.True(t, c.CutChecked)
 	assert.Integer(t, 0, c.CutLevel)
 	assert.Count(t, 0, c.CutLines)
 }
 
-func TestPreviewAccountsForALaterHeadingThatWinsTheCut(t *testing.T) {
+func TestPreviewAccountsForLaterHeadingThatWinsCut(t *testing.T) {
 	c := windowPreview(
 		t,
 		560,

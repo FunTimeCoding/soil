@@ -21,7 +21,10 @@ func (s *Server) GetCertificates(
 		f.Kind = string(*r.Params.Kind)
 	}
 
-	f.Before = r.Params.ExpiresBefore
+	if r.Params.ExpiresBefore != nil {
+		f.Window.WithEnd(*r.Params.ExpiresBefore)
+	}
+
 	f.Revoked = r.Params.Revoked
 
 	if r.Params.Limit != nil {

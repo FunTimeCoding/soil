@@ -32,7 +32,7 @@ func spentDelegates(
 						continue
 					}
 
-					if g := calleeOf(p, c); g != nil {
+					if g := callee(p, c); g != nil {
 						result = append(result, functionKey(g))
 					}
 				}

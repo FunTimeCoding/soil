@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestAMissingPostIsAnsweredNotFound(t *testing.T) {
+func TestMissingPostIsAnsweredNotFound(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	c, r := servedDaemon(t, m)
 	result, e := c.GetThreadWithResponse(t.Context(), "alfa")
@@ -22,7 +22,7 @@ func TestAMissingPostIsAnsweredNotFound(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARefusedPostIsAnsweredForbidden(t *testing.T) {
+func TestRefusedPostIsAnsweredForbidden(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.Failure = forbidden.Format("no access to alfa")
 	c, r := servedDaemon(t, m)
@@ -34,7 +34,7 @@ func TestARefusedPostIsAnsweredForbidden(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAnUnavailableMattermostIsAnsweredUnavailable(t *testing.T) {
+func TestUnavailableMattermostIsAnsweredUnavailable(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.Failure = unavailable.Format("mattermost maintenance")
 	c, r := servedDaemon(t, m)
@@ -48,7 +48,7 @@ func TestAnUnavailableMattermostIsAnsweredUnavailable(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAMattermostFaultIsCaptured(t *testing.T) {
+func TestMattermostFaultIsCaptured(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.Failure = fault()
 	c, r := servedDaemon(t, m)

@@ -133,7 +133,7 @@ func (s *Server) GetSessionDetail(
 		result.Labels = &le
 	}
 
-	pulses, pulseError := s.message.PulsesBySession(d.Identifier)
+	pulses, pulseError := s.message.SessionPulses(d.Identifier)
 
 	if pulseError != nil {
 		return server.GetSessionDetail500JSONResponse(

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAnyScopeFindsTheScopedRow(t *testing.T) {
+func TestAnyScopeFindsScopedRow(t *testing.T) {
 	assert.True(
 		t,
 		component.AnyScope(
@@ -27,7 +27,7 @@ func TestAnyScopeFindsTheScopedRow(t *testing.T) {
 	)
 }
 
-func TestAnyScopeRefusesAnUnscopedSource(t *testing.T) {
+func TestAnyScopeRefusesUnscopedSource(t *testing.T) {
 	assert.False(
 		t,
 		component.AnyScope(

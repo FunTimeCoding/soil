@@ -31,7 +31,7 @@ func (r *rest) item(e error) (any, error) {
 	return server.GetItem404JSONResponse{Error: e.Error()}, nil
 }
 
-func (r *rest) answerWith(
+func (r *rest) answerMessage(
 	e error,
 	_ string,
 ) *server.ErrorResponse {
@@ -40,7 +40,7 @@ func (r *rest) answerWith(
 
 func (r *rest) another(e error) (any, error) {
 	if unreachable.Is(e) {
-		return server.GetOther503JSONResponse(*r.answerWith(e, "")), nil
+		return server.GetOther503JSONResponse(*r.answerMessage(e, "")), nil
 	}
 
 	return nil, e

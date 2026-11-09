@@ -18,7 +18,7 @@ func TestEveryToolCoversEveryTool(t *testing.T) {
 	)
 }
 
-func TestAMissingExtensionIsAnsweredNotReported(t *testing.T) {
+func TestMissingExtensionIsAnsweredNotReported(t *testing.T) {
 	for _, c := range tools() {
 		o := model_context_tester.New(t)
 		o.MockClient.Fail(
@@ -34,7 +34,7 @@ func TestAMissingExtensionIsAnsweredNotReported(t *testing.T) {
 	}
 }
 
-func TestARefusalIsAnsweredNotReported(t *testing.T) {
+func TestRefusalIsAnsweredNotReported(t *testing.T) {
 	for _, c := range tools() {
 		o := model_context_tester.New(t)
 		o.MockClient.Fail(
@@ -50,7 +50,7 @@ func TestARefusalIsAnsweredNotReported(t *testing.T) {
 	}
 }
 
-func TestAnUnexpectedExtensionErrorIsReported(t *testing.T) {
+func TestUnexpectedExtensionErrorIsReported(t *testing.T) {
 	for _, c := range tools() {
 		o := model_context_tester.New(t)
 		o.MockClient.Fail(

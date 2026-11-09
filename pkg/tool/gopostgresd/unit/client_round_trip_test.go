@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsColumnsAndRowsThroughTheMount(t *testing.T) {
+func TestClientReadsColumnsAndRowsThroughMount(t *testing.T) {
 	s, _, _, m := served(t, nil)
 	m.SeedResult(
 		"SELECT a.id, b.id",
@@ -35,7 +35,7 @@ func TestTheClientReadsColumnsAndRowsThroughTheMount(t *testing.T) {
 	assert.Any(t, 7.0, v.Rows[0][1])
 }
 
-func TestTheClientClassifiesARefusalThroughTheMount(t *testing.T) {
+func TestClientClassifiesRefusalThroughMount(t *testing.T) {
 	s, _, _, _ := served(t, syntaxRefusal())
 	c := gopostgresd.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),

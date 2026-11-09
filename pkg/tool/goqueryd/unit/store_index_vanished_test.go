@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestIndexSkipsAListedFileThatIsGone(t *testing.T) {
+func TestIndexSkipsListedFileThatIsGone(t *testing.T) {
 	s := store_tester.OpenTestStore(t)
 	directory := t.TempDir()
 	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nStays.\n")

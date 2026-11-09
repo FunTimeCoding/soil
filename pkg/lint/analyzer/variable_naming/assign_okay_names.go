@@ -9,13 +9,13 @@ import (
 
 func assignOkayNames(forms []OkayForm) map[*ast.Ident]string {
 	result := map[*ast.Ident]string{}
-	byScope := map[*types.Scope][]OkayForm{}
+	scopes := map[*types.Scope][]OkayForm{}
 
 	for _, f := range forms {
-		byScope[f.scope] = append(byScope[f.scope], f)
+		scopes[f.scope] = append(scopes[f.scope], f)
 	}
 
-	for _, scopeForms := range byScope {
+	for _, scopeForms := range scopes {
 		sort.Slice(
 			scopeForms,
 			func(i, j int) bool {

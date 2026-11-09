@@ -22,7 +22,7 @@ func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
 	assert.Integer(t, 1, (*r.JSON200)[0].Identifier)
 }
 
-func TestAlertsAfterCapsTheLimit(t *testing.T) {
+func TestAlertsAfterCapsLimit(t *testing.T) {
 	o := web_service_tester.New(t)
 	o.Seed(30)
 	r, e := o.Client.GetAlertsAfterWithResponse(
@@ -33,7 +33,7 @@ func TestAlertsAfterCapsTheLimit(t *testing.T) {
 	assert.Count(t, 25, *r.JSON200)
 }
 
-func TestAlertsByIdentifierReturnsTheOnesThatExist(t *testing.T) {
+func TestAlertsByIdentifierReturnsOnesThatExist(t *testing.T) {
 	o := web_service_tester.New(t)
 	r, e := o.Client.GetAlertsByIdentifierWithResponse(
 		context.Background(),
@@ -45,7 +45,7 @@ func TestAlertsByIdentifierReturnsTheOnesThatExist(t *testing.T) {
 	assert.String(t, "fp2", (*r.JSON200)[0].Fingerprint)
 }
 
-func TestStatusNamesTheLatestIdentifier(t *testing.T) {
+func TestStatusNamesLatestIdentifier(t *testing.T) {
 	o := web_service_tester.New(t)
 	r, e := o.Client.GetStatusWithResponse(context.Background())
 	assert.FatalOnError(t, e)

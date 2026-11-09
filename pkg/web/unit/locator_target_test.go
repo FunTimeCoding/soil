@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestLocatorTargetSplitsTheQuery(t *testing.T) {
+func TestLocatorTargetSplitsQuery(t *testing.T) {
 	assert.String(
 		t,
 		"https://example.org/detail?id=1",
@@ -22,7 +22,7 @@ func TestLocatorTargetSplitsTheQuery(t *testing.T) {
 	)
 }
 
-func TestLocatorTargetWithoutQueryIsAPath(t *testing.T) {
+func TestLocatorTargetWithoutQueryIsPath(t *testing.T) {
 	assert.String(
 		t,
 		"https://example.org/health",
@@ -40,7 +40,7 @@ func TestLocatorTargetKeepsSetValues(t *testing.T) {
 	)
 }
 
-func TestLocatorTargetRefusesAMalformedQuery(t *testing.T) {
+func TestLocatorTargetRefusesMalformedQuery(t *testing.T) {
 	assert.Panic(
 		t,
 		func() { locator.New(constant.Example).Target("/detail?id=%zz") },

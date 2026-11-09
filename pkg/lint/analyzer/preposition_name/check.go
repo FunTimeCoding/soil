@@ -19,15 +19,22 @@ func Check(
 			continue
 		}
 
-		test := strings.HasSuffix(
-			p.Fset.Position(file.Pos()).Filename,
-			soil.TestSuffix,
+		tests := testNames(
+			file,
+			strings.HasSuffix(
+				p.Fset.Position(file.Pos()).Filename,
+				soil.TestSuffix,
+			),
 		)
+		ast.Inspect(
+			file,
+			func(n ast.Node) bool {
+				if i, okay := n.(*ast.Ident); okay && !tests[i] {
+					checkName(p, results, faces, i)
+				}
 
-		for _, d := range file.Decls {
-			for _, ident := range declaredNames(d, test) {
-				checkName(p, results, faces, ident)
-			}
-		}
+				return true
+			},
+		)
 	}
 }

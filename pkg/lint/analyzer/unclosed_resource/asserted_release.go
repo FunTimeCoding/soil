@@ -23,7 +23,7 @@ func assertedRelease(
 		return nil
 	}
 
-	field := fieldOfReceiver(p, t.X, r)
+	field := receiverField(p, t.X, r)
 	i, okay := a.Lhs[0].(*ast.Ident)
 
 	if field == "" || !okay {

@@ -156,7 +156,7 @@ func TestSecondRootConflicts(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestIssuedLeafVerifiesAgainstTheChain(t *testing.T) {
+func TestIssuedLeafVerifiesAgainstChain(t *testing.T) {
 	v := store_tester.NewChain(t)
 	r, key, e := v.IssueCertificate(
 		server_tester.LeafBody(
@@ -191,7 +191,7 @@ func TestIssuedLeafKeyIsNotStored(t *testing.T) {
 	assert.String(t, "", stored.Key)
 }
 
-func TestForeignNameStillFailsThroughTheService(t *testing.T) {
+func TestForeignNameStillFailsThroughService(t *testing.T) {
 	v := store_tester.NewChain(t)
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
@@ -235,7 +235,7 @@ func TestSignedRequestVerifiesAndStoresNoKey(t *testing.T) {
 	)
 }
 
-func TestRevocationListCarriesTheRevokedSerial(t *testing.T) {
+func TestRevocationListCarriesRevokedSerial(t *testing.T) {
 	v := store_tester.NewChain(t)
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
@@ -317,7 +317,7 @@ func TestRevokedAuthorityStopsResolving(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestExpiringFindsOnlyPastTheHorizon(t *testing.T) {
+func TestExpiringFindsOnlyPastHorizon(t *testing.T) {
 	s := store_tester.NewStore(t)
 	cluster := authority_tester.NewCluster(authority_tester.NewRoot())
 	leaf := authority_tester.NewLeaf(

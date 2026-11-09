@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAnOllamaThatAnswersItsHeartbeatIsReachable(t *testing.T) {
+func TestOllamaThatAnswersItsHeartbeatIsReachable(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, "Ollama is running")
 	host, port := upstream_tester.HostPort(t, s.URL)
 	c := ollama.New(ollama.WithHost(host), ollama.WithPort(port))
@@ -18,7 +18,7 @@ func TestAnOllamaThatAnswersItsHeartbeatIsReachable(t *testing.T) {
 	assert.String(t, "/", last().URL.Path)
 }
 
-func TestAStoppedOllamaIsAConnectionFailure(t *testing.T) {
+func TestStoppedOllamaIsConnectionFailure(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusOK, "")
 	host, port := upstream_tester.HostPort(t, s.URL)
 	s.Close()

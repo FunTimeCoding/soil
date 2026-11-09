@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestRevokingTwiceFindsNothingTheSecondTime(t *testing.T) {
+func TestRevokingTwiceFindsNothingSecondTime(t *testing.T) {
 	v := store_tester.NewChain(t)
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(

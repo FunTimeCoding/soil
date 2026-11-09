@@ -17,7 +17,7 @@ func TestHealthNeedsNoLogin(t *testing.T) {
 	assert.Integer(t, 0, u.Logins())
 }
 
-func TestLoginHappensOnceAndCarriesTheToken(t *testing.T) {
+func TestLoginHappensOnceAndCarriesToken(t *testing.T) {
 	u := upstream_tester.New(t)
 	c := client(t, u, "alfa-jwt")
 	defer c.Close()
@@ -29,7 +29,7 @@ func TestLoginHappensOnceAndCarriesTheToken(t *testing.T) {
 	assert.Strings(t, []string{"", "alfa-token", "alfa-token"}, u.Tokens())
 }
 
-func TestRefusedLoginFailsTheCall(t *testing.T) {
+func TestRefusedLoginFailsCall(t *testing.T) {
 	_, e := client(t, upstream_tester.New(t), "bravo-jwt").List("alfa")
 	assert.StringContains(t, "log in:", e.Error())
 }
@@ -40,7 +40,7 @@ func TestListSortsKeys(t *testing.T) {
 	assert.Strings(t, []string{"bravo", "charlie/"}, keys)
 }
 
-func TestListOfAMissingPathIsEmpty(t *testing.T) {
+func TestListOfMissingPathIsEmpty(t *testing.T) {
 	keys, e := client(t, upstream_tester.New(t), "alfa-jwt").List("missing")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, keys)
@@ -54,12 +54,12 @@ func TestReadReturnsEveryKey(t *testing.T) {
 	assert.Any(t, map[string]string{"DELTA": "echo", "FOXTROT": "golf"}, values)
 }
 
-func TestReadOfAMissingSecretIsNotFound(t *testing.T) {
+func TestReadOfMissingSecretIsNotFound(t *testing.T) {
 	_, e := client(t, upstream_tester.New(t), "alfa-jwt").Read("alfa/missing")
 	assert.True(t, not_found.Is(e))
 }
 
-func TestPutSendsTheValuesAsTheSecretBody(t *testing.T) {
+func TestPutSendsValuesAsSecretBody(t *testing.T) {
 	u := upstream_tester.New(t)
 	assert.FatalOnError(
 		t,

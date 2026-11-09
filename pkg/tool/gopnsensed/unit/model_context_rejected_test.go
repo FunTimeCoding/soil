@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestARejectedHostIsAnsweredQuietlyOverModelContext(t *testing.T) {
+func TestRejectedHostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	m := memory.New()
 	s := model_context_server.New(
 		t,

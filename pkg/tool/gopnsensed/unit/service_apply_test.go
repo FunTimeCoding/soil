@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnAppliedWriteReconfiguresDnsmasq(t *testing.T) {
+func TestAppliedWriteReconfiguresDnsmasq(t *testing.T) {
 	c := counting_source.New(mock_client.New())
 	defer c.Close()
 	s := service_tester.New(t, c)
@@ -21,7 +21,7 @@ func TestAnAppliedWriteReconfiguresDnsmasq(t *testing.T) {
 	assert.Integer(t, 3, c.Reconfigured())
 }
 
-func TestADeferredWriteLeavesDnsmasqAlone(t *testing.T) {
+func TestDeferredWriteLeavesDnsmasqAlone(t *testing.T) {
 	c := counting_source.New(mock_client.New())
 	defer c.Close()
 	s := service_tester.New(t, c)
@@ -32,7 +32,7 @@ func TestADeferredWriteLeavesDnsmasqAlone(t *testing.T) {
 	assert.Integer(t, 0, c.Reconfigured())
 }
 
-func TestARejectedWriteLeavesDnsmasqAlone(t *testing.T) {
+func TestRejectedWriteLeavesDnsmasqAlone(t *testing.T) {
 	c := counting_source.New(rejecting_host.New())
 	defer c.Close()
 	_, e := service_tester.New(t, c).AddHost(request.New(), true)

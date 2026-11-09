@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestReadTakesTheStampFromTheBuildInformation(t *testing.T) {
+func TestReadTakesStampFromBuildInformation(t *testing.T) {
 	path, e := os.Executable()
 	assert.FatalOnError(t, e)
 	b, okay := installed.Read(path)
@@ -17,19 +17,19 @@ func TestReadTakesTheStampFromTheBuildInformation(t *testing.T) {
 	assert.String(t, stamp.New().Version, b.Version)
 }
 
-func TestABinaryBelowTheLatestTagIsStale(t *testing.T) {
+func TestBinaryBelowLatestTagIsStale(t *testing.T) {
 	assert.True(t, installed.Stale("v0.11.169", "v0.11.170"))
 }
 
-func TestABinaryAtTheLatestTagIsNotStale(t *testing.T) {
+func TestBinaryAtLatestTagIsNotStale(t *testing.T) {
 	assert.False(t, installed.Stale("v0.11.170", "v0.11.170"))
 }
 
-func TestADirtyBinaryAtTheLatestTagIsNotStale(t *testing.T) {
+func TestDirtyBinaryAtLatestTagIsNotStale(t *testing.T) {
 	assert.False(t, installed.Stale("v0.11.170+dirty", "v0.11.170"))
 }
 
-func TestABinaryBuiltAfterTheLatestTagIsNotStale(t *testing.T) {
+func TestBinaryBuiltAfterLatestTagIsNotStale(t *testing.T) {
 	assert.False(
 		t,
 		installed.Stale(
@@ -39,13 +39,13 @@ func TestABinaryBuiltAfterTheLatestTagIsNotStale(t *testing.T) {
 	)
 }
 
-func TestABinaryBuiltBeforeTheLatestTagIsStale(t *testing.T) {
+func TestBinaryBuiltBeforeLatestTagIsStale(t *testing.T) {
 	assert.True(
 		t,
 		installed.Stale("v0.11.170-0.20261003120000-f5dce445d000", "v0.11.170"),
 	)
 }
 
-func TestARepositoryWithoutTagsLeavesNothingStale(t *testing.T) {
+func TestRepositoryWithoutTagsLeavesNothingStale(t *testing.T) {
 	assert.False(t, installed.Stale("v0.11.170", ""))
 }

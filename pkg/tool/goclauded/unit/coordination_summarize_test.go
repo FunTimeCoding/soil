@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSummarizeToolStoresTheSummary(t *testing.T) {
+func TestSummarizeToolStoresSummary(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "building things")

@@ -15,5 +15,5 @@ func diffService(
 	i := inventory.New()
 	i.Modules = []module.Module{{Name: "echo", Directory: directory}}
 
-	return service_tester.ForInventory(t, i)
+	return service_tester.InventoryServices(t, i)
 }

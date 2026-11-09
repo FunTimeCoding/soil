@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAddParametersPassesTheArgumentAtEveryCall(t *testing.T) {
+func TestAddParametersPassesArgumentAtEveryCall(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("add-parameters/src"),
@@ -51,7 +51,7 @@ func TestAddParametersPassesTheArgumentAtEveryCall(t *testing.T) {
 	assertFormatted(t, caller)
 }
 
-func TestAddParametersImportsAPackageTheCallSiteLacks(t *testing.T) {
+func TestAddParametersImportsPackageCallSiteLacks(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("add-parameters/src"),
@@ -96,7 +96,7 @@ func TestAddParametersDryRunWritesNothing(t *testing.T) {
 	)
 }
 
-func TestAddParametersRewritesAReplacingModule(t *testing.T) {
+func TestAddParametersRewritesReplacingModule(t *testing.T) {
 	for _, full := range []bool{false, true} {
 		library, user := prepareReplacedLibrary(t, "add-parameters-replacer")
 		s := replacingService(t, library, user)
@@ -137,7 +137,7 @@ func TestAddParametersRewritesAReplacingModule(t *testing.T) {
 	}
 }
 
-func TestAddParametersRefusesAnArgumentOutOfScope(t *testing.T) {
+func TestAddParametersRefusesArgumentOutOfScope(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"does not resolve here",
@@ -145,7 +145,7 @@ func TestAddParametersRefusesAnArgumentOutOfScope(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesAnArgumentOfTheWrongType(t *testing.T) {
+func TestAddParametersRefusesArgumentOfWrongType(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"is not assignable",
@@ -153,7 +153,7 @@ func TestAddParametersRefusesAnArgumentOfTheWrongType(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesAWiderArgumentThanTheParameter(t *testing.T) {
+func TestAddParametersRefusesWiderArgumentThanParameter(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"is not assignable",
@@ -169,7 +169,7 @@ func TestAddParametersRefusesAWiderArgumentThanTheParameter(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesAValueUse(t *testing.T) {
+func TestAddParametersRefusesValueUse(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"used as a value",
@@ -177,7 +177,7 @@ func TestAddParametersRefusesAValueUse(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesAnInterfaceMethod(t *testing.T) {
+func TestAddParametersRefusesInterfaceMethod(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"satisfies",
@@ -185,7 +185,7 @@ func TestAddParametersRefusesAnInterfaceMethod(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesANameTheBodyUses(t *testing.T) {
+func TestAddParametersRefusesNameBodyUses(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"already uses x",
@@ -193,7 +193,7 @@ func TestAddParametersRefusesANameTheBodyUses(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesAPositionAfterTheVariadic(t *testing.T) {
+func TestAddParametersRefusesPositionAfterVariadic(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"follows the variadic",
@@ -201,7 +201,7 @@ func TestAddParametersRefusesAPositionAfterTheVariadic(t *testing.T) {
 	)
 }
 
-func TestAddParametersRefusesAPositionOutOfRange(t *testing.T) {
+func TestAddParametersRefusesPositionOutOfRange(t *testing.T) {
 	assertAdditionRefused(
 		t,
 		"out of range",

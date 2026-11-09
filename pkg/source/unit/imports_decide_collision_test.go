@@ -35,7 +35,7 @@ func TestDecideGivesEveryCollidingMockItsOwner(t *testing.T) {
 	assert.True(t, d[1].Kind == constant.DecisionRename)
 }
 
-func TestDecideKeepsAThirdPartyLosersAlias(t *testing.T) {
+func TestDecideKeepsThirdPartyLosersAlias(t *testing.T) {
 	v := import_view.New(
 		"example.org/alfa/pkg/alert/store",
 		[]*import_entry.Entry{
@@ -114,7 +114,7 @@ func TestDecideKeepsAnotherGroupsPlainNameFree(t *testing.T) {
 	assert.String(t, "clientFace", d[3].Want)
 }
 
-func TestDecideRenamesAFirstPartyLoser(t *testing.T) {
+func TestDecideRenamesFirstPartyLoser(t *testing.T) {
 	d := imports.Decide(
 		import_view.New(
 			"example.org/alfa/pkg/alert/store",

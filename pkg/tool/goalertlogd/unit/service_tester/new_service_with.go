@@ -19,6 +19,7 @@ func NewServiceWith(
 	path string,
 	a face.AlertmanagerClient,
 	retention time.Duration,
+	clock func() time.Time,
 	n soilFace.EventNotifier,
 ) *service.Service {
 	t.Helper()
@@ -28,5 +29,5 @@ func NewServiceWith(
 	g := peer.New(constant.AlertmanagerPeer, a.Address(), a, l, memory.New())
 	t.Cleanup(g.Close)
 
-	return service.New(store.New(d), a, g, retention, n)
+	return service.New(store.New(d), a, g, retention, clock, n)
 }

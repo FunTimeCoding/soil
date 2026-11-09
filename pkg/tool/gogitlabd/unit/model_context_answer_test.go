@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheModelContextAnswersAClassifiedRefusalQuietly(t *testing.T) {
+func TestModelContextAnswersClassifiedRefusalQuietly(t *testing.T) {
 	r := memory.New()
 	d, clients := daemon_tester.New(t, r, constant.FixtureInstance)
 	clients[constant.FixtureInstance].FailProjects(
@@ -28,7 +28,7 @@ func TestTheModelContextAnswersAClassifiedRefusalQuietly(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestTheModelContextCapturesAnUnclassifiedFailure(t *testing.T) {
+func TestModelContextCapturesUnclassifiedFailure(t *testing.T) {
 	r := memory.New()
 	d, clients := daemon_tester.New(t, r, constant.FixtureInstance)
 	clients[constant.FixtureInstance].FailProjects(

@@ -33,7 +33,12 @@ func (s *Service) CreateAuthority(
 	year := validYear(b.ValidYear, kind)
 
 	if kind == constant.KindRoot {
-		return s.save(authority.NewRoot(n, year).Material(), kind, b.Name, "")
+		return s.save(
+			authority.NewRoot(n, year, s.clock()).Material(),
+			kind,
+			b.Name,
+			"",
+		)
 	}
 
 	parent, f := s.authorityOf(constant.RootAuthority)
@@ -52,6 +57,7 @@ func (s *Service) CreateAuthority(
 	r.Kind = kind
 	r.Name = n
 	r.Constraint = c
+	r.Start = s.clock()
 	r.ValidYear = year
 
 	return s.save(parent.Issue(r), kind, b.Name, constant.RootAuthority)

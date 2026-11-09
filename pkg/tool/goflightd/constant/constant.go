@@ -45,4 +45,5 @@ const (
 	WirelessInterval  = 5 * time.Second
 	PruneInterval     = time.Hour
 	Retention         = 7 * 24 * time.Hour
+	QuerySpan         = time.Hour
 )

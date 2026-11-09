@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestABadgeIsAPillInThePrimaryColour(t *testing.T) {
+func TestBadgeIsPillInPrimaryColour(t *testing.T) {
 	assert.String(
 		t,
 		`<span class="badge">alfa</span>`,
@@ -15,7 +15,7 @@ func TestABadgeIsAPillInThePrimaryColour(t *testing.T) {
 	)
 }
 
-func TestAQuietBadgeAndAColouredOneCarryTheirState(t *testing.T) {
+func TestQuietBadgeAndColouredOneCarryTheirState(t *testing.T) {
 	assert.String(
 		t,
 		`<span class="badge quiet">bravo</span>`,
@@ -28,7 +28,7 @@ func TestAQuietBadgeAndAColouredOneCarryTheirState(t *testing.T) {
 	)
 }
 
-func TestABadgeRowWrapsItsBadgesAndVanishesWhenEmpty(t *testing.T) {
+func TestBadgeRowWrapsItsBadgesAndVanishesWhenEmpty(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="badge-row"><span class="badge">delta</span></div>`,

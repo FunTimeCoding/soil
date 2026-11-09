@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestWebInterfaceAnswersAMalformedEntryQuietly(t *testing.T) {
+func TestWebInterfaceAnswersMalformedEntryQuietly(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.AssertStatus(http.StatusBadRequest, "/detail?id=nonsense")
 	o.AssertStatus(http.StatusBadRequest, "/edit?id=0")
@@ -17,7 +17,7 @@ func TestWebInterfaceAnswersAMalformedEntryQuietly(t *testing.T) {
 	assert.Integer(t, 0, o.Captured())
 }
 
-func TestWebInterfaceAnswersAnUnknownEntryQuietly(t *testing.T) {
+func TestWebInterfaceAnswersUnknownEntryQuietly(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.AssertStatus(http.StatusNotFound, "/detail?id=9999")
 	o.AssertStatus(http.StatusNotFound, "/edit?id=9999")
@@ -30,7 +30,7 @@ func TestWebInterfaceAnswersAnUnknownEntryQuietly(t *testing.T) {
 	assert.Integer(t, 0, o.Captured())
 }
 
-func TestWebInterfaceRefusesAnEntryWithoutUser(t *testing.T) {
+func TestWebInterfaceRefusesEntryWithoutUser(t *testing.T) {
 	o := web_interface_tester.New(t)
 	assert.StringContains(
 		t,

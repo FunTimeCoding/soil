@@ -25,11 +25,11 @@ func (s *Server) GetEntries(
 	}
 
 	if r.Params.Since != nil {
-		f.Since = *r.Params.Since
+		f.Window.WithStart(*r.Params.Since)
 	}
 
 	if r.Params.Until != nil {
-		f.Until = *r.Params.Until
+		f.Window.WithEnd(*r.Params.Until)
 	}
 
 	if r.Params.Limit != nil {

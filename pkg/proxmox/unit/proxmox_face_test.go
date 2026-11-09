@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockKeepTheProxmoxFace(t *testing.T) {
+func TestClientAndItsMockKeepProxmoxFace(t *testing.T) {
 	c := proxmox.New("alfa.example", proxmox.WithToken("alfa", "secret"))
 	t.Cleanup(c.Close)
 	m := mock_client.New()

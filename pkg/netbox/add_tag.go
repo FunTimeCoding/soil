@@ -9,7 +9,7 @@ func (c *Client) AddTag(
 	deviceName string,
 	tag string,
 ) (*device.Device, error) {
-	t, e := c.TagByName(tag)
+	t, e := c.Tag(tag)
 
 	if e != nil {
 		return nil, e
@@ -23,7 +23,7 @@ func (c *Client) AddTag(
 		)
 	}
 
-	d, f := c.DeviceByName(deviceName)
+	d, f := c.Device(deviceName)
 
 	if f != nil {
 		return nil, f

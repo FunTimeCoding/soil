@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := newOption(t)
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
@@ -36,7 +36,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestTheDaemonCountsReapsOnItsRegistry(t *testing.T) {
+func TestDaemonCountsReapsOnItsRegistry(t *testing.T) {
 	y := prometheus.NewRegistry()
 	d := daemon.New(newOption(t), logger.New(t.Context()), memory.New(), y)
 	t.Cleanup(d.Close)

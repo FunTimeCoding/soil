@@ -10,7 +10,7 @@ func (c *Client) CreateLocation(
 	name string,
 	siteName string,
 ) (*location.Location, error) {
-	s, e := c.SiteByName(siteName)
+	s, e := c.Site(siteName)
 
 	if e != nil {
 		return nil, e

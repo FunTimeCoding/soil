@@ -101,6 +101,8 @@ func (r *Runner) run() {
 				request.Response <- result
 			}
 		case <-cleanupTicker.C:
+			r.recovery.Run(r.pruneQuarantine)
+
 			if r.cleanupFunction != nil {
 				r.recovery.Run(r.cleanupFunction)
 			}

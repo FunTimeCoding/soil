@@ -1,18 +1,21 @@
 package store
 
 import (
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
-	"time"
 )
 
-func (s *Store) ByTimeRange(
-	start time.Time,
-	end time.Time,
-) ([]record.Record, error) {
+func (s *Store) ByTimeRange(w *window.Window) ([]record.Record, error) {
 	var result []record.Record
+	q := s.database
 
-	return result, s.database.
-		Where("started_at >= ? AND started_at < ?", start, end).
-		Order("started_at").
-		Find(&result).Error
+	if start, started := w.Start(); started {
+		q = q.Where("started_at >= ?", start)
+	}
+
+	if end, ended := w.End(); ended {
+		q = q.Where("started_at < ?", end)
+	}
+
+	return result, q.Order("started_at").Find(&result).Error
 }

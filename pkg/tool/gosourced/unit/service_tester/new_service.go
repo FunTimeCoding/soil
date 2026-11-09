@@ -7,7 +7,7 @@ import (
 
 func NewService(t *testing.T) *Services {
 	t.Helper()
-	result := ForInventory(t, inventory.New())
+	result := InventoryServices(t, inventory.New())
 	result.Workspace.UseIndex(IndexDirectory())
 
 	return result

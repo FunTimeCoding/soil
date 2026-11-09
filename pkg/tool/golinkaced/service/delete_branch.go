@@ -1,7 +1,7 @@
 package service
 
 func (s *Service) DeleteBranch(listIdentifier int) error {
-	links, e := s.LinksByList(listIdentifier)
+	links, e := s.ListLinks(listIdentifier)
 
 	if e != nil {
 		return e

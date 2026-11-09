@@ -39,7 +39,7 @@ func (s *Service) Census(
 	keys := map[string]bool{}
 
 	for _, r := range methods {
-		throughFunctions(r, functions)
+		walkFunctions(r, functions)
 
 		for k := range r.keys {
 			keys[k] = true

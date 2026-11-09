@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestPurgeDropsStaleOnlyAndForgetsTheRoot(t *testing.T) {
+func TestPurgeDropsStaleOnlyAndForgetsRoot(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.AddPost("alfa")
 	m.AddPost("charlie")
@@ -53,7 +53,7 @@ func TestPurgeIsQuietWhenNothingIsStale(t *testing.T) {
 	assert.Count(t, 0, sink.All())
 }
 
-func TestPurgeKeepsWatchingARootALiveSubscriberHolds(t *testing.T) {
+func TestPurgeKeepsWatchingRootLiveSubscriberHolds(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.AddPost("alfa")
 	sink, k := worker_tester.NewSink(t)

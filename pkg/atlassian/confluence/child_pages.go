@@ -10,7 +10,7 @@ func (c *Client) ChildPages(
 	space string,
 	name string,
 ) ([]*page.Page, error) {
-	parent, e := c.PageBySpaceAndName(space, name)
+	parent, e := c.SpacePage(space, name)
 
 	if e != nil {
 		return nil, e

@@ -18,7 +18,7 @@ func New(
 ) *Daemon {
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(d)
-	v := service.New(store.New(d), r)
+	v := service.New(store.New(d), o.Clock, r)
 
 	return &Daemon{database: d, service: v, web: web.New(v)}
 }

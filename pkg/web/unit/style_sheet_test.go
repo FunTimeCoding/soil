@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestARuleCarriesItsSelectorsDeclarationsAndOffset(t *testing.T) {
+func TestRuleCarriesItsSelectorsDeclarationsAndOffset(t *testing.T) {
 	rules := style_sheet.Parse(
 		"\n.alfa, :where(.bravo, .charlie) > p { color:  red;\n margin: 0 }",
 	)

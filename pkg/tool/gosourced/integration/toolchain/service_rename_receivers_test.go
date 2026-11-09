@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRenameReceiversRenamesEveryMethodOfTheType(t *testing.T) {
+func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
 	d := renameReceiversFixture(t)
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
@@ -56,7 +56,7 @@ func TestRenameReceiversRenamesEveryMethodOfTheType(t *testing.T) {
 	)
 }
 
-func TestRenameReceiversRefusesALocalOfTheName(t *testing.T) {
+func TestRenameReceiversRefusesLocalOfName(t *testing.T) {
 	d := renameReceiversFixture(t)
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
@@ -75,7 +75,7 @@ func TestRenameReceiversRefusesALocalOfTheName(t *testing.T) {
 	assert.StringContains(t, "func (y *Clean) Value() int {", local)
 }
 
-func TestRenameReceiversRefusesAParameterOfTheName(t *testing.T) {
+func TestRenameReceiversRefusesParameterOfName(t *testing.T) {
 	d := renameReceiversFixture(t)
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
@@ -89,7 +89,7 @@ func TestRenameReceiversRefusesAParameterOfTheName(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "Busy.Scale: s is taken in the method")
 }
 
-func TestRenameReceiversRefusesAnOuterNameTheReceiverWouldShadow(t *testing.T) {
+func TestRenameReceiversRefusesOuterNameReceiverWouldShadow(t *testing.T) {
 	d := renameReceiversFixture(t)
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
@@ -119,7 +119,7 @@ func TestRenameReceiversLeavesReceiversAlreadyNamed(t *testing.T) {
 	assert.Count(t, 0, r.Entries)
 }
 
-func TestRenameReceiversRefusesABuiltInName(t *testing.T) {
+func TestRenameReceiversRefusesBuiltInName(t *testing.T) {
 	d := renameReceiversFixture(t)
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
@@ -133,7 +133,7 @@ func TestRenameReceiversRefusesABuiltInName(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "len is a built-in name")
 }
 
-func TestRenameReceiversRefusesATypeWithoutMethods(t *testing.T) {
+func TestRenameReceiversRefusesTypeWithoutMethods(t *testing.T) {
 	d := renameReceiversFixture(t)
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),

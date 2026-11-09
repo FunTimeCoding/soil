@@ -8,7 +8,7 @@ func (s *Service) ConfigurationContextByName(
 	return guarded(
 		s.guard,
 		func() (*configuration_context.Context, error) {
-			return s.client.ConfigurationContextByName(n)
+			return s.client.ConfigurationContext(n)
 		},
 	)
 }

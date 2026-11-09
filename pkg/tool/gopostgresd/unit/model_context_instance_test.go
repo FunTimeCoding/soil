@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestModelContextSchemasNeedASelectedInstance(t *testing.T) {
+func TestModelContextSchemasNeedSelectedInstance(t *testing.T) {
 	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	v := model_context_server.New(
 		t,

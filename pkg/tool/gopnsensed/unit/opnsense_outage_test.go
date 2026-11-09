@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestAnOpnsenseOutageIsAnsweredUnavailableWithoutACaptureOverRest(
+func TestOpnsenseOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	c := mock_client.New()
@@ -31,7 +31,7 @@ func TestAnOpnsenseOutageIsAnsweredUnavailableWithoutACaptureOverRest(
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAnOpnsenseOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestOpnsenseOutageFailsToolWithoutCapture(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = refusedDial()
 	m := memory.New()
@@ -52,7 +52,7 @@ func TestAnOpnsenseOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestTheDaemonHandsOutTheOpnsenseGuard(t *testing.T) {
+func TestDaemonHandsOutOpnsenseGuard(t *testing.T) {
 	_, okay := daemon_tester.New(t, mock_client.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

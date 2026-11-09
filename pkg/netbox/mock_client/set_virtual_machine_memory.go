@@ -14,7 +14,7 @@ func (c *Client) SetVirtualMachineMemory(
 		return nil, e
 	}
 
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

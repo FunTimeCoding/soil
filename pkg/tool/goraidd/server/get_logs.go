@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 )
 
@@ -12,19 +13,22 @@ func (s *Server) GetLogs(
 	x context.Context,
 	r server.GetLogsRequestObject,
 ) (server.GetLogsResponseObject, error) {
-	all := s.service.Fights()
+	w := window.Whole()
+
+	if r.Params.Start != nil {
+		w.WithStart(*r.Params.Start)
+	}
+
+	if r.Params.End != nil {
+		w.WithEnd(*r.Params.End)
+	}
+
 	var fights []fight.Fight
 
-	for _, f := range all {
-		if r.Params.Start != nil && f.Timestamp.Before(*r.Params.Start) {
-			continue
+	for _, f := range s.service.Fights() {
+		if w.Contains(f.Timestamp) {
+			fights = append(fights, f)
 		}
-
-		if r.Params.End != nil && f.Timestamp.After(*r.Params.End) {
-			continue
-		}
-
-		fights = append(fights, f)
 	}
 
 	total := len(fights)

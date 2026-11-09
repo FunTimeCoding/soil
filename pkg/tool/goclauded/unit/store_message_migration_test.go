@@ -12,13 +12,13 @@ import (
 	"time"
 )
 
-func TestMigrateDropsMessageReadAndKeepsTheRow(t *testing.T) {
+func TestMigrateDropsMessageReadAndKeepsRow(t *testing.T) {
 	path := seedLegacyMessage(t)
 	d := lite.New(logger.New(context.Background()), path)
 	s := store.New(d, func() time.Time { return time.Now().UTC() })
 	defer relational.CloseMapper(d)
 	assert.Integer(t, 0, columnCount(t, d, constant.MessageTable, "read"))
-	found, e := s.MessagesByIdentifiers([]uint{1})
+	found, e := s.IdentifiedMessages([]uint{1})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, found)
 	assert.String(t, "Ash", found[0].FromName)
@@ -48,7 +48,7 @@ func TestMigrateMessageIsIdempotent(t *testing.T) {
 	s := store.New(d, clock)
 	defer relational.CloseMapper(d)
 	assert.Integer(t, 0, columnCount(t, d, constant.MessageTable, "read"))
-	found, e := s.MessagesByIdentifiers([]uint{1})
+	found, e := s.IdentifiedMessages([]uint{1})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, found)
 }

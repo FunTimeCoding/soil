@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAFailingFirstPollAnswersItsFault(t *testing.T) {
+func TestFailingFirstPollAnswersItsFault(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	s := monitorService(t, m)
 	m.Failure = fault()
@@ -18,7 +18,7 @@ func TestAFailingFirstPollAnswersItsFault(t *testing.T) {
 	assert.True(t, classify.Reportable(failures[0]))
 }
 
-func TestAMattermostOutageAtPollIsLeftToTheGuard(t *testing.T) {
+func TestMattermostOutageAtPollIsLeftToGuard(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	s := monitorService(t, m)
 	m.Failure = unavailable.Format("mattermost maintenance")
@@ -27,7 +27,7 @@ func TestAMattermostOutageAtPollIsLeftToTheGuard(t *testing.T) {
 	assert.False(t, classify.Reportable(failures[0]))
 }
 
-func TestThePollInitializesOnceMattermostAnswers(t *testing.T) {
+func TestPollInitializesOnceMattermostAnswers(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	c := counting_mattermost.New(m)
 	defer c.Close()

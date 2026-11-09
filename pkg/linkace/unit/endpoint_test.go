@@ -75,7 +75,7 @@ func TestRefusalCarriesLinkAceMessage(t *testing.T) {
 	assert.StringContains(t, "The url field is required.", e.Error())
 }
 
-func TestARefusedTokenIsAFault(t *testing.T) {
+func TestRefusedTokenIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -86,7 +86,7 @@ func TestARefusedTokenIsAFault(t *testing.T) {
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestARefusedActionIsAFault(t *testing.T) {
+func TestRefusedActionIsFault(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusForbidden,
@@ -97,7 +97,7 @@ func TestARefusedActionIsAFault(t *testing.T) {
 	assert.True(t, unexpected.Is(e))
 }
 
-func TestAConflictIsConflict(t *testing.T) {
+func TestConflictIsConflict(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusConflict,
@@ -108,7 +108,7 @@ func TestAConflictIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestAMaintenanceAnswerIsUnavailable(t *testing.T) {
+func TestMaintenanceAnswerIsUnavailable(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusServiceUnavailable,

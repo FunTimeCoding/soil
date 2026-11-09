@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestGoquerydEmbedsTheWholeManual(t *testing.T) {
+func TestGoquerydEmbedsWholeManual(t *testing.T) {
 	v := newService(t)
 	assert.String(
 		t,
@@ -25,7 +25,7 @@ func TestGoquerydEmbedsTheWholeManual(t *testing.T) {
 	assert.Integer(t, 3, v.MustStatus().TotalEmbeddings)
 }
 
-func TestGoquerydRefusesTheDenseChunkItself(t *testing.T) {
+func TestGoquerydRefusesDenseChunkItself(t *testing.T) {
 	v := newService(t)
 	v.MustPushDocument(
 		t.Context(),

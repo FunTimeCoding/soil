@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestRevisionFilesAcceptARelativePath(t *testing.T) {
+func TestRevisionFilesAcceptRelativePath(t *testing.T) {
 	r := repository_tester.New(t)
 	r.Write("alfa.go", "package alfa\n")
 	r.Commit("alfa")

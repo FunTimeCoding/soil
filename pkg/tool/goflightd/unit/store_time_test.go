@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/unit/service_tester"
 	"testing"
@@ -9,7 +10,7 @@ import (
 	_ "time/tzdata"
 )
 
-func TestStoreRangeSpansTheFallBack(t *testing.T) {
+func TestStoreRangeSpansFallBack(t *testing.T) {
 	berlin, e := time.LoadLocation("Europe/Berlin")
 	assert.FatalOnError(t, e)
 	at := time.Date(2026, 10, 25, 0, 30, 0, 0, time.UTC).In(berlin)
@@ -18,7 +19,10 @@ func TestStoreRangeSpansTheFallBack(t *testing.T) {
 		t,
 		s.Store.CreateEvent(event.Event{Time: at, Process: "ensembled"}),
 	)
-	events, f := s.Service.Events(at.Add(-time.Hour), at.Add(time.Hour), 100)
+	events, f := s.Service.Events(
+		window.New(at.Add(-time.Hour), at.Add(time.Hour)),
+		100,
+	)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 1, len(events))
 }

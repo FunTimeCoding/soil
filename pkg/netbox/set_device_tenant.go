@@ -9,13 +9,13 @@ func (c *Client) SetDeviceTenant(
 	name string,
 	tenantName string,
 ) (*device.Device, error) {
-	d, e := c.DeviceByName(name)
+	d, e := c.Device(name)
 
 	if e != nil {
 		return nil, e
 	}
 
-	n, f := c.TenantByName(tenantName)
+	n, f := c.Tenant(tenantName)
 
 	if f != nil {
 		return nil, f

@@ -23,10 +23,10 @@ func (s *Server) query(
 		return s.captureDetail(x, e)
 	}
 
-	v, e := s.service.Query(x, instance, a.SQL)
+	v, e := s.sql.Query(x, instance, a.SQL)
 
 	if e != nil {
-		return s.answerWith(
+		return s.answerMessage(
 			x,
 			e,
 			fmt.Sprintf("database error on %s: query not executed", instance),

@@ -16,7 +16,7 @@ func TestFindingsReportUnkeyedRows(t *testing.T) {
 			VALUES ('Jade', 'message', 'unkeyed', 0, '2026-09-02 10:00:00+00:00')`,
 		).Error,
 	)
-	result := s.FindingsByKind(constant.MigrationIncomplete)
+	result := s.KindFindings(constant.MigrationIncomplete)
 	assert.Count(t, 1, result)
 	assert.String(t, "queue", result[0].Subject)
 	assert.Integer(t, 1, result[0].Count)
@@ -33,5 +33,5 @@ func TestFindingsAreSilentWhenEveryRowCarriesItsSession(t *testing.T) {
 		constant.DeliveryQueued,
 	)
 	assert.FatalOnError(t, e)
-	assert.Count(t, 0, s.FindingsByKind(constant.MigrationIncomplete))
+	assert.Count(t, 0, s.KindFindings(constant.MigrationIncomplete))
 }

@@ -74,7 +74,7 @@ func TestDecisionsAreScopedToTheirSession(t *testing.T) {
 	assert.Count(t, 1, s.Store.Decisions(stringsConstant.LowerAlfa))
 }
 
-func TestAnswerMarksTheDecisionAnswered(t *testing.T) {
+func TestAnswerMarksDecisionAnswered(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -116,7 +116,7 @@ func TestAnswerRecordsKindAndValue(t *testing.T) {
 	assert.String(t, "you rule, stay cheap", answered.Answer)
 }
 
-func TestDismissKeepsTheGivenState(t *testing.T) {
+func TestDismissKeepsGivenState(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -147,7 +147,7 @@ func TestBumpAccumulates(t *testing.T) {
 	assert.Integer(t, 2, s.Store.Decisions(stringsConstant.LowerAlfa)[0].Bumped)
 }
 
-func TestClearRecordsTheUnderstanding(t *testing.T) {
+func TestClearRecordsUnderstanding(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
 		stringsConstant.LowerAlfa,

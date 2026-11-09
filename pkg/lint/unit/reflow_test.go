@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnOverrunningParagraphRewraps(t *testing.T) {
+func TestOverrunningParagraphRewraps(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine ten\n",
@@ -18,42 +18,42 @@ func TestAnOverrunningParagraphRewraps(t *testing.T) {
 	)
 }
 
-func TestAParagraphInsideTheWidthIsUntouched(t *testing.T) {
+func TestParagraphInsideWidthIsUntouched(t *testing.T) {
 	content := "one two\nthree four\n\nfive six\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestRewrappingTwiceChangesNothingTheSecondTime(t *testing.T) {
+func TestRewrappingTwiceChangesNothingSecondTime(t *testing.T) {
 	once := rewrapped(t, "one two three four five six seven eight nine ten\n")
 	assert.String(t, once, rewrapped(t, once))
 }
 
-func TestAFencedBlockKeepsItsLongLines(t *testing.T) {
+func TestFencedBlockKeepsItsLongLines(t *testing.T) {
 	content := "```\none two three four five six seven eight nine\n```\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestATildeFenceKeepsItsLongLines(t *testing.T) {
+func TestTildeFenceKeepsItsLongLines(t *testing.T) {
 	content := "~~~\none two three four five six seven eight nine\n~~~\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestATableIsLeftAlone(t *testing.T) {
+func TestTableIsLeftAlone(t *testing.T) {
 	content := "| one | two three four five six seven eight |\n|---|---|\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestAPipeLineIsLeftAloneWithoutADelimiterRow(t *testing.T) {
+func TestPipeLineIsLeftAloneWithoutDelimiterRow(t *testing.T) {
 	content := "| one | two three four five six seven eight |\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestABlockquoteIsLeftAlone(t *testing.T) {
+func TestBlockquoteIsLeftAlone(t *testing.T) {
 	content := "> one two three four five six seven eight nine ten\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestAListItemRewrapsToItsOwnIndent(t *testing.T) {
+func TestListItemRewrapsToItsOwnIndent(t *testing.T) {
 	assert.String(
 		t,
 		"- one two three four five six seven\n  eight nine ten\n",
@@ -61,7 +61,7 @@ func TestAListItemRewrapsToItsOwnIndent(t *testing.T) {
 	)
 }
 
-func TestAnOrderedListItemRewrapsToItsOwnIndent(t *testing.T) {
+func TestOrderedListItemRewrapsToItsOwnIndent(t *testing.T) {
 	assert.String(
 		t,
 		"1. one two three four five six seven\n   eight nine ten\n",
@@ -69,7 +69,7 @@ func TestAnOrderedListItemRewrapsToItsOwnIndent(t *testing.T) {
 	)
 }
 
-func TestANestedListItemRewrapsToItsDeeperIndent(t *testing.T) {
+func TestNestedListItemRewrapsToItsDeeperIndent(t *testing.T) {
 	assert.String(
 		t,
 		"- outer\n  - inner one two three four five six\n    seven eight\n",
@@ -91,7 +91,7 @@ func TestNeighbouringItemsStayApartWhenOneRewraps(t *testing.T) {
 	)
 }
 
-func TestASecondParagraphInsideAListItemKeepsItsIndent(t *testing.T) {
+func TestSecondParagraphInsideListItemKeepsItsIndent(t *testing.T) {
 	assert.String(
 		t,
 		"- one two\n\n  second paragraph one two three four\n  five six\n",
@@ -107,17 +107,17 @@ func TestFrontMatterIsLeftAlone(t *testing.T) {
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestAnIndentedBlockIsLeftAlone(t *testing.T) {
+func TestIndentedBlockIsLeftAlone(t *testing.T) {
 	content := "    one two three four five six seven eight nine\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestAHeadingIsLeftAlone(t *testing.T) {
+func TestHeadingIsLeftAlone(t *testing.T) {
 	content := "# one two three four five six seven eight nine ten\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestAWordLongerThanTheWidthIsNotBroken(t *testing.T) {
+func TestWordLongerThanWidthIsNotBroken(t *testing.T) {
 	assert.String(
 		t,
 		"short\ndoc/ai/design/example/a-path-longer-than-the-width.md\nafter\n",
@@ -128,7 +128,7 @@ func TestAWordLongerThanTheWidthIsNotBroken(t *testing.T) {
 	)
 }
 
-func TestAParagraphJoinsBeforeItWraps(t *testing.T) {
+func TestParagraphJoinsBeforeItWraps(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine ten eleven\n",
@@ -150,7 +150,7 @@ func TestBlankLinesSeparateParagraphs(t *testing.T) {
 	)
 }
 
-func TestAFileWithoutATrailingNewlineKeepsItThatWay(t *testing.T) {
+func TestFileWithoutTrailingNewlineKeepsItThatWay(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine",
@@ -158,11 +158,11 @@ func TestAFileWithoutATrailingNewlineKeepsItThatWay(t *testing.T) {
 	)
 }
 
-func TestAnEmptyFileIsUntouched(t *testing.T) {
+func TestEmptyFileIsUntouched(t *testing.T) {
 	assert.String(t, "", rewrapped(t, ""))
 }
 
-func TestAParagraphOpeningInBoldRewraps(t *testing.T) {
+func TestParagraphOpeningInBoldRewraps(t *testing.T) {
 	assert.String(
 		t,
 		"**one** two three four five six seven\neight nine\n",
@@ -170,7 +170,7 @@ func TestAParagraphOpeningInBoldRewraps(t *testing.T) {
 	)
 }
 
-func TestAnAsteriskBulletRewrapsToItsOwnIndent(t *testing.T) {
+func TestAsteriskBulletRewrapsToItsOwnIndent(t *testing.T) {
 	assert.String(
 		t,
 		"* one two three four five six seven\n  eight nine ten\n",
@@ -178,12 +178,12 @@ func TestAnAsteriskBulletRewrapsToItsOwnIndent(t *testing.T) {
 	)
 }
 
-func TestAThematicBreakIsNotABullet(t *testing.T) {
+func TestThematicBreakIsNotBullet(t *testing.T) {
 	content := "---\n\none two three four five six seven\n"
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestAnOpeningDelimiterWithNoCloseIsNotFrontMatter(t *testing.T) {
+func TestOpeningDelimiterWithNoCloseIsNotFrontMatter(t *testing.T) {
 	assert.String(
 		t,
 		"---\none two three four five six seven eight\nnine\n",
@@ -191,7 +191,7 @@ func TestAnOpeningDelimiterWithNoCloseIsNotFrontMatter(t *testing.T) {
 	)
 }
 
-func TestWhitespaceInsideACodeSpanSurvives(t *testing.T) {
+func TestWhitespaceInsideCodeSpanSurvives(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four `a  b` five six seven\neight\n",
@@ -199,7 +199,7 @@ func TestWhitespaceInsideACodeSpanSurvives(t *testing.T) {
 	)
 }
 
-func TestACodeSpanIsNeverSplitAcrossLines(t *testing.T) {
+func TestCodeSpanIsNeverSplitAcrossLines(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n`go run main.go` seven\n",
@@ -207,7 +207,7 @@ func TestACodeSpanIsNeverSplitAcrossLines(t *testing.T) {
 	)
 }
 
-func TestALinkIsNeverSplitAcrossLines(t *testing.T) {
+func TestLinkIsNeverSplitAcrossLines(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n[seven eight](https://e.x/a) nine\n",
@@ -218,7 +218,7 @@ func TestALinkIsNeverSplitAcrossLines(t *testing.T) {
 	)
 }
 
-func TestALinkLongerThanTheWidthStandsAlone(t *testing.T) {
+func TestLinkLongerThanWidthStandsAlone(t *testing.T) {
 	assert.String(
 		t,
 		"short\n[a link text](https://example.net/a/path/longer/than/forty)\nafter\n",
@@ -229,7 +229,7 @@ func TestALinkLongerThanTheWidthStandsAlone(t *testing.T) {
 	)
 }
 
-func TestALinkAlreadySplitIsRejoined(t *testing.T) {
+func TestLinkAlreadySplitIsRejoined(t *testing.T) {
 	assert.String(
 		t,
 		"one [seven eight](https://e.x/a) two\nthree four five six seven eight nine ten\n",
@@ -240,7 +240,7 @@ func TestALinkAlreadySplitIsRejoined(t *testing.T) {
 	)
 }
 
-func TestALinkWithATitleIsOneUnit(t *testing.T) {
+func TestLinkWithTitleIsOneUnit(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n[seven](https://e.x/a \"t u\") nine\n",
@@ -251,7 +251,7 @@ func TestALinkWithATitleIsOneUnit(t *testing.T) {
 	)
 }
 
-func TestAnImageIsNeverSplitAcrossLines(t *testing.T) {
+func TestImageIsNeverSplitAcrossLines(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n![seven eight](https://e.x/a) nine\n",
@@ -262,7 +262,7 @@ func TestAnImageIsNeverSplitAcrossLines(t *testing.T) {
 	)
 }
 
-func TestACodeSpanAlreadySplitIsRejoined(t *testing.T) {
+func TestCodeSpanAlreadySplitIsRejoined(t *testing.T) {
 	assert.String(
 		t,
 		"one `go run main.go` two three four five\nsix seven eight nine\n",
@@ -278,7 +278,7 @@ func TestWidthCountsCharactersNotBytes(t *testing.T) {
 	assert.String(t, content, rewrapped(t, content))
 }
 
-func TestADashTravelsWithTheWordBeforeIt(t *testing.T) {
+func TestDashTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight - nine\n",
@@ -286,7 +286,7 @@ func TestADashTravelsWithTheWordBeforeIt(t *testing.T) {
 	)
 }
 
-func TestAnOrderedMarkerTravelsWithTheWordBeforeIt(t *testing.T) {
+func TestOrderedMarkerTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight 1. nine\n",
@@ -294,7 +294,7 @@ func TestAnOrderedMarkerTravelsWithTheWordBeforeIt(t *testing.T) {
 	)
 }
 
-func TestAHashTravelsWithTheWordBeforeIt(t *testing.T) {
+func TestHashTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight ## nine\n",
@@ -302,7 +302,7 @@ func TestAHashTravelsWithTheWordBeforeIt(t *testing.T) {
 	)
 }
 
-func TestAQuoteMarkTravelsWithTheWordBeforeIt(t *testing.T) {
+func TestQuoteMarkTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight >nine\n",
@@ -310,7 +310,7 @@ func TestAQuoteMarkTravelsWithTheWordBeforeIt(t *testing.T) {
 	)
 }
 
-func TestADecimalAtALineStartStaysProse(t *testing.T) {
+func TestDecimalAtLineStartStaysProse(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\n2.5 nine\n",
@@ -318,7 +318,7 @@ func TestADecimalAtALineStartStaysProse(t *testing.T) {
 	)
 }
 
-func TestAWrapThatWouldDropAHardLineBreakIsRefused(t *testing.T) {
+func TestWrapThatWouldDropHardLineBreakIsRefused(t *testing.T) {
 	_, e := reflow.Reflow(
 		"one two three four five six seven eight  \nnine\n",
 		constant.FixtureReflowWidth,
@@ -326,7 +326,7 @@ func TestAWrapThatWouldDropAHardLineBreakIsRefused(t *testing.T) {
 	assert.Error(t, e)
 }
 
-func TestEveryWordSurvivesAReflow(t *testing.T) {
+func TestEveryWordSurvivesReflow(t *testing.T) {
 	content := join.NewLine(
 		[]string{
 			markupConstant.FrontMatterDelimiter,

@@ -10,7 +10,7 @@ func (s *Service) CreateTunnel(
 	return guarded(
 		s.guard,
 		func() (*tunnel.Tunnel, error) {
-			g, e := s.client.TunnelGroupByName(group)
+			g, e := s.client.TunnelGroup(group)
 
 			if e != nil {
 				return nil, e

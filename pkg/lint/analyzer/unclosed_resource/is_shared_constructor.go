@@ -16,7 +16,7 @@ func isSharedConstructor(
 		return false
 	}
 
-	f := calleeOf(p, c)
+	f := callee(p, c)
 
 	return f != nil && f.Pkg() != nil &&
 		f.Pkg().Path() == constant.SyncPackage &&

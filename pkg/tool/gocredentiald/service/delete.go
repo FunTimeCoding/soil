@@ -13,7 +13,7 @@ func (s *Service) Delete(identifier string) error {
 		return e
 	}
 
-	entry, group := s.client.EntryByIdentifier(identifier)
+	entry, group := s.client.Entry(identifier)
 
 	if entry == nil {
 		return not_found.New("entry", identifier)

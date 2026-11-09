@@ -17,7 +17,7 @@ func Latest() {
 	c := m.MustTeamChannel(channel)
 	console.Format("Channel: %s\n", c.Name)
 	limit := 10
-	posts := m.MustLatestPosts(c, limit)
+	posts := m.MustRecentPosts(c, limit)
 	console.Format("Latest %d posts (%d found)\n", limit, len(posts))
 
 	for _, p := range posts {

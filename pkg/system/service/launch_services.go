@@ -27,7 +27,7 @@ func (c *Client) launchServices() ([]*service.Service, error) {
 			continue
 		}
 
-		for _, name := range system.FilesByExtension(
+		for _, name := range system.ExtensionFiles(
 			directory,
 			constant.PropertyListExtension,
 		) {

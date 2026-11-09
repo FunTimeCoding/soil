@@ -48,7 +48,7 @@ type ConfluenceClient interface {
 		message string,
 	) (*page.Page, error)
 	DraftPages() ([]*page.Page, error)
-	PagesBySpace(
+	SpacePages(
 		identifier string,
 		status string,
 	) ([]*page.Page, error)

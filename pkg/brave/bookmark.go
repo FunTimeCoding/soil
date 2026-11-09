@@ -8,7 +8,7 @@ import (
 )
 
 func Bookmark(profile string) (*bookmark.File, error) {
-	p, e := ProfileByName(profile)
+	p, e := Profile(profile)
 
 	if e != nil {
 		return nil, e

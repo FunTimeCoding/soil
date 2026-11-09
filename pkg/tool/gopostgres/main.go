@@ -23,7 +23,7 @@ func Main() {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			v = client.New(
+			v = client.NewLong(
 				locator.Environment(
 					constant.HostEnvironment,
 					constant.PortEnvironment,
@@ -47,6 +47,10 @@ func Main() {
 	o.AddCommand(describeTable(&v, t))
 	o.AddCommand(listIndexes(&v, t))
 	o.AddCommand(tableSizes(&v, t))
+	o.AddCommand(createBackup(&v, t))
+	o.AddCommand(listBackups(&v, t))
+	o.AddCommand(restoreBackup(&v, t))
+	o.AddCommand(deleteBackup(&v, t))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	argument.CobraExecute(o)

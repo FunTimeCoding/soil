@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestTheMockFailsOneMethodByItsValue(t *testing.T) {
+func TestMockFailsOneMethodByItsValue(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.SeedAlert("DiskFull", nil, time.Now())

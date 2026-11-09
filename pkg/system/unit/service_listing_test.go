@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAFailedListingIsAnErrorNotAnEmptyHost(t *testing.T) {
+func TestFailedListingIsErrorNotEmptyHost(t *testing.T) {
 	t.Setenv(constant.PathEnvironment, t.TempDir())
 	v, e := service.New().Services()
 	assert.Error(t, e)

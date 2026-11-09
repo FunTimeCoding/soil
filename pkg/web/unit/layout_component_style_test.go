@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheComponentStyleComesBeforeTheDaemonsOwn(t *testing.T) {
+func TestComponentStyleComesBeforeDaemonsOwn(t *testing.T) {
 	page := web_tester.RenderBrand(
 		layout.New(identity.New("test", "test tool", "test"), "", nil).
 			WithStyle(".alfa { color: red; }"),

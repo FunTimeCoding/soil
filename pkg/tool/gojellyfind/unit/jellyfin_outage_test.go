@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestAJellyfinOutageIsAnsweredUnavailableWithoutACaptureOverRest(
+func TestJellyfinOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	c := mock_client.New()
@@ -30,7 +30,7 @@ func TestAJellyfinOutageIsAnsweredUnavailableWithoutACaptureOverRest(
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAJellyfinOutageFailsTheToolWithoutACapture(t *testing.T) {
+func TestJellyfinOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	s.MockClient.Failure = refusedDial()
@@ -44,7 +44,7 @@ func TestAJellyfinOutageFailsTheToolWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestTheDaemonHandsOutTheJellyfinGuard(t *testing.T) {
+func TestDaemonHandsOutJellyfinGuard(t *testing.T) {
 	_, okay := daemon_tester.New(t, mock_client.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAGitHubOutageStaysQuietAndAFaultIsCapturedOnce(t *testing.T) {
+func TestGitHubOutageStaysQuietAndFaultIsCapturedOnce(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = errors.New("github answered nonsense")
 	r := memory.New()
@@ -30,7 +30,7 @@ func TestAGitHubOutageStaysQuietAndAFaultIsCapturedOnce(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAMissingOwnerIsCaptured(t *testing.T) {
+func TestMissingOwnerIsCaptured(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = not_found.Format("Not Found")
 	r := memory.New()
@@ -40,7 +40,7 @@ func TestAMissingOwnerIsCaptured(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestTheDaemonHandsOutTheGitHubGuardFirst(t *testing.T) {
+func TestDaemonHandsOutGitHubGuardFirst(t *testing.T) {
 	_, okay := daemon_tester.New(
 		t,
 		mock_client.New(),

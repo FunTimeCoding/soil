@@ -10,7 +10,7 @@ func (m *Model) applyClaims() {
 	rows := m.table.Rows()
 
 	for _, r := range rows {
-		if i := m.itemByLabel(r[0]); i != nil {
+		if i := m.labelItem(r[0]); i != nil {
 			r[len(r)-1] = join.Comma(m.claims[i.Identifier])
 		}
 	}

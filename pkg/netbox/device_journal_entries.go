@@ -10,7 +10,7 @@ func (c *Client) DeviceJournalEntries(
 	limit int32,
 	offset int32,
 ) ([]*journal_entry.Entry, error) {
-	d, e := c.DeviceByName(device)
+	d, e := c.Device(device)
 
 	if e != nil {
 		return nil, e

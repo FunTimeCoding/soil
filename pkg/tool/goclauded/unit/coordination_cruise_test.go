@@ -26,7 +26,7 @@ func TestCruiseRoundTripsThroughRest(t *testing.T) {
 	assert.Integer(t, 0, g.JSON200.Woken)
 }
 
-func TestRestRefusesPacedCruiseWithoutAPace(t *testing.T) {
+func TestRestRefusesPacedCruiseWithoutPace(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -39,7 +39,7 @@ func TestRestRefusesPacedCruiseWithoutAPace(t *testing.T) {
 	assert.Integer(t, 400, r.StatusCode())
 }
 
-func TestCruisePulseOverRestReportsTheHold(t *testing.T) {
+func TestCruisePulseOverRestReportsHold(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -52,11 +52,11 @@ func TestCruisePulseOverRestReportsTheHold(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	assert.False(t, r.JSON200.Immediate)
-	pulses := clientEntriesByKind(a.CheckLive().Entries, constant.QueuePulse)
+	pulses := clientKindEntries(a.CheckLive().Entries, constant.QueuePulse)
 	assert.Count(t, 1, pulses)
 }
 
-func TestCruiseToolSetsAndReadsTheOwnSession(t *testing.T) {
+func TestCruiseToolSetsAndReadsOwnSession(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")

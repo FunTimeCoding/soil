@@ -23,7 +23,7 @@ func ExpectedRanges(
 
 			if len(call.Args) > index+1 {
 				a := call.Args[index]
-				result = append(result, Range{From: a.Pos(), To: a.End()})
+				result = append(result, Range{Start: a.Pos(), End: a.End()})
 			}
 
 			return true

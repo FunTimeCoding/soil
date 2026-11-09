@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMoveIntoOwnConstantDropsTheOrphan(t *testing.T) {
+func TestMoveIntoOwnConstantDropsOrphan(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("move-orphan/src"),

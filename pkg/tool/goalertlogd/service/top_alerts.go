@@ -1,14 +1,13 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
-	"time"
 )
 
 func (s *Service) TopAlerts(
 	n int,
-	start time.Time,
-	end time.Time,
+	w *window.Window,
 ) ([]top.Record, error) {
-	return s.store.Top(n, start, end)
+	return s.store.Top(n, s.topWindow(w))
 }

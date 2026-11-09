@@ -66,7 +66,7 @@ func TestLeaseKeepsUnclaimedHosts(t *testing.T) {
 	assert.False(t, v[0].Reserved)
 }
 
-func TestLeaseCarriesTheReservationFlag(t *testing.T) {
+func TestLeaseCarriesReservationFlag(t *testing.T) {
 	f := collector_tester.NewLease(t)
 	collector_tester.AddLease(
 		f,

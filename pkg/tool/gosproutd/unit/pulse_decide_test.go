@@ -32,14 +32,14 @@ func TestClosedSessionDrops(t *testing.T) {
 	assert.String(t, "drop", string(pulse.Decide(r, now)))
 }
 
-func TestFreshAnswerHoldsForTheQuietWindow(t *testing.T) {
+func TestFreshAnswerHoldsForQuietWindow(t *testing.T) {
 	now := time.Now()
 	r := pulse_tester.Settled(now)
 	r.NewestAt = now.Add(-time.Minute)
 	assert.String(t, "hold", string(pulse.Decide(r, now)))
 }
 
-func TestNewAnswersCannotHoldPastTheCeiling(t *testing.T) {
+func TestNewAnswersCannotHoldPastCeiling(t *testing.T) {
 	now := time.Now()
 	r := pulse_tester.Settled(now)
 	r.NewestAt = now.Add(-time.Second)

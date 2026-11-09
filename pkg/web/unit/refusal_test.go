@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestARefusalCarriesTheReasonFromTheBody(t *testing.T) {
+func TestRefusalCarriesReasonFromBody(t *testing.T) {
 	e := refusal.New(
 		"push document",
 		answered(t, http.StatusInternalServerError),
@@ -24,7 +24,7 @@ func TestARefusalCarriesTheReasonFromTheBody(t *testing.T) {
 	assert.String(t, "push document status: 500: disk full", e.Error())
 }
 
-func TestACapturedRefusalIsReportedNotCapturedAgain(t *testing.T) {
+func TestCapturedRefusalIsReportedNotCapturedAgain(t *testing.T) {
 	e := refusal.New(
 		"push document",
 		answered(t, http.StatusInternalServerError),
@@ -35,7 +35,7 @@ func TestACapturedRefusalIsReportedNotCapturedAgain(t *testing.T) {
 	assert.String(t, "push document: disk full (reported as alfa)", e.Error())
 }
 
-func TestANotFoundRefusalIsNotFound(t *testing.T) {
+func TestNotFoundRefusalIsNotFound(t *testing.T) {
 	e := refusal.New(
 		"fetch item",
 		answered(t, http.StatusNotFound),
@@ -45,7 +45,7 @@ func TestANotFoundRefusalIsNotFound(t *testing.T) {
 	assert.String(t, "fetch item: no such item", e.Error())
 }
 
-func TestAConflictRefusalIsAConflict(t *testing.T) {
+func TestConflictRefusalIsConflict(t *testing.T) {
 	e := refusal.New(
 		"unmute owner",
 		answered(t, http.StatusConflict),
@@ -55,7 +55,7 @@ func TestAConflictRefusalIsAConflict(t *testing.T) {
 	assert.String(t, "unmute owner: owner not muted: alfa", e.Error())
 }
 
-func TestAnUnavailableRefusalIsUnavailable(t *testing.T) {
+func TestUnavailableRefusalIsUnavailable(t *testing.T) {
 	e := refusal.New(
 		"hybrid lookup",
 		answered(t, http.StatusServiceUnavailable),
@@ -69,7 +69,7 @@ func TestAnUnavailableRefusalIsUnavailable(t *testing.T) {
 	)
 }
 
-func TestAProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
+func TestProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
 	e := refusal.New(
 		"list items",
 		answered(t, http.StatusBadGateway),
@@ -79,7 +79,7 @@ func TestAProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
 	assert.String(t, "list items: no healthy upstream", e.Error())
 }
 
-func TestASuccessIsNoRefusal(t *testing.T) {
+func TestSuccessIsNoRefusal(t *testing.T) {
 	refusal.PanicOnFailure("notify", answered(t, http.StatusNoContent), nil)
 	assert.PanicContains(
 		t,

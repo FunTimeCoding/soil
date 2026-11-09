@@ -53,7 +53,7 @@ func TestModuleBuildsEverySelectedArchitecture(t *testing.T) {
 	assert.StringContains(t, "Version: v0.11.190", r.Start(native, "--version"))
 }
 
-func TestModuleRefusesAnUnknownVersion(t *testing.T) {
+func TestModuleRefusesUnknownVersion(t *testing.T) {
 	t.Chdir(t.TempDir())
 	o := option.New()
 	o.Name = "gosed"
@@ -63,7 +63,7 @@ func TestModuleRefusesAnUnknownVersion(t *testing.T) {
 	assert.NotNil(t, build.Module(o))
 }
 
-func TestModuleRefusesAMissingCommand(t *testing.T) {
+func TestModuleRefusesMissingCommand(t *testing.T) {
 	t.Chdir(t.TempDir())
 	o := option.New()
 	o.Name = "gonotatool"

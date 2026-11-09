@@ -15,7 +15,7 @@ func TestConflictClassifiesByType(t *testing.T) {
 	assert.False(t, conflict.Is(nil))
 }
 
-func TestConflictExistsRendersTheCondition(t *testing.T) {
+func TestConflictExistsRendersCondition(t *testing.T) {
 	e := conflict.Exists("zone", "example.test")
 	assert.String(t, "zone already exists: example.test", e.Error())
 	assert.True(t, conflict.Is(e))

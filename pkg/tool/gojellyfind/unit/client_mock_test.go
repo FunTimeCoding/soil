@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersEveryCallAsTheDaemonDoes(t *testing.T) {
+func TestMockAnswersEveryCallAsDaemonDoes(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	seedServed(s.MockClient)
@@ -28,7 +28,7 @@ func TestTheMockAnswersEveryCallAsTheDaemonDoes(t *testing.T) {
 	assert.Strings(t, served, mediaAnswers(t.Context(), m))
 }
 
-func TestTheMockRecordsEveryWriteItAccepts(t *testing.T) {
+func TestMockRecordsEveryWriteItAccepts(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	seedMock(m)
@@ -38,7 +38,7 @@ func TestTheMockRecordsEveryWriteItAccepts(t *testing.T) {
 	assert.Integers(t, []int{40}, m.Volumes["session-1"])
 }
 
-func TestTheMockFailsOnlyTheMethodItIsToldTo(t *testing.T) {
+func TestMockFailsOnlyMethodItIsToldTo(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	seedMock(m)

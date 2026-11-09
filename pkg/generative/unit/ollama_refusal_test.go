@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnOllamaInputOverTheContextIsAValidationError(t *testing.T) {
+func TestOllamaInputOverContextIsValidationError(t *testing.T) {
 	e := ollamaEmbedding(
 		t,
 		http.StatusBadRequest,
@@ -24,7 +24,7 @@ func TestAnOllamaInputOverTheContextIsAValidationError(t *testing.T) {
 	)
 }
 
-func TestAnOllamaModelNotPulledIsNotFound(t *testing.T) {
+func TestOllamaModelNotPulledIsNotFound(t *testing.T) {
 	e := ollamaEmbedding(
 		t,
 		http.StatusNotFound,
@@ -33,7 +33,7 @@ func TestAnOllamaModelNotPulledIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAFullOllamaQueueIsUnavailable(t *testing.T) {
+func TestFullOllamaQueueIsUnavailable(t *testing.T) {
 	e := ollamaEmbedding(
 		t,
 		http.StatusServiceUnavailable,
@@ -42,7 +42,7 @@ func TestAFullOllamaQueueIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAnOllamaServerErrorIsUnexpected(t *testing.T) {
+func TestOllamaServerErrorIsUnexpected(t *testing.T) {
 	e := ollamaEmbedding(
 		t,
 		http.StatusInternalServerError,

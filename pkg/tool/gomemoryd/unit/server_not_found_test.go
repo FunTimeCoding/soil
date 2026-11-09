@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownMemoryIsAnsweredNotFound(t *testing.T) {
+func TestUnknownMemoryIsAnsweredNotFound(t *testing.T) {
 	s := base.New(t)
 	c, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),

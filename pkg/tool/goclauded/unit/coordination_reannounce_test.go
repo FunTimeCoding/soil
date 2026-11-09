@@ -14,7 +14,7 @@ func TestReannounceAfterRestart(t *testing.T) {
 	a.CheckLive()
 	s.Restart()
 	r := a.CheckLive()
-	reannounce := clientEntriesByKind(r.Entries, constant.QueueReannounce)
+	reannounce := clientKindEntries(r.Entries, constant.QueueReannounce)
 	assert.Count(t, 1, reannounce)
 }
 
@@ -24,7 +24,7 @@ func TestReannounceNotSetWithoutPriorBinding(t *testing.T) {
 	a.CheckLive()
 	s.Restart()
 	r := a.CheckLive()
-	reannounce := clientEntriesByKind(r.Entries, constant.QueueReannounce)
+	reannounce := clientKindEntries(r.Entries, constant.QueueReannounce)
 	assert.Count(t, 0, reannounce)
 }
 
@@ -36,7 +36,7 @@ func TestAnnounceClearsReannounce(t *testing.T) {
 	s.Restart()
 	a.Announce(a.Name(), "second topic")
 	r := a.CheckLive()
-	reannounce := clientEntriesByKind(r.Entries, constant.QueueReannounce)
+	reannounce := clientKindEntries(r.Entries, constant.QueueReannounce)
 	assert.Count(t, 0, reannounce)
 }
 
@@ -47,9 +47,9 @@ func TestReannounceConsumedByCheck(t *testing.T) {
 	a.CheckLive()
 	s.Restart()
 	first := a.CheckLive()
-	reannounce := clientEntriesByKind(first.Entries, constant.QueueReannounce)
+	reannounce := clientKindEntries(first.Entries, constant.QueueReannounce)
 	assert.Count(t, 1, reannounce)
 	second := a.CheckLive()
-	reannounce = clientEntriesByKind(second.Entries, constant.QueueReannounce)
+	reannounce = clientKindEntries(second.Entries, constant.QueueReannounce)
 	assert.Count(t, 0, reannounce)
 }

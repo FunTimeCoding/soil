@@ -33,13 +33,13 @@ func TestRenameSendsItsMovesToMemories(t *testing.T) {
 	assert.String(
 		t,
 		filepath.Join(d, "pkg/alfa/new_name.go"),
-		moves.Paths[0].To,
+		moves.Paths[0].New,
 	)
 	assert.Count(t, 1, moves.Symbols)
 	assert.String(t, "NewName", moves.Symbols[0].NewName)
 }
 
-func TestAMemoryFailureThePeerCapturedIsNotCapturedAgain(t *testing.T) {
+func TestMemoryFailurePeerCapturedIsNotCapturedAgain(t *testing.T) {
 	d := renameFollowFixture(t)
 	p := base.New(t)
 	s, r := service_tester.WithMemoryPeer(t, p.MemoryClient(t))

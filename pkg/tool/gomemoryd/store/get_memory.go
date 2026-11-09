@@ -43,8 +43,8 @@ func (s *Store) GetMemory(identifier int64) (*record.Memory, error) {
 	}
 
 	m.IsActive = active == 1
-	m.Tags = s.tagsForMemory(identifier)
-	m.Metadata = s.metadataForMemory(identifier)
+	m.Tags = s.memoryTags(identifier)
+	m.Metadata = s.memoryMetadata(identifier)
 
 	return m, nil
 }

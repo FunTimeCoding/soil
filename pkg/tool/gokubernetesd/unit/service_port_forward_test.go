@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAPortForwardRefusesAnIncompleteRequest(t *testing.T) {
+func TestPortForwardRefusesIncompleteRequest(t *testing.T) {
 	v := service_tester.New(t)
 
 	for _, q := range []request.PortForward{
@@ -30,14 +30,14 @@ func TestAPortForwardRefusesAnIncompleteRequest(t *testing.T) {
 	assert.Count(t, 0, v.Service.PortForwards())
 }
 
-func TestStoppingAnUnknownPortForwardIsNotFound(t *testing.T) {
+func TestStoppingUnknownPortForwardIsNotFound(t *testing.T) {
 	assert.True(
 		t,
 		not_found.Is(service_tester.New(t).Service.StopPortForward("bravo")),
 	)
 }
 
-func TestStoppingAPortForwardEndsItAndForgetsIt(t *testing.T) {
+func TestStoppingPortForwardEndsItAndForgetsIt(t *testing.T) {
 	r := registry.New()
 	t.Cleanup(r.Close)
 	f := port_forward.New(
@@ -54,7 +54,7 @@ func TestStoppingAPortForwardEndsItAndForgetsIt(t *testing.T) {
 	assert.Count(t, 0, r.All())
 }
 
-func TestClosingTheRegistryStopsEveryPortForward(t *testing.T) {
+func TestClosingRegistryStopsEveryPortForward(t *testing.T) {
 	r := registry.New()
 	f := port_forward.New("pod-delta-8080", "pod/delta", "default", 8080, 80)
 	g := port_forward.New("pod-echo-8081", "pod/echo", "default", 8081, 80)
@@ -66,7 +66,7 @@ func TestClosingTheRegistryStopsEveryPortForward(t *testing.T) {
 	assert.Count(t, 0, r.All())
 }
 
-func TestAPortForwardThatEndsOnItsOwnLeavesTheRegistry(t *testing.T) {
+func TestPortForwardThatEndsOnItsOwnLeavesRegistry(t *testing.T) {
 	r := registry.New()
 	f := port_forward.New("pod-hotel-8080", "pod/hotel", "default", 8080, 80)
 	r.Launch(f, func() {})
@@ -74,7 +74,7 @@ func TestAPortForwardThatEndsOnItsOwnLeavesTheRegistry(t *testing.T) {
 	assert.Count(t, 0, r.All())
 }
 
-func TestAPortForwardStopsSafelyTwice(t *testing.T) {
+func TestPortForwardStopsSafelyTwice(t *testing.T) {
 	f := port_forward.New(
 		"pod-foxtrot-8080",
 		"pod/foxtrot",
@@ -87,7 +87,7 @@ func TestAPortForwardStopsSafelyTwice(t *testing.T) {
 	assert.True(t, stopped(f))
 }
 
-func TestAPortForwardThatFailsBeforeReadyAnswersAtOnce(t *testing.T) {
+func TestPortForwardThatFailsBeforeReadyAnswersAtOnce(t *testing.T) {
 	failed := make(chan error, 1)
 	failed <- errors.New("unable to listen on any of the requested ports")
 	done := make(chan error)
@@ -101,7 +101,7 @@ func TestAPortForwardThatFailsBeforeReadyAnswersAtOnce(t *testing.T) {
 	}
 }
 
-func TestAReadyPortForwardAnswersWithoutError(t *testing.T) {
+func TestReadyPortForwardAnswersWithoutError(t *testing.T) {
 	ready := make(chan struct{})
 	close(ready)
 	assert.Nil(t, port_forward.AwaitReady(ready, make(chan error)))

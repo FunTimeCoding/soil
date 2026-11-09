@@ -21,7 +21,7 @@ func TestEditEventSummaryCascade(t *testing.T) {
 	assert.Count(t, 1, events)
 	_, e := s.Event.EditEvent(events[0].Identifier, "revised summary")
 	assert.FatalOnError(t, e)
-	body := s.Store.SummaryBySession("session-1")
+	body := s.Store.SessionSummary("session-1")
 	assert.String(t, "revised summary", body)
 }
 
@@ -37,7 +37,7 @@ func TestEditEventCompletionCascade(t *testing.T) {
 	assert.Count(t, 1, events)
 	_, f := s.Event.EditEvent(events[0].Identifier, "corrected message")
 	assert.FatalOnError(t, f)
-	completions := s.Store.CompletionsBySession("session-1")
+	completions := s.Store.SessionCompletions("session-1")
 	assert.Count(t, 1, completions)
 	assert.String(t, "corrected message", completions[0].Summary)
 }

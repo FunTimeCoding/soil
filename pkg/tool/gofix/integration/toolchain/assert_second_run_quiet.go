@@ -14,7 +14,7 @@ func assertSecondRunQuiet(
 	t.Helper()
 	before := readGoFiles(t, directory)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunFormatFixWithDirectory([]string{"./..."}, directory, false, r)
+	gofix.RunFormatFix([]string{"./..."}, directory, false, r)
 	assert.Count(t, 0, filterApplied(r.Entries))
 	assert.Any(t, before, readGoFiles(t, directory))
 }

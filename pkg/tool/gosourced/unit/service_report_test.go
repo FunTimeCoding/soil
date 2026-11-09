@@ -64,7 +64,7 @@ func TestReportIgnoresLayout(t *testing.T) {
 	)
 }
 
-func TestReportFollowsAPackageMovedWhole(t *testing.T) {
+func TestReportFollowsPackageMovedWhole(t *testing.T) {
 	r := report.New(
 		revision.New(
 			map[string][]byte{
@@ -100,7 +100,7 @@ func TestReportFollowsAPackageMovedWhole(t *testing.T) {
 	)
 }
 
-func TestReportFindsARenameByShape(t *testing.T) {
+func TestReportFindsRenameByShape(t *testing.T) {
 	r := report.New(
 		revision.New(
 			map[string][]byte{
@@ -122,7 +122,7 @@ func TestReportFindsARenameByShape(t *testing.T) {
 	assert.Strings(t, []string{"renamed . alfa Total"}, report_tester.Lines(r))
 }
 
-func TestReportMarksAMoveThatChanged(t *testing.T) {
+func TestReportMarksMoveThatChanged(t *testing.T) {
 	r := report.New(
 		revision.New(
 			map[string][]byte{
@@ -174,7 +174,7 @@ func TestReportListsAddedAndRemoved(t *testing.T) {
 	)
 }
 
-func TestReportPairsAnAmbiguousNameByItsPackage(t *testing.T) {
+func TestReportPairsAmbiguousNameByItsPackage(t *testing.T) {
 	r := report.New(
 		revision.New(
 			map[string][]byte{
@@ -223,7 +223,7 @@ func TestReportPairsAnAmbiguousNameByItsPackage(t *testing.T) {
 	)
 }
 
-func TestReportPairsAnAmbiguousTypeByItsMethods(t *testing.T) {
+func TestReportPairsAmbiguousTypeByItsMethods(t *testing.T) {
 	r := report.New(
 		revision.New(
 			map[string][]byte{

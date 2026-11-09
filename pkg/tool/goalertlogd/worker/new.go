@@ -11,7 +11,7 @@ import (
 )
 
 func New(
-	record func(time.Time) (*outcome.Outcome, error),
+	record func() (*outcome.Outcome, error),
 	interval time.Duration,
 	l *logger.Logger,
 	y *prometheus.Registry,

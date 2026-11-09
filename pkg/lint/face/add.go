@@ -16,7 +16,7 @@ func (s *Set) Add(interfaces []*fact.Interface) {
 		s.known[k] = true
 
 		for method := range i.Methods {
-			s.byMethod[method] = append(s.byMethod[method], i)
+			s.methodInterfaces[method] = append(s.methodInterfaces[method], i)
 		}
 	}
 }

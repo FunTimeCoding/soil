@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	c := mock_client.New()
 	o := option.New()
 	o.Source = func() face.OpenbaoClient { return c }

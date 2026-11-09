@@ -63,7 +63,7 @@ type AlertmanagerClient interface {
 		d time.Duration,
 		r *rule_list.List,
 	) (string, error)
-	SilenceByRule(name string) (*silence.Silence, error)
+	RuleSilence(name string) (*silence.Silence, error)
 	SilenceExists(name string) (bool, error)
 	Silences(expired bool) ([]*silence.Silence, error)
 	SimpleSilence(

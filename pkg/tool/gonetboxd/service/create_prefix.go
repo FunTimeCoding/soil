@@ -17,7 +17,7 @@ func (s *Service) CreatePrefix(
 
 			if siteName != "" {
 				var e error
-				i, e = s.client.SiteByName(siteName)
+				i, e = s.client.Site(siteName)
 
 				if e != nil {
 					return nil, e

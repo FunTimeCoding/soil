@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMoveKeepsAHelperOnlyTheBatchCallsPrivate(t *testing.T) {
+func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
 	d := moveVisibilityFixture(t)
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
@@ -65,7 +65,7 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 	)
 }
 
-func TestMoveExportsWhatAnInPackageTestCalls(t *testing.T) {
+func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
 	d := moveVisibilityFixture(t)
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),

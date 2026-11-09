@@ -8,14 +8,14 @@ import (
 	"testing"
 )
 
-func TestAnUnknownViewIsAnswered404(t *testing.T) {
+func TestUnknownViewIsAnswered404(t *testing.T) {
 	r, e := servedView(t, "alfa").GetViewWithResponse(context.Background(), 99)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
 	assert.NotNil(t, r.JSON404)
 }
 
-func TestAnEditWithoutOldStringIsAnswered400(t *testing.T) {
+func TestEditWithoutOldStringIsAnswered400(t *testing.T) {
 	r, e := servedView(t, "alfa").EditViewWithResponse(
 		context.Background(),
 		1,
@@ -25,7 +25,7 @@ func TestAnEditWithoutOldStringIsAnswered400(t *testing.T) {
 	assert.Integer(t, http.StatusBadRequest, r.StatusCode())
 }
 
-func TestAnAmbiguousEditIsAnswered409(t *testing.T) {
+func TestAmbiguousEditIsAnswered409(t *testing.T) {
 	r, e := servedView(t, "alfa alfa").EditViewWithResponse(
 		context.Background(),
 		1,

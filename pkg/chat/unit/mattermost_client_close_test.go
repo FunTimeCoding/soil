@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestCloseReleasesTheSocket(t *testing.T) {
+func TestCloseReleasesSocket(t *testing.T) {
 	r := mattermost_client_tester.New(t, func(_ *http.ServeMux) {})
 	deadline := time.Now().Add(2 * time.Second)
 

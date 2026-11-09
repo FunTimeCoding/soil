@@ -10,7 +10,7 @@ import (
 	"unicode/utf8"
 )
 
-func TestCheckContextCutsALongMessage(t *testing.T) {
+func TestCheckContextCutsLongMessage(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	b := s.NewSession(t)

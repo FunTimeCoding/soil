@@ -21,8 +21,7 @@ const (
 	Pace       = "pace"
 )
 
-var CruisePace = []time.Duration{
-	5 * time.Minute,
-	15 * time.Minute,
-	30 * time.Minute,
-}
+const (
+	CruisePaceMinimumMinutes = 1
+	CruisePaceMaximumMinutes = 60
+)

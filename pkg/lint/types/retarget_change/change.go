@@ -2,7 +2,7 @@ package retarget_change
 
 type Change struct {
 	Line   int
-	Before string
-	After  string
+	Old    string
+	New    string
 	Reason string
 }

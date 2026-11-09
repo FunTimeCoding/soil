@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestARefusedHypervisorIsLeftToTheGuard(t *testing.T) {
+func TestRefusedHypervisorIsLeftToGuard(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
 	defer c.Close()
 	w, y, r := worker_tester.NewPollWorker(t, "pve", c)
@@ -39,7 +39,7 @@ func TestARefusedHypervisorIsLeftToTheGuard(t *testing.T) {
 	}
 }
 
-func TestAPollFailingOtherwiseIsCaptured(t *testing.T) {
+func TestPollFailingOtherwiseIsCaptured(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
 	defer c.Close()
 	w, _, r := worker_tester.NewPollWorker(t, "pve", c)

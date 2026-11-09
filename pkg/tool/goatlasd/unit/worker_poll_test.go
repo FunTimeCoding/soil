@@ -53,7 +53,7 @@ atlas_collect_failures_total{source="netbox"} 0
 	assert.Count(t, 1, r.Events())
 }
 
-func TestPollReportsNothingForAnAwayPeer(t *testing.T) {
+func TestPollReportsNothingForAwayPeer(t *testing.T) {
 	v := service_tester.New(t)
 	v.SeedInventory()
 	v.Kubernetes.Failure = &net.OpError{

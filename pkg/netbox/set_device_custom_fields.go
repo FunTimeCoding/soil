@@ -9,7 +9,7 @@ func (c *Client) SetDeviceCustomFields(
 	name string,
 	fields map[string]any,
 ) (*device.Device, error) {
-	d, e := c.DeviceByName(name)
+	d, e := c.Device(name)
 
 	if e != nil {
 		return nil, e

@@ -36,7 +36,7 @@ func TestFilterSearchResultsExcludesNonMatching(t *testing.T) {
 	assert.Count(t, 0, results)
 }
 
-func TestFilterSearchResultsFacetsFollowTheFilter(t *testing.T) {
+func TestFilterSearchResultsFacetsFollowFilter(t *testing.T) {
 	_, facets := web.FilterSearchResults(
 		store_tester.FilterOutcome(),
 		map[string]string{constant.FixtureAuthorKey: "one"},

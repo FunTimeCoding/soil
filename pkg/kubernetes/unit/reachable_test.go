@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestAnAnsweringClusterIsReachable(t *testing.T) {
+func TestAnsweringClusterIsReachable(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		client.FromInterface(fake.NewClientset(), constant.InCluster).
@@ -20,7 +20,7 @@ func TestAnAnsweringClusterIsReachable(t *testing.T) {
 	)
 }
 
-func TestARefusedVersionIsForbidden(t *testing.T) {
+func TestRefusedVersionIsForbidden(t *testing.T) {
 	e := refusingClientset(
 		kubernetes.NewForbidden(
 			schema.GroupResource{Resource: "version"},

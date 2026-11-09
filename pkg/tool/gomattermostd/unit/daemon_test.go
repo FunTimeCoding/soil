@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-func TestTheDaemonWithoutOptionsRunsOnlyItsGuard(t *testing.T) {
+func TestDaemonWithoutOptionsRunsOnlyItsGuard(t *testing.T) {
 	workers := service_tester.NewDaemonWithoutSubscription(
 		t,
 		service_tester.NewMattermost(t, "kilo"),
@@ -27,7 +27,7 @@ func TestTheDaemonWithoutOptionsRunsOnlyItsGuard(t *testing.T) {
 	assert.True(t, guard)
 }
 
-func TestGoclaudedAddsTheRosterGuardTheWatcherAndTwoClocks(t *testing.T) {
+func TestGoclaudedAddsRosterGuardWatcherAndTwoClocks(t *testing.T) {
 	_, k := worker_tester.NewSink(t)
 	workers := service_tester.NewDaemon(
 		t,
@@ -43,7 +43,7 @@ func TestGoclaudedAddsTheRosterGuardTheWatcherAndTwoClocks(t *testing.T) {
 	}
 }
 
-func TestTheMonitorAddsItsClock(t *testing.T) {
+func TestMonitorAddsItsClock(t *testing.T) {
 	_, k := worker_tester.NewSink(t)
 	workers := service_tester.NewDaemon(
 		t,
@@ -57,7 +57,7 @@ func TestTheMonitorAddsItsClock(t *testing.T) {
 	assert.Count(t, 6, workers)
 }
 
-func TestTheDaemonClosesMattermostOnce(t *testing.T) {
+func TestDaemonClosesMattermostOnce(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	_, k := worker_tester.NewSink(t)
 	d := service_tester.NewDaemon(t, m, k, nil)
@@ -66,7 +66,7 @@ func TestTheDaemonClosesMattermostOnce(t *testing.T) {
 	assert.Integer(t, 1, m.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.Failure = connection.New(
 		errorsConstant.Unreachable,

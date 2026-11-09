@@ -16,17 +16,14 @@ func TestRedactionFailsClosedWhileMemoryIsDown(t *testing.T) {
 	s.WriteContextLoadFile("closed-session")
 	s.Transcript.EnrichSession("closed-session")
 	s.MemoryPeer.Failure = refusedConnection()
-	loads, e := s.Transcript.ContextLoadsBySession(
-		t.Context(),
-		"closed-session",
-	)
+	loads, e := s.Transcript.SessionContextLoads(t.Context(), "closed-session")
 	assert.Count(t, 0, loads)
 	assert.True(t, unavailable.Is(e))
 	assert.StringContains(t, "memory unreachable since", e.Error())
 	assert.StringContains(t, "loads hidden", e.Error())
 }
 
-func TestTheContextPanelSaysWhenMemoryIsDown(t *testing.T) {
+func TestContextPanelSaysWhenMemoryIsDown(t *testing.T) {
 	s := service_tester.NewPanel(t, "panel-session")
 	s.MemoryPeer.Failure = refusedConnection()
 	assert.StringContains(
@@ -36,7 +33,7 @@ func TestTheContextPanelSaysWhenMemoryIsDown(t *testing.T) {
 	)
 }
 
-func TestTheTimelineSaysWhenMemoryIsDown(t *testing.T) {
+func TestTimelineSaysWhenMemoryIsDown(t *testing.T) {
 	s := service_tester.New(t)
 	s.MemoryPeer.Failure = refusedConnection()
 	entries, e := s.Event.Timeline(t.Context(), argument.Timeline{Limit: 10})
@@ -45,7 +42,7 @@ func TestTheTimelineSaysWhenMemoryIsDown(t *testing.T) {
 	assert.String(t, "memory_unreachable", entries[0].Kind)
 }
 
-func TestAMomentWhileMemoryIsDownIsDeliveredLaterWithItsTime(t *testing.T) {
+func TestMomentWhileMemoryIsDownIsDeliveredLaterWithItsTime(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("moment-session")
 	s.MemoryPeer.Failure = refusedConnection()
@@ -73,7 +70,7 @@ func TestAMomentWhileMemoryIsDownIsDeliveredLaterWithItsTime(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestARefusedImpressionGoesToSentryAndLeavesTheOutbox(t *testing.T) {
+func TestRefusedImpressionGoesToSentryAndLeavesOutbox(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("refused-session")
 	s.MemoryPeer.Failure = refusedConnection()

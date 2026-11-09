@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsItsMemoryGuardToTheLifecycle(t *testing.T) {
+func TestDaemonHandsItsMemoryGuardToLifecycle(t *testing.T) {
 	d, _ := daemon_tester.New(t, inventory.New())
 	workers := d.Workers()
 	assert.Count(t, 1, workers)
@@ -17,14 +17,14 @@ func TestTheDaemonHandsItsMemoryGuardToTheLifecycle(t *testing.T) {
 	assert.True(t, okay)
 }
 
-func TestClosingTheDaemonClosesTheMemoryClientOnce(t *testing.T) {
+func TestClosingDaemonClosesMemoryClientOnce(t *testing.T) {
 	d, m := daemon_tester.New(t, inventory.New())
 	d.Close()
 	d.Close()
 	assert.Integer(t, 1, m.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d, _ := daemon_tester.New(t, inventory.New())
 	workers := d.Workers()

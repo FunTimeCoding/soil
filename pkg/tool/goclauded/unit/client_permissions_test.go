@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestTheClientReadsThePermissionReport(t *testing.T) {
+func TestClientReadsPermissionReport(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()

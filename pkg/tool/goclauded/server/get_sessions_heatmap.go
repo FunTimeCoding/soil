@@ -14,7 +14,7 @@ func (s *Server) GetSessionsHeatmap(
 	bash := r.Params.Bash != nil && *r.Params.Bash
 	counts := map[string]*server.HeatmapEntry{}
 	totalCalls := 0
-	sessionsWithCalls := 0
+	callingSessions := 0
 
 	for _, session := range sessions {
 		calls := s.transcript.ToolCalls(session.Identifier)
@@ -23,7 +23,7 @@ func (s *Server) GetSessionsHeatmap(
 			continue
 		}
 
-		sessionsWithCalls++
+		callingSessions++
 		seen := map[string]bool{}
 
 		for _, call := range calls {
@@ -71,7 +71,7 @@ func (s *Server) GetSessionsHeatmap(
 
 	return server.GetSessionsHeatmap200JSONResponse{
 		SessionCount:      len(sessions),
-		SessionsWithCalls: sessionsWithCalls,
+		SessionsWithCalls: callingSessions,
 		TotalCalls:        totalCalls,
 		Entries:           entries,
 	}, nil

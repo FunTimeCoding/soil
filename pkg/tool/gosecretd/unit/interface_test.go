@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestShowOfAMissingSecretIsNotFound(t *testing.T) {
+func TestShowOfMissingSecretIsNotFound(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	r, e := interfaceClient(t, s).ShowSecretWithResponse(
@@ -21,7 +21,7 @@ func TestShowOfAMissingSecretIsNotFound(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestPutAndRevealOverTheInterface(t *testing.T) {
+func TestPutAndRevealOverInterface(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := interfaceClient(t, s)

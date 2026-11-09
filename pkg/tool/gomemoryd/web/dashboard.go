@@ -19,7 +19,7 @@ func (s *Server) dashboard(
 	}
 
 	p := dashboard_page.New(v)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,

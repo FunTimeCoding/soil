@@ -1,0 +1,21 @@
+package mock_client
+
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/device_role"
+)
+
+func (c *Client) DeviceRole(n string) (*device_role.Role, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	for _, r := range c.roles {
+		if r.Name == n {
+			return r, nil
+		}
+	}
+
+	return nil, not_found.New(constant.DeviceRoleKind, n)
+}

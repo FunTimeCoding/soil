@@ -44,7 +44,7 @@ func TestInstanceToolRegistersWithTwoInstances(t *testing.T) {
 	assert.Strings(t, []string{"list_instances", "use_instance"}, names)
 }
 
-func TestInstanceToolUseInstanceSelectsForTheSession(t *testing.T) {
+func TestInstanceToolUseInstanceSelectsForSession(t *testing.T) {
 	s := server.NewMCPServer("test", "0")
 	v := instance_tool.New(
 		instance_tester.Inventory("alfa", "bravo"),
@@ -95,7 +95,7 @@ func TestInstanceToolUseInstanceRefusesEmptyAndUnknown(t *testing.T) {
 	)
 }
 
-func TestInstanceToolCapturesACallWithoutASession(t *testing.T) {
+func TestInstanceToolCapturesCallWithoutSession(t *testing.T) {
 	m := memory.New()
 	v := instance_tool.New(
 		instance_tester.Inventory("alfa", "bravo"),
@@ -115,7 +115,7 @@ func TestInstanceToolCapturesACallWithoutASession(t *testing.T) {
 	assert.StringContains(t, "no model context session", f.Error())
 }
 
-func TestInstanceToolListMarksTheActiveInstance(t *testing.T) {
+func TestInstanceToolListMarksActiveInstance(t *testing.T) {
 	s := server.NewMCPServer("test", "0")
 	v := instance_tool.New(
 		instance_tester.Inventory("alfa", "bravo"),

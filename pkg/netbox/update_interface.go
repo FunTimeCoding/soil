@@ -22,7 +22,7 @@ func (c *Client) UpdateInterface(
 		return nil, e
 	}
 
-	i, f := c.DeviceInterfaceByName(d, name)
+	i, f := c.DeviceInterface(d, name)
 
 	if f != nil {
 		return nil, f
@@ -56,7 +56,7 @@ func (c *Client) UpdateInterface(
 			netbox.NewBriefMACAddressRequest(h.String()),
 		),
 	)
-	j, h2 := c.DeviceInterfaceByName(d, name)
+	j, h2 := c.DeviceInterface(d, name)
 
 	if h2 != nil {
 		return nil, h2

@@ -50,7 +50,7 @@ func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 	)
 }
 
-func TestMovePackageKeepsADocumentEditedMeanwhile(t *testing.T) {
+func TestMovePackageKeepsDocumentEditedMeanwhile(t *testing.T) {
 	d := packageMoveDocumentFixture(t)
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(

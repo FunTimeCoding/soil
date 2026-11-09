@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TestPreCompactStartsACompaction(t *testing.T) {
+func TestPreCompactStartsCompaction(t *testing.T) {
 	phase, known := goclaude.CompactionPhase(constant.PreCompactEvent)
 	assert.True(t, known)
 	assert.String(t, "started", string(phase))
 }
 
-func TestPostCompactFinishesACompaction(t *testing.T) {
+func TestPostCompactFinishesCompaction(t *testing.T) {
 	phase, known := goclaude.CompactionPhase(constant.PostCompactEvent)
 	assert.True(t, known)
 	assert.String(t, "finished", string(phase))

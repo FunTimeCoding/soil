@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
+func TestClientClaimsReleasesAndStreams(t *testing.T) {
 	s := base.New(t)
 	c := gomonitord.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
@@ -49,7 +49,7 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 	assert.True(t, errors.Is(streamEnd(t, ended), context.Canceled))
 }
 
-func TestListenReportsAnUnreachableDaemon(t *testing.T) {
+func TestListenReportsUnreachableDaemon(t *testing.T) {
 	c := gomonitord.New(
 		locator.New(webConstant.Localhost).Port(1).Insecure(),
 		generativeConstant.ModelContextTestToken,
@@ -61,7 +61,7 @@ func TestListenReportsAnUnreachableDaemon(t *testing.T) {
 	assert.True(t, connection.Classify(e) != nil)
 }
 
-func TestListenRefusesAnUnknownToken(t *testing.T) {
+func TestListenRefusesUnknownToken(t *testing.T) {
 	s := base.New(t)
 	c := gomonitord.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),

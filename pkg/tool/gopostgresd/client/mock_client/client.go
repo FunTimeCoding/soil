@@ -5,6 +5,7 @@ import "github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 type Client struct {
 	Result    *client.QueryResult
 	Instances []client.Instance
+	Backups   []client.Backup
 	Failure   error
 	Closed    int
 }

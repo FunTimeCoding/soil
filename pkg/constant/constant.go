@@ -83,7 +83,7 @@ const (
 )
 
 var (
-	StartOfTime       = time.Unix(0, 0).UTC()
+	Epoch             = time.Unix(0, 0).UTC()
 	CompactWhitespace = option.Compact()
 )
 

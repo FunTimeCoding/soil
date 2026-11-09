@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestPostsSinceFollowsPastACappedPageAndMerges(t *testing.T) {
+func TestPostsFollowsPastCappedPageAndMerges(t *testing.T) {
 	capped := &model.PostList{Posts: map[string]*model.Post{}}
 
 	for i := range constant.MattermostSinceChunkThreshold {
@@ -78,10 +78,7 @@ func TestPostsSinceFollowsPastACappedPageAndMerges(t *testing.T) {
 			)
 		},
 	)
-	posts, e := r.Client.PostsSince(
-		&model.Channel{Id: "alfa"},
-		time.UnixMilli(1000),
-	)
+	posts, e := r.Client.Posts(&model.Channel{Id: "alfa"}, time.UnixMilli(1000))
 
 	if e != nil {
 		t.Fatal(e)
@@ -93,7 +90,7 @@ func TestPostsSinceFollowsPastACappedPageAndMerges(t *testing.T) {
 	assert.Any(t, "foxtrot", posts[len(posts)-1].Raw.Id)
 }
 
-func TestPostsSinceIncludesRepliesAndAttachmentOnlyPosts(t *testing.T) {
+func TestPostsIncludesRepliesAndAttachmentOnlyPosts(t *testing.T) {
 	var collapsed string
 	r := mattermost_client_tester.New(
 		t,
@@ -146,10 +143,7 @@ func TestPostsSinceIncludesRepliesAndAttachmentOnlyPosts(t *testing.T) {
 			)
 		},
 	)
-	posts, e := r.Client.PostsSince(
-		&model.Channel{Id: "alfa"},
-		time.UnixMilli(1000),
-	)
+	posts, e := r.Client.Posts(&model.Channel{Id: "alfa"}, time.UnixMilli(1000))
 
 	if e != nil {
 		t.Fatal(e)
@@ -164,7 +158,7 @@ func TestPostsSinceIncludesRepliesAndAttachmentOnlyPosts(t *testing.T) {
 	assert.Any(t, []string{"golf"}, []string(posts[2].Raw.FileIds))
 }
 
-func TestRefreshSocketReturnsTheDialError(t *testing.T) {
+func TestRefreshSocketReturnsDialError(t *testing.T) {
 	r := mattermost_client_tester.New(t, func(_ *http.ServeMux) {})
 	before := r.Client.WebSocket()
 	defer before.Close()

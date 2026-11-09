@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesTheForgeItBuilt(t *testing.T) {
+func TestDaemonClosesForgeItBuilt(t *testing.T) {
 	f := service_tester.NewForge(t)
 	daemon.New(
 		store_tester.NewOption(t, f),
@@ -22,7 +22,7 @@ func TestTheDaemonClosesTheForgeItBuilt(t *testing.T) {
 	assert.Integer(t, 1, f.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
 		store_tester.NewOption(t, mock_client.New()),

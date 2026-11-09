@@ -27,7 +27,7 @@ func extractRelays(
 	)
 
 	for source, sink := range callSinks(p, f.Body) {
-		from := calleeOf(p, source)
+		from := callee(p, source)
 
 		if from == nil {
 			continue

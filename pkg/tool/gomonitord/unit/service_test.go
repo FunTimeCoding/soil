@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestServiceRejectsAClaimWithoutAnItem(t *testing.T) {
+func TestServiceRejectsClaimWithoutItem(t *testing.T) {
 	_, e := service_tester.New(t).ClaimItem("", "alfa@host.example")
 	assert.True(t, validation.Is(e))
 }
 
-func TestServiceRejectsAReleaseWithoutAnOwner(t *testing.T) {
+func TestServiceRejectsReleaseWithoutOwner(t *testing.T) {
 	assert.True(
 		t,
 		validation.Is(service_tester.New(t).Release("jira-ABC-1", "")),

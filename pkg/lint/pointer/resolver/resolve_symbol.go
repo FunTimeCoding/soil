@@ -21,6 +21,13 @@ func (r *Resolver) resolveSymbol(candidate string) *pointer.Resolution {
 			return result
 		}
 
+		if r.undeclaredMember(reference, directory, name) {
+			result := pointer.NewResolution(constant.VerdictTallied)
+			result.Reason = constant.ReasonMember
+
+			return result
+		}
+
 		return pointer.NewResolution(constant.VerdictLive)
 	}
 

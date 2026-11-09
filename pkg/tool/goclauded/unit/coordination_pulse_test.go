@@ -21,7 +21,7 @@ func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	check := a.CheckLive()
-	pulses := clientEntriesByKind(check.Entries, constant.QueuePulse)
+	pulses := clientKindEntries(check.Entries, constant.QueuePulse)
 	assert.Count(t, 1, pulses)
 	assert.StringContains(t, "deploy complete", pulses[0].Body)
 }
@@ -36,7 +36,7 @@ func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 		map[string]any{constant.Line: "still building"},
 	)
 	check := a.CheckLive()
-	pulses := clientEntriesByKind(check.Entries, constant.QueuePulse)
+	pulses := clientKindEntries(check.Entries, constant.QueuePulse)
 	assert.Count(t, 0, pulses)
 }
 
@@ -53,9 +53,9 @@ func TestExternalPulseConsumedOnDrain(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	first := a.CheckLive()
-	pulses := clientEntriesByKind(first.Entries, constant.QueuePulse)
+	pulses := clientKindEntries(first.Entries, constant.QueuePulse)
 	assert.Count(t, 1, pulses)
 	second := a.CheckLive()
-	pulses = clientEntriesByKind(second.Entries, constant.QueuePulse)
+	pulses = clientKindEntries(second.Entries, constant.QueuePulse)
 	assert.Count(t, 0, pulses)
 }

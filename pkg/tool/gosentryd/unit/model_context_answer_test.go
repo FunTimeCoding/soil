@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownIssueIsAnsweredQuietly(t *testing.T) {
+func TestUnknownIssueIsAnsweredQuietly(t *testing.T) {
 	m := memory.New()
 	assert.String(
 		t,
@@ -26,7 +26,7 @@ func TestAnUnknownIssueIsAnsweredQuietly(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAForbiddenSearchIsAnsweredQuietly(t *testing.T) {
+func TestForbiddenSearchIsAnsweredQuietly(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("sentry: %s", "token lacks event:read")
 	m := memory.New()
@@ -37,7 +37,7 @@ func TestAForbiddenSearchIsAnsweredQuietly(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnUnclassifiedFailureIsCaptured(t *testing.T) {
+func TestUnclassifiedFailureIsCaptured(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = errors.New("sentry answered nonsense")
 	m := memory.New()
@@ -45,7 +45,7 @@ func TestAnUnclassifiedFailureIsCaptured(t *testing.T) {
 	assert.Count(t, 1, m.Events())
 }
 
-func TestAnOutageIsAnsweredWithoutACapture(t *testing.T) {
+func TestOutageIsAnsweredWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = &net.OpError{
 		Op:  "dial",

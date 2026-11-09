@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestDeferredBearerEditorReadsTheTokenPerRequest(t *testing.T) {
+func TestDeferredBearerEditorReadsTokenPerRequest(t *testing.T) {
 	var names []string
 	read := func(name string) string {
 		names = append(names, name)

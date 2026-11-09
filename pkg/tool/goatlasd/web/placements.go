@@ -17,7 +17,7 @@ func (s *Server) placements(
 	name := r.URL.Query().Get(constant.SearchParameter)
 	v, e := s.service.SearchPlacements(name)
 	errors.PanicOnError(e)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.PlacementsTitle,
 		constant.PlacementsPath,

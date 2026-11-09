@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestAClickOnABoardLabelIsCounted(t *testing.T) {
+func TestClickOnBoardLabelIsCounted(t *testing.T) {
 	v := service_tester.New(
 		t,
 		service_tester.NewOption(
@@ -35,7 +35,7 @@ func TestAClickOnABoardLabelIsCounted(t *testing.T) {
 	assert.String(t, "Grafana", summaries[0].Label)
 }
 
-func TestARefreshFillsEachPanel(t *testing.T) {
+func TestRefreshFillsEachPanel(t *testing.T) {
 	p := newPrometheus(t)
 	p.SeedResult(
 		"count(up == 1)",
@@ -55,7 +55,7 @@ func TestARefreshFillsEachPanel(t *testing.T) {
 	assert.String(t, "3", values["Nextcloud"][1])
 }
 
-func TestEveryRowLabelGetsAValue(t *testing.T) {
+func TestEveryRowLabelGetsValue(t *testing.T) {
 	v := service_tester.New(
 		t,
 		service_tester.NewOption(
@@ -77,7 +77,7 @@ func TestEveryRowLabelGetsAValue(t *testing.T) {
 	assert.Count(t, 4, values["Argo CD"])
 }
 
-func TestAFailingPanelIsReportedAndShownPending(t *testing.T) {
+func TestFailingPanelIsReportedAndShownPending(t *testing.T) {
 	p := newPrometheus(t)
 	u := newUsage(t)
 	u.Failure = errors.New("token expired")

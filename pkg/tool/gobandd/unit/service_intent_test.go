@@ -11,14 +11,14 @@ import (
 	"testing"
 )
 
-func TestAShutdownRecordsTheHostOffline(t *testing.T) {
+func TestShutdownRecordsHostOffline(t *testing.T) {
 	v, n, _, _ := intentService(t)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
 	assert.String(t, "offline", *n.Updated["alfa"].Status)
 }
 
-func TestAStartRecordsTheHostActive(t *testing.T) {
+func TestStartRecordsHostActive(t *testing.T) {
 	v, n, engine, _ := intentService(t)
 	engine.SetPower(bandConstant.PowerOffSoft, bandConstant.PowerOn)
 	_, e := v.Power("alfa", constant.OperationStart, false)
@@ -26,7 +26,7 @@ func TestAStartRecordsTheHostActive(t *testing.T) {
 	assert.String(t, "active", *n.Updated["alfa"].Status)
 }
 
-func TestARefusedPowerRequestRecordsNothing(t *testing.T) {
+func TestRefusedPowerRequestRecordsNothing(t *testing.T) {
 	v, n, engine, _ := intentService(t)
 	engine.SetPower(bandConstant.PowerOn, hardStates()...)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
@@ -34,14 +34,14 @@ func TestARefusedPowerRequestRecordsNothing(t *testing.T) {
 	assert.Count(t, 0, n.Updated)
 }
 
-func TestARebootRecordsNothing(t *testing.T) {
+func TestRebootRecordsNothing(t *testing.T) {
 	v, n, _, _ := intentService(t)
 	_, e := v.Power("alfa", constant.OperationReboot, false)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, n.Updated)
 }
 
-func TestAPowerActionWithoutTheSwitchRecordsNothing(t *testing.T) {
+func TestPowerActionWithoutSwitchRecordsNothing(t *testing.T) {
 	v, engines := service_tester.New(t, memory.New(), "alfa")
 	engine := engines["alfa"]
 	engine.SetPower(bandConstant.PowerOn, runningStates()...)
@@ -50,7 +50,7 @@ func TestAPowerActionWithoutTheSwitchRecordsNothing(t *testing.T) {
 	assert.Integers(t, []int{12}, engine.Requested())
 }
 
-func TestAFailedRecordIsReportedAndNeverHoldsPowerBack(t *testing.T) {
+func TestFailedRecordIsReportedAndNeverHoldsPowerBack(t *testing.T) {
 	v, n, engine, r := intentService(t)
 	n.Failure = errors.New("netbox answered nonsense")
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
@@ -59,7 +59,7 @@ func TestAFailedRecordIsReportedAndNeverHoldsPowerBack(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAnUnreachableNetboxIsNotReported(t *testing.T) {
+func TestUnreachableNetboxIsNotReported(t *testing.T) {
 	v, n, engine, r := intentService(t)
 	n.Failure = unavailable.Format("netbox restarting")
 	_, e := v.Power("alfa", constant.OperationShutdown, false)

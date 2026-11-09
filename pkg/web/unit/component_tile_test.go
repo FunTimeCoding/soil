@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestATileCarriesItsSearchText(t *testing.T) {
+func TestTileCarriesItsSearchText(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="tile foxtrot" data-search="golf hotel">india</div>`,
@@ -22,7 +22,7 @@ func TestATileCarriesItsSearchText(t *testing.T) {
 	)
 }
 
-func TestAGridWithoutSearchIsOnlyTheGrid(t *testing.T) {
+func TestGridWithoutSearchIsOnlyGrid(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="tile-grid"><div class="tile">india</div></div>`,
@@ -35,7 +35,7 @@ func TestAGridWithoutSearchIsOnlyTheGrid(t *testing.T) {
 	)
 }
 
-func TestASearchableGridFiltersTheGridBelowIt(t *testing.T) {
+func TestSearchableGridFiltersGridBelowIt(t *testing.T) {
 	page := renderedNode(t, tile_grid.New(nil).Search("Filter…").Node())
 	assert.StringContains(
 		t,

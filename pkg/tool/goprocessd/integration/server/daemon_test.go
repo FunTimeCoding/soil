@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	directory := t.TempDir()
 	o := option.New()
 	o.ProcfilePath = filepath.Join(directory, "Procfile")
@@ -41,7 +41,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestAProcessDroppedOnReloadLeavesNothingRunning(t *testing.T) {
+func TestProcessDroppedOnReloadLeavesNothingRunning(t *testing.T) {
 	directory := t.TempDir()
 	path := filepath.Join(directory, "Procfile")
 	errors.PanicOnError(

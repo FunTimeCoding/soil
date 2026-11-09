@@ -24,7 +24,7 @@ func TestListShowsAllProcesses(t *testing.T) {
 	assert.String(t, "alfa,bravo", s.Names())
 }
 
-func TestTheClientReachesTheSocket(t *testing.T) {
+func TestClientReachesSocket(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")
 	assert.FatalOnError(t, s.Client.Reachable(context.Background()))
 }
@@ -52,7 +52,7 @@ func TestStartStoppedProcess(t *testing.T) {
 	s.Wait(t, "alfa", s.Running)
 }
 
-func TestAnUnknownProcessIsNotFound(t *testing.T) {
+func TestUnknownProcessIsNotFound(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")
 	x := context.Background()
 	assert.True(t, not_found.Is(s.Client.RestartProcess(x, "nonexistent")))
@@ -74,7 +74,7 @@ func TestRestartAllLeavesEveryProcessRunning(t *testing.T) {
 	assert.String(t, "alfa,bravo", s.Running())
 }
 
-func TestASecondWaveIsAConflict(t *testing.T) {
+func TestSecondWaveIsConflict(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
 	_, e := s.Client.RestartAll(context.Background())

@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestTheTableAnswersTheGatewayStatusesUnavailable(t *testing.T) {
+func TestTableAnswersGatewayStatusesUnavailable(t *testing.T) {
 	for _, status := range []int{
 		http.StatusTooManyRequests,
 		http.StatusBadGateway,
@@ -27,13 +27,13 @@ func TestTheTableAnswersTheGatewayStatusesUnavailable(t *testing.T) {
 	}
 }
 
-func TestTheTableAnswersAConflictAsConflict(t *testing.T) {
+func TestTableAnswersConflictAsConflict(t *testing.T) {
 	s, _ := newScriptedServer(t, "", http.StatusConflict)
 	_, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
 	assert.True(t, conflict.Is(e))
 }
 
-func TestTheTableKeepsOurOwnRefusalsUnexpected(t *testing.T) {
+func TestTableKeepsOurOwnRefusalsUnexpected(t *testing.T) {
 	for _, status := range []int{
 		http.StatusBadRequest,
 		http.StatusUnauthorized,
@@ -47,7 +47,7 @@ func TestTheTableKeepsOurOwnRefusalsUnexpected(t *testing.T) {
 	}
 }
 
-func TestANotFoundCarriesTheSitesReason(t *testing.T) {
+func TestNotFoundCarriesSitesReason(t *testing.T) {
 	s, _ := newScriptedServer(
 		t,
 		`{"message":"no such item"}`,
@@ -58,7 +58,7 @@ func TestANotFoundCarriesTheSitesReason(t *testing.T) {
 	assert.StringContains(t, "/items/7 status: 404: no such item", e.Error())
 }
 
-func TestAClientRowOverridesTheTable(t *testing.T) {
+func TestClientRowOverridesTable(t *testing.T) {
 	s, _ := newScriptedServer(t, "", http.StatusForbidden)
 	_, e := newRequester(t, s.URL).
 		WithStatus(http.StatusForbidden, errorsConstant.ForbiddenClass).
@@ -66,7 +66,7 @@ func TestAClientRowOverridesTheTable(t *testing.T) {
 	assert.True(t, forbidden.Is(e))
 }
 
-func TestARequestRowOverridesTheClientRow(t *testing.T) {
+func TestRequestRowOverridesClientRow(t *testing.T) {
 	s, _ := newScriptedServer(t, "", http.StatusBadRequest)
 	_, e := newRequester(t, s.URL).
 		WithStatus(http.StatusBadRequest, errorsConstant.ForbiddenClass).
@@ -79,7 +79,7 @@ func TestARequestRowOverridesTheClientRow(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestTheRefusalHookDecidesBeforeTheTable(t *testing.T) {
+func TestRefusalHookDecidesBeforeTable(t *testing.T) {
 	s, _ := newScriptedServer(t, "", http.StatusConflict)
 	_, e := newRequester(t, s.URL).
 		WithRefusal(
@@ -94,7 +94,7 @@ func TestTheRefusalHookDecidesBeforeTheTable(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestTheSubjectAndTheReaderShapeTheMessage(t *testing.T) {
+func TestSubjectAndReaderShapeMessage(t *testing.T) {
 	s, _ := newScriptedServer(t, "<p>bravo</p>", http.StatusInternalServerError)
 	_, e := newRequester(t, s.URL).
 		WithSubject("alfa").

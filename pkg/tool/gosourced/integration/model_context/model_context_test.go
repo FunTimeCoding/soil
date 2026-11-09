@@ -114,7 +114,7 @@ func TestRenameSymbol(t *testing.T) {
 	assert.StringContains(t, "func IsGenerated(", string(helper))
 }
 
-func TestRenameSymbolNamesAPackageThatDoesNotLoad(t *testing.T) {
+func TestRenameSymbolNamesPackageThatDoesNotLoad(t *testing.T) {
 	o := model_context_tester.New(
 		t,
 		"../../service/testdata/rename-function/src",

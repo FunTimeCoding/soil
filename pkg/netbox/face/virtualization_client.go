@@ -16,9 +16,9 @@ import (
 )
 
 type VirtualizationClient interface {
-	ClusterByName(n string) (*cluster.Cluster, error)
+	Cluster(n string) (*cluster.Cluster, error)
 	Clusters() ([]*cluster.Cluster, error)
-	ClusterTypeByName(n string) (*cluster_type.Type, error)
+	ClusterType(n string) (*cluster_type.Type, error)
 	ClusterTypes() ([]*cluster_type.Type, error)
 	CreateCluster(
 		name string,
@@ -82,9 +82,9 @@ type VirtualizationClient interface {
 		tenantName string,
 	) (*virtual_machine.Machine, error)
 	VirtualMachineAddresses(machine string) ([]*internet_address.Address, error)
-	VirtualMachineByName(n string) (*virtual_machine.Machine, error)
+	VirtualMachine(n string) (*virtual_machine.Machine, error)
 	VirtualMachineDisks(m *virtual_machine.Machine) ([]*virtual_disk.Disk, error)
-	VirtualMachineInterfaceByName(
+	VirtualMachineInterface(
 		vm *virtual_machine.Machine,
 		name string,
 	) (*netbox.VMInterface, error)
@@ -96,7 +96,7 @@ type VirtualizationClient interface {
 	) (*physical_address.Address, error)
 	ClusterGroups() ([]*cluster_group.Group, error)
 	ClustersByName(s string) ([]*cluster.Cluster, error)
-	DevicesByCluster(s string) ([]*device.Device, error)
+	ClusterDevices(s string) ([]*device.Device, error)
 	MustClusterGroups() []*cluster_group.Group
 	MustClusterTypes() []*cluster_type.Type
 	MustClusters() []*cluster.Cluster

@@ -3,6 +3,7 @@ package model_context_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
+	"time"
 )
 
 func (o *Tester) DocumentSourcedMemory() int64 {
@@ -15,7 +16,7 @@ func (o *Tester) DocumentSourcedMemory() int64 {
 	p.Scope = "alfa"
 	p.ProvenanceFile = "canon/Example.yaml"
 	p.ProvenanceAnchor = "Retry"
-	identifier, e := o.Store().CreateMemory(p)
+	identifier, e := o.Store().CreateMemory(p, time.Now())
 	assert.FatalOnError(o.t, e)
 
 	return identifier

@@ -2,6 +2,7 @@ package event
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument"
@@ -13,13 +14,13 @@ func (s *Service) Timeline(
 	a argument.Timeline,
 ) ([]*timeline.Entry, error) {
 	fetch := a.Limit + a.Offset
-	q := event_query.New().SetLimit(fetch)
+	w := window.Whole()
 
 	if a.Since != "" {
 		t, e := time.Parse(time.RFC3339, a.Since)
 
 		if e == nil {
-			q.SetSince(t)
+			w.WithStart(t)
 		}
 	}
 
@@ -27,9 +28,11 @@ func (s *Service) Timeline(
 		t, e := time.Parse(time.RFC3339, a.Before)
 
 		if e == nil {
-			q.SetBefore(t)
+			w.WithEnd(t)
 		}
 	}
+
+	q := event_query.New().SetLimit(fetch).SetWindow(w)
 
 	if len(a.Kinds) > 0 {
 		q.SetKinds(a.Kinds)

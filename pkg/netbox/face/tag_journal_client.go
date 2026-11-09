@@ -53,17 +53,17 @@ type TagJournalClient interface {
 		limit int32,
 		offset int32,
 	) ([]*journal_entry.Entry, error)
-	DevicesByTag(s string) ([]*device.Device, error)
+	TagDevices(s string) ([]*device.Device, error)
 	MustAddTag(
 		deviceName string,
 		tag string,
 	) *device.Device
 	MustDeviceTagNames(name string) []string
-	MustDevicesByTag(s string) []*device.Device
+	MustTagDevices(s string) []*device.Device
 	MustRemoveTag(
 		deviceName string,
 		tag string,
 	) *device.Device
 	MustTags() []*tag.Tag
-	TagByName(n string) (*tag.Tag, error)
+	Tag(n string) (*tag.Tag, error)
 }

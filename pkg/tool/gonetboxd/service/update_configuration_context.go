@@ -12,7 +12,7 @@ func (s *Service) UpdateConfigurationContext(
 	return guarded(
 		s.guard,
 		func() (*configuration_context.Context, error) {
-			if _, e := s.client.ConfigurationContextByName(name); e != nil {
+			if _, e := s.client.ConfigurationContext(name); e != nil {
 				return nil, e
 			}
 
@@ -43,7 +43,7 @@ func (s *Service) UpdateConfigurationContext(
 				}
 			}
 
-			return s.client.ConfigurationContextByName(name)
+			return s.client.ConfigurationContext(name)
 		},
 	)
 }

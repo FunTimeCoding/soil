@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestARemovalPrintsNothingOnSuccess(t *testing.T) {
+func TestRemovalPrintsNothingOnSuccess(t *testing.T) {
 	for _, arguments := range removals() {
 		c := mock_client.New()
 		var output, failure string
@@ -26,7 +26,7 @@ func TestARemovalPrintsNothingOnSuccess(t *testing.T) {
 	}
 }
 
-func TestAFailedRemovalExitsWithItsMessage(t *testing.T) {
+func TestFailedRemovalExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range removals() {
 		c := mock_client.New()
 		c.Failure = errors.New("foxtrot")
@@ -37,7 +37,7 @@ func TestAFailedRemovalExitsWithItsMessage(t *testing.T) {
 	}
 }
 
-func TestListDevicesEmitsTheDevices(t *testing.T) {
+func TestListDevicesEmitsDevices(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.DeviceList = []*client.Device{{Identifier: 7, Name: "alfa"}}

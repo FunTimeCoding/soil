@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersAnUnknownSecretAsTheDaemonDoes(t *testing.T) {
+func TestMockAnswersUnknownSecretAsDaemonDoes(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := client.New(

@@ -17,10 +17,35 @@ import (
 	"net/url"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/oapi-codegen/runtime"
 )
+
+// Backup defines model for Backup.
+type Backup struct {
+	// Checksum SHA-256 of the dump, on the backup just written.
+	Checksum *string `json:"checksum,omitempty"`
+	Instance string  `json:"instance"`
+	Name     string  `json:"name"`
+	Size     int64   `json:"size"`
+
+	// Tables Table data entries in the dump, on the backup just written.
+	Tables *int      `json:"tables,omitempty"`
+	Time   time.Time `json:"time"`
+}
+
+// BackupList defines model for BackupList.
+type BackupList struct {
+	Backups []Backup `json:"backups"`
+}
+
+// BackupRequest defines model for BackupRequest.
+type BackupRequest struct {
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
+}
 
 // Error defines model for Error.
 type Error struct {
@@ -68,6 +93,32 @@ type QueryResult struct {
 	Rows    [][]interface{} `json:"rows"`
 }
 
+// RestoreRequest defines model for RestoreRequest.
+type RestoreRequest struct {
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
+
+	// Target Database to restore into. Omitted, a new database beside the instance's; the instance's own database restores in place.
+	Target *string `json:"target,omitempty"`
+}
+
+// RestoreResult defines model for RestoreResult.
+type RestoreResult struct {
+	Database string `json:"database"`
+}
+
+// ListBackupsParams defines parameters for ListBackups.
+type ListBackupsParams struct {
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
+}
+
+// DeleteBackupParams defines parameters for DeleteBackup.
+type DeleteBackupParams struct {
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
+}
+
 // ListIndexesParams defines parameters for ListIndexes.
 type ListIndexesParams struct {
 	// Instance Instance name. Optional when only one instance is configured.
@@ -113,6 +164,12 @@ type DescribeTableParams struct {
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
 }
 
+// CreateBackupJSONRequestBody defines body for CreateBackup for application/json ContentType.
+type CreateBackupJSONRequestBody = BackupRequest
+
+// RestoreBackupJSONRequestBody defines body for RestoreBackup for application/json ContentType.
+type RestoreBackupJSONRequestBody = RestoreRequest
+
 // ExplainJSONRequestBody defines body for Explain for application/json ContentType.
 type ExplainJSONRequestBody = ExplainRequest
 
@@ -121,6 +178,18 @@ type QueryJSONRequestBody = QueryRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (GET /api/backups)
+	ListBackups(w http.ResponseWriter, r *http.Request, params ListBackupsParams)
+
+	// (POST /api/backups)
+	CreateBackup(w http.ResponseWriter, r *http.Request)
+
+	// (DELETE /api/backups/{name})
+	DeleteBackup(w http.ResponseWriter, r *http.Request, name string, params DeleteBackupParams)
+
+	// (POST /api/backups/{name}/restore)
+	RestoreBackup(w http.ResponseWriter, r *http.Request, name string)
 
 	// (POST /api/explain)
 	Explain(w http.ResponseWriter, r *http.Request)
@@ -155,6 +224,121 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// ListBackups operation middleware
+func (siw *ServerInterfaceWrapper) ListBackups(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListBackupsParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListBackups(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateBackup operation middleware
+func (siw *ServerInterfaceWrapper) CreateBackup(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateBackup(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteBackup operation middleware
+func (siw *ServerInterfaceWrapper) DeleteBackup(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteBackupParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteBackup(w, r, name, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// RestoreBackup operation middleware
+func (siw *ServerInterfaceWrapper) RestoreBackup(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.RestoreBackup(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // Explain operation middleware
 func (siw *ServerInterfaceWrapper) Explain(w http.ResponseWriter, r *http.Request) {
@@ -565,8 +749,292 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tables/{table}", wrapper.DescribeTable)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/indexes", wrapper.ListIndexes)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/table-sizes", wrapper.TableSizes)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/backups", wrapper.ListBackups)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/backups", wrapper.CreateBackup)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/backups/{name}", wrapper.DeleteBackup)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/backups/{name}/restore", wrapper.RestoreBackup)
 
 	return m
+}
+
+type ListBackupsRequestObject struct {
+	Params ListBackupsParams
+}
+
+type ListBackupsResponseObject interface {
+	VisitListBackupsResponse(w http.ResponseWriter) error
+}
+
+type ListBackups200JSONResponse BackupList
+
+func (response ListBackups200JSONResponse) VisitListBackupsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListBackups400JSONResponse Error
+
+func (response ListBackups400JSONResponse) VisitListBackupsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListBackups404JSONResponse Error
+
+func (response ListBackups404JSONResponse) VisitListBackupsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListBackups500JSONResponse ErrorResponse
+
+func (response ListBackups500JSONResponse) VisitListBackupsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateBackupRequestObject struct {
+	Body *CreateBackupJSONRequestBody
+}
+
+type CreateBackupResponseObject interface {
+	VisitCreateBackupResponse(w http.ResponseWriter) error
+}
+
+type CreateBackup200JSONResponse Backup
+
+func (response CreateBackup200JSONResponse) VisitCreateBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateBackup400JSONResponse Error
+
+func (response CreateBackup400JSONResponse) VisitCreateBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateBackup404JSONResponse Error
+
+func (response CreateBackup404JSONResponse) VisitCreateBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateBackup500JSONResponse ErrorResponse
+
+func (response CreateBackup500JSONResponse) VisitCreateBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteBackupRequestObject struct {
+	Name   string `json:"name"`
+	Params DeleteBackupParams
+}
+
+type DeleteBackupResponseObject interface {
+	VisitDeleteBackupResponse(w http.ResponseWriter) error
+}
+
+type DeleteBackup204Response struct {
+}
+
+func (response DeleteBackup204Response) VisitDeleteBackupResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type DeleteBackup400JSONResponse Error
+
+func (response DeleteBackup400JSONResponse) VisitDeleteBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteBackup404JSONResponse Error
+
+func (response DeleteBackup404JSONResponse) VisitDeleteBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteBackup500JSONResponse ErrorResponse
+
+func (response DeleteBackup500JSONResponse) VisitDeleteBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestoreBackupRequestObject struct {
+	Name string `json:"name"`
+	Body *RestoreBackupJSONRequestBody
+}
+
+type RestoreBackupResponseObject interface {
+	VisitRestoreBackupResponse(w http.ResponseWriter) error
+}
+
+type RestoreBackup200JSONResponse RestoreResult
+
+func (response RestoreBackup200JSONResponse) VisitRestoreBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestoreBackup400JSONResponse Error
+
+func (response RestoreBackup400JSONResponse) VisitRestoreBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestoreBackup404JSONResponse Error
+
+func (response RestoreBackup404JSONResponse) VisitRestoreBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestoreBackup409JSONResponse Error
+
+func (response RestoreBackup409JSONResponse) VisitRestoreBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestoreBackup500JSONResponse ErrorResponse
+
+func (response RestoreBackup500JSONResponse) VisitRestoreBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type RestoreBackup503JSONResponse Error
+
+func (response RestoreBackup503JSONResponse) VisitRestoreBackupResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type ExplainRequestObject struct {
@@ -1336,6 +1804,18 @@ func (response DescribeTable503JSONResponse) VisitDescribeTableResponse(w http.R
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (GET /api/backups)
+	ListBackups(ctx context.Context, request ListBackupsRequestObject) (ListBackupsResponseObject, error)
+
+	// (POST /api/backups)
+	CreateBackup(ctx context.Context, request CreateBackupRequestObject) (CreateBackupResponseObject, error)
+
+	// (DELETE /api/backups/{name})
+	DeleteBackup(ctx context.Context, request DeleteBackupRequestObject) (DeleteBackupResponseObject, error)
+
+	// (POST /api/backups/{name}/restore)
+	RestoreBackup(ctx context.Context, request RestoreBackupRequestObject) (RestoreBackupResponseObject, error)
+
 	// (POST /api/explain)
 	Explain(ctx context.Context, request ExplainRequestObject) (ExplainResponseObject, error)
 
@@ -1398,6 +1878,123 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// ListBackups operation middleware
+func (sh *strictHandler) ListBackups(w http.ResponseWriter, r *http.Request, params ListBackupsParams) {
+	var request ListBackupsRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListBackups(ctx, request.(ListBackupsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListBackups")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListBackupsResponseObject); ok {
+		if err := validResponse.VisitListBackupsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateBackup operation middleware
+func (sh *strictHandler) CreateBackup(w http.ResponseWriter, r *http.Request) {
+	var request CreateBackupRequestObject
+
+	var body CreateBackupJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateBackup(ctx, request.(CreateBackupRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateBackup")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateBackupResponseObject); ok {
+		if err := validResponse.VisitCreateBackupResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteBackup operation middleware
+func (sh *strictHandler) DeleteBackup(w http.ResponseWriter, r *http.Request, name string, params DeleteBackupParams) {
+	var request DeleteBackupRequestObject
+
+	request.Name = name
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteBackup(ctx, request.(DeleteBackupRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteBackup")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteBackupResponseObject); ok {
+		if err := validResponse.VisitDeleteBackupResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// RestoreBackup operation middleware
+func (sh *strictHandler) RestoreBackup(w http.ResponseWriter, r *http.Request, name string) {
+	var request RestoreBackupRequestObject
+
+	request.Name = name
+
+	var body RestoreBackupJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.RestoreBackup(ctx, request.(RestoreBackupRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "RestoreBackup")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(RestoreBackupResponseObject); ok {
+		if err := validResponse.VisitRestoreBackupResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // Explain operation middleware
@@ -1622,24 +2219,33 @@ func (sh *strictHandler) DescribeTable(w http.ResponseWriter, r *http.Request, t
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7Jrfc+M0EMf/FY3gMSSFOx7IW4FjJjOdg/54AG5uGMVeJzqUlSut08t18r8zWsmJkzjhgLQNGT/VkbXa",
-	"767kj1Z2H2VmZ6VFQPJy+Ch9NoWZ4ss3zlkXLkpnS3CkgZuhbqZFCXIoPTmNE7lc9qSD+0o7yOXwXer2",
-	"vld3s+MPkJFc9uK4N+BLix4+f/yehDkg/aFzQNKFhs8W0WLZqutjaZTGG7ivwNOuMIXKLD6x4hwKVRmS",
-	"w0IZDz2Zg8+cLklblEN5U6F48+svV5ejt+Ly7eXVb7+/6cuVw7G1BhQGjxo9KczSkM0hRumOQDWDvviZ",
-	"25URD1NAYdEshEUQtb3QXmQWCz2pHOQNX+vc+Xuz6+X2+kqQFRADb7HbSmcYpC1zo0YcmznLFamxitO8",
-	"o2lqY5p3boSgW2+U1jUtNBJMwO3oZPs0fjLqraW0RXBdgVvsnfmTmSfIKoJ/P08pSs9LdzvIzJpqhjFe",
-	"gplvnYDUoJxTi/Db2YdNi/qipe/m7y3Jtfc05K76JT8vhWVZmky4N7Gl9TRx4HPZk3NwPubr6/5F/yK4",
-	"tCWgKrUcylfc1JOloikLHahSD9LK52SkxRhSokLeR7kc1kyQUSx4+t7mi5gtJEC2UGVpdMY2gw/e4hqj",
-	"4epLB4Ucyi8Ga84OEmQHW8RZbiaFXAXcEEnJqr+5uDia9+ZqYNebiy6JE6VR2A/JfH1E33FvafE6wrky",
-	"Ol8/MtYJJTwpghkgCZqCqJ9k4aCofHiQWN2rp1d31+KdJa0FFtYJo7I/hS1E6fRcG5hAUvj6OfJXA8kG",
-	"LRXW2fnuebKzTkQAndEZQS4eNE05bzybaGkKTpBT6FUWbFnit8deXqsSo0XqT0qbMHUrqK43QZby3Gup",
-	"uUNUqOZKGzU2Yd2wJcNKYw4fIwYm0MKqK+1plPoE0Dk1AwLn5fDdsbetgEx5H/gh6916vUn2GpnZ2ae2",
-	"ldyFMKOMPeNS6CG3wfiPnNxy14Ne0mjNYVdFniyrsdFZy7b7/uXwnGZaWGQAUVouHaY7TJ8jpo32JBIB",
-	"T5rRsc/fUbru9R/5sSq7D0W3Op3t1uA7AV8a00D9KmS/EWRE596a+TqR9Skq5o1z2mnVy3xbOL4vwiGm",
-	"o3FH4zMvmpkEJ4zjxtvMvTC+TX1OtWR+wRozpUZo3EBIB7YObOdcZia7E+Yan/a+8vrTgUKTT9a33OV/",
-	"8zbgHA/q8Q0Hz5VQmIfSUGS2QuoKxI6j58pRfmjjS6m49E8dpodrxLvYpePoS3N0VYtGo46gHUHPuRKN",
-	"aDp5dg4e+e9yL0N/ZC9juEvfcg5itOWTUKloetQvQh2qnxLVP/A/c4gcCo06tHWlbgfqcwV1ntjW+AR7",
-	"YqxeLv8KAAD//w==",
+	"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",
+	"AAAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -116,7 +116,7 @@ func TestRemoveImportNotFound(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "not found")
 }
 
-func TestAddImportRefusesAFileOutsideTheModule(t *testing.T) {
+func TestAddImportRefusesFileOutsideModule(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("import-grouped/src"),

@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TestAnEmptyMessageRaisesNoAlert(t *testing.T) {
+func TestEmptyMessageRaisesNoAlert(t *testing.T) {
 	var b strings.Builder
 	assert.FatalOnError(t, component.Alert("").Render(&b))
 	assert.String(t, "", b.String())
 }
 
-func TestAMessageRaisesAnAlert(t *testing.T) {
+func TestMessageRaisesAlert(t *testing.T) {
 	var b strings.Builder
 	assert.FatalOnError(t, component.Alert("refused").Render(&b))
 	assert.StringContains(t, `role="alert"`, b.String())

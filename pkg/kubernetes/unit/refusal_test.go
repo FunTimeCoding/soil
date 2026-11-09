@@ -11,14 +11,14 @@ import (
 	"testing"
 )
 
-func TestAMissingJobIsNotFound(t *testing.T) {
+func TestMissingJobIsNotFound(t *testing.T) {
 	_, e := refusingClientset(
 		kubernetes.NewNotFound(constant.JobResource, "alfa"),
 	).Job("default", "alfa")
 	assert.True(t, not_found.Is(e))
 }
 
-func TestARefusedListIsForbidden(t *testing.T) {
+func TestRefusedListIsForbidden(t *testing.T) {
 	_, e := refusingClientset(
 		kubernetes.NewForbidden(
 			constant.JobResource,
@@ -29,7 +29,7 @@ func TestARefusedListIsForbidden(t *testing.T) {
 	assert.True(t, forbidden.Is(e))
 }
 
-func TestAConflictingWriteIsConflict(t *testing.T) {
+func TestConflictingWriteIsConflict(t *testing.T) {
 	e := refusingClientset(
 		kubernetes.NewConflict(
 			constant.JobResource,
@@ -40,7 +40,7 @@ func TestAConflictingWriteIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
-func TestAMissingJobIsNotRunning(t *testing.T) {
+func TestMissingJobIsNotRunning(t *testing.T) {
 	running, e := refusingClientset(
 		kubernetes.NewNotFound(constant.JobResource, "alfa"),
 	).JobRunning("default", "alfa")
@@ -48,7 +48,7 @@ func TestAMissingJobIsNotRunning(t *testing.T) {
 	assert.False(t, running)
 }
 
-func TestAMissingJobIsAlreadyDeleted(t *testing.T) {
+func TestMissingJobIsAlreadyDeleted(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		refusingClientset(

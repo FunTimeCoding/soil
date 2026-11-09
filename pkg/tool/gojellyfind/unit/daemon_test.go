@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	c := mock_client.New()
 	before := goleak.IgnoreCurrent()
 	daemon_tester.New(t, c).Close()

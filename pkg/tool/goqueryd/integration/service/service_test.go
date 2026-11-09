@@ -364,7 +364,7 @@ func TestSearchCollectionFilter(t *testing.T) {
 	assert.String(t, "test", outcome.Results[0].Collection)
 }
 
-func TestAHybridSearchWithoutEmbeddingsFindsTheKeywordMatches(t *testing.T) {
+func TestHybridSearchWithoutEmbeddingsFindsKeywordMatches(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
 	outcome, e := s.Service.Search(

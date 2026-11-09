@@ -12,7 +12,7 @@ import (
 	"unicode/utf8"
 )
 
-func TestAnUnknownSessionExitsNotFound(t *testing.T) {
+func TestUnknownSessionExitsNotFound(t *testing.T) {
 	for _, arguments := range sessionCommands("zulu") {
 		_, failure, code := run(t, newMock(t), arguments...)
 		assert.Integer(t, 1, code)
@@ -21,7 +21,7 @@ func TestAnUnknownSessionExitsNotFound(t *testing.T) {
 	}
 }
 
-func TestAnAmbiguousSessionListsTheMatches(t *testing.T) {
+func TestAmbiguousSessionListsMatches(t *testing.T) {
 	c := newMock(t)
 	c.Matches = []client.ResolveMatch{
 		{Identifier: "alfa1234-0000", Name: new("kilo")},
@@ -34,7 +34,7 @@ func TestAnAmbiguousSessionListsTheMatches(t *testing.T) {
 	assert.StringContains(t, "lima", failure)
 }
 
-func TestAFailedCommandExitsWithItsMessage(t *testing.T) {
+func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range append(
 		sessionCommands("alfa"),
 		[]string{"cost"},
@@ -83,7 +83,7 @@ func TestEditPrintsNothingOnSuccess(t *testing.T) {
 	assert.String(t, "", stray)
 }
 
-func TestEditWithoutAChangeIsRefused(t *testing.T) {
+func TestEditWithoutChangeIsRefused(t *testing.T) {
 	_, failure, code := run(t, newMock(t), "session", soil.Edit, "alfa")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "provide --name or --description", failure)
@@ -97,7 +97,7 @@ func TestCostEmitsItsWindow(t *testing.T) {
 	assert.Integer(t, 7, r.Days)
 }
 
-func TestPrintIsADocument(t *testing.T) {
+func TestPrintIsDocument(t *testing.T) {
 	c := newMock(t)
 	c.Messages = []client.SessionMessage{
 		{Role: "user", Text: "kilo"},
@@ -118,7 +118,7 @@ func TestNoUsageYetIsNotFound(t *testing.T) {
 	assert.StringContains(t, "no usage data yet", failure)
 }
 
-func TestContextCutsALongMessageAtThreeHundredCharacters(t *testing.T) {
+func TestContextCutsLongMessageAtThreeHundredCharacters(t *testing.T) {
 	c := newMock(t)
 	long := fmt.Sprintf("x%s", strings.Repeat("ä", 300))
 	c.ToolContext = []client.ToolContextResult{
@@ -137,7 +137,7 @@ func TestContextCutsALongMessageAtThreeHundredCharacters(t *testing.T) {
 	assert.True(t, utf8.ValidString(output))
 }
 
-func TestAnInvalidTurnRangeIsRefused(t *testing.T) {
+func TestInvalidTurnRangeIsRefused(t *testing.T) {
 	_, failure, code := run(
 		t,
 		newMock(t),

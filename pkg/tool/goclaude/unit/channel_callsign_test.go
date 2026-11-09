@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestAwaitCallsignAsksAgainAfterAReleasedHold(t *testing.T) {
+func TestAwaitCallsignAsksAgainAfterReleasedHold(t *testing.T) {
 	c := stubServer(
 		t,
 		`{"callsign":"Ash"}`,

@@ -50,7 +50,7 @@ func TestReplaceWritesNothingWhenOneBlockFails(t *testing.T) {
 	assert.String(t, "alpha\nbeta\n", content(t, path))
 }
 
-func TestReplaceRefusesAnAmbiguousSearch(t *testing.T) {
+func TestReplaceRefusesAmbiguousSearch(t *testing.T) {
 	path := target(t, "x\ny\nx\n")
 	e := goreplace.Run(path, blocks("x", "z"), false, &bytes.Buffer{})
 	assert.StringContains(t, "matches 2 times, at lines 1, 3", failure(t, e))
@@ -67,7 +67,7 @@ func TestReplaceRefusesOverlappingBlocks(t *testing.T) {
 	assert.StringContains(t, "blocks 1 and 2 overlap at line 2", failure(t, e))
 }
 
-func TestReplaceMatchesAgainstTheOriginal(t *testing.T) {
+func TestReplaceMatchesAgainstOriginal(t *testing.T) {
 	path := target(t, "alpha\nbeta\n")
 	e := goreplace.Run(
 		path,
@@ -78,7 +78,7 @@ func TestReplaceMatchesAgainstTheOriginal(t *testing.T) {
 	assert.StringContains(t, "block 2: search not found", failure(t, e))
 }
 
-func TestReplaceDeletesAWholeLine(t *testing.T) {
+func TestReplaceDeletesWholeLine(t *testing.T) {
 	path := target(t, "alpha\nbeta\ngamma\n")
 	assert.FatalOnError(
 		t,
@@ -102,7 +102,7 @@ func TestReplaceHintsAtWhitespace(t *testing.T) {
 	)
 }
 
-func TestReplaceHintsAtTheFirstLine(t *testing.T) {
+func TestReplaceHintsAtFirstLine(t *testing.T) {
 	path := target(t, "one\ntwo\n")
 	e := goreplace.Run(path, blocks("one\nthree", "x"), false, &bytes.Buffer{})
 	assert.StringContains(t, "its first line occurs at line 1", failure(t, e))
@@ -118,7 +118,7 @@ func TestReplaceRefusesStrayText(t *testing.T) {
 	)
 }
 
-func TestReplaceRefusesAMissingDivider(t *testing.T) {
+func TestReplaceRefusesMissingDivider(t *testing.T) {
 	path := target(t, "alpha\n")
 	e := goreplace.Run(
 		path,
@@ -133,7 +133,7 @@ func TestReplaceRefusesAMissingDivider(t *testing.T) {
 	)
 }
 
-func TestReplaceKeepsTheFileMode(t *testing.T) {
+func TestReplaceKeepsFileMode(t *testing.T) {
 	path := target(t, "alpha\n")
 	assert.FatalOnError(t, os.Chmod(path, 0o755))
 	assert.FatalOnError(
@@ -145,7 +145,7 @@ func TestReplaceKeepsTheFileMode(t *testing.T) {
 	assert.String(t, "-rwxr-xr-x", i.Mode().String())
 }
 
-func TestSpanUntilDeletesASectionAndKeepsTheEnd(t *testing.T) {
+func TestSpanUntilDeletesSectionAndKeepsEnd(t *testing.T) {
 	path := target(t, "# a\n\n## Alfa\nx\ny\n\n## Bravo\nz\n")
 	var out bytes.Buffer
 	assert.FatalOnError(
@@ -165,7 +165,7 @@ func TestSpanUntilDeletesASectionAndKeepsTheEnd(t *testing.T) {
 	)
 }
 
-func TestSpanUntilKeepsTheEndOnItsOwnLine(t *testing.T) {
+func TestSpanUntilKeepsEndOnItsOwnLine(t *testing.T) {
 	path := target(t, "## Alfa\nold\n## Bravo\n")
 	assert.FatalOnError(
 		t,
@@ -184,7 +184,7 @@ func TestSpanUntilKeepsTheEndOnItsOwnLine(t *testing.T) {
 	assert.String(t, "## Alfa\nnew\n## Bravo\n", content(t, path))
 }
 
-func TestSpanThroughRemovesTheEnd(t *testing.T) {
+func TestSpanThroughRemovesEnd(t *testing.T) {
 	path := target(t, "a charlie b. delta. tail\n")
 	assert.FatalOnError(
 		t,
@@ -198,7 +198,7 @@ func TestSpanThroughRemovesTheEnd(t *testing.T) {
 	assert.String(t, "a X tail\n", content(t, path))
 }
 
-func TestSpanToEndReplacesTheRest(t *testing.T) {
+func TestSpanToEndReplacesRest(t *testing.T) {
 	path := target(t, "keep\n## Echo\nold\n")
 	assert.FatalOnError(
 		t,
@@ -212,7 +212,7 @@ func TestSpanToEndReplacesTheRest(t *testing.T) {
 	assert.String(t, "keep\n## Echo\nnone\n", content(t, path))
 }
 
-func TestSpanTakesTheFirstEndAfterTheStart(t *testing.T) {
+func TestSpanTakesFirstEndAfterStart(t *testing.T) {
 	path := target(t, "## End\n## Start\nx\n## End\ny\n## End\n")
 	assert.FatalOnError(
 		t,
@@ -226,7 +226,7 @@ func TestSpanTakesTheFirstEndAfterTheStart(t *testing.T) {
 	assert.String(t, "## End\n## End\ny\n## End\n", content(t, path))
 }
 
-func TestSpanRefusesAMissingEnd(t *testing.T) {
+func TestSpanRefusesMissingEnd(t *testing.T) {
 	path := target(t, "## Bravo\n## Alfa\nx\n")
 	e := goreplace.Run(
 		path,
@@ -242,7 +242,7 @@ func TestSpanRefusesAMissingEnd(t *testing.T) {
 	assert.String(t, "## Bravo\n## Alfa\nx\n", content(t, path))
 }
 
-func TestSpanRefusesAMissingClosing(t *testing.T) {
+func TestSpanRefusesMissingClosing(t *testing.T) {
 	path := target(t, "alpha\n")
 	e := goreplace.Run(
 		path,
@@ -272,7 +272,7 @@ func TestSpanRefusesTextAfterToEnd(t *testing.T) {
 	)
 }
 
-func TestAfterInsertsBelowTheAnchorLine(t *testing.T) {
+func TestAfterInsertsBelowAnchorLine(t *testing.T) {
 	path := target(t, "| a | 1 |\n| b | 2 |\n")
 	var out bytes.Buffer
 	assert.FatalOnError(
@@ -288,7 +288,7 @@ func TestAfterInsertsBelowTheAnchorLine(t *testing.T) {
 	assert.StringContains(t, "@@ block 1, line 1\n+| c | 3 |\n", out.String())
 }
 
-func TestAfterTheLastLineWithoutANewline(t *testing.T) {
+func TestAfterLastLineWithoutNewline(t *testing.T) {
 	path := target(t, "alpha\nbeta")
 	assert.FatalOnError(
 		t,
@@ -302,7 +302,7 @@ func TestAfterTheLastLineWithoutANewline(t *testing.T) {
 	assert.String(t, "alpha\nbeta\ngamma", content(t, path))
 }
 
-func TestBeforeInsertsAboveTheAnchorLine(t *testing.T) {
+func TestBeforeInsertsAboveAnchorLine(t *testing.T) {
 	path := target(t, "alpha\n| **Foxtrot** | | |\n")
 	assert.FatalOnError(
 		t,
@@ -316,7 +316,7 @@ func TestBeforeInsertsAboveTheAnchorLine(t *testing.T) {
 	assert.String(t, "alpha\nbeta\n| **Foxtrot** | | |\n", content(t, path))
 }
 
-func TestInsertAtASpanStartIsNoOverlap(t *testing.T) {
+func TestInsertAtSpanStartIsNoOverlap(t *testing.T) {
 	path := target(t, "a\n## S\nx\n## E\n")
 	assert.FatalOnError(
 		t,
@@ -333,7 +333,7 @@ func TestInsertAtASpanStartIsNoOverlap(t *testing.T) {
 	assert.String(t, "a\nb\n## T\n## E\n", content(t, path))
 }
 
-func TestInsertRefusesAnAnchorASpanRemoves(t *testing.T) {
+func TestInsertRefusesAnchorSpanRemoves(t *testing.T) {
 	path := target(t, "## S\nx\n## E\n")
 	e := goreplace.Run(
 		path,
@@ -352,7 +352,7 @@ func TestInsertRefusesAnAnchorASpanRemoves(t *testing.T) {
 	assert.String(t, "## S\nx\n## E\n", content(t, path))
 }
 
-func TestAfterRefusesAMultilineAnchor(t *testing.T) {
+func TestAfterRefusesMultilineAnchor(t *testing.T) {
 	path := target(t, "alpha\nbeta\n")
 	e := goreplace.Run(
 		path,
@@ -367,7 +367,7 @@ func TestAfterRefusesAMultilineAnchor(t *testing.T) {
 	)
 }
 
-func TestAfterRefusesAnAmbiguousAnchor(t *testing.T) {
+func TestAfterRefusesAmbiguousAnchor(t *testing.T) {
 	path := target(t, "| a |\n| a |\n")
 	e := goreplace.Run(
 		path,

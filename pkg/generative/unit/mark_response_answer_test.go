@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnswerFailsAnUncapturedClassQuietly(t *testing.T) {
+func TestAnswerFailsUncapturedClassQuietly(t *testing.T) {
 	m := memory.New()
 	r, e := response.Answer(
 		t.Context(),
@@ -24,7 +24,7 @@ func TestAnswerFailsAnUncapturedClassQuietly(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnswerCapturesACapturedClassWithItsMessage(t *testing.T) {
+func TestAnswerCapturesCapturedClassWithItsMessage(t *testing.T) {
 	m := memory.New()
 	r, e := response.Answer(
 		t.Context(),
@@ -41,7 +41,7 @@ func TestAnswerCapturesACapturedClassWithItsMessage(t *testing.T) {
 	assert.Count(t, 1, m.Events())
 }
 
-func TestAnswerCapturesTheUnclassifiedWithItsText(t *testing.T) {
+func TestAnswerCapturesUnclassifiedWithItsText(t *testing.T) {
 	m := memory.New()
 	r, e := response.Answer(t.Context(), m, errors.New("disk full"))
 	assert.Nil(t, e)
@@ -53,9 +53,9 @@ func TestAnswerCapturesTheUnclassifiedWithItsText(t *testing.T) {
 	assert.Count(t, 1, m.Events())
 }
 
-func TestAnswerWithPutsTheContextBeforeAQuietClass(t *testing.T) {
+func TestAnswerWithPutsContextBeforeQuietClass(t *testing.T) {
 	m := memory.New()
-	r, e := response.AnswerWith(
+	r, e := response.AnswerMessage(
 		t.Context(),
 		m,
 		not_found.Format("post not found: 8"),
@@ -70,9 +70,9 @@ func TestAnswerWithPutsTheContextBeforeAQuietClass(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnswerWithPutsTheContextBeforeAFault(t *testing.T) {
+func TestAnswerWithPutsContextBeforeFault(t *testing.T) {
 	m := memory.New()
-	r, e := response.AnswerWith(
+	r, e := response.AnswerMessage(
 		t.Context(),
 		m,
 		errors.New("disk full"),

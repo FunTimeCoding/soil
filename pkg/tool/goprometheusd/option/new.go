@@ -1,5 +1,7 @@
 package option
 
+import "time"
+
 func New() *Prometheus {
-	return &Prometheus{Client: BuildClient}
+	return &Prometheus{Clock: time.Now, Client: BuildClient}
 }

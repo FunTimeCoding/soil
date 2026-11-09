@@ -52,7 +52,7 @@ func TestDryRunLeavesTreeUntouched(t *testing.T) {
 	)
 }
 
-func TestDryRunReportsWhatTheRealRunReports(t *testing.T) {
+func TestDryRunReportsWhatRealRunReports(t *testing.T) {
 	planned := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("batch-file/src"),

@@ -39,7 +39,7 @@ func drawnTakes(
 	}
 
 	refers := func(e ast.Expr) bool {
-		return parameterOf(p, e, indices) == drawn
+		return parameter(p, e, indices) == drawn
 	}
 	ast.Inspect(
 		f.Body,

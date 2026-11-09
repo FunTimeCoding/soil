@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	s := service_tester.Fixed(stream)

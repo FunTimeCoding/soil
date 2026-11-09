@@ -10,8 +10,8 @@ func ComputeRenames(
 	u *ast.FuncDecl,
 ) []Rename {
 	variables := collectVariables(p.TypesInfo, u.Body)
-	collectFromParams(p.TypesInfo, u, &variables)
-	collectFromReceiver(p.TypesInfo, u, &variables)
+	collectParams(p.TypesInfo, u, &variables)
+	collectReceiver(p.TypesInfo, u, &variables)
 	applyParameterExemptions(variables)
 	var result []Rename
 

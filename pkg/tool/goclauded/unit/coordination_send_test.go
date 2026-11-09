@@ -23,13 +23,13 @@ func TestSendDirectMessage(t *testing.T) {
 		},
 	)
 	r := b.CheckLive()
-	messages := clientEntriesByKind(r.Entries, constant.QueueMessage)
+	messages := clientKindEntries(r.Entries, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	assert.StringContains(t, a.Name(), messages[0].Body)
 	assert.StringContains(t, "heads up: running lint", messages[0].Body)
 }
 
-func TestAnImmediateBroadcastSaysItWasQueued(t *testing.T) {
+func TestImmediateBroadcastSaysItWasQueued(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	b := s.NewSession(t)
@@ -45,7 +45,7 @@ func TestAnImmediateBroadcastSaysItWasQueued(t *testing.T) {
 	assert.StringContains(t, "queued - a broadcast never wakes anyone", answer)
 }
 
-func TestRestReportsWhetherASendWokeAnyone(t *testing.T) {
+func TestRestReportsWhetherSendWokeAnyone(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	b := s.NewSession(t)
@@ -86,7 +86,7 @@ func TestBroadcastReachesAnotherSession(t *testing.T) {
 		map[string]any{constant.Body: "deploying service"},
 	)
 	r := b.CheckLive()
-	messages := clientEntriesByKind(r.Entries, constant.QueueMessage)
+	messages := clientKindEntries(r.Entries, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	assert.StringContains(t, "deploying service", messages[0].Body)
 }

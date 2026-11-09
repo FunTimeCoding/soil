@@ -126,30 +126,40 @@ and the preposition marks where its receiver went. The query moves
 onto its noun (`item.Price()`), a lookup's parameter names its key
 (`User(name)`), a role becomes a qualifier (`AuthoredPosts(author)`),
 and a from-and-until pair becomes one noun, a window. An act is a verb,
-and the noun it lands on owns it: `RemoveFromList` is `list.Remove`. A
-method that never reads its receiver says the same from the other side:
-it is a function, or a method of what it reads.
+and the noun it lands on owns it: `RemoveFromList` is `list.Remove`. Where
+the owner is a qualifier, it moves forward: `ListItemsInAisle` is
+`ListAisleItems`. A method that never reads its receiver says the same from
+the other side: it is a function, or a method of what it reads.
 
-Two analyzers report these, not yet registered: `preposition_name`
-over declared names - functions, methods, interface methods, types and
-struct fields, never parameters or locals - and `unread_receiver`. The
-words and the places they count are `pkg/lint/constant/preposition.go`.
-Outside the first: interface implementations, test functions, yes/no
-states (a bool field, or a bool answer taking no argument), moments (a
-field ending in `At` or holding a time, and a function answering a
-time, then at most a bool and an error, in that order), and constants and
-variables.
+Two analyzers report these, not yet registered: `preposition_name` over
+every name the code defines - functions, methods, types, fields, constants,
+variables, parameters and locals - and `unread_receiver`. The words and the
+places they count are `pkg/lint/constant/preposition.go`: `with`, like
+`from`, counts anywhere but first and never after `New`; `per` and the verb
+particles (`up`, `out`, `off`, `down`) are not prepositions here. Outside the
+first:
+
+- interface implementations, and test functions (named as `testing.md`, Test
+  names);
+- yes/no states: a bool field, a bool answer taking no argument, and `In`
+  opening a bool question (`InStock(name)`);
+- moments: a field, parameter or local ending in `At` or holding a time; a
+  constant or package variable naming a moment or its column, field or index
+  (`ShippedAtColumn`); and a function answering a time, then at most a bool
+  and an error, whose word is `at`;
+- a parameter or local that is the bare word (`from`, `to`, `since`).
 
 ## Ordering variants
 
 Query and store methods that differ only in ordering are separate
 named methods, never a boolean direction parameter - Go has no
 named arguments, so `Seeds(since, 10, true)` tells the call-site
-reader nothing. The name carries the semantics:
+reader nothing. The name carries the semantics, and the moment goes in the
+parameter, never in the name:
 
-- `VersionsSince(...)` - forward walk from a point in time,
-  oldest first (streaming consumers: pollers, watermarks)
-- `RecentVersions(...)`, `RecentSeeds()` - `Recent` means
+- `Versions(since)` - forward walk from a point in time, oldest first
+  (streaming consumers: pollers, watermarks)
+- `RecentVersions(...)`, `RecentSeeds()` - `Recent` alone marks
   newest-first (display consumers: dashboards, tables)
 
 ## HTML node builder naming

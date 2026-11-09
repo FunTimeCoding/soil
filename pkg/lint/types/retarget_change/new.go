@@ -5,5 +5,5 @@ func New(
 	before string,
 	after string,
 ) *Change {
-	return &Change{Line: line, Before: before, After: after}
+	return &Change{Line: line, Old: before, New: after}
 }

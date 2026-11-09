@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestRenameReceiversThroughTheTool(t *testing.T) {
+func TestRenameReceiversThroughTool(t *testing.T) {
 	o := model_context_tester.New(
 		t,
 		"../../service/testdata/rename-receivers/src",

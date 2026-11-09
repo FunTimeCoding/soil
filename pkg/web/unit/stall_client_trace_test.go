@@ -6,13 +6,13 @@ import (
 	"testing"
 )
 
-func TestAnUntracedClientSendsNoTrace(t *testing.T) {
+func TestUntracedClientSendsNoTrace(t *testing.T) {
 	trace, baggage := traceHeaders(t, stall_client.New().Build())
 	assert.String(t, "", trace)
 	assert.String(t, "", baggage)
 }
 
-func TestATracedClientSendsTheTrace(t *testing.T) {
+func TestTracedClientSendsTrace(t *testing.T) {
 	trace, baggage := traceHeaders(t, stall_client.New().Traced().Build())
 	assert.Prefix(t, "0123456789abcdef0123456789abcdef-", trace)
 	assert.StringContains(t, "sentry-release=alfa", baggage)

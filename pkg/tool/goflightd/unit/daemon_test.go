@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonSamplesWirelessWhenItAnswers(t *testing.T) {
+func TestDaemonSamplesWirelessWhenItAnswers(t *testing.T) {
 	s := mock_system.New()
 	t.Cleanup(s.Close)
 	s.Answer(constant.Sudo, constant.WirelessSample)
@@ -24,7 +24,7 @@ func TestTheDaemonSamplesWirelessWhenItAnswers(t *testing.T) {
 	assert.Count(t, 4, d.Workers())
 }
 
-func TestTheDaemonSkipsWirelessWhenItFails(t *testing.T) {
+func TestDaemonSkipsWirelessWhenItFails(t *testing.T) {
 	s := mock_system.New()
 	t.Cleanup(s.Close)
 	s.Fail(constant.Sudo, errors.Format("exit", 1))
@@ -33,7 +33,7 @@ func TestTheDaemonSkipsWirelessWhenItFails(t *testing.T) {
 	assert.Count(t, 3, d.Workers())
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	s := mock_system.New()
 	t.Cleanup(s.Close)
 	s.Serve(mock_stream.New(nil, true, errors.Format("killed", 9)))

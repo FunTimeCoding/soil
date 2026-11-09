@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAFieldRowShowsItsLabelValueAndActions(t *testing.T) {
+func TestFieldRowShowsItsLabelValueAndActions(t *testing.T) {
 	assert.String(
 		t,
 		`<div id="field-alfa" class="field-row"><span class="field-label" data-tooltip="Bravo help">Bravo</span><span class="field-value">charlie</span><span class="field-actions"><button>delta</button></span></div>`,
@@ -24,7 +24,7 @@ func TestAFieldRowShowsItsLabelValueAndActions(t *testing.T) {
 	)
 }
 
-func TestAnEmptyFieldRowReadsNotSet(t *testing.T) {
+func TestEmptyFieldRowReadsNotSet(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row field-unset"><span class="field-label">Echo</span><span class="field-value"><span class="absent">not set</span></span></div>`,
@@ -32,7 +32,7 @@ func TestAnEmptyFieldRowReadsNotSet(t *testing.T) {
 	)
 }
 
-func TestANoteIsMutedWithoutMarkingTheRowUnset(t *testing.T) {
+func TestNoteIsMutedWithoutMarkingRowUnset(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row"><span class="field-label">Foxtrot</span><span class="field-value"><small class="field-note">text · required</small></span></div>`,
@@ -43,7 +43,7 @@ func TestANoteIsMutedWithoutMarkingTheRowUnset(t *testing.T) {
 	)
 }
 
-func TestAnUnlabelledRowCarriesItsContent(t *testing.T) {
+func TestUnlabelledRowCarriesItsContent(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row"><span class="field-value"><a href="/golf">Golf</a></span></div>`,

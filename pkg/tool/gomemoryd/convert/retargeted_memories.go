@@ -18,8 +18,8 @@ func RetargetedMemories(
 				changes,
 				server.RetargetChange{
 					Line:   c.Line,
-					Before: c.Before,
-					After:  c.After,
+					Before: c.Old,
+					After:  c.New,
 					Reason: c.Reason,
 				},
 			)

@@ -6,14 +6,13 @@ import (
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
-	"time"
 )
 
 func (s *Server) permissionsPage(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
-	r, e := s.transcript.Permissions(constant.PermissionWindowDays, time.Now())
+	r, e := s.transcript.Permissions(constant.PermissionWindowDays)
 
 	if e != nil {
 		s.view.Answer(w, q, s.reporter, e)
@@ -21,7 +20,7 @@ func (s *Server) permissionsPage(
 		return
 	}
 
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.PermissionsTitle,
 		constant.PermissionsPath,

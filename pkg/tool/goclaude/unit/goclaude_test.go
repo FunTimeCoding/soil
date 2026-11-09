@@ -58,7 +58,7 @@ func TestVerdictBlocksPipInstall(t *testing.T) {
 	)
 }
 
-func TestVerdictBlocksASinglePythonReplacement(t *testing.T) {
+func TestVerdictBlocksSinglePythonReplacement(t *testing.T) {
 	assert.String(
 		t,
 		"a single python search-and-replace in one file is an Edit call - use the Edit tool; for several replacements in one file, use goreplace (search/replace blocks on stdin, all or none)",
@@ -85,7 +85,7 @@ func TestVerdictBlocksASinglePythonReplacement(t *testing.T) {
 	)
 }
 
-func TestVerdictAllowsPythonThatIsNotASingleReplacement(t *testing.T) {
+func TestVerdictAllowsPythonThatIsNotSingleReplacement(t *testing.T) {
 	for _, command := range []string{
 		"python3 - <<'EOF'\np='notes.md'\ns=open(p).read()\ns=s.replace('a','b').replace('c','d')\nopen(p,'w').write(s)\nEOF",
 		"python3 - <<'EOF'\np='notes.md'\ns=open(p).read()\nfor a, b in [('a','b'),('c','d')]:\n    s=s.replace(a,b)\nopen(p,'w').write(s)\nEOF",
@@ -100,7 +100,7 @@ func TestVerdictAllowsPythonThatIsNotASingleReplacement(t *testing.T) {
 	}
 }
 
-func TestVerdictAllowsASingleReplacementProbeThatRestores(t *testing.T) {
+func TestVerdictAllowsSingleReplacementProbeThatRestores(t *testing.T) {
 	edit := "python3 - <<'PY'\np='pkg/x/run.go'\ns=open(p).read()\ns=s.replace('a','b')\nopen(p,'w').write(s)\nPY\n"
 	assert.String(
 		t,
@@ -124,7 +124,7 @@ func TestVerdictAllowsASingleReplacementProbeThatRestores(t *testing.T) {
 	)
 }
 
-func TestVerdictBlocksASingleReplacementThatIsNotRestored(t *testing.T) {
+func TestVerdictBlocksSingleReplacementThatIsNotRestored(t *testing.T) {
 	edit := "python3 - <<'PY'\np='pkg/x/run.go'\ns=open(p).read()\ns=s.replace('a','b')\nopen(p,'w').write(s)\nPY\n"
 
 	for _, command := range []string{

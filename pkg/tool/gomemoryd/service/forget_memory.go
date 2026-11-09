@@ -12,7 +12,7 @@ func (s *Service) ForgetMemory(
 		return e
 	}
 
-	if e = s.store.ForgetMemory(identifier, source); e != nil {
+	if e = s.store.ForgetMemory(identifier, source, s.clock()); e != nil {
 		return e
 	}
 

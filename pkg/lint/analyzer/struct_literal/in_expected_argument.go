@@ -10,7 +10,7 @@ func inExpectedArgument(
 	position token.Pos,
 ) bool {
 	for _, r := range ranges {
-		if position >= r.From && position < r.To {
+		if position >= r.Start && position < r.End {
 			return true
 		}
 	}

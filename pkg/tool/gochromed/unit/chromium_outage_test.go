@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestEveryToolFailsOnAChromiumOutage(t *testing.T) {
+func TestEveryToolFailsOnChromiumOutage(t *testing.T) {
 	r := memory.New()
 	var unanswered []string
 
@@ -32,12 +32,12 @@ func TestEveryToolFailsOnAChromiumOutage(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestTheDaemonHandsOutTheChromiumGuard(t *testing.T) {
+func TestDaemonHandsOutChromiumGuard(t *testing.T) {
 	_, okay := daemon_tester.New(t, mock_client.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
-func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
+func TestDaemonClosesClientItBuilt(t *testing.T) {
 	c := mock_client.New()
 	daemon_tester.New(t, c).Close()
 	assert.Integer(t, 1, c.Closed())

@@ -15,13 +15,13 @@ func (s *Server) ListProjects(
 	instance, e := s.resolveInstance(x)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	v, e := s.service.Projects(x, instance, a.Search)
 
 	if e != nil {
-		return s.answerWith(x, e, "")
+		return s.answerMessage(x, e, "")
 	}
 
 	return response.SuccessAny(v)

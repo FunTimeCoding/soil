@@ -16,7 +16,7 @@ func (s *Service) Move(
 		return e
 	}
 
-	entry, source := s.client.EntryByIdentifier(identifier)
+	entry, source := s.client.Entry(identifier)
 
 	if entry == nil {
 		return not_found.New("entry", identifier)

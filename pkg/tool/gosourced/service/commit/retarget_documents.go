@@ -46,7 +46,7 @@ func (s *Service) retargetDocuments(
 			continue
 		}
 
-		out := SinkFor(result, root)
+		out := RootSink(result, root)
 
 		if out == nil {
 			out = sink.New(root)

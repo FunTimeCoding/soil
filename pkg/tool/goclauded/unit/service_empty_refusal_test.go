@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestEmptyRefusalAcceptsAHusk(t *testing.T) {
+func TestEmptyRefusalAcceptsHusk(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
 	r := s.Store.GetSession("husk")

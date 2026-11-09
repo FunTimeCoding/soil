@@ -14,7 +14,7 @@ import (
 func TestImportAliasFix(t *testing.T) {
 	directory := module_tester.ImportAlias(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunImportAliasFixWithDirectory([]string{"./..."}, directory, false, r)
+	gofix.RunImportAliasFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"SuperfluousAlias",
 		func(t *testing.T) {

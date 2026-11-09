@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsTheDaemon(t *testing.T) {
+func TestClientReadsDaemon(t *testing.T) {
 	m := service_tester.NewSource(t)
 	m.SeedDevice("alfa")
 	c := client_tester.New(t, m)
@@ -23,7 +23,7 @@ func TestTheClientReadsTheDaemon(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }
 
-func TestTheClientAnswersAnUnknownDeviceAsNotFound(t *testing.T) {
+func TestClientAnswersUnknownDeviceAsNotFound(t *testing.T) {
 	_, e := client_tester.New(t, service_tester.NewSource(t)).GetDevice(
 		context.Background(),
 		"alfa",
@@ -31,7 +31,7 @@ func TestTheClientAnswersAnUnknownDeviceAsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestTheClientAnswersARejectedCreateAsValidation(t *testing.T) {
+func TestClientAnswersRejectedCreateAsValidation(t *testing.T) {
 	_, e := client_tester.New(
 		t,
 		refusing_source.New(validation.New("slug: exists")),
@@ -40,7 +40,7 @@ func TestTheClientAnswersARejectedCreateAsValidation(t *testing.T) {
 	assert.StringContains(t, "slug: exists", e.Error())
 }
 
-func TestTheClientAnswersARefusedTokenAsReported(t *testing.T) {
+func TestClientAnswersRefusedTokenAsReported(t *testing.T) {
 	_, e := client_tester.New(
 		t,
 		refusing_source.New(

@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/parse"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/event"
@@ -79,16 +80,14 @@ func TestStoreRoundTrip(t *testing.T) {
 		),
 	)
 	events, e := s.Service.Events(
-		now.Add(-1*time.Hour),
-		now.Add(time.Hour),
+		window.New(now.Add(-1*time.Hour), now.Add(time.Hour)),
 		100,
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(events))
 	assert.String(t, "ensembled", events[0].Process)
 	snapshots, f := s.Service.Snapshots(
-		now.Add(-1*time.Hour),
-		now.Add(time.Hour),
+		window.New(now.Add(-1*time.Hour), now.Add(time.Hour)),
 		100,
 	)
 	assert.FatalOnError(t, f)

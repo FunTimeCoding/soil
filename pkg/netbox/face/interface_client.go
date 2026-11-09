@@ -27,7 +27,7 @@ type InterfaceClient interface {
 		h net.HardwareAddr,
 	) (*network.Interface, error)
 	PhysicalAddresses() ([]*physical_address.Address, error)
-	DeviceInterfaceByName(
+	DeviceInterface(
 		d *device.Device,
 		name string,
 	) (*network.Interface, error)
@@ -70,7 +70,7 @@ type InterfaceClient interface {
 		description string,
 	) *physical_address.Address
 	MustDeleteInterface(identifier int32)
-	MustDeviceInterfaceByName(
+	MustDeviceInterface(
 		d *device.Device,
 		name string,
 	) *network.Interface
@@ -78,7 +78,7 @@ type InterfaceClient interface {
 	MustInterfaceAddresses(interfaceIdentifier int32) []*internet_address.Address
 	MustPhysicalAddress(a net.HardwareAddr) *physical_address.Address
 	MustPhysicalAddresses() []*physical_address.Address
-	MustPhysicalAddressesByHardware(a net.HardwareAddr) []*physical_address.Address
+	MustHardwarePhysicalAddresses(a net.HardwareAddr) []*physical_address.Address
 	MustUpdateInterface(
 		d *device.Device,
 		name string,
@@ -90,7 +90,7 @@ type InterfaceClient interface {
 		i *network.Interface,
 	) *physical_address.Address
 	PhysicalAddress(a net.HardwareAddr) (*physical_address.Address, error)
-	PhysicalAddressesByHardware(a net.HardwareAddr) ([]*physical_address.Address, error)
+	HardwarePhysicalAddresses(a net.HardwareAddr) ([]*physical_address.Address, error)
 	PhysicalExists(a net.HardwareAddr) (bool, error)
 	UpdatePhysicalAddress(
 		a *physical_address.Address,

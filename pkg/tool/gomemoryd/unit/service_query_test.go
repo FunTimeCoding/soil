@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestASearchHitResolvesToItsMemory(t *testing.T) {
+func TestSearchHitResolvesToItsMemory(t *testing.T) {
 	o := service_tester.New(t)
 	m, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
 	assert.FatalOnError(t, e)
@@ -20,7 +20,7 @@ func TestASearchHitResolvesToItsMemory(t *testing.T) {
 	assert.String(t, "retry policy", found[0].Name)
 }
 
-func TestASearchHitWithoutAMemoryIsDropped(t *testing.T) {
+func TestSearchHitWithoutMemoryIsDropped(t *testing.T) {
 	o := service_tester.New(t)
 	_, e := o.Indexer.PostDocument(
 		t.Context(),
@@ -36,7 +36,7 @@ func TestASearchHitWithoutAMemoryIsDropped(t *testing.T) {
 	assert.Count(t, 0, found)
 }
 
-func TestASearchGoquerydRefusesKeepsItsClass(t *testing.T) {
+func TestSearchGoquerydRefusesKeepsItsClass(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = unavailable.Format("embedder unreachable")
 	_, e := o.Service.SearchRelevant("retry", 10, nil)

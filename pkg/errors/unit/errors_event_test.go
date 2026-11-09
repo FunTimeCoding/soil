@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestEventErrorCarriesTheStory(t *testing.T) {
+func TestEventErrorCarriesStory(t *testing.T) {
 	wrapped := errors.New("index out of range")
 	e := event.New("state_changed", `{"entity_id":"light.desk"}`, wrapped)
 	assert.String(t, "event state_changed: index out of range", e.Error())

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestUnsubscribeForgetsARootOnlyWhenItsLastSubscriberLeaves(t *testing.T) {
+func TestUnsubscribeForgetsRootOnlyWhenItsLastSubscriberLeaves(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.AddPost("alfa")
 	_, k := worker_tester.NewSink(t)

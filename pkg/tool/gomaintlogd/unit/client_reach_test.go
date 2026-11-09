@@ -9,12 +9,12 @@ import (
 	"testing"
 )
 
-func TestTheClientReachesGomaintlogd(t *testing.T) {
+func TestClientReachesGomaintlogd(t *testing.T) {
 	s := base.New(t)
 	assert.FatalOnError(t, s.MaintenanceClient(t).Reachable(t.Context()))
 }
 
-func TestARefusedTokenIsNotReachable(t *testing.T) {
+func TestRefusedTokenIsNotReachable(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),

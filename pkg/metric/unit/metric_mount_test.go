@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheExporterMountsOpenAtTheMetricsPath(t *testing.T) {
+func TestExporterMountsOpenAtMetricsPath(t *testing.T) {
 	m := http.NewServeMux()
 	metric.New().Mount(guard.New(m, nil))
 	r := httptest.NewRecorder()

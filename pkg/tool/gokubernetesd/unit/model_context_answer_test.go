@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestGettingAMissingPodAnswersWithoutAReport(t *testing.T) {
+func TestGettingMissingPodAnswersWithoutReport(t *testing.T) {
 	c, r := service_tester.New(t).Mounted(false)
 	text, e := c.CallToolError(
 		constant.Get,
@@ -25,7 +25,7 @@ func TestGettingAMissingPodAnswersWithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAForbiddenDeleteAnswersWithoutAReport(t *testing.T) {
+func TestForbiddenDeleteAnswersWithoutReport(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(
 		kubernetesErrors.NewForbidden(
@@ -48,7 +48,7 @@ func TestAForbiddenDeleteAnswersWithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAnInvalidPatchAnswersWithoutAReport(t *testing.T) {
+func TestInvalidPatchAnswersWithoutReport(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(kubernetesErrors.NewBadRequest("the patch is not valid"))
 	c, r := v.Mounted(true)
@@ -67,7 +67,7 @@ func TestAnInvalidPatchAnswersWithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAnUnexpectedClusterFailureIsReported(t *testing.T) {
+func TestUnexpectedClusterFailureIsReported(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(errors.New("etcd exploded"))
 	c, r := v.Mounted(false)

@@ -1,0 +1,3 @@
+package name
+
+func TestTheOutsideOfTestFiles() {}

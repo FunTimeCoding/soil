@@ -33,7 +33,7 @@ func TestAptlyAddRefusesWhatAptlyFailed(t *testing.T) {
 	assert.StringContains(t, "already exists and is different", e.Error())
 }
 
-func TestAptlyAddForcesTheReplacement(t *testing.T) {
+func TestAptlyAddForcesReplacement(t *testing.T) {
 	var seen aptlySeen
 	c := fakeAptly(
 		t,

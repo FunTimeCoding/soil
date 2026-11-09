@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMoveKeepsAVariadicSpread(t *testing.T) {
+func TestMoveKeepsVariadicSpread(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("move-variadic/src"),

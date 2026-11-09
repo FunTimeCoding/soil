@@ -32,6 +32,7 @@ func NewService(
 		o.LogCachePath,
 		o.ElitePath,
 		o.OutputPath,
+		o.Clock,
 		l,
 	)
 }

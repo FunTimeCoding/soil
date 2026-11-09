@@ -13,21 +13,21 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsTheDaemon(t *testing.T) {
+func TestClientReadsDaemon(t *testing.T) {
 	c := client_tester.New(t, mock_client.New())
 	_, e := c.ListLeases(context.Background(), "")
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }
 
-func TestTheClientAnswersARejectedHostAsValidation(t *testing.T) {
+func TestClientAnswersRejectedHostAsValidation(t *testing.T) {
 	c := client_tester.New(t, rejecting_host.New())
 	_, e := c.AddHost(context.Background(), client.HostRequest{}, true)
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "host rejected: ip: invalid address", e.Error())
 }
 
-func TestTheClientAnswersAnUnknownHostAsNotFound(t *testing.T) {
+func TestClientAnswersUnknownHostAsNotFound(t *testing.T) {
 	m := missing_host.New()
 	c := client_tester.New(t, m)
 	assert.True(
@@ -37,7 +37,7 @@ func TestTheClientAnswersAnUnknownHostAsNotFound(t *testing.T) {
 	assert.Strings(t, []string{"alfa"}, m.Asked)
 }
 
-func TestTheClientAcceptsANoContentWrite(t *testing.T) {
+func TestClientAcceptsNoContentWrite(t *testing.T) {
 	c := client_tester.New(t, mock_client.New())
 	assert.FatalOnError(
 		t,

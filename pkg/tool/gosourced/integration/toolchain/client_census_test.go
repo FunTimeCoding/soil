@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsACensus(t *testing.T) {
+func TestClientReadsCensus(t *testing.T) {
 	c := mountedCensus(t, prepareCensus(t))
 	r, e := c.GetCensus(
 		t.Context(),
@@ -27,7 +27,7 @@ func TestTheClientReadsACensus(t *testing.T) {
 	assert.Count(t, 0, r.Methods[2].Uses)
 }
 
-func TestTheClientAnswersAnUnknownModuleAsNotFound(t *testing.T) {
+func TestClientAnswersUnknownModuleAsNotFound(t *testing.T) {
 	c := mountedCensus(t, prepareCensus(t))
 	_, e := c.GetCensus(
 		t.Context(),
@@ -40,7 +40,7 @@ func TestTheClientAnswersAnUnknownModuleAsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestTheClientAnswersAnUnknownTypeAsRefused(t *testing.T) {
+func TestClientAnswersUnknownTypeAsRefused(t *testing.T) {
 	c := mountedCensus(t, prepareCensus(t))
 	_, e := c.GetCensus(
 		t.Context(),

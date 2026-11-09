@@ -32,7 +32,7 @@ func sameRewrite(
 		r, e := run(s, directory)
 		assert.FatalOnError(t, e)
 		testutil.AssertBlocked(t, r, 0)
-		trees = append(trees, treeOf(t, directory))
+		trees = append(trees, directoryTree(t, directory))
 	}
 
 	assert.String(t, trees[1], trees[0])

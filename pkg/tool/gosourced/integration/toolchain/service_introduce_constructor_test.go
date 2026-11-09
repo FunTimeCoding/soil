@@ -60,7 +60,7 @@ func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
 	assert.StringContains(t, "return new(single.Shape)", shapes)
 }
 
-func TestIntroduceConstructorReportsWhyASiteStays(t *testing.T) {
+func TestIntroduceConstructorReportsWhySiteStays(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
@@ -116,7 +116,7 @@ func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
 	)
 }
 
-func TestIntroduceConstructorNamesBagConstructorsAfterTheType(t *testing.T) {
+func TestIntroduceConstructorNamesBagConstructorsAfterType(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
@@ -171,7 +171,7 @@ func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
 	)
 }
 
-func TestIntroduceConstructorRefusesATaintedPackage(t *testing.T) {
+func TestIntroduceConstructorRefusesTaintedPackage(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),
@@ -195,7 +195,7 @@ func TestIntroduceConstructorRefusesATaintedPackage(t *testing.T) {
 	)
 }
 
-func TestIntroduceConstructorRefusesAnUnknownParameter(t *testing.T) {
+func TestIntroduceConstructorRefusesUnknownParameter(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("introduce-constructor/src"),

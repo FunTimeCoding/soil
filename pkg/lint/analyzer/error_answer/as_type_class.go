@@ -46,5 +46,5 @@ func asTypeClass(
 		return ""
 	}
 
-	return classOfType(p.TypesInfo.TypeOf(index.Index))
+	return typeClass(p.TypesInfo.TypeOf(index.Index))
 }

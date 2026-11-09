@@ -14,7 +14,7 @@ func RetargetConcern(
 	if c.Reason != "" {
 		return concern.NewLine(
 			constant.ConcernReferenceLeft,
-			fmt.Sprintf("%s: %s", c.Before, c.Reason),
+			fmt.Sprintf("%s: %s", c.Old, c.Reason),
 			path,
 			c.Line,
 			"",
@@ -24,7 +24,7 @@ func RetargetConcern(
 
 	return concern.NewLine(
 		constant.ConcernRetargeted,
-		fmt.Sprintf("%s → %s", c.Before, c.After),
+		fmt.Sprintf("%s → %s", c.Old, c.New),
 		path,
 		c.Line,
 		"",

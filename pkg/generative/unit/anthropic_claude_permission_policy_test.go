@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestPolicyAllowsALoopOfAllowlistedCommands(t *testing.T) {
+func TestPolicyAllowsLoopOfAllowlistedCommands(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -27,12 +27,12 @@ func TestPolicyAllowsRemovingInsideScratch(t *testing.T) {
 	assert.True(t, allows(t, root, scratchpad, `rm -f "tmp/work/x clean.md"`))
 }
 
-func TestPolicyAllowsAGlobInsideAScratchDirectory(t *testing.T) {
+func TestPolicyAllowsGlobInsideScratchDirectory(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(t, allows(t, root, scratchpad, `rm -f tmp/work/*.md`))
 }
 
-func TestPolicyAllowsAVariableNamingTheScratchpad(t *testing.T) {
+func TestPolicyAllowsVariableNamingScratchpad(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -58,7 +58,7 @@ func TestPolicyAllowsRedirectingIntoScratch(t *testing.T) {
 	)
 }
 
-func TestPolicyAllowsAnAllowlistedSubstitution(t *testing.T) {
+func TestPolicyAllowsAllowlistedSubstitution(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -71,12 +71,12 @@ func TestPolicyAllowsCopyingIntoScratch(t *testing.T) {
 	assert.True(t, allows(t, root, scratchpad, `cp doc/guide/a.md tmp/work/`))
 }
 
-func TestPolicyFollowsAChangeDirectory(t *testing.T) {
+func TestPolicyFollowsChangeDirectory(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(t, allows(t, root, scratchpad, `cd tmp/work && rm -f x.md`))
 }
 
-func TestPolicyAllowsShellBuiltinsInsideALoop(t *testing.T) {
+func TestPolicyAllowsShellBuiltinsInsideLoop(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -89,12 +89,12 @@ func TestPolicyAllowsShellBuiltinsInsideALoop(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAShellBuiltinTheAllowlistLacks(t *testing.T) {
+func TestPolicyRefusesShellBuiltinAllowlistLacks(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `ls doc; shift`))
 }
 
-func TestPolicyAllowsATimeoutAroundAnAllowlistedCommand(t *testing.T) {
+func TestPolicyAllowsTimeoutAroundAllowlistedCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -107,17 +107,17 @@ func TestPolicyAllowsATimeoutAroundAnAllowlistedCommand(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesATimeoutAroundAnUnlistedCommand(t *testing.T) {
+func TestPolicyRefusesTimeoutAroundUnlistedCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `timeout 900 python3 x.py`))
 }
 
-func TestPolicyRefusesAFieldSeparatorChangeThatOutlivesOneCommand(t *testing.T) {
+func TestPolicyRefusesFieldSeparatorChangeThatOutlivesOneCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `IFS=/; ls doc`))
 }
 
-func TestPolicyForgetsAVariableThatReadOverwrites(t *testing.T) {
+func TestPolicyForgetsVariableThatReadOverwrites(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -135,27 +135,27 @@ func TestPolicyRefusesRemovingOutsideScratch(t *testing.T) {
 	assert.False(t, allows(t, root, scratchpad, `rm doc/guide/a.md`))
 }
 
-func TestPolicyRefusesAPathClimbingOutOfScratch(t *testing.T) {
+func TestPolicyRefusesPathClimbingOutOfScratch(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `rm tmp/../doc/guide/a.md`))
 }
 
-func TestPolicyRefusesTheScratchRootItself(t *testing.T) {
+func TestPolicyRefusesScratchRootItself(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `rm -rf tmp`))
 }
 
-func TestPolicyRefusesAGlobOverTheScratchRoot(t *testing.T) {
+func TestPolicyRefusesGlobOverScratchRoot(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `rm -rf tmp/*`))
 }
 
-func TestPolicyRefusesADotGlob(t *testing.T) {
+func TestPolicyRefusesDotGlob(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `rm -rf tmp/work/.*`))
 }
 
-func TestPolicyRefusesASymlinkOutOfScratch(t *testing.T) {
+func TestPolicyRefusesSymlinkOutOfScratch(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.FatalOnError(
 		t,
@@ -172,7 +172,7 @@ func TestPolicyRefusesASymlinkOutOfScratch(t *testing.T) {
 	assert.False(t, allows(t, root, scratchpad, `rm -rf tmp/work/link/guide`))
 }
 
-func TestPolicyRefusesAnUnlistedCommand(t *testing.T) {
+func TestPolicyRefusesUnlistedCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -180,7 +180,7 @@ func TestPolicyRefusesAnUnlistedCommand(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAnUnlistedCommandInsideALoop(t *testing.T) {
+func TestPolicyRefusesUnlistedCommandInsideLoop(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -188,7 +188,7 @@ func TestPolicyRefusesAnUnlistedCommandInsideALoop(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAnUnlistedSubstitution(t *testing.T) {
+func TestPolicyRefusesUnlistedSubstitution(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -201,12 +201,12 @@ func TestPolicyRefusesRedirectingOutsideScratch(t *testing.T) {
 	assert.False(t, allows(t, root, scratchpad, `echo x > doc/guide/a.md`))
 }
 
-func TestPolicyRefusesAnUnknownVariable(t *testing.T) {
+func TestPolicyRefusesUnknownVariable(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `rm -rf "$HOME/x"`))
 }
 
-func TestPolicyForgetsAVariableSetInsideALoop(t *testing.T) {
+func TestPolicyForgetsVariableSetInsideLoop(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -219,12 +219,12 @@ func TestPolicyForgetsAVariableSetInsideALoop(t *testing.T) {
 	)
 }
 
-func TestPolicyKeepsASubshellChangeDirectoryInside(t *testing.T) {
+func TestPolicyKeepsSubshellChangeDirectoryInside(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `(cd tmp/work) && rm -f x.md`))
 }
 
-func TestPolicyRefusesAFunctionShadowingAnAllowlistedName(t *testing.T) {
+func TestPolicyRefusesFunctionShadowingAllowlistedName(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -232,7 +232,7 @@ func TestPolicyRefusesAFunctionShadowingAnAllowlistedName(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAPathOverride(t *testing.T) {
+func TestPolicyRefusesPathOverride(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `PATH=/tmp/evil grep x a.md`))
 }
@@ -245,7 +245,7 @@ func TestPolicyRefusesFindExec(t *testing.T) {
 	)
 }
 
-func TestPolicyAllowsSedInPlaceLikeTheAllowlist(t *testing.T) {
+func TestPolicyAllowsSedInPlaceLikeAllowlist(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -253,12 +253,12 @@ func TestPolicyAllowsSedInPlaceLikeTheAllowlist(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAnUnknownLeadingAssignment(t *testing.T) {
+func TestPolicyRefusesUnknownLeadingAssignment(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `FOO=bar app run --rm alpha x`))
 }
 
-func TestPolicyAllowsALocaleBeforeACommand(t *testing.T) {
+func TestPolicyAllowsLocaleBeforeCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -266,17 +266,17 @@ func TestPolicyAllowsALocaleBeforeACommand(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAFieldSeparatorBeforeAnythingButRead(t *testing.T) {
+func TestPolicyRefusesFieldSeparatorBeforeAnythingButRead(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `IFS=/ ls doc`))
 }
 
-func TestPolicyRefusesAnUnquotedGlobOnAWriteCapableCommand(t *testing.T) {
+func TestPolicyRefusesUnquotedGlobOnWriteCapableCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `find doc -name *.md`))
 }
 
-func TestPolicyAllowsAQuotedGlobOnAWriteCapableCommand(t *testing.T) {
+func TestPolicyAllowsQuotedGlobOnWriteCapableCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(t, allows(t, root, scratchpad, `find doc -name '*.md'`))
 }
@@ -286,7 +286,7 @@ func TestPolicyRefusesGitAfterChangingDirectory(t *testing.T) {
 	assert.False(t, allows(t, root, scratchpad, `cd tmp/work && git diff`))
 }
 
-func TestPolicyAllowsGitAfterAChangeDirectoryThatStays(t *testing.T) {
+func TestPolicyAllowsGitAfterChangeDirectoryThatStays(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -294,7 +294,7 @@ func TestPolicyAllowsGitAfterAChangeDirectoryThatStays(t *testing.T) {
 	)
 }
 
-func TestPolicyUnwrapsABareXargs(t *testing.T) {
+func TestPolicyUnwrapsBareXargs(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -302,7 +302,7 @@ func TestPolicyUnwrapsABareXargs(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAnXargsWithFlags(t *testing.T) {
+func TestPolicyRefusesXargsWithFlags(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(
 		t,
@@ -310,12 +310,12 @@ func TestPolicyRefusesAnXargsWithFlags(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesACommandLookup(t *testing.T) {
+func TestPolicyRefusesCommandLookup(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `command -v python3`))
 }
 
-func TestPolicyAllowsAReadOnlyCommandOutsideTheAllowlist(t *testing.T) {
+func TestPolicyAllowsReadOnlyCommandOutsideAllowlist(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.True(
 		t,
@@ -328,12 +328,12 @@ func TestPolicyAllowsAReadOnlyCommandOutsideTheAllowlist(t *testing.T) {
 	)
 }
 
-func TestPolicyRefusesAnUnparseableCommand(t *testing.T) {
+func TestPolicyRefusesUnparseableCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `for x in; do`))
 }
 
-func TestPolicyRefusesABackgroundJob(t *testing.T) {
+func TestPolicyRefusesBackgroundJob(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.False(t, allows(t, root, scratchpad, `grep x a.md &`))
 }
@@ -348,7 +348,7 @@ func TestPolicyRefusesCopyingOutOfScratch(t *testing.T) {
 	assert.False(t, allows(t, root, scratchpad, `cp tmp/work/a.md doc/guide/`))
 }
 
-func TestPolicyNamesNoBlockerForAnAllowedCommand(t *testing.T) {
+func TestPolicyNamesNoBlockerForAllowedCommand(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,
@@ -357,7 +357,7 @@ func TestPolicyNamesNoBlockerForAnAllowedCommand(t *testing.T) {
 	)
 }
 
-func TestPolicyNamesEveryBlockerNotOnlyTheFirst(t *testing.T) {
+func TestPolicyNamesEveryBlockerNotOnlyFirst(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,
@@ -371,7 +371,7 @@ func TestPolicyNamesEveryBlockerNotOnlyTheFirst(t *testing.T) {
 	)
 }
 
-func TestPolicyNamesTheBlockerInsideLoopsAndSubstitutions(t *testing.T) {
+func TestPolicyNamesBlockerInsideLoopsAndSubstitutions(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,
@@ -395,7 +395,7 @@ func TestPolicyNamesTheBlockerInsideLoopsAndSubstitutions(t *testing.T) {
 	)
 }
 
-func TestPolicyWalksOnPastARefusal(t *testing.T) {
+func TestPolicyWalksOnPastRefusal(t *testing.T) {
 	root, scratchpad := newProject(t)
 	both := []string{"cmp", "shasum"}
 	assert.Strings(
@@ -455,7 +455,7 @@ func TestPolicyWalksOnPastARefusal(t *testing.T) {
 	)
 }
 
-func TestPolicyNamesTheSubcommandWhereRulesScopeOne(t *testing.T) {
+func TestPolicyNamesSubcommandWhereRulesScopeOne(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,
@@ -470,7 +470,7 @@ func TestPolicyNamesTheSubcommandWhereRulesScopeOne(t *testing.T) {
 	assert.Strings(t, []string{"cmp"}, blockers(t, root, scratchpad, `cmp a b`))
 }
 
-func TestPolicyNamesGitAfterAChangeDirectory(t *testing.T) {
+func TestPolicyNamesGitAfterChangeDirectory(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,
@@ -479,7 +479,7 @@ func TestPolicyNamesGitAfterAChangeDirectory(t *testing.T) {
 	)
 }
 
-func TestPolicyNamesAWriteOutsideScratch(t *testing.T) {
+func TestPolicyNamesWriteOutsideScratch(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,
@@ -547,7 +547,7 @@ func TestPolicyNamesStructuralBlocks(t *testing.T) {
 	)
 }
 
-func TestPolicyNamesAWrapperItCannotStrip(t *testing.T) {
+func TestPolicyNamesWrapperItCannotStrip(t *testing.T) {
 	root, scratchpad := newProject(t)
 	assert.Strings(
 		t,

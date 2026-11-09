@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestMoveSymbolsRetargetsAnEmptiedFile(t *testing.T) {
+func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
 	d := moveVisibilityFixture(t)
 	testutil.WriteFile(
 		t,
@@ -36,7 +36,7 @@ func TestMoveSymbolsRetargetsAnEmptiedFile(t *testing.T) {
 	)
 }
 
-func TestExtractToFileRetargetsTheRenamedResidual(t *testing.T) {
+func TestExtractToFileRetargetsRenamedResidual(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("extract-last-pair/src"),

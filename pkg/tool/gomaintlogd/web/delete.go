@@ -9,7 +9,7 @@ func (s *Server) delete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	identifier, e := identifierFromQuery(r)
+	identifier, e := queryIdentifier(r)
 
 	if e == nil {
 		e = s.service.Delete(identifier)

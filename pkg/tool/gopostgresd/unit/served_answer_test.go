@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestARestTypoInTheirQueryIsQuiet(t *testing.T) {
+func TestRestTypoInTheirQueryIsQuiet(t *testing.T) {
 	_, c, r, _ := served(t, syntaxRefusal())
 	v, e := c.QueryWithResponse(
 		t.Context(),
@@ -19,7 +19,7 @@ func TestARestTypoInTheirQueryIsQuiet(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARestRefusalOfOurCatalogueIsCaptured(t *testing.T) {
+func TestRestRefusalOfOurCatalogueIsCaptured(t *testing.T) {
 	_, c, r, _ := served(t, syntaxRefusal())
 	v, e := c.ListSchemasWithResponse(
 		t.Context(),
@@ -30,7 +30,7 @@ func TestARestRefusalOfOurCatalogueIsCaptured(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAModelContextTypoInTheirQueryIsQuiet(t *testing.T) {
+func TestModelContextTypoInTheirQueryIsQuiet(t *testing.T) {
 	s, _, r, _ := served(t, syntaxRefusal())
 	m := s.Connect(t)
 	defer m.Close()
@@ -42,7 +42,7 @@ func TestAModelContextTypoInTheirQueryIsQuiet(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAModelContextRefusalOfOurCatalogueIsCaptured(t *testing.T) {
+func TestModelContextRefusalOfOurCatalogueIsCaptured(t *testing.T) {
 	s, _, r, _ := served(t, syntaxRefusal())
 	m := s.Connect(t)
 	defer m.Close()

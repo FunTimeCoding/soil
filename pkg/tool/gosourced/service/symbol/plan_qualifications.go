@@ -67,7 +67,7 @@ func planQualifications(
 		}
 
 		if at := shadowedSite(q, targetPackagePath); at != token.NoPos {
-			return nil, lookup.TakenAt(fileSet, q.Name.Local, at)
+			return nil, lookup.TakenMessage(fileSet, q.Name.Local, at)
 		}
 	}
 

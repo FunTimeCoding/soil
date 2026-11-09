@@ -14,13 +14,13 @@ func TestValidateAcceptsNamesAndTargets(t *testing.T) {
 	assert.Nil(t, gobuild.Validate(o))
 }
 
-func TestValidateRefusesACommaList(t *testing.T) {
+func TestValidateRefusesCommaList(t *testing.T) {
 	o := option.New()
 	o.Names = []string{"gosed,golint"}
 	assert.Error(t, gobuild.Validate(o))
 }
 
-func TestValidateRefusesAPathAsName(t *testing.T) {
+func TestValidateRefusesPathAsName(t *testing.T) {
 	o := option.New()
 	o.Names = []string{"cmd/gosed"}
 	assert.Error(t, gobuild.Validate(o))
@@ -35,7 +35,7 @@ func TestValidateSplitsModuleAndVersion(t *testing.T) {
 	assert.String(t, "v0.11.190", o.Version)
 }
 
-func TestValidateLeavesAModuleWithoutVersionToLatest(t *testing.T) {
+func TestValidateLeavesModuleWithoutVersionToLatest(t *testing.T) {
 	o := option.New()
 	o.Names = []string{"gosed"}
 	o.Module = "github.com/funtimecoding/soil"
@@ -43,20 +43,20 @@ func TestValidateLeavesAModuleWithoutVersionToLatest(t *testing.T) {
 	assert.String(t, "", o.Version)
 }
 
-func TestValidateRefusesAModuleWithoutNames(t *testing.T) {
+func TestValidateRefusesModuleWithoutNames(t *testing.T) {
 	o := option.New()
 	o.Module = "github.com/funtimecoding/soil"
 	assert.Error(t, gobuild.Validate(o))
 }
 
-func TestValidateRefusesAnEmptyVersion(t *testing.T) {
+func TestValidateRefusesEmptyVersion(t *testing.T) {
 	o := option.New()
 	o.Names = []string{"gosed"}
 	o.Module = "github.com/funtimecoding/soil@"
 	assert.Error(t, gobuild.Validate(o))
 }
 
-func TestValidateRefusesMainWithAModule(t *testing.T) {
+func TestValidateRefusesMainWithModule(t *testing.T) {
 	o := option.New()
 	o.Names = []string{"gosed"}
 	o.Module = "github.com/funtimecoding/soil"

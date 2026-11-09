@@ -94,7 +94,7 @@ func (s *Service) UpdateVirtualMachine(
 				name = renamed.Name
 			}
 
-			return s.client.VirtualMachineByName(name)
+			return s.client.VirtualMachine(name)
 		},
 	)
 }

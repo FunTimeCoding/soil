@@ -25,10 +25,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/struct_literal"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stub_constructor"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/test_article"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/tester_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/type_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unchecked_print_write"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unclosed_resource"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/unguarded_peer"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/value_return"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -60,6 +62,7 @@ func check(
 	file_identity.Check(p, results)
 	type_receiver.Check(p, results)
 	tester_receiver.Check(p, results)
+	test_article.Check(p, results)
 	stub_constructor.Check(p, results)
 	unchecked_print_write.Check(p, results)
 	anonymous_struct.Check(p, results)
@@ -70,6 +73,7 @@ func check(
 	unclosed_resource.Check(p, results, summaries)
 	nil_dependency.Check(p, results)
 	forwarding_function.CheckDaemon(p, results)
+	unguarded_peer.Check(p, results)
 
 	if comment {
 		stray_comment.Check(p, results)

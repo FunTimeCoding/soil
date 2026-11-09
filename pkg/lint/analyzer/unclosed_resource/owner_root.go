@@ -19,7 +19,7 @@ func (s *Summaries) ownerRoot(
 
 		selector, isSelector := c.Fun.(*ast.SelectorExpr)
 
-		if !isSelector || !s.selfFor(calleeOf(p, c)) {
+		if !isSelector || !s.selfFor(callee(p, c)) {
 			return nil
 		}
 

@@ -25,7 +25,7 @@ func TestFlagged(t *testing.T) {
 func TestClean(t *testing.T) {
 	temporary := testutil.PrepareTestPackage(t, "testdata/src/clean")
 	testutil.WriteModFile(t, temporary, "clean")
-	p, results := testutil.LoadFromDirectory(t, temporary)
+	p, results := testutil.LoadDirectory(t, temporary)
 	string_constant.Check(p, results)
 	testutil.AssertBlocked(t, results, 0)
 }
@@ -39,7 +39,7 @@ func TestNoConstant(t *testing.T) {
 func TestExpected(t *testing.T) {
 	temporary := testutil.PrepareTestPackage(t, "testdata/src/expected")
 	testutil.WriteModFile(t, temporary, "expected.test")
-	p, results := testutil.LoadFromDirectory(t, temporary)
+	p, results := testutil.LoadDirectory(t, temporary)
 	string_constant.Check(p, results)
 	testutil.AssertBlocked(t, results, 5)
 }
@@ -47,7 +47,7 @@ func TestExpected(t *testing.T) {
 func TestTester(t *testing.T) {
 	temporary := testutil.PrepareTestPackage(t, "testdata/src/tester")
 	testutil.WriteModFile(t, temporary, "tester.test")
-	p, results := testutil.LoadFromDirectory(t, temporary)
+	p, results := testutil.LoadDirectory(t, temporary)
 	string_constant.Check(p, results)
 	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(

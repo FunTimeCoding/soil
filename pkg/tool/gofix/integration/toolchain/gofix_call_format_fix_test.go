@@ -13,7 +13,7 @@ import (
 func TestCallFormatFix(t *testing.T) {
 	directory := module_tester.CallFormat(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunCallFormatFixWithDirectory([]string{"./..."}, directory, r)
+	gofix.RunCallFormatFix([]string{"./..."}, directory, r)
 	t.Run(
 		"LongSingleLine",
 		func(t *testing.T) {
@@ -250,75 +250,87 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
 			assert.Integer(t, 15, len(applied))
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"long_single_line.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(t, applied, "shared_line.go", 8, "formatted call")
-			assertResultAt(
+			assertLineResult(t, applied, "shared_line.go", 8, "formatted call")
+			assertLineResult(
 				t,
 				applied,
 				"shared_line.go",
 				9,
 				"formatted composite literal",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"first_arg_on_paren_line.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"first_arg_on_paren_line.go",
 				5,
 				"formatted composite literal",
 			)
-			assertResultAt(t, applied, "nested_indent.go", 6, "formatted call")
-			assertResultAt(t, applied, "compliant.go", 5, "formatted call")
-			assertResultAt(
+			assertLineResult(
+				t,
+				applied,
+				"nested_indent.go",
+				6,
+				"formatted call",
+			)
+			assertLineResult(t, applied, "compliant.go", 5, "formatted call")
+			assertLineResult(
 				t,
 				applied,
 				"multiple_violations.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(t, applied, "deep_method.go", 14, "formatted call")
-			assertResultAt(
+			assertLineResult(t, applied, "deep_method.go", 14, "formatted call")
+			assertLineResult(
 				t,
 				applied,
 				"collapse_single_arg.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(t, applied, "boundary_at_80.go", 4, "formatted call")
-			assertResultAt(
+			assertLineResult(
+				t,
+				applied,
+				"boundary_at_80.go",
+				4,
+				"formatted call",
+			)
+			assertLineResult(
 				t,
 				applied,
 				"collapse_multi_line.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"nested_long_line.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"exploded_nested.go",
 				4,
 				"formatted call",
 			)
-			assertResultAt(
+			assertLineResult(
 				t,
 				applied,
 				"exploded_nested.go",

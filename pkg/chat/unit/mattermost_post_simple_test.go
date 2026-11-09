@@ -8,21 +8,22 @@ import (
 	"testing"
 )
 
-func TestTheMockListsAndDeletesAChannelsPosts(t *testing.T) {
+func TestMockListsAndDeletesChannelsPosts(t *testing.T) {
 	m := mock_client.New("charlie")
 	defer m.Close()
 	m.AddChannelPost("alfa", "bravo")
 	m.AddChannelPost("delta", "echo")
-	posts, e := m.Posts(m.MustTeamChannel("alfa"))
+	posts, e := m.RecentPosts(m.MustTeamChannel("alfa"), 0)
 	assert.FatalOnError(t, e)
-	assert.Strings(t, []string{"bravo"}, posts.Order)
-	assert.FatalOnError(t, m.DeletePost(posts.Posts["bravo"]))
-	assert.True(t, not_found.Is(m.DeletePost(posts.Posts["bravo"])))
+	assert.Count(t, 1, posts)
+	assert.String(t, "bravo", posts[0].Raw.Id)
+	assert.FatalOnError(t, m.DeletePost(posts[0].Raw))
+	assert.True(t, not_found.Is(m.DeletePost(posts[0].Raw)))
 	_, f := m.FindPost("echo")
 	assert.FatalOnError(t, f)
 }
 
-func TestTheMockPostsToALookedUpChannelByIdentifier(t *testing.T) {
+func TestMockPostsToLookedUpChannelByIdentifier(t *testing.T) {
 	m := mock_client.New("charlie")
 	defer m.Close()
 

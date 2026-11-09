@@ -32,7 +32,7 @@ func TestDoClassifiesOtherStatusAsUnexpected(t *testing.T) {
 	assert.StringContains(t, "status: 500", e.Error())
 }
 
-func TestDoReadsALostHttp2ConnectionAsDropped(t *testing.T) {
+func TestDoReadsLostHttp2ConnectionAsDropped(t *testing.T) {
 	c, _ := newFailingClient(errors.New(errorsConstant.ConnectionLost))
 	_, e := web.Do(
 		c,

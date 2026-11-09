@@ -9,7 +9,7 @@ func returnsSelf(
 	p *packages.Package,
 	f *ast.FuncDecl,
 ) bool {
-	r := receiverOf(p, f)
+	r := receiver(p, f)
 
 	if r == nil {
 		return false

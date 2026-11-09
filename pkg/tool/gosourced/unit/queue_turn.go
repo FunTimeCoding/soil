@@ -27,5 +27,5 @@ func queueTurn(
 		granted <- name
 		g.Release()
 	}()
-	waitForQueue(t, s, queued+1)
+	waitQueue(t, s, queued+1)
 }

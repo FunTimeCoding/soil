@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheClientClassifiesRefusals(t *testing.T) {
+func TestClientClassifiesRefusals(t *testing.T) {
 	c := mattermost_client_tester.New(t, statusUpstream).Client
 	_, e := c.FindPost("forbidden")
 	assert.True(t, forbidden.Is(e))
@@ -23,7 +23,7 @@ func TestTheClientClassifiesRefusals(t *testing.T) {
 	assert.True(t, unavailable.Is(g))
 }
 
-func TestAnUnauthorizedTokenStaysAFault(t *testing.T) {
+func TestUnauthorizedTokenStaysFault(t *testing.T) {
 	c := mattermost_client_tester.New(t, statusUpstream).Client
 	_, e := c.FindPost("unauthorized")
 	assert.True(t, classify.Reportable(e))
@@ -31,7 +31,7 @@ func TestAnUnauthorizedTokenStaysAFault(t *testing.T) {
 	assert.True(t, okay)
 }
 
-func TestAnUnknownStatusKeepsItsDetail(t *testing.T) {
+func TestUnknownStatusKeepsItsDetail(t *testing.T) {
 	c := mattermost_client_tester.New(t, statusUpstream).Client
 	_, e := c.FindPost("teapot")
 	d, okay := e.(*detail_error.Detail)
@@ -39,19 +39,19 @@ func TestAnUnknownStatusKeepsItsDetail(t *testing.T) {
 	assert.StringContains(t, "418", d.Status)
 }
 
-func TestATruncatedBodyIsDropped(t *testing.T) {
+func TestTruncatedBodyIsDropped(t *testing.T) {
 	c := mattermost_client_tester.New(t, statusUpstream).Client
 	_, e := c.FindPost("truncated")
 	assert.True(t, dropped.Is(e))
 }
 
-func TestAnEmptyRefusalKeepsItsStatus(t *testing.T) {
+func TestEmptyRefusalKeepsItsStatus(t *testing.T) {
 	c := mattermost_client_tester.New(t, statusUpstream).Client
 	_, e := c.FindPost("hollow")
 	assert.True(t, not_found.Is(e))
 }
 
-func TestATransportFailureKeepsItsCause(t *testing.T) {
+func TestTransportFailureKeepsItsCause(t *testing.T) {
 	r := mattermost_client_tester.New(t, statusUpstream)
 	r.Stop()
 	_, e := r.Client.FindPost("missing")

@@ -9,9 +9,9 @@ import (
 	"testing"
 )
 
-func TestAnswerWithCarriesTheTraceOfItsContext(t *testing.T) {
+func TestAnswerWithCarriesTraceOfItsContext(t *testing.T) {
 	m := memory.New()
-	_, e := response.AnswerWith(
+	_, e := response.AnswerMessage(
 		trace_tester.Context(t, nil),
 		m,
 		errors.New("disk full"),
@@ -26,7 +26,7 @@ func TestAnswerWithCarriesTheTraceOfItsContext(t *testing.T) {
 	)
 }
 
-func TestCaptureFailCarriesTheTraceOfItsContext(t *testing.T) {
+func TestCaptureFailCarriesTraceOfItsContext(t *testing.T) {
 	m := memory.New()
 	_, e := response.CaptureFail(
 		trace_tester.Context(t, nil),

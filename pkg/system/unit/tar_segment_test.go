@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTarSegmentIsTheArchiveWithoutItsEnd(t *testing.T) {
+func TestTarSegmentIsArchiveWithoutItsEnd(t *testing.T) {
 	var full bytes.Buffer
 	w := tar.NewWriter(&full)
 	writeTarEntry(stringsConstant.LowerAlfa)(w)

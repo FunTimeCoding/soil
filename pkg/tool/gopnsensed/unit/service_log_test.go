@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAnAbsentLogLimitReadsOneHundred(t *testing.T) {
+func TestAbsentLogLimitReadsOneHundred(t *testing.T) {
 	c := limit_recorder.New()
 	defer c.Close()
 	_, e := service_tester.New(t, c).Log(0)
@@ -15,7 +15,7 @@ func TestAnAbsentLogLimitReadsOneHundred(t *testing.T) {
 	assert.Integer(t, 100, c.Limit())
 }
 
-func TestAGivenLogLimitIsKept(t *testing.T) {
+func TestGivenLogLimitIsKept(t *testing.T) {
 	c := limit_recorder.New()
 	defer c.Close()
 	_, e := service_tester.New(t, c).Log(7)

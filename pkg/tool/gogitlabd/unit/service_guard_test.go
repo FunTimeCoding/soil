@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAnUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
+func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	s, clients := service_tester.New(
 		t,
 		constant.FixtureInstance,

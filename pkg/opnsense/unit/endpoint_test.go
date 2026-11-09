@@ -64,7 +64,7 @@ func TestMissingEndpointIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestRefusalCarriesTheMessage(t *testing.T) {
+func TestRefusalCarriesMessage(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusUnauthorized,
@@ -76,7 +76,7 @@ func TestRefusalCarriesTheMessage(t *testing.T) {
 	assert.StringContains(t, "status: 401: Authentication Failed", e.Error())
 }
 
-func TestUntrustedReachesASelfSignedFirewall(t *testing.T) {
+func TestUntrustedReachesSelfSignedFirewall(t *testing.T) {
 	s := httptest.NewTLSServer(
 		http.HandlerFunc(
 			func(

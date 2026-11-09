@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestCruiseDeliveryWakesAnArmedIdleSession(t *testing.T) {
+func TestCruiseDeliveryWakesArmedIdleSession(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
@@ -19,7 +19,7 @@ func TestCruiseDeliveryWakesAnArmedIdleSession(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestCruiseDeliveryWaitsForThePromptWhileCruiseIsOff(t *testing.T) {
+func TestCruiseDeliveryWaitsForPromptWhileCruiseIsOff(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
@@ -29,7 +29,7 @@ func TestCruiseDeliveryWaitsForThePromptWhileCruiseIsOff(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(s.Check("session-1").Entries, constant.QueuePulse),
+		fixture.KindEntries(s.Check("session-1").Entries, constant.QueuePulse),
 	)
 }
 
@@ -64,7 +64,7 @@ func TestPacedCruiseWakesAtMostOncePerPace(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestEveryCruiseWakeIsCountedAcrossARearm(t *testing.T) {
+func TestEveryCruiseWakeIsCountedAcrossRearm(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
@@ -79,7 +79,7 @@ func TestEveryCruiseWakeIsCountedAcrossARearm(t *testing.T) {
 	assert.Integer(t, 2, setting.Woken)
 }
 
-func TestCruiseReleaseKeepsToTheRateCap(t *testing.T) {
+func TestCruiseReleaseKeepsToRateCap(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
@@ -97,7 +97,7 @@ func TestCruiseReleaseKeepsToTheRateCap(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestHeldBacklogReleasesNoFasterThanTheCap(t *testing.T) {
+func TestHeldBacklogReleasesNoFasterThanCap(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
@@ -127,7 +127,7 @@ func TestImmediateDeliveryIgnoresCruise(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestPacedCruiseNeedsAPace(t *testing.T) {
+func TestPacedCruiseNeedsPace(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	e := s.Message.SetCruise("session-1", constant.CruisePaced, 0)
@@ -141,7 +141,7 @@ func TestUnknownCruiseModeIsRefused(t *testing.T) {
 	assert.True(t, refusal.Is(e))
 }
 
-func TestCruiseIsOffForASessionThatNeverSetIt(t *testing.T) {
+func TestCruiseIsOffForSessionThatNeverSetIt(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	setting, e := s.Message.CruiseSetting("session-1")

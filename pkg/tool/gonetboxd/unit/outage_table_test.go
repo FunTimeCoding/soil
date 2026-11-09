@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestEveryOperationAnswersANetBoxOutageUnavailable(t *testing.T) {
+func TestEveryOperationAnswersNetBoxOutageUnavailable(t *testing.T) {
 	r := memory.New()
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
@@ -41,7 +41,7 @@ func TestEveryOperationAnswersANetBoxOutageUnavailable(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestEveryToolFailsOnANetBoxOutage(t *testing.T) {
+func TestEveryToolFailsOnNetBoxOutage(t *testing.T) {
 	r := memory.New()
 	var unanswered []string
 

@@ -15,7 +15,7 @@ func (c *Client) CreateVirtualDisk(
 		return nil, e
 	}
 
-	m, e := c.VirtualMachineByName(machine)
+	m, e := c.VirtualMachine(machine)
 
 	if e != nil {
 		return nil, e

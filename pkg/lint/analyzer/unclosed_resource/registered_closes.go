@@ -17,7 +17,7 @@ func registeredCloses(
 		return nil
 	}
 
-	if o := parameterOf(p, s.X, indices); o != nil {
+	if o := parameter(p, s.X, indices); o != nil {
 		return []int{indices[o]}
 	}
 

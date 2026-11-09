@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestADigestWhoseNotifyFailedArrivesOnTheNextFlush(t *testing.T) {
+func TestDigestWhoseNotifyFailedArrivesOnNextFlush(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", "")
 	o.Roster.Fail(not_found.New(constant.ParameterCallsign, "kilo"))
@@ -22,7 +22,7 @@ func TestADigestWhoseNotifyFailedArrivesOnTheNextFlush(t *testing.T) {
 	assert.Count(t, 1, o.Roster.Notes())
 }
 
-func TestAPendingDigestCombinesWithNewerReplies(t *testing.T) {
+func TestPendingDigestCombinesWithNewerReplies(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", "")
 	o.Roster.Fail(not_found.New(constant.ParameterCallsign, "kilo"))
@@ -37,7 +37,7 @@ func TestAPendingDigestCombinesWithNewerReplies(t *testing.T) {
 	assert.StringContains(t, "second message", o.Roster.Notes()[0].Body)
 }
 
-func TestAFailingSubscriberIsReportedOncePerEpisode(t *testing.T) {
+func TestFailingSubscriberIsReportedOncePerEpisode(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", "")
 	o.Roster.Fail(not_found.New(constant.ParameterCallsign, "kilo"))
@@ -47,7 +47,7 @@ func TestAFailingSubscriberIsReportedOncePerEpisode(t *testing.T) {
 	assert.Count(t, 0, o.Service.FlushDue())
 }
 
-func TestOnlyTheFailedSubscriberIsRetried(t *testing.T) {
+func TestOnlyFailedSubscriberIsRetried(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", "")
 	o.Subscribe(t, "alfa", "lima", "")
@@ -71,7 +71,7 @@ func TestOnlyTheFailedSubscriberIsRetried(t *testing.T) {
 	assert.Integer(t, 1, lima)
 }
 
-func TestAPendingDigestOfAnUnsubscribedThreadIsDropped(t *testing.T) {
+func TestPendingDigestOfUnsubscribedThreadIsDropped(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", "")
 	o.Roster.Fail(not_found.New(constant.ParameterCallsign, "kilo"))

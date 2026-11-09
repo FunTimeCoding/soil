@@ -3,7 +3,7 @@ package alertmanager
 import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) SilenceExists(name string) (bool, error) {
-	_, e := c.SilenceByRule(name)
+	_, e := c.RuleSilence(name)
 
 	if e != nil {
 		if not_found.Is(e) {

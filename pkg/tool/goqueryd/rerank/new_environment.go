@@ -7,6 +7,6 @@ import (
 
 func NewEnvironment() (*Reranker, error) {
 	return NewModel(
-		ModelByName(environment.Required(constant.RerankModelEnvironment)),
+		Model(environment.Required(constant.RerankModelEnvironment)),
 	)
 }

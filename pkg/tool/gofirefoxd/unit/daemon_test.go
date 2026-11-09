@@ -17,14 +17,14 @@ import (
 	"time"
 )
 
-func TestTheDaemonClosesItsClientOnce(t *testing.T) {
+func TestDaemonClosesItsClientOnce(t *testing.T) {
 	s := base.New(t)
 	s.Daemon.Close()
 	s.Daemon.Close()
 	assert.Integer(t, 1, s.MockClient.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunningWithTheExtensionConnected(t *testing.T) {
+func TestDaemonLeavesNothingRunningWithExtensionConnected(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	c := firefox.New()
 	o := option.New()

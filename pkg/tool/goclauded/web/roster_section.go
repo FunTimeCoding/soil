@@ -6,29 +6,11 @@ import (
 )
 
 func (s *Server) rosterSection() (gomponents.Node, error) {
-	sessions, e := s.roster.ListSessions()
+	cards, e := s.rosterCards()
 
 	if e != nil {
 		return nil, e
 	}
 
-	identifiers := make([]string, 0, len(sessions))
-
-	for _, v := range sessions {
-		identifiers = append(identifiers, v.Identifier)
-	}
-
-	labels, f := s.label.LabelsBySessions(identifiers)
-
-	if f != nil {
-		return nil, f
-	}
-
-	pulses, g := s.message.LatestPulsesBySessions(identifiers)
-
-	if g != nil {
-		return nil, g
-	}
-
-	return session_page.Roster(sessions, labels, pulses), nil
+	return session_page.Roster(cards), nil
 }

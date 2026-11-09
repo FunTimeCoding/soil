@@ -25,4 +25,13 @@ type Resolver struct {
 		string,
 		string,
 	) bool
+	DeclaresType func(
+		string,
+		string,
+	) bool
+	Tests         func(string) bool
+	TestElsewhere func(
+		string,
+		string,
+	) bool
 }

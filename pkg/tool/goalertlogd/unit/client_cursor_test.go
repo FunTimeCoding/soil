@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestClientWalksTheCursorFromTheHead(t *testing.T) {
+func TestClientWalksCursorFromHead(t *testing.T) {
 	s := base.New(t)
 	c := s.AlertClient(t)
 	status, e := c.GetStatus(t.Context())
@@ -33,7 +33,7 @@ func TestClientWalksTheCursorFromTheHead(t *testing.T) {
 	assert.Count(t, 0, after)
 }
 
-func TestClientSeesAResolutionByIdentifier(t *testing.T) {
+func TestClientSeesResolutionByIdentifier(t *testing.T) {
 	s := base.New(t)
 	c := s.AlertClient(t)
 	s.MockClient.Remove("fp1")

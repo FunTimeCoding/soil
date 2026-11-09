@@ -54,7 +54,7 @@ func TestApplyWithChangesTriggersDownstream(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestADownstreamWithARunQueuedIsNotCaptured(t *testing.T) {
+func TestDownstreamWithRunQueuedIsNotCaptured(t *testing.T) {
 	c := mock_client.New("alfa")
 	defer c.Close()
 	c.Fail(c.PostTrigger, conflict.Format("run already queued"))

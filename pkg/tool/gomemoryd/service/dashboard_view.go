@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/dashboard_view"
-	"time"
 )
 
 func (s *Service) DashboardView() (*dashboard_view.View, error) {
@@ -27,9 +26,9 @@ func (s *Service) DashboardView() (*dashboard_view.View, error) {
 		}
 	}
 
-	now := time.Now()
+	now := s.clock()
 	result.Versions, e = s.RecentVersions(
-		since(now, constant.DashboardVersionWindow),
+		windowStart(now, constant.DashboardVersionWindow),
 		constant.DashboardVersionLimit,
 	)
 
@@ -38,7 +37,7 @@ func (s *Service) DashboardView() (*dashboard_view.View, error) {
 	}
 
 	result.Impressions, e = s.store.RecentImpressions(
-		since(now, constant.DashboardImpressionWindow),
+		windowStart(now, constant.DashboardImpressionWindow),
 	)
 
 	if e != nil {

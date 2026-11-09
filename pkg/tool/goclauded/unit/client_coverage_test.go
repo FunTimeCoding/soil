@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheClientCoversEveryOperation(t *testing.T) {
+func TestClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	methods := reflect.TypeFor[face.Client]()
@@ -36,6 +36,6 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 	assert.String(t, "", strings.Join(missing, ", "))
 }
 
-func TestTheClientAndItsMockHoldTheFace(t *testing.T) {
+func TestClientAndItsMockHoldFace(t *testing.T) {
 	assert.Count(t, 2, []face.Client{&client.Client{}, mock_client.New()})
 }

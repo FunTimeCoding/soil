@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
+func TestDaemonClosesClientItBuilt(t *testing.T) {
 	c := service_tester.NewSource(t)
 	daemon.New(
 		service_tester.NewOption(t, c),
@@ -22,7 +22,7 @@ func TestTheDaemonClosesTheClientItBuilt(t *testing.T) {
 	assert.Integer(t, 1, c.Closed)
 }
 
-func TestTheIntentClockRunsOnlyWithPowerIntent(t *testing.T) {
+func TestIntentClockRunsOnlyWithPowerIntent(t *testing.T) {
 	assert.Count(t, 1, newDaemon(t, service_tester.NewSource(t)).Workers())
 	o := service_tester.NewOption(t, service_tester.NewSource(t))
 	o.PowerIntent = true
@@ -31,7 +31,7 @@ func TestTheIntentClockRunsOnlyWithPowerIntent(t *testing.T) {
 	assert.Count(t, 2, d.Workers())
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := service_tester.NewOption(t, service_tester.NewSource(t))
 	o.PowerIntent = true
 	before := goleak.IgnoreCurrent()

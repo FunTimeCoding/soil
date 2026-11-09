@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestServiceRefusesAnUnknownInstance(t *testing.T) {
+func TestServiceRefusesUnknownInstance(t *testing.T) {
 	s, _ := service_tester.New(t, constant.FixtureInstance)
 	_, e := s.Projects(t.Context(), "charlie", "")
 	assert.True(t, not_found.Is(e))

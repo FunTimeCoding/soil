@@ -92,7 +92,7 @@ func TestHiddenTagLeavesIndex(t *testing.T) {
 	assert.Count(t, 0, hidden)
 }
 
-func TestRetiredMemoryStaysOutOfTheIndexOnTagEdit(t *testing.T) {
+func TestRetiredMemoryStaysOutOfIndexOnTagEdit(t *testing.T) {
 	o := service_tester.New(t)
 	p := save_option.New()
 	p.Name = "alfa"
@@ -374,7 +374,7 @@ func TestServiceRenameFollowsScope(t *testing.T) {
 	)
 }
 
-func TestServiceAMissingMemoryIsNotFound(t *testing.T) {
+func TestServiceMissingMemoryIsNotFound(t *testing.T) {
 	o := service_tester.New(t)
 	_, e := o.Service.GetMemory(999)
 	assert.String(t, "memory not found: 999", e.Error())
@@ -393,7 +393,7 @@ func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
 	assert.String(t, "pace", reloaded.Name)
 }
 
-func TestServiceRenameVersionsTheRewrittenMemory(t *testing.T) {
+func TestServiceRenameVersionsRewrittenMemory(t *testing.T) {
 	o := service_tester.New(t)
 	m := createNamed(t, o, "pace", "", "Original body.")
 	citing := createNamed(t, o, "citing", "", "See `memory://default/pace`.")

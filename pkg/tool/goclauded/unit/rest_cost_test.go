@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestCostCarriesItsWindowAndFlagsAnUnknownModel(t *testing.T) {
+func TestCostCarriesItsWindowAndFlagsUnknownModel(t *testing.T) {
 	s := base.New(t)
 	at := time.Now().UTC().Add(-time.Minute).Format(time.RFC3339Nano)
 	line := `{"uuid":"%s","type":"assistant","timestamp":"%s","requestId":"%s","message":{"id":"%s","role":"assistant","model":"%s","content":[],"usage":{"input_tokens":10,"output_tokens":5}}}`
@@ -49,7 +49,7 @@ func TestCostCarriesItsWindowAndFlagsAnUnknownModel(t *testing.T) {
 	assert.True(t, unknown["kilo-model"])
 }
 
-func TestSessionDetailFlagsAnUnknownModel(t *testing.T) {
+func TestSessionDetailFlagsUnknownModel(t *testing.T) {
 	s := base.New(t)
 	user := `{"type":"user","timestamp":"2026-05-21T10:00:00Z","sessionId":"echo","slug":"echo-slug","cwd":"/home/user","message":{"role":"user","content":"alfa"}}`
 	line := `{"uuid":"%s","type":"assistant","timestamp":"2026-05-21T10:01:00Z","sessionId":"echo","requestId":"%s","message":{"id":"%s","role":"assistant","model":"%s","content":[],"usage":{"input_tokens":10,"output_tokens":5}}}`
@@ -87,7 +87,7 @@ func TestSessionDetailFlagsAnUnknownModel(t *testing.T) {
 	assert.True(t, unknown["kilo-model"])
 }
 
-func TestAnEmptyCostStillCarriesItsWindow(t *testing.T) {
+func TestEmptyCostStillCarriesItsWindow(t *testing.T) {
 	s := base.New(t)
 	days := 3
 	r, e := s.RESTClient(t).GetCostWithResponse(

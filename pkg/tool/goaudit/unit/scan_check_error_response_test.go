@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestErrorResponseOnACaptured503IsClean(t *testing.T) {
+func TestErrorResponseOnCaptured503IsClean(t *testing.T) {
 	v := virtual_file_system.New()
 	scan_tester.WriteServedSpec(v, scan_tester.ErrorResponseSpec("503"))
 	assertNoConcern(t, scanOne(t, v, false), constant.ErrorResponseOnNon500Key)

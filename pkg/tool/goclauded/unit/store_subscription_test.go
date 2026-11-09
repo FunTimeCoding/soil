@@ -30,7 +30,7 @@ func TestSubscribeIsIdempotent(t *testing.T) {
 
 func TestSubscriptionByNameUnknown(t *testing.T) {
 	s := store_tester.New(t)
-	_, e := s.Store.SubscriptionByName("nobody")
+	_, e := s.Store.Subscription("nobody")
 	assert.NotNil(t, e)
 }
 
@@ -39,7 +39,7 @@ func TestSetSubscriptionPositionAdvances(t *testing.T) {
 	_, e := s.Store.Subscribe("consumer", nil)
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(t, s.Store.SetSubscriptionPosition("consumer", 7))
-	result, e := s.Store.SubscriptionByName("consumer")
+	result, e := s.Store.Subscription("consumer")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 7, int(result.EventIdentifier))
 }
@@ -50,7 +50,7 @@ func TestSetSubscriptionPositionAllowsReplay(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(t, s.Store.SetSubscriptionPosition("consumer", 7))
 	assert.FatalOnError(t, s.Store.SetSubscriptionPosition("consumer", 3))
-	result, e := s.Store.SubscriptionByName("consumer")
+	result, e := s.Store.Subscription("consumer")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 3, int(result.EventIdentifier))
 }

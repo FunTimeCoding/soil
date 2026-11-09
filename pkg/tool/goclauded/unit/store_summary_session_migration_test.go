@@ -6,14 +6,14 @@ import (
 	"testing"
 )
 
-func TestSummarySessionMigrationKeepsTheNewestRow(t *testing.T) {
+func TestSummarySessionMigrationKeepsNewestRow(t *testing.T) {
 	s := store_tester.NewOnFile(t, seedDuplicateSummaries(t))
 	summaries := s.ListSummaries()
 	assert.Count(t, 1, summaries)
 	assert.String(t, "rewrite", summaries[0].Body)
 }
 
-func TestSummarySessionRefusesASecondRow(t *testing.T) {
+func TestSummarySessionRefusesSecondRow(t *testing.T) {
 	s := store_tester.New(t)
 	_, e := s.Store.EnsureSession("session-1")
 	assert.FatalOnError(t, e)

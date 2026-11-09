@@ -55,7 +55,7 @@ func Walk(
 					}
 
 					if !Skipped(
-						o,
+						o.Skips,
 						join.Empty(relative, stringsConstant.Slash),
 					) &&
 						system.IsEmptyDirectory(p) {
@@ -73,7 +73,7 @@ func Walk(
 				errors.PanicOnError(g)
 
 				if o.Metadata || Skipped(
-					o,
+					o.Skips,
 					join.Empty(path.Dir(relative), stringsConstant.Slash),
 				) {
 					v.AddMetadata(relative, i.Size(), i.ModTime())

@@ -16,6 +16,8 @@ var Identity = identity.New(
 const (
 	PollInterval = time.Minute
 	Retention    = 30 * 24 * time.Hour
+	RecentSpan   = time.Hour
+	TopSpan      = 7 * 24 * time.Hour
 )
 
 const (

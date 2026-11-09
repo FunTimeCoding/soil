@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestARecoveredNotFoundAnswersItsStatus(t *testing.T) {
+func TestRecoveredNotFoundAnswersItsStatus(t *testing.T) {
 	r := memory.New()
 	wrapped := recoveryView().Recovery(r)(
 		http.HandlerFunc(
@@ -35,7 +35,7 @@ func TestARecoveredNotFoundAnswersItsStatus(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
+func TestRecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
 	wrapped := recoveryView().Recovery(memory.New())(
 		http.HandlerFunc(
 			func(http.ResponseWriter, *http.Request) {
@@ -51,7 +51,7 @@ func TestARecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
 	assert.String(t, "true", recorder.Header().Get(constant.NotificationItem))
 }
 
-func TestARenderToAClientThatLeftIsNotCaptured(t *testing.T) {
+func TestRenderToClientThatLeftIsNotCaptured(t *testing.T) {
 	r := memory.New()
 	v := recoveryView()
 	wrapped := v.Recovery(r)(
@@ -73,7 +73,7 @@ func TestARenderToAClientThatLeftIsNotCaptured(t *testing.T) {
 	assert.Integer(t, 1, w.Writes)
 }
 
-func TestAPushToAClientThatLeftIsNotCaptured(t *testing.T) {
+func TestPushToClientThatLeftIsNotCaptured(t *testing.T) {
 	r := memory.New()
 	wrapped := recoveryView().Recovery(r)(
 		http.HandlerFunc(
@@ -92,7 +92,7 @@ func TestAPushToAClientThatLeftIsNotCaptured(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARenderWriteFaultIsStillCaptured(t *testing.T) {
+func TestRenderWriteFaultIsStillCaptured(t *testing.T) {
 	r := memory.New()
 	v := recoveryView()
 	wrapped := v.Recovery(r)(
@@ -112,7 +112,7 @@ func TestARenderWriteFaultIsStillCaptured(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestARecoveredUnclassifiedErrorStaysAFaultAndIsCaptured(t *testing.T) {
+func TestRecoveredUnclassifiedErrorStaysFaultAndIsCaptured(t *testing.T) {
 	r := memory.New()
 	wrapped := recoveryView().Recovery(r)(
 		http.HandlerFunc(

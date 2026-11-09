@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAFinishedCompactionWakesTheWatcher(t *testing.T) {
+func TestFinishedCompactionWakesWatcher(t *testing.T) {
 	s := service_tester.New(t)
 	s.Watch("watcher")
 	compacting := s.Check("compacting").Callsign
@@ -31,7 +31,7 @@ func TestAFinishedCompactionWakesTheWatcher(t *testing.T) {
 	)
 }
 
-func TestALeadAlsoOnCallIsTold(t *testing.T) {
+func TestLeadAlsoOnCallIsTold(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("watcher")
 	s.SetLabel("watcher", constant.CompactionWatchLabel, "on_call,lead")
@@ -40,7 +40,7 @@ func TestALeadAlsoOnCallIsTold(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("watcher"))
 }
 
-func TestOnCallAloneIsNotALead(t *testing.T) {
+func TestOnCallAloneIsNotLead(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("watcher")
 	s.SetLabel("watcher", constant.CompactionWatchLabel, "on_call")
@@ -49,7 +49,7 @@ func TestOnCallAloneIsNotALead(t *testing.T) {
 	assert.Integer(t, 0, s.Channel("watcher"))
 }
 
-func TestAStartedCompactionWaitsForTheWatchersPrompt(t *testing.T) {
+func TestStartedCompactionWaitsForWatchersPrompt(t *testing.T) {
 	s := service_tester.New(t)
 	s.Watch("watcher")
 	s.Check("compacting")
@@ -58,14 +58,14 @@ func TestAStartedCompactionWaitsForTheWatchersPrompt(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(
+		fixture.KindEntries(
 			s.Check("watcher").Entries,
 			constant.QueueNotification,
 		),
 	)
 }
 
-func TestACompactionReachesEveryWatcherAndNobodyElse(t *testing.T) {
+func TestCompactionReachesEveryWatcherAndNobodyElse(t *testing.T) {
 	s := service_tester.New(t)
 	s.Watch("first")
 	s.Watch("second")
@@ -78,7 +78,7 @@ func TestACompactionReachesEveryWatcherAndNobodyElse(t *testing.T) {
 	assert.Integer(t, 0, s.Channel("compacting"))
 }
 
-func TestAWatcherIsNotToldOfItsOwnCompaction(t *testing.T) {
+func TestWatcherIsNotToldOfItsOwnCompaction(t *testing.T) {
 	s := service_tester.New(t)
 	s.Watch("watcher")
 	s.Compact("watcher", constant.CompactionFinished, "auto")
@@ -86,14 +86,14 @@ func TestAWatcherIsNotToldOfItsOwnCompaction(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		fixture.EntriesByKind(
+		fixture.KindEntries(
 			s.Check("watcher").Entries,
 			constant.QueueNotification,
 		),
 	)
 }
 
-func TestACompactionWithoutWatchersIsStillLogged(t *testing.T) {
+func TestCompactionWithoutWatchersIsStillLogged(t *testing.T) {
 	s := service_tester.New(t)
 	compacting := s.Check("compacting").Callsign
 	s.Compact("compacting", constant.CompactionStarted, "auto")
@@ -106,7 +106,7 @@ func TestACompactionWithoutWatchersIsStillLogged(t *testing.T) {
 	assert.String(t, "auto", events[0].Metadata[constant.Trigger])
 }
 
-func TestAnUnknownCompactionPhaseIsRefused(t *testing.T) {
+func TestUnknownCompactionPhaseIsRefused(t *testing.T) {
 	s := service_tester.New(t)
 	s.Watch("watcher")
 	s.Check("compacting")
@@ -115,7 +115,7 @@ func TestAnUnknownCompactionPhaseIsRefused(t *testing.T) {
 	assert.Integer(t, 0, s.Channel("watcher"))
 }
 
-func TestACompactionOfAnUnknownSessionIsIgnored(t *testing.T) {
+func TestCompactionOfUnknownSessionIsIgnored(t *testing.T) {
 	s := service_tester.New(t)
 	s.Watch("watcher")
 	s.Compact("stranger", constant.CompactionFinished, "auto")

@@ -5,7 +5,7 @@ import "github.com/funtimecoding/soil/pkg/linkace/tag"
 func (s *Service) resolveTag(name string) (int, error) {
 	t, e := guarded(
 		s.guard,
-		func() (*tag.Tag, error) { return s.client.TagByName(name) },
+		func() (*tag.Tag, error) { return s.client.Tag(name) },
 	)
 
 	if e != nil {

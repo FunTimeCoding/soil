@@ -26,7 +26,7 @@ func TestCloseTabResolvesByTitle(t *testing.T) {
 	assert.Integer(t, 1, len(tabs))
 }
 
-func TestCloseTabAnswersAnUnknownTab(t *testing.T) {
+func TestCloseTabAnswersUnknownTab(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.AddTab("alfa", "Alfa Portal", "https://alfa.example")
@@ -46,7 +46,7 @@ func TestClickBeforeSnapshotAnswersNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestFillRequiresAValue(t *testing.T) {
+func TestFillRequiresValue(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	_, e := service_tester.New(t, c).Fill(
@@ -55,7 +55,7 @@ func TestFillRequiresAValue(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestScreenshotSavesToTheDownloadDirectory(t *testing.T) {
+func TestScreenshotSavesToDownloadDirectory(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.AddTab("alfa", "Alfa Portal", "https://alfa.example")

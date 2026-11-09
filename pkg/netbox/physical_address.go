@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) PhysicalAddress(a net.HardwareAddr) (*physical_address.Address, error) {
-	result, e := c.PhysicalAddressesByHardware(a)
+	result, e := c.HardwarePhysicalAddresses(a)
 
 	if e != nil {
 		return nil, e

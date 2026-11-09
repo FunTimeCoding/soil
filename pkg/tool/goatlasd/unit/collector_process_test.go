@@ -26,7 +26,7 @@ func TestProcessPlacesOnlyRunningEntries(t *testing.T) {
 	assert.String(t, "goqueryd", v[1].Name)
 }
 
-func TestProcessPlacesOnTheConfiguredMachine(t *testing.T) {
+func TestProcessPlacesOnConfiguredMachine(t *testing.T) {
 	f := collector_tester.NewProcess(t)
 	collector_tester.AddProcess(f, "gosublimed", true)
 	v, e := process.New(
@@ -40,7 +40,7 @@ func TestProcessPlacesOnTheConfiguredMachine(t *testing.T) {
 	assert.String(t, "goprocessd", v[0].Source)
 }
 
-func TestProcessRefusesAnUnknownMachine(t *testing.T) {
+func TestProcessRefusesUnknownMachine(t *testing.T) {
 	f := collector_tester.NewProcess(t)
 	collector_tester.AddProcess(f, "gosublimed", true)
 	_, e := process.New(f, peer_tester.NewGuard(t, f), "nowhere").Collect(

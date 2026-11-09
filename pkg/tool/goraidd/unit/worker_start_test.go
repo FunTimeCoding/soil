@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestAWorkerStartedBeforeTheLogCacheSyncsItOnArrival(t *testing.T) {
+func TestWorkerStartedBeforeLogCacheSyncsItOnArrival(t *testing.T) {
 	cache := t.TempDir()
 	s := service_tester.New(t, cache, t.TempDir())
 	w := service_tester.NewWatcher(t, s, memory.New())
@@ -27,7 +27,7 @@ func TestAWorkerStartedBeforeTheLogCacheSyncsItOnArrival(t *testing.T) {
 	assert.Count(t, 1, s.Fights())
 }
 
-func TestAWorkerClosesSafelyTwice(t *testing.T) {
+func TestWorkerClosesSafelyTwice(t *testing.T) {
 	s := service_tester.New(t, t.TempDir(), t.TempDir())
 	w := service_tester.NewWatcher(t, s, memory.New())
 	w.Start()
@@ -35,7 +35,7 @@ func TestAWorkerClosesSafelyTwice(t *testing.T) {
 	w.Close()
 }
 
-func TestAClosedWorkerHasStopped(t *testing.T) {
+func TestClosedWorkerHasStopped(t *testing.T) {
 	missing := filepath.Join(t.TempDir(), "missing")
 	s := service_tester.New(t, missing, t.TempDir())
 	r := memory.New()
@@ -47,7 +47,7 @@ func TestAClosedWorkerHasStopped(t *testing.T) {
 	assert.Count(t, closed, r.Events())
 }
 
-func TestAWorkerThatCannotWatchReportsInsteadOfCrashing(t *testing.T) {
+func TestWorkerThatCannotWatchReportsInsteadOfCrashing(t *testing.T) {
 	missing := filepath.Join(t.TempDir(), "missing")
 	s := service_tester.New(t, missing, t.TempDir())
 	r := memory.New()
@@ -63,7 +63,7 @@ func TestAWorkerThatCannotWatchReportsInsteadOfCrashing(t *testing.T) {
 	assert.Count(t, 2, r.Events())
 }
 
-func TestAFailedStartUpStepLeavesTheNextOnesRunning(t *testing.T) {
+func TestFailedStartUpStepLeavesNextOnesRunning(t *testing.T) {
 	missing := filepath.Join(t.TempDir(), "missing")
 	o := service_tester.NewOption(
 		t,

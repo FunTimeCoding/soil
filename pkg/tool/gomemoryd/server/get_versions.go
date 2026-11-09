@@ -21,7 +21,7 @@ func (s *Server) GetVersions(
 		offset = *r.Params.Offset
 	}
 
-	versions, e := s.service.VersionsSince(r.Params.Since, limit, offset)
+	versions, e := s.service.Versions(r.Params.Since, limit, offset)
 
 	if e != nil {
 		return server.GetVersions500JSONResponse(*s.answer(x, e)), nil

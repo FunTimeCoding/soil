@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-func TestWatchReportsAnUnsealedStore(t *testing.T) {
+func TestWatchReportsUnsealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
 	defer c.Close()
@@ -33,7 +33,7 @@ func TestWatchReportsAnUnsealedStore(t *testing.T) {
 	assert.Float(t, 1, gauge(t, y, constant.ReachableGauge))
 }
 
-func TestWatchReportsASealedStore(t *testing.T) {
+func TestWatchReportsSealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
 	defer c.Close()
@@ -49,7 +49,7 @@ func TestWatchReportsASealedStore(t *testing.T) {
 	assert.Float(t, 1, gauge(t, y, constant.SealedGauge))
 }
 
-func TestWatchReportsAnUnreachableStore(t *testing.T) {
+func TestWatchReportsUnreachableStore(t *testing.T) {
 	y := prometheus.NewRegistry()
 	c := mock_client.New()
 	defer c.Close()
@@ -65,7 +65,7 @@ func TestWatchReportsAnUnreachableStore(t *testing.T) {
 	assert.Float(t, 0, gauge(t, y, constant.ReachableGauge))
 }
 
-func TestWatchCloseWaitsForATickInFlight(t *testing.T) {
+func TestWatchCloseWaitsForTickInFlight(t *testing.T) {
 	entered := make(chan struct{})
 	release := make(chan struct{})
 	var finished atomic.Bool

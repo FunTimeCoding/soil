@@ -1,9 +1,12 @@
 package base
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func New(t *testing.T) *Server {
 	t.Helper()
 
-	return newWith(t, "", "")
+	return serve(t, "", "", time.Now)
 }

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheJobViewTakesTheRequestedJobAndItsTrace(t *testing.T) {
+func TestJobViewTakesRequestedJobAndItsTrace(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
 	c.SeedJob(1, "compile", "kilo", gitlabConstant.JobSuccess)
@@ -21,7 +21,7 @@ func TestTheJobViewTakesTheRequestedJobAndItsTrace(t *testing.T) {
 	assert.Count(t, 2, v.Jobs)
 }
 
-func TestTheJobViewPrefersARunningJobThenAFailedOne(t *testing.T) {
+func TestJobViewPrefersRunningJobThenFailedOne(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
 	c.SeedJob(1, "compile", "kilo", gitlabConstant.JobSuccess)

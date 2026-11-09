@@ -5,7 +5,6 @@ import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
-	"time"
 )
 
 func (s *Server) GetPermissions(
@@ -18,7 +17,7 @@ func (s *Server) GetPermissions(
 		days = *r.Params.Days
 	}
 
-	report, e := s.transcript.Permissions(days, time.Now())
+	report, e := s.transcript.Permissions(days)
 
 	if e != nil {
 		return server.GetPermissions500JSONResponse(

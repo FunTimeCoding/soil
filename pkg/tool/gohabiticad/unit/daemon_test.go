@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	c := mock_client.New()
 	o := option.New()
@@ -35,7 +35,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestCloseClosesTheHabiticaClient(t *testing.T) {
+func TestCloseClosesHabiticaClient(t *testing.T) {
 	c := service_tester.NewSource(t)
 	daemon_tester.New(t, c).Close()
 	assert.Integer(t, 1, c.Closed)

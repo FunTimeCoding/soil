@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAWriteMeetingABadGatewayIsSentOnce(t *testing.T) {
+func TestWriteMeetingBadGatewayIsSentOnce(t *testing.T) {
 	var sent atomic.Int64
 	r := client_tester.New(
 		t,
@@ -34,7 +34,7 @@ func TestAWriteMeetingABadGatewayIsSentOnce(t *testing.T) {
 	assert.Integer(t, 1, int(sent.Load()))
 }
 
-func TestAReadMeetingABadGatewayIsRetried(t *testing.T) {
+func TestReadMeetingBadGatewayIsRetried(t *testing.T) {
 	var sent atomic.Int64
 	r := client_tester.New(
 		t,

@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-	"time"
 )
 
 func (s *Service) Cleanup(x context.Context) []error {
@@ -14,7 +13,7 @@ func (s *Service) Cleanup(x context.Context) []error {
 		return []error{e}
 	}
 
-	cutoff := time.Now().AddDate(0, 0, -14)
+	cutoff := s.clock().AddDate(0, 0, -14)
 	deleted := 0
 	var result []error
 

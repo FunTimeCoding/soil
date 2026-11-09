@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestACancelledCallStopsWaitingOnGitLab(t *testing.T) {
+func TestCancelledCallStopsWaitingOnGitLab(t *testing.T) {
 	arrived := make(chan struct{})
 	release := make(chan struct{})
 	r := client_tester.New(

@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -89,7 +90,13 @@ func (s *Server) registerSession() {
 			),
 			mcp.WithNumber(
 				constant.Pace,
-				mcp.Description("Minutes between wakes, for paced mode."),
+				mcp.Description(
+					fmt.Sprintf(
+						"Minutes between wakes, for paced mode: a whole number from %d to %d.",
+						constant.CruisePaceMinimumMinutes,
+						constant.CruisePaceMaximumMinutes,
+					),
+				),
 			),
 			mcp.WithString(
 				constant.Target,

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownLinkIsAnsweredQuietlyOverModelContext(t *testing.T) {
+func TestUnknownLinkIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = not_found.Format("resource not found: links/%d", 12)
 	m := memory.New()

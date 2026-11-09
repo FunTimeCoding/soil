@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestAPeerIsAwaitedUntilItAnswers(t *testing.T) {
+func TestPeerIsAwaitedUntilItAnswers(t *testing.T) {
 	calls := 0
 	e := peer.Await(
 		t.Context(),
@@ -31,7 +31,7 @@ func TestAPeerIsAwaitedUntilItAnswers(t *testing.T) {
 	assert.Integer(t, 2, calls)
 }
 
-func TestAwaitingAPeerStopsWhenTheCallerStops(t *testing.T) {
+func TestAwaitingPeerStopsWhenCallerStops(t *testing.T) {
 	x, cancel := context.WithCancel(t.Context())
 	time.AfterFunc(10*time.Millisecond, cancel)
 	start := time.Now()

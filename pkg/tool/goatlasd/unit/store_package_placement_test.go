@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestSavePackageRefreshesTheVersion(t *testing.T) {
+func TestSavePackageRefreshesVersion(t *testing.T) {
 	s := store_tester.NewStore(t)
 	now := time.Now()
 	store_tester.SavePackage(

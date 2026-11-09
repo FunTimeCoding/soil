@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) DeleteChoiceSet(name string) error {
-	v, e := c.ChoiceSetByName(name)
+	v, e := c.ChoiceSet(name)
 
 	if e != nil {
 		return e

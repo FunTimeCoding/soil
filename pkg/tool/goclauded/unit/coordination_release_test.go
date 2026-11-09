@@ -16,7 +16,7 @@ func TestReleaseReachesAnotherSession(t *testing.T) {
 	b.CheckLive()
 	a.MustCallTool(constant.Release, map[string]any{})
 	r := b.CheckLive()
-	releases := clientEntriesByKind(r.Entries, constant.QueueSessionRelease)
+	releases := clientKindEntries(r.Entries, constant.QueueSessionRelease)
 	assert.True(t, len(releases) > 0)
 	assert.StringContains(t, a.Name(), releases[0].Body)
 }

@@ -10,7 +10,7 @@ func (s *Summaries) freshRoot(
 	c *ast.CallExpr,
 ) bool {
 	for {
-		f := calleeOf(p, c)
+		f := callee(p, c)
 
 		if f == nil {
 			return false

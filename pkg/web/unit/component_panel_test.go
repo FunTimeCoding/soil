@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAPanelIsATitledArticle(t *testing.T) {
+func TestPanelIsTitledArticle(t *testing.T) {
 	assert.String(
 		t,
 		`<article id="alfa"><h4>Bravo</h4><p>charlie</p></article>`,
@@ -23,7 +23,7 @@ func TestAPanelIsATitledArticle(t *testing.T) {
 	)
 }
 
-func TestAPanelFramesItsHeaderAndFooter(t *testing.T) {
+func TestPanelFramesItsHeaderAndFooter(t *testing.T) {
 	assert.String(
 		t,
 		`<article><header>delta</header><p>charlie</p><footer>echo</footer></article>`,

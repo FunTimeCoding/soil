@@ -9,7 +9,7 @@ func (c *Client) CreateNote(
 	linkIdentifier int,
 	text string,
 ) (*note.Note, error) {
-	if _, e := c.LinkByIdentifier(linkIdentifier); e != nil {
+	if _, e := c.Link(linkIdentifier); e != nil {
 		return nil, e
 	}
 

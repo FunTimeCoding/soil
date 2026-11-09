@@ -30,7 +30,7 @@ func (s *Set) Satisfied(o types.Object) []*fact.Interface {
 		return nil
 	}
 
-	candidates := s.byMethod[f.Name()]
+	candidates := s.methodInterfaces[f.Name()]
 
 	if len(candidates) == 0 {
 		return nil

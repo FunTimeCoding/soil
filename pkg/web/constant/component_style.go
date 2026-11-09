@@ -104,6 +104,7 @@ const ComponentCardStyle = `.card { position: relative; display: grid; grid-temp
 .card-link::after { content: ""; position: absolute; inset: 0; }
 .card-subtitle { margin: 0.1rem 0 0; font-size: 0.85rem; }
 .card-meta { margin: 0 0 0.3rem; font-size: 0.8rem; color: var(--pico-muted-color); }
+.card-clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
 .card .badge-row { margin: 0.4rem 0 0; }
 .card-footer { position: relative; z-index: 1; display: flex; gap: 0.4rem; margin: 0.6rem 0 0; padding: 0; background: none; border: none; opacity: 0.55; transition: opacity 0.15s; }
 .card:hover .card-footer, .card:focus-within .card-footer { opacity: 1; }

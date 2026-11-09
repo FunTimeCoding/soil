@@ -12,13 +12,13 @@ import (
 )
 
 type RackClient interface {
-	DevicesByRack(i int32) ([]*device.Device, error)
-	MustDevicesByRack(i int32) []*device.Device
+	RackDevices(i int32) ([]*device.Device, error)
+	MustRackDevices(i int32) []*device.Device
 	MustPowerFeeds() []*power_feed.Feed
 	MustPowerOutlets() []*power_outlet.Outlet
 	MustPowerPanels() []*power_panel.Panel
 	MustPowerPorts() []*power_port.Port
-	MustRackByName(n string) *rack.Rack
+	MustRack(n string) *rack.Rack
 	MustRackRoles() []*rack_role.Role
 	MustRackTypes() []*rack_type.Type
 	MustRacks() []*rack.Rack
@@ -26,7 +26,7 @@ type RackClient interface {
 	PowerOutlets() ([]*power_outlet.Outlet, error)
 	PowerPanels() ([]*power_panel.Panel, error)
 	PowerPorts() ([]*power_port.Port, error)
-	RackByName(n string) (*rack.Rack, error)
+	Rack(n string) (*rack.Rack, error)
 	RackRoles() ([]*rack_role.Role, error)
 	RackTypes() ([]*rack_type.Type, error)
 	Racks() ([]*rack.Rack, error)

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAThreadDigestIsImmediateByDefault(t *testing.T) {
+func TestThreadDigestIsImmediateByDefault(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", "")
 	o.Reply("bravo", "alfa", "first message")
@@ -16,7 +16,7 @@ func TestAThreadDigestIsImmediateByDefault(t *testing.T) {
 	assert.String(t, "immediate", string(o.Roster.Notes()[0].Delivery))
 }
 
-func TestAQueuedSubscriptionDigestIsQueued(t *testing.T) {
+func TestQueuedSubscriptionDigestIsQueued(t *testing.T) {
 	o := subscribed.New(t)
 	o.Subscribe(t, "alfa", "kilo", goclaudedConstant.DeliveryQueued)
 	o.Reply("bravo", "alfa", "first message")

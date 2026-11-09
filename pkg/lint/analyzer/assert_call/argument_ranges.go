@@ -22,7 +22,7 @@ func ArgumentRanges(
 			for _, argument := range call.Args {
 				result = append(
 					result,
-					Range{From: argument.Pos(), To: argument.End()},
+					Range{Start: argument.Pos(), End: argument.End()},
 				)
 			}
 

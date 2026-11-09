@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestStatusSaysWhyAGracefulShutdownWouldBeRefused(t *testing.T) {
+func TestStatusSaysWhyGracefulShutdownWouldBeRefused(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
 	r, e := s.Client.GetStatusWithResponse(
@@ -29,7 +29,7 @@ func TestStatusSaysWhyAGracefulShutdownWouldBeRefused(t *testing.T) {
 	}
 }
 
-func TestStatusLeavesAnAcceptedForcedShutdownWithoutRefusal(t *testing.T) {
+func TestStatusLeavesAcceptedForcedShutdownWithoutRefusal(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
 	r, e := s.Client.GetStatusWithResponse(

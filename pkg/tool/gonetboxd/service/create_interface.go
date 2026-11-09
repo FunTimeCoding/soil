@@ -26,7 +26,7 @@ func (s *Service) CreateInterface(
 	return guarded(
 		s.guard,
 		func() (*network.Interface, error) {
-			d, e := s.client.DeviceByName(device)
+			d, e := s.client.Device(device)
 
 			if e != nil {
 				return nil, e

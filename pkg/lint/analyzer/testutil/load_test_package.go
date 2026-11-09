@@ -14,5 +14,5 @@ func LoadTestPackage(
 	t.Helper()
 	temporary := PrepareTestPackage(t, sourceDirectory, extraModLines...)
 
-	return LoadFromDirectory(t, temporary)
+	return LoadDirectory(t, temporary)
 }

@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestAStatusDotCarriesItsColourAndTitle(t *testing.T) {
+func TestStatusDotCarriesItsColourAndTitle(t *testing.T) {
 	assert.String(
 		t,
 		`<span class="status-dot" title="fresh" style="--dot-color: #3dd68c;"></span>`,
@@ -14,7 +14,7 @@ func TestAStatusDotCarriesItsColourAndTitle(t *testing.T) {
 	)
 }
 
-func TestAStatusDotNeedsNoTitle(t *testing.T) {
+func TestStatusDotNeedsNoTitle(t *testing.T) {
 	assert.String(
 		t,
 		`<span class="status-dot" style="--dot-color: #111;"></span>`,

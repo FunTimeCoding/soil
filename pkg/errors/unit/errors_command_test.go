@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestCommandErrorCarriesTheStory(t *testing.T) {
+func TestCommandErrorCarriesStory(t *testing.T) {
 	wrapped := errors.New("exit status 128")
 	e := command.New(
 		"git reset --hard origin/main",

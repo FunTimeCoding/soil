@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestChannelCallsignReturnsAfterAPromptTheChannelMissed(t *testing.T) {
+func TestChannelCallsignReturnsAfterPromptChannelMissed(t *testing.T) {
 	s := base.New(t)
 	since := s.Store.Clock()().Add(-time.Second)
 	r := s.Check("session-1")
@@ -24,7 +24,7 @@ func TestChannelCallsignReturnsAfterAPromptTheChannelMissed(t *testing.T) {
 	assert.String(t, r.Callsign, response.JSON200.Callsign)
 }
 
-func TestChannelCallsignHoldsWhenTheOnlyPromptPredatesTheChannel(t *testing.T) {
+func TestChannelCallsignHoldsWhenOnlyPromptPredatesChannel(t *testing.T) {
 	s := base.New(t)
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)
@@ -39,7 +39,7 @@ func TestChannelCallsignHoldsWhenTheOnlyPromptPredatesTheChannel(t *testing.T) {
 	}
 }
 
-func TestChannelCallsignReleasesOnTheNextPrompt(t *testing.T) {
+func TestChannelCallsignReleasesOnNextPrompt(t *testing.T) {
 	s := base.New(t)
 	r := s.Check("session-1")
 	s.Store.Advance(time.Minute)
@@ -64,7 +64,7 @@ func TestChannelCallsignReleasesOnTheNextPrompt(t *testing.T) {
 	}
 }
 
-func TestChannelCallsignReleasesWhenTheDaemonCloses(t *testing.T) {
+func TestChannelCallsignReleasesWhenDaemonCloses(t *testing.T) {
 	s := base.New(t)
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)

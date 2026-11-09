@@ -25,7 +25,7 @@ func (s *Server) placeDetail(
 	errors.PanicOnError(e)
 	sightings, f := s.service.PlaceSightings(kind, name)
 	errors.PanicOnError(f)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		name,
 		component.PlaceLocator(kind, name),

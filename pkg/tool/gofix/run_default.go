@@ -17,7 +17,7 @@ func RunDefault(
 	aliasThrough(
 		o.Patterns,
 		o.Root,
-		newAliasMode(false, appliesByDefault, o.Ours),
+		newAliasMode(false, defaultApplies, o.Ours),
 		w,
 		r,
 	)

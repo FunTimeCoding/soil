@@ -1,6 +1,9 @@
 package base
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func NewHidden(
 	t *testing.T,
@@ -8,5 +11,5 @@ func NewHidden(
 ) *Server {
 	t.Helper()
 
-	return newWith(t, tag, "")
+	return serve(t, tag, "", time.Now)
 }

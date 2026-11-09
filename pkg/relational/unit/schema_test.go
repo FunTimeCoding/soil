@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestARenamedColumnKeepsItsValues(t *testing.T) {
+func TestRenamedColumnKeepsItsValues(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
 	errors.PanicOnError(d.Exec(constant.FixtureNoteRow).Error)
@@ -32,7 +32,7 @@ func TestARenamedColumnKeepsItsValues(t *testing.T) {
 	)
 }
 
-func TestARenameOntoAnExistingColumnFails(t *testing.T) {
+func TestRenameOntoExistingColumnFails(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateBoth).Error)
 	assert.Panic(
@@ -49,7 +49,7 @@ func TestARenameOntoAnExistingColumnFails(t *testing.T) {
 	)
 }
 
-func TestARenamedTableKeepsItsRows(t *testing.T) {
+func TestRenamedTableKeepsItsRows(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
 	errors.PanicOnError(d.Exec(constant.FixtureNoteRow).Error)
@@ -61,7 +61,7 @@ func TestARenamedTableKeepsItsRows(t *testing.T) {
 	assert.False(t, d.Migrator().HasTable(constant.FixtureOldTable))
 }
 
-func TestARenamedIndexFollowsItsTable(t *testing.T) {
+func TestRenamedIndexFollowsItsTable(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
 	errors.PanicOnError(d.Exec(constant.FixtureCreateIndex).Error)
@@ -86,7 +86,7 @@ func TestARenamedIndexFollowsItsTable(t *testing.T) {
 	assert.String(t, "kept", body)
 }
 
-func TestAnIndexRenameOntoAnExistingIndexFails(t *testing.T) {
+func TestIndexRenameOntoExistingIndexFails(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
 	errors.PanicOnError(d.Exec(constant.FixtureCreateIndex).Error)
@@ -105,7 +105,7 @@ func TestAnIndexRenameOntoAnExistingIndexFails(t *testing.T) {
 	)
 }
 
-func TestADroppedColumnAndTableAreGone(t *testing.T) {
+func TestDroppedColumnAndTableAreGone(t *testing.T) {
 	d := lite.NewMemory()
 	errors.PanicOnError(d.Exec(constant.FixtureCreateNotes).Error)
 	schema.DropColumns(d, constant.FixtureOldTable, constant.FixtureStaleColumn)

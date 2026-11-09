@@ -11,5 +11,5 @@ func (v *View) RenderPage(
 	path string,
 	content ...gomponents.Node,
 ) {
-	v.RenderPageWithStatus(w, http.StatusOK, title, path, content...)
+	v.RenderStatusPage(w, http.StatusOK, title, path, content...)
 }

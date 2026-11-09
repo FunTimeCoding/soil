@@ -22,7 +22,7 @@ func (s *Service) Transact(
 		return r, MarkSettled(directory, e)
 	}
 
-	g, e := s.turns.Take(x, turn.SessionOf(x))
+	g, e := s.turns.Take(x, turn.Session(x))
 
 	if e != nil {
 		return nil, e

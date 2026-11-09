@@ -9,7 +9,7 @@ func (c *Client) SetVirtualMachineCustomFields(
 	name string,
 	fields map[string]any,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

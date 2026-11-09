@@ -8,12 +8,12 @@ import (
 func (s *Store) Events(q *event_query.Query) ([]event.Event, error) {
 	g := s.database.Model(event.Stub())
 
-	if !q.Since().IsZero() {
-		g = g.Where("created_at >= ?", q.Since())
+	if start, started := q.Window().Start(); started {
+		g = g.Where("created_at >= ?", start)
 	}
 
-	if !q.Before().IsZero() {
-		g = g.Where("created_at <= ?", q.Before())
+	if end, ended := q.Window().End(); ended {
+		g = g.Where("created_at <= ?", end)
 	}
 
 	if len(q.Kinds()) == 1 {

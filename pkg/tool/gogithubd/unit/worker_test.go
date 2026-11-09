@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func TestPollDropsARunNoLongerLatest(t *testing.T) {
+func TestPollDropsRunNoLongerLatest(t *testing.T) {
 	branches := []string{"main", "feature"}
 	y := prometheus.NewRegistry()
 	w := worker.New(

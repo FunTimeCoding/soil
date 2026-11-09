@@ -26,7 +26,7 @@ func (s *Service) checkServerCaptureFail(
 	server := filepath.Join(path, "server")
 
 	if v.Has(filepath.Join(server, constant.CaptureFile)) ||
-		v.Has(filepath.Join(server, constant.AnswerWithFile)) {
+		v.Has(filepath.Join(server, constant.AnswerMessageFile)) {
 		return
 	}
 

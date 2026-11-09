@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheClientListsTheHypervisorsMachines(t *testing.T) {
+func TestClientListsHypervisorsMachines(t *testing.T) {
 	c, s := client_tester.New(t)
 	s.MockClient.AddMachine("test", 101, "alfa")
 	v, e := c.ListMachines(
@@ -23,7 +23,7 @@ func TestTheClientListsTheHypervisorsMachines(t *testing.T) {
 	assert.String(t, "alfa", v[0].Name)
 }
 
-func TestTheClientAnswersAnUnknownMachineAsNotFound(t *testing.T) {
+func TestClientAnswersUnknownMachineAsNotFound(t *testing.T) {
 	c, _ := client_tester.New(t)
 	_, e := c.GetMachine(
 		t.Context(),
@@ -33,7 +33,7 @@ func TestTheClientAnswersAnUnknownMachineAsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestTheClientAnswersAnUnreachableHypervisorAsUnavailable(t *testing.T) {
+func TestClientAnswersUnreachableHypervisorAsUnavailable(t *testing.T) {
 	c, s := client_tester.New(t)
 	s.MockClient.SetFailure(
 		connection.New(

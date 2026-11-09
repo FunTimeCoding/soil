@@ -48,7 +48,7 @@ func TestRevokesAfterGroupRemoval(t *testing.T) {
 	assert.False(t, allows(t, b, row.Identifier))
 }
 
-func TestAnUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
+func TestUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
 	d := mock_client.New("")
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	b := base.NewWith(t, d)

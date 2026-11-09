@@ -10,7 +10,7 @@ type named interface {
 	Named() string
 }
 
-func TestAMethodValueAndItsOwnCallerShareAName(t *testing.T) {
+func TestMethodValueAndItsOwnCallerShareName(t *testing.T) {
 	f := &MethodFixture{}
 	assert.String(t, runtime.MethodName(f.Named), f.Named())
 	assert.String(
@@ -20,7 +20,7 @@ func TestAMethodValueAndItsOwnCallerShareAName(t *testing.T) {
 	)
 }
 
-func TestAMethodValueIsTheSameForEveryReceiver(t *testing.T) {
+func TestMethodValueIsSameForEveryReceiver(t *testing.T) {
 	assert.String(
 		t,
 		runtime.MethodName((&MethodFixture{}).Named),
@@ -28,7 +28,7 @@ func TestAMethodValueIsTheSameForEveryReceiver(t *testing.T) {
 	)
 }
 
-func TestAMethodValueThroughAnInterfaceIsNotTheMethod(t *testing.T) {
+func TestMethodValueThroughInterfaceIsNotMethod(t *testing.T) {
 	var f named = &MethodFixture{}
 	assert.True(
 		t,

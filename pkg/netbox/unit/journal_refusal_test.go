@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAMissingJournalEntryOnUpdateIsNotFound(t *testing.T) {
+func TestMissingJournalEntryOnUpdateIsNotFound(t *testing.T) {
 	_, e := refusingNetbox(
 		t,
 		http.StatusNotFound,
@@ -16,7 +16,7 @@ func TestAMissingJournalEntryOnUpdateIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAMissingJournalEntryOnDeleteIsNotFound(t *testing.T) {
+func TestMissingJournalEntryOnDeleteIsNotFound(t *testing.T) {
 	e := refusingNetbox(
 		t,
 		http.StatusNotFound,

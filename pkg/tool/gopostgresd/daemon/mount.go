@@ -20,13 +20,22 @@ func (d *Daemon) Mount(
 		webConstant.InterfacePath,
 		server.HandlerFromMux(
 			server.NewStrictHandler(
-				gopostgresd.New(d.service, d.inventory, r),
+				gopostgresd.New(d.catalog, d.query, d.backup, d.inventory, r),
 				[]server.StrictMiddlewareFunc{
 					web.RecordingMiddleware[server.StrictHandlerFunc](t),
+					gopostgresd.ExtendedWrite,
 				},
 			),
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(d.service, d.inventory, d.selection, r, t).Mount(g)
+	model_context.New(
+		d.catalog,
+		d.query,
+		d.backup,
+		d.inventory,
+		d.selection,
+		r,
+		t,
+	).Mount(g)
 }

@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestASocketThatCannotRefreshIsNotOpened(t *testing.T) {
+func TestSocketThatCannotRefreshIsNotOpened(t *testing.T) {
 	m := mock_client.New("alfa")
 	defer m.Close()
 	m.Failure = unavailable.Format("mattermost restarting")
@@ -19,13 +19,13 @@ func TestASocketThatCannotRefreshIsNotOpened(t *testing.T) {
 	assert.True(t, unavailable.Is(s.Open(context.Background())))
 }
 
-func TestClosingASocketThatNeverOpenedIsQuiet(t *testing.T) {
+func TestClosingSocketThatNeverOpenedIsQuiet(t *testing.T) {
 	m := mock_client.New("alfa")
 	defer m.Close()
 	socket.New(m, func(*model.WebSocketEvent) {}).Close()
 }
 
-func TestAMockWithoutASocketRefusesToOpenOne(t *testing.T) {
+func TestMockWithoutSocketRefusesToOpenOne(t *testing.T) {
 	m := mock_client.New("alfa")
 	defer m.Close()
 	s := socket.New(m, func(*model.WebSocketEvent) {})
@@ -34,7 +34,7 @@ func TestAMockWithoutASocketRefusesToOpenOne(t *testing.T) {
 	assert.True(t, m.WebSocket() == nil)
 }
 
-func TestAClosedMockRefusesTheSocket(t *testing.T) {
+func TestClosedMockRefusesSocket(t *testing.T) {
 	m := mock_client.New("alfa")
 	m.Close()
 	e := m.RefreshSocket(context.Background())

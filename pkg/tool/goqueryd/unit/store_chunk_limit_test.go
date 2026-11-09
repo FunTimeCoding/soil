@@ -9,7 +9,7 @@ import (
 	"unicode/utf8"
 )
 
-func TestDocumentCutsALongLineOnARuneBoundary(t *testing.T) {
+func TestDocumentCutsLongLineOnRuneBoundary(t *testing.T) {
 	chunks := chunk.Document(
 		join.Empty("# Wide\n\n", strings.Repeat("あいうえお", 400)),
 		"wide.md",
@@ -22,7 +22,7 @@ func TestDocumentCutsALongLineOnARuneBoundary(t *testing.T) {
 	}
 }
 
-func TestDocumentStartsAnOverlapOnARuneBoundary(t *testing.T) {
+func TestDocumentStartsOverlapOnRuneBoundary(t *testing.T) {
 	chunks := chunk.Document(
 		strings.Repeat(join.Empty(strings.Repeat("あ", 33), "\n"), 80),
 		"lines.md",

@@ -22,12 +22,12 @@ func (s *Store) List(f *filter.Filter) ([]entry.Entry, error) {
 			q = q.Where(map[string]any{"user": f.User})
 		}
 
-		if !f.Since.IsZero() {
-			q = q.Where("timestamp >= ?", f.Since)
+		if start, started := f.Window.Start(); started {
+			q = q.Where("timestamp >= ?", start)
 		}
 
-		if !f.Until.IsZero() {
-			q = q.Where("timestamp <= ?", f.Until)
+		if end, ended := f.Window.End(); ended {
+			q = q.Where("timestamp <= ?", end)
 		}
 
 		if f.Limit > 0 {

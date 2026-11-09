@@ -34,7 +34,7 @@ func TestObserveIgnoresNonTransportErrors(t *testing.T) {
 	assert.True(t, down)
 }
 
-func TestTriageHandsBackWhatIsNotAnOutage(t *testing.T) {
+func TestTriageHandsBackWhatIsNotOutage(t *testing.T) {
 	r := reacher.New(memory.New())
 	down, real := r.Triage("sentry", syscall.ECONNREFUSED)
 	assert.NotNil(t, down)
@@ -52,7 +52,7 @@ func TestTriageHandsBackWhatIsNotAnOutage(t *testing.T) {
 	assert.Nil(t, clean)
 }
 
-func TestHandleLogsAnOutageOnceAndEachRefusalOncePerReason(t *testing.T) {
+func TestHandleLogsOutageOnceAndEachRefusalOncePerReason(t *testing.T) {
 	r := reacher.New(memory.New())
 	var crossed []*edge.Edge
 	var refused []error

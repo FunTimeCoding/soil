@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersTheDirectoryAsTheDaemonDoes(t *testing.T) {
+func TestMockAnswersDirectoryAsDaemonDoes(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := client.New(
@@ -27,7 +27,7 @@ func TestTheMockAnswersTheDirectoryAsTheDaemonDoes(t *testing.T) {
 	assert.Strings(t, served, directoryAnswers(t.Context(), m))
 }
 
-func TestTheMockKeepsThePasswordItWasGiven(t *testing.T) {
+func TestMockKeepsPasswordItWasGiven(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	directoryAnswers(t.Context(), m)
@@ -43,7 +43,7 @@ func TestTheMockKeepsThePasswordItWasGiven(t *testing.T) {
 	assert.String(t, "hotel", m.Passwords["golf"])
 }
 
-func TestTheMockFailsOnlyTheMethodItIsToldTo(t *testing.T) {
+func TestMockFailsOnlyMethodItIsToldTo(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.Fail(m.GetUserAccount, errors.New("account refused"))

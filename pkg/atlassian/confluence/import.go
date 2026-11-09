@@ -16,13 +16,13 @@ func (c *Client) Import(
 	name string,
 ) (*page.Page, error) {
 	f := page_file.Decode(system.ReadFile(base, name))
-	s, e := c.SpaceByName(space)
+	s, e := c.Space(space)
 
 	if e != nil {
 		return nil, e
 	}
 
-	p, g := c.PageBySpaceAndName(space, parent)
+	p, g := c.SpacePage(space, parent)
 
 	if g != nil {
 		return nil, g

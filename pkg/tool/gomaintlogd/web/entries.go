@@ -22,11 +22,11 @@ func (s *Server) entries(
 	f.User = q.Get(constant.User)
 
 	if t, e := time.Parse(constant.FilterFormat, q.Get(constant.Since)); e == nil {
-		f.Since = t
+		f.Window.WithStart(t)
 	}
 
 	if t, e := time.Parse(constant.FilterFormat, q.Get(constant.Until)); e == nil {
-		f.Until = t
+		f.Window.WithEnd(t)
 	}
 
 	entries, e := s.service.Entries(f)

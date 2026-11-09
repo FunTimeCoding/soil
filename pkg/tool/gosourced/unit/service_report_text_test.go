@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestReportTextKeepsTheSourceAsWritten(t *testing.T) {
+func TestReportTextKeepsSourceAsWritten(t *testing.T) {
 	r := revision.New(
 		map[string][]byte{
 			"go.mod": []byte("module example.org/root\n"),

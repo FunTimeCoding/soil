@@ -77,7 +77,7 @@ func (s *Store) queryMemories(
 			return nil, e
 		}
 
-		m.Tags = s.tagsForMemory(m.Identifier)
+		m.Tags = s.memoryTags(m.Identifier)
 		result = append(result, m)
 	}
 

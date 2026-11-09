@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestDrainStampsWhenTheEntryWasDelivered(t *testing.T) {
+func TestDrainStampsWhenEntryWasDelivered(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,
@@ -25,7 +25,7 @@ func TestDrainStampsWhenTheEntryWasDelivered(t *testing.T) {
 	)
 }
 
-func TestRowConsumedBeforeTheStampExistedIsNotRedelivered(t *testing.T) {
+func TestRowConsumedBeforeStampExistedIsNotRedelivered(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,
@@ -43,7 +43,7 @@ func TestRowConsumedBeforeTheStampExistedIsNotRedelivered(t *testing.T) {
 	assert.String(t, "2026-09-02 10:00:00+00:00", s.ConsumedAt("old"))
 }
 
-func TestPeekLeavesTheDeliveryStampUnset(t *testing.T) {
+func TestPeekLeavesDeliveryStampUnset(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,

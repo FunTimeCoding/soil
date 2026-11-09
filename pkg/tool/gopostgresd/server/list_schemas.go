@@ -26,10 +26,10 @@ func (s *Server) ListSchemas(
 	}
 
 	if e != nil {
-		return server.ListSchemas500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.ListSchemas500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
-	rows, e := s.service.ListSchemas(x, instance)
+	rows, e := s.catalog.ListSchemas(x, instance)
 
 	if validation.Is(e) {
 		return server.ListSchemas400JSONResponse(*clientError(e)), nil
@@ -48,7 +48,7 @@ func (s *Server) ListSchemas(
 	}
 
 	if e != nil {
-		return server.ListSchemas500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.ListSchemas500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	return server.ListSchemas200JSONResponse{

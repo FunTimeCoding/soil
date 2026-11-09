@@ -11,8 +11,9 @@ import (
 func (s *Store) ForgetMemory(
 	identifier int64,
 	source string,
+	at time.Time,
 ) error {
-	now := time.Now().UTC().Format(time.RFC3339)
+	now := at.UTC().Format(time.RFC3339)
 	t, e := s.database.Begin()
 
 	if e != nil {

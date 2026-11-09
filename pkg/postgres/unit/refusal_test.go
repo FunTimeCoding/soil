@@ -16,27 +16,27 @@ import (
 	"testing"
 )
 
-func TestASyntaxErrorIsTheCallersMistake(t *testing.T) {
+func TestSyntaxErrorIsCallersMistake(t *testing.T) {
 	assert.True(t, validation.Is(refusal.Classify(refused("42601"))))
 }
 
-func TestADivisionByZeroIsTheCallersMistake(t *testing.T) {
+func TestDivisionByZeroIsCallersMistake(t *testing.T) {
 	assert.True(t, validation.Is(refusal.Classify(refused("22012"))))
 }
 
-func TestAMissingPrivilegeIsForbidden(t *testing.T) {
+func TestMissingPrivilegeIsForbidden(t *testing.T) {
 	assert.True(t, forbidden.Is(refusal.Classify(refused("42501"))))
 }
 
-func TestAUniqueViolationIsAConflict(t *testing.T) {
+func TestUniqueViolationIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(refusal.Classify(refused("23505"))))
 }
 
-func TestASerializationFailureIsAConflict(t *testing.T) {
+func TestSerializationFailureIsConflict(t *testing.T) {
 	assert.True(t, conflict.Is(refusal.Classify(refused("40001"))))
 }
 
-func TestAServerStartingUpIsUnavailable(t *testing.T) {
+func TestServerStartingUpIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(refusal.Classify(refused("57P03"))))
 }
 
@@ -44,31 +44,31 @@ func TestTooManyConnectionsIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(refusal.Classify(refused("53300"))))
 }
 
-func TestACanceledQueryIsATimeout(t *testing.T) {
+func TestCanceledQueryIsTimeout(t *testing.T) {
 	assert.True(
 		t,
 		timeout.Is(refusal.Classify(refused(constant.QueryCanceledCode))),
 	)
 }
 
-func TestABadPasswordIsOursToLookAt(t *testing.T) {
+func TestBadPasswordIsOursToLookAt(t *testing.T) {
 	assert.True(t, classify.Reportable(refusal.Classify(refused("28P01"))))
 }
 
-func TestAnInternalErrorIsOursToLookAt(t *testing.T) {
+func TestInternalErrorIsOursToLookAt(t *testing.T) {
 	assert.True(t, classify.Reportable(refusal.Classify(refused("XX000"))))
 }
 
-func TestACodeShorterThanAClassIsOursToLookAt(t *testing.T) {
+func TestCodeShorterThanClassIsOursToLookAt(t *testing.T) {
 	assert.True(t, classify.Reportable(refusal.Classify(refused("4"))))
 }
 
-func TestAnErrorFromElsewherePassesThrough(t *testing.T) {
+func TestErrorFromElsewherePassesThrough(t *testing.T) {
 	e := errors.Format("elsewhere", "test")
 	assert.True(t, refusal.Classify(e) == e)
 }
 
-func TestARefusedDialStaysAConnectionFailure(t *testing.T) {
+func TestRefusedDialStaysConnectionFailure(t *testing.T) {
 	c, e := postgres.New("postgres://alfa:bravo@127.0.0.1:1/charlie")
 	assert.FatalOnError(t, e)
 	t.Cleanup(c.Close)

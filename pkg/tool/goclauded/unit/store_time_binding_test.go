@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestQueueWindowIgnoresTheBoundLocation(t *testing.T) {
+func TestQueueWindowIgnoresBoundLocation(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,
@@ -26,7 +26,7 @@ func TestQueueWindowIgnoresTheBoundLocation(t *testing.T) {
 	assert.Integer(t, 1, removed)
 }
 
-func TestQueueWindowExcludesRowOutsideTheWindow(t *testing.T) {
+func TestQueueWindowExcludesRowOutsideWindow(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,

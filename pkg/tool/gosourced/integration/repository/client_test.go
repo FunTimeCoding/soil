@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsADiff(t *testing.T) {
+func TestClientReadsDiff(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, r.Clone, generativeConstant.ModelContextTestToken)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
@@ -25,7 +25,7 @@ func TestTheClientReadsADiff(t *testing.T) {
 	assert.Integer(t, 1, d.Counts[0].Count)
 }
 
-func TestTheClientReadsTheTextOfAChange(t *testing.T) {
+func TestClientReadsTextOfChange(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, r.Clone, generativeConstant.ModelContextTestToken)
 	d, e := c.GetDiff(
@@ -41,14 +41,14 @@ func TestTheClientReadsTheTextOfAChange(t *testing.T) {
 	)
 }
 
-func TestTheClientHearsAnUnknownModule(t *testing.T) {
+func TestClientHearsUnknownModule(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, r.Clone, generativeConstant.ModelContextTestToken)
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "golf"})
 	assert.True(t, not_found.Is(e))
 }
 
-func TestARefusedTokenIsAnError(t *testing.T) {
+func TestRefusedTokenIsError(t *testing.T) {
 	r := diffRepository(t)
 	c := mountedClient(t, r.Clone, "hotel-wrong")
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "echo"})

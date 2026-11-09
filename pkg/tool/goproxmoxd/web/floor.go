@@ -14,7 +14,7 @@ func (s *Server) floor(
 	_ *http.Request,
 ) {
 	f := s.service.Floor()
-	s.view.RenderLivePageWithSummary(
+	s.view.RenderSummaryLivePage(
 		w,
 		constant.FloorTitle,
 		constant.FloorPath,

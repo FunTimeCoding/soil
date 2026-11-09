@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	queryFace "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+	"time"
 )
 
 type Service struct {
@@ -16,4 +17,5 @@ type Service struct {
 	tokenizer     *tokenizer.Encoder
 	hiddenTag     string
 	referenceRoot string
+	clock         func() time.Time
 }

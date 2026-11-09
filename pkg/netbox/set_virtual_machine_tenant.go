@@ -9,13 +9,13 @@ func (c *Client) SetVirtualMachineTenant(
 	name string,
 	tenantName string,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e
 	}
 
-	n, f := c.TenantByName(tenantName)
+	n, f := c.Tenant(tenantName)
 
 	if f != nil {
 		return nil, f

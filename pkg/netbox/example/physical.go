@@ -11,7 +11,7 @@ func Physical() {
 	n := netbox.NewEnvironment()
 	defer n.Close()
 
-	for _, p := range n.MustPhysicalAddressesByHardware(
+	for _, p := range n.MustHardwarePhysicalAddresses(
 		network.PhysicalAddress(soil.PhysicalTest0),
 	) {
 		console.Format("Read physical address: %+v\n", p)

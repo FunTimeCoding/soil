@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestChannelAttachKnocksOnceWhenTheSessionAnswers(t *testing.T) {
+func TestChannelAttachKnocksOnceWhenSessionAnswers(t *testing.T) {
 	k := mock_sink.New()
 	var s *channel.Server
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
@@ -25,7 +25,7 @@ func TestChannelAttachKnocksOnceWhenTheSessionAnswers(t *testing.T) {
 	assert.Count(t, 1, k.Kind(constant.ChannelAttachKind))
 }
 
-func TestChannelAttachCarriesTheNonceItWillAccept(t *testing.T) {
+func TestChannelAttachCarriesNonceItWillAccept(t *testing.T) {
 	k := mock_sink.New()
 	var s *channel.Server
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
@@ -41,7 +41,7 @@ func TestChannelAttachCarriesTheNonceItWillAccept(t *testing.T) {
 	assert.String(t, s.Nonce(), attach[0].Meta[constant.ChannelNonceMeta])
 }
 
-func TestChannelAttachStillKnocksWhenTheCallsignIsUnresolved(t *testing.T) {
+func TestChannelAttachStillKnocksWhenCallsignIsUnresolved(t *testing.T) {
 	k := mock_sink.New()
 	var s *channel.Server
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
@@ -55,7 +55,7 @@ func TestChannelAttachStillKnocksWhenTheCallsignIsUnresolved(t *testing.T) {
 	assert.Count(t, 1, k.Kind(constant.ChannelAttachKind))
 }
 
-func TestChannelAttachWaitsAMinuteBeforeKnockingAgain(t *testing.T) {
+func TestChannelAttachWaitsMinuteBeforeKnockingAgain(t *testing.T) {
 	k := mock_sink.New()
 	var waits []time.Duration
 	var s *channel.Server
@@ -72,7 +72,7 @@ func TestChannelAttachWaitsAMinuteBeforeKnockingAgain(t *testing.T) {
 	assert.Duration(t, time.Minute, waits[0])
 }
 
-func TestChannelAttachBackoffDoublesToTheMaximum(t *testing.T) {
+func TestChannelAttachBackoffDoublesToMaximum(t *testing.T) {
 	k := mock_sink.New()
 	var waits []time.Duration
 	var s *channel.Server

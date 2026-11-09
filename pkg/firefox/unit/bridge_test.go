@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	c := firefox.New()
 	t.Cleanup(c.Close)
 	m := mock_client.New()
@@ -24,14 +24,14 @@ func TestTheClientAndItsMockShareTheFace(t *testing.T) {
 	assert.Count(t, 2, faces)
 }
 
-func TestWithoutTheExtensionEveryCallIsUnavailable(t *testing.T) {
+func TestWithoutExtensionEveryCallIsUnavailable(t *testing.T) {
 	c, _ := bridge(t)
 	_, e := c.Tabs()
 	assert.True(t, unavailable.Is(e))
 	assert.False(t, classify.Reportable(e))
 }
 
-func TestACreatedTabComesBack(t *testing.T) {
+func TestCreatedTabComesBack(t *testing.T) {
 	c, s := bridge(t)
 	x := connected(t, c, s.URL)
 	x.Answer(
@@ -43,7 +43,7 @@ func TestACreatedTabComesBack(t *testing.T) {
 	assert.Integer(t, 7, v.Identifier)
 }
 
-func TestTheExtensionRefusalsCarryClasses(t *testing.T) {
+func TestExtensionRefusalsCarryClasses(t *testing.T) {
 	c, s := bridge(t)
 	x := connected(t, c, s.URL)
 	x.Refuse("click", "selector matched nothing: #missing")
@@ -66,7 +66,7 @@ func TestTheExtensionRefusalsCarryClasses(t *testing.T) {
 	assert.True(t, classify.Reportable(h))
 }
 
-func TestAClosedBridgeRefusesTheExtension(t *testing.T) {
+func TestClosedBridgeRefusesExtension(t *testing.T) {
 	c, s := bridge(t)
 	connected(t, c, s.URL)
 	c.Close()
@@ -79,7 +79,7 @@ func TestAClosedBridgeRefusesTheExtension(t *testing.T) {
 	assert.True(t, unavailable.Is(f))
 }
 
-func TestANewConnectionSurvivesTheOldOneEnding(t *testing.T) {
+func TestNewConnectionSurvivesOldOneEnding(t *testing.T) {
 	c, s := bridge(t)
 	first := connected(t, c, s.URL)
 	second := fake_extension.Connect(t, s.URL)

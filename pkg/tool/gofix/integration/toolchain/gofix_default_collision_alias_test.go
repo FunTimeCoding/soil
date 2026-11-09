@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestDefaultRewritesTheDecidedCollisionKinds(t *testing.T) {
+func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 	directory := module_tester.CollisionKinds(t)
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunDefault(
@@ -95,9 +95,9 @@ func TestDefaultRewritesTheDecidedCollisionKinds(t *testing.T) {
 	)
 }
 
-func TestALoserWithoutANameHoldsItsGroup(t *testing.T) {
+func TestLoserWithoutNameHoldsItsGroup(t *testing.T) {
 	directory := module_tester.CollisionKinds(t)
-	gofix.RunConstantAliasFixWithDirectory(
+	gofix.RunConstantAliasFix(
 		[]string{"./..."},
 		directory,
 		false,

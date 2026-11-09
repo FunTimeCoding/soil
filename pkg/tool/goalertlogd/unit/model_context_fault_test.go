@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAStoreFaultCarriesItsOwnTextOverModelContext(t *testing.T) {
+func TestStoreFaultCarriesItsOwnTextOverModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
 	o.Daemon().Close()
 	assert.StringContains(

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReachesTheDaemon(t *testing.T) {
+func TestClientReachesDaemon(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
@@ -21,7 +21,7 @@ func TestTheClientReachesTheDaemon(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestTheProbeRefusesAnUnknownToken(t *testing.T) {
+func TestProbeRefusesUnknownToken(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
@@ -31,7 +31,7 @@ func TestTheProbeRefusesAnUnknownToken(t *testing.T) {
 	assert.NotNil(t, c.Reachable(t.Context()))
 }
 
-func TestAClaimWithoutAnOwnerIsValidation(t *testing.T) {
+func TestClaimWithoutOwnerIsValidation(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),

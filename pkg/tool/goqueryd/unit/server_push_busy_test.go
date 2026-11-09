@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAPushWhileAnotherWriterHoldsTheStoreAnswers503Reported(t *testing.T) {
+func TestPushWhileAnotherWriterHoldsStoreAnswers503Reported(t *testing.T) {
 	r := memory.New()
 	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
 	c := mountedClient(t, o, r)

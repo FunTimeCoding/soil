@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestAWriteWithoutAResultPrintsNothing(t *testing.T) {
+func TestWriteWithoutResultPrintsNothing(t *testing.T) {
 	for _, arguments := range writes() {
 		c := newMock(t)
 		var output, failure string
@@ -30,7 +30,7 @@ func TestAWriteWithoutAResultPrintsNothing(t *testing.T) {
 	}
 }
 
-func TestAFailedCommandExitsWithItsMessage(t *testing.T) {
+func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 	file := join.Join(t.TempDir(), "alfa.md")
 	system.SaveFile(file, "# alfa\n\nbravo\n")
 
@@ -57,13 +57,13 @@ func TestAFailedCommandExitsWithItsMessage(t *testing.T) {
 	}
 }
 
-func TestDeletingAnUnknownCollectionIsNotFound(t *testing.T) {
+func TestDeletingUnknownCollectionIsNotFound(t *testing.T) {
 	_, failure, code := run(t, newMock(t), "delete-collection", "zulu")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "collection not found: zulu", failure)
 }
 
-func TestRemovingAnUnknownContextIsNotFound(t *testing.T) {
+func TestRemovingUnknownContextIsNotFound(t *testing.T) {
 	_, failure, code := run(t, newMock(t), "context-remove", "alfa", "zulu")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "context not found: alfa zulu", failure)
@@ -84,7 +84,7 @@ func TestRechunkEmitsWhatItQueuedAndEmbedded(t *testing.T) {
 	assert.Integer(t, 1, c.Embedded)
 }
 
-func TestAFailedRechunkEmbedsNothing(t *testing.T) {
+func TestFailedRechunkEmbedsNothing(t *testing.T) {
 	c := newMock(t)
 	c.Failure = errors.New("foxtrot")
 	_, _, code := run(t, c, "rechunk")
@@ -92,7 +92,7 @@ func TestAFailedRechunkEmbedsNothing(t *testing.T) {
 	assert.Integer(t, 0, c.Embedded)
 }
 
-func TestOversizeEmitsTheReportWithItsSummary(t *testing.T) {
+func TestOversizeEmitsReportWithItsSummary(t *testing.T) {
 	c := newMock(t)
 	c.OversizeReport = &client.OversizeReport{
 		Allowance:      512,
@@ -127,7 +127,7 @@ func TestNothingOversizeExitsZero(t *testing.T) {
 	assert.Integer(t, 0, r.Summary.Files)
 }
 
-func TestFailedEmitsTheRefusedCount(t *testing.T) {
+func TestFailedEmitsRefusedCount(t *testing.T) {
 	c := newMock(t)
 	c.FailedReport = &client.FailedReport{
 		Chunks: []client.FailedChunk{{Path: "kilo.md"}, {Path: "lima.md"}},
@@ -140,7 +140,7 @@ func TestFailedEmitsTheRefusedCount(t *testing.T) {
 	assert.Integer(t, 2, r.Summary.Refused)
 }
 
-func TestStatusEmitsTheStatus(t *testing.T) {
+func TestStatusEmitsStatus(t *testing.T) {
 	output, _, code := run(t, newMock(t), "status")
 	assert.Integer(t, 0, code)
 	var s client.Status
@@ -148,7 +148,7 @@ func TestStatusEmitsTheStatus(t *testing.T) {
 	assert.Integer(t, 1, s.TotalDocuments)
 }
 
-func TestChunkPrintsThePreviewAsADocument(t *testing.T) {
+func TestChunkPrintsPreviewAsDocument(t *testing.T) {
 	c := newMock(t)
 	c.Preview = &client.ChunkPreview{
 		Allowance:      512,
@@ -173,7 +173,7 @@ func TestChunkPrintsThePreviewAsADocument(t *testing.T) {
 	)
 }
 
-func TestACutWordListGivesOneNotice(t *testing.T) {
+func TestCutWordListGivesOneNotice(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	file := join.Join(t.TempDir(), "alfa.md")
 	system.SaveFile(file, "# alfa\n\nbravo\n\n# charlie\n\ndelta\n")

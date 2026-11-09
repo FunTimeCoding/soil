@@ -12,5 +12,5 @@ func (v *View) Answer(
 	r face.Reporter,
 	e error,
 ) {
-	v.renderFailure(w, q, statusOf(e), layout.ErrorItem(report(r, e)))
+	v.renderFailure(w, q, caughtStatus(e), layout.ErrorItem(report(r, e)))
 }

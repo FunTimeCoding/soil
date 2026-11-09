@@ -10,7 +10,7 @@ func (c *Client) AddVirtualJournalEntry(
 	kind string,
 	comments string,
 ) (*journal_entry.Entry, error) {
-	m, e := c.VirtualMachineByName(machine)
+	m, e := c.VirtualMachine(machine)
 
 	if e != nil {
 		return nil, e

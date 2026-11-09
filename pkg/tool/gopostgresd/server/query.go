@@ -26,10 +26,10 @@ func (s *Server) Query(
 	}
 
 	if e != nil {
-		return server.Query500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.Query500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
-	rows, e := s.service.Query(x, instance, r.Body.Sql)
+	rows, e := s.query.Query(x, instance, r.Body.Sql)
 
 	if validation.Is(e) {
 		return server.Query400JSONResponse(*clientError(e)), nil
@@ -48,7 +48,7 @@ func (s *Server) Query(
 	}
 
 	if e != nil {
-		return server.Query500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.Query500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	return server.Query200JSONResponse{

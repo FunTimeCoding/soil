@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAForgottenClientReadsTheRacksAgain(t *testing.T) {
+func TestForgottenClientReadsRacksAgain(t *testing.T) {
 	var requests atomic.Int32
 	s := httptest.NewServer(
 		http.HandlerFunc(

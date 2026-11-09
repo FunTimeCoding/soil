@@ -6,13 +6,13 @@ import (
 	"testing"
 )
 
-func TestADeliveryWithTheDatabaseGoneAnswersTheFailure(t *testing.T) {
+func TestDeliveryWithDatabaseGoneAnswersFailure(t *testing.T) {
 	s := service_tester.New(t)
 	s.Close()
 	assert.Count(t, 1, s.Memory.DeliverImpressions())
 }
 
-func TestACruiseReleaseWithTheDatabaseGoneAnswersTheFailure(t *testing.T) {
+func TestCruiseReleaseWithDatabaseGoneAnswersFailure(t *testing.T) {
 	s := service_tester.New(t)
 	s.Close()
 	assert.Count(t, 1, s.Message.ReleaseCruise())

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
+	"time"
 )
 
 type Service struct {
@@ -19,6 +20,7 @@ type Service struct {
 	harbor     string
 	sources    func() []string
 	exportPath string
+	clock      func() time.Time
 	logger     *logger.Logger
 	reporter   soilFace.Reporter
 }

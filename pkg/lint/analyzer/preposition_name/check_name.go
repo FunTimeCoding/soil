@@ -15,15 +15,15 @@ func checkName(
 	faces *face.Set,
 	ident *ast.Ident,
 ) {
-	word := placedWord(ident.Name)
+	o := p.TypesInfo.Defs[ident]
 
-	if word == "" {
+	if o == nil {
 		return
 	}
 
-	o := p.TypesInfo.Defs[ident]
+	word := spokenWord(o)
 
-	if o == nil || exempt(o, faces) {
+	if word == "" || exempt(o, faces, word) {
 		return
 	}
 

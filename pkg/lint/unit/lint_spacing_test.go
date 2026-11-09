@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestSpacingRawStringBraceIsNotABlock(t *testing.T) {
+func TestSpacingRawStringBraceIsNotBlock(t *testing.T) {
 	l := spacing.Check(
 		stringsConstant.UpperDelta,
 		strings.NewReader(

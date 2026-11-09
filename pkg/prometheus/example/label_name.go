@@ -13,7 +13,7 @@ func LabelName() {
 
 	for _, l := range c.MustLabelNames(
 		[]string{},
-		soil.StartOfTime,
+		soil.Epoch,
 	).Values {
 		console.Format("  %s\n", l)
 	}

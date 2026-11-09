@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestCompactionThroughTheClientReachesTheWatcher(t *testing.T) {
+func TestCompactionThroughClientReachesWatcher(t *testing.T) {
 	s := base.New(t)
 	watcher := s.NewSession(t)
 	watcher.Announce(watcher.Name(), "leading")
@@ -38,7 +38,7 @@ func TestCompactionThroughTheClientReachesTheWatcher(t *testing.T) {
 			},
 		),
 	)
-	notifications := clientEntriesByKind(
+	notifications := clientKindEntries(
 		watcher.CheckLive().Entries,
 		constant.QueueNotification,
 	)
@@ -54,7 +54,7 @@ func TestCompactionThroughTheClientReachesTheWatcher(t *testing.T) {
 	)
 }
 
-func TestCompactionThroughTheClientRefusesAnUnknownPhase(t *testing.T) {
+func TestCompactionThroughClientRefusesUnknownPhase(t *testing.T) {
 	s := base.New(t)
 	compacting := s.NewSession(t)
 	compacting.CheckLive()

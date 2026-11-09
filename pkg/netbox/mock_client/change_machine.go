@@ -7,7 +7,7 @@ func (c *Client) changeMachine(
 	name string,
 	value string,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

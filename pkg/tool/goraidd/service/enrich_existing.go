@@ -16,7 +16,7 @@ func (s *Service) EnrichExisting(x context.Context) []error {
 		return []error{e}
 	}
 
-	cutoff := time.Now().AddDate(0, 0, -constant.EnrichCutoffDays)
+	cutoff := s.clock().AddDate(0, 0, -constant.EnrichCutoffDays)
 	var result []error
 
 	for _, t := range entries {

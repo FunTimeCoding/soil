@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestUpdateFollowsABodyEdit(t *testing.T) {
+func TestUpdateFollowsBodyEdit(t *testing.T) {
 	_, user := replacedModules(t)
 	updateMatchesBuild(
 		t,
@@ -25,7 +25,7 @@ func TestUpdateFollowsABodyEdit(t *testing.T) {
 	)
 }
 
-func TestUpdateFollowsANewPackageAndImport(t *testing.T) {
+func TestUpdateFollowsNewPackageAndImport(t *testing.T) {
 	_, user := replacedModules(t)
 	g := updateMatchesBuild(
 		t,
@@ -48,7 +48,7 @@ func TestUpdateFollowsANewPackageAndImport(t *testing.T) {
 	assert.NotNil(t, g.Nodes["example/extra"])
 }
 
-func TestUpdateFollowsADeletedPackage(t *testing.T) {
+func TestUpdateFollowsDeletedPackage(t *testing.T) {
 	_, user := replacedModules(t)
 	g := updateMatchesBuild(
 		t,
@@ -61,7 +61,7 @@ func TestUpdateFollowsADeletedPackage(t *testing.T) {
 	assert.Nil(t, g.Nodes["other.test/lib"])
 }
 
-func TestUpdateFollowsATestOnlyDirectory(t *testing.T) {
+func TestUpdateFollowsTestOnlyDirectory(t *testing.T) {
 	_, user := replacedModules(t)
 	updateMatchesBuild(
 		t,
@@ -77,7 +77,7 @@ func TestUpdateFollowsATestOnlyDirectory(t *testing.T) {
 	)
 }
 
-func TestUpdateRebuildsWhenTheTagsChange(t *testing.T) {
+func TestUpdateRebuildsWhenTagsChange(t *testing.T) {
 	_, user := replacedModules(t)
 	tagged := "//go:build custom\n\npackage user\n\nfunc Tagged() string {\n\treturn \"tagged\"\n}\n"
 	g := updateMatchesBuild(
@@ -100,7 +100,7 @@ func TestUpdateRebuildsWhenTheTagsChange(t *testing.T) {
 	)
 }
 
-func TestUpdateFollowsAReplacedModule(t *testing.T) {
+func TestUpdateFollowsReplacedModule(t *testing.T) {
 	library, user := replacedModules(t)
 	testutil.WriteFile(
 		t,
@@ -136,7 +136,7 @@ func TestUpdateFollowsAReplacedModule(t *testing.T) {
 	assert.Nil(t, g.Nodes["other.test/lib/q"])
 }
 
-func TestUpdateKeepsWhatAnUnchangedReplacedPackageReaches(t *testing.T) {
+func TestUpdateKeepsWhatUnchangedReplacedPackageReaches(t *testing.T) {
 	library, user := replacedModules(t)
 	testutil.WriteFile(
 		t,
@@ -184,7 +184,7 @@ func TestUpdateRebuildsWhenGoModChanges(t *testing.T) {
 	)
 }
 
-func TestUpdateIgnoresWhatTheModuleDoesNotBuild(t *testing.T) {
+func TestUpdateIgnoresWhatModuleDoesNotBuild(t *testing.T) {
 	_, user := replacedModules(t)
 	updateMatchesBuild(
 		t,

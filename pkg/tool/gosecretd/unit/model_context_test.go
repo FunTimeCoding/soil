@@ -13,7 +13,7 @@ func TestModelContextOffersFiveTools(t *testing.T) {
 	assert.Count(t, 5, o.Client.ListTools())
 }
 
-func TestStatusReportsTheSeal(t *testing.T) {
+func TestStatusReportsSeal(t *testing.T) {
 	o := model_context_tester.New(t)
 	defer o.Close()
 	o.Server.MockClient.Seal()
@@ -54,7 +54,7 @@ func TestRevealSecretReturnsOneValue(t *testing.T) {
 	assert.False(t, contains(result, "foxtrot-value"))
 }
 
-func TestRevealOfAMissingKeyFailsWithoutACapture(t *testing.T) {
+func TestRevealOfMissingKeyFailsWithoutCapture(t *testing.T) {
 	o := model_context_tester.New(t)
 	defer o.Close()
 	o.Server.MockClient.AddSecret(

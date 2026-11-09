@@ -36,7 +36,7 @@ func collectPackageQualifiers(
 
 				if shadow != nil &&
 					shadow.Parent() != types.Universe {
-					return nil, lookup.TakenAt(set, newName, ident.Pos())
+					return nil, lookup.TakenMessage(set, newName, ident.Pos())
 				}
 			}
 

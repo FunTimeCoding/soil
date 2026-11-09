@@ -45,7 +45,7 @@ func TestFindLiteralsGroupsOutsideSitesByShape(t *testing.T) {
 	assert.String(t, "{} value", literals.Groups[6].Shape)
 }
 
-func TestFindLiteralsCollapsesAMultilineExemplar(t *testing.T) {
+func TestFindLiteralsCollapsesMultilineExemplar(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("find-literals-exemplar/src"),
@@ -63,7 +63,7 @@ func TestFindLiteralsCollapsesAMultilineExemplar(t *testing.T) {
 	)
 }
 
-func TestFindLiteralsRefusesAMissingType(t *testing.T) {
+func TestFindLiteralsRefusesMissingType(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("find-literals/src"),
@@ -78,7 +78,7 @@ func TestFindLiteralsRefusesAMissingType(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "not found")
 }
 
-func TestFindLiteralsRefusesANonStruct(t *testing.T) {
+func TestFindLiteralsRefusesNonStruct(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("find-literals/src"),

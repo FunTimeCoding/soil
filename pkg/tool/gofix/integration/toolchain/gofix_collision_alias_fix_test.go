@@ -13,13 +13,7 @@ import (
 func TestCollisionAliasFixAppliesEveryFirstPartyCollision(t *testing.T) {
 	directory := module_tester.CollisionKinds(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunCollisionAliasFixWithDirectory(
-		[]string{"./..."},
-		directory,
-		nil,
-		false,
-		r,
-	)
+	gofix.RunCollisionAliasFix([]string{"./..."}, directory, nil, false, r)
 	t.Run(
 		"KeeperTakesThePlainName",
 		func(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestOutpostPlacesTheDeployedService(t *testing.T) {
+func TestOutpostPlacesDeployedService(t *testing.T) {
 	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
 	collector_tester.AddService(
 		f,
@@ -30,7 +30,7 @@ func TestOutpostPlacesTheDeployedService(t *testing.T) {
 	assert.String(t, "gooutpostd", v[0].Source)
 }
 
-func TestOutpostRefusesTheBaseSystem(t *testing.T) {
+func TestOutpostRefusesBaseSystem(t *testing.T) {
 	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
 	collector_tester.AddService(
 		f,
@@ -46,7 +46,7 @@ func TestOutpostRefusesTheBaseSystem(t *testing.T) {
 	assert.Count(t, 0, v)
 }
 
-func TestOutpostRefusesASynthesizedUnit(t *testing.T) {
+func TestOutpostRefusesSynthesizedUnit(t *testing.T) {
 	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
 	collector_tester.AddService(
 		f,
@@ -83,7 +83,7 @@ func TestOutpostResolvesByHardwareAddress(t *testing.T) {
 	assert.String(t, "echo", v[0].PlaceName)
 }
 
-func TestOutpostRefusesAnUnknownHost(t *testing.T) {
+func TestOutpostRefusesUnknownHost(t *testing.T) {
 	f := collector_tester.NewOutpost(t, "nowhere", nil)
 	collector_tester.AddService(
 		f,
@@ -98,7 +98,7 @@ func TestOutpostRefusesAnUnknownHost(t *testing.T) {
 	assert.Error(t, e)
 }
 
-func TestOutpostCarriesThePackageAndVersion(t *testing.T) {
+func TestOutpostCarriesPackageAndVersion(t *testing.T) {
 	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
 	collector_tester.AddPackage(
 		f,
@@ -118,7 +118,7 @@ func TestOutpostCarriesThePackageAndVersion(t *testing.T) {
 	assert.String(t, "0.11.154", v[0].Version)
 }
 
-func TestOutpostWithoutAPackageCarriesNone(t *testing.T) {
+func TestOutpostWithoutPackageCarriesNone(t *testing.T) {
 	f := collector_tester.NewOutpost(t, constant.FixtureVirtualMachineNode, nil)
 	collector_tester.AddService(
 		f,
@@ -136,7 +136,7 @@ func TestOutpostWithoutAPackageCarriesNone(t *testing.T) {
 	assert.String(t, "", v[0].Version)
 }
 
-func TestOutpostCollectsPastAFailedTarget(t *testing.T) {
+func TestOutpostCollectsPastFailedTarget(t *testing.T) {
 	dead := collector_tester.NewOutpost(
 		t,
 		constant.FixtureVirtualMachineNode,

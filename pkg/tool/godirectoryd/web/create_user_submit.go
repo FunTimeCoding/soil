@@ -23,7 +23,7 @@ func (s *Server) createUserSubmit(
 	)
 
 	if e != nil {
-		form.RedirectFor(
+		form.IdentifierRedirect(
 			w,
 			r,
 			constant.UserPath,

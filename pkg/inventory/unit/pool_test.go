@@ -29,7 +29,7 @@ func TestPoolBuildsOncePerInstance(t *testing.T) {
 	assert.Integer(t, 1, builds)
 }
 
-func TestPoolRefusesAnUnknownInstance(t *testing.T) {
+func TestPoolRefusesUnknownInstance(t *testing.T) {
 	p := pool.New(
 		instance_tester.Inventory("alfa"),
 		func(i *instance_tester.Instance) (string, error) {
@@ -42,7 +42,7 @@ func TestPoolRefusesAnUnknownInstance(t *testing.T) {
 	assert.String(t, "instance not found: charlie", e.Error())
 }
 
-func TestPoolRetriesAFailedBuild(t *testing.T) {
+func TestPoolRetriesFailedBuild(t *testing.T) {
 	fail := true
 	p := pool.New(
 		instance_tester.Inventory("alfa"),

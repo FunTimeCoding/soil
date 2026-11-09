@@ -163,7 +163,7 @@ func TestPointersHeadingOnDirectory(t *testing.T) {
 	)
 }
 
-func TestPointersHeadingOnDeadFileReportsThePath(t *testing.T) {
+func TestPointersHeadingOnDeadFileReportsPath(t *testing.T) {
 	l := pointer_tester.Headings(nil)(
 		"doc/index.md",
 		strings.NewReader("Read `doc/gone.md#part` first.\n"),

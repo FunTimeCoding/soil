@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Service) loadedIdentifiers(sessionIdentifier string) map[int64]bool {
-	loads, e := s.store.ContextLoadsBySession(sessionIdentifier)
+	loads, e := s.store.SessionContextLoads(sessionIdentifier)
 
 	if e != nil {
 		return nil

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestJobErrorCarriesTheStory(t *testing.T) {
+func TestJobErrorCarriesStory(t *testing.T) {
 	wrapped := errors.New("signal: killed")
 	e := job.New(42, "palindrome", wrapped)
 	e.Detail = map[string]any{"input": "clip.mp4"}

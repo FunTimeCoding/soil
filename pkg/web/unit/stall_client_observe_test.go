@@ -47,9 +47,9 @@ func TestStallClientObservesDefaultPort(t *testing.T) {
 	defer p.Close()
 	x, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, e := p.Client().Do(getWithContext(x, "https://charlie.example/"))
+	_, e := p.Client().Do(contextGet(x, "https://charlie.example/"))
 	assert.True(t, e != nil)
-	_, e = p.Client().Do(getWithContext(x, "http://charlie.example/"))
+	_, e = p.Client().Do(contextGet(x, "http://charlie.example/"))
 	assert.True(t, e != nil)
 	assert.Strings(
 		t,
@@ -75,11 +75,11 @@ func TestStallClientObservesTimeoutAndCancel(t *testing.T) {
 	defer p.Close()
 	x, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
-	_, e := p.Client().Do(getWithContext(x, s.URL))
+	_, e := p.Client().Do(contextGet(x, s.URL))
 	assert.True(t, e != nil)
 	y, stop := context.WithCancel(context.Background())
 	time.AfterFunc(100*time.Millisecond, stop)
-	_, e = p.Client().Do(getWithContext(y, s.URL))
+	_, e = p.Client().Do(contextGet(y, s.URL))
 	assert.True(t, e != nil)
 	assert.Any(
 		t,

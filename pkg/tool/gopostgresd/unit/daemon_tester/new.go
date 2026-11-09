@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/postgres/mock_client"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/dump/mock_dump"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
 	"testing"
@@ -25,12 +26,18 @@ func New(
 		clients[name] = mock_client.New()
 		instances = append(
 			instances,
-			instance.Instance{Name: name, Host: join.Empty(name, ".example")},
+			instance.Instance{
+				Name:     name,
+				Host:     join.Empty(name, ".example"),
+				Database: name,
+			},
 		)
 	}
 
 	o := option.New()
 	o.Inventory = inventory.New[instance.Instance](instances...)
+	o.BackupDirectory = t.TempDir()
+	o.Dump = mock_dump.New()
 	o.Client = func(i *instance.Instance) (face.PostgresClient, error) {
 		return clients[i.Name], nil
 	}

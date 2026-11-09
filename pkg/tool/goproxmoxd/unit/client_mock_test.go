@@ -8,14 +8,14 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersAnUnknownMachineAsNotFound(t *testing.T) {
+func TestMockAnswersUnknownMachineAsNotFound(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	_, e := m.GetMachine(t.Context(), 999, &client.GetMachineParams{})
 	assert.True(t, not_found.Is(e))
 }
 
-func TestTheMockRefusesAWriteToAMissingMachine(t *testing.T) {
+func TestMockRefusesWriteToMissingMachine(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	_, e := m.StartMachine(t.Context(), 999, &client.StartMachineParams{})
@@ -29,7 +29,7 @@ func TestTheMockRefusesAWriteToAMissingMachine(t *testing.T) {
 	assert.True(t, not_found.Is(f))
 }
 
-func TestTheMockStartsAMachineItCreated(t *testing.T) {
+func TestMockStartsMachineItCreated(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	created, e := m.CreateMachine(

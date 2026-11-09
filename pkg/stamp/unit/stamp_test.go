@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestReadTakesEverythingFromTheBuildInformation(t *testing.T) {
+func TestReadTakesEverythingFromBuildInformation(t *testing.T) {
 	assert.Any(
 		t,
 		&stamp.Stamp{
@@ -35,7 +35,7 @@ func TestReadTakesEverythingFromTheBuildInformation(t *testing.T) {
 	)
 }
 
-func TestADevelopmentBuildFallsBackToDefaults(t *testing.T) {
+func TestDevelopmentBuildFallsBackToDefaults(t *testing.T) {
 	assert.Any(
 		t,
 		&stamp.Stamp{
@@ -60,7 +60,7 @@ func TestNoBuildInformationFallsBackToDefaults(t *testing.T) {
 	)
 }
 
-func TestATaggedVersionDisplaysAsItIs(t *testing.T) {
+func TestTaggedVersionDisplaysAsItIs(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
@@ -68,7 +68,7 @@ func TestATaggedVersionDisplaysAsItIs(t *testing.T) {
 	)
 }
 
-func TestADirtyTaggedVersionDisplaysWithoutTheSuffix(t *testing.T) {
+func TestDirtyTaggedVersionDisplaysWithoutSuffix(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
@@ -76,7 +76,7 @@ func TestADirtyTaggedVersionDisplaysWithoutTheSuffix(t *testing.T) {
 	)
 }
 
-func TestAPseudoVersionDisplaysTheTagItFollows(t *testing.T) {
+func TestPseudoVersionDisplaysTagItFollows(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170 (untagged)",
@@ -86,7 +86,7 @@ func TestAPseudoVersionDisplaysTheTagItFollows(t *testing.T) {
 	)
 }
 
-func TestAPseudoVersionWithoutAnyTagDisplaysAsUntagged(t *testing.T) {
+func TestPseudoVersionWithoutAnyTagDisplaysAsUntagged(t *testing.T) {
 	assert.String(
 		t,
 		"untagged",
@@ -96,7 +96,7 @@ func TestAPseudoVersionWithoutAnyTagDisplaysAsUntagged(t *testing.T) {
 	)
 }
 
-func TestADirtyTaggedBuildReleasesAsItsTag(t *testing.T) {
+func TestDirtyTaggedBuildReleasesAsItsTag(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
@@ -104,7 +104,7 @@ func TestADirtyTaggedBuildReleasesAsItsTag(t *testing.T) {
 	)
 }
 
-func TestAnUntaggedBuildReleasesAsTheTagItFollows(t *testing.T) {
+func TestUntaggedBuildReleasesAsTagItFollows(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
@@ -114,7 +114,7 @@ func TestAnUntaggedBuildReleasesAsTheTagItFollows(t *testing.T) {
 	)
 }
 
-func TestABuildBeforeAnyTagHasNoTag(t *testing.T) {
+func TestBuildBeforeAnyTagHasNoTag(t *testing.T) {
 	assert.String(
 		t,
 		"",
@@ -124,7 +124,7 @@ func TestABuildBeforeAnyTagHasNoTag(t *testing.T) {
 	)
 }
 
-func TestADevelopmentBuildHasNoTag(t *testing.T) {
+func TestDevelopmentBuildHasNoTag(t *testing.T) {
 	assert.String(
 		t,
 		"",
@@ -132,7 +132,7 @@ func TestADevelopmentBuildHasNoTag(t *testing.T) {
 	)
 }
 
-func TestAPseudoVersionWithoutRevisionCarriesItsCommit(t *testing.T) {
+func TestPseudoVersionWithoutRevisionCarriesItsCommit(t *testing.T) {
 	assert.String(
 		t,
 		"fd20dc2",
@@ -142,6 +142,6 @@ func TestAPseudoVersionWithoutRevisionCarriesItsCommit(t *testing.T) {
 	)
 }
 
-func TestATaggedVersionWithoutRevisionHasNoCommit(t *testing.T) {
+func TestTaggedVersionWithoutRevisionHasNoCommit(t *testing.T) {
 	assert.String(t, "empty", stamp.Read(buildInformation("v0.11.170")).GitHash)
 }

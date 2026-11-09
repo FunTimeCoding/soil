@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUploadCannotLeaveThePackageRoot(t *testing.T) {
+func TestUploadCannotLeavePackageRoot(t *testing.T) {
 	o := service_tester.New(t)
 	v := mountedUpload(t, o.Option)
 	body := service_tester.PackageBytes(t)
@@ -29,7 +29,7 @@ func TestAnUploadCannotLeaveThePackageRoot(t *testing.T) {
 	assert.Count(t, 0, o.Indexer.Directories)
 }
 
-func TestAnUploadIsStoredSignedAndIndexed(t *testing.T) {
+func TestUploadIsStoredSignedAndIndexed(t *testing.T) {
 	o := service_tester.New(t)
 	v := mountedUpload(t, o.Option)
 	assert.Integer(
@@ -48,7 +48,7 @@ func TestAnUploadIsStoredSignedAndIndexed(t *testing.T) {
 	assert.String(t, directory, o.Indexer.Directories[0])
 }
 
-func TestAnUploadMustBeAnApk(t *testing.T) {
+func TestUploadMustBeApk(t *testing.T) {
 	o := service_tester.New(t)
 	v := mountedUpload(t, o.Option)
 	assert.Integer(

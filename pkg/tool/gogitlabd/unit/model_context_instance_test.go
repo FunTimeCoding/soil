@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestModelContextWorksOnTheSelectedInstance(t *testing.T) {
+func TestModelContextWorksOnSelectedInstance(t *testing.T) {
 	r := memory.New()
 	d, clients := daemon_tester.New(
 		t,

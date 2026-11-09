@@ -12,13 +12,13 @@ import (
 	"time"
 )
 
-func TestKeysWhileTheMasterIsDownAnswerUnavailable(t *testing.T) {
+func TestKeysWhileMasterIsDownAnswerUnavailable(t *testing.T) {
 	v, _ := service_tester.New(t, newOption(t))
 	_, e := v.Keys()
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestKeysAfterLoginAnswerTheMastersKeys(t *testing.T) {
+func TestKeysAfterLoginAnswerMastersKeys(t *testing.T) {
 	m := salt_tester.New(t, "bravo")
 	host, port := upstream_tester.HostPort(t, m.URL)
 	o := newOption(t)

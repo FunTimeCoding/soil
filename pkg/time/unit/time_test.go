@@ -18,16 +18,16 @@ func TestConstant(t *testing.T) {
 }
 
 func TestTime(t *testing.T) {
-	assert.Integer(t, 3600, constant.HourInSeconds)
-	assert.Integer(t, 86400, constant.DayInSeconds)
-	assert.Integer(t, 604800, constant.WeekInSeconds)
-	assert.Integer(t, 2419200, constant.MonthInSeconds)
-	assert.Integer(t, 29030400, constant.YearInSeconds)
-	assert.Integer(t, 28, constant.MonthInDays)
+	assert.Integer(t, 3600, constant.HourSeconds)
+	assert.Integer(t, 86400, constant.DaySeconds)
+	assert.Integer(t, 604800, constant.WeekSeconds)
+	assert.Integer(t, 2419200, constant.MonthSeconds)
+	assert.Integer(t, 29030400, constant.YearSeconds)
+	assert.Integer(t, 28, constant.MonthDays)
 	assert.String(
 		t,
 		"1970-01-01 00:00:00",
-		soil.StartOfTime.Format(constant.DateSecond),
+		soil.Epoch.Format(constant.DateSecond),
 	)
 	now := time.Now()
 	past := now.Add(-time.Minute)
@@ -44,7 +44,7 @@ func TestTime(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	assert.String(t, "1970-01-01 00:00", soilTime.Format(soil.StartOfTime))
+	assert.String(t, "1970-01-01 00:00", soilTime.Format(soil.Epoch))
 }
 
 func TestFormatCompactToday(t *testing.T) {
@@ -72,7 +72,7 @@ func TestMidnight(t *testing.T) {
 	assert.Any(
 		t,
 		time.Date(1970, 1, 1, 0, 0, 0, 0, time.Local),
-		soilTime.Midnight(soil.StartOfTime),
+		soilTime.Midnight(soil.Epoch),
 	)
 }
 
@@ -96,11 +96,11 @@ func TestPublicHoliday(t *testing.T) {
 	assert.False(t, soilTime.PublicHoliday(day.New(2024, time.November, 2)))
 }
 
-func TestWorkDaysSince(t *testing.T) {
+func TestWorkDays(t *testing.T) {
 	assert.Integer(
 		t,
 		3,
-		soilTime.WeekDaysSince(
+		soilTime.WorkDays(
 			day.New(2024, time.October, 25),
 			day.New(2024, time.October, 30),
 		),
@@ -113,10 +113,10 @@ func TestMinuteReadable(t *testing.T) {
 }
 
 func TestSecondReadable(t *testing.T) {
-	minuteSeconds := constant.MinuteInSeconds
-	hourSeconds := constant.HourInSeconds
-	daySeconds := constant.DayInSeconds
-	monthSeconds := constant.MonthInSeconds
+	minuteSeconds := constant.MinuteSeconds
+	hourSeconds := constant.HourSeconds
+	daySeconds := constant.DaySeconds
+	monthSeconds := constant.MonthSeconds
 	assert.String(t, "1 second", second.Readable(1))
 	assert.String(t, "59 seconds", second.Readable(59))
 	assert.String(t, "1 minute", second.Readable(minuteSeconds))
@@ -147,29 +147,29 @@ func TestMonthsBetweenAcrossYears(t *testing.T) {
 	assert.Integer(
 		t,
 		16,
-		soilTime.MonthsBetween(
+		soilTime.Months(
 			day.New(2025, time.May, 24),
 			day.New(2026, time.October, 11),
 		),
 	)
 }
 
-func TestMonthsBetweenCountsOnTheSameDay(t *testing.T) {
+func TestMonthsBetweenCountsOnSameDay(t *testing.T) {
 	assert.Integer(
 		t,
 		12,
-		soilTime.MonthsBetween(
+		soilTime.Months(
 			day.New(2025, time.October, 11),
 			day.New(2026, time.October, 11),
 		),
 	)
 }
 
-func TestMonthsBetweenWaitsForTheDay(t *testing.T) {
+func TestMonthsBetweenWaitsForDay(t *testing.T) {
 	assert.Integer(
 		t,
 		11,
-		soilTime.MonthsBetween(
+		soilTime.Months(
 			day.New(2025, time.October, 12),
 			day.New(2026, time.October, 11),
 		),

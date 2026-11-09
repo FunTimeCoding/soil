@@ -26,7 +26,7 @@ func TestUpdateDeviceAppliesOnlyGivenFields(t *testing.T) {
 	)
 }
 
-func TestUpdateDeviceRenamesLastAndReturnsTheRenamed(t *testing.T) {
+func TestUpdateDeviceRenamesLastAndReturnsRenamed(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.SeedDevice("core")
 	v := device_change.New()

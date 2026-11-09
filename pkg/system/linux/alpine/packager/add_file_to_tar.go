@@ -9,7 +9,7 @@ import (
 func addFileToTar(
 	w *tar.Writer,
 	filePath string,
-	nameInArchive string,
+	archiveName string,
 ) {
 	f := system.Open(filePath)
 	defer errors.PanicClose(f)
@@ -17,7 +17,7 @@ func addFileToTar(
 	system.TarWriteHeader(
 		w,
 		&tar.Header{
-			Name:    nameInArchive,
+			Name:    archiveName,
 			Size:    s.Size(),
 			Mode:    int64(s.Mode()),
 			ModTime: s.ModTime(),

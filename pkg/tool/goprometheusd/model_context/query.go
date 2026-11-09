@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"time"
 )
 
 func (s *Server) query(
@@ -24,7 +23,7 @@ func (s *Server) query(
 		return s.captureDetail(x, e)
 	}
 
-	v, e := s.service.Query(x, instance, a.Query, time.Now())
+	v, e := s.service.Query(x, instance, a.Query)
 
 	if e != nil {
 		return s.captureDetail(x, e)

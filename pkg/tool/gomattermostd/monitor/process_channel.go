@@ -15,7 +15,7 @@ func (m *Monitor) processChannel(name string) error {
 		return not_found.New("channel", name)
 	}
 
-	posts, e := m.client.PostsSince(c, time.UnixMilli(lastMilli))
+	posts, e := m.client.Posts(c, time.UnixMilli(lastMilli))
 
 	if e != nil {
 		return e

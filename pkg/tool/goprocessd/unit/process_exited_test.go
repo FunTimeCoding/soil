@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAGroupAlreadyGoneCountsAsExited(t *testing.T) {
+func TestGroupAlreadyGoneCountsAsExited(t *testing.T) {
 	assert.True(t, process.Exited(unix.ESRCH))
 	assert.True(t, process.Exited(fmt.Errorf("getpgid: %w", unix.ESRCH)))
 	assert.True(t, process.Exited(os.ErrProcessDone))

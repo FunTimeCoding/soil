@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsTheHost(t *testing.T) {
+func TestClientReadsHost(t *testing.T) {
 	c := client_tester.New(t, memory.New())
 	h, e := c.GetHost(context.Background())
 	assert.FatalOnError(t, e)
@@ -20,7 +20,7 @@ func TestTheClientReadsTheHost(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }
 
-func TestTheClientPassesTheOriginFilter(t *testing.T) {
+func TestClientPassesOriginFilter(t *testing.T) {
 	v, e := client_tester.New(t, memory.New()).ListServices(
 		context.Background(),
 		"unknown",
@@ -29,7 +29,7 @@ func TestTheClientPassesTheOriginFilter(t *testing.T) {
 	assert.Count(t, 0, v)
 }
 
-func TestAFailedListingIsAnsweredAndCaptured(t *testing.T) {
+func TestFailedListingIsAnsweredAndCaptured(t *testing.T) {
 	r := memory.New()
 	c := client_tester.New(t, r)
 	t.Setenv(systemConstant.PathEnvironment, t.TempDir())

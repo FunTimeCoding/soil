@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestClosingTheClockWaitsForATickInFlight(t *testing.T) {
+func TestClosingClockWaitsForTickInFlight(t *testing.T) {
 	entered := make(chan struct{})
 	release := make(chan struct{})
 	var once sync.Once
@@ -53,7 +53,7 @@ func TestClosingTheClockWaitsForATickInFlight(t *testing.T) {
 	}
 }
 
-func TestClosingTheClockCancelsARefreshInFlightQuietly(t *testing.T) {
+func TestClosingClockCancelsRefreshInFlightQuietly(t *testing.T) {
 	entered := make(chan struct{})
 	var once sync.Once
 	r := memory.New()
@@ -87,7 +87,7 @@ func TestClosingTheClockCancelsARefreshInFlightQuietly(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestClosingAClockThatNeverStartedReturns(t *testing.T) {
+func TestClosingClockThatNeverStartedReturns(t *testing.T) {
 	w := worker.New(
 		func(context.Context) []error { return nil },
 		func() []*board_entry.Entry { return nil },

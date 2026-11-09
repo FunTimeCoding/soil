@@ -154,21 +154,21 @@ const (
 )
 
 const (
-	Pulse        = "pulse"
-	Label        = "label"
-	Key          = "key"
-	Value        = "value"
-	Past         = "past"
-	Now          = "now"
-	UnsetMarker  = "(unset)"
+	Pulse          = "pulse"
+	Label          = "label"
+	Key            = "key"
+	Value          = "value"
+	Past           = "past"
+	Now            = "now"
+	UnsetMarker    = "(unset)"
 	LabelNotSet    = "%s (not set)"
 	LabelUnchanged = "%s %s (unchanged)"
 	LabelAdd       = "add"
 	LabelRemove    = "remove"
 	LabelHeld      = "label %s already holds a value, nothing written"
 	LabelNotHeld   = "label %s does not hold %q, nothing written"
-	ChangeArrow  = "→"
-	LegacyChange = "change"
+	ChangeArrow    = "→"
+	LegacyChange   = "change"
 )
 
 const (

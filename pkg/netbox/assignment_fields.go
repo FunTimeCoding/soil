@@ -16,7 +16,7 @@ func (c *Client) assignmentFields(
 ) error {
 	roles, e := resolveIdentifiers(
 		a.Roles,
-		c.DeviceRoleByName,
+		c.DeviceRole,
 		func(v *device_role.Role) int32 { return v.Identifier },
 	)
 
@@ -26,7 +26,7 @@ func (c *Client) assignmentFields(
 
 	clusters, e := resolveIdentifiers(
 		a.Clusters,
-		c.ClusterByName,
+		c.Cluster,
 		func(v *cluster.Cluster) int32 { return v.Identifier },
 	)
 
@@ -36,7 +36,7 @@ func (c *Client) assignmentFields(
 
 	platforms, e := resolveIdentifiers(
 		a.Platforms,
-		c.PlatformByName,
+		c.Platform,
 		func(v *platform.Platform) int32 { return v.Identifier },
 	)
 
@@ -46,7 +46,7 @@ func (c *Client) assignmentFields(
 
 	sites, e := resolveIdentifiers(
 		a.Sites,
-		c.SiteByName,
+		c.Site,
 		func(v *site.Site) int32 { return v.Identifier },
 	)
 
@@ -56,7 +56,7 @@ func (c *Client) assignmentFields(
 
 	tenants, e := resolveIdentifiers(
 		a.Tenants,
-		c.TenantByName,
+		c.Tenant,
 		func(v *tenant.Tenant) int32 { return v.Identifier },
 	)
 
@@ -67,7 +67,7 @@ func (c *Client) assignmentFields(
 	tags := []string{}
 
 	for _, n := range a.Tags {
-		t, f := c.TagByName(n)
+		t, f := c.Tag(n)
 
 		if f != nil {
 			return f

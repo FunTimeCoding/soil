@@ -644,8 +644,7 @@ every caller, return a typed `not_found` instead of the flag.
 `<Noun>Exists` variants wrap a lookup and swallow only
 `not_found`. List endpoints are neither: an empty slice is a
 complete answer, not a miss. Examples: `FindBranchRequest`,
-`FindPostBefore`, `FindSession`, `FindLatestPulse`,
-`FindDocument`, `FileExists`.
+`FindSession`, `FindLatestPulse`, `FindDocument`, `FileExists`.
 
 Helpers that compose other calls (`ProjectsWithFile`, `Jobs`,
 `RunnersByTag`) follow the same pair: the plain form composes the

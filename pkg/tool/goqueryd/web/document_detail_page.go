@@ -16,7 +16,7 @@ func (s *Server) documentDetailPage(
 	document, suggestions, e := s.service.GetDocument(path)
 
 	if not_found.Is(e) {
-		s.view.RenderPageWithStatus(
+		s.view.RenderStatusPage(
 			w,
 			http.StatusNotFound,
 			"Not Found",

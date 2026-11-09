@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAMultiLineDescriptionIsRefused(t *testing.T) {
+func TestMultiLineDescriptionIsRefused(t *testing.T) {
 	o := service_tester.New(t)
 	p := scopedOption("alfa", "")
 	p.Description = "one line</parameter>\n<parameter name=\"content\">body"

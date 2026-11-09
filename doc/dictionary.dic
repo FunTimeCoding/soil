@@ -272,6 +272,7 @@ saltstack
 datdba
 datistemplate
 datname
+isready
 rolname
 
 # SQLite

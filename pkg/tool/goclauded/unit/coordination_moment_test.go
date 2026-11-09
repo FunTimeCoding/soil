@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAMomentReachesTheMemoryPeer(t *testing.T) {
+func TestMomentReachesMemoryPeer(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "building things")

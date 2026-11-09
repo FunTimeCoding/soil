@@ -14,6 +14,7 @@ type Service struct {
 	alertmanager prometheus.AlertmanagerClient
 	guard        *peer.Guard
 	retention    time.Duration
+	clock        func() time.Time
 	notifier     face.EventNotifier
 	lastPoll     atomic.Value
 }

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnEntryIsALabelledFormThatWorksWithoutScript(t *testing.T) {
+func TestEntryIsLabelledFormThatWorksWithoutScript(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry" method="post" action="/alfa"><input type="hidden" name="bravo" value="1"><label><span class="entry-label">Charlie</span><input type="text" name="charlie" value="delta" placeholder="echo" required></label><button type="submit">Go</button></form>`,
@@ -27,7 +27,7 @@ func TestAnEntryIsALabelledFormThatWorksWithoutScript(t *testing.T) {
 	)
 }
 
-func TestAFileFieldMakesTheEntryAMultipartForm(t *testing.T) {
+func TestFileFieldMakesEntryMultipartForm(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry" method="post" action="/alfa" enctype="multipart/form-data"><label><span class="entry-label">Bravo</span><input type="file" name="bravo" accept="image/*"></label><button type="submit">Go</button></form>`,
@@ -38,7 +38,7 @@ func TestAFileFieldMakesTheEntryAMultipartForm(t *testing.T) {
 	)
 }
 
-func TestASwappedInlineEntryCarriesItsAlertAndIdentifier(t *testing.T) {
+func TestSwappedInlineEntryCarriesItsAlertAndIdentifier(t *testing.T) {
 	page := renderedNode(
 		t,
 		entry.New("/alfa", "Go").
@@ -55,7 +55,7 @@ func TestASwappedInlineEntryCarriesItsAlertAndIdentifier(t *testing.T) {
 	)
 }
 
-func TestAQueryEntryReadsWithGetAndSwapsByGet(t *testing.T) {
+func TestQueryEntryReadsWithGetAndSwapsByGet(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<form class="entry inline" method="get" action="/alfa" hx-get="/alfa" hx-target="#foxtrot" hx-swap="innerHTML">`,
@@ -70,7 +70,7 @@ func TestAQueryEntryReadsWithGetAndSwapsByGet(t *testing.T) {
 	)
 }
 
-func TestAPasswordNeverCarriesAValueBesideAMail(t *testing.T) {
+func TestPasswordNeverCarriesValueBesideMail(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<input type="email" name="bravo" value="charlie@delta.test"></label><label><span class="entry-label">Golf</span><input type="password" name="golf"></label>`,
@@ -84,7 +84,7 @@ func TestAPasswordNeverCarriesAValueBesideAMail(t *testing.T) {
 	)
 }
 
-func TestASearchFieldCanTakeTheFocus(t *testing.T) {
+func TestSearchFieldCanTakeFocus(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<input type="search" name="bravo" value="charlie" autofocus>`,
@@ -99,7 +99,7 @@ func TestASearchFieldCanTakeTheFocus(t *testing.T) {
 	)
 }
 
-func TestAHeadingSitsInsideTheFormAboveItsAlert(t *testing.T) {
+func TestHeadingSitsInsideFormAboveItsAlert(t *testing.T) {
 	assert.StringContains(
 		t,
 		`action="/alfa"><h5>Sierra</h5><p role="alert" class="form-alert">Tango</p>`,
@@ -110,7 +110,7 @@ func TestAHeadingSitsInsideTheFormAboveItsAlert(t *testing.T) {
 	)
 }
 
-func TestGroupsGatherTheFieldsThatFollowThem(t *testing.T) {
+func TestGroupsGatherFieldsThatFollowThem(t *testing.T) {
 	page := renderedNode(
 		t,
 		entry.New("/alfa", "Go").
@@ -132,7 +132,7 @@ func TestGroupsGatherTheFieldsThatFollowThem(t *testing.T) {
 	)
 }
 
-func TestEndingAGroupReturnsToTheFormItself(t *testing.T) {
+func TestEndingGroupReturnsToFormItself(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<fieldset><legend>Victor</legend><label><span class="entry-label">Uniform</span><input type="text" name="uniform"></label></fieldset><p>xray</p><button`,
@@ -148,7 +148,7 @@ func TestEndingAGroupReturnsToTheFormItself(t *testing.T) {
 	)
 }
 
-func TestAPreviewPostsChangesElsewhereWhileTheSubmitStaysReal(t *testing.T) {
+func TestPreviewPostsChangesElsewhereWhileSubmitStaysReal(t *testing.T) {
 	assert.StringContains(
 		t,
 		`method="post" action="/alfa" hx-post="/alfa/preview" hx-trigger="change delay:300ms" hx-target="#card" hx-swap="outerHTML"`,
@@ -159,7 +159,7 @@ func TestAPreviewPostsChangesElsewhereWhileTheSubmitStaysReal(t *testing.T) {
 	)
 }
 
-func TestTheButtonAndAFieldCarryTheirOwnClasses(t *testing.T) {
+func TestButtonAndFieldCarryTheirOwnClasses(t *testing.T) {
 	page := renderedNode(
 		t,
 		entry.New("/alfa", "Go").
@@ -180,7 +180,7 @@ func TestTheButtonAndAFieldCarryTheirOwnClasses(t *testing.T) {
 	)
 }
 
-func TestARecordEntryKeepsItsButtonsSideBySide(t *testing.T) {
+func TestRecordEntryKeepsItsButtonsSideBySide(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry record" method="post" action="/alfa"><label><span class="entry-label">Bravo</span><input type="text" name="bravo"></label><div class="entry-buttons"><button type="submit">Go</button><a href="/charlie">Cancel</a></div></form>`,
@@ -195,7 +195,7 @@ func TestARecordEntryKeepsItsButtonsSideBySide(t *testing.T) {
 	)
 }
 
-func TestARevealingFieldFetchesTheNextFieldsWhenItChanges(t *testing.T) {
+func TestRevealingFieldFetchesNextFieldsWhenItChanges(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<select name="delta" required hx-get="/echo" hx-trigger="input changed delay:300ms" hx-target="#foxtrot" hx-swap="innerHTML" hx-include="closest form">`,
@@ -210,7 +210,7 @@ func TestARevealingFieldFetchesTheNextFieldsWhenItChanges(t *testing.T) {
 	)
 }
 
-func TestAnAlternativePostsTheSameFieldsElsewhereAfterThePrimary(t *testing.T) {
+func TestAlternativePostsSameFieldsElsewhereAfterPrimary(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<div class="entry-buttons"><button type="submit">Go</button><button type="submit" class="entry-alternative" formaction="/skip" formnovalidate>Skip</button></div>`,
@@ -225,7 +225,7 @@ func TestAnAlternativePostsTheSameFieldsElsewhereAfterThePrimary(t *testing.T) {
 	)
 }
 
-func TestAConfirmAsksBeforeThePrimaryAndSparesTheAlternatives(t *testing.T) {
+func TestConfirmAsksBeforePrimaryAndSparesAlternatives(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<div class="entry-buttons"><button type="submit" onclick="return confirm(&#34;Sure?&#34;)">Go</button><button type="submit" class="entry-alternative" formaction="/skip" formnovalidate>Skip</button></div>`,
@@ -240,7 +240,7 @@ func TestAConfirmAsksBeforeThePrimaryAndSparesTheAlternatives(t *testing.T) {
 	)
 }
 
-func TestSuggestionsOfferAListBesideTheField(t *testing.T) {
+func TestSuggestionsOfferListBesideField(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<label><span class="entry-label">Bravo</span><input type="text" name="bravo" list="bravo-suggestions"><datalist id="bravo-suggestions"><option value="charlie"></option><option value="delta"></option></datalist></label>`,
@@ -254,7 +254,7 @@ func TestSuggestionsOfferAListBesideTheField(t *testing.T) {
 	)
 }
 
-func TestAFieldBuiltElsewhereJoinsTheEntryAndRendersAlone(t *testing.T) {
+func TestFieldBuiltElsewhereJoinsEntryAndRendersAlone(t *testing.T) {
 	f := field.New(constant.EntryNumberKind, "golf", "Golf", "3")
 	assert.String(
 		t,
@@ -268,7 +268,7 @@ func TestAFieldBuiltElsewhereJoinsTheEntryAndRendersAlone(t *testing.T) {
 	)
 }
 
-func TestAFieldChainedAloneMatchesTheEntryModifiers(t *testing.T) {
+func TestFieldChainedAloneMatchesEntryModifiers(t *testing.T) {
 	chained := renderedNode(
 		t,
 		entry.New("/alfa", "Go").
@@ -303,7 +303,7 @@ func TestAFieldChainedAloneMatchesTheEntryModifiers(t *testing.T) {
 	)
 }
 
-func TestARequiredSelectPromptsWithADisabledEmptyOption(t *testing.T) {
+func TestRequiredSelectPromptsWithDisabledEmptyOption(t *testing.T) {
 	page := renderedNode(
 		t,
 		entry.New("/alfa", "Go").
@@ -327,7 +327,7 @@ func TestARequiredSelectPromptsWithADisabledEmptyOption(t *testing.T) {
 	)
 }
 
-func TestAnOptionalSelectLeavesItsPromptSelectable(t *testing.T) {
+func TestOptionalSelectLeavesItsPromptSelectable(t *testing.T) {
 	page := renderedNode(
 		t,
 		entry.New("/alfa", "Go").
@@ -342,7 +342,7 @@ func TestAnOptionalSelectLeavesItsPromptSelectable(t *testing.T) {
 	)
 }
 
-func TestAnAppendingEntryResetsAfterItsRequest(t *testing.T) {
+func TestAppendingEntryResetsAfterItsRequest(t *testing.T) {
 	page := renderedNode(
 		t,
 		entry.New("/alfa", "Add").

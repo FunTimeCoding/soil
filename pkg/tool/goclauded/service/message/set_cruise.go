@@ -16,8 +16,17 @@ func (s *Service) SetCruise(
 	case constant.CruiseOff, constant.CruiseOn:
 		pace = 0
 	case constant.CruisePaced:
-		if pace <= 0 {
-			return refusal.New("paced cruise needs a pace in minutes")
+		if pace%time.Minute != 0 ||
+			pace < constant.CruisePaceMinimumMinutes*time.Minute ||
+			pace > constant.CruisePaceMaximumMinutes*time.Minute {
+			return refusal.New(
+				fmt.Sprintf(
+					"a paced cruise needs a whole number of minutes from %d to %d, not %g",
+					constant.CruisePaceMinimumMinutes,
+					constant.CruisePaceMaximumMinutes,
+					pace.Minutes(),
+				),
+			)
 		}
 	default:
 		return refusal.New(

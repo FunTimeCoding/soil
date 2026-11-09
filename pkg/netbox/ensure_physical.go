@@ -8,7 +8,7 @@ import (
 func (c *Client) EnsurePhysical(
 	h net.HardwareAddr,
 ) (*physical_address.Address, error) {
-	result, e := c.PhysicalAddressesByHardware(h)
+	result, e := c.HardwarePhysicalAddresses(h)
 
 	if e != nil {
 		return nil, e

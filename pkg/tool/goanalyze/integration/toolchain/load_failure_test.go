@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestABrokenAnalyzedPackageAnswersThatItDoesNotLoad(t *testing.T) {
+func TestBrokenAnalyzedPackageAnswersThatItDoesNotLoad(t *testing.T) {
 	if o := scope_tester.ChildOptions("./caller/..."); o != nil {
 		goanalyze.Run(o)
 
@@ -33,7 +33,7 @@ func TestABrokenAnalyzedPackageAnswersThatItDoesNotLoad(t *testing.T) {
 	}
 }
 
-func TestABrokenReachedPackageIsSkippedWithANotice(t *testing.T) {
+func TestBrokenReachedPackageIsSkippedWithNotice(t *testing.T) {
 	root := t.TempDir()
 	helper := filepath.Join(root, "helper_module")
 	application := filepath.Join(root, "application")

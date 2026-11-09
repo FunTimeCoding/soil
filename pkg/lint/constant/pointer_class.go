@@ -14,6 +14,8 @@ const (
 	PointerClassSibling     PointerClass = "sibling"
 	PointerClassRepository  PointerClass = "repository"
 	PointerClassShort       PointerClass = "short"
+	PointerClassTest        PointerClass = "test_name"
+	PointerClassBareSymbol  PointerClass = "bare_symbol"
 )
 
 type PointerClass string

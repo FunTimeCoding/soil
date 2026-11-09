@@ -77,8 +77,8 @@ func (s *Store) SearchMemories(
 			return nil, e
 		}
 
-		r.Tags = s.tagsForMemory(r.Identifier)
-		r.Metadata = s.metadataForMemory(r.Identifier)
+		r.Tags = s.memoryTags(r.Identifier)
+		r.Metadata = s.memoryMetadata(r.Identifier)
 		result = append(result, r)
 	}
 

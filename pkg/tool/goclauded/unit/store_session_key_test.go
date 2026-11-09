@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestSessionKeyAttributesToTheMostRecentPriorHolder(t *testing.T) {
+func TestSessionKeyAttributesToMostRecentPriorHolder(t *testing.T) {
 	s := store_tester.New(t)
 	s.AddSession("early", "Ash", nil, "2026-09-01 10:00:00+00:00")
 	s.AddSession("late", "Ash", "Ash", "2026-09-03 10:00:00+00:00")
@@ -20,7 +20,7 @@ func TestSessionKeyAttributesToTheMostRecentPriorHolder(t *testing.T) {
 	assert.Integer(t, 2, s.QueueRows())
 }
 
-func TestSessionKeyAttributesRowsOfAReleasedSession(t *testing.T) {
+func TestSessionKeyAttributesRowsOfReleasedSession(t *testing.T) {
 	s := store_tester.New(t)
 	s.AddSession("released", "Frost", nil, "2026-09-01 10:00:00+00:00")
 	s.AddQueueRow("Frost", "for a freed name", "2026-09-02 10:00:00+00:00")

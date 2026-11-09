@@ -31,7 +31,7 @@ func TestSelectionIsEmptyUntilChosen(t *testing.T) {
 	assert.String(t, "", active)
 }
 
-func TestSelectionClearForgetsTheSession(t *testing.T) {
+func TestSelectionClearForgetsSession(t *testing.T) {
 	m := server.NewMCPServer("test", "0")
 	x := m.WithContext(t.Context(), session_tester.New("one"))
 	s := selection.New()
@@ -42,7 +42,7 @@ func TestSelectionClearForgetsTheSession(t *testing.T) {
 	assert.String(t, "", active)
 }
 
-func TestSelectionRefusesAContextWithoutASession(t *testing.T) {
+func TestSelectionRefusesContextWithoutSession(t *testing.T) {
 	s := selection.New()
 	assert.NotNil(t, s.Select(t.Context(), "delta"))
 	_, e := s.Active(t.Context())

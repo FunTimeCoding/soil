@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersWhatTheServerAnswers(t *testing.T) {
+func TestMockAnswersWhatServerAnswers(t *testing.T) {
 	s := base.New(t)
 
 	for i := 3; i <= 30; i++ {

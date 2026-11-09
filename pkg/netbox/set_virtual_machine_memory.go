@@ -9,7 +9,7 @@ func (c *Client) SetVirtualMachineMemory(
 	name string,
 	megabytes int32,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

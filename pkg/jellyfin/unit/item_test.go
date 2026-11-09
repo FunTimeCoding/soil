@@ -15,7 +15,7 @@ func TestItemIsFoundByItsIdentifier(t *testing.T) {
 	assert.String(t, "bravo", i.Name)
 }
 
-func TestAnUnknownItemIsNotFound(t *testing.T) {
+func TestUnknownItemIsNotFound(t *testing.T) {
 	_, e := items(t, `{"Items":[],"TotalRecordCount":0}`).Item(
 		"0123456789abcdef0123456789abcdef",
 	)
@@ -27,7 +27,7 @@ func TestAnUnknownItemIsNotFound(t *testing.T) {
 	)
 }
 
-func TestAMalformedIdentifierIsNotFoundDespiteUnrelatedItems(t *testing.T) {
+func TestMalformedIdentifierIsNotFoundDespiteUnrelatedItems(t *testing.T) {
 	_, e := items(
 		t,
 		`{"Items":[{"Id":"0f0e0d0c0b0a09080706050403020100","Name":"delta"}],"TotalRecordCount":1}`,

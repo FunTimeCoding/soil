@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/prometheus/client_golang/api/prometheus/v1"
 	"time"
 )
 
@@ -29,34 +28,13 @@ func (s *Server) queryRange(
 		return s.captureDetail(x, e)
 	}
 
-	start, e := parseDurationOrTime(a.Start)
-
-	if e != nil {
-		return response.Fail("invalid start: %s", e)
-	}
-
-	end := time.Now()
-
-	if a.End != "" {
-		end, e = parseDurationOrTime(a.End)
-
-		if e != nil {
-			return response.Fail("invalid end: %s", e)
-		}
-	}
-
 	step := 60 * time.Second
 
 	if a.Step > 0 {
 		step = time.Duration(a.Step) * time.Second
 	}
 
-	v, f := s.service.QueryRange(
-		x,
-		instance,
-		a.Query,
-		v1.Range{Start: start, End: end, Step: step},
-	)
+	v, f := s.service.QueryRange(x, instance, a.Query, a.Start, a.End, step)
 
 	if f != nil {
 		return s.captureDetail(x, f)

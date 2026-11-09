@@ -99,6 +99,7 @@ func New(t *testing.T) *Tester {
 		d.Harbor,
 		sources,
 		t.TempDir(),
+		s.Clock(),
 		l,
 		d.Reporter,
 	)

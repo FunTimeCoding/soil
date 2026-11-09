@@ -182,7 +182,7 @@ func TestFatalOnError(t *testing.T) {
 	assert.FatalOnError(t, nil)
 }
 
-func TestSkipOnOutageSkipsATimeout(t *testing.T) {
+func TestSkipOnOutageSkipsTimeout(t *testing.T) {
 	r := &skipRecorder{TB: t}
 	assert.SkipOnOutage(r, context.DeadlineExceeded)
 	assert.True(t, r.skipped)
@@ -195,7 +195,7 @@ func TestSkipOnOutageLetsOtherErrorsThrough(t *testing.T) {
 	assert.False(t, r.skipped)
 }
 
-func TestSkipUnlessDialableLetsAListeningHostThrough(t *testing.T) {
+func TestSkipUnlessDialableLetsListeningHostThrough(t *testing.T) {
 	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
 	assert.FatalOnError(t, e)
 	r := &skipRecorder{TB: t}
@@ -204,7 +204,7 @@ func TestSkipUnlessDialableLetsAListeningHostThrough(t *testing.T) {
 	assert.False(t, r.skipped)
 }
 
-func TestSkipUnlessDialableSkipsAClosedPort(t *testing.T) {
+func TestSkipUnlessDialableSkipsClosedPort(t *testing.T) {
 	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
 	assert.FatalOnError(t, e)
 	address := l.Addr().String()
@@ -214,7 +214,7 @@ func TestSkipUnlessDialableSkipsAClosedPort(t *testing.T) {
 	assert.True(t, r.skipped)
 }
 
-func TestSkipUnlessDialableRemembersTheVerdict(t *testing.T) {
+func TestSkipUnlessDialableRemembersVerdict(t *testing.T) {
 	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
 	assert.FatalOnError(t, e)
 	address := l.Addr().String()

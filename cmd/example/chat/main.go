@@ -13,7 +13,6 @@ func main() {
 		mattermost.DeleteTwice()
 		mattermost.Paging()
 		mattermost.Latest()
-		mattermost.Before()
 		example.DeleteLoop()
 		mattermost.Team()
 		mattermost.Dialog()

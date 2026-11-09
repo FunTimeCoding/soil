@@ -8,7 +8,7 @@ func (s *Spacing) step(
 		return
 	}
 
-	h := s.shapeOf(line, number)
+	h := s.shape(line, number)
 	s.trackBlocks(h)
 	s.trackParentheses(line)
 

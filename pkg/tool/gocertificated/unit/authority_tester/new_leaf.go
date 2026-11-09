@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/distinguished_name"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/issue_request"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/material"
+	"time"
 )
 
 func NewLeaf(
@@ -19,6 +20,7 @@ func NewLeaf(
 	r.Kind = constant.KindServer
 	r.Name = n
 	r.Host = host
+	r.Start = time.Now()
 	r.ValidDay = constant.LeafValidityDay
 
 	return cluster.Issue(r)

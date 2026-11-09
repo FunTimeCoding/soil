@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestWidenAccessOpensDenyToTheNetworkList(t *testing.T) {
+func TestWidenAccessOpensDenyToNetworkList(t *testing.T) {
 	assert.String(
 		t,
 		"UseSpecifiedNetworkACL",
@@ -24,11 +24,11 @@ func TestWidenAccessKeepsZoneNameServersAccess(t *testing.T) {
 	)
 }
 
-func TestWidenAccessNeverNarrowsAnOpenZone(t *testing.T) {
+func TestWidenAccessNeverNarrowsOpenZone(t *testing.T) {
 	assert.String(t, "Allow", technitium.WidenAccess(constant.AccessAllow))
 }
 
-func TestAllowUpdateOnAFreshZone(t *testing.T) {
+func TestAllowUpdateOnFreshZone(t *testing.T) {
 	o := zoneOptions(
 		`{"name":"alfa.example","update":"Deny","updateNetworkACL":[],"updateSecurityPolicies":[]}`,
 	)
@@ -71,7 +71,7 @@ func TestAllowUpdateKeepsExistingNetworksAndPolicies(t *testing.T) {
 	assert.Count(t, 2, o.UpdatePolicies)
 }
 
-func TestAllowTransferKeepsZoneNameServersAndAddsTheKey(t *testing.T) {
+func TestAllowTransferKeepsZoneNameServersAndAddsKey(t *testing.T) {
 	o := zoneOptions(
 		`{"name":"alfa.example","zoneTransfer":"AllowOnlyZoneNameServers",
 		"zoneTransferNetworkACL":[],"zoneTransferTsigKeyNames":[]}`,

@@ -12,7 +12,7 @@ func (s *Service) LatestPosts(
 	return guarded(
 		s.guard,
 		func() ([]*post.Post, error) {
-			return s.mattermost.LatestPosts(h, limit)
+			return s.mattermost.RecentPosts(h, limit)
 		},
 	)
 }

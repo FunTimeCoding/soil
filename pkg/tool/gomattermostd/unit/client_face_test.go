@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockShareTheFace(t *testing.T) {
+func TestClientAndItsMockShareFace(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	faces := []face.Client{

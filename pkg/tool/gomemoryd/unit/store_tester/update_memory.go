@@ -3,6 +3,7 @@ package store_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
+	"time"
 )
 
 func (o *Tester) UpdateMemory(
@@ -10,6 +11,6 @@ func (o *Tester) UpdateMemory(
 	option *save_option.Option,
 ) {
 	o.t.Helper()
-	_, e := o.Store.UpdateMemory(identifier, option)
+	_, e := o.Store.UpdateMemory(identifier, option, time.Now())
 	assert.FatalOnError(o.t, e)
 }

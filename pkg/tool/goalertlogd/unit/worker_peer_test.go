@@ -6,20 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/worker_tester"
 	"testing"
-	"time"
 )
 
-func TestAnAlertmanagerOutageIsLeftToTheGuard(t *testing.T) {
+func TestAlertmanagerOutageIsLeftToGuard(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Fail(refusedConnection())
 	o.Worker.Poll()
 	o.Worker.Poll()
 	assert.Count(t, 0, o.Reporter.Events())
-	_, e := o.Service.Record(time.Now())
+	_, e := o.Service.Record()
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAnAlertmanagerFaultIsCapturedOnce(t *testing.T) {
+func TestAlertmanagerFaultIsCapturedOnce(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Fail(errors.Format("alertmanager answered", "garbage"))
 	o.Worker.Poll()

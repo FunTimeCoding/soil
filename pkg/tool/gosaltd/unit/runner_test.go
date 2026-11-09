@@ -23,7 +23,7 @@ func TestRunnerImplementsDrainer(t *testing.T) {
 	)
 }
 
-func TestCloseWaitsForTheKeySyncInFlight(t *testing.T) {
+func TestCloseWaitsForKeySyncInFlight(t *testing.T) {
 	m := salt_tester.New(t, "bravo")
 	m.HoldKeys()
 	host, port := upstream_tester.HostPort(t, m.URL)

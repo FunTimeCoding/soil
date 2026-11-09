@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestFixRefusedWhenAFileChangesBeforeCommit(t *testing.T) {
+func TestFixRefusedWhenFileChangesBeforeCommit(t *testing.T) {
 	directory := module_tester.NamesakeExported(t)
 	o := module_tester.Options(t, directory, false, false, "./alfa/...")
 	o.BeforeCommit = func() {
@@ -38,7 +38,7 @@ func TestFixRefusedWhenAFileChangesBeforeCommit(t *testing.T) {
 	)
 }
 
-func TestFixRefusedWhenAReplacingModuleChangesBeforeCommit(t *testing.T) {
+func TestFixRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 	library := module_tester.ReplacedLibrary(t)
 	user := module_tester.ReplacingUser(
 		t,

@@ -16,19 +16,19 @@ func (s *Service) CreateDevice(
 	return guarded(
 		s.guard,
 		func() (*device.Device, error) {
-			r, e := s.client.DeviceRoleByName(role)
+			r, e := s.client.DeviceRole(role)
 
 			if e != nil {
 				return nil, e
 			}
 
-			t, e := s.client.DeviceTypeByName(deviceType)
+			t, e := s.client.DeviceType(deviceType)
 
 			if e != nil {
 				return nil, e
 			}
 
-			i, e := s.client.SiteByName(site)
+			i, e := s.client.Site(site)
 
 			if e != nil {
 				return nil, e
@@ -37,7 +37,7 @@ func (s *Service) CreateDevice(
 			var n *tenant.Tenant
 
 			if tenantName != "" {
-				n, e = s.client.TenantByName(tenantName)
+				n, e = s.client.Tenant(tenantName)
 
 				if e != nil {
 					return nil, e

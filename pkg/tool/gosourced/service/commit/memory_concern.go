@@ -17,7 +17,7 @@ func MemoryConcern(
 	if c.Reason != "" {
 		return concern.NewFile(
 			constant.ConcernReferenceLeft,
-			fmt.Sprintf("%s: %s: %s", memory, c.Before, c.Reason),
+			fmt.Sprintf("%s: %s: %s", memory, c.Old, c.Reason),
 			"",
 			true,
 		)
@@ -25,7 +25,7 @@ func MemoryConcern(
 
 	return concern.NewFile(
 		constant.ConcernRetargeted,
-		fmt.Sprintf("%s: %s → %s", memory, c.Before, c.After),
+		fmt.Sprintf("%s: %s → %s", memory, c.Old, c.New),
 		"",
 		true,
 	)

@@ -30,7 +30,7 @@ func TestCheckWithMessage(t *testing.T) {
 	s.Send(r2.Callsign, "", "golf")
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
-	messages := fixture.EntriesByKind(r.Entries, constant.QueueMessage)
+	messages := fixture.KindEntries(r.Entries, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 }
 
@@ -43,7 +43,7 @@ func TestCheckWithTimeout(t *testing.T) {
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
 	assert.True(t, r.Changed)
-	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)
+	timeouts := fixture.KindEntries(r.Entries, constant.QueueTimeout)
 	assert.Count(t, 1, timeouts)
 	assert.String(
 		t,
@@ -59,7 +59,7 @@ func TestCheckWithReannounce(t *testing.T) {
 	s.Roster.ClearBindings()
 	r = s.Check("session-1")
 	assert.True(t, r.Changed)
-	reannounce := fixture.EntriesByKind(r.Entries, constant.QueueReannounce)
+	reannounce := fixture.KindEntries(r.Entries, constant.QueueReannounce)
 	assert.Count(t, 1, reannounce)
 }
 
@@ -71,7 +71,7 @@ func TestCheckWithSessionActivity(t *testing.T) {
 	s.Announce("session-2", r2.Callsign, "other work", "pkg/auth")
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
-	announces := fixture.EntriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := fixture.KindEntries(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 }
 
@@ -85,7 +85,7 @@ func TestCheckCompleteTimeout(t *testing.T) {
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
 	assert.True(t, r.Changed)
-	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)
+	timeouts := fixture.KindEntries(r.Entries, constant.QueueTimeout)
 	assert.Count(t, 1, timeouts)
 	assert.String(
 		t,
@@ -100,10 +100,10 @@ func TestCheckConsumesEntries(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	s.Send(r2.Callsign, r1.Callsign, "hello")
 	first := s.Check("session-1")
-	messages := fixture.EntriesByKind(first.Entries, constant.QueueMessage)
+	messages := fixture.KindEntries(first.Entries, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	second := s.Check("session-1")
-	messages = fixture.EntriesByKind(second.Entries, constant.QueueMessage)
+	messages = fixture.KindEntries(second.Entries, constant.QueueMessage)
 	assert.Count(t, 0, messages)
 }
 
@@ -117,9 +117,6 @@ func TestCheckWithCompletionActivity(t *testing.T) {
 	s.Store.Advance(time.Second)
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
-	completions := fixture.EntriesByKind(
-		r.Entries,
-		constant.QueueSessionComplete,
-	)
+	completions := fixture.KindEntries(r.Entries, constant.QueueSessionComplete)
 	assert.True(t, len(completions) > 0)
 }

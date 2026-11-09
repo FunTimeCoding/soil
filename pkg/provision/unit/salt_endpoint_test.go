@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestTheFirstCallLogsInAndSendsTheToken(t *testing.T) {
+func TestFirstCallLogsInAndSendsToken(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
@@ -38,7 +38,7 @@ func TestExpiredTokenRenewsOnce(t *testing.T) {
 	assert.Strings(t, []string{"token-1", "token-1", "token-2"}, s.Seen())
 }
 
-func TestRefusalCarriesTheParagraph(t *testing.T) {
+func TestRefusalCarriesParagraph(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	_, e := newSaltClient(t, s.URL, "bravo").ListJobs()
 	assert.True(t, unexpected.Is(e))
@@ -49,7 +49,7 @@ func TestRefusalCarriesTheParagraph(t *testing.T) {
 	)
 }
 
-func TestAGatewayTimeoutIsUnavailable(t *testing.T) {
+func TestGatewayTimeoutIsUnavailable(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	assert.FatalOnError(t, c.Login(t.Context()))
@@ -59,7 +59,7 @@ func TestAGatewayTimeoutIsUnavailable(t *testing.T) {
 	assert.StringContains(t, "salt-api status: 504", e.Error())
 }
 
-func TestABadGatewayIsUnavailable(t *testing.T) {
+func TestBadGatewayIsUnavailable(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	assert.FatalOnError(t, c.Login(t.Context()))
@@ -68,7 +68,7 @@ func TestABadGatewayIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAClassifiedStatusWinsOverTheParagraph(t *testing.T) {
+func TestClassifiedStatusWinsOverParagraph(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	assert.FatalOnError(t, c.Login(t.Context()))
@@ -82,7 +82,7 @@ func TestAClassifiedStatusWinsOverTheParagraph(t *testing.T) {
 	)
 }
 
-func TestAWrongPasswordIsRefusedWithTheReason(t *testing.T) {
+func TestWrongPasswordIsRefusedWithReason(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "charlie")
 	defer c.Close()
@@ -97,7 +97,7 @@ func TestAWrongPasswordIsRefusedWithTheReason(t *testing.T) {
 	assert.StringContains(t, "Could not authenticate", f.Error())
 }
 
-func TestALoginNobodyAnswersIsAConnectionFailure(t *testing.T) {
+func TestLoginNobodyAnswersIsConnectionFailure(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
@@ -105,7 +105,7 @@ func TestALoginNobodyAnswersIsAConnectionFailure(t *testing.T) {
 	assert.NotNil(t, connection.Classify(c.Login(t.Context())))
 }
 
-func TestAPostThatHangsEndsWithItsContext(t *testing.T) {
+func TestPostThatHangsEndsWithItsContext(t *testing.T) {
 	s := salt_tester.New(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
@@ -135,7 +135,7 @@ func TestAPostThatHangsEndsWithItsContext(t *testing.T) {
 	}
 }
 
-func TestALoginThatHangsEndsWithItsContext(t *testing.T) {
+func TestLoginThatHangsEndsWithItsContext(t *testing.T) {
 	release := make(chan struct{})
 	s := httptest.NewServer(
 		http.HandlerFunc(

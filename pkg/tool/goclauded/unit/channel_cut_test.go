@@ -12,7 +12,7 @@ import (
 	"unicode/utf8"
 )
 
-func TestChannelDeliveryCutsALongMessage(t *testing.T) {
+func TestChannelDeliveryCutsLongMessage(t *testing.T) {
 	s := base.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
@@ -33,7 +33,7 @@ func TestChannelDeliveryCutsALongMessage(t *testing.T) {
 	}
 }
 
-func TestChannelDeliveryKeepsAShortMessageWhole(t *testing.T) {
+func TestChannelDeliveryKeepsShortMessageWhole(t *testing.T) {
 	s := base.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")

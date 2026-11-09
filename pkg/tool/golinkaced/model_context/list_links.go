@@ -11,10 +11,10 @@ func (s *Server) ListLinks(
 	_ mcp.CallToolRequest,
 	a argument.ListLinks,
 ) (*mcp.CallToolResult, error) {
-	p := pageFromOffset(a.Offset, a.Limit)
+	p := offsetPage(a.Offset, a.Limit)
 
 	if a.List > 0 {
-		r, e := s.service.LinksByListPage(a.List, p)
+		r, e := s.service.ListLinksPage(a.List, p)
 
 		if e != nil {
 			return s.answer(x, e)

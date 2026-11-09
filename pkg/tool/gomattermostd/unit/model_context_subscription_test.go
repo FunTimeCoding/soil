@@ -26,7 +26,7 @@ func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 	assert.String(t, "bravo", stored[0].ChannelIdentifier)
 }
 
-func TestSubscribeThreadAnswersTheLatestReply(t *testing.T) {
+func TestSubscribeThreadAnswersLatestReply(t *testing.T) {
 	r := model_context_tester.New(t, repliedUpstream)
 	result := r.Client.MustCallToolNotation(
 		constant.SubscribeThread,
@@ -67,7 +67,7 @@ func TestSubscribeThreadIsIdempotent(t *testing.T) {
 	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("kilo")))
 }
 
-func TestSubscribeThreadStoresAQueuedDelivery(t *testing.T) {
+func TestSubscribeThreadStoresQueuedDelivery(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	r.Client.MustCallTool(
 		constant.SubscribeThread,
@@ -84,7 +84,7 @@ func TestSubscribeThreadStoresAQueuedDelivery(t *testing.T) {
 	)
 }
 
-func TestSubscribeThreadRejectsAnUnknownDelivery(t *testing.T) {
+func TestSubscribeThreadRejectsUnknownDelivery(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	r.Client.MustCallToolError(
 		constant.SubscribeThread,

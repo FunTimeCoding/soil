@@ -26,7 +26,7 @@ func resultPaths(raw json.RawMessage) []string {
 
 	for _, text := range texts {
 		for _, line := range split.NewLine(text) {
-			result = append(result, pathsIn(line)...)
+			result = append(result, linePaths(line)...)
 		}
 	}
 

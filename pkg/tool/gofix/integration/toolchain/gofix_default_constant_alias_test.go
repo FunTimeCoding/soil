@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestDefaultRewritesAConstantImport(t *testing.T) {
+func TestDefaultRewritesConstantImport(t *testing.T) {
 	directory := module_tester.ConstantAlias(t)
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunDefault(

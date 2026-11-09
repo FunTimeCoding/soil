@@ -31,8 +31,8 @@ func TestRenameFunction(t *testing.T) {
 		"pkg/target/is_generated.go",
 	)
 	assert.StringContains(t, "func IsGenerated(", declaration)
-	inPackage := service_tester.ReadFixtureFile(t, d, "pkg/target/check.go")
-	assert.StringContains(t, "IsGenerated(content)", inPackage)
+	samePackage := service_tester.ReadFixtureFile(t, d, "pkg/target/check.go")
+	assert.StringContains(t, "IsGenerated(content)", samePackage)
 	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assert.StringContains(t, "target.IsGenerated(content)", crossPackage)
 }
@@ -88,8 +88,8 @@ func TestRenameMethod(t *testing.T) {
 		"pkg/target/lookup_by_name.go",
 	)
 	assert.StringContains(t, "func (s *Store) LookupByName(", method)
-	inPackage := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	assert.StringContains(t, "v.LookupByName(\"test\")", inPackage)
+	samePackage := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	assert.StringContains(t, "v.LookupByName(\"test\")", samePackage)
 	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assert.StringContains(t, "s.LookupByName(\"test\")", crossPackage)
 }

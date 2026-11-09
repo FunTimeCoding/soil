@@ -7,14 +7,14 @@ import (
 	"testing"
 )
 
-func TestAnAnsweringPluginIsReachable(t *testing.T) {
+func TestAnsweringPluginIsReachable(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		bridge(t, http.StatusOK, `{"views":[]}`).Reachable(t.Context()),
 	)
 }
 
-func TestARestartingPluginIsUnavailable(t *testing.T) {
+func TestRestartingPluginIsUnavailable(t *testing.T) {
 	e := bridge(
 		t,
 		http.StatusServiceUnavailable,
@@ -23,7 +23,7 @@ func TestARestartingPluginIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestViewsFromARestartingPluginAreUnavailable(t *testing.T) {
+func TestViewsFromRestartingPluginAreUnavailable(t *testing.T) {
 	_, e := bridge(
 		t,
 		http.StatusServiceUnavailable,

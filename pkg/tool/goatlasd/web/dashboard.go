@@ -19,7 +19,7 @@ func (s *Server) dashboard(
 	errors.PanicOnError(e)
 	unclaimed, f := s.service.MatchingSightings("", true)
 	errors.PanicOnError(f)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.DashboardTitle,
 		webConstant.RootPath,

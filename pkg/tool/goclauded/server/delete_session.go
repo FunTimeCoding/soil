@@ -10,7 +10,7 @@ func (s *Server) DeleteSession(
 	x context.Context,
 	r server.DeleteSessionRequestObject,
 ) (server.DeleteSessionResponseObject, error) {
-	if e := s.roster.ReleaseByCallsign(r.Callsign); e != nil {
+	if e := s.roster.ReleaseCallsign(r.Callsign); e != nil {
 		return server.DeleteSession500JSONResponse(
 			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil

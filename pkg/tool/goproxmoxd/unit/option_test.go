@@ -9,13 +9,13 @@ import (
 	"testing"
 )
 
-func TestTheOptionCarriesBothFactories(t *testing.T) {
+func TestOptionCarriesBothFactories(t *testing.T) {
 	o := option.New()
 	assert.NotNil(t, o.Hypervisor)
 	assert.NotNil(t, o.Shell)
 }
 
-func TestAHypervisorWithoutCredentialsIsRefused(t *testing.T) {
+func TestHypervisorWithoutCredentialsIsRefused(t *testing.T) {
 	alfa := instance.Instance{Name: "alfa", Host: "alfa.example"}
 	_, e := option.BuildHypervisor(&alfa)
 	assert.True(t, validation.Is(e))
@@ -24,7 +24,7 @@ func TestAHypervisorWithoutCredentialsIsRefused(t *testing.T) {
 	assert.True(t, validation.Is(f))
 }
 
-func TestAHypervisorWithATokenIsBuilt(t *testing.T) {
+func TestHypervisorWithTokenIsBuilt(t *testing.T) {
 	alfa := instance.Instance{
 		Name:   "alfa",
 		Host:   "alfa.example",
@@ -37,7 +37,7 @@ func TestAHypervisorWithATokenIsBuilt(t *testing.T) {
 	assert.NotNil(t, c)
 }
 
-func TestAShellWithoutCredentialsIsNotConfigured(t *testing.T) {
+func TestShellWithoutCredentialsIsNotConfigured(t *testing.T) {
 	alfa := instance.Instance{Name: "alfa", Host: "alfa.example"}
 	_, e := option.BuildShell(&alfa)
 	assert.True(t, not_configured.Is(e))

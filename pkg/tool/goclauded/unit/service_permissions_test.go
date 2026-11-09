@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestPermissionsRankTheBlockersOfTheLastWeek(t *testing.T) {
+func TestPermissionsRankBlockersOfLastWeek(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
@@ -113,7 +113,8 @@ func TestPermissionsRankTheBlockersOfTheLastWeek(t *testing.T) {
 		"session-c",
 		permissionCall("Bash", "ls doc", "config", "rule", 9*day),
 	)
-	r, e := x.Transcript.Permissions(7, permissionNow())
+	setPermissionNow(x)
+	r, e := x.Transcript.Permissions(7)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 7, r.Days)
 	assert.Integer(t, 2, r.Sessions)
@@ -167,7 +168,8 @@ func TestPermissionsMergeEverySettingsFile(t *testing.T) {
 			time.Hour,
 		),
 	)
-	r, e := x.Transcript.Permissions(7, permissionNow())
+	setPermissionNow(x)
+	r, e := x.Transcript.Permissions(7)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, r.Cleared)
 	assert.Count(t, 0, r.Rows)
@@ -207,7 +209,8 @@ func TestPermissionsRowNamesItsNewestDistinctCommands(t *testing.T) {
 		)
 	}
 
-	r, e := x.Transcript.Permissions(7, permissionNow())
+	setPermissionNow(x)
+	r, e := x.Transcript.Permissions(7)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, r.Rows)
 	assert.Integer(t, 5, r.Rows[0].Prompts)
@@ -219,7 +222,7 @@ func TestPermissionsRowNamesItsNewestDistinctCommands(t *testing.T) {
 	)
 }
 
-func TestPermissionsRefuseAnUnreadableSettingsFile(t *testing.T) {
+func TestPermissionsRefuseUnreadableSettingsFile(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
@@ -245,11 +248,12 @@ func TestPermissionsRefuseAnUnreadableSettingsFile(t *testing.T) {
 			time.Hour,
 		),
 	)
-	_, e := x.Transcript.Permissions(7, permissionNow())
+	setPermissionNow(x)
+	_, e := x.Transcript.Permissions(7)
 	assert.NotNil(t, e)
 }
 
-func TestPermissionsBreakAReasonTieAlphabetically(t *testing.T) {
+func TestPermissionsBreakReasonTieAlphabetically(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
@@ -277,7 +281,8 @@ func TestPermissionsBreakAReasonTieAlphabetically(t *testing.T) {
 			time.Hour,
 		),
 	)
-	r, e := x.Transcript.Permissions(7, permissionNow())
+	setPermissionNow(x)
+	r, e := x.Transcript.Permissions(7)
 	assert.FatalOnError(t, e)
 	assert.String(t, "bashMiss:no-rule-match", r.Rows[0].Reason)
 }

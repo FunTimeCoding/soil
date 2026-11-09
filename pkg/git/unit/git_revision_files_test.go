@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestRevisionFilesReadTheCommittedTree(t *testing.T) {
+func TestRevisionFilesReadCommittedTree(t *testing.T) {
 	r := repository_tester.New(t)
 	r.Write("alfa.go", "package alfa\n")
 	r.Commit("alfa")
@@ -20,7 +20,7 @@ func TestRevisionFilesReadTheCommittedTree(t *testing.T) {
 	assert.Any(t, map[string][]byte{"alfa.go": []byte("package alfa\n")}, files)
 }
 
-func TestIndexFilesReadTheStagedContent(t *testing.T) {
+func TestIndexFilesReadStagedContent(t *testing.T) {
 	r := repository_tester.New(t)
 	r.Write("alfa.go", "package alfa\n")
 	r.Commit("alfa")
@@ -54,7 +54,7 @@ func TestRevisionFilesStayInsideTheirDirectory(t *testing.T) {
 	)
 }
 
-func TestRevisionFilesRefuseAnUnknownRevision(t *testing.T) {
+func TestRevisionFilesRefuseUnknownRevision(t *testing.T) {
 	r := repository_tester.New(t)
 	_, e := git.RevisionFiles(r.Clone, "nowhere", goFile)
 	assert.Error(t, e)

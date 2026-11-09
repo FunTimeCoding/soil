@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAMalformedNumberIsNotReported(t *testing.T) {
+func TestMalformedNumberIsNotReported(t *testing.T) {
 	r := memory.New()
 	d, _ := daemon_tester.New(t, r, constant.FixtureInstance)
 	m := http.NewServeMux()

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAQueuedSyncIsAnsweredQuietly(t *testing.T) {
+func TestQueuedSyncIsAnsweredQuietly(t *testing.T) {
 	m := memory.New()
 	r, e := model_context.SyncResponse(
 		t.Context(),
@@ -24,7 +24,7 @@ func TestAQueuedSyncIsAnsweredQuietly(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestAnUnexpectedSyncErrorIsCaptured(t *testing.T) {
+func TestUnexpectedSyncErrorIsCaptured(t *testing.T) {
 	m := memory.New()
 	_, e := model_context.SyncResponse(
 		t.Context(),
@@ -36,7 +36,7 @@ func TestAnUnexpectedSyncErrorIsCaptured(t *testing.T) {
 	assert.Count(t, 1, m.Events())
 }
 
-func TestAFailedSyncIsNotCapturedTwice(t *testing.T) {
+func TestFailedSyncIsNotCapturedTwice(t *testing.T) {
 	m := memory.New()
 	result := update.NewResult()
 	result.Error = errors.New("sync failed")

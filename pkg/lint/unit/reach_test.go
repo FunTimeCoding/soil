@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestReachReadsTheEditToolPaths(t *testing.T) {
+func TestReachReadsEditToolPaths(t *testing.T) {
 	edits, e := reach.ReadTranscript(
 		transcript_tester.Write(
 			t,
@@ -40,7 +40,7 @@ func TestReachReadsTheEditToolPaths(t *testing.T) {
 	)
 }
 
-func TestReachResolvesSourceResultsAgainstTheChosenModule(t *testing.T) {
+func TestReachResolvesSourceResultsAgainstChosenModule(t *testing.T) {
 	edits, e := reach.ReadTranscript(
 		transcript_tester.Write(
 			t,
@@ -89,7 +89,7 @@ func TestReachSkipsDryRunSourceResults(t *testing.T) {
 	assert.Count(t, 0, edits.Files)
 }
 
-func TestReachResolvesAndCountsBashWritesFromTheLineDirectory(t *testing.T) {
+func TestReachResolvesAndCountsBashWritesFromLineDirectory(t *testing.T) {
 	edits, e := reach.ReadTranscript(
 		transcript_tester.Write(
 			t,
@@ -146,7 +146,7 @@ func TestReachTakesImportersAndKeepsDocumentsApart(t *testing.T) {
 	assert.Strings(t, []string{"./doc"}, r.Documents)
 }
 
-func TestReachKeepsTheImportersOfADeletedPackageAndDropsIt(t *testing.T) {
+func TestReachKeepsImportersOfDeletedPackageAndDropsIt(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
 	testutil.WriteFile(

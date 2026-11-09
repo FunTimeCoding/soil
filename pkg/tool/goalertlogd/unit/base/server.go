@@ -11,5 +11,6 @@ type Server struct {
 	Daemon     *daemon.Daemon
 	Clock      *worker.Worker
 	MockClient *mock_client.Client
+	LitePath   string
 	*model_context_server.Server
 }

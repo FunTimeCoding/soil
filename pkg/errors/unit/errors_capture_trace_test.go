@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestACaptureCarriesTheTraceOfItsContext(t *testing.T) {
+func TestCaptureCarriesTraceOfItsContext(t *testing.T) {
 	m := memory.New()
 	classify.Capture(
 		trace_tester.Context(t, nil),
@@ -28,14 +28,14 @@ func TestACaptureCarriesTheTraceOfItsContext(t *testing.T) {
 	)
 }
 
-func TestACaptureOutsideARequestHasNoTrace(t *testing.T) {
+func TestCaptureOutsideRequestHasNoTrace(t *testing.T) {
 	m := memory.New()
 	classify.Capture(t.Context(), m, errors.New("disk full"), "")
 	assert.Count(t, 1, m.Events())
 	assert.String(t, "", m.Events()[0].Trace)
 }
 
-func TestTheReporterSendsOnItsOwnHubOutsideARequest(t *testing.T) {
+func TestReporterSendsOnItsOwnHubOutsideRequest(t *testing.T) {
 	r := sendingReporter(t, "http://key@localhost:1/1", io.Discard)
 	m := &sentry.MockTransport{}
 	c, e := sentry.NewClient(
@@ -48,7 +48,7 @@ func TestTheReporterSendsOnItsOwnHubOutsideARequest(t *testing.T) {
 	assert.Count(t, 1, m.Events())
 }
 
-func TestTheReporterSendsOnTheHubOfItsContext(t *testing.T) {
+func TestReporterSendsOnHubOfItsContext(t *testing.T) {
 	r := sendingReporter(t, "http://key@localhost:1/1", io.Discard)
 	m := &sentry.MockTransport{}
 	c, e := sentry.NewClient(

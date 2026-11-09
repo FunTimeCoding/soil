@@ -9,7 +9,7 @@ func (c *Client) SetConfigurationContextPayload(
 	name string,
 	payload map[string]any,
 ) (*configuration_context.Context, error) {
-	v, e := c.ConfigurationContextByName(name)
+	v, e := c.ConfigurationContext(name)
 
 	if e != nil {
 		return nil, e

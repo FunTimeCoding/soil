@@ -5,5 +5,5 @@ func (s *Service) HiddenIdentifiers() (map[int64]bool, error) {
 		return map[int64]bool{}, nil
 	}
 
-	return s.store.ListIdentifiersByTag(s.hiddenTag)
+	return s.store.ListTagIdentifiers(s.hiddenTag)
 }

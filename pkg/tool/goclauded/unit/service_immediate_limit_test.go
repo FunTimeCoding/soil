@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestImmediateIsRateLimitedToTheSlowPath(t *testing.T) {
+func TestImmediateIsRateLimitedToSlowPath(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
@@ -40,11 +40,11 @@ func TestImmediateIsRateLimitedToTheSlowPath(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.EntriesByKind(remaining.Entries, constant.QueueMessage),
+		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
-func TestImmediateRecoversAfterTheWindow(t *testing.T) {
+func TestImmediateRecoversAfterWindow(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")

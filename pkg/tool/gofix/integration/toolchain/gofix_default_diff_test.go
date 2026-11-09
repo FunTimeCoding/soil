@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestDefaultDiffShowsTheCombinedRun(t *testing.T) {
+func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 	directory := module_tester.Interacting(t)
 	path := filepath.Join(directory, "interact.go")
 	before := readGoFiles(t, directory)

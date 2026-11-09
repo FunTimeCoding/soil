@@ -48,7 +48,7 @@ func Log(
 	console.Format("Team: %s\n", currentTeam)
 	console.Format("At-risk cut-off member: %s\n", atRiskCutOff)
 	gw2.ImportAleevaFiles()
-	members := gw2.MembersOfGuild(gw2.NewEnvironment(), tag)
+	members := gw2.GuildMembers(gw2.NewEnvironment(), tag)
 	console.Format("Members count: %d\n", len(members))
 	var atRisk []string
 

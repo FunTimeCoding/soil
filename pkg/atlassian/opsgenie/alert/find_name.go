@@ -29,7 +29,7 @@ func (a *Alert) findName() string {
 	result := a.shortenAlert(message)
 
 	if result == constant.OpsgenieUnknownName {
-		result = a.nameFromDescription(description)
+		result = a.descriptionName(description)
 
 		if result == constant.OpsgenieUnknownName {
 			if a.RawList != nil {

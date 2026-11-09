@@ -22,7 +22,7 @@ func (c *Client) Labeled() ([]*page.Page, error) {
 	}
 
 	for _, identifier := range identifiers {
-		pages, f := c.PagesByLabel(identifier)
+		pages, f := c.LabelPages(identifier)
 
 		if f != nil {
 			return nil, f

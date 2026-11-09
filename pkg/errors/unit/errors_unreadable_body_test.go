@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestUnreadableBodyCarriesTheCause(t *testing.T) {
+func TestUnreadableBodyCarriesCause(t *testing.T) {
 	cause := errors.New("unexpected EOF")
 	e := unreadable_body.New(cause, "technitium %s: %d", "/zones", 502)
 	assert.String(

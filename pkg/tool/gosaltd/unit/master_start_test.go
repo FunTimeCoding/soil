@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestTheStartUpRunWaitsForTheMasterAndHappensOnce(t *testing.T) {
+func TestStartUpRunWaitsForMasterAndHappensOnce(t *testing.T) {
 	c := mock_client.New()
 	c.Fail(c.Reachable, refusedDial())
 	o := newOption(t)
@@ -29,7 +29,7 @@ func TestTheStartUpRunWaitsForTheMasterAndHappensOnce(t *testing.T) {
 	assert.Integer(t, 1, c.Highstates())
 }
 
-func TestAShutdownDuringTheOutageWritesNoStartUpRun(t *testing.T) {
+func TestShutdownDuringOutageWritesNoStartUpRun(t *testing.T) {
 	c := mock_client.New()
 	c.Fail(c.Reachable, refusedDial())
 	o := newOption(t)

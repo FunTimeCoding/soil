@@ -25,6 +25,9 @@ func newResolver(
 	r.Routes = p.Routes
 	r.Headings = p.Headings
 	r.Declares = p.Declares
+	r.DeclaresType = p.DeclaresType
+	r.Tests = p.Tests
+	r.TestElsewhere = p.TestElsewhere
 
 	return r
 }

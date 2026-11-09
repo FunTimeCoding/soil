@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheProbeReachesAGuardedDaemon(t *testing.T) {
+func TestProbeReachesGuardedDaemon(t *testing.T) {
 	s := reachableServer(t)
 	assert.FatalOnError(
 		t,
@@ -21,7 +21,7 @@ func TestTheProbeReachesAGuardedDaemon(t *testing.T) {
 	)
 }
 
-func TestTheProbeFailsOnAWrongToken(t *testing.T) {
+func TestProbeFailsOnWrongToken(t *testing.T) {
 	s := reachableServer(t)
 	e := reachable_probe.Reach(
 		context.Background(),
@@ -33,7 +33,7 @@ func TestTheProbeFailsOnAWrongToken(t *testing.T) {
 	assert.StringContains(t, "401", e.Error())
 }
 
-func TestTheProbeFailsWithoutAToken(t *testing.T) {
+func TestProbeFailsWithoutToken(t *testing.T) {
 	s := reachableServer(t)
 	e := reachable_probe.Reach(
 		context.Background(),

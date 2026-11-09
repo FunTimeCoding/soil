@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestPollReportsARefusalBesideAnInstanceThatIsAway(t *testing.T) {
+func TestPollReportsRefusalBesideInstanceThatIsAway(t *testing.T) {
 	r := memory.New()
 	w, _, clients := newWorker(t, r)
 	defer w.Close()
@@ -28,7 +28,7 @@ func TestPollReportsARefusalBesideAnInstanceThatIsAway(t *testing.T) {
 	assert.String(t, "refused for no known reason", events[0].Error.Error())
 }
 
-func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
+func TestPollKeepsRowsOfFailingInstance(t *testing.T) {
 	r := memory.New()
 	w, s, clients := newWorker(t, r)
 	defer w.Close()

@@ -10,7 +10,7 @@ func receiverCalls(
 	p *packages.Package,
 	f *ast.FuncDecl,
 ) []string {
-	r := receiverOf(p, f)
+	r := receiver(p, f)
 	var result []string
 	ast.Inspect(
 		f.Body,

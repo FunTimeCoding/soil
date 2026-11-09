@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheStreamFollowsEveryClaimChange(t *testing.T) {
+func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	s := base.New(t)
 	r := openStream(t, s.Server)
 	assert.String(t, "[]", readEvent(t, r))
@@ -40,7 +40,7 @@ func TestTheStreamFollowsEveryClaimChange(t *testing.T) {
 	assert.String(t, "[]", readEvent(t, r))
 }
 
-func TestAClaimWithoutAnOwnerIsRejected(t *testing.T) {
+func TestClaimWithoutOwnerIsRejected(t *testing.T) {
 	s := base.New(t)
 	r, e := newClient(t, s.Server).PutClaimWithResponse(
 		context.Background(),

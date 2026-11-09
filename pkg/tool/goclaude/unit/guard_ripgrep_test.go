@@ -18,7 +18,7 @@ func TestQuestionLetsRipgrepSearchesThrough(t *testing.T) {
 	assert.String(t, "", guard.Question("grep -l foo pkg && ("))
 }
 
-func TestQuestionAsksForARipgrepProgram(t *testing.T) {
+func TestQuestionAsksForRipgrepProgram(t *testing.T) {
 	assert.String(
 		t,
 		"rg --pre runs a program",

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheClientUploadsToTheDaemon(t *testing.T) {
+func TestClientUploadsToDaemon(t *testing.T) {
 	o := service_tester.New(t)
 	c := mountedClient(t, o)
 	assert.FatalOnError(
@@ -33,7 +33,7 @@ func TestTheClientUploadsToTheDaemon(t *testing.T) {
 	)
 }
 
-func TestTheClientSeesARefusedUploadAsValidation(t *testing.T) {
+func TestClientSeesRefusedUploadAsValidation(t *testing.T) {
 	c := mountedClient(t, service_tester.New(t))
 	e := c.PostPackage(
 		t.Context(),
@@ -47,14 +47,14 @@ func TestTheClientSeesARefusedUploadAsValidation(t *testing.T) {
 	assert.StringContains(t, "not an apk package", e.Error())
 }
 
-func TestTheClientListsWhatTheDaemonIndexed(t *testing.T) {
+func TestClientListsWhatDaemonIndexed(t *testing.T) {
 	c := mountedClient(t, service_tester.New(t))
 	result, e := c.GetPackages(t.Context(), &client.GetPackagesParams{})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, result)
 }
 
-func TestTheClientReachesGoalpined(t *testing.T) {
+func TestClientReachesGoalpined(t *testing.T) {
 	c := mountedClient(t, service_tester.New(t))
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }

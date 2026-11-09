@@ -46,7 +46,7 @@ func TestDecideForeignConstantCarriesItsDomain(t *testing.T) {
 	assert.True(t, d[0].Kind == constant.DecisionRename)
 }
 
-func TestDecideRefusesANameALaterConstantKeeps(t *testing.T) {
+func TestDecideRefusesNameLaterConstantKeeps(t *testing.T) {
 	d := imports.Decide(
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa",
@@ -73,7 +73,7 @@ func TestDecideRefusesANameALaterConstantKeeps(t *testing.T) {
 	assert.True(t, d[1].Kind == constant.DecisionKeep)
 }
 
-func TestDecideIgnoresAnImportThatIsLeaving(t *testing.T) {
+func TestDecideIgnoresImportThatIsLeaving(t *testing.T) {
 	arriving := entry(
 		"example.org/alfa/pkg/tool/goalfa/constant",
 		constant.ConstantPackage,
@@ -101,7 +101,7 @@ func TestDecideIgnoresAnImportThatIsLeaving(t *testing.T) {
 	assert.True(t, d[0].Kind == constant.DecisionKeep)
 }
 
-func TestDecideLeavesTheLosersWhenTheKeeperIsRefused(t *testing.T) {
+func TestDecideLeavesLosersWhenKeeperIsRefused(t *testing.T) {
 	d := imports.Decide(
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa/face/service",
@@ -127,7 +127,7 @@ func TestDecideLeavesTheLosersWhenTheKeeperIsRefused(t *testing.T) {
 	assert.String(t, "repository", d[1].Want)
 }
 
-func TestDecideRefusesANameALocalHolds(t *testing.T) {
+func TestDecideRefusesNameLocalHolds(t *testing.T) {
 	d := imports.Decide(
 		import_view.New(
 			"example.org/alfa/pkg/web/server",

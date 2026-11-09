@@ -29,13 +29,13 @@ func (s *Service) SessionDetail(query string) (*session_detail.Detail, error) {
 		return nil, not_found.New(constant.SessionKind, query)
 	}
 
-	completions, f := s.store.CompletionsBySession(v.Identifier)
+	completions, f := s.store.SessionCompletions(v.Identifier)
 
 	if f != nil {
 		return nil, f
 	}
 
-	body, f := s.store.SummaryBySession(v.Identifier)
+	body, f := s.store.SessionSummary(v.Identifier)
 
 	if f != nil {
 		return nil, f

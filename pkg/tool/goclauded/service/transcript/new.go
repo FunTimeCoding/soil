@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
+	"time"
 )
 
 func New(
@@ -19,10 +20,12 @@ func New(
 	harbor string,
 	sources func() []string,
 	exportPath string,
+	clock func() time.Time,
 	l *logger.Logger,
 	r soilFace.Reporter,
 ) *Service {
 	return &Service{
+		clock:      clock,
 		store:      s,
 		client:     c,
 		cache:      cache,

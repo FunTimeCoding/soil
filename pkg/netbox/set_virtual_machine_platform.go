@@ -9,13 +9,13 @@ func (c *Client) SetVirtualMachinePlatform(
 	name string,
 	platformName string,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e
 	}
 
-	p, f := c.PlatformByName(platformName)
+	p, f := c.Platform(platformName)
 
 	if f != nil {
 		return nil, f

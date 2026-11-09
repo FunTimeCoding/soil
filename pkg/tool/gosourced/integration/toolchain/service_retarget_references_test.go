@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestRetargetReferencesFollowsAHandMove(t *testing.T) {
+func TestRetargetReferencesFollowsHandMove(t *testing.T) {
 	d := handMovedFixture(t)
 	s, m := service_tester.WithMemory(t)
 	r, e := s.Reference.RetargetReferences(
@@ -31,7 +31,7 @@ func TestRetargetReferencesFollowsAHandMove(t *testing.T) {
 	assert.String(
 		t,
 		filepath.Join(d, "pkg/alfa/renamed.go"),
-		m.Retargets[0].Paths[0].To,
+		m.Retargets[0].Paths[0].New,
 	)
 }
 
@@ -54,7 +54,7 @@ func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 	)
 }
 
-func TestRetargetReferencesRefusesAPathOutsideTheModule(t *testing.T) {
+func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
 	d := handMovedFixture(t)
 	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
@@ -71,7 +71,7 @@ func TestRetargetReferencesRefusesAPathOutsideTheModule(t *testing.T) {
 	)
 }
 
-func TestRetargetReferencesSaysWhenNothingCitesTheMove(t *testing.T) {
+func TestRetargetReferencesSaysWhenNothingCitesMove(t *testing.T) {
 	d := handMovedFixture(t)
 	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),

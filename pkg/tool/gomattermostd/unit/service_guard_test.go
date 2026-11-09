@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAnUnavailableMattermostClosesTheGuard(t *testing.T) {
+func TestUnavailableMattermostClosesGuard(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.AddPost("alfa")
 	r := memory.New()
@@ -23,7 +23,7 @@ func TestAnUnavailableMattermostClosesTheGuard(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAQuietRefusalLeavesTheGuardOpen(t *testing.T) {
+func TestQuietRefusalLeavesGuardOpen(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.AddPost("alfa")
 	r := memory.New()

@@ -33,7 +33,7 @@ func emptyClauses(body *ast.BlockStmt) []Region {
 			to = body.List[index+1].Pos()
 		}
 
-		result = append(result, Region{From: from, To: to})
+		result = append(result, Region{Start: from, End: to})
 	}
 
 	return result

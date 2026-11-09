@@ -15,6 +15,7 @@ import (
 	"maps"
 	"slices"
 	"testing"
+	"time"
 )
 
 func New(
@@ -52,5 +53,5 @@ func New(
 	)
 	t.Cleanup(p.Close)
 
-	return service.New(p)
+	return service.New(p, time.Now)
 }

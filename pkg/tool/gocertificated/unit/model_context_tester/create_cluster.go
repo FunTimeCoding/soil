@@ -9,9 +9,9 @@ func (o *Tester) CreateCluster() string {
 	return o.Client.MustCallTool(
 		constant.CreateAuthority,
 		map[string]any{
-			generativeConstant.ParameterName:     constant.FixtureClusterAuthority,
-			constant.KindParameter:       string(constant.KindIntermediate),
-			constant.CommonNameParameter: constant.FixtureIssuingCommonName,
+			generativeConstant.ParameterName: constant.FixtureClusterAuthority,
+			constant.KindParameter:           string(constant.KindIntermediate),
+			constant.CommonNameParameter:     constant.FixtureIssuingCommonName,
 			constant.DomainParameter: []any{
 				constant.FixtureDomain,
 				constant.FixtureInternalDomain,

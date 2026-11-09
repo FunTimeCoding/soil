@@ -11,47 +11,47 @@ import (
 	"testing"
 )
 
-func TestAProseDashUnderAParagraphLineIsFlagged(t *testing.T) {
+func TestProseDashUnderParagraphLineIsFlagged(t *testing.T) {
 	assert.Any(t, []int{2}, reflow.Interruptions("one two\n- three four\n"))
 }
 
-func TestAProsePlusUnderAParagraphLineIsFlagged(t *testing.T) {
+func TestProsePlusUnderParagraphLineIsFlagged(t *testing.T) {
 	assert.Any(t, []int{2}, reflow.Interruptions("one two\n+ three four\n"))
 }
 
-func TestANestedProseDashIsFlagged(t *testing.T) {
+func TestNestedProseDashIsFlagged(t *testing.T) {
 	assert.Any(t, []int{2}, reflow.Interruptions("- one two\n  - three four\n"))
 }
 
-func TestAListAfterABlankLineIsClean(t *testing.T) {
+func TestListAfterBlankLineIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("one two\n\n- three\n"))
 }
 
-func TestAListAfterAColonIsClean(t *testing.T) {
+func TestListAfterColonIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("Items:\n- one\n- two\n"))
 }
 
-func TestAListAfterABoldColonIsClean(t *testing.T) {
+func TestListAfterBoldColonIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("**Items:**\n- one\n"))
 }
 
-func TestAQuotedProseDashIsFlagged(t *testing.T) {
+func TestQuotedProseDashIsFlagged(t *testing.T) {
 	assert.Any(t, []int{2}, reflow.Interruptions("one two\n- \"three\" four\n"))
 }
 
-func TestAParenthesisedProseDashIsFlagged(t *testing.T) {
+func TestParenthesisedProseDashIsFlagged(t *testing.T) {
 	assert.Any(t, []int{2}, reflow.Interruptions("one two\n- (three) four\n"))
 }
 
-func TestAQuotedCapitalisedItemIsClean(t *testing.T) {
+func TestQuotedCapitalisedItemIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("one two\n- \"Three\"\n"))
 }
 
-func TestACodeItemIsClean(t *testing.T) {
+func TestCodeItemIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("one two\n- `three`\n"))
 }
 
-func TestACapitalisedItemIsClean(t *testing.T) {
+func TestCapitalisedItemIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("one two\n- Three\n"))
 }
 
@@ -63,7 +63,7 @@ func TestFrontMatterIsNeverFlagged(t *testing.T) {
 	)
 }
 
-func TestAnInterruptingListIsAConcernThatIsNotFixed(t *testing.T) {
+func TestInterruptingListIsConcernThatIsNotFixed(t *testing.T) {
 	l := lint.InterruptingList(
 		stringsConstant.UpperAlfa,
 		strings.NewReader("one two\n- three four\n"),

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestARefusedChunkLeavesTheRestOfItsDocumentEmbedded(t *testing.T) {
+func TestRefusedChunkLeavesRestOfItsDocumentEmbedded(t *testing.T) {
 	body := fixture.Read(systemConstant.LimitPath, "manual.txt")
 	assert.Count(t, 3, chunk.Document(body, "manual.txt", newReranker(t)))
 	m := newEmbedder(t)
@@ -22,7 +22,7 @@ func TestARefusedChunkLeavesTheRestOfItsDocumentEmbedded(t *testing.T) {
 	assert.Integer(t, 2, v.MustStatus().TotalEmbeddings)
 }
 
-func TestARefusedDocumentDoesNotHoldBackThePendingOnes(t *testing.T) {
+func TestRefusedDocumentDoesNotHoldBackPendingOnes(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("Bravo archive header")
 	v := newService(t, m, newReranker(t))
@@ -38,7 +38,7 @@ func TestARefusedDocumentDoesNotHoldBackThePendingOnes(t *testing.T) {
 	assert.Integer(t, 3, s.TotalEmbeddings)
 }
 
-func TestAChunkOverTheEmbedderWindowNeverReachesTheEmbedder(t *testing.T) {
+func TestChunkOverEmbedderWindowNeverReachesEmbedder(t *testing.T) {
 	m := newEmbedder(t)
 	c := newReranker(t)
 	c.SetAllowance(300)
@@ -62,7 +62,7 @@ func TestAChunkOverTheEmbedderWindowNeverReachesTheEmbedder(t *testing.T) {
 	assert.StringContains(t, "tokens against 300", failed[0].Reason)
 }
 
-func TestARecordedRefusalIsNotRetried(t *testing.T) {
+func TestRecordedRefusalIsNotRetried(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("Bravo archive header")
 	v := newService(t, m, newReranker(t))
@@ -80,7 +80,7 @@ func TestARecordedRefusalIsNotRetried(t *testing.T) {
 	assert.Integer(t, 1, v.MustStatus().FailedEmbeddings)
 }
 
-func TestRechunkLeavesARefusedDocumentAlone(t *testing.T) {
+func TestRechunkLeavesRefusedDocumentAlone(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))
@@ -97,7 +97,7 @@ func TestRechunkLeavesARefusedDocumentAlone(t *testing.T) {
 	assert.Integer(t, 1, v.MustStatus().FailedEmbeddings)
 }
 
-func TestFailedListsTheRefusedChunk(t *testing.T) {
+func TestFailedListsRefusedChunk(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))
@@ -122,7 +122,7 @@ func TestFailedListsTheRefusedChunk(t *testing.T) {
 	assert.Count(t, 0, other)
 }
 
-func TestPruneRemovesAnOldVersionOfAPushedDocument(t *testing.T) {
+func TestPruneRemovesOldVersionOfPushedDocument(t *testing.T) {
 	v := newService(t, newEmbedder(t), newReranker(t))
 	v.MustPushDocument(
 		t.Context(),
@@ -147,7 +147,7 @@ func TestPruneRemovesAnOldVersionOfAPushedDocument(t *testing.T) {
 	assert.StringContains(t, "yankee", found.Body)
 }
 
-func TestPruneKeepsTheContentOfARefusedDocument(t *testing.T) {
+func TestPruneKeepsContentOfRefusedDocument(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("Bravo archive header")
 	v := newService(t, m, newReranker(t))
@@ -162,7 +162,7 @@ func TestPruneKeepsTheContentOfARefusedDocument(t *testing.T) {
 	assert.Integer(t, 1, v.MustStatus().FailedEmbeddings)
 }
 
-func TestDeletingADocumentClearsItsFailures(t *testing.T) {
+func TestDeletingDocumentClearsItsFailures(t *testing.T) {
 	m := newEmbedder(t)
 	m.Refuse("SYNOPSIS")
 	v := newService(t, m, newReranker(t))

@@ -15,7 +15,7 @@ func TestReflowClean(t *testing.T) {
 	assertReport(t, "Alfa", false, nil, "", l)
 }
 
-func TestReflowRewrapsAnOverrunningParagraph(t *testing.T) {
+func TestReflowRewrapsOverrunningParagraph(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end\n")
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
 	assertReport(
@@ -38,7 +38,7 @@ func TestReflowRewrapsAnOverrunningParagraph(t *testing.T) {
 	)
 }
 
-func TestReflowRefusesAHardLineBreak(t *testing.T) {
+func TestReflowRefusesHardLineBreak(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end  \nnext\n")
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
 	assertReport(

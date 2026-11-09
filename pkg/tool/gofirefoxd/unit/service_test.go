@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestMissingArgumentsAreRefusedBeforeTheBrowser(t *testing.T) {
+func TestMissingArgumentsAreRefusedBeforeBrowser(t *testing.T) {
 	o := model_context_tester.New(t)
 
 	for name, arguments := range map[string]map[string]any{
@@ -34,7 +34,7 @@ func TestMissingArgumentsAreRefusedBeforeTheBrowser(t *testing.T) {
 	assert.Count(t, 0, tabs)
 }
 
-func TestAScreenshotIsSavedToTheDownloadDirectory(t *testing.T) {
+func TestScreenshotIsSavedToDownloadDirectory(t *testing.T) {
 	o := model_context_tester.New(t)
 	b := tab.New()
 	b.Identifier = 3

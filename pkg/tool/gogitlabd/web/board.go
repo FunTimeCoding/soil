@@ -16,7 +16,7 @@ func (s *Server) board(
 ) {
 	entries := s.service.Entries()
 	multiple := s.multiple()
-	s.view.RenderLivePageWithSummary(
+	s.view.RenderSummaryLivePage(
 		w,
 		constant.BoardTitle,
 		constant.BoardPath,

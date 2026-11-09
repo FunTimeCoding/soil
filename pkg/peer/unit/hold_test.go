@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestAHeldConnectionReopensAfterItDrops(t *testing.T) {
+func TestHeldConnectionReopensAfterItDrops(t *testing.T) {
 	p := held_peer.New()
 	r := memory.New()
 	h := hold.New("lima", p, logger.New(context.Background()), r).WithBackoff(
@@ -33,7 +33,7 @@ func TestAHeldConnectionReopensAfterItDrops(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAHeldConnectionWaitsOutAnOutage(t *testing.T) {
+func TestHeldConnectionWaitsOutOutage(t *testing.T) {
 	p := held_peer.New()
 	p.Refuse(refusedConnection(), refusedConnection(), upstreamUnavailable())
 	r := memory.New()
@@ -48,7 +48,7 @@ func TestAHeldConnectionWaitsOutAnOutage(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAHeldConnectionReportsARefusalOnce(t *testing.T) {
+func TestHeldConnectionReportsRefusalOnce(t *testing.T) {
 	p := held_peer.New()
 	p.Refuse(
 		errors.New("authentication invalid"),
@@ -69,7 +69,7 @@ func TestAHeldConnectionReportsARefusalOnce(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAHeldConnectionReportsWhereItIsTold(t *testing.T) {
+func TestHeldConnectionReportsWhereItIsTold(t *testing.T) {
 	p := held_peer.New()
 	p.Refuse(errors.New("authentication invalid"), refusedConnection())
 	r := memory.New()
@@ -94,7 +94,7 @@ func TestAHeldConnectionReportsWhereItIsTold(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAHeldConnectionIsUnavailableUntilItServes(t *testing.T) {
+func TestHeldConnectionIsUnavailableUntilItServes(t *testing.T) {
 	p := held_peer.New()
 	p.Refuse(refusedConnection())
 	crossed := make(chan *edge.Edge, 4)
@@ -116,7 +116,7 @@ func TestAHeldConnectionIsUnavailableUntilItServes(t *testing.T) {
 	assert.StringContains(t, "romeo unreachable since", h.Unavailable().Error())
 }
 
-func TestAServingHoldIsAvailable(t *testing.T) {
+func TestServingHoldIsAvailable(t *testing.T) {
 	p := held_peer.New()
 	h := hold.New("tango", p, logger.New(context.Background()), memory.New())
 	h.Start()
@@ -125,7 +125,7 @@ func TestAServingHoldIsAvailable(t *testing.T) {
 	assert.Nil(t, h.Unavailable())
 }
 
-func TestAnAdapterHoldsThreeFunctions(t *testing.T) {
+func TestAdapterHoldsThreeFunctions(t *testing.T) {
 	opened := make(chan struct{}, 4)
 	closed := make(chan struct{}, 4)
 	end := make(chan error, 1)
@@ -158,7 +158,7 @@ func TestAnAdapterHoldsThreeFunctions(t *testing.T) {
 	await(t, opened)
 }
 
-func TestClosingAHeldConnectionEndsItWithoutReopening(t *testing.T) {
+func TestClosingHeldConnectionEndsItWithoutReopening(t *testing.T) {
 	p := held_peer.New()
 	h := hold.New(
 		"papa",
@@ -174,7 +174,7 @@ func TestClosingAHeldConnectionEndsItWithoutReopening(t *testing.T) {
 	assert.Integer(t, 2, p.Closes())
 }
 
-func TestANeverStartedHoldCloses(t *testing.T) {
+func TestNeverStartedHoldCloses(t *testing.T) {
 	h := hold.New(
 		"quebec",
 		held_peer.New(),
@@ -190,7 +190,7 @@ func TestANeverStartedHoldCloses(t *testing.T) {
 	await(t, h.Done())
 }
 
-func TestClosingWaitsForTheServeInFlight(t *testing.T) {
+func TestClosingWaitsForServeInFlight(t *testing.T) {
 	serving := make(chan struct{}, 1)
 	release := make(chan struct{})
 	h := hold.New(
@@ -226,7 +226,7 @@ func TestClosingWaitsForTheServeInFlight(t *testing.T) {
 	await(t, closed)
 }
 
-func TestClosingDuringAnOpenClosesWhatItOpened(t *testing.T) {
+func TestClosingDuringOpenClosesWhatItOpened(t *testing.T) {
 	opening := make(chan struct{}, 1)
 	closing := make(chan struct{}, 2)
 	release := make(chan struct{})

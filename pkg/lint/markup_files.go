@@ -19,7 +19,7 @@ func markupFiles(
 			continue
 		}
 
-		if Skipped(o, p) {
+		if Skipped(o.Skips, p) {
 			if o.Verbose {
 				console.Format("Skip markup file: %s\n", p)
 			}

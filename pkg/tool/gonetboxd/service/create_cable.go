@@ -11,25 +11,25 @@ func (s *Service) CreateCable(
 	return guarded(
 		s.guard,
 		func() (*cable.Cable, error) {
-			a, e := s.client.DeviceByName(deviceA)
+			a, e := s.client.Device(deviceA)
 
 			if e != nil {
 				return nil, e
 			}
 
-			sideA, e := s.client.DeviceInterfaceByName(a, interfaceA)
+			sideA, e := s.client.DeviceInterface(a, interfaceA)
 
 			if e != nil {
 				return nil, e
 			}
 
-			b, e := s.client.DeviceByName(deviceB)
+			b, e := s.client.Device(deviceB)
 
 			if e != nil {
 				return nil, e
 			}
 
-			sideB, e := s.client.DeviceInterfaceByName(b, interfaceB)
+			sideB, e := s.client.DeviceInterface(b, interfaceB)
 
 			if e != nil {
 				return nil, e

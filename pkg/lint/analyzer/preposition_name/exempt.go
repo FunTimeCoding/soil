@@ -1,6 +1,7 @@
 package preposition_name
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"go/types"
 )
@@ -8,6 +9,7 @@ import (
 func exempt(
 	o types.Object,
 	faces *face.Set,
+	word string,
 ) bool {
 	if faces.Implements(o) {
 		return true
@@ -17,9 +19,23 @@ func exempt(
 	case *types.Func:
 		s := v.Type().(*types.Signature)
 
-		return state(s) || momentAnswer(s)
+		return state(s) || word == constant.MomentSegment && momentAnswer(s)
 	case *types.Var:
-		return v.IsField() && (isBool(v.Type()) || moment(v))
+		if v.IsField() {
+			return isBool(v.Type()) || moment(v)
+		}
+
+		if packageLevel(v) {
+			return momentName(v.Name())
+		}
+
+		return bare(v.Name()) || moment(v)
+	case *types.Const:
+		if packageLevel(v) {
+			return momentName(v.Name())
+		}
+
+		return bare(v.Name()) || momentName(v.Name())
 	}
 
 	return false

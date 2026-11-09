@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheMockClaimsReleasesAndStreams(t *testing.T) {
+func TestMockClaimsReleasesAndStreams(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	x := t.Context()
@@ -38,7 +38,7 @@ func TestTheMockClaimsReleasesAndStreams(t *testing.T) {
 	assert.True(t, validation.Is(k))
 }
 
-func TestTheMockFailsEveryOperation(t *testing.T) {
+func TestMockFailsEveryOperation(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.Failure = errors.New("alfa")

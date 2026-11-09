@@ -15,7 +15,7 @@ func Extract(p *packages.Package) *fact.Summary {
 		return result
 	}
 
-	for t, methods := range methodsByType(p) {
+	for t, methods := range typeMethods(p) {
 		if _, okay := methods[constant.CloseMethod]; okay {
 			result.Releases[typeKey(t)] = releasedFields(p, methods)
 			closeEquivalents(p, t, methods, result)
@@ -81,7 +81,7 @@ func Extract(p *packages.Package) *fact.Summary {
 				result.Arranging[k] = conditions
 			}
 
-			for _, g := range delegatesOf(p, f.Body) {
+			for _, g := range delegates(p, f.Body) {
 				if callee := functionKey(g); callee != k {
 					result.Delegates[k] = append(result.Delegates[k], callee)
 				}

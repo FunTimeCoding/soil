@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestDeletingAnAbsentDocumentIsNoError(t *testing.T) {
+func TestDeletingAbsentDocumentIsNoError(t *testing.T) {
 	deleted, e := store_tester.OpenTestStore(t).DeleteDocument(
 		"notes",
 		"alfa.md",
@@ -19,7 +19,7 @@ func TestDeletingAnAbsentDocumentIsNoError(t *testing.T) {
 	assert.False(t, deleted)
 }
 
-func TestADeleteOnABrokenDatabaseFails(t *testing.T) {
+func TestDeleteOnBrokenDatabaseFails(t *testing.T) {
 	d := connection.NewMemory()
 	s := store.New(d, constant.FixtureEmbedModel)
 	errors.PanicClose(d)

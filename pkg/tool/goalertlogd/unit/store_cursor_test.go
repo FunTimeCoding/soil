@@ -32,7 +32,7 @@ func TestByIdentifiersSkipsUnknownOnes(t *testing.T) {
 	assert.Integer(t, 3, int(result[1].Identifier))
 }
 
-func TestLatestIdentifierIsTheHead(t *testing.T) {
+func TestLatestIdentifierIsHead(t *testing.T) {
 	s := newStore(t)
 	empty, e := s.LatestIdentifier()
 	assert.FatalOnError(t, e)

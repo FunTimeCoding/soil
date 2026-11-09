@@ -26,7 +26,7 @@ func TestTimeOfDayAlreadyPastIsTomorrow(t *testing.T) {
 	)
 }
 
-func TestTimeOfDayKeepsTheWallClockAcrossDaylightSaving(t *testing.T) {
+func TestTimeOfDayKeepsWallClockAcrossDaylightSaving(t *testing.T) {
 	chicago, e := time.LoadLocation("America/Chicago")
 	assert.FatalOnError(t, e)
 	now := time.Date(2026, time.March, 7, 10, 0, 0, 0, chicago)

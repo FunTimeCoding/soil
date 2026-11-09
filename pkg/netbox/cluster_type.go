@@ -1,0 +1,23 @@
+package netbox
+
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+)
+
+func (c *Client) ClusterType(n string) (*cluster_type.Type, error) {
+	result, e := c.ClusterTypes()
+
+	if e != nil {
+		return nil, e
+	}
+
+	for _, t := range result {
+		if t.Name == n {
+			return t, nil
+		}
+	}
+
+	return nil, not_found.New(constant.ClusterTypeKind, n)
+}

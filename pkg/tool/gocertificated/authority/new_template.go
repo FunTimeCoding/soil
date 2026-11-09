@@ -5,16 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/issue_request"
 	"net"
-	"time"
 )
 
 func newTemplate(r *issue_request.Request) *x509.Certificate {
-	now := time.Now()
 	t := &x509.Certificate{}
 	t.SerialNumber = newSerial()
 	t.Subject = r.Name.Subject()
-	t.NotBefore = now.Add(-constant.ClockSkew)
-	t.NotAfter = now.AddDate(r.ValidYear, 0, r.ValidDay)
+	t.NotBefore = r.Start.Add(-constant.ClockSkew)
+	t.NotAfter = r.Start.AddDate(r.ValidYear, 0, r.ValidDay)
 	t.BasicConstraintsValid = true
 
 	switch r.Kind {

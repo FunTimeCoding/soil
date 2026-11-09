@@ -9,10 +9,8 @@ func (s *Server) GetSnapshots(
 	x context.Context,
 	r server.GetSnapshotsRequestObject,
 ) (server.GetSnapshotsResponseObject, error) {
-	start, end := timeRange(r.Params.Start, r.Params.End)
 	snapshots, e := s.service.Snapshots(
-		start,
-		end,
+		timeRange(r.Params.Start, r.Params.End),
 		limitOr(r.Params.Limit, 1000),
 	)
 

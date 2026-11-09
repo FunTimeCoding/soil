@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
 	"testing"
+	"time"
 )
 
 func TestDocumentSourcedMemoryRejectsUpdate(t *testing.T) {
@@ -59,7 +60,7 @@ func TestGetMemoryGroup(t *testing.T) {
 	o.Content = "parent"
 	o.Description = "cluster parent"
 	o.Type = "reference"
-	parent, e := s.Store().CreateMemory(o)
+	parent, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	child := save_option.New()
 	child.Name = "member"
@@ -68,7 +69,7 @@ func TestGetMemoryGroup(t *testing.T) {
 	child.Type = "reference"
 	child.ParentIdentifier = &parent
 	child.Ordinal = 1
-	_, f := s.Store().CreateMemory(child)
+	_, f := s.Store().CreateMemory(child, time.Now())
 	assert.FatalOnError(t, f)
 	result := s.MustCallTool(
 		constant.GetMemoryGroup,

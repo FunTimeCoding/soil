@@ -10,11 +10,8 @@ import (
 	"time"
 )
 
-func (s *Service) Permissions(
-	days int,
-	now time.Time,
-) (*permission.Report, error) {
-	cut := now.Add(-time.Duration(days) * 24 * time.Hour)
+func (s *Service) Permissions(days int) (*permission.Report, error) {
+	cut := s.clock().Add(-time.Duration(days) * 24 * time.Hour)
 	rules := map[string][]*allowlist.Rule{}
 	var prompts []*permission.Prompt
 	sessions := 0

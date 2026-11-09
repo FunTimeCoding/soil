@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAnUnavailablePeerIsHeldOffWithoutBeingAsked(t *testing.T) {
+func TestUnavailablePeerIsHeldOffWithoutBeingAsked(t *testing.T) {
 	p := newPrometheus(t)
 	u := newUsage(t)
 	u.Failure = unavailable.Format("nextcloud restarting")

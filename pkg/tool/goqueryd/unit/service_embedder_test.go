@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAPushIsEmbeddedWhileTheEmbedderAnswers(t *testing.T) {
+func TestPushIsEmbeddedWhileEmbedderAnswers(t *testing.T) {
 	m := newEmbedder(t)
 	v := newService(t, m, newReranker(t))
 	assert.String(
@@ -24,7 +24,7 @@ func TestAPushIsEmbeddedWhileTheEmbedderAnswers(t *testing.T) {
 	assert.Integer(t, 0, v.MustStatus().PendingEmbeddings)
 }
 
-func TestAPushWhileTheEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
+func TestPushWhileEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
@@ -49,7 +49,7 @@ func TestAPushWhileTheEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
 	assert.Count(t, 1, listed.Results)
 }
 
-func TestAHybridSearchFailsAtOnceWhileTheEmbedderIsDown(t *testing.T) {
+func TestHybridSearchFailsAtOnceWhileEmbedderIsDown(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
@@ -61,7 +61,7 @@ func TestAHybridSearchFailsAtOnceWhileTheEmbedderIsDown(t *testing.T) {
 	assert.Integer(t, 1, m.Calls())
 }
 
-func TestAKeywordSearchNeedsNoEmbedder(t *testing.T) {
+func TestKeywordSearchNeedsNoEmbedder(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))
@@ -79,7 +79,7 @@ func TestAKeywordSearchNeedsNoEmbedder(t *testing.T) {
 	assert.Count(t, 1, found.Results)
 }
 
-func TestPendingDocumentsWaitWhileTheEmbedderIsDown(t *testing.T) {
+func TestPendingDocumentsWaitWhileEmbedderIsDown(t *testing.T) {
 	m := newEmbedder(t)
 	m.Fail(refusedConnection())
 	v := newService(t, m, newReranker(t))

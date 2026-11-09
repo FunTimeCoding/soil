@@ -9,13 +9,13 @@ func (c *Client) SetDeviceLocation(
 	name string,
 	locationName string,
 ) (*device.Device, error) {
-	d, e := c.DeviceByName(name)
+	d, e := c.Device(name)
 
 	if e != nil {
 		return nil, e
 	}
 
-	l, f := c.LocationByName(locationName)
+	l, f := c.Location(locationName)
 
 	if f != nil {
 		return nil, f

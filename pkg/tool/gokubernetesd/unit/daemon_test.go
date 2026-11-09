@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesTwice(t *testing.T) {
+func TestDaemonClosesTwice(t *testing.T) {
 	d := service_tester.NewDaemon(
 		t,
 		service_tester.NewOption(t, map[string]*cluster.Cluster{}),
@@ -22,7 +22,7 @@ func TestTheDaemonClosesTwice(t *testing.T) {
 	d.Close()
 }
 
-func TestTheDaemonAnswersWhetherItHasClusters(t *testing.T) {
+func TestDaemonAnswersWhetherItHasClusters(t *testing.T) {
 	a := service_tester.New(t)
 	assert.True(
 		t,
@@ -45,7 +45,7 @@ func TestTheDaemonAnswersWhetherItHasClusters(t *testing.T) {
 	)
 }
 
-func TestTheDaemonHandsItsGuardsThenItsForwardsToTheLifecycle(t *testing.T) {
+func TestDaemonHandsItsGuardsThenItsForwardsToLifecycle(t *testing.T) {
 	a := service_tester.New(t)
 	workers := service_tester.NewDaemon(
 		t,
@@ -67,7 +67,7 @@ func TestTheDaemonHandsItsGuardsThenItsForwardsToTheLifecycle(t *testing.T) {
 	assert.True(t, forwards)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	a := service_tester.New(t)
 	before := goleak.IgnoreCurrent()
 	d := service_tester.NewDaemon(

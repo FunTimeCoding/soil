@@ -29,8 +29,28 @@ func (s *Service) checkRenamedMethod(
 	}
 
 	w := s.workspace.Workspace(directory)
+	modules := workspaceModules(all)
 
 	for _, i := range face.FromWorkspace(w, all).Satisfied(f) {
+		if _, declares := i.Methods[f.Name()]; declares &&
+			inWorkspace(modules, i.Package) {
+			addPositionConcern(
+				r,
+				set,
+				f.Pos(),
+				constant.ConcernValidation,
+				false,
+				"%s satisfies %s.%s - renaming it breaks that interface; rename %s.%s to rename them together",
+				f.Name(),
+				i.Package,
+				i.Name,
+				i.Name,
+				f.Name(),
+			)
+
+			continue
+		}
+
 		addPositionConcern(
 			r,
 			set,

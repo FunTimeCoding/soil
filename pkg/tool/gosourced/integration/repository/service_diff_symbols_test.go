@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestDiffSymbolsComparesHeadWithTheIndex(t *testing.T) {
+func TestDiffSymbolsComparesHeadWithIndex(t *testing.T) {
 	r := diffRepository(t)
 	v := diffService(t, r.Clone)
 	result, e := v.Diff.DiffSymbols("echo", "", "")
@@ -34,7 +34,7 @@ func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
 	)
 }
 
-func TestDiffSymbolsRefusesAnUnknownModuleOrRevision(t *testing.T) {
+func TestDiffSymbolsRefusesUnknownModuleOrRevision(t *testing.T) {
 	r := diffRepository(t)
 	v := diffService(t, r.Clone)
 	_, e := v.Diff.DiffSymbols("foxtrot", "", "")

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestInventoryRefusesAnUnscopedPublicHost(t *testing.T) {
+func TestInventoryRefusesUnscopedPublicHost(t *testing.T) {
 	e := inventory.New[instance.Instance](
 		instance.Instance{Name: "bravo", Host: "https://gitlab.com"},
 	).Validate()
@@ -20,7 +20,7 @@ func TestInventoryRefusesAnUnscopedPublicHost(t *testing.T) {
 	)
 }
 
-func TestInventoryAllowsAScopedPublicHost(t *testing.T) {
+func TestInventoryAllowsScopedPublicHost(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		inventory.New[instance.Instance](
@@ -33,7 +33,7 @@ func TestInventoryAllowsAScopedPublicHost(t *testing.T) {
 	)
 }
 
-func TestInventoryAllowsAnUnscopedSelfHostedInstance(t *testing.T) {
+func TestInventoryAllowsUnscopedSelfHostedInstance(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		inventory.New[instance.Instance](

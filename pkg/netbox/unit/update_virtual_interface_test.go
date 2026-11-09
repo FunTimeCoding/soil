@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestUpdateVirtualInterfaceSetsThePrimaryAddress(t *testing.T) {
+func TestUpdateVirtualInterfaceSetsPrimaryAddress(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
@@ -30,7 +30,7 @@ func TestUpdateVirtualInterfaceSetsThePrimaryAddress(t *testing.T) {
 	assert.String(t, "set", r.Primary)
 }
 
-func TestUpdateVirtualInterfaceAssignsToTheVirtualInterface(t *testing.T) {
+func TestUpdateVirtualInterfaceAssignsToVirtualInterface(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRenameOntoAnImportedNameRefuses(t *testing.T) {
+func TestRenameOntoImportedNameRefuses(t *testing.T) {
 	d := renameScopeFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -25,7 +25,7 @@ func TestRenameOntoAnImportedNameRefuses(t *testing.T) {
 	assertCompiles(t, d)
 }
 
-func TestRenameOntoALocalAtACallSiteRefuses(t *testing.T) {
+func TestRenameOntoLocalAtCallSiteRefuses(t *testing.T) {
 	d := renameScopeFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -43,7 +43,7 @@ func TestRenameOntoALocalAtACallSiteRefuses(t *testing.T) {
 	assertCompiles(t, d)
 }
 
-func TestRenameOntoAUsedBuiltinRefuses(t *testing.T) {
+func TestRenameOntoUsedBuiltinRefuses(t *testing.T) {
 	d := renameScopeFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
@@ -60,7 +60,7 @@ func TestRenameOntoAUsedBuiltinRefuses(t *testing.T) {
 	assertCompiles(t, d)
 }
 
-func TestRenameBesideAnUnrelatedLocalBuilds(t *testing.T) {
+func TestRenameBesideUnrelatedLocalBuilds(t *testing.T) {
 	d := renameScopeFixture(t)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),

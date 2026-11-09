@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheSublimeClientAndItsMockShareTheFace(t *testing.T) {
+func TestSublimeClientAndItsMockShareFace(t *testing.T) {
 	f := reflect.TypeFor[face.SublimeClient]()
 	assert.True(t, reflect.TypeFor[*sublime.Client]().Implements(f))
 	assert.True(t, reflect.TypeFor[*mock_client.Client]().Implements(f))

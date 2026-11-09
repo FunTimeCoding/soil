@@ -6,16 +6,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
+	"time"
 )
 
-func TestDashboardCountsSitInTheSummaryStrip(t *testing.T) {
+func TestDashboardCountsSitInSummaryStrip(t *testing.T) {
 	s := base.New(t)
 	o := save_option.New()
 	o.Name = "alfa"
 	o.Content = "alfa content"
 	o.Type = "feedback"
 	o.Tags = []string{"shared"}
-	_, e := s.Store().CreateMemory(o)
+	_, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	page := body(t, s.Server, constant.DashboardPath, false)
 	assert.StringContains(t, "1 active · 0 relations", page)

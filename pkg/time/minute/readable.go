@@ -6,5 +6,5 @@ import (
 )
 
 func Readable(minutes int) string {
-	return second.Readable(minutes * constant.MinuteInSeconds)
+	return second.Readable(minutes * constant.MinuteSeconds)
 }

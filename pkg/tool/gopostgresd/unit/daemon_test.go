@@ -7,14 +7,14 @@ import (
 	"testing"
 )
 
-func TestClosingTheDaemonClosesEveryInstanceClient(t *testing.T) {
+func TestClosingDaemonClosesEveryInstanceClient(t *testing.T) {
 	d, clients := daemon_tester.New(t, "alfa", "bravo")
 	d.Close()
 	assert.Integer(t, 1, clients["alfa"].Closed)
 	assert.Integer(t, 1, clients["bravo"].Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	workers := d.Workers()
@@ -31,7 +31,7 @@ func TestTheDaemonLeavesNothingRunning(t *testing.T) {
 	goleak.VerifyNone(t, before)
 }
 
-func TestTheDaemonHandsOneGuardPerInstanceToTheLifecycle(t *testing.T) {
+func TestDaemonHandsOneGuardPerInstanceToLifecycle(t *testing.T) {
 	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	assert.Count(t, 2, d.Workers())
 }

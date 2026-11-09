@@ -19,20 +19,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_service_tester"
 	"net/http"
 	"testing"
+	"time"
 )
 
-func TestTheDaemonClosesItsDatabaseOnce(t *testing.T) {
+func TestDaemonClosesItsDatabaseOnce(t *testing.T) {
 	d := daemon.New(base.NewOption(t), logger.New(t.Context()), memory.New())
 	d.Close()
 	d.Close()
 }
 
-func TestTheServiceRecordsItsOwnUse(t *testing.T) {
+func TestServiceRecordsItsOwnUse(t *testing.T) {
 	o := base.NewOption(t)
 	m := lite.New(logger.New(t.Context()), o.LitePath)
 	defer relational.CloseMapper(m)
 	migrate.AutoMigrate(m)
-	v := service.New(store.New(m), memory.New())
+	v := service.New(store.New(m), time.Now, memory.New())
 	e := record.NewBaseline(
 		"GetSummary",
 		constant.SurfaceWebService,
@@ -48,7 +49,7 @@ func TestTheServiceRecordsItsOwnUse(t *testing.T) {
 	assert.NotNil(t, events[0].Detail)
 }
 
-func TestAFailingStoreIsAnsweredAndReported(t *testing.T) {
+func TestFailingStoreIsAnsweredAndReported(t *testing.T) {
 	o := web_service_tester.New(t)
 	o.Daemon.Close()
 	r, e := o.Client.GetSummaryWithResponse(

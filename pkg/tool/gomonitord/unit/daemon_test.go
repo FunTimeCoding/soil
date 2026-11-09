@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	daemon_tester.New(t).Close()
 	goleak.VerifyNone(t, before)

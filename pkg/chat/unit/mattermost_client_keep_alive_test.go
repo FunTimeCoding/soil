@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestSocketPingsTheServerWhileIdle(t *testing.T) {
+func TestSocketPingsServerWhileIdle(t *testing.T) {
 	r := mattermost_client_tester.New(
 		t,
 		func(_ *http.ServeMux) {},
@@ -27,7 +27,7 @@ func TestSocketPingsTheServerWhileIdle(t *testing.T) {
 	assert.True(t, r.Pings() >= 3)
 }
 
-func TestRefreshSocketMovesTheKeepAlive(t *testing.T) {
+func TestRefreshSocketMovesKeepAlive(t *testing.T) {
 	r := mattermost_client_tester.New(
 		t,
 		func(_ *http.ServeMux) {},

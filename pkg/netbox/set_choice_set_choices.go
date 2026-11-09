@@ -13,7 +13,7 @@ func (c *Client) SetChoiceSetChoices(
 	name string,
 	choices []string,
 ) (*choice_set.Set, error) {
-	v, e := c.ChoiceSetByName(name)
+	v, e := c.ChoiceSet(name)
 
 	if e != nil {
 		return nil, e

@@ -45,7 +45,7 @@ func Lint(
 	}
 
 	for _, p := range repo.Files.Files() {
-		if !InScope(o, p) || Skipped(o, p) {
+		if !InScope(o, p) || Skipped(o.Skips, p) {
 			continue
 		}
 

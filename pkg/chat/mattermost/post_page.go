@@ -8,7 +8,6 @@ import (
 func (c *Client) postPage(
 	h *model.Channel,
 	anchor string,
-	collapsed bool,
 ) (*model.PostList, error) {
 	if anchor == "" {
 		page, r, e := c.client.GetPostsForChannel(
@@ -17,7 +16,7 @@ func (c *Client) postPage(
 			0,
 			constant.MattermostMaxPerPage,
 			constant.MattermostEmptyEntityTag,
-			collapsed,
+			constant.MattermostCollapsedThreads,
 			false,
 		)
 
@@ -31,7 +30,7 @@ func (c *Client) postPage(
 		0,
 		constant.MattermostMaxPerPage,
 		constant.MattermostEmptyEntityTag,
-		collapsed,
+		constant.MattermostCollapsedThreads,
 		false,
 	)
 

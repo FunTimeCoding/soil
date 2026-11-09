@@ -3,7 +3,7 @@ package constant
 import "regexp"
 
 var CaptureCalls = []string{
-	"answerWith",
+	"answerMessage",
 	"answer",
 	"captureFail",
 	"captureDetail",

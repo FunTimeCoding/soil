@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestARefusedPermissionAnswersForbidden(t *testing.T) {
+func TestRefusedPermissionAnswersForbidden(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.SetFailure(
 		forbidden.Format("Permission check failed (/, Sys.Audit)"),
@@ -26,7 +26,7 @@ func TestARefusedPermissionAnswersForbidden(t *testing.T) {
 	assert.StringContains(t, "Permission check failed", r.JSON403.Error)
 }
 
-func TestALockedGuestAnswersConflict(t *testing.T) {
+func TestLockedGuestAnswersConflict(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.SetFailure(conflict.Format("VM is locked (backup)"))
 	r, e := restClient(t, s).StartMachineWithResponse(
@@ -38,7 +38,7 @@ func TestALockedGuestAnswersConflict(t *testing.T) {
 	assert.Integer(t, 409, r.StatusCode())
 }
 
-func TestAnUnreachableHypervisorAnswersUnavailable(t *testing.T) {
+func TestUnreachableHypervisorAnswersUnavailable(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.SetFailure(
 		connection.New(
@@ -56,7 +56,7 @@ func TestAnUnreachableHypervisorAnswersUnavailable(t *testing.T) {
 	assert.Integer(t, 503, r.StatusCode())
 }
 
-func TestAnUnexpectedFailureIsCapturedWithItsEvent(t *testing.T) {
+func TestUnexpectedFailureIsCapturedWithItsEvent(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.SetFailure(errors.New("cfs lock timeout"))
 	r, e := restClient(t, s).ListNodesWithResponse(

@@ -38,7 +38,7 @@ func TestNewestSectionKeepsLiveTargetWithConfiguredProject(t *testing.T) {
 	o.AssertMissing("Newest Issues", constant.PlatePath)
 }
 
-func TestTheClockFillsThePlatePage(t *testing.T) {
+func TestClockFillsPlatePage(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.Refresh(openIssue("ALFA-1"))
 	o.AssertContains("ALFA-1", constant.PlatePath)

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnOverrideWhoseUpdateIsRefusedAnswersTheRefusal(t *testing.T) {
+func TestOverrideWhoseUpdateIsRefusedAnswersRefusal(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseUpdate(
 		kubernetesErrors.NewForbidden(
@@ -32,7 +32,7 @@ func TestAnOverrideWhoseUpdateIsRefusedAnswersTheRefusal(t *testing.T) {
 	assert.Integer(t, 0, v.Creates())
 }
 
-func TestAnOverrideOfAMissingResourceCreatesIt(t *testing.T) {
+func TestOverrideOfMissingResourceCreatesIt(t *testing.T) {
 	v := service_tester.New(t)
 	_, e := v.Service.ApplyResource(
 		t.Context(),

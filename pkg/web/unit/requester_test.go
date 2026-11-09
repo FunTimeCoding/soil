@@ -46,7 +46,7 @@ func TestMissingIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestRefusalCarriesTheSitesReason(t *testing.T) {
+func TestRefusalCarriesSitesReason(t *testing.T) {
 	s, _ := newScriptedServer(
 		t,
 		`{"message":"quota spent"}`,
@@ -73,7 +73,7 @@ func TestRefusalCanBeReadBySite(t *testing.T) {
 	assert.String(t, "site says spent", e.Error())
 }
 
-func TestTransportFailureHidesTheKey(t *testing.T) {
+func TestTransportFailureHidesKey(t *testing.T) {
 	s, _ := newScriptedServer(t, "", http.StatusOK)
 	r := newRequester(t, s.URL)
 	r.WithAuthorizer(query.New(url.Values{"api_key": {"secret"}}))
@@ -126,7 +126,7 @@ func TestSecondUnauthorizedIsReturned(t *testing.T) {
 	assert.Integer(t, 1, a.Renewed)
 }
 
-func TestAbsoluteLocatorLeavesTheBase(t *testing.T) {
+func TestAbsoluteLocatorLeavesBase(t *testing.T) {
 	s, seen := newScriptedServer(t, "alfa", http.StatusOK)
 	owned := requester.New(locator.New("unused.example"))
 	defer owned.Close()

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesTheQueryClientOnce(t *testing.T) {
+func TestDaemonClosesQueryClientOnce(t *testing.T) {
 	q := mock_client.New()
 	t.Cleanup(q.Close)
 	d := daemon.New(daemonOption(t, q), logger.New(t.Context()), memory.New())
@@ -21,9 +21,7 @@ func TestTheDaemonClosesTheQueryClientOnce(t *testing.T) {
 	assert.Integer(t, 1, q.Closed)
 }
 
-func TestTheDaemonHandsItsGuardThenItsReconcileClockToTheLifecycle(
-	t *testing.T,
-) {
+func TestDaemonHandsItsGuardThenItsReconcileClockToLifecycle(t *testing.T) {
 	d := daemon.New(
 		daemonOption(t, mock_client.New()),
 		logger.New(t.Context()),
@@ -38,7 +36,7 @@ func TestTheDaemonHandsItsGuardThenItsReconcileClockToTheLifecycle(
 	assert.True(t, clock)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
 		daemonOption(t, mock_client.New()),

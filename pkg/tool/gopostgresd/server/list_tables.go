@@ -26,7 +26,7 @@ func (s *Server) ListTables(
 	}
 
 	if e != nil {
-		return server.ListTables500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.ListTables500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	var schema string
@@ -35,7 +35,7 @@ func (s *Server) ListTables(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.ListTables(x, instance, schema)
+	rows, e := s.catalog.ListTables(x, instance, schema)
 
 	if validation.Is(e) {
 		return server.ListTables400JSONResponse(*clientError(e)), nil
@@ -54,7 +54,7 @@ func (s *Server) ListTables(
 	}
 
 	if e != nil {
-		return server.ListTables500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.ListTables500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	return server.ListTables200JSONResponse{

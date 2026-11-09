@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAPushToolWhileAnotherWriterHoldsTheStoreFailsReported(t *testing.T) {
+func TestPushToolWhileAnotherWriterHoldsStoreFailsReported(t *testing.T) {
 	r := memory.New()
 	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
 	c := served(t, o, r).Connect(t)

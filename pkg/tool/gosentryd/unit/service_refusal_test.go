@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAQuietRefusalIsNotCapturedByTheGuard(t *testing.T) {
+func TestQuietRefusalIsNotCapturedByGuard(t *testing.T) {
 	m := memory.New()
 	v := service_tester.Shared(t, service_tester.NewSource(t), m)
 	_, e := v.Issue("100")

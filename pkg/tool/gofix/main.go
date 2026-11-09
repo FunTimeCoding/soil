@@ -53,7 +53,7 @@ func Main() {
 	s := output.NewResultsWithDirectory(root)
 
 	if a.GetBoolean("rename") {
-		RunVariableNamingFixWithDirectory(patterns, root, diff, s)
+		RunVariableNamingFix(patterns, root, diff, s)
 	} else {
 		o := option.New()
 		o.Root = root

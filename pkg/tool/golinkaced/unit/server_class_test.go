@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
+func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = &net.OpError{
 		Op:  "dial",
@@ -34,7 +34,7 @@ func TestAnOutageIsAnsweredAsUnavailableWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestARefusedTokenIsAnsweredAsForbiddenWithoutACapture(t *testing.T) {
+func TestRefusedTokenIsAnsweredAsForbiddenWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("linkace: %s", "Unauthenticated.")
 	m := memory.New()
@@ -44,7 +44,7 @@ func TestARefusedTokenIsAnsweredAsForbiddenWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestARejectedLinkIsAnsweredAsBadRequestWithoutACapture(t *testing.T) {
+func TestRejectedLinkIsAnsweredAsBadRequestWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("linkace: %s", "The url field is required.")
 	m := memory.New()
@@ -57,7 +57,7 @@ func TestARejectedLinkIsAnsweredAsBadRequestWithoutACapture(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestATakenTagNameIsAnsweredAsConflictWithoutACapture(t *testing.T) {
+func TestTakenTagNameIsAnsweredAsConflictWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = conflict.Format("linkace: %s", "The tag already exists.")
 	m := memory.New()

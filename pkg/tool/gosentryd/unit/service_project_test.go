@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSearchIssuesResolvesTheProjectSlug(t *testing.T) {
+func TestSearchIssuesResolvesProjectSlug(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.AddProject("41", "backend")
 	c.AddProject("42", "frontend")
@@ -21,7 +21,7 @@ func TestSearchIssuesResolvesTheProjectSlug(t *testing.T) {
 	assert.String(t, "100", issues[0].Identifier)
 }
 
-func TestSearchIssuesWithoutAProjectSearchesEveryProject(t *testing.T) {
+func TestSearchIssuesWithoutProjectSearchesEveryProject(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.AddProject("41", "backend")
 	c.AddIssue("100", "41", constant.UnresolvedStatus)
@@ -32,7 +32,7 @@ func TestSearchIssuesWithoutAProjectSearchesEveryProject(t *testing.T) {
 	assert.Count(t, 2, issues)
 }
 
-func TestSearchEventsResolvesTheProjectSlug(t *testing.T) {
+func TestSearchEventsResolvesProjectSlug(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.AddProject("42", "frontend")
 	_, e := service_tester.Service(t, c).SearchEvents(
@@ -45,7 +45,7 @@ func TestSearchEventsResolvesTheProjectSlug(t *testing.T) {
 	assert.String(t, "42", c.EventSearchProject())
 }
 
-func TestSearchRefusesAnUnknownProject(t *testing.T) {
+func TestSearchRefusesUnknownProject(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.AddProject("41", "backend")
 	_, e := service_tester.Service(t, c).SearchEvents("", "missing", 0, "")

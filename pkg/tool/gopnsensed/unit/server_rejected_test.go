@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestARejectedHostIsAnsweredAsBadRequest(t *testing.T) {
+func TestRejectedHostIsAnsweredAsBadRequest(t *testing.T) {
 	m := memory.New()
 	c := client_tester.NewWith(t, rejecting_host.New(), m)
 	_, e := c.AddHost(context.Background(), client.HostRequest{}, true)

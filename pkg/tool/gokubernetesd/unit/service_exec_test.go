@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAnExecRefusesAnIncompleteRequest(t *testing.T) {
+func TestExecRefusesIncompleteRequest(t *testing.T) {
 	v := service_tester.New(t)
 
 	for _, q := range []request.Exec{

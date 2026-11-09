@@ -25,5 +25,5 @@ func (s *Service) Release(
 		return e
 	}
 
-	return s.store.ReleaseByCallsign(name)
+	return s.store.ReleaseCallsign(name)
 }

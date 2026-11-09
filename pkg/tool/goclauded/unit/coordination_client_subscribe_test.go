@@ -87,7 +87,7 @@ func TestClientSubscribeClosesItsChannelOnStop(t *testing.T) {
 	fixture.DrainStreamEvents(t, events)
 }
 
-func TestClientSubscribeReportsARefusedTokenOnce(t *testing.T) {
+func TestClientSubscribeReportsRefusedTokenOnce(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port).String(),

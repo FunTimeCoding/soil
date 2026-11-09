@@ -22,7 +22,7 @@ func (s *Service) checkModelContext(
 	}
 
 	if !v.Has(filepath.Join(mc, constant.CaptureFile)) &&
-		!v.Has(filepath.Join(mc, constant.AnswerWithFile)) {
+		!v.Has(filepath.Join(mc, constant.AnswerMessageFile)) {
 		s.addConcern(
 			constant.MissingCaptureFailKey,
 			constant.MissingCaptureFailText,

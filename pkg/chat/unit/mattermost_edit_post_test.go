@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestEditPostPatchesOnlyTheMessage(t *testing.T) {
+func TestEditPostPatchesOnlyMessage(t *testing.T) {
 	var sent map[string]any
 	c := mattermost_client_tester.New(
 		t,
@@ -43,7 +43,7 @@ func TestEditPostPatchesOnlyTheMessage(t *testing.T) {
 	assert.Any(t, nil, sent["is_pinned"])
 }
 
-func TestEditingAMissingPostIsNotFound(t *testing.T) {
+func TestEditingMissingPostIsNotFound(t *testing.T) {
 	_, e := mattermost_client_tester.New(t, statusUpstream).Client.EditPost(
 		&model.Post{Id: "missing"},
 		"done",
@@ -52,7 +52,7 @@ func TestEditingAMissingPostIsNotFound(t *testing.T) {
 	assert.String(t, "post not found: missing", e.Error())
 }
 
-func TestTheMockEditsItsStoredPost(t *testing.T) {
+func TestMockEditsItsStoredPost(t *testing.T) {
 	m := mock_client.New("charlie")
 	defer m.Close()
 	m.AddPost("alfa")

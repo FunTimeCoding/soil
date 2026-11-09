@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestAnsweredAtTakesTheInjectedClock(t *testing.T) {
+func TestAnsweredAtTakesInjectedClock(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
 		stringsConstant.LowerAlfa,
@@ -31,7 +31,7 @@ func TestAnsweredAtTakesTheInjectedClock(t *testing.T) {
 	assert.True(t, answered.Equal(s.Clock()()))
 }
 
-func TestDismissTakesTheInjectedClock(t *testing.T) {
+func TestDismissTakesInjectedClock(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
 		stringsConstant.LowerAlfa,

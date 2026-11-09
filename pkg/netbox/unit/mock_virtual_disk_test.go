@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheMockReturnsEachMachinesOwnDisks(t *testing.T) {
+func TestMockReturnsEachMachinesOwnDisks(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	alfa := m.SeedSizedVirtualMachine("alfa", 4, 8192, "charlie")
@@ -28,18 +28,18 @@ func TestTheMockReturnsEachMachinesOwnDisks(t *testing.T) {
 	assert.Count(t, 1, others)
 }
 
-func TestASizedMachineCarriesItsCoresMemoryAndSite(t *testing.T) {
+func TestSizedMachineCarriesItsCoresMemoryAndSite(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	m.SeedSizedVirtualMachine("alfa", 4, 8192, "charlie")
-	v, e := m.VirtualMachineByName("alfa")
+	v, e := m.VirtualMachine("alfa")
 	assert.FatalOnError(t, e)
 	assert.String(t, "charlie", v.Site)
 	assert.Any(t, 4.0, v.Raw.GetVcpus())
 	assert.Integer(t, 8192, int(v.Raw.GetMemory()))
 }
 
-func TestACreatedDiskIsReturnedWithItsMachine(t *testing.T) {
+func TestCreatedDiskIsReturnedWithItsMachine(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	alfa := m.SeedVirtualMachine("alfa")
@@ -53,7 +53,7 @@ func TestACreatedDiskIsReturnedWithItsMachine(t *testing.T) {
 	assert.True(t, not_found.Is(g))
 }
 
-func TestCoresAndMemoryAreSetOnTheMachine(t *testing.T) {
+func TestCoresAndMemoryAreSetOnMachine(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	m.SeedSizedVirtualMachine("alfa", 2, 4096, "echo")
@@ -61,7 +61,7 @@ func TestCoresAndMemoryAreSetOnTheMachine(t *testing.T) {
 	assert.FatalOnError(t, e)
 	_, f := m.SetVirtualMachineMemory("alfa", 16384)
 	assert.FatalOnError(t, f)
-	v, g := m.VirtualMachineByName("alfa")
+	v, g := m.VirtualMachine("alfa")
 	assert.FatalOnError(t, g)
 	assert.Any(t, 8.0, v.Raw.GetVcpus())
 	assert.Integer(t, 16384, int(v.Raw.GetMemory()))
@@ -69,13 +69,13 @@ func TestCoresAndMemoryAreSetOnTheMachine(t *testing.T) {
 	assert.True(t, not_found.Is(h))
 }
 
-func TestTheDisksFailOnTheirOwn(t *testing.T) {
+func TestDisksFailOnTheirOwn(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	alfa := m.SeedVirtualMachine("alfa")
 	m.Fail(m.VirtualMachineDisks, unavailable.Format("netbox: down"))
 	_, e := m.VirtualMachineDisks(alfa)
 	assert.True(t, unavailable.Is(e))
-	_, f := m.VirtualMachineByName("alfa")
+	_, f := m.VirtualMachine("alfa")
 	assert.FatalOnError(t, f)
 }

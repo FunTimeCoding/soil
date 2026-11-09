@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheClientSeesAnUnknownIssueAsNotFound(t *testing.T) {
+func TestClientSeesUnknownIssueAsNotFound(t *testing.T) {
 	c := client_tester.New(
 		t,
 		failing_jira.New(not_found.Format("Issue does not exist")),
@@ -22,7 +22,7 @@ func TestTheClientSeesAnUnknownIssueAsNotFound(t *testing.T) {
 	assert.StringContains(t, "Issue does not exist", e.Error())
 }
 
-func TestTheClientSeesARejectedQueryAsValidation(t *testing.T) {
+func TestClientSeesRejectedQueryAsValidation(t *testing.T) {
 	c := client_tester.New(
 		t,
 		failing_jira.New(validation.New("Error in the JQL Query")),
@@ -32,7 +32,7 @@ func TestTheClientSeesARejectedQueryAsValidation(t *testing.T) {
 	assert.StringContains(t, "Error in the JQL Query", e.Error())
 }
 
-func TestTheClientSeesAnOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
+func TestClientSeesOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
 	c := client_tester.New(
 		t,
 		failing_jira.New(detail_error.New("Service unavailable", "503")),
@@ -43,7 +43,7 @@ func TestTheClientSeesAnOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
 	assert.True(t, result == nil)
 }
 
-func TestTheClientReachesGoatlassiand(t *testing.T) {
+func TestClientReachesGoatlassiand(t *testing.T) {
 	c := client_tester.New(t, mock_client.New())
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }

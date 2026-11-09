@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheSaltClientAndItsMockShareTheFace(t *testing.T) {
+func TestSaltClientAndItsMockShareFace(t *testing.T) {
 	c := salt.New("salt.test", 1, "alfa", "bravo")
 	defer c.Close()
 	m := mock_client.New()

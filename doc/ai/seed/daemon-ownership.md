@@ -50,10 +50,11 @@ open work in a seed of its own. An item leaves this seed when it is done.
   the Proxmox mock's methods ignore `SetFailure` - each gains it when a test
   needs it
 - REST and MCP disagree on an expected error with no class: MCP's
-  `response.AnswerWith` honours `classify.Reportable`, REST's
-  `classify.Capture` captures it anyway. Only gopostgresd's caller-left
-  error meets it on REST, so REST keeps capturing until a second surface
-  needs otherwise; the fix then is in `Capture`, not in a daemon
+  `go:pkg/generative/mark/response.AnswerMessage` honours
+  `go:pkg/errors/classify.Reportable`, REST's `go:pkg/errors/classify.Capture`
+  captures it anyway. Only gopostgresd's caller-left error meets it on REST, so
+  REST keeps capturing until a second surface needs otherwise; the fix then is
+  in `Capture`, not in a daemon
 - Upstream clients: pkg/linkace, pkg/habitica and pkg/errors/sentry/basic
   map 401 with 403 to `forbidden`, so an expired token fails quietly;
   client-go answers GitLab's 404 with a sentinel, so pkg/gitlab's not-found
@@ -83,7 +84,7 @@ open work in a seed of its own. An item leaves this seed when it is done.
   hold's `Close` up to gorilla's 45 s `HandshakeTimeout`; gomattermostd's
   watcher looks up an event's author over the client inside the socket's
   callback
-- godirectoryd's web submits show `e.Error()` through `form.Redirect`
+- godirectoryd's web submits show `e.Error()` through `go:pkg/web/form.Redirect`
   without a class check, so an unexpected failure reads as a form refusal
 - Surfaces still deciding on an error: goproxmoxd's MCP `captureDetail`
   tests `proxmox.ErrNotAuthorized` and `proxmox.ErrTimeout`, and gochromed's
@@ -113,7 +114,7 @@ open work in a seed of its own. An item leaves this seed when it is done.
   runs)
 - gopostgresd: a refusal surfacing while rows are read (needs a live
   database). gomemoryd: its profile search branch has no failure test of its
-  own, and `importer.Import` has no caller but its test
+  own, and `go:pkg/tool/gomemoryd/importer.Import` has no caller but its test
 - goproxmoxd: two handlers are tested per class, and `error_answer` checks
   the shape of the other branches but not that each is present. PVE's
   refusal texts are fixtures, so only a live call would show an upgrade

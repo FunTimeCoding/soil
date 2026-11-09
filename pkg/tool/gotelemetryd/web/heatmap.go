@@ -28,7 +28,7 @@ func (s *Server) heatmap(
 	}
 
 	o := summary_option.New()
-	o.Since = sinceFromWindow(window)
+	o.Span = windowSpan(window)
 	o.GroupBy = group
 	rows, e := s.service.Summary(o)
 	errors.PanicOnError(e)

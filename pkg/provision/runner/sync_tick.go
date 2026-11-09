@@ -24,20 +24,21 @@ func (r *Runner) syncTick() bool {
 	}
 
 	r.syncFailures++
+	e, okay := v.(error)
+
+	if !okay {
+		e = fmt.Errorf("%v", v)
+	}
 
 	if r.syncFailures == 1 {
-		e, okay := v.(error)
-
-		if !okay {
-			e = fmt.Errorf("%v", v)
-		}
-
 		r.reporter.CaptureException(e)
 	} else {
 		r.logger.Structured(
 			"git_sync_failed",
 			constant.RunnerError,
-			fmt.Sprint(v),
+			e.Error(),
+			constant.RunnerStderr,
+			stderr(e),
 			constant.RunnerConsecutive,
 			r.syncFailures,
 		)

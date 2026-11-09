@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestTheStreamRecordsEachMessage(t *testing.T) {
+func TestStreamRecordsEachMessage(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Serve(
 		mock_stream.New(
@@ -31,13 +31,13 @@ func TestTheStreamRecordsEachMessage(t *testing.T) {
 	assert.Integer(t, 2, v.Events)
 }
 
-func TestAStreamThatEndsBadlyIsAnError(t *testing.T) {
+func TestStreamThatEndsBadlyIsError(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Serve(mock_stream.New(nil, false, errors.Format("exit", 1)))
 	assert.Count(t, 1, s.Service.CaptureStream(context.Background()))
 }
 
-func TestCancelKillsTheStream(t *testing.T) {
+func TestCancelKillsStream(t *testing.T) {
 	s := service_tester.New(t)
 	m := mock_stream.New(
 		[]string{constant.SessionSample},
@@ -60,7 +60,7 @@ func TestCancelKillsTheStream(t *testing.T) {
 	assert.Integer(t, 1, m.Killed())
 }
 
-func TestAFailingStoreStopsTheStream(t *testing.T) {
+func TestFailingStoreStopsStream(t *testing.T) {
 	s := service_tester.New(t)
 	m := mock_stream.New([]string{constant.SessionSample}, true, nil)
 	s.System.Serve(m)

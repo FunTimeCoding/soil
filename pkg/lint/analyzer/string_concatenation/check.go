@@ -15,6 +15,6 @@ func Check(
 			continue
 		}
 
-		inspectWithParent(file, p, results)
+		inspectParents(file, p, results)
 	}
 }

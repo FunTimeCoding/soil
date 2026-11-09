@@ -12,9 +12,5 @@ func New(l *response.Log) *Log {
 		accounts = append(accounts, strings.TrimPrefix(p.AccountName, ":"))
 	}
 
-	return &Log{
-		Time:     timeFromName(l.FileName),
-		Accounts: accounts,
-		Raw:      l,
-	}
+	return &Log{Time: nameTime(l.FileName), Accounts: accounts, Raw: l}
 }

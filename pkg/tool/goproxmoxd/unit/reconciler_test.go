@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheReconcilerOnlyPromotes(t *testing.T) {
+func TestReconcilerOnlyPromotes(t *testing.T) {
 	c, machines := reconcileFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
@@ -30,7 +30,7 @@ func TestTheReconcilerOnlyPromotes(t *testing.T) {
 	assert.Count(t, 1, n.UpdatedMachines)
 }
 
-func TestAnUnreachableHypervisorIsOnlyLogged(t *testing.T) {
+func TestUnreachableHypervisorIsOnlyLogged(t *testing.T) {
 	c, machines := reconcileFloor()
 	defer c.Close()
 	c.SetFailure(

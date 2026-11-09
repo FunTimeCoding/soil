@@ -16,7 +16,7 @@ func (s *Service) messagesFor(
 		}
 	}
 
-	found, e := s.store.MessagesByIdentifiers(identifiers)
+	found, e := s.store.IdentifiedMessages(identifiers)
 
 	if e != nil {
 		return nil, e

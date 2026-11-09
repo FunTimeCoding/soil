@@ -18,7 +18,7 @@ func BookmarkNode() {
 	directory := a.RequiredPositional(0, "DIRECTORY")
 	b := brave.MustBookmark(constant.DefaultProfile)
 	f := constant.Format
-	d := node.MustDirectoryByName(node.New(b.Root.Bar), directory)
+	d := node.MustDirectory(node.New(b.Root.Bar), directory)
 	console.Format("Root: %s\n", d.Format(f))
 
 	if depth > 0 {

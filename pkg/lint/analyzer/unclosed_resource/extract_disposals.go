@@ -36,9 +36,9 @@ func extractDisposals(
 				return true
 			}
 
-			for parameter, index := range indices {
+			for v, index := range indices {
 				refers := func(e ast.Expr) bool {
-					return parameterOf(p, e, indices) == parameter
+					return parameter(p, e, indices) == v
 				}
 
 				for _, condition := range callConditions(p, c, refers) {

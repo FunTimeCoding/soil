@@ -23,7 +23,7 @@ func TestPendingRetainDropsSubscriptionsThatAreGone(t *testing.T) {
 	assert.Count(t, 0, p.Roots(now))
 }
 
-func TestAPendingDigestRetriesWithADoublingDelay(t *testing.T) {
+func TestPendingDigestRetriesWithDoublingDelay(t *testing.T) {
 	p := pending_digest.New(30*time.Second, 10*time.Minute)
 	start := time.Date(2026, 11, 4, 12, 0, 0, 0, time.UTC)
 	e := event.New(constant.MessageEvent, "Foxtrot", "first", start)
@@ -36,7 +36,7 @@ func TestAPendingDigestRetriesWithADoublingDelay(t *testing.T) {
 	assert.Count(t, 1, p.Roots(retry.Add(time.Minute)))
 }
 
-func TestAPendingDigestDelayStopsAtTheLimit(t *testing.T) {
+func TestPendingDigestDelayStopsAtLimit(t *testing.T) {
 	p := pending_digest.New(30*time.Second, 10*time.Minute)
 	now := time.Date(2026, 11, 4, 12, 0, 0, 0, time.UTC)
 	e := event.New(constant.MessageEvent, "Foxtrot", "first", now)
@@ -49,7 +49,7 @@ func TestAPendingDigestDelayStopsAtTheLimit(t *testing.T) {
 	assert.Count(t, 1, p.Roots(now.Add(10*time.Minute)))
 }
 
-func TestASuccessfulRetryResetsTheDelay(t *testing.T) {
+func TestSuccessfulRetryResetsDelay(t *testing.T) {
 	p := pending_digest.New(30*time.Second, 10*time.Minute)
 	now := time.Date(2026, 11, 4, 12, 0, 0, 0, time.UTC)
 	e := event.New(constant.MessageEvent, "Foxtrot", "first", now)

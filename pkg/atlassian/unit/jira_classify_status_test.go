@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestARefusedProjectIsForbidden(t *testing.T) {
+func TestRefusedProjectIsForbidden(t *testing.T) {
 	e := atlassian.WrapError(
 		jiraFailure(
 			http.StatusForbidden,
@@ -24,7 +24,7 @@ func TestARefusedProjectIsForbidden(t *testing.T) {
 	assert.StringContains(t, "permission to see this project", e.Error())
 }
 
-func TestAnUnavailableJiraIsUnavailable(t *testing.T) {
+func TestUnavailableJiraIsUnavailable(t *testing.T) {
 	e := atlassian.WrapError(
 		jiraFailure(
 			http.StatusServiceUnavailable,
@@ -36,7 +36,7 @@ func TestAnUnavailableJiraIsUnavailable(t *testing.T) {
 	assert.StringContains(t, "Down for upgrade", e.Error())
 }
 
-func TestAnUnavailableJiraWithoutNotationIsUnavailable(t *testing.T) {
+func TestUnavailableJiraWithoutNotationIsUnavailable(t *testing.T) {
 	e := atlassian.WrapError(
 		&jira.Response{
 			Response: &http.Response{StatusCode: http.StatusServiceUnavailable},
@@ -47,7 +47,7 @@ func TestAnUnavailableJiraWithoutNotationIsUnavailable(t *testing.T) {
 	assert.StringContains(t, "maintenance", e.Error())
 }
 
-func TestARejectedTokenStaysAFault(t *testing.T) {
+func TestRejectedTokenStaysFault(t *testing.T) {
 	e := atlassian.WrapError(
 		jiraFailure(
 			http.StatusUnauthorized,

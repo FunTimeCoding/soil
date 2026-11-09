@@ -42,21 +42,21 @@ func TestUnknownStateIsNeverWoken(t *testing.T) {
 	assert.False(t, cruise.Wakes(r, now))
 }
 
-func TestIdleSessionInsideTheWakeWindowIsWoken(t *testing.T) {
+func TestIdleSessionInsideWakeWindowIsWoken(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
 	r.IdleSince = now.Add(-30 * time.Minute)
 	assert.True(t, cruise.Wakes(r, now))
 }
 
-func TestIdleSessionPastTheWakeWindowIsNotWoken(t *testing.T) {
+func TestIdleSessionPastWakeWindowIsNotWoken(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
 	r.IdleSince = now.Add(-constant.WakeWindow - time.Minute)
 	assert.False(t, cruise.Wakes(r, now))
 }
 
-func TestPacedModeWaitsOutTheGap(t *testing.T) {
+func TestPacedModeWaitsOutGap(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
 	r.Mode = constant.CruisePaced
@@ -65,7 +65,7 @@ func TestPacedModeWaitsOutTheGap(t *testing.T) {
 	assert.False(t, cruise.Wakes(r, now))
 }
 
-func TestPacedModeWakesAfterTheGap(t *testing.T) {
+func TestPacedModeWakesAfterGap(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
 	r.Mode = constant.CruisePaced

@@ -56,7 +56,7 @@ func TestReacherSuccessOnUnknownHostIsSilent(t *testing.T) {
 	assert.Nil(t, h)
 }
 
-func TestReacherDownReturnsACopy(t *testing.T) {
+func TestReacherDownReturnsCopy(t *testing.T) {
 	r := reacher.New(memory.New())
 	r.Fail("sentry", errorsConstant.Refused)
 	_, h := r.Down("sentry")

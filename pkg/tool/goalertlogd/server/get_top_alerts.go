@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
-	"time"
 )
 
 func (s *Server) GetTopAlerts(
@@ -12,23 +12,21 @@ func (s *Server) GetTopAlerts(
 	r server.GetTopAlertsRequestObject,
 ) (server.GetTopAlertsResponseObject, error) {
 	n := 25
-	now := time.Now()
-	start := now.Add(-7 * 24 * time.Hour)
-	end := now
+	w := window.Whole()
 
 	if r.Params.N != nil {
 		n = *r.Params.N
 	}
 
 	if r.Params.Start != nil {
-		start = *r.Params.Start
+		w.WithStart(*r.Params.Start)
 	}
 
 	if r.Params.End != nil {
-		end = *r.Params.End
+		w.WithEnd(*r.Params.End)
 	}
 
-	records, e := s.service.TopAlerts(n, start, end)
+	records, e := s.service.TopAlerts(n, w)
 
 	if e != nil {
 		return server.GetTopAlerts500JSONResponse(*s.answer(x, e)), nil

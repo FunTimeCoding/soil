@@ -1,8 +1,17 @@
 package face
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"github.com/mattermost/mattermost/server/public/model"
+	"time"
+)
 
 type MattermostPostingClient interface {
+	Clear(h *model.Channel) (int, error)
+	ClearOld(
+		h *model.Channel,
+		cutoff time.Time,
+		keep int,
+	) (int, int, error)
 	DeletePost(p *model.Post) error
 	EditPost(
 		p *model.Post,

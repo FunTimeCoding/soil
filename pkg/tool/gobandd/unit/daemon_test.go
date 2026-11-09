@@ -10,25 +10,25 @@ import (
 	"testing"
 )
 
-func TestClosingTheDaemonClosesEveryEngine(t *testing.T) {
+func TestClosingDaemonClosesEveryEngine(t *testing.T) {
 	d, engines := daemon_tester.New(t, "alfa", "bravo")
 	d.Close()
 	assert.Integer(t, 1, engines["alfa"].Closed)
 	assert.Integer(t, 1, engines["bravo"].Closed)
 }
 
-func TestTheDaemonHandsOneGuardPerHostWithoutNetbox(t *testing.T) {
+func TestDaemonHandsOneGuardPerHostWithoutNetbox(t *testing.T) {
 	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	assert.Count(t, 2, d.Workers())
 }
 
-func TestAHostWithoutAPasswordIsRefusedNotFatal(t *testing.T) {
+func TestHostWithoutPasswordIsRefusedNotFatal(t *testing.T) {
 	i := instance.Instance{Name: "alfa", Host: "alfa.example"}
 	_, e := option.BuildEngine(&i)
 	assert.True(t, validation.Is(e))
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d, _ := daemon_tester.New(t, "alfa", "bravo")
 	workers := d.Workers()

@@ -22,7 +22,7 @@ func passedOn(
 				return true
 			}
 
-			h := calleeOf(p, c)
+			h := callee(p, c)
 
 			if h == nil {
 				return true

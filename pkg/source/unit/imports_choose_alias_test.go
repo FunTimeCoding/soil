@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestChooseAliasPrefersTheBareSubsystem(t *testing.T) {
+func TestChooseAliasPrefersBareSubsystem(t *testing.T) {
 	assert.String(
 		t,
 		"web",
@@ -33,7 +33,7 @@ func TestChooseAliasFallsBackToSubsystemAndName(t *testing.T) {
 	)
 }
 
-func TestChooseAliasFallbackCamelsASnakeName(t *testing.T) {
+func TestChooseAliasFallbackCamelsSnakeName(t *testing.T) {
 	assert.String(
 		t,
 		"clientMockClient",
@@ -46,7 +46,7 @@ func TestChooseAliasFallbackCamelsASnakeName(t *testing.T) {
 	)
 }
 
-func TestChooseAliasAtTheLayoutRootIsModulePlusName(t *testing.T) {
+func TestChooseAliasAtLayoutRootIsModulePlusName(t *testing.T) {
 	assert.String(
 		t,
 		"alfaErrors",
@@ -59,7 +59,7 @@ func TestChooseAliasAtTheLayoutRootIsModulePlusName(t *testing.T) {
 	)
 }
 
-func TestChooseAliasAtTheLayoutRootLeavesTheBareModuleToConstant(t *testing.T) {
+func TestChooseAliasAtLayoutRootLeavesBareModuleToConstant(t *testing.T) {
 	assert.String(
 		t,
 		"alfa",

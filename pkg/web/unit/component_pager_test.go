@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestACountedPagerLinksBothWaysAroundItsPosition(t *testing.T) {
+func TestCountedPagerLinksBothWaysAroundItsPosition(t *testing.T) {
 	assert.String(
 		t,
 		`<p class="pager"><a href="/alfa?offset=0">Previous</a><span class="pager-position">21–40 of 93</span><a href="/alfa?offset=40">Next</a></p>`,
@@ -21,7 +21,7 @@ func TestACountedPagerLinksBothWaysAroundItsPosition(t *testing.T) {
 	)
 }
 
-func TestAnOpenEndedPagerShowsOnlyTheWayOnward(t *testing.T) {
+func TestOpenEndedPagerShowsOnlyWayOnward(t *testing.T) {
 	assert.String(
 		t,
 		`<p class="pager"><a href="/alfa?page=2">Older →</a></p>`,
@@ -29,6 +29,6 @@ func TestAnOpenEndedPagerShowsOnlyTheWayOnward(t *testing.T) {
 	)
 }
 
-func TestAPagerWithNowhereToGoRendersNothing(t *testing.T) {
+func TestPagerWithNowhereToGoRendersNothing(t *testing.T) {
 	assert.String(t, ``, renderedNode(t, pager.New().Node()))
 }

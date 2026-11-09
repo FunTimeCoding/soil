@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAStartedMachineIsRecordedActive(t *testing.T) {
+func TestStartedMachineIsRecordedActive(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.AddNode("test")
@@ -21,7 +21,7 @@ func TestAStartedMachineIsRecordedActive(t *testing.T) {
 	assert.String(t, "active", *n.UpdatedMachines["alfa"].Status)
 }
 
-func TestAShutDownContainerIsRecordedOffline(t *testing.T) {
+func TestShutDownContainerIsRecordedOffline(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.AddNode("test")
@@ -32,7 +32,7 @@ func TestAShutDownContainerIsRecordedOffline(t *testing.T) {
 	assert.String(t, "offline", *n.UpdatedMachines["bravo"].Status)
 }
 
-func TestAnUpwardReconcileOnlyPromotes(t *testing.T) {
+func TestUpwardReconcileOnlyPromotes(t *testing.T) {
 	c, machines := reconcileFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
@@ -47,7 +47,7 @@ func TestAnUpwardReconcileOnlyPromotes(t *testing.T) {
 	assert.Count(t, 0, n.UpdatedMachines)
 }
 
-func TestAFullReconcileAlsoDemotesAndWrites(t *testing.T) {
+func TestFullReconcileAlsoDemotesAndWrites(t *testing.T) {
 	c, machines := reconcileFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
@@ -64,7 +64,7 @@ func TestAFullReconcileAlsoDemotesAndWrites(t *testing.T) {
 	assert.Count(t, 2, n.UpdatedMachines)
 }
 
-func TestAReconcileWithoutTheSwitchIsNotConfigured(t *testing.T) {
+func TestReconcileWithoutSwitchIsNotConfigured(t *testing.T) {
 	c, _ := reconcileFloor()
 	defer c.Close()
 	_, e := service_tester.ContainerService(t, c).Reconcile(

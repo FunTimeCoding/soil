@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestALoadIsARealLink(t *testing.T) {
+func TestLoadIsRealLink(t *testing.T) {
 	assert.String(
 		t,
 		`<a href="/alfa">Bravo</a>`,
@@ -15,7 +15,7 @@ func TestALoadIsARealLink(t *testing.T) {
 	)
 }
 
-func TestASwappedLoadGetsItsPathIntoTheTarget(t *testing.T) {
+func TestSwappedLoadGetsItsPathIntoTarget(t *testing.T) {
 	assert.String(
 		t,
 		`<a href="/alfa" role="button" class="outline" hx-get="/alfa" hx-target="#charlie" hx-swap="outerHTML">Bravo</a>`,

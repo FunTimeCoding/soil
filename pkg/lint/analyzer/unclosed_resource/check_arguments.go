@@ -27,7 +27,7 @@ func checkArguments(
 				return true
 			}
 
-			f := calleeOf(p, c)
+			f := callee(p, c)
 
 			if f == nil {
 				return true

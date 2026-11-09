@@ -45,7 +45,7 @@ func (s *Service) EditEvent(
 		}
 
 		if slug != "" {
-			c, f := s.store.CompletionByTopic(edited.SessionIdentifier, topic)
+			c, f := s.store.TopicCompletion(edited.SessionIdentifier, topic)
 
 			if f == nil && c != nil {
 				s.report(

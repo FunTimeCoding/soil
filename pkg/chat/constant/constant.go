@@ -27,6 +27,8 @@ const (
 
 	MattermostSinceChunkThreshold int = 1000
 	MattermostSinceChunkLimit     int = 20
+	MattermostClearBatchSize      int = 1000
+	MattermostClearBatchLimit     int = 20
 	MattermostCollapsedThreads        = false
 
 	MattermostEmptyEntityTag = ""

@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestWebRefusesAnUnresolvableInstanceAsBadRequest(t *testing.T) {
+func TestWebRefusesUnresolvableInstanceAsBadRequest(t *testing.T) {
 	r := memory.New()
 	d, _ := daemon_tester.New(
 		t,

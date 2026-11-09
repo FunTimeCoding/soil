@@ -22,7 +22,7 @@ func OllamaReply() {
 		t.Self().UserName,
 	)
 
-	for _, m := range t.MessagesByChannel(c) {
+	for _, m := range t.ChannelMessages(c) {
 		if false {
 			console.Line(m.Format(f))
 		}

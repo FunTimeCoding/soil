@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonClosesWhatItBuiltOnce(t *testing.T) {
+func TestDaemonClosesWhatItBuiltOnce(t *testing.T) {
 	m := newEmbedder(t)
 	a := newReranker(t)
 	d := daemon.New(
@@ -26,7 +26,7 @@ func TestTheDaemonClosesWhatItBuiltOnce(t *testing.T) {
 	assert.Integer(t, 1, a.Closed)
 }
 
-func TestTheDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
+func TestDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 	d := daemon.New(
 		service_tester.NewOption(t, newEmbedder(t), newReranker(t)),
 		logger.New(t.Context()),
@@ -37,7 +37,7 @@ func TestTheDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 	assert.Count(t, 2, d.Workers())
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(

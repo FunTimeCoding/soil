@@ -1,15 +1,16 @@
 package preposition_name
 
-import (
-	"github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/lint/segment"
-)
+import "github.com/funtimecoding/soil/pkg/lint/constant"
 
-func placedWord(name string) string {
-	parts := segment.Segments(name)
+func placedWord(
+	parts []string,
+	start int,
+) string {
 	last := len(parts) - 1
 
-	for i, s := range parts {
+	for i := start; i <= last; i++ {
+		s := parts[i]
+
 		if constant.PrepositionAnywhere[s] {
 			return s
 		}

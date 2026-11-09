@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/distinguished_name"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/issue_request"
+	"time"
 )
 
 func NewCluster(root *authority.Authority) *authority.Authority {
@@ -14,6 +15,7 @@ func NewCluster(root *authority.Authority) *authority.Authority {
 	r.Kind = constant.KindIntermediate
 	r.Name = n
 	r.Constraint = NewClusterConstraint()
+	r.Start = time.Now()
 	r.ValidYear = constant.IntermediateValidityYear
 
 	return authority.New(root.Issue(r))

@@ -39,7 +39,7 @@ func (s *Server) memoryDetailPage(
 	}
 
 	p := memory_page.New(v)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		v.Memory.Name,
 		constant.MemoriesPath,

@@ -46,7 +46,7 @@ func arrivalName(
 	)
 	v.Entries = append(v.Entries, arriving)
 	taken := func(name string) bool {
-		return v.LocalTaken(name) || heldByOther(v.Entries, arriving, name)
+		return v.LocalTaken(name) || otherHeld(v.Entries, arriving, name)
 	}
 	want := ""
 

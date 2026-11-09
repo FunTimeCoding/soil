@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAFailureAnsweringACallerCarriesTheCallersTrace(t *testing.T) {
+func TestFailureAnsweringCallerCarriesCallersTrace(t *testing.T) {
 	s := base.New(t)
 	c := s.MemoryClient(t)
 	s.Execute("ALTER TABLE memory RENAME TO memory_gone")

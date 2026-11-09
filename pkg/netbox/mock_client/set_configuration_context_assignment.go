@@ -13,7 +13,7 @@ func (c *Client) SetConfigurationContextAssignment(
 		return nil, c.Failure
 	}
 
-	v, e := c.ConfigurationContextByName(name)
+	v, e := c.ConfigurationContext(name)
 
 	if e != nil {
 		return nil, e

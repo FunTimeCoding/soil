@@ -40,6 +40,7 @@ func New(
 		o.LogCachePath,
 		o.ElitePath,
 		o.OutputPath,
+		o.Clock,
 		l,
 	)
 	result.service = v

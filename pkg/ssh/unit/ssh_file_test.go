@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestAFileRoundTripsOverSftp(t *testing.T) {
+func TestFileRoundTripsOverSftp(t *testing.T) {
 	c := server_tester.New(t).Dial()
 	directory := t.TempDir()
 	path := filepath.Join(directory, "alfa.yaml")
@@ -31,7 +31,7 @@ func TestAFileRoundTripsOverSftp(t *testing.T) {
 	assert.Count(t, 0, empty)
 }
 
-func TestAMissingFileIsNotFound(t *testing.T) {
+func TestMissingFileIsNotFound(t *testing.T) {
 	c := server_tester.New(t).Dial()
 	path := filepath.Join(t.TempDir(), "alfa.yaml")
 	_, e := c.ReadFile(path)
@@ -41,7 +41,7 @@ func TestAMissingFileIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(f))
 }
 
-func TestARefusedWriteIsForbidden(t *testing.T) {
+func TestRefusedWriteIsForbidden(t *testing.T) {
 	c := server_tester.New(t).Dial()
 	directory := t.TempDir()
 	assert.FatalOnError(t, os.Chmod(directory, 0500))
@@ -50,7 +50,7 @@ func TestARefusedWriteIsForbidden(t *testing.T) {
 	assert.True(t, forbidden.Is(e))
 }
 
-func TestALostConnectionIsDropped(t *testing.T) {
+func TestLostConnectionIsDropped(t *testing.T) {
 	s := server_tester.New(t)
 	c := s.Dial()
 	path := filepath.Join(t.TempDir(), "alfa.yaml")
@@ -60,7 +60,7 @@ func TestALostConnectionIsDropped(t *testing.T) {
 	assert.True(t, dropped.Is(e))
 }
 
-func TestAnUndialledClientAnswersAnError(t *testing.T) {
+func TestUndialledClientAnswersError(t *testing.T) {
 	c := ssh.NewWithPassword("alfa", "localhost", "", false)
 	defer c.Close()
 	_, e := c.ReadFile("/alfa")

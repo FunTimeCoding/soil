@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestAMissingOwnerIsNotFound(t *testing.T) {
+func TestMissingOwnerIsNotFound(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusNotFound,
@@ -22,7 +22,7 @@ func TestAMissingOwnerIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAMissingRepositoryIsNotFound(t *testing.T) {
+func TestMissingRepositoryIsNotFound(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusNotFound,
@@ -32,7 +32,7 @@ func TestAMissingRepositoryIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestARateLimitIsUnavailable(t *testing.T) {
+func TestRateLimitIsUnavailable(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusForbidden,
@@ -46,7 +46,7 @@ func TestARateLimitIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestASecondaryRateLimitIsUnavailable(t *testing.T) {
+func TestSecondaryRateLimitIsUnavailable(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusForbidden,
@@ -56,7 +56,7 @@ func TestASecondaryRateLimitIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAMissingRepositoryHasNoTags(t *testing.T) {
+func TestMissingRepositoryHasNoTags(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusNotFound,
@@ -66,7 +66,7 @@ func TestAMissingRepositoryHasNoTags(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAConflictingRunDeleteIsConflict(t *testing.T) {
+func TestConflictingRunDeleteIsConflict(t *testing.T) {
 	assert.True(
 		t,
 		conflict.Is(
@@ -80,7 +80,7 @@ func TestAConflictingRunDeleteIsConflict(t *testing.T) {
 	)
 }
 
-func TestAnOutageFailsTheProbe(t *testing.T) {
+func TestOutageFailsProbe(t *testing.T) {
 	assert.True(
 		t,
 		unavailable.Is(
@@ -94,7 +94,7 @@ func TestAnOutageFailsTheProbe(t *testing.T) {
 	)
 }
 
-func TestARefusedTokenIsOursToLookAt(t *testing.T) {
+func TestRefusedTokenIsOursToLookAt(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusUnauthorized,
@@ -105,7 +105,7 @@ func TestARefusedTokenIsOursToLookAt(t *testing.T) {
 	assert.False(t, forbidden.Is(e))
 }
 
-func TestAForbiddenDeleteIsOursToLookAt(t *testing.T) {
+func TestForbiddenDeleteIsOursToLookAt(t *testing.T) {
 	e := refusingGithub(
 		t,
 		http.StatusForbidden,
@@ -116,7 +116,7 @@ func TestAForbiddenDeleteIsOursToLookAt(t *testing.T) {
 	assert.False(t, forbidden.Is(e))
 }
 
-func TestAnInvalidSearchIsOursToLookAt(t *testing.T) {
+func TestInvalidSearchIsOursToLookAt(t *testing.T) {
 	_, e := refusingGithub(
 		t,
 		http.StatusUnprocessableEntity,

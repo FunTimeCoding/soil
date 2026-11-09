@@ -1,7 +1,7 @@
 package netbox
 
 func (c *Client) DeviceTagNames(name string) ([]string, error) {
-	d, e := c.DeviceByName(name)
+	d, e := c.Device(name)
 
 	if e != nil {
 		return nil, e

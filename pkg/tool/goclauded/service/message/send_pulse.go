@@ -22,7 +22,7 @@ func (s *Service) SendPulse(
 	}
 
 	if fromName == "" {
-		callsign, e := s.store.CallsignBySessionIdentifier(sessionIdentifier)
+		callsign, e := s.store.SessionCallsign(sessionIdentifier)
 
 		if e != nil {
 			return false, e

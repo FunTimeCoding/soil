@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestRetargetReferencesRewritesAfterTheMove(t *testing.T) {
+func TestRetargetReferencesRewritesAfterMove(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteFile(t, root, "pkg/bravo/service/run.go", "package service\n")
 	o := service_tester.NewReferenced(t, root)
@@ -66,7 +66,7 @@ func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 	)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, reports)
-	assert.String(t, "pkg/bravo/run.go", reports[0].Changes[0].After)
+	assert.String(t, "pkg/bravo/run.go", reports[0].Changes[0].New)
 	unchanged, g := o.Service.GetMemory(m.Identifier)
 	assert.FatalOnError(t, g)
 	assert.String(t, "Read `pkg/alfa/run.go` first.", unchanged.Content)

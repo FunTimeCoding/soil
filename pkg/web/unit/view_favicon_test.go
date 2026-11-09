@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestAFaviconIsLinkedFromTheHead(t *testing.T) {
+func TestFaviconIsLinkedFromHead(t *testing.T) {
 	i := identity.New("test", "test tool", "test")
 	assert.StringContains(
 		t,
@@ -26,7 +26,7 @@ func TestAFaviconIsLinkedFromTheHead(t *testing.T) {
 	)
 }
 
-func TestTheViewServesTheFaviconItHolds(t *testing.T) {
+func TestViewServesFaviconItHolds(t *testing.T) {
 	i := identity.New("test", "test tool", "test")
 	r := httptest.NewRecorder()
 	view.New(layout.New(i, "", []byte("png"))).Favicon(

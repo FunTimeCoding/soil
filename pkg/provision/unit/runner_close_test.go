@@ -26,7 +26,7 @@ func TestLifecycleClosesNeverStartedRunner(t *testing.T) {
 	assert.False(t, setup.Load())
 }
 
-func TestClosingTheRunnerEndsItsSetup(t *testing.T) {
+func TestClosingRunnerEndsItsSetup(t *testing.T) {
 	r := runner.New(
 		runner_option.Option{
 			SetupFunction: func(x context.Context) bool {
@@ -48,7 +48,7 @@ func TestClosingTheRunnerEndsItsSetup(t *testing.T) {
 	}
 }
 
-func TestATriggerAfterCloseIsRefused(t *testing.T) {
+func TestTriggerAfterCloseIsRefused(t *testing.T) {
 	var setup atomic.Bool
 	r := newSetupProbe(&setup)
 	r.Start()
@@ -57,7 +57,7 @@ func TestATriggerAfterCloseIsRefused(t *testing.T) {
 	assert.True(t, unavailable.Is(r.Trigger(trigger.Request{})))
 }
 
-func TestASyncAfterCloseIsRefused(t *testing.T) {
+func TestSyncAfterCloseIsRefused(t *testing.T) {
 	var setup atomic.Bool
 	r := newSetupProbe(&setup)
 	r.Start()
@@ -77,7 +77,7 @@ func TestASyncAfterCloseIsRefused(t *testing.T) {
 	}
 }
 
-func TestATriggerQueuedBeforeStartIsAnsweredOnClose(t *testing.T) {
+func TestTriggerQueuedBeforeStartIsAnsweredOnClose(t *testing.T) {
 	var setup atomic.Bool
 	r := newSetupProbe(&setup)
 	response := make(chan *trigger.Result, 1)

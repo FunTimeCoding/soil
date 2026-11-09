@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestGenerateReturnsTheReport(t *testing.T) {
+func TestGenerateReturnsReport(t *testing.T) {
 	c := mountedClient(t, fake_parser.New(2, nil))
 	result, e := c.PostGenerate(
 		t.Context(),
@@ -25,7 +25,7 @@ func TestGenerateReturnsTheReport(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestAMissingInputFileIsNotFound(t *testing.T) {
+func TestMissingInputFileIsNotFound(t *testing.T) {
 	c := mountedClient(t, fake_parser.New(1, nil))
 	absent := filepath.Join(t.TempDir(), "delta.zevtc")
 	_, e := c.PostGenerate(t.Context(), []string{absent}, nil)
@@ -33,13 +33,13 @@ func TestAMissingInputFileIsNotFound(t *testing.T) {
 	assert.StringContains(t, "delta.zevtc", e.Error())
 }
 
-func TestNoFilesAreTheCallersMistake(t *testing.T) {
+func TestNoFilesAreCallersMistake(t *testing.T) {
 	c := mountedClient(t, fake_parser.New(1, nil))
 	_, e := c.PostGenerate(t.Context(), []string{}, nil)
 	assert.True(t, validation.Is(e))
 }
 
-func TestAFailedGenerateIsReported(t *testing.T) {
+func TestFailedGenerateIsReported(t *testing.T) {
 	c := mountedClient(t, fake_parser.New(0, errors.New("echo parse failed")))
 	_, e := c.PostGenerate(
 		t.Context(),

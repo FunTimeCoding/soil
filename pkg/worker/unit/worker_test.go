@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func TestOnceRunsTheTickOnce(t *testing.T) {
+func TestOnceRunsTickOnce(t *testing.T) {
 	var ticks atomic.Int64
 	w := worker.NewOnce(
 		func(context.Context) []error {
@@ -52,7 +52,7 @@ func TestCloseBeforeStartReturns(t *testing.T) {
 	}
 }
 
-func TestCloseWaitsForARunningTick(t *testing.T) {
+func TestCloseWaitsForRunningTick(t *testing.T) {
 	entered := make(chan struct{})
 	var finished atomic.Bool
 	w := worker.NewOnce(
@@ -72,7 +72,7 @@ func TestCloseWaitsForARunningTick(t *testing.T) {
 	assert.True(t, finished.Load())
 }
 
-func TestATickCancelledByCloseReportsNothing(t *testing.T) {
+func TestTickCancelledByCloseReportsNothing(t *testing.T) {
 	entered := make(chan struct{})
 	r := memory.New()
 	w := worker.NewOnce(
@@ -110,7 +110,7 @@ func TestDailyWaitsForItsTimeInsteadOfTickingAtStart(t *testing.T) {
 	assert.Integer(t, int64(0), ticks.Load())
 }
 
-func TestADailyTickIsCancelledByClose(t *testing.T) {
+func TestDailyTickIsCancelledByClose(t *testing.T) {
 	entered := make(chan struct{})
 	seen := make(chan error, 1)
 	w := worker.NewDaily(
@@ -136,7 +136,7 @@ func TestADailyTickIsCancelledByClose(t *testing.T) {
 	assert.True(t, errors.Is(<-seen, context.Canceled))
 }
 
-func TestACancelledDailyTickReportsNothing(t *testing.T) {
+func TestCancelledDailyTickReportsNothing(t *testing.T) {
 	entered := make(chan struct{})
 	r := memory.New()
 	w := worker.NewDaily(
@@ -195,7 +195,7 @@ func TestEveryDelayIsItsInterval(t *testing.T) {
 	)
 }
 
-func TestAReportableFailureIsCapturedAndAQuietOneIsNot(t *testing.T) {
+func TestReportableFailureIsCapturedAndQuietOneIsNot(t *testing.T) {
 	r := memory.New()
 	owned := worker.NewEvery(
 		func() []error {
@@ -228,7 +228,7 @@ func TestEveryTicksAtStart(t *testing.T) {
 	assert.Integer(t, int64(1), ticks.Load())
 }
 
-func TestADelayedStartWaitsOneIntervalBeforeItsFirstTick(t *testing.T) {
+func TestDelayedStartWaitsOneIntervalBeforeItsFirstTick(t *testing.T) {
 	var ticks atomic.Int64
 	w := worker.NewEvery(
 		func() []error {
@@ -246,7 +246,7 @@ func TestADelayedStartWaitsOneIntervalBeforeItsFirstTick(t *testing.T) {
 	assert.Integer(t, int64(0), ticks.Load())
 }
 
-func TestADelayedStartTicksAfterItsInterval(t *testing.T) {
+func TestDelayedStartTicksAfterItsInterval(t *testing.T) {
 	var ticks atomic.Int64
 	w := worker.NewEvery(
 		func() []error {

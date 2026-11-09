@@ -1,0 +1,45 @@
+package store
+
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+)
+
+func (s *Store) listChildMemories(parentIdentifier int64) ([]record.MemorySummary, error) {
+	rows, e := s.database.Query(
+		`SELECT identifier, name, description, type, scope, updated_at, parent_identifier
+		FROM memory
+		WHERE parent_identifier = ? AND is_active = 1
+		ORDER BY ordinal, updated_at DESC`,
+		parentIdentifier,
+	)
+
+	if e != nil {
+		return nil, e
+	}
+
+	defer errors.LogClose(rows)
+	var result []record.MemorySummary
+
+	for rows.Next() {
+		var m record.MemorySummary
+		e := rows.Scan(
+			&m.Identifier,
+			&m.Name,
+			&m.Description,
+			&m.Type,
+			&m.Scope,
+			&m.UpdatedAt,
+			&m.ParentIdentifier,
+		)
+
+		if e != nil {
+			return nil, e
+		}
+
+		m.Tags = s.memoryTags(m.Identifier)
+		result = append(result, m)
+	}
+
+	return result, nil
+}

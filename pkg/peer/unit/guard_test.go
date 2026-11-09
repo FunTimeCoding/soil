@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestAGuardPassesCallsThroughWhileThePeerAnswers(t *testing.T) {
+func TestGuardPassesCallsThroughWhilePeerAnswers(t *testing.T) {
 	g := peer.New(
 		"charlie",
 		"http://server.test:8080",
@@ -35,7 +35,7 @@ func TestAGuardPassesCallsThroughWhileThePeerAnswers(t *testing.T) {
 	assert.Nil(t, g.Unavailable())
 }
 
-func TestAnOutageFailsFastWithoutReachingThePeer(t *testing.T) {
+func TestOutageFailsFastWithoutReachingPeer(t *testing.T) {
 	r := memory.New()
 	g := peer.New(
 		"delta",
@@ -59,7 +59,7 @@ func TestAnOutageFailsFastWithoutReachingThePeer(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestARefusalIsReportedOnceAndThePeerStaysUp(t *testing.T) {
+func TestRefusalIsReportedOnceAndPeerStaysUp(t *testing.T) {
 	r := memory.New()
 	g := peer.New(
 		"india",
@@ -78,7 +78,7 @@ func TestARefusalIsReportedOnceAndThePeerStaysUp(t *testing.T) {
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAnAttemptLeavesEveryRefusalToTheCaller(t *testing.T) {
+func TestAttemptLeavesEveryRefusalToCaller(t *testing.T) {
 	r := memory.New()
 	g := peer.New(
 		"juliett",
@@ -106,7 +106,7 @@ func TestAnAttemptLeavesEveryRefusalToTheCaller(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAGuardProbesUntilThePeerReturns(t *testing.T) {
+func TestGuardProbesUntilPeerReturns(t *testing.T) {
 	p := new(SwitchablePeer)
 	p.Fail(refusedConnection())
 	g := peer.New(
@@ -143,7 +143,7 @@ func TestAGuardProbesUntilThePeerReturns(t *testing.T) {
 	assert.Nil(t, g.Unavailable())
 }
 
-func TestACallerThatStopsLeavesThePeerUp(t *testing.T) {
+func TestCallerThatStopsLeavesPeerUp(t *testing.T) {
 	g := peer.New(
 		"golf",
 		"http://server.test:8080",

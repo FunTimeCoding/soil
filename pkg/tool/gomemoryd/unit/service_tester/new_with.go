@@ -12,6 +12,7 @@ import (
 	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func newWith(
@@ -31,7 +32,7 @@ func newWith(
 
 	return &Tester{
 		t:        t,
-		Service:  service.New(store.New(d), q, g, hiddenTag, root, r),
+		Service:  service.New(store.New(d), q, g, hiddenTag, root, time.Now, r),
 		Indexer:  q,
 		Reporter: r,
 	}

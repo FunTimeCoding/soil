@@ -9,8 +9,10 @@ func (s *Server) GetEvents(
 	x context.Context,
 	r server.GetEventsRequestObject,
 ) (server.GetEventsResponseObject, error) {
-	start, end := timeRange(r.Params.Start, r.Params.End)
-	events, e := s.service.Events(start, end, limitOr(r.Params.Limit, 1000))
+	events, e := s.service.Events(
+		timeRange(r.Params.Start, r.Params.End),
+		limitOr(r.Params.Limit, 1000),
+	)
 
 	if e != nil {
 		return server.GetEvents500JSONResponse(*s.answer(x, e)), nil

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestTheMockLeavesAHeldLabelAloneAsTheClientDoes(t *testing.T) {
+func TestMockLeavesHeldLabelAloneAsClientDoes(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Join("alfa", 3, time.Now())

@@ -28,7 +28,7 @@ func (v *View) Recovery(r face.Reporter) func(http.Handler) http.Handler {
 					v.renderFailure(
 						w,
 						q,
-						statusOf(caught),
+						caughtStatus(caught),
 						layout.ErrorItem(report(r, caught)),
 					)
 				}()

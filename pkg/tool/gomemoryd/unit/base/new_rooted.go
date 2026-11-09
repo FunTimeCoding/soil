@@ -1,6 +1,9 @@
 package base
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func NewRooted(
 	t *testing.T,
@@ -8,5 +11,5 @@ func NewRooted(
 ) *Server {
 	t.Helper()
 
-	return newWith(t, "", root)
+	return serve(t, "", root, time.Now)
 }

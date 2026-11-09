@@ -23,7 +23,14 @@ func NewWith(
 	t.Helper()
 	r := memory.New()
 	y := prometheus.NewRegistry()
-	v := service_tester.NewServiceWith(t, path, c, retention, notifier.New())
+	v := service_tester.NewServiceWith(
+		t,
+		path,
+		c,
+		retention,
+		time.Now,
+		notifier.New(),
+	)
 	w := worker.New(
 		v.Record,
 		constant.PollInterval,

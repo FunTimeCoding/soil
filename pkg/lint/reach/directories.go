@@ -20,7 +20,7 @@ func Directories(
 
 	for _, f := range files {
 		directory := filepath.Dir(f)
-		relative, okay := inside(root, directory)
+		relative, okay := rootRelative(root, directory)
 
 		if !okay {
 			continue
@@ -47,7 +47,7 @@ func Directories(
 
 		for _, p := range packagePaths {
 			for _, n := range module_graph.Dependents(g, p) {
-				if relative, okay := inside(root, n.Directory); okay {
+				if relative, okay := rootRelative(root, n.Directory); okay {
 					packages[relative] = true
 				}
 			}

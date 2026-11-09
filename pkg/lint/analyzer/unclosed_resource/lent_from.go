@@ -64,7 +64,7 @@ func lentFrom(
 		}
 
 		selection := p.TypesInfo.Selections[s]
-		f := calleeOf(p, v)
+		f := callee(p, v)
 
 		if selection == nil || selection.Kind() != types.MethodVal || f == nil {
 			return false

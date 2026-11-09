@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestGenerateMovesTheReportOutUnderItsDate(t *testing.T) {
+func TestGenerateMovesReportOutUnderItsDate(t *testing.T) {
 	p := fake_parser.New(3, nil)
 	s, output := service_tester.New(t, p)
 	v, e := s.Generate(
@@ -36,7 +36,7 @@ func TestGenerateMovesTheReportOutUnderItsDate(t *testing.T) {
 	assert.False(t, system.DirectoryExists(p.Workdir()))
 }
 
-func TestTwoReportsAMinuteApartBothSurvive(t *testing.T) {
+func TestTwoReportsMinuteApartBothSurvive(t *testing.T) {
 	s, output := service_tester.New(t, fake_parser.New(1, nil))
 	first := time.Date(2026, 1, 2, 20, 0, 0, 0, time.UTC)
 	_, e := s.Generate([]string{inputFile(t, "foxtrot.zevtc")}, first)
@@ -60,7 +60,7 @@ func TestTwoReportsAMinuteApartBothSurvive(t *testing.T) {
 	)
 }
 
-func TestGenerateAnswersAMissingInput(t *testing.T) {
+func TestGenerateAnswersMissingInput(t *testing.T) {
 	p := fake_parser.New(1, nil)
 	s, _ := service_tester.New(t, p)
 	_, e := s.Generate(
@@ -80,7 +80,7 @@ func TestGenerateRefusesNoFiles(t *testing.T) {
 	assert.Integer(t, 0, p.Calls())
 }
 
-func TestAFailedParseNamesTheStep(t *testing.T) {
+func TestFailedParseNamesStep(t *testing.T) {
 	failure := errors.New("bravo parse failed")
 	s, _ := service_tester.New(t, fake_parser.New(0, failure))
 	_, e := s.Generate([]string{inputFile(t, "bravo.zevtc")}, time.Now())

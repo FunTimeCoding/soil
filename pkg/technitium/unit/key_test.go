@@ -23,7 +23,7 @@ func TestKeyEncodeJoinsEveryFieldOfEveryRow(t *testing.T) {
 	)
 }
 
-func TestKeyEncodeOfNothingClearsTheList(t *testing.T) {
+func TestKeyEncodeOfNothingClearsList(t *testing.T) {
 	assert.String(t, "false", key.Encode(nil))
 }
 
@@ -36,7 +36,7 @@ func TestKeyGenerateMakesA32ByteSecret(t *testing.T) {
 	assert.String(t, "hmac-sha256", k.Algorithm)
 }
 
-func TestKeyGenerateNeverRepeatsASecret(t *testing.T) {
+func TestKeyGenerateNeverRepeatsSecret(t *testing.T) {
 	assert.True(
 		t,
 		key.Generate("alfa", constant.DefaultAlgorithm).Secret != key.Generate(

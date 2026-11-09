@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestRegionFindReturnsTheTextBetweenMarkers(t *testing.T) {
+func TestRegionFindReturnsTextBetweenMarkers(t *testing.T) {
 	inner, e := region.Find(
 		"# Title\n\n<!-- alfa:start -->\n- one\n<!-- alfa:end -->\n\nafter\n",
 		constant.FixtureRegion,
@@ -16,7 +16,7 @@ func TestRegionFindReturnsTheTextBetweenMarkers(t *testing.T) {
 	assert.String(t, "\n- one\n", inner)
 }
 
-func TestRegionReplaceKeepsEverythingOutsideTheMarkers(t *testing.T) {
+func TestRegionReplaceKeepsEverythingOutsideMarkers(t *testing.T) {
 	result, e := region.Replace(
 		"before\n<!-- alfa:start -->\nold\n<!-- alfa:end -->\nafter\n",
 		constant.FixtureRegion,
@@ -43,7 +43,7 @@ func TestRegionOtherNamesMarkersDoNotCount(t *testing.T) {
 	assert.ErrorIs(t, e, constant.ErrorRegionMissing)
 }
 
-func TestRegionRefusesARepeatedStartMarker(t *testing.T) {
+func TestRegionRefusesRepeatedStartMarker(t *testing.T) {
 	_, e := region.Find(
 		"<!-- alfa:start -->\n<!-- alfa:start -->\n<!-- alfa:end -->\n",
 		constant.FixtureRegion,
@@ -52,13 +52,13 @@ func TestRegionRefusesARepeatedStartMarker(t *testing.T) {
 	assert.String(t, `region "alfa": start marker appears 2 times`, e.Error())
 }
 
-func TestRegionRefusesAnEndMarkerWithoutAStart(t *testing.T) {
+func TestRegionRefusesEndMarkerWithoutStart(t *testing.T) {
 	_, e := region.Find("x\n<!-- alfa:end -->\n", constant.FixtureRegion)
 	assert.Error(t, e)
 	assert.String(t, `region "alfa": end marker has no partner`, e.Error())
 }
 
-func TestRegionRefusesAStartMarkerWithoutAnEnd(t *testing.T) {
+func TestRegionRefusesStartMarkerWithoutEnd(t *testing.T) {
 	_, e := region.Replace(
 		"<!-- alfa:start -->\nx\n",
 		constant.FixtureRegion,
@@ -68,7 +68,7 @@ func TestRegionRefusesAStartMarkerWithoutAnEnd(t *testing.T) {
 	assert.String(t, `region "alfa": start marker has no partner`, e.Error())
 }
 
-func TestRegionRefusesAnEndMarkerBeforeTheStart(t *testing.T) {
+func TestRegionRefusesEndMarkerBeforeStart(t *testing.T) {
 	_, e := region.Replace(
 		"<!-- alfa:end -->\nx\n<!-- alfa:start -->\n",
 		constant.FixtureRegion,

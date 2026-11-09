@@ -44,7 +44,7 @@ func carriers(
 			return carriers(p, body, v.X, indices, visited)
 		}
 	case *ast.CallExpr:
-		f := calleeOf(p, v)
+		f := callee(p, v)
 
 		if f == nil {
 			return nil

@@ -6,13 +6,13 @@ import (
 	"testing"
 )
 
-func TestTheProbeAnswersWhenOpnsenseAnswers(t *testing.T) {
+func TestProbeAnswersWhenOpnsenseAnswers(t *testing.T) {
 	s := canned("{}")
 	defer s.Close()
 	assert.FatalOnError(t, client(t, s).Reachable(t.Context()))
 }
 
-func TestADeadKeyFailsTheProbe(t *testing.T) {
+func TestDeadKeyFailsProbe(t *testing.T) {
 	s := refusing(http.StatusUnauthorized)
 	defer s.Close()
 	assert.NotNil(t, client(t, s).Reachable(t.Context()))

@@ -12,12 +12,12 @@ func answerOf(
 	p *packages.Package,
 	e ast.Expr,
 ) *answer.Answer {
-	if status := statusOf(p, e); status != 0 {
+	if s := status(p, e); s != 0 {
 		if captures(e) {
-			return answer.NewCaptured(status)
+			return answer.NewCaptured(s)
 		}
 
-		return answer.NewUncaptured(status)
+		return answer.NewUncaptured(s)
 	}
 
 	call, okay := e.(*ast.CallExpr)

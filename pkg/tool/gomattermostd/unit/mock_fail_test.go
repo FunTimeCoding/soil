@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestTheMockReactionsFailOnTheirOwn(t *testing.T) {
+func TestMockReactionsFailOnTheirOwn(t *testing.T) {
 	m := mock_client.New()
 	t.Cleanup(m.Close)
 	m.Reactions["alfa"] = []string{"bravo"}

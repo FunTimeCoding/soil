@@ -31,13 +31,13 @@ func (s *Server) UploadFile(
 	}
 
 	if e != nil {
-		return s.answerWith(x, e, "read file")
+		return s.answerMessage(x, e, "read file")
 	}
 
 	ch, e := s.service.ResolveChannel(a.ChannelIdentifier, a.ChannelName)
 
 	if e != nil {
-		return s.answerWith(x, e, "channel")
+		return s.answerMessage(x, e, "channel")
 	}
 
 	name := filepath.Base(a.Path)

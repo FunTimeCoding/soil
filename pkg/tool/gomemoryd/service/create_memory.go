@@ -21,7 +21,7 @@ func (s *Service) CreateMemory(o *save_option.Option) (*record.Memory, error) {
 	}
 
 	o.Metadata = applyBase(o.Metadata, o.Base)
-	identifier, e := s.store.CreateMemory(o)
+	identifier, e := s.store.CreateMemory(o, s.clock())
 
 	if e != nil {
 		return nil, e

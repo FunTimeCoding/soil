@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestTheClientListsLogsAndReports(t *testing.T) {
+func TestClientListsLogsAndReports(t *testing.T) {
 	cache := t.TempDir()
 	service_tester.WriteLogCache(
 		cache,
@@ -34,7 +34,7 @@ func TestTheClientListsLogsAndReports(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestARefusedTokenIsAnError(t *testing.T) {
+func TestRefusedTokenIsError(t *testing.T) {
 	o := service_tester.NewOption(
 		t,
 		t.TempDir(),

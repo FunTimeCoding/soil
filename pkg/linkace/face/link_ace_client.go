@@ -31,18 +31,18 @@ type LinkAceClient interface {
 	DeleteList(identifier int) error
 	DeleteNote(identifier int) error
 	DeleteTag(identifier int) error
-	LinkByIdentifier(identifier int) (*link.Link, error)
+	Link(identifier int) (*link.Link, error)
 	Links() ([]*link.Link, error)
-	LinksByList(identifier int) ([]*link.Link, error)
+	ListLinks(identifier int) ([]*link.Link, error)
 	LinksByListPage(
 		identifier int,
 		p int,
 	) (*page.Page[*link.Link], error)
 	LinksPage(p int) (*page.Page[*link.Link], error)
-	ListByName(name string) (*list.List, error)
+	List(name string) (*list.List, error)
 	Lists() ([]*list.List, error)
 	ListsPage(p int) (*page.Page[*list.List], error)
-	NotesByLink(linkIdentifier int) ([]*note.Note, error)
+	LinkNotes(linkIdentifier int) ([]*note.Note, error)
 	NotesByLinkPage(
 		linkIdentifier int,
 		p int,
@@ -53,7 +53,7 @@ type LinkAceClient interface {
 		query string,
 		p int,
 	) (*page.Page[*link.Link], error)
-	TagByName(name string) (*tag.Tag, error)
+	Tag(name string) (*tag.Tag, error)
 	Tags() ([]*tag.Tag, error)
 	TagsPage(p int) (*page.Page[*tag.Tag], error)
 	UpdateLink(

@@ -9,11 +9,11 @@ import (
 	"testing"
 )
 
-func TestACobraToolPrintsTheSameVersionBlockAsEveryTool(t *testing.T) {
+func TestCobraToolPrintsSameVersionBlockAsEveryTool(t *testing.T) {
 	assert.String(t, stamp.New().Text(), cobraVersion(t, "--version"))
 }
 
-func TestACobraToolPrintsTheVersionAsNotation(t *testing.T) {
+func TestCobraToolPrintsVersionAsNotation(t *testing.T) {
 	assert.String(
 		t,
 		join.Empty(

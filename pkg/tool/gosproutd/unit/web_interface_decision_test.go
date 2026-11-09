@@ -12,13 +12,13 @@ import (
 	"testing"
 )
 
-func TestAnUnknownDecisionIsNotFound(t *testing.T) {
+func TestUnknownDecisionIsNotFound(t *testing.T) {
 	s, _ := webServer(t)
 	status, _ := sendForm(t, s, decision_page.Path(999, true), nil)
 	assert.Integer(t, http.StatusNotFound, status)
 }
 
-func TestAnOverlongReplyAlertsAtTheForm(t *testing.T) {
+func TestOverlongReplyAlertsAtForm(t *testing.T) {
 	s, seed := webServer(t)
 	d := seed.PushDecision(
 		stringsConstant.LowerAlfa,

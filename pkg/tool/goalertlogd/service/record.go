@@ -5,10 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/outcome"
 	"maps"
-	"time"
 )
 
-func (s *Service) Record(now time.Time) (*outcome.Outcome, error) {
+func (s *Service) Record() (*outcome.Outcome, error) {
+	now := s.clock()
 	s.lastPoll.Store(now)
 	defer s.notifier.Notify()
 	alerts, e := s.activeAlerts()
@@ -64,7 +64,7 @@ func (s *Service) Record(now time.Time) (*outcome.Outcome, error) {
 			continue
 		}
 
-		if h := s.store.Resolve(fingerprint); h != nil {
+		if h := s.store.Resolve(fingerprint, now); h != nil {
 			return nil, h
 		}
 	}

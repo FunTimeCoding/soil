@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"sort"
-	"time"
 )
 
 func (s *Server) GetCost(
@@ -18,9 +17,7 @@ func (s *Server) GetCost(
 		days = *r.Params.Days
 	}
 
-	to := time.Now().UTC()
-	from := to.Add(-time.Duration(days) * 24 * time.Hour)
-	usage := s.transcript.UsageBetween(from, to)
+	usage := s.transcript.Usage(days)
 	result := server.CostResponse{Days: days}
 
 	if len(usage) == 0 {

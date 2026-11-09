@@ -107,7 +107,7 @@ func (s *Service) applyPatternThrough(
 	var refused []*pattern_site.Entry
 
 	for _, reference := range lookup.ObjectReferences(all, isAnchor) {
-		file := lookup.SyntaxFileAt(reference.Package, reference.Ident.Pos())
+		file := lookup.SyntaxFile(reference.Package, reference.Ident.Pos())
 
 		if file == nil {
 			continue
@@ -120,7 +120,7 @@ func (s *Service) applyPatternThrough(
 			reference.Ident.End(),
 		)
 		node := siteNode(path)
-		entry, j := s.siteEntryFor(
+		entry, j := s.siteEntry(
 			directory,
 			set,
 			contents,

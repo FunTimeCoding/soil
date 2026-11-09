@@ -112,7 +112,7 @@ func TestProtocolAbsentTabLeavesClientUsable(t *testing.T) {
 		lifetime_tester.ProtocolAbsent(t, s.Client),
 	)
 	assert.Integer(t, 0, s.Client.TargetCount())
-	assert.NotNil(t, s.Client.MustTabByHost(constant.FixtureQuietRoute))
+	assert.NotNil(t, s.Client.MustHostTab(constant.FixtureQuietRoute))
 	s.AssertTabAlive(identifier)
 }
 

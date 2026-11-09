@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheClientReadsCollectedPlacements(t *testing.T) {
+func TestClientReadsCollectedPlacements(t *testing.T) {
 	v := service_tester.New(t)
 	v.SeedInventory()
 	collector_tester.AddProcess(v.Process, constant.FixtureService, true)
@@ -38,7 +38,7 @@ func TestTheClientReadsCollectedPlacements(t *testing.T) {
 	assert.Count(t, 2, places)
 }
 
-func TestTheClientFiltersSightings(t *testing.T) {
+func TestClientFiltersSightings(t *testing.T) {
 	v := service_tester.New(t)
 	v.SeedInventory()
 	collector_tester.AddLease(
@@ -67,7 +67,7 @@ func TestTheClientFiltersSightings(t *testing.T) {
 	assert.String(t, "198.51.100.233", unclaimed[0].Address)
 }
 
-func TestTheClientReachesTheDaemon(t *testing.T) {
+func TestClientReachesDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
 		service_tester.New(t),
@@ -76,7 +76,7 @@ func TestTheClientReachesTheDaemon(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
-func TestTheClientRefusesAWrongToken(t *testing.T) {
+func TestClientRefusesWrongToken(t *testing.T) {
 	c := client_tester.New(t, service_tester.New(t), "wrong")
 	assert.Error(t, c.Reachable(t.Context()))
 	_, e := c.ListPlaces(t.Context())

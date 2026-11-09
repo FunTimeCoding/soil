@@ -46,7 +46,7 @@ type RunnerForge interface {
 		x context.Context,
 		all bool,
 	) ([]*runner.Runner, error)
-	RunnersByTag(
+	TagRunners(
 		x context.Context,
 		tag string,
 	) ([]*runner.Runner, error)

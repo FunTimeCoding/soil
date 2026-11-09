@@ -111,7 +111,7 @@ func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 	assert.Count(t, 0, n.Requests())
 }
 
-func TestClientTriggerToNobodyIsAConnectionFailure(t *testing.T) {
+func TestClientTriggerToNobodyIsConnectionFailure(t *testing.T) {
 	c := provision.New(
 		webConstant.Localhost,
 		1,
@@ -142,7 +142,7 @@ func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestClientTriggerOnAStoppedRunnerIsUnavailable(t *testing.T) {
+func TestClientTriggerOnStoppedRunnerIsUnavailable(t *testing.T) {
 	r := memory.New()
 	s := newTriggerServer(
 		t,

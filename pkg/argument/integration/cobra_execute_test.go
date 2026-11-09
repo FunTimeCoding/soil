@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnUnknownCobraFlagPrintsTheCommandUsageAndExitsTwo(t *testing.T) {
+func TestUnknownCobraFlagPrintsCommandUsageAndExitsTwo(t *testing.T) {
 	if arguments := os.Getenv(constant.FixtureArgumentsEnvironment); arguments != "" {
 		argument.CobraExecute(cobraRoot(split.Space(arguments), nil))
 
@@ -25,7 +25,7 @@ func TestAnUnknownCobraFlagPrintsTheCommandUsageAndExitsTwo(t *testing.T) {
 	assert.StringNotContains(t, "panic", r.ErrorString)
 }
 
-func TestACobraCommandFailureStillPanics(t *testing.T) {
+func TestCobraCommandFailureStillPanics(t *testing.T) {
 	if arguments := os.Getenv(constant.FixtureArgumentsEnvironment); arguments != "" {
 		argument.CobraExecute(
 			cobraRoot(split.Space(arguments), errors.New("echo failed")),

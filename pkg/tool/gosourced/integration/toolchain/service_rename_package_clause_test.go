@@ -97,7 +97,7 @@ func TestRenamePackageClauseSameName(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "already named")
 }
 
-func TestRenamePackageClauseReportsATestOnlyPackage(t *testing.T) {
+func TestRenamePackageClauseReportsTestOnlyPackage(t *testing.T) {
 	d := t.TempDir()
 	testutil.WriteModFile(t, d, "example")
 	testutil.WriteFile(

@@ -20,11 +20,17 @@ func Main() {
 		constant.Identity.InventoryPath(),
 		"Inventory file path",
 	)
+	a.String(
+		constant.BackupDirectoryArgument,
+		"",
+		"Directory holding each instance's backups",
+	)
 	a.Parse()
 	o := option.New()
 	o.Read(a)
 	o.Inventory = inventory.Load[instance.Instance](
 		a.GetString(argumentConstant.Inventory),
 	)
+	o.BackupDirectory = a.GetString(constant.BackupDirectoryArgument)
 	Run(o, s)
 }

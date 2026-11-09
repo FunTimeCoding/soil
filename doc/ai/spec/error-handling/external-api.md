@@ -28,7 +28,7 @@ client on the requester (`pkg/web/requester`) reads the upstream's
 message out of its error body through `refusal.Reason`; a library client
 converts the library's error type into `detail_error.Detail` at the
 boundary. The surface answers what arrives through `answer` and
-`answerWith` (`mcp.md`, `rest.md`) and never parses an upstream body
+`answerMessage` (`mcp.md`, `rest.md`) and never parses an upstream body
 itself. Where an upstream answers with an opaque body or an HTML error
 page, its status line is all the message there is.
 

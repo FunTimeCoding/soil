@@ -20,7 +20,7 @@ func TestUpdateToolReachesSessionActivity(t *testing.T) {
 		},
 	)
 	r := a.CheckLive()
-	updates := clientEntriesByKind(r.Entries, constant.QueueSessionUpdate)
+	updates := clientKindEntries(r.Entries, constant.QueueSessionUpdate)
 	assert.True(t, len(updates) > 0)
 	assert.StringContains(t, "second topic", updates[0].Body)
 }
@@ -45,7 +45,7 @@ func TestUpdateMultiple(t *testing.T) {
 		},
 	)
 	r := a.CheckLive()
-	updates := clientEntriesByKind(r.Entries, constant.QueueSessionUpdate)
+	updates := clientKindEntries(r.Entries, constant.QueueSessionUpdate)
 	assert.True(t, len(updates) >= 2)
 }
 

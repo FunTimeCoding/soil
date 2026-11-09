@@ -26,7 +26,7 @@ func (s *Server) ListIndexes(
 	}
 
 	if e != nil {
-		return server.ListIndexes500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.ListIndexes500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	var schema string
@@ -35,7 +35,7 @@ func (s *Server) ListIndexes(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.ListIndexes(x, instance, schema, r.Params.Table)
+	rows, e := s.catalog.ListIndexes(x, instance, schema, r.Params.Table)
 
 	if validation.Is(e) {
 		return server.ListIndexes400JSONResponse(*clientError(e)), nil
@@ -54,7 +54,7 @@ func (s *Server) ListIndexes(
 	}
 
 	if e != nil {
-		return server.ListIndexes500JSONResponse(*s.answerWith(x, e, "")), nil
+		return server.ListIndexes500JSONResponse(*s.answerMessage(x, e, "")), nil
 	}
 
 	return server.ListIndexes200JSONResponse{

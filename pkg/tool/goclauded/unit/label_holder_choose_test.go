@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestHolderKeepsTheLabel(t *testing.T) {
+func TestHolderKeepsLabel(t *testing.T) {
 	plan := label_holder_tester.Choose(
 		label_holder_tester.Active("a", ""),
 		label_holder_tester.Active("b", "watch"),
@@ -18,7 +18,7 @@ func TestHolderKeepsTheLabel(t *testing.T) {
 	assert.Count(t, 0, plan.Unset)
 }
 
-func TestActiveHolderKeepsAgainstAResumedOne(t *testing.T) {
+func TestActiveHolderKeepsAgainstResumedOne(t *testing.T) {
 	plan := label_holder_tester.Choose(
 		label_holder_tester.Idle("resumed", "watch"),
 		label_holder_tester.Active("holder", "watch"),
@@ -38,7 +38,7 @@ func TestIdleHolderIsReplaced(t *testing.T) {
 	assert.String(t, "gone", plan.Unset[0].Identifier)
 }
 
-func TestDuplicatesTrimToTheNewest(t *testing.T) {
+func TestDuplicatesTrimToNewest(t *testing.T) {
 	plan := label_holder_tester.Choose(
 		label_holder_tester.Active("a", "watch"),
 		label_holder_tester.Active("b", "watch"),
@@ -86,7 +86,7 @@ func TestFreshSessionsWaitForTheirTurns(t *testing.T) {
 	assert.String(t, "settled", plan.Adopt)
 }
 
-func TestAHolderIsFoundAmongSeveralValues(t *testing.T) {
+func TestHolderIsFoundAmongSeveralValues(t *testing.T) {
 	plan := label_holder_tester.Choose(
 		label_holder_tester.Active("a", "lead,watch"),
 	)
@@ -94,7 +94,7 @@ func TestAHolderIsFoundAmongSeveralValues(t *testing.T) {
 	assert.String(t, "", plan.Adopt)
 }
 
-func TestAnIdleHolderReleasesOnlyItsOwnValue(t *testing.T) {
+func TestIdleHolderReleasesOnlyItsOwnValue(t *testing.T) {
 	plan := label_holder_tester.Choose(
 		label_holder_tester.Idle("gone", "lead,Watch"),
 	)
@@ -102,7 +102,7 @@ func TestAnIdleHolderReleasesOnlyItsOwnValue(t *testing.T) {
 	assert.String(t, "Watch", plan.Unset[0].Value)
 }
 
-func TestAdoptionTakesASessionHoldingOnlyACompatibleValue(t *testing.T) {
+func TestAdoptionTakesSessionHoldingOnlyCompatibleValue(t *testing.T) {
 	plan := label_holder_tester.ChooseBeside(
 		constant.FixtureCompatible,
 		label_holder_tester.Active("a", "Lead"),
@@ -111,7 +111,7 @@ func TestAdoptionTakesASessionHoldingOnlyACompatibleValue(t *testing.T) {
 	assert.String(t, "a", plan.Adopt)
 }
 
-func TestAdoptionSkipsASessionHoldingAnyOtherValueBesideACompatibleOne(
+func TestAdoptionSkipsSessionHoldingAnyOtherValueBesideCompatibleOne(
 	t *testing.T,
 ) {
 	plan := label_holder_tester.ChooseBeside(
@@ -122,7 +122,7 @@ func TestAdoptionSkipsASessionHoldingAnyOtherValueBesideACompatibleOne(
 	assert.String(t, "b", plan.Adopt)
 }
 
-func TestAdoptionWithNothingCompatibleSkipsASessionHoldingAValue(t *testing.T) {
+func TestAdoptionWithNothingCompatibleSkipsSessionHoldingValue(t *testing.T) {
 	plan := label_holder_tester.Choose(
 		label_holder_tester.Active("a", constant.FixtureCompatible),
 		label_holder_tester.Active("b", ""),

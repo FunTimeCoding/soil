@@ -13,7 +13,7 @@ func (c *Client) SetVirtualMachineCustomFields(
 		return nil, c.Failure
 	}
 
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestApplyPatternRewritesTheSelectorChainBeforeAnAnchor(t *testing.T) {
+func TestApplyPatternRewritesSelectorChainBeforeAnchor(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("selector/src"),

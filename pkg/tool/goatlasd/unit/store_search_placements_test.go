@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func TestSearchPlacementsMatchesPartOfTheName(t *testing.T) {
+func TestSearchPlacementsMatchesPartOfName(t *testing.T) {
 	s := store_tester.NewStore(t)
 	now := time.Now()
 	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab-runner", now)
@@ -21,7 +21,7 @@ func TestSearchPlacementsMatchesPartOfTheName(t *testing.T) {
 	assert.String(t, "gitlab-runner", v[1].Name)
 }
 
-func TestSearchPlacementsWithoutANameCarriesEverything(t *testing.T) {
+func TestSearchPlacementsWithoutNameCarriesEverything(t *testing.T) {
 	s := store_tester.NewStore(t)
 	now := time.Now()
 	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab", now)
@@ -31,7 +31,7 @@ func TestSearchPlacementsWithoutANameCarriesEverything(t *testing.T) {
 	assert.Count(t, 2, v)
 }
 
-func TestSearchPlacementsRefusesAnAbsentName(t *testing.T) {
+func TestSearchPlacementsRefusesAbsentName(t *testing.T) {
 	s := store_tester.NewStore(t)
 	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab", time.Now())
 	v, e := s.SearchPlacements("nowhere")

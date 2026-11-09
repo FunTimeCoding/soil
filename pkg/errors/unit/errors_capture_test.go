@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestACallerThatLeftIsNotCaptured(t *testing.T) {
+func TestCallerThatLeftIsNotCaptured(t *testing.T) {
 	r := memory.New()
 	text, event := classify.Capture(
 		t.Context(),
@@ -23,7 +23,7 @@ func TestACallerThatLeftIsNotCaptured(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAWrappedCallerThatLeftIsNotCaptured(t *testing.T) {
+func TestWrappedCallerThatLeftIsNotCaptured(t *testing.T) {
 	r := memory.New()
 	_, event := classify.Capture(
 		t.Context(),
@@ -35,7 +35,7 @@ func TestAWrappedCallerThatLeftIsNotCaptured(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAFaultIsStillCaptured(t *testing.T) {
+func TestFaultIsStillCaptured(t *testing.T) {
 	r := memory.New()
 	_, event := classify.Capture(t.Context(), r, errors.New("disk full"), "")
 	assert.String(t, "memory-1", event)

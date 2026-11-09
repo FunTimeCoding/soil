@@ -6,14 +6,14 @@ import (
 	"testing"
 )
 
-func TestADocumentAnswersItsBody(t *testing.T) {
+func TestDocumentAnswersItsBody(t *testing.T) {
 	answer, _ := documentAnswer(t, "notes/alfa.md")
 	assert.Integer(t, http.StatusOK, answer.StatusCode())
 	assert.FatalNotNil(t, answer.JSON200)
 	assert.String(t, "Alfa", answer.JSON200.Title)
 }
 
-func TestAMissingDocumentAnswers404WithoutAReport(t *testing.T) {
+func TestMissingDocumentAnswers404WithoutReport(t *testing.T) {
 	answer, r := documentAnswer(t, "notes/bravo.md")
 	assert.Integer(t, http.StatusNotFound, answer.StatusCode())
 	assert.FatalNotNil(t, answer.JSON404)
@@ -21,7 +21,7 @@ func TestAMissingDocumentAnswers404WithoutAReport(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestAReferenceWithoutACollectionAnswers400WithoutAReport(t *testing.T) {
+func TestReferenceWithoutCollectionAnswers400WithoutReport(t *testing.T) {
 	answer, r := documentAnswer(t, "alfa")
 	assert.Integer(t, http.StatusBadRequest, answer.StatusCode())
 	assert.FatalNotNil(t, answer.JSON400)

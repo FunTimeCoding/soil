@@ -9,11 +9,11 @@ import (
 	"testing"
 )
 
-func TestTheDaemonHandsTwoGuardsPerInstanceToTheLifecycle(t *testing.T) {
+func TestDaemonHandsTwoGuardsPerInstanceToLifecycle(t *testing.T) {
 	assert.Count(t, 4, healthyDaemon(t, "alfa", "bravo").Workers())
 }
 
-func TestClosingTheDaemonClosesBothClientsOfEveryInstance(t *testing.T) {
+func TestClosingDaemonClosesBothClientsOfEveryInstance(t *testing.T) {
 	a := mock_client.New()
 	p := prometheusMock.New()
 	d := daemon_tester.New(
@@ -26,7 +26,7 @@ func TestClosingTheDaemonClosesBothClientsOfEveryInstance(t *testing.T) {
 	assert.Integer(t, 1, p.Closed)
 }
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	alertmanagers := map[string]*mock_client.Client{"alfa": mock_client.New()}
 	prometheuses := map[string]*prometheusMock.Client{
 		"alfa": prometheusMock.New(),

@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestInventoryNamesKeepTheFileOrder(t *testing.T) {
+func TestInventoryNamesKeepFileOrder(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"alfa", "bravo"},
@@ -20,7 +20,7 @@ func TestInventoryNamesKeepTheFileOrder(t *testing.T) {
 	)
 }
 
-func TestInventoryFindsAnInstanceByName(t *testing.T) {
+func TestInventoryFindsInstanceByName(t *testing.T) {
 	i, okay := instance_tester.Inventory("alfa", "bravo").Find("bravo")
 	assert.True(t, okay)
 	assert.String(t, "bravo.example", i.Host)
@@ -28,7 +28,7 @@ func TestInventoryFindsAnInstanceByName(t *testing.T) {
 	assert.False(t, missing)
 }
 
-func TestInventoryResolveInstanceDefaultsToTheOnlyOne(t *testing.T) {
+func TestInventoryResolveInstanceDefaultsToOnlyOne(t *testing.T) {
 	name, e := instance_tester.Inventory("alfa").ResolveInstance("")
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", name)
@@ -39,12 +39,12 @@ func TestInventoryResolveInstanceRequiresSelectionWithTwo(t *testing.T) {
 	assert.True(t, not_selected.Is(e))
 }
 
-func TestInventoryResolveInstanceRefusesAnUnknownName(t *testing.T) {
+func TestInventoryResolveInstanceRefusesUnknownName(t *testing.T) {
 	_, e := instance_tester.Inventory("alfa").ResolveInstance("charlie")
 	assert.True(t, not_found.Is(e))
 }
 
-func TestInventoryValidateRefusesABrokenInstance(t *testing.T) {
+func TestInventoryValidateRefusesBrokenInstance(t *testing.T) {
 	broken := instance_tester.New("bravo", "bravo.example")
 	broken.Broken = true
 	e := inventory.New[instance_tester.Instance](
@@ -55,7 +55,7 @@ func TestInventoryValidateRefusesABrokenInstance(t *testing.T) {
 	assert.String(t, "instance bravo is broken", e.Error())
 }
 
-func TestInventoryLoadReadsTheFile(t *testing.T) {
+func TestInventoryLoadReadsFile(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "inventory.yaml")
 	assert.FatalOnError(
 		t,

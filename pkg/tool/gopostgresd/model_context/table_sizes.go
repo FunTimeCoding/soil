@@ -19,10 +19,10 @@ func (s *Server) tableSizes(
 		return s.captureDetail(x, e)
 	}
 
-	v, e := s.service.TableSizes(x, instance, a.Schema)
+	v, e := s.catalog.TableSizes(x, instance, a.Schema)
 
 	if e != nil {
-		return s.answerWith(
+		return s.answerMessage(
 			x,
 			e,
 			fmt.Sprintf(

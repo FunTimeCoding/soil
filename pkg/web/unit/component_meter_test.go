@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestABareMeterIsANativeProgressBar(t *testing.T) {
+func TestBareMeterIsNativeProgressBar(t *testing.T) {
 	assert.String(
 		t,
 		`<progress class="meter-bar" value="12" max="40"></progress>`,
@@ -15,7 +15,7 @@ func TestABareMeterIsANativeProgressBar(t *testing.T) {
 	)
 }
 
-func TestAColouredMeterSetsPicosProgressVariables(t *testing.T) {
+func TestColouredMeterSetsPicosProgressVariables(t *testing.T) {
 	assert.String(
 		t,
 		`<progress class="meter-bar" value="0.6" max="1" style="--pico-progress-color: #5b8def; --pico-progress-background-color: #2b2b3a"></progress>`,
@@ -26,7 +26,7 @@ func TestAColouredMeterSetsPicosProgressVariables(t *testing.T) {
 	)
 }
 
-func TestAMeterCarriesItsSizeAsVariables(t *testing.T) {
+func TestMeterCarriesItsSizeAsVariables(t *testing.T) {
 	assert.String(
 		t,
 		`<progress class="meter-bar" value="1" max="2" style="--meter-width: 6rem; --meter-height: 0.9rem"></progress>`,
@@ -34,7 +34,7 @@ func TestAMeterCarriesItsSizeAsVariables(t *testing.T) {
 	)
 }
 
-func TestALabelledMeterIsARowOfLabelBarAndValue(t *testing.T) {
+func TestLabelledMeterIsRowOfLabelBarAndValue(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="meter"><span class="meter-label">Load</span><progress class="meter-bar" value="0.42" max="1"></progress><span class="meter-value">0.42</span></div>`,
@@ -42,7 +42,7 @@ func TestALabelledMeterIsARowOfLabelBarAndValue(t *testing.T) {
 	)
 }
 
-func TestAGaugeCarriesItsShareColourAndWidthAsVariables(t *testing.T) {
+func TestGaugeCarriesItsShareColourAndWidthAsVariables(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="meter" data-tooltip="alfa: 7/10"><span class="meter-icon">◆</span><div class="meter-gauge" style="--meter-share: 70.0%; --meter-color: #8a6fb0; --meter-width: 4rem"><div class="meter-gauge-fill"></div></div></div>`,
@@ -59,7 +59,7 @@ func TestAGaugeCarriesItsShareColourAndWidthAsVariables(t *testing.T) {
 	)
 }
 
-func TestAGaugePastItsMaximumStopsFull(t *testing.T) {
+func TestGaugePastItsMaximumStopsFull(t *testing.T) {
 	assert.StringContains(
 		t,
 		`--meter-share: 100.0%`,

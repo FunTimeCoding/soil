@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestToolCallsCarryThePermissionDecision(t *testing.T) {
+func TestToolCallsCarryPermissionDecision(t *testing.T) {
 	c := claude_tester.WriteFixture(
 		t,
 		[]string{
@@ -27,7 +27,7 @@ func TestToolCallsCarryThePermissionDecision(t *testing.T) {
 	assert.String(t, "bashMiss:too-complex", calls[0].PermissionReason)
 }
 
-func TestToolCallsFallBackToTheReasonType(t *testing.T) {
+func TestToolCallsFallBackToReasonType(t *testing.T) {
 	c := claude_tester.WriteFixture(
 		t,
 		[]string{
@@ -43,7 +43,7 @@ func TestToolCallsFallBackToTheReasonType(t *testing.T) {
 	assert.String(t, "rule", calls[0].PermissionReason)
 }
 
-func TestToolCallsKeepTheFirstDecisionForACall(t *testing.T) {
+func TestToolCallsKeepFirstDecisionForCall(t *testing.T) {
 	c := claude_tester.WriteFixture(
 		t,
 		[]string{

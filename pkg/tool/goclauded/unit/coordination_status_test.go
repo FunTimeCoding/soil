@@ -66,7 +66,7 @@ func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 	assert.StringContains(t, "Nobody", string(body))
 }
 
-func TestStatusFindsNoMissingTranscriptForASessionWithOne(t *testing.T) {
+func TestStatusFindsNoMissingTranscriptForSessionWithOne(t *testing.T) {
 	s := base.NewWithSessionFile(t, "doomed", "some-slug")
 	s.Store.Advance(constant.CompleteTimeoutWindow + time.Minute)
 	response, e := s.RESTClient(t).GetStatusWithResponse(t.Context())

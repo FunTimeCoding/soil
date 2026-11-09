@@ -8,8 +8,10 @@ import (
 
 func (c *Client) Query(
 	q string,
-	_ time.Time,
+	t time.Time,
 ) (*query_result.Result, error) {
+	c.record(t)
+
 	if c.Failure != nil {
 		return nil, c.Failure
 	}

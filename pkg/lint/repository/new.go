@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/lint/repository/declaration_set"
 	"github.com/funtimecoding/soil/pkg/markup/heading"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
@@ -18,7 +19,7 @@ func New(
 		routes:         map[string][]string{},
 		headings:       map[string][]*heading.Heading{},
 		missing:        map[string]bool{},
-		declarations:   map[string]map[string]bool{},
+		declarations:   map[string]*declaration_set.Set{},
 		siblingIgnored: map[string]func(string) bool{},
 	}
 	result.ignored = git.IgnoreMatcher(result.Root)

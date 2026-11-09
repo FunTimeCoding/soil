@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestTheClientCoversEveryOperation(t *testing.T) {
+func TestClientCoversEveryOperation(t *testing.T) {
 	s, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	methods := reflect.TypeFor[*client.Client]()
@@ -35,7 +35,7 @@ func TestTheClientCoversEveryOperation(t *testing.T) {
 	assert.String(t, "", strings.Join(missing, ", "))
 }
 
-func TestTheClientAndItsMockKeepTheFace(t *testing.T) {
+func TestClientAndItsMockKeepFace(t *testing.T) {
 	c := client.New(webConstant.Localhost, 1, "alfa")
 	m := mock_client.New("bravo")
 	clients := []face.Client{c, m}

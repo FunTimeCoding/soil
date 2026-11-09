@@ -15,10 +15,10 @@ func TestPeekQueueDoesNotConsume(t *testing.T) {
 	s.Send(r2.Callsign, r.Callsign, "hello")
 	peeked, e := s.Message.PeekQueue("session-1", "")
 	assert.FatalOnError(t, e)
-	messages := fixture.EntriesByKind(peeked, constant.QueueMessage)
+	messages := fixture.KindEntries(peeked, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	drained := s.Check("session-1")
-	drainedMessages := fixture.EntriesByKind(
+	drainedMessages := fixture.KindEntries(
 		drained.Entries,
 		constant.QueueMessage,
 	)

@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestATableHeadsItsColumnsAndCarriesItsRows(t *testing.T) {
+func TestTableHeadsItsColumnsAndCarriesItsRows(t *testing.T) {
 	assert.String(
 		t,
 		`<table><thead><tr><th>Alfa</th><th class="numeric">Bravo</th></tr></thead><tbody><tr><td>charlie</td><td class="numeric">1</td></tr></tbody></table>`,
@@ -33,7 +33,7 @@ func TestATableHeadsItsColumnsAndCarriesItsRows(t *testing.T) {
 	)
 }
 
-func TestAnEmptyTableSaysSoInTheSharedLook(t *testing.T) {
+func TestEmptyTableSaysSoInSharedLook(t *testing.T) {
 	assert.String(
 		t,
 		`<p class="absent">Nothing yet.</p>`,
@@ -41,7 +41,7 @@ func TestAnEmptyTableSaysSoInTheSharedLook(t *testing.T) {
 	)
 }
 
-func TestATableWithoutAnEmptyMessageStaysATable(t *testing.T) {
+func TestTableWithoutEmptyMessageStaysTable(t *testing.T) {
 	assert.String(
 		t,
 		`<table><thead><tr><th>Alfa</th></tr></thead><tbody></tbody></table>`,
@@ -49,7 +49,7 @@ func TestATableWithoutAnEmptyMessageStaysATable(t *testing.T) {
 	)
 }
 
-func TestAHeaderlessTableCarriesOnlyItsBody(t *testing.T) {
+func TestHeaderlessTableCarriesOnlyItsBody(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="echo"><tbody><tr><td>alfa</td></tr></tbody></table>`,
@@ -65,7 +65,7 @@ func TestAHeaderlessTableCarriesOnlyItsBody(t *testing.T) {
 	)
 }
 
-func TestAnIdentifiedTableKeepsItsTargetWhenEmpty(t *testing.T) {
+func TestIdentifiedTableKeepsItsTargetWhenEmpty(t *testing.T) {
 	assert.String(
 		t,
 		`<div id="delta"><p class="absent">Nothing yet.</p></div>`,
@@ -76,7 +76,7 @@ func TestAnIdentifiedTableKeepsItsTargetWhenEmpty(t *testing.T) {
 	)
 }
 
-func TestATableCarriesItsClassAndBodyIdentifier(t *testing.T) {
+func TestTableCarriesItsClassAndBodyIdentifier(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="echo"><thead><tr><th>Alfa</th></tr></thead><tbody id="foxtrot"></tbody></table>`,

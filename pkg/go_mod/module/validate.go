@@ -10,7 +10,7 @@ func (m *Module) Validate() {
 		return
 	}
 
-	m.Months = time.MonthsBetween(*m.Release, m.now)
+	m.Months = time.Months(*m.Release, m.now)
 
 	if m.Months >= m.threshold {
 		m.concern = append(m.concern, constant.ReleaseStale)

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestTheClientListsUnresolvedThreads(t *testing.T) {
+func TestClientListsUnresolvedThreads(t *testing.T) {
 	r := client_tester.New(t, unresolvedUpstream)
 	threads, e := r.Client.GetUnresolvedThreads(
 		t.Context(),
@@ -24,7 +24,7 @@ func TestTheClientListsUnresolvedThreads(t *testing.T) {
 	assert.String(t, "lima", threads[0].Replies[0].Identifier)
 }
 
-func TestUnresolvedThreadsOfAnUnknownChannelAreNotFound(t *testing.T) {
+func TestUnresolvedThreadsOfUnknownChannelAreNotFound(t *testing.T) {
 	r := client_tester.New(t, unresolvedUpstream)
 	_, e := r.Client.GetUnresolvedThreads(
 		t.Context(),

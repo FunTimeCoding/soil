@@ -16,7 +16,7 @@ import (
 	"testing"
 )
 
-func TestModelContextQueriesNeedASelectedInstance(t *testing.T) {
+func TestModelContextQueriesNeedSelectedInstance(t *testing.T) {
 	v := model_context_server.New(
 		t,
 		func(g *guard.Mux) {

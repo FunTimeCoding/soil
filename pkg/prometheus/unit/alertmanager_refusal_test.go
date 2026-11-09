@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestABadAlertmanagerFilterIsTheCallersMistake(t *testing.T) {
+func TestBadAlertmanagerFilterIsCallersMistake(t *testing.T) {
 	c := newRefusingAlertmanager(
 		t,
 		http.StatusBadRequest,
@@ -27,13 +27,13 @@ func TestABadAlertmanagerFilterIsTheCallersMistake(t *testing.T) {
 	assert.StringContains(t, "bad matcher format", e.Error())
 }
 
-func TestAnUnknownSilenceIsNotFound(t *testing.T) {
+func TestUnknownSilenceIsNotFound(t *testing.T) {
 	c := newRefusingAlertmanager(t, http.StatusNotFound, `"silence not found"`)
 	e := c.DeleteSilence("8d1f0c4a-0000-4000-8000-000000000000")
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAnAlertmanagerBehindAnUnavailableProxyIsUnavailable(t *testing.T) {
+func TestAlertmanagerBehindUnavailableProxyIsUnavailable(t *testing.T) {
 	c := newRefusingAlertmanager(
 		t,
 		http.StatusServiceUnavailable,
@@ -47,7 +47,7 @@ func TestAnAlertmanagerBehindAnUnavailableProxyIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestAnAlertmanagerFaultKeepsItsText(t *testing.T) {
+func TestAlertmanagerFaultKeepsItsText(t *testing.T) {
 	c := newRefusingAlertmanager(
 		t,
 		http.StatusInternalServerError,

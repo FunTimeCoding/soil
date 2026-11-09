@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestTheDaemonLeavesNothingRunning(t *testing.T) {
+func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o := base.NewOption(t)
 	before := goleak.IgnoreCurrent()
 	daemon.New(o, logger.New(t.Context()), memory.New()).Close()

@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAClientBuiltBeforeTheBrowserConnectsOnFirstNeed(t *testing.T) {
+func TestClientBuiltBeforeBrowserConnectsOnFirstNeed(t *testing.T) {
 	s := base.New(t)
 	s.Stop()
 	c := chromium.New("localhost", s.Port)
@@ -22,7 +22,7 @@ func TestAClientBuiltBeforeTheBrowserConnectsOnFirstNeed(t *testing.T) {
 	assert.FatalOnError(t, f)
 }
 
-func TestAClientComesBackAfterTheBrowserRestarts(t *testing.T) {
+func TestClientComesBackAfterBrowserRestarts(t *testing.T) {
 	s := base.New(t)
 	_, e := s.Client.Targets()
 	assert.FatalOnError(t, e)

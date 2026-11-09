@@ -26,6 +26,24 @@ test files live is `test-placement.md`.
   the drop, and a read that deletes what it filters hides a missing
   cleanup.
 
+## Test names
+
+A test name is chopped, not a sentence: it says what the code does in the
+words that carry the meaning, and drops the articles (a, an, the).
+`TestAHeldConnectionIsUnavailableUntilItServes` is
+`TestHeldConnectionIsUnavailableUntilItServes`;
+`TestAnOpenAIServerThatListsItsModelsIsReachable` is
+`TestOpenAIServerThatListsItsModelsIsReachable`, and its tail goes too -
+`TestOpenAIServerIsReachable` - since the verdict already tells it from
+`TestOpenAIServerThatRefusesIsNotReachable`; a tail stays when another test
+in the package needs it. Two tests of one behaviour at different layers
+carry the layer, not an article: `TestRenderCutsLongMessage` beside
+`TestDeliveryCutsLongMessage`. Prepositions stay when they carry meaning -
+`preposition_name` doesn't read test names. The `test_article` analyzer flags
+an article inside a `Test` function's name - not its last segment, where a
+single capital is a label (`TestDoorA`); the rest of the chopping is the
+writer's.
+
 ## Service First
 
 Behaviour is tested where it lives: the service, called directly. A

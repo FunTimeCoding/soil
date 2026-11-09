@@ -37,7 +37,7 @@ func renameReceiver(
 			)
 		}
 
-		d.Name = p.To
+		d.Name = p.New
 	}
 
 	addPositionConcern(
@@ -48,8 +48,8 @@ func renameReceiver(
 		true,
 		"%s: %s → %s, %d uses",
 		p.Label,
-		p.From,
-		p.To,
+		p.Old,
+		p.New,
 		len(p.Idents)-1,
 	)
 

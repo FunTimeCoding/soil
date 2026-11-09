@@ -9,38 +9,38 @@ import (
 	"testing"
 )
 
-func TestABookmarkFileIsReadFromItsProfile(t *testing.T) {
+func TestBookmarkFileIsReadFromItsProfile(t *testing.T) {
 	braveSettings(t, constant.FixtureSignedIn, constant.FixtureBookmarkBar)
 	b, e := brave.Bookmark(constant.DefaultProfile)
 	assert.FatalOnError(t, e)
 	assert.String(t, "https://example.org/kid", b.Root.Bar.Children[0].Locator)
 }
 
-func TestMissingSettingsAreAnError(t *testing.T) {
+func TestMissingSettingsAreError(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	_, e := brave.Bookmark(constant.DefaultProfile)
 	assert.NotNil(t, e)
 }
 
-func TestAnUnknownProfileIsNotFound(t *testing.T) {
+func TestUnknownProfileIsNotFound(t *testing.T) {
 	braveSettings(t, constant.FixtureSignedIn, constant.FixtureBookmarkBar)
-	_, e := brave.ProfileByName("Profile 9")
+	_, e := brave.Profile("Profile 9")
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAMissingBookmarkFileIsAnError(t *testing.T) {
+func TestMissingBookmarkFileIsError(t *testing.T) {
 	braveSettings(t, constant.FixtureSignedIn, "")
 	_, e := brave.Bookmark(constant.DefaultProfile)
 	assert.NotNil(t, e)
 }
 
-func TestABrokenBookmarkFileIsAnError(t *testing.T) {
+func TestBrokenBookmarkFileIsError(t *testing.T) {
 	braveSettings(t, constant.FixtureSignedIn, "{roots")
 	_, e := brave.Bookmark(constant.DefaultProfile)
 	assert.NotNil(t, e)
 }
 
-func TestUndecodableAccountsAreAnError(t *testing.T) {
+func TestUndecodableAccountsAreError(t *testing.T) {
 	braveSettings(
 		t,
 		constant.FixtureBrokenAccounts,

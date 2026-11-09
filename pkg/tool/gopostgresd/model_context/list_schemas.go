@@ -19,10 +19,10 @@ func (s *Server) listSchemas(
 		return s.captureDetail(x, e)
 	}
 
-	v, e := s.service.ListSchemas(x, instance)
+	v, e := s.catalog.ListSchemas(x, instance)
 
 	if e != nil {
-		return s.answerWith(
+		return s.answerMessage(
 			x,
 			e,
 			fmt.Sprintf("database error on %s: schemas not listed", instance),

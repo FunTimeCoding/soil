@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAShortOutageStaysOutOfSentry(t *testing.T) {
+func TestShortOutageStaysOutOfSentry(t *testing.T) {
 	c := fake_clock.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
@@ -24,7 +24,7 @@ func TestAShortOutageStaysOutOfSentry(t *testing.T) {
 	assert.Count(t, 0, m.Events())
 }
 
-func TestALastingOutageIsReportedOncePerEpisode(t *testing.T) {
+func TestLastingOutageIsReportedOncePerEpisode(t *testing.T) {
 	c := fake_clock.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
@@ -41,7 +41,7 @@ func TestALastingOutageIsReportedOncePerEpisode(t *testing.T) {
 	assert.Count(t, 2, m.Events())
 }
 
-func TestAnOutageTheCallerNamesLastsLikeAnyOther(t *testing.T) {
+func TestOutageCallerNamesLastsLikeAnyOther(t *testing.T) {
 	c := fake_clock.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
@@ -66,7 +66,7 @@ func TestAnOutageTheCallerNamesLastsLikeAnyOther(t *testing.T) {
 	)
 }
 
-func TestALastingOutageReportsTheTransportFailureWithItsEpisode(t *testing.T) {
+func TestLastingOutageReportsTransportFailureWithItsEpisode(t *testing.T) {
 	c := fake_clock.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)

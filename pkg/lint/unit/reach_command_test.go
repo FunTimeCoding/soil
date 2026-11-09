@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestReachCommandTakesBothSidesOfAMove(t *testing.T) {
+func TestReachCommandTakesBothSidesOfMove(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"/alfa/bravo.go", "/alfa/charlie/bravo.go"},
@@ -14,7 +14,7 @@ func TestReachCommandTakesBothSidesOfAMove(t *testing.T) {
 	)
 }
 
-func TestReachCommandTakesOnlyTheCopyDestination(t *testing.T) {
+func TestReachCommandTakesOnlyCopyDestination(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"/alfa/charlie.go"},
@@ -22,7 +22,7 @@ func TestReachCommandTakesOnlyTheCopyDestination(t *testing.T) {
 	)
 }
 
-func TestReachCommandFollowsTheDirectoryChange(t *testing.T) {
+func TestReachCommandFollowsDirectoryChange(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"/alfa/bravo/charlie.go"},
@@ -30,7 +30,7 @@ func TestReachCommandFollowsTheDirectoryChange(t *testing.T) {
 	)
 }
 
-func TestReachCommandTakesInPlaceSedOperandsAfterTheScript(t *testing.T) {
+func TestReachCommandTakesInPlaceSedOperandsAfterScript(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"/alfa/bravo.go", "/alfa/charlie.md"},
@@ -41,7 +41,7 @@ func TestReachCommandTakesInPlaceSedOperandsAfterTheScript(t *testing.T) {
 	)
 }
 
-func TestReachCommandLeavesAReadingSedAlone(t *testing.T) {
+func TestReachCommandLeavesReadingSedAlone(t *testing.T) {
 	assert.Count(
 		t,
 		0,
@@ -49,7 +49,7 @@ func TestReachCommandLeavesAReadingSedAlone(t *testing.T) {
 	)
 }
 
-func TestReachCommandTakesALiteralRedirectButNotTheNullDevice(t *testing.T) {
+func TestReachCommandTakesLiteralRedirectButNotNullDevice(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"/alfa/bravo.md"},
@@ -60,13 +60,13 @@ func TestReachCommandTakesALiteralRedirectButNotTheNullDevice(t *testing.T) {
 	)
 }
 
-func TestReachCommandLeavesAVariableOperandUnresolved(t *testing.T) {
+func TestReachCommandLeavesVariableOperandUnresolved(t *testing.T) {
 	w := reach.ResolveCommand("/alfa", "for f in *.go; do rm $f; done")
 	assert.Count(t, 0, w.Paths)
 	assert.True(t, w.Unresolved)
 }
 
-func TestReachCommandNamesAFixerRunButNotItsDiff(t *testing.T) {
+func TestReachCommandNamesFixerRunButNotItsDiff(t *testing.T) {
 	assert.True(t, reach.ResolveCommand("/alfa", "gofix ./...").Fixer)
 	assert.False(t, reach.ResolveCommand("/alfa", "gofix --diff ./...").Fixer)
 }

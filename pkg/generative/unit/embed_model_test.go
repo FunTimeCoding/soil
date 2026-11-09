@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestAnOpenAIClientSendsItsModel(t *testing.T) {
+func TestOpenAIClientSendsItsModel(t *testing.T) {
 	var model string
 	s := httptest.NewServer(
 		http.HandlerFunc(
@@ -42,7 +42,7 @@ func TestAnOpenAIClientSendsItsModel(t *testing.T) {
 	assert.String(t, "nomic-embed-text-v1.5.f16", model)
 }
 
-func TestAnOllamaClientSendsItsModel(t *testing.T) {
+func TestOllamaClientSendsItsModel(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"embeddings":[[0.5]]}`)
 	host, port := upstream_tester.HostPort(t, s.URL)
 	c := ollama.New(
@@ -56,7 +56,7 @@ func TestAnOllamaClientSendsItsModel(t *testing.T) {
 	assert.String(t, "nomic-embed-text:v1.5", sentModel(last()))
 }
 
-func TestAnOllamaClientWithoutAModelSendsTheDefault(t *testing.T) {
+func TestOllamaClientWithoutModelSendsDefault(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"embeddings":[[0.5]]}`)
 	host, port := upstream_tester.HostPort(t, s.URL)
 	c := ollama.New(ollama.WithHost(host), ollama.WithPort(port))
@@ -66,7 +66,7 @@ func TestAnOllamaClientWithoutAModelSendsTheDefault(t *testing.T) {
 	assert.String(t, "nomic-embed-text", sentModel(last()))
 }
 
-func TestTheEmbedModelDefaultsPerScheme(t *testing.T) {
+func TestEmbedModelDefaultsPerScheme(t *testing.T) {
 	t.Setenv(constant.EmbedModelEnvironment, "")
 	t.Setenv(constant.EmbedTargetEnvironment, "ollama://alfa:11434")
 	assert.String(t, "nomic-embed-text", embed.ModelEnvironment())
@@ -78,13 +78,13 @@ func TestTheEmbedModelDefaultsPerScheme(t *testing.T) {
 	)
 }
 
-func TestTheEmbedModelEnvironmentOverridesTheDefault(t *testing.T) {
+func TestEmbedModelEnvironmentOverridesDefault(t *testing.T) {
 	t.Setenv(constant.EmbedTargetEnvironment, "openai://alfa:1234")
 	t.Setenv(constant.EmbedModelEnvironment, "nomic-embed-text-v1.5.f16")
 	assert.String(t, "nomic-embed-text-v1.5.f16", embed.ModelEnvironment())
 }
 
-func TestAnUnknownEmbedSchemeHasNoDefaultModel(t *testing.T) {
+func TestUnknownEmbedSchemeHasNoDefaultModel(t *testing.T) {
 	assert.PanicContains(
 		t,
 		"unknown embed target scheme: bravo",

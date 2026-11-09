@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestTheMockAnswersTheStatusItWasGiven(t *testing.T) {
+func TestMockAnswersStatusItWasGiven(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.SetStatus(&client.Status{Instance: "alfa", Power: "on"})
@@ -27,7 +27,7 @@ func TestTheMockAnswersTheStatusItWasGiven(t *testing.T) {
 	assert.True(t, not_found.Is(f))
 }
 
-func TestTheMockRecordsPowerRequestsUntilTold(t *testing.T) {
+func TestMockRecordsPowerRequestsUntilTold(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.SetStatus(&client.Status{Instance: "alfa", Power: "on"})

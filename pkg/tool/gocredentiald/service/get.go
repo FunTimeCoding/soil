@@ -12,7 +12,7 @@ func (s *Service) Get(identifier string) *entry_detail.Detail {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	s.refresh()
-	entry, _ := s.client.EntryByIdentifier(identifier)
+	entry, _ := s.client.Entry(identifier)
 
 	if entry == nil {
 		return nil

@@ -20,7 +20,7 @@ func TestComplete(t *testing.T) {
 	)
 	assert.Count(t, 1, events)
 	assert.String(t, "auth bug resolved", events[0].Metadata[constant.Message])
-	completions := s.Store.CompletionsBySession("session-1")
+	completions := s.Store.SessionCompletions("session-1")
 	assert.Count(t, 1, completions)
 	assert.String(t, "auth bug resolved", completions[0].Summary)
 }

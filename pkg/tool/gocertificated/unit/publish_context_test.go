@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAPublishWhoseCallerLeftCommitsNothing(t *testing.T) {
+func TestPublishWhoseCallerLeftCommitsNothing(t *testing.T) {
 	o := publish_tester.New(t)
 	o.CreateRoot()
 	x, cancel := context.WithCancel(t.Context())

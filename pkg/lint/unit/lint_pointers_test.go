@@ -339,10 +339,17 @@ func TestPointersBasedSeveralInteriorDead(t *testing.T) {
 			),
 		),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 4, line),
+		"",
+		l,
+	)
 }
 
-func TestPointersUnprefixedSymbolIsAPath(t *testing.T) {
+func TestPointersUnprefixedSymbolIsPath(t *testing.T) {
 	line := "Wraps `pkg/provision/salt.Client` today."
 	l := pointer_tester.Checker("pkg/provision/salt")(
 		stringsConstant.UpperAlfa,
@@ -449,7 +456,14 @@ func TestPointersBasedInteriorDead(t *testing.T) {
 			fmt.Sprintf("---\nbase: pkg/provision\n---\n%s\n", line),
 		),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 4, line),
+		"",
+		l,
+	)
 }
 
 func TestPointersBasedForeignNamespaceIgnored(t *testing.T) {
@@ -503,7 +517,14 @@ func TestPointersBasedSiblingInteriorDead(t *testing.T) {
 			),
 		),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 4, line),
+		"",
+		l,
+	)
 }
 
 func TestPointersCommandResolves(t *testing.T) {
@@ -579,7 +600,14 @@ func TestPointersRouteWithoutSpecificationDead(t *testing.T) {
 			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 4, line),
+		"",
+		l,
+	)
 }
 
 func TestPointersRouteLive(t *testing.T) {
@@ -608,7 +636,14 @@ func TestPointersRouteDead(t *testing.T) {
 			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 4, line),
+		"",
+		l,
+	)
 }
 
 func TestPointersRouteLiteralLive(t *testing.T) {
@@ -644,7 +679,14 @@ func TestPointersRouteLiteralDead(t *testing.T) {
 			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 4, line),
+		"",
+		l,
+	)
 }
 
 func TestPointersRouteLiteralInSharedTree(t *testing.T) {
@@ -723,7 +765,14 @@ func TestPointersBaseDead(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("---\n%s\n---\nProse.\n", line)),
 	)
-	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 2, line), "", l)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadConcerns("Alfa", 2, line),
+		"",
+		l,
+	)
 }
 
 func TestPointersExpansionExisting(t *testing.T) {
@@ -934,7 +983,7 @@ func TestPointersCommandDeclaredScalar(t *testing.T) {
 		t,
 		"Alfa",
 		true,
-		pointer_tester.DeadAt(
+		pointer_tester.DeadConcerns(
 			"Alfa",
 			4,
 			"The harness handles `/compact` itself and `/ghost` stays dead.",

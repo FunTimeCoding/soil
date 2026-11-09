@@ -6,5 +6,5 @@ import (
 )
 
 func (s *Server) captureDetail(x context.Context, e error) (*mcp.CallToolResult, error) {
-	return s.answerWith(x, e, "")
+	return s.answerMessage(x, e, "")
 }

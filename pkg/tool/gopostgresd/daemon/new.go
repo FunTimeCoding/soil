@@ -7,7 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/backup"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/catalog"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service/query"
+	backupStore "github.com/funtimecoding/soil/pkg/tool/gopostgresd/store/backup"
 )
 
 func New(
@@ -26,6 +29,14 @@ func New(
 		inventory: o.Inventory,
 		pool:      p,
 		selection: selection.New(),
-		service:   service.New(p),
+		catalog:   catalog.New(p),
+		query:     query.New(p),
+		backup: backup.New(
+			o.Inventory,
+			p,
+			backupStore.New(o.BackupDirectory),
+			o.Dump,
+			o.Clock,
+		),
 	}
 }

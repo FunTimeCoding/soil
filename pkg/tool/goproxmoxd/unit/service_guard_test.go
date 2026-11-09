@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAnUnreachableHypervisorFailsFastWithoutBeingAskedAgain(t *testing.T) {
+func TestUnreachableHypervisorFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.AddNode("test")
@@ -32,7 +32,7 @@ func TestAnUnreachableHypervisorFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	assert.StringContains(t, "proxmox:test unreachable since", f.Error())
 }
 
-func TestAMissingGuestLeavesTheGuardClosed(t *testing.T) {
+func TestMissingGuestLeavesGuardClosed(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.AddNode("test")

@@ -7,19 +7,19 @@ import (
 	"testing"
 )
 
-func TestAMountedClientSendsABareSessionToSignIn(t *testing.T) {
+func TestMountedClientSendsBareSessionToSignIn(t *testing.T) {
 	w := served(newMountedMux(t), "/target")
 	assert.Integer(t, http.StatusFound, w.Code)
 	assert.String(t, "/sign-in", w.Header().Get("Location"))
 }
 
-func TestAMountedClientAnswersTheCallback(t *testing.T) {
+func TestMountedClientAnswersCallback(t *testing.T) {
 	w := served(newMountedMux(t), constant.CallbackPath)
 	assert.Integer(t, http.StatusBadRequest, w.Code)
 	assert.StringContains(t, "missing flow state", w.Body.String())
 }
 
-func TestAMountedClientSignsOut(t *testing.T) {
+func TestMountedClientSignsOut(t *testing.T) {
 	w := served(newMountedMux(t), constant.SignOutPath)
 	assert.Integer(t, http.StatusFound, w.Code)
 	assert.String(t, "/", w.Header().Get("Location"))

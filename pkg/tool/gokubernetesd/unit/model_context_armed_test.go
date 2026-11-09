@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestADisarmedDaemonRegistersNoWriteTool(t *testing.T) {
+func TestDisarmedDaemonRegistersNoWriteTool(t *testing.T) {
 	c, _ := service_tester.New(t).Mounted(false)
 	names := toolNames(c)
 	assert.Contains(t, []string{"get"}, names)
@@ -17,7 +17,7 @@ func TestADisarmedDaemonRegistersNoWriteTool(t *testing.T) {
 	}
 }
 
-func TestAnArmedDaemonRegistersTheWriteTools(t *testing.T) {
+func TestArmedDaemonRegistersWriteTools(t *testing.T) {
 	c, _ := service_tester.New(t).Mounted(true)
 	assert.Contains(t, writeTools(), toolNames(c))
 }

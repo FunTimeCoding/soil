@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheSentryClientAndItsMockShareTheFace(t *testing.T) {
+func TestSentryClientAndItsMockShareFace(t *testing.T) {
 	c := sentry.New("sentry.example", "alfa-token")
 	defer c.Close()
 	m := mock_client.New()

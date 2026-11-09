@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -15,9 +16,7 @@ func (s *Server) getTopAlerts(
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	n := r.GetInt(constant.N, 25)
-	now := time.Now()
-	start := now.Add(-7 * 24 * time.Hour)
-	end := now
+	w := window.Whole()
 
 	if v := r.GetString(constant.Start, ""); v != "" {
 		t, e := time.Parse(time.RFC3339, v)
@@ -26,7 +25,7 @@ func (s *Server) getTopAlerts(
 			return response.Fail("invalid start format: %v", e)
 		}
 
-		start = t
+		w.WithStart(t)
 	}
 
 	if v := r.GetString(constant.End, ""); v != "" {
@@ -36,10 +35,10 @@ func (s *Server) getTopAlerts(
 			return response.Fail("invalid end format: %v", e)
 		}
 
-		end = t
+		w.WithEnd(t)
 	}
 
-	records, f := s.service.TopAlerts(n, start, end)
+	records, f := s.service.TopAlerts(n, w)
 
 	if f != nil {
 		return s.answer(x, f)

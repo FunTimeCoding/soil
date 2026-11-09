@@ -7,7 +7,7 @@ func (s *Service) CreateImpression(
 	source string,
 	capturedAt string,
 ) (int64, error) {
-	at := time.Now().UTC()
+	at := s.clock().UTC()
 
 	if capturedAt != "" {
 		parsed, e := time.Parse(time.RFC3339, capturedAt)

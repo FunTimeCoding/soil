@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheAptlyClientAndItsMockKeepTheFace(t *testing.T) {
+func TestAptlyClientAndItsMockKeepFace(t *testing.T) {
 	m := mock_client.New()
 	clients := []face.AptlyClient{
 		aptly.New("aptly.example", 8080, true, "alfa", "bravo"),

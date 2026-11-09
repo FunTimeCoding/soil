@@ -11,7 +11,7 @@ func (s *Summaries) disposesTransferField(
 	c *ast.CallExpr,
 	t resource_transfer.Transfer,
 ) bool {
-	f := calleeOf(p, c)
+	f := callee(p, c)
 
 	if f == nil {
 		return false

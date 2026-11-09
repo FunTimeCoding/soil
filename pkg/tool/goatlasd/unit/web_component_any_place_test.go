@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnyPlaceFindsTheClaimedHost(t *testing.T) {
+func TestAnyPlaceFindsClaimedHost(t *testing.T) {
 	assert.True(
 		t,
 		component.AnyPlace(
@@ -34,7 +34,7 @@ func TestAnyPlaceFindsTheClaimedHost(t *testing.T) {
 	)
 }
 
-func TestAnyPlaceRefusesAnUnclaimedList(t *testing.T) {
+func TestAnyPlaceRefusesUnclaimedList(t *testing.T) {
 	assert.False(
 		t,
 		component.AnyPlace(

@@ -12,8 +12,10 @@ func (s *Service) LabelValues(
 	instance string,
 	label string,
 	matches []string,
-	since time.Time,
+	span time.Duration,
 ) (*label_result.Result, error) {
+	since := s.spanStart(span)
+
 	return guarded(
 		s,
 		x,

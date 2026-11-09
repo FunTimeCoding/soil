@@ -33,7 +33,7 @@ func TestAlert(t *testing.T) {
 			Summary:           "none",
 			Message:           "none",
 			Prometheus:        "none",
-			Start:             new(soil.StartOfTime),
+			Start:             new(soil.Epoch),
 			Link:              "https://Bravo/#/alerts?filter=%7Balertname%3D%22none%22%7D",
 		},
 		actual,

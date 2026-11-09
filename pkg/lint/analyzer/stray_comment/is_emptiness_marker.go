@@ -11,7 +11,7 @@ func isEmptinessMarker(
 	}
 
 	for _, r := range regions {
-		if c.Pos() > r.From && c.End() < r.To {
+		if c.Pos() > r.Start && c.End() < r.End {
 			return true
 		}
 	}

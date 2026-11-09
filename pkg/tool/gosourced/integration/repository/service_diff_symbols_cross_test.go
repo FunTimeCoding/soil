@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestDiffSymbolsFollowsAMoveIntoARequiredModule(t *testing.T) {
+func TestDiffSymbolsFollowsMoveIntoRequiredModule(t *testing.T) {
 	v := crossService(t)
 	r, e := v.Diff.DiffSymbols("user", "HEAD~1", "HEAD")
 	assert.FatalOnError(t, e)

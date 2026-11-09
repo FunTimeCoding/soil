@@ -13,7 +13,7 @@ func (s *Service) Update(
 		return e
 	}
 
-	entry, _ := s.client.EntryByIdentifier(identifier)
+	entry, _ := s.client.Entry(identifier)
 
 	if entry == nil {
 		return not_found.New("entry", identifier)

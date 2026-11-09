@@ -8,7 +8,7 @@ import (
 
 func logLists(s *allianceLog) {
 	for _, e := range s.seenDays {
-		labels := GuildsOfMember(s.guildReport, e.Name)
+		labels := MemberGuilds(s.guildReport, e.Name)
 
 		if len(labels) == 0 {
 			labels = append(labels, "no-guild")
@@ -27,7 +27,7 @@ func logLists(s *allianceLog) {
 	}
 
 	for _, e := range s.neverSeenDays {
-		labels := GuildsOfMember(s.guildReport, e)
+		labels := MemberGuilds(s.guildReport, e)
 
 		if len(labels) == 0 {
 			labels = append(labels, "no-guild")

@@ -1297,6 +1297,9 @@ components:
           - paced
         pace_minutes:
           type: integer
+          minimum: 1
+          maximum: 60
+          description: Minutes between wakes, for paced mode - a whole number from 1 to 60.
     CruiseResponse:
       type: object
       required:

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestASealedStoreIsUnavailable(t *testing.T) {
+func TestSealedStoreIsUnavailable(t *testing.T) {
 	s, _ := web.New(
 		t,
 		http.StatusServiceUnavailable,
@@ -23,7 +23,7 @@ func TestASealedStoreIsUnavailable(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
-func TestARefusedPolicyIsCaptured(t *testing.T) {
+func TestRefusedPolicyIsCaptured(t *testing.T) {
 	s, _ := web.New(t, http.StatusForbidden, `{"errors":["permission denied"]}`)
 	c := openbao.New(web.Locator(t, s.URL))
 	defer c.Close()
@@ -31,7 +31,7 @@ func TestARefusedPolicyIsCaptured(t *testing.T) {
 	assert.True(t, classify.Reportable(e))
 }
 
-func TestASealedStoreFailsTheProbe(t *testing.T) {
+func TestSealedStoreFailsProbe(t *testing.T) {
 	s, _ := web.New(
 		t,
 		http.StatusOK,
@@ -42,7 +42,7 @@ func TestASealedStoreFailsTheProbe(t *testing.T) {
 	assert.True(t, unavailable.Is(c.Reachable(t.Context())))
 }
 
-func TestAnUninitializedStoreFailsTheProbe(t *testing.T) {
+func TestUninitializedStoreFailsProbe(t *testing.T) {
 	s, _ := web.New(
 		t,
 		http.StatusOK,
@@ -53,7 +53,7 @@ func TestAnUninitializedStoreFailsTheProbe(t *testing.T) {
 	assert.True(t, unavailable.Is(c.Reachable(t.Context())))
 }
 
-func TestADeadLoginFailsTheProbe(t *testing.T) {
+func TestDeadLoginFailsProbe(t *testing.T) {
 	assert.NotNil(
 		t,
 		client(t, upstream_tester.New(t), "bravo-jwt").Reachable(t.Context()),

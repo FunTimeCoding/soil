@@ -11,7 +11,7 @@ func (c *Client) SetVirtualMachinePrimaryAddress(
 	name string,
 	address string,
 ) (*virtual_machine.Machine, error) {
-	m, e := c.VirtualMachineByName(name)
+	m, e := c.VirtualMachine(name)
 
 	if e != nil {
 		return nil, e

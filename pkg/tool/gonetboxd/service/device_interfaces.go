@@ -6,7 +6,7 @@ func (s *Service) DeviceInterfaces(device string) ([]*network.Interface, error) 
 	return guarded(
 		s.guard,
 		func() ([]*network.Interface, error) {
-			d, e := s.client.DeviceByName(device)
+			d, e := s.client.Device(device)
 
 			if e != nil {
 				return nil, e

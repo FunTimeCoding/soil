@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/service"
 	"testing"
+	"time"
 )
 
 func NewService(
@@ -15,5 +16,12 @@ func NewService(
 ) *service.Service {
 	t.Helper()
 
-	return NewServiceWith(t, path, a, constant.Retention, notifier.New())
+	return NewServiceWith(
+		t,
+		path,
+		a,
+		constant.Retention,
+		time.Now,
+		notifier.New(),
+	)
 }

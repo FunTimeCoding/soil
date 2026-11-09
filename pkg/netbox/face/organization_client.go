@@ -31,38 +31,38 @@ type OrganizationClient interface {
 	CreatePlatform(name string) (*platform.Platform, error)
 	CreateSite(name string) (*site.Site, error)
 	CreateTenant(name string) (*tenant.Tenant, error)
-	DeviceRoleByName(n string) (*device_role.Role, error)
+	DeviceRole(n string) (*device_role.Role, error)
 	DeviceRoles() ([]*device_role.Role, error)
-	DeviceTypeByName(n string) (*device_type.Type, error)
+	DeviceType(n string) (*device_type.Type, error)
 	DeviceTypes() ([]*device_type.Type, error)
 	Locations() ([]*location.Location, error)
-	ManufacturerByName(n string) (*manufacturer.Manufacturer, error)
+	Manufacturer(n string) (*manufacturer.Manufacturer, error)
 	Manufacturers() ([]*manufacturer.Manufacturer, error)
 	Platforms() ([]*platform.Platform, error)
-	SiteByName(n string) (*site.Site, error)
+	Site(n string) (*site.Site, error)
 	Sites() ([]*site.Site, error)
-	TenantByName(n string) (*tenant.Tenant, error)
+	Tenant(n string) (*tenant.Tenant, error)
 	Tenants() ([]*tenant.Tenant, error)
 	ContactGroups() ([]*contact_group.Group, error)
 	ContactRoles() ([]*contact_role.Role, error)
 	Contacts() ([]*contact.Contact, error)
-	LocationByName(n string) (*location.Location, error)
+	Location(n string) (*location.Location, error)
 	MustContactGroups() []*contact_group.Group
 	MustContactRoles() []*contact_role.Role
 	MustContacts() []*contact.Contact
-	MustDeviceRoleByName(n string) *device_role.Role
+	MustDeviceRole(n string) *device_role.Role
 	MustDeviceRoles() []*device_role.Role
-	MustDeviceTypeByName(n string) *device_type.Type
+	MustDeviceType(n string) *device_type.Type
 	MustDeviceTypes() []*device_type.Type
 	MustLocations() []*location.Location
 	MustManufacturers() []*manufacturer.Manufacturer
 	MustPlatforms() []*platform.Platform
-	MustSiteByName(n string) *site.Site
+	MustSite(n string) *site.Site
 	MustSites() []*site.Site
-	MustTenantByName(n string) *tenant.Tenant
+	MustTenant(n string) *tenant.Tenant
 	MustTenantGroups() []*tenant_group.Group
 	MustTenants() []*tenant.Tenant
-	PlatformByName(n string) (*platform.Platform, error)
+	Platform(n string) (*platform.Platform, error)
 	SitesByMatch(m string) ([]*site.Site, error)
 	SitesByName(n string) ([]*site.Site, error)
 	TenantGroups() ([]*tenant_group.Group, error)

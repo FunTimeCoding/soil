@@ -19,7 +19,7 @@ func TestMapForLabel(t *testing.T) {
 				},
 			},
 		},
-		generic.MapForLabel(
+		generic.LabelMap(
 			[]*generic.Result{
 				{
 					Type:   constant.Scalar,

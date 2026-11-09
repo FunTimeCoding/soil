@@ -3,13 +3,11 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/web/authority_page"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/web/dashboard_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
-	"time"
 )
 
 func (s *Server) dashboard(
@@ -20,12 +18,9 @@ func (s *Server) dashboard(
 	errors.PanicOnError(e)
 	pending, f := s.service.Pending()
 	errors.PanicOnError(f)
-	horizon := filter.New()
-	horizon.Before = new(time.Now().AddDate(0, 0, constant.ExpiryHorizonDay))
-	horizon.Revoked = new(false)
-	expiring, g := s.service.Certificates(horizon)
+	expiring, g := s.service.Expiring()
 	errors.PanicOnError(g)
-	s.view.RenderPageWithSummary(
+	s.view.RenderSummaryPage(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,

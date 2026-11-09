@@ -10,7 +10,7 @@ func (c *Client) SetChoiceSetChoices(
 		return nil, c.Failure
 	}
 
-	v, e := c.ChoiceSetByName(name)
+	v, e := c.ChoiceSet(name)
 
 	if e != nil {
 		return nil, e

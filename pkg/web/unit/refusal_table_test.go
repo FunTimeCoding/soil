@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestWithoutDropsTheRowAndLeavesTheTableItCameFrom(t *testing.T) {
+func TestWithoutDropsRowAndLeavesTableItCameFrom(t *testing.T) {
 	table := refusal.NewTable()
 	assert.Nil(
 		t,
@@ -21,7 +21,7 @@ func TestWithoutDropsTheRowAndLeavesTheTableItCameFrom(t *testing.T) {
 	assert.String(t, "unavailable", table.Class(http.StatusServiceUnavailable))
 }
 
-func TestEveryRowNamesAClassThatClassedKnows(t *testing.T) {
+func TestEveryRowNamesClassThatClassedKnows(t *testing.T) {
 	known := []string{
 		errorsConstant.ValidationClass,
 		errorsConstant.NotFoundClass,

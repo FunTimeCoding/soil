@@ -36,7 +36,7 @@ func (s *Server) GetChannelHistory(
 	truncated := 0
 
 	if a.Since != "" {
-		since, f := parseSince(a.Since)
+		since, f := parseMoment(a.Since)
 
 		if f != nil {
 			return response.Fail("invalid since format: %v", f)

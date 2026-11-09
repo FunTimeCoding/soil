@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestALoginWhileTheDirectoryIsAwaySaysSo(t *testing.T) {
+func TestLoginWhileDirectoryIsAwaySaysSo(t *testing.T) {
 	d := mock_client.New("")
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	o := tester.NewWith(t, d)
@@ -28,7 +28,7 @@ func TestALoginWhileTheDirectoryIsAwaySaysSo(t *testing.T) {
 	assert.StringNotContains(t, "rejected those credentials", body)
 }
 
-func TestAWrongDirectoryPasswordIsStillRejected(t *testing.T) {
+func TestWrongDirectoryPasswordIsStillRejected(t *testing.T) {
 	d := mock_client.New("")
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	o := tester.NewWith(t, d)
@@ -45,7 +45,7 @@ func TestAWrongDirectoryPasswordIsStillRejected(t *testing.T) {
 	assert.StringContains(t, "rejected those credentials", body)
 }
 
-func TestALocalLoginWorksWhileTheDirectoryIsAway(t *testing.T) {
+func TestLocalLoginWorksWhileDirectoryIsAway(t *testing.T) {
 	d := mock_client.New("")
 	d.Failure = directoryDown()
 	o := tester.NewWith(t, d)

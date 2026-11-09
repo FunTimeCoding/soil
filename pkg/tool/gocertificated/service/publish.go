@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
-	"time"
 )
 
 func (s *Service) Publish(x context.Context) (string, []*change.Change, error) {
@@ -44,5 +43,5 @@ func (s *Service) Publish(x context.Context) (string, []*change.Change, error) {
 		serial = append(serial, r.Serial)
 	}
 
-	return commit, change, s.store.MarkPublished(serial, time.Now())
+	return commit, change, s.store.MarkPublished(serial, s.clock())
 }

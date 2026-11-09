@@ -18,7 +18,7 @@ func (s *Server) PostAnnounce(
 		files = join.NewLine(*r.Body.Files)
 	}
 
-	identifier, e := s.roster.ResolveByCallsign(r.Body.Callsign)
+	identifier, e := s.roster.ResolveCallsign(r.Body.Callsign)
 
 	if e != nil {
 		return server.PostAnnounce500JSONResponse(

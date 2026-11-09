@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheModelContextAnswersColumnsAndRows(t *testing.T) {
+func TestModelContextAnswersColumnsAndRows(t *testing.T) {
 	s, _, _, m := served(t, nil)
 	m.SeedResult(
 		"SELECT a.id, b.id",

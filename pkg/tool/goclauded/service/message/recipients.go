@@ -13,7 +13,7 @@ func (s *Service) recipients(
 	var result []*session.Session
 
 	for _, c := range to {
-		found, e := s.store.SessionByCallsign(c)
+		found, e := s.store.CallsignSession(c)
 
 		if e != nil {
 			return nil, e

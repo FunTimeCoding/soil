@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-func TestMigrateStoresTheManifestValues(t *testing.T) {
+func TestMigrateStoresManifestValues(t *testing.T) {
 	s := secrets(t)
 	r, e := gosecret.Migrate(s, writeSecret(t), "alfa", constant.DefaultStore)
 	assert.FatalOnError(t, e)
@@ -24,7 +24,7 @@ func TestMigrateStoresTheManifestValues(t *testing.T) {
 	)
 }
 
-func TestMigrateTurnsTheManifestIntoAnExternalSecret(t *testing.T) {
+func TestMigrateTurnsManifestIntoExternalSecret(t *testing.T) {
 	path := writeSecret(t)
 	_, e := gosecret.Migrate(secrets(t), path, "alfa", constant.DefaultStore)
 	assert.FatalOnError(t, e)
@@ -45,7 +45,7 @@ spec:
 	)
 }
 
-func TestMigrateTakesTheNamespaceFromTheDirectory(t *testing.T) {
+func TestMigrateTakesNamespaceFromDirectory(t *testing.T) {
 	directory := filepath.Join(t.TempDir(), "bravo")
 	errors.PanicOnError(os.Mkdir(directory, 0o755))
 	path := filepath.Join(directory, "example-secret.yaml")
@@ -55,7 +55,7 @@ func TestMigrateTakesTheNamespaceFromTheDirectory(t *testing.T) {
 	assert.String(t, "bravo/example-secret", r.Path)
 }
 
-func TestMigrateRemovesTheDecodedFile(t *testing.T) {
+func TestMigrateRemovesDecodedFile(t *testing.T) {
 	path := writeSecret(t)
 	decoded := gosecret.GetDecodedPath(path)
 	system.SaveFile(decoded, "=== ALFA ===\none\n=== CHARLIE ===\nthree\n")
@@ -65,7 +65,7 @@ func TestMigrateRemovesTheDecodedFile(t *testing.T) {
 	assert.False(t, system.FileExists(decoded))
 }
 
-func TestMigrateRefusesADecodedFileThatDiffers(t *testing.T) {
+func TestMigrateRefusesDecodedFileThatDiffers(t *testing.T) {
 	path := writeSecret(t)
 	system.SaveFile(
 		gosecret.GetDecodedPath(path),
@@ -77,7 +77,7 @@ func TestMigrateRefusesADecodedFileThatDiffers(t *testing.T) {
 	assert.Count(t, 0, s.Secrets["alfa/example-secret"])
 }
 
-func TestMigrateLeavesTheManifestWhenTheStoreDisagrees(t *testing.T) {
+func TestMigrateLeavesManifestWhenStoreDisagrees(t *testing.T) {
 	path := writeSecret(t)
 	s := secrets(t)
 	s.Tamper = "ALFA"
@@ -90,7 +90,7 @@ func TestMigrateLeavesTheManifestWhenTheStoreDisagrees(t *testing.T) {
 	)
 }
 
-func TestMigrateReportsKeysAlreadyInTheStore(t *testing.T) {
+func TestMigrateReportsKeysAlreadyInStore(t *testing.T) {
 	s := secrets(t)
 	s.Secrets["alfa/example-secret"] = map[string]string{"DELTA": "four"}
 	r, e := gosecret.Migrate(s, writeSecret(t), "alfa", constant.DefaultStore)
@@ -98,7 +98,7 @@ func TestMigrateReportsKeysAlreadyInTheStore(t *testing.T) {
 	assert.Strings(t, []string{"DELTA"}, r.Extra)
 }
 
-func TestExternalSecretCarriesANonOpaqueType(t *testing.T) {
+func TestExternalSecretCarriesNonOpaqueType(t *testing.T) {
 	assert.StringContains(
 		t,
 		"creationPolicy: Owner, template: {type: kubernetes.io/tls}}",

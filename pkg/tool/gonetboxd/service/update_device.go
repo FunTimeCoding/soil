@@ -85,7 +85,7 @@ func (s *Service) UpdateDevice(
 				name = renamed.Name
 			}
 
-			return s.client.DeviceByName(name)
+			return s.client.Device(name)
 		},
 	)
 }

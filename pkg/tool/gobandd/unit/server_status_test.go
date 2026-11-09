@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestStatusReportsPowerAndTheOperationsOffered(t *testing.T) {
+func TestStatusReportsPowerAndOperationsOffered(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(
 		bandConstant.PowerOn,

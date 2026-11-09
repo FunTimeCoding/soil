@@ -1,6 +1,7 @@
 package retarget
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"path"
 	"strings"
@@ -14,11 +15,15 @@ func Mentions(
 	var segments []string
 
 	for _, m := range moves.Paths {
-		segments = append(segments, path.Base(m.From))
+		segments = append(segments, path.Base(m.Old))
 	}
 
 	for _, m := range moves.Symbols {
 		segments = append(segments, path.Base(m.Directory))
+
+		if pointer.IsTestName(m.Name) {
+			segments = append(segments, m.Name)
+		}
 	}
 
 	for _, segment := range segments {

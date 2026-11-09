@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestACompletionAnswersWhileGoquerydIsAway(t *testing.T) {
+func TestCompletionAnswersWhileGoquerydIsAway(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "building things")
@@ -28,7 +28,7 @@ func TestACompletionAnswersWhileGoquerydIsAway(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestTheQueryGuardHoldsCallsOffAfterAnOutage(t *testing.T) {
+func TestQueryGuardHoldsCallsOffAfterOutage(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "building things")
@@ -49,7 +49,7 @@ func TestTheQueryGuardHoldsCallsOffAfterAnOutage(t *testing.T) {
 	assert.Count(t, 0, s.Pushed(constant.SummaryCollection))
 }
 
-func TestReconcileCatchesUpACompletionAWriteMissed(t *testing.T) {
+func TestReconcileCatchesUpCompletionWriteMissed(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "building things")

@@ -8,14 +8,14 @@ import (
 	"testing"
 )
 
-func TestANewClientNeverDialsTheBrowser(t *testing.T) {
+func TestNewClientNeverDialsBrowser(t *testing.T) {
 	c := chromium.New("localhost", closedPort(t))
 	defer c.Close()
 	_, e := c.Targets()
 	assert.String(t, "unreachable", classify.Class(e))
 }
 
-func TestAPageAnswersABrowserThatIsDown(t *testing.T) {
+func TestPageAnswersBrowserThatIsDown(t *testing.T) {
 	c := chromium.New("localhost", closedPort(t))
 	defer c.Close()
 	_, e := protocol.NewIdentifier(c, "alfa").Body()

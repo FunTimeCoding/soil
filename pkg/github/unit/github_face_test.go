@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestTheClientAndItsMockKeepTheFace(t *testing.T) {
+func TestClientAndItsMockKeepFace(t *testing.T) {
 	m := mock_client.New()
 	clients := []face.GitHubClient{github.New("alfa-token"), m}
 

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAnActionIsAFormThatWorksWithoutScript(t *testing.T) {
+func TestActionIsFormThatWorksWithoutScript(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="action" method="post" action="/alfa"><input type="hidden" name="bravo" value="1"><button type="submit">Go</button></form>`,
@@ -15,7 +15,7 @@ func TestAnActionIsAFormThatWorksWithoutScript(t *testing.T) {
 	)
 }
 
-func TestASwappedActionIsUpgradedByHtmx(t *testing.T) {
+func TestSwappedActionIsUpgradedByHtmx(t *testing.T) {
 	page := renderedAction(
 		t,
 		action.New("/alfa", "Go").Swap("#charlie", constant.SwapOuter).Confirm(
@@ -30,13 +30,13 @@ func TestASwappedActionIsUpgradedByHtmx(t *testing.T) {
 	assert.StringNotContains(t, "onsubmit", page)
 }
 
-func TestAPlainActionConfirmsBeforeSubmitting(t *testing.T) {
+func TestPlainActionConfirmsBeforeSubmitting(t *testing.T) {
 	page := renderedAction(t, action.New("/alfa", "Go").Confirm("Sure?"))
 	assert.StringContains(t, `onsubmit="return confirm(&#34;Sure?&#34;)"`, page)
 	assert.StringNotContains(t, "hx-confirm", page)
 }
 
-func TestASmallTitledActionNeedsNoLabel(t *testing.T) {
+func TestSmallTitledActionNeedsNoLabel(t *testing.T) {
 	page := renderedAction(t, action.New("/alfa", "").Small().Title("2 × 3"))
 	assert.StringContains(t, `<form class="action small"`, page)
 	assert.StringContains(
@@ -46,7 +46,7 @@ func TestASmallTitledActionNeedsNoLabel(t *testing.T) {
 	)
 }
 
-func TestAnActionCarriesItsClassesAndCanBeDisabled(t *testing.T) {
+func TestActionCarriesItsClassesAndCanBeDisabled(t *testing.T) {
 	page := renderedAction(
 		t,
 		action.New("/alfa", "Go").

@@ -15,7 +15,7 @@ func TestLineOffset(t *testing.T) {
 	assert.Integer(t, 5, store.LineOffset("a\nbb\nccc", 9))
 }
 
-func TestRerankTextKeywordHitTakesTheChunkHoldingItsLine(t *testing.T) {
+func TestRerankTextKeywordHitTakesChunkHoldingItsLine(t *testing.T) {
 	assert.StringNotContains(
 		t,
 		"bravo",

@@ -23,7 +23,7 @@ func (s *Server) MyThreads(
 	opts := model.GetUserThreadsOpts{PageSize: uint64(limit), Extended: true}
 
 	if a.Since != "" {
-		since, g := parseSince(a.Since)
+		since, g := parseMoment(a.Since)
 
 		if g != nil {
 			return response.Fail("invalid since format: %v", g)

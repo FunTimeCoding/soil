@@ -20,7 +20,7 @@ import (
 	"testing"
 )
 
-func TestAServerTakesItsAddressAndTokensFromTheWebOption(t *testing.T) {
+func TestServerTakesItsAddressAndTokensFromWebOption(t *testing.T) {
 	p := system.FindUnusedPort(19400)
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(

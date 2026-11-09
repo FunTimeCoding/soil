@@ -150,7 +150,7 @@ func TestPollTracksLastPollTime(t *testing.T) {
 	assert.False(t, o.Service.LastPoll().IsZero())
 }
 
-func TestAPollSetsTheGauges(t *testing.T) {
+func TestPollSetsGauges(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
 		alert.NewBasic(

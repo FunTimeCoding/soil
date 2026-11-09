@@ -42,7 +42,7 @@ func TestNotifierNotifySkipsEmptyCallsign(t *testing.T) {
 	assert.Integer(t, 0, int(calls.Load()))
 }
 
-func TestNotifierAnswersAFailureForItsCallerToReport(t *testing.T) {
+func TestNotifierAnswersFailureForItsCallerToReport(t *testing.T) {
 	var calls atomic.Int32
 	c := answering(t, http.StatusInternalServerError, &calls)
 	r := memory.New()
@@ -52,7 +52,7 @@ func TestNotifierAnswersAFailureForItsCallerToReport(t *testing.T) {
 	assert.Integer(t, 0, len(r.Events()))
 }
 
-func TestAGoclaudedOutageHoldsTheNextDigestOff(t *testing.T) {
+func TestGoclaudedOutageHoldsNextDigestOff(t *testing.T) {
 	var calls atomic.Int32
 	c := answering(t, http.StatusServiceUnavailable, &calls)
 	r := memory.New()

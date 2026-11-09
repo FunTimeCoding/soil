@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestAlertsAnswerFromTheNamedInstance(t *testing.T) {
+func TestAlertsAnswerFromNamedInstance(t *testing.T) {
 	s := refusingBravo(t)
 	_, _, e := s.Alerts(t.Context(), "alfa", alert_filter.New())
 	assert.FatalOnError(t, e)
@@ -20,7 +20,7 @@ func TestAlertsAnswerFromTheNamedInstance(t *testing.T) {
 	assert.True(t, validation.Is(f))
 }
 
-func TestSilencesAnswerFromTheNamedInstance(t *testing.T) {
+func TestSilencesAnswerFromNamedInstance(t *testing.T) {
 	s := refusingBravo(t)
 	_, e := s.Silences(t.Context(), "alfa", false)
 	assert.FatalOnError(t, e)
@@ -28,7 +28,7 @@ func TestSilencesAnswerFromTheNamedInstance(t *testing.T) {
 	assert.True(t, validation.Is(f))
 }
 
-func TestCreateSilenceAnswersFromTheNamedInstance(t *testing.T) {
+func TestCreateSilenceAnswersFromNamedInstance(t *testing.T) {
 	s := refusingBravo(t)
 	_, e := s.CreateSilence(t.Context(), "alfa", "Watchdog", "", time.Hour)
 	assert.FatalOnError(t, e)
@@ -36,7 +36,7 @@ func TestCreateSilenceAnswersFromTheNamedInstance(t *testing.T) {
 	assert.True(t, validation.Is(f))
 }
 
-func TestDeleteSilenceAnswersFromTheNamedInstance(t *testing.T) {
+func TestDeleteSilenceAnswersFromNamedInstance(t *testing.T) {
 	s := refusingBravo(t)
 	assert.FatalOnError(t, s.DeleteSilence(t.Context(), "alfa", "silence-1"))
 	assert.True(
@@ -45,7 +45,7 @@ func TestDeleteSilenceAnswersFromTheNamedInstance(t *testing.T) {
 	)
 }
 
-func TestStatusAnswersFromTheNamedInstance(t *testing.T) {
+func TestStatusAnswersFromNamedInstance(t *testing.T) {
 	s := refusingBravo(t)
 	_, e := s.Status(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
@@ -53,7 +53,7 @@ func TestStatusAnswersFromTheNamedInstance(t *testing.T) {
 	assert.True(t, validation.Is(f))
 }
 
-func TestAlertsReadTheirRulesFromThePrometheusPeer(t *testing.T) {
+func TestAlertsReadTheirRulesFromPrometheusPeer(t *testing.T) {
 	p := prometheusMock.New()
 	p.Failure = validation.New("bad rules request")
 	s := service_tester.New(
@@ -65,7 +65,7 @@ func TestAlertsReadTheirRulesFromThePrometheusPeer(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestCreateSilenceReadsItsRulesFromThePrometheusPeer(t *testing.T) {
+func TestCreateSilenceReadsItsRulesFromPrometheusPeer(t *testing.T) {
 	p := prometheusMock.New()
 	p.Failure = validation.New("bad rules request")
 	s := service_tester.New(
@@ -77,7 +77,7 @@ func TestCreateSilenceReadsItsRulesFromThePrometheusPeer(t *testing.T) {
 	assert.True(t, validation.Is(e))
 }
 
-func TestAPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
+func TestPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
 	p := prometheusMock.New()
 	p.Failure = refusedConnection()
 	s := service_tester.New(
@@ -92,7 +92,7 @@ func TestAPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
 	assert.FatalOnError(t, f)
 }
 
-func TestAnUnreachableAlertmanagerFailsFastWithoutBeingAskedAgain(t *testing.T) {
+func TestUnreachableAlertmanagerFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	a := mock_client.New()
 	a.Fail(refusedConnection())
 	s := service_tester.New(

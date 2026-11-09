@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestInstanceToolInstructionsFollowTheCount(t *testing.T) {
+func TestInstanceToolInstructionsFollowCount(t *testing.T) {
 	i := identity.New("probe", "probe tool", "probe").WithInstructions(
 		"Probe bridge.",
 		paragraph.New(

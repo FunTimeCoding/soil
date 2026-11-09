@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestTheDaemonHandsItsSupervisorToTheLifecycle(t *testing.T) {
+func TestDaemonHandsItsSupervisorToLifecycle(t *testing.T) {
 	d := daemon_tester.New(t, "alfa: sleep 60\n")
 	workers := d.Workers()
 	assert.Count(t, 1, workers)
@@ -17,7 +17,7 @@ func TestTheDaemonHandsItsSupervisorToTheLifecycle(t *testing.T) {
 	assert.True(t, okay)
 }
 
-func TestTheWaitEndsWhenEveryProcessHasExited(t *testing.T) {
+func TestWaitEndsWhenEveryProcessHasExited(t *testing.T) {
 	done := make(chan struct{})
 	returned := make(chan struct{})
 	go func() {

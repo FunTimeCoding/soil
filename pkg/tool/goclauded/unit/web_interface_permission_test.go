@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func TestThePermissionsPageRanksABlockerWithItsCommands(t *testing.T) {
+func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
@@ -45,7 +45,7 @@ func TestThePermissionsPageRanksABlockerWithItsCommands(t *testing.T) {
 	assert.StringContains(t, "1 prompts", page)
 }
 
-func TestThePermissionsPageCutsALongCommand(t *testing.T) {
+func TestPermissionsPageCutsLongCommand(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
@@ -70,7 +70,7 @@ func TestThePermissionsPageCutsALongCommand(t *testing.T) {
 	)
 }
 
-func TestThePermissionsPageSaysWhenNothingPrompted(t *testing.T) {
+func TestPermissionsPageSaysWhenNothingPrompted(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	page := body(t, s.Server, constant.PermissionsPath)

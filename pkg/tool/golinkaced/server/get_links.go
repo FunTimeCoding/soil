@@ -18,7 +18,7 @@ func (s *Server) GetLinks(
 	}
 
 	if r.Params.List != nil {
-		links, e := s.service.LinksByList(int(*r.Params.List))
+		links, e := s.service.ListLinks(int(*r.Params.List))
 
 		if forbidden.Is(e) {
 			return server.GetLinks403JSONResponse{Error: e.Error()}, nil

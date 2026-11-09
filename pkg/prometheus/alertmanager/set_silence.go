@@ -28,7 +28,7 @@ func (c *Client) SetSilence(
 		d = constant.AlertmanagerDefaultDuration
 	}
 
-	s, f := c.SilenceByRule(alert)
+	s, f := c.RuleSilence(alert)
 
 	if f != nil {
 		if not_found.Is(f) {

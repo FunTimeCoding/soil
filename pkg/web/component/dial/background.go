@@ -27,11 +27,11 @@ func (d *Dial) background() string {
 			parts,
 			fmt.Sprintf(
 				"conic-gradient(transparent 0deg %.1fdeg, %s %.1fdeg %.1fdeg, transparent %.1fdeg 360deg)",
-				degrees(l.from),
+				degrees(l.start),
 				l.color,
-				degrees(l.from),
-				degrees(l.to),
-				degrees(l.to),
+				degrees(l.start),
+				degrees(l.end),
+				degrees(l.end),
 			),
 		)
 	}

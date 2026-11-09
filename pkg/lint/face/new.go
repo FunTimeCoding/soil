@@ -7,8 +7,8 @@ import (
 
 func New(loaded []*packages.Package) *Set {
 	result := &Set{
-		byMethod: make(map[string][]*fact.Interface),
-		known:    make(map[string]bool),
+		methodInterfaces: make(map[string][]*fact.Interface),
+		known:            make(map[string]bool),
 	}
 	result.Add(universe())
 	seen := make(map[string]bool)

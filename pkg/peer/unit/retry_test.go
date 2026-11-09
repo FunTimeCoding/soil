@@ -42,7 +42,7 @@ func TestSucceedsAfterRetries(t *testing.T) {
 	assert.True(t, r.Elapsed >= 2*time.Millisecond)
 }
 
-func TestUntilReturnsOnceTheProbeSucceeds(t *testing.T) {
+func TestUntilReturnsOnceProbeSucceeds(t *testing.T) {
 	calls := 0
 	r, e := retry.Until(
 		t.Context(),
@@ -63,7 +63,7 @@ func TestUntilReturnsOnceTheProbeSucceeds(t *testing.T) {
 	assert.True(t, r.Elapsed >= 2*time.Millisecond)
 }
 
-func TestUntilGivesUpAtTheDeadline(t *testing.T) {
+func TestUntilGivesUpAtDeadline(t *testing.T) {
 	fail := errors.New("unanswered")
 	r, e := retry.Until(
 		t.Context(),
@@ -97,7 +97,7 @@ func TestUntilStopsWhenItsContextIsCancelled(t *testing.T) {
 	assert.True(t, errors.Is(e, fail))
 }
 
-func TestUntilEndsAProbeThatHangsAtTheDeadline(t *testing.T) {
+func TestUntilEndsProbeThatHangsAtDeadline(t *testing.T) {
 	start := time.Now()
 	_, e := retry.Until(
 		t.Context(),

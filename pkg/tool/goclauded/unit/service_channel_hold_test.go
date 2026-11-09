@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-func TestChannelHoldEndsBeforeTheClientGivesUp(t *testing.T) {
+func TestChannelHoldEndsBeforeClientGivesUp(t *testing.T) {
 	assert.True(t, constant.ChannelHold < webConstant.LongResponseHeaderTimeout)
 }
 
-func TestAwaitImmediateQueueReleasesAfterTheHold(t *testing.T) {
+func TestAwaitImmediateQueueReleasesAfterHold(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	drained, e := s.Message.AwaitImmediateQueue(
@@ -27,7 +27,7 @@ func TestAwaitImmediateQueueReleasesAfterTheHold(t *testing.T) {
 	assert.Count(t, 0, drained)
 }
 
-func TestAwaitCallsignReleasesAfterTheHold(t *testing.T) {
+func TestAwaitCallsignReleasesAfterHold(t *testing.T) {
 	s := service_tester.New(t)
 	callsign, e := s.Message.AwaitCallsign(
 		context.Background(),

@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestReconcileCountsAPushedSummary(t *testing.T) {
+func TestReconcileCountsPushedSummary(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.AddSession("session-1", "Ash", "Ash", "2026-09-01 10:00:00+00:00")
 	s.Store.EditAlias("session-1", "ash-night")
@@ -41,7 +41,7 @@ func TestReconcileCountsAPushedSummary(t *testing.T) {
 	)
 }
 
-func TestReconcileLeavesACurrentSummaryAlone(t *testing.T) {
+func TestReconcileLeavesCurrentSummaryAlone(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.AddSession("session-1", "Ash", "Ash", "2026-09-01 10:00:00+00:00")
 	s.Store.EditAlias("session-1", "ash-night")

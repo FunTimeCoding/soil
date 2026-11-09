@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestClaimTakesAnEmptyLabel(t *testing.T) {
+func TestClaimTakesEmptyLabel(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -25,7 +25,7 @@ func TestClaimTakesAnEmptyLabel(t *testing.T) {
 	assert.String(t, "watch", a.Label(constant.FixtureLabelKey))
 }
 
-func TestClaimLeavesADeclaredLabelAlone(t *testing.T) {
+func TestClaimLeavesDeclaredLabelAlone(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -45,7 +45,7 @@ func TestClaimLeavesADeclaredLabelAlone(t *testing.T) {
 	assert.String(t, "bravo", a.Label(constant.FixtureLabelKey))
 }
 
-func TestReleaseLeavesARedeclaredLabelAlone(t *testing.T) {
+func TestReleaseLeavesRedeclaredLabelAlone(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -95,7 +95,7 @@ func TestReleaseRemovesItsOwnLabel(t *testing.T) {
 	assert.String(t, "", a.Label(constant.FixtureLabelKey))
 }
 
-func TestApplyMovesTheLabelFromAnIdleHolder(t *testing.T) {
+func TestApplyMovesLabelFromIdleHolder(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
@@ -122,7 +122,7 @@ func TestApplyMovesTheLabelFromAnIdleHolder(t *testing.T) {
 	assert.String(t, "", b.Label(constant.FixtureLabelKey))
 }
 
-func TestApplyAdoptsBesideACompatibleValue(t *testing.T) {
+func TestApplyAdoptsBesideCompatibleValue(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")

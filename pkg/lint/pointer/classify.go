@@ -70,6 +70,14 @@ func Classify(
 		return constant.PointerClassSibling
 	}
 
+	if IsTestName(trimmed) {
+		return constant.PointerClassTest
+	}
+
+	if IsBareSymbol(trimmed) {
+		return constant.PointerClassBareSymbol
+	}
+
 	root, _, _ := strings.Cut(strings.TrimPrefix(trimmed, "./"), "/")
 
 	if !slices.Contains(roots, root) {

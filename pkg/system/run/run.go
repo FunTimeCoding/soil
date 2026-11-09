@@ -1,6 +1,7 @@
 package run
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/system/result"
 	"io"
@@ -8,6 +9,7 @@ import (
 
 type Run struct {
 	result.Result
+	context        context.Context
 	environment    []string
 	replaceEnviron bool
 	processGroup   bool

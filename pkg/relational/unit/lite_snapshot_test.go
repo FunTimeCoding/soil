@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func TestAReadThenWriteTransactionKeepsItsWrite(t *testing.T) {
+func TestReadThenWriteTransactionKeepsItsWrite(t *testing.T) {
 	d := connection.New(
 		logger.New(t.Context()),
 		filepath.Join(t.TempDir(), constant.FixtureLiteFile),

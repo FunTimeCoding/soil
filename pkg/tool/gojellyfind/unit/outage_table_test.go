@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestEveryOperationAnswersAJellyfinOutageUnavailable(t *testing.T) {
+func TestEveryOperationAnswersJellyfinOutageUnavailable(t *testing.T) {
 	r := memory.New()
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
@@ -38,7 +38,7 @@ func TestEveryOperationAnswersAJellyfinOutageUnavailable(t *testing.T) {
 	assert.Count(t, 0, r.Events())
 }
 
-func TestEveryToolFailsOnAJellyfinOutage(t *testing.T) {
+func TestEveryToolFailsOnJellyfinOutage(t *testing.T) {
 	r := memory.New()
 	var unanswered []string
 

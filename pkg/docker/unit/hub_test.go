@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestTagsReadsThePage(t *testing.T) {
+func TestTagsReadsPage(t *testing.T) {
 	s, last := upstream_tester.New(
 		t,
 		http.StatusOK,
@@ -40,7 +40,7 @@ func TestMissingImageIsNotFound(t *testing.T) {
 	assert.True(t, not_found.Is(e))
 }
 
-func TestAnOutageIsUnavailable(t *testing.T) {
+func TestOutageIsUnavailable(t *testing.T) {
 	for _, status := range []int{
 		http.StatusTooManyRequests,
 		http.StatusServiceUnavailable,
@@ -51,20 +51,20 @@ func TestAnOutageIsUnavailable(t *testing.T) {
 	}
 }
 
-func TestARefusedTokenIsForbidden(t *testing.T) {
+func TestRefusedTokenIsForbidden(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusForbidden, `{"message":"denied"}`)
 	_, e := newHubClient(t, s.URL).Tags("library/delta")
 	assert.True(t, forbidden.Is(e))
 }
 
-func TestARequestWeWroteBadlyStaysUnexpected(t *testing.T) {
+func TestRequestWeWroteBadlyStaysUnexpected(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusBadRequest, `{"message":"bad"}`)
 	_, e := newHubClient(t, s.URL).Tags("library/echo")
 	assert.Error(t, e)
 	assert.String(t, "", classify.Class(e))
 }
 
-func TestReachableReadsTheProbeImage(t *testing.T) {
+func TestReachableReadsProbeImage(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"name":"alpine"}`)
 	assert.FatalOnError(
 		t,

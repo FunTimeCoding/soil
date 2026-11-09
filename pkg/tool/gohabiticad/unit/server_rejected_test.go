@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestAnInvalidStatIsAnsweredAsBadRequest(t *testing.T) {
+func TestInvalidStatIsAnsweredAsBadRequest(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("%q is not a valid Stat.", "bravo")
 	m := memory.New()

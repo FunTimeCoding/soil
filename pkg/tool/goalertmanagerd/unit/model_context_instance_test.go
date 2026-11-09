@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestModelContextAlertsNeedASelectedInstance(t *testing.T) {
+func TestModelContextAlertsNeedSelectedInstance(t *testing.T) {
 	v := model_context_server.New(
 		t,
 		func(g *guard.Mux) {

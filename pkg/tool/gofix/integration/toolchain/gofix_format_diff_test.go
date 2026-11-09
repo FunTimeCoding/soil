@@ -11,14 +11,14 @@ import (
 	"testing"
 )
 
-func TestFormatDiffShowsTheFullRun(t *testing.T) {
+func TestFormatDiffShowsFullRun(t *testing.T) {
 	directory := module_tester.FormatDiff(t)
 	path := filepath.Join(directory, "exploded_nested.go")
 	before := readGoFiles(t, directory)
 	printed := assert.Capture(
 		t,
 		func() {
-			gofix.RunFormatFixWithDirectory(
+			gofix.RunFormatFix(
 				[]string{"./..."},
 				directory,
 				true,
@@ -35,7 +35,7 @@ func TestFormatDiffShowsTheFullRun(t *testing.T) {
 		),
 		printed,
 	)
-	gofix.RunFormatFixWithDirectory(
+	gofix.RunFormatFix(
 		[]string{"./..."},
 		directory,
 		false,

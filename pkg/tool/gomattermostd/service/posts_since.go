@@ -13,7 +13,7 @@ func (s *Service) PostsSince(
 	return guarded(
 		s.guard,
 		func() ([]*post.Post, error) {
-			return s.mattermost.PostsSince(h, since)
+			return s.mattermost.Posts(h, since)
 		},
 	)
 }

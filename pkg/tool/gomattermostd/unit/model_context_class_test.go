@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestAMissingPostIsAnsweredQuietlyOverModelContext(t *testing.T) {
+func TestMissingPostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	r.Client.MustCallToolError(
 		constant.GetThreadReplies,
@@ -18,7 +18,7 @@ func TestAMissingPostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	assert.Count(t, 0, r.Server.Reporter.Events())
 }
 
-func TestDownloadingIntoAMissingDirectoryIsAnsweredQuietly(t *testing.T) {
+func TestDownloadingIntoMissingDirectoryIsAnsweredQuietly(t *testing.T) {
 	r := model_context_tester.New(t, fileUpstream)
 	directory := filepath.Join(t.TempDir(), "absent")
 	assert.StringContains(
@@ -35,7 +35,7 @@ func TestDownloadingIntoAMissingDirectoryIsAnsweredQuietly(t *testing.T) {
 	assert.Count(t, 0, r.Server.Reporter.Events())
 }
 
-func TestUploadingAMissingFileIsAnsweredQuietly(t *testing.T) {
+func TestUploadingMissingFileIsAnsweredQuietly(t *testing.T) {
 	r := model_context_tester.New(t, threadUpstream)
 	path := filepath.Join(t.TempDir(), "absent.txt")
 	assert.StringContains(

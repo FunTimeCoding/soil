@@ -1,6 +1,7 @@
 package retarget
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
@@ -20,16 +21,12 @@ func Line(
 	var changes []*retarget_change.Change
 
 	for _, c := range pointer.Extract(text) {
-		after, rewritable := rewriteSpan(r, source, declared, moves, c)
+		after, reason := rewrite(r, source, declared, moves, c)
 
-		if !rewritable {
+		if reason != "" {
 			changes = append(
 				changes,
-				retarget_change.NewManual(
-					number,
-					c.Span,
-					"braced span needs a hand edit",
-				),
+				retarget_change.NewManual(number, c.Span, reason),
 			)
 
 			continue
@@ -47,7 +44,7 @@ func Line(
 				retarget_change.NewManual(
 					number,
 					c.Span,
-					"span is not written verbatim",
+					constant.VerbatimSpanReason,
 				),
 			)
 

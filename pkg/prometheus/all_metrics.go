@@ -6,7 +6,7 @@ import (
 )
 
 func (c *Client) AllMetrics() ([]string, error) {
-	result, e := c.LabelValues(constant.Name, []string{}, soil.StartOfTime)
+	result, e := c.LabelValues(constant.Name, []string{}, soil.Epoch)
 
 	if e != nil {
 		return nil, e

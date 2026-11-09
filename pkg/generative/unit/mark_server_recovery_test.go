@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestAPanickingToolAnswersAReadableErrorWithTheEventIdentifier(t *testing.T) {
+func TestPanickingToolAnswersReadableErrorWithEventIdentifier(t *testing.T) {
 	r := identified_reporter.New("echo")
 	c := recoveringClient(t, r)
 	q := mcp.CallToolRequest{}
@@ -23,7 +23,7 @@ func TestAPanickingToolAnswersAReadableErrorWithTheEventIdentifier(t *testing.T)
 	assert.Count(t, 1, r.Events())
 }
 
-func TestAPanickingResourceAnswersAnErrorWithTheEventIdentifier(t *testing.T) {
+func TestPanickingResourceAnswersErrorWithEventIdentifier(t *testing.T) {
 	r := identified_reporter.New("foxtrot")
 	c := recoveringClient(t, r)
 	q := mcp.ReadResourceRequest{}
