@@ -1,6 +1,6 @@
 package scalar_or_list
 
-import "go.yaml.in/yaml/v3"
+import "go.yaml.in/yaml/v4"
 
 func (s *Strings) UnmarshalYAML(value *yaml.Node) error {
 	if value.Kind == yaml.ScalarNode {

@@ -66,7 +66,7 @@ var KnownTags = map[string]bool{
 }
 
 const (
-	IndexFormatVersion = "9"
+	IndexFormatVersion = "11"
 
 	StorageName    = "gosourced"
 	IndexDirectory = "index"

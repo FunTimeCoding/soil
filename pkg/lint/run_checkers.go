@@ -28,11 +28,11 @@ func runCheckers(
 			result := check(p, strings.NewReader(content))
 
 			for _, c := range result.Concerns {
-				if c.Fixed && o.Fix {
-					r.AddConcern(c)
-				} else if !c.Fixed {
-					r.AddConcern(c)
+				if !o.Fix {
+					c.Fixed = false
 				}
+
+				r.AddConcern(c)
 			}
 
 			if result.Fixed != "" && result.Fixed != result.Original {

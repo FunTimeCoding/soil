@@ -1,8 +1,7 @@
 package event
 
 import (
-	soilFace "github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
@@ -15,7 +14,7 @@ type Service struct {
 	message  *message.Service
 	memory   *memory.Service
 	document *document.Service
-	notifier face.Notifier
+	notifier face.EventNotifier
 	clock    func() time.Time
-	reporter soilFace.Reporter
+	reporter face.Reporter
 }

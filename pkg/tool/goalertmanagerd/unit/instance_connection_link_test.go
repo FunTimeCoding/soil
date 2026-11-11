@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/types/instance"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"testing"
 )
 

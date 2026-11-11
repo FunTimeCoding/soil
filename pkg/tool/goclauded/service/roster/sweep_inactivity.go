@@ -2,13 +2,13 @@ package roster
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/time/minute"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"time"
 )
 
 func (s *Service) sweepInactivity() []error {
 	var result []error
-	cutoff := s.clock().Add(-1 * time.Hour)
+	cutoff := s.clock().Add(-constant.InactivityTimeoutWindow)
 	sessions := s.store.SweepInactivity(cutoff)
 
 	for _, e := range sessions {
@@ -26,7 +26,8 @@ func (s *Service) sweepInactivity() []error {
 			e.CallsignValue(),
 			constant.QueueTimeout,
 			fmt.Sprintf(
-				"1 hour since last turn. Removed from roster. Last topic: %s",
+				"%s since last turn. Removed from roster. Last topic: %s",
+				minute.Readable(int(constant.InactivityTimeoutWindow.Minutes())),
 				e.Topic,
 			),
 		); f != nil {

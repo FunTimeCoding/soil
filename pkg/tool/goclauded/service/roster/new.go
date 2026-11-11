@@ -1,8 +1,8 @@
 package roster
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
@@ -15,7 +15,7 @@ func New(
 	messages *message.Service,
 	sessions *session.Service,
 	cache *session_cache.Cache,
-	n face.Notifier,
+	n face.EventNotifier,
 	clock func() time.Time,
 	l *logger.Logger,
 ) *Service {

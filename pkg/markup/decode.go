@@ -1,6 +1,6 @@
 package markup
 
-import "go.yaml.in/yaml/v3"
+import "go.yaml.in/yaml/v4"
 
 func Decode(
 	value string,

@@ -1,8 +1,8 @@
 package message
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
@@ -11,7 +11,7 @@ import (
 
 type Service struct {
 	store         *store.Store
-	notifier      face.Notifier
+	notifier      face.EventNotifier
 	stop          *stopper.Stopper
 	clock         func() time.Time
 	metric        *metric.Metric

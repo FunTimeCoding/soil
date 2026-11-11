@@ -1,6 +1,7 @@
 package double
 
 import (
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
 	memoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
@@ -20,7 +21,7 @@ func (s *Set) Option(
 	result.Claude = func() face.ClaudeSource { return s.Client }
 	result.Memory = func() memoryd.Client { return s.MemoryPeer }
 	result.Query = func() queryd.Client { return s.Query }
-	result.Notifier = func() face.Notifier { return s.Notifier }
+	result.Notifier = func() soilFace.EventNotifier { return s.Notifier }
 	result.Sources = func() []string { return []string{s.Source} }
 	result.ChannelAlways = s.ChannelAlways
 

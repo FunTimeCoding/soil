@@ -15,7 +15,10 @@ const (
 const CallsignReleaseWindow = 7 * 24 * time.Hour
 const SevenDayWindow = 7 * 24 * time.Hour
 const UsagePageUnreadable = "usage page carries no weekly meter"
-const CompleteTimeoutWindow = 30 * time.Minute
+const (
+	CompleteTimeoutWindow   = 30 * time.Minute
+	InactivityTimeoutWindow = time.Hour
+)
 const ChannelHold = 5 * time.Minute
 const ReconcileInterval = 10 * time.Minute
 const (

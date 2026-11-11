@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/literals"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern/literals"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/pattern_site"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
 )

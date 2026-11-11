@@ -3,7 +3,7 @@ package configuration
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/constant"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"io/fs"
 	"os"
 	"path/filepath"

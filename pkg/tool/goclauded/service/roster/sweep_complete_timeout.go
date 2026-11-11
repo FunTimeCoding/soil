@@ -1,6 +1,10 @@
 package roster
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/time/minute"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+)
 
 func (s *Service) sweepCompleteTimeout() []error {
 	var result []error
@@ -21,7 +25,10 @@ func (s *Service) sweepCompleteTimeout() []error {
 			e.Identifier,
 			e.CallsignValue(),
 			constant.QueueTimeout,
-			"30 minutes since completing. Removed from roster.",
+			fmt.Sprintf(
+				"%s since completing. Removed from roster.",
+				minute.Readable(int(constant.CompleteTimeoutWindow.Minutes())),
+			),
 		); f != nil {
 			result = append(result, f)
 		}

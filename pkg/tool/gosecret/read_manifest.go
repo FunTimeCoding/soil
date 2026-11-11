@@ -3,7 +3,7 @@ package gosecret
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"os"
 )
 

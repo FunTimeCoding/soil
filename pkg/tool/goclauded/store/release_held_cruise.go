@@ -13,8 +13,8 @@ func (s *Store) ReleaseHeldCruise(sessionIdentifier string) (int64, error) {
 		false,
 	).Updates(
 		map[string]any{
-			constant.Immediate:     true,
-			"immediate_at":         s.clock(),
+			constant.Immediate:      true,
+			"immediate_at":          s.clock(),
 			constant.ReleasedColumn: true,
 		},
 	)

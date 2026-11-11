@@ -15,6 +15,7 @@ func moduleBreakages(
 	newModulePath string,
 ) []*concern.Concern {
 	var result []*concern.Concern
+	aliases := map[*types.Package]map[string]string{}
 
 	for _, symbol := range symbols {
 		targetPath := moduleTargetPath(
@@ -56,13 +57,26 @@ func moduleBreakages(
 			continue
 		}
 
-		was := moduleTypeName(symbol.Object.Type(), modulePath, newModulePath)
-		now := moduleTypeName(found.Type(), modulePath, newModulePath)
+		if _, known := aliases[target]; !known {
+			aliases[target] = publicAliases(target, modulePath, newModulePath)
+		}
 
-		if was == now {
+		if moduleTypeName(
+			nameless(symbol.Object.Type()),
+			modulePath,
+			newModulePath,
+		) == publicTypeName(
+			moduleTypeName(nameless(found.Type()), modulePath, newModulePath),
+			aliases[target],
+		) {
 			continue
 		}
 
+		was := moduleTypeName(symbol.Object.Type(), modulePath, newModulePath)
+		now := publicTypeName(
+			moduleTypeName(found.Type(), modulePath, newModulePath),
+			aliases[target],
+		)
 		result = append(
 			result,
 			moduleBreakage(

@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"os"
 	"strings"
 	"testing"

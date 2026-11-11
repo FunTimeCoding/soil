@@ -17,7 +17,9 @@ installs them all.
 
 `task lint-check` runs the same stages without writing: golint and
 golangci-lint without `--fix`, `gofix --diff`, then goanalyze and
-goaudit. Use it to look; fix with `task lint`. `REACH=own` narrows
+goaudit. golint without `--fix` reports what it would fix as a finding,
+so a green check means `task lint` has nothing to change. Use it to look;
+fix with `task lint`. `REACH=own` narrows
 it to what the current session changed, `REACH=<session>` to what a
 named one did: `goreach` reads the session's transcript - the files
 its edit tools wrote and the ones gosourced reports - keeps those git

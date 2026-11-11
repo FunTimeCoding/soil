@@ -3,7 +3,7 @@ package ansible_inventory
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 func (i *Inventory) Markup() string {

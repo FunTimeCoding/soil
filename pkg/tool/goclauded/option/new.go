@@ -3,6 +3,7 @@ package option
 import (
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
@@ -26,7 +27,7 @@ func New() *Option {
 		},
 		Memory:   func() memoryd.Client { return memoryClient.NewEnvironment() },
 		Query:    func() queryd.Client { return queryClient.NewEnvironment() },
-		Notifier: func() face.Notifier { return notifier.New() },
+		Notifier: func() soilFace.EventNotifier { return notifier.New() },
 		Browser:  chromium.NewEnvironment,
 		Sources:  sweep.SourceDirectories,
 		Utilization: func() generative.AnthropicClient {

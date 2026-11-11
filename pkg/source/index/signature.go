@@ -1,19 +1,13 @@
 package index
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/source/canonical_type"
+	"go/types"
+)
 
 func Signature(f *types.Func) string {
-	s := f.Type().(*types.Signature)
-
-	return types.TypeString(
-		types.NewSignatureType(
-			nil,
-			nil,
-			nil,
-			unnamed(s.Params()),
-			unnamed(s.Results()),
-			s.Variadic(),
-		),
+	return canonical_type.String(
+		canonical_type.Unnamed(f.Type().(*types.Signature)),
 		qualifier,
 	)
 }

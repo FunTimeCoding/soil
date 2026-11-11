@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/strict_server"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"path/filepath"
 )
 

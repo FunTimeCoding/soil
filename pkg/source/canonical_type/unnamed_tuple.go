@@ -1,11 +1,11 @@
-package index
+package canonical_type
 
 import (
 	"go/token"
 	"go/types"
 )
 
-func unnamed(t *types.Tuple) *types.Tuple {
+func unnamedTuple(t *types.Tuple) *types.Tuple {
 	result := make([]*types.Var, t.Len())
 
 	for i := range t.Len() {

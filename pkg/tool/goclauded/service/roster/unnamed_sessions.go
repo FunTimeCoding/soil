@@ -1,8 +1,8 @@
 package roster
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/enriched_session"
-	"time"
 )
 
 func (s *Service) UnnamedSessions(
@@ -15,7 +15,7 @@ func (s *Service) UnnamedSessions(
 		return nil, e
 	}
 
-	cutoff := s.clock().Add(-1 * time.Hour)
+	cutoff := s.clock().Add(-constant.InactivityTimeoutWindow)
 	result := make([]*enriched_session.Session, 0, len(sessions))
 
 	for _, i := range sessions {

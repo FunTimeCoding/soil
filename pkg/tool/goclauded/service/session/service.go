@@ -1,6 +1,7 @@
 package session
 
 import (
+	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
@@ -21,7 +22,7 @@ type Service struct {
 	client     face.ClaudeSource
 	cache      *session_cache.Cache
 	index      *search_index.Index
-	notifier   face.Notifier
+	notifier   soilFace.EventNotifier
 	clock      func() time.Time
 	harbor     string
 	sources    func() []string

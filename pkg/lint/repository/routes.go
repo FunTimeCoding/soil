@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/types/repository_specification"
 	"github.com/funtimecoding/soil/pkg/system"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"maps"
 	"os"
 	"path/filepath"

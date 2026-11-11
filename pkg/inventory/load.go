@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/inventory/face"
 	"github.com/funtimecoding/soil/pkg/system"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 )
 
 func Load[T any, P face.Entry[T]](path string) *Inventory[T, P] {

@@ -3,7 +3,6 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
-	"time"
 )
 
 func (s *Store) ListSessions() ([]session.Session, error) {
@@ -11,6 +10,6 @@ func (s *Store) ListSessions() ([]session.Session, error) {
 
 	return result, s.database.Where(
 		"last_seen > ? AND callsign IS NOT NULL",
-		s.clock().Add(-1*time.Hour),
+		s.clock().Add(-constant.InactivityTimeoutWindow),
 	).Order(constant.Callsign).Find(&result).Error
 }

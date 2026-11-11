@@ -190,6 +190,22 @@ func TestCheckResultImportCollapsed(t *testing.T) {
 	)
 }
 
+func TestCheckReportsFixableConcernWithoutFix(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/foo/foo.go",
+		"package foo\n\nimport (\n\t\"fmt\"\n)\n\nfunc Foo() {\n\tfmt.Println(\"hello\")\n}\n",
+	)
+	var r output.Results
+	lint.Check(repository.New(t.TempDir(), v), option.New("", false), &r)
+	assertUnfixed(
+		t,
+		r.Entries,
+		"pkg/foo/foo.go",
+		constant.SingleMultiImportText,
+	)
+}
+
 func TestCheckResultBlankLineRemoved(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(

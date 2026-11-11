@@ -24,7 +24,7 @@ func sessionBackfill(c *command_context.Context) *cobra.Command {
 			}
 
 			c.Terminal().EmitValue(
-				c.Client().PostBackfill(context.Background(), parameters),
+				c.LongClient().PostBackfill(context.Background(), parameters),
 			)
 		},
 	}

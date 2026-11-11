@@ -53,6 +53,93 @@ func TestRenameModuleBreakage(t *testing.T) {
 	assert.StringContains(t, "\"example/lib/v2\"", caller)
 }
 
+func TestRenameModuleTreatsAnyAsEmptyInterface(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("module-any/src"),
+	)
+	s := service_tester.NewService(t)
+	r, e := s.Module.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.StringContains(
+		t,
+		"\"example/lib/v3\"",
+		service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go"),
+	)
+}
+
+func TestRenameModuleIgnoresParameterAndResultNames(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("module-result-names/src"),
+	)
+	s := service_tester.NewService(t)
+	r, e := s.Module.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.StringContains(
+		t,
+		"\"example/lib/v3\"",
+		service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go"),
+	)
+}
+
+func TestRenameModuleReadsInternalTypeThroughPublicAlias(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("module-internal-alias/src"),
+	)
+	s := service_tester.NewService(t)
+	r, e := s.Module.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	assert.StringContains(t, "\"example/lib/v3\"", caller)
+	assertCompiles(t, d)
+}
+
+func TestRenameModuleReportsInternalTypeWithoutAlias(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("module-internal-hidden/src"),
+	)
+	s := service_tester.NewService(t)
+	r, e := s.Module.RenameModule(
+		t.Context(),
+		d,
+		"example/lib/v2",
+		"example/lib/v3",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlockedContains(t, r, "internal/scan.Token")
+	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	assert.StringContains(t, "\"example/lib/v2\"", caller)
+}
+
 func TestRenameModuleForce(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,

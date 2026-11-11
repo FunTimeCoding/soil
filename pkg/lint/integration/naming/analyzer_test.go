@@ -19,3 +19,9 @@ func TestImplementingMethodWithOwnParameterNames(t *testing.T) {
 	naming.Check(p, results, face.New([]*packages.Package{p}))
 	testutil.AssertBlocked(t, results, 0)
 }
+
+func TestMethodImplementingInterfaceReExportedThroughAlias(t *testing.T) {
+	p, results := testutil.LoadTestPackage(t, "testdata/src/aliased")
+	naming.Check(p, results, face.New([]*packages.Package{p}))
+	testutil.AssertBlocked(t, results, 0)
+}

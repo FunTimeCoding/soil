@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/open_api"
-	"go.yaml.in/yaml/v3"
+	"go.yaml.in/yaml/v4"
 	"maps"
 	"path/filepath"
 	"slices"
