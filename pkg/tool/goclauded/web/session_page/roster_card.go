@@ -25,6 +25,6 @@ func rosterCard(c *roster_card.Card) gomponents.Node {
 			),
 		).
 		State(region(identifier, constant.RosterStatePart, State(c))).
-		Footer(RosterCruise(identifier, c.Cruise, "")).
+		Footer(RosterCruise(identifier, c.Cruise, c.CruiseGrace, "")).
 		Node()
 }

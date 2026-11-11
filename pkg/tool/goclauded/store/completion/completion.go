@@ -11,4 +11,5 @@ type Completion struct {
 	Summary           string    `gorm:"column:summary"`
 	Sequence          int       `gorm:"column:sequence"`
 	CreatedAt         time.Time `gorm:"column:created_at"`
+	CompletedAt       time.Time `gorm:"column:completed_at"`
 }

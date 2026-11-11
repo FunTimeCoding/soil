@@ -17,10 +17,11 @@ import (
 
 // Census defines model for Census.
 type Census struct {
-	Fields  []string       `json:"fields"`
-	Methods []CensusMethod `json:"methods"`
-	Package string         `json:"package"`
-	Type    string         `json:"type"`
+	Fields   []string         `json:"fields"`
+	Methods  []CensusMethod   `json:"methods"`
+	Package  string           `json:"package"`
+	Type     string           `json:"type"`
+	Unloaded []CensusUnloaded `json:"unloaded"`
 }
 
 // CensusCaller defines model for CensusCaller.
@@ -68,6 +69,13 @@ type CensusMethod struct {
 type CensusTables struct {
 	Read    []string `json:"read"`
 	Written []string `json:"written"`
+}
+
+// CensusUnloaded defines model for CensusUnloaded.
+type CensusUnloaded struct {
+	Cause   string `json:"cause"`
+	Lost    string `json:"lost"`
+	Package string `json:"package"`
 }
 
 // CensusUse defines model for CensusUse.

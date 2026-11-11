@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
@@ -40,7 +41,7 @@ func renameReceiver(
 		d.Name = p.New
 	}
 
-	addPositionConcern(
+	concern_line.Add(
 		r,
 		set,
 		p.Method.Pos(),

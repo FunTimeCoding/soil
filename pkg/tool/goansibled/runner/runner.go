@@ -12,6 +12,7 @@ type Runner struct {
 	provision        *runner.Runner
 	store            *store.Store
 	playbook         []string
+	site             string
 	cloneDirectory   string
 	ansibleDirectory string
 	logger           *logger.Logger

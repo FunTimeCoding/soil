@@ -46,6 +46,32 @@ func TestChooseAliasFallbackCamelsSnakeName(t *testing.T) {
 	)
 }
 
+func TestChooseAliasKeepsBareSnakeSubsystem(t *testing.T) {
+	assert.String(
+		t,
+		"bravo_charlie",
+		imports.ChooseAlias(
+			"example.org/alfa/pkg/bravo_charlie/constant",
+			"example.org/alfa",
+			constant.ConstantPackage,
+			taken(),
+		),
+	)
+}
+
+func TestChooseAliasFallbackCamelsSnakeSubsystem(t *testing.T) {
+	assert.String(
+		t,
+		"bravoCharlieConstant",
+		imports.ChooseAlias(
+			"example.org/alfa/pkg/bravo_charlie/constant",
+			"example.org/alfa",
+			constant.ConstantPackage,
+			taken("bravo_charlie"),
+		),
+	)
+}
+
 func TestChooseAliasAtLayoutRootIsModulePlusName(t *testing.T) {
 	assert.String(
 		t,

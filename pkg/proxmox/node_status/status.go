@@ -2,7 +2,7 @@ package node_status
 
 type Status struct {
 	BootDetail      BootDetail      `json:"boot-info"`
-	Idle            int             `json:"idle"`
+	Idle            float64         `json:"idle"`
 	Kernel          Kernel          `json:"current-kernel"`
 	KernelVersion   string          `json:"kversion"`
 	LoadAverage     []string        `json:"loadavg"`
@@ -14,5 +14,5 @@ type Status struct {
 	SamePageMerge   SamePageMerge   `json:"ksm"`
 	Swap            Swap            `json:"swap"`
 	Uptime          int             `json:"uptime"`
-	Wait            int             `json:"wait"`
+	Wait            float64         `json:"wait"`
 }

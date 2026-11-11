@@ -1,0 +1,3 @@
+FROM alpine:3.24.3
+COPY tmp/gopatrold/linux-amd64/gopatrold /usr/local/bin
+ENTRYPOINT ["gopatrold"]

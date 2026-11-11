@@ -1,7 +1,7 @@
 package workspace
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
@@ -17,7 +17,7 @@ func (s *Service) SubtreeLoad(
 	g := s.Workspace(directory).Graph()
 	reached := load.ReachedPaths(
 		g,
-		[]string{join.Empty(packagePath, go_modConstant.RecursivePattern)},
+		[]string{join.Empty(packagePath, goModConstant.RecursivePattern)},
 	)
 
 	if s.full {

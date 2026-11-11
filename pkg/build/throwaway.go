@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/build/constant"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -18,7 +18,7 @@ func throwaway(
 	name string,
 ) error {
 	system.SaveFile(
-		join.Absolute(directory, go_modConstant.ModFile),
+		join.Absolute(directory, goModConstant.ModFile),
 		fmt.Sprintf("module %s\n", constant.ThrowawayModule),
 	)
 	r := run.New()

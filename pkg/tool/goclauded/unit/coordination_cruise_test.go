@@ -15,58 +15,59 @@ func TestCruiseRoundTripsThroughRest(t *testing.T) {
 	r, e := a.RestClient.PostSessionCruiseWithResponse(
 		a.Context,
 		a.UUID,
-		client.CruiseRequest{Mode: client.Paced, PaceMinutes: new(15)},
+		client.CruiseRequest{Grace: "15"},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	g, f := a.RestClient.GetSessionCruiseWithResponse(a.Context, a.UUID)
 	assert.FatalOnError(t, f)
-	assert.String(t, "paced", g.JSON200.Mode)
-	assert.Integer(t, 15, *g.JSON200.PaceMinutes)
+	assert.Integer(t, 15, g.JSON200.GraceMinutes)
+	assert.False(t, g.JSON200.Default)
 	assert.Integer(t, 0, g.JSON200.Woken)
 }
 
-func TestRestRefusesPacedCruiseWithoutPace(t *testing.T) {
+func TestRestReportsDefaultCruise(t *testing.T) {
+	s := base.NewWithChannelAlways(t)
+	a := s.NewSession(t)
+	a.Announce(a.Name(), "working")
+	g, e := a.RestClient.GetSessionCruiseWithResponse(a.Context, a.UUID)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 30, g.JSON200.GraceMinutes)
+	assert.True(t, g.JSON200.Default)
+}
+
+func TestRestRefusesGracePastLimit(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
 	r, e := a.RestClient.PostSessionCruiseWithResponse(
 		a.Context,
 		a.UUID,
-		client.CruiseRequest{Mode: client.Paced},
+		client.CruiseRequest{Grace: "60"},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 400, r.StatusCode())
-}
-
-func TestCruisePulseOverRestReportsHold(t *testing.T) {
-	s := base.New(t)
-	a := s.NewSession(t)
-	a.Announce(a.Name(), "working")
-	a.CheckLive()
-	r, e := a.RestClient.PostSessionPulseWithResponse(
-		a.Context,
-		a.UUID,
-		client.PulseRequest{Body: "alert batch", Delivery: new(client.Cruise)},
-	)
-	assert.FatalOnError(t, e)
-	assert.Integer(t, 200, r.StatusCode())
-	assert.False(t, r.JSON200.Immediate)
-	pulses := clientKindEntries(a.CheckLive().Entries, constant.QueuePulse)
-	assert.Count(t, 1, pulses)
 }
 
 func TestCruiseToolSetsAndReadsOwnSession(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "working")
-	a.MustCallTool(
-		constant.CruiseTool,
-		map[string]any{constant.Mode: "paced", constant.Pace: 30},
-	)
+	a.MustCallTool(constant.CruiseTool, map[string]any{constant.Grace: "20"})
 	assert.String(
 		t,
-		"cruise paced every 30m0s",
+		"cruise after 20m0s idle",
 		a.MustCallTool(constant.CruiseTool, map[string]any{}),
 	)
+}
+
+func TestCruiseToolRefusesGracePastLimit(t *testing.T) {
+	s := base.New(t)
+	a := s.NewSession(t)
+	a.Announce(a.Name(), "working")
+	answer := a.MustCallToolError(
+		constant.CruiseTool,
+		map[string]any{constant.Grace: "61"},
+	)
+	assert.StringContains(t, "from 1 to 59", answer)
 }

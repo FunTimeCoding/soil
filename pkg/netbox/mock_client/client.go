@@ -8,10 +8,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
 	"github.com/funtimecoding/soil/pkg/netbox/network"
 	"github.com/funtimecoding/soil/pkg/netbox/rack"
 	"github.com/funtimecoding/soil/pkg/netbox/site"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/netbox/tunnel_termination"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_disk"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 )
@@ -30,6 +32,8 @@ type Client struct {
 	contexts   []*configuration_context.Context
 	sets       []*choice_set.Set
 	fields     []*custom_field.Field
+	tunnels    []*tunnel_termination.Termination
+	addresses  map[string][]*internet_address.Address
 	calls      []string
 	failures   *failure.Failure
 	Failure    error

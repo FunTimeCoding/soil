@@ -6,8 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
-func (s *Service) indexed(collection string) (map[string]string, error) {
-	result := map[string]string{}
+func (s *Service) indexed(
+	collection string,
+) (map[string]client.SearchResult, error) {
+	result := map[string]client.SearchResult{}
 	offset := 0
 
 	for {
@@ -35,7 +37,7 @@ func (s *Service) indexed(collection string) (map[string]string, error) {
 		}
 
 		for _, r := range outcome.Results {
-			result[r.Path] = r.Hash
+			result[r.Path] = r
 		}
 
 		if len(outcome.Results) < goquerydConstant.ListPage {

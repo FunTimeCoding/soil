@@ -5,11 +5,13 @@ func NewCensus(
 	typeName string,
 	fields []string,
 	methods []*CensusMethod,
+	unloaded []*CensusUnloaded,
 ) *Census {
 	return &Census{
-		Package: packagePath,
-		Type:    typeName,
-		Fields:  fields,
-		Methods: methods,
+		Package:  packagePath,
+		Type:     typeName,
+		Fields:   fields,
+		Methods:  methods,
+		Unloaded: unloaded,
 	}
 }

@@ -7,5 +7,5 @@ func (c *Client) TunnelTerminations() ([]*tunnel_termination.Termination, error)
 		return nil, c.Failure
 	}
 
-	return nil, nil
+	return c.tunnels, nil
 }

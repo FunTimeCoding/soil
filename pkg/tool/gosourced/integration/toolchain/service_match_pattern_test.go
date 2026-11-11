@@ -57,10 +57,12 @@ func TestMatchPatternImported(t *testing.T) {
 	assert.Integer(t, 4, match.Total)
 	assert.Integer(t, 2, match.Matched)
 	assert.Integer(t, 2, len(match.Unmatched))
-	assert.String(t, "fmt.Println(\"done\", 2)", match.Unmatched[0].Exemplar)
-	assert.String(t, "pkg/monitor/run.go", match.Unmatched[0].Locations[0].File)
-	assert.String(t, "fmt.Println(7)", match.Unmatched[1].Exemplar)
-	assert.String(t, "pkg/gauge/run.go", match.Unmatched[1].Locations[0].File)
+	assert.String(t, "fmt.Println(INT)", match.Unmatched[0].Shape)
+	assert.String(t, "fmt.Println(7)", match.Unmatched[0].Exemplar)
+	assert.String(t, "pkg/gauge/run.go", match.Unmatched[0].Locations[0].File)
+	assert.String(t, "fmt.Println(STRING, INT)", match.Unmatched[1].Shape)
+	assert.String(t, "fmt.Println(\"done\", 2)", match.Unmatched[1].Exemplar)
+	assert.String(t, "pkg/monitor/run.go", match.Unmatched[1].Locations[0].File)
 }
 
 func TestMatchPatternHoleConsistency(t *testing.T) {

@@ -9,6 +9,7 @@ import (
 
 func New(
 	pattern *match.Pattern,
+	qualifiers map[string]string,
 	information *types.Info,
 	scope *types.Package,
 	set *token.FileSet,
@@ -17,6 +18,7 @@ func New(
 ) *Matcher {
 	return &Matcher{
 		holes:       pattern.Holes,
+		qualifiers:  qualifiers,
 		bindings:    map[string]ast.Expr{},
 		information: information,
 		scope:       scope,

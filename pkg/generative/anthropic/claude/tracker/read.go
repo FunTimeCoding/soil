@@ -65,11 +65,11 @@ func Read(
 			}
 		}
 
-		if cold {
-			if line.Slug != "" && s.Slug == "" {
-				s.Slug = line.Slug
-			}
+		if line.Slug != "" && s.Slug == "" {
+			s.Slug = line.Slug
+		}
 
+		if cold {
 			if line.WorkDirectory != "" && s.WorkDirectory == "" {
 				s.WorkDirectory = line.WorkDirectory
 			}

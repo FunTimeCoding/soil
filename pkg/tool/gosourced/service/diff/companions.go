@@ -1,7 +1,7 @@
 package diff
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/module_range"
 )
 
@@ -11,8 +11,8 @@ func (s *Service) companions(
 	after map[string][]byte,
 	to string,
 ) []*module_range.Range {
-	was := requirements(before[go_modConstant.ModFile])
-	now := requirements(after[go_modConstant.ModFile])
+	was := requirements(before[goModConstant.ModFile])
+	now := requirements(after[goModConstant.ModFile])
 	var result []*module_range.Range
 
 	for _, m := range s.inventory.Modules {

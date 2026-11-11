@@ -3,16 +3,14 @@ package goclaude
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
-	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func sessionCruise(c *command_context.Context) *cobra.Command {
-	var pace int
-	result := &cobra.Command{
-		Use:   "cruise <id-or-name> [off|on|paced]",
-		Short: "Show a session's cruise setting, or set it",
+	return &cobra.Command{
+		Use:   "cruise <id-or-name> [off|default|<minutes>]",
+		Short: "Show a session's cruise grace, or set it",
 		Args:  cobra.RangeArgs(1, 2),
 		Run: func(
 			_ *cobra.Command,
@@ -24,39 +22,24 @@ func sessionCruise(c *command_context.Context) *cobra.Command {
 				return
 			}
 
-			var r *client.CruiseResponse
-			var e error
-
 			if len(arguments) == 1 {
-				r, e = c.Client().GetSessionCruise(
-					context.Background(),
-					identifier,
+				c.Terminal().EmitValue(
+					c.Client().GetSessionCruise(
+						context.Background(),
+						identifier,
+					),
 				)
-			} else {
-				body := client.CruiseRequest{
-					Mode: client.CruiseRequestMode(arguments[1]),
-				}
 
-				if pace > 0 {
-					body.PaceMinutes = &pace
-				}
-
-				r, e = c.Client().PostSessionCruise(
-					context.Background(),
-					identifier,
-					body,
-				)
+				return
 			}
 
-			c.Terminal().EmitValue(r, e)
+			c.Terminal().EmitValue(
+				c.Client().PostSessionCruise(
+					context.Background(),
+					identifier,
+					client.CruiseRequest{Grace: arguments[1]},
+				),
+			)
 		},
 	}
-	result.Flags().IntVar(
-		&pace,
-		goclaudedConstant.Pace,
-		0,
-		"minutes between wakes, for paced",
-	)
-
-	return result
 }

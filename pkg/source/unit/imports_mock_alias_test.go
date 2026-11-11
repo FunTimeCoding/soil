@@ -17,6 +17,17 @@ func TestMockAliasCarriesItsPackage(t *testing.T) {
 	)
 }
 
+func TestMockAliasCamelsSnakeOwner(t *testing.T) {
+	assert.String(
+		t,
+		"bravoCharlieMock",
+		imports.MockAlias(
+			"example.org/alfa/pkg/bravo_charlie/mock_client",
+			"example.org/alfa",
+		),
+	)
+}
+
 func TestMockAliasClimbsPastClientToItsOwner(t *testing.T) {
 	assert.String(
 		t,

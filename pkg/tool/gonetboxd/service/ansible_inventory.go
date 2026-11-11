@@ -4,6 +4,7 @@ import "github.com/funtimecoding/soil/pkg/netbox/ansible_inventory"
 
 func (s *Service) AnsibleInventory(
 	field string,
+	site string,
 ) (*ansible_inventory.Inventory, error) {
 	return guarded(
 		s.guard,
@@ -25,7 +26,13 @@ func (s *Service) AnsibleInventory(
 				devices = activeDevices(devices)
 			}
 
-			return ansible_inventory.New(field, machines, devices), nil
+			tunnel, g := s.tunnelAddresses(site, machines, devices)
+
+			if g != nil {
+				return nil, g
+			}
+
+			return ansible_inventory.New(field, tunnel, machines, devices), nil
 		},
 	)
 }

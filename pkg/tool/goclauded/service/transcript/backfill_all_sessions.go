@@ -2,6 +2,7 @@ package transcript
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/backfill_result"
 )
 
@@ -11,9 +12,7 @@ func (s *Service) BackfillAllSessions() *backfill_result.Result {
 	errors.PanicOnError(e)
 
 	for _, e := range sessions {
-		resolved := s.client.Resolve(e.Identifier)
-
-		if resolved.Identifier == "" {
+		if !system.FileExists(s.transcriptPath(e.Identifier)) {
 			r.Skipped++
 
 			continue

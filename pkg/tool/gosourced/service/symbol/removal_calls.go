@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/token"
 	"golang.org/x/tools/go/ast/astutil"
@@ -39,7 +40,7 @@ func removalCalls(
 			call := enclosingCall(path)
 
 			if call == nil {
-				addPositionConcern(
+				concern_line.Add(
 					r,
 					set,
 					reference.Ident.Pos(),
@@ -55,7 +56,7 @@ func removalCalls(
 			arguments, okay := droppedArguments(owner, call, t)
 
 			if !okay {
-				addPositionConcern(
+				concern_line.Add(
 					r,
 					set,
 					call.Pos(),

@@ -2,7 +2,7 @@ package resolve
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"golang.org/x/mod/modfile"
 	"os"
@@ -10,7 +10,7 @@ import (
 )
 
 func LocalReplacements(directory string) []string {
-	p := filepath.Join(directory, go_modConstant.ModFile)
+	p := filepath.Join(directory, goModConstant.ModFile)
 
 	if !system.FileExists(p) {
 		return nil

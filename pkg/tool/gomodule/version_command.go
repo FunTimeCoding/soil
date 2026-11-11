@@ -6,7 +6,7 @@ import (
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/runtime"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -35,7 +35,7 @@ func versionCommand(t *terminal.Terminal) *cobra.Command {
 				o.Path = arguments[0]
 			}
 
-			if s := environment.Optional(go_modConstant.VersionSkipEnvironment); s != "" {
+			if s := environment.Optional(goModConstant.VersionSkipEnvironment); s != "" {
 				o.Skip = split.Comma(s)
 			} else if skip != "" {
 				o.Skip = split.Comma(skip)

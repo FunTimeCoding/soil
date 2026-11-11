@@ -25,13 +25,43 @@ func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.String(
 		t,
 		"Keep `pkg/alfa/keep.go`, move `pkg/bravo/lone.go`.\n",
+		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+	)
+}
+
+func TestMoveSymbolsRetargetsSplitFileToPackage(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-split-file/src"),
+	)
+	testutil.WriteFile(
+		t,
+		d,
+		"doc/note.md",
+		"Helpers live in `pkg/alfa/helpers.go`.\n",
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+		t.Context(),
+		d,
+		"example/pkg/alfa",
+		[]string{"Clamp", "Limit"},
+		"",
+		"example/pkg/bravo",
+		"",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"Helpers live in `pkg/bravo`.\n",
 		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
 	)
 }

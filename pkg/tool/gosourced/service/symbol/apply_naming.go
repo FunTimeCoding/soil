@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/naming"
 	"go/token"
 )
@@ -39,7 +40,7 @@ func applyNaming(
 			fields[s.Field].Names[s.Index].Name = name
 		}
 
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			s.Signature.Pos(),

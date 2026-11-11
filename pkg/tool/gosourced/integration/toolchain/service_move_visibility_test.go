@@ -19,7 +19,6 @@ func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -48,7 +47,6 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -75,7 +73,6 @@ func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
 		"",
 		"example/pkg/bravo",
 		"",
-		false,
 		false,
 		false,
 	)

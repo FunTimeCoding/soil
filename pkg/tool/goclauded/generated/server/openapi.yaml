@@ -875,7 +875,7 @@ paths:
           type: string
       responses:
         "200":
-          description: The session's cruise setting; off for a session that never set one.
+          description: The session's cruise setting; the daemon's default for a session that never set one.
           content:
             application/json:
               schema:
@@ -1276,41 +1276,37 @@ components:
         body:
           type: string
         delivery:
-          $ref: "#/components/schemas/Delivery"
+          description: Absent means queued.
+          allOf:
+          - $ref: "#/components/schemas/Delivery"
     Delivery:
       type: string
-      description: queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+      description: immediate wakes the session now, queued arrives with its next prompt or after its idle grace. Each request says what absent means.
       enum:
       - queued
       - immediate
-      - cruise
     CruiseRequest:
       type: object
       required:
-      - mode
+      - grace
       properties:
-        mode:
+        grace:
           type: string
-          enum:
-          - "off"
-          - "on"
-          - paced
-        pace_minutes:
-          type: integer
-          minimum: 1
-          maximum: 60
-          description: Minutes between wakes, for paced mode - a whole number from 1 to 60.
+          description: off, default, or idle minutes before the wake - a whole number from 1 to 59.
     CruiseResponse:
       type: object
       required:
-      - mode
+      - grace_minutes
+      - default
       - woken
       properties:
-        mode:
-          type: string
-        pace_minutes:
+        grace_minutes:
           type: integer
-        promoted_at:
+          description: Idle minutes before a wake delivers what waits; 0 is off.
+        default:
+          type: boolean
+          description: The grace follows the daemon's default rather than a setting of the session's own.
+        woken_at:
           type: string
           format: date-time
         woken:
@@ -1477,7 +1473,9 @@ components:
         body:
           type: string
         delivery:
-          $ref: "#/components/schemas/Delivery"
+          description: Absent means immediate; a broadcast is always queued.
+          allOf:
+          - $ref: "#/components/schemas/Delivery"
     NotifyRequest:
       type: object
       required:
@@ -1492,7 +1490,9 @@ components:
         body:
           type: string
         delivery:
-          $ref: "#/components/schemas/Delivery"
+          description: Absent means queued.
+          allOf:
+          - $ref: "#/components/schemas/Delivery"
     DeliveryResponse:
       type: object
       required:

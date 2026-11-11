@@ -9,6 +9,7 @@ type DeviceClient interface {
 	AnsibleInventoryMarkup(
 		x context.Context,
 		field string,
+		site string,
 	) (string, error)
 	CreateCable(
 		x context.Context,

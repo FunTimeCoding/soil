@@ -8,9 +8,14 @@ import (
 	"sort"
 )
 
-func Fingerprint(p *types.Package) string {
+func Fingerprint(
+	p *types.Package,
+	fingerprints map[string]string,
+) string {
 	var lines []string
 	scope := p.Scope()
+	mentioned := make(map[string]bool)
+	seen := make(map[types.Type]bool)
 
 	for _, name := range scope.Names() {
 		o := scope.Lookup(name)
@@ -20,6 +25,7 @@ func Fingerprint(p *types.Package) string {
 		}
 
 		lines = append(lines, types.ObjectString(o, qualifier))
+		mentionType(o.Type(), p, mentioned, seen)
 		typeName, isTypeName := o.(*types.TypeName)
 
 		if !isTypeName {
@@ -35,8 +41,13 @@ func Fingerprint(p *types.Package) string {
 		for i := range set.Len() {
 			if f, okay := set.At(i).Obj().(*types.Func); okay && f.Exported() {
 				lines = append(lines, join.Space(name, f.Name(), Signature(f)))
+				mentionType(f.Type(), p, mentioned, seen)
 			}
 		}
+	}
+
+	for path := range mentioned {
+		lines = append(lines, join.Space("mentions", path, fingerprints[path]))
 	}
 
 	sort.Strings(lines)

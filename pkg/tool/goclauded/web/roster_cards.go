@@ -47,6 +47,7 @@ func (s *Server) rosterCards() ([]*roster_card.Card, error) {
 		c.Latest = pulses[c.Session.Identifier]
 		c.Queued = queued[c.Session.Identifier]
 		c.Cruise = cruise[c.Session.Identifier]
+		c.CruiseGrace = s.message.Grace(c.Cruise)
 		result = append(result, c)
 	}
 

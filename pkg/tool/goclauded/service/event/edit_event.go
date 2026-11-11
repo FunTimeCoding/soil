@@ -48,14 +48,7 @@ func (s *Service) EditEvent(
 			c, f := s.store.TopicCompletion(edited.SessionIdentifier, topic)
 
 			if f == nil && c != nil {
-				s.report(
-					s.document.PushCompletion(
-						slug,
-						c.Sequence,
-						message,
-						metadata,
-					),
-				)
+				s.report(s.document.PushCompletion(slug, c, message, metadata))
 			}
 		}
 	}

@@ -10,20 +10,71 @@ import (
 	"time"
 )
 
-func TestCruiseDeliveryWakesArmedIdleSession(t *testing.T) {
+func TestQueuedPulseWaitsOutGrace(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
-	s.Arm("session-1", constant.CruiseOn, 0)
-	assert.True(t, s.Pulse("session-1", constant.DeliveryCruise))
+	s.Arm("session-1", "30")
+	assert.False(t, s.Pulse("session-1", constant.DeliveryQueued))
+	s.Store.Advance(29 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 0, s.Channel("session-1"))
+	s.Store.Advance(time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestCruiseDeliveryWaitsForPromptWhileCruiseIsOff(t *testing.T) {
+func TestOneWakeDeliversEverythingWaiting(t *testing.T) {
+	s := service_tester.New(t)
+	r1 := s.Check("session-1")
+	r2 := s.Store.EnsureSession("session-2")
+	s.EndTurn("session-1")
+	s.Arm("session-1", "30")
+	s.Pulse("session-1", constant.DeliveryQueued)
+	s.Send(r2.Callsign, r1.Callsign, "named")
+	s.Send(r2.Callsign, "", "to everyone")
+	_, e := s.Message.SendNotification(
+		r1.Callsign,
+		"mattermost",
+		"notice",
+		constant.DeliveryQueued,
+	)
+	assert.FatalOnError(t, e)
+	s.Store.Advance(30 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 4, s.Channel("session-1"))
+	setting, f := s.Message.CruiseSetting("session-1")
+	assert.FatalOnError(t, f)
+	assert.Integer(t, 1, setting.Woken)
+}
+
+func TestRosterActivityNeverPops(t *testing.T) {
+	s := service_tester.New(t)
+	s.Check("session-1")
+	r2 := s.Store.EnsureSession("session-2")
+	s.EndTurn("session-1")
+	s.Arm("session-1", "30")
+	s.Announce("session-2", r2.Callsign, "some work", "")
+	s.Store.Advance(30 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 0, s.Channel("session-1"))
+	assert.Count(
+		t,
+		1,
+		fixture.KindEntries(
+			s.Check("session-1").Entries,
+			constant.QueueSessionAnnounce,
+		),
+	)
+}
+
+func TestCruiseOffWaitsForPrompt(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
-	assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
+	s.Arm("session-1", constant.CruiseOff)
+	s.Pulse("session-1", constant.DeliveryQueued)
+	s.Store.Advance(30 * time.Minute)
 	assert.Count(t, 0, s.Message.ReleaseCruise())
 	assert.Integer(t, 0, s.Channel("session-1"))
 	assert.Count(
@@ -33,91 +84,63 @@ func TestCruiseDeliveryWaitsForPromptWhileCruiseIsOff(t *testing.T) {
 	)
 }
 
-func TestBusySessionHoldsCruiseUntilItsTurnEnds(t *testing.T) {
+func TestGraceCountsFromTurnEnd(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
+	s.Arm("session-1", "30")
+	s.Store.Advance(40 * time.Minute)
+	s.Check("session-1")
+	s.Pulse("session-1", constant.DeliveryQueued)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 0, s.Channel("session-1"))
+	s.EndTurn("session-1")
+	s.Store.Advance(29 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 0, s.Channel("session-1"))
 	s.Store.Advance(time.Minute)
-	s.Check("session-1")
-	s.Arm("session-1", constant.CruiseOn, 0)
-	assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
-	assert.Count(t, 0, s.Message.ReleaseCruise())
-	assert.Integer(t, 0, s.Channel("session-1"))
-	s.EndTurn("session-1")
 	assert.Count(t, 0, s.Message.ReleaseCruise())
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestPacedCruiseWakesAtMostOncePerPace(t *testing.T) {
+func TestReleaseCountsOnceAgainstCap(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
-	s.Arm("session-1", constant.CruisePaced, 15*time.Minute)
-	assert.True(t, s.Pulse("session-1", constant.DeliveryCruise))
-	assert.Integer(t, 1, s.Channel("session-1"))
-	assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
-	s.Store.Advance(5 * time.Minute)
+	s.Arm("session-1", "30")
+
+	for range 10 {
+		s.Pulse("session-1", constant.DeliveryQueued)
+	}
+
+	s.Store.Advance(30 * time.Minute)
 	assert.Count(t, 0, s.Message.ReleaseCruise())
-	assert.Integer(t, 0, s.Channel("session-1"))
-	s.Store.Advance(15 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
-	assert.Integer(t, 1, s.Channel("session-1"))
+	assert.Integer(t, 10, s.Channel("session-1"))
+
+	for range constant.ImmediateLimit - 1 {
+		assert.True(t, s.Pulse("session-1", constant.DeliveryImmediate))
+	}
+
+	assert.False(t, s.Pulse("session-1", constant.DeliveryImmediate))
 }
 
-func TestEveryCruiseWakeIsCountedAcrossRearm(t *testing.T) {
+func TestReleaseWaitsWhileCapIsSpent(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.EndTurn("session-1")
-	s.Arm("session-1", constant.CruisePaced, 15*time.Minute)
-	assert.True(t, s.Pulse("session-1", constant.DeliveryCruise))
-	assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
-	s.Store.Advance(15 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
-	s.Arm("session-1", constant.CruiseOn, 0)
-	setting, e := s.Message.CruiseSetting("session-1")
-	assert.FatalOnError(t, e)
-	assert.Integer(t, 2, setting.Woken)
-}
-
-func TestCruiseReleaseKeepsToRateCap(t *testing.T) {
-	s := service_tester.New(t)
-	s.Check("session-1")
-	s.EndTurn("session-1")
+	s.Arm("session-1", "30")
+	s.Store.Advance(30 * time.Minute)
 
 	for range constant.ImmediateLimit {
 		assert.True(t, s.Pulse("session-1", constant.DeliveryImmediate))
 	}
 
-	s.Arm("session-1", constant.CruiseOn, 0)
-	assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
+	s.Pulse("session-1", constant.DeliveryQueued)
 	assert.Count(t, 0, s.Message.ReleaseCruise())
 	assert.Integer(t, 6, s.Channel("session-1"))
 	s.Store.Advance(constant.ImmediateWindow)
 	assert.Count(t, 0, s.Message.ReleaseCruise())
 	assert.Integer(t, 1, s.Channel("session-1"))
-}
-
-func TestHeldBacklogReleasesNoFasterThanCap(t *testing.T) {
-	s := service_tester.New(t)
-	s.Check("session-1")
-	s.EndTurn("session-1")
-	s.Store.Advance(time.Minute)
-	s.Check("session-1")
-	s.Arm("session-1", constant.CruiseOn, 0)
-
-	for range 10 {
-		assert.False(t, s.Pulse("session-1", constant.DeliveryCruise))
-	}
-
-	s.Store.Advance(2 * constant.ImmediateWindow)
-	s.EndTurn("session-1")
-	assert.Count(t, 0, s.Message.ReleaseCruise())
-	assert.Integer(t, 6, s.Channel("session-1"))
-	assert.Count(t, 0, s.Message.ReleaseCruise())
-	assert.Integer(t, 0, s.Channel("session-1"))
-	s.Store.Advance(constant.ImmediateWindow)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
-	assert.Integer(t, 4, s.Channel("session-1"))
 }
 
 func TestImmediateDeliveryIgnoresCruise(t *testing.T) {
@@ -127,24 +150,64 @@ func TestImmediateDeliveryIgnoresCruise(t *testing.T) {
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
-func TestPacedCruiseNeedsPace(t *testing.T) {
+func TestCruiseIsOffByDefaultWithoutChannelPromise(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
-	e := s.Message.SetCruise("session-1", constant.CruisePaced, 0)
-	assert.True(t, refusal.Is(e))
-}
-
-func TestUnknownCruiseModeIsRefused(t *testing.T) {
-	s := service_tester.New(t)
-	s.Check("session-1")
-	e := s.Message.SetCruise("session-1", constant.Cruise("sometimes"), 0)
-	assert.True(t, refusal.Is(e))
-}
-
-func TestCruiseIsOffForSessionThatNeverSetIt(t *testing.T) {
-	s := service_tester.New(t)
-	s.Check("session-1")
+	s.EndTurn("session-1")
+	s.Pulse("session-1", constant.DeliveryQueued)
+	s.Store.Advance(30 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 0, s.Channel("session-1"))
 	setting, e := s.Message.CruiseSetting("session-1")
 	assert.FatalOnError(t, e)
-	assert.String(t, "off", string(setting.Mode))
+	assert.Nil(t, setting.Grace)
+	assert.Duration(t, 0, s.Message.Grace(setting))
+}
+
+func TestChannelPromiseDefaultsCruiseToThirtyMinutes(t *testing.T) {
+	s := service_tester.New(t)
+	s.Message.WithChannelAlways()
+	s.Check("session-1")
+	s.EndTurn("session-1")
+	s.Pulse("session-1", constant.DeliveryQueued)
+	s.Store.Advance(30 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 1, s.Channel("session-1"))
+	setting, e := s.Message.CruiseSetting("session-1")
+	assert.FatalOnError(t, e)
+	assert.Nil(t, setting.Grace)
+	assert.Integer(t, 1, setting.Woken)
+}
+
+func TestOwnGraceOverridesDefault(t *testing.T) {
+	s := service_tester.New(t)
+	s.Message.WithChannelAlways()
+	s.Check("session-1")
+	s.EndTurn("session-1")
+	s.Arm("session-1", "10")
+	s.Pulse("session-1", constant.DeliveryQueued)
+	s.Store.Advance(10 * time.Minute)
+	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Integer(t, 1, s.Channel("session-1"))
+}
+
+func TestDefaultClearsOwnGrace(t *testing.T) {
+	s := service_tester.New(t)
+	s.Check("session-1")
+	s.Arm("session-1", "10")
+	s.Arm("session-1", constant.CruiseDefault)
+	setting, e := s.Message.CruiseSetting("session-1")
+	assert.FatalOnError(t, e)
+	assert.Nil(t, setting.Grace)
+}
+
+func TestCruiseGraceTakesOneToFiftyNineMinutes(t *testing.T) {
+	s := service_tester.New(t)
+	s.Check("session-1")
+	assert.FatalOnError(t, s.Message.SetCruise("session-1", "1"))
+	assert.FatalOnError(t, s.Message.SetCruise("session-1", "59"))
+
+	for _, refused := range []string{"0", "60", "1.5", "sometimes", ""} {
+		assert.True(t, refusal.Is(s.Message.SetCruise("session-1", refused)))
+	}
 }

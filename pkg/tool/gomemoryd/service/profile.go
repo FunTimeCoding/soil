@@ -6,8 +6,10 @@ import (
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/format"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/budget"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"slices"
 	"strings"
 )
@@ -19,10 +21,6 @@ func (s *Service) Profile(
 ) (*profile.Result, *profile.Detail, error) {
 	if scope == constant.AllScope || scope == constant.DefaultScope {
 		return nil, nil, validation.New("scope name is reserved: %s", scope)
-	}
-
-	if f := s.ensureTokenizer(); f != nil {
-		return nil, nil, f
 	}
 
 	always, e := s.ListMemoriesWithContent(constant.AlwaysTag, scope)
@@ -75,19 +73,58 @@ func (s *Service) Profile(
 		parentChildren[parent] = names
 	}
 
-	alwaysTokens := 0
+	notice := ""
+	var completed []client.SearchResult
+
+	if scope == "" {
+		results, g := s.ListCompletions()
+
+		if n := s.queryNotice(g); n != "" {
+			notice = n
+		} else {
+			completed = results
+		}
+	}
+
+	var matched []record.SearchResult
+
+	if topic != "" && scope == "" {
+		exclude := make([]string, len(always))
+
+		for i, m := range always {
+			exclude[i] = fmt.Sprintf("memory/%d", m.Identifier)
+		}
+
+		var g error
+		matched, g = s.SearchRelevant(topic, 20, exclude)
+
+		if n := s.queryNotice(g); n != "" {
+			notice = n
+		}
+	}
+
+	b := budget.New(constant.ProfileByteBudget)
+
+	if notice != "" {
+		b.Open("")
+		b.Charge(notice)
+	}
+
+	mark := b.Spent()
+	b.Open(profile.Opening(constant.AlwaysSectionHeading))
 
 	for i := range always {
 		if children, found := parentChildren[always[i].Identifier]; found {
 			always[i].Children = children
 		}
 
-		alwaysTokens += s.tokenizer.Count(format.AlwaysMemory(&always[i]))
+		b.Charge(format.AlwaysMemory(&always[i]))
 	}
 
-	remaining := max(constant.ProfileBudget-alwaysTokens, 0)
+	alwaysBytes := b.Spent() - mark
+	mark = b.Spent()
+	b.Open(profile.Opening(constant.IndexSectionHeading))
 	indexTrimmed := 0
-	indexTokens := 0
 	var index []record.MemorySummary
 
 	for _, m := range allMemories {
@@ -107,63 +144,47 @@ func (s *Service) Profile(
 			m.Children = children
 		}
 
-		tokens := s.tokenizer.Count(format.IndexEntry(&m))
-
-		if remaining-tokens < 0 {
+		if !b.Fit(format.IndexEntry(&m)) {
 			indexTrimmed++
 
 			continue
 		}
 
-		remaining -= tokens
-		indexTokens += tokens
 		index = append(index, m)
 	}
 
-	notice := ""
+	indexBytes := b.Spent() - mark
+	mark = b.Spent()
+	b.Open(profile.Opening(constant.CompletionSectionHeading))
 	completionsTrimmed := 0
-	completionTokens := 0
 	var completions []*profile.Completion
 
-	if scope == "" {
-		results, g := s.ListCompletions()
+	for _, r := range completed {
+		name := r.Path
 
-		if n := s.queryNotice(g); n != "" {
-			notice = n
-		} else {
-			for _, r := range results {
-				name := r.Path
-
-				if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
-					name = name[:i]
-				}
-
-				body := ""
-
-				if r.Body != nil {
-					body = *r.Body
-				}
-
-				tokens := s.tokenizer.Count(format.Completion(name, body))
-
-				if remaining-tokens < 0 {
-					completionsTrimmed++
-
-					continue
-				}
-
-				remaining -= tokens
-				completionTokens += tokens
-				completions = append(
-					completions,
-					profile.NewCompletion(name, body),
-				)
-			}
+		if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
+			name = name[:i]
 		}
+
+		body := ""
+
+		if r.Body != nil {
+			body = *r.Body
+		}
+
+		if !b.Fit(format.Completion(name, body)) {
+			completionsTrimmed++
+
+			continue
+		}
+
+		completions = append(completions, profile.NewCompletion(name, body))
 	}
 
+	completionBytes := b.Spent() - mark
+	mark = b.Spent()
+	b.Open(profile.Opening(constant.ImpressionSectionHeading))
 	impressionsTrimmed := 0
-	impressionTokens := 0
 	var impressions []record.Impression
 
 	if scope == "" {
@@ -171,53 +192,34 @@ func (s *Service) Profile(
 
 		if g == nil {
 			for i := range latest {
-				tokens := s.tokenizer.Count(format.Impression(&latest[i]))
-
-				if remaining-tokens < 0 {
+				if !b.Fit(format.Impression(&latest[i])) {
 					impressionsTrimmed++
 
 					continue
 				}
 
-				remaining -= tokens
-				impressionTokens += tokens
 				impressions = append(impressions, latest[i])
 			}
 		}
 	}
 
+	impressionBytes := b.Spent() - mark
+	mark = b.Spent()
+	b.Open(profile.Opening(constant.RelevantSectionHeading))
 	relevantTrimmed := 0
-	relevantTokens := 0
 	var relevant []record.SearchResult
 
-	if topic != "" && scope == "" {
-		exclude := make([]string, len(always))
+	for i := range matched {
+		if !b.Fit(format.RelevantMemory(&matched[i])) {
+			relevantTrimmed++
 
-		for i, m := range always {
-			exclude[i] = fmt.Sprintf("memory/%d", m.Identifier)
+			continue
 		}
 
-		found, g := s.SearchRelevant(topic, 20, exclude)
-
-		if n := s.queryNotice(g); n != "" {
-			notice = n
-		}
-
-		for i := range found {
-			tokens := s.tokenizer.Count(format.RelevantMemory(&found[i]))
-
-			if remaining-tokens < 0 {
-				relevantTrimmed++
-
-				continue
-			}
-
-			remaining -= tokens
-			relevantTokens += tokens
-			relevant = append(relevant, found[i])
-		}
+		relevant = append(relevant, matched[i])
 	}
 
+	relevantBytes := b.Spent() - mark
 	result := profile.NewResult(
 		always,
 		index,
@@ -231,17 +233,17 @@ func (s *Service) Profile(
 	}
 
 	d := profile.NewDetail()
-	d.Budget = constant.ProfileBudget
-	d.AlwaysTokens = alwaysTokens
-	d.IndexTokens = indexTokens
+	d.Budget = constant.ProfileByteBudget
+	d.AlwaysBytes = alwaysBytes
+	d.IndexBytes = indexBytes
 	d.IndexTrimmed = indexTrimmed
-	d.CompletionTokens = completionTokens
+	d.CompletionBytes = completionBytes
 	d.CompletionsTrimmed = completionsTrimmed
-	d.ImpressionTokens = impressionTokens
+	d.ImpressionBytes = impressionBytes
 	d.ImpressionsTrimmed = impressionsTrimmed
-	d.RelevantTokens = relevantTokens
+	d.RelevantBytes = relevantBytes
 	d.RelevantTrimmed = relevantTrimmed
-	d.TotalTokens = constant.ProfileBudget - remaining
+	d.TotalBytes = b.Spent()
 
 	return result, d, nil
 }

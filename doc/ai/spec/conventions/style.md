@@ -26,7 +26,10 @@
   return half; the rest is judgment. Converting forces the constructor
   the codebase already wants, since `&pkg.X{}` trips `struct_literal`
   for owned packages. Generated types stay by value - oapi-codegen
-  types cannot be made to travel by pointer.
+  types cannot be made to travel by pointer. A type that must travel by
+  value - a map key, a value compared on a hot path where a pointer
+  would allocate each time - is declared with `//goanalyze:by-value`
+  and its reason directly above it; a bare directive does not count.
 - **String concatenation** - use `join.Empty(a, b)`
   (`pkg/strings/join`) for pure string-string joins. Use
   `fmt.Sprintf` only when there is actual formatting (numbers,

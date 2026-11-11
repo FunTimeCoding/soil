@@ -9,10 +9,9 @@ import (
 
 func (s *Store) SetCruise(
 	sessionIdentifier string,
-	mode constant.Cruise,
-	pace time.Duration,
+	grace *time.Duration,
 ) error {
-	v := cruise_setting.New(sessionIdentifier, mode, pace)
+	v := cruise_setting.New(sessionIdentifier, grace)
 	v.UpdatedAt = s.clock()
 
 	return s.database.Clauses(
@@ -20,9 +19,8 @@ func (s *Store) SetCruise(
 			Columns: []clause.Column{{Name: "session_identifier"}},
 			DoUpdates: clause.Assignments(
 				map[string]any{
-					"mode":       mode,
-					"pace":       pace,
-					"updated_at": v.UpdatedAt,
+					constant.GraceColumn: grace,
+					"updated_at":         v.UpdatedAt,
 				},
 			),
 		},

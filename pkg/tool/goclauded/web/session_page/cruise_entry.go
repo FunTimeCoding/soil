@@ -6,29 +6,39 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/component/choice"
 	"github.com/funtimecoding/soil/pkg/web/component/entry"
 	"strconv"
+	"time"
 )
 
 func cruiseEntry(
 	identifier string,
 	setting *cruise_setting.Setting,
+	grace time.Duration,
 ) *entry.Entry {
-	pace := ""
+	kind := constant.CruiseMinutes
+	minutes := ""
 
-	if setting.Mode == constant.CruisePaced {
-		pace = strconv.Itoa(int(setting.Pace.Minutes()))
+	switch {
+	case setting.Grace == nil:
+		kind = constant.CruiseDefault
+	case *setting.Grace == 0:
+		kind = constant.CruiseOff
 	}
 
-	modes := []*choice.Choice{
-		choice.New(string(constant.CruiseOff), string(constant.CruiseOff)),
-		choice.New(string(constant.CruiseOn), string(constant.CruiseOn)),
-		choice.New(string(constant.CruisePaced), string(constant.CruisePaced)),
+	if grace > 0 {
+		minutes = strconv.Itoa(int(grace.Minutes()))
+	}
+
+	kinds := []*choice.Choice{
+		choice.New(constant.CruiseDefault, constant.CruiseDefault),
+		choice.New(constant.CruiseOff, constant.CruiseOff),
+		choice.New(constant.CruiseMinutes, constant.CruiseMinutes),
 	}
 
 	return entry.New(ActionPath(identifier, constant.CruiseAction), "Set").
 		Inline().
-		Select(constant.Mode, "Cruise", modes, string(setting.Mode)).
-		Number(constant.Pace, "Minutes", pace).
-		Min(strconv.Itoa(constant.CruisePaceMinimumMinutes)).
-		Max(strconv.Itoa(constant.CruisePaceMaximumMinutes)).
+		Select(constant.GraceKind, "Cruise", kinds, kind).
+		Number(constant.Grace, "Minutes", minutes).
+		Min(strconv.Itoa(constant.CruiseGraceMinimumMinutes)).
+		Max(strconv.Itoa(constant.CruiseGraceMaximumMinutes)).
 		Step("1")
 }

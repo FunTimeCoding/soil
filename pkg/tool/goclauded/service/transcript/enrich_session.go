@@ -1,18 +1,12 @@
 package transcript
 
 import (
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"path/filepath"
 )
 
 func (s *Service) EnrichSession(identifier string) {
-	path := filepath.Join(
-		s.harbor,
-		join.Empty(identifier, soil.NotationLogExtension),
-	)
+	path := s.transcriptPath(identifier)
 	state := s.cache.GetOrCreate(identifier)
 	calls, e := tracker.Read(path, state, constant.FollowedTools)
 

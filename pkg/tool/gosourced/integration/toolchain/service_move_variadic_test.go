@@ -23,7 +23,6 @@ func TestMoveKeepsVariadicSpread(t *testing.T) {
 		"list.go",
 		true,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)

@@ -25,6 +25,7 @@ const (
 
 	AnsibleDirectoryEnvironment = "ANSIBLE_DIRECTORY"
 	AnsiblePlaybookEnvironment  = "ANSIBLE_PLAYBOOK"
+	AnsibleSiteEnvironment      = "ANSIBLE_SITE"
 	PlaybookUsage               = "Comma-separated playbook paths relative to the ansible directory"
 
 	Command          = "ansible-playbook"

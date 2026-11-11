@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/match"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/pattern_site"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
+	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/ast/astutil"
 )
@@ -72,6 +73,19 @@ func (s *Service) MatchPattern(
 
 		return false
 	}
+	qualifiers, _ := qualifierPaths(
+		specification,
+		symbol,
+		anchorPackage(declaration, receiver),
+		lookup.PackageNames(all),
+	)
+	var patternNode ast.Node = specification.Statement
+	call := expressionCall(specification, symbol)
+
+	if call != nil {
+		patternNode = call
+	}
+
 	contents := map[string][]byte{}
 	total := 0
 	matched := 0
@@ -90,9 +104,10 @@ func (s *Service) MatchPattern(
 			reference.Ident.Pos(),
 			reference.Ident.End(),
 		)
-		node := siteNode(path)
+		node, anchor := siteSelection(path, call != nil)
 		unification := matcher.New(
 			specification,
+			qualifiers,
 			reference.Package.TypesInfo,
 			reference.Package.Types,
 			set,
@@ -100,7 +115,7 @@ func (s *Service) MatchPattern(
 			isAnchor,
 		)
 
-		if unification.Unify(specification.Statement, node) {
+		if unification.Unify(patternNode, node) {
 			matched++
 
 			continue
@@ -111,7 +126,7 @@ func (s *Service) MatchPattern(
 			set,
 			contents,
 			node,
-			anchorNode(path),
+			anchor,
 			reference,
 		)
 

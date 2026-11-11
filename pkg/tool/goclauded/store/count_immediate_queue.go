@@ -11,16 +11,34 @@ func (s *Store) CountImmediateQueue(
 	since time.Time,
 ) (int64, error) {
 	condition, arguments := sessionKeyMatch(sessionIdentifier, callsign)
-	var result int64
+	var pushed int64
 
-	return result, s.database.Model(queue.Stub()).Where(
+	if e := s.database.Model(queue.Stub()).Where(
 		condition,
 		arguments...,
 	).Where(
-		"immediate = ?",
+		"immediate = ? AND released = ?",
 		true,
+		false,
 	).Where(
 		"COALESCE(immediate_at, created_at) > ?",
 		since,
-	).Count(&result).Error
+	).Count(&pushed).Error; e != nil {
+		return 0, e
+	}
+
+	var released int64
+
+	if e := s.database.Model(queue.Stub()).Where(
+		condition,
+		arguments...,
+	).Where(
+		"released = ? AND immediate_at > ?",
+		true,
+		since,
+	).Distinct("immediate_at").Count(&released).Error; e != nil {
+		return 0, e
+	}
+
+	return pushed + released, nil
 }

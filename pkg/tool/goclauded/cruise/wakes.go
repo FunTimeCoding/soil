@@ -9,7 +9,7 @@ func Wakes(
 	r *Reading,
 	now time.Time,
 ) bool {
-	if r.Closed || r.Mode == constant.CruiseOff {
+	if r.Closed || r.Grace <= 0 {
 		return false
 	}
 
@@ -17,15 +17,7 @@ func Wakes(
 		return false
 	}
 
-	if now.Sub(r.IdleSince) >= constant.WakeWindow {
-		return false
-	}
+	idle := now.Sub(r.IdleSince)
 
-	if r.Mode == constant.CruisePaced && !r.PromotedAt.IsZero() && now.Sub(
-		r.PromotedAt,
-	) < r.Pace {
-		return false
-	}
-
-	return true
+	return idle >= r.Grace && idle < constant.WakeWindow
 }

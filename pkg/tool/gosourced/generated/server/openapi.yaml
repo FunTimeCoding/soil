@@ -110,6 +110,7 @@ components:
       - type
       - fields
       - methods
+      - unloaded
       properties:
         package:
           type: string
@@ -123,6 +124,23 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CensusMethod"
+        unloaded:
+          type: array
+          items:
+            $ref: "#/components/schemas/CensusUnloaded"
+    CensusUnloaded:
+      type: object
+      required:
+      - package
+      - cause
+      - lost
+      properties:
+        package:
+          type: string
+        cause:
+          type: string
+        lost:
+          type: string
     CensusMethod:
       type: object
       required:

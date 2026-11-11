@@ -22,6 +22,7 @@ func (s *Set) Option(
 	result.Query = func() queryd.Client { return s.Query }
 	result.Notifier = func() face.Notifier { return s.Notifier }
 	result.Sources = func() []string { return []string{s.Source} }
+	result.ChannelAlways = s.ChannelAlways
 
 	return result
 }

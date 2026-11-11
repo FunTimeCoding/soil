@@ -15,6 +15,7 @@ type Entry struct {
 	Delivery          constant.Delivery `gorm:"column:delivery"`
 	Immediate         bool              `gorm:"column:immediate"`
 	ImmediateAt       *time.Time        `gorm:"column:immediate_at"`
+	Released          bool              `gorm:"column:released;not null;default:false"`
 	Consumed          bool              `gorm:"column:consumed"`
 	ConsumedAt        *time.Time        `gorm:"column:consumed_at"`
 	CreatedAt         time.Time         `gorm:"column:created_at"`

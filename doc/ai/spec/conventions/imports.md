@@ -18,7 +18,8 @@ into the analyzer, not only a doc.
   domain's `constant` - the one whose domain directory holds the file,
   the deepest when two do - is imported plain. Every other `constant`
   carries its domain, collision or not: `webConstant`,
-  `consoleConstant`, `stringsConstant`. The global `pkg/constant` takes
+  `consoleConstant`, `stringsConstant`. A snake_case domain joins
+  lower-camel: `goModConstant`. The global `pkg/constant` takes
   the module's name: `soil` in soil, `mint` in mint.
 - **Other packages alias only when names collide in the same file.** The plain
   name goes, in order, to the standard library; the import sharing the longest

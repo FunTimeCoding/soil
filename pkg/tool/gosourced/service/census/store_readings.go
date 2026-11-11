@@ -13,6 +13,7 @@ func storeReadings(
 	directory string,
 	module string,
 	keys map[string]bool,
+	missing unloaded,
 ) (map[string]*storeReading, error) {
 	result := map[string]*storeReading{}
 	loaded := map[string]bool{}
@@ -30,11 +31,13 @@ func storeReadings(
 			loaded[path] = true
 		}
 
-		all, _, e := load.Packages(directory, paths...)
+		all, broken, _, e := load.Lenient(directory, paths...)
 
 		if e != nil {
 			return nil, e
 		}
+
+		noteUnloaded(missing, broken, constant.CensusLostTables)
 
 		for _, p := range all {
 			for _, f := range p.Syntax {

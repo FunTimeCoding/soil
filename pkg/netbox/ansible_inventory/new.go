@@ -7,6 +7,7 @@ import (
 
 func New(
 	field string,
+	tunnel map[string]string,
 	machines []*virtual_machine.Machine,
 	devices []*device.Device,
 ) *Inventory {
@@ -17,7 +18,7 @@ func New(
 			result.add(
 				g,
 				m.Name,
-				hostVariables(m.PrimaryAddress, m.Configuration),
+				hostVariables(m.PrimaryAddress, tunnel[m.Name], m.Configuration),
 			)
 		}
 	}
@@ -27,7 +28,7 @@ func New(
 			result.add(
 				g,
 				d.Name,
-				hostVariables(d.PrimaryAddress, d.Configuration),
+				hostVariables(d.PrimaryAddress, tunnel[d.Name], d.Configuration),
 			)
 		}
 	}

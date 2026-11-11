@@ -78,7 +78,7 @@ func (s *Server) registerSearch() {
 		mcp.NewTool(
 			constant.List,
 			mcp.WithDescription(
-				"List documents in a collection, ordered by recency. Optional metadata filter, pagination, and full body. Response includes facets showing metadata key distribution.",
+				"List documents in a collection, ordered by when each was last pushed - a re-push reorders it. Optional metadata filter, pagination, and full body. Response includes facets showing metadata key distribution.",
 			),
 			mcp.WithString(
 				constant.Collection,

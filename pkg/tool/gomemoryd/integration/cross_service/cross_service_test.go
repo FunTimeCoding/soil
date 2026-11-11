@@ -31,17 +31,18 @@ func TestProfileShowsCompletions(t *testing.T) {
 	assert.StringContains(t, "built the search pipeline", result)
 }
 
-func TestProfileShowsMultipleCompletionsPerSession(t *testing.T) {
+func TestProfileShowsLatestCompletionPerSession(t *testing.T) {
 	s := cross_service_tester.New(t)
 	s.QueryClient.MustCallTool(
 		goquerydConstant.Push,
 		map[string]any{
 			goquerydConstant.Collection: "completions",
 			goquerydConstant.Path:       "test-session/1",
-			goquerydConstant.Body:       "built the API",
+			goquerydConstant.Body:       "wrote the tests",
 			goquerydConstant.Metadata: map[string]string{
 				"source_type":  "session-completion",
 				"session_name": "test-session",
+				"completed_at": "2026-11-10T12:00:00Z",
 			},
 		},
 	)
@@ -50,16 +51,17 @@ func TestProfileShowsMultipleCompletionsPerSession(t *testing.T) {
 		map[string]any{
 			goquerydConstant.Collection: "completions",
 			goquerydConstant.Path:       "test-session/2",
-			goquerydConstant.Body:       "wrote the tests",
+			goquerydConstant.Body:       "built the API",
 			goquerydConstant.Metadata: map[string]string{
 				"source_type":  "session-completion",
 				"session_name": "test-session",
+				"completed_at": "2026-11-09T12:00:00Z",
 			},
 		},
 	)
 	result := s.MemoryClient.MustCallTool(constant.Profile, map[string]any{})
-	assert.StringContains(t, "built the API", result)
 	assert.StringContains(t, "wrote the tests", result)
+	assert.StringNotContains(t, "built the API", result)
 }
 
 func TestProfileCompletionsEmptyWhenNone(t *testing.T) {

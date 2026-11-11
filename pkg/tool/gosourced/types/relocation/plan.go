@@ -17,6 +17,7 @@ type Plan struct {
 	Constraints       map[string][]string
 	Qualifications    map[string]*FileQualification
 	Renames           map[*ast.Ident]string
+	Holders           map[*ast.SelectorExpr]string
 	PackagePath       string
 	TargetPackagePath string
 	TargetPackageName string

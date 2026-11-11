@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/token"
+	"maps"
 )
 
 func planQualifications(
@@ -51,16 +52,23 @@ func planQualifications(
 	}
 
 	for filename, q := range result {
-		q.Name = arrivalName(
+		name, locals, refusal := arrivalName(
 			q,
 			sourcePackagePath,
 			targetPackagePath,
 			targetPackageName,
 		)
 
-		if q.Name == nil {
+		if refusal != "" {
+			return nil, refusal
+		}
+
+		if name == nil {
 			return nil, fmt.Sprintf("no available import name in %s", filename)
 		}
+
+		q.Name = name
+		maps.Copy(q.Locals, locals)
 
 		if !q.Name.Imported {
 			continue

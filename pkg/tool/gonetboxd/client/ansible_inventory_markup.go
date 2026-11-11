@@ -10,11 +10,15 @@ import (
 func (c *Client) AnsibleInventoryMarkup(
 	x context.Context,
 	field string,
+	site string,
 ) (string, error) {
-	r, e := c.client.GetAnsibleInventoryWithResponse(
-		x,
-		&client.GetAnsibleInventoryParams{Field: &field},
-	)
+	p := &client.GetAnsibleInventoryParams{Field: &field}
+
+	if site != "" {
+		p.Site = &site
+	}
+
+	r, e := c.client.GetAnsibleInventoryWithResponse(x, p)
 
 	if e != nil {
 		return "", e

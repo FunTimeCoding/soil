@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/session_detail"
+	"time"
 )
 
 type View struct {
@@ -15,5 +16,6 @@ type View struct {
 	LoadsHidden string
 	Pulses      []pulse.Pulse
 	Cruise      *cruise_setting.Setting
+	CruiseGrace time.Duration
 	DeleteHash  string
 }

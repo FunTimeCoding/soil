@@ -1,0 +1,1 @@
+[{"archive":[],"backup":[],"cipher":"none","db":[],"name":"empty","repo":[{"cipher":"none","key":1,"status":{"code":1,"message":"missing stanza path"}}],"status":{"code":1,"lock":{"backup":{"held":false},"restore":{"held":false}},"message":"missing stanza path"}}]

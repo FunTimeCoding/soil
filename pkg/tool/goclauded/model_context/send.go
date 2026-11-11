@@ -32,14 +32,12 @@ func (s *Server) send(
 	}
 
 	to := q.GetStringSlice(constant.To, nil)
-	d := constant.Delivery(
-		q.GetString(constant.DeliveryParameter, string(constant.DeliveryQueued)),
-	)
+	d := constant.Delivery(q.GetString(constant.DeliveryParameter, ""))
 
 	switch d {
-	case constant.DeliveryQueued, constant.DeliveryImmediate, constant.DeliveryCruise:
+	case "", constant.DeliveryQueued, constant.DeliveryImmediate:
 	default:
-		return response.Fail("delivery must be queued, immediate or cruise")
+		return response.Fail("delivery must be immediate or queued")
 	}
 
 	held, f := s.message.Send(c.Callsign, to, body, d)

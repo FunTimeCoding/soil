@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
-	"time"
 )
 
 func (s *Service) ReconcileCompletions() []error {
@@ -20,6 +19,8 @@ func (s *Service) ReconcileCompletions() []error {
 	pushed := 0
 	skipped := 0
 	var failed []error
+	current := map[string]bool{}
+	named := map[string]bool{}
 
 	for _, c := range s.store.ListCompletions() {
 		slug, metadata, f := s.SessionMetadata(c.SessionIdentifier)
@@ -29,23 +30,22 @@ func (s *Service) ReconcileCompletions() []error {
 			continue
 		}
 
-		name := fmt.Sprintf("%s/%d", slug, c.Sequence)
+		path := fmt.Sprintf("%s/%d", slug, c.Sequence)
+		current[path] = true
+		named[c.SessionIdentifier] = true
 
-		if existing[name] == store.HashContent(c.Summary) {
+		if indexedCurrent(
+			existing,
+			path,
+			store.HashContent(c.Summary),
+			completionMetadata(metadata, &c),
+		) {
 			skipped++
 
 			continue
 		}
 
-		metadata["created_at"] = []string{c.CreatedAt.Format(time.RFC3339)}
-
-		if g := s.pushDocument(
-			constant.CompletionCollection,
-			constant.CompletionSourceType,
-			name,
-			c.Summary,
-			metadata,
-		); g != nil {
+		if g := s.PushCompletion(slug, &c, c.Summary, metadata); g != nil {
 			failed = append(failed, g)
 
 			if connection.Classify(g) != nil {
@@ -64,7 +64,15 @@ func (s *Service) ReconcileCompletions() []error {
 		pushed++
 	}
 
+	swept, g := s.sweep(constant.CompletionCollection, existing, current, named)
+	failed = append(failed, g...)
 	s.metric.CountReconcile(constant.CompletionCollection, pushed, len(failed))
+	s.metric.CountSwept(constant.CompletionCollection, swept)
+
+	if len(g) > 0 && connection.Classify(g[len(g)-1]) != nil {
+		return failed
+	}
+
 	s.metric.SetIndexed(constant.CompletionCollection, pushed+skipped)
 
 	return failed

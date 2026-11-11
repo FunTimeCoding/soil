@@ -65,6 +65,29 @@ func TestApplyRunsAgainstStaticAndNetboxInventory(t *testing.T) {
 	assert.Count(t, 0, o.Reporter.Events())
 }
 
+func TestApplyAsksInventoryForItsSite(t *testing.T) {
+	o := ansible_tester.NewWithSite(
+		t,
+		http.HandlerFunc(
+			func(
+				w http.ResponseWriter,
+				r *http.Request,
+			) {
+				if r.URL.Query().Get("site") != "kilo" {
+					w.WriteHeader(http.StatusBadRequest)
+
+					return
+				}
+
+				_, e := w.Write([]byte(constant.FixtureMarkup))
+				errors.PanicOnError(e)
+			},
+		),
+		"kilo",
+	)
+	assert.String(t, "success", o.WaitForRun().Status)
+}
+
 func TestApplyFailsWhenNetboxInventoryFails(t *testing.T) {
 	o := ansible_tester.New(
 		t,

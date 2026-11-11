@@ -93,8 +93,15 @@ open work in a seed of its own. An item leaves this seed when it is done.
   message but an `unexpected` one with a generic text, where the message is
   the error's own (`README.md`, Answering an error). The `captureDetail` of
   goalertmanagerd, gobandd's MCP, gokubernetesd, gonetboxd, gopostgresd,
-  goprometheusd, goqueryd and gosourced only forwards to the answer helper -
-  a name left over
+  goprometheusd and goqueryd only forwards to the answer helper - a name left
+  over
+- gosourced's MCP handlers answer through its own `captureFail`, which still
+  decides: a `load_failure` is answered quietly while the broken package is
+  fresh and captured once nothing in it changed for
+  `go:pkg/tool/gosourced/constant.LoadSettled`. The class table has no
+  load-failure class, and a class's capture is fixed, so "quiet while edited
+  toward, captured once settled" cannot be said there yet - that is what moving
+  the handlers to `answer` waits on
 - gosproutd's MCP checks a decision's understanding, looks up a seed by name
   and bounds a position before calling the service, and `Clear`,
   `SetPosition`, `Reorder` and `Seeds` return no error, so a store failure

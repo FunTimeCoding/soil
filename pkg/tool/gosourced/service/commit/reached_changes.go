@@ -1,7 +1,7 @@
 package commit
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"path/filepath"
@@ -41,7 +41,7 @@ func (s *Service) reachedChanges(
 	}
 
 	var result []string
-	files := []string{go_modConstant.ModFile, go_modConstant.SumFile}
+	files := []string{goModConstant.ModFile, goModConstant.SumFile}
 
 	for _, p := range changed {
 		name := filepath.Base(p)

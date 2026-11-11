@@ -2,7 +2,7 @@ package constant
 
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/measure/language"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 )
@@ -21,7 +21,7 @@ var (
 		WithQuote(QuoteDouble).
 		WithRawQuote(QuoteBacktick)
 	GoModule = language.New("Go Module").
-			WithFilename(go_modConstant.ModFile, go_modConstant.SumFile).
+			WithFilename(goModConstant.ModFile, goModConstant.SumFile).
 			WithLineComment(stringsConstant.DoubleSlash)
 )
 

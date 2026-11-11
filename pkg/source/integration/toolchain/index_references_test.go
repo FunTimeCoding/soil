@@ -62,6 +62,62 @@ func TestReferencingFollowsNewPackage(t *testing.T) {
 	)
 }
 
+func TestReferencingFollowsMovedMethodThroughField(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport \"example/alfa\"\n\ntype Holder struct {\n\tOuter *alfa.Outer\n}\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call(h *bravo.Holder) {\n\th.Outer.Run()\n}\n",
+	)
+}
+
+func TestReferencingFollowsMovedMethodThroughResult(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport \"example/alfa\"\n\nfunc Make() alfa.Outer {\n\treturn alfa.Outer{}\n}\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call() {\n\tbravo.Make().Run()\n}\n",
+	)
+}
+
+func TestReferencingFollowsMovedMethodThroughEmbedding(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport \"example/alfa\"\n\ntype Holder struct {\n\talfa.Outer\n}\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call(h bravo.Holder) {\n\th.Run()\n}\n",
+	)
+}
+
+func TestReferencingFollowsMovedMethodThroughTypeArgument(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport (\n\t\"example/alfa\"\n\t\"sync/atomic\"\n)\n\nvar Default atomic.Pointer[alfa.Outer]\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call() {\n\tbravo.Default.Load().Run()\n}\n",
+	)
+}
+
+func TestReferencingFollowsMovedMethodThroughMap(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport \"example/alfa\"\n\nvar Registry map[string]alfa.Outer\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call() {\n\tbravo.Registry[\"x\"].Run()\n}\n",
+	)
+}
+
+func TestReferencingFollowsMovedMethodThroughAlias(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport \"example/alfa\"\n\ntype Outer = alfa.Outer\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call(o bravo.Outer) {\n\to.Run()\n}\n",
+	)
+}
+
+func TestReferencingFollowsMovedMethodThroughInterface(t *testing.T) {
+	assertFollowsMovedRun(
+		t,
+		"package bravo\n\nimport \"example/alfa\"\n\nfunc Source() interface{ Outer() alfa.Outer } {\n\treturn nil\n}\n",
+		"package charlie\n\nimport \"example/bravo\"\n\nfunc Call() {\n\tbravo.Source().Outer().Run()\n}\n",
+	)
+}
+
 func TestWorkspaceSharesOneRefresh(t *testing.T) {
 	directory := reference_tester.Module(t)
 	w := index.New(t.TempDir(), directory)

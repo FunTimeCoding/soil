@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"path/filepath"
 	"testing"
@@ -17,6 +18,7 @@ func seedDuplicateSummaries(t *testing.T) string {
 	path := filepath.Join(t.TempDir(), "goclauded.sqlite")
 	d := lite.New(logger.New(context.Background()), path)
 	defer relational.CloseMapper(d)
+	migrate.AutoMigrate(d)
 	s := store.New(d, func() time.Time { return time.Now().UTC() })
 	_, e := s.EnsureSession("session-1")
 	assert.FatalOnError(t, e)

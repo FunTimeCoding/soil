@@ -24,7 +24,6 @@ func TestMoveBuildTagCarry(t *testing.T) {
 		"hold.go",
 		true,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -50,7 +49,6 @@ func TestMoveBuildTagMismatchBlocked(t *testing.T) {
 		"existing.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, "build constraint mismatch")
@@ -72,7 +70,6 @@ func TestMoveBuildTagMixedSourcesBlocked(t *testing.T) {
 		"hold.go",
 		true,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, "different build constraints")
@@ -92,7 +89,6 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 		"",
 		"example/pkg/home",
 		"tagged.go",
-		false,
 		false,
 		false,
 	)
@@ -121,7 +117,6 @@ func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
 		"example/pkg/tagged/hold",
 		"hold.go",
 		true,
-		false,
 		false,
 	)
 	assert.FatalOnError(t, e)

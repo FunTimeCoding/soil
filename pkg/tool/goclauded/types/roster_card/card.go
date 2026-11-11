@@ -5,12 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"time"
 )
 
 type Card struct {
-	Session *session.Session
-	Labels  []label.Label
-	Latest  *pulse.Pulse
-	Queued  int64
-	Cruise  *cruise_setting.Setting
+	Session     *session.Session
+	Labels      []label.Label
+	Latest      *pulse.Pulse
+	Queued      int64
+	Cruise      *cruise_setting.Setting
+	CruiseGrace time.Duration
 }

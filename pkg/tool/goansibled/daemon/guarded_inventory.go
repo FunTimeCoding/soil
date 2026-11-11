@@ -14,13 +14,14 @@ func guardedInventory(
 	return func(
 		x context.Context,
 		field string,
+		site string,
 	) (string, error) {
 		var result string
 		e := g.Attempt(
 			x,
 			func(y context.Context) error {
 				var f error
-				result, f = c.AnsibleInventoryMarkup(y, field)
+				result, f = c.AnsibleInventoryMarkup(y, field, site)
 
 				return f
 			},

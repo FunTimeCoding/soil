@@ -3,6 +3,7 @@ package symbol
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 )
 
 func (s *Service) ChangeVisibility(
@@ -18,7 +19,7 @@ func (s *Service) ChangeVisibility(
 		directory,
 		packagePath,
 		symbol,
-		FlipName(symbol),
+		identifier.FlipName(symbol),
 		receiver,
 		dryRun,
 	)

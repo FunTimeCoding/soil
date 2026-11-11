@@ -3,16 +3,17 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
+	"time"
 )
 
-func toCruiseResponse(c *cruise_setting.Setting) server.CruiseResponse {
-	result := server.CruiseResponse{Mode: string(c.Mode), Woken: c.Woken}
-
-	if c.Pace > 0 {
-		result.PaceMinutes = new(int(c.Pace.Minutes()))
+func toCruiseResponse(
+	c *cruise_setting.Setting,
+	grace time.Duration,
+) server.CruiseResponse {
+	return server.CruiseResponse{
+		GraceMinutes: int(grace.Minutes()),
+		Default:      c.Grace == nil,
+		Woken:        c.Woken,
+		WokenAt:      c.WokenAt,
 	}
-
-	result.PromotedAt = c.PromotedAt
-
-	return result
 }

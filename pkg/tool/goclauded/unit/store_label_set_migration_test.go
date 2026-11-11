@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"path/filepath"
@@ -19,6 +20,7 @@ func TestSingleValueIndexIsDroppedOnStart(t *testing.T) {
 			"CREATE UNIQUE INDEX session_key ON label (session_identifier, key)",
 		).Error,
 	)
+	migrate.AutoMigrate(s.Mapper())
 	reopened := store.New(s.Mapper(), time.Now)
 	_, e := reopened.SetLabel(
 		"session-1",

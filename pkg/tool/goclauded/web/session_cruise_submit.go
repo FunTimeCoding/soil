@@ -5,8 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
 	"github.com/funtimecoding/soil/pkg/web/form"
 	"net/http"
-	"strconv"
-	"time"
 )
 
 func (s *Server) sessionCruiseSubmit(
@@ -14,17 +12,16 @@ func (s *Server) sessionCruiseSubmit(
 	q *http.Request,
 ) {
 	identifier := q.PathValue(constant.Identifier)
-	mode := constant.Cruise(q.FormValue(constant.Mode))
-	var pace time.Duration
+	grace := q.FormValue(constant.GraceKind)
 
-	if minutes, e := strconv.ParseFloat(q.FormValue(constant.Pace), 64); e == nil {
-		pace = time.Duration(minutes * float64(time.Minute))
+	if grace == constant.CruiseMinutes {
+		grace = q.FormValue(constant.Grace)
 	}
 
-	refused := s.message.SetCruise(identifier, mode, pace)
+	refused := s.message.SetCruise(identifier, grace)
 
 	if s.view.IsExtendedRequest(q) {
-		s.cruiseFragment(w, q, identifier, mode, pace, refused)
+		s.cruiseFragment(w, q, identifier, refused)
 
 		return
 	}

@@ -29,7 +29,7 @@ func (m *Matcher) Unify(
 	case *ast.SelectorExpr:
 		s, okay := site.(*ast.SelectorExpr)
 
-		return okay && m.Unify(p.X, s.X) && m.Unify(p.Sel, s.Sel)
+		return okay && m.unifySelector(p, s)
 	case *ast.CallExpr:
 		s, okay := site.(*ast.CallExpr)
 

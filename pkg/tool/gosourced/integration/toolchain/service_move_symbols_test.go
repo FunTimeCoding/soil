@@ -27,7 +27,6 @@ func TestBatchFile(t *testing.T) {
 		"constant.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -66,7 +65,6 @@ func TestBatchEnum(t *testing.T) {
 		"pkg/target/constant.go",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		false,
 	)
@@ -108,7 +106,6 @@ func TestBatchSubset(t *testing.T) {
 		"constant.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -144,7 +141,6 @@ func TestBatchCollision(t *testing.T) {
 		"constant.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -165,7 +161,6 @@ func TestBatchDependencyTogether(t *testing.T) {
 		"",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		false,
 	)
@@ -194,7 +189,6 @@ func TestBatchMultiName(t *testing.T) {
 		"pkg/target/constant.go",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		false,
 	)
@@ -227,7 +221,6 @@ func TestBatchMultiNamePartial(t *testing.T) {
 		"constant.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -250,11 +243,14 @@ func TestBatchMethodRefused(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(t, r, "methods cannot move")
+	testutil.AssertBlockedContains(
+		t,
+		r,
+		"move it with move_methods, or its type with extract_type",
+	)
 }
 
 func TestBatchMethodSetRefused(t *testing.T) {
@@ -271,7 +267,6 @@ func TestBatchMethodSetRefused(t *testing.T) {
 		"",
 		"example/pkg/target/constant",
 		"",
-		false,
 		false,
 		false,
 	)
@@ -296,7 +291,6 @@ func TestBackReferenceQualified(t *testing.T) {
 		"example/pkg/target",
 		"mover.go",
 		true,
-		true,
 		false,
 	)
 	assert.FatalOnError(t, e)
@@ -309,29 +303,6 @@ func TestBackReferenceQualified(t *testing.T) {
 	assertFormatted(t, source)
 	assert.StringContains(t, "func Stayer()", source)
 	assert.False(t, strings.Contains(source, "func Mover"))
-}
-
-func TestBackReferenceRefusedWithoutFlag(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("back-reference/src"),
-	)
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
-		t.Context(),
-		d,
-		"example/pkg/source",
-		[]string{"Mover"},
-		"",
-		"example/pkg/target",
-		"mover.go",
-		true,
-		false,
-		false,
-	)
-	assert.FatalOnError(t, e)
-	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(t, r, "package-local")
 }
 
 func TestBackReferenceCycleRefused(t *testing.T) {
@@ -349,7 +320,6 @@ func TestBackReferenceCycleRefused(t *testing.T) {
 		"example/pkg/target",
 		"mover.go",
 		true,
-		true,
 		false,
 	)
 	assert.FatalOnError(t, e)
@@ -357,7 +327,7 @@ func TestBackReferenceCycleRefused(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "cycle")
 }
 
-func TestBackReferenceUnexportedRefused(t *testing.T) {
+func TestBackReferenceUnexportedIsExported(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("back-reference-unexported/src"),
@@ -372,10 +342,42 @@ func TestBackReferenceUnexportedRefused(t *testing.T) {
 		"example/pkg/target",
 		"mover.go",
 		true,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assertFixedContains(t, "stayer → Stayer", r)
+	assertFixedContains(t, "stayer → source.Stayer (back reference)", r)
+	assert.String(
+		t,
+		"package source\n\nfunc Stayer() string {\n\treturn \"stay\"\n}\n",
+		service_tester.ReadFixtureFile(t, d, "pkg/source/source.go"),
+	)
+	assert.StringContains(
+		t,
+		"return source.Stayer() + \" moved\"",
+		service_tester.ReadFixtureFile(t, d, "pkg/target/mover.go"),
+	)
+	assertCompiles(t, d)
+}
+
+func TestBackReferenceExportCollisionRefused(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("back-reference-collision/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+		t.Context(),
+		d,
+		"example/pkg/source",
+		[]string{"Mover"},
+		"",
+		"example/pkg/target",
+		"mover.go",
 		true,
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(t, r, "unexported")
+	testutil.AssertBlockedContains(t, r, "Stayer already exists")
 }

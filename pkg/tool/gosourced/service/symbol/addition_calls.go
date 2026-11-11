@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/addition"
 	"go/token"
 	"go/types"
@@ -45,7 +46,7 @@ func additionCalls(
 			call := enclosingCall(path)
 
 			if call == nil {
-				addPositionConcern(
+				concern_line.Add(
 					r,
 					set,
 					reference.Ident.Pos(),
@@ -60,7 +61,7 @@ func additionCalls(
 
 			if len(call.Args) == 1 && count > 1 {
 				if _, tuple := owner.TypesInfo.TypeOf(call.Args[0]).(*types.Tuple); tuple {
-					addPositionConcern(
+					concern_line.Add(
 						r,
 						set,
 						call.Pos(),
@@ -86,7 +87,7 @@ func additionCalls(
 			)
 
 			if e != nil {
-				addPositionConcern(
+				concern_line.Add(
 					r,
 					set,
 					call.Pos(),
@@ -102,7 +103,7 @@ func additionCalls(
 			}
 
 			if !types.AssignableTo(argument, t.Type) {
-				addPositionConcern(
+				concern_line.Add(
 					r,
 					set,
 					call.Pos(),

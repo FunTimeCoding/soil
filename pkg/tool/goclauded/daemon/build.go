@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/metric"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
@@ -33,11 +34,17 @@ func (d *Daemon) build(
 	y *prometheus.Registry,
 ) {
 	n := o.Notifier()
+	migrate.AutoMigrate(d.database)
 	s := store.New(d.database, o.Clock)
 	x := search_index.New(d.searchDatabase)
 	m := metric.New(y)
 	d.label = label.New(s, n)
 	d.message = message.New(s, n, d.stop, o.Clock, m, l)
+
+	if o.ChannelAlways {
+		d.message.WithChannelAlways()
+	}
+
 	d.memory = memory.New(s, d.memoryPeer, d.memoryGuard, d.message, o.Clock, r)
 	d.usage = usage.New(s, n, d.browser, o.Clock, l, r)
 	d.search = search.New(s, x, o.Harbor)

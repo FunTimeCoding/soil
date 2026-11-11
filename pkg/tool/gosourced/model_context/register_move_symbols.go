@@ -49,12 +49,6 @@ func (s *Server) registerMoveSymbols() {
 				),
 			),
 			mcp.WithBoolean(
-				"qualify_back_references",
-				mcp.Description(
-					"When a moved declaration references symbols staying in the source package, qualify those references and import the source package instead of refusing. Unexported back-reference targets still refuse - export them first.",
-				),
-			),
-			mcp.WithBoolean(
 				"dry_run",
 				mcp.Description(
 					"Report what the call would change without writing anything. Emits the same lines a real run does.",

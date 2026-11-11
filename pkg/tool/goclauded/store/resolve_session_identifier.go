@@ -55,6 +55,22 @@ func (s *Store) ResolveSessionIdentifier(query string) (*resolve_result.Result, 
 		matches = append(matches, matchFrom(&aliasSession, constant.Alias))
 	}
 
+	var slugSessions []session.Session
+
+	if e := s.database.Where("slug = ?", query).Find(&slugSessions).Error; e != nil {
+		return nil, e
+	}
+
+	for i := range slugSessions {
+		if !seen[slugSessions[i].Identifier] {
+			seen[slugSessions[i].Identifier] = true
+			matches = append(
+				matches,
+				matchFrom(&slugSessions[i], constant.Slug),
+			)
+		}
+	}
+
 	var prefixSessions []session.Session
 
 	if e := s.database.Where(

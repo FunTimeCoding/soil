@@ -3,6 +3,7 @@ package symbol
 import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/ast"
 	"go/token"
@@ -60,7 +61,7 @@ func planLocals(
 					done[v.Pos()] = true
 
 					if writes > 0 {
-						addPositionConcern(
+						concern_line.Add(
 							r,
 							set,
 							v.Pos(),
@@ -76,7 +77,7 @@ func planLocals(
 					statement, block, initializer := declaringStatement(path)
 
 					if statement == nil {
-						addPositionConcern(
+						concern_line.Add(
 							r,
 							set,
 							v.Pos(),
@@ -91,7 +92,7 @@ func planLocals(
 
 					if initializer != nil &&
 						hasSideEffect(c.Owner.TypesInfo, initializer) {
-						addPositionConcern(
+						concern_line.Add(
 							r,
 							set,
 							v.Pos(),

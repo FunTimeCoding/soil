@@ -1,6 +1,9 @@
 package symbol
 
-import "golang.org/x/tools/go/packages"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"golang.org/x/tools/go/packages"
+)
 
 func checkCollision(
 	p *packages.Package,
@@ -8,7 +11,7 @@ func checkCollision(
 	receiver string,
 ) error {
 	if receiver == "" {
-		return checkScopeCollision(p, targetName)
+		return identifier.CheckScopeCollision(p, targetName)
 	}
 
 	return checkMemberCollision(p, targetName, receiver)

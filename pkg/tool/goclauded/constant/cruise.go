@@ -2,26 +2,27 @@ package constant
 
 import "time"
 
-type Cruise string
-
 const (
-	CruiseOff   Cruise = "off"
-	CruiseOn    Cruise = "on"
-	CruisePaced Cruise = "paced"
+	CruiseOff     = "off"
+	CruiseDefault = "default"
+	CruiseMinutes = "minutes"
 )
 
 const (
-	CruiseInterval = 30 * time.Second
-	WakeWindow     = time.Hour
+	CruiseInterval     = 30 * time.Second
+	WakeWindow         = time.Hour
+	DefaultCruiseGrace = 30 * time.Minute
 )
 
 const (
 	CruiseTool = "cruise"
-	Mode       = "mode"
-	Pace       = "pace"
+	Grace      = "grace"
+	GraceKind  = "grace_kind"
 )
 
 const (
-	CruisePaceMinimumMinutes = 1
-	CruisePaceMaximumMinutes = 60
+	CruiseGraceMinimumMinutes = 1
+	CruiseGraceMaximumMinutes = 59
 )
+
+var CruiseKinds = []string{QueueMessage, QueueNotification, QueuePulse}

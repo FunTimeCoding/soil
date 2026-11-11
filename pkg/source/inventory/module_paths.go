@@ -1,7 +1,7 @@
 package inventory
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"golang.org/x/mod/modfile"
 	"os"
 	"path/filepath"
@@ -12,7 +12,7 @@ func (i *Inventory) ModulePaths() []string {
 
 	for _, m := range i.Modules {
 		content, e := os.ReadFile(
-			filepath.Join(m.Directory, go_modConstant.ModFile),
+			filepath.Join(m.Directory, goModConstant.ModFile),
 		)
 
 		if e != nil {

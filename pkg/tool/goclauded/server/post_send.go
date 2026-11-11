@@ -17,7 +17,12 @@ func (s *Server) PostSend(
 		to = *r.Body.To
 	}
 
-	d := toDelivery(r.Body.Delivery)
+	var d constant.Delivery
+
+	if r.Body.Delivery != nil {
+		d = toDelivery(r.Body.Delivery)
+	}
+
 	held, e := s.message.Send(r.Body.Callsign, to, r.Body.Body, d)
 
 	if e != nil {

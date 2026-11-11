@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -34,7 +35,7 @@ func (s *Service) checkRenamedMethod(
 	for _, i := range face.FromWorkspace(w, all).Satisfied(f) {
 		if _, declares := i.Methods[f.Name()]; declares &&
 			inWorkspace(modules, i.Package) {
-			addPositionConcern(
+			concern_line.Add(
 				r,
 				set,
 				f.Pos(),
@@ -51,7 +52,7 @@ func (s *Service) checkRenamedMethod(
 			continue
 		}
 
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			f.Pos(),

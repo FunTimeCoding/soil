@@ -81,6 +81,12 @@ const (
 	MonitorUsageEnvironment           = "CLAUDE_MONITOR_USAGE"
 	UsageEndpointEnvironment          = "CLAUDE_USAGE_ENDPOINT"
 	CoverageRootEnvironment           = "CLAUDE_COVERAGE_ROOT"
+	ChannelAlwaysEnvironment          = "CLAUDE_CHANNEL_ALWAYS"
+)
+
+const (
+	DeliveryDescription              = "immediate (default) wakes each named recipient now; one without a channel gets it with their next prompt. queued arrives with their next prompt or after their idle grace - for a note that can wait."
+	DeliveryDescriptionChannelAlways = "immediate (default) wakes each named recipient now. queued arrives with their next prompt or after their idle grace - for a note that can wait."
 )
 
 const (
@@ -132,10 +138,13 @@ const (
 	SummarySourceType    = "session-summary"
 	CompletionSourceType = "session-completion"
 
+	CompletedAtMetadata = "completed_at"
+
 	Collection    = "collection"
 	Outcome       = "outcome"
 	OutcomePushed = "pushed"
 	OutcomeFailed = "failed"
+	OutcomeSwept  = "swept"
 )
 
 const (
@@ -151,6 +160,12 @@ const (
 	ModelColumn          = "model"
 	ContextPercentColumn = "context_percent"
 	ContextWindowColumn  = "context_window"
+	CompletionTable      = "completion"
+	CruiseSettingTable   = "cruise_setting"
+	CruiseModeColumn     = "mode"
+	CompletedAtColumn    = "completed_at"
+	GraceColumn          = "grace"
+	ReleasedColumn       = "released"
 )
 
 const (

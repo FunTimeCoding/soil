@@ -17,7 +17,13 @@ func (s *Server) GetAnsibleInventory(
 		field = *r.Params.Field
 	}
 
-	result, e := s.service.AnsibleInventory(field)
+	var site string
+
+	if r.Params.Site != nil {
+		site = *r.Params.Site
+	}
+
+	result, e := s.service.AnsibleInventory(field, site)
 
 	if unavailable.Is(e) {
 		return server.GetAnsibleInventory503JSONResponse{Error: e.Error()}, nil

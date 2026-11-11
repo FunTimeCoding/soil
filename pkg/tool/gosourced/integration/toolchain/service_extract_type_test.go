@@ -99,7 +99,7 @@ func TestExtractTypeCollision(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "already exists")
 }
 
-func TestExtractTypeDependency(t *testing.T) {
+func TestExtractTypeQualifiesBackReference(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("extract-dependency/src"),
@@ -116,9 +116,45 @@ func TestExtractTypeDependency(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assertFixedContains(t, "prefix → Prefix", r)
+	assertFixedContains(t, "prefix → target.Prefix (back reference)", r)
+	assert.StringContains(
+		t,
+		"return target.Prefix()",
+		service_tester.ReadFixtureFile(t, d, "pkg/model/describe.go"),
+	)
+	assert.StringContains(
+		t,
+		"func Prefix() string",
+		service_tester.ReadFixtureFile(t, d, "pkg/target/prefix.go"),
+	)
+	assertCompiles(t, d)
+}
+
+func TestExtractTypeBackReferenceCycleRefused(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("extract-dependency-cycle/src"),
+	)
+	s := service_tester.NewService(t)
+	r, e := s.Symbol.ExtractType(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Store",
+		"example/pkg/model",
+		"",
+		true,
+		false,
+	)
+	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(t, r, "package-local")
-	testutil.AssertBlockedContains(t, r, "prefix")
+	testutil.AssertBlockedContains(
+		t,
+		r,
+		"example/pkg/model → example/pkg/target → example/pkg/model",
+	)
 }
 
 func TestExtractTypeFieldCollision(t *testing.T) {

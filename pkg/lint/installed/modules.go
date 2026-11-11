@@ -1,7 +1,7 @@
 package installed
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"golang.org/x/mod/modfile"
 	"os"
 	"path/filepath"
@@ -21,7 +21,7 @@ func modules(parent string) map[string]string {
 		}
 
 		directory := filepath.Join(parent, entry.Name())
-		b, f := os.ReadFile(filepath.Join(directory, go_modConstant.ModFile))
+		b, f := os.ReadFile(filepath.Join(directory, goModConstant.ModFile))
 
 		if f != nil {
 			continue

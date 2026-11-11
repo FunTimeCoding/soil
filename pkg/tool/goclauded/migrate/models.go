@@ -1,0 +1,45 @@
+package migrate
+
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/completion"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/fable_snapshot"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/impression_outbox"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pool_name"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/rate_snapshot"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/subscription"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/tracker_state"
+)
+
+func Models() []any {
+	return []any{
+		session.Stub(),
+		message.Stub(),
+		event.Stub(),
+		event_metadata.Stub(),
+		completion.Stub(),
+		summary.Stub(),
+		pool_name.Stub(),
+		fable_snapshot.Stub(),
+		rate_snapshot.Stub(),
+		label.Stub(),
+		pulse.Stub(),
+		notification.Stub(),
+		queue.Stub(),
+		tracker_state.Stub(),
+		context_load.Stub(),
+		subscription.Stub(),
+		cruise_setting.Stub(),
+		impression_outbox.Stub(),
+	}
+}

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/token"
 	"golang.org/x/tools/go/packages"
@@ -35,7 +36,7 @@ func applyRemovals(
 			names = append(names, v.Name())
 		}
 
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			t.Declaration.Pos(),
@@ -55,7 +56,7 @@ func applyRemovals(
 		}
 
 		removeCallArguments(d.(*dst.CallExpr), c.Target)
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			c.Call.Pos(),
@@ -91,7 +92,7 @@ func applyRemovals(
 			)
 		}
 
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			l.Statement.Pos(),

@@ -19,7 +19,6 @@ func TestMoveSymbolsRequalifiesReplacingModule(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -51,7 +50,6 @@ func TestMoveSymbolsToNewPackageRequalifiesReplacingModule(t *testing.T) {
 		"",
 		true,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -72,7 +70,6 @@ func TestMoveSymbolsByFileRequalifiesReplacingModule(t *testing.T) {
 		"source/source.go",
 		"other.test/lib/target",
 		"",
-		false,
 		false,
 		false,
 	)
@@ -124,7 +121,6 @@ func TestMoveSymbolsRequalifiesReplacingModuleOnWholeLoad(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -146,7 +142,6 @@ func TestMoveSymbolsDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 		"",
 		"other.test/lib/target",
 		"",
-		false,
 		false,
 		true,
 	)

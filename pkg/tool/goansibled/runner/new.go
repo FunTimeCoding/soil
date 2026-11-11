@@ -19,6 +19,7 @@ func New(
 	result := &Runner{
 		store:            s,
 		playbook:         o.Playbook,
+		site:             o.Site,
 		cloneDirectory:   o.CloneDirectory,
 		ansibleDirectory: o.AnsibleDirectory,
 		logger:           l,

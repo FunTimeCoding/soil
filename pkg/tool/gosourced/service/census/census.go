@@ -1,7 +1,9 @@
 package census
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
 	"slices"
 	"strings"
@@ -12,7 +14,10 @@ func (s *Service) Census(
 	packagePath string,
 	typeName string,
 ) (*result.Census, error) {
-	loaded, _, e := s.workspace.CensusPackages(directory, packagePath)
+	loaded, broken, _, e := s.workspace.LenientCensusPackages(
+		directory,
+		packagePath,
+	)
 
 	if e != nil {
 		return nil, e
@@ -21,9 +26,17 @@ func (s *Service) Census(
 	home := homePackage(loaded, packagePath)
 
 	if home == nil {
+		for _, p := range broken {
+			if p.PkgPath == packagePath {
+				return nil, load_failure.New(p.PkgPath, p.Errors[0])
+			}
+		}
+
 		return nil, validation.New("unknown package: %s", packagePath)
 	}
 
+	missing := unloaded{}
+	noteUnloaded(missing, broken, constant.CensusLostCallers)
 	subject := censusType(home, typeName)
 
 	if subject == nil {
@@ -46,13 +59,13 @@ func (s *Service) Census(
 		}
 	}
 
-	stores, f := storeReadings(directory, module, keys)
+	stores, f := storeReadings(directory, module, keys, missing)
 
 	if f != nil {
 		return nil, f
 	}
 
-	tables, g := tableNames(directory, stores)
+	tables, g := tableNames(directory, stores, missing)
 
 	if g != nil {
 		return nil, g
@@ -82,5 +95,6 @@ func (s *Service) Census(
 		typeName,
 		structFields(subject),
 		entries,
+		unloadedResults(missing),
 	), nil
 }

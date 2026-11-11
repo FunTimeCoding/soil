@@ -13,6 +13,7 @@ func ansibleInventory(
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var field string
+	var site string
 	result := &cobra.Command{
 		Use:   "ansible-inventory",
 		Short: "Print the Ansible inventory NetBox describes, one group per field value",
@@ -21,7 +22,11 @@ func ansibleInventory(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			markup, e := c.AnsibleInventoryMarkup(context.Background(), field)
+			markup, e := c.AnsibleInventoryMarkup(
+				context.Background(),
+				field,
+				site,
+			)
 
 			if e != nil {
 				t.Exitln(e)
@@ -37,6 +42,12 @@ func ansibleInventory(
 		gonetboxdConstant.Field,
 		gonetboxdConstant.AnsibleField,
 		"custom field whose values become the groups",
+	)
+	result.Flags().StringVar(
+		&site,
+		gonetboxdConstant.Site,
+		"",
+		"site the caller dials from; a host at another site is dialled at its tunnel address",
 	)
 
 	return result

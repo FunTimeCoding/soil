@@ -1,9 +1,6 @@
 package store
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
 
 func (s *Store) CruiseSetting(
 	sessionIdentifier string,
@@ -19,7 +16,7 @@ func (s *Store) CruiseSetting(
 	}
 
 	if found.RowsAffected == 0 {
-		return cruise_setting.New(sessionIdentifier, constant.CruiseOff, 0), nil
+		return cruise_setting.New(sessionIdentifier, nil), nil
 	}
 
 	return &result, nil

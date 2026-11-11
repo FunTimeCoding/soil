@@ -4,11 +4,14 @@ import "github.com/funtimecoding/soil/pkg/netbox/constant"
 
 func hostVariables(
 	primary string,
+	tunnel string,
 	configuration map[string]any,
 ) map[string]any {
 	result := map[string]any{}
 
-	if a := hostAddress(primary); a != "" {
+	if tunnel != "" {
+		result[constant.InventoryAddress] = tunnel
+	} else if a := hostAddress(primary); a != "" {
 		result[constant.InventoryAddress] = a
 	}
 

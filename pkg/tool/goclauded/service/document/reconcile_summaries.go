@@ -17,6 +17,8 @@ func (s *Service) ReconcileSummaries() []error {
 	pushed := 0
 	skipped := 0
 	var failed []error
+	current := map[string]bool{}
+	named := map[string]bool{}
 
 	for _, m := range s.store.ListSummaries() {
 		slug, metadata, f := s.SessionMetadata(m.SessionIdentifier)
@@ -26,7 +28,10 @@ func (s *Service) ReconcileSummaries() []error {
 			continue
 		}
 
-		if existing[slug] == store.HashContent(m.Body) {
+		current[slug] = true
+		named[m.SessionIdentifier] = true
+
+		if existing[slug].Hash == store.HashContent(m.Body) {
 			skipped++
 
 			continue
@@ -51,7 +56,15 @@ func (s *Service) ReconcileSummaries() []error {
 		pushed++
 	}
 
+	swept, g := s.sweep(constant.SummaryCollection, existing, current, named)
+	failed = append(failed, g...)
 	s.metric.CountReconcile(constant.SummaryCollection, pushed, len(failed))
+	s.metric.CountSwept(constant.SummaryCollection, swept)
+
+	if len(g) > 0 && connection.Classify(g[len(g)-1]) != nil {
+		return failed
+	}
+
 	s.metric.SetIndexed(constant.SummaryCollection, pushed+skipped)
 
 	return failed

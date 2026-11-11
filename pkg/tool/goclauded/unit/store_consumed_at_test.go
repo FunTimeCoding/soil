@@ -25,24 +25,6 @@ func TestDrainStampsWhenEntryWasDelivered(t *testing.T) {
 	)
 }
 
-func TestRowConsumedBeforeStampExistedIsNotRedelivered(t *testing.T) {
-	s := store_tester.New(t)
-	assert.FatalOnError(
-		t,
-		s.Store.Database().Exec(
-			`INSERT INTO queue
-			(session_identifier, callsign, kind, body, consumed, created_at)
-			VALUES ('holder', 'Jade', 'message', 'old', 1,
-			'2026-09-02 10:00:00+00:00')`,
-		).Error,
-	)
-	s.Store.StampDelivered()
-	drained, e := s.Store.DrainQueue("holder", "Jade")
-	assert.FatalOnError(t, e)
-	assert.Count(t, 0, drained)
-	assert.String(t, "2026-09-02 10:00:00+00:00", s.ConsumedAt("old"))
-}
-
 func TestPeekLeavesDeliveryStampUnset(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(

@@ -3,7 +3,6 @@ package event
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"time"
 )
 
 func (s *Service) Complete(
@@ -50,8 +49,7 @@ func (s *Service) Complete(
 		return nil
 	}
 
-	metadata["created_at"] = []string{c.CreatedAt.Format(time.RFC3339)}
-	s.report(s.document.PushCompletion(slug, c.Sequence, message, metadata))
+	s.report(s.document.PushCompletion(slug, c, message, metadata))
 
 	return nil
 }

@@ -57,6 +57,54 @@ func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
 	assert.StringContains(t, "fmt.Sprint(deltaConstant.Mode)", caller)
 }
 
+func TestMoveIntoNewFileNamesCarriedConstants(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-two-constants/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+		t.Context(),
+		d,
+		"example/pkg/xray/bravo",
+		"Clamp",
+		"example/pkg/xray/charlie",
+		"",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"package charlie\n\nimport (\n\talfaConstant \"example/pkg/alfa/constant\"\n\t\"example/pkg/xray/constant\"\n)\n\nfunc Clamp(name string) int {\n\tif name == alfaConstant.Prefix {\n\t\treturn constant.Limit\n\t}\n\n\treturn 0\n}\n",
+		service_tester.ReadFixtureFile(t, d, "pkg/xray/charlie/clamp.go"),
+	)
+}
+
+func TestMoveIntoExistingFileNamesCarriedConstants(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-two-constants/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+		t.Context(),
+		d,
+		"example/pkg/xray/bravo",
+		"Clamp",
+		"example/pkg/xray/charlie",
+		"size.go",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"package charlie\n\nimport (\n\talfaConstant \"example/pkg/alfa/constant\"\n\t\"example/pkg/xray/constant\"\n)\n\nfunc Size() int {\n\treturn constant.Limit * 2\n}\n\nfunc Clamp(name string) int {\n\tif name == alfaConstant.Prefix {\n\t\treturn constant.Limit\n\t}\n\n\treturn 0\n}\n",
+		service_tester.ReadFixtureFile(t, d, "pkg/xray/charlie/size.go"),
+	)
+}
+
 func TestMoveKeepsOneImportBlock(t *testing.T) {
 	d := prepareDottedModule(t, "move-dotted/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(

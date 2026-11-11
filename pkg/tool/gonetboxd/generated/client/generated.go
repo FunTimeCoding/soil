@@ -608,6 +608,9 @@ type ListDeviceJournalEntriesParams struct {
 type GetAnsibleInventoryParams struct {
 	// Field Custom field whose values become the groups. Default ansible_playbook.
 	Field *string `form:"field,omitempty" json:"field,omitempty"`
+
+	// Site Site the caller dials from. A host at another site is dialled at the address on its interface terminating a tunnel, where it has one. Absent means every host keeps its primary address.
+	Site *string `form:"site,omitempty" json:"site,omitempty"`
 }
 
 // ListVirtualJournalEntriesParams defines parameters for ListVirtualJournalEntries.
@@ -4734,6 +4737,18 @@ func NewGetAnsibleInventoryRequest(server string, params *GetAnsibleInventoryPar
 		if params.Field != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "field", *params.Field, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Site != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "site", *params.Site, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
 				return nil, err
 			} else {
 				for _, qp := range strings.Split(queryFrag, "&") {

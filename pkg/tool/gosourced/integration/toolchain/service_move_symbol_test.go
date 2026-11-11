@@ -227,7 +227,104 @@ func TestMoveCycle(t *testing.T) {
 	testutil.AssertBlockedContains(t, r, "cycle")
 }
 
-func TestMoveDependency(t *testing.T) {
+func TestMoveIntoImporterOnlyOfMovedSymbol(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-into-importer/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+		t.Context(),
+		d,
+		"example/pkg/target/constant",
+		"Mode",
+		"example/pkg/other",
+		"",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"package other\n\nfunc Run() string {\n\treturn Mode\n}\n",
+		service_tester.ReadFixtureFile(t, d, "pkg/other/run.go"),
+	)
+}
+
+func TestMoveIntoImporterOfSourceWithoutCycle(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-beside-source/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+		t.Context(),
+		d,
+		"example/pkg/alfa/constant",
+		"Mode",
+		"example/pkg/bravo/constant",
+		"constant.go",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"package constant\n\nconst Kind = \"kind\"\n",
+		service_tester.ReadFixtureFile(t, d, "pkg/alfa/constant/constant.go"),
+	)
+	assert.StringContains(
+		t,
+		"const Mode = \"alfa\"",
+		service_tester.ReadFixtureFile(t, d, "pkg/bravo/constant/constant.go"),
+	)
+}
+
+func TestMoveCycleThroughImporterLosingSource(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-cycle-through-importer/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+		t.Context(),
+		d,
+		"example/pkg/source",
+		"Mode",
+		"example/pkg/target",
+		"",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 1)
+	testutil.AssertBlockedContains(t, r, "example/pkg/relay")
+}
+
+func TestMoveCycleThroughCarriedImport(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-cycle-through-carried/src"),
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+		t.Context(),
+		d,
+		"example/pkg/source",
+		"Mode",
+		"example/pkg/target",
+		"",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 1)
+	testutil.AssertBlockedContains(
+		t,
+		r,
+		"example/pkg/target → example/pkg/relay → example/pkg/target",
+	)
+}
+
+func TestMoveSymbolQualifiesSibling(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
 		service_tester.ServiceTestdata("move-dependency/src"),
@@ -244,9 +341,19 @@ func TestMoveDependency(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, e)
-	testutil.AssertBlocked(t, r, 1)
-	testutil.AssertBlockedContains(t, r, "package-local")
-	testutil.AssertBlockedContains(t, r, "prefix")
+	testutil.AssertBlocked(t, r, 0)
+	assertFixedContains(t, "prefix → Prefix", r)
+	assert.StringContains(
+		t,
+		"const composed = target.Prefix + \"bravo\"",
+		service_tester.ReadFixtureFile(t, d, "pkg/target/constant/constant.go"),
+	)
+	assert.StringContains(
+		t,
+		"const Prefix = \"alfa\"",
+		service_tester.ReadFixtureFile(t, d, "pkg/target/constant.go"),
+	)
+	assertCompiles(t, d)
 }
 
 func TestMoveGroup(t *testing.T) {

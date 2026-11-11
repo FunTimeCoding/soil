@@ -11,12 +11,9 @@ func (s *Service) pushDelivery(
 ) (bool, error) {
 	e.Delivery = d
 
-	switch d {
-	case constant.DeliveryImmediate:
+	if d == constant.DeliveryImmediate {
 		return s.pushImmediate(e)
-	case constant.DeliveryCruise:
-		return s.pushCruise(e)
-	default:
-		return false, s.pushEntry(e)
 	}
+
+	return false, s.pushEntry(e)
 }

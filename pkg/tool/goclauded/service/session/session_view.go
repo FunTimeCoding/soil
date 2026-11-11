@@ -40,6 +40,7 @@ func (s *Service) SessionView(
 		return nil, e
 	}
 
+	result.CruiseGrace = s.message.Grace(result.Cruise)
 	result.DeleteHash = s.DeleteHash(d.Identifier)
 
 	return result, nil

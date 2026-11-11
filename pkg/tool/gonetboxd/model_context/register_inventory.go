@@ -10,12 +10,18 @@ func (s *Server) registerInventory() {
 		mcp.NewTool(
 			constant.AnsibleInventory,
 			mcp.WithDescription(
-				"Ansible YAML inventory built from NetBox: every device and virtual machine with a value in the field, one group per value, ansible_host from the primary address, and the keys of the ansible object in the host's configuration context as host variables, overriding ansible_host",
+				"Ansible YAML inventory built from NetBox: every device and virtual machine with a value in the field, one group per value, ansible_host from the primary address - or, for a host off the caller's site, the address on its interface terminating a tunnel - and the keys of the ansible object in the host's configuration context as host variables, overriding ansible_host",
 			),
 			mcp.WithString(
 				constant.Field,
 				mcp.Description(
 					"Custom field whose values become the groups. Default: ansible_playbook.",
+				),
+			),
+			mcp.WithString(
+				constant.Site,
+				mcp.Description(
+					"Site the caller dials from. Absent: every host keeps its primary address.",
 				),
 			),
 		),

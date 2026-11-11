@@ -13,9 +13,11 @@ func TestDirectoryContent(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{
+			"backrest",
 			"board",
 			"claude",
 			"directory",
+			"disk",
 			"hypertext",
 			"license",
 			"limit",

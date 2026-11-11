@@ -5,6 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/receiver_rename"
 	"go/ast"
 	"go/token"
@@ -65,10 +67,10 @@ func planReceivers(
 			}
 
 			receiver := p.TypesInfo.Defs[field.Names[0]]
-			label := memberName(n.Type, method.Name.Name)
+			label := identifier.MemberName(n.Type, method.Name.Name)
 
 			if taken := receiverCollision(p, method, receiver, n.Name); taken != nil {
-				addPositionConcern(
+				concern_line.Add(
 					r,
 					set,
 					taken.Pos(),

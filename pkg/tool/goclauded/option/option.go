@@ -19,6 +19,7 @@ type Option struct {
 	Harbor                 string
 	MonitorUsage           bool
 	UtilizationFallback    bool
+	ChannelAlways          bool
 	Clock                  func() time.Time
 	Claude                 func() face.ClaudeSource
 	Memory                 func() memoryd.Client

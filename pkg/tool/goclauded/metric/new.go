@@ -10,7 +10,7 @@ func New(r *prometheus.Registry) *Metric {
 		reconciled: prometheus.NewCounterVec(
 			prometheus.CounterOpts{
 				Name: "goclauded_reconciled_total",
-				Help: "Documents reconcile pushed to goqueryd or failed to push, by collection and outcome",
+				Help: "Documents reconcile pushed to goqueryd, swept from it as no longer a session's current path, or failed on, by collection and outcome",
 			},
 			[]string{constant.Collection, constant.Outcome},
 		),

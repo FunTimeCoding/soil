@@ -16,6 +16,7 @@ func (r *Runner) renderInventory() (string, error) {
 	markup, e := r.inventory.AnsibleInventoryMarkup(
 		context.Background(),
 		gonetboxdConstant.AnsibleField,
+		r.site,
 	)
 
 	if e != nil {

@@ -3,27 +3,15 @@ package server
 import (
 	"context"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
-	"time"
 )
 
 func (s *Server) PostSessionCruise(
 	x context.Context,
 	r server.PostSessionCruiseRequestObject,
 ) (server.PostSessionCruiseResponseObject, error) {
-	var pace time.Duration
-
-	if r.Body.PaceMinutes != nil {
-		pace = time.Duration(*r.Body.PaceMinutes) * time.Minute
-	}
-
-	if e := s.message.SetCruise(
-		r.Identifier,
-		constant.Cruise(r.Body.Mode),
-		pace,
-	); e != nil {
+	if e := s.message.SetCruise(r.Identifier, r.Body.Grace); e != nil {
 		if refusal.Is(e) {
 			return server.PostSessionCruise400JSONResponse(
 				server.Error{Error: e.Error()},
@@ -43,5 +31,7 @@ func (s *Server) PostSessionCruise(
 		), nil
 	}
 
-	return server.PostSessionCruise200JSONResponse(toCruiseResponse(c)), nil
+	return server.PostSessionCruise200JSONResponse(
+		toCruiseResponse(c, s.message.Grace(c)),
+	), nil
 }

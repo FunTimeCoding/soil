@@ -1,7 +1,7 @@
 package index
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -9,7 +9,7 @@ import (
 func (w *Workspace) Reaches(pattern string) bool {
 	prefix, subtree := strings.CutSuffix(
 		pattern,
-		go_modConstant.RecursivePattern,
+		goModConstant.RecursivePattern,
 	)
 
 	if !subtree {

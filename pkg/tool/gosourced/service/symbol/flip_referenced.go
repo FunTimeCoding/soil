@@ -2,6 +2,7 @@ package symbol
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"unicode"
 )
@@ -21,7 +22,7 @@ func flipReferenced(
 			}
 
 			entry.Flipped = true
-			entry.NewName = FlipName(entry.Symbol)
+			entry.NewName = identifier.FlipName(entry.Symbol)
 
 			break
 		}

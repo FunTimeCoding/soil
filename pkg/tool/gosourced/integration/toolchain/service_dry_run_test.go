@@ -30,7 +30,6 @@ func TestDryRunLeavesTreeUntouched(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
-		false,
 		true,
 	)
 	assert.FatalOnError(t, e)
@@ -67,7 +66,6 @@ func TestDryRunReportsWhatRealRunReports(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
-		false,
 		true,
 	)
 	assert.FatalOnError(t, e)
@@ -83,7 +81,6 @@ func TestDryRunReportsWhatRealRunReports(t *testing.T) {
 		"pkg/target/constant.go",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		false,
 	)
@@ -109,7 +106,6 @@ func TestDryRunMarksConcernsPlanned(t *testing.T) {
 		"pkg/target/constant.go",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		true,
 	)

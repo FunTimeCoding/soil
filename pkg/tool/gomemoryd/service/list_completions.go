@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
 func (s *Service) ListCompletions() ([]client.SearchResult, error) {
-	limit := 20
+	collection := "completions"
+	limit := 1000
 	var outcome *client.ListOutcome
 
 	if e := s.guard.Attempt(
@@ -16,12 +18,11 @@ func (s *Service) ListCompletions() ([]client.SearchResult, error) {
 			outcome, f = s.query.GetList(
 				x,
 				&client.GetListParams{
-					Collection: "completions",
+					Collection: collection,
 					Metadata: &map[string]string{
 						"source_type": "session-completion",
 					},
 					Limit: &limit,
-					Full:  new(true),
 				},
 			)
 
@@ -30,19 +31,29 @@ func (s *Service) ListCompletions() ([]client.SearchResult, error) {
 	); e != nil {
 		return nil, e
 	}
-	seen := map[string]bool{}
-	var filtered []client.SearchResult
+	var filled []client.SearchResult
 
-	for _, r := range outcome.Results {
-		slug := sessionSlug(r.Path)
-		seen[slug] = true
+	for _, r := range latestCompletions(outcome.Results, 5) {
+		var document *client.SearchResult
 
-		if len(seen) > 5 {
-			break
+		if e := s.guard.Attempt(
+			context.Background(),
+			func(x context.Context) error {
+				var f error
+				document, f = s.query.GetDocument(
+					x,
+					&client.GetDocumentParams{
+						Path: join.Slash([]string{collection, r.Path}),
+					},
+				)
+
+				return f
+			},
+		); e != nil {
+			return nil, e
 		}
-
-		filtered = append(filtered, r)
+		filled = append(filled, *document)
 	}
 
-	return filtered, nil
+	return filled, nil
 }

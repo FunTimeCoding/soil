@@ -75,26 +75,15 @@ func (s *Server) registerSession() {
 		mcp.NewTool(
 			constant.CruiseTool,
 			mcp.WithDescription(
-				"Read or set a session's cruise setting - whether deliveries sent with cruise may wake it while idle. off (default) waits for the next prompt, on wakes it, paced wakes it at most once per pace. Omit mode to read. Setting it on your own session raises your own autonomy and the approval belongs to the person you work with - prefer asking over setting.",
+				"Read or set a session's cruise setting - how long it may sit idle before one wake delivers the messages, notifications and pulses waiting for it. Omit grace to read. Setting it on your own session raises your own autonomy and the approval belongs to the person you work with - prefer asking over setting.",
 			),
 			mcp.WithString(
-				constant.Mode,
-				mcp.Enum(
-					string(constant.CruiseOff),
-					string(constant.CruiseOn),
-					string(constant.CruisePaced),
-				),
-				mcp.Description(
-					"Mode to set. Omit to read the current setting.",
-				),
-			),
-			mcp.WithNumber(
-				constant.Pace,
+				constant.Grace,
 				mcp.Description(
 					fmt.Sprintf(
-						"Minutes between wakes, for paced mode: a whole number from %d to %d.",
-						constant.CruisePaceMinimumMinutes,
-						constant.CruisePaceMaximumMinutes,
+						"off, default, or idle minutes before the wake: a whole number from %d to %d. Omit to read.",
+						constant.CruiseGraceMinimumMinutes,
+						constant.CruiseGraceMaximumMinutes,
 					),
 				),
 			),

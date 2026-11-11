@@ -13,7 +13,7 @@ func TestReconcileCountsPushedSummary(t *testing.T) {
 	s.Store.EditAlias("session-1", "ash-night")
 	assert.FatalOnError(
 		t,
-		s.Store.Store.UpsertSummary("session-1", "Ash", "the night"),
+		s.Store.Store.UpsertSummary("session-1", "Ash", "indexed the corpus"),
 	)
 	assert.Count(t, 0, s.Document.ReconcileSummaries())
 	assert.Float(
@@ -47,7 +47,7 @@ func TestReconcileLeavesCurrentSummaryAlone(t *testing.T) {
 	s.Store.EditAlias("session-1", "ash-night")
 	assert.FatalOnError(
 		t,
-		s.Store.Store.UpsertSummary("session-1", "Ash", "the night"),
+		s.Store.Store.UpsertSummary("session-1", "Ash", "indexed the corpus"),
 	)
 	assert.Count(t, 0, s.Document.ReconcileSummaries())
 	assert.Count(t, 0, s.Document.ReconcileSummaries())

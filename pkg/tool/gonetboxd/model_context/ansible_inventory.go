@@ -13,6 +13,7 @@ func (s *Server) ansibleInventory(
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.AnsibleInventory(
 		r.GetString(constant.Field, constant.AnsibleField),
+		r.GetString(constant.Site, ""),
 	)
 
 	if e != nil {

@@ -1,9 +1,6 @@
 package store
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
 
 func (s *Store) CruiseSettings(
 	sessionIdentifiers []string,
@@ -29,7 +26,7 @@ func (s *Store) CruiseSettings(
 
 	for _, v := range sessionIdentifiers {
 		if result[v] == nil {
-			result[v] = cruise_setting.New(v, constant.CruiseOff, 0)
+			result[v] = cruise_setting.New(v, nil)
 		}
 	}
 

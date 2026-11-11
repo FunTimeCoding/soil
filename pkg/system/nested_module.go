@@ -1,7 +1,7 @@
 package system
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"path/filepath"
 )
 
@@ -13,5 +13,5 @@ func NestedModule(
 		return false
 	}
 
-	return FileExists(filepath.Join(directory, go_modConstant.ModFile))
+	return FileExists(filepath.Join(directory, goModConstant.ModFile))
 }

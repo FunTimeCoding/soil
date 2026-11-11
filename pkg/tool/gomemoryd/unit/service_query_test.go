@@ -43,28 +43,51 @@ func TestSearchGoquerydRefusesKeepsItsClass(t *testing.T) {
 	assert.True(t, unavailable.Is(e))
 }
 
+func TestCompletionsKeepLatestPerSession(t *testing.T) {
+	o := service_tester.New(t)
+	postCompletion(t, o, "alfa/2", "2026-11-09T12:00:00+01:00")
+	postCompletion(t, o, "alfa/1", "2026-11-09T10:00:00+01:00")
+	postCompletion(t, o, "bravo/1", "2026-11-09T10:30:00Z")
+	postCompletion(t, o, "alfa/3", "2026-11-09T09:00:00+01:00")
+	found, e := o.Service.ListCompletions()
+	assert.FatalOnError(t, e)
+	assert.Count(t, 2, found)
+	assert.String(t, "alfa/2", found[0].Path)
+	assert.String(t, "alfa/2", *found[0].Body)
+	assert.String(t, "bravo/1", found[1].Path)
+}
+
+func TestCompletionsOrderByCreationAcrossOffsets(t *testing.T) {
+	o := service_tester.New(t)
+	postCompletion(t, o, "alfa/1", "2026-11-09T11:00:00+01:00")
+	postCompletion(t, o, "bravo/1", "2026-11-09T10:30:00Z")
+	found, e := o.Service.ListCompletions()
+	assert.FatalOnError(t, e)
+	assert.Count(t, 2, found)
+	assert.String(t, "bravo/1", found[0].Path)
+}
+
 func TestCompletionsStopAtFiveSessions(t *testing.T) {
 	o := service_tester.New(t)
-	metadata := map[string][]string{"source_type": {"session-completion"}}
+	postCompletion(t, o, "alfa/1", "2026-11-09T10:00:00+01:00")
+	postCompletion(t, o, "bravo/1", "2026-11-09T11:00:00+01:00")
+	postCompletion(t, o, "charlie/1", "2026-11-09T12:00:00+01:00")
+	postCompletion(t, o, "delta/1", "2026-11-09T13:00:00+01:00")
+	postCompletion(t, o, "echo/1", "2026-11-09T14:00:00+01:00")
+	postCompletion(t, o, "foxtrot/1", "2026-11-09T15:00:00+01:00")
+	found, e := o.Service.ListCompletions()
+	assert.FatalOnError(t, e)
+	assert.Count(t, 5, found)
+	assert.String(t, "foxtrot/1", found[0].Path)
+	assert.String(t, "bravo/1", found[4].Path)
+}
 
-	for _, path := range []string{
-		"alfa/1", "alfa/2", "bravo/1", "charlie/1",
-		"delta/1", "echo/1", "foxtrot/1",
-	} {
-		_, e := o.Indexer.PostDocument(
-			t.Context(),
-			client.PostDocumentJSONRequestBody{
-				Collection: "completions",
-				Path:       path,
-				Body:       path,
-				Metadata:   &metadata,
-			},
-		)
-		assert.FatalOnError(t, e)
-	}
-
-	found, f := o.Service.ListCompletions()
-	assert.FatalOnError(t, f)
-	assert.Count(t, 6, found)
-	assert.String(t, "echo/1", found[5].Path)
+func TestCompletionWithoutTimestampSortsLast(t *testing.T) {
+	o := service_tester.New(t)
+	postCompletion(t, o, "alfa/1", "")
+	postCompletion(t, o, "bravo/1", "2026-11-09T10:00:00+01:00")
+	found, e := o.Service.ListCompletions()
+	assert.FatalOnError(t, e)
+	assert.Count(t, 2, found)
+	assert.String(t, "alfa/1", found[1].Path)
 }

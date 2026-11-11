@@ -19,9 +19,15 @@ func (c *Client) GetList(
 	var found []client.SearchResult
 
 	for _, d := range c.inCollection(p.Collection) {
-		if matches(d, p.Metadata) {
-			found = append(found, d)
+		if !matches(d, p.Metadata) {
+			continue
 		}
+
+		if p.Full == nil || !*p.Full {
+			d.Body = nil
+		}
+
+		found = append(found, d)
 	}
 
 	if p.Offset != nil {

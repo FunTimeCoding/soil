@@ -8,6 +8,7 @@ import (
 
 type Matcher struct {
 	holes       map[string]string
+	qualifiers  map[string]string
 	bindings    map[string]ast.Expr
 	information *types.Info
 	scope       *types.Package

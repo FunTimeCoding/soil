@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"go/token"
 	"go/types"
@@ -70,6 +71,19 @@ func (s *Service) checkRename(
 	}
 
 	references := resolve.FindAllReferences(all, declaration)
+	fields, capture := identifier.EmbeddedFieldReferences(
+		all,
+		declaration,
+		n.NewName,
+	)
+
+	if capture != "" {
+		r.AddConcern(
+			concern.NewFile(constant.ConcernValidation, capture, "", false),
+		)
+
+		return nil
+	}
 
 	if n.Receiver == "" {
 		if taken := checkRenameScope(
@@ -97,7 +111,7 @@ func (s *Service) checkRename(
 			position := set.Position(f.Ident.Pos())
 			r.AddConcern(
 				concern.NewLine(
-					"cross-package",
+					constant.ConcernCrossPackage,
 					fmt.Sprintf(
 						"%s.%s would lose access",
 						f.Package.PkgPath,
@@ -115,6 +129,6 @@ func (s *Service) checkRename(
 	return &plannedRename{
 		Rename:      n,
 		Declaration: declaration,
-		References:  references,
+		References:  append(references, fields...),
 	}
 }

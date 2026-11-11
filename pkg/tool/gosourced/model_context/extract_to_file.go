@@ -4,7 +4,6 @@ import (
 	"context"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -40,20 +39,5 @@ func (s *Server) extractToFile(
 		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
-	var unfixed []*concern.Concern
-	var fixed []*concern.Concern
-
-	for _, c := range r.Entries {
-		if c.Fixed || c.Planned {
-			fixed = append(fixed, c)
-		} else {
-			unfixed = append(unfixed, c)
-		}
-	}
-
-	if len(unfixed) > 0 {
-		return response.Fail("%s", formatConcerns(unfixed))
-	}
-
-	return response.Success(formatConcerns(fixed))
+	return answerConcerns(r)
 }

@@ -2,14 +2,14 @@ package module_graph
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"golang.org/x/mod/modfile"
 	"os"
 	"path/filepath"
 )
 
 func readModule(root string) (string, map[string]string, map[string]string) {
-	p := filepath.Join(root, go_modConstant.ModFile)
+	p := filepath.Join(root, goModConstant.ModFile)
 	b, e := os.ReadFile(p)
 	errors.PanicOnError(e)
 	f, e := modfile.Parse(p, b, nil)

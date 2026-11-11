@@ -24,7 +24,11 @@ its edit tools wrote and the ones gosourced reports - keeps those git
 still sees changed, and prints the directories they reach, each
 changed package and every package importing it, read from import
 lines so code that does not type-check still counts. goaudit stays
-whole-repository. A reach with nothing changed ends the task early.
+whole-repository. A reach with nothing changed ends the task early. A
+reach takes in whole packages, so another session's changed files ride
+along, and a stage that fails on theirs stops the run before the later
+stages look at yours - run those stages directly over your packages until
+theirs clears.
 Bash writes join the reach where the command names its files
 literally - `mv` and `git mv` (both sides), `cp` (the destination),
 `rm`, `git rm`, `rmdir`, `sed -i`, `tee`, `touch` and redirects -

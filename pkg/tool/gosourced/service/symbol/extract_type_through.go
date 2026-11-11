@@ -6,14 +6,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/ast"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
+	"maps"
 	"path"
 )
 
@@ -138,19 +141,23 @@ func (s *Service) extractTypeThrough(
 	typeEntry := entries[0]
 
 	if target != nil {
-		if f := checkScopeCollision(target, typeEntry.NewName); f != nil {
+		if f := identifier.CheckScopeCollision(target, typeEntry.NewName); f != nil {
 			return commit.FailValidation(r, f.Error())
 		}
+	}
+
+	flipped, flips, f := planBackReferences(all, p, entries, nil)
+
+	if f != nil {
+		return commit.FailValidation(r, f.Error())
 	}
 
 	if message := checkEntryGuards(
 		all,
 		p,
-		target,
 		entries,
 		packagePath,
 		targetPackagePath,
-		false,
 	); message != "" {
 		return commit.FailValidation(r, message)
 	}
@@ -174,6 +181,19 @@ func (s *Service) extractTypeThrough(
 	}
 
 	renames := make(map[*ast.Ident]string)
+	maps.Copy(renames, flips)
+
+	if typeEntry.Flipped {
+		if capture := embeddedRenames(
+			all,
+			typeEntry.Object,
+			typeEntry.NewName,
+			renames,
+		); capture != "" {
+			return commit.FailValidation(r, capture)
+		}
+	}
+
 	var external []relocation.QualifiedReference
 
 	for _, entry := range entries {
@@ -224,11 +244,14 @@ func (s *Service) extractTypeThrough(
 		return commit.FailValidation(r, blocked)
 	}
 
+	reportExports(r, set, flipped)
+	resymbolExports(out, set, flipped)
+
 	for _, field := range fields {
 		position := set.Position(field.Object.Pos())
 		r.AddConcern(
 			concern.NewLine(
-				"exported",
+				constant.ConcernExported,
 				fmt.Sprintf("%s → %s", field.Object.Name(), field.NewName),
 				position.Filename,
 				position.Line,

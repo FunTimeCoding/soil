@@ -1,0 +1,8 @@
+Personalities : [raid1] 
+md0 : active raid1 sdb1[1] sda1[0]
+      1046528 blocks super 1.2 [2/2] [UU]
+      
+md1 : active (auto-read-only) raid1 sdb2[1] sda2[0](F)
+      1953382400 blocks super 1.2 [2/1] [U_]
+      
+unused devices: <none>

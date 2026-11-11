@@ -75,13 +75,120 @@ func TestMoveRetargetsExportedSymbol(t *testing.T) {
 		"",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.String(
 		t,
 		"See `go:pkg/bravo.Lone`.\n",
+		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+	)
+}
+
+func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-methods/src"),
+	)
+	testutil.WriteFile(
+		t,
+		d,
+		"doc/note.md",
+		"See `go:pkg/alfa.Service.Greet`.\n",
+	)
+	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+		t.Context(),
+		d,
+		"example/pkg/alfa",
+		"Service",
+		[]string{"Greet"},
+		"example/pkg/bravo",
+		"Worker",
+		"",
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"See `go:pkg/bravo.Worker.Greet`.\n",
+		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+	)
+}
+
+func TestMoveMethodsRetargetsExportedBackReference(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("move-methods/src"),
+	)
+	testutil.WriteFile(t, d, "doc/note.md", "Uses `go:pkg/alfa.prefix`.\n")
+	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+		t.Context(),
+		d,
+		"example/pkg/alfa",
+		"Service",
+		[]string{"Label"},
+		"example/pkg/bravo",
+		"Worker",
+		"",
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"Uses `go:pkg/alfa.Prefix`.\n",
+		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+	)
+}
+
+func TestMoveSymbolsRetargetsExportedBackReference(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("back-reference-unexported/src"),
+	)
+	testutil.WriteFile(t, d, "doc/note.md", "Uses `go:pkg/source.stayer`.\n")
+	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+		t.Context(),
+		d,
+		"example/pkg/source",
+		[]string{"Mover"},
+		"",
+		"example/pkg/target",
+		"mover.go",
+		true,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"Uses `go:pkg/source.Stayer`.\n",
+		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+	)
+}
+
+func TestExtractTypeRetargetsExportedBackReference(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("extract-dependency/src"),
+	)
+	testutil.WriteFile(t, d, "doc/note.md", "Uses `go:pkg/target.prefix`.\n")
+	r, e := service_tester.NewService(t).Symbol.ExtractType(
+		t.Context(),
+		d,
+		"example/pkg/target",
+		"Store",
+		"example/pkg/model",
+		"",
+		true,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	assert.String(
+		t,
+		"Uses `go:pkg/target.Prefix`.\n",
 		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
 	)
 }

@@ -18,7 +18,7 @@ func MockAlias(
 		}
 
 		if !constant.MockOwnerSkips[s] {
-			return join.Empty(s, constant.MockSuffix)
+			return join.Empty(lowerCamel(s), constant.MockSuffix)
 		}
 	}
 

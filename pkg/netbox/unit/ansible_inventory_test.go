@@ -45,6 +45,7 @@ func TestAnsibleInventoryGroupsHostsByField(t *testing.T) {
 `,
 		ansible_inventory.New(
 			"ansible_playbook",
+			map[string]string{},
 			[]*virtual_machine.Machine{
 				virtual_machine.New(m),
 				virtual_machine.New(unmanaged),
@@ -108,7 +109,80 @@ func TestAnsibleInventoryCarriesContextVariables(t *testing.T) {
 `,
 		ansible_inventory.New(
 			"ansible_playbook",
+			map[string]string{},
 			[]*virtual_machine.Machine{virtual_machine.New(m)},
+			[]*device.Device{device.New(d)},
+		).Markup(),
+	)
+}
+
+func TestAnsibleInventoryDialsTunnelAddress(t *testing.T) {
+	d := netbox.NewDeviceWithConfigContextWithDefaults()
+	d.SetName("alfa")
+	d.SetCustomFields(map[string]any{"ansible_playbook": []any{"echo"}})
+	d.SetPrimaryIp4(
+		*netbox.NewBriefIPAddress(
+			1,
+			"",
+			"203.0.113.5/32",
+			netbox.AggregateFamily{},
+			"203.0.113.5/32",
+		),
+	)
+	e := netbox.NewDeviceWithConfigContextWithDefaults()
+	e.SetName("bravo")
+	e.SetCustomFields(map[string]any{"ansible_playbook": []any{"echo"}})
+	e.SetPrimaryIp4(
+		*netbox.NewBriefIPAddress(
+			2,
+			"",
+			"192.168.0.6/24",
+			netbox.AggregateFamily{},
+			"192.168.0.6/24",
+		),
+	)
+	assert.String(
+		t,
+		`all:
+    children:
+        echo:
+            hosts:
+                alfa:
+                    ansible_host: 198.51.100.1
+                bravo:
+                    ansible_host: 192.168.0.6
+`,
+		ansible_inventory.New(
+			"ansible_playbook",
+			map[string]string{"alfa": "198.51.100.1"},
+			[]*virtual_machine.Machine{},
+			[]*device.Device{device.New(d), device.New(e)},
+		).Markup(),
+	)
+}
+
+func TestAnsibleInventoryContextOverridesTunnelAddress(t *testing.T) {
+	d := netbox.NewDeviceWithConfigContextWithDefaults()
+	d.SetName("alfa")
+	d.SetCustomFields(map[string]any{"ansible_playbook": []any{"echo"}})
+	d.SetConfigContext(
+		map[string]any{
+			"ansible": map[string]any{"ansible_host": "alfa.example"},
+		},
+	)
+	assert.String(
+		t,
+		`all:
+    children:
+        echo:
+            hosts:
+                alfa:
+                    ansible_host: alfa.example
+`,
+		ansible_inventory.New(
+			"ansible_playbook",
+			map[string]string{"alfa": "198.51.100.1"},
+			[]*virtual_machine.Machine{},
 			[]*device.Device{device.New(d)},
 		).Markup(),
 	)

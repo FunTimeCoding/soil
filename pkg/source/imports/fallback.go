@@ -6,5 +6,5 @@ func Fallback(
 	subsystem string,
 	declaredName string,
 ) string {
-	return join.Empty(subsystem, upperCamel(declaredName))
+	return join.Empty(lowerCamel(subsystem), upperCamel(declaredName))
 }

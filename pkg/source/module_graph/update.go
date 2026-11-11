@@ -1,7 +1,7 @@
 package module_graph
 
 import (
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/source/build_tag"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/build"
@@ -16,8 +16,8 @@ func Update(
 	changed []string,
 ) *Graph {
 	for _, p := range changed {
-		if name := filepath.Base(p); name == go_modConstant.ModFile ||
-			name == go_modConstant.SumFile {
+		if name := filepath.Base(p); name == goModConstant.ModFile ||
+			name == goModConstant.SumFile {
 			return Build(root)
 		}
 	}

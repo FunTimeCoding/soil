@@ -2,6 +2,7 @@ package symbol
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 )
 
@@ -10,8 +11,8 @@ func duplicateTargets(renames []*symbol_rename.Rename) string {
 	targets := map[string]string{}
 
 	for _, n := range renames {
-		source := memberName(n.Receiver, n.OldName)
-		target := memberName(n.Receiver, n.NewName)
+		source := identifier.MemberName(n.Receiver, n.OldName)
+		target := identifier.MemberName(n.Receiver, n.NewName)
 
 		if sources[source] {
 			return fmt.Sprintf("%s is renamed twice", source)

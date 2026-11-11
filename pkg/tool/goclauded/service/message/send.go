@@ -19,6 +19,10 @@ func (s *Service) Send(
 		return nil, e
 	}
 
+	if d == "" {
+		d = constant.DeliveryImmediate
+	}
+
 	if len(to) == 0 {
 		d = constant.DeliveryQueued
 	}

@@ -18,5 +18,7 @@ func (s *Server) GetSessionCruise(
 		), nil
 	}
 
-	return server.GetSessionCruise200JSONResponse(toCruiseResponse(c)), nil
+	return server.GetSessionCruise200JSONResponse(
+		toCruiseResponse(c, s.message.Grace(c)),
+	), nil
 }

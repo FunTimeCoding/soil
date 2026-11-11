@@ -24,7 +24,6 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 		"constant.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -58,7 +57,6 @@ func TestMoveCommentSourceScrub(t *testing.T) {
 		"",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		false,
 	)
@@ -96,7 +94,6 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 		"constant.go",
 		false,
 		false,
-		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -131,7 +128,6 @@ func TestMoveCommentGroupDocument(t *testing.T) {
 		"",
 		"example/pkg/target/constant",
 		"constant.go",
-		false,
 		false,
 		false,
 	)

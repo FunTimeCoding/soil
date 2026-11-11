@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"go/token"
@@ -104,9 +105,9 @@ func (s *Service) renameThrough(
 		declaring := filepath.Dir(set.Position(p.Declaration.Pos()).Filename)
 		out.Resymbol(
 			declaring,
-			memberName(p.Rename.Receiver, p.Rename.OldName),
+			identifier.MemberName(p.Rename.Receiver, p.Rename.OldName),
 			declaring,
-			memberName(p.Rename.Receiver, p.Rename.NewName),
+			identifier.MemberName(p.Rename.Receiver, p.Rename.NewName),
 		)
 	}
 

@@ -6,19 +6,26 @@ import (
 	"time"
 )
 
-func cruiseLine(v *cruise_setting.Setting) string {
-	result := fmt.Sprintf("cruise %s", v.Mode)
+func cruiseLine(
+	v *cruise_setting.Setting,
+	grace time.Duration,
+) string {
+	result := "cruise off"
 
-	if v.Pace > 0 {
-		result = fmt.Sprintf("%s every %s", result, v.Pace)
+	if grace > 0 {
+		result = fmt.Sprintf("cruise after %s idle", grace)
 	}
 
-	if v.PromotedAt != nil {
+	if v.Grace == nil {
+		result = fmt.Sprintf("%s (default)", result)
+	}
+
+	if v.WokenAt != nil {
 		result = fmt.Sprintf(
 			"%s, woken %d times, last %s",
 			result,
 			v.Woken,
-			v.PromotedAt.Format(time.RFC3339),
+			v.WokenAt.Format(time.RFC3339),
 		)
 	}
 

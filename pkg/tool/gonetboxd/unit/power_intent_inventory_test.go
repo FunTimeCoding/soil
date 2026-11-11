@@ -18,7 +18,7 @@ func TestPowerIntentServiceKeepsActiveHosts(t *testing.T) {
 	seedIntentHosts(c)
 	i, e := service_tester.Service(t, c).
 		WithPowerIntent().
-		AnsibleInventory(constant.AnsibleField)
+		AnsibleInventory(constant.AnsibleField, "")
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,
@@ -72,7 +72,10 @@ func TestPowerIntentDaemonKeepsActiveHosts(t *testing.T) {
 func TestInventoryKeepsEveryHost(t *testing.T) {
 	c := service_tester.NewSource(t)
 	seedIntentHosts(c)
-	i, e := service_tester.Service(t, c).AnsibleInventory(constant.AnsibleField)
+	i, e := service_tester.Service(t, c).AnsibleInventory(
+		constant.AnsibleField,
+		"",
+	)
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,

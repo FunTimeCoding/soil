@@ -2,6 +2,7 @@ package symbol
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/ast"
 	"go/token"
 )
@@ -14,8 +15,10 @@ func expandFileSymbols(file *ast.File) ([]string, error) {
 		case *ast.FuncDecl:
 			if declaration.Recv != nil {
 				return nil, validation.New(
-					"file contains method %s - methods cannot move",
+					"file contains method %s - move it with %s, or its type with %s",
 					declaration.Name.Name,
+					constant.MoveMethods,
+					constant.ExtractType,
 				)
 			}
 

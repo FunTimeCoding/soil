@@ -2,7 +2,7 @@ package packages
 
 import (
 	"context"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
@@ -18,7 +18,7 @@ func (s *Service) MovePackage(
 	return s.commit.Transact(
 		x,
 		directory,
-		[]string{join.Empty(packagePath, go_modConstant.RecursivePattern)},
+		[]string{join.Empty(packagePath, goModConstant.RecursivePattern)},
 		dryRun,
 		func(d string, out *sink.Sink) (*output.Results, error) {
 			if d != directory {

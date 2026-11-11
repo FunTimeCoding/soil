@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"testing"
 	"time"
@@ -17,6 +18,7 @@ func NewOnFile(
 	now := time.Now().UTC()
 	d := lite.New(logger.New(t.Context()), path)
 	t.Cleanup(func() { relational.CloseMapper(d) })
+	migrate.AutoMigrate(d)
 
 	return &Tester{
 		t:      t,

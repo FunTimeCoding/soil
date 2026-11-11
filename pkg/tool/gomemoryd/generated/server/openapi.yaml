@@ -579,33 +579,35 @@ components:
           description: The sum over every memory in the scope, withheld ones included; for block, the tokens if every block were loaded.
     ProfileDetail:
       type: object
-      required: [budget, always_tokens, index_tokens, index_trimmed, completion_tokens, completions_trimmed, impression_tokens, impressions_trimmed, relevant_tokens, relevant_trimmed, total_tokens, hidden]
+      required: [budget, always_bytes, index_bytes, index_trimmed, completion_bytes, completions_trimmed, impression_bytes, impressions_trimmed, relevant_bytes, relevant_trimmed, total_bytes, hidden]
       properties:
         hidden:
           type: integer
-          description: Entries withheld from this surface by the hidden tag; token counts include them.
+          description: Entries withheld from this surface by the hidden tag; byte counts include them.
         budget:
           type: integer
-        always_tokens:
+          description: The byte limit on the profile text the model receives.
+        always_bytes:
           type: integer
-        index_tokens:
+        index_bytes:
           type: integer
         index_trimmed:
           type: integer
-        completion_tokens:
+        completion_bytes:
           type: integer
         completions_trimmed:
           type: integer
-        impression_tokens:
+        impression_bytes:
           type: integer
         impressions_trimmed:
           type: integer
-        relevant_tokens:
+        relevant_bytes:
           type: integer
         relevant_trimmed:
           type: integer
-        total_tokens:
+        total_bytes:
           type: integer
+          description: The length in bytes of the profile text, notice and section headings included.
     ProfileMemory:
       type: object
       required: [identifier, name, content, description, type, created_at, updated_at, is_active]

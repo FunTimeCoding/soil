@@ -3,6 +3,7 @@ package symbol
 import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/ast"
 	"go/token"
@@ -26,7 +27,7 @@ func checkBodyUses(
 						return true
 					}
 
-					addPositionConcern(
+					concern_line.Add(
 						r,
 						set,
 						i.Pos(),

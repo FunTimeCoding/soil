@@ -35,30 +35,8 @@ func (e CompactionPhase) Valid() bool {
 	}
 }
 
-// Defines values for CruiseRequestMode.
-const (
-	Off   CruiseRequestMode = "off"
-	On    CruiseRequestMode = "on"
-	Paced CruiseRequestMode = "paced"
-)
-
-// Valid indicates whether the value is a known member of the CruiseRequestMode enum.
-func (e CruiseRequestMode) Valid() bool {
-	switch e {
-	case Off:
-		return true
-	case On:
-		return true
-	case Paced:
-		return true
-	default:
-		return false
-	}
-}
-
 // Defines values for Delivery.
 const (
-	Cruise    Delivery = "cruise"
 	Immediate Delivery = "immediate"
 	Queued    Delivery = "queued"
 )
@@ -66,8 +44,6 @@ const (
 // Valid indicates whether the value is a known member of the Delivery enum.
 func (e Delivery) Valid() bool {
 	switch e {
-	case Cruise:
-		return true
 	case Immediate:
 		return true
 	case Queued:
@@ -191,23 +167,21 @@ type CoverageTool struct {
 
 // CruiseRequest defines model for CruiseRequest.
 type CruiseRequest struct {
-	Mode CruiseRequestMode `json:"mode"`
-
-	// PaceMinutes Minutes between wakes, for paced mode - a whole number from 1 to 60.
-	PaceMinutes *int `json:"pace_minutes,omitempty"`
+	// Grace off, default, or idle minutes before the wake - a whole number from 1 to 59.
+	Grace string `json:"grace"`
 }
-
-// CruiseRequestMode defines model for CruiseRequest.Mode.
-type CruiseRequestMode string
 
 // CruiseResponse defines model for CruiseResponse.
 type CruiseResponse struct {
-	Mode        string     `json:"mode"`
-	PaceMinutes *int       `json:"pace_minutes,omitempty"`
-	PromotedAt  *time.Time `json:"promoted_at,omitempty"`
+	// Default The grace follows the daemon's default rather than a setting of the session's own.
+	Default bool `json:"default"`
+
+	// GraceMinutes Idle minutes before a wake delivers what waits; 0 is off.
+	GraceMinutes int `json:"grace_minutes"`
 
 	// Woken How many times cruise has woken the session.
-	Woken int `json:"woken"`
+	Woken   int        `json:"woken"`
+	WokenAt *time.Time `json:"woken_at,omitempty"`
 }
 
 // DeleteReceiptResponse defines model for DeleteReceiptResponse.
@@ -229,7 +203,7 @@ type DeleteReceiptResponse struct {
 	Transcript    *string   `json:"transcript,omitempty"`
 }
 
-// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+// Delivery immediate wakes the session now, queued arrives with its next prompt or after its idle grace. Each request says what absent means.
 type Delivery string
 
 // DeliveryResponse defines model for DeliveryResponse.
@@ -367,7 +341,7 @@ type NotifyRequest struct {
 	Body     string `json:"body"`
 	Callsign string `json:"callsign"`
 
-	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+	// Delivery Absent means queued.
 	Delivery *Delivery `json:"delivery,omitempty"`
 	Source   string    `json:"source"`
 }
@@ -418,7 +392,7 @@ type PulseEntry struct {
 type PulseRequest struct {
 	Body string `json:"body"`
 
-	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+	// Delivery Absent means queued.
 	Delivery *Delivery `json:"delivery,omitempty"`
 }
 
@@ -492,7 +466,7 @@ type SendRequest struct {
 	Body     string `json:"body"`
 	Callsign string `json:"callsign"`
 
-	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+	// Delivery Absent means immediate; a broadcast is always queued.
 	Delivery *Delivery `json:"delivery,omitempty"`
 	To       *[]string `json:"to,omitempty"`
 }

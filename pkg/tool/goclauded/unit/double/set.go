@@ -16,6 +16,7 @@ type Set struct {
 	Notifier   *mock_notifier.Notifier
 	MemoryPeer *memoryMock.Client
 	Reporter   *memory.Memory
-	Harbor     string
-	Source     string
+	Harbor        string
+	Source        string
+	ChannelAlways bool
 }

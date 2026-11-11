@@ -12,6 +12,7 @@ func (s *Server) register() {
 	s.registerParameters()
 	s.registerMoveSymbol()
 	s.registerMoveSymbols()
+	s.registerMoveMethods()
 	s.registerPackages()
 	s.registerExtraction()
 	s.registerImports()

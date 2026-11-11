@@ -15,5 +15,5 @@ func (s *Service) cruiseWakes(sessionIdentifier string) (bool, error) {
 		return false, f
 	}
 
-	return cruise.Wakes(cruise.Read(v, setting), s.clock()), nil
+	return cruise.Wakes(cruise.Read(v, s.Grace(setting)), s.clock()), nil
 }

@@ -15,5 +15,6 @@ func NewFileQualification(
 		Owner:       p,
 		SamePackage: p.PkgPath == sourcePackagePath,
 		Idents:      make(map[*ast.Ident]string),
+		Locals:      make(map[*ast.Ident]string),
 	}
 }

@@ -60,7 +60,6 @@ type Client interface {
 	PostSweep(x context.Context) (*client.SweepResponse, error)
 	PostTurnEnd(x context.Context, body client.PostTurnEndJSONRequestBody) error
 	Pulse(sessionIdentifier string, body string) (bool, error)
-	PulseCruise(sessionIdentifier string, body string) (bool, error)
 	PulseImmediate(sessionIdentifier string, body string) (bool, error)
 	Reachable(x context.Context) error
 	RecentSessions(limit int) ([]*target.Target, error)

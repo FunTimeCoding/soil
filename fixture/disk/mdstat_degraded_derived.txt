@@ -1,0 +1,7 @@
+Personalities : [raid0] [raid1] [raid4] [raid5] [raid6] [raid10] 
+md1 : active raid1 nvme3n1p2[2] nvme2n1p2[0](F) nvme1n1p2[1]
+      1953382400 blocks super 1.2 [2/1] [_U]
+      [>....................]  recovery =  0.4% (7813120/1953382400) finish=155.4min speed=200000K/sec
+      bitmap: 4/15 pages [16KB], 65536KB chunk
+
+unused devices: <none>

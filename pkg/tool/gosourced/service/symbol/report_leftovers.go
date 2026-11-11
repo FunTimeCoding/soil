@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/removal"
 	"go/ast"
 	"go/token"
@@ -54,7 +55,7 @@ func reportLeftovers(
 					reads, writes := variableUses(all, v, removed)
 
 					if reads == 0 && writes > 0 {
-						addPositionConcern(
+						concern_line.Add(
 							r,
 							set,
 							v.Pos(),
@@ -73,7 +74,7 @@ func reportLeftovers(
 				}
 
 				if reads, _ := variableUses(all, v, removed); reads == 0 {
-					addPositionConcern(
+					concern_line.Add(
 						r,
 						set,
 						v.Pos(),

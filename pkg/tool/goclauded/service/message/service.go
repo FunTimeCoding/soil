@@ -10,10 +10,12 @@ import (
 )
 
 type Service struct {
-	store    *store.Store
-	notifier face.Notifier
-	stop     *stopper.Stopper
-	clock    func() time.Time
-	metric   *metric.Metric
-	logger   *logger.Logger
+	store         *store.Store
+	notifier      face.Notifier
+	stop          *stopper.Stopper
+	clock         func() time.Time
+	metric        *metric.Metric
+	logger        *logger.Logger
+	channelAlways bool
+	defaultGrace  time.Duration
 }

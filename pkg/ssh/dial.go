@@ -27,15 +27,18 @@ func (c *Client) Dial() error {
 		defer errors.LogClose(agent)
 	}
 
-	result, g := ssh.Dial(
-		systemConstant.Transmission,
-		net.JoinHostPort(c.host, strconv.Itoa(c.port)),
-		&ssh.ClientConfig{
-			User:            c.user,
-			Auth:            []ssh.AuthMethod{method},
-			HostKeyCallback: callback,
-		},
-	)
+	address := net.JoinHostPort(c.host, strconv.Itoa(c.port))
+	configuration := &ssh.ClientConfig{
+		User:            c.user,
+		Auth:            []ssh.AuthMethod{method},
+		HostKeyCallback: callback,
+	}
+
+	if c.secure {
+		configuration.HostKeyAlgorithms = hostKeyAlgorithms(callback, address)
+	}
+
+	result, g := ssh.Dial(systemConstant.Transmission, address, configuration)
 
 	if g != nil {
 		if h := connection.Classify(g); h != nil {

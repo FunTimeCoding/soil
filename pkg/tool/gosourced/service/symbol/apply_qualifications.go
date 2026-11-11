@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/token"
@@ -44,6 +45,8 @@ func applyQualifications(
 			d.Path = targetPackagePath
 		}
 
+		renameLocals(r, decorations, set, q)
+
 		if q.Name != nil && q.Name.Alias != "" && !q.Name.Imported {
 			decorations.AddAlias(file, targetPackagePath, q.Name.Alias)
 		}
@@ -51,7 +54,7 @@ func applyQualifications(
 		for _, qp := range q.Positions {
 			r.AddConcern(
 				concern.NewLine(
-					"qualified",
+					constant.ConcernQualified,
 					fmt.Sprintf(
 						"%s → %s.%s",
 						qp.OldName,

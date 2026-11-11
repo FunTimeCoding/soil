@@ -3,6 +3,7 @@ package symbol
 import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/naming"
 	"go/ast"
 	"go/token"
@@ -49,7 +50,7 @@ func namingSite(
 	}
 
 	if candidates > 1 {
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			signature.Pos(),
@@ -65,7 +66,7 @@ func namingSite(
 	}
 
 	if signatureNames(signature)[name] || bodyUsesName(body, name) {
-		addPositionConcern(
+		concern_line.Add(
 			r,
 			set,
 			signature.Pos(),

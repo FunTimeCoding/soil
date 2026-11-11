@@ -2,14 +2,14 @@ package profile
 
 type Detail struct {
 	Budget             int `json:"budget"`
-	AlwaysTokens       int `json:"always_tokens"`
-	IndexTokens        int `json:"index_tokens"`
+	AlwaysBytes        int `json:"always_bytes"`
+	IndexBytes         int `json:"index_bytes"`
 	IndexTrimmed       int `json:"index_trimmed"`
-	CompletionTokens   int `json:"completion_tokens"`
+	CompletionBytes    int `json:"completion_bytes"`
 	CompletionsTrimmed int `json:"completions_trimmed"`
-	ImpressionTokens   int `json:"impression_tokens"`
+	ImpressionBytes    int `json:"impression_bytes"`
 	ImpressionsTrimmed int `json:"impressions_trimmed"`
-	RelevantTokens     int `json:"relevant_tokens"`
+	RelevantBytes      int `json:"relevant_bytes"`
 	RelevantTrimmed    int `json:"relevant_trimmed"`
-	TotalTokens        int `json:"total_tokens"`
+	TotalBytes         int `json:"total_bytes"`
 }

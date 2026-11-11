@@ -12,6 +12,7 @@ func (s *Store) UpsertCompletion(
 	topic string,
 	message string,
 ) (*completion.Completion, error) {
+	now := s.clock()
 	var existing completion.Completion
 	result := s.database.Where(
 		"session_identifier = ? AND topic = ?",
@@ -26,15 +27,21 @@ func (s *Store) UpsertCompletion(
 	if result.RowsAffected > 0 {
 		e := s.database.Model(&existing).Updates(
 			map[string]any{
-				"name":                 name,
-				"kind":                 kind,
-				constant.SummaryColumn: message,
+				"name":                     name,
+				"kind":                     kind,
+				constant.SummaryColumn:     message,
+				constant.CompletedAtColumn: now,
 			},
 		).Error
 
 		if e != nil {
 			return nil, e
 		}
+
+		existing.Name = name
+		existing.Kind = kind
+		existing.Summary = message
+		existing.CompletedAt = now
 
 		return &existing, nil
 	}
@@ -46,6 +53,7 @@ func (s *Store) UpsertCompletion(
 	).Count(&count)
 	c := completion.New(sessionIdentifier, name, kind, topic, message)
 	c.Sequence = int(count) + 1
+	c.CompletedAt = now
 
 	if e := s.database.Create(c).Error; e != nil {
 		return nil, e

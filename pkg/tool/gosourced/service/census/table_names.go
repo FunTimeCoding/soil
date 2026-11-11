@@ -10,6 +10,7 @@ import (
 func tableNames(
 	directory string,
 	stores map[string]*storeReading,
+	missing unloaded,
 ) (map[string]string, error) {
 	result := map[string]string{}
 	declared := map[string]*types.Named{}
@@ -41,11 +42,13 @@ func tableNames(
 		return result, nil
 	}
 
-	all, _, e := load.Packages(directory, sortedKeys(paths)...)
+	all, broken, _, e := load.Lenient(directory, sortedKeys(paths)...)
 
 	if e != nil {
 		return nil, e
 	}
+
+	noteUnloaded(missing, broken, constant.CensusLostTables)
 
 	for q, m := range declared {
 		result[q] = declaredTable(all, m)

@@ -13,6 +13,7 @@ type Ansible struct {
 	CopyModes        bool
 	AnsibleDirectory string
 	Playbook         []string
+	Site             string
 	PostgresLocator  string
 	LitePath         string
 	Inventory        func() face.Client

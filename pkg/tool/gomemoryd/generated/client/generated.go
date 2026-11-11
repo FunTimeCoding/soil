@@ -87,20 +87,24 @@ type ProfileCompletion struct {
 
 // ProfileDetail defines model for ProfileDetail.
 type ProfileDetail struct {
-	AlwaysTokens       int `json:"always_tokens"`
+	AlwaysBytes int `json:"always_bytes"`
+
+	// Budget The byte limit on the profile text the model receives.
 	Budget             int `json:"budget"`
-	CompletionTokens   int `json:"completion_tokens"`
+	CompletionBytes    int `json:"completion_bytes"`
 	CompletionsTrimmed int `json:"completions_trimmed"`
 
-	// Hidden Entries withheld from this surface by the hidden tag; token counts include them.
+	// Hidden Entries withheld from this surface by the hidden tag; byte counts include them.
 	Hidden             int `json:"hidden"`
-	ImpressionTokens   int `json:"impression_tokens"`
+	ImpressionBytes    int `json:"impression_bytes"`
 	ImpressionsTrimmed int `json:"impressions_trimmed"`
-	IndexTokens        int `json:"index_tokens"`
+	IndexBytes         int `json:"index_bytes"`
 	IndexTrimmed       int `json:"index_trimmed"`
-	RelevantTokens     int `json:"relevant_tokens"`
+	RelevantBytes      int `json:"relevant_bytes"`
 	RelevantTrimmed    int `json:"relevant_trimmed"`
-	TotalTokens        int `json:"total_tokens"`
+
+	// TotalBytes The length in bytes of the profile text, notice and section headings included.
+	TotalBytes int `json:"total_bytes"`
 }
 
 // ProfileImpression defines model for ProfileImpression.

@@ -57,6 +57,33 @@ func TestReadAccumulatesUsage(t *testing.T) {
 	assert.Integer(t, 0, second.Cache1Hour)
 }
 
+func TestReadTakesSlugArrivingAfterFirstRead(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "session.jsonl")
+	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}`
+	claude_tester.AppendFile(
+		t,
+		path,
+		claude_tester.AssistantUsageLine("m1", "r1", "claude-fable-5", fable),
+	)
+	s := tracker.New()
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
+	assert.String(t, "", s.Slug)
+	claude_tester.AppendFile(
+		t,
+		path,
+		`{"type":"system","subtype":"compact_boundary","slug":"quiet-folding-heron"}
+`,
+	)
+	claude_tester.AppendFile(
+		t,
+		path,
+		`{"type":"system","subtype":"turn_duration","slug":"loud-folding-heron"}
+`,
+	)
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
+	assert.String(t, "quiet-folding-heron", s.Slug)
+}
+
 func TestReadResetsOnShrink(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}`

@@ -7,12 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/ast"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
+	"maps"
 	"path"
 	"path/filepath"
 )
@@ -25,7 +27,6 @@ func (s *Service) moveSymbolsThrough(
 	targetPackagePath string,
 	targetFile string,
 	create bool,
-	qualifyBackReferences bool,
 	out *sink.Sink,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
@@ -163,67 +164,24 @@ func (s *Service) moveSymbolsThrough(
 		newNames[entry.NewName] = entry.Symbol
 
 		if target != nil {
-			if f := checkScopeCollision(target, entry.NewName); f != nil {
+			if f := identifier.CheckScopeCollision(target, entry.NewName); f != nil {
 				return commit.FailValidation(r, f.Error())
 			}
 		}
 	}
 
-	if qualifyBackReferences {
-		excluded := make(map[token.Pos]bool)
-		moved := make(map[types.Object]bool)
+	flipped, flips, f := planBackReferences(all, p, entries, nil)
 
-		for _, entry := range entries {
-			excluded[entry.Object.Pos()] = true
-			moved[entry.Object] = true
-		}
-
-		back := false
-
-		for _, entry := range entries {
-			idents := backReferenceIdentifiers(p, excluded, entry.Node)
-
-			if len(idents) == 0 {
-				continue
-			}
-
-			back = true
-
-			for _, ident := range idents {
-				if o := p.TypesInfo.Uses[ident]; !o.Exported() {
-					return commit.FailValidation(
-						r,
-						fmt.Sprintf(
-							"%s references unexported %s - export it first",
-							entry.Symbol,
-							o.Name(),
-						),
-					)
-				}
-			}
-
-			entry.BackIdentifiers = idents
-		}
-
-		if back && sourceReferencesMoved(p, entries, moved) {
-			return commit.FailValidation(
-				r,
-				fmt.Sprintf(
-					"move would create an import cycle: %s references a moved symbol",
-					packagePath,
-				),
-			)
-		}
+	if f != nil {
+		return commit.FailValidation(r, f.Error())
 	}
 
 	if message := checkEntryGuards(
 		all,
 		p,
-		target,
 		entries,
 		packagePath,
 		targetPackagePath,
-		qualifyBackReferences,
 	); message != "" {
 		return commit.FailValidation(r, message)
 	}
@@ -248,6 +206,22 @@ func (s *Service) moveSymbolsThrough(
 
 	var external []relocation.QualifiedReference
 	renames := make(map[*ast.Ident]string)
+	maps.Copy(renames, flips)
+
+	for _, entry := range entries {
+		if !entry.Flipped {
+			continue
+		}
+
+		if capture := embeddedRenames(
+			all,
+			entry.Object,
+			entry.NewName,
+			renames,
+		); capture != "" {
+			return commit.FailValidation(r, capture)
+		}
+	}
 
 	for _, entry := range entries {
 		for _, f := range references[entry] {
@@ -281,6 +255,8 @@ func (s *Service) moveSymbolsThrough(
 		return commit.FailValidation(r, blocked)
 	}
 
+	reportExports(r, set, flipped)
+	resymbolExports(out, set, flipped)
 	plan := relocation.NewPlan()
 	plan.Set = set
 	plan.All = all

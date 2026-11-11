@@ -1,15 +1,10 @@
 package service_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"time"
-)
+import "github.com/funtimecoding/soil/pkg/assert"
 
 func (o *Tester) Arm(
 	sessionIdentifier string,
-	mode constant.Cruise,
-	pace time.Duration,
+	grace string,
 ) {
-	assert.FatalOnError(o.t, o.Message.SetCruise(sessionIdentifier, mode, pace))
+	assert.FatalOnError(o.t, o.Message.SetCruise(sessionIdentifier, grace))
 }

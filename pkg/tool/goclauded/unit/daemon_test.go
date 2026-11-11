@@ -10,6 +10,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/worker"
@@ -33,6 +36,28 @@ func TestDaemonClosesBothPeerClientsOnce(t *testing.T) {
 	d.Close()
 	assert.Integer(t, 1, m.Closed)
 	assert.Integer(t, 1, q.Closed)
+}
+
+func TestDaemonMigratesFreshDatabase(t *testing.T) {
+	o, _, _ := newDaemonOption(t)
+	daemon.New(
+		o,
+		logger.New(t.Context()),
+		memory.New(),
+		prometheus.NewRegistry(),
+	).Close()
+	d := lite.New(logger.New(t.Context()), o.LitePath)
+	defer relational.CloseMapper(d)
+	assert.Integer(
+		t,
+		1,
+		columnCount(t, d, constant.CruiseSettingTable, constant.GraceColumn),
+	)
+	assert.Integer(
+		t,
+		1,
+		columnCount(t, d, constant.CompletionTable, constant.CompletedAtColumn),
+	)
 }
 
 func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {

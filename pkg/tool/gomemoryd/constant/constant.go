@@ -81,7 +81,7 @@ const (
 	DetailHeadClass  = "detail-head"
 	Days             = "days"
 
-	ProfileBudget = 15000
+	ProfileByteBudget = 50000
 
 	DefaultCollection = "memories"
 	MemoryTable       = "memory"

@@ -6,6 +6,12 @@ import (
 )
 
 func (s *Server) registerMessaging() {
+	delivery := constant.DeliveryDescription
+
+	if s.message.ChannelAlways() {
+		delivery = constant.DeliveryDescriptionChannelAlways
+	}
+
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Send,
@@ -27,13 +33,10 @@ func (s *Server) registerMessaging() {
 			mcp.WithString(
 				constant.DeliveryParameter,
 				mcp.Enum(
-					string(constant.DeliveryQueued),
 					string(constant.DeliveryImmediate),
-					string(constant.DeliveryCruise),
+					string(constant.DeliveryQueued),
 				),
-				mcp.Description(
-					"queued (default) waits for the recipient's next prompt. immediate wakes them now - only for messages that cannot wait, it costs the recipient a turn the moment it lands. cruise wakes them only as their cruise setting allows.",
-				),
+				mcp.Description(delivery),
 			),
 		),
 		s.send,

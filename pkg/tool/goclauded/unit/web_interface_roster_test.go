@@ -60,14 +60,17 @@ func TestRosterCruiseSitsInFooterOutsideLink(t *testing.T) {
 	markup_tester.AssertCount(t, 0, page, `[sse-swap^="roster-"] form`)
 }
 
-func TestRefusedPaceAnswersCardsFormWithItsAlert(t *testing.T) {
+func TestRefusedGraceAnswersCardsFormWithItsAlert(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
 	answer := submit(
 		t,
 		s,
 		session_page.ActionPath("session-1", constant.CruiseAction),
-		url.Values{constant.Mode: {"paced"}, constant.Pace: {"61"}},
+		url.Values{
+			constant.GraceKind: {constant.CruiseMinutes},
+			constant.Grace:     {"61"},
+		},
 		true,
 	)
 	markup_tester.AssertCount(
@@ -79,24 +82,41 @@ func TestRefusedPaceAnswersCardsFormWithItsAlert(t *testing.T) {
 			session_page.Event("session-1", constant.RosterCruisePart),
 		),
 	)
-	assert.StringContains(t, "from 1 to 60, not 61", answer)
+	assert.StringContains(t, "from 1 to 59, not &#34;61&#34;", answer)
 	setting, e := s.Store.Store.CruiseSetting("session-1")
 	assert.FatalOnError(t, e)
-	assert.String(t, "off", string(setting.Mode))
+	assert.Nil(t, setting.Grace)
 }
 
-func TestDetailPageTakesPaceInRange(t *testing.T) {
+func TestDetailPageTakesGraceInRange(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
 	submit(
 		t,
 		s,
 		session_page.ActionPath("session-1", constant.CruiseAction),
-		url.Values{constant.Mode: {"paced"}, constant.Pace: {"12"}},
+		url.Values{
+			constant.GraceKind: {constant.CruiseMinutes},
+			constant.Grace:     {"12"},
+		},
 		false,
 	)
 	setting, e := s.Store.Store.CruiseSetting("session-1")
 	assert.FatalOnError(t, e)
-	assert.String(t, "paced", string(setting.Mode))
-	assert.Integer(t, 12*time.Minute, setting.Pace)
+	assert.Duration(t, 12*time.Minute, *setting.Grace)
+}
+
+func TestDetailPageTurnsCruiseOff(t *testing.T) {
+	s := base.New(t)
+	s.Store.EnsureSession("session-1")
+	submit(
+		t,
+		s,
+		session_page.ActionPath("session-1", constant.CruiseAction),
+		url.Values{constant.GraceKind: {constant.CruiseOff}},
+		false,
+	)
+	setting, e := s.Store.Store.CruiseSetting("session-1")
+	assert.FatalOnError(t, e)
+	assert.Duration(t, 0, *setting.Grace)
 }

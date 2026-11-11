@@ -17,4 +17,5 @@ type Server struct {
 	closed        sync.Once
 	Port          int
 	Password      string
+	HostKey       ssh.PublicKey
 }

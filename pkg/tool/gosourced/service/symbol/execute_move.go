@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/ast"
@@ -28,7 +29,7 @@ func executeMove(
 		position := plan.Set.Position(entry.Object.Pos())
 		r.AddConcern(
 			concern.NewLine(
-				"exported",
+				constant.ConcernExported,
 				fmt.Sprintf("%s → %s", entry.Symbol, entry.NewName),
 				position.Filename,
 				position.Line,
@@ -66,6 +67,10 @@ func executeMove(
 		}
 	}
 
+	if e := applyHolders(r, decorations, plan); e != nil {
+		return nil, e
+	}
+
 	e := applyQualifications(
 		r,
 		decorations,
@@ -82,6 +87,17 @@ func executeMove(
 		for _, ident := range entry.BackIdentifiers {
 			if d := decorations.DecoratedIdent(plan.Source, ident); d != nil {
 				d.Path = plan.PackagePath
+				concern_line.Add(
+					r,
+					plan.Set,
+					ident.Pos(),
+					constant.ConcernQualified,
+					true,
+					"%s → %s.%s (back reference)",
+					ident.Name,
+					plan.Source.Name,
+					d.Name,
+				)
 			}
 		}
 	}
@@ -157,11 +173,13 @@ func executeMove(
 
 		out.Remove(filename)
 		deleted[filename] = true
+		target := soleMoveTarget(plan, filename)
 
-		if target := soleMoveTarget(plan, filename); target != "" {
-			out.Relocate(filename, target)
+		if target == "" {
+			target = plan.MoveDirectory
 		}
 
+		out.Relocate(filename, target)
 		r.AddConcern(
 			concern.NewFile(
 				constant.ConcernRemoved,
@@ -200,6 +218,8 @@ func executeMove(
 		if e != nil {
 			return nil, e
 		}
+
+		nameTargetImports(decorations, plan, targetPath, groups[name])
 
 		for _, entry := range groups[name] {
 			r.AddConcern(

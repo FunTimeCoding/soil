@@ -29,6 +29,7 @@ func Main() {
 		constant.AnsibleDirectoryEnvironment,
 	)
 	o.Playbook = a.Slice(argumentConstant.Playbook)
+	o.Site = environment.Optional(constant.AnsibleSiteEnvironment)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 

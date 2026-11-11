@@ -11,5 +11,6 @@ type FileQualification struct {
 	SamePackage bool
 	Name        *ImportName
 	Idents      map[*ast.Ident]string
+	Locals      map[*ast.Ident]string
 	Positions   []QualifiedPosition
 }

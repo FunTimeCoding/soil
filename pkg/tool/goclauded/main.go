@@ -28,6 +28,7 @@ func Main() {
 		constant.SessionExportDirectoryEnvironment,
 	)
 	o.Harbor = claude.New().Base()
+	o.ChannelAlways = environment.Exists(constant.ChannelAlwaysEnvironment)
 	o.MonitorUsage = environment.Exists(constant.MonitorUsageEnvironment) &&
 		!environment.Exists(constant.UsageEndpointEnvironment)
 	o.UtilizationFallback = utilization.Supported() &&

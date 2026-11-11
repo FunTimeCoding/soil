@@ -16,7 +16,6 @@ func (s *Service) MoveSymbols(
 	targetPackagePath string,
 	targetFile string,
 	create bool,
-	qualifyBackReferences bool,
 	dryRun bool,
 ) (*output.Results, error) {
 	absolute := filePath
@@ -50,7 +49,6 @@ func (s *Service) MoveSymbols(
 				targetPackagePath,
 				targetFile,
 				create,
-				qualifyBackReferences,
 				out,
 			)
 		},

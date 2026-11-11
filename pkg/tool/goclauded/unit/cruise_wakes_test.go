@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestArmedIdleSessionIsWoken(t *testing.T) {
+func TestIdleSessionPastGraceIsWoken(t *testing.T) {
 	now := time.Now()
 	assert.True(t, cruise.Wakes(cruise_tester.Settled(now), now))
 }
@@ -17,7 +17,7 @@ func TestArmedIdleSessionIsWoken(t *testing.T) {
 func TestCruiseOffNeverWakes(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
-	r.Mode = constant.CruiseOff
+	r.Grace = 0
 	assert.False(t, cruise.Wakes(r, now))
 }
 
@@ -42,7 +42,14 @@ func TestUnknownStateIsNeverWoken(t *testing.T) {
 	assert.False(t, cruise.Wakes(r, now))
 }
 
-func TestIdleSessionInsideWakeWindowIsWoken(t *testing.T) {
+func TestIdleSessionInsideGraceIsNotWoken(t *testing.T) {
+	now := time.Now()
+	r := cruise_tester.Settled(now)
+	r.IdleSince = now.Add(-29 * time.Minute)
+	assert.False(t, cruise.Wakes(r, now))
+}
+
+func TestIdleSessionAtGraceIsWoken(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
 	r.IdleSince = now.Add(-30 * time.Minute)
@@ -52,42 +59,6 @@ func TestIdleSessionInsideWakeWindowIsWoken(t *testing.T) {
 func TestIdleSessionPastWakeWindowIsNotWoken(t *testing.T) {
 	now := time.Now()
 	r := cruise_tester.Settled(now)
-	r.IdleSince = now.Add(-constant.WakeWindow - time.Minute)
-	assert.False(t, cruise.Wakes(r, now))
-}
-
-func TestPacedModeWaitsOutGap(t *testing.T) {
-	now := time.Now()
-	r := cruise_tester.Settled(now)
-	r.Mode = constant.CruisePaced
-	r.Pace = 15 * time.Minute
-	r.PromotedAt = now.Add(-5 * time.Minute)
-	assert.False(t, cruise.Wakes(r, now))
-}
-
-func TestPacedModeWakesAfterGap(t *testing.T) {
-	now := time.Now()
-	r := cruise_tester.Settled(now)
-	r.Mode = constant.CruisePaced
-	r.Pace = 15 * time.Minute
-	r.PromotedAt = now.Add(-20 * time.Minute)
-	assert.True(t, cruise.Wakes(r, now))
-}
-
-func TestPacedModeFirstWakeDoesNotWait(t *testing.T) {
-	now := time.Now()
-	r := cruise_tester.Settled(now)
-	r.Mode = constant.CruisePaced
-	r.Pace = 30 * time.Minute
-	assert.True(t, cruise.Wakes(r, now))
-}
-
-func TestPacedGapYieldsWhenSheStepsInHerself(t *testing.T) {
-	now := time.Now()
-	r := cruise_tester.Settled(now)
-	r.Mode = constant.CruisePaced
-	r.Pace = 15 * time.Minute
-	r.PromotedAt = now.Add(-20 * time.Minute)
-	r.Idle = false
+	r.IdleSince = now.Add(-constant.WakeWindow)
 	assert.False(t, cruise.Wakes(r, now))
 }

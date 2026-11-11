@@ -1377,9 +1377,15 @@ paths:
         schema:
           type: string
         description: Custom field whose values become the groups. Default ansible_playbook.
+      - name: site
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Site the caller dials from. A host at another site is dialled at the address on its interface terminating a tunnel, where it has one. Absent means every host keeps its primary address.
       responses:
         "200":
-          description: Ansible YAML inventory, one group per field value. Host variables are ansible_host from the primary address and the keys of the ansible object in the host's configuration context, which override it.
+          description: Ansible YAML inventory, one group per field value. Host variables are ansible_host - the tunnel address for a host off the caller's site, the primary address otherwise - and the keys of the ansible object in the host's configuration context, which override it.
           content:
             text/plain:
               schema:

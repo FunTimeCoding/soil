@@ -15,21 +15,15 @@ func (s *Service) releaseHeld(identifier string) (bool, error) {
 		s.clock().Add(-constant.ImmediateWindow),
 	)
 
-	if f != nil {
+	if f != nil || recent >= constant.ImmediateLimit {
 		return false, f
 	}
 
-	budget := constant.ImmediateLimit - int(recent)
-
-	if budget <= 0 {
-		return false, nil
-	}
-
-	count, g := s.store.ReleaseHeldCruise(identifier, budget)
+	count, g := s.store.ReleaseHeldCruise(identifier)
 
 	if g != nil || count == 0 {
 		return false, g
 	}
 
-	return true, s.store.MarkPromoted(identifier)
+	return true, s.store.MarkWoken(identifier)
 }

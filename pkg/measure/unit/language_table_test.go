@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/measure/classifier"
 	"github.com/funtimecoding/soil/pkg/measure/constant"
 	"github.com/funtimecoding/soil/pkg/measure/registry"
@@ -56,7 +56,7 @@ func TestTableCensus(t *testing.T) {
 	assert.String(t, "XML", r.ByPath("schema.avsc").Name)
 	assert.String(t, "Plain Text", r.ByPath("LICENSE").Name)
 	assert.String(t, "Groovy", r.ByPath("Jenkinsfile").Name)
-	assert.String(t, "Go Module", r.ByPath(go_modConstant.ModFile).Name)
+	assert.String(t, "Go Module", r.ByPath(goModConstant.ModFile).Name)
 }
 
 func TestClassifyHashFamily(t *testing.T) {

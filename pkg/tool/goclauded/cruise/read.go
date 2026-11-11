@@ -1,22 +1,16 @@
 package cruise
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"time"
 )
 
 func Read(
 	v *session.Session,
-	c *cruise_setting.Setting,
+	grace time.Duration,
 ) *Reading {
 	result := New()
-	result.Mode = c.Mode
-	result.Pace = c.Pace
-
-	if c.PromotedAt != nil {
-		result.PromotedAt = *c.PromotedAt
-	}
-
+	result.Grace = grace
 	result.Closed = v.ClosedAt != nil
 	result.StateKnown = v.LastTurnEndAt != nil
 

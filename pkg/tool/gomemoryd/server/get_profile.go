@@ -144,16 +144,16 @@ func (s *Server) GetProfile(
 	if d != nil {
 		response.Detail = &server.ProfileDetail{
 			Budget:             d.Budget,
-			AlwaysTokens:       d.AlwaysTokens,
-			IndexTokens:        d.IndexTokens,
+			AlwaysBytes:        d.AlwaysBytes,
+			IndexBytes:         d.IndexBytes,
 			IndexTrimmed:       d.IndexTrimmed,
-			CompletionTokens:   d.CompletionTokens,
+			CompletionBytes:    d.CompletionBytes,
 			CompletionsTrimmed: d.CompletionsTrimmed,
-			ImpressionTokens:   d.ImpressionTokens,
+			ImpressionBytes:    d.ImpressionBytes,
 			ImpressionsTrimmed: d.ImpressionsTrimmed,
-			RelevantTokens:     d.RelevantTokens,
+			RelevantBytes:      d.RelevantBytes,
 			RelevantTrimmed:    d.RelevantTrimmed,
-			TotalTokens:        d.TotalTokens,
+			TotalBytes:         d.TotalBytes,
 			Hidden: len(result.Always) - len(visible.Always) +
 				len(result.Index) - len(visible.Index) +
 				len(result.Relevant) - len(visible.Relevant),

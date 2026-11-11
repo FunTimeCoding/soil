@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 	"github.com/mark3labs/mcp-go/mcp"
-	"time"
 )
 
 func (s *Server) cruise(
@@ -30,12 +29,8 @@ func (s *Server) cruise(
 		return failed, f
 	}
 
-	if mode := q.GetString(constant.Mode, ""); mode != "" {
-		if g := s.message.SetCruise(
-			sessionIdentifier,
-			constant.Cruise(mode),
-			time.Duration(q.GetFloat(constant.Pace, 0)*float64(time.Minute)),
-		); g != nil {
+	if grace := q.GetString(constant.Grace, ""); grace != "" {
+		if g := s.message.SetCruise(sessionIdentifier, grace); g != nil {
 			if refusal.Is(g) {
 				return response.Fail(g.Error())
 			}
@@ -50,5 +45,5 @@ func (s *Server) cruise(
 		return s.captureFail(x, h, soil.UnexpectedError)
 	}
 
-	return response.Success(cruiseLine(setting))
+	return response.Success(cruiseLine(setting, s.message.Grace(setting)))
 }

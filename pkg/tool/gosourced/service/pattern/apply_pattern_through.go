@@ -2,6 +2,7 @@ package pattern
 
 import (
 	"fmt"
+	"github.com/dave/dst"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
@@ -14,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/pattern_site"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
+	"go/ast"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/ast/astutil"
@@ -84,9 +86,11 @@ func (s *Service) applyPatternThrough(
 
 		return false
 	}
+	anchor := anchorPackage(declaration, receiver)
 	qualifiers, i := resolveQualifiers(
 		replacementSpec,
 		symbol,
+		anchor,
 		lookup.PackageNames(all),
 	)
 
@@ -98,11 +102,38 @@ func (s *Service) applyPatternThrough(
 		return r, nil, nil
 	}
 
+	matching, _ := qualifierPaths(
+		patternSpec,
+		symbol,
+		anchor,
+		lookup.PackageNames(all),
+	)
+	var patternNode ast.Node = patternSpec.Statement
+	call := expressionCall(patternSpec, symbol)
+
+	if call != nil {
+		patternNode = call
+
+		if _, okay := replacementSpec.Statement.(*ast.ExprStmt); !okay {
+			r.AddConcern(
+				concern.NewFile(
+					constant.ConcernValidation,
+					"the pattern is a call, so the replacement must be an expression",
+					"",
+					false,
+				),
+			)
+
+			return r, nil, nil
+		}
+	}
+
 	report := result.NewApply(symbol, pattern, replacement)
 	decorations := decoration.NewSet()
 	contents := map[string][]byte{}
 	seen := map[token.Pos]bool{}
 	var plans []pattern_site.ApplyPlan
+	var planned []*pattern_site.Entry
 	var unmatched []*pattern_site.Entry
 	var refused []*pattern_site.Entry
 
@@ -119,13 +150,13 @@ func (s *Service) applyPatternThrough(
 			reference.Ident.Pos(),
 			reference.Ident.End(),
 		)
-		node := siteNode(path)
+		node, shape := siteSelection(path, call != nil)
 		entry, j := s.siteEntry(
 			directory,
 			set,
 			contents,
 			node,
-			anchorNode(path),
+			shape,
 			reference,
 		)
 
@@ -135,6 +166,7 @@ func (s *Service) applyPatternThrough(
 
 		unification := matcher.New(
 			patternSpec,
+			matching,
 			reference.Package.TypesInfo,
 			reference.Package.Types,
 			set,
@@ -142,7 +174,7 @@ func (s *Service) applyPatternThrough(
 			isAnchor,
 		)
 
-		if !unification.Unify(patternSpec.Statement, node) {
+		if !unification.Unify(patternNode, node) {
 			unmatched = append(unmatched, entry)
 
 			continue
@@ -159,7 +191,7 @@ func (s *Service) applyPatternThrough(
 		seen[node.Pos()] = true
 		parent := statementParent(path, node)
 
-		if parent == nil {
+		if parent == nil && call == nil {
 			refused = append(refused, entry)
 
 			continue
@@ -191,8 +223,23 @@ func (s *Service) applyPatternThrough(
 				Anchor:    anchorNode(path),
 			},
 		)
+		planned = append(planned, entry)
 	}
 
+	nested := nestedPlans(plans)
+	var kept []pattern_site.ApplyPlan
+
+	for i, plan := range plans {
+		if nested[i] {
+			refused = append(refused, planned[i])
+
+			continue
+		}
+
+		kept = append(kept, plan)
+	}
+
+	plans = kept
 	report.Unmatched = literals.GroupEntries(unmatched)
 	report.Refused = literals.GroupEntries(refused)
 
@@ -220,6 +267,18 @@ func (s *Service) applyPatternThrough(
 
 		if l != nil {
 			return nil, nil, l
+		}
+
+		if call != nil {
+			if m := swapExpression(
+				decorations.Files[set.Position(plan.Statement.Pos()).Filename],
+				decorations.DecoratedNode(plan.Package, plan.Statement),
+				statement.(*dst.ExprStmt).X,
+			); m != nil {
+				return nil, nil, m
+			}
+
+			continue
 		}
 
 		if m := swapStatement(

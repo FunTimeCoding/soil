@@ -3,6 +3,7 @@ package symbol
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -51,7 +52,7 @@ func fieldFlips(
 			)
 		}
 
-		newName := FlipName(field.Name())
+		newName := identifier.FlipName(field.Name())
 
 		if memberNames[newName] {
 			return nil, fmt.Sprintf(
