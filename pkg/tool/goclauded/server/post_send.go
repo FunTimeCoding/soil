@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 )
 
 func (s *Server) PostSend(
@@ -17,21 +17,24 @@ func (s *Server) PostSend(
 		to = *r.Body.To
 	}
 
-	var d constant.Delivery
-
-	if r.Body.Delivery != nil {
-		d = toDelivery(r.Body.Delivery)
-	}
-
-	held, e := s.message.Send(r.Body.Callsign, to, r.Body.Body, d)
+	result, e := s.message.Send(
+		r.Body.Callsign,
+		to,
+		r.Body.Body,
+		toDelivery(r.Body.Delivery),
+	)
 
 	if e != nil {
+		if refusal.Is(e) {
+			return server.PostSend400JSONResponse(
+				server.Error{Error: e.Error()},
+			), nil
+		}
+
 		return server.PostSend500JSONResponse(
 			*s.captureFail(x, e, soil.UnexpectedError),
 		), nil
 	}
 
-	return server.PostSend200JSONResponse{
-		Immediate: len(to) > 0 && d != constant.DeliveryQueued && len(held) == 0,
-	}, nil
+	return server.PostSend200JSONResponse{Immediate: result.Immediate()}, nil
 }

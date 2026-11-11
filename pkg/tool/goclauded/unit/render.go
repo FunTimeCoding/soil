@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/delivery"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/delivery_renderer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"time"
@@ -23,5 +23,5 @@ func render(
 		values = append(values, *e)
 	}
 
-	return delivery.New(stored, time.UTC).Context(values)
+	return delivery_renderer.New(stored, time.UTC).Context(values)
 }

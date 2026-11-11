@@ -2,7 +2,7 @@ package message
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/delivery"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/delivery_renderer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"time"
 )
@@ -23,11 +23,11 @@ func (s *Service) DrainImmediateQueue(
 		return nil, f
 	}
 
-	d := delivery.New(messages, time.Local)
+	r := delivery_renderer.New(messages, time.Local)
 
 	for i, v := range result {
 		if v.Kind == constant.QueueMessage {
-			result[i].Body = d.Cut(v)
+			result[i].Body = r.Cut(v)
 		}
 	}
 

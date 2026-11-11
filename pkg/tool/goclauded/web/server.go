@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
@@ -18,6 +19,7 @@ type Server struct {
 	session       *session.Service
 	label         *label.Service
 	message       *message.Service
+	cruise        *cruise.Service
 	event         *event.Service
 	transcript    *transcript.Service
 	usage         *usage.Service

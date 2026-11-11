@@ -17,5 +17,4 @@ type Service struct {
 	metric        *metric.Metric
 	logger        *logger.Logger
 	channelAlways bool
-	defaultGrace  time.Duration
 }

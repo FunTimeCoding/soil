@@ -205,6 +205,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeliveryResponse"
+        "400":
+          description: Delivery is neither immediate nor queued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -228,7 +234,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DeliveryResponse"
         "400":
-          description: Body over the delivery entry limit.
+          description: Body over the delivery entry limit, or delivery neither immediate nor queued.
           content:
             application/json:
               schema:
@@ -853,7 +859,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/DeliveryResponse"
         "400":
-          description: Body over the delivery entry limit.
+          description: Body over the delivery entry limit, or delivery neither immediate nor queued.
           content:
             application/json:
               schema:

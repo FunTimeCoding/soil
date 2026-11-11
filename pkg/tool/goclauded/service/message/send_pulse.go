@@ -9,8 +9,14 @@ func (s *Service) SendPulse(
 	sessionIdentifier string,
 	fromName string,
 	body string,
-	d constant.Delivery,
+	requested constant.Delivery,
 ) (bool, error) {
+	d, e := delivery(requested, constant.DeliveryQueued)
+
+	if e != nil {
+		return false, e
+	}
+
 	if fromName == "" {
 		if f := entryRefusal(constant.QueuePulse, body); f != nil {
 			return false, f

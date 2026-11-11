@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
@@ -40,9 +41,11 @@ func (d *Daemon) build(
 	m := metric.New(y)
 	d.label = label.New(s, n)
 	d.message = message.New(s, n, d.stop, o.Clock, m, l)
+	d.cruise = cruise.New(s, n, o.Clock)
 
 	if o.ChannelAlways {
 		d.message.WithChannelAlways()
+		d.cruise.WithDefaultGrace(constant.DefaultCruiseGrace)
 	}
 
 	d.memory = memory.New(s, d.memoryPeer, d.memoryGuard, d.message, o.Clock, r)
@@ -74,6 +77,7 @@ func (d *Daemon) build(
 		s,
 		d.label,
 		d.message,
+		d.cruise,
 		d.transcript,
 		c,
 		cache,
@@ -90,6 +94,7 @@ func (d *Daemon) build(
 		d.session,
 		d.label,
 		d.message,
+		d.cruise,
 		d.event,
 		d.transcript,
 		d.usage,
@@ -109,7 +114,7 @@ func (d *Daemon) build(
 	d.clocks = clocks(
 		d.roster,
 		d.transcript,
-		d.message,
+		d.cruise,
 		d.memory,
 		d.usage,
 		d.search,

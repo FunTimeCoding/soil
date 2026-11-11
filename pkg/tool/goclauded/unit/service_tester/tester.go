@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
@@ -32,6 +33,7 @@ type Tester struct {
 	Startup        *startup.Service
 	Label          *label.Service
 	Message        *message.Service
+	Cruise         *cruise.Service
 	Memory         *memory.Service
 	Event          *event.Service
 	Transcript     *transcript.Service

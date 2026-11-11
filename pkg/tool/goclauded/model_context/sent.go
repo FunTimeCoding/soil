@@ -2,16 +2,15 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/send_result"
 	"strings"
 )
 
 func sent(
 	to []string,
-	held []string,
-	d constant.Delivery,
+	r *send_result.Result,
 ) string {
-	if len(to) == 0 && d != constant.DeliveryQueued {
+	if r.Requested != r.Delivery {
 		return "Broadcast sent, queued - a broadcast never wakes anyone; name the recipients to wake them"
 	}
 
@@ -21,13 +20,13 @@ func sent(
 		result = fmt.Sprintf("Sent to %s", strings.Join(to, ", "))
 	}
 
-	if len(held) == 0 {
+	if len(r.Held) == 0 {
 		return result
 	}
 
 	return fmt.Sprintf(
 		"%s; deferred to the next prompt of %s - immediate delivery is rate limited for them right now",
 		result,
-		strings.Join(held, ", "),
+		strings.Join(r.Held, ", "),
 	)
 }

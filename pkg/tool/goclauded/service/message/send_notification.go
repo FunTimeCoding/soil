@@ -11,8 +11,14 @@ func (s *Service) SendNotification(
 	callsign string,
 	source string,
 	body string,
-	d constant.Delivery,
+	requested constant.Delivery,
 ) (bool, error) {
+	d, e := delivery(requested, constant.DeliveryQueued)
+
+	if e != nil {
+		return false, e
+	}
+
 	if f := entryRefusal(constant.QueueNotification, body); f != nil {
 		return false, f
 	}

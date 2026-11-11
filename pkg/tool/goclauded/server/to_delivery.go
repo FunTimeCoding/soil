@@ -7,7 +7,7 @@ import (
 
 func toDelivery(d *server.Delivery) constant.Delivery {
 	if d == nil {
-		return constant.DeliveryQueued
+		return ""
 	}
 
 	return constant.Delivery(*d)

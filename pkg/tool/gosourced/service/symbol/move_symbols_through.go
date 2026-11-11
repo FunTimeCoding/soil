@@ -8,14 +8,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
-	"go/ast"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
-	"maps"
-	"path"
 	"path/filepath"
 )
 
@@ -51,7 +49,7 @@ func (s *Service) moveSymbolsThrough(
 		packagePath,
 		targetPackagePath,
 		func(loaded []*packages.Package, loadedSet *token.FileSet) []types.Object {
-			return movedObjects(
+			return relocator.MovedObjects(
 				directory,
 				loaded,
 				loadedSet,
@@ -91,7 +89,7 @@ func (s *Service) moveSymbolsThrough(
 			)
 		}
 
-		symbols, e = expandFileSymbols(file)
+		symbols, e = relocator.ExpandFileSymbols(file)
 
 		if e != nil {
 			return commit.FailValidation(r, e.Error())
@@ -111,7 +109,7 @@ func (s *Service) moveSymbolsThrough(
 		unique[name] = true
 	}
 
-	entries, message := buildMoveEntries(
+	entries, message := relocator.BuildMoveEntries(
 		all,
 		p,
 		packagePath,
@@ -123,7 +121,7 @@ func (s *Service) moveSymbolsThrough(
 		return commit.FailValidation(r, message)
 	}
 
-	if message := checkMethodSet(entries); message != "" {
+	if message := relocator.CheckMethodSet(entries); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
@@ -133,7 +131,7 @@ func (s *Service) moveSymbolsThrough(
 		references[entry] = resolve.FindAllReferences(all, entry.Object)
 	}
 
-	flipReferenced(entries, references)
+	relocator.FlipReferenced(entries, references)
 	target := lookup.FindPackage(all, targetPackagePath)
 
 	if target == nil && !create {
@@ -170,54 +168,31 @@ func (s *Service) moveSymbolsThrough(
 		}
 	}
 
-	flipped, flips, f := planBackReferences(all, p, entries, nil)
+	plan := relocation.NewPlan()
+	plan.Set = set
+	plan.All = all
+	plan.Source = p
+	plan.Target = target
+	plan.Entries = entries
+	plan.PackagePath = packagePath
+	plan.TargetPackagePath = targetPackagePath
 
-	if f != nil {
-		return commit.FailValidation(r, f.Error())
-	}
-
-	if message := checkEntryGuards(
-		all,
-		p,
-		entries,
-		packagePath,
-		targetPackagePath,
-	); message != "" {
+	if message := relocator.Prepare(plan, nil); message != "" {
 		return commit.FailValidation(r, message)
-	}
-
-	moveDirectory, e := lookup.TargetDirectory(p, target, targetPackagePath)
-
-	if e != nil {
-		return commit.FailValidation(r, e.Error())
-	}
-
-	constraints, message := planConstraints(set, target, entries, moveDirectory)
-
-	if message != "" {
-		return commit.FailValidation(r, message)
-	}
-
-	targetPackageName := path.Base(targetPackagePath)
-
-	if target != nil {
-		targetPackageName = target.Types.Name()
 	}
 
 	var external []relocation.QualifiedReference
-	renames := make(map[*ast.Ident]string)
-	maps.Copy(renames, flips)
 
 	for _, entry := range entries {
 		if !entry.Flipped {
 			continue
 		}
 
-		if capture := embeddedRenames(
+		if capture := relocator.EmbeddedRenames(
 			all,
 			entry.Object,
 			entry.NewName,
-			renames,
+			plan.Renames,
 		); capture != "" {
 			return commit.FailValidation(r, capture)
 		}
@@ -225,9 +200,9 @@ func (s *Service) moveSymbolsThrough(
 
 	for _, entry := range entries {
 		for _, f := range references[entry] {
-			if movedContains(entries, f.Ident.Pos()) {
+			if relocator.MovedContains(entries, f.Ident.Pos()) {
 				if entry.Flipped {
-					renames[f.Ident] = entry.NewName
+					plan.Renames[f.Ident] = entry.NewName
 				}
 
 				continue
@@ -243,35 +218,19 @@ func (s *Service) moveSymbolsThrough(
 		}
 	}
 
-	qualifications, blocked := planQualifications(
+	qualifications, blocked := relocator.PlanQualifications(
 		set,
 		external,
 		packagePath,
 		targetPackagePath,
-		targetPackageName,
+		plan.TargetPackageName,
 	)
 
 	if qualifications == nil {
 		return commit.FailValidation(r, blocked)
 	}
 
-	reportExports(r, set, flipped)
-	resymbolExports(out, set, flipped)
-	plan := relocation.NewPlan()
-	plan.Set = set
-	plan.All = all
-	plan.Source = p
-	plan.Target = target
-	plan.Resolver = resolve.NewNames(all)
-	plan.Entries = entries
-	plan.Constraints = constraints
 	plan.Qualifications = qualifications
-	plan.Renames = renames
-	plan.PackagePath = packagePath
-	plan.TargetPackagePath = targetPackagePath
-	plan.TargetPackageName = targetPackageName
-	plan.MoveDirectory = moveDirectory
-	plan.CreateTarget = target == nil
 
-	return executeMove(r, plan, out)
+	return relocator.Finish(r, plan, out)
 }

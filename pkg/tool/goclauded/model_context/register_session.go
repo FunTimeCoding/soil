@@ -94,6 +94,6 @@ func (s *Server) registerSession() {
 				),
 			),
 		),
-		s.cruise,
+		s.cruiseSession,
 	)
 }

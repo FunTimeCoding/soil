@@ -2,22 +2,20 @@ package symbol
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
-	"go/ast"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
-	"maps"
-	"path"
 )
 
 func (s *Service) extractTypeThrough(
@@ -55,7 +53,7 @@ func (s *Service) extractTypeThrough(
 				return nil
 			}
 
-			return typeMembers(o)
+			return relocator.TypeMembers(o)
 		},
 	)
 
@@ -88,7 +86,12 @@ func (s *Service) extractTypeThrough(
 		)
 	}
 
-	entries, message := gatherTypeEntries(set, p, typeObject, targetFile)
+	entries, message := relocator.GatherTypeEntries(
+		set,
+		p,
+		typeObject,
+		targetFile,
+	)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
@@ -112,8 +115,8 @@ func (s *Service) extractTypeThrough(
 		references[entry] = resolve.FindAllReferences(all, entry.Object)
 	}
 
-	memberNames := typeMemberNames(typeObject)
-	flipReferenced(entries, references)
+	memberNames := relocator.TypeMemberNames(typeObject)
+	relocator.FlipReferenced(entries, references)
 
 	for _, entry := range entries {
 		if !entry.Flipped {
@@ -132,7 +135,12 @@ func (s *Service) extractTypeThrough(
 		}
 	}
 
-	fields, message := fieldFlips(all, entries, typeObject, memberNames)
+	fields, message := relocator.FieldFlips(
+		all,
+		entries,
+		typeObject,
+		memberNames,
+	)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
@@ -146,49 +154,25 @@ func (s *Service) extractTypeThrough(
 		}
 	}
 
-	flipped, flips, f := planBackReferences(all, p, entries, nil)
+	plan := relocation.NewPlan()
+	plan.Set = set
+	plan.All = all
+	plan.Source = p
+	plan.Target = target
+	plan.Entries = entries
+	plan.PackagePath = packagePath
+	plan.TargetPackagePath = targetPackagePath
 
-	if f != nil {
-		return commit.FailValidation(r, f.Error())
-	}
-
-	if message := checkEntryGuards(
-		all,
-		p,
-		entries,
-		packagePath,
-		targetPackagePath,
-	); message != "" {
+	if message := relocator.Prepare(plan, nil); message != "" {
 		return commit.FailValidation(r, message)
 	}
-
-	moveDirectory, e := lookup.TargetDirectory(p, target, targetPackagePath)
-
-	if e != nil {
-		return commit.FailValidation(r, e.Error())
-	}
-
-	constraints, message := planConstraints(set, target, entries, moveDirectory)
-
-	if message != "" {
-		return commit.FailValidation(r, message)
-	}
-
-	targetPackageName := path.Base(targetPackagePath)
-
-	if target != nil {
-		targetPackageName = target.Types.Name()
-	}
-
-	renames := make(map[*ast.Ident]string)
-	maps.Copy(renames, flips)
 
 	if typeEntry.Flipped {
-		if capture := embeddedRenames(
+		if capture := relocator.EmbeddedRenames(
 			all,
 			typeEntry.Object,
 			typeEntry.NewName,
-			renames,
+			plan.Renames,
 		); capture != "" {
 			return commit.FailValidation(r, capture)
 		}
@@ -200,9 +184,9 @@ func (s *Service) extractTypeThrough(
 		isType := entry.Object == typeObject
 
 		for _, f := range references[entry] {
-			if movedContains(entries, f.Ident.Pos()) {
+			if relocator.MovedContains(entries, f.Ident.Pos()) {
 				if entry.Flipped {
-					renames[f.Ident] = entry.NewName
+					plan.Renames[f.Ident] = entry.NewName
 				}
 
 				continue
@@ -221,61 +205,43 @@ func (s *Service) extractTypeThrough(
 			}
 
 			if entry.Flipped {
-				renames[f.Ident] = entry.NewName
+				plan.Renames[f.Ident] = entry.NewName
 			}
 		}
 	}
 
 	for _, field := range fields {
 		for _, f := range field.References {
-			renames[f.Ident] = field.NewName
+			plan.Renames[f.Ident] = field.NewName
 		}
 	}
 
-	qualifications, blocked := planQualifications(
+	qualifications, blocked := relocator.PlanQualifications(
 		set,
 		external,
 		packagePath,
 		targetPackagePath,
-		targetPackageName,
+		plan.TargetPackageName,
 	)
 
 	if qualifications == nil {
 		return commit.FailValidation(r, blocked)
 	}
 
-	reportExports(r, set, flipped)
-	resymbolExports(out, set, flipped)
+	plan.Qualifications = qualifications
 
 	for _, field := range fields {
-		position := set.Position(field.Object.Pos())
-		r.AddConcern(
-			concern.NewLine(
-				constant.ConcernExported,
-				fmt.Sprintf("%s → %s", field.Object.Name(), field.NewName),
-				position.Filename,
-				position.Line,
-				"",
-				true,
-			),
+		concern_line.Add(
+			r,
+			set,
+			field.Object.Pos(),
+			constant.ConcernExported,
+			true,
+			"%s → %s",
+			field.Object.Name(),
+			field.NewName,
 		)
 	}
 
-	plan := relocation.NewPlan()
-	plan.Set = set
-	plan.All = all
-	plan.Source = p
-	plan.Target = target
-	plan.Resolver = resolve.NewNames(all)
-	plan.Entries = entries
-	plan.Constraints = constraints
-	plan.Qualifications = qualifications
-	plan.Renames = renames
-	plan.PackagePath = packagePath
-	plan.TargetPackagePath = targetPackagePath
-	plan.TargetPackageName = targetPackageName
-	plan.MoveDirectory = moveDirectory
-	plan.CreateTarget = target == nil
-
-	return executeMove(r, plan, out)
+	return relocator.Finish(r, plan, out)
 }

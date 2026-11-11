@@ -1,4 +1,4 @@
 FROM alpine:3.24.3
-RUN apk add --no-cache postgresql16-client
+RUN apk add --no-cache postgresql18-client
 COPY tmp/gopostgresd/linux-amd64/gopostgresd /usr/local/bin
 ENTRYPOINT ["gopostgresd"]

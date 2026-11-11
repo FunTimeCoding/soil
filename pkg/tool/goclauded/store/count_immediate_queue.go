@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (s *Store) CountImmediateQueue(
+func (s *Store) countImmediateQueue(
 	sessionIdentifier string,
 	callsign string,
 	since time.Time,

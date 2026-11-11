@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 	"slices"

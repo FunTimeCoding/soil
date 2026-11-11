@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/send_result"
 	"strings"
 )
 
@@ -11,30 +12,34 @@ func (s *Service) Send(
 	name string,
 	to []string,
 	body string,
-	d constant.Delivery,
-) ([]string, error) {
-	holders, e := s.recipients(name, to)
+	requested constant.Delivery,
+) (*send_result.Result, error) {
+	requested, e := delivery(requested, constant.DeliveryImmediate)
 
 	if e != nil {
 		return nil, e
 	}
 
-	if d == "" {
-		d = constant.DeliveryImmediate
-	}
-
-	if len(to) == 0 {
-		d = constant.DeliveryQueued
-	}
-
-	m, f := s.store.SendMessage(name, strings.Join(to, ", "), body)
+	holders, f := s.recipients(name, to)
 
 	if f != nil {
 		return nil, f
 	}
 
+	d := requested
+
+	if len(to) == 0 {
+		d = constant.DeliveryQueued
+	}
+
+	m, g := s.store.SendMessage(name, strings.Join(to, ", "), body)
+
+	if g != nil {
+		return nil, g
+	}
+
 	formatted := fmt.Sprintf("%s: %s", name, body)
-	var held []string
+	result := send_result.New(requested, d)
 
 	for _, h := range holders {
 		entry := queue.New(
@@ -44,16 +49,16 @@ func (s *Service) Send(
 			formatted,
 		)
 		entry.MessageIdentifier = new(m.Identifier)
-		delivered, g := s.pushDelivery(entry, d)
+		delivered, i := s.pushDelivery(entry, d)
 
-		if g != nil {
-			return nil, g
+		if i != nil {
+			return nil, i
 		}
 
-		if d != constant.DeliveryQueued && !delivered {
-			held = append(held, h.CallsignValue())
+		if d == constant.DeliveryImmediate && !delivered {
+			result.Held = append(result.Held, h.CallsignValue())
 		}
 	}
 
-	return held, nil
+	return result, nil
 }

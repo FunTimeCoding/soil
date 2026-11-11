@@ -6,5 +6,5 @@ func (o *Tester) Arm(
 	sessionIdentifier string,
 	grace string,
 ) {
-	assert.FatalOnError(o.t, o.Message.SetCruise(sessionIdentifier, grace))
+	assert.FatalOnError(o.t, o.Cruise.Set(sessionIdentifier, grace))
 }

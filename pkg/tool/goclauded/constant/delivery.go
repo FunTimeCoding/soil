@@ -7,7 +7,10 @@ const (
 	DeliveryImmediate Delivery = "immediate"
 )
 
-const DeliveryParameter = "delivery"
+const (
+	DeliveryParameter = "delivery"
+	DeliveryUnknown   = "delivery must be immediate or queued"
+)
 const (
 	DeliveryBudget     = 2000
 	DeliveryCutFloor   = 300

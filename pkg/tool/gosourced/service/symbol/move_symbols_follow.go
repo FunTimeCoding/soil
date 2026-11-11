@@ -7,8 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -28,7 +29,7 @@ func (s *Service) moveSymbolsFollow(
 		loaded []*packages.Package,
 		loadedSet *token.FileSet,
 	) []types.Object {
-		return movedObjects(
+		return relocator.MovedObjects(
 			directory,
 			loaded,
 			loadedSet,
@@ -75,7 +76,7 @@ func (s *Service) moveSymbolsFollow(
 		targetPackageName = path.Base(targetPackagePath)
 	}
 
-	qualifications, blocked := planQualifications(
+	qualifications, blocked := relocator.PlanQualifications(
 		set,
 		external,
 		packagePath,
@@ -88,7 +89,7 @@ func (s *Service) moveSymbolsFollow(
 	}
 
 	decorations := decoration.NewSet()
-	e = applyQualifications(
+	e = relocator.ApplyQualifications(
 		r,
 		decorations,
 		set,

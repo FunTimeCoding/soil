@@ -3,17 +3,15 @@ package symbol
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/relocation"
-	"go/ast"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
-	"maps"
 	"path/filepath"
 )
 
@@ -41,7 +39,12 @@ func (s *Service) moveMethodsThrough(
 		packagePath,
 		targetPackagePath,
 		func(loaded []*packages.Package, _ *token.FileSet) []types.Object {
-			return methodObjects(loaded, packagePath, typeName, methods)
+			return relocator.MethodObjects(
+				loaded,
+				packagePath,
+				typeName,
+				methods,
+			)
 		},
 	)
 
@@ -58,7 +61,7 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	source := namedType(p, typeName)
+	source := relocator.NamedType(p, typeName)
 
 	if source == nil {
 		return commit.FailValidation(
@@ -76,7 +79,7 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	destination := namedType(target, targetType)
+	destination := relocator.NamedType(target, targetType)
 
 	if destination == nil {
 		return commit.FailValidation(
@@ -85,23 +88,29 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	entries, message := methodEntries(set, p, source, methods, targetFile)
+	entries, message := relocator.MethodEntries(
+		set,
+		p,
+		source,
+		methods,
+		targetFile,
+	)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	receivers, message := receiverIdentifiers(entries)
+	receivers, message := relocator.ReceiverIdentifiers(entries)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	if message := checkMethodShape(p, entries, destination); message != "" {
+	if message := relocator.CheckMethodShape(p, entries, destination); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	if message := checkTargetCollision(entries, destination); message != "" {
+	if message := relocator.CheckTargetCollision(entries, destination); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
@@ -109,73 +118,22 @@ func (s *Service) moveMethodsThrough(
 		directory,
 		all,
 		entries,
-		qualifiedType(source),
+		relocator.QualifiedType(source),
 	); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	holders, message := routeCallers(all, set, p, source, destination, entries)
-
-	if message != "" {
-		return commit.FailValidation(r, message)
-	}
-
-	flipped, flips, f := planBackReferences(all, p, entries, receivers)
-
-	if f != nil {
-		return commit.FailValidation(r, f.Error())
-	}
-
-	if message := checkEntryGuards(
+	holders, message := relocator.RouteCallers(
 		all,
+		set,
 		p,
+		source,
+		destination,
 		entries,
-		packagePath,
-		targetPackagePath,
-	); message != "" {
-		return commit.FailValidation(r, message)
-	}
-
-	moveDirectory, g := lookup.TargetDirectory(p, target, targetPackagePath)
-
-	if g != nil {
-		return commit.FailValidation(r, g.Error())
-	}
-
-	constraints, message := planConstraints(set, target, entries, moveDirectory)
+	)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
-	}
-
-	renames := make(map[*ast.Ident]string)
-	maps.Copy(renames, flips)
-
-	for i := range receivers {
-		renames[i] = targetType
-	}
-
-	for _, o := range flipped {
-		if capture := embeddedRenames(
-			all,
-			o,
-			identifier.FlipName(o.Name()),
-			renames,
-		); capture != "" {
-			return commit.FailValidation(r, capture)
-		}
-	}
-
-	reportExports(r, set, flipped)
-	resymbolExports(out, set, flipped)
-
-	for _, entry := range entries {
-		out.Resymbol(
-			filepath.Dir(set.Position(entry.File.Pos()).Filename),
-			identifier.MemberName(typeName, entry.Symbol),
-			moveDirectory,
-			identifier.MemberName(targetType, entry.Symbol),
-		)
 	}
 
 	plan := relocation.NewPlan()
@@ -183,16 +141,27 @@ func (s *Service) moveMethodsThrough(
 	plan.All = all
 	plan.Source = p
 	plan.Target = target
-	plan.Resolver = resolve.NewNames(all)
 	plan.Entries = entries
-	plan.Constraints = constraints
-	plan.Qualifications = map[string]*relocation.FileQualification{}
-	plan.Renames = renames
 	plan.Holders = holders
 	plan.PackagePath = packagePath
 	plan.TargetPackagePath = targetPackagePath
-	plan.TargetPackageName = target.Types.Name()
-	plan.MoveDirectory = moveDirectory
 
-	return executeMove(r, plan, out)
+	if message := relocator.Prepare(plan, receivers); message != "" {
+		return commit.FailValidation(r, message)
+	}
+
+	for i := range receivers {
+		plan.Renames[i] = targetType
+	}
+
+	for _, entry := range entries {
+		out.Resymbol(
+			filepath.Dir(set.Position(entry.File.Pos()).Filename),
+			identifier.MemberName(typeName, entry.Symbol),
+			plan.MoveDirectory,
+			identifier.MemberName(targetType, entry.Symbol),
+		)
+	}
+
+	return relocator.Finish(r, plan, out)
 }

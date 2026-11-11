@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -32,23 +33,20 @@ func (s *Server) send(
 	}
 
 	to := q.GetStringSlice(constant.To, nil)
-	d := constant.Delivery(q.GetString(constant.DeliveryParameter, ""))
-
-	switch d {
-	case "", constant.DeliveryQueued, constant.DeliveryImmediate:
-	default:
-		return response.Fail("delivery must be immediate or queued")
-	}
-
-	held, f := s.message.Send(c.Callsign, to, body, d)
+	result, f := s.message.Send(
+		c.Callsign,
+		to,
+		body,
+		constant.Delivery(q.GetString(constant.DeliveryParameter, "")),
+	)
 
 	if f != nil {
-		if not_found.Is(f) {
+		if not_found.Is(f) || refusal.Is(f) {
 			return response.Fail(f.Error())
 		}
 
 		return s.captureFail(x, f, soil.UnexpectedError)
 	}
 
-	return response.Success(sent(to, held, d))
+	return response.Success(sent(to, result))
 }

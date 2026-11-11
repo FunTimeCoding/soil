@@ -11,7 +11,7 @@ func (s *Server) PostSessionCruise(
 	x context.Context,
 	r server.PostSessionCruiseRequestObject,
 ) (server.PostSessionCruiseResponseObject, error) {
-	if e := s.message.SetCruise(r.Identifier, r.Body.Grace); e != nil {
+	if e := s.cruise.Set(r.Identifier, r.Body.Grace); e != nil {
 		if refusal.Is(e) {
 			return server.PostSessionCruise400JSONResponse(
 				server.Error{Error: e.Error()},
@@ -23,7 +23,7 @@ func (s *Server) PostSessionCruise(
 		), nil
 	}
 
-	c, f := s.message.CruiseSetting(r.Identifier)
+	c, f := s.cruise.Setting(r.Identifier)
 
 	if f != nil {
 		return server.PostSessionCruise500JSONResponse(
@@ -32,6 +32,6 @@ func (s *Server) PostSessionCruise(
 	}
 
 	return server.PostSessionCruise200JSONResponse(
-		toCruiseResponse(c, s.message.Grace(c)),
+		toCruiseResponse(c, s.cruise.Grace(c)),
 	), nil
 }

@@ -15,5 +15,5 @@ func TestDeliveryWithDatabaseGoneAnswersFailure(t *testing.T) {
 func TestCruiseReleaseWithDatabaseGoneAnswersFailure(t *testing.T) {
 	s := service_tester.New(t)
 	s.Close()
-	assert.Count(t, 1, s.Message.ReleaseCruise())
+	assert.Count(t, 1, s.Cruise.Release())
 }

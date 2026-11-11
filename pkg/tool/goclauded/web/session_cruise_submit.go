@@ -18,7 +18,7 @@ func (s *Server) sessionCruiseSubmit(
 		grace = q.FormValue(constant.Grace)
 	}
 
-	refused := s.message.SetCruise(identifier, grace)
+	refused := s.cruise.Set(identifier, grace)
 
 	if s.view.IsExtendedRequest(q) {
 		s.cruiseFragment(w, q, identifier, refused)

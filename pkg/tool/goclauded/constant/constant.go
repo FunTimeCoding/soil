@@ -287,6 +287,8 @@ const (
 
 	FixtureLabelKey   = "role"
 	FixtureCompatible = "lead"
+
+	FixtureUnknownDelivery = "eventually"
 )
 
 const FixtureChannelHold = 50 * time.Millisecond

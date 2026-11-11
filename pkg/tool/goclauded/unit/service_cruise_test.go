@@ -17,10 +17,10 @@ func TestQueuedPulseWaitsOutGrace(t *testing.T) {
 	s.Arm("session-1", "30")
 	assert.False(t, s.Pulse("session-1", constant.DeliveryQueued))
 	s.Store.Advance(29 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 0, s.Channel("session-1"))
 	s.Store.Advance(time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
@@ -41,9 +41,9 @@ func TestOneWakeDeliversEverythingWaiting(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	s.Store.Advance(30 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 4, s.Channel("session-1"))
-	setting, f := s.Message.CruiseSetting("session-1")
+	setting, f := s.Cruise.Setting("session-1")
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 1, setting.Woken)
 }
@@ -56,7 +56,7 @@ func TestRosterActivityNeverPops(t *testing.T) {
 	s.Arm("session-1", "30")
 	s.Announce("session-2", r2.Callsign, "some work", "")
 	s.Store.Advance(30 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 0, s.Channel("session-1"))
 	assert.Count(
 		t,
@@ -75,7 +75,7 @@ func TestCruiseOffWaitsForPrompt(t *testing.T) {
 	s.Arm("session-1", constant.CruiseOff)
 	s.Pulse("session-1", constant.DeliveryQueued)
 	s.Store.Advance(30 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 0, s.Channel("session-1"))
 	assert.Count(
 		t,
@@ -92,14 +92,14 @@ func TestGraceCountsFromTurnEnd(t *testing.T) {
 	s.Store.Advance(40 * time.Minute)
 	s.Check("session-1")
 	s.Pulse("session-1", constant.DeliveryQueued)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 0, s.Channel("session-1"))
 	s.EndTurn("session-1")
 	s.Store.Advance(29 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 0, s.Channel("session-1"))
 	s.Store.Advance(time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
@@ -114,7 +114,7 @@ func TestReleaseCountsOnceAgainstCap(t *testing.T) {
 	}
 
 	s.Store.Advance(30 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 10, s.Channel("session-1"))
 
 	for range constant.ImmediateLimit - 1 {
@@ -136,10 +136,10 @@ func TestReleaseWaitsWhileCapIsSpent(t *testing.T) {
 	}
 
 	s.Pulse("session-1", constant.DeliveryQueued)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 6, s.Channel("session-1"))
 	s.Store.Advance(constant.ImmediateWindow)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
@@ -156,24 +156,24 @@ func TestCruiseIsOffByDefaultWithoutChannelPromise(t *testing.T) {
 	s.EndTurn("session-1")
 	s.Pulse("session-1", constant.DeliveryQueued)
 	s.Store.Advance(30 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 0, s.Channel("session-1"))
-	setting, e := s.Message.CruiseSetting("session-1")
+	setting, e := s.Cruise.Setting("session-1")
 	assert.FatalOnError(t, e)
 	assert.Nil(t, setting.Grace)
-	assert.Duration(t, 0, s.Message.Grace(setting))
+	assert.Duration(t, 0, s.Cruise.Grace(setting))
 }
 
-func TestChannelPromiseDefaultsCruiseToThirtyMinutes(t *testing.T) {
+func TestDefaultGraceWakesSessionWithoutItsOwn(t *testing.T) {
 	s := service_tester.New(t)
-	s.Message.WithChannelAlways()
+	s.Cruise.WithDefaultGrace(constant.DefaultCruiseGrace)
 	s.Check("session-1")
 	s.EndTurn("session-1")
 	s.Pulse("session-1", constant.DeliveryQueued)
 	s.Store.Advance(30 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 1, s.Channel("session-1"))
-	setting, e := s.Message.CruiseSetting("session-1")
+	setting, e := s.Cruise.Setting("session-1")
 	assert.FatalOnError(t, e)
 	assert.Nil(t, setting.Grace)
 	assert.Integer(t, 1, setting.Woken)
@@ -181,13 +181,13 @@ func TestChannelPromiseDefaultsCruiseToThirtyMinutes(t *testing.T) {
 
 func TestOwnGraceOverridesDefault(t *testing.T) {
 	s := service_tester.New(t)
-	s.Message.WithChannelAlways()
+	s.Cruise.WithDefaultGrace(constant.DefaultCruiseGrace)
 	s.Check("session-1")
 	s.EndTurn("session-1")
 	s.Arm("session-1", "10")
 	s.Pulse("session-1", constant.DeliveryQueued)
 	s.Store.Advance(10 * time.Minute)
-	assert.Count(t, 0, s.Message.ReleaseCruise())
+	assert.Count(t, 0, s.Cruise.Release())
 	assert.Integer(t, 1, s.Channel("session-1"))
 }
 
@@ -196,7 +196,7 @@ func TestDefaultClearsOwnGrace(t *testing.T) {
 	s.Check("session-1")
 	s.Arm("session-1", "10")
 	s.Arm("session-1", constant.CruiseDefault)
-	setting, e := s.Message.CruiseSetting("session-1")
+	setting, e := s.Cruise.Setting("session-1")
 	assert.FatalOnError(t, e)
 	assert.Nil(t, setting.Grace)
 }
@@ -204,10 +204,10 @@ func TestDefaultClearsOwnGrace(t *testing.T) {
 func TestCruiseGraceTakesOneToFiftyNineMinutes(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
-	assert.FatalOnError(t, s.Message.SetCruise("session-1", "1"))
-	assert.FatalOnError(t, s.Message.SetCruise("session-1", "59"))
+	assert.FatalOnError(t, s.Cruise.Set("session-1", "1"))
+	assert.FatalOnError(t, s.Cruise.Set("session-1", "59"))
 
 	for _, refused := range []string{"0", "60", "1.5", "sometimes", ""} {
-		assert.True(t, refusal.Is(s.Message.SetCruise("session-1", refused)))
+		assert.True(t, refusal.Is(s.Cruise.Set("session-1", refused)))
 	}
 }

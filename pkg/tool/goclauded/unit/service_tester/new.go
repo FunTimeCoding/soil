@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
@@ -68,6 +69,7 @@ func New(t *testing.T) *Tester {
 		m,
 		l,
 	)
+	result.Cruise = cruise.New(s.Store, d.Notifier, s.Clock())
 	result.Memory = memory.New(
 		s.Store,
 		d.MemoryPeer,
@@ -107,6 +109,7 @@ func New(t *testing.T) *Tester {
 		s.Store,
 		result.Label,
 		result.Message,
+		result.Cruise,
 		result.Transcript,
 		d.Client,
 		cache,

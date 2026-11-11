@@ -15,24 +15,24 @@ func TestImmediateIsRateLimitedToSlowPath(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 
 	for range constant.ImmediateLimit {
-		held, e := s.Message.Send(
+		result, e := s.Message.Send(
 			r2.Callsign,
 			[]string{r1.Callsign},
 			"burst",
 			constant.DeliveryImmediate,
 		)
 		assert.FatalOnError(t, e)
-		assert.Count(t, 0, held)
+		assert.Count(t, 0, result.Held)
 	}
 
-	held, e := s.Message.Send(
+	result, e := s.Message.Send(
 		r2.Callsign,
 		[]string{r1.Callsign},
 		"over",
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, e)
-	assert.Count(t, 1, held)
+	assert.Count(t, 1, result.Held)
 	drained, f := s.Message.DrainImmediateQueue("session-1", r1.Callsign)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 6, drained)
@@ -66,7 +66,7 @@ func TestImmediateRecoversAfterWindow(t *testing.T) {
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, e)
-	assert.Count(t, 1, blocked)
+	assert.Count(t, 1, blocked.Held)
 	s.Store.Advance(constant.ImmediateWindow + time.Minute)
 	allowed, f := s.Message.Send(
 		r2.Callsign,
@@ -75,5 +75,5 @@ func TestImmediateRecoversAfterWindow(t *testing.T) {
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, f)
-	assert.Count(t, 0, allowed)
+	assert.Count(t, 0, allowed.Held)
 }

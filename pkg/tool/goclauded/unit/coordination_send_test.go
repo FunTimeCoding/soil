@@ -74,6 +74,30 @@ func TestRestReportsWhetherSendWokeAnyone(t *testing.T) {
 	assert.True(t, named.JSON200.Immediate)
 }
 
+func TestRestSendPastImmediateLimitSaysItWasHeld(t *testing.T) {
+	s := base.New(t)
+	a := s.NewSession(t)
+	b := s.NewSession(t)
+	a.Announce(a.Name(), "sender")
+	b.Announce(b.Name(), "receiver")
+	request := client.SendRequest{
+		Callsign: a.Name(),
+		Body:     "tango",
+		Delivery: new(client.Immediate),
+		To:       &[]string{b.Name()},
+	}
+
+	for range constant.ImmediateLimit {
+		r, e := a.RestClient.PostSendWithResponse(a.Context, request)
+		assert.FatalOnError(t, e)
+		assert.True(t, r.JSON200.Immediate)
+	}
+
+	r, e := a.RestClient.PostSendWithResponse(a.Context, request)
+	assert.FatalOnError(t, e)
+	assert.False(t, r.JSON200.Immediate)
+}
+
 func TestBroadcastReachesAnotherSession(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)

@@ -1,22 +1,15 @@
 package message
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 
 func (s *Service) pushImmediate(e *queue.Entry) (bool, error) {
-	recent, f := s.store.CountImmediateQueue(
-		e.SessionIdentifier,
-		e.Callsign,
-		s.clock().Add(-constant.ImmediateWindow),
-	)
+	room, f := s.store.ImmediateRoom(e.SessionIdentifier, e.Callsign, s.clock())
 
 	if f != nil {
 		return false, f
 	}
 
-	e.Immediate = recent < constant.ImmediateLimit
+	e.Immediate = room
 
 	if e.Immediate {
 		e.ImmediateAt = new(s.clock())

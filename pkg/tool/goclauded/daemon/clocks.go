@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/roster"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/search"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/transcript"
@@ -18,7 +18,7 @@ import (
 func clocks(
 	v *roster.Service,
 	t *transcript.Service,
-	m *message.Service,
+	c *cruise.Service,
 	y *memory.Service,
 	u *usage.Service,
 	x *search.Service,
@@ -39,7 +39,7 @@ func clocks(
 		).WithDelayedStart(),
 		worker.NewEvery(y.PollMemory, l, r, constant.MemoryPollInterval),
 		worker.NewEvery(y.DeliverImpressions, l, r, constant.ImpressionInterval),
-		worker.NewEvery(m.ReleaseCruise, l, r, constant.CruiseInterval),
+		worker.NewEvery(c.Release, l, r, constant.CruiseInterval),
 	}
 
 	if o.MonitorUsage {

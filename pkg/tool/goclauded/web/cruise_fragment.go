@@ -11,7 +11,7 @@ func (s *Server) cruiseFragment(
 	identifier string,
 	refused error,
 ) {
-	setting, e := s.message.CruiseSetting(identifier)
+	setting, e := s.cruise.Setting(identifier)
 
 	if e != nil {
 		s.view.Answer(w, q, s.reporter, e)
@@ -30,7 +30,7 @@ func (s *Server) cruiseFragment(
 		session_page.RosterCruise(
 			identifier,
 			setting,
-			s.message.Grace(setting),
+			s.cruise.Grace(setting),
 			alert,
 		),
 	)

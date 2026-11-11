@@ -36,11 +36,11 @@ func (s *Service) SessionView(
 		return nil, e
 	}
 
-	if result.Cruise, e = s.message.CruiseSetting(d.Identifier); e != nil {
+	if result.Cruise, e = s.cruise.Setting(d.Identifier); e != nil {
 		return nil, e
 	}
 
-	result.CruiseGrace = s.message.Grace(result.Cruise)
+	result.CruiseGrace = s.cruise.Grace(result.Cruise)
 	result.DeleteHash = s.DeleteHash(d.Identifier)
 
 	return result, nil

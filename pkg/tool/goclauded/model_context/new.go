@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory"
@@ -18,6 +19,7 @@ func New(
 	rosterService *roster.Service,
 	labelService *label.Service,
 	messageService *message.Service,
+	cruiseService *cruise.Service,
 	eventService *event.Service,
 	memoryService *memory.Service,
 	usageService *usage.Service,
@@ -31,6 +33,7 @@ func New(
 		roster:    rosterService,
 		label:     labelService,
 		message:   messageService,
+		cruise:    cruiseService,
 		event:     eventService,
 		memory:    memoryService,
 		usage:     usageService,

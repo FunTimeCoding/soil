@@ -140,14 +140,14 @@ func TestImmediateWakesEveryNamedRecipient(t *testing.T) {
 	r1 := s.Check("session-1")
 	r2 := s.Check("session-2")
 	r3 := s.Check("session-3")
-	held, e := s.Message.Send(
+	result, e := s.Message.Send(
 		r1.Callsign,
 		[]string{r2.Callsign, r3.Callsign},
 		"echo",
 		constant.DeliveryImmediate,
 	)
 	assert.FatalOnError(t, e)
-	assert.Count(t, 0, held)
+	assert.Count(t, 0, result.Held)
 	two, f := s.Message.DrainImmediateQueue("session-2", r2.Callsign)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, two)

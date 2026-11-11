@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/message"
@@ -24,6 +25,7 @@ func New(
 	sessionService *session.Service,
 	labelService *label.Service,
 	messageService *message.Service,
+	cruiseService *cruise.Service,
 	eventService *event.Service,
 	transcriptService *transcript.Service,
 	usageService *usage.Service,
@@ -36,6 +38,7 @@ func New(
 		session:    sessionService,
 		label:      labelService,
 		message:    messageService,
+		cruise:     cruiseService,
 		event:      eventService,
 		transcript: transcriptService,
 		usage:      usageService,

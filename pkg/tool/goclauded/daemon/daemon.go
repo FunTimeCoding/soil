@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/document"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/label"
@@ -44,6 +45,7 @@ type Daemon struct {
 	startup          *startup.Service
 	label            *label.Service
 	message          *message.Service
+	cruise           *cruise.Service
 	memory           *memory.Service
 	event            *event.Service
 	transcript       *transcript.Service

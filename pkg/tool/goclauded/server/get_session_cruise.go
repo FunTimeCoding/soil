@@ -10,7 +10,7 @@ func (s *Server) GetSessionCruise(
 	x context.Context,
 	r server.GetSessionCruiseRequestObject,
 ) (server.GetSessionCruiseResponseObject, error) {
-	c, e := s.message.CruiseSetting(r.Identifier)
+	c, e := s.cruise.Setting(r.Identifier)
 
 	if e != nil {
 		return server.GetSessionCruise500JSONResponse(
@@ -19,6 +19,6 @@ func (s *Server) GetSessionCruise(
 	}
 
 	return server.GetSessionCruise200JSONResponse(
-		toCruiseResponse(c, s.message.Grace(c)),
+		toCruiseResponse(c, s.cruise.Grace(c)),
 	), nil
 }
