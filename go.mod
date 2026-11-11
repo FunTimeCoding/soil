@@ -91,7 +91,7 @@ require (
 	github.com/yuin/goldmark/v2 v2.1.16
 	gitlab.com/gitlab-org/api/client-go/v3 v3.48.0
 	go.uber.org/goleak v1.3.0
-	go.yaml.in/yaml/v3 v3.0.6
+	go.yaml.in/yaml/v4 v4.0.0
 	golang.org/x/crypto v0.59.0
 	golang.org/x/mod v0.43.0
 	golang.org/x/net v0.62.0
