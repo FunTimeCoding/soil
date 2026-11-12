@@ -18,6 +18,14 @@ func arrivalName(
 	targetPackageName string,
 ) (*relocation.ImportName, map[*ast.Ident]string, string) {
 	v, _ := imports.ViewOf(q.Owner, q.File)
+	local := v.LocalTaken
+	v.LocalTaken = func(name string) bool {
+		if taken, leaving := leavingTaken(q, name); leaving {
+			return taken
+		}
+
+		return local(name)
+	}
 
 	for _, e := range v.Entries {
 		if e.Path == targetPackagePath {

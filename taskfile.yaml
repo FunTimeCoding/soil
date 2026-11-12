@@ -6,7 +6,7 @@ tasks:
   lint:
     cmds:
     - golint --fix
-    - golangci-lint run --build-tags local
+    - golangci-lint run --build-tags "$(goreach --tags)"
     - gofix ./...
     - goanalyze ./...
     - goaudit .
@@ -29,7 +29,7 @@ tasks:
       fi
       golint $documents
       if [ -n "$packages" ]; then
-        golangci-lint run --build-tags local $packages
+        golangci-lint run --build-tags "$(goreach --tags)" $packages
         gofix --diff $packages
         goanalyze $packages
       fi

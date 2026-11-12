@@ -1,13 +1,13 @@
 package board_page
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout/entry"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func (p *Page) strip(v *layout.Entry) gomponents.Node {
+func (p *Page) strip(v *entry.Entry) gomponents.Node {
 	rows := p.Rows(v)
 
 	if rows == nil {

@@ -2,6 +2,7 @@ package revision
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision/qualifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol"
 	"go/ast"
 	"go/token"
@@ -11,7 +12,7 @@ func functionSymbol(
 	s *token.FileSet,
 	f *ast.File,
 	d *ast.FuncDecl,
-	q *qualifier,
+	q *qualifier.Qualifier,
 ) *symbol.Symbol {
 	receiver := ""
 	kind := constant.SymbolFunction
@@ -32,7 +33,7 @@ func functionSymbol(
 		position.Line,
 	)
 	result.Start, result.End = span(s, d)
-	q.qualify(d, localNames(d))
+	q.Qualify(d, localNames(d))
 	result.Body = render(s, d)
 	result.Shape = anonymous(s, d, d.Name)
 	result.Signature = render(

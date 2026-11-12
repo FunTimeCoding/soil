@@ -3,9 +3,10 @@ package monitor
 import (
 	"charm.land/bubbletea/v2"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 )
 
-func (m *Model) claimEvent(g claim.Message) tea.Cmd {
+func (m *Model) claimEvent(g message.Message) tea.Cmd {
 	if g.Error != nil {
 		m.claimError = g.Error
 

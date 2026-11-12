@@ -3,6 +3,8 @@ package constant
 const (
 	PortEnvironment = "METRIC_PORT"
 	PortUsage       = "Metric listen port"
+	BindEnvironment = "METRIC_BIND_ADDRESS"
+	BindUsage       = "Metric listen address, every interface when empty"
 
 	Port = 9090
 

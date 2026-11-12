@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/workspace"
 	"sync"
 )
 
@@ -25,5 +26,6 @@ type Daemon struct {
 	pattern   *pattern.Service
 	reference *reference.Service
 	symbol    *symbol.Service
+	workspace *workspace.Service
 	closeOnce sync.Once
 }

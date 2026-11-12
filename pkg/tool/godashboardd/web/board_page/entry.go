@@ -1,13 +1,13 @@
 package board_page
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout/entry"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func (p *Page) entry(v *layout.Entry) gomponents.Node {
+func (p *Page) entry(v *entry.Entry) gomponents.Node {
 	nodes := []gomponents.Node{
 		html.A(
 			html.Href(v.Link),

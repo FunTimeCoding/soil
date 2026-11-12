@@ -3,6 +3,7 @@ package gofix
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
+	"go/format"
 	"go/token"
 	"sort"
 )
@@ -40,6 +41,10 @@ func editThrough(
 				fe.length,
 				[]byte(fe.newText),
 			)
+		}
+
+		if formatted, f := format.Source(modified); f == nil {
+			modified = formatted
 		}
 
 		if e = w.Write(path, modified); e != nil {

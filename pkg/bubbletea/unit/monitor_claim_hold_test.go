@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -33,8 +34,8 @@ func TestClosingWindowReleasesNoticeNobodyReads(t *testing.T) {
 		"bogus",
 	)
 	defer m.Close()
-	updates := make(chan claim.Message, 1)
-	updates <- claim.Message{}
+	updates := make(chan message.Message, 1)
+	updates <- message.Message{}
 	c := claim.New(m, updates)
 	h := hold.New(
 		"gomonitord",

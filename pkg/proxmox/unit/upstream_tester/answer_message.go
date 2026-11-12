@@ -1,5 +1,7 @@
 package upstream_tester
 
+import "github.com/funtimecoding/soil/pkg/proxmox/unit/upstream_tester/answer"
+
 func (u *Upstream) AnswerMessage(
 	path string,
 	line string,
@@ -7,5 +9,5 @@ func (u *Upstream) AnswerMessage(
 ) {
 	u.mutex.Lock()
 	defer u.mutex.Unlock()
-	u.answers[path] = &Answer{Line: line, Body: body}
+	u.answers[path] = answer.New(line, body)
 }

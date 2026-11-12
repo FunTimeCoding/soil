@@ -1,34 +1,36 @@
 package census
 
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
+
 func merge(
-	into *reading,
-	from *reading,
+	into *reading.Reading,
+	from *reading.Reading,
 ) {
-	for k := range from.calls {
-		into.calls[k] = true
+	for k := range from.Calls {
+		into.Calls[k] = true
 	}
 
-	for k := range from.fields {
-		into.fields[k] = true
+	for k := range from.Fields {
+		into.Fields[k] = true
 	}
 
-	for k := range from.keys {
-		into.keys[k] = true
+	for k := range from.Keys {
+		into.Keys[k] = true
 	}
 
-	for k := range from.packages {
-		into.packages[k] = true
+	for k := range from.Packages {
+		into.Packages[k] = true
 	}
 
-	for l, methods := range from.uses {
-		if into.uses[l] == nil {
-			into.uses[l] = map[string]bool{}
+	for l, methods := range from.Uses {
+		if into.Uses[l] == nil {
+			into.Uses[l] = map[string]bool{}
 		}
 
 		for m := range methods {
-			into.uses[l][m] = true
+			into.Uses[l][m] = true
 		}
 	}
 
-	into.atomically = into.atomically || from.atomically
+	into.Atomically = into.Atomically || from.Atomically
 }

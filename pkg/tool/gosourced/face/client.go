@@ -14,6 +14,7 @@ type Client interface {
 		x context.Context,
 		p *client.GetDiffParams,
 	) (client.DiffResponse, error)
+	PostIndexPrune(x context.Context) ([]string, error)
 	Reachable(x context.Context) error
 	Close()
 }

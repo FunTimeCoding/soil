@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard/response"
 	"testing"
 )
 
@@ -42,11 +43,11 @@ func TestHintDecisionShape(t *testing.T) {
 	assert.String(
 		t,
 		`{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"bravo"}}`,
-		string(notation.Marshal(guard.NewDecision("", "bravo"))),
+		string(notation.Marshal(response.NewDecision("", "bravo"))),
 	)
 	assert.String(
 		t,
 		`{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"alfa","additionalContext":"bravo"}}`,
-		string(notation.Marshal(guard.NewDecision("alfa", "bravo"))),
+		string(notation.Marshal(response.NewDecision("alfa", "bravo"))),
 	)
 }

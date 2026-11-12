@@ -3,6 +3,7 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/hold"
@@ -18,14 +19,14 @@ func nextClaimMessage(
 	port int,
 	token string,
 	r *memory.Memory,
-) *claim.Message {
+) *message.Message {
 	t.Helper()
 	m := client.New(
 		locator.New(webConstant.Localhost).Port(port).Insecure(),
 		token,
 	)
 	defer m.Close()
-	updates := make(chan claim.Message, 1)
+	updates := make(chan message.Message, 1)
 	c := claim.New(m, updates)
 	h := hold.New(
 		"gomonitord",

@@ -32,6 +32,10 @@ func LocalTaken(
 			continue
 		}
 
+		if f, okay := o.(*types.Func); okay && f.Signature().Recv() != nil {
+			continue
+		}
+
 		return true
 	}
 

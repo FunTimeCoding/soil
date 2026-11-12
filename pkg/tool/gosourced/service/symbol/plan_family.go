@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/rename_plan"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"go/token"
 	"go/types"
@@ -21,7 +22,7 @@ func (s *Service) planFamily(
 	m *types.Func,
 	n *symbol_rename.Rename,
 	r *output.Results,
-) []*plannedRename {
+) []*rename_plan.Plan {
 	members, refusals := methodFamily(all, m)
 	slices.SortFunc(
 		members,
@@ -71,21 +72,20 @@ func (s *Service) planFamily(
 		return nil
 	}
 
-	result := make([]*plannedRename, 0, len(members))
+	result := make([]*rename_plan.Plan, 0, len(members))
 
 	for _, f := range members {
 		result = append(
 			result,
-			&plannedRename{
-				Rename: symbol_rename.New(
+			rename_plan.New(
+				symbol_rename.New(
 					n.OldName,
 					n.NewName,
 					receiverNamed(f).Obj().Name(),
 				),
-				Declaration: f,
-				References:  resolve.FindAllReferences(all, f),
-			},
-		)
+				f,
+				resolve.FindAllReferences(all, f),
+			))
 	}
 
 	return result

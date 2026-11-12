@@ -3,6 +3,7 @@ package turn
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn/waiter"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/turn_grant"
 	"time"
 )
@@ -22,7 +23,7 @@ func (s *Scheduler) Take(
 	}
 
 	ahead := s.queued() + 1
-	w := &waiter{ready: make(chan struct{})}
+	w := waiter.New(make(chan struct{}))
 
 	if len(s.waiting[session]) == 0 {
 		s.order = append(s.order, session)
@@ -34,7 +35,7 @@ func (s *Scheduler) Take(
 	defer t.Stop()
 
 	select {
-	case <-w.ready:
+	case <-w.Ready:
 		return turn_grant.New(ahead, time.Since(start), s.release), nil
 	case <-x.Done():
 		s.abandon(session, w)

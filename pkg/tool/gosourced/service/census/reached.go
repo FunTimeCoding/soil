@@ -1,14 +1,16 @@
 package census
 
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
+
 func reached(
-	methods map[string]*reading,
+	methods map[string]*reading.Reading,
 	name string,
-) []*reading {
+) []*reading.Reading {
 	visited := map[string]bool{name: true}
-	result := []*reading{methods[name]}
-	var walk func(*reading)
-	walk = func(r *reading) {
-		for _, c := range sortedKeys(r.calls) {
+	result := []*reading.Reading{methods[name]}
+	var walk func(*reading.Reading)
+	walk = func(r *reading.Reading) {
+		for _, c := range sortedKeys(r.Calls) {
 			if visited[c] || methods[c] == nil {
 				continue
 			}

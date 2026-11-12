@@ -9,6 +9,7 @@ import (
 
 func (i *Instance) MetricAddress() string {
 	return join.Empty(
+		i.GetString(constant.MetricBindAddress),
 		stringsConstant.Colon,
 		integers.ToString(i.GetInteger(constant.MetricPort)),
 	)

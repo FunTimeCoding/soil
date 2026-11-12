@@ -3,6 +3,7 @@ package goreach
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/tool/goreach/constant"
@@ -22,6 +23,11 @@ func Main() {
 		false,
 		"Also print the directories of changed files that are not Go, for golint",
 	)
+	a.Boolean(
+		constant.Tags,
+		false,
+		"Print the repository's custom build tags comma-joined, for golangci-lint",
+	)
 	a.String(
 		argumentConstant.Root,
 		"",
@@ -29,6 +35,13 @@ func Main() {
 	)
 	a.Parse()
 	root, _ := lint.Root(a.GetString(argumentConstant.Root))
+
+	if a.GetBoolean(constant.Tags) {
+		console.Format("%s\n", Tags(root))
+
+		return
+	}
+
 	Run(
 		root,
 		transcriptPath(a.GetString(constant.Transcript), a.Positionals()),

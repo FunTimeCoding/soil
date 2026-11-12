@@ -1,6 +1,7 @@
 package guard
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard/edit"
 	"mvdan.cc/sh/v3/syntax"
 	"strings"
 )
@@ -12,7 +13,7 @@ func localSingleReplacement(command string) bool {
 		return false
 	}
 
-	var edits []*Edit
+	var edits []*edit.Edit
 	var calls []*syntax.CallExpr
 	syntax.Walk(
 		file,
@@ -26,7 +27,7 @@ func localSingleReplacement(command string) bool {
 				}
 
 				if target, single := singleReplacement(source); single {
-					edits = append(edits, newEdit(x.End().Offset(), target))
+					edits = append(edits, edit.New(x.End().Offset(), target))
 				}
 			case *syntax.CallExpr:
 				if len(x.Args) > 0 {

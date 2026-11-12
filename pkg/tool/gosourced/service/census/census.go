@@ -54,7 +54,7 @@ func (s *Service) Census(
 	for _, r := range methods {
 		walkFunctions(r, functions)
 
-		for k := range r.keys {
+		for k := range r.Keys {
 			keys[k] = true
 		}
 	}

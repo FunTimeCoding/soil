@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard/response"
 	"testing"
 )
 
@@ -209,6 +210,6 @@ func TestAskDecisionShape(t *testing.T) {
 	assert.String(
 		t,
 		`{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"alfa"}}`,
-		string(notation.Marshal(guard.NewDecision("alfa", ""))),
+		string(notation.Marshal(response.NewDecision("alfa", ""))),
 	)
 }

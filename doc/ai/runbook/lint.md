@@ -7,7 +7,10 @@ task lint
 ```
 
 Runs the repository's lint pipeline — golint, golangci-lint, gofix,
-goanalyze and goaudit, in that order.
+goanalyze and goaudit, in that order. golangci-lint takes the repository's
+custom build tags from `goreach --tags`, the set goanalyze and gofix already
+load with, so a file behind any tag is linted - a hand-written tag list
+drifts, and a directory whose files all carry a missing tag fails the run.
 Each tool's first line names the repository it scanned; after that
 the pipeline is silent on success - any further output is a failure.
 Lint has multiple stages - clearing the first may reveal new

@@ -29,7 +29,7 @@ func (w *Workspace) read(
 		}
 
 		value, found := w.fetch(
-			kindStore(constant.IndexFactsKind, k),
+			w.kindStore(constant.IndexFactsKind, k),
 			path,
 			w.kindKey(key, k),
 			k.Value(),

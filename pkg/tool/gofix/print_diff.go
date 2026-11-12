@@ -8,14 +8,15 @@ import (
 
 func printDiff(
 	path string,
+	destination string,
 	original []byte,
 	modified []byte,
 ) {
-	if string(original) == string(modified) {
+	if string(original) == string(modified) && path == destination {
 		return
 	}
 
-	console.Format("--- %s\n+++ %s\n", path, path)
+	console.Format("--- %s\n+++ %s\n", path, destination)
 
 	for _, l := range line_diff.Hunks(
 		line_diff.Lines(string(original), string(modified)),

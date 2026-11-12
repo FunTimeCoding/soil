@@ -143,6 +143,11 @@ type ModuleRange struct {
 	To string `json:"to"`
 }
 
+// PruneResponse defines model for PruneResponse.
+type PruneResponse struct {
+	Removed []string `json:"removed"`
+}
+
 // GetCensusParams defines parameters for GetCensus.
 type GetCensusParams struct {
 	Module string `form:"module" json:"module"`
@@ -176,6 +181,9 @@ type ServerInterface interface {
 
 	// (GET /api/diff)
 	GetDiff(w http.ResponseWriter, r *http.Request, params GetDiffParams)
+
+	// (POST /api/index/prune)
+	PostIndexPrune(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -318,6 +326,20 @@ func (siw *ServerInterfaceWrapper) GetDiff(w http.ResponseWriter, r *http.Reques
 	handler.ServeHTTP(w, r)
 }
 
+// PostIndexPrune operation middleware
+func (siw *ServerInterfaceWrapper) PostIndexPrune(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostIndexPrune(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 type UnescapedCookieParamError struct {
 	ParamName string
 	Err       error
@@ -440,6 +462,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/diff", wrapper.GetDiff)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/census", wrapper.GetCensus)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/index/prune", wrapper.PostIndexPrune)
 
 	return m
 }
@@ -558,6 +581,41 @@ func (response GetDiff500JSONResponse) VisitGetDiffResponse(w http.ResponseWrite
 	return err
 }
 
+type PostIndexPruneRequestObject struct {
+}
+
+type PostIndexPruneResponseObject interface {
+	VisitPostIndexPruneResponse(w http.ResponseWriter) error
+}
+
+type PostIndexPrune200JSONResponse PruneResponse
+
+func (response PostIndexPrune200JSONResponse) VisitPostIndexPruneResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostIndexPrune500JSONResponse ErrorResponse
+
+func (response PostIndexPrune500JSONResponse) VisitPostIndexPruneResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -566,6 +624,9 @@ type StrictServerInterface interface {
 
 	// (GET /api/diff)
 	GetDiff(ctx context.Context, request GetDiffRequestObject) (GetDiffResponseObject, error)
+
+	// (POST /api/index/prune)
+	PostIndexPrune(ctx context.Context, request PostIndexPruneRequestObject) (PostIndexPruneResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -659,35 +720,61 @@ func (sh *strictHandler) GetDiff(w http.ResponseWriter, r *http.Request, params 
 	}
 }
 
+// PostIndexPrune operation middleware
+func (sh *strictHandler) PostIndexPrune(w http.ResponseWriter, r *http.Request) {
+	var request PostIndexPruneRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostIndexPrune(ctx, request.(PostIndexPruneRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostIndexPrune")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostIndexPruneResponseObject); ok {
+		if err := validResponse.VisitPostIndexPruneResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

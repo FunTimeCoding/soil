@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/receiver_plan"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/receiver_rename"
 	"go/ast"
 	"go/token"
@@ -19,8 +20,8 @@ func planReceivers(
 	p *packages.Package,
 	n *receiver_rename.Rename,
 	r *output.Results,
-) []*plannedReceiver {
-	refuse := func(format string, arguments ...any) []*plannedReceiver {
+) []*receiver_plan.Plan {
+	refuse := func(format string, arguments ...any) []*receiver_plan.Plan {
 		r.AddConcern(
 			concern.NewFile(
 				constant.ConcernValidation,
@@ -47,7 +48,7 @@ func planReceivers(
 		return refuse("no type %s in %s", n.Type, p.PkgPath)
 	}
 
-	var result []*plannedReceiver
+	var result []*receiver_plan.Plan
 	methods := 0
 
 	for _, file := range p.Syntax {
@@ -86,14 +87,13 @@ func planReceivers(
 
 			result = append(
 				result,
-				&plannedReceiver{
-					Method: method,
-					Idents: receiverUses(p, method, field.Names[0], receiver),
-					Label:  label,
-					Old:    field.Names[0].Name,
-					New:    n.Name,
-				},
-			)
+				receiver_plan.New(
+					method,
+					receiverUses(p, method, field.Names[0], receiver),
+					label,
+					field.Names[0].Name,
+					n.Name,
+				))
 		}
 	}
 

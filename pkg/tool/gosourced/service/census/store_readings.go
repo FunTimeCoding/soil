@@ -3,6 +3,7 @@ package census
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
 	"go/ast"
 	"go/types"
 	"path/filepath"
@@ -14,8 +15,8 @@ func storeReadings(
 	module string,
 	keys map[string]bool,
 	missing unloaded,
-) (map[string]*storeReading, error) {
-	result := map[string]*storeReading{}
+) (map[string]*reading.Store, error) {
+	result := map[string]*reading.Store{}
 	loaded := map[string]bool{}
 	pending := map[string]bool{}
 
@@ -63,7 +64,7 @@ func storeReadings(
 					s := readStore(p, x, module)
 					result[methodKey(owner(o), x.Name.Name)] = s
 
-					for c := range s.calls {
+					for c := range s.Calls {
 						if path := keyPackage(c); !loaded[path] {
 							pending[path] = true
 						}

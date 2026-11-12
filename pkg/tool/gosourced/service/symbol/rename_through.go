@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/rename_plan"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"go/token"
@@ -58,7 +59,7 @@ func (s *Service) renameThrough(
 		}
 	}
 
-	var planned []*plannedRename
+	var planned []*rename_plan.Plan
 
 	for _, n := range renames {
 		d, _, f := lookup.FindDeclaration(

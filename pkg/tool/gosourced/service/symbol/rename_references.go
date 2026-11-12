@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/rename_plan"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
@@ -15,7 +16,7 @@ func renameReferences(
 	decorations *decoration.Set,
 	all []*packages.Package,
 	set *token.FileSet,
-	p *plannedRename,
+	p *rename_plan.Plan,
 	r *output.Results,
 ) error {
 	for _, f := range p.References {

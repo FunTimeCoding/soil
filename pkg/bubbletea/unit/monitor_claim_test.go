@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor"
-	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
@@ -35,7 +35,7 @@ func TestWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	_, f := d.PutClaim(x, "jira-GONE-1", "someone@elsewhere")
 	assert.FatalOnError(t, f)
 	m.Update(
-		claim.Message{
+		message.Message{
 			Claims: []client.Claim{
 				{Item: "jira-GONE-1", Owner: owner},
 				{Item: "jira-GONE-1", Owner: "someone@elsewhere"},

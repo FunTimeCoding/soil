@@ -13,6 +13,7 @@ const (
 	PermissionReasonPrefix   = "bashMiss:"
 )
 const CallsignReleaseWindow = 7 * 24 * time.Hour
+const AbandonedQueueWindow = 7 * 24 * time.Hour
 const SevenDayWindow = 7 * 24 * time.Hour
 const UsagePageUnreadable = "usage page carries no weekly meter"
 const (

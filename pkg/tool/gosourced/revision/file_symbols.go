@@ -3,6 +3,7 @@ package revision
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision/qualifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol"
 	"go/ast"
 	"go/token"
@@ -23,11 +24,11 @@ func fileSymbols(
 		own = join.Empty(own, constant.TestClauseSuffix)
 	}
 
-	q := &qualifier{
-		imports: importNames(f, clauses),
-		own:     names[packageKey(directory, f.Name.Name)],
-		path:    own,
-	}
+	q := qualifier.New(
+		importNames(f, clauses),
+		names[packageKey(directory, f.Name.Name)],
+		own,
+	)
 	var result []*symbol.Symbol
 
 	for _, d := range f.Decls {

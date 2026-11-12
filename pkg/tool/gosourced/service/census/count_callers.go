@@ -2,6 +2,7 @@ package census
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -13,7 +14,7 @@ func countCallers(
 	home string,
 	subject *types.Named,
 	module string,
-	methods map[string]*reading,
+	methods map[string]*reading.Reading,
 ) {
 	seen := map[string]bool{}
 
@@ -47,12 +48,12 @@ func countCallers(
 						p.PkgPath,
 						constant.TestClauseSuffix,
 					)
-					k := callerKey{
-						kind:        callerKind(path, home, file),
-						packagePath: relative(module, path),
-						function:    enclosing(f, i.Pos()),
+					k := reading.CallerKey{
+						Kind:        callerKind(path, home, file),
+						PackagePath: relative(module, path),
+						Function:    enclosing(f, i.Pos()),
 					}
-					target.callers[k]++
+					target.Callers[k]++
 
 					return true
 				},

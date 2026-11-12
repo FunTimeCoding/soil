@@ -15,4 +15,9 @@ func (i *Instance) Metric() {
 		),
 		metricConstant.PortUsage,
 	)
+	i.String(
+		constant.MetricBindAddress,
+		environment.Fallback(metricConstant.BindEnvironment, ""),
+		metricConstant.BindUsage,
+	)
 }

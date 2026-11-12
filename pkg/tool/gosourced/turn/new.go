@@ -1,7 +1,10 @@
 package turn
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn/waiter"
+	"time"
+)
 
 func New(bound time.Duration) *Scheduler {
-	return &Scheduler{waiting: map[string][]*waiter{}, bound: bound}
+	return &Scheduler{waiting: map[string][]*waiter.Waiter{}, bound: bound}
 }

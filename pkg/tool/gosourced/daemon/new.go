@@ -40,5 +40,6 @@ func New(
 		pattern:   pattern.New(w, c),
 		reference: reference.New(w, c),
 		symbol:    symbol.New(w, c),
+		workspace: w,
 	}
 }

@@ -2,7 +2,7 @@ package monitor
 
 import (
 	"charm.land/bubbles/v2/table"
-	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
 	"github.com/funtimecoding/soil/pkg/bubbletea/types/modal"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
@@ -23,7 +23,7 @@ type Model struct {
 	connect        bool
 	monitor        face.Client
 	hold           *hold.Hold
-	updates        chan claim.Message
+	updates        chan message.Message
 	claims         map[string][]string
 	claimError     error
 	owner          string

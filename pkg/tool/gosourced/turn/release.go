@@ -22,6 +22,6 @@ func (s *Scheduler) release() {
 		delete(s.waiting, session)
 	}
 
-	next.granted = true
-	close(next.ready)
+	next.Granted = true
+	close(next.Ready)
 }

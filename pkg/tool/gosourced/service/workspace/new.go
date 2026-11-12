@@ -6,5 +6,8 @@ import (
 )
 
 func New(indexDirectory string) *Service {
-	return &Service{workspaces: cache.New(indexDirectory, face.Kind())}
+	return &Service{
+		workspaces:     cache.New(indexDirectory, face.Kind()),
+		indexDirectory: indexDirectory,
+	}
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/funtimecoding/soil/pkg/proxmox/unit/upstream_tester/answer"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"net/http"
 	"strings"
@@ -24,7 +25,7 @@ func (u *Upstream) serve(
 	u.mutex.Unlock()
 
 	if !okay {
-		a = &Answer{Line: "501 no such uri"}
+		a = answer.New("501 no such uri", "")
 	}
 
 	c, b, e := http.NewResponseController(w).Hijack()

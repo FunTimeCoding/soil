@@ -1,14 +1,17 @@
 package turn
 
-import "slices"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn/waiter"
+	"slices"
+)
 
 func (s *Scheduler) abandon(
 	session string,
-	w *waiter,
+	w *waiter.Waiter,
 ) {
 	s.mutex.Lock()
 
-	if w.granted {
+	if w.Granted {
 		s.mutex.Unlock()
 		s.release()
 
@@ -17,7 +20,7 @@ func (s *Scheduler) abandon(
 
 	queue := slices.DeleteFunc(
 		s.waiting[session],
-		func(o *waiter) bool { return o == w },
+		func(o *waiter.Waiter) bool { return o == w },
 	)
 
 	if len(queue) > 0 {

@@ -1,9 +1,9 @@
 package board
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout/entry"
 
-func (b *Board) Entries() []*layout.Entry {
-	var result []*layout.Entry
+func (b *Board) Entries() []*entry.Entry {
+	var result []*entry.Entry
 
 	for _, c := range b.Top {
 		for _, s := range c.Sections {

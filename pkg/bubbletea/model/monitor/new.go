@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -47,7 +48,7 @@ func New(
 	}
 
 	result.monitor = client.NewEnvironment()
-	result.updates = make(chan claim.Message, 1)
+	result.updates = make(chan message.Message, 1)
 	c := claim.New(result.monitor, result.updates)
 	result.hold = hold.New(
 		gomonitordConstant.Identity.Name(),

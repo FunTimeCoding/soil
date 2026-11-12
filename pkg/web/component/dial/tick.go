@@ -1,6 +1,9 @@
 package dial
 
-import "github.com/funtimecoding/soil/pkg/web/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/web/component/dial/marker"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+)
 
 func (d *Dial) Tick(
 	share float64,
@@ -9,13 +12,7 @@ func (d *Dial) Tick(
 ) *Dial {
 	d.markers = append(
 		d.markers,
-		&marker{
-			share: share,
-			class: constant.DialTickClass,
-			color: color,
-			title: title,
-		},
-	)
+		marker.New(share, constant.DialTickClass, color, title))
 
 	return d
 }

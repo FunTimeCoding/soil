@@ -51,6 +51,30 @@ func TestExtractType(t *testing.T) {
 	assert.False(t, strings.Contains(caller, "target"))
 }
 
+func TestExtractTypeIntoNamesakePackageImportsPlain(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("extract-namesake/src"),
+	)
+	s := service_tester.NewService(t)
+	r, e := s.Symbol.ExtractType(
+		t.Context(),
+		d,
+		"example/pkg/alfa",
+		"waiter",
+		"example/pkg/alfa/waiter",
+		"",
+		true,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	queue := service_tester.ReadFixtureFile(t, d, "pkg/alfa/queue.go")
+	assert.StringContains(t, "import \"example/pkg/alfa/waiter\"\n", queue)
+	assert.StringContains(t, "[]*waiter.Waiter", queue)
+	assertCompiles(t, d)
+}
+
 func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,

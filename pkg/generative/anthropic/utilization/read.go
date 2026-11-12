@@ -3,6 +3,7 @@ package utilization
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/usage_result"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -12,7 +13,7 @@ import (
 func (c *Client) Read(
 	x context.Context,
 	token string,
-) (*Result, error) {
+) (*usage_result.Result, error) {
 	b, e := c.requester.Bytes(
 		request.Get(constant.AnthropicUtilizationPath).
 			WithContext(x).

@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/receiver_plan"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/receiver_rename"
 )
@@ -42,7 +43,7 @@ func renameReceiversThrough(
 		return r, nil
 	}
 
-	var planned []*plannedReceiver
+	var planned []*receiver_plan.Plan
 
 	for _, n := range renames {
 		planned = append(planned, planReceivers(set, declaring, n, r)...)

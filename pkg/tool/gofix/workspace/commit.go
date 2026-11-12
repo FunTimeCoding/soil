@@ -1,8 +1,10 @@
 package workspace
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
+	"maps"
 	"os"
 	"path/filepath"
 	"slices"
@@ -44,6 +46,18 @@ func (w *Workspace) Commit() ([]string, error) {
 
 	for _, path := range w.order {
 		if e := os.WriteFile(path, w.overlay[path], 0644); e != nil {
+			return nil, e
+		}
+	}
+
+	for _, from := range slices.Sorted(maps.Keys(w.moves)) {
+		to := w.moves[from]
+
+		if system.FileExists(to) {
+			return nil, fmt.Errorf("move %s: %s already exists", from, to)
+		}
+
+		if e := os.Rename(from, to); e != nil {
 			return nil, e
 		}
 	}

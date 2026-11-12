@@ -14,6 +14,7 @@ type Workspace struct {
 	overlay      map[string][]byte
 	original     map[string][]byte
 	order        []string
+	moves        map[string]string
 	writes       int
 	loadedKey    string
 	loadedWrites int

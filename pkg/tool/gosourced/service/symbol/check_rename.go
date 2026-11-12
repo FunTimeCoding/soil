@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/rename_plan"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"go/token"
 	"go/types"
@@ -22,7 +23,7 @@ func (s *Service) checkRename(
 	packagePath string,
 	n *symbol_rename.Rename,
 	r *output.Results,
-) *plannedRename {
+) *rename_plan.Plan {
 	declaration, p, e := lookup.FindDeclaration(
 		all,
 		packagePath,
@@ -126,9 +127,5 @@ func (s *Service) checkRename(
 		}
 	}
 
-	return &plannedRename{
-		Rename:      n,
-		Declaration: declaration,
-		References:  append(references, fields...),
-	}
+	return rename_plan.New(n, declaration, append(references, fields...))
 }

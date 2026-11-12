@@ -3,13 +3,14 @@ package census
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
 	"go/types"
 	"gorm.io/gorm/schema"
 )
 
 func tableNames(
 	directory string,
-	stores map[string]*storeReading,
+	stores map[string]*reading.Store,
 	missing unloaded,
 ) (map[string]string, error) {
 	result := map[string]string{}
@@ -18,7 +19,7 @@ func tableNames(
 	naming := schema.NamingStrategy{}
 
 	for _, s := range stores {
-		for q, m := range s.models {
+		for q, m := range s.Models {
 			if _, done := result[q]; done || declared[q] != nil {
 				continue
 			}

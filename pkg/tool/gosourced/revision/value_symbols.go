@@ -3,6 +3,7 @@ package revision
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision/qualifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol"
 	"go/ast"
 	"go/token"
@@ -13,7 +14,7 @@ func valueSymbols(
 	s *token.FileSet,
 	f *ast.File,
 	d *ast.GenDecl,
-	q *qualifier,
+	q *qualifier.Qualifier,
 ) []*symbol.Symbol {
 	kind := constant.SymbolVariable
 
@@ -33,7 +34,7 @@ func valueSymbols(
 		}
 
 		start, end := span(s, v)
-		q.qualify(v, localNames(v))
+		q.Qualify(v, localNames(v))
 		rendered := &ast.ValueSpec{
 			Names:  v.Names,
 			Type:   v.Type,

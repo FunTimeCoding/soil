@@ -2,6 +2,7 @@ package census
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -12,7 +13,7 @@ func readUse(
 	i *ast.Ident,
 	subject *types.Named,
 	module string,
-	r *reading,
+	r *reading.Reading,
 ) {
 	o := p.TypesInfo.Uses[i]
 
@@ -23,7 +24,7 @@ func readUse(
 	path := o.Pkg().Path()
 
 	if path != p.PkgPath && inModule(module, path) {
-		r.packages[relative(module, path)] = true
+		r.Packages[relative(module, path)] = true
 	}
 
 	f, okay := o.(*types.Func)
@@ -36,21 +37,21 @@ func readUse(
 
 	switch {
 	case n != nil && sameType(n, subject):
-		r.calls[f.Name()] = true
+		r.Calls[f.Name()] = true
 	case n != nil && inModule(module, n.Obj().Pkg().Path()):
 		l := label(n)
 
-		if r.uses[l] == nil {
-			r.uses[l] = map[string]bool{}
+		if r.Uses[l] == nil {
+			r.Uses[l] = map[string]bool{}
 		}
 
-		r.uses[l][f.Name()] = true
-		r.keys[methodKey(n, f.Name())] = true
+		r.Uses[l][f.Name()] = true
+		r.Keys[methodKey(n, f.Name())] = true
 	case n == nil && path == p.PkgPath && f.Parent() == f.Pkg().Scope():
-		r.functions[f.Name()] = true
+		r.Functions[f.Name()] = true
 	}
 
 	if n != nil && f.Name() == constant.AtomicallyMethod {
-		r.atomically = true
+		r.Atomically = true
 	}
 }

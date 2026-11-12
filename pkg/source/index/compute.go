@@ -57,7 +57,7 @@ func (w *Workspace) compute(
 
 			v := kind.Extract(p)
 			w.keep(
-				kindStore(constant.IndexFactsKind, kind),
+				w.kindStore(constant.IndexFactsKind, kind),
 				path,
 				w.kindKey(k, kind),
 				v,

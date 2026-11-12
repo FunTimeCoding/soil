@@ -1,13 +1,16 @@
 package profile
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile/completion"
+)
 
 func NewResult(
 	always []record.Memory,
 	index []record.MemorySummary,
 	relevant []record.SearchResult,
 	impressions []record.Impression,
-	completions []*Completion,
+	completions []*completion.Completion,
 ) *Result {
 	result := &Result{
 		Always:      always,

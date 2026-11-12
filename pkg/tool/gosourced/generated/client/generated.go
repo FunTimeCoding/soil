@@ -136,6 +136,11 @@ type ModuleRange struct {
 	To string `json:"to"`
 }
 
+// PruneResponse defines model for PruneResponse.
+type PruneResponse struct {
+	Removed []string `json:"removed"`
+}
+
 // GetCensusParams defines parameters for GetCensus.
 type GetCensusParams struct {
 	Module string `form:"module" json:"module"`
@@ -240,6 +245,11 @@ type ClientInterface interface {
 
 	// GetDiff performs a GET /api/diff (the `GetDiff` operationId) request.
 	GetDiff(ctx context.Context, params *GetDiffParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostIndexPrune performs a POST /api/index/prune (the `PostIndexPrune` operationId) request.
+	//
+	// Delete every index generation but the daemon's own, and every build inside it untouched for a day.
+	PostIndexPrune(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 // GetCensus performs a GET /api/census (the `GetCensus` operationId) request.
@@ -258,6 +268,21 @@ func (c *Client) GetCensus(ctx context.Context, params *GetCensusParams, reqEdit
 // GetDiff performs a GET /api/diff (the `GetDiff` operationId) request.
 func (c *Client) GetDiff(ctx context.Context, params *GetDiffParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetDiffRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostIndexPrune performs a POST /api/index/prune (the `PostIndexPrune` operationId) request.
+//
+// Delete every index generation but the daemon's own, and every build inside it untouched for a day.
+func (c *Client) PostIndexPrune(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostIndexPruneRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -420,6 +445,33 @@ func NewGetDiffRequest(server string, params *GetDiffParams) (*http.Request, err
 	return req, nil
 }
 
+// NewPostIndexPruneRequest constructs an http.Request for the PostIndexPrune method
+func NewPostIndexPruneRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/index/prune")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -473,6 +525,13 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetDiffWithResponse(ctx context.Context, params *GetDiffParams, reqEditors ...RequestEditorFn) (*GetDiffResponse, error)
+
+	// PostIndexPruneWithResponse performs a POST /api/index/prune (the `PostIndexPrune` operationId) request.
+	//
+	// Delete every index generation but the daemon's own, and every build inside it untouched for a day.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostIndexPruneWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostIndexPruneResponse, error)
 }
 
 type GetCensusResponse struct {
@@ -592,6 +651,54 @@ func (r GetDiffResponse) ContentType() string {
 	return ""
 }
 
+type PostIndexPruneResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *PruneResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostIndexPruneResponse) GetJSON200() *PruneResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostIndexPruneResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostIndexPruneResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostIndexPruneResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostIndexPruneResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostIndexPruneResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 // GetCensusWithResponse performs a GET /api/census (the `GetCensus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -612,6 +719,19 @@ func (c *ClientWithResponses) GetDiffWithResponse(ctx context.Context, params *G
 		return nil, err
 	}
 	return ParseGetDiffResponse(rsp)
+}
+
+// PostIndexPruneWithResponse performs a POST /api/index/prune (the `PostIndexPrune` operationId) request.
+//
+// Delete every index generation but the daemon's own, and every build inside it untouched for a day.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostIndexPruneWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostIndexPruneResponse, error) {
+	rsp, err := c.PostIndexPrune(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostIndexPruneResponse(rsp)
 }
 
 // ParseGetCensusResponse parses an HTTP response from a GetCensusWithResponse call
@@ -688,6 +808,39 @@ func ParseGetDiffResponse(rsp *http.Response) (*GetDiffResponse, error) {
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostIndexPruneResponse parses an HTTP response from a PostIndexPruneWithResponse call
+func ParsePostIndexPruneResponse(rsp *http.Response) (*PostIndexPruneResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostIndexPruneResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PruneResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

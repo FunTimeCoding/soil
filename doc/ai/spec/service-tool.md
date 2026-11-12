@@ -116,10 +116,13 @@ the live resolved default.
   `a.Address()` - not a bare port
 
 Daemons that expose a Prometheus exporter also call `a.Metric()` -
-registers `--metric-port` with chain `METRIC_PORT` > 9090. The
+registers `--metric-port` with chain `METRIC_PORT` > 9090, and
+`--metric-bind-address` with chain `METRIC_BIND_ADDRESS` > empty. The
 option carries `Metric option.Web`, its address from `a.MetricAddress()`;
 `Run` serves `m.Mount` - the exporter, open - on its own lifecycle server
-there, binding all interfaces. Locally co-hosted
+there, binding all interfaces unless the bind address names one - a host
+reachable from outside its network narrows it to a private address. Locally
+co-hosted
 exporter daemons each get a unique `--metric-port` in the Procfile,
 like `--port`.
 

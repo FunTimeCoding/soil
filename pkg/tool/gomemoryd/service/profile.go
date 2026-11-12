@@ -9,6 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/budget"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile/completion"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile/detail"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"slices"
 	"strings"
@@ -17,8 +19,8 @@ import (
 func (s *Service) Profile(
 	topic string,
 	scope string,
-	detail bool,
-) (*profile.Result, *profile.Detail, error) {
+	t bool,
+) (*profile.Result, *detail.Detail, error) {
 	if scope == constant.AllScope || scope == constant.DefaultScope {
 		return nil, nil, validation.New("scope name is reserved: %s", scope)
 	}
@@ -157,7 +159,7 @@ func (s *Service) Profile(
 	mark = b.Spent()
 	b.Open(profile.Opening(constant.CompletionSectionHeading))
 	completionsTrimmed := 0
-	var completions []*profile.Completion
+	var completions []*completion.Completion
 
 	for _, r := range completed {
 		name := r.Path
@@ -178,7 +180,7 @@ func (s *Service) Profile(
 			continue
 		}
 
-		completions = append(completions, profile.NewCompletion(name, body))
+		completions = append(completions, completion.New(name, body))
 	}
 
 	completionBytes := b.Spent() - mark
@@ -228,11 +230,11 @@ func (s *Service) Profile(
 		completions,
 	).WithNotice(notice)
 
-	if !detail {
+	if !t {
 		return result, nil, nil
 	}
 
-	d := profile.NewDetail()
+	d := detail.New()
 	d.Budget = constant.ProfileByteBudget
 	d.AlwaysBytes = alwaysBytes
 	d.IndexBytes = indexBytes

@@ -14,7 +14,7 @@ func (w *Workspace) storeExternal(p *types.Package) {
 			continue
 		}
 
-		target := kindStore(constant.IndexExternalKind, kind)
+		target := w.kindStore(constant.IndexExternalKind, kind)
 
 		if kk := w.kindKey(k, kind); !w.holds(target, path, kk) {
 			w.keep(target, path, kk, kind.External(p))

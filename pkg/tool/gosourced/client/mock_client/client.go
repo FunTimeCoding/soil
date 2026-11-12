@@ -9,6 +9,7 @@ type Client struct {
 	mutex   sync.Mutex
 	Census  client.Census
 	Diff    client.DiffResponse
+	Removed []string
 	Asked   []string
 	Failure error
 	Probe   error

@@ -101,8 +101,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/index/prune:
+    post:
+      operationId: postIndexPrune
+      description: >-
+        Delete every index generation but the daemon's own, and every build
+        inside it untouched for a day.
+      responses:
+        "200":
+          description: What was removed, by name, relative to the index.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PruneResponse"
+        "500":
+          description: The index could not be pruned.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    PruneResponse:
+      type: object
+      required:
+      - removed
+      properties:
+        removed:
+          type: array
+          items:
+            type: string
     Census:
       type: object
       required:

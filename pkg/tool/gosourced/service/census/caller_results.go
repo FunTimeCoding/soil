@@ -2,17 +2,18 @@ package census
 
 import (
 	"cmp"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
 	"slices"
 )
 
-func callerResults(callers map[callerKey]int) []*result.CensusCaller {
+func callerResults(callers map[reading.CallerKey]int) []*result.CensusCaller {
 	entries := make([]*result.CensusCaller, 0, len(callers))
 
 	for k, count := range callers {
 		entries = append(
 			entries,
-			result.NewCensusCaller(k.kind, k.packagePath, k.function, count),
+			result.NewCensusCaller(k.Kind, k.PackagePath, k.Function, count),
 		)
 	}
 

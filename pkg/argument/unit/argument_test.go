@@ -7,6 +7,7 @@ import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/identity"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
+	metricConstant "github.com/funtimecoding/soil/pkg/metric/constant"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	relationalConstant "github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -199,6 +200,42 @@ func TestWebFlagOverridesEnvironment(t *testing.T) {
 	assert.Integer(t, 7000, a.GetInteger(constant.Port))
 	assert.String(t, "192.168.0.1", a.GetString(constant.BindAddress))
 	assert.String(t, "192.168.0.1:7000", a.Address())
+}
+
+func TestMetricListensOnEveryInterfaceByDefault(t *testing.T) {
+	t.Setenv(metricConstant.PortEnvironment, "")
+	t.Setenv(metricConstant.BindEnvironment, "")
+	a := testInstance(t)
+	a.Metric()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.String(t, ":9090", a.MetricAddress())
+}
+
+func TestMetricBindEnvironmentNarrowsAddress(t *testing.T) {
+	t.Setenv(metricConstant.PortEnvironment, "9100")
+	t.Setenv(metricConstant.BindEnvironment, "192.0.2.1")
+	a := testInstance(t)
+	a.Metric()
+	assert.Nil(t, a.ParseArguments(nil))
+	assert.String(t, "192.0.2.1:9100", a.MetricAddress())
+}
+
+func TestMetricBindFlagOverridesEnvironment(t *testing.T) {
+	t.Setenv(metricConstant.BindEnvironment, "192.0.2.1")
+	a := testInstance(t)
+	a.Metric()
+	assert.Nil(
+		t,
+		a.ParseArguments(
+			[]string{
+				"--metric-port",
+				"9100",
+				"--metric-bind-address",
+				"127.0.0.1",
+			},
+		),
+	)
+	assert.String(t, "127.0.0.1:9100", a.MetricAddress())
 }
 
 func TestInventoryEnvironmentOverridesDefault(t *testing.T) {

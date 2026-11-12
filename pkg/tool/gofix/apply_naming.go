@@ -25,6 +25,7 @@ func applyNaming(
 
 	edits := BuildAllEdits(fileSet, all, violations, r)
 	editThrough(fileSet, edits, o.Root, w)
+	identityMoves(fileSet, all, violations, w, r)
 	loaded := BuildLoadedFiles(all)
 
 	for f := range covered {

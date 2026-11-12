@@ -11,4 +11,5 @@ var Identity = identity.New(
 const (
 	Transcript = "transcript"
 	Documents  = "documents"
+	Tags       = "tags"
 )

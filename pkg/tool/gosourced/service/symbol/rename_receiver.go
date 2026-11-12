@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/receiver_plan"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
@@ -15,7 +16,7 @@ func renameReceiver(
 	decorations *decoration.Set,
 	all []*packages.Package,
 	set *token.FileSet,
-	p *plannedReceiver,
+	p *receiver_plan.Plan,
 	r *output.Results,
 ) error {
 	owner, file := lookup.FindOwningFile(all, p.Method.Pos())

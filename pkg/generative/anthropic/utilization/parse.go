@@ -2,17 +2,19 @@ package utilization
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/response"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/usage_result"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
 
-func Parse(body []byte) *Result {
-	var parsed Response
+func Parse(body []byte) *usage_result.Result {
+	var parsed response.Utilization
 
 	if e := json.Unmarshal(body, &parsed); e != nil {
 		return nil
 	}
 
-	result := &Result{}
+	result := usage_result.New()
 	found := false
 
 	for _, l := range parsed.Limits {

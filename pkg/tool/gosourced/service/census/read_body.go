@@ -1,6 +1,7 @@
 package census
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census/reading"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -13,12 +14,12 @@ func readBody(
 	subject *types.Named,
 	module string,
 	stores map[string]bool,
-) *reading {
-	result := newReading(d.Name.Name, file)
+) *reading.Reading {
+	result := reading.NewReading(d.Name.Name, file)
 
 	for _, f := range d.Type.Params.List {
 		if n := named(p.TypesInfo.TypeOf(f.Type)); n != nil && stores[qualified(n)] {
-			result.step = true
+			result.Step = true
 		}
 	}
 
@@ -34,7 +35,7 @@ func readBody(
 				}
 
 				if r := named(s.Recv()); r != nil && sameType(r, subject) {
-					result.fields[x.Sel.Name] = true
+					result.Fields[x.Sel.Name] = true
 				}
 			case *ast.Ident:
 				readUse(p, x, subject, module, result)

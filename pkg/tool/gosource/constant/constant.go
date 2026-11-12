@@ -26,3 +26,8 @@ const (
 	StagedLabel   = "staged"
 	TextIndent    = "    "
 )
+
+const (
+	NothingToPrune = "nothing to prune"
+	RemovedFormat  = "removed %s"
+)

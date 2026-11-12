@@ -1,5 +1,10 @@
 package constant
 
+import (
+	"regexp"
+	"time"
+)
+
 const (
 	GeneratedMarker = "// Code generated"
 	GeneratedSuffix = "DO NOT EDIT."
@@ -44,6 +49,7 @@ var KnownTags = map[string]bool{
 	"openbsd":   true,
 	"plan9":     true,
 	"solaris":   true,
+	"unix":      true,
 	"wasip1":    true,
 	"windows":   true,
 	"386":       true,
@@ -78,4 +84,18 @@ const (
 	IndexReferencesKind = "references"
 
 	IndexBulkThreshold = 50
+
+	IndexBuildDirectory = "build"
+	GenerationMarker    = ".touched"
+	GenerationTrash     = ".trash-"
+)
+
+var (
+	GenerationPattern = regexp.MustCompile(`^(go|devel ).*-[0-9a-f]{12}$`)
+	BuildPattern      = regexp.MustCompile(`^[0-9a-f]{16}$`)
+)
+
+const (
+	GenerationRetention = 72 * time.Hour
+	GenerationRefresh   = 24 * time.Hour
 )

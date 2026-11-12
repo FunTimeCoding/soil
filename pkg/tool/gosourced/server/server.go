@@ -5,11 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/census"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/diff"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/workspace"
 )
 
 type Server struct {
-	census   *census.Service
-	diff     *diff.Service
-	module   *module.Service
-	reporter face.Reporter
+	census    *census.Service
+	diff      *diff.Service
+	module    *module.Service
+	workspace *workspace.Service
+	reporter  face.Reporter
 }

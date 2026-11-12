@@ -2,7 +2,7 @@ package usage
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/usage_result"
 )
 
 func (s *Service) PollUtilization(x context.Context) []error {
@@ -26,7 +26,7 @@ func (s *Service) PollUtilization(x context.Context) []error {
 		return nil
 	}
 
-	var result *utilization.Result
+	var result *usage_result.Result
 
 	if e := s.utilizationGuard.Attempt(
 		x,

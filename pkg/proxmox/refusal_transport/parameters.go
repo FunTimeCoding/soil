@@ -3,6 +3,7 @@ package refusal_transport
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/proxmox/refusal_transport/parameter_errors"
 	"io"
 	"maps"
 	"slices"
@@ -10,7 +11,7 @@ import (
 )
 
 func parameters(body io.Reader) string {
-	var payload parameterErrors
+	var payload parameter_errors.ParameterErrors
 
 	if json.NewDecoder(body).Decode(&payload) != nil ||
 		len(payload.Errors) == 0 {

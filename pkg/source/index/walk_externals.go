@@ -39,7 +39,7 @@ func (w *Workspace) walkExternals(k *kind.Kind) ([]any, []string) {
 			record.NewExternal(nil),
 		)
 		v, held := w.fetch(
-			kindStore(constant.IndexExternalKind, k),
+			w.kindStore(constant.IndexExternalKind, k),
 			path,
 			w.kindKey(key, k),
 			k.Value(),

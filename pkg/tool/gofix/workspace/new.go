@@ -24,5 +24,6 @@ func New(
 		before:   snapshot.Take(absolute...),
 		overlay:  map[string][]byte{},
 		original: map[string][]byte{},
+		moves:    map[string]string{},
 	}
 }

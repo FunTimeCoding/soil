@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard/response"
 	"github.com/spf13/cobra"
 	"runtime"
 )
@@ -38,7 +39,7 @@ func New(t *terminal.Terminal) *cobra.Command {
 			h := Hint(i.ToolInput.Command)
 
 			if q != "" || h != "" {
-				t.Line(string(notation.Marshal(NewDecision(q, h))))
+				t.Line(string(notation.Marshal(response.NewDecision(q, h))))
 			}
 		},
 	}

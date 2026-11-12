@@ -1,6 +1,7 @@
 package revision
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision/qualifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol"
 	"go/ast"
 	"go/token"
@@ -10,7 +11,7 @@ func declarationSymbols(
 	s *token.FileSet,
 	f *ast.File,
 	d *ast.GenDecl,
-	q *qualifier,
+	q *qualifier.Qualifier,
 ) []*symbol.Symbol {
 	switch d.Tok {
 	case token.TYPE:

@@ -3,6 +3,7 @@ package utilization
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/credential"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/response"
 	"time"
 )
 
@@ -11,7 +12,7 @@ func ParseCredential(raw string) *credential.Credential {
 		return nil
 	}
 
-	var stored StoredCredential
+	var stored response.Stored
 
 	if e := json.Unmarshal([]byte(raw), &stored); e != nil {
 		return nil

@@ -1,8 +1,8 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout/row"
 
-func (s *Service) rowValues(rows []*layout.Row) ([]string, []error) {
+func (s *Service) rowValues(rows []*row.Row) ([]string, []error) {
 	var result []string
 	var failed []error
 
