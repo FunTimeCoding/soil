@@ -7,29 +7,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/daemon_tester"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
-	"slices"
-	"strings"
 	"testing"
 )
 
-func TestEveryToolFailsOnChromiumOutage(t *testing.T) {
-	r := memory.New()
-	var unanswered []string
-
-	for tool, text := range outage_tester.ToolFailures(
+func TestToolsOnChromiumOutage(t *testing.T) {
+	outage_tester.Tools(
 		t,
-		func() *model_context_server.Server { return outageServer(t, r) },
+		func(r *memory.Memory) (*model_context_server.Server, func() error) {
+			return outageServer(t, r)
+		},
+		webConstant.OutageReaches,
 		nil,
-	) {
-		if !strings.Contains(text, "connection refused") {
-			unanswered = append(unanswered, tool)
-		}
-	}
-
-	slices.Sort(unanswered)
-	assert.String(t, "", strings.Join(unanswered, ", "))
-	assert.Count(t, 0, r.Events())
+		nil,
+	)
 }
 
 func TestDaemonHandsOutChromiumGuard(t *testing.T) {

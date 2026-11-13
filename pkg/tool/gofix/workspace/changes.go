@@ -1,10 +1,7 @@
 package workspace
 
-import "sort"
+import "github.com/funtimecoding/soil/pkg/source/types/layer_change"
 
-func (w *Workspace) Changes() []string {
-	result := append([]string(nil), w.order...)
-	sort.Strings(result)
-
-	return result
+func (w *Workspace) Changes() []*layer_change.Change {
+	return w.layer.Changes()
 }

@@ -11,7 +11,7 @@ import (
 func TestFieldRowShowsItsLabelValueAndActions(t *testing.T) {
 	assert.String(
 		t,
-		`<div id="field-alfa" class="field-row"><span class="field-label" data-tooltip="Bravo help">Bravo</span><span class="field-value">charlie</span><span class="field-actions"><button>delta</button></span></div>`,
+		`<div id="field-alfa" class="field-row"><span class="field-label"><span data-tooltip="Bravo help">Bravo</span></span><span class="field-value">charlie</span><span class="field-actions"><button>delta</button></span></div>`,
 		renderedNode(
 			t,
 			field_row.New("Bravo").

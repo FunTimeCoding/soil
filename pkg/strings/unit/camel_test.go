@@ -14,3 +14,9 @@ func TestCamelToSnake(t *testing.T) {
 	assert.String(t, "already_snake", camel.ToSnake("already_snake"))
 	assert.String(t, "new", camel.ToSnake("New"))
 }
+
+func TestCamelFromSnake(t *testing.T) {
+	assert.String(t, "ApplyResult", camel.FromSnake("apply_result"))
+	assert.String(t, "Response", camel.FromSnake("response"))
+	assert.String(t, "Name2", camel.FromSnake("name2"))
+}

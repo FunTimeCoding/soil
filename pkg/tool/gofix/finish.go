@@ -12,8 +12,12 @@ func finish(
 	w *workspace.Workspace,
 	r *output.Results,
 ) {
+	if w.Stacked() {
+		return
+	}
+
 	if w.Diff() {
-		printChanges(w)
+		PrintChanges(w.Changes())
 
 		return
 	}

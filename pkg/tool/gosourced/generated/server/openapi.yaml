@@ -120,8 +120,179 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/check:
+    post:
+      operationId: postCheck
+      description: >-
+        Run every lint stage over a repository - golint, goaudit, gofix and
+        goanalyze - one check at a time across the daemon.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckRequest"
+      responses:
+        "200":
+          description: >-
+            Each stage's findings, the fixes not applied, and the packages
+            checked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckResponse"
+        "404":
+          description: The root is no module of the inventory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Other checks held the daemon past the wait.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The check could not run.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    CheckRequest:
+      type: object
+      required:
+      - root
+      properties:
+        root:
+          type: string
+          description: Absolute directory of the repository to check.
+        fix:
+          type: boolean
+          description: Apply what golint and gofix can fix.
+        fresh:
+          type: boolean
+          description: Check every package again, ignoring the clean cache.
+        transcript:
+          type: string
+          description: >-
+            A session's transcript, whose changes scope the check; the whole
+            repository when empty.
+    CheckResponse:
+      type: object
+      required:
+      - root
+      - announcement
+      - unchanged
+      - sections
+      - changes
+      - checked
+      - stale
+      properties:
+        root:
+          type: string
+        announcement:
+          type: string
+        unchanged:
+          type: boolean
+        sections:
+          type: array
+          items:
+            $ref: "#/components/schemas/CheckSection"
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/CheckChange"
+        checked:
+          type: array
+          items:
+            type: string
+        stale:
+          type: string
+          description: >-
+            A lint source changed since the daemon started, relative to its
+            module; empty when none has.
+    CheckSection:
+      type: object
+      required:
+      - header
+      - entries
+      - unchecked
+      properties:
+        header:
+          type: string
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/CheckConcern"
+        unchecked:
+          type: array
+          items:
+            $ref: "#/components/schemas/CheckUnchecked"
+    CheckConcern:
+      type: object
+      required:
+      - key
+      - text
+      - path
+      - type
+      - line
+      - line_text
+      - fixed
+      - planned
+      properties:
+        key:
+          type: string
+        text:
+          type: string
+        path:
+          type: string
+        type:
+          type: string
+        line:
+          type: integer
+        line_text:
+          type: string
+        fixed:
+          type: boolean
+        planned:
+          type: boolean
+    CheckUnchecked:
+      type: object
+      required:
+      - path
+      - line
+      - span
+      - reason
+      properties:
+        path:
+          type: string
+        line:
+          type: integer
+        span:
+          type: string
+        reason:
+          type: string
+    CheckChange:
+      type: object
+      required:
+      - path
+      - destination
+      - original
+      - current
+      properties:
+        path:
+          type: string
+        destination:
+          type: string
+        original:
+          type: string
+          format: byte
+        current:
+          type: string
+          format: byte
     PruneResponse:
       type: object
       required:

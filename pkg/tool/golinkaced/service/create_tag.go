@@ -1,10 +1,17 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/linkace/tag"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/linkace/tag"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateTag(name string) (*tag.Tag, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*tag.Tag, error) { return s.client.CreateTag(name) },
+		func(context.Context) (*tag.Tag, error) {
+			return s.client.CreateTag(name)
+		},
 	)
 }

@@ -45,3 +45,9 @@ func TestIdentityWarningsSkipsNoConstant(t *testing.T) {
 	v.WriteString("pkg/tool/gotest/main.go", "package gotest\n")
 	assert.Integer(t, 0, len(scan.IdentityWarnings(v, nil)))
 }
+
+func TestIdentityWarningsWithoutToolDirectory(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("pkg/alfa/alfa.go", "package alfa\n")
+	assert.Integer(t, 0, len(scan.IdentityWarnings(v, nil)))
+}

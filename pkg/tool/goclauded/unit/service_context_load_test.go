@@ -74,3 +74,78 @@ func TestContextLoadsSurviveColdReplay(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.Integer(t, len(first), len(second))
 }
+
+func TestContextLoadsRecordTextProfileTiers(t *testing.T) {
+	s := service_tester.New(t)
+	s.Store.EnsureSession("text-session")
+	s.WriteTranscript("text-session", "context-loads-text.jsonl")
+	s.Transcript.EnrichSession("text-session")
+	loads, e := s.Transcript.SessionContextLoads(t.Context(), "text-session")
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 11, len(loads))
+	always := fixture.LoadAt(t, loads, 1)
+	assert.String(t, "102", always.Reference)
+	assert.String(t, "bravo", always.Name)
+	assert.String(t, "always", always.Tier)
+	second := fixture.LoadAt(t, loads, 2)
+	assert.String(t, "103", second.Reference)
+	assert.String(t, "always", second.Tier)
+	relevant := fixture.LoadAt(t, loads, 3)
+	assert.String(t, "104", relevant.Reference)
+	assert.String(t, "delta", relevant.Name)
+	assert.String(t, "relevant", relevant.Tier)
+
+	for _, entry := range loads {
+		assert.True(t, entry.Reference != "201")
+	}
+
+	assert.Count(t, 0, s.Reporter.Events())
+}
+
+func TestContextLoadsFollowWholeReadOfPersistedProfile(t *testing.T) {
+	s := service_tester.New(t)
+	s.Store.EnsureSession("persisted-session")
+	s.WriteTranscript("persisted-session", "context-loads-persisted.jsonl")
+	s.Transcript.EnrichSession("persisted-session")
+	loads, e := s.Transcript.SessionContextLoads(
+		t.Context(),
+		"persisted-session",
+	)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 11, len(loads))
+	always := fixture.LoadAt(t, loads, 1)
+	assert.String(t, "102", always.Reference)
+	assert.String(t, "always", always.Tier)
+	relevant := fixture.LoadAt(t, loads, 3)
+	assert.String(t, "104", relevant.Reference)
+	assert.String(t, "relevant", relevant.Tier)
+	assert.Count(t, 0, s.Reporter.Events())
+}
+
+func TestContextLoadsReportRecentPersistedProfileOnce(t *testing.T) {
+	s := service_tester.New(t)
+	s.Store.EnsureSession("persisted-session")
+	s.Store.EnsureSession("second-persisted-session")
+	s.WriteRecentTranscript(
+		"persisted-session",
+		"context-loads-persisted.jsonl",
+	)
+	s.WriteRecentTranscript(
+		"second-persisted-session",
+		"context-loads-persisted.jsonl",
+	)
+	s.Transcript.EnrichSession("persisted-session")
+	s.Transcript.EnrichSession("second-persisted-session")
+	assert.Count(t, 1, s.Reporter.Events())
+}
+
+func TestContextLoadsReportUnreadableProfileOnce(t *testing.T) {
+	s := service_tester.New(t)
+	s.Store.EnsureSession("drift-session")
+	s.Store.EnsureSession("second-drift-session")
+	s.WriteTranscript("drift-session", "context-loads-drift.jsonl")
+	s.WriteTranscript("second-drift-session", "context-loads-drift.jsonl")
+	s.Transcript.EnrichSession("drift-session")
+	s.Transcript.EnrichSession("second-drift-session")
+	assert.Count(t, 1, s.Reporter.Events())
+}

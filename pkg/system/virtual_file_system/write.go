@@ -13,6 +13,6 @@ func (s *System) Write(
 	f := file.New(int64(len(content)), time.Now())
 	f.Content = content
 	f.Loaded = true
-	s.files[path] = f
+	s.put(path, f)
 	s.written[path] = true
 }

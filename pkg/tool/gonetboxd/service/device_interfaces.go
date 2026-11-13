@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/network"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) DeviceInterfaces(device string) ([]*network.Interface, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*network.Interface, error) {
+		func(context.Context) ([]*network.Interface, error) {
 			d, e := s.client.Device(device)
 
 			if e != nil {

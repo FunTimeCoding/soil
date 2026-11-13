@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"time"
 )
 
@@ -9,9 +11,10 @@ func (s *Service) UnresolvedThreads(
 	name string,
 	since time.Time,
 ) ([]*thread.Thread, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*thread.Thread, error) {
+		func(context.Context) ([]*thread.Thread, error) {
 			h, e := s.mattermost.TeamChannel(name)
 
 			if e != nil {

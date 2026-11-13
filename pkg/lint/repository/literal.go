@@ -16,7 +16,7 @@ func (r *Repository) Literal(
 
 	if !found {
 		if strings.HasPrefix(directory, soil.ParentDirectory) {
-			contents = siblingContents(r.Absolute(directory))
+			contents = r.siblingLiterals(directory)
 		} else {
 			prefix := join.Empty(directory, stringsConstant.Slash)
 

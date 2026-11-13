@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/publish"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -37,7 +38,7 @@ func NewWith(
 		g,
 		publish.New(
 			f,
-			constant.FixtureProject,
+			strconv.Itoa(constant.FixtureProject),
 			constant.PublishBranch,
 			constant.FixtureAuthorityDirectory,
 			constant.FixtureClusterAuthority,

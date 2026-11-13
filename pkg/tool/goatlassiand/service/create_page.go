@@ -1,6 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreatePage(
 	space string,
@@ -9,9 +13,10 @@ func (s *Service) CreatePage(
 	body string,
 	draft bool,
 ) (*page.Page, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.confluenceGuard,
-		func() (*page.Page, error) {
+		func(context.Context) (*page.Page, error) {
 			if draft {
 				return s.confluence.CreateDraftPage(space, parent, title, body)
 			}

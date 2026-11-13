@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/netbox/prefix"
 	"github.com/funtimecoding/soil/pkg/netbox/site"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) CreatePrefix(
@@ -10,9 +12,10 @@ func (s *Service) CreatePrefix(
 	siteName string,
 	description string,
 ) (*prefix.Prefix, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*prefix.Prefix, error) {
+		func(context.Context) (*prefix.Prefix, error) {
 			var i *site.Site
 
 			if siteName != "" {

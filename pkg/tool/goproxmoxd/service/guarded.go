@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/proxmox/face"
 )
 
@@ -17,15 +18,9 @@ func guarded[T any](
 		return result, e
 	}
 
-	g := p.Guard().Attempt(
+	return peer.Guarded(
 		context.Background(),
-		func(context.Context) error {
-			var h error
-			result, h = f(p.Client())
-
-			return h
-		},
+		p.Guard(),
+		func(context.Context) (T, error) { return f(p.Client()) },
 	)
-
-	return result, g
 }

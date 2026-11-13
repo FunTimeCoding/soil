@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/device_type"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) DeviceTypes() ([]*device_type.Type, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*device_type.Type, error) {
+		func(context.Context) ([]*device_type.Type, error) {
 			return s.client.DeviceTypes()
 		},
 	)

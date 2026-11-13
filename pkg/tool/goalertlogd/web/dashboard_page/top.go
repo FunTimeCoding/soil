@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web/alert_page"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web/component"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -23,15 +22,9 @@ func Top(records []top.Record) gomponents.Node {
 						gomponents.Text(r.Name),
 					),
 				),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("%d", r.Count),
-				),
+				html.Td(gomponents.Textf("%d", r.Count)),
 				html.Td(gomponents.Text(duration(r.AverageDuration))),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("%d", r.CurrentlyFiring),
-				),
+				html.Td(gomponents.Textf("%d", r.CurrentlyFiring)),
 				html.Td(component.SeverityBadge(r.Severity)),
 			),
 		)

@@ -8,14 +8,18 @@ func addWords(
 	words []*syntax.Word,
 ) {
 	for _, w := range words {
-		v, okay := literalValue(w)
-
-		if !okay {
-			result.Unresolved = true
+		if v, okay := literalValue(w); okay {
+			result.Paths = append(result.Paths, absolute(directory, v))
 
 			continue
 		}
 
-		result.Paths = append(result.Paths, absolute(directory, v))
+		if g, okay := globValue(w); okay {
+			result.Patterns = append(result.Patterns, absolute(directory, g))
+
+			continue
+		}
+
+		result.Unresolved = true
 	}
 }

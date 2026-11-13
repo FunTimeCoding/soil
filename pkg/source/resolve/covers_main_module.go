@@ -1,7 +1,10 @@
 package resolve
 
-import "slices"
+import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"slices"
+)
 
 func CoversMainModule(patterns []string) bool {
-	return slices.Contains(patterns, "./...")
+	return slices.Contains(patterns, goModConstant.AllPackages)
 }

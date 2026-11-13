@@ -6,12 +6,7 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func facets(
-	all []result.Facet,
-	query string,
-	collection string,
-	metadata map[string]string,
-) gomponents.Node {
+func (p *Page) facets(all []result.Facet) gomponents.Node {
 	sections := make([]gomponents.Node, 0, len(all))
 
 	for _, f := range all {
@@ -28,7 +23,7 @@ func facets(
 			continue
 		}
 
-		sections = append(sections, facet(f, query, collection, metadata))
+		sections = append(sections, p.facet(f))
 	}
 
 	return gomponents.Group(sections)

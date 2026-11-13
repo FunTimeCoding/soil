@@ -169,6 +169,13 @@ on as a method value, only inside `Attempt`, `Do` or a function of the
 package wrapping them; a helper whose every caller is inside counts as
 inside, and a method with no error result is not a peer call.
 
+The operation's context is its caller's, so a hang-up and a trace reach the
+peer with it. A write that must finish once begun - a message posted, a change
+of several steps - takes `context.WithoutCancel` of it instead: the trace still
+travels, and a caller hanging up no longer stops it halfway. Work no caller
+started - a tick, an event from a held connection - runs under its worker's
+own context, or `context.Background()` where the worker has none.
+
 `Close` stops the probe loop only: `Attempt` still runs calls, so a
 daemon may flush through a guard the lifecycle already closed, and a
 peer down at close is never probed back.

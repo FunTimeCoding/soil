@@ -17,9 +17,10 @@ type Entry struct {
 	alert         string
 	confirm       string
 	inline        bool
-	record        bool
+	sideways      bool
 	reset         bool
 	query         bool
+	live          bool
 	class         string
 	buttonClass   string
 	hidden        []gomponents.Node

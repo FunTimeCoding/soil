@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/ansible_inventory"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/ansible_inventory"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) AnsibleInventory(
 	field string,
 	site string,
 ) (*ansible_inventory.Inventory, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*ansible_inventory.Inventory, error) {
+		func(context.Context) (*ansible_inventory.Inventory, error) {
 			machines, e := s.client.VirtualMachines()
 
 			if e != nil {

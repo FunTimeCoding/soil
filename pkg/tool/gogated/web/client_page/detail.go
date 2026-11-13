@@ -3,10 +3,10 @@ package client_page
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/client"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/web/component"
 	"github.com/funtimecoding/soil/pkg/web/component/action"
 	"github.com/funtimecoding/soil/pkg/web/component/fact"
 	"maragu.dev/gomponents"
@@ -17,10 +17,7 @@ func Detail(c *client.Client) gomponents.Node {
 	return gomponents.Group(
 		[]gomponents.Node{
 			html.H1(
-				gomponents.Textf(
-					"Client %s",
-					component.Truncate(c.Identifier, 8),
-				),
+				gomponents.Textf("Client %s", shorten.Prefix(c.Identifier, 8)),
 			),
 			fact.New().
 				Row("Identifier", c.Identifier).

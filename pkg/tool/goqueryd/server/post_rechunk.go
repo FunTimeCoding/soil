@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -13,9 +12,7 @@ func (s *Server) PostRechunk(
 	documents, e := s.service.Rechunk()
 
 	if e != nil {
-		return server.PostRechunk500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.PostRechunk500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	if documents == nil {

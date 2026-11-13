@@ -22,6 +22,15 @@ func (e *Entry) extendedAttributes() []gomponents.Node {
 			extended.Target(e.target),
 			extended.Swap(e.swap),
 		)
+
+		if e.live {
+			result = append(
+				result,
+				extended.Trigger(constant.TriggerForm),
+				extended.Sync(constant.SyncReplace),
+				extended.Push("true"),
+			)
+		}
 	} else if e.previewPath != "" {
 		result = append(
 			result,

@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/plate"
 )
@@ -31,16 +33,22 @@ func (s *Service) Plate() (*plate.Plate, error) {
 		return nil, f
 	}
 
-	if result.Favorites, f = guarded[[]*page.Page](
+	if result.Favorites, f = peer.Guarded(
+		context.Background(),
 		s.confluenceGuard,
-		s.confluence.Favorites,
+		func(context.Context) ([]*page.Page, error) {
+			return s.confluence.Favorites()
+		},
 	); f != nil {
 		return nil, f
 	}
 
-	if result.Watched, f = guarded[[]*page.Page](
+	if result.Watched, f = peer.Guarded(
+		context.Background(),
 		s.confluenceGuard,
-		s.confluence.Watched,
+		func(context.Context) ([]*page.Page, error) {
+			return s.confluence.Watched()
+		},
 	); f != nil {
 		return nil, f
 	}

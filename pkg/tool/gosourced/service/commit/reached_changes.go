@@ -1,11 +1,9 @@
 package commit
 
 import (
-	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
+	"github.com/funtimecoding/soil/pkg/source/concurrent_write"
+	"github.com/funtimecoding/soil/pkg/source/module_graph"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
-	"path/filepath"
-	"slices"
 )
 
 func (s *Service) reachedChanges(
@@ -18,38 +16,23 @@ func (s *Service) reachedChanges(
 		return changed
 	}
 
-	kept := map[string]bool{}
+	var written []string
 
 	for _, out := range outs {
-		for _, p := range out.Paths() {
-			kept[filepath.Dir(p)] = true
-		}
+		written = append(written, out.Paths()...)
 
 		for _, o := range out.Renames() {
 			if o.Target != "" {
-				kept[filepath.Dir(o.Target)] = true
+				written = append(written, o.Target)
 			}
 		}
 	}
 
+	var graphs []*module_graph.Graph
+
 	for _, root := range roots {
-		g := s.workspace.Workspace(root).Graph()
-
-		for _, u := range load.ReachUnits(g, packagePaths) {
-			kept[u.Directory] = true
-		}
+		graphs = append(graphs, s.workspace.Workspace(root).Graph())
 	}
 
-	var result []string
-	files := []string{goModConstant.ModFile, goModConstant.SumFile}
-
-	for _, p := range changed {
-		name := filepath.Base(p)
-
-		if kept[filepath.Dir(p)] || slices.Contains(files, name) {
-			result = append(result, p)
-		}
-	}
-
-	return result
+	return concurrent_write.Reached(graphs, packagePaths, written, changed)
 }

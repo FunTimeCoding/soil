@@ -37,7 +37,7 @@ func TestIgnoreMatcher(t *testing.T) {
 	root := t.TempDir()
 
 	if e := os.WriteFile(
-		filepath.Join(root, ".gitignore"),
+		filepath.Join(root, constant.IgnoreFile),
 		[]byte("/.claude/notes\ntmp/\n"),
 		0o600,
 	); e != nil {

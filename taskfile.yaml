@@ -4,36 +4,29 @@ tasks:
   default: {cmds: [{task: lint}, {task: test}, {task: build}], silent: true}
   pre-push: {cmds: [{task: lint}, {task: test}], silent: true}
   lint:
-    cmds:
-    - golint --fix
-    - golangci-lint run --build-tags "$(goreach --tags)"
-    - gofix ./...
-    - goanalyze ./...
-    - goaudit .
-    silent: true
-  lint-check:
-    desc: 'The lint stages without writing; REACH=own or REACH=<session> narrows them to what a session changed'
+    desc: 'golangci-lint, then gocheck - golint, goaudit, gofix and goanalyze in one run - applying what they fix'
     cmds:
     - |
-      set -e
+      status=0
+      golangci-lint run --build-tags "$(goreach --tags)" || status=1
+      gocheck --fix || status=1
+      exit $status
+    silent: true
+  lint-check:
+    desc: 'task lint without writing; REACH=own or REACH=<session> narrows it to what a session changed'
+    cmds:
+    - |
+      status=0
       packages=./...
-      documents=
       if [ -n "{{.REACH}}" ]; then
         session={{if ne .REACH "own"}}{{.REACH}}{{end}}
-        packages=$(goreach $session)
-        documents=$(goreach --documents $session 2>/dev/null)
-        if [ -z "$documents" ]; then
-          echo "goreach: nothing changed"
-          exit 0
-        fi
+        packages=$(goreach $session 2>/dev/null)
       fi
-      golint $documents
       if [ -n "$packages" ]; then
-        golangci-lint run --build-tags "$(goreach --tags)" $packages
-        gofix --diff $packages
-        goanalyze $packages
+        golangci-lint run --build-tags "$(goreach --tags)" $packages || status=1
       fi
-      goaudit .
+      gocheck {{if .REACH}}--reach {{.REACH}}{{end}} || status=1
+      exit $status
     silent: true
   test:
     cmds: ['gotestsum --format dots -- --tags local ./...']

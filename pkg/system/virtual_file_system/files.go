@@ -1,15 +1,20 @@
 package virtual_file_system
 
-import "sort"
+import (
+	"slices"
+	"sort"
+)
 
 func (s *System) Files() []string {
-	result := make([]string, 0, len(s.files))
+	if s.sorted == nil {
+		s.sorted = make([]string, 0, len(s.files))
 
-	for path := range s.files {
-		result = append(result, path)
+		for path := range s.files {
+			s.sorted = append(s.sorted, path)
+		}
+
+		sort.Strings(s.sorted)
 	}
 
-	sort.Strings(result)
-
-	return result
+	return slices.Clone(s.sorted)
 }

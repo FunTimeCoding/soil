@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) ListsPage(p int) (*page.Page[*list.List], error) {
-	var r response.ListResponse
+	var r response.ListPage
 
 	if e := c.basic.Get(
 		"lists",

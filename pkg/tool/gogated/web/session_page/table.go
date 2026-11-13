@@ -3,9 +3,9 @@ package session_page
 import (
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/authentication_session"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/web/component"
 	"github.com/funtimecoding/soil/pkg/web/component/action"
 	"github.com/funtimecoding/soil/pkg/web/component/badge"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
@@ -25,7 +25,7 @@ func Table(
 			rows,
 			html.Tr(
 				html.Td(
-					gomponents.Text(component.Truncate(s.Identifier, 8)),
+					gomponents.Text(shorten.Prefix(s.Identifier, 8)),
 					gomponents.If(
 						s.Identifier == current,
 						badge.New("this browser").Quiet().Node(),

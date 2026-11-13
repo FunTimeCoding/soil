@@ -40,6 +40,12 @@ func clocks(
 		worker.NewEvery(y.PollMemory, l, r, constant.MemoryPollInterval),
 		worker.NewEvery(y.DeliverImpressions, l, r, constant.ImpressionInterval),
 		worker.NewEvery(c.Release, l, r, constant.CruiseInterval),
+		worker.NewEvery(
+			t.RefreshReports,
+			l,
+			r,
+			constant.ReportInterval,
+		).WithDelayedStart(),
 	}
 
 	if o.MonitorUsage {

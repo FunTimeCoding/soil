@@ -9,6 +9,6 @@ import (
 type Client struct {
 	client *client.ClientWithResponses
 	base   *locator.Locator
-	token  func() string
+	token  string
 	pool   *pool.Pool
 }

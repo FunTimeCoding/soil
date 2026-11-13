@@ -2,7 +2,7 @@ package workspace
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/source/snapshot"
+	"github.com/funtimecoding/soil/pkg/source/layer"
 	"path/filepath"
 )
 
@@ -19,11 +19,8 @@ func New(
 	}
 
 	return &Workspace{
-		diff:     diff,
-		roots:    absolute,
-		before:   snapshot.Take(absolute...),
-		overlay:  map[string][]byte{},
-		original: map[string][]byte{},
-		moves:    map[string]string{},
+		diff:  diff,
+		roots: absolute,
+		layer: layer.New(nil, absolute...),
 	}
 }

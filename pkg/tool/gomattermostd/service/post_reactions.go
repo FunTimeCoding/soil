@@ -1,9 +1,15 @@
 package service
 
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
+
 func (s *Service) PostReactions(identifier string) ([]string, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]string, error) {
+		func(context.Context) ([]string, error) {
 			p, e := s.mattermost.FindPost(identifier)
 
 			if e != nil {

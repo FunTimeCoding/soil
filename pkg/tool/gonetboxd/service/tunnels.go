@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/tunnel"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/tunnel"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Tunnels() ([]*tunnel.Tunnel, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*tunnel.Tunnel, error) {
+		func(context.Context) ([]*tunnel.Tunnel, error) {
 			return s.client.Tunnels()
 		},
 	)

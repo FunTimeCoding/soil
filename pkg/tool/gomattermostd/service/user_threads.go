@@ -1,11 +1,16 @@
 package service
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/mattermost/mattermost/server/public/model"
+)
 
 func (s *Service) UserThreads(o model.GetUserThreadsOpts) (*model.Threads, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*model.Threads, error) {
+		func(context.Context) (*model.Threads, error) {
 			me, e := s.mattermost.Me()
 
 			if e != nil {

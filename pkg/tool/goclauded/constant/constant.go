@@ -16,6 +16,8 @@ const CallsignReleaseWindow = 7 * 24 * time.Hour
 const AbandonedQueueWindow = 7 * 24 * time.Hour
 const SevenDayWindow = 7 * 24 * time.Hour
 const UsagePageUnreadable = "usage page carries no weekly meter"
+const ProfileUnreadable = "profile text carries a tier section with no memory headings"
+const ProfilePersisted = "profile answer outgrew the inline limit and was saved to a file"
 const (
 	CompleteTimeoutWindow   = 30 * time.Minute
 	InactivityTimeoutWindow = time.Hour
@@ -29,6 +31,7 @@ const (
 	FindingInterval         = 5 * time.Minute
 	UsagePollInterval       = time.Minute
 	UtilizationPollInterval = 5 * time.Minute
+	ReportInterval          = 10 * time.Minute
 )
 const RosterStaleAfter = 45 * time.Minute
 const DaemonStarted = "started"
@@ -48,6 +51,14 @@ const (
 	PulseAction  = "pulse"
 	CruiseAction = "cruise"
 	DeleteAction = "delete"
+	OpenAction   = "open"
+	CloseAction  = "close"
+
+	CoverageServer      = "server"
+	CoverageRowPrefix   = "server-"
+	PermissionBlocker   = "blocker"
+	PermissionRowPrefix = "blocker-"
+	CoverageNeverUsed   = "never"
 )
 
 var (

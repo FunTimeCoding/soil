@@ -2,6 +2,7 @@ package gofix
 
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"github.com/funtimecoding/soil/pkg/text/dictionary"
 	"path/filepath"
@@ -14,7 +15,7 @@ func runSurvey(
 	patterns []string,
 ) {
 	if len(patterns) == 0 {
-		patterns = []string{"./..."}
+		patterns = []string{goModConstant.AllPackages}
 	}
 
 	known := knownWords(directory)

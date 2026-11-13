@@ -20,10 +20,7 @@ func (p *Page) Memories() gomponents.Node {
 				rows,
 				html.Tr(
 					html.Td(gomponents.Text(t)),
-					html.Td(
-						html.Class(webConstant.NumericClass),
-						gomponents.Textf("%d", c),
-					),
+					html.Td(gomponents.Textf("%d", c)),
 				),
 			)
 		}

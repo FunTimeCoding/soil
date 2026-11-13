@@ -70,6 +70,22 @@ func TestQueryEntryReadsWithGetAndSwapsByGet(t *testing.T) {
 	)
 }
 
+func TestLiveQueryEntryFollowsTypingAndPushesAddress(t *testing.T) {
+	assert.String(
+		t,
+		`<form class="entry" method="get" action="/alfa" hx-get="/alfa" hx-target="#foxtrot" hx-swap="innerHTML" hx-trigger="input delay:200ms, submit" hx-sync="this:replace" hx-push-url="true"><label><span class="entry-label">Bravo</span><input type="search" name="bravo" value="charlie"></label></form>`,
+		renderedNode(
+			t,
+			entry.New("/alfa", "Filter").
+				Query().
+				Swap("#foxtrot", constant.SwapInner).
+				Live().
+				Search("bravo", "Bravo", "charlie").
+				Node(),
+		),
+	)
+}
+
 func TestPasswordNeverCarriesValueBesideMail(t *testing.T) {
 	assert.StringContains(
 		t,
@@ -180,14 +196,14 @@ func TestButtonAndFieldCarryTheirOwnClasses(t *testing.T) {
 	)
 }
 
-func TestRecordEntryKeepsItsButtonsSideBySide(t *testing.T) {
+func TestSidewaysEntryKeepsItsButtonsSideBySide(t *testing.T) {
 	assert.String(
 		t,
-		`<form class="entry record" method="post" action="/alfa"><label><span class="entry-label">Bravo</span><input type="text" name="bravo"></label><div class="entry-buttons"><button type="submit">Go</button><a href="/charlie">Cancel</a></div></form>`,
+		`<form class="entry sideways" method="post" action="/alfa"><label><span class="entry-label">Bravo</span><input type="text" name="bravo"></label><div class="entry-buttons"><button type="submit">Go</button><a href="/charlie">Cancel</a></div></form>`,
 		renderedNode(
 			t,
 			entry.New("/alfa", "Go").
-				Record().
+				Sideways().
 				Text("bravo", "Bravo", "").
 				Beside(html.A(html.Href("/charlie"), gomponents.Text("Cancel"))).
 				Node(),

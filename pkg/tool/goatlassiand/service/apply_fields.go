@@ -1,9 +1,11 @@
 package service
 
 import (
+	"context"
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) applyFields(
@@ -14,7 +16,13 @@ func (s *Service) applyFields(
 		return nil, nil
 	}
 
-	fieldMap, e := guarded[*field_map.Map](s.jiraGuard, s.jira.FieldMap)
+	fieldMap, e := peer.Guarded(
+		context.Background(),
+		s.jiraGuard,
+		func(context.Context) (*field_map.Map, error) {
+			return s.jira.FieldMap()
+		},
+	)
 
 	if e != nil {
 		return nil, e

@@ -33,7 +33,7 @@ tasks:
 
 | Task | Command | Purpose |
 |------|---------|---------|
-| `lint` | `golint --fix` + `golangci-lint run --build-tags local` + `gofix ./...` + `goanalyze ./...` + `goaudit .` | Lint with auto-fix, static analysis, AST fix and check, then compliance audit |
+| `lint` | `golint --fix` + `golangci-lint run --build-tags "$(goreach --tags)"` + `gofix ./...` + `goanalyze ./...` + `goaudit .` | Lint with auto-fix, static analysis, AST fix and check, then compliance audit |
 | `test` | `gotestsum --format dots -- --tags local ./...` | Run tests (including local-tagged) with minimal output |
 | `build` | `go run cmd/gobuild/main.go build` | Cross-compile all binaries via gobuild |
 | `check` | `gosec -fmt=json ...` | Security scan |

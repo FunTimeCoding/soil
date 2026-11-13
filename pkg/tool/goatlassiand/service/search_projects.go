@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/project_match"
 	"strings"
 )
@@ -10,9 +12,10 @@ func (s *Service) SearchProjects(
 	limit int,
 	detail bool,
 ) ([]*project_match.Match, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.jiraGuard,
-		func() ([]*project_match.Match, error) {
+		func(context.Context) ([]*project_match.Match, error) {
 			projects, e := s.jira.Projects()
 
 			if e != nil {

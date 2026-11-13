@@ -39,10 +39,6 @@ func New(
 				).
 				WithItems(
 					navigation_item.New(
-						constant.DashboardPath,
-						constant.DashboardTitle,
-					),
-					navigation_item.New(
 						constant.AuthoritiesPath,
 						constant.AuthoritiesTitle,
 					),

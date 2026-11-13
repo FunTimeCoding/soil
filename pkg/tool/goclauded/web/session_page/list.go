@@ -42,8 +42,8 @@ func List(
 					),
 				),
 				html.Td(html.Small(gomponents.Text(s.Description))),
-				numeric(s.Lines),
-				numeric(s.TurnCount),
+				html.Td(gomponents.Textf("%d", s.Lines)),
+				html.Td(gomponents.Textf("%d", s.TurnCount)),
 			),
 		)
 	}

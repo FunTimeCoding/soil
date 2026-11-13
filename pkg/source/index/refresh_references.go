@@ -16,7 +16,13 @@ func (w *Workspace) refreshReferences() map[string]*record.References {
 	var directories []string
 
 	for path, u := range g.Units {
-		k := referencesKey(g, u, w.fileHash(u.Files), w.fingerprints)
+		k := unitDigest(
+			g,
+			u,
+			w.fileHash(u.Files),
+			w.fingerprints,
+			constant.IndexReferencesKind,
+		)
 		r, found := w.fetch(
 			constant.IndexReferencesKind,
 			path,

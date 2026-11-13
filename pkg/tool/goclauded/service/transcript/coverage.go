@@ -1,56 +1,20 @@
 package transcript
 
-import (
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
-	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
-	goauditConstant "github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/coverage"
-	"path/filepath"
-	"time"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/coverage"
 
 func (s *Service) Coverage() []*coverage.Server {
-	root := coverageRoot()
-	var configurationPaths []string
+	s.reports.RLock()
+	held := s.heldCoverage
+	s.reports.RUnlock()
 
-	for _, p := range goauditConstant.ConfigurationPaths {
-		configurationPaths = append(configurationPaths, filepath.Join(root, p))
+	if held != nil {
+		return held
 	}
 
-	configuration := audit_configuration.Load(
-		system.FirstFile(configurationPaths...),
-	)
-	registered := map[string][]string{}
+	result := s.computeCoverage()
+	s.reports.Lock()
+	s.heldCoverage = result
+	s.reports.Unlock()
 
-	for server, path := range configuration.ModelContext {
-		resolved := filepath.Join(root, path)
-
-		if !system.DirectoryExists(resolved) {
-			continue
-		}
-
-		names, _ := scan.RegisteredTools(
-			virtual_file_system.From(resolved),
-			path,
-		)
-		registered[server] = names
-	}
-
-	var calls []*tool_call.Call
-
-	for _, e := range s.Sessions() {
-		calls = append(calls, s.ToolCalls(e.Identifier)...)
-	}
-
-	return coverage.Compute(
-		calls,
-		registered,
-		configuration.ModelContext,
-		configuredServers(root),
-		configuration.Aliases,
-		time.Now(),
-	)
+	return result
 }

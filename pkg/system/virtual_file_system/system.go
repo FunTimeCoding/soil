@@ -7,7 +7,8 @@ import (
 
 type System struct {
 	files    map[string]*file.File
-	moves    []pending_move.Move
+	sorted   []string
+	moves   []pending_move.Move
 	written  map[string]bool
 	deleted  map[string]bool
 	maxFiles int

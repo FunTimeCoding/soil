@@ -5,6 +5,7 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/source/warm_tree"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
@@ -82,7 +83,7 @@ func ModelContextPermissions(
 			continue
 		}
 
-		names, concerns := RegisteredTools(Tree(resolved), path)
+		names, concerns := RegisteredTools(Tree(warm_tree.New(resolved)), path)
 		result = append(result, concerns...)
 		registered := make(map[string]bool)
 

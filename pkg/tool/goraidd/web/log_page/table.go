@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/web/component"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -29,8 +28,8 @@ func Table(fights []fight.Fight) gomponents.Node {
 				layout.TimeCell(f.Timestamp),
 				html.Td(gomponents.Text(length(f))),
 				html.Td(gomponents.Text(mapName(f))),
-				component.NumericCell(fmt.Sprintf("%d", f.AlliedCount)),
-				component.NumericCell(enemies(f)),
+				html.Td(gomponents.Text(fmt.Sprintf("%d", f.AlliedCount))),
+				html.Td(gomponents.Text(enemies(f))),
 			),
 		)
 	}

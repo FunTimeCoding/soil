@@ -12,6 +12,10 @@ import (
 func MissingSentry(v *virtual_file_system.System) []*concern.Concern {
 	programs := make(map[string]bool)
 
+	if !v.DirectoryExists("cmd") {
+		return nil
+	}
+
 	for _, name := range v.MustReadDirectory("cmd") {
 		if name == "example" {
 			continue

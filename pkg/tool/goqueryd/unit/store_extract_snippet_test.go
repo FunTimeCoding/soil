@@ -42,31 +42,27 @@ func TestExtractSnippetTruncatesLongResult(t *testing.T) {
 		"keyword matching vector similarity cross-encoder reranking\n",
 		50,
 	)
-	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
+	snippet, _ := store.ExtractSnippet(long, "vector", 0)
 	assert.Less(t, 401, len(snippet))
 }
 
 func TestExtractSnippetTruncatesOnRuneBoundary(t *testing.T) {
 	long := strings.Join(
-		[]string{
-			"keyword",
-			strings.Repeat("a", 387),
-			strings.Repeat("—", 20),
-		},
+		[]string{"alfa", strings.Repeat("a", 387), strings.Repeat("—", 20)},
 		" ",
 	)
-	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
+	snippet, _ := store.ExtractSnippet(long, "alfa", 0)
 	assert.True(t, utf8.ValidString(snippet))
 	assert.Less(t, 401, len(snippet))
 }
 
 func TestExtractSnippetChunkWindowOnRuneBoundary(t *testing.T) {
 	body := strings.Join(
-		[]string{strings.Repeat("—", 100), "keyword target line"},
+		[]string{strings.Repeat("—", 100), "alfa target line"},
 		"",
 	)
-	position := strings.Index(body, "keyword")
-	snippet, _ := store.ExtractSnippet(body, "keyword", position)
+	position := strings.Index(body, "alfa")
+	snippet, _ := store.ExtractSnippet(body, "alfa", position)
 	assert.True(t, utf8.ValidString(snippet))
-	assert.StringContains(t, "keyword", snippet)
+	assert.StringContains(t, "alfa", snippet)
 }

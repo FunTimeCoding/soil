@@ -2,13 +2,13 @@ package goreach
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/system"
 	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
-func resolveSession(query string) string {
+func resolveSession(query string) (string, error) {
 	c := goclauded.NewEnvironment()
 	defer c.Close()
 	r, matches, e := c.GetResolve(
@@ -17,21 +17,20 @@ func resolveSession(query string) string {
 	)
 
 	if not_found.Is(e) {
-		system.Exitf(1, "session not found: %s\n", query)
+		return "", not_found.New("session", query)
 	}
 
 	if e != nil {
-		system.Exitf(1, "%s\n", e)
+		return "", e
 	}
 
 	if len(matches) > 0 {
-		system.Exitf(
-			1,
-			"ambiguous: %q matches %d sessions - pass its identifier\n",
+		return "", ambiguous.Format(
+			"ambiguous: %q matches %d sessions - pass its identifier",
 			query,
 			len(matches),
 		)
 	}
 
-	return r.Identifier
+	return r.Identifier, nil
 }

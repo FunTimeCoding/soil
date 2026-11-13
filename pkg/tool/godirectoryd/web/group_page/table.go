@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/types/group"
 	"github.com/funtimecoding/soil/pkg/web/component/action"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"strconv"
@@ -21,10 +20,7 @@ func Table(groups []*group.Group) gomponents.Node {
 			rows,
 			html.Tr(
 				html.Td(gomponents.Text(g.Name)),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Text(strconv.Itoa(g.Number)),
-				),
+				html.Td(gomponents.Text(strconv.Itoa(g.Number))),
 				html.Td(gomponents.Text(join.CommaSpace(g.Member))),
 				html.Td(
 					action.New(constant.DeleteGroupPath, "Delete").

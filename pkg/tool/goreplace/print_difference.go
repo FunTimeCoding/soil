@@ -1,8 +1,9 @@
 package goreplace
 
 import (
+	textConstant "github.com/funtimecoding/soil/pkg/text/constant"
+	"github.com/funtimecoding/soil/pkg/text/literal_edit/match"
 	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goreplace/match"
 	"io"
 	"strings"
 )
@@ -17,7 +18,7 @@ func printDifference(
 		removed := content[m.Offset : m.Offset+m.Length]
 		added := m.Replace
 
-		if m.Block.Opening != constant.SearchMarker {
+		if m.Block.Opening != textConstant.SearchMarker {
 			removed = strings.TrimSuffix(removed, "\n")
 			added = strings.TrimPrefix(strings.TrimSuffix(added, "\n"), "\n")
 		}

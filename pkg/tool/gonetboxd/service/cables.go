@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/cable"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/cable"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Cables() ([]*cable.Cable, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*cable.Cable, error) {
+		func(context.Context) ([]*cable.Cable, error) {
 			return s.client.Cables()
 		},
 	)

@@ -6,6 +6,7 @@ import (
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
+	"slices"
 	"sort"
 )
 
@@ -13,7 +14,7 @@ func (s *Server) coveragePage(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	servers := s.transcript.Coverage()
+	servers := slices.Clone(s.transcript.Coverage())
 	sort.SliceStable(
 		servers,
 		func(i, j int) bool {

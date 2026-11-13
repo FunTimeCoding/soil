@@ -84,6 +84,7 @@ const (
 	ParameterType   = "type"
 	FieldSeparator  = " "
 	ModuleKind      = "module"
+	RootKind        = "repository root"
 	ModuleQualifier = "module"
 	MissingPackage  = "missing"
 	ConcernMissing  = "missing"
@@ -141,11 +142,24 @@ var QualifiedReference = regexp.MustCompile(
 const ReferenceSeparator = " . "
 const TextContext = 2
 const (
-	TurnBound      = 2 * time.Minute
-	TurnReported   = time.Second
-	CommitAttempts = 3
-	LoadSettled    = 10 * time.Minute
+	TurnBound           = 2 * time.Minute
+	CheckBound          = 5 * time.Minute
+	PointerCacheContext = "pointer_cache"
+	TurnReported        = time.Second
+	CommitAttempts      = 3
+	LoadSettled         = 10 * time.Minute
 )
+
+var LintSources = []string{
+	"pkg/lint",
+	"pkg/source",
+	"pkg/tool/gocheck",
+	"pkg/tool/golint",
+	"pkg/tool/gofix",
+	"pkg/tool/goanalyze",
+	"pkg/tool/goaudit",
+	"pkg/tool/goreach",
+}
 
 const (
 	GormPath            = "gorm.io/gorm"

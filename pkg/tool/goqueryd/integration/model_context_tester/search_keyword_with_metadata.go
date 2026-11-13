@@ -10,7 +10,7 @@ func (t *Tester) SearchKeywordWithMetadata(
 		constant.Search,
 		map[string]any{
 			"query":           query,
-			constant.Mode:     "keyword",
+			constant.Mode:     constant.KeywordMode,
 			constant.Metadata: metadata,
 		},
 	)

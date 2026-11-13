@@ -21,11 +21,5 @@ func ListPackages(
 		return nil, fmt.Errorf("list packages: %w", e)
 	}
 
-	result := make(map[string]bool)
-
-	for _, p := range listed {
-		result[p.PkgPath] = true
-	}
-
-	return result, nil
+	return PackagePaths(listed), nil
 }

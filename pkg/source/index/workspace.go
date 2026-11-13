@@ -20,6 +20,7 @@ type Workspace struct {
 	memo         map[string]*memo_entry.Entry
 	fingerprints map[string]string
 	facts        map[string]map[string]any
+	digests      map[string]map[string][]byte
 	references   *xref.Index
 	build        string
 }

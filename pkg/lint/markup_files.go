@@ -1,10 +1,10 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ func markupFiles(
 
 		if Skipped(o.Skips, p) {
 			if o.Verbose {
-				console.Format("Skip markup file: %s\n", p)
+				writer.Print(o.Trace, "Skip markup file: %s\n", p)
 			}
 
 			continue
@@ -33,7 +33,7 @@ func markupFiles(
 		}
 
 		if o.Verbose {
-			console.Format("Select markup file: %s\n", p)
+			writer.Print(o.Trace, "Select markup file: %s\n", p)
 		}
 
 		result = append(result, p)

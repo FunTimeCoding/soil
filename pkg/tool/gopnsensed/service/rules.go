@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/opnsense/rule"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/opnsense/rule"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Rules(phrase string) ([]*rule.Rule, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*rule.Rule, error) {
+		func(context.Context) ([]*rule.Rule, error) {
 			return s.client.Rules(phrase)
 		},
 	)

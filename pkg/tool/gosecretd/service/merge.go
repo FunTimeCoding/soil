@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"maps"
 	"slices"
 )
@@ -19,9 +21,10 @@ func (s *Service) Merge(
 		return nil, validation.New("values are required")
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]string, error) {
+		func(context.Context) ([]string, error) {
 			result, e := s.client.Read(path)
 
 			if not_found.Is(e) {

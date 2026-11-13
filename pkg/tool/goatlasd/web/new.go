@@ -17,10 +17,6 @@ func New(v *service.Service) *Server {
 				WithStyle(constant.InlineStyle).
 				WithItems(
 					navigation_item.New(
-						webConstant.RootPath,
-						constant.DashboardTitle,
-					),
-					navigation_item.New(
 						constant.PlacementsPath,
 						constant.PlacementsTitle,
 					),

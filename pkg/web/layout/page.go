@@ -25,4 +25,5 @@ type Page struct {
 	commands     []*palette.Command
 	extended     string
 	serverSide   string
+	fullWindow   bool
 }

@@ -11,6 +11,6 @@ func (w *Workspace) externalConfiguration(
 	return &packages.Config{
 		Mode:       mode,
 		Dir:        w.root,
-		BuildFlags: resolve.BuildFlags(w.root),
+		BuildFlags: resolve.TagFlags(w.graph.Tags),
 	}
 }

@@ -32,7 +32,7 @@ func (s *Server) get(
 	}
 
 	if f != nil {
-		return s.captureDetail(x, f)
+		return s.answer(x, f)
 	}
 
 	return response.Success(notation.MarshalIndent(document))

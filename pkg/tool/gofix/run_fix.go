@@ -1,9 +1,9 @@
 package gofix
 
 import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/option"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
@@ -17,10 +17,14 @@ func runFix(
 	patterns := o.Patterns
 
 	if len(patterns) == 0 {
-		patterns = []string{"./..."}
+		patterns = []string{goModConstant.AllPackages}
 	}
 
-	reported := listReported(o.Root, patterns)
+	reported := o.Reported
+
+	if reported == nil {
+		reported = listReported(o.Root, patterns)
+	}
 
 	if o.Full || resolve.CoversMainModule(patterns) {
 		fixModule(o, patterns, reported, nil, w, r)
@@ -29,7 +33,7 @@ func runFix(
 	}
 
 	loaded, fileSet := loadThrough(o.Root, patterns, w)
-	handle := index.New(o.IndexDirectory(), o.Root, face.Kind())
+	handle := indexHandle(o)
 	faces := face.FromWorkspace(handle, loaded)
 	violations := FindViolations(loaded, reported, faces)
 

@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) ConfigurationContexts() ([]*configuration_context.Context, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*configuration_context.Context, error) {
+		func(context.Context) ([]*configuration_context.Context, error) {
 			return s.client.ConfigurationContexts()
 		},
 	)

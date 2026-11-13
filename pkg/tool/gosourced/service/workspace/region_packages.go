@@ -1,6 +1,7 @@
 package workspace
 
 import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
 	"golang.org/x/tools/go/packages"
 	"strings"
@@ -11,7 +12,7 @@ func (s *Service) RegionPackages(
 	region string,
 ) ([]*packages.Package, error) {
 	if s.full {
-		all, _, e := load.Packages(directory, "./...")
+		all, _, e := load.Packages(directory, goModConstant.AllPackages)
 
 		return all, e
 	}

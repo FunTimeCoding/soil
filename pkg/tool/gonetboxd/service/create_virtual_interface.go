@@ -1,14 +1,19 @@
 package service
 
-import "github.com/netbox-community/go-netbox/v4"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/netbox-community/go-netbox/v4"
+)
 
 func (s *Service) CreateVirtualInterface(
 	machine string,
 	name string,
 ) (*netbox.VMInterface, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*netbox.VMInterface, error) {
+		func(context.Context) (*netbox.VMInterface, error) {
 			m, e := s.client.VirtualMachine(machine)
 
 			if e != nil {

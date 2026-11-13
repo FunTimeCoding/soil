@@ -72,7 +72,7 @@ var KnownTags = map[string]bool{
 }
 
 const (
-	IndexFormatVersion = "11"
+	IndexFormatVersion = "13"
 
 	StorageName    = "gosourced"
 	IndexDirectory = "index"
@@ -82,6 +82,11 @@ const (
 	IndexFactsKind      = "facts"
 	IndexExternalKind   = "external"
 	IndexReferencesKind = "references"
+	IndexUnitKind       = "unit"
+	IndexClosureKind    = "closure"
+	IndexMarksKind      = "marks"
+
+	FingerprintPackageLine = "package"
 
 	IndexBulkThreshold = 50
 

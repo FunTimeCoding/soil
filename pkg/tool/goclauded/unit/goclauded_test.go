@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/coverage"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/label_change"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
@@ -84,7 +85,7 @@ func TestCoverageComputeIgnoresOtherTools(t *testing.T) {
 	servers := coverage.Compute(
 		[]*tool_call.Call{
 			coverageCall("Bash", "2026-08-20T10:00:00Z"),
-			coverageCall("Read", "2026-08-20T10:00:00Z"),
+			coverageCall(constant.ReadTool, "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{},
 		map[string]string{},
@@ -189,7 +190,9 @@ func TestTranscriptCacheGrownFile(t *testing.T) {
 	assert.Integer(t, 1, len(c.ToolCalls("alfa")))
 	f, e := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
 	assert.Nil(t, e)
-	_, e = f.WriteString(transcriptLine("Read", "2026-08-20T11:00:00Z"))
+	_, e = f.WriteString(
+		transcriptLine(constant.ReadTool, "2026-08-20T11:00:00Z"),
+	)
 	assert.Nil(t, e)
 	errors.PanicClose(f)
 	assert.Integer(t, 2, len(c.ToolCalls("alfa")))

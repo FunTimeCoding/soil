@@ -3,7 +3,6 @@ package gofix
 import (
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/option"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
@@ -20,10 +19,7 @@ func fixModule(
 	all, fileSet := loadThrough(o.Root, resolve.WithMainModule(patterns), w)
 
 	if faces == nil {
-		faces = face.NewWithIndex(
-			index.New(o.IndexDirectory(), o.Root, face.Kind()),
-			all,
-		)
+		faces = face.NewWithIndex(indexHandle(o), all)
 	}
 
 	violations := FindViolations(all, reported, faces)

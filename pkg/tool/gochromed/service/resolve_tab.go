@@ -1,15 +1,21 @@
 package service
 
 import (
+	"context"
 	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 	"strings"
 )
 
 func (s *Service) resolveTab(v *selector.Selector) (*tab.Tab, error) {
-	tabs, e := guarded(s.guard, s.source.Tabs)
+	tabs, e := peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(context.Context) ([]*tab.Tab, error) { return s.source.Tabs() },
+	)
 
 	if e != nil {
 		return nil, e

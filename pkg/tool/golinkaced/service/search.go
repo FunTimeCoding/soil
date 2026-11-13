@@ -1,7 +1,11 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/linkace/link"
+	"github.com/funtimecoding/soil/pkg/linkace/list"
+	"github.com/funtimecoding/soil/pkg/linkace/tag"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/search_result"
 	"strings"
 )
@@ -14,9 +18,12 @@ func (s *Service) Search(
 	lower := strings.ToLower(query)
 
 	if entityType == "" || entityType == "link" {
-		links, e := guarded(
+		links, e := peer.Guarded(
+			context.Background(),
 			s.guard,
-			func() ([]*link.Link, error) { return s.client.Search(query) },
+			func(context.Context) ([]*link.Link, error) {
+				return s.client.Search(query)
+			},
 		)
 
 		if e != nil {
@@ -27,7 +34,13 @@ func (s *Service) Search(
 	}
 
 	if entityType == "" || entityType == "list" {
-		all, e := guarded(s.guard, s.client.Lists)
+		all, e := peer.Guarded(
+			context.Background(),
+			s.guard,
+			func(context.Context) ([]*list.List, error) {
+				return s.client.Lists()
+			},
+		)
 
 		if e != nil {
 			return nil, e
@@ -41,7 +54,13 @@ func (s *Service) Search(
 	}
 
 	if entityType == "" || entityType == "tag" {
-		all, e := guarded(s.guard, s.client.Tags)
+		all, e := peer.Guarded(
+			context.Background(),
+			s.guard,
+			func(context.Context) ([]*tag.Tag, error) {
+				return s.client.Tags()
+			},
+		)
 
 		if e != nil {
 			return nil, e

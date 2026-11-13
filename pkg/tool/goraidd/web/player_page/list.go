@@ -29,10 +29,12 @@ func List(rows []record.Attendance) gomponents.Node {
 					),
 				),
 				html.Td(gomponents.Text(r.Characters)),
-				component.NumericCell(
-					fmt.Sprintf("%d / %d", r.Fights, r.Available),
+				html.Td(
+					gomponents.Text(
+						fmt.Sprintf("%d / %d", r.Fights, r.Available),
+					),
 				),
-				component.NumericCell(fmt.Sprintf("%d%%", share)),
+				html.Td(gomponents.Text(fmt.Sprintf("%d%%", share))),
 			),
 		)
 	}

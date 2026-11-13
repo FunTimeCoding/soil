@@ -25,7 +25,11 @@ func (s *Service) ImportersLoad(
 	}
 
 	if s.full {
-		return load.Around(directory, load.ReachedPaths(g, reach), "./...")
+		return load.Around(
+			directory,
+			load.ReachedPaths(g, reach),
+			goModConstant.AllPackages,
+		)
 	}
 
 	prefix := join.Empty(packagePath, "/")
@@ -48,7 +52,11 @@ func (s *Service) ImportersLoad(
 	patterns = slices.Compact(slices.Sorted(slices.Values(patterns)))
 
 	if 2*len(patterns) > len(units) {
-		return load.Around(directory, load.ReachedPaths(g, reach), "./...")
+		return load.Around(
+			directory,
+			load.ReachedPaths(g, reach),
+			goModConstant.AllPackages,
+		)
 	}
 
 	return load.Packages(directory, patterns...)

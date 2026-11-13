@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/habitica/score"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/habitica/score"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Score(
 	taskIdentifier string,
 	direction string,
 ) (*score.Score, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*score.Score, error) {
+		func(context.Context) (*score.Score, error) {
 			return s.client.Score(taskIdentifier, direction)
 		},
 	)

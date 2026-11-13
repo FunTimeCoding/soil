@@ -20,8 +20,8 @@ func listing(summary *token_summary.Summary) gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				numericCell(c.Block),
-				numericCell(c.Description),
+				html.Td(gomponents.Textf("%d", c.Block)),
+				html.Td(gomponents.Textf("%d", c.Description)),
 				html.Td(memory_page.Link(c.Identifier, c.Name)),
 				html.Td(gomponents.Text(join.Space(c.Tags...))),
 			),

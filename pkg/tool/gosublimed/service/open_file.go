@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
 )
 
@@ -10,9 +12,10 @@ func (s *Service) OpenFile(path string) (*view.View, error) {
 		return nil, validation.New("file_path is required")
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*view.View, error) {
+		func(context.Context) (*view.View, error) {
 			return s.client.OpenFile(path)
 		},
 	)

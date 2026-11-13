@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
 )
 
@@ -18,9 +20,10 @@ func (s *Service) Reveal(
 		return "", validation.New("key is required")
 	}
 
-	values, e := guarded(
+	values, e := peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (map[string]string, error) {
+		func(context.Context) (map[string]string, error) {
 			return s.client.Read(path)
 		},
 	)

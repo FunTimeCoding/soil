@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) EditPage(
@@ -36,9 +38,10 @@ func (s *Service) EditPage(
 		status = atlassianConstant.ConfluenceDraftStatus
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.confluenceGuard,
-		func() (*page.Page, error) {
+		func(context.Context) (*page.Page, error) {
 			return s.confluence.PutPage(
 				identifier,
 				title,

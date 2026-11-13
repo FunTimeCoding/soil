@@ -12,7 +12,7 @@ func (c *Client) LinksByListPage(
 	identifier int,
 	p int,
 ) (*page.Page[*link.Link], error) {
-	var r response.LinkResponse
+	var r response.LinkPage
 
 	if e := c.basic.Get(
 		fmt.Sprintf("lists/%d/links", identifier),

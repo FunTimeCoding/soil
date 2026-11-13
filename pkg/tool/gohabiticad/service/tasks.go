@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/habitica/task"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Tasks(taskType string) ([]*task.Task, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*task.Task, error) {
+		func(context.Context) ([]*task.Task, error) {
 			return s.client.Tasks(taskType)
 		},
 	)

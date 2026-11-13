@@ -3,6 +3,7 @@ package string_constant
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"path/filepath"
 	"testing"
 )
 
@@ -19,6 +20,59 @@ func TestFlagged(t *testing.T) {
 		t,
 		results,
 		`string literal "query" has constant constant.Query`,
+	)
+}
+
+func TestFlaggedFromOwnConstantFile(t *testing.T) {
+	directory := t.TempDir()
+	testutil.WriteModFile(t, directory, "alfa")
+	testutil.WriteFile(
+		t,
+		directory,
+		"constant.go",
+		"package alfa\n\nconst Bravo = \"charlie delta\"\n",
+	)
+	testutil.WriteFile(
+		t,
+		directory,
+		"echo.go",
+		"package alfa\n\nfunc Echo() {\n\tprintln(\"charlie delta\")\n}\n",
+	)
+	p, results := testutil.LoadDirectory(t, directory)
+	string_constant.Check(p, results)
+	testutil.AssertBlocked(t, results, 1)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		`string literal "charlie delta" has constant alfa.Bravo`,
+	)
+}
+
+func TestFlaggedFromParentConstantDirectory(t *testing.T) {
+	directory := t.TempDir()
+	testutil.WriteModFile(t, directory, "alfa")
+	testutil.WriteFile(
+		t,
+		directory,
+		"pkg/constant/constant.go",
+		"package constant\n\nconst Bravo = \"charlie delta\"\n",
+	)
+	testutil.WriteFile(
+		t,
+		directory,
+		"pkg/echo/echo.go",
+		"package echo\n\nfunc Echo() {\n\tprintln(\"charlie delta\")\n}\n",
+	)
+	p, results := testutil.LoadDirectory(
+		t,
+		filepath.Join(directory, "pkg/echo"),
+	)
+	string_constant.Check(p, results)
+	testutil.AssertBlocked(t, results, 1)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		`string literal "charlie delta" has constant constant.Bravo`,
 	)
 }
 

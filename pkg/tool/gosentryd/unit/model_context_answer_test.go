@@ -7,9 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/service_tester"
-	"net"
-	"os"
-	"syscall"
 	"testing"
 )
 
@@ -47,11 +44,7 @@ func TestUnclassifiedFailureIsCaptured(t *testing.T) {
 
 func TestOutageIsAnsweredWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = &net.OpError{
-		Op:  "dial",
-		Net: "tcp",
-		Err: os.NewSyscallError("connect", syscall.ECONNREFUSED),
-	}
+	c.Failure = refusedDial()
 	m := memory.New()
 	s := servedTools(t, c, m)
 

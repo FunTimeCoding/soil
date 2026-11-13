@@ -72,7 +72,7 @@ func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {
 		prometheus.NewRegistry(),
 	)
 	workers := d.Workers()
-	assert.Count(t, 13, workers)
+	assert.Count(t, 14, workers)
 
 	for n, w := range workers {
 		_, guard := w.(*peer.Guard)
@@ -126,7 +126,7 @@ func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 	)
 	t.Cleanup(d.Close)
 	workers := d.Workers()
-	assert.Count(t, 11, workers)
+	assert.Count(t, 12, workers)
 
 	for n, w := range workers {
 		_, guard := w.(*peer.Guard)

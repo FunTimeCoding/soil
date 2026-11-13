@@ -6,7 +6,22 @@ import (
 )
 
 func (p *Page) Commands() []*palette.Command {
+	if !p.HasCommandPalette() {
+		return nil
+	}
+
 	var result []*palette.Command
+
+	if name := p.identity.Name(); name != "" {
+		result = append(
+			result,
+			palette.NewCommand(
+				name,
+				constant.RootPath,
+				constant.PaletteNavigate,
+			),
+		)
+	}
 
 	for _, i := range p.items {
 		result = append(

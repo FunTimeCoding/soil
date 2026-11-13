@@ -3,13 +3,17 @@ package example
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forwarding_function"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 )
 
 func Census() {
-	all, _, e := resolve.LoadPackages(soil.CurrentDirectory, "./...")
+	all, _, e := resolve.LoadPackages(
+		soil.CurrentDirectory,
+		goModConstant.AllPackages,
+	)
 	errors.PanicOnError(e)
 	results := output.NewResultsWithDirectory(soil.CurrentDirectory)
 

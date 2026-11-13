@@ -25,23 +25,33 @@ func Detail(players []record.RaidPlayer) gomponents.Node {
 					),
 				),
 				component.ProfessionCell(r.Profession),
-				component.NumericCell(fmt.Sprintf("%d", r.Fights)),
-				component.NumericCell(component.PerSecond(r.Damage, seconds, 1)),
-				component.NumericCell(
-					component.PerSecond(r.Healing, seconds, 1),
+				html.Td(gomponents.Text(fmt.Sprintf("%d", r.Fights))),
+				html.Td(
+					gomponents.Text(component.PerSecond(r.Damage, seconds, 1)),
 				),
-				component.NumericCell(
-					component.PerSecond(r.ConditionCleanses, seconds, 1),
+				html.Td(
+					gomponents.Text(component.PerSecond(r.Healing, seconds, 1)),
 				),
-				component.NumericCell(
-					component.PerSecond(r.BoonStrips, seconds, 2),
+				html.Td(
+					gomponents.Text(
+						component.PerSecond(r.ConditionCleanses, seconds, 1),
+					),
 				),
-				component.NumericCell(
-					component.PerSecond(r.Barrier, seconds, 1),
+				html.Td(
+					gomponents.Text(
+						component.PerSecond(r.BoonStrips, seconds, 2),
+					),
 				),
-				component.NumericCell(component.PerSecond(r.Downs, seconds, 1)),
-				component.NumericCell(component.PerMinute(r.DeadCount, minutes)),
-				component.NumericCell(fmt.Sprintf("%.0f", r.DistToCom)),
+				html.Td(
+					gomponents.Text(component.PerSecond(r.Barrier, seconds, 1)),
+				),
+				html.Td(
+					gomponents.Text(component.PerSecond(r.Downs, seconds, 1)),
+				),
+				html.Td(
+					gomponents.Text(component.PerMinute(r.DeadCount, minutes)),
+				),
+				html.Td(gomponents.Text(fmt.Sprintf("%.0f", r.DistToCom))),
 			),
 		)
 	}

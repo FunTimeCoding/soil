@@ -15,15 +15,9 @@ var ConversationStyle = join.Empty(
 )
 
 const ConversationLayoutStyle = `
-	html, body {
-		height: 100%;
-		margin: 0;
-		overflow: hidden;
-	}
 	.conversation-layout {
 		display: grid;
 		grid-template-columns: 350px 1fr;
-		height: 100vh;
 	}
 	.sidebar {
 		overflow-y: auto;
@@ -31,13 +25,25 @@ const ConversationLayoutStyle = `
 		padding: 0.5rem;
 	}
 	.sidebar-entry {
+		position: relative;
 		padding: 0.5rem;
-		cursor: pointer;
 		border-radius: var(--pico-border-radius);
 		margin-bottom: 0.25rem;
 	}
-	.sidebar-entry:hover {
+	.sidebar-entry:hover,
+	.sidebar-entry[aria-current] {
 		background: var(--pico-muted-border-color);
+	}
+	.entry-link {
+		color: inherit;
+	}
+	.entry-link::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+	}
+	.sidebar-more {
+		color: var(--pico-muted-color);
 	}
 	.sidebar-entry small {
 		color: var(--pico-muted-color);
@@ -49,8 +55,9 @@ const ConversationLayoutStyle = `
 		align-items: center;
 	}
 	.rename-icon {
+		position: relative;
+		z-index: 1;
 		opacity: 0;
-		cursor: pointer;
 		font-size: 0.85rem;
 	}
 	.sidebar-entry:hover .rename-icon {
@@ -101,18 +108,16 @@ const ConversationMessageStyle = `	.panel {
 const ConversationSearchStyle = `	.search-form {
 		margin-bottom: 0.5rem;
 	}
-	.search-input {
-		width: 100%;
-		padding: 0.4rem 0.5rem;
-		margin-bottom: 0.25rem;
-		font-size: 0.85rem;
-	}
-	.search-kinds {
+	.search-form fieldset {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.75rem;
 		font-size: 0.8rem;
 	}
-	.search-kinds label {
+	.search-form fieldset legend {
+		width: 100%;
+	}
+	.search-form fieldset label {
 		margin: 0;
 	}
 	.search-progress {
@@ -124,9 +129,16 @@ const ConversationSearchStyle = `	.search-form {
 		margin-bottom: 0.25rem;
 	}
 	.search-result summary {
-		padding: 0.5rem;
+		position: relative;
+		padding: 0.5rem 2rem 0.5rem 0.5rem;
 		cursor: pointer;
 		border-radius: var(--pico-border-radius);
+	}
+	.search-result summary::after {
+		position: absolute;
+		right: 0.5rem;
+		top: 0.75rem;
+		margin: 0;
 	}
 	.search-result summary:hover {
 		background: var(--pico-muted-border-color);
@@ -136,9 +148,10 @@ const ConversationSearchStyle = `	.search-form {
 		display: block;
 	}
 	.search-snippet {
+		display: block;
+		color: inherit;
 		padding: 0.35rem 0.5rem 0.35rem 1.25rem;
 		font-size: 0.85rem;
-		cursor: pointer;
 		border-radius: var(--pico-border-radius);
 		word-wrap: break-word;
 	}

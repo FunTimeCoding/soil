@@ -1,8 +1,10 @@
 package search_page
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web/memory_page"
+	"github.com/funtimecoding/soil/pkg/web/component/highlight"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -24,6 +26,15 @@ func Results(
 			html.Tr(
 				html.Td(memory_page.Link(m.Identifier, m.Name)),
 				html.Td(html.Small(gomponents.Text(m.Description))),
+				html.Td(
+					html.Small(
+						highlight.NewMarked(
+							m.Snippet,
+							constant.SnippetOpen,
+							constant.SnippetClose,
+						).Node(),
+					),
+				),
 				html.Td(gomponents.Text(m.Type)),
 				html.Td(memory_page.TagChips(m.Tags)),
 			),
@@ -36,7 +47,7 @@ func Results(
 				len(results) > 0,
 				html.P(gomponents.Text(resultCount(len(results)))),
 			),
-			table.New("Name", "Description", "Type", "Tags").
+			table.New("Name", "Description", "Match", "Type", "Tags").
 				Rows(rows).
 				Empty("No results.").
 				Node(),

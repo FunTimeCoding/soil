@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
@@ -14,7 +15,7 @@ func (s *Service) Search(
 	o.Reranker = s.reranker
 	var found []result.Search
 
-	if o.Mode == "keyword" {
+	if o.Mode == constant.KeywordMode {
 		results, e := s.store.SearchKeyword(
 			o.Query,
 			o.Limit+len(o.Exclude),

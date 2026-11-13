@@ -26,7 +26,7 @@ func (s *Server) delete(
 	deleted, g := s.service.DeleteDocument(collection, path)
 
 	if g != nil {
-		return s.captureFail(x, g, "delete failed")
+		return s.answer(x, g)
 	}
 
 	if !deleted {

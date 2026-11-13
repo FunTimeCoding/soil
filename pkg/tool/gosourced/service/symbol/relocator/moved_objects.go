@@ -35,7 +35,7 @@ func MovedObjects(
 			return nil
 		}
 
-		expanded, e := ExpandFileSymbols(file)
+		expanded, e := FileSymbols(file)
 
 		if e != nil {
 			return nil

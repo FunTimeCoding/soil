@@ -2,13 +2,16 @@ package option
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/lint/document_cache"
+	"github.com/funtimecoding/soil/pkg/source/warm_forest"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/writer"
+	"os"
 	"slices"
 	"strings"
 )
@@ -17,7 +20,12 @@ func New(
 	raw string,
 	verbose bool,
 ) *Lint {
-	result := &Lint{Verbose: verbose}
+	result := &Lint{
+		Verbose:   verbose,
+		Trace:     os.Stdout,
+		Trees:     warm_forest.New(),
+		Documents: document_cache.New(),
+	}
 
 	if raw != "" {
 		for _, skip := range split.Comma(raw) {
@@ -48,7 +56,8 @@ func New(
 	}
 
 	if verbose {
-		console.Format(
+		writer.Print(
+			result.Trace,
 			"Skips (%d): %s\n",
 			len(result.Skips),
 			join.Comma(result.Skips),

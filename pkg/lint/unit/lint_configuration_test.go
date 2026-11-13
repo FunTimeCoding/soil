@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/repository"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -20,9 +21,14 @@ func TestCheckReflowSkipsConfiguredDirectory(t *testing.T) {
 	var r output.Results
 	o := option.New("", false)
 	o.ReflowSkips = []string{"pkg/runbook/"}
-	fixes := lint.Check(repository.New(t.TempDir(), v), o, &r)
-	assert.Boolean(t, false, fixes.Has("pkg/runbook/Alert.md"))
-	assert.Boolean(t, true, fixes.Has("doc/prose.md"))
+	root := t.TempDir()
+	fixes := lint.Check(repository.New(root, v), o, &r)
+	assert.Boolean(
+		t,
+		false,
+		fixes.Holds(filepath.Join(root, "pkg/runbook/Alert.md")),
+	)
+	assert.Boolean(t, true, fixes.Holds(filepath.Join(root, "doc/prose.md")))
 }
 
 func TestCheckReflowRunsEverywhereWithoutSkips(t *testing.T) {
@@ -30,10 +36,11 @@ func TestCheckReflowRunsEverywhereWithoutSkips(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/runbook/Alert.md", long)
 	var r output.Results
-	fixes := lint.Check(
-		repository.New(t.TempDir(), v),
-		option.New("", false),
-		&r,
+	root := t.TempDir()
+	fixes := lint.Check(repository.New(root, v), option.New("", false), &r)
+	assert.Boolean(
+		t,
+		true,
+		fixes.Holds(filepath.Join(root, "pkg/runbook/Alert.md")),
 	)
-	assert.Boolean(t, true, fixes.Has("pkg/runbook/Alert.md"))
 }

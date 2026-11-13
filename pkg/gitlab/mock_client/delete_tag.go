@@ -1,11 +1,24 @@
 package mock_client
 
-import "context"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
+	"slices"
+)
 
 func (c *Client) DeleteTag(
 	_ context.Context,
 	_ int64,
-	_ string,
+	name string,
 ) error {
-	return c.failure
+	if c.failure != nil {
+		return c.failure
+	}
+
+	c.tags = slices.DeleteFunc(
+		c.tags,
+		func(t *tag.Tag) bool { return t.Name == name },
+	)
+
+	return nil
 }

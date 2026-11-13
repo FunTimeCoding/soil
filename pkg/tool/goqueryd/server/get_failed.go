@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -19,9 +18,7 @@ func (s *Server) GetFailed(
 	failed, e := s.service.Failed(collection)
 
 	if e != nil {
-		return server.GetFailed500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.GetFailed500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	chunks := make([]server.FailedChunk, len(failed))

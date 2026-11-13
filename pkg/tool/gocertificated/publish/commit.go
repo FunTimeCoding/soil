@@ -36,10 +36,16 @@ func (p *Publisher) Commit(
 		)
 	}
 
-	result, e := p.forge.CommitActions(x, p.project, p.branch, message, action)
+	project, e := p.projectIdentifier(x)
 
 	if e != nil {
 		return "", e
+	}
+
+	result, f := p.forge.CommitActions(x, project, p.branch, message, action)
+
+	if f != nil {
+		return "", f
 	}
 
 	return result.Identifier, nil

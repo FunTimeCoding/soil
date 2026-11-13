@@ -86,12 +86,7 @@ func (s *Service) extractTypeThrough(
 		)
 	}
 
-	entries, message := relocator.GatherTypeEntries(
-		set,
-		p,
-		typeObject,
-		targetFile,
-	)
+	entries, message := relocator.TypeEntries(set, p, typeObject, targetFile)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
@@ -216,7 +211,7 @@ func (s *Service) extractTypeThrough(
 		}
 	}
 
-	qualifications, blocked := relocator.PlanQualifications(
+	qualifications, blocked := relocator.Qualifications(
 		set,
 		external,
 		packagePath,

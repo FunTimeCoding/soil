@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -41,12 +40,8 @@ func (s *Server) search(
 
 	outcome, f := s.service.Search(x, o)
 
-	if unavailable.Is(f) {
-		return response.Fail("%v", f)
-	}
-
 	if f != nil {
-		return s.captureFail(x, f, "search failed")
+		return s.answer(x, f)
 	}
 
 	return response.Success(notation.MarshalIndent(outcome))

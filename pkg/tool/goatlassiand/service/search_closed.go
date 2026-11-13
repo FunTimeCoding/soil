@@ -1,13 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) searchClosed(
 	query string,
 	closed string,
 ) ([]*issue.Issue, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.jiraGuard,
-		func() ([]*issue.Issue, error) { return s.jira.Search(query, closed) },
+		func(context.Context) ([]*issue.Issue, error) {
+			return s.jira.Search(query, closed)
+		},
 	)
 }

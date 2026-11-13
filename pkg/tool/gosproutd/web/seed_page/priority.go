@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/seed"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -26,10 +25,7 @@ func Priority(seeds []seed.Seed) gomponents.Node {
 						html.Value(fmt.Sprintf("%d", v.Identifier)),
 					),
 				),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("%d", v.Position),
-				),
+				html.Td(gomponents.Textf("%d", v.Position)),
 				html.Td(gomponents.Text(v.Name)),
 				html.Td(
 					html.Class(constant.SeedPathClass),

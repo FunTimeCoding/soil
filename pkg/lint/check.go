@@ -1,52 +1,84 @@
 package lint
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/repository"
 	"github.com/funtimecoding/soil/pkg/lint/spacing"
-	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/lint/types/checker_step"
+	"github.com/funtimecoding/soil/pkg/source/layer"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func Check(
 	repo *repository.Repository,
 	o *option.Lint,
 	r *output.Results,
-) *virtual_file_system.System {
-	fixes := virtual_file_system.New()
+) *layer.Layer {
+	fixes := o.Layer
+
+	if fixes == nil {
+		fixes = layer.New(nil)
+	}
+
 	runCheckers(
-		repo.Files,
+		repo,
 		fixes,
 		goFiles(repo.Files, o),
-		[]Checker{
-			Import,
-			Function,
-			Variable,
-			PackageName,
-			StrayConstant,
-			FixtureDirective,
-			spacing.Check,
-			VariableGrouping,
+		[]*checker_step.Step{
+			checker_step.New(constant.StepImport, Import, true),
+			checker_step.New(constant.StepFunction, Function, true),
+			checker_step.New(constant.StepVariable, Variable, true),
+			checker_step.New(constant.StepPackageName, PackageName, true),
+			checker_step.New(constant.StepStrayConstant, StrayConstant, true),
+			checker_step.New(
+				constant.StepFixtureDirective,
+				FixtureDirective,
+				true,
+			),
+			checker_step.New(constant.StepSpacing, spacing.Check, true),
+			checker_step.New(
+				constant.StepVariableGrouping,
+				VariableGrouping,
+				true,
+			),
 		},
 		o,
 		r,
 	)
 	runCheckers(
-		repo.Files,
+		repo,
 		fixes,
 		markupFiles(repo.Files, o),
-		[]Checker{Markup},
+		[]*checker_step.Step{
+			checker_step.New(constant.StepMarkup, Markup, true),
+		},
 		o,
 		r,
 	)
 	runCheckers(
-		repo.Files,
+		repo,
 		fixes,
 		markdownFiles(repo.Files, o),
-		[]Checker{
-			Pointers(newResolver(repo, o), r.AddUnchecked),
-			Unless(o.ReflowSkips, Reflow),
-			InterruptingList,
+		[]*checker_step.Step{
+			checker_step.New(
+				constant.StepPointers,
+				pointerChecker(repo, o, r),
+				false,
+			),
+			checker_step.New(
+				join.Comma(
+					append([]string{constant.StepReflow}, o.ReflowSkips...),
+				),
+				Unless(o.ReflowSkips, Reflow),
+				true,
+			),
+			checker_step.New(
+				constant.StepInterruptingList,
+				InterruptingList,
+				true,
+			),
 		},
 		o,
 		r,

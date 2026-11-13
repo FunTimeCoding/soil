@@ -13,7 +13,7 @@ func EditForm(s *session.Session) gomponents.Node {
 		[]gomponents.Node{
 			html.H3(gomponents.Text("Edit Session")),
 			entry.New(ActionPath(s.Identifier, constant.EditAction), "Save").
-				Record().
+				Sideways().
 				Text(constant.Alias, "Name", s.AliasValue()).
 				TextArea(constant.Description, "Description", s.Description).
 				Lines("3").

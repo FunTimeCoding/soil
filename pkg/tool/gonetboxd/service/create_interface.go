@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
 )
@@ -23,9 +25,10 @@ func (s *Service) CreateInterface(
 		}
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*network.Interface, error) {
+		func(context.Context) (*network.Interface, error) {
 			d, e := s.client.Device(device)
 
 			if e != nil {

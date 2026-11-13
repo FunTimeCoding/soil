@@ -25,6 +25,7 @@ const (
 	CopyCommand            = "cp"
 	GitCommand             = "git"
 	NullDevice             = "/dev/null"
+	GlobCharacters         = "*?["
 	InPlaceFlag            = "-i"
 	InPlaceLongFlag        = "--in-place"
 	FixFlag                = "--fix"

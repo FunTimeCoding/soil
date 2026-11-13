@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
@@ -70,9 +71,9 @@ func (s *Service) UpdateIssue(
 		len(fields) > 0
 
 	if hasFieldChanges {
-		if h := attempt(
-			s.jiraGuard,
-			func() error { return s.jira.UpdateNative(raw) },
+		if h := s.jiraGuard.Attempt(
+			context.Background(),
+			func(context.Context) error { return s.jira.UpdateNative(raw) },
 		); h != nil {
 			return nil, h
 		}
@@ -85,9 +86,9 @@ func (s *Service) UpdateIssue(
 			return nil, i
 		}
 
-		if j := attempt(
-			s.jiraGuard,
-			func() error { return s.jira.Assign(key, user) },
+		if j := s.jiraGuard.Attempt(
+			context.Background(),
+			func(context.Context) error { return s.jira.Assign(key, user) },
 		); j != nil {
 			return nil, j
 		}

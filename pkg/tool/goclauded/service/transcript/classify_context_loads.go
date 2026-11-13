@@ -10,8 +10,9 @@ import (
 func classifyContextLoads(
 	sessionIdentifier string,
 	calls []*tool_call.Call,
-) []context_load.Load {
+) ([]context_load.Load, []bool) {
 	var result []context_load.Load
+	var profiles []bool
 	modePending := false
 
 	for _, c := range calls {
@@ -34,9 +35,17 @@ func classifyContextLoads(
 		}
 
 		if c.Name == constant.ProfileTool {
+			loads, readable := profileLoads(sessionIdentifier, c)
+			result = append(result, loads...)
+			profiles = append(profiles, readable)
+
+			continue
+		}
+
+		if c.Name == constant.ReadTool {
 			result = append(
 				result,
-				profileLoads(sessionIdentifier, c)...,
+				persistedProfileLoads(sessionIdentifier, c)...,
 			)
 
 			continue
@@ -59,5 +68,5 @@ func classifyContextLoads(
 		}
 	}
 
-	return result
+	return result, profiles
 }

@@ -36,6 +36,9 @@ const (
 	EmbedderPeer      = "embedder"
 	DocumentKind      = "document"
 	HybridMode        = "hybrid"
+	KeywordMode       = "keyword"
+	ResultsIdentifier = "search-results"
+	ResultsTarget     = "#search-results"
 	EmbeddingPending  = "stored; embedding pending: %v"
 	EmbeddingRefused  = "stored; refused chunks skipped: %v"
 	EmbeddingDeferred = "pending embeddings wait: %v"
@@ -73,9 +76,9 @@ const (
 	DocumentPageSize = 20
 	SearchPageSize   = 20
 
-	FixtureAuthorKey  = "author"
-	FixtureTagKey     = "tag"
-	FixtureBuildValue = "build"
+	FixtureAuthorKey   = "author"
+	FixtureTagKey      = "tag"
+	FixtureBuildValue  = "build"
 	FixtureEmbedTarget = "ollama://server.test:11434"
 	FixtureEmbedModel  = "fixture-embed"
 

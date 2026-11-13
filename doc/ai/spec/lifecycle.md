@@ -135,6 +135,20 @@ Builder methods on `*server.Server`:
 Mixed servers (REST routes + MCP/SSE on the same mux) omit
 `WithProtected()` - the streaming endpoint decides the timeout.
 
+## Health and version
+
+Every server serves two routes of its own, after the setup function has
+registered the daemon's: GET /health answers 200, and GET /version answers the
+running binary's report - `name`, `version`, `git_hash`, `commit_date`,
+`module`, `dirty` - read from Go's build information (`pkg/stamp`), the same
+shape as `--version --notation`. A daemon never registers either itself, and no
+OpenAPI spec declares them.
+
+The health route is what a Kubernetes liveness probe dials, on the web port and
+on the metric port alike. The version route is the ground truth for a rollout,
+where the image tag is only a claim. Probes reach pods directly, past the
+ingress, so both stay outside any authentication a daemon adds to its routes.
+
 ## Registration Order Matters
 
 Components start in the order they are registered. This is intentional:
@@ -168,7 +182,7 @@ func Run(o *option.Config, r face.Reporter) {
                 constant.Identity,
                 o.Address,
                 func(m *http.ServeMux) {
-                    m.HandleFunc("/health", health)
+                    m.HandleFunc("GET /status", status)
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
         ).

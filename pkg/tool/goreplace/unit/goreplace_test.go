@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	textConstant "github.com/funtimecoding/soil/pkg/text/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goreplace"
-	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
 	"os"
 	"testing"
 )
@@ -152,7 +152,7 @@ func TestSpanUntilDeletesSectionAndKeepsEnd(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			spanBlock("## Alfa", constant.UntilMarker, "## Bravo", ""),
+			spanBlock("## Alfa", textConstant.UntilMarker, "## Bravo", ""),
 			false,
 			&out,
 		),
@@ -173,7 +173,7 @@ func TestSpanUntilKeepsEndOnItsOwnLine(t *testing.T) {
 			path,
 			spanBlock(
 				"## Alfa",
-				constant.UntilMarker,
+				textConstant.UntilMarker,
 				"## Bravo",
 				"## Alfa\nnew",
 			),
@@ -190,7 +190,7 @@ func TestSpanThroughRemovesEnd(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			spanBlock("charlie", constant.ThroughMarker, "delta.", "X"),
+			spanBlock("charlie", textConstant.ThroughMarker, "delta.", "X"),
 			false,
 			&bytes.Buffer{},
 		),
@@ -204,7 +204,7 @@ func TestSpanToEndReplacesRest(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			spanBlock("## Echo", constant.ToEndMarker, "", "## Echo\nnone"),
+			spanBlock("## Echo", textConstant.ToEndMarker, "", "## Echo\nnone"),
 			false,
 			&bytes.Buffer{},
 		),
@@ -218,7 +218,7 @@ func TestSpanTakesFirstEndAfterStart(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			spanBlock("## Start", constant.UntilMarker, "## End", ""),
+			spanBlock("## Start", textConstant.UntilMarker, "## End", ""),
 			false,
 			&bytes.Buffer{},
 		),
@@ -230,7 +230,7 @@ func TestSpanRefusesMissingEnd(t *testing.T) {
 	path := target(t, "## Bravo\n## Alfa\nx\n")
 	e := goreplace.Run(
 		path,
-		spanBlock("## Alfa", constant.UntilMarker, "## Bravo", ""),
+		spanBlock("## Alfa", textConstant.UntilMarker, "## Bravo", ""),
 		false,
 		&bytes.Buffer{},
 	)
@@ -261,7 +261,7 @@ func TestSpanRefusesTextAfterToEnd(t *testing.T) {
 	path := target(t, "alpha\n")
 	e := goreplace.Run(
 		path,
-		spanBlock("alpha", constant.ToEndMarker, "beta", ""),
+		spanBlock("alpha", textConstant.ToEndMarker, "beta", ""),
 		false,
 		&bytes.Buffer{},
 	)
@@ -279,7 +279,7 @@ func TestAfterInsertsBelowAnchorLine(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			insertBlock(constant.AfterMarker, "| a |", "| c | 3 |"),
+			insertBlock(textConstant.AfterMarker, "| a |", "| c | 3 |"),
 			false,
 			&out,
 		),
@@ -294,7 +294,7 @@ func TestAfterLastLineWithoutNewline(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			insertBlock(constant.AfterMarker, "beta", "gamma"),
+			insertBlock(textConstant.AfterMarker, "beta", "gamma"),
 			false,
 			&bytes.Buffer{},
 		),
@@ -308,7 +308,7 @@ func TestBeforeInsertsAboveAnchorLine(t *testing.T) {
 		t,
 		goreplace.Run(
 			path,
-			insertBlock(constant.BeforeMarker, "**Foxtrot**", "beta"),
+			insertBlock(textConstant.BeforeMarker, "**Foxtrot**", "beta"),
 			false,
 			&bytes.Buffer{},
 		),
@@ -323,8 +323,8 @@ func TestInsertAtSpanStartIsNoOverlap(t *testing.T) {
 		goreplace.Run(
 			path,
 			join.Empty(
-				spanBlock("## S", constant.UntilMarker, "## E", "## T"),
-				insertBlock(constant.AfterMarker, "a", "b"),
+				spanBlock("## S", textConstant.UntilMarker, "## E", "## T"),
+				insertBlock(textConstant.AfterMarker, "a", "b"),
 			),
 			false,
 			&bytes.Buffer{},
@@ -338,8 +338,8 @@ func TestInsertRefusesAnchorSpanRemoves(t *testing.T) {
 	e := goreplace.Run(
 		path,
 		join.Empty(
-			spanBlock("## S", constant.UntilMarker, "## E", ""),
-			insertBlock(constant.AfterMarker, "x", "y"),
+			spanBlock("## S", textConstant.UntilMarker, "## E", ""),
+			insertBlock(textConstant.AfterMarker, "x", "y"),
 		),
 		false,
 		&bytes.Buffer{},
@@ -356,7 +356,7 @@ func TestAfterRefusesMultilineAnchor(t *testing.T) {
 	path := target(t, "alpha\nbeta\n")
 	e := goreplace.Run(
 		path,
-		insertBlock(constant.AfterMarker, "alpha\nbeta", "x"),
+		insertBlock(textConstant.AfterMarker, "alpha\nbeta", "x"),
 		false,
 		&bytes.Buffer{},
 	)
@@ -371,7 +371,7 @@ func TestAfterRefusesAmbiguousAnchor(t *testing.T) {
 	path := target(t, "| a |\n| a |\n")
 	e := goreplace.Run(
 		path,
-		insertBlock(constant.AfterMarker, "| a |", "x"),
+		insertBlock(textConstant.AfterMarker, "| a |", "x"),
 		false,
 		&bytes.Buffer{},
 	)

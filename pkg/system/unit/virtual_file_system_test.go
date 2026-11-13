@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func TestWriteRead(t *testing.T) {
@@ -53,6 +54,44 @@ func TestFilesSorted(t *testing.T) {
 	v.WriteString("a.yaml", "")
 	v.WriteString("c.yaml", "")
 	assert.Any(t, []string{"a.yaml", "b.yaml", "c.yaml"}, v.Files())
+}
+
+func TestFilesFollowEveryChange(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("b.yaml", "")
+	assert.Strings(t, []string{"b.yaml"}, v.Files())
+	v.WriteString("a.yaml", "")
+	v.AddFile("c.yaml", nil, time.Time{})
+	v.AddMetadata("d.yaml", 0, time.Time{})
+	assert.Strings(
+		t,
+		[]string{"a.yaml", "b.yaml", "c.yaml", "d.yaml"},
+		v.Files(),
+	)
+	v.Delete("b.yaml")
+	assert.Strings(t, []string{"a.yaml", "c.yaml", "d.yaml"}, v.Files())
+}
+
+func TestFilesKeepsListingFromCaller(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("a.yaml", "")
+	v.Files()[0] = "z.yaml"
+	assert.Strings(t, []string{"a.yaml"}, v.Files())
+}
+
+func TestFromSkippingReadsNothingBelowSkippedDirectory(t *testing.T) {
+	d := t.TempDir()
+	v := virtual_file_system.New()
+	v.WriteString("alfa/a.txt", "")
+	v.WriteString("bravo/b.txt", "")
+	v.WriteString("charlie/bravo/c.txt", "")
+	v.Flush(d)
+	skipped := virtual_file_system.FromSkipping(
+		d,
+		func(name string) bool { return name == "bravo" },
+	)
+	assert.Strings(t, []string{"alfa/a.txt"}, skipped.Files())
+	assert.Integer(t, 3, len(virtual_file_system.From(d).Files()))
 }
 
 func TestVirtualFileSystemDirectoryExists(t *testing.T) {

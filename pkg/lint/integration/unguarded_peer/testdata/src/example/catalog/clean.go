@@ -154,3 +154,37 @@ type Plain struct {
 func (p *Plain) Fetch(title string) (string, error) {
 	return p.client.Book(context.Background(), title)
 }
+
+func (s *Service) Through(title string) (string, error) {
+	return peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(x context.Context) (string, error) {
+			return s.client.Book(x, title)
+		},
+	)
+}
+
+func (s *Service) Typed(title string) (string, error) {
+	return peer.Guarded[string](
+		context.Background(),
+		s.guard,
+		func(x context.Context) (string, error) {
+			return s.client.Book(x, title)
+		},
+	)
+}
+
+func (s *Service) via(
+	call func(context.Context) (string, error),
+) (string, error) {
+	return peer.Guarded(context.Background(), s.guard, call)
+}
+
+func (s *Service) Via(title string) (string, error) {
+	return s.via(
+		func(x context.Context) (string, error) {
+			return s.client.Book(x, title)
+		},
+	)
+}

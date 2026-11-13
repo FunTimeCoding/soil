@@ -92,6 +92,9 @@ const (
 	StrayBinaryKey  = "stray_binary"
 	StrayBinaryText = "Stray binary detected"
 
+	ConcurrentWriteKey  = "concurrent_write"
+	ConcurrentWriteText = "changed since it was read - nothing written, run again"
+
 	VariableGroupingKey  = "variable_grouping"
 	VariableGroupingText = "Consecutive var declarations should use var (...) block"
 

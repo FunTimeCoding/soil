@@ -3,6 +3,7 @@ package pattern
 import (
 	"fmt"
 	"github.com/dave/dst"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
@@ -46,7 +47,7 @@ func (s *Service) applyPatternThrough(
 		return r, nil, nil
 	}
 
-	all, set, f := load.Packages(directory, "./...")
+	all, set, f := load.Packages(directory, goModConstant.AllPackages)
 
 	if f != nil {
 		return nil, nil, f

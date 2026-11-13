@@ -1,31 +1,21 @@
 package constant
 
 const (
-	InfiniteScrollScript = `
+	PanelSwapScript = `
 	(function() {
-		var sidebar = document.querySelector('.sidebar');
-		if (!sidebar) return;
-		var loading = false;
-		sidebar.addEventListener('scroll', function() {
-			if (loading) return;
-			if (sidebar.scrollTop + sidebar.clientHeight < sidebar.scrollHeight - 50) return;
-			var sentinel = sidebar.querySelector('[data-load-more]');
-			if (!sentinel) return;
-			loading = true;
-			var url = sentinel.getAttribute('data-load-more');
-			fetch(url).then(function(r) { return r.text(); }).then(function(html) {
-				sentinel.outerHTML = html;
-				loading = false;
-			});
+		var panel = document.getElementById('panel');
+		if (panel) panel.scrollTop = panel.scrollHeight;
+		document.addEventListener('htmx:afterSwap', function(e) {
+			if (e.detail.target.id !== 'panel') return;
+			var entry = e.detail.requestConfig.elt.closest('.sidebar-entry');
+			if (entry) {
+				document.querySelectorAll('.sidebar-entry[aria-current]').forEach(function(x) { x.removeAttribute('aria-current'); });
+				entry.setAttribute('aria-current', 'true');
+			}
+			if (e.detail.target.querySelector('.search-current')) return;
+			e.detail.target.scrollTop = e.detail.target.scrollHeight;
 		});
 	})();
-`
-	ScrollToBottomScript = `
-	document.addEventListener('htmx:afterSwap', function(e) {
-		if (e.detail.target.id !== 'panel') return;
-		if (e.detail.target.querySelector('.search-current')) return;
-		e.detail.target.scrollTop = e.detail.target.scrollHeight;
-	});
 `
 	HitNavigationScript = `
 	(function() {

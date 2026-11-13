@@ -11,7 +11,7 @@ func (w *Workspace) Remember(
 	set *token.FileSet,
 ) {
 	w.loadedKey = key
-	w.loadedWrites = w.writes
+	w.loadedWrites = w.layer.Writes()
 	w.loaded = loaded
 	w.loadedSet = set
 }

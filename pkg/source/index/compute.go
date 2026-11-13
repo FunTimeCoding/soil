@@ -41,7 +41,7 @@ func (w *Workspace) compute(
 		}
 
 		k := key(g, g.Nodes[path], files[path], w.fingerprints)
-		fingerprint := Fingerprint(p.Types, w.fingerprints)
+		fingerprint := Fingerprint(p, w.fingerprints)
 		w.keep(
 			constant.IndexPackageKind,
 			path,

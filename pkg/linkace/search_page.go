@@ -11,7 +11,7 @@ func (c *Client) SearchPage(
 	query string,
 	p int,
 ) (*page.Page[*link.Link], error) {
-	var r response.LinkResponse
+	var r response.LinkPage
 
 	if e := c.basic.Get(
 		"search/links",

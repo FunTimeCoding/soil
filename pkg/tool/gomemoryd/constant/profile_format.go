@@ -22,6 +22,14 @@ const (
 	CompletionSectionHeading = "# completions"
 )
 
+var SectionHeadings = []string{
+	AlwaysSectionHeading,
+	IndexSectionHeading,
+	RelevantSectionHeading,
+	ImpressionSectionHeading,
+	CompletionSectionHeading,
+}
+
 const (
 	QueryAwayNotice   = "goqueryd is away - topic-matched memories and completions left out"
 	QueryFailedNotice = "goqueryd failed - topic-matched memories and completions left out"

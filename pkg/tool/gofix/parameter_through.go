@@ -1,6 +1,7 @@
 package gofix
 
 import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
 )
@@ -12,7 +13,7 @@ func parameterThrough(
 	r *output.Results,
 ) {
 	if len(patterns) == 0 {
-		patterns = []string{"./..."}
+		patterns = []string{goModConstant.AllPackages}
 	}
 
 	all, fileSet := loadThrough(directory, patterns, w)

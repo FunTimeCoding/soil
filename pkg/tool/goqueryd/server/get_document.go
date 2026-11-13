@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
@@ -23,9 +22,7 @@ func (s *Server) GetDocument(
 	}
 
 	if e != nil {
-		return server.GetDocument500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.GetDocument500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := server.GetDocument200JSONResponse{

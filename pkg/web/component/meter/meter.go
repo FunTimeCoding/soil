@@ -14,5 +14,4 @@ type Meter struct {
 	icon    gomponents.Node
 	title   string
 	class   string
-	gauge   bool
 }

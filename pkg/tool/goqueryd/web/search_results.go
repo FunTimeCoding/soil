@@ -14,21 +14,18 @@ import (
 
 func (s *Server) searchResults(
 	q *http.Request,
+	page *search_page.Page,
 	query string,
 	collection string,
-	mode string,
+	metadata map[string]string,
 ) (gomponents.Node, error) {
-	if mode == "" {
-		mode = constant.HybridMode
-	}
-
-	key := search_cache.Key(query, collection, mode)
+	key := search_cache.Key(query, collection, page.Mode())
 	outcome := s.cache.Get(key)
 
 	if outcome == nil {
 		o := search_option.New(query, constant.SearchPageSize)
 		o.Collection = collection
-		o.Mode = mode
+		o.Mode = page.Mode()
 		var e error
 		outcome, e = s.service.Search(q.Context(), o)
 
@@ -46,8 +43,7 @@ func (s *Server) searchResults(
 		s.cache.Put(key, outcome)
 	}
 
-	metadata := parseMetadataParams(q.URL.Query())
 	results, facets := FilterSearchResults(outcome, metadata)
 
-	return search_page.Results(results, facets, query, collection, metadata), nil
+	return page.Results(results, facets), nil
 }

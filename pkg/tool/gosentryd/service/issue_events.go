@@ -1,6 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) IssueEvents(
 	identifier string,
@@ -8,9 +12,10 @@ func (s *Service) IssueEvents(
 	limit int,
 	cursor string,
 ) ([]response.Event, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]response.Event, error) {
+		func(context.Context) ([]response.Event, error) {
 			return s.client.IssueEvents(
 				s.organization,
 				identifier,

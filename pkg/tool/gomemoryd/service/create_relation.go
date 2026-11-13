@@ -16,6 +16,12 @@ func (s *Service) CreateRelation(
 		return validation.New("unknown relation type: %s", relationType)
 	}
 
+	for _, identifier := range []int64{sourceIdentifier, targetIdentifier} {
+		if _, e := s.store.GetMemory(identifier); e != nil {
+			return e
+		}
+	}
+
 	return s.store.CreateRelation(
 		sourceIdentifier,
 		targetIdentifier,

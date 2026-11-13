@@ -1,6 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) SearchEvents(
 	query string,
@@ -14,9 +18,10 @@ func (s *Service) SearchEvents(
 		return nil, e
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]response.EventRow, error) {
+		func(context.Context) ([]response.EventRow, error) {
 			return s.client.SearchEvents(
 				s.organization,
 				query,

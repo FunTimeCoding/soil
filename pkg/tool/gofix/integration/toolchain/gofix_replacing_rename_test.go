@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -21,7 +20,7 @@ func TestExportedRenameReachesReplacingModule(t *testing.T) {
 		)
 		o := module_tester.Options(t, library, false, full, "./alfa/...")
 		o.Replacing = []string{user}
-		gofix.RunDefault(o, output.NewResultsWithDirectory(library))
+		module_tester.RunDefault(t, o, output.NewResultsWithDirectory(library))
 		assert.String(
 			t,
 			"package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMessage()\n}\n",
@@ -44,7 +43,11 @@ func TestExportedRenameDiffLeavesReplacingModule(t *testing.T) {
 	printed := assert.Capture(
 		t,
 		func() {
-			gofix.RunDefault(o, output.NewResultsWithDirectory(library))
+			module_tester.RunDefault(
+				t,
+				o,
+				output.NewResultsWithDirectory(library),
+			)
 		},
 	)
 	assert.String(
@@ -72,7 +75,7 @@ func TestExportedRenameRefusedWhenReplacingModuleFailsToLoad(t *testing.T) {
 	o := module_tester.Options(t, library, false, false, "./alfa/...")
 	o.Replacing = []string{user}
 	r := output.NewResultsWithDirectory(library)
-	gofix.RunDefault(o, r)
+	module_tester.RunDefault(t, o, r)
 	assert.String(
 		t,
 		"package alfa\n\nfunc SendMsg() string {\n\treturn \"x\"\n}\n",

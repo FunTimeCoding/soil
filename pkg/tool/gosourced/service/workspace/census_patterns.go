@@ -1,6 +1,7 @@
 package workspace
 
 import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
 	"slices"
 )
@@ -10,7 +11,7 @@ func censusPatterns(
 	packagePaths []string,
 	full bool,
 ) ([]string, bool) {
-	whole := []string{"./..."}
+	whole := []string{goModConstant.AllPackages}
 	var patterns []string
 
 	for _, packagePath := range packagePaths {

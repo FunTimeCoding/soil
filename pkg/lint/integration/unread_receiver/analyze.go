@@ -2,6 +2,7 @@ package unread_receiver
 
 import (
 	"fmt"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unread_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/face"
@@ -21,7 +22,7 @@ func analyze(t *testing.T) *output.Results {
 		Dir:   directory,
 		Tests: true,
 	}
-	all, e := packages.Load(configuration, "./...")
+	all, e := packages.Load(configuration, goModConstant.AllPackages)
 
 	if e != nil {
 		t.Fatalf("load: %s", e)

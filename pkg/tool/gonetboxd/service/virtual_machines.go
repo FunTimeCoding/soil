@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
 
@@ -11,9 +13,10 @@ func (s *Service) VirtualMachines() (
 	map[int32][]*label.Label,
 	error,
 ) {
-	result, e := guarded(
+	result, e := peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*virtual_machine.Machine, error) {
+		func(context.Context) ([]*virtual_machine.Machine, error) {
 			return s.client.VirtualMachines()
 		},
 	)

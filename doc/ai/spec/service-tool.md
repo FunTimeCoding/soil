@@ -311,13 +311,15 @@ func New(v *service.Service) *Server {
             layout.New(constant.Identity, webConstant.ThemeArchive, favicon).
                 WithStyle(constant.InlineStyle).
                 WithItems(
-                    navigation_item.New(constant.DashboardPath, constant.DashboardTitle),
                     navigation_item.New(constant.EntriesPath, constant.EntriesTitle),
                 ),
         ),
     }
 }
 ```
+
+The identity's name at the top left links to `/`, so the root page takes no
+navigation item of its own; the items are the pages beside it.
 
 The layout writes the shared component style ahead of the daemon's own, and
 carries the command palette whenever it has something to list: its navigation

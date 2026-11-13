@@ -61,7 +61,23 @@ func TestSearchPageCarriesLiveWiring(t *testing.T) {
 	s := base.New(t)
 	target := "/search"
 	page := body(t, s.Server, target, false)
-	assert.StringContains(t, `hx-trigger="input changed delay:300ms"`, page)
+	assert.StringContains(t, `hx-trigger="input delay:200ms, submit"`, page)
 	assert.StringContains(t, `hx-target="#search-results"`, page)
+	assert.StringContains(t, `hx-push-url="true"`, page)
 	assert.StringContains(t, `<div id="search-results">`, page)
+}
+
+func TestSearchMarksStemmedMatchInSnippet(t *testing.T) {
+	s := base.New(t)
+	o := save_option.New()
+	o.Name = "boathouse"
+	o.Content = "the crew kept rowing home before dark"
+	o.Type = "feedback"
+	_, e := s.Store().CreateMemory(o, time.Now())
+	assert.FatalOnError(t, e)
+	assert.StringContains(
+		t,
+		`kept <mark class="highlight">rowing</mark> home`,
+		body(t, s.Server, "/search?query=rowed", true),
+	)
 }

@@ -89,7 +89,7 @@ func (s *Service) moveSymbolsThrough(
 			)
 		}
 
-		symbols, e = relocator.ExpandFileSymbols(file)
+		symbols, e = relocator.FileSymbols(file)
 
 		if e != nil {
 			return commit.FailValidation(r, e.Error())
@@ -109,7 +109,7 @@ func (s *Service) moveSymbolsThrough(
 		unique[name] = true
 	}
 
-	entries, message := relocator.BuildMoveEntries(
+	entries, message := relocator.SymbolEntries(
 		all,
 		p,
 		packagePath,
@@ -218,7 +218,7 @@ func (s *Service) moveSymbolsThrough(
 		}
 	}
 
-	qualifications, blocked := relocator.PlanQualifications(
+	qualifications, blocked := relocator.Qualifications(
 		set,
 		external,
 		packagePath,

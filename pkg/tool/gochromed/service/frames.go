@@ -1,12 +1,18 @@
 package service
 
 import (
+	"context"
 	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) frames(identifier string) []*tab.Tab {
-	tabs, e := guarded(s.guard, s.source.Tabs)
+	tabs, e := peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(context.Context) ([]*tab.Tab, error) { return s.source.Tabs() },
+	)
 
 	if e != nil {
 		return nil

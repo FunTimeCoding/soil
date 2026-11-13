@@ -2,6 +2,7 @@ package unguarded_peer
 
 import (
 	"fmt"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unguarded_peer"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -39,7 +40,7 @@ func analyze(t *testing.T) *output.Results {
 		Dir:   directory,
 		Tests: true,
 	}
-	loaded, f := packages.Load(configuration, "./...")
+	loaded, f := packages.Load(configuration, goModConstant.AllPackages)
 
 	if f != nil {
 		t.Fatalf("load: %s", f)

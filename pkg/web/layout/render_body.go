@@ -47,7 +47,7 @@ func (p *Page) renderBody() []gomponents.Node {
 		body = append(
 			body,
 			html.Nav(
-				html.Class("container"),
+				p.container(),
 				html.Ul(html.Li(node)),
 				html.Ul(navigation...),
 			),
@@ -56,14 +56,11 @@ func (p *Page) renderBody() []gomponents.Node {
 
 	body = append(
 		body,
-		html.Div(
-			html.ID(constant.LayoutNotificationRegion),
-			html.Class("container"),
-		),
-		html.Div(html.ID(constant.LayoutStatusLine), html.Class("container")),
+		html.Div(html.ID(constant.LayoutNotificationRegion), p.container()),
+		html.Div(html.ID(constant.LayoutStatusLine), p.container()),
 	)
 	var mainAttrs []gomponents.Node
-	mainAttrs = append(mainAttrs, html.Class("container"))
+	mainAttrs = append(mainAttrs, p.container())
 
 	if p.liveEndpoint != "" {
 		endpoint := p.liveEndpoint

@@ -1,21 +1,16 @@
 package workspace
 
 import (
-	"github.com/funtimecoding/soil/pkg/source/snapshot"
+	"github.com/funtimecoding/soil/pkg/source/layer"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
 
 type Workspace struct {
 	diff         bool
+	stacked      bool
 	roots        []string
-	before       *snapshot.Snapshot
-	beforeCommit func()
-	overlay      map[string][]byte
-	original     map[string][]byte
-	order        []string
-	moves        map[string]string
-	writes       int
+	layer        *layer.Layer
 	loadedKey    string
 	loadedWrites int
 	loaded       []*packages.Package

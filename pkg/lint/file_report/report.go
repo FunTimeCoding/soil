@@ -16,5 +16,4 @@ type Report struct {
 	Concerns        []*concern.Concern
 	Original        string
 	Fixed           string
-	Fix             func()
 }

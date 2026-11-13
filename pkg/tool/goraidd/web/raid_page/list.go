@@ -29,8 +29,8 @@ func List(raids []record.Raid) gomponents.Node {
 					html.Class(webConstant.LayoutTimeCellClass),
 					gomponents.Text(r.Date.Format(timeConstant.DateYear)),
 				),
-				component.NumericCell(fmt.Sprintf("%d", r.Fights)),
-				component.NumericCell(fmt.Sprintf("%d", r.Players)),
+				html.Td(gomponents.Text(fmt.Sprintf("%d", r.Fights))),
+				html.Td(gomponents.Text(fmt.Sprintf("%d", r.Players))),
 			),
 		)
 	}

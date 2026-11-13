@@ -17,12 +17,24 @@ test files live is `test-placement.md`.
   helpers return only success values.
 - **A new test is proven by breaking what it guards** - break the code
   path, not its inputs, keep it compiling, watch the test fail, restore.
-  `go test -overlay` breaks without touching the tree. One break at a
+  `go test -overlay` breaks without touching the tree, and `gobreak` runs a
+  file of such breaks and reads each run as below. One break at a
   time: a break that panics aborts the package and hides every other
   verdict. A break the test survives names a branch no test reaches, or
   code nothing needs. A break run reads its silences: `no tests to run` is a
   pattern that matched nothing, and a break whose pattern no longer matches
-  broke nothing - both read green.
+  broke nothing - both read green. Run the suite green before the break, then
+  read which assertion fails under it: a red proves only the assertion that
+  failed - a red from a build error, a setup step or a test already failing
+  proves nothing about the case. The break, its run and its restore each go
+  after the one before has finished: tool calls sent together run
+  concurrently, so a run beside the edit it judges can read the tree before
+  the edit lands, and a restore beside a command that changes directory can
+  run in the wrong place.
+- **A split makes wiring a thing to break** - splitting a type turns wiring it
+  held implicitly into constructor arguments that can be handed wrong, and the
+  tests written before the split could not have made that mistake. Break each
+  new hand-off once.
 - **A filter test keeps a row and drops a row**, and counts the rows
   directly - a filter dropping everything passes a test asserting only
   the drop, and a read that deletes what it filters hides a missing
@@ -119,8 +131,13 @@ A mock answers as the client does: never `nil, nil` where the client returns a
 value, an unseeded query with an empty result, absence as the daemon answers
 it. A double it replaces keeps its old default by seeding it. A mock that only
 ever stands in for the client hides the client's own bugs, so each success path
-also goes once through the real client against the served daemon. A double with
-a `Close` is the test's to close: one helper builds it and closes it on cleanup.
+also goes once through the real client against the served daemon. A double
+handed to two collaborators at once, a peer and its guard, makes every
+mis-wiring between them behave like the right one; only the served path proves
+that wiring. When production gains a goroutine that reads a double - a guard's
+probe loop over a mock - the double's switches become `atomic`, or a test
+flipping one races. A double with a `Close` is the test's to close: one helper
+builds it and closes it on cleanup.
 A client too costly to build per test is shared behind a lease whose `Close`
 does nothing, closed in `TestMain` after `m.Run()`. A fleet's fixtures become
 the face's seeded data through one translator, proven by loading every fixture
@@ -163,12 +180,26 @@ double records what it was asked and the test asserts the ask.
 
 ## Peer Guard Tests
 
-A guarded daemon has an outage table (`go:pkg/web/outage_tester`): every
-REST operation and MCP tool against a peer that is down, each expecting
-`unavailable` and no capture. Each operation meets a fresh daemon built
-by the caller's `serve` on one shared reporter, so no operation inherits a
-guard another one opened, and an operation swallowing its peer's error
-shows by name.
+A guarded daemon with a REST or MCP surface has an outage table
+(`go:pkg/web/outage_tester`): `Operations` over every REST operation and `Tools`
+over every MCP tool, against a peer that is down. Each name meets a fresh daemon
+built by the caller's `serve` on one shared reporter, so no operation inherits a
+guard another one opened. The
+table gives the daemon's usual reach and the names that differ from it, each
+`OutageReaches`, `OutageDegrades` or `OutageElsewhere`
+(`go:pkg/web/constant.OutageReach`), and `serve` hands back the daemon's own
+guard's `Unavailable`, so the guard witnesses every name: a reaching name
+opens the outage and answers `unavailable` - a 503, or a tool error carrying
+the guard's own outage text - a degrading one opens it and answers anyway, one
+elsewhere leaves the guard closed, and none captures. An
+exception or override naming nothing served fails by name. An operation
+stopping at `not_found` on an empty fixture never opens the guard and fails as
+never reaching the peer - override a placeholder argument the operation
+refuses, and seed in `serve` the state it needs when one write without the peer
+serves it. State the peer must create, or a fixture that grows per tool - an
+order already shipped for one tool, a second order to merge into for the
+next - is no table's to build: the service test reaches that path with the
+peer stopped, and the table declares the name for what the placeholder meets.
 
 A quiet class reads the same guarded or not, so an outage test cannot prove
 the guard; what only the guard does can - the next call failing at once,
@@ -189,9 +220,12 @@ HTTP through a client it owns, never `http.DefaultClient`,
 `http.DefaultTransport` or `http.Get` and its siblings. The owner closes the
 client's idle connections before the server stops: a connection Go's
 transport dialled and parked unused counts as new to the server, and
-`Shutdown` waits five seconds before treating a new connection as idle.
-A change to a shared client's lifecycle runs every consumer's suite under
-`-race`: the goroutine that races it lives in the consumer.
+`Shutdown` waits five seconds before treating a new connection as idle. The
+tell is a test pinned at exactly 5.0s, or 10s for two, in
+`gotestsum tool slowest`: something it opened - a client session, a stream -
+was still held when the server stopped. A change to a shared client's
+lifecycle runs every consumer's suite under `-race`: the goroutine that races
+it lives in the consumer.
 
 - On `generative/model_context_server`: `Connect(t)` for the MCP client,
   `Client()` for raw requests and generated REST clients

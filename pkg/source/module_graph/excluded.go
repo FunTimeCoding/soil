@@ -1,10 +1,8 @@
 package module_graph
 
 import (
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
-	"strings"
 )
 
 func Excluded(
@@ -15,11 +13,6 @@ func Excluded(
 		return false
 	}
 
-	name := filepath.Base(directory)
-
-	return name == "testdata" ||
-		name == "vendor" ||
-		strings.HasPrefix(name, soil.CurrentDirectory) ||
-		strings.HasPrefix(name, "_") ||
+	return excludedName(filepath.Base(directory)) ||
 		system.NestedModule(root, directory)
 }

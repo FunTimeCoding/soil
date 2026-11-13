@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/gitlab/face"
 
 func New(
 	f face.GitLabClient,
-	project int64,
+	projectPath string,
 	branch string,
 	authorityDirectory string,
 	secretAuthority string,
@@ -12,7 +12,7 @@ func New(
 ) *Publisher {
 	return &Publisher{
 		forge:              f,
-		project:            project,
+		projectPath:        projectPath,
 		branch:             branch,
 		authorityDirectory: authorityDirectory,
 		secretAuthority:    secretAuthority,

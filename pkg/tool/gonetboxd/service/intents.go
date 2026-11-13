@@ -1,14 +1,17 @@
 package service
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/intent"
 )
 
 func (s *Service) Intents() ([]*intent.Intent, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*intent.Intent, error) {
+		func(context.Context) ([]*intent.Intent, error) {
 			devices, e := s.client.Devices()
 
 			if e != nil {

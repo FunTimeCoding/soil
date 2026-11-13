@@ -3,7 +3,6 @@ package collection_page
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/status"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -22,10 +21,7 @@ func List(collections []status.CollectionStatus) gomponents.Node {
 					),
 				),
 				html.Td(gomponents.Text(c.Type)),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("%d", c.DocumentCount),
-				),
+				html.Td(gomponents.Textf("%d", c.DocumentCount)),
 				html.Td(html.Small(gomponents.Text(c.Path))),
 				html.Td(html.Small(gomponents.Text(c.Pattern))),
 			),

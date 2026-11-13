@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -13,9 +12,7 @@ func (s *Server) GetStatus(
 	status, e := s.service.Status()
 
 	if e != nil {
-		return server.GetStatus500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.GetStatus500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	collections := make([]server.CollectionStatus, len(status.Collections))

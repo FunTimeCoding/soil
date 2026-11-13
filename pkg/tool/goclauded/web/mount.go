@@ -16,6 +16,8 @@ func (s *Server) Mount(g *guard.Mux) {
 	pulse := join.Empty(item, stringsConstant.Slash, constant.PulseAction)
 	cruise := join.Empty(item, stringsConstant.Slash, constant.CruiseAction)
 	remove := join.Empty(item, stringsConstant.Slash, constant.DeleteAction)
+	open := join.Empty(stringsConstant.Slash, constant.OpenAction)
+	closing := join.Empty(stringsConstant.Slash, constant.CloseAction)
 	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
 	g.OpenMount(route.Get(webConstant.LivePath), s.live())
 	g.Token(route.Get(constant.EventStreamPath), s.eventStream())
@@ -28,7 +30,11 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Post(constant.SessionsPath, remove), s.sessionDeleteAction)
 	g.Open(route.Get(constant.ActivityPath), s.activityPage)
 	g.Open(route.Get(constant.CoveragePath), s.coveragePage)
+	g.Open(route.Get(constant.CoveragePath, open), s.coverageOpen)
+	g.Open(route.Get(constant.CoveragePath, closing), s.coverageClose)
 	g.Open(route.Get(constant.PermissionsPath), s.permissionsPage)
+	g.Open(route.Get(constant.PermissionsPath, open), s.permissionOpen)
+	g.Open(route.Get(constant.PermissionsPath, closing), s.permissionClose)
 	g.Open(route.Get(constant.StatusPath), s.statusPage)
 	g.Open(route.Get(constant.UsagePath), s.usagePage)
 	g.Open(route.Get(constant.MessagesPath), s.messagesPage)
@@ -36,5 +42,20 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(constant.HistoryPath, item), s.historyRow)
 	g.Open(route.Get(constant.HistoryPath, edit), s.historyEditForm)
 	g.Open(route.Post(constant.HistoryPath, edit), s.historyEditSubmit)
-	s.conversations.Mount(g)
+	sidebar := join.Empty(stringsConstant.Slash, constant.SidebarAction)
+	search := join.Empty(stringsConstant.Slash, constant.SearchAction)
+	hits := join.Empty(item, stringsConstant.Slash, constant.HitsAction)
+	g.Open(route.Get(constant.ConversationsPath), s.conversationsPage)
+	g.Open(
+		route.Get(constant.ConversationsPath, sidebar),
+		s.conversationSidebar,
+	)
+	g.Open(route.Get(constant.ConversationsPath, search), s.conversationSearch)
+	g.Open(route.Get(constant.ConversationsPath, hits), s.conversationHits)
+	g.Open(route.Get(constant.ConversationsPath, edit), s.conversationEditForm)
+	g.Open(
+		route.Post(constant.ConversationsPath, edit),
+		s.conversationEditSubmit,
+	)
+	g.Open(route.Get(constant.ConversationsPath, item), s.conversationPanel)
 }

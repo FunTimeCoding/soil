@@ -1,6 +1,7 @@
 package reference
 
 import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
@@ -19,7 +20,7 @@ func (s *Service) FindReferences(
 	pattern := packagePath
 
 	if s.workspace.Full() {
-		pattern = "./..."
+		pattern = goModConstant.AllPackages
 	}
 
 	all, set, e := load.Packages(directory, pattern)

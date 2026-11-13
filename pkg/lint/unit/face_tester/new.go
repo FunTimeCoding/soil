@@ -2,6 +2,7 @@ package face_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
@@ -13,7 +14,7 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	directory := kind_tester.ImporterModule(t)
-	result, _, e := resolve.LoadPackages(directory, "./...")
+	result, _, e := resolve.LoadPackages(directory, goModConstant.AllPackages)
 	errors.PanicOnError(e)
 	loaded := resolve.PreferTestVariants(result)
 	var model *types.Named

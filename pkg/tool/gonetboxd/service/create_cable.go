@@ -1,6 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/cable"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/cable"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateCable(
 	deviceA string,
@@ -8,9 +12,10 @@ func (s *Service) CreateCable(
 	deviceB string,
 	interfaceB string,
 ) (*cable.Cable, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*cable.Cable, error) {
+		func(context.Context) (*cable.Cable, error) {
 			a, e := s.client.Device(deviceA)
 
 			if e != nil {

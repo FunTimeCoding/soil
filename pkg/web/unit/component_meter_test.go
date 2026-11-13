@@ -42,27 +42,19 @@ func TestLabelledMeterIsRowOfLabelBarAndValue(t *testing.T) {
 	)
 }
 
-func TestGaugeCarriesItsShareColourAndWidthAsVariables(t *testing.T) {
+func TestTallMeterWithIconKeepsNativeBar(t *testing.T) {
 	assert.String(
 		t,
-		`<div class="meter" data-tooltip="alfa: 7/10"><span class="meter-icon">◆</span><div class="meter-gauge" style="--meter-share: 70.0%; --meter-color: #8a6fb0; --meter-width: 4rem"><div class="meter-gauge-fill"></div></div></div>`,
+		`<div class="meter" data-tooltip="alfa: 7/10"><span class="meter-icon">◆</span><progress class="meter-bar" value="7" max="10" style="--pico-progress-color: #8a6fb0; --meter-width: 4rem; --meter-height: 1.125rem"></progress></div>`,
 		renderedNode(
 			t,
 			meter.New(7, 10).
-				Gauge().
 				Icon(gomponents.Text("◆")).
 				Color("#8a6fb0").
 				Width("4rem").
+				Height("1.125rem").
 				Title("alfa: 7/10").
 				Node(),
 		),
-	)
-}
-
-func TestGaugePastItsMaximumStopsFull(t *testing.T) {
-	assert.StringContains(
-		t,
-		`--meter-share: 100.0%`,
-		renderedNode(t, meter.New(5, 3).Gauge().Node()),
 	)
 }

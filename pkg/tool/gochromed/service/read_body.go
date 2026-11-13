@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/saved"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 )
@@ -12,7 +14,13 @@ func (s *Service) ReadBody(v *selector.Selector) (*saved.Saved, error) {
 		return nil, e
 	}
 
-	body, f := guarded(s.guard, s.source.Page(t.Identifier).Body)
+	body, f := peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(context.Context) (string, error) {
+			return s.source.Page(t.Identifier).Body()
+		},
+	)
 
 	if f != nil {
 		return nil, f

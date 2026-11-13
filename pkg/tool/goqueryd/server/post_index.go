@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -19,9 +18,7 @@ func (s *Server) PostIndex(
 	results, e := s.service.IndexCollections(collection)
 
 	if e != nil {
-		return server.PostIndex500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.PostIndex500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	converted := make(server.PostIndex200JSONResponse, len(results))

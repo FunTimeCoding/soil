@@ -2,6 +2,7 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"testing"
@@ -14,7 +15,7 @@ func assertSecondRunQuiet(
 	t.Helper()
 	before := readGoFiles(t, directory)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunFormatFix([]string{"./..."}, directory, false, r)
+	gofix.RunFormatFix([]string{goModConstant.AllPackages}, directory, false, r)
 	assert.Count(t, 0, filterApplied(r.Entries))
 	assert.Any(t, before, readGoFiles(t, directory))
 }

@@ -172,6 +172,25 @@ func AutoMigrate(d *gorm.DB) {
 }
 ```
 
+A lookup of one row goes through `go:pkg/relational.FindOne`, which reports
+whether a row was found, or `go:pkg/relational.FetchOne`, which answers a
+missing row as `not_found` - the store builds the query and passes in the
+record its constructor made:
+
+```go
+result := host.New()
+e := relational.FetchOne(
+    s.mapper.Where("name = ?", name),
+    result,
+    constant.HostKind,
+    name,
+)
+```
+
+Never `First` or `Take`: they answer a miss with `gorm.ErrRecordNotFound`,
+which gorm's logger prints on every miss, and `First` orders by primary key
+unasked - a lookup whose condition can match several rows orders explicitly.
+
 Tests migrate and build the same way, in memory, as `testing.md` sets
 out:
 

@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/internet_address"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) DeviceAddresses(device string) ([]*internet_address.Address, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*internet_address.Address, error) {
+		func(context.Context) ([]*internet_address.Address, error) {
 			return s.client.DeviceAddresses(device)
 		},
 	)

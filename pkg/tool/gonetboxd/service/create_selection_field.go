@@ -1,15 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/custom_field"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/custom_field"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateSelectionField(
 	name string,
 	label string,
 	choiceSet string,
 ) (*custom_field.Field, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*custom_field.Field, error) {
+		func(context.Context) (*custom_field.Field, error) {
 			return s.client.CreateSelectionField(name, label, choiceSet)
 		},
 	)

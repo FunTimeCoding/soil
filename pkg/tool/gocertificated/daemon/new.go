@@ -1,8 +1,6 @@
 package daemon
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
@@ -22,15 +20,13 @@ func New(
 ) *Daemon {
 	d := relational.Open(l, o.PostgresLocator, o.LitePath)
 	f := o.Forge()
-	project, e := f.ResolveProject(context.Background(), o.Project)
-	errors.PanicOnError(e)
 	g := peer.New(constant.ForgePeer, "", f, l, r)
 	s := service.New(
 		store.New(d),
 		g,
 		publish.New(
 			f,
-			project,
+			o.Project,
 			o.Branch,
 			o.AuthorityDirectory,
 			o.SecretAuthority,

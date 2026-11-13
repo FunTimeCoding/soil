@@ -1,62 +1,43 @@
 package unit
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
-	"net/http"
-	"slices"
-	"strings"
 	"testing"
 )
 
-func TestEveryOperationAnswersNetBoxOutageUnavailable(t *testing.T) {
-	r := memory.New()
+func TestOperationsOnNetBoxOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	address := `{"address":"00:00:5e:00:53:01"}`
-	var unanswered []string
-
-	for operation, status := range outage_tester.Statuses(
+	outage_tester.Operations(
 		t,
-		func() *model_context_server.Server { return outageServer(t, r) },
+		func(r *memory.Memory) (*model_context_server.Server, func() error) {
+			return outageServer(t, r)
+		},
 		spec,
+		webConstant.OutageReaches,
+		nil,
+		nil,
 		map[string]string{
 			"SetInterfacePhysicalAddress":        address,
 			"SetVirtualInterfacePhysicalAddress": address,
 		},
-	) {
-		if status != http.StatusServiceUnavailable {
-			unanswered = append(
-				unanswered,
-				fmt.Sprintf("%s %d", operation, status),
-			)
-		}
-	}
-	slices.Sort(unanswered)
-	assert.String(t, "", strings.Join(unanswered, ", "))
-	assert.Count(t, 0, r.Events())
+	)
 }
 
-func TestEveryToolFailsOnNetBoxOutage(t *testing.T) {
-	r := memory.New()
-	var unanswered []string
-
-	for tool, text := range outage_tester.ToolFailures(
+func TestToolsOnNetBoxOutage(t *testing.T) {
+	outage_tester.Tools(
 		t,
-		func() *model_context_server.Server { return outageServer(t, r) },
-		map[string]map[string]any{
-			"update_journal_entry": {"comments": "alfa"},
+		func(r *memory.Memory) (*model_context_server.Server, func() error) {
+			return outageServer(t, r)
 		},
-	) {
-		if !strings.Contains(text, "connection refused") {
-			unanswered = append(unanswered, tool)
-		}
-	}
-	slices.Sort(unanswered)
-	assert.String(t, "", strings.Join(unanswered, ", "))
-	assert.Count(t, 0, r.Events())
+		webConstant.OutageReaches,
+		nil,
+		map[string]map[string]any{"update_journal_entry": {"comments": "alfa"}},
+	)
 }

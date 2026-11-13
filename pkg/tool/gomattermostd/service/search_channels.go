@@ -1,11 +1,16 @@
 package service
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/mattermost/mattermost/server/public/model"
+)
 
 func (s *Service) SearchChannels(query string) ([]*model.Channel, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*model.Channel, error) {
+		func(context.Context) ([]*model.Channel, error) {
 			return s.mattermost.SearchChannels(
 				s.mattermost.DefaultTeam(),
 				query,

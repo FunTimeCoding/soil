@@ -1,6 +1,7 @@
 package reach
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"mvdan.cc/sh/v3/syntax"
 	"strings"
 )
@@ -11,7 +12,7 @@ func literalValue(w *syntax.Word) (string, bool) {
 	for _, part := range w.Parts {
 		switch p := part.(type) {
 		case *syntax.Lit:
-			if strings.ContainsAny(p.Value, "*?[") {
+			if strings.ContainsAny(p.Value, constant.GlobCharacters) {
 				return "", false
 			}
 

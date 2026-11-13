@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/device_change"
 )
 
@@ -9,9 +11,10 @@ func (s *Service) UpdateDevice(
 	name string,
 	c *device_change.Change,
 ) (*device.Device, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*device.Device, error) {
+		func(context.Context) (*device.Device, error) {
 			if c.PrimaryAddress != nil {
 				if _, e := s.client.SetDevicePrimaryAddress(
 					name,

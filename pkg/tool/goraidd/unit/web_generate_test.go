@@ -6,10 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
-	"net"
 	"net/http"
-	"os"
-	"syscall"
 	"testing"
 )
 
@@ -28,13 +25,7 @@ func TestGeneratingHandsEliteFilesToParser(t *testing.T) {
 
 func TestDownParserAnswersWithoutReportAndFailsFast(t *testing.T) {
 	p := service_tester.NewParser(t)
-	p.Fail(
-		&net.OpError{
-			Op:  "dial",
-			Net: "tcp",
-			Err: os.NewSyscallError("connect", syscall.ECONNREFUSED),
-		},
-	)
+	p.Fail(refusedDial())
 	r := memory.New()
 	v := mountedGenerate(t, p, r)
 	status, body := postGenerate(t, v, "20261024-201500.zevtc")

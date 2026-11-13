@@ -1,13 +1,18 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/linkace/link"
 	"github.com/funtimecoding/soil/pkg/linkace/page"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) LinksPage(p int) (*page.Page[*link.Link], error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*page.Page[*link.Link], error) { return s.client.LinksPage(p) },
+		func(context.Context) (*page.Page[*link.Link], error) {
+			return s.client.LinksPage(p)
+		},
 	)
 }

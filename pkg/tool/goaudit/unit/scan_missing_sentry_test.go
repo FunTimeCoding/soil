@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"testing"
 )
 
@@ -81,4 +82,20 @@ func TestMissingSentrySorted(t *testing.T) {
 	assert.Integer(t, 2, len(result))
 	assert.String(t, "cmd/goalfa", result[0].Path)
 	assert.String(t, "cmd/gobravo", result[1].Path)
+}
+
+func TestMissingSentryWithoutCommandDirectory(t *testing.T) {
+	assert.Count(t, 0, scan.MissingSentry(virtual_file_system.New()))
+}
+
+func TestServicesWithoutToolDirectory(t *testing.T) {
+	assert.Count(
+		t,
+		0,
+		scan.Services(
+			virtual_file_system.New(),
+			"alfa",
+			audit_configuration.Load(""),
+		),
+	)
 }

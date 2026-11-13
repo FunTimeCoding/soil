@@ -1,19 +1,22 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	githubConstant "github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/types/run_key"
 )
 
 func (s *Service) Latest() (map[run_key.Key]*run.Run, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (map[run_key.Key]*run.Run, error) {
+		func(context.Context) (map[run_key.Key]*run.Run, error) {
 			repositories, e := s.client.Repositories(s.owner)
 
 			if not_found.Is(e) {

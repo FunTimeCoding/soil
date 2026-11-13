@@ -16,10 +16,16 @@ func (s *Store) SearchMemories(
 	scope string,
 ) ([]record.SearchResult, error) {
 	var parts []string
-	var arguments []any
+	arguments := []any{
+		constant.SnippetOpen,
+		constant.SnippetClose,
+		constant.SnippetEllipsis,
+		constant.SnippetTokens,
+	}
 	parts = append(
 		parts,
-		`SELECT m.identifier, m.name, m.content, m.description, m.type, m.scope, m.updated_at, rank, COALESCE(p.name, '')
+		`SELECT m.identifier, m.name, m.content, m.description, m.type, m.scope, m.updated_at, rank, COALESCE(p.name, ''),
+		snippet(memory_full_text_search, -1, ?, ?, ?, ?)
 		FROM memory_full_text_search f
 		JOIN memory m ON m.identifier = f.rowid
 		LEFT JOIN memory p ON p.identifier = m.parent_identifier`,
@@ -71,6 +77,7 @@ func (s *Store) SearchMemories(
 			&r.UpdatedAt,
 			&r.Rank,
 			&r.ParentName,
+			&r.Snippet,
 		)
 
 		if e != nil {

@@ -1,6 +1,9 @@
 package service
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/nextcloud/usage"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"strconv"
 )
@@ -12,7 +15,11 @@ func (s *Service) usageValues() ([]string, error) {
 		return pending, nil
 	}
 
-	result, e := guarded(s.usageGuard, s.usage.Fetch)
+	result, e := peer.Guarded(
+		context.Background(),
+		s.usageGuard,
+		func(context.Context) (*usage.Usage, error) { return s.usage.Fetch() },
+	)
 
 	if e != nil {
 		return pending, e

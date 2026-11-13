@@ -12,7 +12,7 @@ func (c *Client) NotesByLinkPage(
 	linkIdentifier int,
 	p int,
 ) (*page.Page[*note.Note], error) {
-	var r response.NoteResponse
+	var r response.NotePage
 
 	if e := c.basic.Get(
 		fmt.Sprintf("links/%d/notes", linkIdentifier),

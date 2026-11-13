@@ -11,22 +11,16 @@ import (
 	"slices"
 )
 
-func facet(
-	f result.Facet,
-	query string,
-	collection string,
-	metadata map[string]string,
-) gomponents.Node {
+func (p *Page) facet(f result.Facet) gomponents.Node {
 	chips := make([]gomponents.Node, 0, len(f.Values))
 
 	for _, value := range slices.Sorted(maps.Keys(f.Values)) {
 		c := chip.New(fmt.Sprintf("%s (%d)", value, f.Values[value]))
 
-		if metadata[f.Key] == value {
-			c.Link(Path(query, collection, copyWithout(metadata, f.Key))).
-				Current()
+		if p.metadata[f.Key] == value {
+			c.Link(p.path(p.mode, copyWithout(p.metadata, f.Key))).Current()
 		} else {
-			c.Link(Path(query, collection, copyWith(metadata, f.Key, value)))
+			c.Link(p.path(p.mode, copyWith(p.metadata, f.Key, value)))
 		}
 
 		chips = append(chips, c.Node())

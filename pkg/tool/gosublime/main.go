@@ -13,7 +13,7 @@ func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	t := terminal.New(s)
-	c := client.NewDeferred(t.Required)
+	c := client.NewEnvironment()
 	defer c.Close()
 	x := &Context{Client: c, Terminal: t}
 	o := &cobra.Command{

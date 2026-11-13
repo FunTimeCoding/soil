@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -13,7 +12,8 @@ import (
 func TestScopedRunKeepsMethodOfOutsideInterface(t *testing.T) {
 	for _, full := range []bool{false, true} {
 		directory := module_tester.OutsideInterface(t)
-		gofix.RunDefault(
+		module_tester.RunDefault(
+			t,
 			module_tester.Options(t, directory, false, full, "./alfa/..."),
 			output.NewResultsWithDirectory(directory),
 		)

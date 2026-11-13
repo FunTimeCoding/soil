@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/opnsense/request"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/opnsense/request"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) AddHost(
 	h *request.Host,
 	apply bool,
 ) (string, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (string, error) {
+		func(context.Context) (string, error) {
 			result, e := s.client.AddHost(h)
 
 			if e != nil {

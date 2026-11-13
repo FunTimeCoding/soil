@@ -6,6 +6,7 @@ func (w *Workspace) refresh() {
 	g := w.graph
 	w.fingerprints = make(map[string]string, len(g.Nodes))
 	w.facts = make(map[string]map[string]any, len(w.kinds))
+	w.digests = make(map[string]map[string][]byte, len(w.kinds))
 
 	for _, k := range w.kinds {
 		w.facts[k.Name] = make(map[string]any, len(g.Nodes))

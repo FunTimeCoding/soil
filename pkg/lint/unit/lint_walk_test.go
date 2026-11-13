@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/system"
+	"os"
 	"path/filepath"
 	"testing"
 )
@@ -52,4 +53,45 @@ func TestWalkEmptyDirectoriesOutsideSkips(t *testing.T) {
 	system.MakeDirectory(filepath.Join(root, ".git", "empty"))
 	_, empty := lint.Walk(root, option.New("", false))
 	assert.Strings(t, []string{"doc/empty"}, empty)
+}
+
+func TestWalkDirectoryHoldingOnlyLinkIsNotEmpty(t *testing.T) {
+	root := t.TempDir()
+	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	system.MakeDirectory(filepath.Join(root, "linked"))
+	assert.FatalOnError(
+		t,
+		os.Symlink(
+			filepath.Join(root, "doc", "a.md"),
+			filepath.Join(root, "linked", "a.md"),
+		),
+	)
+	_, empty := lint.Walk(root, option.New("", false))
+	assert.Strings(t, nil, empty)
+}
+
+func TestWalkLinkToEmptyDirectoryIsNotEmpty(t *testing.T) {
+	root := t.TempDir()
+	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	system.MakeDirectory(filepath.Join(root, "doc", "empty"))
+	assert.FatalOnError(
+		t,
+		os.Symlink(
+			filepath.Join(root, "doc", "empty"),
+			filepath.Join(root, "linked"),
+		),
+	)
+	_, empty := lint.Walk(root, option.New("", false))
+	assert.Strings(t, []string{"doc/empty"}, empty)
+}
+
+func TestWalkReadsForestTreeNotDisk(t *testing.T) {
+	root := t.TempDir()
+	testutil.WriteFile(t, root, "alfa.md", "bravo\n")
+	o := option.New("", false)
+	_, e := o.Trees.Tree(root).Read("alfa.md")
+	assert.FatalOnError(t, e)
+	testutil.WriteFile(t, root, "alfa.md", "charlie\n")
+	repo, _ := lint.Walk(root, o)
+	assert.String(t, "bravo\n", repo.Files.ReadString("alfa.md"))
 }

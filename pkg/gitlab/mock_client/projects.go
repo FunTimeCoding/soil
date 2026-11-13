@@ -10,6 +10,10 @@ func (c *Client) Projects(x context.Context) ([]*project.Project, error) {
 		return nil, e
 	}
 
+	if c.failure != nil {
+		return nil, c.failure
+	}
+
 	if c.projectFailure != nil {
 		return nil, c.projectFailure
 	}

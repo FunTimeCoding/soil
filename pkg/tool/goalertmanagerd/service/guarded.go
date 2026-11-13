@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/prometheus/face"
 )
 
@@ -18,15 +19,9 @@ func guarded[T any](
 		return result, e
 	}
 
-	g := p.AlertmanagerGuard().Attempt(
+	return peer.Guarded(
 		x,
-		func(context.Context) error {
-			var h error
-			result, h = f(p.Alertmanager())
-
-			return h
-		},
+		p.AlertmanagerGuard(),
+		func(context.Context) (T, error) { return f(p.Alertmanager()) },
 	)
-
-	return result, g
 }

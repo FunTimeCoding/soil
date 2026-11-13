@@ -24,10 +24,6 @@ func New(
 				WithStyle(constant.InlineStyle).
 				WithItems(
 					navigation_item.New(
-						constant.DashboardPath,
-						constant.DashboardTitle,
-					),
-					navigation_item.New(
 						webConstant.SearchPath,
 						constant.SearchTitle,
 					),

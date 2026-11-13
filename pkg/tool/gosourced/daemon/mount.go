@@ -20,7 +20,14 @@ func (d *Daemon) Mount(
 		webConstant.InterfacePath,
 		server.HandlerFromMux(
 			server.NewStrictHandler(
-				gosourced.New(d.census, d.diff, d.module, d.workspace, r),
+				gosourced.New(
+					d.census,
+					d.check,
+					d.diff,
+					d.module,
+					d.workspace,
+					r,
+				),
 				[]server.StrictMiddlewareFunc{
 					web.RecordingMiddleware[server.StrictHandlerFunc](t),
 				},

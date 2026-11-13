@@ -1,33 +1,43 @@
 package constant
 
 const (
-	SectionClass           = "section"
-	ActionClass            = "action"
-	ActionSmallClass       = "small"
-	NumericClass           = "numeric"
-	AbsentClass            = "absent"
-	ClusterClass           = "cluster"
-	FactsClass             = "facts"
-	RowScope               = "row"
-	TileClass              = "tile"
-	TileGridClass          = "tile-grid"
-	DialClass              = "dial"
-	DialCenterClass        = "dial-center"
-	DialNeedleClass        = "dial-needle"
-	DialPointClass         = "dial-point"
-	DialTickClass          = "dial-tick"
-	DialAngleVariable      = "--dial-angle"
-	DialBackgroundVariable = "--dial-background"
-	StatusDotClass         = "status-dot"
-	PagerClass             = "pager"
-	PagerPositionClass     = "pager-position"
-	SearchAttribute        = "data-search"
-	BodyTarget             = "body"
+	SectionClass             = "section"
+	ActionClass              = "action"
+	ActionSmallClass         = "small"
+	NumericColumnClassPrefix = "numeric-"
+	AbsentClass              = "absent"
+	UnsetMark                = "—"
+	ClusterClass             = "cluster"
+	HeadingRowClass          = "heading-row"
+	ActionRowClass           = "action-row"
+	FactsClass               = "facts"
+	RowScope                 = "row"
+	GlanceClass              = "glance"
+	GlanceColumnsClass       = "glance-columns"
+	GlanceColumnsVariable    = "--glance-columns"
+	GlanceGroupClass         = "glance-group"
+	GlanceLabelClass         = "glance-label"
+	GlanceValueClass         = "glance-value"
+	TileClass                = "tile"
+	TileGridClass            = "tile-grid"
+	DialClass                = "dial"
+	DialCenterClass          = "dial-center"
+	DialNeedleClass          = "dial-needle"
+	DialPointClass           = "dial-point"
+	DialTickClass            = "dial-tick"
+	DialAngleVariable        = "--dial-angle"
+	DialBackgroundVariable   = "--dial-background"
+	StatusDotClass           = "status-dot"
+	PagerClass               = "pager"
+	PagerPositionClass       = "pager-position"
+	SearchAttribute          = "data-search"
+	BodyTarget               = "body"
 )
 
 const (
-	DialDegrees = 360.0
-	DialQuarter = 90.0
+	NumericColumnLimit = 12
+	DialDegrees        = 360.0
+	DialQuarter        = 90.0
 )
 
 const (
@@ -89,18 +99,24 @@ const (
 	MeterClass            = "meter"
 	MeterRowClass         = "meter-row"
 	MeterBarClass         = "meter-bar"
-	MeterGaugeClass       = "meter-gauge"
-	MeterGaugeFillClass   = "meter-gauge-fill"
 	MeterIconClass        = "meter-icon"
 	MeterLabelClass       = "meter-label"
 	MeterValueClass       = "meter-value"
-	MeterShareVariable    = "--meter-share"
-	MeterColorVariable    = "--meter-color"
-	MeterTrackVariable    = "--meter-track"
 	MeterWidthVariable    = "--meter-width"
 	MeterHeightVariable   = "--meter-height"
 	ProgressColorVariable = "--pico-progress-color"
 	ProgressTrackVariable = "--pico-progress-background-color"
+)
+
+const (
+	PlateClass         = "plate"
+	PlateGroupClass    = "plate-group"
+	PlateNameClass     = "plate-name"
+	PlateHeadlineClass = "plate-headline"
+	PlateCaptionClass  = "plate-caption"
+	PlateRowClass      = "plate-row"
+	PlateLabelClass    = "plate-label"
+	PlateValueClass    = "plate-value"
 )
 
 const (
@@ -116,9 +132,19 @@ const (
 )
 
 const (
+	OpeningRowClass     = "opening-row"
+	OpeningDetailClass  = "opening-detail"
+	OpeningContentClass = "opening-content"
+	OpeningDetailSuffix = "-detail"
+	ExpandedAttribute   = "aria-expanded"
+	CurrentAttribute    = "aria-current"
+	HighlightClass      = "highlight"
+)
+
+const (
 	EntryClass             = "entry"
 	EntryInlineClass       = "inline"
-	EntryRecordClass       = "record"
+	EntrySidewaysClass     = "sideways"
 	EntryButtonsClass      = "entry-buttons"
 	EntryAlternativeClass  = "entry-alternative"
 	EntrySuggestionsSuffix = "-suggestions"

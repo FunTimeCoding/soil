@@ -3,7 +3,6 @@ package counter_page
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/tally"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -26,13 +25,7 @@ func Table(tallies []*tally.Tally) gomponents.Node {
 			v.Bumped,
 			v.Turns,
 		} {
-			cells = append(
-				cells,
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("%d", n),
-				),
-			)
+			cells = append(cells, html.Td(gomponents.Textf("%d", n)))
 		}
 
 		rows = append(rows, html.Tr(cells...))

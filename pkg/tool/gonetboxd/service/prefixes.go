@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/prefix"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/prefix"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Prefixes() ([]*prefix.Prefix, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*prefix.Prefix, error) {
+		func(context.Context) ([]*prefix.Prefix, error) {
 			return s.client.Prefixes()
 		},
 	)

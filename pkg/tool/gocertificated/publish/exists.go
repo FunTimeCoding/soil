@@ -9,7 +9,13 @@ func (p *Publisher) exists(
 	x context.Context,
 	path string,
 ) (bool, error) {
-	_, e := p.forge.File(x, p.project, p.branch, path)
+	project, e := p.projectIdentifier(x)
+
+	if e != nil {
+		return false, e
+	}
+
+	_, e = p.forge.File(x, project, p.branch, path)
 
 	if not_found.Is(e) {
 		return false, nil

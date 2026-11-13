@@ -1,31 +1,47 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/lint/repository"
+	"github.com/funtimecoding/soil/pkg/lint/types/checker_step"
+	"github.com/funtimecoding/soil/pkg/source/layer"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"strings"
 )
 
 func runCheckers(
-	v *virtual_file_system.System,
-	fixes *virtual_file_system.System,
+	repo *repository.Repository,
+	fixes *layer.Layer,
 	paths []string,
-	checkers []Checker,
+	steps []*checker_step.Step,
 	o *option.Lint,
 	r *output.Results,
 ) {
 	for _, p := range paths {
 		if o.Verbose {
-			console.Format("Process: %s\n", p)
+			writer.Print(o.Trace, "Process: %s\n", p)
 		}
 
-		original := v.ReadString(p)
+		original := repo.Files.ReadString(p)
 		content := original
 
-		for _, check := range checkers {
-			result := check(p, strings.NewReader(content))
+		for _, s := range steps {
+			var result *file_report.Report
+
+			if s.Pure {
+				result = o.Documents.Result(
+					s.Name,
+					p,
+					content,
+					func() *file_report.Report {
+						return s.Check(p, strings.NewReader(content))
+					},
+				)
+			} else {
+				result = s.Check(p, strings.NewReader(content))
+			}
 
 			for _, c := range result.Concerns {
 				if !o.Fix {
@@ -41,7 +57,7 @@ func runCheckers(
 		}
 
 		if content != original {
-			fixes.WriteString(p, content)
+			fixes.Rewrite(repo.Absolute(p), []byte(original), []byte(content))
 		}
 	}
 }

@@ -12,7 +12,7 @@ import (
 func TestPanelIsTitledArticle(t *testing.T) {
 	assert.String(
 		t,
-		`<article id="alfa"><h4>Bravo</h4><p>charlie</p></article>`,
+		`<article id="alfa"><header><strong>Bravo</strong></header><p>charlie</p></article>`,
 		renderedNode(
 			t,
 			panel.New("Bravo").
@@ -33,6 +33,20 @@ func TestPanelFramesItsHeaderAndFooter(t *testing.T) {
 				Header(gomponents.Text("delta")).
 				Content(html.P(gomponents.Text("charlie"))).
 				Footer(gomponents.Text(constant.FixtureEcho)).
+				Node(),
+		),
+	)
+}
+
+func TestPanelTitleSharesBandWithHeaderInRow(t *testing.T) {
+	assert.String(
+		t,
+		`<article><header class="heading-row"><strong>Bravo</strong>delta</header><p>charlie</p></article>`,
+		renderedNode(
+			t,
+			panel.New("Bravo").
+				Header(gomponents.Text("delta")).
+				Content(html.P(gomponents.Text("charlie"))).
 				Node(),
 		),
 	)

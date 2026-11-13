@@ -4,5 +4,5 @@ func (w *Workspace) Move(
 	from string,
 	to string,
 ) {
-	w.moves[from] = to
+	w.layer.Move(from, to)
 }

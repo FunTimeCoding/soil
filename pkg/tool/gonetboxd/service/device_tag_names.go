@@ -1,9 +1,15 @@
 package service
 
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
+
 func (s *Service) DeviceTagNames(name string) ([]string, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]string, error) {
+		func(context.Context) ([]string, error) {
 			return s.client.DeviceTagNames(name)
 		},
 	)

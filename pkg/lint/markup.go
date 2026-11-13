@@ -1,11 +1,9 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	markupConstant "github.com/funtimecoding/soil/pkg/markup/constant"
-	"github.com/funtimecoding/soil/pkg/system"
 	"io"
 )
 
@@ -33,13 +31,6 @@ func Markup(
 			}
 		} else {
 			s.PassLine(line)
-		}
-	}
-
-	s.Fix = func() {
-		if s.Fixed != "" {
-			console.Format("Add front matter delimiter %s\n", path)
-			system.SaveFile(path, s.Fixed)
 		}
 	}
 

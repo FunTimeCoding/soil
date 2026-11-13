@@ -1,7 +1,10 @@
 package service
 
 import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/kubernetes/argocd/application"
 	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"strconv"
 )
@@ -18,7 +21,13 @@ func (s *Service) argocdValues() ([]string, error) {
 		return pending, nil
 	}
 
-	applications, e := guarded(s.argocdGuard, s.argocd.Applications)
+	applications, e := peer.Guarded(
+		context.Background(),
+		s.argocdGuard,
+		func(context.Context) ([]*application.Application, error) {
+			return s.argocd.Applications()
+		},
+	)
 
 	if e != nil {
 		return pending, e

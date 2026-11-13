@@ -13,4 +13,5 @@ type SearchResult struct {
 	Rank             float64           `json:"rank"`
 	ParentIdentifier *int64            `json:"parent_identifier,omitempty"`
 	ParentName       string            `json:"parent_name,omitempty"`
+	Snippet          string            `json:"-"`
 }

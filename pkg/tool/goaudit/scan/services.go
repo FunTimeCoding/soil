@@ -17,6 +17,10 @@ func Services(
 	var result []*Service
 	toolDirectory := "pkg/tool"
 
+	if !v.DirectoryExists(toolDirectory) {
+		return nil
+	}
+
 	for _, name := range v.MustReadDirectory(toolDirectory) {
 		if !strings.HasPrefix(name, soil.Go) {
 			continue

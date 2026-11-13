@@ -10,6 +10,10 @@ func (c *Client) RegistryRepositories(
 	project int64,
 	_ bool,
 ) ([]*registry_repository.Repository, error) {
+	if c.failure != nil {
+		return nil, c.failure
+	}
+
 	var result []*registry_repository.Repository
 
 	for _, r := range c.registries {

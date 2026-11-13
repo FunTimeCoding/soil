@@ -2,6 +2,7 @@ package forwarding_function
 
 import (
 	"fmt"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
@@ -22,7 +23,7 @@ func analyze(
 		Dir:   directory,
 		Tests: true,
 	}
-	loaded, e := packages.Load(configuration, "./...")
+	loaded, e := packages.Load(configuration, goModConstant.AllPackages)
 
 	if e != nil {
 		t.Fatalf("load: %s", e)

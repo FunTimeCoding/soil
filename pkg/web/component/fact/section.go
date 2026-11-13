@@ -1,19 +1,11 @@
 package fact
 
-import (
-	"github.com/funtimecoding/soil/pkg/web/constant"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
-)
+import "github.com/funtimecoding/soil/pkg/web/component/fact/row"
 
 func (f *Fact) Section(label string) *Fact {
-	f.rows = append(
-		f.rows,
-		html.Tr(
-			html.Class(constant.SectionClass),
-			html.Th(html.ColSpan("2"), gomponents.Text(label)),
-		),
-	)
+	r := row.New(label, nil)
+	r.Section = true
+	f.rows = append(f.rows, r)
 
 	return f
 }

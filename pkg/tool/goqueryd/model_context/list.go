@@ -39,7 +39,7 @@ func (s *Server) list(
 	)
 
 	if f != nil {
-		return s.captureFail(x, f, "document listing failed")
+		return s.answer(x, f)
 	}
 
 	return response.Success(notation.MarshalIndent(outcome))

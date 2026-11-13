@@ -1,9 +1,15 @@
 package service
 
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
+
 func (s *Service) inGroup(account string) (bool, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.directoryGuard,
-		func() (bool, error) {
+		func(context.Context) (bool, error) {
 			return s.directory.InGroup(account)
 		},
 	)

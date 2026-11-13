@@ -6,5 +6,5 @@ import (
 )
 
 func New(t *terminal.Terminal) *Context {
-	return &Context{client: client.NewDeferred(t.Required), terminal: t}
+	return &Context{client: client.NewEnvironment(), terminal: t}
 }

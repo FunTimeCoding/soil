@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -17,7 +16,8 @@ func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 	printed := assert.Capture(
 		t,
 		func() {
-			gofix.RunDefault(
+			module_tester.RunDefault(
+				t,
 				module_tester.Options(t, directory, true, false, "./..."),
 				output.NewResultsWithDirectory(directory),
 			)
@@ -32,7 +32,8 @@ func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 		),
 		printed,
 	)
-	gofix.RunDefault(
+	module_tester.RunDefault(
+		t,
 		module_tester.Options(t, directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)

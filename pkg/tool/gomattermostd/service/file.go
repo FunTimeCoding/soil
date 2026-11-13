@@ -1,9 +1,15 @@
 package service
 
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
+
 func (s *Service) File(identifier string) ([]byte, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]byte, error) {
+		func(context.Context) ([]byte, error) {
 			return s.mattermost.File(identifier)
 		},
 	)

@@ -3,19 +3,17 @@ package search_page
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/document_page"
+	"github.com/funtimecoding/soil/pkg/web/component/highlight"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func Results(
+func (p *Page) Results(
 	results []result.Search,
 	all []result.Facet,
-	query string,
-	collection string,
-	metadata map[string]string,
 ) gomponents.Node {
+	terms := p.terms()
 	rows := make([]gomponents.Node, 0, len(results))
 
 	for _, m := range results {
@@ -29,20 +27,17 @@ func Results(
 					),
 				),
 				html.Td(html.Small(gomponents.Text(m.VirtualPath))),
-				html.Td(html.Small(gomponents.Text(m.Snippet))),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("%.2f", m.Score),
-				),
+				html.Td(html.Small(highlight.New(m.Snippet, terms...).Node())),
+				html.Td(gomponents.Textf("%.2f", m.Score)),
 			),
 		)
 	}
 
 	return gomponents.Group(
 		[]gomponents.Node{
-			filters(query, collection, metadata),
-			count(len(results), collection),
-			facets(all, query, collection, metadata),
+			p.filters(),
+			count(len(results), p.collection),
+			p.facets(all),
 			table.New("Title", "Path", "Snippet", "Score").
 				Numeric(3).
 				Rows(rows).

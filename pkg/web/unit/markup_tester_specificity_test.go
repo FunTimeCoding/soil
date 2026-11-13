@@ -25,7 +25,7 @@ func TestSpecificityCountsWhereAsNothingAndIsAsItsWeightiestArgument(t *testing.
 	)
 	weigh(
 		[3]int{0, 3, 1},
-		":where(form).entry.record label:has(> .entry-label)",
+		":where(form).entry.sideways label:has(> .entry-label)",
 	)
 	weigh([3]int{1, 1, 0}, "#notifications:empty")
 	weigh([3]int{0, 0, 2}, "dialog::backdrop")

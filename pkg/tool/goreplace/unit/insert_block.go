@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
+	textConstant "github.com/funtimecoding/soil/pkg/text/constant"
 	"strings"
 )
 
@@ -14,9 +14,9 @@ func insertBlock(
 		[]string{
 			opening,
 			anchor,
-			constant.DividerMarker,
+			textConstant.DividerMarker,
 			insert,
-			constant.ReplaceMarker,
+			textConstant.ReplaceMarker,
 			"",
 		},
 		"\n",

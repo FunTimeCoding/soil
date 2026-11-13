@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/machine_change"
 )
 
@@ -9,9 +11,10 @@ func (s *Service) UpdateVirtualMachine(
 	name string,
 	c *machine_change.Change,
 ) (*virtual_machine.Machine, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*virtual_machine.Machine, error) {
+		func(context.Context) (*virtual_machine.Machine, error) {
 			if c.PrimaryAddress != nil {
 				if _, e := s.client.SetVirtualMachinePrimaryAddress(
 					name,

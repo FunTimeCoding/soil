@@ -3,6 +3,7 @@ package gofix
 import (
 	"bytes"
 	"github.com/funtimecoding/soil/pkg/errors"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
@@ -15,7 +16,7 @@ func formatThrough(
 	r *output.Results,
 ) {
 	if len(patterns) == 0 {
-		patterns = []string{"./..."}
+		patterns = []string{goModConstant.AllPackages}
 	}
 
 	all, _ := loadThrough(directory, patterns, w)

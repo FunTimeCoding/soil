@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/summary_row"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -36,10 +35,7 @@ func Table(
 				html.Td(gomponents.Text(r.Tool)),
 				gomponents.If(surface, html.Td(gomponents.Text(r.Surface))),
 				gomponents.If(kind, html.Td(gomponents.Text(r.Kind))),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Text(fmt.Sprintf("%d", r.Count)),
-				),
+				html.Td(gomponents.Text(fmt.Sprintf("%d", r.Count))),
 			),
 		)
 	}

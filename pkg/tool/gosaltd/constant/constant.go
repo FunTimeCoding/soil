@@ -27,9 +27,6 @@ const (
 	Status      = "status"
 	Identifier  = "id"
 
-	MinionsFail = "list minions"
-	KeysFail    = "list keys"
-
 	SaltDirectoryEnvironment = "SALT_DIRECTORY"
 
 	SaltPeer = "salt"

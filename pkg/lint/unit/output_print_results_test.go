@@ -46,7 +46,7 @@ func TestPrintResultsVerboseShowsAll(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"pkg/foo.go: applied fix (auto-fixed)\npkg/bar.go: blocked finding\n",
+		"pkg/bar.go: blocked finding\npkg/foo.go: applied fix (auto-fixed)\n",
 		result,
 	)
 }
@@ -74,7 +74,25 @@ func TestPrintResultsSummaryShowsBlockedDetailed(t *testing.T) {
 			output.PrintResults(entries, true)
 		},
 	)
-	assert.String(t, "pkg/foo.go\npkg/bar.go: blocked\n", result)
+	assert.String(t, "pkg/bar.go: blocked\npkg/foo.go\n", result)
+}
+
+func TestPrintResultsSortsByPathThenLine(t *testing.T) {
+	entries := []*concern.Concern{
+		concern.NewLine("a", "late", "pkg/foo.go", 9, "", false),
+		concern.NewLine("b", "other", "pkg/bar.go", 3, "", false),
+		concern.NewLine("c", "early", "pkg/foo.go", 2, "", false),
+	}
+	result := testutil.CaptureStdout(
+		func() {
+			output.PrintResults(entries, false)
+		},
+	)
+	assert.String(
+		t,
+		"pkg/bar.go:3: other\npkg/foo.go:2: early\npkg/foo.go:9: late\n",
+		result,
+	)
 }
 
 func TestPrintResultsLineLevel(t *testing.T) {

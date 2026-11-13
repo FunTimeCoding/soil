@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -12,7 +11,8 @@ import (
 
 func TestPassAfterRenameSeesRenamedSource(t *testing.T) {
 	directory := module_tester.RenamedParameter(t)
-	gofix.RunDefault(
+	module_tester.RunDefault(
+		t,
 		module_tester.Options(t, directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)

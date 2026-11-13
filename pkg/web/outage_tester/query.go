@@ -7,7 +7,10 @@ import (
 	"net/url"
 )
 
-func query(o *openapi3.Operation) string {
+func query(
+	o *openapi3.Operation,
+	parameters map[string]string,
+) string {
 	result := url.Values{}
 
 	for _, p := range o.Parameters {
@@ -16,7 +19,13 @@ func query(o *openapi3.Operation) string {
 			continue
 		}
 
-		result.Set(p.Value.Name, fmt.Sprint(schemaPlaceholder(p.Value.Schema)))
+		v, okay := parameters[p.Value.Name]
+
+		if !okay {
+			v = fmt.Sprint(schemaPlaceholder(p.Value.Schema))
+		}
+
+		result.Set(p.Value.Name, v)
 	}
 
 	if len(result) == 0 {

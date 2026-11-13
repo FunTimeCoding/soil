@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/wireless_network"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/wireless_network"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateWirelessNetwork(ssid string) (*wireless_network.Network, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*wireless_network.Network, error) {
+		func(context.Context) (*wireless_network.Network, error) {
 			return s.client.CreateWirelessNetwork(ssid)
 		},
 	)

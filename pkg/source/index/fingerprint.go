@@ -3,16 +3,20 @@ package index
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/types"
+	"golang.org/x/tools/go/packages"
 	"sort"
 )
 
 func Fingerprint(
-	p *types.Package,
+	loaded *packages.Package,
 	fingerprints map[string]string,
 ) string {
-	var lines []string
+	p := loaded.Types
+	declarations := typeDeclarations(loaded)
+	lines := []string{join.Space(constant.FingerprintPackageLine, p.Name())}
 	scope := p.Scope()
 	mentioned := make(map[string]bool)
 	seen := make(map[types.Type]bool)
@@ -32,6 +36,7 @@ func Fingerprint(
 			continue
 		}
 
+		lines = append(lines, declarations[name]...)
 		set := types.NewMethodSet(types.NewPointer(typeName.Type()))
 
 		if _, isFace := typeName.Type().Underlying().(*types.Interface); isFace {

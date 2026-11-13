@@ -26,10 +26,6 @@ func New(
 				WithStyle(constant.InlineStyle).
 				WithItems(
 					navigation_item.New(
-						constant.DashboardPath,
-						constant.SeedsTitle,
-					),
-					navigation_item.New(
 						constant.SessionsPath,
 						constant.SessionsTitle,
 					),

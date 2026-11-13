@@ -14,7 +14,8 @@ func inGuard(
 	for i := len(stack) - 2; i >= 0; i-- {
 		c, okay := stack[i].(*ast.CallExpr)
 
-		if !okay || (!guardMethod(p, c.Fun) && !wrappers[callee(p, c.Fun)]) {
+		if !okay || (!guardMethod(p, c.Fun) && !guardFunction(p, c.Fun) &&
+			!wrappers[callee(p, c.Fun)]) {
 			continue
 		}
 

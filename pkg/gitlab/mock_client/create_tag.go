@@ -13,5 +13,8 @@ func (c *Client) CreateTag(
 	_ string,
 	_ string,
 ) (*tag.Tag, error) {
-	return tag.New(&gitlab.Tag{Name: name}), nil
+	result := tag.New(&gitlab.Tag{Name: name})
+	c.tags = append(c.tags, result)
+
+	return result, nil
 }

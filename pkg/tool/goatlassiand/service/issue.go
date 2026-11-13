@@ -1,10 +1,15 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Issue(key string) (*issue.Issue, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.jiraGuard,
-		func() (*issue.Issue, error) { return s.jira.Issue(key) },
+		func(context.Context) (*issue.Issue, error) { return s.jira.Issue(key) },
 	)
 }

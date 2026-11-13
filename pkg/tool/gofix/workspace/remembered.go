@@ -10,7 +10,9 @@ func (w *Workspace) Remembered(key string) (
 	*token.FileSet,
 	bool,
 ) {
-	if w.loaded == nil || w.loadedKey != key || w.loadedWrites != w.writes {
+	if w.loaded == nil ||
+		w.loadedKey != key ||
+		w.loadedWrites != w.layer.Writes() {
 		return nil, nil, false
 	}
 

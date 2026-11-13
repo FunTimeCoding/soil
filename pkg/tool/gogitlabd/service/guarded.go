@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func guarded[T any](
@@ -18,15 +19,9 @@ func guarded[T any](
 		return result, e
 	}
 
-	g := p.Guard().Attempt(
+	return peer.Guarded(
 		x,
-		func(y context.Context) error {
-			var h error
-			result, h = f(y, p.Client())
-
-			return h
-		},
+		p.Guard(),
+		func(y context.Context) (T, error) { return f(y, p.Client()) },
 	)
-
-	return result, g
 }

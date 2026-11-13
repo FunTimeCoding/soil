@@ -3,10 +3,15 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/model_context_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/server_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/store_tester"
 	"net/http"
 	"testing"
 )
@@ -43,6 +48,14 @@ func TestForgeFaultIsCaptured(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())
 	assert.Count(t, 1, s.Reporter.Events())
+}
+
+func TestDaemonStartsWhileForgeIsDown(t *testing.T) {
+	f := service_tester.NewForge(t)
+	f.Fail(refusedConnection())
+	d := daemon_tester.New(t, store_tester.NewOption(t, f), memory.New())
+	_, guard := d.Workers()[0].(*peer.Guard)
+	assert.True(t, guard)
 }
 
 func TestForgeOutageRefusesToolQuietly(t *testing.T) {

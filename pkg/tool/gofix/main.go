@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/build_tag"
 	"github.com/funtimecoding/soil/pkg/source/inventory"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/option"
@@ -63,7 +64,8 @@ func Main() {
 		i := inventory.LoadOptional(inventory.DefaultPath())
 		o.Replacing = i.Replacing(root)
 		o.Ours = i.ModulePaths()
-		RunDefault(o, s)
+		_, e := RunDefault(o, s)
+		resolve.ExitOnLoadFailure(e)
 	}
 
 	hasBlocked := output.PrintResults(s.Entries, a.GetBoolean("summary"))

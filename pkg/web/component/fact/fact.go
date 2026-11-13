@@ -1,7 +1,9 @@
 package fact
 
-import "maragu.dev/gomponents"
+import "github.com/funtimecoding/soil/pkg/web/component/fact/row"
 
 type Fact struct {
-	rows []gomponents.Node
+	rows    []*row.Row
+	columns int
+	glance  bool
 }

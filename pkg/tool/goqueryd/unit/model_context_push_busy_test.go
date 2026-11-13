@@ -16,7 +16,7 @@ func TestPushToolWhileAnotherWriterHoldsStoreFailsReported(t *testing.T) {
 	holdStore(t, o.LitePath)
 	assert.StringContains(
 		t,
-		"push failed",
+		"store busy",
 		c.MustCallToolError(
 			constant.Push,
 			map[string]any{

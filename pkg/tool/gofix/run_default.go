@@ -9,9 +9,15 @@ import (
 func RunDefault(
 	o *option.Fix,
 	r *output.Results,
-) {
-	w := workspace.New(o.Diff, append([]string{o.Root}, o.Replacing...)...)
+) (w *workspace.Workspace, e error) {
+	w = workspaceFor(o)
+	defer func() { e = recoveredLoadFailure(recover()) }()
 	w.BeforeCommit(o.BeforeCommit)
+
+	if o.Loaded != nil && !o.Full {
+		w.Remember(loadKey(o.Root, o.Patterns), o.Loaded, o.FileSet)
+	}
+
 	runFix(o, w, r)
 	parameterThrough(o.Patterns, o.Root, w, r)
 	aliasThrough(
@@ -23,4 +29,6 @@ func RunDefault(
 	)
 	formatThrough(o.Patterns, o.Root, w, r)
 	finish(w, r)
+
+	return w, nil
 }

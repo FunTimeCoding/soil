@@ -10,5 +10,5 @@ func (s *System) AddMetadata(
 	size int64,
 	modTime time.Time,
 ) {
-	s.files[path] = file.New(size, modTime)
+	s.put(path, file.New(size, modTime))
 }

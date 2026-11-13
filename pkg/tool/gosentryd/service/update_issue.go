@@ -1,15 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) UpdateIssue(
 	identifier string,
 	status string,
 	assignedTo string,
 ) (*response.Issue, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*response.Issue, error) {
+		func(context.Context) (*response.Issue, error) {
 			return s.client.UpdateIssue(
 				s.organization,
 				identifier,

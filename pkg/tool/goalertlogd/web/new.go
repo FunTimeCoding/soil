@@ -23,10 +23,6 @@ func New(
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(
-						constant.DashboardPath,
-						constant.DashboardTitle,
-					),
-					navigation_item.New(
 						constant.RecentPath,
 						constant.RecentTitle,
 					),

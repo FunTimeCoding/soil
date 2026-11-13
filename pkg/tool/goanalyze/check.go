@@ -15,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/nil_dependency"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/omit_empty_zero"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/redundant_type_name"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_literal"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/route_guard"
@@ -74,6 +75,7 @@ func check(
 	nil_dependency.Check(p, results)
 	forwarding_function.CheckDaemon(p, results)
 	unguarded_peer.Check(p, results)
+	redundant_type_name.Check(p, results)
 
 	if comment {
 		stray_comment.Check(p, results)

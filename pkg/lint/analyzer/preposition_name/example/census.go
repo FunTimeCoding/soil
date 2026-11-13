@@ -2,6 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/preposition_name"
 	"github.com/funtimecoding/soil/pkg/lint/face"
@@ -12,7 +13,7 @@ import (
 
 func Census() {
 	root, _ := lint.Root("")
-	all, _, e := resolve.LoadPackages(root, "./...")
+	all, _, e := resolve.LoadPackages(root, goModConstant.AllPackages)
 	errors.PanicOnError(e)
 	loaded := resolve.PreferTestVariants(all)
 	faces := face.NewWithIndex(

@@ -306,10 +306,10 @@ writes a notice to stderr without ending the command. A typed client's
 response is checked before its `JSON200` is read - `t.Reject(r.Status(),
 r.Body)` when it is nil. `t.Blockln` is for a protocol exit that is neither
 success nor failure, such as a hook refusing a tool call: the command records
-`blocked`. A token comes from `t.Required`, read once the command runs:
-`web.DeferredBearerEditor(t.Required, name)` reads it on the first request,
-so a missing token ends the command as `error` and `--help` needs none.
-Results go to stdout, failures to stderr, so a pipe receives only results.
-Every exit records the running command's outcome in telemetry and flushes it
-first - still without the reporter. A command that calls `os.Exit` directly
-records nothing; that is the shape the terminal replaces.
+`blocked`. A daemon client's token comes from its `NewEnvironment()` in `Main`,
+so a missing token exits before any command begins. A token one command alone
+needs is read inside it through `t.Required`, which ends that command as
+`error`. Results go to stdout, failures to stderr, so a pipe receives only
+results. Every exit records the running command's outcome in telemetry and
+flushes it first - still without the reporter. A command that calls `os.Exit`
+directly records nothing; that is the shape the terminal replaces.

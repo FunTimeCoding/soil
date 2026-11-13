@@ -17,7 +17,7 @@ func (s *Server) index(
 	)
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(notation.MarshalIndent(results))

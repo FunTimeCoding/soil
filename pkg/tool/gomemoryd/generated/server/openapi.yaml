@@ -267,6 +267,18 @@ paths:
       responses:
         "200":
           description: Relation created or already present.
+        "400":
+          description: Unknown relation type.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Source or target memory not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create relation.
           content:

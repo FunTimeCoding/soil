@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -47,7 +46,7 @@ func (s *Server) findReferences(
 		)
 
 		if f != nil {
-			return s.captureFail(x, f, soil.UnexpectedError)
+			return s.captureFail(x, f)
 		}
 
 		if references == nil {
@@ -69,7 +68,7 @@ func (s *Server) findReferences(
 	)
 
 	if f != nil {
-		return s.captureFail(x, f, soil.UnexpectedError)
+		return s.captureFail(x, f)
 	}
 
 	if references == nil {

@@ -2,6 +2,7 @@ package goclaude
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/terminal"
 )
 
@@ -14,7 +15,8 @@ func printPeekEntry(
 	t.Line(userText)
 
 	if limit > 0 && assistantContext != nil && *assistantContext != "" {
-		text, _ := cutRunes(*assistantContext, limit)
-		t.Line(fmt.Sprintf("  → %s", text))
+		t.Line(
+			fmt.Sprintf("  → %s", shorten.Prefix(*assistantContext, limit)),
+		)
 	}
 }

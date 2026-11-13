@@ -39,6 +39,7 @@ trivy
 
 # Go
 GOPROXY
+GOFLAGS
 errcheck
 goanalyze
 golangci
@@ -140,6 +141,7 @@ gosecretd
 gosentry
 gosentryd
 gosilence
+gosource
 gosourced
 gosproutd
 gosublime

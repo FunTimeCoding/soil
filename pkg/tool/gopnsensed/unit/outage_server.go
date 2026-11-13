@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/opnsense/mock_client"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -13,17 +14,16 @@ import (
 func outageServer(
 	t *testing.T,
 	r *memory.Memory,
-) *model_context_server.Server {
+) (*model_context_server.Server, func() error) {
 	t.Helper()
 	c := mock_client.New()
 	c.Failure = refusedDial()
+	d := daemon_tester.New(t, c)
 	result := model_context_server.New(
 		t,
-		func(g *guard.Mux) {
-			daemon_tester.New(t, c).Mount(r, mock_recorder.New(), g)
-		},
+		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
 	t.Cleanup(result.Close)
 
-	return result
+	return result, d.Workers()[0].(*peer.Guard).Unavailable
 }

@@ -13,5 +13,5 @@ func (s *System) AddFile(
 	f := file.New(int64(len(content)), modTime)
 	f.Content = content
 	f.Loaded = true
-	s.files[path] = f
+	s.put(path, f)
 }

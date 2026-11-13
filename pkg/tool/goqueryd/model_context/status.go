@@ -14,7 +14,7 @@ func (s *Server) status(
 	result, e := s.service.Status()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answer(x, e)
 	}
 
 	return response.Success(notation.MarshalIndent(result))

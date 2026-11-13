@@ -160,6 +160,15 @@ Shared error classes), or for a one-off type by answering
 `Expected() true` (`classify/face.Expected`), which `classify.Reportable`
 honours - and only once it has been seen enough to know what it means.
 
+## An answer it cannot give
+
+A lookup that cannot read what came back returns the failure, not the value
+that means "nothing there" - absent and broken must not share a value. A
+check that cannot see a class says so, and where it cannot answer, its answer
+refuses rather than returning the value that means success: a warning in one
+field does not neutralise a success-shaped value in the next, because the
+reader is reading for the answer.
+
 ## Leaves
 
 - [mcp.md](mcp.md) - answer and answerMessage on MCP, response.Fail for

@@ -7,7 +7,9 @@ const (
 
 	OriginRemote = "origin"
 
-	Directory = ".git"
+	Directory   = ".git"
+	IgnoreFile  = ".gitignore"
+	ExcludeFile = ".git/info/exclude"
 
 	MainBranch   = "main"
 	MasterBranch = "master"

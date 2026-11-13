@@ -3,9 +3,9 @@ package goreplace
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/goreplace/block"
+	"github.com/funtimecoding/soil/pkg/text/literal_edit/block"
+	"github.com/funtimecoding/soil/pkg/text/literal_edit/match"
 	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goreplace/match"
 	"io"
 	"os"
 	"strings"
@@ -36,16 +36,6 @@ func Run(
 		return fmt.Errorf(constant.Failed, path, strings.Join(failures, "\n"))
 	}
 
-	var result strings.Builder
-	previous := 0
-
-	for _, m := range matches {
-		result.WriteString(content[previous:m.Offset])
-		result.WriteString(m.Replace)
-		previous = m.Offset + m.Length
-	}
-
-	result.WriteString(content[previous:])
 	printDifference(out, content, matches)
 
 	if dryRun {
@@ -54,7 +44,11 @@ func Run(
 		return nil
 	}
 
-	system.WriteFile(path, []byte(result.String()), system.Mode(path))
+	system.WriteFile(
+		path,
+		[]byte(match.Apply(content, matches)),
+		system.Mode(path),
+	)
 	write(out, constant.Applied, path, len(matches))
 
 	return nil

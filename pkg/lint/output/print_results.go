@@ -1,8 +1,10 @@
 package output
 
 import (
+	"cmp"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"slices"
 )
 
 func PrintResults(
@@ -11,8 +13,21 @@ func PrintResults(
 ) bool {
 	var hasBlocked bool
 	seen := make(map[string]bool)
+	sorted := slices.Clone(entries)
+	slices.SortStableFunc(
+		sorted,
+		func(
+			a *concern.Concern,
+			b *concern.Concern,
+		) int {
+			return cmp.Or(
+				cmp.Compare(a.Path, b.Path),
+				cmp.Compare(a.Line, b.Line),
+			)
+		},
+	)
 
-	for _, c := range entries {
+	for _, c := range sorted {
 		line := FormatConcern(c)
 
 		if !c.Fixed && !c.Planned {

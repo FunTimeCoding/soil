@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/types/summary"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -18,10 +17,7 @@ func Table(summaries []summary.Summary) gomponents.Node {
 			rows,
 			html.Tr(
 				html.Td(gomponents.Text(v.Label)),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Text(fmt.Sprintf("%d", v.Count)),
-				),
+				html.Td(gomponents.Text(fmt.Sprintf("%d", v.Count))),
 				layout.TimeCell(v.Last),
 			),
 		)

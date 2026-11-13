@@ -12,10 +12,10 @@ func spreadRow(
 ) gomponents.Node {
 	return html.Tr(
 		html.Td(gomponents.Text(name)),
-		numericCell(s.Median),
-		numericCell(s.Ninetieth),
-		numericCell(s.NinetyNinth),
-		numericCell(s.Maximum),
-		numericCell(s.Total),
+		html.Td(gomponents.Textf("%d", s.Median)),
+		html.Td(gomponents.Textf("%d", s.Ninetieth)),
+		html.Td(gomponents.Textf("%d", s.NinetyNinth)),
+		html.Td(gomponents.Textf("%d", s.Maximum)),
+		html.Td(gomponents.Textf("%d", s.Total)),
 	)
 }

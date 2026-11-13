@@ -2,6 +2,7 @@ package timeline
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/label_change"
 )
@@ -59,8 +60,8 @@ func FormatDescription(e *Entry) string {
 			return fmt.Sprintf("%s summarized", actor)
 		}
 
-		if !e.Full && len(body) > 200 {
-			body = fmt.Sprintf("%s…", body[:200])
+		if !e.Full {
+			body = shorten.Ellipsis(body, 200)
 		}
 
 		return fmt.Sprintf("%s summarized: %s", actor, body)

@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
 
@@ -11,9 +13,10 @@ func (s *Service) Devices(query string) (
 	map[int32][]*label.Label,
 	error,
 ) {
-	result, e := guarded(
+	result, e := peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*device.Device, error) {
+		func(context.Context) ([]*device.Device, error) {
 			if query != "" {
 				return s.client.DevicesByMatch(query)
 			}

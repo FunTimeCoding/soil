@@ -91,6 +91,69 @@ type CensusUse struct {
 	Type    string   `json:"type"`
 }
 
+// CheckChange defines model for CheckChange.
+type CheckChange struct {
+	Current     []byte `json:"current"`
+	Destination string `json:"destination"`
+	Original    []byte `json:"original"`
+	Path        string `json:"path"`
+}
+
+// CheckConcern defines model for CheckConcern.
+type CheckConcern struct {
+	Fixed    bool   `json:"fixed"`
+	Key      string `json:"key"`
+	Line     int    `json:"line"`
+	LineText string `json:"line_text"`
+	Path     string `json:"path"`
+	Planned  bool   `json:"planned"`
+	Text     string `json:"text"`
+	Type     string `json:"type"`
+}
+
+// CheckRequest defines model for CheckRequest.
+type CheckRequest struct {
+	// Fix Apply what golint and gofix can fix.
+	Fix *bool `json:"fix,omitempty"`
+
+	// Fresh Check every package again, ignoring the clean cache.
+	Fresh *bool `json:"fresh,omitempty"`
+
+	// Root Absolute directory of the repository to check.
+	Root string `json:"root"`
+
+	// Transcript A session's transcript, whose changes scope the check; the whole repository when empty.
+	Transcript *string `json:"transcript,omitempty"`
+}
+
+// CheckResponse defines model for CheckResponse.
+type CheckResponse struct {
+	Announcement string         `json:"announcement"`
+	Changes      []CheckChange  `json:"changes"`
+	Checked      []string       `json:"checked"`
+	Root         string         `json:"root"`
+	Sections     []CheckSection `json:"sections"`
+
+	// Stale A lint source changed since the daemon started, relative to its module; empty when none has.
+	Stale     string `json:"stale"`
+	Unchanged bool   `json:"unchanged"`
+}
+
+// CheckSection defines model for CheckSection.
+type CheckSection struct {
+	Entries   []CheckConcern   `json:"entries"`
+	Header    string           `json:"header"`
+	Unchecked []CheckUnchecked `json:"unchecked"`
+}
+
+// CheckUnchecked defines model for CheckUnchecked.
+type CheckUnchecked struct {
+	Line   int    `json:"line"`
+	Path   string `json:"path"`
+	Reason string `json:"reason"`
+	Span   string `json:"span"`
+}
+
 // ClassCount defines model for ClassCount.
 type ClassCount struct {
 	Class string `json:"class"`
@@ -173,11 +236,17 @@ type GetDiffParams struct {
 	Text *bool `form:"text,omitempty" json:"text,omitempty"`
 }
 
+// PostCheckJSONRequestBody defines body for PostCheck for application/json ContentType.
+type PostCheckJSONRequestBody = CheckRequest
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
 	// (GET /api/census)
 	GetCensus(w http.ResponseWriter, r *http.Request, params GetCensusParams)
+
+	// (POST /api/check)
+	PostCheck(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/diff)
 	GetDiff(w http.ResponseWriter, r *http.Request, params GetDiffParams)
@@ -245,6 +314,20 @@ func (siw *ServerInterfaceWrapper) GetCensus(w http.ResponseWriter, r *http.Requ
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetCensus(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostCheck operation middleware
+func (siw *ServerInterfaceWrapper) PostCheck(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostCheck(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -463,6 +546,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/diff", wrapper.GetDiff)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/census", wrapper.GetCensus)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/index/prune", wrapper.PostIndexPrune)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/check", wrapper.PostCheck)
 
 	return m
 }
@@ -520,6 +604,70 @@ func (response GetCensus404JSONResponse) VisitGetCensusResponse(w http.ResponseW
 type GetCensus500JSONResponse ErrorResponse
 
 func (response GetCensus500JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostCheckRequestObject struct {
+	Body *PostCheckJSONRequestBody
+}
+
+type PostCheckResponseObject interface {
+	VisitPostCheckResponse(w http.ResponseWriter) error
+}
+
+type PostCheck200JSONResponse CheckResponse
+
+func (response PostCheck200JSONResponse) VisitPostCheckResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostCheck404JSONResponse Error
+
+func (response PostCheck404JSONResponse) VisitPostCheckResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostCheck409JSONResponse Error
+
+func (response PostCheck409JSONResponse) VisitPostCheckResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostCheck500JSONResponse ErrorResponse
+
+func (response PostCheck500JSONResponse) VisitPostCheckResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -622,6 +770,9 @@ type StrictServerInterface interface {
 	// (GET /api/census)
 	GetCensus(ctx context.Context, request GetCensusRequestObject) (GetCensusResponseObject, error)
 
+	// (POST /api/check)
+	PostCheck(ctx context.Context, request PostCheckRequestObject) (PostCheckResponseObject, error)
+
 	// (GET /api/diff)
 	GetDiff(ctx context.Context, request GetDiffRequestObject) (GetDiffResponseObject, error)
 
@@ -694,6 +845,37 @@ func (sh *strictHandler) GetCensus(w http.ResponseWriter, r *http.Request, param
 	}
 }
 
+// PostCheck operation middleware
+func (sh *strictHandler) PostCheck(w http.ResponseWriter, r *http.Request) {
+	var request PostCheckRequestObject
+
+	var body PostCheckJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostCheck(ctx, request.(PostCheckRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostCheck")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostCheckResponseObject); ok {
+		if err := validResponse.VisitPostCheckResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetDiff operation middleware
 func (sh *strictHandler) GetDiff(w http.ResponseWriter, r *http.Request, params GetDiffParams) {
 	var request GetDiffRequestObject
@@ -749,32 +931,43 @@ func (sh *strictHandler) PostIndexPrune(w http.ResponseWriter, r *http.Request) 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

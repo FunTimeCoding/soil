@@ -1,14 +1,19 @@
 package service
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/mattermost/mattermost/server/public/model"
+)
 
 func (s *Service) Users(
 	page int,
 	perPage int,
 ) ([]*model.User, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*model.User, error) {
+		func(context.Context) ([]*model.User, error) {
 			return s.mattermost.Users(page, perPage)
 		},
 	)

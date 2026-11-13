@@ -2,11 +2,12 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/types/summary"
 )
 
 func (s *Service) Latest(x context.Context) ([]*summary.Summary, error) {
-	stanzas, e := guarded(x, s.guard, s.client.Stanzas)
+	stanzas, e := peer.Guarded(x, s.guard, s.client.Stanzas)
 
 	if e != nil {
 		return nil, e

@@ -1,10 +1,12 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/directory/types/entry"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/user"
 )
@@ -13,9 +15,10 @@ func (s *Service) authenticateDirectory(
 	account string,
 	password string,
 ) (*user.User, error) {
-	found, e := guarded(
+	found, e := peer.Guarded(
+		context.Background(),
 		s.directoryGuard,
-		func() (*entry.Entry, error) {
+		func(context.Context) (*entry.Entry, error) {
 			return s.directory.Authenticate(account, password)
 		},
 	)

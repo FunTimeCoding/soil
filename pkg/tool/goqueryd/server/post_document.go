@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
@@ -33,15 +32,11 @@ func (s *Server) PostDocument(
 	)
 
 	if timeout.Is(e) {
-		return server.PostDocument503JSONResponse(
-			*s.captureFail(x, e, e.Error()),
-		), nil
+		return server.PostDocument503JSONResponse(*s.answer(x, e)), nil
 	}
 
 	if e != nil {
-		return server.PostDocument500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.PostDocument500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := server.PostDocument200JSONResponse{}

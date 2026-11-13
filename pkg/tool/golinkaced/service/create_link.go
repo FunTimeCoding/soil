@@ -1,6 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/linkace/link"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/linkace/link"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateLink(
 	l string,
@@ -8,9 +12,10 @@ func (s *Service) CreateLink(
 	listIdentifier int,
 	tags []string,
 ) (*link.Link, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*link.Link, error) {
+		func(context.Context) (*link.Link, error) {
 			return s.client.CreateLink(l, title, listIdentifier, tags)
 		},
 	)

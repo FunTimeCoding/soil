@@ -8,7 +8,7 @@ func ReachedPaths(
 ) map[string]bool {
 	result := map[string]bool{}
 
-	for _, u := range ReachUnits(g, packagePaths) {
+	for _, u := range module_graph.ReachUnits(g, packagePaths) {
 		result[u.Path] = true
 	}
 

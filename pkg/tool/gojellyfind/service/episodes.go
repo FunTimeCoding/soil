@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/jellyfin/item"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) Episodes(seriesIdentifier string) ([]*item.Item, error) {
@@ -10,9 +12,10 @@ func (s *Service) Episodes(seriesIdentifier string) ([]*item.Item, error) {
 		return nil, validation.New("series_id is required")
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*item.Item, error) {
+		func(context.Context) ([]*item.Item, error) {
 			return s.client.Episodes(seriesIdentifier)
 		},
 	)

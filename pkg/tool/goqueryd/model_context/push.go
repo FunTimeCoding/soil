@@ -43,7 +43,7 @@ func (s *Server) push(
 	warning, h := s.service.PushDocument(x, collection, path, body, metadata)
 
 	if h != nil {
-		return s.captureFail(x, h, "push failed")
+		return s.answer(x, h)
 	}
 
 	if warning != "" {

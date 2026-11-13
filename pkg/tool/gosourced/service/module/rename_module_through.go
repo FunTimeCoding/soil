@@ -2,6 +2,7 @@ package module
 
 import (
 	"fmt"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
@@ -36,7 +37,7 @@ func renameModuleThrough(
 		)
 	}
 
-	all, set, e := load.Packages(directory, "./...")
+	all, set, e := load.Packages(directory, goModConstant.AllPackages)
 
 	if e != nil {
 		return nil, e

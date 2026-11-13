@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/opnsense/host"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/opnsense/host"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) Hosts(phrase string) ([]*host.Host, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() ([]*host.Host, error) {
+		func(context.Context) ([]*host.Host, error) {
 			return s.client.Hosts(phrase)
 		},
 	)

@@ -2,6 +2,7 @@ package reference
 
 import (
 	"fmt"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/index/xref"
@@ -23,7 +24,7 @@ func (s *Service) FileReferences(
 	pattern := packagePath
 
 	if s.workspace.Full() {
-		pattern = "./..."
+		pattern = goModConstant.AllPackages
 	}
 
 	all, set, e := load.Packages(directory, pattern)

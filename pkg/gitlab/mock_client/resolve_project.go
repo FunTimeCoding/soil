@@ -9,6 +9,10 @@ func (c *Client) ResolveProject(
 	_ context.Context,
 	identifier string,
 ) (int64, error) {
+	if c.failure != nil {
+		return 0, c.failure
+	}
+
 	if number, e := strconv.ParseInt(identifier, 10, 64); e == nil {
 		return number, nil
 	}

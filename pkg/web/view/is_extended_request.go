@@ -6,5 +6,6 @@ import (
 )
 
 func (v *View) IsExtendedRequest(r *http.Request) bool {
-	return r.Header.Get(constant.ExtendedRequest) == "true"
+	return r.Header.Get(constant.ExtendedRequest) == "true" &&
+		r.Header.Get(constant.ExtendedRestore) != "true"
 }

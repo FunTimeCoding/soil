@@ -8,6 +8,8 @@ const (
 	BlockCall    = "call"
 )
 
+var BlockKinds = []string{BlockMessage, BlockEdit, BlockCall}
+
 const (
 	SearchConversationLimit   = 20
 	SearchConversationMaximum = 100

@@ -1,17 +1,20 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/peer"
 )
 
 func (s *Service) SetPageStatus(
 	identifier string,
 	status string,
 ) (*page.Page, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.confluenceGuard,
-		func() (*page.Page, error) {
+		func(context.Context) (*page.Page, error) {
 			var current *page.Page
 			var e error
 

@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/device"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) SetDeviceCustomFields(
 	name string,
 	fields map[string]any,
 ) (*device.Device, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*device.Device, error) {
+		func(context.Context) (*device.Device, error) {
 			return s.client.SetDeviceCustomFields(name, fields)
 		},
 	)

@@ -7,9 +7,9 @@ import (
 
 func TestUnguardedPeerFlagsCallsOutsideGuard(t *testing.T) {
 	results := analyze(t)
-	testutil.AssertBlocked(t, results, 5)
+	testutil.AssertBlocked(t, results, 6)
 
-	for _, line := range []int{9, 16, 23, 45, 68} {
+	for _, line := range []int{9, 16, 23, 45, 68, 77} {
 		testutil.AssertLineBlocked(t, results, "flagged.go", line)
 	}
 

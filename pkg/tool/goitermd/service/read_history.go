@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/iterm/history"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
 )
 
@@ -13,9 +15,10 @@ func (s *Service) ReadHistory(
 		count = constant.HistoryCount
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*history.History, error) {
+		func(context.Context) (*history.History, error) {
 			return s.client.ReadHistory(identifier, count)
 		},
 	)

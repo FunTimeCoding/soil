@@ -36,11 +36,14 @@ func (r *FieldRow) Node() gomponents.Node {
 			r.label != "",
 			html.Span(
 				html.Class(constant.FieldLabelClass),
+				gomponents.If(r.tooltip == "", gomponents.Text(r.label)),
 				gomponents.If(
 					r.tooltip != "",
-					gomponents.Attr(constant.TooltipAttribute, r.tooltip),
+					html.Span(
+						gomponents.Attr(constant.TooltipAttribute, r.tooltip),
+						gomponents.Text(r.label),
+					),
 				),
-				gomponents.Text(r.label),
 			),
 		),
 		html.Span(html.Class(constant.FieldValueClass), value),

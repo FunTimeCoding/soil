@@ -9,19 +9,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
-	"net"
-	"os"
-	"syscall"
 	"testing"
 )
 
 func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = &net.OpError{
-		Op:  "dial",
-		Net: "tcp",
-		Err: os.NewSyscallError("connect", syscall.ECONNREFUSED),
-	}
+	c.Failure = refusedDial()
 	m := memory.New()
 	s := restClient(t, c, m)
 

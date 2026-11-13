@@ -1,7 +1,17 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/habitica/statistic"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) UserStats() (*statistic.Statistic, error) {
-	return guarded(s.guard, s.client.UserStats)
+	return peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(context.Context) (*statistic.Statistic, error) {
+			return s.client.UserStats()
+		},
+	)
 }

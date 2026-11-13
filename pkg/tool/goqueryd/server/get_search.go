@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
@@ -54,9 +53,7 @@ func (s *Server) GetSearch(
 	}
 
 	if e != nil {
-		return server.GetSearch500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.GetSearch500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	result := server.GetSearch200JSONResponse{

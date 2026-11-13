@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
@@ -18,9 +17,7 @@ func (s *Server) PostEmbed(
 	}
 
 	if e != nil {
-		return server.PostEmbed500JSONResponse(
-			*s.captureFail(x, e, soil.UnexpectedError),
-		), nil
+		return server.PostEmbed500JSONResponse(*s.answer(x, e)), nil
 	}
 
 	return server.PostEmbed200JSONResponse{

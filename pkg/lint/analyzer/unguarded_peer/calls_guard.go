@@ -13,7 +13,8 @@ func callsGuard(
 	ast.Inspect(
 		body,
 		func(n ast.Node) bool {
-			if c, okay := n.(*ast.CallExpr); okay && guardMethod(p, c.Fun) {
+			if c, okay := n.(*ast.CallExpr); okay &&
+				(guardMethod(p, c.Fun) || guardFunction(p, c.Fun)) {
 				result = true
 			}
 

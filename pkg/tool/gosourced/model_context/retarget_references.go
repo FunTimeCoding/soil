@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -33,7 +32,7 @@ func (s *Server) retargetReferences(
 	)
 
 	if e != nil {
-		return s.captureFail(x, e, soil.UnexpectedError)
+		return s.captureFail(x, e)
 	}
 
 	return answerConcerns(r)

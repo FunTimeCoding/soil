@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -13,12 +12,8 @@ func (s *Server) embed(
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Embed(x)
 
-	if unavailable.Is(e) {
-		return response.Fail("%v", e)
-	}
-
 	if e != nil {
-		return s.captureFail(x, e, "embed failed")
+		return s.answer(x, e)
 	}
 
 	return response.Success(

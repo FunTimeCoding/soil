@@ -1,7 +1,17 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/sublime/view"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/sublime/view"
+)
 
 func (s *Service) Views() ([]*view.View, error) {
-	return guarded(s.guard, s.client.Views)
+	return peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(context.Context) ([]*view.View, error) {
+			return s.client.Views()
+		},
+	)
 }

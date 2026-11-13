@@ -6,41 +6,50 @@
 task lint
 ```
 
-Runs the repository's lint pipeline — golint, golangci-lint, gofix,
-goanalyze and goaudit, in that order. golangci-lint takes the repository's
-custom build tags from `goreach --tags`, the set goanalyze and gofix already
-load with, so a file behind any tag is linted - a hand-written tag list
-drifts, and a directory whose files all carry a missing tag fails the run.
-Each tool's first line names the repository it scanned; after that
-the pipeline is silent on success - any further output is a failure.
-Lint has multiple stages - clearing the first may reveal new
-issues from the next. golint also names every installed binary
-older than its repository's latest tag; `gobuild stale`
-installs them all.
+Runs golangci-lint, then `gocheck --fix`: golint, goaudit, gofix and
+goanalyze as stages of one run, each under its own header line naming the
+repository. Every stage reports even when an earlier one found something, and
+the run fails if any did. golint's and gofix's fixes are written once at the
+end, and not at all if a file they touch changed meanwhile - the refusal names
+each such file. A package that does not load is a finding, and gofix and
+goanalyze skip that run. golangci-lint takes the repository's custom build tags
+from `goreach --tags`, the set gocheck loads with, so a file behind any tag is
+linted - a hand-written tag list drifts, and a directory whose files all carry
+a missing tag fails the run. After the headers the pipeline is silent on
+success - any further output is a failure. gocheck skips a package it checked
+clean before at an unchanged key - its files, the APIs it uses, the packages it
+imports, the workspace's interfaces and the constants in reach of it - so a run
+loads only what moved; `gocheck --fresh` checks everything again. golint also
+names every installed binary older than its repository's latest tag;
+`gobuild stale` installs them all.
 
-`task lint-check` runs the same stages without writing: golint and
-golangci-lint without `--fix`, `gofix --diff`, then goanalyze and
-goaudit. golint without `--fix` reports what it would fix as a finding,
-so a green check means `task lint` has nothing to change. Use it to look;
-fix with `task lint`. `REACH=own` narrows
-it to what the current session changed, `REACH=<session>` to what a
-named one did: `goreach` reads the session's transcript - the files
-its edit tools wrote and the ones gosourced reports - keeps those git
-still sees changed, and prints the directories they reach, each
-changed package and every package importing it, read from import
-lines so code that does not type-check still counts. goaudit stays
-whole-repository. A reach with nothing changed ends the task early. A
-reach takes in whole packages, so another session's changed files ride
-along, and a stage that fails on theirs stops the run before the later
-stages look at yours - run those stages directly over your packages until
-theirs clears.
+gocheck asks gosourced to run the check when `GOSOURCE_TOKEN` is set and the
+daemon serves the repository, and runs in its own process otherwise - the same
+code, so the same findings. gosourced runs the lint code it started with: a
+run says so in one line on stderr when that code changed since, and
+`gocheck --local` runs the code on disk.
+
+`task lint-check` runs the same without writing: golangci-lint without
+`--fix`, and gocheck printing one diff of what golint and gofix would change.
+goanalyze checks the code as it would be after those fixes, with its lines
+translated back to the files on disk. A green check means `task lint` has
+nothing to change. Use it to look; fix with `task lint`. `REACH=own` narrows it
+to what the current session changed, `REACH=<session>` to what a named one did:
+`goreach` reads the session's transcript - the files its edit tools wrote and
+the ones gosourced reports - keeps those git still sees changed, and prints the
+directories they reach, each changed package and every package importing it,
+read from import lines so code that does not type-check still counts. goaudit
+stays whole-repository. A reach with nothing changed ends the task early. A
+reach takes in whole packages, so another session's changed files ride along,
+and their findings come with yours.
 Bash writes join the reach where the command names its files
 literally - `mv` and `git mv` (both sides), `cp` (the destination),
 `rm`, `git rm`, `rmdir`, `sed -i`, `tee`, `touch` and redirects -
 resolved from the directory the transcript recorded and any `cd`
-before them. `goreach` counts the rest apart: operands built from
-variables, globs or loops, fixer runs (their own run is their check)
-and scripts.
+before them. A glob operand (`rm tmp/*.md`) takes in the files git sees
+changed that it matches, and counts as globbed. `goreach` counts the
+rest apart: operands built from variables or loops, fixer runs (their
+own run is their check) and scripts.
 `go test $(goreach)` tests the same reach.
 
 Run the full pipeline once per completed code scope - it covers
@@ -139,8 +148,18 @@ the check reaches, including one that reaches it through a `replace`
 directive. A new analyzer goes the same way: build it, clear it,
 then register it.
 
+Teach a check only what the live tree needs: before extending it for a
+suspected miss, show the miss exists with a break or a count, because an
+extension that moves no finding is code nothing needs. And when tightening
+a check floods findings of one shape, read what the loose rule was standing
+in for before reverting - the flood is often a gap the old rule hid, not a
+fault in the new one.
+
 ### After a large refactor
 
 Run `task lint` to catch naming drift,
 unused imports, spacing violations. Run `goaudit` to catch structural
 drift.
+
+After a repo-wide auto-fix, run `go vet ./...` or the tests: `go build ./...`
+skips test files, so a fix that breaks one builds green.

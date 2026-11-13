@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateVirtualMachine(
 	name string,
 	cluster string,
 ) (*virtual_machine.Machine, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*virtual_machine.Machine, error) {
+		func(context.Context) (*virtual_machine.Machine, error) {
 			c, e := s.client.Cluster(cluster)
 
 			if e != nil {

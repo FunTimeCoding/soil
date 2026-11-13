@@ -1,7 +1,17 @@
 package service
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/mattermost/mattermost/server/public/model"
+)
 
 func (s *Service) Me() (*model.User, error) {
-	return guarded(s.guard, s.mattermost.Me)
+	return peer.Guarded(
+		context.Background(),
+		s.guard,
+		func(context.Context) (*model.User, error) {
+			return s.mattermost.Me()
+		},
+	)
 }

@@ -13,7 +13,8 @@ import (
 func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 	directory := module_tester.CollisionKinds(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunDefault(
+	module_tester.RunDefault(
+		t,
 		module_tester.Options(t, directory, false, false, "./..."),
 		r,
 	)

@@ -7,16 +7,19 @@ import (
 	"net/url"
 )
 
-func Path(
-	query string,
-	collection string,
+func (p *Page) path(
+	mode string,
 	metadata map[string]string,
 ) string {
 	parameters := url.Values{}
-	parameters.Set(webConstant.ParameterQuery, query)
+	parameters.Set(webConstant.ParameterQuery, p.query)
 
-	if collection != "" {
-		parameters.Set(constant.Collection, collection)
+	if p.collection != "" {
+		parameters.Set(constant.Collection, p.collection)
+	}
+
+	if mode != constant.HybridMode {
+		parameters.Set(constant.Mode, mode)
 	}
 
 	for k, v := range metadata {

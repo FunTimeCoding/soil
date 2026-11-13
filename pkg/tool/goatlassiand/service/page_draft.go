@@ -1,11 +1,16 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) PageDraft(identifier string) (*page.Page, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.confluenceGuard,
-		func() (*page.Page, error) {
+		func(context.Context) (*page.Page, error) {
 			return s.confluence.DraftOverlay(identifier)
 		},
 	)

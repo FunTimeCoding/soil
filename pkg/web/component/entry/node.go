@@ -16,8 +16,8 @@ func (e *Entry) Node() gomponents.Node {
 		classes = append(classes, constant.EntryInlineClass)
 	}
 
-	if e.record {
-		classes = append(classes, constant.EntryRecordClass)
+	if e.sideways {
+		classes = append(classes, constant.EntrySidewaysClass)
 	}
 
 	if e.class != "" {
@@ -57,6 +57,6 @@ func (e *Entry) Node() gomponents.Node {
 		gomponents.If(e.alert != "", layout.Alert(e.alert)),
 		gomponents.Group(e.hidden),
 		gomponents.Group(e.body()),
-		button,
+		gomponents.If(!e.live, button),
 	)
 }

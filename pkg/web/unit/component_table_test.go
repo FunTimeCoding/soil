@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -12,7 +13,7 @@ import (
 func TestTableHeadsItsColumnsAndCarriesItsRows(t *testing.T) {
 	assert.String(
 		t,
-		`<table><thead><tr><th>Alfa</th><th class="numeric">Bravo</th></tr></thead><tbody><tr><td>charlie</td><td class="numeric">1</td></tr></tbody></table>`,
+		`<table class="numeric-1"><thead><tr><th>Alfa</th><th>Bravo</th></tr></thead><tbody><tr><td>charlie</td><td>1</td></tr></tbody></table>`,
 		renderedTable(
 			t,
 			table.New("Alfa", "Bravo").
@@ -21,16 +22,46 @@ func TestTableHeadsItsColumnsAndCarriesItsRows(t *testing.T) {
 					[]gomponents.Node{
 						html.Tr(
 							html.Td(gomponents.Text("charlie")),
-							html.Td(
-								html.Class(constant.NumericClass),
-								gomponents.Text("1"),
-							),
+							html.Td(gomponents.Text("1")),
 						),
 					},
 				).
 				Empty("Nothing yet."),
 		),
 	)
+}
+
+func TestNumericColumnsMarkTableBesideItsOwnClass(t *testing.T) {
+	assert.StringContains(
+		t,
+		`<table class="echo numeric-0 numeric-3">`,
+		renderedTable(
+			t,
+			table.New("Alfa").Class(constant.FixtureEcho).Numeric(3, 0),
+		),
+	)
+}
+
+func TestNumericColumnBeyondSharedRulesPanics(t *testing.T) {
+	assert.PanicContains(
+		t,
+		"numeric column outside the shared rules",
+		func() { table.New("Alfa").Numeric(constant.NumericColumnLimit) },
+	)
+}
+
+func TestEveryNumericColumnHasSharedRule(t *testing.T) {
+	for c := range constant.NumericColumnLimit {
+		assert.StringContains(
+			t,
+			fmt.Sprintf(
+				":where(table.numeric-%d) :is(th, td:not([colspan])):nth-child(%d)",
+				c,
+				c+1,
+			),
+			constant.ComponentStyle,
+		)
+	}
 }
 
 func TestEmptyTableSaysSoInSharedLook(t *testing.T) {

@@ -1,6 +1,10 @@
 package service
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/mattermost/mattermost/server/public/model"
+)
 
 func (s *Service) UploadAndPost(
 	h *model.Channel,
@@ -9,9 +13,10 @@ func (s *Service) UploadAndPost(
 	message string,
 ) (*model.Post, *model.FileInfo, error) {
 	var file *model.FileInfo
-	p, e := guarded(
+	p, e := peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*model.Post, error) {
+		func(context.Context) (*model.Post, error) {
 			var f error
 			file, f = s.mattermost.UploadFile(h, name, content)
 

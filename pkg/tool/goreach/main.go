@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/lint"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goreach/constant"
 )
 
@@ -42,9 +43,14 @@ func Main() {
 		return
 	}
 
-	Run(
-		root,
-		transcriptPath(a.GetString(constant.Transcript), a.Positionals()),
-		a.GetBoolean(constant.Documents),
+	transcript, e := TranscriptPath(
+		a.GetString(constant.Transcript),
+		a.Positionals(),
 	)
+
+	if e != nil {
+		system.Exitf(1, "%s\n", e)
+	}
+
+	Run(root, transcript, a.GetBoolean(constant.Documents))
 }

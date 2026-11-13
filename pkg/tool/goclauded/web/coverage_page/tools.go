@@ -27,8 +27,8 @@ func tools(e *coverage.Server) gomponents.Node {
 			html.Tr(
 				html.Td(gomponents.Text(t.Name)),
 				html.Td(state.Node()),
-				numeric(t.CallsRecent),
-				numeric(t.CallsTotal),
+				html.Td(gomponents.Textf("%d", t.CallsRecent)),
+				html.Td(gomponents.Textf("%d", t.CallsTotal)),
 				lastUsed(t.LastUsed),
 			),
 		)

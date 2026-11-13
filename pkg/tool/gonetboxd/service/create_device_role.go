@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/device_role"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/device_role"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateDeviceRole(
 	name string,
 	virtualMachine bool,
 ) (*device_role.Role, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*device_role.Role, error) {
+		func(context.Context) (*device_role.Role, error) {
 			return s.client.CreateDeviceRole(name, virtualMachine)
 		},
 	)

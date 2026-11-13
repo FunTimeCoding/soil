@@ -1,6 +1,7 @@
 package navigation_item
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -18,7 +19,10 @@ func (i *Item) Render(currentPath string) gomponents.Node {
 	}
 
 	if currentPath == i.path {
-		attributes = append(attributes, gomponents.Attr("aria-current", "page"))
+		attributes = append(
+			attributes,
+			gomponents.Attr(constant.CurrentAttribute, "page"),
+		)
 	}
 
 	return html.Li(html.A(attributes...))

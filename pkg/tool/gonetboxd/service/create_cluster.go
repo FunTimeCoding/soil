@@ -1,15 +1,20 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/netbox/cluster"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/netbox/cluster"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) CreateCluster(
 	name string,
 	clusterType string,
 	site string,
 ) (*cluster.Cluster, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*cluster.Cluster, error) {
+		func(context.Context) (*cluster.Cluster, error) {
 			t, e := s.client.ClusterType(clusterType)
 
 			if e != nil {

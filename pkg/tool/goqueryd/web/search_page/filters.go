@@ -10,22 +10,18 @@ import (
 	"slices"
 )
 
-func filters(
-	query string,
-	collection string,
-	metadata map[string]string,
-) gomponents.Node {
-	if len(metadata) == 0 {
+func (p *Page) filters() gomponents.Node {
+	if len(p.metadata) == 0 {
 		return gomponents.Group(nil)
 	}
 
 	var chips []gomponents.Node
 
-	for _, k := range slices.Sorted(maps.Keys(metadata)) {
+	for _, k := range slices.Sorted(maps.Keys(p.metadata)) {
 		chips = append(
 			chips,
-			chip.New(fmt.Sprintf("%s: %s", k, metadata[k])).
-				Link(Path(query, collection, copyWithout(metadata, k))).
+			chip.New(fmt.Sprintf("%s: %s", k, p.metadata[k])).
+				Link(p.path(p.mode, copyWithout(p.metadata, k))).
 				Content(gomponents.Text(" ×")).
 				Node(),
 		)

@@ -1,6 +1,7 @@
 package workspace
 
 import (
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/load"
 	"go/token"
@@ -12,7 +13,7 @@ func wholeLoad(
 	w *index.Workspace,
 	packagePaths ...string,
 ) ([]*packages.Package, *token.FileSet, error) {
-	patterns := []string{"./..."}
+	patterns := []string{goModConstant.AllPackages}
 	var reachable []string
 
 	for _, p := range packagePaths {

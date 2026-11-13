@@ -7,6 +7,7 @@ import (
 
 type Results struct {
 	workDirectory string
+	Header        string
 	Entries       []*concern.Concern
 	Unchecked     []*unchecked.Unchecked
 }

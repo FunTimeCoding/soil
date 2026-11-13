@@ -8,7 +8,7 @@ import (
 func skipped(name string) bool {
 	return name == "vendor" ||
 		name == "testdata" ||
-		name == "tmp" ||
+		strings.HasPrefix(name, "_") ||
 		name != soil.CurrentDirectory &&
 			strings.HasPrefix(name, soil.CurrentDirectory)
 }

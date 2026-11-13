@@ -62,7 +62,7 @@ func Check(
 					concern.NewPosition(
 						"unguarded_peer",
 						fmt.Sprintf(
-							"%s reaches a guarded peer outside its guard - call it inside the guard's Attempt or Do, or a function wrapping them",
+							"%s reaches a guarded peer outside its guard - call it inside the guard's Attempt or Do, peer.Guarded, or a function wrapping them",
 							types.ExprString(s),
 						),
 						p.Fset.Position(s.Pos()),

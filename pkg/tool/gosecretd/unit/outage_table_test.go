@@ -1,59 +1,41 @@
 package unit
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/server"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
-	"net/http"
-	"slices"
-	"strings"
 	"testing"
 )
 
-func TestEveryOperationAnswersOpenbaoOutageUnavailable(t *testing.T) {
-	r := memory.New()
+func TestOperationsOnOpenbaoOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	var unanswered []string
-
-	for operation, status := range outage_tester.Statuses(
+	outage_tester.Operations(
 		t,
-		func() *model_context_server.Server { return outageServer(t, r) },
+		func(r *memory.Memory) (*model_context_server.Server, func() error) {
+			return outageServer(t, r)
+		},
 		spec,
+		webConstant.OutageReaches,
+		nil,
+		nil,
 		map[string]string{"PutSecret": `{"values":{"alfa":"bravo"}}`},
-	) {
-		if status != http.StatusServiceUnavailable {
-			unanswered = append(
-				unanswered,
-				fmt.Sprintf("%s %d", operation, status),
-			)
-		}
-	}
-
-	slices.Sort(unanswered)
-	assert.String(t, "", strings.Join(unanswered, ", "))
-	assert.Count(t, 0, r.Events())
+	)
 }
 
-func TestEveryToolFailsOnOpenbaoOutage(t *testing.T) {
-	r := memory.New()
-	var unanswered []string
-
-	for tool, text := range outage_tester.ToolFailures(
+func TestToolsOnOpenbaoOutage(t *testing.T) {
+	outage_tester.Tools(
 		t,
-		func() *model_context_server.Server { return outageServer(t, r) },
+		func(r *memory.Memory) (*model_context_server.Server, func() error) {
+			return outageServer(t, r)
+		},
+		webConstant.OutageReaches,
+		nil,
 		map[string]map[string]any{
 			"put_secret": {"values": map[string]any{"alfa": "bravo"}},
 		},
-	) {
-		if !strings.Contains(text, "connection refused") {
-			unanswered = append(unanswered, tool)
-		}
-	}
-	slices.Sort(unanswered)
-	assert.String(t, "", strings.Join(unanswered, ", "))
-	assert.Count(t, 0, r.Events())
+	)
 }

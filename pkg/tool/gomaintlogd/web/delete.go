@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web/entry_page"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -21,5 +22,10 @@ func (s *Server) delete(
 		return
 	}
 
-	s.view.RenderStatus(w, "Deleted entry", webConstant.LayoutStatusSuccess)
+	s.view.RenderStatusFragment(
+		w,
+		entry_page.Removal(identifier),
+		"Deleted entry",
+		webConstant.LayoutStatusSuccess,
+	)
 }

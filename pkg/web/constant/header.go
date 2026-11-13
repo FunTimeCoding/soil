@@ -13,6 +13,7 @@ const (
 	Cookie            = "Cookie"
 	ExtendedRedirect  = "HX-Redirect"
 	ExtendedRequest   = "HX-Request"
+	ExtendedRestore   = "HX-History-Restore-Request"
 	ForwardedFor      = "X-Forwarded-For"
 	ForwardedHost     = "X-Forwarded-Host"
 	LastEvent         = "Last-Event-ID"

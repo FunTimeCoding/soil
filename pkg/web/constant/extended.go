@@ -16,6 +16,7 @@ const (
 	ExtendedOnPrefix     = "hx-on:"
 	ExtendedAfterRequest = "hx-on::after-request"
 	ExtendedPreserve     = "hx-preserve"
+	ExtendedPush         = "hx-push-url"
 	ServerSideConnect    = "sse-connect"
 	ServerSideSwap       = "sse-swap"
 )
@@ -39,4 +40,5 @@ const (
 	TriggerChange = "change"
 	TriggerType   = "keyup changed delay:200ms"
 	TriggerForm   = "input delay:200ms, submit"
+	TriggerShown  = "intersect once"
 )

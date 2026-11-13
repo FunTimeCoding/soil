@@ -3,14 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"testing"
 )
 
 func TestDefaultFormatsAfterDealiasing(t *testing.T) {
 	directory := module_tester.AliasedCall(t)
-	gofix.RunDefault(
+	module_tester.RunDefault(
+		t,
 		module_tester.Options(t, directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)

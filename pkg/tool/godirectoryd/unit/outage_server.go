@@ -1,0 +1,31 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/directory/mock_client"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
+	"github.com/funtimecoding/soil/pkg/web/guard"
+	"testing"
+)
+
+func outageServer(
+	t *testing.T,
+	r *memory.Memory,
+) (*model_context_server.Server, func() error) {
+	t.Helper()
+	c := mock_client.New("")
+	c.Failure = refusedConnection()
+	d := daemon_tester.New(t, c, r)
+	result := model_context_server.NewSignedOn(
+		t,
+		authorization_tester.Client,
+		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
+	)
+	t.Cleanup(result.Close)
+
+	return result, d.Workers()[0].(*peer.Guard).Unavailable
+}

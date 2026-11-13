@@ -4,6 +4,7 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -82,6 +83,69 @@ type CensusUnloaded struct {
 type CensusUse struct {
 	Methods []string `json:"methods"`
 	Type    string   `json:"type"`
+}
+
+// CheckChange defines model for CheckChange.
+type CheckChange struct {
+	Current     []byte `json:"current"`
+	Destination string `json:"destination"`
+	Original    []byte `json:"original"`
+	Path        string `json:"path"`
+}
+
+// CheckConcern defines model for CheckConcern.
+type CheckConcern struct {
+	Fixed    bool   `json:"fixed"`
+	Key      string `json:"key"`
+	Line     int    `json:"line"`
+	LineText string `json:"line_text"`
+	Path     string `json:"path"`
+	Planned  bool   `json:"planned"`
+	Text     string `json:"text"`
+	Type     string `json:"type"`
+}
+
+// CheckRequest defines model for CheckRequest.
+type CheckRequest struct {
+	// Fix Apply what golint and gofix can fix.
+	Fix *bool `json:"fix,omitempty"`
+
+	// Fresh Check every package again, ignoring the clean cache.
+	Fresh *bool `json:"fresh,omitempty"`
+
+	// Root Absolute directory of the repository to check.
+	Root string `json:"root"`
+
+	// Transcript A session's transcript, whose changes scope the check; the whole repository when empty.
+	Transcript *string `json:"transcript,omitempty"`
+}
+
+// CheckResponse defines model for CheckResponse.
+type CheckResponse struct {
+	Announcement string         `json:"announcement"`
+	Changes      []CheckChange  `json:"changes"`
+	Checked      []string       `json:"checked"`
+	Root         string         `json:"root"`
+	Sections     []CheckSection `json:"sections"`
+
+	// Stale A lint source changed since the daemon started, relative to its module; empty when none has.
+	Stale     string `json:"stale"`
+	Unchanged bool   `json:"unchanged"`
+}
+
+// CheckSection defines model for CheckSection.
+type CheckSection struct {
+	Entries   []CheckConcern   `json:"entries"`
+	Header    string           `json:"header"`
+	Unchecked []CheckUnchecked `json:"unchecked"`
+}
+
+// CheckUnchecked defines model for CheckUnchecked.
+type CheckUnchecked struct {
+	Line   int    `json:"line"`
+	Path   string `json:"path"`
+	Reason string `json:"reason"`
+	Span   string `json:"span"`
 }
 
 // ClassCount defines model for ClassCount.
@@ -166,6 +230,9 @@ type GetDiffParams struct {
 	Text *bool `form:"text,omitempty" json:"text,omitempty"`
 }
 
+// PostCheckJSONRequestBody defines body for PostCheck for application/json ContentType.
+type PostCheckJSONRequestBody = CheckRequest
+
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
 
@@ -243,6 +310,18 @@ type ClientInterface interface {
 	// GetCensus performs a GET /api/census (the `GetCensus` operationId) request.
 	GetCensus(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostCheckWithBody performs a POST /api/check (the `PostCheck` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+	PostCheckWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostCheck performs a POST /api/check (the `PostCheck` operationId) request.
+	// Takes a body of the `application/json` content type.
+	//
+	// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+	PostCheck(ctx context.Context, body PostCheckJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetDiff performs a GET /api/diff (the `GetDiff` operationId) request.
 	GetDiff(ctx context.Context, params *GetDiffParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -255,6 +334,38 @@ type ClientInterface interface {
 // GetCensus performs a GET /api/census (the `GetCensus` operationId) request.
 func (c *Client) GetCensus(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCensusRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostCheckWithBody performs a POST /api/check (the `PostCheck` operationId) request,
+// with any type of body and a specified content type.
+//
+// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+func (c *Client) PostCheckWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostCheckRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostCheck performs a POST /api/check (the `PostCheck` operationId) request.
+// Takes a body of the `application/json` content type.
+//
+// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+func (c *Client) PostCheck(ctx context.Context, body PostCheckJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostCheckRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -355,6 +466,46 @@ func NewGetCensusRequest(server string, params *GetCensusParams) (*http.Request,
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewPostCheckRequest calls the generic PostCheck builder with application/json body
+func NewPostCheckRequest(server string, body PostCheckJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostCheckRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostCheckRequestWithBody constructs an http.Request for the PostCheck method, with any body, and a specified content type
+func NewPostCheckRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/check")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -521,6 +672,20 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetCensusWithResponse(ctx context.Context, params *GetCensusParams, reqEditors ...RequestEditorFn) (*GetCensusResponse, error)
 
+	// PostCheckWithBodyWithResponse performs a POST /api/check (the `PostCheck` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostCheckWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostCheckResponse, error)
+
+	// PostCheckWithResponse performs a POST /api/check (the `PostCheck` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+	PostCheckWithResponse(ctx context.Context, body PostCheckJSONRequestBody, reqEditors ...RequestEditorFn) (*PostCheckResponse, error)
+
 	// GetDiffWithResponse performs a GET /api/diff (the `GetDiff` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -590,6 +755,68 @@ func (r GetCensusResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetCensusResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostCheckResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CheckResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostCheckResponse) GetJSON200() *CheckResponse {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostCheckResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostCheckResponse) GetJSON409() *Error {
+	return r.JSON409
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostCheckResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostCheckResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostCheckResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostCheckResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostCheckResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -710,6 +937,32 @@ func (c *ClientWithResponses) GetCensusWithResponse(ctx context.Context, params 
 	return ParseGetCensusResponse(rsp)
 }
 
+// PostCheckWithBodyWithResponse performs a POST /api/check (the `PostCheck` operationId) request,
+// with any type of body and a specified content type.
+//
+// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostCheckWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostCheckResponse, error) {
+	rsp, err := c.PostCheckWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostCheckResponse(rsp)
+}
+
+// PostCheckWithResponse performs a POST /api/check (the `PostCheck` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Run every lint stage over a repository - golint, goaudit, gofix and goanalyze - one check at a time across the daemon.
+func (c *ClientWithResponses) PostCheckWithResponse(ctx context.Context, body PostCheckJSONRequestBody, reqEditors ...RequestEditorFn) (*PostCheckResponse, error) {
+	rsp, err := c.PostCheck(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostCheckResponse(rsp)
+}
+
 // GetDiffWithResponse performs a GET /api/diff (the `GetDiff` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -768,6 +1021,53 @@ func ParseGetCensusResponse(rsp *http.Response) (*GetCensusResponse, error) {
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostCheckResponse parses an HTTP response from a PostCheckWithResponse call
+func ParsePostCheckResponse(rsp *http.Response) (*PostCheckResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostCheckResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CheckResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

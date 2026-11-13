@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maps"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -32,15 +31,12 @@ func (p *Page) tokens() gomponents.Node {
 			rows,
 			html.Tr(
 				html.Td(gomponents.Text(name)),
-				numeric(t.Count),
+				html.Td(gomponents.Textf("%d", t.Count)),
 				tokenCell(t.Input),
 				tokenCell(t.Output),
 				tokenCell(t.CacheCreation),
 				tokenCell(t.CacheRead),
-				html.Td(
-					html.Class(webConstant.NumericClass),
-					gomponents.Textf("$%.2f", pricing.Cost(model, t)),
-				),
+				html.Td(gomponents.Textf("$%.2f", pricing.Cost(model, t))),
 			),
 		)
 	}

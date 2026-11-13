@@ -7,6 +7,8 @@ const (
 	LayoutStatusSuccess      = "success"
 	LayoutStatusNotice       = "notice"
 	LayoutTimeCellClass      = "time-cell"
+	LayoutClampCellClass     = "clamp-cell"
+	LayoutFullWindowClass    = "full-window"
 
 	LayoutConnection             = "connection"
 	LayoutConnectionConnected    = "connection-dot connected"

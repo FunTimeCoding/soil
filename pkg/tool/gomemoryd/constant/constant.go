@@ -81,6 +81,12 @@ const (
 	DetailHeadClass  = "detail-head"
 	Days             = "days"
 
+	OpenAction  = "open"
+	CloseAction = "close"
+	EditAction  = "edit"
+	WebSource   = "web"
+	RowPrefix   = "memory-"
+
 	ProfileByteBudget = 50000
 
 	DefaultCollection = "memories"
@@ -119,4 +125,8 @@ const (
 	SearchPlaceholder = "search memories..."
 	PrefixMark        = "*"
 	SearchLimit       = 20
+	SnippetOpen       = ""
+	SnippetClose      = ""
+	SnippetEllipsis   = "…"
+	SnippetTokens     = 12
 )

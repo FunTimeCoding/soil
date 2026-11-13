@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) TagsPage(p int) (*page.Page[*tag.Tag], error) {
-	var r response.TagResponse
+	var r response.TagPage
 
 	if e := c.basic.Get(
 		"tags",

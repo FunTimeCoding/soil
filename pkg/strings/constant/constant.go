@@ -43,6 +43,7 @@ const (
 	DoubleColon    = "::"
 	DoubleSlash    = "//"
 	DoubleSpace    = "  "
+	Ellipsis       = "…"
 	Equals         = "="
 	Hash           = "#"
 	Pipe           = "|"

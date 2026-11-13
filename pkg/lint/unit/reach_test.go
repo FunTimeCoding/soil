@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/reach"
 	"github.com/funtimecoding/soil/pkg/lint/unit/transcript_tester"
+	"github.com/funtimecoding/soil/pkg/source/warm_forest"
 	"path/filepath"
 	"testing"
 )
@@ -102,6 +103,7 @@ func TestReachResolvesAndCountsBashWritesFromLineDirectory(t *testing.T) {
 			transcript_tester.BashUse("charlie", "/repository", "rm $f"),
 			transcript_tester.BashUse("delta", "/repository", "golint --fix"),
 			transcript_tester.BashUse("echo", "/repository", "python3 run.py"),
+			transcript_tester.BashUse("foxtrot", "/repository", "rm *.md"),
 		),
 		nil,
 	)
@@ -111,7 +113,9 @@ func TestReachResolvesAndCountsBashWritesFromLineDirectory(t *testing.T) {
 		[]string{"/repository/alfa.go", "/repository/bravo/alfa.go"},
 		edits.Files,
 	)
+	assert.Strings(t, []string{"/repository/*.md"}, edits.Patterns)
 	assert.Integer(t, 1, edits.Resolved)
+	assert.Integer(t, 1, edits.Globbed)
 	assert.Integer(t, 1, edits.Unresolved)
 	assert.Integer(t, 1, edits.Fixers)
 	assert.Integer(t, 1, edits.Scripts)
@@ -135,6 +139,7 @@ func TestReachTakesImportersAndKeepsDocumentsApart(t *testing.T) {
 	testutil.WriteFile(t, root, "charlie/charlie.go", "package charlie\n")
 	testutil.WriteFile(t, root, "alfa/testdata/delta.go", "package delta\n")
 	r := reach.Directories(
+		warm_forest.New(),
 		root,
 		[]string{
 			filepath.Join(root, "alfa/alfa.go"),
@@ -155,6 +160,35 @@ func TestReachKeepsImportersOfDeletedPackageAndDropsIt(t *testing.T) {
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example.org/reach/alfa\"\n\nfunc Bravo() { alfa.Alfa() }\n",
 	)
-	r := reach.Directories(root, []string{filepath.Join(root, "alfa/alfa.go")})
+	r := reach.Directories(
+		warm_forest.New(),
+		root,
+		[]string{filepath.Join(root, "alfa/alfa.go")},
+	)
 	assert.Strings(t, []string{"./bravo"}, r.Packages)
+}
+
+func TestReachCarriesGraphItWidenedThrough(t *testing.T) {
+	root := t.TempDir()
+	testutil.WriteModFile(t, root, "example.org/reach")
+	testutil.WriteFile(
+		t,
+		root,
+		"alfa/alfa.go",
+		"package alfa\n\nfunc Alfa() {}\n",
+	)
+	r := reach.Directories(
+		warm_forest.New(),
+		root,
+		[]string{filepath.Join(root, "alfa/alfa.go")},
+	)
+	assert.FatalNotNil(t, r.Graph)
+	_, okay := r.Graph.Nodes["example.org/reach/alfa"]
+	assert.True(t, okay)
+	documents := reach.Directories(
+		warm_forest.New(),
+		root,
+		[]string{filepath.Join(root, "doc/bravo.md")},
+	)
+	assert.Nil(t, documents.Graph)
 }

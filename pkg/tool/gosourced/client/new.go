@@ -12,7 +12,7 @@ func New(
 	l *locator.Locator,
 	token string,
 ) *Client {
-	p := stall_client.New().Traced().Build()
+	p := stall_client.New().Traced().Long().Build()
 	c, e := client.NewClientWithResponses(
 		l.String(),
 		client.WithHTTPClient(p.Client()),

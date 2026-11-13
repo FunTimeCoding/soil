@@ -1,16 +1,19 @@
 package service
 
 import (
+	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"time"
 )
 
 func (s *Service) queryValue(q string) (string, error) {
-	r, e := guarded(
+	r, e := peer.Guarded(
+		context.Background(),
 		s.prometheusGuard,
-		func() (*query_result.Result, error) {
+		func(context.Context) (*query_result.Result, error) {
 			return s.prometheus.Query(q, time.Now())
 		},
 	)

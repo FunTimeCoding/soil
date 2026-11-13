@@ -11,13 +11,14 @@ import (
 func Form(query string) gomponents.Node {
 	return entry.New(webConstant.SearchPath, constant.SearchTitle).
 		Query().
+		Swap(
+			join.Empty("#", constant.SearchResultsMark),
+			webConstant.SwapInner,
+		).
+		Live().
 		Inline().
 		Search(constant.Query, constant.SearchTitle, query).
 		Placeholder(constant.SearchPlaceholder).
 		Focus().
-		Reveal(
-			webConstant.SearchPath,
-			join.Empty("#", constant.SearchResultsMark),
-		).
 		Node()
 }

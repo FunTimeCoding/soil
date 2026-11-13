@@ -1,9 +1,9 @@
 package gofix
 
-import "github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
+import "github.com/funtimecoding/soil/pkg/source/types/layer_change"
 
-func printChanges(w *workspace.Workspace) {
-	for _, path := range w.Changes() {
-		printDiff(path, w.Destination(path), w.Original(path), w.Current(path))
+func PrintChanges(changes []*layer_change.Change) {
+	for _, c := range changes {
+		printDiff(c.Path, c.Destination, c.Original, c.Current)
 	}
 }

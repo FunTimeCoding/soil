@@ -3,7 +3,6 @@ package session_page
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/session"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -19,11 +18,10 @@ func List(sessions []*session.Session) gomponents.Node {
 				html.Td(
 					html.A(html.Href(Path(v.Name)), gomponents.Text(v.Name)),
 				),
-				count(v.Open),
-				count(v.Pending),
-				count(v.Cleared),
+				html.Td(gomponents.Textf("%d", v.Open)),
+				html.Td(gomponents.Textf("%d", v.Pending)),
+				html.Td(gomponents.Textf("%d", v.Cleared)),
 				html.Td(
-					html.Class(webConstant.NumericClass),
 					gomponents.If(
 						v.Bumped > 0,
 						html.Strong(gomponents.Textf("%d", v.Bumped)),

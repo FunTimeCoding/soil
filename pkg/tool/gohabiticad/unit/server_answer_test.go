@@ -7,19 +7,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
-	"net"
-	"os"
-	"syscall"
 	"testing"
 )
 
 func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = &net.OpError{
-		Op:  "dial",
-		Net: "tcp",
-		Err: os.NewSyscallError("connect", syscall.ECONNREFUSED),
-	}
+	c.Failure = refusedDial()
 	m := memory.New()
 	s := restClient(t, c, m)
 

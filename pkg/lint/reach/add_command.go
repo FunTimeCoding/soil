@@ -9,6 +9,8 @@ func addCommand(
 		files[p] = true
 	}
 
+	result.Patterns = append(result.Patterns, w.Patterns...)
+
 	switch {
 	case w.Fixer:
 		result.Fixers++
@@ -16,6 +18,8 @@ func addCommand(
 		result.Scripts++
 	case w.Unresolved:
 		result.Unresolved++
+	case len(w.Patterns) > 0:
+		result.Globbed++
 	case len(w.Paths) > 0:
 		result.Resolved++
 	}

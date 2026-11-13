@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) LinksPage(p int) (*page.Page[*link.Link], error) {
-	var r response.LinkResponse
+	var r response.LinkPage
 
 	if e := c.basic.Get(
 		"links",

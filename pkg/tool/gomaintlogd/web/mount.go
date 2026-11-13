@@ -22,6 +22,7 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(constant.AddEntryPath), s.add)
 	g.Open(route.Post(constant.AddEntryPath), s.addSubmit)
 	g.Open(route.Get(constant.DetailPath), s.detail)
+	g.Open(route.Get(constant.ClosePath), s.close)
 	g.Open(route.Get(constant.EditPath), s.edit)
 	g.Open(route.Post(constant.EditPath), s.editSubmit)
 	g.Open(route.Post(constant.DeletePath), s.delete)

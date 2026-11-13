@@ -1,15 +1,20 @@
 package service
 
-import "github.com/mattermost/mattermost/server/public/model"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/mattermost/mattermost/server/public/model"
+)
 
 func (s *Service) Reply(
 	h *model.Channel,
 	m *model.Post,
 	text string,
 ) (*model.Post, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*model.Post, error) {
+		func(context.Context) (*model.Post, error) {
 			return s.mattermost.Reply(h, m, text)
 		},
 	)

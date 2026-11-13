@@ -1,6 +1,10 @@
 package service
 
-import "github.com/netbox-community/go-netbox/v4"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/netbox-community/go-netbox/v4"
+)
 
 func (s *Service) SetVirtualInterfacePhysicalAddress(
 	machine string,
@@ -13,9 +17,10 @@ func (s *Service) SetVirtualInterfacePhysicalAddress(
 		return nil, e
 	}
 
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*netbox.VMInterface, error) {
+		func(context.Context) (*netbox.VMInterface, error) {
 			m, f := s.client.VirtualMachine(machine)
 
 			if f != nil {

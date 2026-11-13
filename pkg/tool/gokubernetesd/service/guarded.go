@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 )
 
@@ -18,15 +19,9 @@ func guarded[T any](
 		return result, e
 	}
 
-	g := s.guards[clusterName].Attempt(
+	return peer.Guarded(
 		x,
-		func(context.Context) error {
-			var h error
-			result, h = f(c)
-
-			return h
-		},
+		s.guards[clusterName],
+		func(context.Context) (T, error) { return f(c) },
 	)
-
-	return result, g
 }

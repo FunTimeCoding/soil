@@ -20,9 +20,9 @@ func Recent(records []record.Record) gomponents.Node {
 					html.A(html.Href(Path(r.Name)), gomponents.Text(r.Name)),
 				),
 				html.Td(component.SeverityBadge(r.Severity)),
-				html.Td(gomponents.Text(component.Truncate(r.Summary, 80))),
+				layout.ClampCell(r.Summary),
 				layout.TimeCell(r.Start),
-				component.EndCell(r.End),
+				layout.OptionalTimeCell(r.End, ""),
 				html.Td(component.StatusBadge(r.End)),
 			),
 		)

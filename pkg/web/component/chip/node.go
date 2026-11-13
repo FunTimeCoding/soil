@@ -25,7 +25,10 @@ func (c *Chip) Node() gomponents.Node {
 			c.color != "",
 			html.Style(join.Empty(constant.ChipColorVariable, ": ", c.color)),
 		),
-		gomponents.If(c.current, gomponents.Attr("aria-current", "true")),
+		gomponents.If(
+			c.current,
+			gomponents.Attr(constant.CurrentAttribute, "true"),
+		),
 		gomponents.Group(c.attributes),
 		gomponents.Text(c.label),
 		gomponents.Group(c.content),

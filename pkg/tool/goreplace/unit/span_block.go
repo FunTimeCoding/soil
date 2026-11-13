@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
+	textConstant "github.com/funtimecoding/soil/pkg/text/constant"
 	"strings"
 )
 
@@ -11,17 +11,17 @@ func spanBlock(
 	end string,
 	replace string,
 ) string {
-	lines := []string{constant.SpanMarker, start, closing}
+	lines := []string{textConstant.SpanMarker, start, closing}
 
 	if end != "" {
 		lines = append(lines, end)
 	}
 
-	lines = append(lines, constant.DividerMarker)
+	lines = append(lines, textConstant.DividerMarker)
 
 	if replace != "" {
 		lines = append(lines, replace)
 	}
 
-	return strings.Join(append(lines, constant.ReplaceMarker, ""), "\n")
+	return strings.Join(append(lines, textConstant.ReplaceMarker, ""), "\n")
 }

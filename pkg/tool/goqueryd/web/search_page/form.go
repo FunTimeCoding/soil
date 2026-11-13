@@ -9,23 +9,25 @@ import (
 	"maragu.dev/gomponents"
 )
 
-func Form(
-	query string,
-	collection string,
-	collections []status.CollectionStatus,
-) gomponents.Node {
+func (p *Page) Form(collections []status.CollectionStatus) gomponents.Node {
 	choices := []*choice.Choice{choice.New("", "All collections")}
 
 	for _, c := range collections {
 		choices = append(choices, choice.New(c.Name, c.Name))
 	}
 
-	return entry.New(webConstant.SearchPath, constant.SearchTitle).
+	e := entry.New(webConstant.SearchPath, constant.SearchTitle).
 		Query().
 		Inline().
-		Search(webConstant.ParameterQuery, constant.SearchTitle, query).
+		Hidden(constant.Mode, p.mode)
+
+	if p.mode == constant.KeywordMode {
+		e.Swap(constant.ResultsTarget, webConstant.SwapInner).Live()
+	}
+
+	return e.Search(webConstant.ParameterQuery, constant.SearchTitle, p.query).
 		Placeholder("search documents...").
 		Focus().
-		Select(constant.Collection, "Collection", choices, collection).
+		Select(constant.Collection, "Collection", choices, p.collection).
 		Node()
 }

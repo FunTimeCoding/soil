@@ -21,7 +21,7 @@ func (s *Service) SubtreeLoad(
 	)
 
 	if s.full {
-		return load.Around(directory, reached, "./...")
+		return load.Around(directory, reached, goModConstant.AllPackages)
 	}
 
 	prefix := join.Empty(packagePath, "/")
@@ -50,7 +50,7 @@ func (s *Service) SubtreeLoad(
 	}
 
 	if !own {
-		return load.Around(directory, reached, "./...")
+		return load.Around(directory, reached, goModConstant.AllPackages)
 	}
 
 	return load.Packages(directory, patterns...)

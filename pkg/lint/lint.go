@@ -1,12 +1,8 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/lint/installed"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/system"
 	"os"
 )
 
@@ -15,101 +11,8 @@ func Lint(
 	root string,
 	o *option.Lint,
 ) {
-	repo, empty := Walk(root, o)
-	c := loadConfiguration(repo.Root)
-	o.Registries = c.Registries
-	o.ReflowSkips = c.Reflow.Skip
-	r := output.NewResultsWithDirectory(repo.Root)
-	Header(name, repo.Root, scopeDetail(o, repo.Files))
-
-	for _, p := range empty {
-		if !InScope(o, p) {
-			continue
-		}
-
-		if o.Fix {
-			system.Remove(repo.Absolute(p))
-			r.AddConcern(
-				concern.NewFile(
-					"empty_directory",
-					"removed empty directory",
-					p,
-					true,
-				),
-			)
-		} else {
-			r.AddConcern(
-				concern.NewFile("empty_directory", "empty directory", p, false),
-			)
-		}
-	}
-
-	for _, p := range repo.Files.Files() {
-		if !InScope(o, p) || Skipped(o.Skips, p) {
-			continue
-		}
-
-		if repo.Files.FileAt(p).Size == 0 {
-			if o.Fix {
-				system.Remove(repo.Absolute(p))
-				r.AddConcern(
-					concern.NewFile(
-						"empty_file",
-						"removed empty file",
-						p,
-						true,
-					),
-				)
-			} else {
-				r.AddConcern(
-					concern.NewFile("empty_file", "empty file", p, false),
-				)
-			}
-
-			continue
-		}
-
-		if isKnownBinaryExtension(p) {
-			continue
-		}
-
-		if IsExecutable(repo.Files.ReadString(p)) {
-			if o.Fix {
-				system.Remove(repo.Absolute(p))
-				r.AddConcern(
-					concern.NewFile(
-						constant.StrayBinaryKey,
-						"removed stray binary",
-						p,
-						true,
-					),
-				)
-			} else {
-				r.AddConcern(
-					concern.NewFile(
-						constant.StrayBinaryKey,
-						constant.StrayBinaryText,
-						p,
-						false,
-					),
-				)
-			}
-		}
-	}
-
-	fixes := Check(repo, o, r)
-
-	if o.Fix {
-		fixes.Flush(repo.Root)
-	}
-
-	if len(o.Scopes) == 0 {
-		for _, c := range installed.Check(repo.Root) {
-			r.AddConcern(c)
-		}
-	}
-
-	hasBlocked := output.PrintResults(r.Entries, o.Summary)
+	r := Report(name, root, o)
+	hasBlocked := output.Print(r, o.Summary)
 
 	if o.Census {
 		output.PrintCensus(r.Unchecked)

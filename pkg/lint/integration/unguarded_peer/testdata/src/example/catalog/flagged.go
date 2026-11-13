@@ -69,3 +69,12 @@ func (s *Service) Faked(title string) error {
 		},
 	)
 }
+
+func (s *Service) Retried(title string) error {
+	return peer.Retry(
+		context.Background(),
+		func(x context.Context) error {
+			return s.client.Shelve(x, title)
+		},
+	)
+}

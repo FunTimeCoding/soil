@@ -1,14 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/linkace/note"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/linkace/note"
+	"github.com/funtimecoding/soil/pkg/peer"
+)
 
 func (s *Service) UpdateNote(
 	identifier int,
 	text string,
 ) (*note.Note, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*note.Note, error) {
+		func(context.Context) (*note.Note, error) {
 			return s.client.UpdateNote(identifier, text)
 		},
 	)

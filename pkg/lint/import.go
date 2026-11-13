@@ -2,11 +2,9 @@ package lint
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/system"
 	"io"
 	"slices"
 	"strings"
@@ -91,13 +89,6 @@ func Import(
 			}
 		} else {
 			s.PassLine(line)
-		}
-	}
-
-	s.Fix = func() {
-		if s.Fixed != "" {
-			console.Format("Simplify import %s\n", path)
-			system.SaveFile(path, s.Fixed)
 		}
 	}
 

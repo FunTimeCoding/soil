@@ -19,10 +19,6 @@ func (s *Server) update(
 		return response.Fail("memory_id is required")
 	}
 
-	if guard, g := s.guardDocumentSourced(int64(identifier)); guard != nil {
-		return guard, g
-	}
-
 	existing, f := s.service.GetMemory(int64(identifier))
 
 	if f != nil {
@@ -35,7 +31,7 @@ func (s *Server) update(
 	o.Description = textOr(q, constant.Description, existing.Description)
 	o.Source = q.GetString(constant.Source, "")
 	o.Base = baseChange(q)
-	m, rewritten, h := s.service.UpdateMemory(int64(identifier), o)
+	m, rewritten, h := s.service.EditMemory(int64(identifier), o)
 
 	if h != nil {
 		return s.answer(x, h)

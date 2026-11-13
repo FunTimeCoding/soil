@@ -60,6 +60,21 @@ func TestReachCommandTakesLiteralRedirectButNotNullDevice(t *testing.T) {
 	)
 }
 
+func TestReachCommandTakesGlobOperandAsPattern(t *testing.T) {
+	w := reach.ResolveCommand("/alfa", "rm -f bravo/charlie-*.md")
+	assert.Count(t, 0, w.Paths)
+	assert.Strings(t, []string{"/alfa/bravo/charlie-*.md"}, w.Patterns)
+	assert.False(t, w.Unresolved)
+}
+
+func TestReachCommandKeepsQuotedGlobCharactersLiteral(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{`/alfa/bravo-\**.md`},
+		reach.ResolveCommand("/alfa", "rm bravo-'*'*.md").Patterns,
+	)
+}
+
 func TestReachCommandLeavesVariableOperandUnresolved(t *testing.T) {
 	w := reach.ResolveCommand("/alfa", "for f in *.go; do rm $f; done")
 	assert.Count(t, 0, w.Paths)

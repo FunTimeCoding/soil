@@ -2,6 +2,7 @@ package test_article
 
 import (
 	"fmt"
+	goModConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/test_article"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -20,7 +21,7 @@ func analyze(t *testing.T) *output.Results {
 		Dir:   directory,
 		Tests: true,
 	}
-	loaded, e := packages.Load(configuration, "./...")
+	loaded, e := packages.Load(configuration, goModConstant.AllPackages)
 
 	if e != nil {
 		t.Fatalf("load: %s", e)

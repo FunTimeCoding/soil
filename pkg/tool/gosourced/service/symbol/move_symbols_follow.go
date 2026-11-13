@@ -76,7 +76,7 @@ func (s *Service) moveSymbolsFollow(
 		targetPackageName = path.Base(targetPackagePath)
 	}
 
-	qualifications, blocked := relocator.PlanQualifications(
+	qualifications, blocked := relocator.Qualifications(
 		set,
 		external,
 		packagePath,

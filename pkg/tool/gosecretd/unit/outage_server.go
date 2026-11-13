@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/openbao/face"
 	"github.com/funtimecoding/soil/pkg/openbao/mock_client"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
@@ -17,7 +18,7 @@ import (
 func outageServer(
 	t *testing.T,
 	r *memory.Memory,
-) *model_context_server.Server {
+) (*model_context_server.Server, func() error) {
 	t.Helper()
 	c := mock_client.New()
 	c.Failure = refusedDial()
@@ -33,5 +34,5 @@ func outageServer(
 	)
 	t.Cleanup(result.Close)
 
-	return result
+	return result, d.Workers()[0].(*peer.Guard).Unavailable
 }

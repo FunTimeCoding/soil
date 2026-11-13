@@ -6,7 +6,13 @@ func (s *Service) recordContextLoads(
 	identifier string,
 	calls []*tool_call.Call,
 ) {
-	loads := classifyContextLoads(identifier, calls)
+	loads, profiles := classifyContextLoads(identifier, calls)
+
+	for _, readable := range profiles {
+		s.noteProfile(readable)
+	}
+
+	s.notePersistedProfiles(calls)
 
 	if len(loads) == 0 {
 		return

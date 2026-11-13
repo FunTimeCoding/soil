@@ -10,5 +10,5 @@ func (c *Client) Images(
 	_ int64,
 	_ int64,
 ) ([]*image.Image, error) {
-	return nil, nil
+	return nil, c.failure
 }

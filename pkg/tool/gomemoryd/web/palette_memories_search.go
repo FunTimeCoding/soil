@@ -18,7 +18,7 @@ func (s *Server) paletteMemoriesSearch(
 
 	if query != "" {
 		results, e := s.service.VisibleSearchResults(
-			fmt.Sprintf("%s*", query),
+			PrefixQuery(query),
 			10,
 			"",
 			"",

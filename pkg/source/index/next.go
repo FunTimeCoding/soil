@@ -2,6 +2,7 @@ package index
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
+	"github.com/funtimecoding/soil/pkg/system"
 	"maps"
 )
 
@@ -13,6 +14,12 @@ func Next(
 	sums := maps.Clone(previous.sums)
 	memo := maps.Clone(previous.memo)
 	previous.lock.Unlock()
+
+	for _, p := range changed {
+		if !system.FileExists(p) {
+			delete(sums, p)
+		}
+	}
 
 	return &Workspace{
 		root:  previous.root,

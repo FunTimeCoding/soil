@@ -1,7 +1,9 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/context_change"
 )
 
@@ -9,9 +11,10 @@ func (s *Service) UpdateConfigurationContext(
 	name string,
 	c *context_change.Change,
 ) (*configuration_context.Context, error) {
-	return guarded(
+	return peer.Guarded(
+		context.Background(),
 		s.guard,
-		func() (*configuration_context.Context, error) {
+		func(context.Context) (*configuration_context.Context, error) {
 			if _, e := s.client.ConfigurationContext(name); e != nil {
 				return nil, e
 			}

@@ -1,8 +1,8 @@
 package client_page
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/client"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/web/component"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
@@ -19,7 +19,7 @@ func Table(clients []*client.Client) gomponents.Node {
 				html.Td(
 					html.A(
 						html.Href(Path(c.Identifier)),
-						gomponents.Text(component.Truncate(c.Identifier, 8)),
+						gomponents.Text(shorten.Prefix(c.Identifier, 8)),
 					),
 				),
 				html.Td(gomponents.Text(c.RedirectLocators)),

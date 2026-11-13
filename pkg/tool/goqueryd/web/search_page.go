@@ -16,40 +16,47 @@ func (s *Server) searchPage(
 	values := q.URL.Query()
 	query := values.Get(webConstant.ParameterQuery)
 	collection := values.Get(constant.Collection)
-	status, e := s.service.Status()
+	metadata := parseMetadataParams(values)
+	page := search_page.New(
+		query,
+		collection,
+		values.Get(constant.Mode),
+		metadata,
+	)
+	var results gomponents.Node
 
-	if e != nil {
-		s.view.Answer(w, q, s.reporter, e)
+	if query != "" {
+		var e error
+		results, e = s.searchResults(q, page, query, collection, metadata)
+
+		if e != nil {
+			s.view.Answer(w, q, s.reporter, e)
+
+			return
+		}
+	}
+
+	if s.view.IsExtendedRequest(q) {
+		s.view.RenderFragment(w, gomponents.Group([]gomponents.Node{results}))
 
 		return
 	}
 
-	content := []gomponents.Node{
-		html.H3(gomponents.Text(constant.SearchTitle)),
-		search_page.Form(query, collection, status.Collections),
-	}
+	status, f := s.service.Status()
 
-	if query != "" {
-		results, f := s.searchResults(
-			q,
-			query,
-			collection,
-			values.Get(constant.Mode),
-		)
+	if f != nil {
+		s.view.Answer(w, q, s.reporter, f)
 
-		if f != nil {
-			s.view.Answer(w, q, s.reporter, f)
-
-			return
-		}
-
-		content = append(content, results)
+		return
 	}
 
 	s.view.RenderPage(
 		w,
 		constant.SearchTitle,
 		webConstant.SearchPath,
-		content...,
+		html.H3(gomponents.Text(constant.SearchTitle)),
+		page.Form(status.Collections),
+		page.Modes(),
+		html.Div(html.ID(constant.ResultsIdentifier), results),
 	)
 }
