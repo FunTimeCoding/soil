@@ -14,9 +14,9 @@ func New(
 	ours []string,
 ) *Cache {
 	return &Cache{
-		handle:  handle,
-		layer:   l,
-		faces:   face.FromWorkspace(handle, nil).Fingerprint(),
+		handle:    handle,
+		layer:     l,
+		faces:     face.FromWorkspace(handle, nil).Fingerprint(),
 		comment:   comment,
 		ours:      slices.Sorted(slices.Values(ours)),
 		listed:    make(map[string][]string),

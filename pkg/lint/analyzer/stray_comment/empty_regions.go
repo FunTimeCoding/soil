@@ -19,7 +19,10 @@ func emptyRegions(file *ast.File) []Region {
 				if len(t.Methods.List) == 0 {
 					result = append(
 						result,
-						Region{Start: t.Methods.Opening, End: t.Methods.Closing},
+						Region{
+							Start: t.Methods.Opening,
+							End:   t.Methods.Closing,
+						},
 					)
 				}
 			case *ast.SwitchStmt:

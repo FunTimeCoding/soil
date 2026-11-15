@@ -17,7 +17,10 @@ func (s *Service) File(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) (*file.File, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) (*file.File, error) {
 			return c.File(y, project, branch, name)
 		},
 	)

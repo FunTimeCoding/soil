@@ -22,7 +22,10 @@ func extractYields(
 
 	k := functionKey(o)
 	returned := returnedVariables(p, f)
-	yield := func(field string, e ast.Expr) {
+	yield := func(
+		field string,
+		e ast.Expr,
+	) {
 		for _, c := range factoryCarriers(p, f.Body, e, indices) {
 			if c.Argument != constant.ReceiverArgument {
 				summary.Yields[k] = append(
@@ -52,7 +55,11 @@ func extractYields(
 				for i, l := range v.Lhs {
 					s, okay := l.(*ast.SelectorExpr)
 
-					if okay && i < len(v.Rhs) && returnedRoot(p, s.X, returned) {
+					if okay && i < len(v.Rhs) && returnedRoot(
+						p,
+						s.X,
+						returned,
+					) {
 						yield(s.Sel.Name, v.Rhs[i])
 					}
 				}

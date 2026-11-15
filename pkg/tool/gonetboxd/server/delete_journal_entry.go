@@ -27,7 +27,12 @@ func (s *Server) DeleteJournalEntry(
 	}
 
 	if e != nil {
-		return server.DeleteJournalEntry500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.DeleteJournalEntry500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.DeleteJournalEntry204Response{}, nil

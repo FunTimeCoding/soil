@@ -20,7 +20,10 @@ func PaletteAnswer(
 	m := http.NewServeMux()
 	g := guard.New(m, []string{"token"}).WithSession(
 		func(next http.HandlerFunc) http.HandlerFunc {
-			return func(w http.ResponseWriter, q *http.Request) {
+			return func(
+				w http.ResponseWriter,
+				q *http.Request,
+			) {
 				next(w, guard.WithSubject(q, "alfa"))
 			}
 		},

@@ -82,7 +82,10 @@ func Requested() {
 	_ = r
 }
 
-func closeLater(c *Chained, register func(func())) {
+func closeLater(
+	c *Chained,
+	register func(func()),
+) {
 	register(c.Close)
 }
 

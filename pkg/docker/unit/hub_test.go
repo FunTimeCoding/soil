@@ -18,7 +18,8 @@ import (
 func TestTagsReadsPage(t *testing.T) {
 	s := upstream_server.New(
 		t,
-		upstream_server.WithAnswer(`{"results":[{"name":"1.27-alpine"}]}`))
+		upstream_server.WithAnswer(`{"results":[{"name":"1.27-alpine"}]}`),
+	)
 	tags, e := hub_tester.New(t, s.URL).Tags("library/alfa")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, tags)

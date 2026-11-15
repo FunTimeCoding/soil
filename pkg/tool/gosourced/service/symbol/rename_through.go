@@ -27,7 +27,10 @@ func (s *Service) renameThrough(
 		directory,
 		packagePath,
 		"",
-		func(loaded []*packages.Package, _ *token.FileSet) []types.Object {
+		func(
+			loaded []*packages.Package,
+			_ *token.FileSet,
+		) []types.Object {
 			var result []types.Object
 
 			for _, n := range renames {
@@ -78,7 +81,14 @@ func (s *Service) renameThrough(
 			continue
 		}
 
-		if p := s.checkRename(directory, all, set, packagePath, n, r); p != nil {
+		if p := s.checkRename(
+			directory,
+			all,
+			set,
+			packagePath,
+			n,
+			r,
+		); p != nil {
 			planned = append(planned, p)
 		}
 	}

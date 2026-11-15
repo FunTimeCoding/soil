@@ -12,7 +12,10 @@ import (
 func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 	tree := rewrite_tester.SameRewrite(
 		t,
-		func(s *service_tester.Services, d string) (*output.Results, error) {
+		func(
+			s *service_tester.Services,
+			d string,
+		) (*output.Results, error) {
 			return s.Symbol.Rename(
 				t.Context(),
 				d,
@@ -30,7 +33,10 @@ func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 	tree := rewrite_tester.SameRewrite(
 		t,
-		func(s *service_tester.Services, d string) (*output.Results, error) {
+		func(
+			s *service_tester.Services,
+			d string,
+		) (*output.Results, error) {
 			return s.Symbol.Rename(
 				t.Context(),
 				d,
@@ -48,7 +54,10 @@ func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 func TestTargetedMovePackageMatchesFullLoad(t *testing.T) {
 	tree := rewrite_tester.SameRewrite(
 		t,
-		func(s *service_tester.Services, d string) (*output.Results, error) {
+		func(
+			s *service_tester.Services,
+			d string,
+		) (*output.Results, error) {
 			return s.Packages.MovePackage(
 				t.Context(),
 				d,

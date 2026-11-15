@@ -20,7 +20,8 @@ func TestGetSendsCredentialsAndUnwrapsEnvelope(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"success":true,"data":[{"name":"charlie"}]}`,
-		))
+		),
+	)
 	var out []map[string]string
 	assert.FatalOnError(
 		t,
@@ -41,7 +42,8 @@ func TestGetSendsCredentialsAndUnwrapsEnvelope(t *testing.T) {
 func TestPostSendsParametersAndNotation(t *testing.T) {
 	s := upstream_server.New(
 		t,
-		upstream_server.WithAnswer(`{"success":true,"data":{"str":3}}`))
+		upstream_server.WithAnswer(`{"success":true,"data":{"str":3}}`),
+	)
 	var out map[string]int
 	assert.FatalOnError(
 		t,

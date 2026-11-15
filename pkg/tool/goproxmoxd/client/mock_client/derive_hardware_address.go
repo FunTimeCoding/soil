@@ -15,7 +15,7 @@ func (c *Client) DeriveHardwareAddress(
 	}
 
 	result := &client.DerivedAddress{
-		Identifier:      p.Identifier,
+		Identifier: p.Identifier,
 		HardwareAddress: fmt.Sprintf(
 			"02:00:00:00:%02x:%02x",
 			p.Identifier/256,

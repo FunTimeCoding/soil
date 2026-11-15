@@ -35,8 +35,8 @@ const (
 
 	MattermostSocketWait = 5 * time.Second
 
-	MattermostKeepAlive  = 25 * time.Second
-	MattermostPingWait   = time.Second
+	MattermostKeepAlive = 25 * time.Second
+	MattermostPingWait  = time.Second
 
 	MattermostEventChannelClosed = "event channel closed"
 	MattermostPingTimeout        = "ping timeout"

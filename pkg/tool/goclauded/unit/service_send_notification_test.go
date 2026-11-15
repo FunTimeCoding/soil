@@ -36,6 +36,9 @@ func TestSendNotificationReachesHolder(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		delivery_tester.KindEntries(drained.Entries, constant.QueueNotification),
+		delivery_tester.KindEntries(
+			drained.Entries,
+			constant.QueueNotification,
+		),
 	)
 }

@@ -20,7 +20,11 @@ func groupRemove(
 			a []string,
 		) {
 			t.EmitValue(
-				c.DeleteGroupNameMemberAccount(context.Background(), a[0], a[1]),
+				c.DeleteGroupNameMemberAccount(
+					context.Background(),
+					a[0],
+					a[1],
+				),
 			)
 		},
 	}

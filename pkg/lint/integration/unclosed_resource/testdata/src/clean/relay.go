@@ -62,7 +62,10 @@ func RelayedInline() {
 
 func useSettings(s *Settings) {}
 
-func drawnAndRegistered(s *Settings, cleanup func(func())) {
+func drawnAndRegistered(
+	s *Settings,
+	cleanup func(func()),
+) {
 	c := s.Make()
 	cleanup(c.Close)
 	useSettings(s)

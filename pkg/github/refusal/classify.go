@@ -30,7 +30,10 @@ func Classify(e error) error {
 		return e
 	}
 
-	if g := refusal.Status(answer.Response.StatusCode, answer.Message); g != nil {
+	if g := refusal.Status(
+		answer.Response.StatusCode,
+		answer.Message,
+	); g != nil {
 		return g
 	}
 

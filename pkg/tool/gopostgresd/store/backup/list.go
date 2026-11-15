@@ -48,7 +48,10 @@ func (s *Store) List(instance string) ([]*backup.Backup, error) {
 
 	slices.SortFunc(
 		result,
-		func(x *backup.Backup, y *backup.Backup) int {
+		func(
+			x *backup.Backup,
+			y *backup.Backup,
+		) int {
 			return y.Time.Compare(x.Time)
 		},
 	)

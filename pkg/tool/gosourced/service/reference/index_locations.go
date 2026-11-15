@@ -32,7 +32,11 @@ func indexLocations(
 
 			result = append(
 				result,
-				location.New(system.RelativePath(directory, full), s.Line, unit),
+				location.New(
+					system.RelativePath(directory, full),
+					s.Line,
+					unit,
+				),
 			)
 		}
 	}

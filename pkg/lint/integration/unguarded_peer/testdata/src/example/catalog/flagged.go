@@ -12,7 +12,10 @@ func (s *Service) Unguarded(title string) error {
 func Bare(
 	c Client,
 	g *peer.Guard,
-) func(context.Context, string) (string, error) {
+) func(
+	context.Context,
+	string,
+) (string, error) {
 	return c.Book
 }
 

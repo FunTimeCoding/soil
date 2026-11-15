@@ -26,7 +26,10 @@ func (x *Index) Events(changes []*plan.ResourceChange) []*host_event.Event {
 			continue
 		}
 
-		for _, h := range x.hosts(configurationAddress(c.Address), map[string]bool{}) {
+		for _, h := range x.hosts(
+			configurationAddress(c.Address),
+			map[string]bool{},
+		) {
 			merged[h] = stronger(merged[h], provisionConstant.HostUpdate)
 		}
 	}

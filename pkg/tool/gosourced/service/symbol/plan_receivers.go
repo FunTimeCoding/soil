@@ -21,7 +21,10 @@ func planReceivers(
 	n *receiver_rename.Rename,
 	r *output.Results,
 ) []*receiver_plan.Plan {
-	refuse := func(format string, arguments ...any) []*receiver_plan.Plan {
+	refuse := func(
+		format string,
+		arguments ...any,
+	) []*receiver_plan.Plan {
 		r.AddConcern(
 			concern.NewFile(
 				constant.ConcernValidation,
@@ -70,7 +73,12 @@ func planReceivers(
 			receiver := p.TypesInfo.Defs[field.Names[0]]
 			label := identifier.MemberName(n.Type, method.Name.Name)
 
-			if taken := receiverCollision(p, method, receiver, n.Name); taken != nil {
+			if taken := receiverCollision(
+				p,
+				method,
+				receiver,
+				n.Name,
+			); taken != nil {
 				concern_line.Add(
 					r,
 					set,
@@ -93,7 +101,8 @@ func planReceivers(
 					label,
 					field.Names[0].Name,
 					n.Name,
-				))
+				),
+			)
 		}
 	}
 

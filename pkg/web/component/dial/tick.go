@@ -12,7 +12,8 @@ func (d *Dial) Tick(
 ) *Dial {
 	d.markers = append(
 		d.markers,
-		marker.New(share, constant.DialTickClass, color, title))
+		marker.New(share, constant.DialTickClass, color, title),
+	)
 
 	return d
 }

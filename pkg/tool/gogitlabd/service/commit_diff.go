@@ -17,7 +17,10 @@ func (s *Service) CommitDiff(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*diff.Diff, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*diff.Diff, error) {
 			return c.CommitDiff(y, project, sha, limit)
 		},
 	)

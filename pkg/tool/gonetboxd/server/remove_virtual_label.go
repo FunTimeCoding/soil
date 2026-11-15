@@ -32,7 +32,12 @@ func (s *Server) RemoveVirtualLabel(
 	}
 
 	if e != nil {
-		return server.RemoveVirtualLabel500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.RemoveVirtualLabel500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.RemoveVirtualLabel204Response{}, nil

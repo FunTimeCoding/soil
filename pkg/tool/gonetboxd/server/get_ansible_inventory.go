@@ -30,7 +30,12 @@ func (s *Server) GetAnsibleInventory(
 	}
 
 	if e != nil {
-		return server.GetAnsibleInventory500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.GetAnsibleInventory500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.GetAnsibleInventory200TextResponse(result.Markup()), nil

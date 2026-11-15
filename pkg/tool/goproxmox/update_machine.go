@@ -53,7 +53,10 @@ func updateMachine(c *command_context.Context) *cobra.Command {
 				c.Client().UpdateMachine(
 					context.Background(),
 					identifier,
-					&client.UpdateMachineParams{Instance: c.Instance(), Node: n},
+					&client.UpdateMachineParams{
+						Instance: c.Instance(),
+						Node:     n,
+					},
 					body,
 				),
 			)

@@ -49,7 +49,10 @@ func Table(
 				html.Td(
 					html.Class(constant.ReferenceClass),
 					gomponents.Text(
-						strings.TrimPrefix(e.Reference, constant.RenovatePrefix),
+						strings.TrimPrefix(
+							e.Reference,
+							constant.RenovatePrefix,
+						),
 					),
 				),
 				html.Td(

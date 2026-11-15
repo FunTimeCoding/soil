@@ -17,7 +17,8 @@ func (s *Service) DependentPackages(
 		return load.Around(
 			directory,
 			load.ReachedPaths(g, packagePaths),
-			patterns...)
+			patterns...,
+		)
 	}
 
 	if len(patterns) == 0 {

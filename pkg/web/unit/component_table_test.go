@@ -28,7 +28,9 @@ func TestTableHeadsItsColumnsAndCarriesItsRows(t *testing.T) {
 					},
 				).
 				Empty("Nothing yet.").
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestNumericColumnsMarkTableBesideItsOwnClass(t *testing.T) {
@@ -38,7 +40,9 @@ func TestNumericColumnsMarkTableBesideItsOwnClass(t *testing.T) {
 		web_tester.Render(
 			t,
 			table.New("Alfa").Class(constant.FixtureEcho).Numeric(3, 0).
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestNumericColumnBeyondSharedRulesPanics(t *testing.T) {
@@ -67,14 +71,16 @@ func TestEmptyTableSaysSoInSharedLook(t *testing.T) {
 	assert.String(
 		t,
 		`<p class="absent">Nothing yet.</p>`,
-		web_tester.Render(t, table.New("Alfa").Empty("Nothing yet.").Node()))
+		web_tester.Render(t, table.New("Alfa").Empty("Nothing yet.").Node()),
+	)
 }
 
 func TestTableWithoutEmptyMessageStaysTable(t *testing.T) {
 	assert.String(
 		t,
 		`<table><thead><tr><th>Alfa</th></tr></thead><tbody></tbody></table>`,
-		web_tester.Render(t, table.New("Alfa").Node()))
+		web_tester.Render(t, table.New("Alfa").Node()),
+	)
 }
 
 func TestHeaderlessTableCarriesOnlyItsBody(t *testing.T) {
@@ -89,7 +95,9 @@ func TestHeaderlessTableCarriesOnlyItsBody(t *testing.T) {
 				Rows(
 					[]gomponents.Node{html.Tr(html.Td(gomponents.Text("alfa")))},
 				).
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestIdentifiedTableKeepsItsTargetWhenEmpty(t *testing.T) {
@@ -99,7 +107,9 @@ func TestIdentifiedTableKeepsItsTargetWhenEmpty(t *testing.T) {
 		web_tester.Render(
 			t,
 			table.New("Alfa").Empty("Nothing yet.").Identifier("delta").
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestTableCarriesItsClassAndBodyIdentifier(t *testing.T) {
@@ -111,5 +121,7 @@ func TestTableCarriesItsClassAndBodyIdentifier(t *testing.T) {
 			table.New("Alfa").Class(constant.FixtureEcho).BodyIdentifier(
 				"foxtrot",
 			).
-				Node()))
+				Node(),
+		),
+	)
 }

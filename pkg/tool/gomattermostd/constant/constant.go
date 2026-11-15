@@ -51,13 +51,13 @@ const (
 	DigestIndent     = "    "
 	LabelPrefix      = 8
 
-	MattermostPeer = "mattermost upstream"
-	RosterPeer     = "goclauded"
-	DebounceWindow = 30 * time.Second
-	FlushTick      = time.Second
+	MattermostPeer    = "mattermost upstream"
+	RosterPeer        = "goclauded"
+	DebounceWindow    = 30 * time.Second
+	FlushTick         = time.Second
 	PendingRetryLimit = 10 * time.Minute
-	PurgeWindow    = 7 * 24 * time.Hour
-	PurgeInterval  = time.Hour
+	PurgeWindow       = 7 * 24 * time.Hour
+	PurgeInterval     = time.Hour
 
 	HostEnvironment     = "GOMATTERMOST_HOST"
 	PortEnvironment     = "GOMATTERMOST_PORT"

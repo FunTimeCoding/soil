@@ -10,7 +10,10 @@ func guarded[T any](
 	x context.Context,
 	s *Service,
 	instance string,
-	f func(context.Context, face.GitLabClient) (T, error),
+	f func(
+		context.Context,
+		face.GitLabClient,
+	) (T, error),
 ) (T, error) {
 	var result T
 	p, e := s.pool.Client(instance)

@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/reference"
 )
 
-func (s *Service) ReferenceReports()([]*reference.Report, error) {
+func (s *Service) ReferenceReports() ([]*reference.Report, error) {
 	if s.referenceRoot == "" {
 		return nil, unrooted()
 	}

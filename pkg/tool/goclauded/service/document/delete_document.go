@@ -14,7 +14,10 @@ func (s *Service) deleteDocument(
 		func(x context.Context) error {
 			_, e := s.query.DeleteDocument(
 				x,
-				&client.DeleteDocumentParams{Collection: collection, Path: path},
+				&client.DeleteDocumentParams{
+					Collection: collection,
+					Path:       path,
+				},
 			)
 
 			return e

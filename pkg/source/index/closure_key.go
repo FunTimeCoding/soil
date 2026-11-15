@@ -21,7 +21,10 @@ func (w *Workspace) ClosureKey(
 
 	if !registered {
 		panic(
-			fmt.Sprintf("kind %s is not registered with this workspace", k.Name),
+			fmt.Sprintf(
+				"kind %s is not registered with this workspace",
+				k.Name,
+			),
 		)
 	}
 

@@ -33,11 +33,17 @@ func assertSelectorWeight(
 		}
 
 		d.FindMatcher(m).Each(
-			func(_ int, n *goquery.Selection) {
+			func(
+				_ int,
+				n *goquery.Selection,
+			) {
 				tag := goquery.NodeName(n)
 				key := join.Empty(s, "|", tag)
 
-				if slices.Contains(constant.PicoElements, tag) && !reported[key] {
+				if slices.Contains(
+					constant.PicoElements,
+					tag,
+				) && !reported[key] {
 					reported[key] = true
 					t.Errorf(
 						"rule %q weighs %v on <%s>, which Pico styles",

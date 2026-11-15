@@ -21,7 +21,8 @@ func TestRemovalPrintsNothingOnSuccess(t *testing.T) {
 				output, failure, code = command_tester.Run(
 					t,
 					c,
-					arguments...)
+					arguments...,
+				)
 			},
 		)
 		assert.Integer(t, 0, code)

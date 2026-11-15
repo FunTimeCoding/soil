@@ -154,7 +154,11 @@ func TestUnrestoredSingleReplacementBlocked(t *testing.T) {
 	edit := "python3 - <<'PY'\np='pkg/x/run.go'\ns=open(p).read()\ns=s.replace('a','b')\nopen(p,'w').write(s)\nPY\n"
 
 	for _, command := range []string{
-		join.Empty("cp pkg/x/run.go /tmp/run.bak && ", edit, "go test ./pkg/x/"),
+		join.Empty(
+			"cp pkg/x/run.go /tmp/run.bak && ",
+			edit,
+			"go test ./pkg/x/",
+		),
 		join.Empty(edit, "cp /tmp/other.bak pkg/x/other.go"),
 		join.Empty("cp /tmp/run.bak pkg/x/run.go; ", edit),
 	} {
@@ -277,7 +281,10 @@ func TestSedAsArgumentAllowed(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		guard.BlockReason("darwin", `grep -cE '(^|[|&;( ])sed( |$)' corpus.txt`),
+		guard.BlockReason(
+			"darwin",
+			`grep -cE '(^|[|&;( ])sed( |$)' corpus.txt`,
+		),
 	)
 	assert.String(t, "", guard.BlockReason("darwin", "echo parsed"))
 	assert.String(t, "", guard.BlockReason("darwin", "git grep sedative"))

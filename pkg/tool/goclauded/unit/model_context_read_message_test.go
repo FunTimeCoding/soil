@@ -17,7 +17,10 @@ func TestReadMessageTool(t *testing.T) {
 	result := a.MustCallTool(
 		constant.ReadMessage,
 		map[string]any{
-			constant.Identifiers: []any{direct.Identifier, broadcast.Identifier},
+			constant.Identifiers: []any{
+				direct.Identifier,
+				broadcast.Identifier,
+			},
 		},
 	)
 	assert.StringContains(

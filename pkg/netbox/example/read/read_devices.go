@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 )
 
-func readDevices(n *netbox.Client, f *option.Format) {
+func readDevices(
+	n *netbox.Client,
+	f *option.Format,
+) {
 	for _, l := range n.MustLocations() {
 		console.Format("Location: %s\n", l.Format(f))
 	}

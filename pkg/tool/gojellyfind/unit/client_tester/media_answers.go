@@ -70,7 +70,11 @@ func MediaAnswers(
 	)
 	answer(
 		nil,
-		f.SetVolume(x, "session-1", client.SetVolumeJSONRequestBody{Level: 101}),
+		f.SetVolume(
+			x,
+			"session-1",
+			client.SetVolumeJSONRequestBody{Level: 101},
+		),
 	)
 	answer(
 		nil,

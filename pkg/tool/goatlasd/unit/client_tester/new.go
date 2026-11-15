@@ -34,7 +34,8 @@ func New(
 		func(g *guard.Mux) {
 			d.Mount(r, mock_recorder.New(), g)
 		},
-		model_context_server.WithSignOn())
+		model_context_server.WithSignOn(),
+	)
 	t.Cleanup(s.Close)
 	result := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),

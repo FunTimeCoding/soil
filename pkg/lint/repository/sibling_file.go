@@ -16,7 +16,10 @@ func (r *Repository) siblingFile(
 	}
 
 	b, e := r.trees.Tree(r.Absolute(sibling)).Read(
-		strings.TrimPrefix(relative, join.Empty(sibling, stringsConstant.Slash)),
+		strings.TrimPrefix(
+			relative,
+			join.Empty(sibling, stringsConstant.Slash),
+		),
 	)
 	errors.PanicOnError(e)
 	result := string(b)

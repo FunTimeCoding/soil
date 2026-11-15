@@ -5,6 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func (c *Client) CreatePrefix(_ context.Context, _ string, _ string, _ string) (client.Prefix, error) {
+func (c *Client) CreatePrefix(
+	_ context.Context,
+	_ string,
+	_ string,
+	_ string,
+) (client.Prefix, error) {
 	return client.Prefix{}, c.Failure
 }

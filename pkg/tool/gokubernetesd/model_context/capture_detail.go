@@ -6,6 +6,9 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) captureDetail(x context.Context, e error) (*mcp.CallToolResult, error) {
+func (s *Server) captureDetail(
+	x context.Context,
+	e error,
+) (*mcp.CallToolResult, error) {
 	return response.Answer(x, s.reporter, e)
 }

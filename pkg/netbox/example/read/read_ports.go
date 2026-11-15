@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 )
 
-func readPorts(n *netbox.Client, f *option.Format) {
+func readPorts(
+	n *netbox.Client,
+	f *option.Format,
+) {
 	for _, e := range n.MustPowerFeeds() {
 		console.Format("PowerFeed: %s\n", e.Format(f))
 	}

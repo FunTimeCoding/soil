@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 )
 
-func readRacks(n *netbox.Client, f *option.Format) {
+func readRacks(
+	n *netbox.Client,
+	f *option.Format,
+) {
 	for _, t := range n.MustRackTypes() {
 		console.Format("RackType: %s\n", t.Format(f))
 	}

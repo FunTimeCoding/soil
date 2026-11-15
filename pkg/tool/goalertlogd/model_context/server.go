@@ -7,7 +7,7 @@ import (
 )
 
 type Server struct {
-	server  *server.MCPServer
-	service *service.Service
+	server   *server.MCPServer
+	service  *service.Service
 	reporter face.Reporter
 }

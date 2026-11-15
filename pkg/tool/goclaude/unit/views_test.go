@@ -18,7 +18,8 @@ func TestUnknownSessionExitsNotFound(t *testing.T) {
 		_, failure, code := command_tester.Run(
 			t,
 			command_tester.Mock(t),
-			arguments...)
+			arguments...,
+		)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "zulu", failure)
 		assert.StringContains(t, "not found", failure)

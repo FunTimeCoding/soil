@@ -12,7 +12,10 @@ func AssertUniqueIdentifiers(
 	t.Helper()
 	seen := map[string]int{}
 	document(body).Find("[id]").Each(
-		func(_ int, s *goquery.Selection) {
+		func(
+			_ int,
+			s *goquery.Selection,
+		) {
 			identifier, _ := s.Attr("id")
 			seen[identifier]++
 		},

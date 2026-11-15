@@ -33,7 +33,12 @@ func (s *Server) CreateInterface(
 	}
 
 	if e != nil {
-		return server.CreateInterface500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.CreateInterface500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	result := server.Interface{Identifier: i.Identifier, Name: i.Name}

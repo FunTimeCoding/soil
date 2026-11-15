@@ -28,7 +28,10 @@ func TestWrappedCallerThatLeftIsNotCaptured(t *testing.T) {
 	_, event := classify.Capture(
 		t.Context(),
 		r,
-		fmt.Errorf("probe: %w", caller_left.New(errors.New("context canceled"))),
+		fmt.Errorf(
+			"probe: %w",
+			caller_left.New(errors.New("context canceled")),
+		),
 		"",
 	)
 	assert.String(t, "", event)

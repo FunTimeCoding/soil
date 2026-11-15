@@ -18,7 +18,11 @@ func Detail(
 		[]gomponents.Node{
 			html.H1(gomponents.Text(name)),
 			html.H2(gomponents.Text(constant.CarriesHeading)),
-			component.PlacementTable(placements, false, constant.NothingCarried),
+			component.PlacementTable(
+				placements,
+				false,
+				constant.NothingCarried,
+			),
 			html.H2(gomponents.Text(constant.NetworkHeading)),
 			component.SightingTable(sightings, constant.NothingSeen),
 		},

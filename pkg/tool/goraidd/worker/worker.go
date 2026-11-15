@@ -10,7 +10,10 @@ import (
 )
 
 type Worker struct {
-	handle   func(context.Context, fsnotify.Event) []error
+	handle func(
+		context.Context,
+		fsnotify.Event,
+	) []error
 	paths    []string
 	prepare  []func(context.Context) []error
 	logger   *logger.Logger

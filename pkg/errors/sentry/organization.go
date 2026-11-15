@@ -8,7 +8,11 @@ import (
 func (c *Client) Organization(slug string) (*response.Organization, error) {
 	var result response.Organization
 
-	if e := c.basic.Get(fmt.Sprintf("organizations/%s", slug), nil, &result); e != nil {
+	if e := c.basic.Get(
+		fmt.Sprintf("organizations/%s", slug),
+		nil,
+		&result,
+	); e != nil {
 		return nil, e
 	}
 

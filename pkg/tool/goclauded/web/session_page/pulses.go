@@ -28,7 +28,12 @@ func Pulses(pulses []pulse.Pulse) gomponents.Node {
 		lines = append(
 			lines,
 			html.P(
-				html.Small(gomponents.Textf("%s ", p.CreatedAt.Format("15:04"))),
+				html.Small(
+					gomponents.Textf(
+						"%s ",
+						p.CreatedAt.Format("15:04"),
+					),
+				),
 				html.Em(gomponents.Textf("%s ", from)),
 				gomponents.Text(p.Body),
 			),

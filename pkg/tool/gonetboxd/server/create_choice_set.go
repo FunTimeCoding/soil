@@ -23,7 +23,12 @@ func (s *Server) CreateChoiceSet(
 	}
 
 	if e != nil {
-		return server.CreateChoiceSet500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.CreateChoiceSet500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.CreateChoiceSet201JSONResponse(*convert.ChoiceSet(result)), nil

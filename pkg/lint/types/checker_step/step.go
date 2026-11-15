@@ -7,6 +7,9 @@ import (
 
 type Step struct {
 	Name  string
-	Check func(string, io.Reader) *file_report.Report
-	Pure  bool
+	Check func(
+		string,
+		io.Reader,
+	) *file_report.Report
+	Pure bool
 }

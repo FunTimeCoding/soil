@@ -26,7 +26,13 @@ func (s *Server) ListIndexes(
 	}
 
 	if e != nil {
-		return server.ListIndexes500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.ListIndexes500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	var schema string
@@ -54,7 +60,13 @@ func (s *Server) ListIndexes(
 	}
 
 	if e != nil {
-		return server.ListIndexes500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.ListIndexes500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	return server.ListIndexes200JSONResponse{

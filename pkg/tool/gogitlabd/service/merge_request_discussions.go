@@ -16,7 +16,10 @@ func (s *Service) MergeRequestDiscussions(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*discussion.Discussion, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*discussion.Discussion, error) {
 			return c.MergeRequestDiscussions(y, project, identifier)
 		},
 	)

@@ -13,8 +13,8 @@ func New(
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server:  server.New(constant.Identity, r).WithRecorder(t).Server(),
-		service: v,
+		server:   server.New(constant.Identity, r).WithRecorder(t).Server(),
+		service:  v,
 		reporter: r,
 	}
 	result.register()

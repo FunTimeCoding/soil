@@ -26,5 +26,10 @@ func (s *Server) GetDevice(
 		return server.GetDevice500JSONResponse(*s.captureDetail(x, e)), nil
 	}
 
-	return server.GetDevice200JSONResponse(*convert.LabeledDevice(d, labels)), nil
+	return server.GetDevice200JSONResponse(
+		*convert.LabeledDevice(
+			d,
+			labels,
+		),
+	), nil
 }

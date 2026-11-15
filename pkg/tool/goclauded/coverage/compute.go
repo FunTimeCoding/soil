@@ -51,7 +51,10 @@ func Compute(
 	}
 
 	for _, c := range calls {
-		if !strings.HasPrefix(c.Name, generativeConstant.ModelContextToolPrefix) {
+		if !strings.HasPrefix(
+			c.Name,
+			generativeConstant.ModelContextToolPrefix,
+		) {
 			continue
 		}
 

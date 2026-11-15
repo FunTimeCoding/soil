@@ -27,7 +27,12 @@ func Reflow(
 				return ast.WalkContinue, nil
 			}
 
-			if p := rewrap(source, mask, b, width); p != nil && p.start >= body {
+			if p := rewrap(
+				source,
+				mask,
+				b,
+				width,
+			); p != nil && p.start >= body {
 				patches = append(patches, p)
 			}
 

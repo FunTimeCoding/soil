@@ -21,7 +21,10 @@ func (r *Renderer) messageMinimum(candidates []queue.Entry) int {
 		size(
 			[]string{
 				constant.DeliveryMessages,
-				fmt.Sprintf(constant.DeliveryIndent, constant.DeliveryExplanation),
+				fmt.Sprintf(
+					constant.DeliveryIndent,
+					constant.DeliveryExplanation,
+				),
 			},
 		)+r.reserve(candidates),
 	)

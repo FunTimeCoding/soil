@@ -32,7 +32,10 @@ func countCallers(
 
 					o, okay := p.TypesInfo.Uses[i].(*types.Func)
 
-					if !okay || owner(o) == nil || !sameType(owner(o), subject) {
+					if !okay || owner(o) == nil || !sameType(
+						owner(o),
+						subject,
+					) {
 						return true
 					}
 

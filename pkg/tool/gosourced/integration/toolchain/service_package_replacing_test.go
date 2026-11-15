@@ -15,7 +15,11 @@ import (
 
 func TestMovePackageRetargetsReplacingModule(t *testing.T) {
 	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	r, e := module_tester.ReplacingService(t, library, user).Packages.MovePackage(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Packages.MovePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -52,7 +56,11 @@ func TestMovePackageRetargetsReplacingModule(t *testing.T) {
 
 func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
 	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	r, e := module_tester.ReplacingService(t, library, user).Packages.RenamePackage(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Packages.RenamePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -83,7 +91,11 @@ func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
 
 func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
 	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	r, e := module_tester.ReplacingService(t, library, user).Packages.RenamePackageClause(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Packages.RenamePackageClause(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -111,7 +123,11 @@ func TestRenamePackageRefusedWhenNameIsTakenInReplacingModule(t *testing.T) {
 		"pkg/clash/clash.go",
 		"package clash\n\nimport \"other.test/lib/shape\"\n\nfunc form() int {\n\treturn shape.New().Width\n}\n",
 	)
-	r, e := module_tester.ReplacingService(t, library, user).Packages.RenamePackage(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Packages.RenamePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -133,7 +149,11 @@ func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
 	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/user")))
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/aliased")))
-	r, e := module_tester.ReplacingService(t, library, user).Packages.MovePackage(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Packages.MovePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -152,7 +172,11 @@ func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
 func TestMovePackageDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
 	before := rewrite_tester.DirectoryTree(t, user)
-	r, e := module_tester.ReplacingService(t, library, user).Packages.MovePackage(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Packages.MovePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",

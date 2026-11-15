@@ -19,7 +19,10 @@ func removalTargets(
 ) []*removal.Target {
 	var result []*removal.Target
 	seen := map[string]bool{}
-	refuse := func(format string, arguments ...any) {
+	refuse := func(
+		format string,
+		arguments ...any,
+	) {
 		r.AddConcern(
 			concern.NewFile(
 				constant.ConcernValidation,

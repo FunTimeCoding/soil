@@ -23,7 +23,12 @@ func (s *Server) CreateManufacturer(
 	}
 
 	if e != nil {
-		return server.CreateManufacturer500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.CreateManufacturer500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.CreateManufacturer201JSONResponse{

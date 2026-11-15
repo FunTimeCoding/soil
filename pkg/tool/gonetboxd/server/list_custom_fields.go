@@ -18,7 +18,12 @@ func (s *Server) ListCustomFields(
 	}
 
 	if e != nil {
-		return server.ListCustomFields500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListCustomFields500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.ListCustomFields200JSONResponse(convert.CustomFields(result)),

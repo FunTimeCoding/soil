@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 )
 
-func readModules(n *netbox.Client, f *option.Format) {
+func readModules(
+	n *netbox.Client,
+	f *option.Format,
+) {
 	for _, c := range n.MustVirtualChassis() {
 		console.Format("VirtualChassis: %s\n", c.Format(f))
 	}

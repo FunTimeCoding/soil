@@ -27,7 +27,11 @@ func buildAliasEdits(
 	case spec.Name != nil:
 		result = append(
 			result,
-			Edit{position: spec.Name.Pos(), end: spec.Name.End(), newText: want},
+			Edit{
+				position: spec.Name.Pos(),
+				end:      spec.Name.End(),
+				newText:  want,
+			},
 		)
 	default:
 		result = append(

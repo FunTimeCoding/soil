@@ -30,7 +30,12 @@ func (p *Parser) line(
 	case constant.AnyHeadingPattern.MatchString(text):
 		p.closeSection(number - 1)
 		p.current = section.NewSection(number)
-		p.current.Level = len(text) - len(strings.TrimLeft(text, constant.HeadingMark))
+		p.current.Level = len(text) - len(
+			strings.TrimLeft(
+				text,
+				constant.HeadingMark,
+			),
+		)
 		p.current.Title = text
 		p.open(number, constant.BlockHeading)
 		p.flush(number)

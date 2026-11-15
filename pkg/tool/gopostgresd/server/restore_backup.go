@@ -25,7 +25,13 @@ func (s *Server) RestoreBackup(
 	}
 
 	if e != nil {
-		return server.RestoreBackup500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.RestoreBackup500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	var target string
@@ -53,7 +59,13 @@ func (s *Server) RestoreBackup(
 	}
 
 	if e != nil {
-		return server.RestoreBackup500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.RestoreBackup500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	return server.RestoreBackup200JSONResponse{Database: database}, nil

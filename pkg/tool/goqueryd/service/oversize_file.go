@@ -28,7 +28,14 @@ func (s *Service) oversizeFile(
 
 		first, last := lineRange(d.Body, c)
 		result.Add(
-			oversize_chunk.New(i, first, last, len(c.Text), tokens, embedTokens),
+			oversize_chunk.New(
+				i,
+				first,
+				last,
+				len(c.Text),
+				tokens,
+				embedTokens,
+			),
 		)
 	}
 

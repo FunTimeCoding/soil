@@ -17,7 +17,10 @@ func rootRelative(
 		return "", false
 	}
 
-	for d := directory; d != root && strings.HasPrefix(d, root); d = filepath.Dir(d) {
+	for d := directory; d != root && strings.HasPrefix(
+		d,
+		root,
+	); d = filepath.Dir(d) {
 		if module_graph.Excluded(root, d) {
 			return "", false
 		}

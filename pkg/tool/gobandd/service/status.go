@@ -12,7 +12,10 @@ func (s *Service) Status(instance string) (*status.Status, error) {
 		func(c face.BandClient) (*status.Status, error) {
 			result := status.New(instance)
 
-			for _, read := range []func(face.BandClient, *status.Status) error{
+			for _, read := range []func(
+				face.BandClient,
+				*status.Status,
+			) error{
 				readHost,
 				readSetup,
 				readScreen,

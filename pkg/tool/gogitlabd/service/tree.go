@@ -19,7 +19,10 @@ func (s *Service) Tree(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*tree.Node, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*tree.Node, error) {
 			return c.Tree(y, project, path, reference, recursive, limit)
 		},
 	)

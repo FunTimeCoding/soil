@@ -8,7 +8,10 @@ import (
 
 func (r *Repository) inNestedModule(path string) bool {
 	for _, m := range r.NestedModules {
-		if path == m || strings.HasPrefix(path, join.Empty(m, stringsConstant.Slash)) {
+		if path == m || strings.HasPrefix(
+			path,
+			join.Empty(m, stringsConstant.Slash),
+		) {
 			return true
 		}
 	}

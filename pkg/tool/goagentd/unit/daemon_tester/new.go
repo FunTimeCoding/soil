@@ -12,7 +12,11 @@ import (
 
 func New(
 	t *testing.T,
-	stream func(string, io.Writer, ...string) face.Stream,
+	stream func(
+		string,
+		io.Writer,
+		...string,
+	) face.Stream,
 ) *daemon.Daemon {
 	t.Helper()
 	o := option.New()

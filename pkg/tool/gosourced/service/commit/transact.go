@@ -14,7 +14,10 @@ func (s *Service) Transact(
 	directory string,
 	packagePaths []string,
 	dryRun bool,
-	operation func(string, *sink.Sink) (*output.Results, error),
+	operation func(
+		string,
+		*sink.Sink,
+	) (*output.Results, error),
 ) (*output.Results, error) {
 	if dryRun {
 		r, e := s.attempt(directory, packagePaths, dryRun, operation)

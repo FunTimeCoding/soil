@@ -19,7 +19,8 @@ func TestQueryRangeSendsWindow(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"status":"success","data":{"resultType":"streams","result":[]}}`,
-		))
+		),
+	)
 	start := time.Unix(100, 0)
 	end := time.Unix(200, 0)
 	_, e := loki_tester.New(t, s.URL).QueryRange(

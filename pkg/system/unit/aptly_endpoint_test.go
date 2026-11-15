@@ -15,7 +15,8 @@ import (
 func TestPackagesReadsList(t *testing.T) {
 	s := upstream_server.New(
 		t,
-		upstream_server.WithAnswer(`["Pamd64 charlie 1.2.3 abc"]`))
+		upstream_server.WithAnswer(`["Pamd64 charlie 1.2.3 abc"]`),
+	)
 	result, e := aptly_tester.New(t, s.URL).Packages("delta")
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"Pamd64 charlie 1.2.3 abc"}, result)

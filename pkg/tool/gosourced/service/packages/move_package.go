@@ -20,7 +20,10 @@ func (s *Service) MovePackage(
 		directory,
 		[]string{join.Empty(packagePath, goModConstant.RecursivePattern)},
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			if d != directory {
 				return s.movePackageFollow(
 					d,

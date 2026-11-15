@@ -28,7 +28,12 @@ func (s *Service) CreateUser(
 	}
 
 	if e := s.attempt(
-		func() error { return s.directory.Add(s.userName(account), attributes) },
+		func() error {
+			return s.directory.Add(
+				s.userName(account),
+				attributes,
+			)
+		},
 	); e != nil {
 		return nil, e
 	}

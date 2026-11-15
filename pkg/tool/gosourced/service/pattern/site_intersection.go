@@ -15,7 +15,12 @@ func siteIntersection(sites []*literal.Site) []string {
 	for _, site := range sites[1:] {
 		result = slices.DeleteFunc(
 			result,
-			func(name string) bool { return !slices.Contains(site.Fields, name) },
+			func(name string) bool {
+				return !slices.Contains(
+					site.Fields,
+					name,
+				)
+			},
 		)
 	}
 

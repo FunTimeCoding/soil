@@ -52,6 +52,9 @@ func (p *Page) Opened() gomponents.Node {
 			),
 		),
 		html.Pre(gomponents.Text(m.Content)),
-		html.Div(html.Class(webConstant.ActionRowClass), gomponents.Group(acts)),
+		html.Div(
+			html.Class(webConstant.ActionRowClass),
+			gomponents.Group(acts),
+		),
 	).Response()
 }

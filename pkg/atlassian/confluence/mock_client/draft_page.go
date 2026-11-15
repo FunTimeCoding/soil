@@ -18,12 +18,12 @@ func (c *Client) DraftPage(identifier string) (*page.Page, error) {
 	e, okay := c.pages[identifier]
 
 	if !okay || e.Deleted {
-		return nil, not_found.New(constant.ConfluencePageKind,identifier)
+		return nil, not_found.New(constant.ConfluencePageKind, identifier)
 	}
 
 	if e.Page != nil && e.Page.Status == constant.ConfluenceDraftStatus {
 		return toPage(e.Page), nil
 	}
 
-	return nil, not_found.New(constant.ConfluencePageKind,identifier)
+	return nil, not_found.New(constant.ConfluencePageKind, identifier)
 }

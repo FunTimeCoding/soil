@@ -9,8 +9,14 @@ type Client interface {
 	Reachable(x context.Context) error
 	Close() error
 	Address() string
-	Book(x context.Context, title string) (string, error)
-	Shelve(x context.Context, title string) error
+	Book(
+		x context.Context,
+		title string,
+	) (string, error)
+	Shelve(
+		x context.Context,
+		title string,
+	) error
 }
 
 type Service struct {
@@ -104,15 +110,27 @@ func (s *Service) Probe(x context.Context) error {
 func Lookup(
 	c Client,
 	g *peer.Guard,
-) func(context.Context, string) (string, error) {
+) func(
+	context.Context,
+	string,
+) (string, error) {
 	return wrap(g, c.Book)
 }
 
 func wrap(
 	g *peer.Guard,
-	call func(context.Context, string) (string, error),
-) func(context.Context, string) (string, error) {
-	return func(x context.Context, title string) (string, error) {
+	call func(
+		context.Context,
+		string,
+	) (string, error),
+) func(
+	context.Context,
+	string,
+) (string, error) {
+	return func(
+		x context.Context,
+		title string,
+	) (string, error) {
 		var result string
 		e := g.Attempt(
 			x,

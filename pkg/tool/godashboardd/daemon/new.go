@@ -23,14 +23,20 @@ func New(
 	migrate.AutoMigrate(d)
 	p := o.Prometheus()
 	result := &Daemon{
-		database:        d,
-		prometheus:      p,
-		prometheusGuard: peer.New(constant.PrometheusPeer, p.Address(), p, l, r),
-		argocd:          o.Argocd(),
-		usage:           o.Usage(),
-		notifier:        notifier.New(),
-		logger:          l,
-		reporter:        r,
+		database:   d,
+		prometheus: p,
+		prometheusGuard: peer.New(
+			constant.PrometheusPeer,
+			p.Address(),
+			p,
+			l,
+			r,
+		),
+		argocd:   o.Argocd(),
+		usage:    o.Usage(),
+		notifier: notifier.New(),
+		logger:   l,
+		reporter: r,
 	}
 
 	if result.argocd != nil {

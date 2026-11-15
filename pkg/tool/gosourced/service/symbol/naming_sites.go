@@ -95,7 +95,10 @@ func namingSites(
 					result = append(result, site)
 				}
 			}
-			literals := func(root ast.Node, label string) {
+			literals := func(
+				root ast.Node,
+				label string,
+			) {
 				ast.Inspect(
 					root,
 					func(n ast.Node) bool {

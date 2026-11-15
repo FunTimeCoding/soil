@@ -8,6 +8,9 @@ import (
 
 func (r *Reporter) owned(function string) bool {
 	return r.module != "" &&
-		strings.HasPrefix(function, join.Empty(r.module, stringsConstant.Slash)) &&
+		strings.HasPrefix(
+			function,
+			join.Empty(r.module, stringsConstant.Slash),
+		) &&
 		!strings.Contains(packagePath(function), "/generated/")
 }

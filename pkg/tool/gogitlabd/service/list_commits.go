@@ -17,7 +17,10 @@ func (s *Service) ListCommits(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*commit.Commit, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*commit.Commit, error) {
 			return c.ListCommits(y, project, reference, limit)
 		},
 	)

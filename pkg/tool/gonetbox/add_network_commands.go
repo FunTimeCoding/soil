@@ -6,7 +6,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func addNetworkCommands(t *terminal.Terminal, c face.Client, o *cobra.Command) {
+func addNetworkCommands(
+	t *terminal.Terminal,
+	c face.Client,
+	o *cobra.Command,
+) {
 	o.AddCommand(listTunnelGroups(c, t))
 	o.AddCommand(listTunnels(c, t))
 	o.AddCommand(listTunnelTerminations(c, t))

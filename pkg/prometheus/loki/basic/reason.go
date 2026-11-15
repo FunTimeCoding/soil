@@ -11,7 +11,10 @@ func reason(
 ) string {
 	text := strings.TrimSpace(string(body))
 
-	if text == "" || strings.ContainsAny(text[:1], constant.LokiMarkupOpenings) {
+	if text == "" || strings.ContainsAny(
+		text[:1],
+		constant.LokiMarkupOpenings,
+	) {
 		return fallback
 	}
 

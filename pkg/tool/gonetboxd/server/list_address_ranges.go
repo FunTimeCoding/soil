@@ -18,7 +18,12 @@ func (s *Server) ListAddressRanges(
 	}
 
 	if e != nil {
-		return server.ListAddressRanges500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListAddressRanges500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.ListAddressRanges200JSONResponse(

@@ -19,6 +19,7 @@ func (p *Parser) flush(end int) {
 			p.blockStart,
 			end,
 			strings.Join(p.lines[p.blockStart-1:end], "\n"),
-		))
+		),
+	)
 	p.blockStart = 0
 }

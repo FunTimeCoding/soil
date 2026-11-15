@@ -15,7 +15,10 @@ func (s *Service) Trace(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) (string, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) (string, error) {
 			return c.Trace(y, project, jobIdentifier)
 		},
 	)

@@ -23,7 +23,10 @@ func (s *Service) IntroduceConstructor(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			introduced, c, f := s.introduceConstructorThrough(
 				d,
 				packagePath,

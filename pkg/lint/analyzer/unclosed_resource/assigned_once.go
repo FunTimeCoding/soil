@@ -13,8 +13,14 @@ func assignedOnce(
 ) bool {
 	count := 0
 	looped := false
-	var walk func(n ast.Node, loop bool)
-	walk = func(n ast.Node, loop bool) {
+	var walk func(
+		n ast.Node,
+		loop bool,
+	)
+	walk = func(
+		n ast.Node,
+		loop bool,
+	) {
 		ast.Inspect(
 			n,
 			func(c ast.Node) bool {

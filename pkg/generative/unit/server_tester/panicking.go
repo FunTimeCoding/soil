@@ -19,7 +19,10 @@ func Panicking(
 	s := server.New(identity.Example(), r).WithResources().Server()
 	s.AddTool(
 		mcp.NewTool("golf"),
-		func(context.Context, mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		func(
+			context.Context,
+			mcp.CallToolRequest,
+		) (*mcp.CallToolResult, error) {
 			panic("bravo")
 		},
 	)

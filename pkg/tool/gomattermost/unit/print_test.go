@@ -22,7 +22,10 @@ func TestPrintShowsWindowEachThreadAndItsSummary(t *testing.T) {
 		[]*thread_summary.Summary{
 			thread_summary.New(
 				client.Thread{
-					Root: client.Post{Username: "lima", Message: "alfa is down"},
+					Root: client.Post{
+						Username: "lima",
+						Message:  "alfa is down",
+					},
 				},
 				"kilo",
 			),

@@ -29,7 +29,10 @@ func AssertClassesStyled(
 
 	reported := map[string]bool{}
 	d.Find("[class]").Each(
-		func(_ int, s *goquery.Selection) {
+		func(
+			_ int,
+			s *goquery.Selection,
+		) {
 			value, _ := s.Attr("class")
 
 			for _, c := range strings.Fields(value) {

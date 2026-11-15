@@ -17,7 +17,10 @@ func dependencyMatcher(modules []string) func(string) bool {
 				}
 
 				if span == form ||
-					strings.HasPrefix(span, join.Empty(form, stringsConstant.Slash)) {
+					strings.HasPrefix(
+						span,
+						join.Empty(form, stringsConstant.Slash),
+					) {
 					return true
 				}
 			}

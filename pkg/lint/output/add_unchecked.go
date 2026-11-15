@@ -13,5 +13,6 @@ func (r *Results) AddUnchecked(
 ) {
 	r.Unchecked = append(
 		r.Unchecked,
-		unchecked.New(r.Relativize(path), line, span, reason))
+		unchecked.New(r.Relativize(path), line, span, reason),
+	)
 }

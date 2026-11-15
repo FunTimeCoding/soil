@@ -20,7 +20,8 @@ func TestBadQueryIsCallersMistake(t *testing.T) {
 			t,
 			http.StatusBadRequest,
 			`{"status":"error","errorType":"bad_data","error":"parse error at char 4"}`,
-		).URL)
+		).URL,
+	)
 	_, e := c.Query("up{", time.Now())
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "parse error at char 4", e.Error())
@@ -33,7 +34,8 @@ func TestQueryThatCannotExecuteIsCallersMistake(t *testing.T) {
 			t,
 			http.StatusUnprocessableEntity,
 			`{"status":"error","errorType":"execution","error":"many-to-many matching not allowed"}`,
-		).URL)
+		).URL,
+	)
 	_, e := c.Query("up * on() up", time.Now())
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "many-to-many matching not allowed", e.Error())
@@ -46,7 +48,8 @@ func TestQueryTimeoutNeitherInvalidNorUnavailable(t *testing.T) {
 			t,
 			http.StatusServiceUnavailable,
 			`{"status":"error","errorType":"timeout","error":"query timed out in expression evaluation"}`,
-		).URL)
+		).URL,
+	)
 	_, e := c.Query(constant.Up, time.Now())
 	assert.Error(t, e)
 	assert.False(t, validation.Is(e))
@@ -61,7 +64,8 @@ func TestBadGatewayInFrontOfPrometheusIsUnavailable(t *testing.T) {
 			t,
 			http.StatusBadGateway,
 			"<html><body><h1>502 Bad Gateway</h1></body></html>",
-		).URL)
+		).URL,
+	)
 	_, e := c.Query(constant.Up, time.Now())
 	assert.True(t, unavailable.Is(e))
 }

@@ -13,7 +13,10 @@ func NewOllama(t *testing.T) face.ReachableEmbedder {
 	t.Helper()
 	target := environment.Optional(generativeConstant.EmbedTargetEnvironment)
 
-	if !strings.HasPrefix(target, join.Empty(generativeConstant.OllamaScheme, ":")) {
+	if !strings.HasPrefix(
+		target,
+		join.Empty(generativeConstant.OllamaScheme, ":"),
+	) {
 		t.Skipf(
 			"the claim is the ollama client's truncate flag; target is %q",
 			target,

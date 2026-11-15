@@ -18,7 +18,10 @@ func (s *Service) Plate() (*plate.Plate, error) {
 	result := plate.New()
 	var f error
 
-	if result.Issues, f = s.searchClosed(constant.PlateQuery, closed); f != nil {
+	if result.Issues, f = s.searchClosed(
+		constant.PlateQuery,
+		closed,
+	); f != nil {
 		return nil, f
 	}
 

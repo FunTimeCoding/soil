@@ -31,5 +31,10 @@ func (c *Client) DeleteUserAccount(
 	c.UserList = slices.Delete(c.UserList, i, i+1)
 	delete(c.Passwords, account)
 
-	return &client.Receipt{Message: fmt.Sprintf("deleted user: %s", account)}, nil
+	return &client.Receipt{
+		Message: fmt.Sprintf(
+			"deleted user: %s",
+			account,
+		),
+	}, nil
 }

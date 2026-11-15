@@ -29,7 +29,10 @@ func (s *Service) MoveSymbols(
 		directory,
 		[]string{packagePath},
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			if d != directory {
 				return s.moveSymbolsFollow(
 					d,

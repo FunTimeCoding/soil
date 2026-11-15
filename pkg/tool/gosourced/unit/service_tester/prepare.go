@@ -15,5 +15,6 @@ func Prepare(
 	return testutil.PrepareTestPackage(
 		t,
 		ServiceTestdata(name),
-		extraModLines...)
+		extraModLines...,
+	)
 }

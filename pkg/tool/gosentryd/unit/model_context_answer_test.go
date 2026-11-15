@@ -17,7 +17,11 @@ func TestUnknownIssueIsAnsweredQuietly(t *testing.T) {
 	assert.String(
 		t,
 		"issue not found: 100",
-		daemon_tester.ServedTools(t, service_tester.NewSource(t), m).MustCallToolError(
+		daemon_tester.ServedTools(
+			t,
+			service_tester.NewSource(t),
+			m,
+		).MustCallToolError(
 			constant.GetIssue,
 			map[string]any{"identifier": "100"},
 		),

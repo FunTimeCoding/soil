@@ -40,7 +40,10 @@ func (s *Service) extractTypeThrough(
 		directory,
 		packagePath,
 		targetPackagePath,
-		func(loaded []*packages.Package, _ *token.FileSet) []types.Object {
+		func(
+			loaded []*packages.Package,
+			_ *token.FileSet,
+		) []types.Object {
 			p := lookup.FindPackage(loaded, packagePath)
 
 			if p == nil {
@@ -144,7 +147,10 @@ func (s *Service) extractTypeThrough(
 	typeEntry := entries[0]
 
 	if target != nil {
-		if f := identifier.CheckScopeCollision(target, typeEntry.NewName); f != nil {
+		if f := identifier.CheckScopeCollision(
+			target,
+			typeEntry.NewName,
+		); f != nil {
 			return commit.FailValidation(r, f.Error())
 		}
 	}

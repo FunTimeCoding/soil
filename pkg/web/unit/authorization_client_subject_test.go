@@ -16,7 +16,12 @@ func TestRequireHandsSignedInSubjectOn(t *testing.T) {
 	q := httptest.NewRequest(http.MethodGet, "/target", nil)
 	q.AddCookie(c.SubjectCookie("alfa"))
 	c.Require(
-		func(_ http.ResponseWriter, r *http.Request) { seen = guard.Subject(r) },
+		func(
+			_ http.ResponseWriter,
+			r *http.Request,
+		) {
+			seen = guard.Subject(r)
+		},
 	)(httptest.NewRecorder(), q)
 	assert.String(t, "alfa", seen)
 }

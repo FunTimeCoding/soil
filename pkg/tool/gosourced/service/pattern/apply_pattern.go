@@ -25,7 +25,10 @@ func (s *Service) ApplyPattern(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			applied, a, f := s.applyPatternThrough(
 				d,
 				packagePath,

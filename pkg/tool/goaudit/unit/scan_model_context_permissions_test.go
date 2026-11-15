@@ -128,13 +128,23 @@ func TestModelContextPermissionsInstanceToolCallRegistersSharedTools(
 	assert.Integer(
 		t,
 		2,
-		len(scan.ModelContextPermissions(base, scan_tester.AlfaConfiguration())),
+		len(
+			scan.ModelContextPermissions(
+				base,
+				scan_tester.AlfaConfiguration(),
+			),
+		),
 	)
 	scan_tester.WriteInstanceToolCall(base)
 	assert.Integer(
 		t,
 		0,
-		len(scan.ModelContextPermissions(base, scan_tester.AlfaConfiguration())),
+		len(
+			scan.ModelContextPermissions(
+				base,
+				scan_tester.AlfaConfiguration(),
+			),
+		),
 	)
 }
 
@@ -167,6 +177,11 @@ func TestModelContextPermissionsCoverEveryInstanceToolRegistration(
 	assert.Integer(
 		t,
 		0,
-		len(scan.ModelContextPermissions(base, scan_tester.AlfaConfiguration())),
+		len(
+			scan.ModelContextPermissions(
+				base,
+				scan_tester.AlfaConfiguration(),
+			),
+		),
 	)
 }

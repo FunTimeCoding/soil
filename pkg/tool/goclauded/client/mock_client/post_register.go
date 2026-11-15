@@ -5,6 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
-func (c *Client) PostRegister(_ context.Context, _ client.PostRegisterJSONRequestBody) (*client.RegisterResponse, error) {
+func (c *Client) PostRegister(
+	_ context.Context,
+	_ client.PostRegisterJSONRequestBody,
+) (*client.RegisterResponse, error) {
 	return &client.RegisterResponse{}, c.Failure
 }

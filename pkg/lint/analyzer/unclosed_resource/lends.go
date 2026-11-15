@@ -54,7 +54,14 @@ func lends(
 						continue
 					}
 
-					if !lentFrom(p, f.Body, e, indices, map[*types.Var]bool{}, via) {
+					if !lentFrom(
+						p,
+						f.Body,
+						e,
+						indices,
+						map[*types.Var]bool{},
+						via,
+					) {
 						lending = false
 					}
 

@@ -8,7 +8,10 @@ import (
 
 func (r *Repository) siblingOf(path string) (string, bool) {
 	for _, s := range r.Siblings {
-		if path == s || strings.HasPrefix(path, join.Empty(s, stringsConstant.Slash)) {
+		if path == s || strings.HasPrefix(
+			path,
+			join.Empty(s, stringsConstant.Slash),
+		) {
 			return s, true
 		}
 	}

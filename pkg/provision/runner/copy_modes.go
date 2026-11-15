@@ -14,7 +14,11 @@ func copyModes(
 	errors.PanicOnError(
 		filepath.WalkDir(
 			source,
-			func(path string, d fs.DirEntry, e error) error {
+			func(
+				path string,
+				d fs.DirEntry,
+				e error,
+			) error {
 				if e != nil {
 					return e
 				}

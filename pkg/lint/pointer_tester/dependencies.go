@@ -17,7 +17,10 @@ func Dependencies(modules ...string) lint.Checker {
 
 			for _, form := range []string{m, rest} {
 				if span == form ||
-					strings.HasPrefix(span, join.Empty(form, stringsConstant.Slash)) {
+					strings.HasPrefix(
+						span,
+						join.Empty(form, stringsConstant.Slash),
+					) {
 					return true
 				}
 			}

@@ -9,7 +9,10 @@ import (
 func Analyze(
 	t *testing.T,
 	directory string,
-	check func(*packages.Package, *output.Results),
+	check func(
+		*packages.Package,
+		*output.Results,
+	),
 ) *output.Results {
 	t.Helper()
 	loaded, result := loadVariants(t, directory)

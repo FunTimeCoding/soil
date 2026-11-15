@@ -21,7 +21,10 @@ func (c *Card) visual() gomponents.Node {
 	case c.emblem != "":
 		return html.Div(
 			html.Class(
-				join.Space(constant.CardVisualClass, constant.CardFallbackClass),
+				join.Space(
+					constant.CardVisualClass,
+					constant.CardFallbackClass,
+				),
 			),
 			gomponents.Text(c.emblem),
 		)

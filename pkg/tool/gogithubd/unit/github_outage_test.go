@@ -18,7 +18,12 @@ func TestGitHubOutageStaysQuietAndFaultIsCapturedOnce(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = errors.New("github answered nonsense")
 	r := memory.New()
-	w, okay := daemon_tester.New(t, c, metric.New(), r).Workers()[1].(*worker.Worker)
+	w, okay := daemon_tester.New(
+		t,
+		c,
+		metric.New(),
+		r,
+	).Workers()[1].(*worker.Worker)
 	assert.True(t, okay)
 	w.Poll()
 	assert.Count(t, 1, r.Events())
@@ -35,7 +40,12 @@ func TestMissingOwnerIsCaptured(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = not_found.Format("Not Found")
 	r := memory.New()
-	w, okay := daemon_tester.New(t, c, metric.New(), r).Workers()[1].(*worker.Worker)
+	w, okay := daemon_tester.New(
+		t,
+		c,
+		metric.New(),
+		r,
+	).Workers()[1].(*worker.Worker)
 	assert.True(t, okay)
 	w.Poll()
 	assert.Count(t, 1, r.Events())

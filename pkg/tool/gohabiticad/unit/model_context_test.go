@@ -33,7 +33,7 @@ func TestModelContext(t *testing.T) {
 		constant.ScoreTask,
 		map[string]any{
 			generativeConstant.ParameterIdentifier: "task-1",
-			constant.Direction:             "up",
+			constant.Direction:                     "up",
 		},
 	)
 	assert.StringContains(t, "hp", score)

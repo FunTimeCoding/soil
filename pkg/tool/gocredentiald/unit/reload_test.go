@@ -27,7 +27,10 @@ func TestUnreadableChangeIsAnsweredFromCopyLoadedBefore(t *testing.T) {
 	assert.StringContains(
 		t,
 		"Forge",
-		c.MustCallTool(constant.SearchEntries, map[string]any{"query": "forge"}),
+		c.MustCallTool(
+			constant.SearchEntries,
+			map[string]any{"query": "forge"},
+		),
 	)
 	assert.Count(t, 1, r.Events())
 }

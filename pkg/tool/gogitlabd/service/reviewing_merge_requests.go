@@ -15,7 +15,10 @@ func (s *Service) ReviewingMergeRequests(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*merge_request.Request, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*merge_request.Request, error) {
 			return c.ReviewingMergeRequests(y, all)
 		},
 	)

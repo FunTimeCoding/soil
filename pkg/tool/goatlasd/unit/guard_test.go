@@ -27,7 +27,8 @@ func TestGuard(t *testing.T) {
 		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
-		model_context_server.WithSignOn())
+		model_context_server.WithSignOn(),
+	)
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyGuarded(t, "/api/placements")

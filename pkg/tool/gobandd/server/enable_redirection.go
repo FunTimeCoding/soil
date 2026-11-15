@@ -45,7 +45,12 @@ func (s *Server) EnableRedirection(
 	}
 
 	if f != nil {
-		return server.EnableRedirection500JSONResponse(*s.captureDetail(x, f)), nil
+		return server.EnableRedirection500JSONResponse(
+			*s.captureDetail(
+				x,
+				f,
+			),
+		), nil
 	}
 
 	if enabled == nil {

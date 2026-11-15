@@ -55,7 +55,11 @@ func updateVirtualMachine(
 
 			body.CustomFields = customFields()
 			t.EmitValue(
-				c.UpdateVirtualMachine(context.Background(), arguments[0], body),
+				c.UpdateVirtualMachine(
+					context.Background(),
+					arguments[0],
+					body,
+				),
 			)
 		},
 	}

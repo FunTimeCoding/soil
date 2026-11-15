@@ -28,7 +28,8 @@ func TestGuard(t *testing.T) {
 		func(g *guard.Mux) {
 			d.Mount(g)
 		},
-		model_context_server.WithSignOn())
+		model_context_server.WithSignOn(),
+	)
 	defer s.Close()
 	s.VerifyBase(t)
 	s.VerifyFavicon(t)

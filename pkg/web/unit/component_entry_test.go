@@ -206,7 +206,12 @@ func TestSidewaysEntryKeepsItsButtonsSideBySide(t *testing.T) {
 			entry.New("/alfa", "Go").
 				Sideways().
 				Text("bravo", "Bravo", "").
-				Beside(html.A(html.Href("/charlie"), gomponents.Text("Cancel"))).
+				Beside(
+					html.A(
+						html.Href("/charlie"),
+						gomponents.Text("Cancel"),
+					),
+				).
 				Node(),
 		),
 	)
@@ -369,7 +374,12 @@ func TestAppendingEntryResetsAfterItsRequest(t *testing.T) {
 			Date("november", "November", "2026-10-26").
 			TextArea("oscar", "Oscar", "papa").
 			Lines("3").
-			Select("quebec", "Quebec", choice.FromValues([]string{"romeo"}), "").
+			Select(
+				"quebec",
+				"Quebec",
+				choice.FromValues([]string{"romeo"}),
+				"",
+			).
 			Node(),
 	)
 	assert.StringContains(t, `hx-on::after-request="this.reset()"`, page)

@@ -64,7 +64,8 @@ func FieldFlips(
 
 		result = append(
 			result,
-			relocation.NewFieldFlip(field, newName, references))
+			relocation.NewFieldFlip(field, newName, references),
+		)
 	}
 
 	return result, ""

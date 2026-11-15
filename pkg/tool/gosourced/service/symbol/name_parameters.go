@@ -20,7 +20,10 @@ func (s *Service) NameParameters(
 		directory,
 		paths,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return s.nameParametersThrough(d, request, paths, out)
 		},
 	)

@@ -23,7 +23,14 @@ func TestModuleBuildsEverySelectedArchitecture(t *testing.T) {
 	assert.FatalOnError(t, build.Module(o))
 	assert.True(
 		t,
-		system.FileExists(filepath.Join("tmp", "gosed", "linux-amd64", "gosed")),
+		system.FileExists(
+			filepath.Join(
+				"tmp",
+				"gosed",
+				"linux-amd64",
+				"gosed",
+			),
+		),
 	)
 	assert.True(
 		t,

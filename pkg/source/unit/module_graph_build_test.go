@@ -51,6 +51,9 @@ func TestBuildForestReadsTreeNotDisk(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		module_graph.BuildForest(f, root).Nodes["example.org/alfa/bravo"].Imports,
+		module_graph.BuildForest(
+			f,
+			root,
+		).Nodes["example.org/alfa/bravo"].Imports,
 	)
 }

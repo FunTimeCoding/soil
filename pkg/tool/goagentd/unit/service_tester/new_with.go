@@ -11,7 +11,11 @@ import (
 
 func NewWith(
 	t *testing.T,
-	stream func(string, io.Writer, ...string) face.Stream,
+	stream func(
+		string,
+		io.Writer,
+		...string,
+	) face.Stream,
 	r face.Reporter,
 ) *Tester {
 	t.Helper()

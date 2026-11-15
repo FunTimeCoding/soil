@@ -26,7 +26,10 @@ func (s *Service) planFamily(
 	members, refusals := methodFamily(all, m)
 	slices.SortFunc(
 		members,
-		func(a *types.Func, b *types.Func) int {
+		func(
+			a *types.Func,
+			b *types.Func,
+		) int {
 			x := set.Position(a.Pos())
 			y := set.Position(b.Pos())
 
@@ -85,7 +88,8 @@ func (s *Service) planFamily(
 				),
 				f,
 				resolve.FindAllReferences(all, f),
-			))
+			),
+		)
 	}
 
 	return result

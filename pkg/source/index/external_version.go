@@ -15,7 +15,10 @@ func externalVersion(
 
 	for module := range requirements {
 		if (path == module ||
-			strings.HasPrefix(path, join.Empty(module, stringsConstant.Slash))) &&
+			strings.HasPrefix(
+				path,
+				join.Empty(module, stringsConstant.Slash),
+			)) &&
 			len(module) > len(best) {
 			best = module
 		}

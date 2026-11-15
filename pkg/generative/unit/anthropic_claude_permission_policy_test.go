@@ -27,7 +27,12 @@ func TestPolicyAllowsRemovingInsideScratch(t *testing.T) {
 	root, scratchpad := policy_tester.Project(t)
 	assert.True(
 		t,
-		policy_tester.Allows(t, root, scratchpad, `rm -f "tmp/work/x clean.md"`),
+		policy_tester.Allows(
+			t,
+			root,
+			scratchpad,
+			`rm -f "tmp/work/x clean.md"`,
+		),
 	)
 }
 
@@ -82,7 +87,12 @@ func TestPolicyAllowsCopyingIntoScratch(t *testing.T) {
 	root, scratchpad := policy_tester.Project(t)
 	assert.True(
 		t,
-		policy_tester.Allows(t, root, scratchpad, `cp doc/guide/a.md tmp/work/`),
+		policy_tester.Allows(
+			t,
+			root,
+			scratchpad,
+			`cp doc/guide/a.md tmp/work/`,
+		),
 	)
 }
 
@@ -277,7 +287,12 @@ func TestPolicyKeepsSubshellChangeDirectoryInside(t *testing.T) {
 	root, scratchpad := policy_tester.Project(t)
 	assert.False(
 		t,
-		policy_tester.Allows(t, root, scratchpad, `(cd tmp/work) && rm -f x.md`),
+		policy_tester.Allows(
+			t,
+			root,
+			scratchpad,
+			`(cd tmp/work) && rm -f x.md`,
+		),
 	)
 }
 
@@ -457,7 +472,12 @@ func TestPolicyRefusesMovingOutOfScratch(t *testing.T) {
 	root, scratchpad := policy_tester.Project(t)
 	assert.False(
 		t,
-		policy_tester.Allows(t, root, scratchpad, `mv doc/guide/a.md tmp/work/`),
+		policy_tester.Allows(
+			t,
+			root,
+			scratchpad,
+			`mv doc/guide/a.md tmp/work/`,
+		),
 	)
 }
 
@@ -465,7 +485,12 @@ func TestPolicyRefusesCopyingOutOfScratch(t *testing.T) {
 	root, scratchpad := policy_tester.Project(t)
 	assert.False(
 		t,
-		policy_tester.Allows(t, root, scratchpad, `cp tmp/work/a.md doc/guide/`),
+		policy_tester.Allows(
+			t,
+			root,
+			scratchpad,
+			`cp tmp/work/a.md doc/guide/`,
+		),
 	)
 }
 

@@ -7,9 +7,15 @@ import (
 
 func New() *Cache {
 	return &Cache{
-		seed:     maphash.MakeSeed(),
-		entries:  make(map[string]*pointer_entry.Entry),
-		globals:  make(map[string]string),
-		Mismatch: func(string, string, string, string) {},
+		seed:    maphash.MakeSeed(),
+		entries: make(map[string]*pointer_entry.Entry),
+		globals: make(map[string]string),
+		Mismatch: func(
+			string,
+			string,
+			string,
+			string,
+		) {
+		},
 	}
 }

@@ -26,7 +26,8 @@ func TestWriteWithoutResultPrintsNothing(t *testing.T) {
 				output, failure, code = command_tester.Run(
 					t,
 					c,
-					arguments...)
+					arguments...,
+				)
 			},
 		)
 		assert.Integer(t, 0, code)
@@ -173,7 +174,13 @@ func TestChunkPrintsPreviewAsDocument(t *testing.T) {
 		Model:          "kilo",
 		Window:         512,
 		Chunks: []client.PreviewChunk{
-			{Index: 1, FirstLine: 1, LastLine: 9, Tokens: 600, EmbedTokens: 600},
+			{
+				Index:       1,
+				FirstLine:   1,
+				LastLine:    9,
+				Tokens:      600,
+				EmbedTokens: 600,
+			},
 		},
 	}
 	file := join.Join(t.TempDir(), "alfa.md")

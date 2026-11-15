@@ -61,7 +61,10 @@ func (s *Service) Upload(
 		return i
 	}
 
-	if j := os.Rename(staging.Name(), filepath.Join(directory, file)); j != nil {
+	if j := os.Rename(
+		staging.Name(),
+		filepath.Join(directory, file),
+	); j != nil {
 		return j
 	}
 

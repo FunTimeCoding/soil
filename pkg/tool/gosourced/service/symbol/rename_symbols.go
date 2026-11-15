@@ -30,7 +30,10 @@ func (s *Service) RenameSymbols(
 		directory,
 		[]string{packagePath},
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return s.renameThrough(d, packagePath, renames, out)
 		},
 	)

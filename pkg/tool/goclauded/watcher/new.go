@@ -9,7 +9,10 @@ import (
 
 func New(
 	rescan func(context.Context) []error,
-	sync func(string, string),
+	sync func(
+		string,
+		string,
+	),
 	directories func() []string,
 	harbor string,
 	l *logger.Logger,

@@ -6,10 +6,17 @@ import (
 )
 
 func (r *Run) build(s ...string) *exec.Cmd {
-	c := exec.Command(s[0], s[1:]...) // #nosec G204 goanalyze:ignore forbidden_call
+	c := exec.Command(
+		s[0],
+		s[1:]...,
+	) // #nosec G204 goanalyze:ignore forbidden_call
 
 	if r.context != nil {
-		c = exec.CommandContext(r.context, s[0], s[1:]...) // #nosec G204 goanalyze:ignore forbidden_call
+		c = exec.CommandContext(
+			r.context,
+			s[0],
+			s[1:]...,
+		) // #nosec G204 goanalyze:ignore forbidden_call
 	}
 
 	if r.Directory != "" {

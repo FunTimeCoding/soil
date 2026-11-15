@@ -9,7 +9,10 @@ import (
 	"net/http"
 )
 
-func handleDialog(w http.ResponseWriter, e *http.Request) {
+func handleDialog(
+	w http.ResponseWriter,
+	e *http.Request,
+) {
 	c := request_context.New(w, e)
 	c.SetLastLocation()
 	l := multi_line.New()

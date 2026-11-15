@@ -76,7 +76,10 @@ func TestOneUnreachableInstanceLeavesOthersAnswering(t *testing.T) {
 	alfa.Failure = outage_tester.RefusedDial()
 	s := service_tester.New(
 		t,
-		map[string]*mock_client.Client{"alfa": alfa, "bravo": mock_client.New()},
+		map[string]*mock_client.Client{
+			"alfa":  alfa,
+			"bravo": mock_client.New(),
+		},
 	)
 	_, e := s.Query(t.Context(), "alfa", "up")
 	assert.True(t, unavailable.Is(e))

@@ -36,7 +36,10 @@ func TestCollisionAliasFixAppliesEveryFirstPartyCollision(t *testing.T) {
 				"package unit\n\nimport (\n\thotelMock \"testmodule/pkg/hotel/mock_client\"\n\tgoindiaMock \"testmodule/pkg/tool/goindia/client/mock_client\"\n)\n\nfunc Doubles() (*hotelMock.Client, *goindiaMock.Client) {\n\treturn &hotelMock.Client{}, &goindiaMock.Client{}\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(directory, "pkg/tool/goindia/unit/doubles.go"),
+					filepath.Join(
+						directory,
+						"pkg/tool/goindia/unit/doubles.go",
+					),
 				),
 			)
 		},

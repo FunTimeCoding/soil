@@ -16,7 +16,10 @@ func (s *Service) ReadCommit(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) (*commit.Commit, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) (*commit.Commit, error) {
 			return c.ReadCommit(y, project, sha)
 		},
 	)

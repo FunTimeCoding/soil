@@ -15,10 +15,13 @@ type Requester struct {
 	userAgent  string
 	header     map[string]string
 	authorizer face.Authorizer
-	refusal    func(int, []byte) error
-	table      *refusal.Table
-	reason     refusal.Reader
-	subject    string
-	backoff    time.Duration
-	pace       *rate.Limiter
+	refusal    func(
+		int,
+		[]byte,
+	) error
+	table   *refusal.Table
+	reason  refusal.Reader
+	subject string
+	backoff time.Duration
+	pace    *rate.Limiter
 }

@@ -13,7 +13,10 @@ func lineRange(
 	first := strings.Count(body[:c.Position], stringsConstant.Unix) + 1
 
 	return first, first + strings.Count(
-		strings.TrimRight(body[c.Position:c.Position+c.Length], stringsConstant.Unix),
+		strings.TrimRight(
+			body[c.Position:c.Position+c.Length],
+			stringsConstant.Unix,
+		),
 		stringsConstant.Unix,
 	)
 }

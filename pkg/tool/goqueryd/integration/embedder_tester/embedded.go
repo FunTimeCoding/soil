@@ -17,7 +17,11 @@ func Embedded(
 ) {
 	t.Helper()
 
-	for _, c := range chunk.Document(body, name, service_tester.NewReranker(t)) {
+	for _, c := range chunk.Document(
+		body,
+		name,
+		service_tester.NewReranker(t),
+	) {
 		_, f := embed.Single(t.Context(), e, c.Text)
 		assert.FatalOnError(t, f)
 	}

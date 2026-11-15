@@ -11,6 +11,9 @@ func widenOurs(
 	}
 
 	return func(modulePath string) bool {
-		return own != nil && own(modulePath) || slices.Contains(ours, modulePath)
+		return own != nil && own(modulePath) || slices.Contains(
+			ours,
+			modulePath,
+		)
 	}
 }

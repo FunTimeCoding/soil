@@ -14,7 +14,10 @@ func (s *Service) ResolveProject(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) (int64, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) (int64, error) {
 			return c.ResolveProject(y, identifier)
 		},
 	)

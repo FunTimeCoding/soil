@@ -25,7 +25,13 @@ func (s *Server) GetStatus(
 	}
 
 	if e != nil {
-		return server.GetStatus500JSONResponse(*s.captureFail(x, e, e.Error())), nil
+		return server.GetStatus500JSONResponse(
+			*s.captureFail(
+				x,
+				e,
+				e.Error(),
+			),
+		), nil
 	}
 
 	v, f := s.service.Status(instance)

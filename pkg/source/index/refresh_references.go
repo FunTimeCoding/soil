@@ -46,7 +46,8 @@ func (w *Workspace) refreshReferences() map[string]*record.References {
 
 	loaded, e := resolve.LoadTested(
 		w.root,
-		slices.Compact(slices.Sorted(slices.Values(directories)))...)
+		slices.Compact(slices.Sorted(slices.Values(directories)))...,
+	)
 	errors.PanicOnError(e)
 	workspace := make(map[string]bool, len(g.Nodes))
 

@@ -24,7 +24,10 @@ func (s *Service) HandleEvent(
 	}
 
 	if strings.HasSuffix(v.Name, gw2Constant.DetailedWvWKillSuffix) {
-		if e := s.EnrichFile(filepath.Dir(v.Name), filepath.Base(v.Name)); e != nil {
+		if e := s.EnrichFile(
+			filepath.Dir(v.Name),
+			filepath.Base(v.Name),
+		); e != nil {
 			result = append(result, e)
 		}
 	}

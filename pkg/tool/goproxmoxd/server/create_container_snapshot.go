@@ -26,7 +26,12 @@ func (s *Server) CreateContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.CreateContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.CreateContainerSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	node := ""
@@ -54,7 +59,12 @@ func (s *Server) CreateContainerSnapshot(
 	case unavailable.Is(e):
 		return server.CreateContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.CreateContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.CreateContainerSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.CreateContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

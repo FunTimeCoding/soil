@@ -30,9 +30,12 @@ func Tools() []Tool {
 			Method:    func(c *mock_client.Client) any { return c.CloseTab },
 		},
 		{
-			Name:      constant.Navigate,
-			Arguments: map[string]any{"tab_id": 1, "url": "https://example.com"},
-			Method:    func(c *mock_client.Client) any { return c.Navigate },
+			Name: constant.Navigate,
+			Arguments: map[string]any{
+				"tab_id": 1,
+				"url":    "https://example.com",
+			},
+			Method: func(c *mock_client.Client) any { return c.Navigate },
 		},
 		{
 			Name:      constant.NavigateBack,

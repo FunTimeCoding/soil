@@ -13,7 +13,11 @@ func (o *Tester) ObjectModes() []fs.FileMode {
 		o.t,
 		filepath.WalkDir(
 			filepath.Join(o.CloneDirectory, ".git", "objects"),
-			func(path string, d fs.DirEntry, e error) error {
+			func(
+				path string,
+				d fs.DirEntry,
+				e error,
+			) error {
 				if e != nil || d.IsDir() || filepath.Base(filepath.Dir(path)) == "info" {
 					return e
 				}

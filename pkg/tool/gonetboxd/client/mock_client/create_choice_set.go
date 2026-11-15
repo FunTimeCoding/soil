@@ -5,6 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func (c *Client) CreateChoiceSet(_ context.Context, _ string, _ []string) (client.ChoiceSet, error) {
+func (c *Client) CreateChoiceSet(
+	_ context.Context,
+	_ string,
+	_ []string,
+) (client.ChoiceSet, error) {
 	return client.ChoiceSet{}, c.Failure
 }

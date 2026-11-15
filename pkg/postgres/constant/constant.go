@@ -30,8 +30,8 @@ var ValidationClasses = []string{
 }
 
 var (
-	ConflictClasses = []string{"23", "40", "55"}
-	ForbiddenCodes = []string{"42501"}
+	ConflictClasses  = []string{"23", "40", "55"}
+	ForbiddenCodes   = []string{"42501"}
 	UnavailableCodes = []string{"57P01", "57P02", "57P03", "53300"}
 )
 

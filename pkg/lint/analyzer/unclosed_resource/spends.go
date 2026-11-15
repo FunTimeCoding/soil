@@ -41,7 +41,11 @@ func spends(
 				}
 
 				for i, e := range v.Results {
-					if !mayCarry(results.At(i).Type()) || isZeroValue(p, f.Body, e) {
+					if !mayCarry(results.At(i).Type()) || isZeroValue(
+						p,
+						f.Body,
+						e,
+					) {
 						continue
 					}
 

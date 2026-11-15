@@ -19,7 +19,10 @@ func permissionEntries(s *claude_settings.Settings) []string {
 		s.Permissions.Ask,
 	} {
 		for _, entry := range list {
-			if strings.HasPrefix(entry, generativeConstant.ModelContextToolPrefix) {
+			if strings.HasPrefix(
+				entry,
+				generativeConstant.ModelContextToolPrefix,
+			) {
 				result = append(result, entry)
 			}
 		}

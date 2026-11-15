@@ -10,7 +10,10 @@ import (
 func (s *Service) notePersistedProfiles(calls []*tool_call.Call) {
 	for _, c := range calls {
 		if c.Name != constant.ProfileTool ||
-			!strings.HasPrefix(resultText(c.Result), constant.PersistedOutput) ||
+			!strings.HasPrefix(
+				resultText(c.Result),
+				constant.PersistedOutput,
+			) ||
 			s.clock().Sub(callTime(c)) > constant.PersistedProfileWindow {
 			continue
 		}

@@ -5,6 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func (c *Client) ListVirtualJournalEntries(_ context.Context, _ string, _ int32, _ int32) ([]*client.JournalEntry, error) {
+func (c *Client) ListVirtualJournalEntries(
+	_ context.Context,
+	_ string,
+	_ int32,
+	_ int32,
+) ([]*client.JournalEntry, error) {
 	return nil, c.Failure
 }

@@ -20,7 +20,10 @@ func TestRecoveredNotFoundAnswersItsStatus(t *testing.T) {
 	r := memory.New()
 	wrapped := view_tester.New().Recovery(r)(
 		http.HandlerFunc(
-			func(http.ResponseWriter, *http.Request) {
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
 				panic(not_found.Format("paper alfa"))
 			},
 		),
@@ -39,7 +42,10 @@ func TestRecoveredNotFoundAnswersItsStatus(t *testing.T) {
 func TestRecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
 	wrapped := view_tester.New().Recovery(memory.New())(
 		http.HandlerFunc(
-			func(http.ResponseWriter, *http.Request) {
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
 				panic(conflict.Format("already accepted"))
 			},
 		),
@@ -117,7 +123,10 @@ func TestRecoveredUnclassifiedErrorStaysFaultAndIsCaptured(t *testing.T) {
 	r := memory.New()
 	wrapped := view_tester.New().Recovery(r)(
 		http.HandlerFunc(
-			func(http.ResponseWriter, *http.Request) {
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
 				panic(errors.New("store failed"))
 			},
 		),

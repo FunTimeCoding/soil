@@ -18,7 +18,12 @@ func Run(
 
 	return terminal_tester.Run(
 		t,
-		func(m *terminal.Terminal) *cobra.Command { return goatlassian.New(c, m) },
+		func(m *terminal.Terminal) *cobra.Command {
+			return goatlassian.New(
+				c,
+				m,
+			)
+		},
 		arguments...,
 	)
 }

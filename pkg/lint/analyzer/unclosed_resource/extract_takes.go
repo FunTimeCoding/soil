@@ -69,7 +69,10 @@ func extractTakes(
 								Argument: c.Argument,
 								Conditions: append(
 									[]fact.Condition{
-										*fact.NewReleaseCondition(holder, field),
+										*fact.NewReleaseCondition(
+											holder,
+											field,
+										),
 									},
 									c.Conditions...,
 								),

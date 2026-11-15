@@ -25,7 +25,11 @@ func New(
 	for _, entry := range b.Entries() {
 		links = append(
 			links,
-			palette.NewCommand(entry.Label, entry.Link, webConstant.PaletteLink),
+			palette.NewCommand(
+				entry.Label,
+				entry.Link,
+				webConstant.PaletteLink,
+			),
 		)
 	}
 

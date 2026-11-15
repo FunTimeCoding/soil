@@ -20,7 +20,10 @@ func deleteBranch(c *command_context.Context) *cobra.Command {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
 			c.Terminal().EmitDone(
-				c.Client().DeleteBranch(context.Background(), int32(identifier)),
+				c.Client().DeleteBranch(
+					context.Background(),
+					int32(identifier),
+				),
 			)
 		},
 	}

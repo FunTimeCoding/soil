@@ -18,7 +18,12 @@ func (s *Server) ListVirtualMachines(
 	}
 
 	if e != nil {
-		return server.ListVirtualMachines500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListVirtualMachines500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.ListVirtualMachines200JSONResponse(

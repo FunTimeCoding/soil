@@ -12,7 +12,8 @@ func (d *Dial) Point(
 ) *Dial {
 	d.markers = append(
 		d.markers,
-		marker.New(share, constant.DialPointClass, color, title))
+		marker.New(share, constant.DialPointClass, color, title),
+	)
 
 	return d
 }

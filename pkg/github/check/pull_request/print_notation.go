@@ -15,7 +15,12 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoGitHubPullRequest) {
+	for _, e := range report.Trim(
+		v,
+		r,
+		o.All,
+		monitorConstant.GoGitHubPullRequest,
+	) {
 		var s soil.Severity
 
 		if e.HasConcerns() {

@@ -43,7 +43,10 @@ func (s *Server) query(
 		}
 		var detail map[string]string
 
-		if v.Detail != nil && json.Unmarshal([]byte(*v.Detail), &detail) == nil {
+		if v.Detail != nil && json.Unmarshal(
+			[]byte(*v.Detail),
+			&detail,
+		) == nil {
 			entries[i].Detail = detail
 		}
 	}

@@ -29,7 +29,12 @@ func TestClientAddsAndRemovesOneValue(t *testing.T) {
 	assert.String(t, "lead,on_call", a.Label(constant.FixtureLabelKey))
 	assert.FatalOnError(
 		t,
-		c.RemoveLabel(a.UUID, constant.FixtureLabelKey, "on_call", "reconciler"),
+		c.RemoveLabel(
+			a.UUID,
+			constant.FixtureLabelKey,
+			"on_call",
+			"reconciler",
+		),
 	)
 	assert.String(t, "lead", a.Label(constant.FixtureLabelKey))
 }

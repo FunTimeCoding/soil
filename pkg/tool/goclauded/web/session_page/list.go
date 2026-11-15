@@ -35,7 +35,10 @@ func List(
 			rows,
 			html.Tr(
 				html.Td(
-					html.A(html.Href(Path(s.Identifier)), gomponents.Text(name)),
+					html.A(
+						html.Href(Path(s.Identifier)),
+						gomponents.Text(name),
+					),
 					gomponents.If(
 						s.Active,
 						badge.New(constant.ActiveLabel).Node(),

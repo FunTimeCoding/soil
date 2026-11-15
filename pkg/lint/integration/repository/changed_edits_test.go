@@ -15,9 +15,9 @@ func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 	system_tester.Write(t, root, "alfa.go", "package alfa\n")
 	system_tester.Write(t, root, "bravo.go", "package alfa\n")
 	system_tester.Write(t, root, "charlie.go", "package alfa\n")
-	repository_tester.Identified(root,"init", "-q")
-	repository_tester.Identified(root,"add", "--all")
-	repository_tester.Identified(root,"commit", "--quiet", "--message=alfa")
+	repository_tester.Identified(root, "init", "-q")
+	repository_tester.Identified(root, "add", "--all")
+	repository_tester.Identified(root, "commit", "--quiet", "--message=alfa")
 	system_tester.Write(
 		t,
 		root,
@@ -25,7 +25,7 @@ func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 		"package alfa\n\nfunc Bravo() {}\n",
 	)
 	system_tester.Write(t, root, "delta.go", "package alfa\n")
-	repository_tester.Identified(root,"mv", "charlie.go", "echo.go")
+	repository_tester.Identified(root, "mv", "charlie.go", "echo.go")
 	changed, f := reach.ChangedEdits(
 		root,
 		reach.NewEdits(
@@ -57,9 +57,9 @@ func TestGlobReachesChangedFilesItMatches(t *testing.T) {
 	system_tester.Write(t, root, "alfa.md", "alfa\n")
 	system_tester.Write(t, root, "bravo.md", "bravo\n")
 	system_tester.Write(t, root, "charlie.go", "package charlie\n")
-	repository_tester.Identified(root,"init", "-q")
-	repository_tester.Identified(root,"add", "--all")
-	repository_tester.Identified(root,"commit", "--quiet", "--message=alfa")
+	repository_tester.Identified(root, "init", "-q")
+	repository_tester.Identified(root, "add", "--all")
+	repository_tester.Identified(root, "commit", "--quiet", "--message=alfa")
 	system_tester.Write(t, root, "bravo.md", "bravo changed\n")
 	system_tester.Write(t, root, "delta.md", "delta\n")
 	system_tester.Write(

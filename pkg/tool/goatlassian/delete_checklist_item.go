@@ -27,7 +27,11 @@ func deleteChecklistItem(
 			}
 
 			t.EmitValue(
-				c.DeleteChecklistItem(context.Background(), arguments[0], index),
+				c.DeleteChecklistItem(
+					context.Background(),
+					arguments[0],
+					index,
+				),
 			)
 		},
 	}

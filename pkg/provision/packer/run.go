@@ -30,7 +30,10 @@ func (c *Client) Run(
 
 	system.Move(
 		preseed,
-		join.Absolute(c.packerWebDirectory, systemConstant.PreseedConfiguration),
+		join.Absolute(
+			c.packerWebDirectory,
+			systemConstant.PreseedConfiguration,
+		),
 	)
 	b := build.New(architecture, 4444, username, password)
 	b.SetBuilder(

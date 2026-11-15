@@ -228,7 +228,11 @@ func TestRemoveParametersRefusesSideEffectInReplacingModule(t *testing.T) {
 		"package effect\n\nimport \"other.test/lib\"\n\nfunc count() int {\n\treturn 1\n}\n\nfunc Use() string {\n\treturn lib.Log(\"a\", count())\n}\n",
 	)
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.RemoveParameters(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Symbol.RemoveParameters(
 		t.Context(),
 		library,
 		module_tester.LogValues(),
@@ -259,7 +263,11 @@ func TestRemoveParametersRefusesValueUseInReplacingModule(t *testing.T) {
 		"pkg/value/value.go",
 		"package value\n\nimport \"other.test/lib\"\n\nvar Logger = lib.Log\n",
 	)
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.RemoveParameters(
+	r, e := module_tester.ReplacingService(
+		t,
+		library,
+		user,
+	).Symbol.RemoveParameters(
 		t.Context(),
 		library,
 		module_tester.LogValues(),

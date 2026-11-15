@@ -57,7 +57,10 @@ func (s *Store) ResolveSessionIdentifier(query string) (*resolve_result.Result, 
 
 	var slugSessions []session.Session
 
-	if e := s.database.Where("slug = ?", query).Find(&slugSessions).Error; e != nil {
+	if e := s.database.Where(
+		"slug = ?",
+		query,
+	).Find(&slugSessions).Error; e != nil {
 		return nil, e
 	}
 

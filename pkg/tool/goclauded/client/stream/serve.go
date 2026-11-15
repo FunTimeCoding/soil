@@ -46,7 +46,10 @@ func (s *Stream) Serve(x context.Context) error {
 		case line == "" && len(lines) > 0:
 			result := stream_event.New()
 
-			if notation.DecodeBytes([]byte(join.NewLine(lines)), result) == nil {
+			if notation.DecodeBytes(
+				[]byte(join.NewLine(lines)),
+				result,
+			) == nil {
 				select {
 				case s.events <- result:
 					if identifier != "" {

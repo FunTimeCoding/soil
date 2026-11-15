@@ -7,7 +7,10 @@ import (
 
 func New(
 	name string,
-	check func(string, io.Reader) *file_report.Report,
+	check func(
+		string,
+		io.Reader,
+	) *file_report.Report,
 	pure bool,
 ) *Step {
 	return &Step{Name: name, Check: check, Pure: pure}

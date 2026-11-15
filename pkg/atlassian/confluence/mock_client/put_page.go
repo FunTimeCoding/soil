@@ -25,12 +25,12 @@ func (c *Client) PutPage(
 	e, okay := c.pages[identifier]
 
 	if !okay || e.Deleted {
-		return nil, not_found.New(constant.ConfluencePageKind,identifier)
+		return nil, not_found.New(constant.ConfluencePageKind, identifier)
 	}
 
 	if status == constant.ConfluenceDraftStatus {
 		if e.Page == nil {
-			return nil, not_found.New(constant.ConfluencePageKind,identifier)
+			return nil, not_found.New(constant.ConfluencePageKind, identifier)
 		}
 
 		draft := *e.Page
@@ -45,7 +45,7 @@ func (c *Client) PutPage(
 	}
 
 	if e.Page == nil {
-		return nil, not_found.New(constant.ConfluencePageKind,identifier)
+		return nil, not_found.New(constant.ConfluencePageKind, identifier)
 	}
 
 	e.Page.Title = title

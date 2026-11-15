@@ -7,7 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/server"
 )
 
-func (s *Server) captureDetail(x context.Context, e error) *server.ErrorResponse {
+func (s *Server) captureDetail(
+	x context.Context,
+	e error,
+) *server.ErrorResponse {
 	if unexpected.Is(e) {
 		return s.captureFail(x, e, e.Error())
 	}

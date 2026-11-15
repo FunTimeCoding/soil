@@ -32,7 +32,12 @@ func (s *Server) RemoveVirtualTag(
 	}
 
 	if e != nil {
-		return server.RemoveVirtualTag500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.RemoveVirtualTag500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	entry := server.VirtualMachine{Identifier: vm.Identifier, Name: vm.Name}

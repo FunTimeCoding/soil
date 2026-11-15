@@ -6,8 +6,15 @@ import (
 )
 
 type Dump interface {
-	Dump(x context.Context, i *instance.Instance, path string) error
-	Count(x context.Context, path string) (int, error)
+	Dump(
+		x context.Context,
+		i *instance.Instance,
+		path string,
+	) error
+	Count(
+		x context.Context,
+		path string,
+	) (int, error)
 	Restore(
 		x context.Context,
 		i *instance.Instance,

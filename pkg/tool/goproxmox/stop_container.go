@@ -31,7 +31,10 @@ func stopContainer(c *command_context.Context) *cobra.Command {
 				c.Client().StopContainer(
 					context.Background(),
 					identifier,
-					&client.StopContainerParams{Instance: c.Instance(), Node: n},
+					&client.StopContainerParams{
+						Instance: c.Instance(),
+						Node:     n,
+					},
 				),
 			)
 		},

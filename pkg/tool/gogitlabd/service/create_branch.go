@@ -17,7 +17,10 @@ func (s *Service) CreateBranch(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) (*branch.Branch, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) (*branch.Branch, error) {
 			return c.CreateBranch(y, project, name, reference)
 		},
 	)

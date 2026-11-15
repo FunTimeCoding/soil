@@ -33,7 +33,12 @@ func (s *Server) RemoveDeviceTag(
 	}
 
 	if e != nil {
-		return server.RemoveDeviceTag500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.RemoveDeviceTag500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.RemoveDeviceTag200JSONResponse(*convert.Device(d)), nil

@@ -11,7 +11,8 @@ import (
 func TestListenerPutBindsEnvelopePrefix(t *testing.T) {
 	s := upstream_server.New(
 		t,
-		upstream_server.WithAnswer(constant.FixtureRedirection))
+		upstream_server.WithAnswer(constant.FixtureRedirection),
+	)
 	c := band.New(s.URL, "alfa", "bravo")
 	defer c.Close()
 	assert.FatalOnError(t, c.EnableListener())

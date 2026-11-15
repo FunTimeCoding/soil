@@ -15,7 +15,11 @@ func (s *Server) List(context.Context) []string {
 	return nil
 }
 
-func Pair(context.Context, string) {}
+func Pair(
+	context.Context,
+	string,
+) {
+}
 
 func Named(y context.Context) context.Context {
 	return y

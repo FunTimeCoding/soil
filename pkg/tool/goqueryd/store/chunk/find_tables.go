@@ -47,7 +47,10 @@ func findTables(content string) []*Table {
 		j := i + 2
 
 		for j < len(lines) &&
-			strings.HasPrefix(trimmed(content, lines[j]), constant.TableRowPrefix) {
+			strings.HasPrefix(
+				trimmed(content, lines[j]),
+				constant.TableRowPrefix,
+			) {
 			t.rows = append(t.rows, lines[j])
 			j++
 		}

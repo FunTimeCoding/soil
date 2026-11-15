@@ -21,7 +21,8 @@ func expand(s string) []string {
 		for _, a := range style_sheet.SplitTop(s[open+1:last], ',') {
 			result = append(
 				result,
-				expand(join.Empty(s[:start], a, s[last+1:]))...)
+				expand(join.Empty(s[:start], a, s[last+1:]))...,
+			)
 		}
 
 		return result

@@ -12,7 +12,10 @@ func (s *Service) attempt(
 	directory string,
 	packagePaths []string,
 	dryRun bool,
-	operation func(string, *sink.Sink) (*output.Results, error),
+	operation func(
+		string,
+		*sink.Sink,
+	) (*output.Results, error),
 ) (*output.Results, error) {
 	candidates := []string{directory}
 

@@ -23,7 +23,12 @@ func (s *Server) CreateClusterType(
 	}
 
 	if e != nil {
-		return server.CreateClusterType500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.CreateClusterType500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.CreateClusterType201JSONResponse{

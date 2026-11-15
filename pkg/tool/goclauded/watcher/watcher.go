@@ -9,10 +9,13 @@ import (
 )
 
 type Watcher struct {
-	context     context.Context
-	cancel      context.CancelFunc
-	rescan      func(context.Context) []error
-	sync        func(string, string)
+	context context.Context
+	cancel  context.CancelFunc
+	rescan  func(context.Context) []error
+	sync    func(
+		string,
+		string,
+	)
 	directories func() []string
 	recovery    *recovery.Recovery
 	reporter    face.Reporter

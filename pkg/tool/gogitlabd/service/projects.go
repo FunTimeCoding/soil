@@ -15,7 +15,10 @@ func (s *Service) Projects(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*project.Project, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*project.Project, error) {
 			if search != "" {
 				return c.SearchProject(y, search)
 			}

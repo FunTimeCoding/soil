@@ -66,5 +66,6 @@ func (s *Server) register(
 			grantTypes,
 			responseTypes,
 			body.TokenEndpointAuthMethod,
-		))
+		),
+	)
 }

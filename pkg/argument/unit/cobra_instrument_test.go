@@ -12,7 +12,14 @@ func TestNestedCommandIsRecordedByItsFullPath(t *testing.T) {
 	root := &cobra.Command{Use: "gotest"}
 	group := &cobra.Command{Use: "character"}
 	group.AddCommand(
-		&cobra.Command{Use: soil.List, Run: func(*cobra.Command, []string) {}},
+		&cobra.Command{
+			Use: soil.List,
+			Run: func(
+				*cobra.Command,
+				[]string,
+			) {
+			},
+		},
 	)
 	root.AddCommand(group)
 	assert.Strings(
@@ -26,12 +33,22 @@ func TestRootsOwnPreRunStillRuns(t *testing.T) {
 	ran := false
 	root := &cobra.Command{
 		Use: "gotest",
-		PersistentPreRun: func(*cobra.Command, []string) {
+		PersistentPreRun: func(
+			*cobra.Command,
+			[]string,
+		) {
 			ran = true
 		},
 	}
 	root.AddCommand(
-		&cobra.Command{Use: soil.List, Run: func(*cobra.Command, []string) {}},
+		&cobra.Command{
+			Use: soil.List,
+			Run: func(
+				*cobra.Command,
+				[]string,
+			) {
+			},
+		},
 	)
 	argument_tester.Instrumented(t, root, soil.List)
 	assert.True(t, ran)

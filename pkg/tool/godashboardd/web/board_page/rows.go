@@ -29,7 +29,10 @@ func (p *Page) Rows(v *entry.Entry) gomponents.Node {
 			html.Span(
 				gomponents.Text(label),
 				gomponents.Text(" "),
-				html.Span(html.Class("board-row-value"), gomponents.Text(value)),
+				html.Span(
+					html.Class("board-row-value"),
+					gomponents.Text(value),
+				),
 			),
 		)
 	}

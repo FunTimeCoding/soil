@@ -10,7 +10,11 @@ import (
 func AnalyzeFaces(
 	t *testing.T,
 	directory string,
-	check func(*packages.Package, *output.Results, *face.Set),
+	check func(
+		*packages.Package,
+		*output.Results,
+		*face.Set,
+	),
 ) *output.Results {
 	t.Helper()
 	loaded, result := loadVariants(t, directory)

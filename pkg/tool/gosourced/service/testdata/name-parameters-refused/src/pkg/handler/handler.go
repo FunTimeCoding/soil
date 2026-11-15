@@ -14,7 +14,11 @@ func Outer(_ context.Context) string {
 	return x
 }
 
-func Twice(_ context.Context, _ context.Context) {}
+func Twice(
+	_ context.Context,
+	_ context.Context,
+) {
+}
 
 func Result(_ context.Context) (x string) {
 	return ""

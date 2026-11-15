@@ -16,7 +16,12 @@ func (s *Server) PostReferencesRetarget(
 	)
 
 	if e != nil {
-		return server.PostReferencesRetarget500JSONResponse(*s.answer(x, e)), nil
+		return server.PostReferencesRetarget500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.PostReferencesRetarget200JSONResponse{

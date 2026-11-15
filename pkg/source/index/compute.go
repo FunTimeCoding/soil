@@ -34,7 +34,11 @@ func (w *Workspace) compute(
 			continue
 		}
 
-		if len(p.Errors) > 0 || p.Types == nil || !ready(g, path, w.fingerprints) {
+		if len(p.Errors) > 0 || p.Types == nil || !ready(
+			g,
+			path,
+			w.fingerprints,
+		) {
 			failed[path] = true
 
 			continue

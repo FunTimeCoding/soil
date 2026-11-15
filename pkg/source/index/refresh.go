@@ -28,7 +28,10 @@ func (w *Workspace) refresh() {
 				continue
 			}
 
-			if w.read(path, key(g, g.Nodes[path], files[path], w.fingerprints)) {
+			if w.read(
+				path,
+				key(g, g.Nodes[path], files[path], w.fingerprints),
+			) {
 				done[path] = true
 
 				continue

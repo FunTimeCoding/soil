@@ -72,7 +72,8 @@ func findImportAliasSuggestions(
 						reportAliasRename(d, filePath, r)
 						edits = append(
 							edits,
-							buildAliasEdits(p, file, spec, d)...)
+							buildAliasEdits(p, file, spec, d)...,
+						)
 					}
 				}
 			}

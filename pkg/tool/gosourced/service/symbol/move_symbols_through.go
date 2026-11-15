@@ -48,7 +48,10 @@ func (s *Service) moveSymbolsThrough(
 		directory,
 		packagePath,
 		targetPackagePath,
-		func(loaded []*packages.Package, loadedSet *token.FileSet) []types.Object {
+		func(
+			loaded []*packages.Package,
+			loadedSet *token.FileSet,
+		) []types.Object {
 			return relocator.MovedObjects(
 				directory,
 				loaded,
@@ -162,7 +165,10 @@ func (s *Service) moveSymbolsThrough(
 		newNames[entry.NewName] = entry.Symbol
 
 		if target != nil {
-			if f := identifier.CheckScopeCollision(target, entry.NewName); f != nil {
+			if f := identifier.CheckScopeCollision(
+				target,
+				entry.NewName,
+			); f != nil {
 				return commit.FailValidation(r, f.Error())
 			}
 		}

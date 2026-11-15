@@ -15,7 +15,11 @@ func Window(
 	r := service_tester.NewReranker(t)
 	r.SetAllowance(allowance)
 
-	return service_tester.NewService(t, service_tester.NewEmbedder(t), r).Preview(
+	return service_tester.NewService(
+		t,
+		service_tester.NewEmbedder(t),
+		r,
+	).Preview(
 		"lines.md",
 		body,
 	).Chunks[0]

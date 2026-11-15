@@ -23,7 +23,12 @@ func (s *Server) CreateDeviceType(
 	}
 
 	if e != nil {
-		return server.CreateDeviceType500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.CreateDeviceType500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.CreateDeviceType201JSONResponse(*convert.DeviceType(t)), nil

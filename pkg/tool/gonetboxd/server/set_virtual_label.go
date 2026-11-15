@@ -28,7 +28,12 @@ func (s *Server) SetVirtualLabel(
 	}
 
 	if e != nil {
-		return server.SetVirtualLabel500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.SetVirtualLabel500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.SetVirtualLabel200JSONResponse(*convert.Label(result)), nil

@@ -5,6 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func (c *Client) ListAddresses(_ context.Context, _ string) ([]*client.Address, error) {
+func (c *Client) ListAddresses(
+	_ context.Context,
+	_ string,
+) ([]*client.Address, error) {
 	return nil, c.Failure
 }

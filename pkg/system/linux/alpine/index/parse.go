@@ -24,7 +24,10 @@ func parse(content string) []*Entry {
 			current.Name = v
 		}
 
-		if v, okay := strings.CutPrefix(line, constant.AlpineIndexVersion); okay {
+		if v, okay := strings.CutPrefix(
+			line,
+			constant.AlpineIndexVersion,
+		); okay {
 			current.Version = v
 		}
 

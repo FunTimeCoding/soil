@@ -14,7 +14,8 @@ func TestFactTableLabelsEachRow(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="facts"><tbody><tr><th scope="row">Alfa</th><td>bravo</td></tr></tbody></table>`,
-		web_tester.Render(t, fact.New().Row("Alfa", "bravo").Node()))
+		web_tester.Render(t, fact.New().Row("Alfa", "bravo").Node()),
+	)
 }
 
 func TestSectionSpansBothColumns(t *testing.T) {
@@ -24,7 +25,8 @@ func TestSectionSpansBothColumns(t *testing.T) {
 		web_tester.Render(
 			t,
 			fact.New().Section("Charlie").Row("Alfa", "bravo").Node(),
-		))
+		),
+	)
 }
 
 func TestFactTooltipLandsOnLastValue(t *testing.T) {
@@ -37,7 +39,9 @@ func TestFactTooltipLandsOnLastValue(t *testing.T) {
 				Row("Alfa", "bravo").
 				Row("Charlie", "delta").
 				Tooltip(constant.FixtureEcho).
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestGlanceSetsLabelOverValue(t *testing.T) {
@@ -51,7 +55,9 @@ func TestGlanceSetsLabelOverValue(t *testing.T) {
 				Row("Charlie", "delta").
 				Tooltip(constant.FixtureEcho).
 				Glance().
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestGlanceColumnsCarryCount(t *testing.T) {
@@ -61,7 +67,8 @@ func TestGlanceColumnsCarryCount(t *testing.T) {
 		web_tester.Render(
 			t,
 			fact.New().Row("Alfa", "bravo").Columns(3).Glance().Node(),
-		))
+		),
+	)
 }
 
 func TestGlanceSectionsBecomeGroups(t *testing.T) {
@@ -75,7 +82,9 @@ func TestGlanceSectionsBecomeGroups(t *testing.T) {
 				Section("Charlie").
 				Row("Delta", constant.FixtureEcho).
 				Glance().
-				Node()))
+				Node(),
+		),
+	)
 }
 
 func TestFactValueCanBeMarkup(t *testing.T) {
@@ -88,5 +97,7 @@ func TestFactValueCanBeMarkup(t *testing.T) {
 				"Alfa",
 				html.A(html.Href("/delta"), gomponents.Text("delta")),
 			).
-				Node()))
+				Node(),
+		),
+	)
 }

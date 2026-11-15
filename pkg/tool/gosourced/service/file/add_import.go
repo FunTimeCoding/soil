@@ -19,7 +19,10 @@ func (s *Service) AddImport(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return addImportThrough(d, filePath, importPath, alias, out)
 		},
 	)

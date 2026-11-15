@@ -19,7 +19,10 @@ func (s *Service) RenameModule(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return renameModuleThrough(
 				d,
 				modulePath,

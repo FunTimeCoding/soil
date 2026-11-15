@@ -12,7 +12,10 @@ func (s *Server) generate(
 ) {
 	errors.PanicOnError(r.ParseForm())
 
-	if e := s.service.Generate(r.Context(), r.Form[constant.FileNameField]); e != nil {
+	if e := s.service.Generate(
+		r.Context(),
+		r.Form[constant.FileNameField],
+	); e != nil {
 		s.view.Answer(w, r, s.reporter, e)
 
 		return

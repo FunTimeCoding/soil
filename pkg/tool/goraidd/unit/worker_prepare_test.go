@@ -18,7 +18,12 @@ func TestCloseCancelsStartUpStepInFlightAndSkipsRest(t *testing.T) {
 	seen := make(chan error, 1)
 	var later atomic.Int64
 	w := worker.New(
-		func(context.Context, fsnotify.Event) []error { return nil },
+		func(
+			context.Context,
+			fsnotify.Event,
+		) []error {
+			return nil
+		},
 		nil,
 		logger.New(t.Context()),
 		memory.New(),

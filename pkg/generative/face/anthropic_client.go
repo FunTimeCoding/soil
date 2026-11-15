@@ -8,5 +8,8 @@ import (
 type AnthropicClient interface {
 	Close()
 	Reachable(x context.Context) error
-	Read(x context.Context, token string) (*usage_result.Result, error)
+	Read(
+		x context.Context,
+		token string,
+	) (*usage_result.Result, error)
 }

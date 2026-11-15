@@ -17,7 +17,12 @@ func (s *Server) ListDeviceTypes(
 	}
 
 	if e != nil {
-		return server.ListDeviceTypes500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListDeviceTypes500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	result := make([]*server.DeviceType, 0, len(types))

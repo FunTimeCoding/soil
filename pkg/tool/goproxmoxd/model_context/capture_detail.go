@@ -8,7 +8,10 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) captureDetail(x context.Context, e error) (*mcp.CallToolResult, error) {
+func (s *Server) captureDetail(
+	x context.Context,
+	e error,
+) (*mcp.CallToolResult, error) {
 	if errors.Is(e, proxmox.ErrNotAuthorized) ||
 		errors.Is(e, proxmox.ErrTimeout) {
 		return s.captureFail(x, e, e.Error())

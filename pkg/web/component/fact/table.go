@@ -17,7 +17,10 @@ func (f *Fact) table() gomponents.Node {
 					if r.Section {
 						return html.Tr(
 							html.Class(constant.SectionClass),
-							html.Th(html.ColSpan("2"), gomponents.Text(r.Label)),
+							html.Th(
+								html.ColSpan("2"),
+								gomponents.Text(r.Label),
+							),
 						)
 					}
 

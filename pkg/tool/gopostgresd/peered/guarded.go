@@ -7,7 +7,10 @@ import (
 
 func (p *Peered) Guarded(
 	x context.Context,
-	narrow func(context.Context, error) error,
+	narrow func(
+		context.Context,
+		error,
+	) error,
 	sql string,
 	a ...any,
 ) (*result.Result, error) {

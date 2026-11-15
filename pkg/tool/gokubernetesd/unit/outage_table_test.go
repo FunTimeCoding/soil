@@ -43,7 +43,7 @@ func TestToolsOnClusterOutage(t *testing.T) {
 				"resourceType": "deployments",
 				"name":         "alfa",
 			},
-			constant.Top:         {"resourceType": "pods"},
+			constant.Top: {"resourceType": "pods"},
 			constant.PortForward: {
 				"resourceType": "pod",
 				"name":         "alfa",

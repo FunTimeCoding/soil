@@ -12,7 +12,7 @@ import (
 
 func TestLogRecloseIgnoresAlreadyClosed(t *testing.T) {
 	b := log_tester.Capture(t)
-	file :=mock_closer.New(os.ErrClosed)
+	file := mock_closer.New(os.ErrClosed)
 	listener := mock_closer.New(net.ErrClosed)
 	errors.LogReclose(file)
 	errors.LogReclose(listener)

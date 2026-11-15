@@ -17,7 +17,12 @@ func (s *Server) ListClusterTypes(
 	}
 
 	if e != nil {
-		return server.ListClusterTypes500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListClusterTypes500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	result := make([]*server.ClusterType, 0, len(types))

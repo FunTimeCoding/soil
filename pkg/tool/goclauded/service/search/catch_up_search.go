@@ -33,7 +33,10 @@ func (s *Service) CatchUpSearch(x context.Context) []error {
 
 	slices.SortFunc(
 		files,
-		func(a os.FileInfo, b os.FileInfo) int {
+		func(
+			a os.FileInfo,
+			b os.FileInfo,
+		) int {
 			return b.ModTime().Compare(a.ModTime())
 		},
 	)

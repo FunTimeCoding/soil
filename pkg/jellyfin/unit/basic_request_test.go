@@ -64,7 +64,11 @@ func TestPostWithoutBodySendsNothing(t *testing.T) {
 	)
 	assert.FatalOnError(
 		t,
-		jellyfin_tester.Basic(t, s.URL).Post("/Sessions/echo/Playing", nil, nil),
+		jellyfin_tester.Basic(t, s.URL).Post(
+			"/Sessions/echo/Playing",
+			nil,
+			nil,
+		),
 	)
 	assert.String(t, "", s.LastBody())
 }

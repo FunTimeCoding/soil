@@ -9,7 +9,10 @@ import (
 func (c *Client) Tabs() ([]*tab.Tab, error) {
 	var result []*tab.Tab
 
-	if e := c.requester.Notation(request.Get(constant.NotationPath), &result); e != nil {
+	if e := c.requester.Notation(
+		request.Get(constant.NotationPath),
+		&result,
+	); e != nil {
 		return nil, e
 	}
 

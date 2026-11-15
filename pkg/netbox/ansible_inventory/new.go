@@ -18,7 +18,11 @@ func New(
 			result.add(
 				g,
 				m.Name,
-				hostVariables(m.PrimaryAddress, tunnel[m.Name], m.Configuration),
+				hostVariables(
+					m.PrimaryAddress,
+					tunnel[m.Name],
+					m.Configuration,
+				),
 			)
 		}
 	}
@@ -28,7 +32,11 @@ func New(
 			result.add(
 				g,
 				d.Name,
-				hostVariables(d.PrimaryAddress, tunnel[d.Name], d.Configuration),
+				hostVariables(
+					d.PrimaryAddress,
+					tunnel[d.Name],
+					d.Configuration,
+				),
 			)
 		}
 	}

@@ -38,7 +38,10 @@ func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
 	system_tester.ReadOnly(t, filepath.Dir(path))
 	assert.Error(
 		t,
-		s.Update(identifier, map[string]string{constant.PasswordKey: "changed"}),
+		s.Update(
+			identifier,
+			map[string]string{constant.PasswordKey: "changed"},
+		),
 	)
 	password, _ := s.Reveal(identifier)
 	assert.String(t, "hunter2", password)
@@ -55,9 +58,16 @@ func TestFailedBackupRefusesWrite(t *testing.T) {
 	)
 	assert.Error(
 		t,
-		s.Update(identifier, map[string]string{constant.PasswordKey: "changed"}),
+		s.Update(
+			identifier,
+			map[string]string{constant.PasswordKey: "changed"},
+		),
 	)
-	password, _ := service_tester.New(t, path, service_tester.WithClock(at)).Reveal(
+	password, _ := service_tester.New(
+		t,
+		path,
+		service_tester.WithClock(at),
+	).Reveal(
 		identifier,
 	)
 	assert.String(t, "hunter2", password)

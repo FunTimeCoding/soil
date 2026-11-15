@@ -14,7 +14,14 @@ func Version(
 	arguments ...string,
 ) string {
 	t.Helper()
-	o := &cobra.Command{Use: "gotest", Run: func(*cobra.Command, []string) {}}
+	o := &cobra.Command{
+		Use: "gotest",
+		Run: func(
+			*cobra.Command,
+			[]string,
+		) {
+		},
+	}
 	argument.CobraStamp(o, identity.New("gotest", "test tool", "gotest"))
 	var b bytes.Buffer
 	o.SetOut(&b)

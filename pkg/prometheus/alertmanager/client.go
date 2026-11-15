@@ -13,7 +13,7 @@ import (
 type Client struct {
 	client      *client.AlertmanagerAPI
 	link        *locator.Locator
-	enricher   *alert_enricher.Enricher
+	enricher    *alert_enricher.Enricher
 	changer     *field_changer.Changer
 	nameFilter  *name_filter.Filter
 	labelFilter *label_filter.Filter

@@ -21,5 +21,8 @@ func (c *Client) PostGenerate(
 
 	c.Generated = append(c.Generated, files)
 
-	return client.GenerateResponse{Path: "report.html", TidCount: len(files)}, nil
+	return client.GenerateResponse{
+		Path:     "report.html",
+		TidCount: len(files),
+	}, nil
 }

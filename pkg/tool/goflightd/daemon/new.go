@@ -33,7 +33,12 @@ func New(
 		service:  v,
 		clocks: []*worker.Worker{
 			worker.New(v.CaptureStream, l, r, constant.StreamPause),
-			worker.NewEvery(v.SampleBluetooth, l, r, constant.BluetoothInterval),
+			worker.NewEvery(
+				v.SampleBluetooth,
+				l,
+				r,
+				constant.BluetoothInterval,
+			),
 			worker.NewEvery(v.Prune, l, r, constant.PruneInterval),
 		},
 	}

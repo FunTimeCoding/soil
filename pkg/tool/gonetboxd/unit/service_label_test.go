@@ -59,7 +59,10 @@ func TestRemoveDeviceLabel(t *testing.T) {
 }
 
 func TestDeviceLabelRefusesUnknownDevice(t *testing.T) {
-	_, e := service_tester.Service(t, service_tester.NewSource(t)).SetDeviceLabel(
+	_, e := service_tester.Service(
+		t,
+		service_tester.NewSource(t),
+	).SetDeviceLabel(
 		"missing",
 		"rack",
 		"a1",

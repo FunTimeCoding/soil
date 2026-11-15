@@ -8,6 +8,11 @@ func (s *Service) Transition(
 ) error {
 	return s.jiraGuard.Attempt(
 		context.Background(),
-		func(context.Context) error { return s.jira.Transition(key, transition) },
+		func(context.Context) error {
+			return s.jira.Transition(
+				key,
+				transition,
+			)
+		},
 	)
 }

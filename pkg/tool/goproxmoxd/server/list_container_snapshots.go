@@ -26,7 +26,12 @@ func (s *Server) ListContainerSnapshots(
 	}
 
 	if e != nil {
-		return server.ListContainerSnapshots500JSONResponse(*s.answer(x, e)), nil
+		return server.ListContainerSnapshots500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	node := ""
@@ -51,7 +56,12 @@ func (s *Server) ListContainerSnapshots(
 	case unavailable.Is(e):
 		return server.ListContainerSnapshots503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.ListContainerSnapshots500JSONResponse(*s.answer(x, e)), nil
+		return server.ListContainerSnapshots500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	converted := convert.ContainerSnapshots(snapshots)

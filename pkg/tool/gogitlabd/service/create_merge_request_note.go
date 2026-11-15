@@ -17,7 +17,10 @@ func (s *Service) CreateMergeRequestNote(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) (*note.Note, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) (*note.Note, error) {
 			return c.CreateMergeRequestNote(y, project, identifier, body)
 		},
 	)

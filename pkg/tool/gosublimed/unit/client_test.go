@@ -76,7 +76,10 @@ func TestClientRoundTripsThroughDaemon(t *testing.T) {
 	_, g := c.EditView(
 		x,
 		created.ViewId,
-		generated.EditViewJSONRequestBody{OldString: "alfa", NewString: "bravo"},
+		generated.EditViewJSONRequestBody{
+			OldString: "alfa",
+			NewString: "bravo",
+		},
 	)
 	assert.True(t, conflict.Is(g))
 	_, h := c.GetView(x, 99)

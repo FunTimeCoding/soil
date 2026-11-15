@@ -30,7 +30,10 @@ func TestServerTakesItsAddressAndTokensFromWebOption(t *testing.T) {
 			func(g *guard.Mux) {
 				g.Token(
 					route.Get("/alfa"),
-					func(w http.ResponseWriter, _ *http.Request) {
+					func(
+						w http.ResponseWriter,
+						_ *http.Request,
+					) {
 						w.WriteHeader(http.StatusNoContent)
 					},
 				)

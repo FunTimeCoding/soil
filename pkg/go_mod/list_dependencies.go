@@ -43,7 +43,10 @@ func ListDependencies(
 
 	sort.Slice(
 		result,
-		func(i int, j int) bool {
+		func(
+			i int,
+			j int,
+		) bool {
 			return result[i].Path < result[j].Path
 		},
 	)

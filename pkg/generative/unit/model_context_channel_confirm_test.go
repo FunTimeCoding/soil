@@ -11,7 +11,11 @@ func TestChannelConfirmRejectsWrongNonce(t *testing.T) {
 	s := channel_tester.NewChannelServer()
 	assert.True(
 		t,
-		channel_tester.Confirm(s, "not-the-nonce", stringsConstant.UpperAlfa).IsError,
+		channel_tester.Confirm(
+			s,
+			"not-the-nonce",
+			stringsConstant.UpperAlfa,
+		).IsError,
 	)
 	assert.False(t, s.Opened())
 }
@@ -27,7 +31,11 @@ func TestChannelConfirmRejectsCallsignMismatch(t *testing.T) {
 	s.Resolve(stringsConstant.UpperAlfa)
 	assert.True(
 		t,
-		channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperBravo).IsError,
+		channel_tester.Confirm(
+			s,
+			s.Nonce(),
+			stringsConstant.UpperBravo,
+		).IsError,
 	)
 	assert.False(t, s.Opened())
 }
@@ -51,6 +59,10 @@ func TestChannelConfirmAdoptsCallsignWhenUnresolved(t *testing.T) {
 	assert.True(t, s.Opened())
 	assert.True(
 		t,
-		channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperBravo).IsError,
+		channel_tester.Confirm(
+			s,
+			s.Nonce(),
+			stringsConstant.UpperBravo,
+		).IsError,
 	)
 }

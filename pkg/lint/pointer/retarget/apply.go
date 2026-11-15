@@ -15,7 +15,10 @@ func apply(
 
 	for _, m := range moves {
 		if target != m.Old &&
-			!strings.HasPrefix(target, join.Empty(m.Old, stringsConstant.Slash)) {
+			!strings.HasPrefix(
+				target,
+				join.Empty(m.Old, stringsConstant.Slash),
+			) {
 			continue
 		}
 

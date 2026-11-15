@@ -36,7 +36,12 @@ func localFactoryRelays(
 					continue
 				}
 
-				for _, c := range factoryCarriers(p, f.Body, a.Rhs[i], indices) {
+				for _, c := range factoryCarriers(
+					p,
+					f.Body,
+					a.Rhs[i],
+					indices,
+				) {
 					if c.Argument == constant.ReceiverArgument {
 						continue
 					}

@@ -14,7 +14,10 @@ func LeadingCharacter(w *syntax.Word) (byte, bool) {
 	switch p := w.Parts[0].(type) {
 	case *syntax.Lit:
 		if p.Value == "" ||
-			strings.IndexByte(constant.UnquotedExpansionCharacters, p.Value[0]) >= 0 {
+			strings.IndexByte(
+				constant.UnquotedExpansionCharacters,
+				p.Value[0],
+			) >= 0 {
 			return 0, false
 		}
 

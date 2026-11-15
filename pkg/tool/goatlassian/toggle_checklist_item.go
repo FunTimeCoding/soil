@@ -27,7 +27,11 @@ func toggleChecklistItem(
 			}
 
 			t.EmitValue(
-				c.ToggleChecklistItem(context.Background(), arguments[0], index),
+				c.ToggleChecklistItem(
+					context.Background(),
+					arguments[0],
+					index,
+				),
 			)
 		},
 	}

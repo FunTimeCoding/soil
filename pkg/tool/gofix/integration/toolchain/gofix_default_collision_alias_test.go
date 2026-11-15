@@ -108,6 +108,9 @@ func TestLoserWithoutNameHoldsItsGroup(t *testing.T) {
 	assert.String(
 		t,
 		"package held\n\nimport (\n\t\"testmodule\"\n\tchain1 \"testmodule/pkg/delta/chain\"\n)\n\nfunc Held(*chain.Root) *chain1.Delta {\n\treturn &chain1.Delta{}\n}\n",
-		testutil.ReadFile(t, filepath.Join(directory, "pkg/delta/held/held.go")),
+		testutil.ReadFile(
+			t,
+			filepath.Join(directory, "pkg/delta/held/held.go"),
+		),
 	)
 }

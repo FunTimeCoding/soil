@@ -11,5 +11,10 @@ type Cache struct {
 	globals  map[string]string
 	checks   int
 	auditing bool
-	Mismatch func(string, string, string, string)
+	Mismatch func(
+		string,
+		string,
+		string,
+		string,
+	)
 }

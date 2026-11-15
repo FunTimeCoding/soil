@@ -28,7 +28,10 @@ func (s *Service) checkServiceLayout(
 		len(sourceFiles(v, directory)) > 0 {
 		s.addConcern(
 			constant.MixedServiceKey,
-			fmt.Sprintf(constant.MixedServiceText, strings.Join(services, ", ")),
+			fmt.Sprintf(
+				constant.MixedServiceText,
+				strings.Join(services, ", "),
+			),
 			path,
 		)
 	}

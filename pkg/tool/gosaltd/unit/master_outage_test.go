@@ -52,6 +52,9 @@ func TestKeySyncStaysQuietWhileMasterIsDown(t *testing.T) {
 }
 
 func TestDaemonHandsOutMasterGuardFirst(t *testing.T) {
-	_, okay := service_tester.NewDownDaemon(t, memory.New()).Workers()[0].(*peer.Guard)
+	_, okay := service_tester.NewDownDaemon(
+		t,
+		memory.New(),
+	).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

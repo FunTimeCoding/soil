@@ -34,7 +34,10 @@ func TestDaemonsForbiddenStatusIsForbidden(t *testing.T) {
 	assert.True(
 		t,
 		forbidden.Is(
-			refusal.NewDaemonTable().Classify(http.StatusForbidden, "not armed"),
+			refusal.NewDaemonTable().Classify(
+				http.StatusForbidden,
+				"not armed",
+			),
 		),
 	)
 }

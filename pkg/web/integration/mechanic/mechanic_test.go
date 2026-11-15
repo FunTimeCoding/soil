@@ -15,7 +15,7 @@ import (
 func TestEventAfterRequestResetsForm(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.NotifyPath))
+	b.Navigate(join.Empty(address, constant.NotifyPath))
 	b.WaitVisible("#note-input")
 	b.Fill("#note-input", "hello")
 	b.Click("#receipt-post")
@@ -28,7 +28,7 @@ func TestEventAfterRequestResetsForm(t *testing.T) {
 func TestEventOutOfBandSwap(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.NotifyPath))
+	b.Navigate(join.Empty(address, constant.NotifyPath))
 	b.WaitVisible("#note-input")
 	b.Fill("#note-input", "hello")
 	b.Click("#receipt-post")
@@ -41,7 +41,7 @@ func TestEventOutOfBandSwap(t *testing.T) {
 func TestEventFailureRaisesNotification(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.NotifyPath))
+	b.Navigate(join.Empty(address, constant.NotifyPath))
 	b.WaitVisible("#fail-post")
 	assert.Integer(t, 0, b.CountElements("#notifications .notification-error"))
 	b.Click("#fail-post")
@@ -54,7 +54,7 @@ func TestEventFailureRaisesNotification(t *testing.T) {
 func TestExtraSwapDelete(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#remove-post")
 	assert.Integer(t, 1, b.CountElements("#remove"))
 	b.Click("#remove-post")
@@ -64,7 +64,7 @@ func TestExtraSwapDelete(t *testing.T) {
 func TestExtraSwapBeforeEnd(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#append-post")
 	assert.Integer(t, 0, b.CountElements("#append li"))
 	b.Click("#append-post")
@@ -76,7 +76,7 @@ func TestExtraSwapBeforeEnd(t *testing.T) {
 func TestExtraSwapNone(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#quiet-post")
 	b.Click("#quiet-post")
 	b.WaitCondition("document.querySelector('#poll').textContent.length > 0")
@@ -86,7 +86,7 @@ func TestExtraSwapNone(t *testing.T) {
 func TestExtraRequestHeaderBranch(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitCondition("document.querySelector('#branch').textContent.length > 0")
 	assert.String(t, "fragment", b.Text("#branch"))
 }
@@ -94,7 +94,7 @@ func TestExtraRequestHeaderBranch(t *testing.T) {
 func TestExtraPolling(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitCondition(
 		"document.querySelector('#poll').textContent.indexOf('poll 1') >= 0",
 	)
@@ -106,7 +106,7 @@ func TestExtraPolling(t *testing.T) {
 func TestExtraTriggerHeaderFiresEvent(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#fire-post")
 	assert.String(t, "", b.Text("#fire"))
 	b.Click("#fire-post")
@@ -116,7 +116,7 @@ func TestExtraTriggerHeaderFiresEvent(t *testing.T) {
 func TestExtraRedirectHeader(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#redirect-post")
 	b.Click("#redirect-post")
 	b.WaitVisible("#pulse-post")
@@ -126,7 +126,7 @@ func TestExtraRedirectHeader(t *testing.T) {
 func TestExtraRefreshHeader(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#refresh-post")
 	b.Evaluate("window.beforeRefresh = true", nil)
 	b.Click("#refresh-post")
@@ -136,7 +136,7 @@ func TestExtraRefreshHeader(t *testing.T) {
 func TestExtraIndicatorHiddenAtRest(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#slow-post")
 	assert.String(
 		t,
@@ -151,7 +151,7 @@ func TestExtraIndicatorHiddenAtRest(t *testing.T) {
 func TestExtraIndicatorShowsWhileWaiting(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#slow-post")
 	b.Click("#slow-post")
 	b.WaitCondition(
@@ -168,7 +168,7 @@ func TestExtraIndicatorShowsWhileWaiting(t *testing.T) {
 func TestExtraIndicatorSelfKeepsControlDimmed(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.ExtraPath))
+	b.Navigate(join.Empty(address, constant.ExtraPath))
 	b.WaitVisible("#slow-post")
 	b.Click("#slow-post")
 	b.WaitCondition(
@@ -185,7 +185,7 @@ func TestExtraIndicatorSelfKeepsControlDimmed(t *testing.T) {
 func TestStreamConnects(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.StreamPath))
+	b.Navigate(join.Empty(address, constant.StreamPath))
 	b.WaitVisible("#pulse-post")
 	assert.StringContains(t, "pulse 0", b.Text("#pulse"))
 }
@@ -193,7 +193,7 @@ func TestStreamConnects(t *testing.T) {
 func TestStreamPushesNamedEvent(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.StreamPath))
+	b.Navigate(join.Empty(address, constant.StreamPath))
 	b.WaitVisible("#pulse-post")
 	b.Click("#pulse-post")
 	b.WaitCondition(
@@ -205,7 +205,7 @@ func TestStreamPushesNamedEvent(t *testing.T) {
 func TestStreamPushesSecondNamedEvent(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.StreamPath))
+	b.Navigate(join.Empty(address, constant.StreamPath))
 	b.WaitVisible("#pulse-post")
 	b.Click("#pulse-post")
 	assert.StringContains(t, "count 0", b.Text("#tick"))
@@ -218,7 +218,7 @@ func TestStreamPushesSecondNamedEvent(t *testing.T) {
 func TestSwapInner(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.RootPath))
+	b.Navigate(join.Empty(address, constant.RootPath))
 	b.WaitVisible("#counter-post")
 	assert.String(t, "0", b.Text("#counter"))
 	b.Click("#counter-post")
@@ -229,7 +229,7 @@ func TestSwapInner(t *testing.T) {
 func TestSwapGetReadsWithoutIncrement(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.RootPath))
+	b.Navigate(join.Empty(address, constant.RootPath))
 	b.WaitVisible("#counter-get")
 	b.Click("#counter-get")
 	b.WaitCondition("document.querySelector('#counter') !== null")
@@ -239,7 +239,7 @@ func TestSwapGetReadsWithoutIncrement(t *testing.T) {
 func TestSwapOuterReplacesElement(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.RootPath))
+	b.Navigate(join.Empty(address, constant.RootPath))
 	b.WaitVisible("#row-post")
 	assert.String(t, "original", b.Text("#row"))
 	b.Evaluate("window.confirm = function() { return true; }", nil)
@@ -251,7 +251,7 @@ func TestSwapOuterReplacesElement(t *testing.T) {
 func TestSwapConfirmCancelBlocksRequest(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.RootPath))
+	b.Navigate(join.Empty(address, constant.RootPath))
 	b.WaitVisible("#row-post")
 	b.Evaluate("window.confirm = function() { return false; }", nil)
 	b.Click("#row-post")
@@ -262,7 +262,7 @@ func TestSwapConfirmCancelBlocksRequest(t *testing.T) {
 func TestTriggerLoad(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.TriggerPath))
+	b.Navigate(join.Empty(address, constant.TriggerPath))
 	b.WaitCondition(
 		"document.querySelector('#load-region').textContent.indexOf('term=load') >= 0",
 	)
@@ -272,7 +272,7 @@ func TestTriggerLoad(t *testing.T) {
 func TestTriggerLoadDelay(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.TriggerPath))
+	b.Navigate(join.Empty(address, constant.TriggerPath))
 	assert.String(t, "", b.Text("#delayed"))
 	b.WaitCondition(
 		"document.querySelector('#delayed').textContent.indexOf('term=delayed') >= 0",
@@ -282,7 +282,7 @@ func TestTriggerLoadDelay(t *testing.T) {
 func TestTriggerChange(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.TriggerPath))
+	b.Navigate(join.Empty(address, constant.TriggerPath))
 	b.WaitVisible("#scope-select")
 	b.Evaluate(
 		"(function(){var s=document.querySelector('#scope-select');s.value='second';s.dispatchEvent(new Event('change'));})()",
@@ -296,7 +296,7 @@ func TestTriggerChange(t *testing.T) {
 func TestTriggerKeyupIncludesAndVals(t *testing.T) {
 	address := mechanic_tester.Serve(t)
 	b := browser_tester.New(t)
-	b.Navigate(join.Empty(address,constant.TriggerPath))
+	b.Navigate(join.Empty(address, constant.TriggerPath))
 	b.WaitVisible("#term-input")
 	b.Fill("#term-input", "abc")
 	b.WaitCondition(

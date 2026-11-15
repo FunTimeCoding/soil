@@ -25,7 +25,10 @@ func TestCreateDeviceWithTenantAndTags(t *testing.T) {
 }
 
 func TestCreateDeviceWithoutTenant(t *testing.T) {
-	d, e := service_tester.Service(t, service_tester.DeviceCatalog(t)).CreateDevice(
+	d, e := service_tester.Service(
+		t,
+		service_tester.DeviceCatalog(t),
+	).CreateDevice(
 		"core",
 		"server",
 		"r640",

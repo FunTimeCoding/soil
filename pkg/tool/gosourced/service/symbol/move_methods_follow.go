@@ -19,7 +19,10 @@ func (s *Service) moveMethodsFollow(
 	methods []string,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
-	objects := func(loaded []*packages.Package, _ *token.FileSet) []types.Object {
+	objects := func(
+		loaded []*packages.Package,
+		_ *token.FileSet,
+	) []types.Object {
 		return relocator.MethodObjects(loaded, packagePath, typeName, methods)
 	}
 	all, set, e := s.workspace.ReferenceLoad(

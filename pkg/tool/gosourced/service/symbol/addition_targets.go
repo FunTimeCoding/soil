@@ -23,7 +23,10 @@ func additionTargets(
 ) []*addition.Target {
 	var result []*addition.Target
 	seen := map[string]bool{}
-	refuse := func(format string, arguments ...any) {
+	refuse := func(
+		format string,
+		arguments ...any,
+	) {
 		r.AddConcern(
 			concern.NewFile(
 				constant.ConcernValidation,

@@ -44,7 +44,10 @@ func TestGenerationOpenRemovesLeftoverTrash(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		os.MkdirAll(
-			filepath.Join(root, join.Empty(constant.GenerationTrash, "charlie")),
+			filepath.Join(
+				root,
+				join.Empty(constant.GenerationTrash, "charlie"),
+			),
 			0755,
 		),
 	)

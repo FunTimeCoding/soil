@@ -11,7 +11,10 @@ func pathPrefixes(p string) map[string]bool {
 	result := map[string]bool{stringsConstant.Slash: true}
 	current := stringsConstant.Slash
 
-	for _, segment := range strings.Split(path.Clean(p), stringsConstant.Slash) {
+	for _, segment := range strings.Split(
+		path.Clean(p),
+		stringsConstant.Slash,
+	) {
 		if segment == "" {
 			continue
 		}

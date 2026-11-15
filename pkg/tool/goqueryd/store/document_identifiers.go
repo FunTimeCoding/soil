@@ -38,7 +38,10 @@ func (s *Store) documentIdentifiers(keys []record.DocumentKey) map[record.Docume
 		var collection, path string
 		var identifier int
 		errors.PanicOnError(rows.Scan(&collection, &path, &identifier))
-		result[record.DocumentKey{Collection: collection, Path: path}] = identifier
+		result[record.DocumentKey{
+			Collection: collection,
+			Path:       path,
+		}] = identifier
 	}
 
 	errors.PanicOnError(rows.Err())

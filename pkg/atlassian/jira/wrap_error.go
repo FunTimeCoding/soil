@@ -41,7 +41,10 @@ func WrapError(
 		if g := refusal.NewTable().
 			With(http.StatusBadRequest, errorsConstant.ValidationClass).
 			With(http.StatusForbidden, errorsConstant.ForbiddenClass).
-			With(http.StatusUnprocessableEntity, errorsConstant.ValidationClass).
+			With(
+				http.StatusUnprocessableEntity,
+				errorsConstant.ValidationClass,
+			).
 			Classify(r.StatusCode, detail); g != nil {
 			return g
 		}

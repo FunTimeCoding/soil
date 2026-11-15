@@ -18,7 +18,10 @@ func (s *Service) Pipelines(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]*pipeline.Pipeline, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]*pipeline.Pipeline, error) {
 			return c.Pipelines(y, project, reference, status, limit)
 		},
 	)

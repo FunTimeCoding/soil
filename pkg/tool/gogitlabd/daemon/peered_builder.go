@@ -25,7 +25,13 @@ func peeredBuilder(
 
 		return peered.New(
 			c,
-			peer.New(join.Colon(constant.InstancePeer, i.Name), i.Host, c, l, r),
+			peer.New(
+				join.Colon(constant.InstancePeer, i.Name),
+				i.Host,
+				c,
+				l,
+				r,
+			),
 		), nil
 	}
 }

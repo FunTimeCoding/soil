@@ -26,7 +26,13 @@ func (s *Server) DescribeTable(
 	}
 
 	if e != nil {
-		return server.DescribeTable500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.DescribeTable500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	var schema string
@@ -54,7 +60,13 @@ func (s *Server) DescribeTable(
 	}
 
 	if e != nil {
-		return server.DescribeTable500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.DescribeTable500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	return server.DescribeTable200JSONResponse{

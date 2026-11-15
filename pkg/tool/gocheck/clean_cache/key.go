@@ -32,7 +32,10 @@ func (c *Cache) Key(u *module_graph.Node) (string, bool) {
 	write(unit, closure, c.faces, strconv.FormatBool(c.comment))
 	write(c.ours...)
 
-	for _, path := range string_constant.ListedConstantFiles(u.Directory, c.list) {
+	for _, path := range string_constant.ListedConstantFiles(
+		u.Directory,
+		c.list,
+	) {
 		digest, okay := c.constantDigest(path)
 
 		if !okay {

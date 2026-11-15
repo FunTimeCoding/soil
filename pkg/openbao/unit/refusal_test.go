@@ -42,7 +42,8 @@ func TestSealedStoreFailsProbe(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"initialized":true,"sealed":true,"version":"2.7.1"}`,
-		))
+		),
+	)
 	c := openbao.New(locator.NewOrigin(s.URL))
 	defer c.Close()
 	assert.True(t, unavailable.Is(c.Reachable(t.Context())))
@@ -53,7 +54,8 @@ func TestUninitializedStoreFailsProbe(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"initialized":false,"sealed":false,"version":"2.7.1"}`,
-		))
+		),
+	)
 	c := openbao.New(locator.NewOrigin(s.URL))
 	defer c.Close()
 	assert.True(t, unavailable.Is(c.Reachable(t.Context())))

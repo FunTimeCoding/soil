@@ -54,7 +54,10 @@ func TestOpnsenseOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestDaemonHandsOutOpnsenseGuard(t *testing.T) {
-	_, okay := daemon_tester.New(t, mock_client.New()).Workers()[0].(*peer.Guard)
+	_, okay := daemon_tester.New(
+		t,
+		mock_client.New(),
+	).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 

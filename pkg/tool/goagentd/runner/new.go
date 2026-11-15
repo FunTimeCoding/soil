@@ -10,7 +10,11 @@ import (
 
 func New(
 	workspace string,
-	stream func(string, io.Writer, ...string) face.Stream,
+	stream func(
+		string,
+		io.Writer,
+		...string,
+	) face.Stream,
 	l *logger.Logger,
 	r face.Reporter,
 ) *Runner {

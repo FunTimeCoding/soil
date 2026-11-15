@@ -11,7 +11,10 @@ func inModules(
 	modules []string,
 ) bool {
 	for _, m := range modules {
-		if path == m || strings.HasPrefix(path, join.Empty(m, stringsConstant.Slash)) {
+		if path == m || strings.HasPrefix(
+			path,
+			join.Empty(m, stringsConstant.Slash),
+		) {
 			return true
 		}
 	}

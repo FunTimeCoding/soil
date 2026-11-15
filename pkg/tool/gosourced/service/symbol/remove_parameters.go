@@ -24,7 +24,10 @@ func (s *Service) RemoveParameters(
 		directory,
 		paths,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return s.removeParametersThrough(d, removals, out)
 		},
 	)

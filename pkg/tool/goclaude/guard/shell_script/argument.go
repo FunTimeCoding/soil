@@ -10,7 +10,10 @@ func Argument(w *syntax.Word) (string, bool) {
 	for _, part := range w.Parts {
 		switch p := part.(type) {
 		case *syntax.Lit:
-			if strings.ContainsAny(p.Value, constant.UnquotedExpansionCharacters) {
+			if strings.ContainsAny(
+				p.Value,
+				constant.UnquotedExpansionCharacters,
+			) {
 				return "", false
 			}
 		case *syntax.SglQuoted:

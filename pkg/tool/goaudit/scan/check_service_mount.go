@@ -16,7 +16,10 @@ func (s *Service) checkServiceMount(
 
 	owner := path
 
-	if daemon := filepath.Join(path, constant.DaemonDirectory); v.DirectoryExists(
+	if daemon := filepath.Join(
+		path,
+		constant.DaemonDirectory,
+	); v.DirectoryExists(
 		daemon,
 	) {
 		owner = daemon

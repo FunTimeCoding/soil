@@ -15,7 +15,8 @@ func TestActionIsFormThatWorksWithoutScript(t *testing.T) {
 		web_tester.Render(
 			t,
 			action.New("/alfa", "Go").Hidden("bravo", "1").Node(),
-		))
+		),
+	)
 }
 
 func TestSwappedActionIsUpgradedByHtmx(t *testing.T) {
@@ -24,7 +25,8 @@ func TestSwappedActionIsUpgradedByHtmx(t *testing.T) {
 		action.New("/alfa", "Go").Swap("#charlie", constant.SwapOuter).Confirm(
 			"Sure?",
 		).
-			Node())
+			Node(),
+	)
 	assert.StringContains(t, `method="post" action="/alfa"`, page)
 	assert.StringContains(t, `hx-post="/alfa"`, page)
 	assert.StringContains(t, `hx-target="#charlie"`, page)
@@ -62,7 +64,8 @@ func TestActionCarriesItsClassesAndCanBeDisabled(t *testing.T) {
 			Class("delta").
 			ButtonClass("outline").
 			Disabled(true).
-			Node())
+			Node(),
+	)
 	assert.StringContains(t, `<form class="action delta"`, page)
 	assert.StringContains(
 		t,

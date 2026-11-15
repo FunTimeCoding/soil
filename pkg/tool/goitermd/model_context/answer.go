@@ -5,6 +5,9 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) answer(x context.Context, e error) (*mcp.CallToolResult, error) {
+func (s *Server) answer(
+	x context.Context,
+	e error,
+) (*mcp.CallToolResult, error) {
 	return s.answerMessage(x, e, "")
 }

@@ -9,5 +9,9 @@ import (
 type Agent struct {
 	option.Web
 	Workspace string
-	Stream    func(string, io.Writer, ...string) face.Stream
+	Stream    func(
+		string,
+		io.Writer,
+		...string,
+	) face.Stream
 }

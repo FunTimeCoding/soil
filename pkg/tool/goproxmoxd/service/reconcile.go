@@ -82,7 +82,12 @@ func (s *Service) Reconcile(
 
 	slices.SortFunc(
 		result.Changes,
-		func(a, b *intent.Change) int { return strings.Compare(a.Name, b.Name) },
+		func(a, b *intent.Change) int {
+			return strings.Compare(
+				a.Name,
+				b.Name,
+			)
+		},
 	)
 	slices.Sort(result.Unknown)
 	slices.Sort(result.Ambiguous)

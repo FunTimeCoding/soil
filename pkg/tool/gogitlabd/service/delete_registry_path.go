@@ -17,7 +17,10 @@ func (s *Service) DeleteRegistryPath(
 		x,
 		s,
 		instance,
-		func(y context.Context, c face.GitLabClient) ([]string, error) {
+		func(
+			y context.Context,
+			c face.GitLabClient,
+		) ([]string, error) {
 			list, e := c.RegistryRepositories(y, project, false)
 
 			if e != nil {

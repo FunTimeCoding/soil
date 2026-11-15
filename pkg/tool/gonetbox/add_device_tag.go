@@ -20,7 +20,11 @@ func addDeviceTag(
 			arguments []string,
 		) {
 			t.EmitValue(
-				c.AddDeviceTag(context.Background(), arguments[0], arguments[1]),
+				c.AddDeviceTag(
+					context.Background(),
+					arguments[0],
+					arguments[1],
+				),
 			)
 		},
 	}

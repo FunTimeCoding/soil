@@ -167,7 +167,10 @@ func TestFileWithoutTrailingNewlineKeepsItThatWay(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine",
-		lint_tester.Rewrapped(t, "one two three four five six seven eight nine"),
+		lint_tester.Rewrapped(
+			t,
+			"one two three four five six seven eight nine",
+		),
 	)
 }
 

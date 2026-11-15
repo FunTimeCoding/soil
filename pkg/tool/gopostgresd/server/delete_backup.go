@@ -23,7 +23,13 @@ func (s *Server) DeleteBackup(
 	}
 
 	if e != nil {
-		return server.DeleteBackup500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.DeleteBackup500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	e = s.backup.Delete(instance, r.Name)
@@ -37,7 +43,13 @@ func (s *Server) DeleteBackup(
 	}
 
 	if e != nil {
-		return server.DeleteBackup500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.DeleteBackup500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	return server.DeleteBackup204Response{}, nil

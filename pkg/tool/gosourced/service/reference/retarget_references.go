@@ -40,7 +40,10 @@ func (s *Service) RetargetReferences(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			for _, m := range moves {
 				out.Relocate(modulePath(d, m.Old), modulePath(d, m.New))
 			}

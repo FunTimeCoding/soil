@@ -13,7 +13,10 @@ func (s *Service) ReferenceLoad(
 	directory string,
 	packagePath string,
 	targetPackagePath string,
-	objects func([]*packages.Package, *token.FileSet) []types.Object,
+	objects func(
+		[]*packages.Package,
+		*token.FileSet,
+	) []types.Object,
 ) ([]*packages.Package, *token.FileSet, error) {
 	w := s.Workspace(directory)
 

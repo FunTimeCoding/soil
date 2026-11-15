@@ -33,7 +33,10 @@ func (s *Service) Rechunk() ([]string, error) {
 		positions := stored[hash]
 
 		if len(positions) == 0 ||
-			samePositions(positions, chunk.Document(d.Body, d.Path, s.reranker)) {
+			samePositions(
+				positions,
+				chunk.Document(d.Body, d.Path, s.reranker),
+			) {
 			continue
 		}
 

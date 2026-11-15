@@ -18,7 +18,10 @@ func (s *Service) RemoveImport(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return removeImportThrough(d, filePath, importPath, out)
 		},
 	)

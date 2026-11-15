@@ -30,7 +30,12 @@ func moveSymbol(
 			continue
 		}
 
-		return join.Empty(m.NewDirectory, stringsConstant.Dot, m.NewName, rest), true
+		return join.Empty(
+			m.NewDirectory,
+			stringsConstant.Dot,
+			m.NewName,
+			rest,
+		), true
 	}
 
 	return "", false

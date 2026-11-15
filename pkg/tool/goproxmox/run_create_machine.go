@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 )
 
-func runCreateMachine(c *command_context.Context, f *machineFlags) {
+func runCreateMachine(
+	c *command_context.Context,
+	f *machineFlags,
+) {
 	body := client.CreateMachineJSONRequestBody{Node: f.node, Name: f.name}
 
 	if f.diskImport != "" {

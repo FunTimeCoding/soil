@@ -5,6 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func (c *Client) CreateVirtualMachine(_ context.Context, _ string, _ string) (client.VirtualMachine, error) {
+func (c *Client) CreateVirtualMachine(
+	_ context.Context,
+	_ string,
+	_ string,
+) (client.VirtualMachine, error) {
 	return client.VirtualMachine{}, c.Failure
 }

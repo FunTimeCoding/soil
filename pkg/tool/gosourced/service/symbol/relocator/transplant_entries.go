@@ -67,7 +67,8 @@ func transplantEntries(
 
 		groups[g.Tok] = append(
 			groups[g.Tok],
-			relocation.NewTransplantSpec(declaration, spec, single))
+			relocation.NewTransplantSpec(declaration, spec, single),
+		)
 	}
 
 	for tok, parts := range groups {

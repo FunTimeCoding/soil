@@ -52,7 +52,11 @@ func TestHybridSearchMetadataFilter(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(
 		t,
-		s.SetMetadata("test", "alfa.md", map[string][]string{"scope": {"alfa"}}),
+		s.SetMetadata(
+			"test",
+			"alfa.md",
+			map[string][]string{"scope": {"alfa"}},
+		),
 	)
 	option := search_option.New("search pipeline", 10)
 	option.Metadata = map[string]string{"scope": "alfa"}

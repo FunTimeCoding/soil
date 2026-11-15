@@ -10,10 +10,10 @@ import (
 )
 
 type Client struct {
-	context context.Context
-	client  *netbox.APIClient
-	base    *locator.Locator
-	cache   *cache.Cache
+	context  context.Context
+	client   *netbox.APIClient
+	base     *locator.Locator
+	cache    *cache.Cache
 	verbose  bool
 	observer prometheus.ObserverVec
 	pool     *pool.Pool

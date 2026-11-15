@@ -26,7 +26,10 @@ func (s *Service) RenameReceivers(
 		directory,
 		[]string{packagePath},
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return renameReceiversThrough(d, packagePath, renames, out)
 		},
 	)

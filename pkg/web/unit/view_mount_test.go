@@ -15,7 +15,11 @@ import (
 
 func TestViewMountsPaletteBehindSignOnOnlyWhereThereIsSignOn(t *testing.T) {
 	v := view.New(
-		layout.New(identity.New("test", "test tool", "test"), "", []byte("png")).
+		layout.New(
+			identity.New("test", "test tool", "test"),
+			"",
+			[]byte("png"),
+		).
 			WithItems(navigation_item.New("/alfa", "Alfa")),
 	)
 	plain := http.NewServeMux()
@@ -24,7 +28,10 @@ func TestViewMountsPaletteBehindSignOnOnlyWhereThereIsSignOn(t *testing.T) {
 	v.Mount(
 		guard.New(signed, []string{"token"}).WithSession(
 			func(http.HandlerFunc) http.HandlerFunc {
-				return func(w http.ResponseWriter, _ *http.Request) {
+				return func(
+					w http.ResponseWriter,
+					_ *http.Request,
+				) {
 					w.WriteHeader(http.StatusForbidden)
 				}
 			},

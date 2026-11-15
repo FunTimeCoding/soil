@@ -24,7 +24,10 @@ func tableNames(
 				continue
 			}
 
-			if types.NewMethodSet(m).Lookup(m.Obj().Pkg(), constant.TableNameMethod) == nil &&
+			if types.NewMethodSet(m).Lookup(
+				m.Obj().Pkg(),
+				constant.TableNameMethod,
+			) == nil &&
 				types.NewMethodSet(types.NewPointer(m)).Lookup(
 					m.Obj().Pkg(),
 					constant.TableNameMethod,

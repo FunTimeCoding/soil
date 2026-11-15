@@ -17,7 +17,12 @@ func (s *Server) ListManufacturers(
 	}
 
 	if e != nil {
-		return server.ListManufacturers500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListManufacturers500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	result := make([]*server.Manufacturer, 0, len(manufacturers))

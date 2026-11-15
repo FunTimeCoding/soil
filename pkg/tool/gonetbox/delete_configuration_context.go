@@ -20,7 +20,10 @@ func deleteConfigurationContext(
 			arguments []string,
 		) {
 			t.EmitDone(
-				c.DeleteConfigurationContext(context.Background(), arguments[0]),
+				c.DeleteConfigurationContext(
+					context.Background(),
+					arguments[0],
+				),
 			)
 		},
 	}

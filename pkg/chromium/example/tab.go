@@ -12,6 +12,9 @@ func Tab() {
 	defer c.Close()
 	console.Format(
 		"Body: %+v",
-		protocol.New(c, environment.Required("CHROMIUM_EXAMPLE_TAB")).MustBody(),
+		protocol.New(
+			c,
+			environment.Required("CHROMIUM_EXAMPLE_TAB"),
+		).MustBody(),
 	)
 }

@@ -20,7 +20,8 @@ func expandFileQuerySymbols(file *ast.File) []*pattern_site.QuerySymbol {
 
 			result = append(
 				result,
-				pattern_site.NewQuerySymbol(declaration.Name.Name, receiver))
+				pattern_site.NewQuerySymbol(declaration.Name.Name, receiver),
+			)
 		case *ast.GenDecl:
 			if declaration.Tok == token.IMPORT {
 				continue

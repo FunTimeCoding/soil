@@ -26,7 +26,13 @@ func (s *Server) ListSchemas(
 	}
 
 	if e != nil {
-		return server.ListSchemas500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.ListSchemas500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	rows, e := s.catalog.ListSchemas(x, instance)
@@ -48,7 +54,13 @@ func (s *Server) ListSchemas(
 	}
 
 	if e != nil {
-		return server.ListSchemas500JSONResponse(*s.answerMessage(x, e, "")), nil
+		return server.ListSchemas500JSONResponse(
+			*s.answerMessage(
+				x,
+				e,
+				"",
+			),
+		), nil
 	}
 
 	return server.ListSchemas200JSONResponse{

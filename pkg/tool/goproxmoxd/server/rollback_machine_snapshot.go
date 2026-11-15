@@ -26,7 +26,12 @@ func (s *Server) RollbackMachineSnapshot(
 	}
 
 	if e != nil {
-		return server.RollbackMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.RollbackMachineSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	node := ""
@@ -54,7 +59,12 @@ func (s *Server) RollbackMachineSnapshot(
 	case unavailable.Is(e):
 		return server.RollbackMachineSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.RollbackMachineSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.RollbackMachineSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.RollbackMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

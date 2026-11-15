@@ -14,7 +14,12 @@ func Apply(
 	var failures []error
 
 	for _, u := range p.Unset {
-		if _, e := l.ReleaseLabel(u.Identifier, r.Key, u.Value, from); e != nil {
+		if _, e := l.ReleaseLabel(
+			u.Identifier,
+			r.Key,
+			u.Value,
+			from,
+		); e != nil {
 			failures = append(failures, e)
 		}
 	}

@@ -23,7 +23,12 @@ func (s *Server) ListDeviceLabels(
 	}
 
 	if e != nil {
-		return server.ListDeviceLabels500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListDeviceLabels500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.ListDeviceLabels200JSONResponse(convert.Labels(labels)), nil

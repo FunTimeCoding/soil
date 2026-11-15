@@ -68,7 +68,14 @@ func TestRequestsCarryTheirInstance(t *testing.T) {
 	service_tester.SeedForge(bravo, 2, "web")
 	bravo.SetMergeRequests(
 		nil,
-		[]*merge_request.Request{gitlab_tester.Request(2, 1, "bravo change", 2)},
+		[]*merge_request.Request{
+			gitlab_tester.Request(
+				2,
+				1,
+				"bravo change",
+				2,
+			),
+		},
 	)
 	w.Poll()
 	requests := s.Requests()

@@ -18,7 +18,10 @@ func TestQuietPanicRendersWithoutReport(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	view_tester.New().Recovery(r)(
 		http.HandlerFunc(
-			func(http.ResponseWriter, *http.Request) {
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
 				panic(unavailable.Format("goalfa unreachable"))
 			},
 		),
@@ -36,7 +39,10 @@ func TestFaultingPanicIsReported(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	view_tester.New().Recovery(r)(
 		http.HandlerFunc(
-			func(http.ResponseWriter, *http.Request) {
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
 				panic(errors.New("bravo exploded"))
 			},
 		),

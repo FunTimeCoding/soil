@@ -5,6 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func (c *Client) ListDevices(_ context.Context, _ *string) ([]*client.Device, error) {
+func (c *Client) ListDevices(
+	_ context.Context,
+	_ *string,
+) ([]*client.Device, error) {
 	return c.DeviceList, c.Failure
 }

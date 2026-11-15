@@ -22,7 +22,10 @@ func TaggedStore(t *testing.T) *store.Store {
 			"test",
 			"alfa.md",
 			map[string][]string{
-				constant.FixtureTagKey:    {constant.FixtureBuildValue, "groom"},
+				constant.FixtureTagKey: {
+					constant.FixtureBuildValue,
+					"groom",
+				},
 				constant.FixtureAuthorKey: {"one"},
 			},
 		),

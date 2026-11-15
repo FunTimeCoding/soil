@@ -20,7 +20,10 @@ func searchList(c *command_context.Context) *cobra.Command {
 			c.Terminal().EmitValue(
 				c.Client().Search(
 					context.Background(),
-					&client.SearchParams{Query: arguments[0], Type: &entityType},
+					&client.SearchParams{
+						Query: arguments[0],
+						Type:  &entityType,
+					},
 				),
 			)
 		},

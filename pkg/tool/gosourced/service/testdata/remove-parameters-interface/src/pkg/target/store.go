@@ -1,7 +1,10 @@
 package target
 
 type Saver interface {
-	Save(name string, version string) error
+	Save(
+		name string,
+		version string,
+	) error
 }
 
 type Store struct{}

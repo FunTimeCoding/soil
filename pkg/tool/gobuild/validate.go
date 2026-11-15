@@ -33,7 +33,10 @@ func Validate(o *option.Build) error {
 
 		path, version, _ := strings.Cut(o.Module, constant.VersionSeparator)
 
-		if path == "" || strings.HasSuffix(o.Module, constant.VersionSeparator) {
+		if path == "" || strings.HasSuffix(
+			o.Module,
+			constant.VersionSeparator,
+		) {
 			return fmt.Errorf("invalid module %q: path[@version]", o.Module)
 		}
 

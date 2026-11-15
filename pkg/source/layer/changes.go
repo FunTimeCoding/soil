@@ -53,7 +53,10 @@ func (l *Layer) Changes() []*layer_change.Change {
 
 	slices.SortFunc(
 		result,
-		func(a *layer_change.Change, b *layer_change.Change) int {
+		func(
+			a *layer_change.Change,
+			b *layer_change.Change,
+		) int {
 			return strings.Compare(a.Path, b.Path)
 		},
 	)

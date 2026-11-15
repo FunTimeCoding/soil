@@ -18,7 +18,10 @@ func (s *Service) ExtractToFile(
 		directory,
 		nil,
 		dryRun,
-		func(d string, out *sink.Sink) (*output.Results, error) {
+		func(
+			d string,
+			out *sink.Sink,
+		) (*output.Results, error) {
 			return extractToFileThrough(d, filePath, symbolName, out)
 		},
 	)

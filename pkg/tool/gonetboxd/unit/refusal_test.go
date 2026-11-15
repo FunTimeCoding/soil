@@ -46,7 +46,10 @@ func TestRejectedCreateIsQuietToolFailure(t *testing.T) {
 	assert.StringContains(
 		t,
 		"slug: exists",
-		c.MustCallToolError(constant.CreateSite, map[string]any{"name": "alfa"}),
+		c.MustCallToolError(
+			constant.CreateSite,
+			map[string]any{"name": "alfa"},
+		),
 	)
 	assert.Count(t, 0, r.Events())
 }

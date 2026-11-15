@@ -33,7 +33,10 @@ func Changed(root string) (map[string]bool, error) {
 			continue
 		}
 
-		result[filepath.Join(root, entry[constant.PorcelainStatusWidth:])] = true
+		result[filepath.Join(
+			root,
+			entry[constant.PorcelainStatusWidth:],
+		)] = true
 
 		if entry[0] == 'R' || entry[0] == 'C' {
 			i++

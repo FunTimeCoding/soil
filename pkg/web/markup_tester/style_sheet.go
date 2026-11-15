@@ -8,7 +8,10 @@ import (
 func styleSheet(d *goquery.Document) string {
 	var result strings.Builder
 	d.Find("style").Each(
-		func(_ int, s *goquery.Selection) {
+		func(
+			_ int,
+			s *goquery.Selection,
+		) {
 			result.WriteString(s.Text())
 		},
 	)

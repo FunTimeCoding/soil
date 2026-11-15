@@ -9,6 +9,6 @@ const (
 const (
 	InformationPath = "/ocs/v2.php/apps/serverinfo/api/v1/info"
 	FormatParameter = "format"
-	NotationFormat      = "json"
+	NotationFormat  = "json"
 	TokenHeader     = "NC-Token"
 )

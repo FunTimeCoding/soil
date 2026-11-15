@@ -6,7 +6,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func addCatalogCommands(t *terminal.Terminal, c face.Client, o *cobra.Command) {
+func addCatalogCommands(
+	t *terminal.Terminal,
+	c face.Client,
+	o *cobra.Command,
+) {
 	o.AddCommand(listAddressRanges(c, t))
 	o.AddCommand(createAddressRange(c, t))
 	o.AddCommand(listLocations(c, t))

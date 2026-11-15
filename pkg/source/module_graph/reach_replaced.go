@@ -42,7 +42,10 @@ func reachReplaced(
 
 		for module, directory := range replaced {
 			if p != module &&
-				!strings.HasPrefix(p, join.Empty(module, stringsConstant.Slash)) {
+				!strings.HasPrefix(
+					p,
+					join.Empty(module, stringsConstant.Slash),
+				) {
 				continue
 			}
 

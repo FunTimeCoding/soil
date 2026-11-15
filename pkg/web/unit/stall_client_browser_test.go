@@ -14,7 +14,13 @@ import (
 func TestStallClientBrowserSendsBrowserHello(t *testing.T) {
 	var hello *tls.ClientHelloInfo
 	s := httptest.NewUnstartedServer(
-		http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}),
+		http.HandlerFunc(
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
+			},
+		),
 	)
 	s.EnableHTTP2 = true
 	s.TLS = &tls.Config{

@@ -9,7 +9,10 @@ import (
 )
 
 func New(
-	handle func(context.Context, fsnotify.Event) []error,
+	handle func(
+		context.Context,
+		fsnotify.Event,
+	) []error,
 	paths []string,
 	l *logger.Logger,
 	r face.Reporter,

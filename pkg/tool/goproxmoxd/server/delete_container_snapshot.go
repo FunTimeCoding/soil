@@ -26,7 +26,12 @@ func (s *Server) DeleteContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.DeleteContainerSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	node := ""
@@ -54,7 +59,12 @@ func (s *Server) DeleteContainerSnapshot(
 	case unavailable.Is(e):
 		return server.DeleteContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.DeleteContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.DeleteContainerSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.DeleteContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil

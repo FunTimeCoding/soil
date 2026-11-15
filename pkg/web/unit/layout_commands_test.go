@@ -22,6 +22,10 @@ func TestLayoutWithNothingToListHasNoWayHome(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		layout.New(identity.New("alfa", "alfa tool", "alfa"), "", nil).Commands(),
+		layout.New(
+			identity.New("alfa", "alfa tool", "alfa"),
+			"",
+			nil,
+		).Commands(),
 	)
 }

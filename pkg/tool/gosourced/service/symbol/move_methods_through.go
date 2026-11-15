@@ -38,7 +38,10 @@ func (s *Service) moveMethodsThrough(
 		directory,
 		packagePath,
 		targetPackagePath,
-		func(loaded []*packages.Package, _ *token.FileSet) []types.Object {
+		func(
+			loaded []*packages.Package,
+			_ *token.FileSet,
+		) []types.Object {
 			return relocator.MethodObjects(
 				loaded,
 				packagePath,
@@ -84,7 +87,11 @@ func (s *Service) moveMethodsThrough(
 	if destination == nil {
 		return commit.FailValidation(
 			r,
-			fmt.Sprintf("no named type %s in %s", targetType, targetPackagePath),
+			fmt.Sprintf(
+				"no named type %s in %s",
+				targetType,
+				targetPackagePath,
+			),
 		)
 	}
 
@@ -106,11 +113,18 @@ func (s *Service) moveMethodsThrough(
 		return commit.FailValidation(r, message)
 	}
 
-	if message := relocator.CheckMethodShape(p, entries, destination); message != "" {
+	if message := relocator.CheckMethodShape(
+		p,
+		entries,
+		destination,
+	); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	if message := relocator.CheckTargetCollision(entries, destination); message != "" {
+	if message := relocator.CheckTargetCollision(
+		entries,
+		destination,
+	); message != "" {
 		return commit.FailValidation(r, message)
 	}
 

@@ -23,7 +23,12 @@ func (s *Server) ListVirtualDisks(
 	}
 
 	if e != nil {
-		return server.ListVirtualDisks500JSONResponse(*s.captureDetail(x, e)), nil
+		return server.ListVirtualDisks500JSONResponse(
+			*s.captureDetail(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.ListVirtualDisks200JSONResponse(convert.Disks(disks)), nil

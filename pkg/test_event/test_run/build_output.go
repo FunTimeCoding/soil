@@ -13,7 +13,8 @@ func (r *Run) BuildOutput() []string {
 		if e.Action == constant.ActionBuildOutput {
 			result = append(
 				result,
-				slice.StripEmpty(split.NewLine(e.Output))...)
+				slice.StripEmpty(split.NewLine(e.Output))...,
+			)
 		}
 	}
 

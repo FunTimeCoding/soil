@@ -23,7 +23,8 @@ import (
 func TestRunWorkerStartOrder(t *testing.T) {
 	var log []string
 	owned := lifecycle.New(
-		logger.New(context.Background())).WithWorker(mock_worker.New("a", &log)).WithWorker(
+		logger.New(context.Background()),
+	).WithWorker(mock_worker.New("a", &log)).WithWorker(
 		mock_worker.New("b", &log),
 	).WithWorker(
 		mock_worker.New("c", &log),
@@ -165,7 +166,8 @@ func TestRunMixedOrder(t *testing.T) {
 	var log []string
 	p, n := system.ClaimPort()
 	l := lifecycle.New(
-		logger.New(context.Background())).WithWorker(mock_worker.New("a", &log)).WithServer(
+		logger.New(context.Background()),
+	).WithWorker(mock_worker.New("a", &log)).WithServer(
 		server.New(
 			identity.Example(),
 			option.New(""),

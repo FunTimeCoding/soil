@@ -42,7 +42,8 @@ func TestUsageSendsTokenAndReadsCounts(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"ocs":{"data":{"nextcloud":{"storage":{"num_files":12},"shares":{"num_shares":3}}}}}`,
-		))
+		),
+	)
 	host, p := upstream_server.HostPort(t, s.URL)
 	owned := client.New(host, p, false, "charlie-token")
 	defer owned.Close()

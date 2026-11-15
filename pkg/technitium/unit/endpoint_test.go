@@ -18,7 +18,8 @@ import (
 func TestGetUnwrapsEnvelope(t *testing.T) {
 	s := upstream_server.New(
 		t,
-		upstream_server.WithAnswer(`{"status":"ok","response":{"zones":[]}}`))
+		upstream_server.WithAnswer(`{"status":"ok","response":{"zones":[]}}`),
+	)
 	payload, e := technitium_tester.New(t, s.URL).Get(
 		"/zones/records/get?domain=alfa.example&listZone=true",
 	)
@@ -38,7 +39,8 @@ func TestGetUnwrapsEnvelope(t *testing.T) {
 func TestPostSendsFormInBody(t *testing.T) {
 	s := upstream_server.New(
 		t,
-		upstream_server.WithAnswer(`{"status":"ok","response":{}}`))
+		upstream_server.WithAnswer(`{"status":"ok","response":{}}`),
+	)
 	_, e := technitium_tester.New(t, s.URL).Post(
 		constant.SettingsSetPath,
 		url.Values{constant.KeysParameter: {"alfa|c2VjcmV0|hmac-sha256"}},
@@ -71,7 +73,8 @@ func TestPostErrorEnvelopeIsUnexpected(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"status":"error","errorMessage":"Invalid TSIG key name."}`,
-		))
+		),
+	)
 	_, e := technitium_tester.New(t, s.URL).Post(
 		constant.ZoneOptionsSetPath,
 		url.Values{},
@@ -89,7 +92,8 @@ func TestErrorEnvelopeIsUnexpected(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"status":"error","errorMessage":"No such zone was found: bravo.example"}`,
-		))
+		),
+	)
 	_, e := technitium_tester.New(t, s.URL).Get(
 		"/zones/delete?zone=bravo.example",
 	)
@@ -106,7 +110,8 @@ func TestInvalidTokenIsUnexpected(t *testing.T) {
 		t,
 		upstream_server.WithAnswer(
 			`{"status":"invalid-token","errorMessage":"Invalid token or session expired."}`,
-		))
+		),
+	)
 	_, e := technitium_tester.New(t, s.URL).Get("/zones/list")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "technitium invalid-token:", e.Error())

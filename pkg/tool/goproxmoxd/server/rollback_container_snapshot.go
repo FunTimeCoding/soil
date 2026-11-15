@@ -26,7 +26,12 @@ func (s *Server) RollbackContainerSnapshot(
 	}
 
 	if e != nil {
-		return server.RollbackContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.RollbackContainerSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	node := ""
@@ -54,7 +59,12 @@ func (s *Server) RollbackContainerSnapshot(
 	case unavailable.Is(e):
 		return server.RollbackContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
-		return server.RollbackContainerSnapshot500JSONResponse(*s.answer(x, e)), nil
+		return server.RollbackContainerSnapshot500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.RollbackContainerSnapshot200JSONResponse{

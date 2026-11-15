@@ -21,7 +21,12 @@ func TestPortForwardRefusesIncompleteRequest(t *testing.T) {
 		{ResourceType: "pod", LocalPort: 8080, TargetPort: 80},
 		{ResourceType: "pod", Name: "alfa", TargetPort: 80},
 		{ResourceType: "pod", Name: "alfa", LocalPort: 8080},
-		{ResourceType: "deployment", Name: "alfa", LocalPort: 8080, TargetPort: 80},
+		{
+			ResourceType: "deployment",
+			Name:         "alfa",
+			LocalPort:    8080,
+			TargetPort:   80,
+		},
 	} {
 		_, e := v.Service.PortForward(t.Context(), "test", q)
 		assert.True(t, validation.Is(e))

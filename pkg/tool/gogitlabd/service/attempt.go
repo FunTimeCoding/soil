@@ -8,7 +8,10 @@ import (
 func (s *Service) attempt(
 	x context.Context,
 	instance string,
-	f func(context.Context, face.GitLabClient) error,
+	f func(
+		context.Context,
+		face.GitLabClient,
+	) error,
 ) error {
 	p, e := s.pool.Client(instance)
 

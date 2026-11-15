@@ -94,7 +94,12 @@ func rewriteSite(
 			&dst.AssignStmt{
 				Lhs: []dst.Expr{
 					&dst.SelectorExpr{
-						X:   dst.Clone(decorations.DecoratedNode(site.Package, target)).(dst.Expr),
+						X: dst.Clone(
+							decorations.DecoratedNode(
+								site.Package,
+								target,
+							),
+						).(dst.Expr),
 						Sel: dst.NewIdent(name),
 					},
 				},

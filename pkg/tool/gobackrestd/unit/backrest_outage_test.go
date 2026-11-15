@@ -16,7 +16,12 @@ func TestCommandOutageStaysQuietAndStopsAsking(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = unavailable.Format("pgbackrest command unavailable: exit 125")
 	r := memory.New()
-	w, okay := daemon_tester.New(t, c, metric.New(), r).Workers()[1].(*worker.Worker)
+	w, okay := daemon_tester.New(
+		t,
+		c,
+		metric.New(),
+		r,
+	).Workers()[1].(*worker.Worker)
 	assert.True(t, okay)
 
 	for range 3 {
@@ -31,7 +36,12 @@ func TestPgbackrestFaultIsCapturedEachPoll(t *testing.T) {
 	c := mock_client.New()
 	c.Failure = errors.New("pgbackrest info: exit status 31")
 	r := memory.New()
-	w, okay := daemon_tester.New(t, c, metric.New(), r).Workers()[1].(*worker.Worker)
+	w, okay := daemon_tester.New(
+		t,
+		c,
+		metric.New(),
+		r,
+	).Workers()[1].(*worker.Worker)
 	assert.True(t, okay)
 	w.Poll()
 	w.Poll()

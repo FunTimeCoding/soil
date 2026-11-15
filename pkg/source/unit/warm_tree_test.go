@@ -27,7 +27,10 @@ func TestWarmTreeHoldsEntriesButGit(t *testing.T) {
 	)
 	assert.FatalOnError(
 		t,
-		os.Symlink(filepath.Join(root, "alfa.txt"), filepath.Join(root, "file")),
+		os.Symlink(
+			filepath.Join(root, "alfa.txt"),
+			filepath.Join(root, "file"),
+		),
 	)
 	tree := warm_tree.New(root)
 	assert.Strings(t, []string{"alfa.txt", "charlie/delta.go"}, tree.Files())

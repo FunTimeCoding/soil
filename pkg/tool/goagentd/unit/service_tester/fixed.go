@@ -5,7 +5,11 @@ import (
 	"io"
 )
 
-func Fixed(s face.Stream) func(string, io.Writer, ...string) face.Stream {
+func Fixed(s face.Stream) func(
+	string,
+	io.Writer,
+	...string,
+) face.Stream {
 	return func(
 		string,
 		io.Writer,

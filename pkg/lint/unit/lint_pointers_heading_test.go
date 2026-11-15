@@ -173,7 +173,11 @@ func TestPointersHeadingOnDeadFileReportsPath(t *testing.T) {
 		t,
 		"doc/index.md",
 		true,
-		pointer_tester.Dead("doc/index.md", "Read `doc/gone.md#part` first.", 1),
+		pointer_tester.Dead(
+			"doc/index.md",
+			"Read `doc/gone.md#part` first.",
+			1,
+		),
 		"",
 		l,
 	)

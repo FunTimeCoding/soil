@@ -20,7 +20,8 @@ func ScopeNames(name string) *kind.Kind {
 		func(p *types.Package) any {
 			return new(
 				join.Space(
-					slices.Concat([]string{p.Path()}, p.Scope().Names())...),
+					slices.Concat([]string{p.Path()}, p.Scope().Names())...,
+				),
 			)
 		},
 	)

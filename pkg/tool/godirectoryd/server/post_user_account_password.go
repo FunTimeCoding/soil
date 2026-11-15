@@ -41,7 +41,12 @@ func (s *Server) PostUserAccountPassword(
 	}
 
 	if e != nil {
-		return server.PostUserAccountPassword500JSONResponse(*s.answer(x, e)), nil
+		return server.PostUserAccountPassword500JSONResponse(
+			*s.answer(
+				x,
+				e,
+			),
+		), nil
 	}
 
 	return server.PostUserAccountPassword200JSONResponse{

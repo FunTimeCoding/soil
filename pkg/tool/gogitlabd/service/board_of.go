@@ -43,7 +43,11 @@ func (s *Service) boardOf(
 			return nil, h
 		}
 
-		for reference, i := range latest_pipeline.New(branches, tags, pipelines) {
+		for reference, i := range latest_pipeline.New(
+			branches,
+			tags,
+			pipelines,
+		) {
 			latest[[2]string{name, reference}] = i
 		}
 	}

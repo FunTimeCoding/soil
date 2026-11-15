@@ -9,11 +9,15 @@ import (
 )
 
 type Runner struct {
-	mutex       sync.Mutex
-	state       constant.RunnerState
-	result      string
-	workspace   string
-	stream      func(string, io.Writer, ...string) face.Stream
+	mutex     sync.Mutex
+	state     constant.RunnerState
+	result    string
+	workspace string
+	stream    func(
+		string,
+		io.Writer,
+		...string,
+	) face.Stream
 	reporter    face.Reporter
 	recovery    *recovery.Recovery
 	current     face.Stream

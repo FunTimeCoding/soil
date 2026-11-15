@@ -11,7 +11,11 @@ import (
 func browserDial(
 	d *net.Dialer,
 	insecure bool,
-) func(context.Context, string, string) (net.Conn, error) {
+) func(
+	context.Context,
+	string,
+	string,
+) (net.Conn, error) {
 	return func(
 		x context.Context,
 		network string,
