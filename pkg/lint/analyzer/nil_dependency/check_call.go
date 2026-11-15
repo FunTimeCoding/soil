@@ -42,7 +42,7 @@ func checkCall(
 		if suppress.IsSuppressed(
 			p.Fset,
 			p.Syntax,
-			argument.Pos(),
+			argument,
 			"nil_dependency",
 		) {
 			continue

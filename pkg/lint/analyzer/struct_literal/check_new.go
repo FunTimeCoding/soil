@@ -37,7 +37,7 @@ func checkNew(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, call.Pos(), "struct_literal") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, call, "struct_literal") {
 		return
 	}
 

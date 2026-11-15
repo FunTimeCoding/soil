@@ -26,5 +26,21 @@ func SingleParameter(t *testing.T) string {
 			"too_long.go",
 			"package example\n\nfunc VeryLongFunctionNameThatWouldExceedTheLimit(\n\tparameterWithAVeryLongName string,\n) error {\n\treturn nil\n}\n",
 		).
+		File(
+			"expanded_function_type.go",
+			"package example\n\nfunc Expanded(\n\tf func(\n\t\tint,\n\t\t[]byte,\n\t) error,\n) error {\n\treturn nil\n}\n",
+		).
+		File(
+			"half_expanded_function_type.go",
+			"package example\n\nfunc HalfExpanded(f func(\n\tint,\n\t[]byte,\n) error) error {\n\treturn nil\n}\n",
+		).
+		File(
+			"commented_function_type.go",
+			"package example\n\nfunc Commented(\n\tf func(\n\t\tint, // status\n\t\t[]byte,\n\t) error,\n) error {\n\treturn nil\n}\n",
+		).
+		File(
+			"struct_type.go",
+			"package example\n\nfunc Structured(\n\tv struct {\n\t\tA int\n\t\tB int\n\t},\n) error {\n\treturn nil\n}\n",
+		).
 		Directory()
 }

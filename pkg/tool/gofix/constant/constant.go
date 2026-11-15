@@ -15,6 +15,11 @@ const (
 	DiffContext              = 2
 )
 
+const (
+	ParameterSourcePrefix = "package p\n\nfunc _("
+	ParameterSourceSuffix = ") {}\n"
+)
+
 var (
 	BuiltinNames = map[string]bool{
 		"bool":       true,

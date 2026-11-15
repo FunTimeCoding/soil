@@ -10,8 +10,8 @@ import (
 const DaysOfYear = 365
 
 type Item struct {
-	Name        string
-	CreatedAt   time.Time
+	Name      string
+	CreatedAt time.Time
 	SeenAt      string
 	OnSaleUntil *time.Time
 	ForSale     bool

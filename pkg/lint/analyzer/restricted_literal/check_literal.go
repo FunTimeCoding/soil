@@ -30,7 +30,7 @@ func checkLiteral(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, l.Pos(), "restricted_literal") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, l, "restricted_literal") {
 		return
 	}
 

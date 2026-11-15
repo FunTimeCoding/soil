@@ -17,7 +17,7 @@ func report(
 	if suppress.IsSuppressed(
 		p.Fset,
 		p.Syntax,
-		call.Pos(),
+		call,
 		"multi_value_result",
 	) {
 		return

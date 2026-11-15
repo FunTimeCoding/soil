@@ -31,7 +31,7 @@ func checkBinary(
 	if suppress.IsSuppressed(
 		p.Fset,
 		p.Syntax,
-		e.Pos(),
+		e,
 		constant.StringConcatenationKey,
 	) {
 		return

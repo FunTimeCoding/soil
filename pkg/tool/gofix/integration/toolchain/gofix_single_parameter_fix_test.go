@@ -69,10 +69,59 @@ func TestSingleParameterFix(t *testing.T) {
 		},
 	)
 	t.Run(
+		"ExpandedFunctionTypeCollapsed",
+		func(t *testing.T) {
+			assert.String(
+				t,
+				"package example\n\nfunc Expanded(f func(int, []byte) error) error {\n\treturn nil\n}\n",
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "expanded_function_type.go"),
+				),
+			)
+		},
+	)
+	t.Run(
+		"HalfExpandedFunctionTypeCollapsed",
+		func(t *testing.T) {
+			assert.String(
+				t,
+				"package example\n\nfunc HalfExpanded(f func(int, []byte) error) error {\n\treturn nil\n}\n",
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "half_expanded_function_type.go"),
+				),
+			)
+		},
+	)
+	t.Run(
+		"CommentedFunctionTypeUntouched",
+		func(t *testing.T) {
+			assert.String(
+				t,
+				"package example\n\nfunc Commented(\n\tf func(\n\t\tint, // status\n\t\t[]byte,\n\t) error,\n) error {\n\treturn nil\n}\n",
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "commented_function_type.go"),
+				),
+			)
+		},
+	)
+	t.Run(
+		"StructTypeUntouched",
+		func(t *testing.T) {
+			assert.String(
+				t,
+				"package example\n\nfunc Structured(\n\tv struct {\n\t\tA int\n\t\tB int\n\t},\n) error {\n\treturn nil\n}\n",
+				testutil.ReadFile(t, filepath.Join(directory, "struct_type.go")),
+			)
+		},
+	)
+	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
 			applied := fix_tester.Applied(r.Entries)
-			assert.Integer(t, 2, len(applied))
+			assert.Integer(t, 4, len(applied))
 			fix_tester.LineResult(
 				t,
 				applied,
@@ -87,8 +136,35 @@ func TestSingleParameterFix(t *testing.T) {
 				3,
 				"collapsed single parameter",
 			)
+			fix_tester.LineResult(
+				t,
+				applied,
+				"expanded_function_type.go",
+				3,
+				"collapsed single parameter",
+			)
+			fix_tester.LineResult(
+				t,
+				applied,
+				"half_expanded_function_type.go",
+				3,
+				"collapsed single parameter",
+			)
 		},
 	)
+}
+
+func TestSingleParameterFixSettles(t *testing.T) {
+	directory := module_tester.SingleParameter(t)
+	gofix.RunSingleParameterFix(
+		[]string{"./..."},
+		directory,
+		false,
+		output.NewResultsWithDirectory(directory),
+	)
+	r := output.NewResultsWithDirectory(directory)
+	gofix.RunSingleParameterFix([]string{"./..."}, directory, false, r)
+	assert.Integer(t, 0, len(fix_tester.Applied(r.Entries)))
 }
 
 func TestSingleParameterFixWithTestFiles(t *testing.T) {

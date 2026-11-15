@@ -28,6 +28,17 @@ func collapseSingleParameter(
 	parameterStart := fileSet.Position(field.Pos()).Offset
 	parameterEnd := fileSet.Position(field.End()).Offset
 	parameterText := string(source[parameterStart:parameterEnd])
+
+	if fileSet.Position(field.Pos()).Line != fileSet.Position(field.End()).Line {
+		joined, okay := joinParameter(parameterText)
+
+		if !okay {
+			return nil
+		}
+
+		parameterText = joined
+	}
+
 	lineStart := openPosition.Offset - (openPosition.Column - 1)
 	prefix := source[lineStart:openPosition.Offset]
 	closeOffset := closePosition.Offset

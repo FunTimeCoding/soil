@@ -33,7 +33,7 @@ func checkUnary(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, expr.Pos(), "struct_literal") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, expr, "struct_literal") {
 		return
 	}
 

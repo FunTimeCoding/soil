@@ -39,7 +39,7 @@ func checkSelector(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, sel.Pos(), "restricted_call") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, sel, "restricted_call") {
 		return
 	}
 

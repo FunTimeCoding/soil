@@ -21,7 +21,7 @@ func checkStruct(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, s.Pos(), "anonymous_struct") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, s, "anonymous_struct") {
 		return
 	}
 

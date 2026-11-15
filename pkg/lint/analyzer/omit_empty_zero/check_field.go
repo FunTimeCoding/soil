@@ -36,7 +36,7 @@ func checkField(
 	if suppress.IsSuppressed(
 		p.Fset,
 		p.Syntax,
-		field.Pos(),
+		field,
 		"omit_empty_zero",
 	) {
 		return

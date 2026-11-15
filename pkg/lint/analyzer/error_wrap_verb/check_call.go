@@ -69,7 +69,7 @@ func checkCall(
 		if suppress.IsSuppressed(
 			p.Fset,
 			p.Syntax,
-			call.Pos(),
+			call,
 			"error_wrap_verb",
 		) {
 			return

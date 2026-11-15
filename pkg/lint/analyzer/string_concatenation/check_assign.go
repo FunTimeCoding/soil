@@ -31,7 +31,7 @@ func checkAssign(
 	if suppress.IsSuppressed(
 		p.Fset,
 		p.Syntax,
-		s.Pos(),
+		s,
 		constant.StringConcatenationKey,
 	) {
 		return

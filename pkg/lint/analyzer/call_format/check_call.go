@@ -19,7 +19,7 @@ func checkCall(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, call.Pos(), "call_format") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, call, "call_format") {
 		return
 	}
 

@@ -44,7 +44,7 @@ func checkCall(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, call.Pos(), "forbidden_call") {
+	if suppress.IsSuppressed(p.Fset, p.Syntax, call, "forbidden_call") {
 		return
 	}
 

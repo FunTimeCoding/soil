@@ -1,8 +1,7 @@
 package example
 
 func firstArgumentOnParenLine() {
-	withStruct(
-		"name",
+	withStruct("name",
 		Options{Value: 1},
 	)
 }

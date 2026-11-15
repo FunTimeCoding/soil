@@ -40,10 +40,7 @@ func Shadow(message string) string {
 	return x
 }
 
-func Log(
-	prefix string,
-	values ...string,
-) string {
+func Log(prefix string, values ...string) string {
 	return prefix + values[0]
 }
 
