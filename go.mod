@@ -5,10 +5,10 @@ go 1.27.4
 require (
 	charm.land/bubbles/v2 v2.2.1
 	charm.land/bubbletea/v2 v2.1.1
-	charm.land/lipgloss/v2 v2.1.0
+	charm.land/lipgloss/v2 v2.1.1
 	github.com/JohannesKaufmann/html-to-markdown/v2 v2.5.2
 	github.com/MrGunflame/gw2api v1.0.5
-	github.com/PuerkitoBio/goquery v1.13.0
+	github.com/PuerkitoBio/goquery v1.14.0
 	github.com/amikos-tech/chroma-go v0.4.1
 	github.com/amikos-tech/pure-onnx v0.0.1
 	github.com/amikos-tech/pure-tokenizers v0.1.5
@@ -19,8 +19,8 @@ require (
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.4
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.159.3
-	github.com/chromedp/chromedp v0.23.0
+	github.com/chromedp/cdproto v0.160.3
+	github.com/chromedp/chromedp v0.23.1
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
 	github.com/coreos/go-semver v0.3.1
@@ -48,14 +48,14 @@ require (
 	github.com/google/licensecheck v0.3.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gpustack/gguf-parser-go v0.28.1
+	github.com/gpustack/gguf-parser-go v0.28.2
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20261015192556-fcf0a80b71e9
 	github.com/hetznercloud/hcloud-go/v2 v2.53.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.4
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
-	github.com/luthermonson/go-proxmox v0.8.2
+	github.com/luthermonson/go-proxmox v0.9.0
 	github.com/mark3labs/mcp-go v1.5.0
 	github.com/mattermost/mattermost/server/public v0.6.1
 	github.com/mattn/go-isatty v0.0.24
@@ -65,7 +65,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.6
 	github.com/oapi-codegen/runtime v1.9.0
 	github.com/ollama/ollama v0.40.16
-	github.com/openai/openai-go/v3 v3.98.0
+	github.com/openai/openai-go/v3 v3.99.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
@@ -74,7 +74,7 @@ require (
 	github.com/pkg/sftp v1.13.12
 	github.com/prometheus/alertmanager v0.35.0
 	github.com/prometheus/client_golang v1.25.0
-	github.com/prometheus/common v0.73.1
+	github.com/prometheus/common v0.74.0
 	github.com/refraction-networking/utls v1.8.2
 	github.com/sashabaranov/go-openai v1.43.0
 	github.com/sergi/go-diff v1.4.0
@@ -89,7 +89,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.16
-	gitlab.com/gitlab-org/api/client-go/v3 v3.48.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.50.0
 	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v4 v4.0.0
 	golang.org/x/crypto v0.59.0
@@ -100,7 +100,7 @@ require (
 	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.52.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.312.0
+	google.golang.org/api v0.315.0
 	google.golang.org/protobuf v1.36.12
 	gorm.io/driver/postgres v1.6.3
 	gorm.io/gorm v1.31.2
@@ -268,7 +268,7 @@ require (
 	github.com/ory/go-convenience v0.1.0 // indirect
 	github.com/ory/x v0.0.665 // indirect
 	github.com/package-url/packageurl-go v0.1.7 // indirect
-	github.com/pandatix/go-abnf v0.5.3 // indirect
+	github.com/pandatix/go-abnf v0.5.5 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
@@ -335,7 +335,7 @@ require (
 	go.opentelemetry.io/proto/otlp v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect
-	go.yaml.in/yaml/v2 v2.4.4 // indirect
+	go.yaml.in/yaml/v2 v2.4.5 // indirect
 	go.yaml.in/yaml/v3 v3.0.6 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
 	golang.org/x/sync v0.25.0 // indirect

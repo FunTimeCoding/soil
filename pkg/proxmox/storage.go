@@ -14,9 +14,9 @@ func (c *Client) Storage(
 		return nil, validation.New("storage name is required")
 	}
 
-	result, e := n.Storage(c.context, name)
+	result := n.StorageRef(name)
 
-	if e != nil {
+	if e := result.Ping(c.context); e != nil {
 		return nil, notFound(e, constant.StorageKind, name)
 	}
 
