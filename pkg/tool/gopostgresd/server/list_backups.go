@@ -24,11 +24,7 @@ func (s *Server) ListBackups(
 
 	if e != nil {
 		return server.ListBackups500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 
@@ -36,11 +32,7 @@ func (s *Server) ListBackups(
 
 	if e != nil {
 		return server.ListBackups500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 

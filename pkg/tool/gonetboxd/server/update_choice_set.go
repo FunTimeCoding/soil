@@ -29,10 +29,7 @@ func (s *Server) UpdateChoiceSet(
 
 	if e != nil {
 		return server.UpdateChoiceSet500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

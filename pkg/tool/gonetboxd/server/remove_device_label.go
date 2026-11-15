@@ -33,10 +33,7 @@ func (s *Server) RemoveDeviceLabel(
 
 	if e != nil {
 		return server.RemoveDeviceLabel500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

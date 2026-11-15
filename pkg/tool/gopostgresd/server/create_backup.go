@@ -24,11 +24,7 @@ func (s *Server) CreateBackup(
 
 	if e != nil {
 		return server.CreateBackup500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 
@@ -40,11 +36,7 @@ func (s *Server) CreateBackup(
 
 	if e != nil {
 		return server.CreateBackup500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 

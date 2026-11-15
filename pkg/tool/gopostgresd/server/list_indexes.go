@@ -27,11 +27,7 @@ func (s *Server) ListIndexes(
 
 	if e != nil {
 		return server.ListIndexes500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 
@@ -61,11 +57,7 @@ func (s *Server) ListIndexes(
 
 	if e != nil {
 		return server.ListIndexes500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 

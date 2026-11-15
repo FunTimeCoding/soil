@@ -18,10 +18,7 @@ func (s *Server) ListManufacturers(
 
 	if e != nil {
 		return server.ListManufacturers500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

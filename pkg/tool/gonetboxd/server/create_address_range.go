@@ -41,10 +41,7 @@ func (s *Server) CreateAddressRange(
 
 	if e != nil {
 		return server.CreateAddressRange500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

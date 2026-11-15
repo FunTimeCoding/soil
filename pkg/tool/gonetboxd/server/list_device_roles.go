@@ -19,10 +19,7 @@ func (s *Server) ListDeviceRoles(
 
 	if e != nil {
 		return server.ListDeviceRoles500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

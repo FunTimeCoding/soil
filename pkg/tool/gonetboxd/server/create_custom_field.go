@@ -39,10 +39,7 @@ func (s *Server) CreateCustomField(
 
 	if e != nil {
 		return server.CreateCustomField500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

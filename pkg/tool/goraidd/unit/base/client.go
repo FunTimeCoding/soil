@@ -16,11 +16,7 @@ func Client(
 	t.Helper()
 	result := client.New(
 		locator.New("localhost").Port(
-			Mount(
-				t,
-				o,
-				memory.New(),
-			).Port,
+			Mount(t, o, memory.New()).Port,
 		).Insecure(),
 		token,
 	)

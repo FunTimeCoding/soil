@@ -27,10 +27,7 @@ func (s *Server) CreateContainerSnapshot(
 
 	if e != nil {
 		return server.CreateContainerSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 
@@ -60,10 +57,7 @@ func (s *Server) CreateContainerSnapshot(
 		return server.CreateContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
 		return server.CreateContainerSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 

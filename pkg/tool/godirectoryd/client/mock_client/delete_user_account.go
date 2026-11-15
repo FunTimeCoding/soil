@@ -32,9 +32,6 @@ func (c *Client) DeleteUserAccount(
 	delete(c.Passwords, account)
 
 	return &client.Receipt{
-		Message: fmt.Sprintf(
-			"deleted user: %s",
-			account,
-		),
+		Message: fmt.Sprintf("deleted user: %s", account),
 	}, nil
 }

@@ -24,10 +24,7 @@ func (s *Server) CreateTunnelGroup(
 
 	if e != nil {
 		return server.CreateTunnelGroup500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

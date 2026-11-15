@@ -29,10 +29,7 @@ func (s *Server) CreateVirtualDisk(
 
 	if e != nil {
 		return server.CreateVirtualDisk500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

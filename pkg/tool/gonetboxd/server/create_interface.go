@@ -34,10 +34,7 @@ func (s *Server) CreateInterface(
 
 	if e != nil {
 		return server.CreateInterface500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

@@ -35,10 +35,7 @@ func (s *Server) UpdateJournalEntry(
 
 	if e != nil {
 		return server.UpdateJournalEntry500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

@@ -26,11 +26,7 @@ func (s *Server) RestoreBackup(
 
 	if e != nil {
 		return server.RestoreBackup500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 
@@ -60,11 +56,7 @@ func (s *Server) RestoreBackup(
 
 	if e != nil {
 		return server.RestoreBackup500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 

@@ -33,10 +33,7 @@ func (s *Server) RemoveVirtualTag(
 
 	if e != nil {
 		return server.RemoveVirtualTag500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

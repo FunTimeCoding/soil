@@ -27,9 +27,6 @@ func (s *Server) GetDevice(
 	}
 
 	return server.GetDevice200JSONResponse(
-		*convert.LabeledDevice(
-			d,
-			labels,
-		),
+		*convert.LabeledDevice(d, labels),
 	), nil
 }

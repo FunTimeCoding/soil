@@ -24,10 +24,7 @@ func (s *Server) CreateDeviceType(
 
 	if e != nil {
 		return server.CreateDeviceType500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

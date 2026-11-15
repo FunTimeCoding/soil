@@ -18,10 +18,7 @@ func (s *Server) ListClusterTypes(
 
 	if e != nil {
 		return server.ListClusterTypes500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

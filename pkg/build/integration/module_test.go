@@ -24,12 +24,7 @@ func TestModuleBuildsEverySelectedArchitecture(t *testing.T) {
 	assert.True(
 		t,
 		system.FileExists(
-			filepath.Join(
-				"tmp",
-				"gosed",
-				"linux-amd64",
-				"gosed",
-			),
+			filepath.Join("tmp", "gosed", "linux-amd64", "gosed"),
 		),
 	)
 	assert.True(

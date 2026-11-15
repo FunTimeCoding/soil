@@ -27,10 +27,7 @@ func (s *Server) DeleteContainerSnapshot(
 
 	if e != nil {
 		return server.DeleteContainerSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 
@@ -60,10 +57,7 @@ func (s *Server) DeleteContainerSnapshot(
 		return server.DeleteContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
 		return server.DeleteContainerSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 

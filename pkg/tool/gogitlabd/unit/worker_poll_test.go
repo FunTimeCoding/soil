@@ -69,12 +69,7 @@ func TestRequestsCarryTheirInstance(t *testing.T) {
 	bravo.SetMergeRequests(
 		nil,
 		[]*merge_request.Request{
-			gitlab_tester.Request(
-				2,
-				1,
-				"bravo change",
-				2,
-			),
+			gitlab_tester.Request(2, 1, "bravo change", 2),
 		},
 	)
 	w.Poll()

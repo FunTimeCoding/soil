@@ -19,10 +19,7 @@ func (s *Server) ListTunnelGroups(
 
 	if e != nil {
 		return server.ListTunnelGroups500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

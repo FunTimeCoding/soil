@@ -29,9 +29,6 @@ func (c *Client) PostUserAccountPassword(
 	c.Passwords[account] = b.Password
 
 	return &client.Receipt{
-		Message: fmt.Sprintf(
-			"password set: %s",
-			account,
-		),
+		Message: fmt.Sprintf("password set: %s", account),
 	}, nil
 }

@@ -46,10 +46,7 @@ func (s *Server) EnableRedirection(
 
 	if f != nil {
 		return server.EnableRedirection500JSONResponse(
-			*s.captureDetail(
-				x,
-				f,
-			),
+			*s.captureDetail(x, f),
 		), nil
 	}
 

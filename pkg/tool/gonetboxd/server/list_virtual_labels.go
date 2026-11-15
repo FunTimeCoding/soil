@@ -24,10 +24,7 @@ func (s *Server) ListVirtualLabels(
 
 	if e != nil {
 		return server.ListVirtualLabels500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

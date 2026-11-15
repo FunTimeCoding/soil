@@ -27,10 +27,7 @@ func (s *Server) ListContainerSnapshots(
 
 	if e != nil {
 		return server.ListContainerSnapshots500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 
@@ -57,10 +54,7 @@ func (s *Server) ListContainerSnapshots(
 		return server.ListContainerSnapshots503JSONResponse(*clientError(e)), nil
 	case e != nil:
 		return server.ListContainerSnapshots500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 

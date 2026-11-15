@@ -9,10 +9,7 @@ func (s *Service) Transition(
 	return s.jiraGuard.Attempt(
 		context.Background(),
 		func(context.Context) error {
-			return s.jira.Transition(
-				key,
-				transition,
-			)
+			return s.jira.Transition(key, transition)
 		},
 	)
 }

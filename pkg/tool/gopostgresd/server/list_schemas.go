@@ -27,11 +27,7 @@ func (s *Server) ListSchemas(
 
 	if e != nil {
 		return server.ListSchemas500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 
@@ -55,11 +51,7 @@ func (s *Server) ListSchemas(
 
 	if e != nil {
 		return server.ListSchemas500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 

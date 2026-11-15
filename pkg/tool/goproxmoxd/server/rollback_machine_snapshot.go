@@ -27,10 +27,7 @@ func (s *Server) RollbackMachineSnapshot(
 
 	if e != nil {
 		return server.RollbackMachineSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 
@@ -60,10 +57,7 @@ func (s *Server) RollbackMachineSnapshot(
 		return server.RollbackMachineSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
 		return server.RollbackMachineSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 

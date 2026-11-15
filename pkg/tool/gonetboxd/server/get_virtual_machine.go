@@ -24,10 +24,7 @@ func (s *Server) GetVirtualMachine(
 
 	if e != nil {
 		return server.GetVirtualMachine500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

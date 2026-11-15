@@ -207,10 +207,7 @@ func TestSidewaysEntryKeepsItsButtonsSideBySide(t *testing.T) {
 				Sideways().
 				Text("bravo", "Bravo", "").
 				Beside(
-					html.A(
-						html.Href("/charlie"),
-						gomponents.Text("Cancel"),
-					),
+					html.A(html.Href("/charlie"), gomponents.Text("Cancel")),
 				).
 				Node(),
 		),

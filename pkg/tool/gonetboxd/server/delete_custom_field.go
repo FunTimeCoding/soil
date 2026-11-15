@@ -33,10 +33,7 @@ func (s *Server) DeleteCustomField(
 
 	if e != nil {
 		return server.DeleteCustomField500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

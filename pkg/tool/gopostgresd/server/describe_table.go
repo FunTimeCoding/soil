@@ -27,11 +27,7 @@ func (s *Server) DescribeTable(
 
 	if e != nil {
 		return server.DescribeTable500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 
@@ -61,11 +57,7 @@ func (s *Server) DescribeTable(
 
 	if e != nil {
 		return server.DescribeTable500JSONResponse(
-			*s.answerMessage(
-				x,
-				e,
-				"",
-			),
+			*s.answerMessage(x, e, ""),
 		), nil
 	}
 

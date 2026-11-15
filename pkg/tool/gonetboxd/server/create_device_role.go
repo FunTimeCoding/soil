@@ -30,10 +30,7 @@ func (s *Server) CreateDeviceRole(
 
 	if e != nil {
 		return server.CreateDeviceRole500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 

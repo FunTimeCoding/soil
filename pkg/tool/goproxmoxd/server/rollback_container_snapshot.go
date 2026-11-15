@@ -27,10 +27,7 @@ func (s *Server) RollbackContainerSnapshot(
 
 	if e != nil {
 		return server.RollbackContainerSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 
@@ -60,10 +57,7 @@ func (s *Server) RollbackContainerSnapshot(
 		return server.RollbackContainerSnapshot503JSONResponse(*clientError(e)), nil
 	case e != nil:
 		return server.RollbackContainerSnapshot500JSONResponse(
-			*s.answer(
-				x,
-				e,
-			),
+			*s.answer(x, e),
 		), nil
 	}
 

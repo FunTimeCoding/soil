@@ -18,10 +18,7 @@ func (s *Server) ListDeviceTypes(
 
 	if e != nil {
 		return server.ListDeviceTypes500JSONResponse(
-			*s.captureDetail(
-				x,
-				e,
-			),
+			*s.captureDetail(x, e),
 		), nil
 	}
 
