@@ -33,7 +33,7 @@ func (s *Service) MatchPattern(
 		return r, nil, nil
 	}
 
-	all, set, f := s.workspace.CensusPackages(directory, packagePath)
+	all, set, f := s.workspace.DependentPackages(directory, packagePath)
 
 	if f != nil {
 		return nil, nil, f

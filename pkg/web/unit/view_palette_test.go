@@ -7,14 +7,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
-	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
+	"github.com/funtimecoding/soil/pkg/web/unit/view_tester"
 	"github.com/funtimecoding/soil/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"net/http"
 	"testing"
 )
 
 func TestPaletteListsItemsThenExtras(t *testing.T) {
-	r := paletteAnswer(t, paletteView(), true)
+	r := view_tester.PaletteAnswer(t, view_tester.Palette(), true)
 	assert.Integer(t, http.StatusOK, r.Code)
 	assert.StringContains(t, "Alfa", r.Body.String())
 	assert.StringContains(t, "Bravo", r.Body.String())
@@ -22,7 +23,7 @@ func TestPaletteListsItemsThenExtras(t *testing.T) {
 }
 
 func TestSignedSessionAlsoGetsSignOut(t *testing.T) {
-	r := paletteAnswer(t, paletteView(), false)
+	r := view_tester.PaletteAnswer(t, view_tester.Palette(), false)
 	assert.StringContains(t, "Sign out", r.Body.String())
 }
 
@@ -51,6 +52,6 @@ func TestLayoutWithNothingToListHasNoPalette(t *testing.T) {
 	assert.Integer(
 		t,
 		http.StatusNotFound,
-		paletteAnswer(t, view.New(plain), true).Code,
+		view_tester.PaletteAnswer(t, view.New(plain), true).Code,
 	)
 }

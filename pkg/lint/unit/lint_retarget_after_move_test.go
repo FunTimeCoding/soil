@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/pointer_tester"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestRetargetAfterMoveHappened(t *testing.T) {
 		pointer_tester.Resolver("pkg/bravo/run.go"),
 		"doc/note.md",
 		"Read `pkg/alfa/run.go` first.\n",
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(t, "Read `pkg/bravo/run.go` first.\n", after)
 }
@@ -27,7 +28,7 @@ func TestRetargetMovedBaseAfterMove(t *testing.T) {
 		),
 		"doc/note.md",
 		"---\nbase: pkg/alfa\n---\n\nSee `service/run.go`.\n",
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(
 		t,
@@ -42,7 +43,7 @@ func TestRetargetLeavesDeadPathThatNoMoveExplains(t *testing.T) {
 		pointer_tester.Resolver("pkg/bravo/run.go"),
 		"doc/note.md",
 		content,
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(t, content, after)
 	assert.Count(t, 0, changes)

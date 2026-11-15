@@ -7,5 +7,9 @@ func (c *Client) UserThreads(
 	_ *model.Team,
 	_ model.GetUserThreadsOpts,
 ) (*model.Threads, error) {
-	return nil, c.Failure
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	return &model.Threads{}, nil
 }

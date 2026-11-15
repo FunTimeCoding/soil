@@ -10,10 +10,7 @@ import (
 )
 
 func TestAddImportToGrouped(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-grouped/src"),
-	)
+	d := service_tester.Prepare(t, "import-grouped/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.AddImport(
 		t.Context(),
@@ -38,10 +35,7 @@ func TestAddImportToGrouped(t *testing.T) {
 }
 
 func TestAddImportToEmpty(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-empty/src"),
-	)
+	d := service_tester.Prepare(t, "import-empty/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.AddImport(
 		t.Context(),
@@ -58,10 +52,7 @@ func TestAddImportToEmpty(t *testing.T) {
 }
 
 func TestAddImportWithAlias(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-grouped/src"),
-	)
+	d := service_tester.Prepare(t, "import-grouped/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.AddImport(
 		t.Context(),
@@ -78,10 +69,7 @@ func TestAddImportWithAlias(t *testing.T) {
 }
 
 func TestRemoveImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-grouped/src"),
-	)
+	d := service_tester.Prepare(t, "import-grouped/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.RemoveImport(
 		t.Context(),
@@ -99,10 +87,7 @@ func TestRemoveImport(t *testing.T) {
 }
 
 func TestRemoveImportNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-grouped/src"),
-	)
+	d := service_tester.Prepare(t, "import-grouped/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.RemoveImport(
 		t.Context(),
@@ -117,14 +102,8 @@ func TestRemoveImportNotFound(t *testing.T) {
 }
 
 func TestAddImportRefusesFileOutsideModule(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-grouped/src"),
-	)
-	other := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("import-grouped/src"),
-	)
+	d := service_tester.Prepare(t, "import-grouped/src")
+	other := service_tester.Prepare(t, "import-grouped/src")
 	source := service_tester.ReadFixtureFile(t, other, "pkg/target/example.go")
 	r, e := service_tester.NewService(t).File.AddImport(
 		t.Context(),

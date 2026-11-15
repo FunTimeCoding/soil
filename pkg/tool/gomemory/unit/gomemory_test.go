@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemory/result"
+	"github.com/funtimecoding/soil/pkg/tool/gomemory/unit/command_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"testing"
@@ -14,7 +15,14 @@ func TestProfileEmitsProfileAndPassesTopicAndDetail(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Profile = &client.ProfileResponse{Text: "alfa"}
-	output, _, code := run(t, c, "profile", "--topic", "bravo", "--detail")
+	output, _, code := command_tester.Run(
+		t,
+		c,
+		"profile",
+		"--topic",
+		"bravo",
+		"--detail",
+	)
 	assert.Integer(t, 0, code)
 	var p client.ProfileResponse
 	notation.MustDecode(output, &p, false)
@@ -29,7 +37,7 @@ func TestProfileEmitsProfileAndPassesTopicAndDetail(t *testing.T) {
 func TestProfileWithoutFlagsSendsNoTopicOrDetail(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
-	_, _, code := run(t, c, "profile")
+	_, _, code := command_tester.Run(t, c, "profile")
 	assert.Integer(t, 0, code)
 	assert.Count(t, 1, c.ProfileCalls)
 	assert.Nil(t, c.ProfileCalls[0].Topic)
@@ -40,7 +48,13 @@ func TestProfilePrintsRenderedDocument(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Profile = &client.ProfileResponse{Text: "# always\n\nalfa\n"}
-	output, failure, code := run(t, c, "profile", "--topic", "bravo")
+	output, failure, code := command_tester.Run(
+		t,
+		c,
+		"profile",
+		"--topic",
+		"bravo",
+	)
 	assert.Integer(t, 0, code)
 	assert.String(t, "", failure)
 	assert.String(t, "# always\n\nalfa\n", output)
@@ -50,7 +64,7 @@ func TestFailedProfileExitsWithItsMessage(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Failure = errors.New("foxtrot")
-	output, failure, code := run(t, c, "profile")
+	output, failure, code := command_tester.Run(t, c, "profile")
 	assert.Integer(t, 1, code)
 	assert.String(t, "", output)
 	assert.StringContains(t, "foxtrot", failure)
@@ -60,7 +74,7 @@ func TestStatisticEmitsSummaryForScope(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Tokens = &client.TokenSummary{Withheld: 3, Memories: 5}
-	output, _, code := run(t, c, "statistic", "--scope", "kilo")
+	output, _, code := command_tester.Run(t, c, "statistic", "--scope", "kilo")
 	assert.Integer(t, 0, code)
 	var s client.TokenSummary
 	notation.MustDecode(output, &s, false)
@@ -75,7 +89,7 @@ func TestRelationsEmitsEdges(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Edges = []client.Relation{{SourceName: "alfa", TargetName: "bravo"}}
-	output, _, code := run(
+	output, _, code := command_tester.Run(
 		t,
 		c,
 		"relations",
@@ -102,7 +116,7 @@ func TestRelationsEmitsEdges(t *testing.T) {
 func TestRelationsUntypedAsksForUntypedFilter(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
-	_, _, code := run(t, c, "relations", "--untyped")
+	_, _, code := command_tester.Run(t, c, "relations", "--untyped")
 	assert.Integer(t, 0, code)
 	assert.Count(t, 1, c.RelationCalls)
 	assert.FatalNotNil(t, c.RelationCalls[0].Type)
@@ -113,7 +127,7 @@ func TestFailedCallExitsWithItsMessage(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Failure = errors.New("foxtrot")
-	_, failure, code := run(t, c, "statistic")
+	_, failure, code := command_tester.Run(t, c, "statistic")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "foxtrot", failure)
 }

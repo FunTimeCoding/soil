@@ -1,12 +1,17 @@
 package preposition_name
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/preposition_name"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"testing"
 )
 
 func TestPrepositionNameFlagsTable(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 	testutil.AssertBlocked(t, results, 42)
 
 	for _, text := range []string{
@@ -33,7 +38,11 @@ func TestPrepositionNameFlagsTable(t *testing.T) {
 }
 
 func TestPrepositionNameLeavesBoundaries(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 
 	for _, name := range []string{
 		"CreatedAt ",
@@ -60,14 +69,22 @@ func TestPrepositionNameLeavesBoundaries(t *testing.T) {
 }
 
 func TestPrepositionNameMomentAnswerKeepsOnlyAt(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 	testutil.AssertBlockedContains(t, results, `ResaleFrom carries "from"`)
 	testutil.AssertBlockedContains(t, results, `dayOf carries "of"`)
 	testutil.AssertNotBlockedContains(t, results, "RestockAt ")
 }
 
 func TestPrepositionNameChecksConstantsAndVariables(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 
 	for _, text := range []string{
 		`DaysOfYear carries "of"`,
@@ -88,7 +105,11 @@ func TestPrepositionNameChecksConstantsAndVariables(t *testing.T) {
 }
 
 func TestPrepositionNameChecksParametersAndLocals(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 
 	for _, text := range []string{
 		`byName carries "by"`,
@@ -110,7 +131,11 @@ func TestPrepositionNameChecksParametersAndLocals(t *testing.T) {
 }
 
 func TestPrepositionNameFlagsAnsweredWords(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 
 	for _, text := range []string{
 		`VersionsSince carries "since"`,
@@ -136,7 +161,11 @@ func TestPrepositionNameFlagsAnsweredWords(t *testing.T) {
 }
 
 func TestPrepositionNameSparesInOpeningQuestion(t *testing.T) {
-	results := analyze(t)
+	results := testutil.AnalyzeFaces(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		preposition_name.Check,
+	)
 	testutil.AssertNotBlockedContains(t, results, "InStock ")
 	testutil.AssertBlockedContains(t, results, `InCart carries "in"`)
 	testutil.AssertBlockedContains(t, results, `StockedInAisle carries "in"`)

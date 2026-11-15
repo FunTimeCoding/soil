@@ -4,13 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestRetargetReferencesFollowsHandMove(t *testing.T) {
-	d := handMovedFixture(t)
+	d := module_tester.HandMoved(t)
 	s, m := service_tester.WithMemory(t)
 	r, e := s.Reference.RetargetReferences(
 		t.Context(),
@@ -36,7 +38,7 @@ func TestRetargetReferencesFollowsHandMove(t *testing.T) {
 }
 
 func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
-	d := handMovedFixture(t)
+	d := module_tester.HandMoved(t)
 	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
 		d,
@@ -55,7 +57,7 @@ func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 }
 
 func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
-	d := handMovedFixture(t)
+	d := module_tester.HandMoved(t)
 	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
 		d,
@@ -72,7 +74,7 @@ func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
 }
 
 func TestRetargetReferencesSaysWhenNothingCitesMove(t *testing.T) {
-	d := handMovedFixture(t)
+	d := module_tester.HandMoved(t)
 	r, e := service_tester.NewService(t).Reference.RetargetReferences(
 		t.Context(),
 		d,
@@ -85,6 +87,6 @@ func TestRetargetReferencesSaysWhenNothingCitesMove(t *testing.T) {
 	assert.StringContains(
 		t,
 		"nothing references the moved paths",
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 }

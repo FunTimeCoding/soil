@@ -8,7 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/permission_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"strings"
 	"testing"
 	"time"
@@ -18,10 +19,10 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
-	permissionSettings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
 	e := session.New("session-a")
 	e.WorkDirectory = project
-	s.Set.Client.AddSession(e)
+	s.Peers.Client.AddSession(e)
 	c := tool_call.New(
 		"Bash",
 		"toolu_a",
@@ -31,8 +32,8 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 	c.PermissionDecision = "accept"
 	c.PermissionSource = "user_temporary"
 	c.PermissionReason = "bashMiss:no-rule-match"
-	s.Set.Client.AddToolCall("session-a", c)
-	page := body(t, s.Server, constant.PermissionsPath)
+	s.Peers.Client.AddToolCall("session-a", c)
+	page := s.Body(t, constant.PermissionsPath)
 	markup_tester.AssertCount(t, 1, page, "tbody tr.opening-row")
 	markup_tester.AssertText(
 		t,
@@ -49,7 +50,7 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 		"tr.opening-row",
 		"hx-get",
 	)
-	opened := body(t, s.Server, "/permissions/open?blocker=sort")
+	opened := s.Body(t, "/permissions/open?blocker=sort")
 	assert.StringContains(t, `class="opening-detail"><td colspan="5">`, opened)
 	markup_tester.AssertText(t, "sort x", opened, "pre")
 	markup_tester.AssertAttribute(
@@ -59,7 +60,7 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 		"template tr.opening-row",
 		"hx-get",
 	)
-	closed := body(t, s.Server, "/permissions/close?blocker=sort")
+	closed := s.Body(t, "/permissions/close?blocker=sort")
 	markup_tester.AssertCount(t, 0, closed, "pre")
 	markup_tester.AssertAttribute(
 		t,
@@ -73,7 +74,7 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 func TestPermissionsRowGoneFromReportLeavesPage(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
-	gone := body(t, s.Server, "/permissions/open?blocker=sort")
+	gone := s.Body(t, "/permissions/open?blocker=sort")
 	markup_tester.AssertAttribute(
 		t,
 		"delete",
@@ -88,10 +89,10 @@ func TestPermissionsPageCutsLongCommand(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
-	permissionSettings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
 	e := session.New("session-a")
 	e.WorkDirectory = project
-	s.Set.Client.AddSession(e)
+	s.Peers.Client.AddSession(e)
 	c := tool_call.New(
 		"Bash",
 		"toolu_a",
@@ -99,11 +100,11 @@ func TestPermissionsPageCutsLongCommand(t *testing.T) {
 	)
 	c.Detail = join.Empty("sort ", strings.Repeat("a", 500))
 	c.PermissionSource = "user_temporary"
-	s.Set.Client.AddToolCall("session-a", c)
+	s.Peers.Client.AddToolCall("session-a", c)
 	markup_tester.AssertText(
 		t,
 		join.Empty("sort ", strings.Repeat("a", 395), "…"),
-		body(t, s.Server, "/permissions/open?blocker=sort"),
+		s.Body(t, "/permissions/open?blocker=sort"),
 		"pre",
 	)
 }
@@ -111,7 +112,7 @@ func TestPermissionsPageCutsLongCommand(t *testing.T) {
 func TestPermissionsPageSaysWhenNothingPrompted(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
-	page := body(t, s.Server, constant.PermissionsPath)
+	page := s.Body(t, constant.PermissionsPath)
 	assert.StringContains(t, "No permission prompts in this window.", page)
 	markup_tester.AssertCount(t, 0, page, "tr.opening-row")
 }

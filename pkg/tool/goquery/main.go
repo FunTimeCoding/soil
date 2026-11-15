@@ -12,7 +12,7 @@ func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	t := terminal.New(s)
-	c := client.NewLongEnvironment()
+	c := client.NewEnvironment(client.WithLong())
 	defer c.Close()
 	o := New(c, t)
 	argument.CobraInstrument(o, s)

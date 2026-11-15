@@ -3,13 +3,16 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	declaration := service_tester.ReadFixtureFile(
 		t,
 		d,
@@ -19,7 +22,7 @@ func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(
 		func() {
-			testutil.WriteFile(t, d, "pkg/caller/run.go", caller)
+			system_tester.Write(t, d, "pkg/caller/run.go", caller)
 		},
 	)
 	r, e := s.Symbol.Rename(
@@ -36,7 +39,7 @@ func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
 	assert.String(
 		t,
 		"pkg/caller/run.go: changed since it was read - nothing written, run again\npkg/caller/run.go: changed while the call ran - ran again\npkg/caller/run.go: changed while the call ran - ran again",
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 	assert.String(
 		t,
@@ -50,7 +53,7 @@ func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
 }
 
 func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	s := service_tester.NewService(t)
 	edited := false
@@ -61,7 +64,7 @@ func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
 			}
 
 			edited = true
-			testutil.WriteFile(t, d, "pkg/caller/run.go", caller)
+			system_tester.Write(t, d, "pkg/caller/run.go", caller)
 		},
 	)
 	r, e := s.Symbol.Rename(
@@ -78,7 +81,7 @@ func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
 	assert.StringContains(
 		t,
 		"pkg/caller/run.go: changed while the call ran - ran again",
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 	assert.StringContains(
 		t,
@@ -88,11 +91,11 @@ func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
 }
 
 func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				d,
 				"pkg/other/other.go",
@@ -111,7 +114,11 @@ func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.StringNotContains(t, "pkg/other/other.go", joinedConcerns(r))
+	assert.StringNotContains(
+		t,
+		"pkg/other/other.go",
+		rewrite_tester.JoinedConcerns(r),
+	)
 	assert.StringContains(
 		t,
 		"func IsGenerated(",
@@ -120,11 +127,11 @@ func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
 }
 
 func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				d,
 				"pkg/other/other.go",
@@ -146,18 +153,18 @@ func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
 	assert.StringContains(
 		t,
 		"pkg/other/other.go: changed since it was read",
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 }
 
 func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
 	consumer := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
-	s := replacingService(t, library, user)
+	s := module_tester.ReplacingService(t, library, user)
 	s.Commit.BeforeCommit(
 		func() {
-			testutil.WriteFile(t, user, "pkg/user/user.go", consumer)
+			system_tester.Write(t, user, "pkg/user/user.go", consumer)
 		},
 	)
 	r, e := s.Symbol.Rename(
@@ -174,7 +181,7 @@ func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 	assert.StringContains(
 		t,
 		filepath.Join(user, "pkg/user/user.go: changed since it was read"),
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 	assert.String(
 		t,
@@ -189,11 +196,11 @@ func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 }
 
 func TestRenameCommitsPastReplacingModuleChangeOutsideReach(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	s := replacingService(t, library, user)
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	s := module_tester.ReplacingService(t, library, user)
 	s.Commit.BeforeCommit(
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"pkg/alfa/alfa.go",
@@ -220,7 +227,7 @@ func TestRenameCommitsPastReplacingModuleChangeOutsideReach(t *testing.T) {
 }
 
 func TestRenameCommitsWhenNothingChanged(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	called := false
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(

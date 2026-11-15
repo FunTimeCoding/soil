@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/iterm"
 	"github.com/funtimecoding/soil/pkg/iterm/face"
 	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
+	"github.com/funtimecoding/soil/pkg/iterm/unit/iterm_tester"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,12 +15,14 @@ import (
 func TestAnsweringBridgeIsReachable(t *testing.T) {
 	assert.FatalOnError(
 		t,
-		bridge(t, http.StatusOK, `{"sessions":[]}`).Reachable(t.Context()),
+		iterm_tester.New(t, http.StatusOK, `{"sessions":[]}`).Reachable(
+			t.Context(),
+		),
 	)
 }
 
 func TestRestartingBridgeIsUnavailable(t *testing.T) {
-	e := bridge(
+	e := iterm_tester.New(
 		t,
 		http.StatusServiceUnavailable,
 		`{"error":"iTerm2 is starting"}`,
@@ -28,7 +31,7 @@ func TestRestartingBridgeIsUnavailable(t *testing.T) {
 }
 
 func TestSessionsFromRestartingBridgeAreUnavailable(t *testing.T) {
-	_, e := bridge(
+	_, e := iterm_tester.New(
 		t,
 		http.StatusServiceUnavailable,
 		`{"error":"iTerm2 is starting"}`,

@@ -2,7 +2,7 @@ package cross_service_tester
 
 import (
 	chat "github.com/funtimecoding/soil/pkg/chat/face"
-	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost_client_tester"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"

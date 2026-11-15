@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestRedactionFailsClosedWhileMemoryIsDown(t *testing.T) {
 	s.Store.EnsureSession("closed-session")
 	s.WriteContextLoadFile("closed-session")
 	s.Transcript.EnrichSession("closed-session")
-	s.MemoryPeer.Failure = refusedConnection()
+	s.MemoryPeer.Failure = outage_tester.RefusedDial()
 	loads, e := s.Transcript.SessionContextLoads(t.Context(), "closed-session")
 	assert.Count(t, 0, loads)
 	assert.True(t, unavailable.Is(e))
@@ -25,7 +26,7 @@ func TestRedactionFailsClosedWhileMemoryIsDown(t *testing.T) {
 
 func TestContextPanelSaysWhenMemoryIsDown(t *testing.T) {
 	s := service_tester.NewPanel(t, "panel-session")
-	s.MemoryPeer.Failure = refusedConnection()
+	s.MemoryPeer.Failure = outage_tester.RefusedDial()
 	assert.StringContains(
 		t,
 		"memory unreachable since",
@@ -35,7 +36,7 @@ func TestContextPanelSaysWhenMemoryIsDown(t *testing.T) {
 
 func TestTimelineSaysWhenMemoryIsDown(t *testing.T) {
 	s := service_tester.New(t)
-	s.MemoryPeer.Failure = refusedConnection()
+	s.MemoryPeer.Failure = outage_tester.RefusedDial()
 	entries, e := s.Event.Timeline(t.Context(), argument.Timeline{Limit: 10})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, entries)
@@ -45,7 +46,7 @@ func TestTimelineSaysWhenMemoryIsDown(t *testing.T) {
 func TestMomentWhileMemoryIsDownIsDeliveredLaterWithItsTime(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("moment-session")
-	s.MemoryPeer.Failure = refusedConnection()
+	s.MemoryPeer.Failure = outage_tester.RefusedDial()
 	s.Moment("moment-session", "kilo", "the light through the blinds")
 	assert.Count(t, 0, s.MemoryPeer.Impressions)
 	pending, e := s.Store.Store.PendingImpressions()
@@ -73,7 +74,7 @@ func TestMomentWhileMemoryIsDownIsDeliveredLaterWithItsTime(t *testing.T) {
 func TestRefusedImpressionGoesToSentryAndLeavesOutbox(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("refused-session")
-	s.MemoryPeer.Failure = refusedConnection()
+	s.MemoryPeer.Failure = outage_tester.RefusedDial()
 	s.Moment("refused-session", "lima", "first")
 	s.Moment("refused-session", "lima", "second")
 	s.MemoryPeer.Failure = nil

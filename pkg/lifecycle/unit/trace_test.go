@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/lifecycle/unit/trace_tester"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -15,7 +16,7 @@ import (
 )
 
 func TestIncomingTraceIsOnRequestHub(t *testing.T) {
-	p := serveTrace(
+	p := trace_tester.Serve(
 		t,
 		func(g *guard.Mux) {
 			g.Open(
@@ -32,13 +33,13 @@ func TestIncomingTraceIsOnRequestHub(t *testing.T) {
 		},
 	)
 	locator := fmt.Sprintf("http://localhost:%d/trace", p)
-	continued := tracedGet(
+	continued := trace_tester.Get(
 		t,
 		locator,
 		"0123456789abcdef0123456789abcdef-0123456789abcdef-1",
 	)
 	assert.Prefix(t, "0123456789abcdef0123456789abcdef-", continued)
-	fresh := tracedGet(t, locator, "")
+	fresh := trace_tester.Get(t, locator, "")
 	assert.True(t, fresh != "")
 	assert.StringNotContains(t, "0123456789abcdef0123456789abcdef", fresh)
 }
@@ -58,7 +59,7 @@ func TestOutgoingRequestCarriesIncomingTrace(t *testing.T) {
 	defer d.Close()
 	o := stall_client.New().Traced().Build()
 	defer o.Close()
-	p := serveTrace(
+	p := trace_tester.Serve(
 		t,
 		func(g *guard.Mux) {
 			g.Open(
@@ -76,7 +77,7 @@ func TestOutgoingRequestCarriesIncomingTrace(t *testing.T) {
 			)
 		},
 	)
-	tracedGet(
+	trace_tester.Get(
 		t,
 		fmt.Sprintf("http://localhost:%d/call", p),
 		"0123456789abcdef0123456789abcdef-0123456789abcdef-1",

@@ -20,7 +20,7 @@ test files live is `test-placement.md`.
   `go test -overlay` breaks without touching the tree, and `gobreak` runs a
   file of such breaks and reads each run as below. One break at a
   time: a break that panics aborts the package and hides every other
-  verdict. A break the test survives names a branch no test reaches, or
+  test's result. A break the test survives names a branch no test reaches, or
   code nothing needs. A break run reads its silences: `no tests to run` is a
   pattern that matched nothing, and a break whose pattern no longer matches
   broke nothing - both read green. Run the suite green before the break, then
@@ -28,7 +28,7 @@ test files live is `test-placement.md`.
   failed - a red from a build error, a setup step or a test already failing
   proves nothing about the case. The break, its run and its restore each go
   after the one before has finished: tool calls sent together run
-  concurrently, so a run beside the edit it judges can read the tree before
+  concurrently, so a run beside the edit it checks can read the tree before
   the edit lands, and a restore beside a command that changes directory can
   run in the wrong place.
 - **A split makes wiring a thing to break** - splitting a type turns wiring it
@@ -42,10 +42,13 @@ test files live is `test-placement.md`.
 
 ## Test names
 
-A test name is chopped: the words that carry the meaning, no articles
-(`test_article` flags them), and no tail the verdict already tells apart -
-`TestOpenAIServerIsReachable` beside
-`TestOpenAIServerThatRefusesIsNotReachable`. Two tests of one behaviour at
+A test name states the subject and what holds of it: the thing under test
+first, then its outcome in plain software words - `TestNpxBlocked`,
+`TestGitReadersAllowed`, `TestRunFailsOnUnknownExpect`. No articles
+(`test_article` flags them), no `Is` or `Are`, and no verbs that give code a
+voice or a mind - answers, refuses, says, keeps, sees. It is chopped: no tail
+the outcome already tells apart - `TestOpenAIServerListingModelsReachable`
+beside `TestUnauthorizedOpenAIServerUnreachable`. Two tests of one behaviour at
 different layers carry the layer. Prepositions stay when they carry meaning;
 `preposition_name` doesn't read test names.
 
@@ -184,15 +187,21 @@ A guarded daemon with a REST or MCP surface has an outage table
 (`go:pkg/web/outage_tester`): `Operations` over every REST operation and `Tools`
 over every MCP tool, against a peer that is down. Each name meets a fresh daemon
 built by the caller's `serve` on one shared reporter, so no operation inherits a
-guard another one opened. The
-table gives the daemon's usual reach and the names that differ from it, each
-`OutageReaches`, `OutageDegrades` or `OutageElsewhere`
-(`go:pkg/web/constant.OutageReach`), and `serve` hands back the daemon's own
-guard's `Unavailable`, so the guard witnesses every name: a reaching name
-opens the outage and answers `unavailable` - a 503, or a tool error carrying
-the guard's own outage text - a degrading one opens it and answers anyway, one
-elsewhere leaves the guard closed, and none captures. An
-exception or override naming nothing served fails by name. An operation
+guard another one opened. `serve` calls the daemon's
+`<path>/unit/outage_server` package: `New(t, r)`, or `New(t, r, peer)` when the
+daemon guards several peers and the peer name picks the double that fails. The
+double fails with `go:pkg/web/outage_tester.RefusedDial`. The table gives the
+daemon's usual reach and the names that differ from it, each `OutageReaches`,
+`OutageDegrades` or `OutageElsewhere` (`go:pkg/web/constant.OutageReach`), and
+`serve` hands back the daemon's own guard's `Unavailable`, looked up by peer
+name with `go:pkg/web/outage_tester.Guard`, which fails the test when no guard
+carries that name - an index into `Workers()` hands a table expecting
+`OutageElsewhere` a healthy guard that passes whatever the names do. The guard
+then checks every name: a reaching name opens the outage and answers
+`unavailable` - a 503, or a tool error carrying the guard's own outage text - a
+degrading one opens it and answers anyway, one elsewhere leaves the guard
+closed, and none captures. An exception or override naming nothing served
+fails by name. An operation
 stopping at `not_found` on an empty fixture never opens the guard and fails as
 never reaching the peer - override a placeholder argument the operation
 refuses, and seed in `serve` the state it needs when one write without the peer
@@ -200,6 +209,8 @@ serves it. State the peer must create, or a fixture that grows per tool - an
 order already shipped for one tool, a second order to merge into for the
 next - is no table's to build: the service test reaches that path with the
 peer stopped, and the table declares the name for what the placeholder meets.
+A provisioning runner never started waits forever on `sync`, so `serve` closes
+it before the table calls anything.
 
 A quiet class reads the same guarded or not, so an outage test cannot prove
 the guard; what only the guard does can - the next call failing at once,
@@ -207,7 +218,9 @@ without asking the peer. The double fails as the client does: a dial failure
 is a `connection.Failure` (a hand-built `net.OpError` classifies only around
 a real errno, `os.NewSyscallError("connect", syscall.ECONNREFUSED)`), where a
 bare `unreachable` error passes through as a refusal and the guard never
-opens. The guard answers `unavailable` on the call that opens the outage and
+opens. A test pointing a real client at a down peer, with no double between,
+gives it `go:pkg/web/outage_tester.RefusedAddress`, a closed server's
+address. The guard answers `unavailable` on the call that opens the outage and
 reports it only after `Lasting`, so a fast test counts the peer's calls, not
 the reporter's events. A guard comes back only through its probe loop, on a
 real timer from `ProbeMinimum`, so a test that needs the peer back fails a
@@ -237,12 +250,23 @@ it lives in the consumer.
   deferred after the lifecycle's `Close`, so it runs first.
 - On an `httptest.Server`: its own `Client()`, which `Close` takes care of.
 
+A peer that only answers is `go:pkg/web/upstream_server` at the call site -
+`WithStatus`, `WithAnswer`, `WithHeader`, `WithTLS` for a client that only
+speaks HTTPS - and the test reads what reached it through `Last()`,
+`LastBody()` and `Count()`. A builder in the home's `<subject>_tester` takes
+the address and builds the client against it - `New(t, address)` where the
+home has one client. A peer that routes or keeps state is a `<peer>_server`
+of its own (`test-placement.md`). The fake carries `WithObject()` only when
+its client chooses a decoder by `Content-Type`: generated OpenAPI clients and
+the openai SDK refuse a plain-text answer. A refusal fake whose client reads
+errors through `refusal.Reason` needs none, since that parses any body.
+
 ## Guard Battery
 
 Every guarded daemon has `<path>/unit/guard_test.go` (package
 `unit`): it starts the production `Mount` on a dynamic port via
-`generative/model_context_server.New(t, setup)` - `NewSignedOn` for a daemon
-that signs on - and asserts the full
+`generative/model_context_server.New(t, setup)` - with `WithSignOn()` for a
+daemon that signs on - and asserts the full
 auth contract with the battery methods, mirroring the mount surface:
 
 - `VerifyBase` — health and version open, and `route:/api/reachable` 401

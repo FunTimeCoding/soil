@@ -11,7 +11,7 @@ func (t *Tester) Close() {
 			t.stop.Close()
 			t.memoryGuard.Close()
 			t.queryGuard.Close()
-			t.Set.Close()
+			t.Peers.Close()
 			errors.PanicClose(t.searchDatabase)
 			relational.CloseMapper(t.Store.Mapper())
 		},

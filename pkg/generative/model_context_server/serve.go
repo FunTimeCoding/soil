@@ -17,9 +17,10 @@ import (
 
 func serve(
 	t *testing.T,
+	s *Server,
 	w *option.Web,
 	setup func(*guard.Mux),
-) *Server {
+) {
 	t.Helper()
 	p, n := system.ClaimPort()
 	b := lifecycle.New(logger.New(context.Background())).WithServer(
@@ -27,6 +28,7 @@ func serve(
 	)
 	b.Run()
 	assert.Listen(t, p)
-
-	return &Server{Port: p, Lifecycle: b, pool: stall_client.New().Build()}
+	s.Port = p
+	s.Lifecycle = b
+	s.pool = stall_client.New().Build()
 }

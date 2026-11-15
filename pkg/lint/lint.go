@@ -14,8 +14,8 @@ func Lint(
 	r := Report(name, root, o)
 	hasBlocked := output.Print(r, o.Summary)
 
-	if o.Census {
-		output.PrintCensus(r.Unchecked)
+	if o.Unchecked {
+		output.PrintUnchecked(r.Unchecked)
 	}
 
 	if hasBlocked {

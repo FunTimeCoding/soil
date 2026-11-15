@@ -8,10 +8,7 @@ import (
 )
 
 func TestMovePackageBaseMismatch(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-move/src"),
-	)
+	d := service_tester.Prepare(t, "package-move/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.MovePackage(
 		t.Context(),
@@ -26,10 +23,7 @@ func TestMovePackageBaseMismatch(t *testing.T) {
 }
 
 func TestMovePackageIntoItself(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-move/src"),
-	)
+	d := service_tester.Prepare(t, "package-move/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.MovePackage(
 		t.Context(),

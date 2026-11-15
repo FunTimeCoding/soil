@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/types/summary"
+	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/worker"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/testutil"
@@ -21,7 +22,7 @@ func TestPollDropsStanzaNoLongerListed(t *testing.T) {
 	w := worker.New(
 		func(context.Context) ([]*summary.Summary, error) {
 			s := summary.New(stanzas[0], 0)
-			s.Latest["full"] = fixtureStanzas("backed_up.json")[0].Backup[0]
+			s.Latest["full"] = service_tester.Stanzas("backed_up.json")[0].Backup[0]
 			stanzas = stanzas[1:]
 
 			return []*summary.Summary{s}, nil

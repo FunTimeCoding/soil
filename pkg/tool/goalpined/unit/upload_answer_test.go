@@ -6,7 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/upload_tester"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,11 +18,16 @@ import (
 func TestBodyThatIsNotPackageIsRefusedQuietly(t *testing.T) {
 	o := service_tester.New(t)
 	r := memory.New()
-	v := mountedReported(t, o.Option, r)
+	v := base.Mount(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusBadRequest,
-		postUpload(t, v, constant.FixtureUploadPath, []byte("not a package")),
+		upload_tester.Post(
+			t,
+			v,
+			constant.FixtureUploadPath,
+			[]byte("not a package"),
+		),
 	)
 	assert.Count(t, 0, r.Events())
 	assert.Count(t, 0, o.Indexer.Directories)
@@ -39,11 +46,11 @@ func TestMissingSignatureKeyIsCaptured(t *testing.T) {
 		os.Remove(filepath.Join(o.KeyDirectory, o.SignatureKey)),
 	)
 	r := memory.New()
-	v := mountedReported(t, o.Option, r)
+	v := base.Mount(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusInternalServerError,
-		postUpload(
+		upload_tester.Post(
 			t,
 			v,
 			constant.FixtureUploadPath,
@@ -57,11 +64,11 @@ func TestFailedIndexIsCaptured(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = errors.Format("index packages", "apk")
 	r := memory.New()
-	v := mountedReported(t, o.Option, r)
+	v := base.Mount(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusInternalServerError,
-		postUpload(
+		upload_tester.Post(
 			t,
 			v,
 			constant.FixtureUploadPath,

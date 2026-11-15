@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -81,5 +82,5 @@ func TestExportedRenameRefusedWhenReplacingModuleFailsToLoad(t *testing.T) {
 		"package alfa\n\nfunc SendMsg() string {\n\treturn \"x\"\n}\n",
 		testutil.ReadFile(t, filepath.Join(library, "alfa", "send.go")),
 	)
-	assert.Integer(t, 1, len(filterBlocked(r.Entries)))
+	assert.Integer(t, 1, len(fix_tester.Blocked(r.Entries)))
 }

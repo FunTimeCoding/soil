@@ -4,22 +4,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/option"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestRepositoryIgnoredReadsEachCheckoutRules(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"go.mod",
 		"module alfa\n\nrequire example.org/bravo v1.0.0\n",
 	)
-	testutil.WriteFile(t, root, ".gitignore", "/scratch\n")
-	testutil.WriteFile(
+	system_tester.Write(t, root, ".gitignore", "/scratch\n")
+	system_tester.Write(
 		t,
 		filepath.Join(root, soil.ParentDirectory, "bravo"),
 		".gitignore",

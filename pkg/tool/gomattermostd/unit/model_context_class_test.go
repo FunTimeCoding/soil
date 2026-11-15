@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestMissingPostIsAnsweredQuietlyOverModelContext(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	r.Client.MustCallToolError(
 		constant.GetThreadReplies,
 		map[string]any{"post_id": "missing"},
@@ -19,7 +20,7 @@ func TestMissingPostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 }
 
 func TestDownloadingIntoMissingDirectoryIsAnsweredQuietly(t *testing.T) {
-	r := model_context_tester.New(t, fileUpstream)
+	r := model_context_tester.New(t, mattermost_server.File)
 	directory := filepath.Join(t.TempDir(), "absent")
 	assert.StringContains(
 		t,
@@ -36,7 +37,7 @@ func TestDownloadingIntoMissingDirectoryIsAnsweredQuietly(t *testing.T) {
 }
 
 func TestUploadingMissingFileIsAnsweredQuietly(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	path := filepath.Join(t.TempDir(), "absent.txt")
 	assert.StringContains(
 		t,

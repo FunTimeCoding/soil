@@ -56,3 +56,8 @@ const (
 const InCluster = "in-cluster"
 const NamespacePath = "/var/run/secrets/kubernetes.io/serviceaccount/namespace"
 const HostnameLimit = 63
+const (
+	DialRefusedText     = "connect: connection refused"
+	DialUnknownHostText = "no such host"
+	DialTimeoutText     = "i/o timeout"
+)

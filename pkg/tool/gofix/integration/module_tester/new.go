@@ -2,7 +2,7 @@ package module_tester
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func New(
 ) *Module {
 	t.Helper()
 	directory := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"go.mod",

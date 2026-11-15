@@ -36,17 +36,17 @@ func TestClientClaimsReleasesAndStreams(t *testing.T) {
 			func(v []client.Claim) { events <- v },
 		)
 	}()
-	assert.Count(t, 0, nextEvent(t, events))
+	assert.Count(t, 0, assert.Signalled(t, events))
 	put, f := c.PutClaim(x, "jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, f)
 	assert.String(t, "alfa@host.example", put.Owner)
-	claimed := nextEvent(t, events)
+	claimed := assert.Signalled(t, events)
 	assert.Count(t, 1, claimed)
 	assert.String(t, "alfa@host.example", claimed[0].Owner)
 	assert.FatalOnError(t, c.DeleteClaim(x, "jira-ABC-1", "alfa@host.example"))
-	assert.Count(t, 0, nextEvent(t, events))
+	assert.Count(t, 0, assert.Signalled(t, events))
 	cancel()
-	assert.True(t, errors.Is(streamEnd(t, ended), context.Canceled))
+	assert.True(t, errors.Is(assert.Signalled(t, ended), context.Canceled))
 }
 
 func TestListenReportsUnreachableDaemon(t *testing.T) {

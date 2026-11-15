@@ -36,7 +36,7 @@ func TestShowSecretMasksValues(t *testing.T) {
 		map[string]any{"path": "alfa/bravo"},
 	)
 	assert.StringContains(t, "CHARLIE", result)
-	assert.False(t, contains(result, "delta-value"))
+	assert.StringNotContains(t, "delta-value", result)
 }
 
 func TestRevealSecretReturnsOneValue(t *testing.T) {
@@ -51,7 +51,7 @@ func TestRevealSecretReturnsOneValue(t *testing.T) {
 		map[string]any{"path": "alfa/bravo", "key": "CHARLIE"},
 	)
 	assert.StringContains(t, "delta-value", result)
-	assert.False(t, contains(result, "foxtrot-value"))
+	assert.StringNotContains(t, "foxtrot-value", result)
 }
 
 func TestRevealOfMissingKeyFailsWithoutCapture(t *testing.T) {

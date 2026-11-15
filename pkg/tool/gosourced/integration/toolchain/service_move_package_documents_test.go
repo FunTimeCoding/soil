@@ -4,13 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestMovePackageRetargetsDocuments(t *testing.T) {
-	d := packageMoveDocumentFixture(t)
+	d := module_tester.PackageMoveDocument(t)
 	r, e := service_tester.NewService(t).Packages.MovePackage(
 		t.Context(),
 		d,
@@ -28,7 +30,7 @@ func TestMovePackageRetargetsDocuments(t *testing.T) {
 }
 
 func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
-	d := packageMoveDocumentFixture(t)
+	d := module_tester.PackageMoveDocument(t)
 	r, e := service_tester.NewService(t).Packages.MovePackage(
 		t.Context(),
 		d,
@@ -51,11 +53,11 @@ func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 }
 
 func TestMovePackageKeepsDocumentEditedMeanwhile(t *testing.T) {
-	d := packageMoveDocumentFixture(t)
+	d := module_tester.PackageMoveDocument(t)
 	s := service_tester.NewService(t)
 	s.Commit.BeforeCommit(
 		func() {
-			testutil.WriteFile(t, d, "doc/note.md", "Edited meanwhile.\n")
+			system_tester.Write(t, d, "doc/note.md", "Edited meanwhile.\n")
 		},
 	)
 	r, e := s.Packages.MovePackage(

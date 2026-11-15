@@ -11,10 +11,7 @@ import (
 )
 
 func TestExtractFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-function/src"),
-	)
+	d := service_tester.Prepare(t, "extract-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -41,10 +38,7 @@ func TestExtractFunction(t *testing.T) {
 }
 
 func TestExtractFunctionRemovesUnusedImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-function/src"),
-	)
+	d := service_tester.Prepare(t, "extract-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -64,10 +58,7 @@ func TestExtractFunctionRemovesUnusedImport(t *testing.T) {
 }
 
 func TestExtractFunctionNoImports(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-function/src"),
-	)
+	d := service_tester.Prepare(t, "extract-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -88,10 +79,7 @@ func TestExtractFunctionNoImports(t *testing.T) {
 }
 
 func TestExtractRenamesSourceWhenOneRemains(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-last-pair/src"),
-	)
+	d := service_tester.Prepare(t, "extract-last-pair/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -120,10 +108,7 @@ func TestExtractRenamesSourceWhenOneRemains(t *testing.T) {
 }
 
 func TestExtractTypeToFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-identity/src"),
-	)
+	d := service_tester.Prepare(t, "extract-identity/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -144,10 +129,7 @@ func TestExtractTypeToFile(t *testing.T) {
 }
 
 func TestExtractLeavesTypeWithoutRename(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-identity/src"),
-	)
+	d := service_tester.Prepare(t, "extract-identity/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -164,10 +146,7 @@ func TestExtractLeavesTypeWithoutRename(t *testing.T) {
 }
 
 func TestExtractFromTestFileKeepsItsName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-test-file/src"),
-	)
+	d := service_tester.Prepare(t, "extract-test-file/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -184,10 +163,7 @@ func TestExtractFromTestFileKeepsItsName(t *testing.T) {
 }
 
 func TestExtractFromTestFileCarriesRenamedImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-test-file/src"),
-	)
+	d := service_tester.Prepare(t, "extract-test-file/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -208,10 +184,7 @@ func TestExtractFromTestFileCarriesRenamedImport(t *testing.T) {
 }
 
 func TestExtractFromTestFileCarriesBuildConstraint(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-test-file/src"),
-	)
+	d := service_tester.Prepare(t, "extract-test-file/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -231,10 +204,7 @@ func TestExtractFromTestFileCarriesBuildConstraint(t *testing.T) {
 }
 
 func TestExtractResolvesTagGatedDependency(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-tagged-dependency/src"),
-	)
+	d := service_tester.Prepare(t, "extract-tagged-dependency/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),

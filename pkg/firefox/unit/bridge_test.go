@@ -10,7 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/firefox/constant"
 	"github.com/funtimecoding/soil/pkg/firefox/face"
 	"github.com/funtimecoding/soil/pkg/firefox/mock_client"
-	"github.com/funtimecoding/soil/pkg/firefox/unit/fake_extension"
+	"github.com/funtimecoding/soil/pkg/firefox/unit/extension_peer"
+	"github.com/funtimecoding/soil/pkg/firefox/unit/firefox_tester"
 	"testing"
 	"time"
 )
@@ -25,15 +26,15 @@ func TestClientAndItsMockShareFace(t *testing.T) {
 }
 
 func TestWithoutExtensionEveryCallIsUnavailable(t *testing.T) {
-	c, _ := bridge(t)
+	c, _ := firefox_tester.Bridge(t)
 	_, e := c.Tabs()
 	assert.True(t, unavailable.Is(e))
 	assert.False(t, classify.Reportable(e))
 }
 
 func TestCreatedTabComesBack(t *testing.T) {
-	c, s := bridge(t)
-	x := connected(t, c, s.URL)
+	c, s := firefox_tester.Bridge(t)
+	x := firefox_tester.Connected(t, c, s.URL)
 	x.Answer(
 		"create_tab",
 		map[string]any{"tab_id": 7, "url": "https://example.com"},
@@ -44,8 +45,8 @@ func TestCreatedTabComesBack(t *testing.T) {
 }
 
 func TestExtensionRefusalsCarryClasses(t *testing.T) {
-	c, s := bridge(t)
-	x := connected(t, c, s.URL)
+	c, s := firefox_tester.Bridge(t)
+	x := firefox_tester.Connected(t, c, s.URL)
 	x.Refuse("click", "selector matched nothing: #missing")
 	_, e := c.Click(1, "#missing")
 	assert.True(t, not_found.Is(e))
@@ -67,22 +68,22 @@ func TestExtensionRefusalsCarryClasses(t *testing.T) {
 }
 
 func TestClosedBridgeRefusesExtension(t *testing.T) {
-	c, s := bridge(t)
-	connected(t, c, s.URL)
+	c, s := firefox_tester.Bridge(t)
+	firefox_tester.Connected(t, c, s.URL)
 	c.Close()
 	c.Close()
 	_, e := c.Tabs()
 	assert.True(t, unavailable.Is(e))
-	fake_extension.Connect(t, s.URL)
+	extension_peer.Connect(t, s.URL)
 	time.Sleep(50 * time.Millisecond)
 	_, f := c.Tabs()
 	assert.True(t, unavailable.Is(f))
 }
 
 func TestNewConnectionSurvivesOldOneEnding(t *testing.T) {
-	c, s := bridge(t)
-	first := connected(t, c, s.URL)
-	second := fake_extension.Connect(t, s.URL)
+	c, s := firefox_tester.Bridge(t)
+	first := firefox_tester.Connected(t, c, s.URL)
+	second := extension_peer.Connect(t, s.URL)
 	second.Answer("list_tabs", []any{})
 	time.Sleep(50 * time.Millisecond)
 	first.Disconnect()

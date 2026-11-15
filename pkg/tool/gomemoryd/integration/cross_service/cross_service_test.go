@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/cross_service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/profile_tester"
 	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"testing"
 )
@@ -114,12 +114,12 @@ func TestProfileExcludesAlwaysMemoriesFromRelevant(t *testing.T) {
 	assert.StringContains(
 		t,
 		mark,
-		fixture.Section(raw, constant.AlwaysSectionHeading),
+		profile_tester.Section(raw, constant.AlwaysSectionHeading),
 	)
 	assert.StringNotContains(
 		t,
 		mark,
-		fixture.Section(raw, constant.RelevantSectionHeading),
+		profile_tester.Section(raw, constant.RelevantSectionHeading),
 	)
 }
 
@@ -162,12 +162,12 @@ func TestProfileHidesNoIndexMemoriesFromIndex(t *testing.T) {
 	assert.StringNotContains(
 		t,
 		fmt.Sprintf("%d error handling pattern", identifier),
-		fixture.Section(raw, constant.IndexSectionHeading),
+		profile_tester.Section(raw, constant.IndexSectionHeading),
 	)
 	assert.StringContains(
 		t,
 		mark,
-		fixture.Section(raw, constant.RelevantSectionHeading),
+		profile_tester.Section(raw, constant.RelevantSectionHeading),
 	)
 }
 
@@ -199,7 +199,7 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 	}
 
 	raw := s.MemoryClient.MustCallTool(constant.Profile, map[string]any{})
-	index := fixture.Section(raw, constant.IndexSectionHeading)
+	index := profile_tester.Section(raw, constant.IndexSectionHeading)
 	assert.StringContains(t, fmt.Sprintf("%d ", parentIdentifier), index)
 
 	for _, name := range childNames {

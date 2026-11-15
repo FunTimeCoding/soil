@@ -2,40 +2,18 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"net"
-	"net/http"
-	"net/http/httptest"
+	"github.com/funtimecoding/soil/pkg/prometheus/unit/alertmanager_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
 func TestAlertmanagerClientDialsConfiguredPort(t *testing.T) {
-	var seen string
-	s := httptest.NewServer(
-		http.HandlerFunc(
-			func(
-				w http.ResponseWriter,
-				r *http.Request,
-			) {
-				seen = r.URL.Path
-				w.Header().Set(webConstant.ContentType, webConstant.Object)
-				_, e := w.Write([]byte(`{}`))
-				errors.PanicOnError(e)
-			},
-		),
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{}`),
+		upstream_server.WithObject(),
 	)
-	defer s.Close()
-	c := alertmanager.New(
-		"127.0.0.1",
-		s.Listener.Addr().(*net.TCPAddr).Port,
-		false,
-		"",
-		"",
-	)
-	defer c.Close()
-	_, e := c.Status()
+	_, e := alertmanager_tester.New(t, s.URL).Status()
 	assert.FatalOnError(t, e)
-	assert.String(t, "/api/v2/status", seen)
+	assert.String(t, "/api/v2/status", s.Last().URL.Path)
 }

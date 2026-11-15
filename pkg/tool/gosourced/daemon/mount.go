@@ -21,7 +21,7 @@ func (d *Daemon) Mount(
 		server.HandlerFromMux(
 			server.NewStrictHandler(
 				gosourced.New(
-					d.census,
+					d.usage,
 					d.check,
 					d.diff,
 					d.module,

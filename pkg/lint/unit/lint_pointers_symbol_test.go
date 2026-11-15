@@ -3,6 +3,7 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/pointer_tester"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -19,7 +20,7 @@ func TestPointersSymbolDeclared(t *testing.T) {
 			"Wraps `go:pkg/provision/salt.Client` and `go:pkg/system/run/New()`.\n",
 		),
 	)
-	assertReport(t, "Alfa", false, nil, "", l)
+	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }
 
 func TestPointersSymbolUndeclared(t *testing.T) {
@@ -31,7 +32,7 @@ func TestPointersSymbolUndeclared(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -49,5 +50,5 @@ func TestPointersSymbolMemberChecksItsHead(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("Runs `go:pkg/provision/salt.Client.Run()` once.\n"),
 	)
-	assertReport(t, "Alfa", false, nil, "", l)
+	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }

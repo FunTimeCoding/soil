@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -23,5 +24,5 @@ func TestImportAliasFixIgnoresMethodNamesake(t *testing.T) {
 		"package example\n\nimport \"testmodule/pkg/helper\"\n\ntype Holder struct{}\n\nfunc (o *Holder) helper() string {\n\treturn helper.Value()\n}\n",
 		testutil.ReadFile(t, filepath.Join(directory, "holder.go")),
 	)
-	assertBuilds(t, directory)
+	fix_tester.Builds(t, directory)
 }

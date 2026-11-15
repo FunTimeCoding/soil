@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -20,7 +21,7 @@ func TestDeleteWhoseRefreshFailsStillAnswersAndReports(t *testing.T) {
 	r := memory.New()
 	d, clients := daemon_tester.New(t, r, constant.FixtureInstance)
 	clients[constant.FixtureInstance].FailProjects(errors.New("unreachable"))
-	v := startServer(t, d, r)
+	v := base.Mount(t, d, r)
 	defer v.Close()
 	q := web.NewPost(
 		locator.New(webConstant.Localhost).Insecure().Port(v.Port).Path(

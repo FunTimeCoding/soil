@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
 
@@ -19,7 +20,7 @@ func TestServiceMountMissingFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.MissingServiceMountKey)
+	scan_tester.Concern(t, constant.MissingServiceMountKey, s[0])
 }
 
 func TestServiceMountPresentClean(t *testing.T) {
@@ -33,5 +34,5 @@ func TestServiceMountPresentClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/mount.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], constant.MissingServiceMountKey)
+	scan_tester.NoConcern(t, constant.MissingServiceMountKey, s[0])
 }

@@ -3,12 +3,13 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
-	d := moveVisibilityFixture(t)
+	d := service_tester.Prepare(t, "move-visibility/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
@@ -22,7 +23,7 @@ func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 	assert.StringContains(
 		t,
 		"func piece() int",
@@ -36,7 +37,7 @@ func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
 }
 
 func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
-	d := moveVisibilityFixture(t)
+	d := service_tester.Prepare(t, "move-visibility/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
@@ -50,7 +51,7 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 	assert.StringContains(
 		t,
 		"func Lone() int",
@@ -64,7 +65,7 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 }
 
 func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
-	d := moveVisibilityFixture(t)
+	d := service_tester.Prepare(t, "move-visibility/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
@@ -78,7 +79,7 @@ func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 	assert.StringContains(
 		t,
 		"func Probe() int",

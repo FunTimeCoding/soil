@@ -11,4 +11,5 @@ const (
 const (
 	ObjectOpening = "{"
 	PanicPrefix   = "panic: "
+	PackageHeader = "# "
 )

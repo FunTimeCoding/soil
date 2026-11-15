@@ -4,19 +4,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
 func TestLoadPackagesDiscoversBuildTags(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "testmodule")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"pkg/example/example.go",
 		"package example\n\nfunc Hello() string { return \"hello\" }\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"pkg/example/example_test.go",
@@ -42,7 +43,7 @@ func TestLoadPackagesDiscoversBuildTags(t *testing.T) {
 func TestLoadPackagesTagOnlyTestPackage(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "testmodule")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"pkg/tagged/tagged_test.go",

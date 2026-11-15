@@ -2,11 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/base"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	v, _ := webServer(t)
+	v, _ := base.New(t)
 	v.VerifyBase(t)
 	v.VerifyFavicon(t)
 	v.VerifyOpen(t, constant.DashboardPath)

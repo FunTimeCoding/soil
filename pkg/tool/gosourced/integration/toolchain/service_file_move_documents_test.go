@@ -3,13 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
-	d := moveVisibilityFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-visibility/src")
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",
@@ -36,11 +37,8 @@ func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
 }
 
 func TestMoveSymbolsRetargetsSplitFileToPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-split-file/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-split-file/src")
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",
@@ -67,11 +65,8 @@ func TestMoveSymbolsRetargetsSplitFileToPackage(t *testing.T) {
 }
 
 func TestExtractToFileRetargetsRenamedResidual(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-last-pair/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "extract-last-pair/src")
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",

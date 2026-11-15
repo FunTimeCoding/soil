@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
@@ -16,7 +17,7 @@ import (
 func TestRefusalCarriesReasonFromBody(t *testing.T) {
 	e := refusal.New(
 		"push document",
-		answered(t, http.StatusInternalServerError),
+		upstream_server.Answered(t, http.StatusInternalServerError),
 		[]byte(`{"error":"disk full"}`),
 	)
 	assert.True(t, unexpected.Is(e))
@@ -27,7 +28,7 @@ func TestRefusalCarriesReasonFromBody(t *testing.T) {
 func TestCapturedRefusalIsReportedNotCapturedAgain(t *testing.T) {
 	e := refusal.New(
 		"push document",
-		answered(t, http.StatusInternalServerError),
+		upstream_server.Answered(t, http.StatusInternalServerError),
 		[]byte(`{"error":"disk full","event_identifier":"alfa"}`),
 	)
 	assert.True(t, reported.Is(e))
@@ -38,7 +39,7 @@ func TestCapturedRefusalIsReportedNotCapturedAgain(t *testing.T) {
 func TestNotFoundRefusalIsNotFound(t *testing.T) {
 	e := refusal.New(
 		"fetch item",
-		answered(t, http.StatusNotFound),
+		upstream_server.Answered(t, http.StatusNotFound),
 		[]byte(`{"error":"no such item"}`),
 	)
 	assert.True(t, not_found.Is(e))
@@ -48,7 +49,7 @@ func TestNotFoundRefusalIsNotFound(t *testing.T) {
 func TestConflictRefusalIsConflict(t *testing.T) {
 	e := refusal.New(
 		"unmute owner",
-		answered(t, http.StatusConflict),
+		upstream_server.Answered(t, http.StatusConflict),
 		[]byte(`{"error":"owner not muted: alfa"}`),
 	)
 	assert.True(t, conflict.Is(e))
@@ -58,7 +59,7 @@ func TestConflictRefusalIsConflict(t *testing.T) {
 func TestUnavailableRefusalIsUnavailable(t *testing.T) {
 	e := refusal.New(
 		"hybrid lookup",
-		answered(t, http.StatusServiceUnavailable),
+		upstream_server.Answered(t, http.StatusServiceUnavailable),
 		[]byte(`{"error":"embedder unreachable since 14:02"}`),
 	)
 	assert.True(t, unavailable.Is(e))
@@ -72,7 +73,7 @@ func TestUnavailableRefusalIsUnavailable(t *testing.T) {
 func TestProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
 	e := refusal.New(
 		"list items",
-		answered(t, http.StatusBadGateway),
+		upstream_server.Answered(t, http.StatusBadGateway),
 		[]byte(`{"error":"no healthy upstream"}`),
 	)
 	assert.True(t, unavailable.Is(e))
@@ -80,14 +81,18 @@ func TestProxysBadGatewayRefusalIsUnavailable(t *testing.T) {
 }
 
 func TestSuccessIsNoRefusal(t *testing.T) {
-	refusal.PanicOnFailure("notify", answered(t, http.StatusNoContent), nil)
+	refusal.PanicOnFailure(
+		"notify",
+		upstream_server.Answered(t, http.StatusNoContent),
+		nil,
+	)
 	assert.PanicContains(
 		t,
 		"notify status: 500",
 		func() {
 			refusal.PanicOnFailure(
 				"notify",
-				answered(t, http.StatusInternalServerError),
+				upstream_server.Answered(t, http.StatusInternalServerError),
 				nil,
 			)
 		},

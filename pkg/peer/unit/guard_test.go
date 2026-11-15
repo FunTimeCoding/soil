@@ -8,6 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/peer/unit/switchable_peer"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 	"time"
 )
@@ -16,7 +18,7 @@ func TestGuardPassesCallsThroughWhilePeerAnswers(t *testing.T) {
 	g := peer.New(
 		"charlie",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		memory.New(),
 	)
@@ -40,7 +42,7 @@ func TestOutageFailsFastWithoutReachingPeer(t *testing.T) {
 	g := peer.New(
 		"delta",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		r,
 	)
@@ -49,7 +51,7 @@ func TestOutageFailsFastWithoutReachingPeer(t *testing.T) {
 	call := func(context.Context) error {
 		calls++
 
-		return refusedConnection()
+		return outage_tester.RefusedDial()
 	}
 	assert.True(t, unavailable.Is(g.Do(t.Context(), call)))
 	e := g.Do(t.Context(), call)
@@ -64,7 +66,7 @@ func TestRefusalIsReportedOnceAndPeerStaysUp(t *testing.T) {
 	g := peer.New(
 		"india",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		r,
 	)
@@ -83,7 +85,7 @@ func TestAttemptLeavesEveryRefusalToCaller(t *testing.T) {
 	g := peer.New(
 		"juliett",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		r,
 	)
@@ -99,7 +101,7 @@ func TestAttemptLeavesEveryRefusalToCaller(t *testing.T) {
 		unavailable.Is(
 			g.Attempt(
 				t.Context(),
-				func(context.Context) error { return refusedConnection() },
+				func(context.Context) error { return outage_tester.RefusedDial() },
 			),
 		),
 	)
@@ -107,8 +109,8 @@ func TestAttemptLeavesEveryRefusalToCaller(t *testing.T) {
 }
 
 func TestGuardProbesUntilPeerReturns(t *testing.T) {
-	p := new(SwitchablePeer)
-	p.Fail(refusedConnection())
+	p := switchable_peer.New()
+	p.Fail(outage_tester.RefusedDial())
 	g := peer.New(
 		"foxtrot",
 		"http://server.test:8080",
@@ -123,7 +125,7 @@ func TestGuardProbesUntilPeerReturns(t *testing.T) {
 		unavailable.Is(
 			g.Do(
 				t.Context(),
-				func(context.Context) error { return refusedConnection() },
+				func(context.Context) error { return outage_tester.RefusedDial() },
 			),
 		),
 	)
@@ -147,7 +149,7 @@ func TestCallerThatStopsLeavesPeerUp(t *testing.T) {
 	g := peer.New(
 		"golf",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		memory.New(),
 	)

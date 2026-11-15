@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
@@ -23,7 +24,7 @@ func TestDaemonClosesClientItBuilt(t *testing.T) {
 }
 
 func TestIntentClockRunsOnlyWithPowerIntent(t *testing.T) {
-	assert.Count(t, 1, newDaemon(t, service_tester.NewSource(t)).Workers())
+	assert.Count(t, 1, base.Daemon(t, service_tester.NewSource(t)).Workers())
 	o := service_tester.NewOption(t, service_tester.NewSource(t))
 	o.PowerIntent = true
 	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())

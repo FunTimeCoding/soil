@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/profile_tester"
 	"strings"
 	"testing"
 )
@@ -13,7 +13,7 @@ import (
 func TestGetMemoryCompactByDefault(t *testing.T) {
 	s := model_context_tester.New(t)
 	identifier := s.DocumentSourcedMemory()
-	result := fixture.Decode(
+	result := model_context_tester.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemory,
@@ -45,7 +45,7 @@ func TestGetMemoryCompactByDefault(t *testing.T) {
 func TestGetMemoryDetailCarriesProvenance(t *testing.T) {
 	s := model_context_tester.New(t)
 	identifier := s.DocumentSourcedMemory()
-	result := fixture.Decode(
+	result := model_context_tester.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemory,
@@ -72,7 +72,7 @@ func TestGetMemoryGroupCompactByDefault(t *testing.T) {
 			constant.ParentIdentifier: parent,
 		},
 	)
-	result := fixture.Decode(
+	result := model_context_tester.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemoryGroup,
@@ -127,7 +127,7 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 			constant.Type:             "deep-dive",
 		},
 	)
-	result := fixture.Decode(
+	result := model_context_tester.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemoryGroup,
@@ -144,7 +144,7 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 func TestGetMemoryGroupDetailCarriesProvenance(t *testing.T) {
 	s := model_context_tester.New(t)
 	parent := s.DocumentSourcedMemory()
-	result := fixture.Decode(
+	result := model_context_tester.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemoryGroup,
@@ -258,7 +258,7 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 			constant.Add:              constant.AlwaysTag,
 		},
 	)
-	always := fixture.Section(
+	always := profile_tester.Section(
 		s.MustCallTool(constant.Profile, map[string]any{}),
 		constant.AlwaysSectionHeading,
 	)

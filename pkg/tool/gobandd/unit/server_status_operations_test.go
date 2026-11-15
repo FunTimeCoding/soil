@@ -5,12 +5,13 @@ import (
 	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
 func TestStatusSaysWhyGracefulShutdownWouldBeRefused(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
 	r, e := s.Client.GetStatusWithResponse(
 		t.Context(),
 		&client.GetStatusParams{Instance: new("alfa")},
@@ -31,7 +32,7 @@ func TestStatusSaysWhyGracefulShutdownWouldBeRefused(t *testing.T) {
 
 func TestStatusLeavesAcceptedForcedShutdownWithoutRefusal(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
 	r, e := s.Client.GetStatusWithResponse(
 		t.Context(),
 		&client.GetStatusParams{Instance: new("alfa")},

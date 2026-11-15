@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/argument/unit/argument_tester"
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/identity"
@@ -89,7 +90,7 @@ func TestLiteDefault(t *testing.T) {
 
 func TestLiteEnvironmentOverridesDefault(t *testing.T) {
 	t.Setenv(relationalConstant.LitePathEnvironment, "/somewhere/custom.sqlite")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Lite()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(t, "/somewhere/custom.sqlite", a.GetString(constant.Lite))
@@ -97,7 +98,7 @@ func TestLiteEnvironmentOverridesDefault(t *testing.T) {
 
 func TestLiteFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(relationalConstant.LitePathEnvironment, "/somewhere/custom.sqlite")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Lite()
 	assert.Nil(t, a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}))
 	assert.String(t, "/explicit/flag.sqlite", a.GetString(constant.Lite))
@@ -106,7 +107,7 @@ func TestLiteFlagOverridesEnvironment(t *testing.T) {
 func TestDatabaseDefaults(t *testing.T) {
 	t.Setenv(relationalConstant.LitePathEnvironment, "")
 	t.Setenv(relationalConstant.PostgresLocatorEnvironment, "")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Database()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(t, "", a.GetString(constant.Postgres))
@@ -117,7 +118,7 @@ func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
 		relationalConstant.PostgresLocatorEnvironment,
 		"postgres://env@localhost/env",
 	)
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Database()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(
@@ -132,7 +133,7 @@ func TestDatabaseFlagOverridesEnvironment(t *testing.T) {
 		relationalConstant.PostgresLocatorEnvironment,
 		"postgres://env@localhost/env",
 	)
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Database()
 	assert.Nil(
 		t,
@@ -148,13 +149,13 @@ func TestDatabaseFlagOverridesEnvironment(t *testing.T) {
 }
 
 func TestNoPositionalsAccepts(t *testing.T) {
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	assert.Nil(t, a.ParseArguments(nil))
 	a.NoPositionals("hint")
 }
 
 func TestNoPositionalsAcceptsFlags(t *testing.T) {
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.String(constant.File, "Procfile", constant.Path)
 	assert.Nil(t, a.ParseArguments([]string{"--file", "Other"}))
 	a.NoPositionals("hint")
@@ -167,7 +168,7 @@ func TestPositionalOutOfBoundsIsEmpty(t *testing.T) {
 func TestWebDefaults(t *testing.T) {
 	t.Setenv(webConstant.PortEnvironment, "")
 	t.Setenv(webConstant.BindEnvironment, "")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Web()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.Integer(t, 8080, a.GetInteger(constant.Port))
@@ -178,7 +179,7 @@ func TestWebDefaults(t *testing.T) {
 func TestWebEnvironmentOverridesDefault(t *testing.T) {
 	t.Setenv(webConstant.PortEnvironment, "9000")
 	t.Setenv(webConstant.BindEnvironment, "0.0.0.0")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Web()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.Integer(t, 9000, a.GetInteger(constant.Port))
@@ -189,7 +190,7 @@ func TestWebEnvironmentOverridesDefault(t *testing.T) {
 func TestWebFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(webConstant.PortEnvironment, "9000")
 	t.Setenv(webConstant.BindEnvironment, "0.0.0.0")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Web()
 	assert.Nil(
 		t,
@@ -205,7 +206,7 @@ func TestWebFlagOverridesEnvironment(t *testing.T) {
 func TestMetricListensOnEveryInterfaceByDefault(t *testing.T) {
 	t.Setenv(metricConstant.PortEnvironment, "")
 	t.Setenv(metricConstant.BindEnvironment, "")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Metric()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(t, ":9090", a.MetricAddress())
@@ -214,7 +215,7 @@ func TestMetricListensOnEveryInterfaceByDefault(t *testing.T) {
 func TestMetricBindEnvironmentNarrowsAddress(t *testing.T) {
 	t.Setenv(metricConstant.PortEnvironment, "9100")
 	t.Setenv(metricConstant.BindEnvironment, "192.0.2.1")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Metric()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(t, "192.0.2.1:9100", a.MetricAddress())
@@ -222,7 +223,7 @@ func TestMetricBindEnvironmentNarrowsAddress(t *testing.T) {
 
 func TestMetricBindFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(metricConstant.BindEnvironment, "192.0.2.1")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Metric()
 	assert.Nil(
 		t,
@@ -240,7 +241,7 @@ func TestMetricBindFlagOverridesEnvironment(t *testing.T) {
 
 func TestInventoryEnvironmentOverridesDefault(t *testing.T) {
 	t.Setenv(inventoryConstant.PathEnvironment, "/etc/gotest/gotestd.yaml")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Inventory()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(
@@ -252,7 +253,7 @@ func TestInventoryEnvironmentOverridesDefault(t *testing.T) {
 
 func TestInventoryFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(inventoryConstant.PathEnvironment, "/etc/gotest/gotestd.yaml")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Inventory()
 	assert.Nil(t, a.ParseArguments([]string{"--inventory", "/explicit.yaml"}))
 	assert.String(t, "/explicit.yaml", a.GetString(constant.Inventory))
@@ -260,7 +261,7 @@ func TestInventoryFlagOverridesEnvironment(t *testing.T) {
 
 func TestRepositoryEnvironmentOverridesDefault(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerRepositoryEnvironment, "git@host:a/b.git")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Repository()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(t, "git@host:a/b.git", a.GetString(constant.Repository))
@@ -268,7 +269,7 @@ func TestRepositoryEnvironmentOverridesDefault(t *testing.T) {
 
 func TestRepositoryFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerRepositoryEnvironment, "git@host:a/b.git")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.Repository()
 	assert.Nil(
 		t,
@@ -279,7 +280,7 @@ func TestRepositoryFlagOverridesEnvironment(t *testing.T) {
 
 func TestCloneDirectoryEnvironmentOverridesDefault(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerCloneDirectoryEnvironment, "/srv/clone")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.CloneDirectory()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.String(t, "/srv/clone", a.GetString(constant.CloneDirectory))
@@ -287,7 +288,7 @@ func TestCloneDirectoryEnvironmentOverridesDefault(t *testing.T) {
 
 func TestCloneDirectoryFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerCloneDirectoryEnvironment, "/srv/clone")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.CloneDirectory()
 	assert.Nil(t, a.ParseArguments([]string{"--clone-directory", "/explicit"}))
 	assert.String(t, "/explicit", a.GetString(constant.CloneDirectory))
@@ -295,7 +296,7 @@ func TestCloneDirectoryFlagOverridesEnvironment(t *testing.T) {
 
 func TestCopyModesDefaultsOff(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerCopyModesEnvironment, "")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.CopyModes()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.False(t, a.GetBoolean(constant.CopyModes))
@@ -303,7 +304,7 @@ func TestCopyModesDefaultsOff(t *testing.T) {
 
 func TestCopyModesEnvironmentTurnsOn(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerCopyModesEnvironment, "1")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.CopyModes()
 	assert.Nil(t, a.ParseArguments(nil))
 	assert.True(t, a.GetBoolean(constant.CopyModes))
@@ -311,7 +312,7 @@ func TestCopyModesEnvironmentTurnsOn(t *testing.T) {
 
 func TestCopyModesFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(provisionConstant.RunnerCopyModesEnvironment, "1")
-	a := testInstance(t)
+	a := argument_tester.Instance(t)
 	a.CopyModes()
 	assert.Nil(t, a.ParseArguments([]string{"--copy-modes=false"}))
 	assert.False(t, a.GetBoolean(constant.CopyModes))

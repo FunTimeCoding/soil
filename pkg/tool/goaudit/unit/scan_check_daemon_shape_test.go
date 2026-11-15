@@ -2,57 +2,82 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
 
 func TestMissingDaemonFlaggedWhenArmed(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.Delete("pkg/tool/gotestd/daemon/daemon.go")
-	assertConcern(t, scanOne(t, v, true), constant.MissingDaemonKey)
+	scan_tester.Concern(
+		t,
+		constant.MissingDaemonKey,
+		scan_tester.One(t, v, true),
+	)
 }
 
 func TestMissingDaemonQuietWhenDisarmed(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.Delete("pkg/tool/gotestd/daemon/daemon.go")
-	assertNoConcern(t, scanOne(t, v, false), constant.MissingDaemonKey)
+	scan_tester.NoConcern(
+		t,
+		constant.MissingDaemonKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestMissingDaemonQuietWithDaemon(t *testing.T) {
-	s := scanOne(t, daemonFixture(constant.FixtureClosedRun), true)
-	assertNoConcern(t, s, constant.MissingDaemonKey)
+	s := scan_tester.One(t, scan_tester.Daemon(constant.FixtureClosedRun), true)
+	scan_tester.NoConcern(t, constant.MissingDaemonKey, s)
 }
 
 func TestMissingServiceBesideDaemon(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.Delete("pkg/tool/gotestd/service/service.go")
-	assertConcern(t, scanOne(t, v, false), constant.MissingServiceKey)
+	scan_tester.Concern(
+		t,
+		constant.MissingServiceKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestServiceBesideDaemonClean(t *testing.T) {
-	s := scanOne(t, daemonFixture(constant.FixtureClosedRun), false)
-	assertNoConcern(t, s, constant.MissingServiceKey)
+	s := scan_tester.One(
+		t,
+		scan_tester.Daemon(constant.FixtureClosedRun),
+		false,
+	)
+	scan_tester.NoConcern(t, constant.MissingServiceKey, s)
 }
 
 func TestMixedServiceFlagged(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.WriteString(
 		"pkg/tool/gotestd/service/book/service.go",
 		"package book\n\ntype Service struct{}\n",
 	)
-	assertConcern(t, scanOne(t, v, false), constant.MixedServiceKey)
+	scan_tester.Concern(
+		t,
+		constant.MixedServiceKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestResultPackageBesideServiceClean(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.WriteString(
 		"pkg/tool/gotestd/service/sync_result/result.go",
 		"package sync_result\n\ntype Result struct{}\n",
 	)
-	assertNoConcern(t, scanOne(t, v, false), constant.MixedServiceKey)
+	scan_tester.NoConcern(
+		t,
+		constant.MixedServiceKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestSeveralServicesWithoutCodeClean(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.Delete("pkg/tool/gotestd/service/service.go")
 	v.WriteString(
 		"pkg/tool/gotestd/service/book/service.go",
@@ -62,91 +87,135 @@ func TestSeveralServicesWithoutCodeClean(t *testing.T) {
 		"pkg/tool/gotestd/service/loan/service.go",
 		"package loan\n\ntype Service struct{}\n",
 	)
-	s := scanOne(t, v, false)
-	assertNoConcern(t, s, constant.MixedServiceKey)
-	assertNoConcern(t, s, constant.MissingServiceKey)
+	s := scan_tester.One(t, v, false)
+	scan_tester.NoConcern(t, constant.MixedServiceKey, s)
+	scan_tester.NoConcern(t, constant.MissingServiceKey, s)
 }
 
 func TestServiceImportingMapperFlagged(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.Delete("pkg/tool/gotestd/service/service.go")
 	v.WriteString(
 		"pkg/tool/gotestd/service/book/service.go",
 		constant.FixtureMapperService,
 	)
-	assertConcern(t, scanOne(t, v, false), constant.ServiceImportsMapperKey)
+	scan_tester.Concern(
+		t,
+		constant.ServiceImportsMapperKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestDaemonImportingMapperClean(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.WriteString(
 		"pkg/tool/gotestd/daemon/new.go",
 		"package daemon\n\nimport \"gorm.io/gorm\"\n\nfunc New(m *gorm.DB) {}\n",
 	)
-	assertNoConcern(t, scanOne(t, v, false), constant.ServiceImportsMapperKey)
+	scan_tester.NoConcern(
+		t,
+		constant.ServiceImportsMapperKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestRunBuildingClockFlagged(t *testing.T) {
-	s := scanOne(t, daemonFixture(constant.FixtureClockRun), false)
-	assertConcern(t, s, constant.RunBuildsClockKey)
-	assertNoConcern(t, s, constant.RunBuildsClientKey)
+	s := scan_tester.One(t, scan_tester.Daemon(constant.FixtureClockRun), false)
+	scan_tester.Concern(t, constant.RunBuildsClockKey, s)
+	scan_tester.NoConcern(t, constant.RunBuildsClientKey, s)
 }
 
 func TestRunBuildingClockQuietBeforeDaemon(t *testing.T) {
-	v := daemonFixture(constant.FixtureClockRun)
+	v := scan_tester.Daemon(constant.FixtureClockRun)
 	v.Delete("pkg/tool/gotestd/daemon/daemon.go")
-	assertNoConcern(t, scanOne(t, v, true), constant.RunBuildsClockKey)
+	scan_tester.NoConcern(
+		t,
+		constant.RunBuildsClockKey,
+		scan_tester.One(t, v, true),
+	)
 }
 
 func TestRunBuildingClientFlagged(t *testing.T) {
-	s := scanOne(t, daemonFixture(constant.FixtureClientRun), false)
-	assertConcern(t, s, constant.RunBuildsClientKey)
+	s := scan_tester.One(
+		t,
+		scan_tester.Daemon(constant.FixtureClientRun),
+		false,
+	)
+	scan_tester.Concern(t, constant.RunBuildsClientKey, s)
 }
 
 func TestRunBuildingOnlyDaemonClean(t *testing.T) {
-	s := scanOne(t, daemonFixture(constant.FixtureClosedRun), false)
-	assertNoConcern(t, s, constant.RunBuildsClientKey)
-	assertNoConcern(t, s, constant.RunBuildsClockKey)
+	s := scan_tester.One(
+		t,
+		scan_tester.Daemon(constant.FixtureClosedRun),
+		false,
+	)
+	scan_tester.NoConcern(t, constant.RunBuildsClientKey, s)
+	scan_tester.NoConcern(t, constant.RunBuildsClockKey, s)
 }
 
 func TestDaemonNotClosedFlagged(t *testing.T) {
-	v := daemonFixture(constant.FixtureUnclosedRun)
+	v := scan_tester.Daemon(constant.FixtureUnclosedRun)
 	v.WriteString("pkg/tool/gotestd/daemon/close.go", "package daemon\n")
-	assertConcern(t, scanOne(t, v, false), constant.DaemonNotClosedKey)
+	scan_tester.Concern(
+		t,
+		constant.DaemonNotClosedKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestDaemonClosedClean(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.WriteString("pkg/tool/gotestd/daemon/close.go", "package daemon\n")
-	assertNoConcern(t, scanOne(t, v, false), constant.DaemonNotClosedKey)
+	scan_tester.NoConcern(
+		t,
+		constant.DaemonNotClosedKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestSurfaceHoldingDaemonFlagged(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.WriteString(
 		"pkg/tool/gotestd/model_context/new.go",
 		"package model_context\n\nimport \"example.org/pkg/tool/gotestd/daemon\"\n",
 	)
-	assertConcern(t, scanOne(t, v, false), constant.SurfaceHoldsDaemonKey)
+	scan_tester.Concern(
+		t,
+		constant.SurfaceHoldsDaemonKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestSurfaceHoldingServiceClean(t *testing.T) {
-	v := daemonFixture(constant.FixtureClosedRun)
+	v := scan_tester.Daemon(constant.FixtureClosedRun)
 	v.WriteString(
 		"pkg/tool/gotestd/model_context/new.go",
 		"package model_context\n\nimport \"example.org/pkg/tool/gotestd/service\"\n",
 	)
-	assertNoConcern(t, scanOne(t, v, false), constant.SurfaceHoldsDaemonKey)
+	scan_tester.NoConcern(
+		t,
+		constant.SurfaceHoldsDaemonKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestMountOutsideDaemonFlagged(t *testing.T) {
-	v := guardedDaemon()
+	v := scan_tester.GuardedDaemon()
 	v.WriteString("pkg/tool/gotestd/mount.go", "package gotestd\n")
-	assertConcern(t, scanOne(t, v, false), constant.MissingServiceMountKey)
+	scan_tester.Concern(
+		t,
+		constant.MissingServiceMountKey,
+		scan_tester.One(t, v, false),
+	)
 }
 
 func TestMountInDaemonClean(t *testing.T) {
-	v := guardedDaemon()
+	v := scan_tester.GuardedDaemon()
 	v.WriteString("pkg/tool/gotestd/daemon/mount.go", "package daemon\n")
-	assertNoConcern(t, scanOne(t, v, false), constant.MissingServiceMountKey)
+	scan_tester.NoConcern(
+		t,
+		constant.MissingServiceMountKey,
+		scan_tester.One(t, v, false),
+	)
 }

@@ -8,10 +8,7 @@ import (
 )
 
 func TestFindLiteralsGroupsOutsideSitesByShape(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-literals/src"),
-	)
+	d := service_tester.Prepare(t, "find-literals/src")
 	r, literals, e := service_tester.NewService(t).Pattern.FindLiterals(
 		d,
 		"example/pkg/target",
@@ -46,10 +43,7 @@ func TestFindLiteralsGroupsOutsideSitesByShape(t *testing.T) {
 }
 
 func TestFindLiteralsCollapsesMultilineExemplar(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-literals-exemplar/src"),
-	)
+	d := service_tester.Prepare(t, "find-literals-exemplar/src")
 	_, literals, e := service_tester.NewService(t).Pattern.FindLiterals(
 		d,
 		"example/pkg/target",
@@ -64,10 +58,7 @@ func TestFindLiteralsCollapsesMultilineExemplar(t *testing.T) {
 }
 
 func TestFindLiteralsRefusesMissingType(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-literals/src"),
-	)
+	d := service_tester.Prepare(t, "find-literals/src")
 	r, literals, e := service_tester.NewService(t).Pattern.FindLiterals(
 		d,
 		"example/pkg/target",
@@ -79,10 +70,7 @@ func TestFindLiteralsRefusesMissingType(t *testing.T) {
 }
 
 func TestFindLiteralsRefusesNonStruct(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-literals/src"),
-	)
+	d := service_tester.Prepare(t, "find-literals/src")
 	r, literals, e := service_tester.NewService(t).Pattern.FindLiterals(
 		d,
 		"example/pkg/target",

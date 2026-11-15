@@ -14,18 +14,13 @@ const (
 )
 
 const (
-	ExpectRed     = "red"
-	ExpectSurvive = "survive"
-)
-
-const (
-	ResultRed        = "red"
-	ResultPanic      = "panic"
-	ResultUnreached  = "unreached"
-	ResultSurvived   = "survived"
-	ResultUnmatched   = "unmatched"
-	ResultBuildFailed = "build failed"
-	ResultSetupFailed = "setup failed"
+	StatusKilled       = "killed"
+	StatusPanic        = "panic"
+	StatusNoCoverage   = "no coverage"
+	StatusSurvived     = "survived"
+	StatusUnmatched    = "unmatched"
+	StatusCompileError = "compile error"
+	StatusRuntimeError = "runtime error"
 )
 
 const (
@@ -45,7 +40,6 @@ const (
 	CoverFile       = "cover.out"
 	TemporaryPrefix = "gobreak-"
 	PackagePrefix   = "./"
-	PackageHeader   = "# "
 	NameSeparator   = "_"
 	FileMode        = 0o600
 )
@@ -57,9 +51,10 @@ const (
 	BaselineBuild    = "baseline: build failed: %s"
 	BaselineSetup    = "baseline: packages fail without a failing test: %s"
 	BaselineNoTests  = "baseline: the tests pattern matches no test"
+	UnknownExpect    = "break %s: expect %q is neither killed nor survived"
 	BaselinePassed   = "baseline  ok  %d tests\n"
 	UnmatchedFormat  = "%s: %s"
-	ReachedNever     = "%s:%d never ran"
+	NoCoverageDetail = "%s:%d never ran"
 	UnexpectedMarker = "  (expected %s)"
 	LineFormat       = "%s  %s  %s%s"
 	LinePrint        = "%s\n"

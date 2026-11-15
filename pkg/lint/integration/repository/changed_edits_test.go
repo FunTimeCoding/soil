@@ -2,8 +2,9 @@ package repository
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/git/repository_tester"
 	"github.com/funtimecoding/soil/pkg/lint/reach"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
@@ -11,15 +12,20 @@ import (
 func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
-	testutil.WriteFile(t, root, "alfa.go", "package alfa\n")
-	testutil.WriteFile(t, root, "bravo.go", "package alfa\n")
-	testutil.WriteFile(t, root, "charlie.go", "package alfa\n")
-	git(t, root, "init", "-q")
-	git(t, root, "add", "--all")
-	git(t, root, "commit", "--quiet", "--message=alfa")
-	testutil.WriteFile(t, root, "bravo.go", "package alfa\n\nfunc Bravo() {}\n")
-	testutil.WriteFile(t, root, "delta.go", "package alfa\n")
-	git(t, root, "mv", "charlie.go", "echo.go")
+	system_tester.Write(t, root, "alfa.go", "package alfa\n")
+	system_tester.Write(t, root, "bravo.go", "package alfa\n")
+	system_tester.Write(t, root, "charlie.go", "package alfa\n")
+	repository_tester.Identified(root,"init", "-q")
+	repository_tester.Identified(root,"add", "--all")
+	repository_tester.Identified(root,"commit", "--quiet", "--message=alfa")
+	system_tester.Write(
+		t,
+		root,
+		"bravo.go",
+		"package alfa\n\nfunc Bravo() {}\n",
+	)
+	system_tester.Write(t, root, "delta.go", "package alfa\n")
+	repository_tester.Identified(root,"mv", "charlie.go", "echo.go")
 	changed, f := reach.ChangedEdits(
 		root,
 		reach.NewEdits(
@@ -48,15 +54,15 @@ func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 func TestGlobReachesChangedFilesItMatches(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
-	testutil.WriteFile(t, root, "alfa.md", "alfa\n")
-	testutil.WriteFile(t, root, "bravo.md", "bravo\n")
-	testutil.WriteFile(t, root, "charlie.go", "package charlie\n")
-	git(t, root, "init", "-q")
-	git(t, root, "add", "--all")
-	git(t, root, "commit", "--quiet", "--message=alfa")
-	testutil.WriteFile(t, root, "bravo.md", "bravo changed\n")
-	testutil.WriteFile(t, root, "delta.md", "delta\n")
-	testutil.WriteFile(
+	system_tester.Write(t, root, "alfa.md", "alfa\n")
+	system_tester.Write(t, root, "bravo.md", "bravo\n")
+	system_tester.Write(t, root, "charlie.go", "package charlie\n")
+	repository_tester.Identified(root,"init", "-q")
+	repository_tester.Identified(root,"add", "--all")
+	repository_tester.Identified(root,"commit", "--quiet", "--message=alfa")
+	system_tester.Write(t, root, "bravo.md", "bravo changed\n")
+	system_tester.Write(t, root, "delta.md", "delta\n")
+	system_tester.Write(
 		t,
 		root,
 		"charlie.go",

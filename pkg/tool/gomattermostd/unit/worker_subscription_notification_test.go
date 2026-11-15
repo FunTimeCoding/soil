@@ -6,18 +6,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/cross_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/event_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
 	"time"
 )
 
 func TestSocketEventBecomesNotification(t *testing.T) {
-	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
+	r := cross_service_tester.New(
+		t,
+		mattermost_server.Notification,
+		10*time.Millisecond,
+	)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Start()
 	r.Upstream.Push(
-		postEvent(
+		event_tester.Posted(
 			&model.Post{
 				Id:       "reply",
 				RootId:   "alfa",
@@ -48,12 +54,16 @@ func TestSocketEventBecomesNotification(t *testing.T) {
 }
 
 func TestSocketEventInUnwatchedThreadIgnored(t *testing.T) {
-	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
+	r := cross_service_tester.New(
+		t,
+		mattermost_server.Notification,
+		10*time.Millisecond,
+	)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Start()
 	r.Upstream.Push(
-		postEvent(
+		event_tester.Posted(
 			&model.Post{
 				Id:       "reply",
 				RootId:   "elsewhere",

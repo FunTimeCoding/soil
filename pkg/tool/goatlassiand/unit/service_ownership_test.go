@@ -8,8 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/failing_jira"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
@@ -93,9 +93,11 @@ func TestRefreshFillsPlateAndNotifiesOnlyOnChange(t *testing.T) {
 }
 
 func TestFailedRefreshIsReportableAndKeepsPlate(t *testing.T) {
+	j := service_tester.NewJira(t)
+	j.Fail(j.Search, errors.Format("search refused", "ALFA"))
 	v := service_tester.NewService(
 		t,
-		failing_jira.New(errors.Format("search refused", "ALFA")),
+		j,
 		service_tester.NewConfluence(t),
 		nil,
 		notifier.New(),
@@ -107,9 +109,11 @@ func TestFailedRefreshIsReportableAndKeepsPlate(t *testing.T) {
 }
 
 func TestOutageIsLeftToGuard(t *testing.T) {
+	j := service_tester.NewJira(t)
+	j.Fail(j.Search, outage_tester.RefusedDial())
 	v := service_tester.NewService(
 		t,
-		failing_jira.New(refusedConnection()),
+		j,
 		service_tester.NewConfluence(t),
 		nil,
 		notifier.New(),

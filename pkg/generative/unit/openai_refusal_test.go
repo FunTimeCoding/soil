@@ -8,46 +8,46 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/openai"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
-	"sync/atomic"
 	"testing"
 )
 
 func TestOpenAIRefusedBodyIsValidationError(t *testing.T) {
-	e := openaiEmbedding(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		`{"error":{"message":"Invalid body: failed to parse JSON value","type":"invalid_request","code":"invalid_json"}}`,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(
+			`{"error":{"message":"Invalid body: failed to parse JSON value","type":"invalid_request","code":"invalid_json"}}`,
+		),
 	)
+	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
+	defer c.Close()
+	_, e := c.Embed(t.Context(), []string{"alfa"})
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "Invalid body", e.Error())
 }
 
 func TestOpenAIServerErrorIsUnexpectedAndNotRetried(t *testing.T) {
-	var calls atomic.Int64
-	s, _ := upstream_tester.New(t, http.StatusOK, "")
-	s.Config.Handler = http.HandlerFunc(
-		func(
-			w http.ResponseWriter,
-			_ *http.Request,
-		) {
-			calls.Add(1)
-			w.WriteHeader(http.StatusInternalServerError)
-		},
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusInternalServerError),
 	)
 	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
 	defer c.Close()
 	_, e := c.Embed(t.Context(), []string{"alfa"})
 	assert.True(t, unexpected.Is(e))
-	assert.Integer(t, 1, int(calls.Load()))
+	assert.Integer(t, 1, s.Count())
 }
 
 func TestBusyOpenAIServerIsUnavailable(t *testing.T) {
-	e := openaiEmbedding(
+	s := upstream_server.New(
 		t,
-		http.StatusServiceUnavailable,
-		`{"error":{"message":"busy"}}`,
+		upstream_server.WithStatus(http.StatusServiceUnavailable),
+		upstream_server.WithAnswer(`{"error":{"message":"busy"}}`),
 	)
+	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
+	defer c.Close()
+	_, e := c.Embed(t.Context(), []string{"alfa"})
 	assert.True(t, unavailable.Is(e))
 }

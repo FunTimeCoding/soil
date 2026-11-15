@@ -8,10 +8,7 @@ import (
 )
 
 func TestMoveRenamesShadowingLocal(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-shadowing-local/src"),
-	)
+	d := service_tester.Prepare(t, "move-shadowing-local/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -42,10 +39,7 @@ func TestMoveRenamesShadowingLocal(t *testing.T) {
 }
 
 func TestMoveRefusesShadowingLocalWithoutFreeLetter(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-shadowing-local-refused/src"),
-	)
+	d := service_tester.Prepare(t, "move-shadowing-local-refused/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,

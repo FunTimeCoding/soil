@@ -13,7 +13,7 @@ func describePower(
 ) *plan.Power {
 	result := plan.NewPower(v.Instance, v.Power)
 
-	if o := verdict(v, operation, force); o != nil && o.Refusal != nil {
+	if o := matchingOperation(v, operation, force); o != nil && o.Refusal != nil {
 		result.Refusal = o.Refusal
 
 		return result

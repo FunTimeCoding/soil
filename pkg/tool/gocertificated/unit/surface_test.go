@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/model_context_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/publish_tester"
@@ -205,14 +206,16 @@ func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 	action := o.Forge.Commits()[0].Actions
 	directory := t.TempDir()
 	manifest := filepath.Join(directory, "authority-secret.yaml")
-	write(
+	system_tester.Write(
 		t,
-		manifest,
+		directory,
+		"authority-secret.yaml",
 		publish_tester.Content(action, constant.FixtureSecretPath),
 	)
-	write(
+	system_tester.Write(
 		t,
-		gosecret.GetDecodedPath(manifest),
+		directory,
+		gosecret.GetDecodedPath("authority-secret.yaml"),
 		publish_tester.Content(
 			action,
 			gosecret.GetDecodedPath(constant.FixtureSecretPath),
@@ -243,7 +246,7 @@ func TestEveryPageRenders(t *testing.T) {
 
 func TestRootIsCreatedThroughForm(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
 	assert.StringContains(
 		t,
 		"Example Root CA",
@@ -253,20 +256,26 @@ func TestRootIsCreatedThroughForm(t *testing.T) {
 
 func TestFormRejectionKeepsValues(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
-	page := o.Submit(constant.CreateAuthorityPath, rootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
+	page := o.Submit(
+		constant.CreateAuthorityPath,
+		web_interface_tester.RootValues(),
+	)
 	assert.StringContains(t, "already live", page)
 	assert.StringContains(t, "Example Root CA", page)
 }
 
 func TestIssuedKeyIsShownOnceThenNeverAgain(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
-	o.Submit(constant.CreateAuthorityPath, clusterValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.ClusterValues())
 	assert.StringContains(
 		t,
 		"PRIVATE KEY",
-		o.Submit(constant.IssueCertificatePath, leafValues()),
+		o.Submit(
+			constant.IssueCertificatePath,
+			web_interface_tester.LeafValues(),
+		),
 	)
 	assert.StringNotContains(
 		t,
@@ -277,7 +286,7 @@ func TestIssuedKeyIsShownOnceThenNeverAgain(t *testing.T) {
 
 func TestPublishButtonCommitsChain(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
 	assert.StringContains(
 		t,
 		"certificate/root/certificate.pem",
@@ -294,6 +303,6 @@ func TestPublishButtonCommitsChain(t *testing.T) {
 
 func TestRootPathServesAnchorAsText(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
 	assert.StringContains(t, "BEGIN CERTIFICATE", o.Page(constant.RootPath))
 }

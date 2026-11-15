@@ -52,9 +52,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/census:
+  /api/usage:
     get:
-      operationId: getCensus
+      operationId: getUsage
       parameters:
       - name: module
         in: query
@@ -82,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Census"
+                $ref: "#/components/schemas/Usage"
         "400":
           description: Unknown package, or the type is not a struct.
           content:
@@ -302,7 +302,7 @@ components:
           type: array
           items:
             type: string
-    Census:
+    Usage:
       type: object
       required:
       - package
@@ -322,12 +322,12 @@ components:
         methods:
           type: array
           items:
-            $ref: "#/components/schemas/CensusMethod"
+            $ref: "#/components/schemas/UsageMethod"
         unloaded:
           type: array
           items:
-            $ref: "#/components/schemas/CensusUnloaded"
-    CensusUnloaded:
+            $ref: "#/components/schemas/UsageUnloaded"
+    UsageUnloaded:
       type: object
       required:
       - package
@@ -340,7 +340,7 @@ components:
           type: string
         lost:
           type: string
-    CensusMethod:
+    UsageMethod:
       type: object
       required:
       - name
@@ -363,7 +363,7 @@ components:
         callers:
           type: array
           items:
-            $ref: "#/components/schemas/CensusCaller"
+            $ref: "#/components/schemas/UsageCaller"
         calls:
           description: Methods of the type it calls, through free functions too.
           type: array
@@ -383,7 +383,7 @@ components:
           description: Methods it calls on the module's other types, by type.
           type: array
           items:
-            $ref: "#/components/schemas/CensusUse"
+            $ref: "#/components/schemas/UsedType"
         packages:
           description: The module's other packages it references.
           type: array
@@ -396,12 +396,12 @@ components:
           description: It takes the transaction store as a parameter.
           type: boolean
         tables:
-          $ref: "#/components/schemas/CensusTables"
+          $ref: "#/components/schemas/UsageTables"
         reach:
           description: The tables with every method it calls, transitively.
           allOf:
-          - $ref: "#/components/schemas/CensusTables"
-    CensusCaller:
+          - $ref: "#/components/schemas/UsageTables"
+    UsageCaller:
       type: object
       required:
       - kind
@@ -418,7 +418,7 @@ components:
           type: string
         count:
           type: integer
-    CensusUse:
+    UsedType:
       type: object
       required:
       - type
@@ -430,7 +430,7 @@ components:
           type: array
           items:
             type: string
-    CensusTables:
+    UsageTables:
       type: object
       required:
       - read

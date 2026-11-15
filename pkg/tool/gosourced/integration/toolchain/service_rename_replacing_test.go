@@ -3,14 +3,17 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestRenameRewritesReplacingModule(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -32,13 +35,13 @@ func TestRenameRewritesReplacingModule(t *testing.T) {
 	assert.StringContains(
 		t,
 		filepath.Join(user, "pkg/user/user.go: Log → Write"),
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 }
 
 func TestRenameFieldReachesReplacingModuleThroughAnotherPackage(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -57,9 +60,9 @@ func TestRenameFieldReachesReplacingModuleThroughAnotherPackage(t *testing.T) {
 }
 
 func TestRenameDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
 	source := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -81,9 +84,9 @@ func TestRenameDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 }
 
 func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -100,7 +103,7 @@ func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
 			user,
 			"pkg/user/user.go: example/pkg/user.Log would lose access",
 		),
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 	assert.String(
 		t,
@@ -110,15 +113,15 @@ func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
 }
 
 func TestRenameRefusedWhenReplacingModuleDoesNotTypeCheck(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	testutil.WriteFile(
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	system_tester.Write(
 		t,
 		user,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"other.test/lib\"\n\nfunc Broken() string {\n\treturn lib.Log(missing)\n}\n",
 	)
 	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	_, e := replacingService(t, library, user).Symbol.Rename(
+	_, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -136,8 +139,8 @@ func TestRenameRefusedWhenReplacingModuleDoesNotTypeCheck(t *testing.T) {
 }
 
 func TestRenameSkipsReplacingModuleThatDoesNotReach(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/unused",

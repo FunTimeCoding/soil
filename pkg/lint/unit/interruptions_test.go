@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/reflow"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -68,7 +69,7 @@ func TestInterruptingListIsConcernThatIsNotFixed(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("one two\n- three four\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,

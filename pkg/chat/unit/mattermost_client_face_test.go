@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/face"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client"
-	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost_client_tester"
 	"net/http"
 	"testing"
 )

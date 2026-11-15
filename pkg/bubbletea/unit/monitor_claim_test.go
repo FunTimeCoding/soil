@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
+	"github.com/funtimecoding/soil/pkg/bubbletea/unit/monitor_tester"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
@@ -19,7 +20,7 @@ import (
 
 func TestWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	s := base.New(t)
-	connectTo(t, s.Port)
+	monitor_tester.Connect(t, s.Port)
 	m := monitor.New(true, memory.New())
 	defer m.Close()
 	owner := fmt.Sprintf(
@@ -52,7 +53,7 @@ func TestWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	)
 	present.Label = present.Identifier
 	_, c := m.Update(fetch.Message{Items: []*item.Item{present}})
-	runCommand(c)
+	monitor_tester.Run(c)
 	r, g := d.GetClaims(x)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, r)

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -14,7 +15,7 @@ func TestMarkupClean(t *testing.T) {
 		stringsConstant.UpperBravo,
 		strings.NewReader("---\nmyKey: myValue\n"),
 	)
-	assertReport(t, "Bravo", false, nil, "", l)
+	lint_tester.Report(t, "Bravo", false, nil, "", l)
 }
 
 func TestMarkup(t *testing.T) {
@@ -22,7 +23,7 @@ func TestMarkup(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("myKey: myValue\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,

@@ -5,11 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
-	"sync/atomic"
 	"testing"
 )
 
@@ -31,20 +32,25 @@ func TestNotifierNotify(t *testing.T) {
 }
 
 func TestNotifierNotifySkipsEmptyCallsign(t *testing.T) {
-	var calls atomic.Int32
-	c := answering(t, http.StatusOK, &calls)
+	s := upstream_server.New(t)
+	c := client.New(s.URL, false, "")
+	t.Cleanup(c.Close)
 	r := memory.New()
 	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
 	assert.Nil(
 		t,
 		n.Notify("", "first message", goclaudedConstant.DeliveryImmediate),
 	)
-	assert.Integer(t, 0, int(calls.Load()))
+	assert.Integer(t, 0, s.Count())
 }
 
 func TestNotifierAnswersFailureForItsCallerToReport(t *testing.T) {
-	var calls atomic.Int32
-	c := answering(t, http.StatusInternalServerError, &calls)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+	)
+	c := client.New(s.URL, false, "")
+	t.Cleanup(c.Close)
 	r := memory.New()
 	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
 	e := n.Notify("kilo", "first message", goclaudedConstant.DeliveryImmediate)
@@ -53,8 +59,12 @@ func TestNotifierAnswersFailureForItsCallerToReport(t *testing.T) {
 }
 
 func TestGoclaudedOutageHoldsNextDigestOff(t *testing.T) {
-	var calls atomic.Int32
-	c := answering(t, http.StatusServiceUnavailable, &calls)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusServiceUnavailable),
+	)
+	c := client.New(s.URL, false, "")
+	t.Cleanup(c.Close)
 	r := memory.New()
 	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
 	assert.True(
@@ -69,6 +79,6 @@ func TestGoclaudedOutageHoldsNextDigestOff(t *testing.T) {
 			n.Notify("kilo", "second", goclaudedConstant.DeliveryImmediate),
 		),
 	)
-	assert.Integer(t, 1, int(calls.Load()))
+	assert.Integer(t, 1, s.Count())
 	assert.Integer(t, 0, len(r.Events()))
 }

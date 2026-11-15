@@ -7,37 +7,43 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/client_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/failing_jira"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"testing"
 )
 
 func TestClientSeesUnknownIssueAsNotFound(t *testing.T) {
-	c := client_tester.New(
-		t,
-		failing_jira.New(not_found.Format("Issue does not exist")),
+	j := service_tester.NewJira(t)
+	j.Fail(j.Issue, not_found.Format("Issue does not exist"))
+	_, e := client_tester.New(t, j).GetIssue(
+		context.Background(),
+		"ALFA-1",
+		false,
 	)
-	_, e := c.GetIssue(context.Background(), "ALFA-1", false)
 	assert.True(t, not_found.Is(e))
 	assert.StringContains(t, "Issue does not exist", e.Error())
 }
 
 func TestClientSeesRejectedQueryAsValidation(t *testing.T) {
-	c := client_tester.New(
-		t,
-		failing_jira.New(validation.New("Error in the JQL Query")),
+	j := service_tester.NewJira(t)
+	j.Fail(j.Search, validation.New("Error in the JQL Query"))
+	_, e := client_tester.New(t, j).SearchIssues(
+		context.Background(),
+		"bravo =",
+		nil,
 	)
-	_, e := c.SearchIssues(context.Background(), "bravo =", nil)
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "Error in the JQL Query", e.Error())
 }
 
 func TestClientSeesOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
-	c := client_tester.New(
-		t,
-		failing_jira.New(detail_error.New("Service unavailable", "503")),
+	j := service_tester.NewJira(t)
+	j.Fail(j.Search, detail_error.New("Service unavailable", "503"))
+	result, e := client_tester.New(t, j).SearchIssues(
+		context.Background(),
+		"project = CHARLIE",
+		nil,
 	)
-	result, e := c.SearchIssues(context.Background(), "project = CHARLIE", nil)
 	assert.True(t, e != nil)
 	assert.False(t, not_found.Is(e))
 	assert.True(t, result == nil)

@@ -7,6 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/peer/unit/switchable_peer"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -14,7 +16,7 @@ func TestGuardedHandsBackCallValue(t *testing.T) {
 	g := peer.New(
 		"echo",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		memory.New(),
 	)
@@ -32,7 +34,7 @@ func TestGuardedOutageAnswersWithoutReachingPeer(t *testing.T) {
 	g := peer.New(
 		"golf",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		memory.New(),
 	)
@@ -41,7 +43,7 @@ func TestGuardedOutageAnswersWithoutReachingPeer(t *testing.T) {
 	call := func(context.Context) (string, error) {
 		calls++
 
-		return "hotel", refusedConnection()
+		return "hotel", outage_tester.RefusedDial()
 	}
 	_, e := peer.Guarded(t.Context(), g, call)
 	assert.True(t, unavailable.Is(e))

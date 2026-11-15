@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/argument/unit/argument_tester"
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/spf13/cobra"
@@ -17,7 +18,7 @@ func TestNestedCommandIsRecordedByItsFullPath(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"begin gotest character list", "record gotest character list"},
-		runInstrumented(t, root, "character", soil.List).entries,
+		argument_tester.Instrumented(t, root, "character", soil.List).Entries,
 	)
 }
 
@@ -32,6 +33,6 @@ func TestRootsOwnPreRunStillRuns(t *testing.T) {
 	root.AddCommand(
 		&cobra.Command{Use: soil.List, Run: func(*cobra.Command, []string) {}},
 	)
-	runInstrumented(t, root, soil.List)
+	argument_tester.Instrumented(t, root, soil.List)
 	assert.True(t, ran)
 }

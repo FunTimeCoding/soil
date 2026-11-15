@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/chunk_tester"
 	"testing"
 )
 
 func TestTableOverAllowanceSplitsBetweenRows(t *testing.T) {
-	chunks := tableChunks(t, 40)
+	chunks := chunk_tester.Table(t, 40)
 	assert.Count(t, 5, chunks)
 	assert.String(
 		t,
@@ -18,7 +19,7 @@ func TestTableOverAllowanceSplitsBetweenRows(t *testing.T) {
 }
 
 func TestTablePiecesCoverSourceContiguously(t *testing.T) {
-	chunks := tableChunks(t, 40)
+	chunks := chunk_tester.Table(t, 40)
 
 	for i := 1; i < 4; i++ {
 		assert.Integer(
@@ -36,7 +37,7 @@ func TestTablePiecesCoverSourceContiguously(t *testing.T) {
 }
 
 func TestTableThatTipsItsWindowOverLeavesText(t *testing.T) {
-	chunks := tableChunks(t, 50)
+	chunks := chunk_tester.Table(t, 50)
 	assert.Count(t, 4, chunks)
 	assert.String(
 		t,
@@ -48,7 +49,7 @@ func TestTableThatTipsItsWindowOverLeavesText(t *testing.T) {
 }
 
 func TestTableWithinAllowanceStaysInText(t *testing.T) {
-	chunks := tableChunks(t, 100)
+	chunks := chunk_tester.Table(t, 100)
 	assert.Count(t, 1, chunks)
 	assert.String(
 		t,

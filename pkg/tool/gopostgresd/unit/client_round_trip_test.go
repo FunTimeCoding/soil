@@ -7,13 +7,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/postgres/types/result"
 	gopostgresd "github.com/funtimecoding/soil/pkg/tool/gopostgresd/client"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
 func TestClientReadsColumnsAndRowsThroughMount(t *testing.T) {
-	s, _, _, m := served(t, nil)
+	s, _, _, m := base.Serve(t, nil)
 	m.SeedResult(
 		"SELECT a.id, b.id",
 		result.New([]string{"id", "id"}, [][]any{{1.0, 7.0}}),
@@ -36,7 +38,7 @@ func TestClientReadsColumnsAndRowsThroughMount(t *testing.T) {
 }
 
 func TestClientClassifiesRefusalThroughMount(t *testing.T) {
-	s, _, _, _ := served(t, syntaxRefusal())
+	s, _, _, _ := base.Serve(t, service_tester.SyntaxRefusal())
 	c := gopostgresd.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
 		generativeConstant.ModelContextTestToken,

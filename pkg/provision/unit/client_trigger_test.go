@@ -18,6 +18,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/mock_runner"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
+	"github.com/funtimecoding/soil/pkg/provision/unit/runner_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
@@ -25,7 +26,7 @@ import (
 
 func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 	n := mock_runner.New()
-	s := newTriggerServer(t, n, memory.New())
+	s := runner_tester.Mount(t, n, memory.New())
 	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
@@ -64,7 +65,7 @@ func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 
 func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
 	n := mock_runner.New()
-	s := newTriggerServer(t, n, memory.New())
+	s := runner_tester.Mount(t, n, memory.New())
 	c := provision.New(
 		webConstant.Localhost,
 		s.Port,
@@ -81,7 +82,7 @@ func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
 
 func TestTriggerWithoutHostsFieldCarriesNoHosts(t *testing.T) {
 	n := mock_runner.New()
-	s := newTriggerServer(t, n, memory.New())
+	s := runner_tester.Mount(t, n, memory.New())
 	c, e := client.NewClientWithResponses(
 		s.Address(""),
 		client.WithHTTPClient(s.Client()),
@@ -102,7 +103,7 @@ func TestTriggerWithoutHostsFieldCarriesNoHosts(t *testing.T) {
 
 func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 	n := mock_runner.New()
-	s := newTriggerServer(t, n, memory.New())
+	s := runner_tester.Mount(t, n, memory.New())
 	c := provision.New(webConstant.Localhost, s.Port, "bravo")
 	defer c.Close()
 	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
@@ -125,7 +126,7 @@ func TestClientTriggerToNobodyIsConnectionFailure(t *testing.T) {
 
 func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 	r := memory.New()
-	s := newTriggerServer(
+	s := runner_tester.Mount(
 		t,
 		mock_runner.New().WithFail(conflict.Format("run already queued")),
 		r,
@@ -144,7 +145,7 @@ func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 
 func TestClientTriggerOnStoppedRunnerIsUnavailable(t *testing.T) {
 	r := memory.New()
-	s := newTriggerServer(
+	s := runner_tester.Mount(
 		t,
 		mock_runner.New().WithFail(unavailable.Format(constant.RunnerStopped)),
 		r,
@@ -163,7 +164,11 @@ func TestClientTriggerOnStoppedRunnerIsUnavailable(t *testing.T) {
 
 func TestClientTriggerFailureIsCaptured(t *testing.T) {
 	r := memory.New()
-	s := newTriggerServer(t, mock_runner.New().WithFail(fmt.Errorf("alfa")), r)
+	s := runner_tester.Mount(
+		t,
+		mock_runner.New().WithFail(fmt.Errorf("alfa")),
+		r,
+	)
 	c := provision.New(
 		webConstant.Localhost,
 		s.Port,

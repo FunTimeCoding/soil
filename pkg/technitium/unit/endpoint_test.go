@@ -6,8 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/technitium/constant"
+	"github.com/funtimecoding/soil/pkg/technitium/unit/technitium_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -15,17 +16,15 @@ import (
 )
 
 func TestGetUnwrapsEnvelope(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"status":"ok","response":{"zones":[]}}`,
-	)
-	payload, e := newClient(t, s.URL).Get(
+		upstream_server.WithAnswer(`{"status":"ok","response":{"zones":[]}}`))
+	payload, e := technitium_tester.New(t, s.URL).Get(
 		"/zones/records/get?domain=alfa.example&listZone=true",
 	)
 	assert.FatalOnError(t, e)
 	assert.String(t, `{"zones":[]}`, string(payload))
-	r := last()
+	r := s.Last()
 	assert.String(t, "/api/zones/records/get", r.URL.Path)
 	assert.String(t, "alfa.example", r.URL.Query().Get("domain"))
 	assert.String(t, "true", r.URL.Query().Get("listZone"))
@@ -37,17 +36,15 @@ func TestGetUnwrapsEnvelope(t *testing.T) {
 }
 
 func TestPostSendsFormInBody(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"status":"ok","response":{}}`,
-	)
-	_, e := newClient(t, s.URL).Post(
+		upstream_server.WithAnswer(`{"status":"ok","response":{}}`))
+	_, e := technitium_tester.New(t, s.URL).Post(
 		constant.SettingsSetPath,
 		url.Values{constant.KeysParameter: {"alfa|c2VjcmV0|hmac-sha256"}},
 	)
 	assert.FatalOnError(t, e)
-	r := last()
+	r := s.Last()
 	assert.String(t, http.MethodPost, r.Method)
 	assert.String(t, "/api/settings/set", r.URL.Path)
 	assert.String(t, "", r.URL.RawQuery)
@@ -70,12 +67,15 @@ func TestPostSendsFormInBody(t *testing.T) {
 }
 
 func TestPostErrorEnvelopeIsUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"status":"error","errorMessage":"Invalid TSIG key name."}`,
+		upstream_server.WithAnswer(
+			`{"status":"error","errorMessage":"Invalid TSIG key name."}`,
+		))
+	_, e := technitium_tester.New(t, s.URL).Post(
+		constant.ZoneOptionsSetPath,
+		url.Values{},
 	)
-	_, e := newClient(t, s.URL).Post(constant.ZoneOptionsSetPath, url.Values{})
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
@@ -85,12 +85,14 @@ func TestPostErrorEnvelopeIsUnexpected(t *testing.T) {
 }
 
 func TestErrorEnvelopeIsUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"status":"error","errorMessage":"No such zone was found: bravo.example"}`,
+		upstream_server.WithAnswer(
+			`{"status":"error","errorMessage":"No such zone was found: bravo.example"}`,
+		))
+	_, e := technitium_tester.New(t, s.URL).Get(
+		"/zones/delete?zone=bravo.example",
 	)
-	_, e := newClient(t, s.URL).Get("/zones/delete?zone=bravo.example")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
@@ -100,23 +102,25 @@ func TestErrorEnvelopeIsUnexpected(t *testing.T) {
 }
 
 func TestInvalidTokenIsUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"status":"invalid-token","errorMessage":"Invalid token or session expired."}`,
-	)
-	_, e := newClient(t, s.URL).Get("/zones/list")
+		upstream_server.WithAnswer(
+			`{"status":"invalid-token","errorMessage":"Invalid token or session expired."}`,
+		))
+	_, e := technitium_tester.New(t, s.URL).Get("/zones/list")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "technitium invalid-token:", e.Error())
 }
 
 func TestRefusalCarriesErrorMessage(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		`{"status":"error","errorMessage":"Parameter 'zone' missing."}`,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(
+			`{"status":"error","errorMessage":"Parameter 'zone' missing."}`,
+		),
 	)
-	_, e := newClient(t, s.URL).Get("/zones/create")
+	_, e := technitium_tester.New(t, s.URL).Get("/zones/create")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
@@ -138,9 +142,9 @@ func TestUntrustedReachesSelfSignedServer(t *testing.T) {
 		),
 	)
 	t.Cleanup(s.Close)
-	_, e := newClient(t, s.URL).Get("/zones/list")
+	_, e := technitium_tester.New(t, s.URL).Get("/zones/list")
 	assert.True(t, unreachable.Is(e))
-	c := newClient(t, s.URL)
+	c := technitium_tester.New(t, s.URL)
 	defer c.Close()
 	c.Untrusted()
 	_, f := c.Get("/zones/list")

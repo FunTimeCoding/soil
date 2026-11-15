@@ -6,11 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/directory_tester"
 	"testing"
 )
 
 func TestAllowsWithoutDirectory(t *testing.T) {
-	assert.True(t, allows(t, base.New(t), "anything"))
+	assert.True(t, base.Allows(t, base.New(t), "anything"))
 }
 
 func TestAllowsLocalUser(t *testing.T) {
@@ -18,7 +19,7 @@ func TestAllowsLocalUser(t *testing.T) {
 	b := base.NewWith(t, d)
 	row, e := b.Store.UserByMail(constant.FixtureMail)
 	assert.FatalOnError(t, e)
-	assert.True(t, allows(t, b, row.Identifier))
+	assert.True(t, base.Allows(t, b, row.Identifier))
 }
 
 func TestAllowsDirectoryMember(t *testing.T) {
@@ -31,7 +32,7 @@ func TestAllowsDirectoryMember(t *testing.T) {
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
-	assert.True(t, allows(t, b, row.Identifier))
+	assert.True(t, base.Allows(t, b, row.Identifier))
 }
 
 func TestRevokesAfterGroupRemoval(t *testing.T) {
@@ -45,7 +46,7 @@ func TestRevokesAfterGroupRemoval(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	d.SetMember("member", false)
-	assert.False(t, allows(t, b, row.Identifier))
+	assert.False(t, base.Allows(t, b, row.Identifier))
 }
 
 func TestUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
@@ -58,7 +59,7 @@ func TestUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
-	d.Failure = directoryDown()
+	d.Failure = directory_tester.Down()
 	allowed, f := b.Service.DirectoryAllows(row.Identifier)
 	assert.False(t, allowed)
 	assert.True(t, unavailable.Is(f))
@@ -67,5 +68,5 @@ func TestUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
 func TestAllowsUnknownIdentifierRefused(t *testing.T) {
 	d := mock_client.New("")
 	b := base.NewWith(t, d)
-	assert.False(t, allows(t, b, "missing"))
+	assert.False(t, base.Allows(t, b, "missing"))
 }

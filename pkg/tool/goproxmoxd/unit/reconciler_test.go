@@ -14,7 +14,7 @@ import (
 )
 
 func TestReconcilerOnlyPromotes(t *testing.T) {
-	c, machines := reconcileFloor()
+	c, machines := service_tester.ReconcileFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	r := reconciler.New(
@@ -31,7 +31,7 @@ func TestReconcilerOnlyPromotes(t *testing.T) {
 }
 
 func TestUnreachableHypervisorIsOnlyLogged(t *testing.T) {
-	c, machines := reconcileFloor()
+	c, machines := service_tester.ReconcileFloor()
 	defer c.Close()
 	c.SetFailure(
 		&net.OpError{

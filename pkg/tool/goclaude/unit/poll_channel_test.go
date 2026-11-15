@@ -4,21 +4,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/unit/channel_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestPollChannelStallsOnceAtThreshold(t *testing.T) {
-	c := stubServer(
+	u := upstream_server.New(
 		t,
-		constant.FixtureChannelEntry,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
+		upstream_server.WithStatus(http.StatusInternalServerError),
 	)
-	s, k := channelSink()
+	c := client_tester.New(t, u.URL)
+	s, k := channel_tester.New()
 	failures := 0
 
 	for range 5 {
@@ -36,14 +35,19 @@ func TestPollChannelStallsOnceAtThreshold(t *testing.T) {
 }
 
 func TestPollChannelResumesAndDeliversAfterStall(t *testing.T) {
-	c := stubServer(
+	u := upstream_server.New(
 		t,
-		constant.FixtureChannelEntry,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
+		upstream_server.WithStatus(
+			http.StatusInternalServerError,
+			http.StatusInternalServerError,
+			http.StatusInternalServerError,
+			http.StatusOK,
+		),
+		upstream_server.WithAnswer(constant.FixtureChannelEntry),
+		upstream_server.WithObject(),
 	)
-	s, k := channelSink()
+	c := client_tester.New(t, u.URL)
+	s, k := channel_tester.New()
 	failures := 0
 
 	for range 4 {
@@ -60,16 +64,20 @@ func TestPollChannelResumesAndDeliversAfterStall(t *testing.T) {
 }
 
 func TestPollChannelSuccessResetsCount(t *testing.T) {
-	c := stubServer(
+	u := upstream_server.New(
 		t,
-		constant.FixtureChannelEntry,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
-		http.StatusOK,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
+		upstream_server.WithStatus(
+			http.StatusInternalServerError,
+			http.StatusInternalServerError,
+			http.StatusOK,
+			http.StatusInternalServerError,
+			http.StatusInternalServerError,
+		),
+		upstream_server.WithAnswer(constant.FixtureChannelEntry),
+		upstream_server.WithObject(),
 	)
-	s, k := channelSink()
+	c := client_tester.New(t, u.URL)
+	s, k := channel_tester.New()
 	failures := 0
 
 	for range 5 {

@@ -7,6 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/label_tester"
 	"testing"
 )
 
@@ -18,7 +20,7 @@ func TestCompactionThroughClientReachesWatcher(t *testing.T) {
 	_, e := watcher.RestClient.PostSessionLabelWithResponse(
 		watcher.Context,
 		watcher.UUID,
-		labelBody(
+		label_tester.Body(
 			constant.CompactionWatchLabel,
 			constant.CompactionWatchValue,
 			watcher.Name(),
@@ -38,7 +40,7 @@ func TestCompactionThroughClientReachesWatcher(t *testing.T) {
 			},
 		),
 	)
-	notifications := clientKindEntries(
+	notifications := delivery_tester.ClientKindEntries(
 		watcher.CheckLive().Entries,
 		constant.QueueNotification,
 	)

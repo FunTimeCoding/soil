@@ -26,10 +26,10 @@ const (
 	HarnessSessionIdentifierEnvironment = "CLAUDE_CODE_SESSION_ID"
 
 	GuardBlockExit = 2
-	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
-	NpxMessage     = "npx is blocked (supply-chain guard) - it downloads and executes npm packages on demand"
-	PipMessage     = "pip install is blocked (supply-chain guard) - no python dependencies may be installed on this system"
-	XargsMessage   = "xargs on macOS is BSD xargs and rejects the GNU flags -a and -d - redirect the file on stdin instead: xargs command < file"
+	SedReason      = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
+	NpxReason      = "npx is blocked (supply-chain guard) - it downloads and executes npm packages on demand"
+	PipReason      = "pip install is blocked (supply-chain guard) - no python dependencies may be installed on this system"
+	XargsReason    = "xargs on macOS is BSD xargs and rejects the GNU flags -a and -d - redirect the file on stdin instead: xargs command < file"
 
 	OapiCodegenCommand = "oapi-codegen"
 	OapiCodegenHint    = "`task generate` in the repository root regenerates every service's client and server from its openapi.yaml with this same oapi-codegen invocation; it is how this repository runs code generation, and it runs quietly"
@@ -60,7 +60,7 @@ var (
 	)
 )
 
-const SingleReplacementMessage = "a single python search-and-replace in one file is an Edit call - use the Edit tool; for several replacements in one file, use goreplace (search/replace blocks on stdin, all or none)"
+const SingleReplacementReason = "a single python search-and-replace in one file is an Edit call - use the Edit tool; for several replacements in one file, use goreplace (search/replace blocks on stdin, all or none)"
 
 var (
 	PythonReplaceCall  = regexp.MustCompile(`\.replace\(`)

@@ -22,9 +22,9 @@ whole subtree consolidate up into it. One test binary per domain
 instead of one per package: cold runs stop paying link tax, and a
 shared-file edit relinks one binary.
 
-Test homes carry normal package names, so regular files coexist
-with tests: helpers live beside the tests as plain `.go` files,
-and every `_test.go` file holds at least one test.
+A test home holds `_test.go` files only, and every one holds at least one
+test. What the tests share lives in a helper package (Helper packages);
+goaudit's `stray_helper` flags anything else beside them.
 
 All-or-nothing per root: a single in-package `_test.go` left behind
 resurrects that package's test binary.
@@ -36,7 +36,9 @@ with accessors and `Close()`) as plain package source, and helper packages
 sit beside the tests they serve as `<path>/unit/<name>/`
 (`pkg/strings/unit/strings_tester`). Setup constructors compile untagged
 even when a tagged integration test uses them: environment reads happen at
-call time, so tags belong on the test files only.
+call time, so tags belong on the test files only - unless the package under
+test itself builds only under the tag, when its helper package carries the
+same tag.
 
 ### Black-box only
 
@@ -76,6 +78,51 @@ moving side is renamed for what it observes - an MCP `TestGetNodeNotFound`
 beside a REST one becomes `TestGetNodeToolReportsNotFound` - never a
 mechanical prefix, which also catches inherited misnomers. A file name the
 facet prefix would double drops the repeat.
+
+## Helper packages
+
+A helper package is named for the role it plays in a test:
+
+- `<subject>_tester` builds the subject under test from its parts, or
+  asserts on what it produces (`service_tester`, `markup_tester`); the type
+  it hands out is named for what it holds, `Tester` when it is a bundle of
+  parts
+- `<peer>_server` is a fake network peer the subject talks to - type
+  `Server`, `New(t, ...)`, and accessors for what it received
+  (`proxmox_server`, `issuer_server`, `upstream_server`)
+- `mock_<face>` implements a client's whole face, beside the face
+  (`testing.md`)
+- `<behaviour>_<role>` is an in-process stand-in whose point is one
+  behaviour (`failing_writer`, `refusing_source`, `held_peer`)
+- `base` builds the daemon stack
+- `command_tester` fronts a command-line tool's tests: `Run(t, client,
+  arguments...)` over `go:pkg/terminal/terminal_tester.Run`, holding the
+  home's argument lists and seeded mock
+
+`fake_` tells a reader nothing the role does not: a fake peer is a server,
+a stand-in is named for its behaviour. An accessor names what the test
+wants and fails the test when it is absent - `s.Last()`,
+`outage_tester.Guard(t, workers, name)` - never an index into a slice.
+
+Every helper lives in a named package, even one with a single caller, and
+never in a `_test.go`. A helper that needs `t` and its own package's tester
+is a method on that tester, which holds `t`; its methods never take `t`
+themselves (`tester_receiver`). Where every caller only fails on the error a
+method returns, the method fails the test itself and returns the value alone
+(`go:pkg/tool/goclauded/unit/store_tester.Tester.Announce`); a test wanting
+the error calls the subject directly.
+
+Placement follows reach. A helper serving one domain's tests lives in that
+domain's `<path>/unit/<name>/`; one serving only tests that cross the line
+lives on the integration side, in `<path>/integration/<name>/` or the
+subpackage it serves (`go:pkg/tool/gofix/integration/fix_tester`), and may
+wrap a unit sibling of the same name
+(`go:pkg/tool/goqueryd/integration/store_tester` over
+`go:pkg/tool/goqueryd/unit/store_tester`); one serving other domains' tests
+lives beside the source package it stands for (`pkg/web/upstream_server`,
+`pkg/web/authorization/authorization_tester`). Production API wins over a
+test-side copy: look for it before writing a helper
+(`locator.NewOrigin`), and for a helper package already playing the role.
 
 ## The line
 

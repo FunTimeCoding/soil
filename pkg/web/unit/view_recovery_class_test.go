@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/unit/failing_writer"
+	"github.com/funtimecoding/soil/pkg/web/unit/view_tester"
 	"maragu.dev/gomponents"
 	"net/http"
 	"net/http/httptest"
@@ -17,7 +18,7 @@ import (
 
 func TestRecoveredNotFoundAnswersItsStatus(t *testing.T) {
 	r := memory.New()
-	wrapped := recoveryView().Recovery(r)(
+	wrapped := view_tester.New().Recovery(r)(
 		http.HandlerFunc(
 			func(http.ResponseWriter, *http.Request) {
 				panic(not_found.Format("paper alfa"))
@@ -36,7 +37,7 @@ func TestRecoveredNotFoundAnswersItsStatus(t *testing.T) {
 }
 
 func TestRecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
-	wrapped := recoveryView().Recovery(memory.New())(
+	wrapped := view_tester.New().Recovery(memory.New())(
 		http.HandlerFunc(
 			func(http.ResponseWriter, *http.Request) {
 				panic(conflict.Format("already accepted"))
@@ -53,7 +54,7 @@ func TestRecoveredConflictFragmentKeepsItsHeader(t *testing.T) {
 
 func TestRenderToClientThatLeftIsNotCaptured(t *testing.T) {
 	r := memory.New()
-	v := recoveryView()
+	v := view_tester.New()
 	wrapped := v.Recovery(r)(
 		http.HandlerFunc(
 			func(
@@ -64,7 +65,7 @@ func TestRenderToClientThatLeftIsNotCaptured(t *testing.T) {
 			},
 		),
 	)
-	w := failing_writer.New(brokenPipe())
+	w := failing_writer.New(failing_writer.BrokenPipe())
 	wrapped.ServeHTTP(
 		w,
 		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
@@ -75,7 +76,7 @@ func TestRenderToClientThatLeftIsNotCaptured(t *testing.T) {
 
 func TestPushToClientThatLeftIsNotCaptured(t *testing.T) {
 	r := memory.New()
-	wrapped := recoveryView().Recovery(r)(
+	wrapped := view_tester.New().Recovery(r)(
 		http.HandlerFunc(
 			func(
 				w http.ResponseWriter,
@@ -86,7 +87,7 @@ func TestPushToClientThatLeftIsNotCaptured(t *testing.T) {
 		),
 	)
 	wrapped.ServeHTTP(
-		failing_writer.New(brokenPipe()),
+		failing_writer.New(failing_writer.BrokenPipe()),
 		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
 	)
 	assert.Count(t, 0, r.Events())
@@ -94,7 +95,7 @@ func TestPushToClientThatLeftIsNotCaptured(t *testing.T) {
 
 func TestRenderWriteFaultIsStillCaptured(t *testing.T) {
 	r := memory.New()
-	v := recoveryView()
+	v := view_tester.New()
 	wrapped := v.Recovery(r)(
 		http.HandlerFunc(
 			func(
@@ -114,7 +115,7 @@ func TestRenderWriteFaultIsStillCaptured(t *testing.T) {
 
 func TestRecoveredUnclassifiedErrorStaysFaultAndIsCaptured(t *testing.T) {
 	r := memory.New()
-	wrapped := recoveryView().Recovery(r)(
+	wrapped := view_tester.New().Recovery(r)(
 		http.HandlerFunc(
 			func(http.ResponseWriter, *http.Request) {
 				panic(errors.New("store failed"))

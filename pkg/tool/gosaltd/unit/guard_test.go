@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
 	"testing"
@@ -13,7 +14,7 @@ import (
 
 func TestGuard(t *testing.T) {
 	d := daemon.New(
-		newOption(t),
+		service_tester.NewOption(t),
 		logger.New(t.Context()),
 		memory.New(),
 		prometheus.NewRegistry(),

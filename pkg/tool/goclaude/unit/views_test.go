@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/unit/command_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"strings"
 	"testing"
@@ -13,8 +14,11 @@ import (
 )
 
 func TestUnknownSessionExitsNotFound(t *testing.T) {
-	for _, arguments := range sessionCommands("zulu") {
-		_, failure, code := run(t, newMock(t), arguments...)
+	for _, arguments := range command_tester.SessionCommands("zulu") {
+		_, failure, code := command_tester.Run(
+			t,
+			command_tester.Mock(t),
+			arguments...)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "zulu", failure)
 		assert.StringContains(t, "not found", failure)
@@ -22,12 +26,12 @@ func TestUnknownSessionExitsNotFound(t *testing.T) {
 }
 
 func TestAmbiguousSessionListsMatches(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.Matches = []client.ResolveMatch{
 		{Identifier: "alfa1234-0000", Name: new("kilo")},
 		{Identifier: "alfa5678-0000", Alias: new("lima")},
 	}
-	_, failure, code := run(t, c, "session", "show", "alfa")
+	_, failure, code := command_tester.Run(t, c, "session", "show", "alfa")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, `ambiguous: "alfa" matches 2 sessions`, failure)
 	assert.StringContains(t, "alfa1234", failure)
@@ -36,7 +40,7 @@ func TestAmbiguousSessionListsMatches(t *testing.T) {
 
 func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range append(
-		sessionCommands("alfa"),
+		command_tester.SessionCommands("alfa"),
 		[]string{"cost"},
 		[]string{"status"},
 		[]string{"usage"},
@@ -51,22 +55,22 @@ func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 		[]string{"session", "bash-dump"},
 		[]string{"message", "read", "1"},
 	) {
-		c := newMock(t)
+		c := command_tester.Mock(t)
 		c.Failure = errors.New("foxtrot")
-		_, failure, code := run(t, c, arguments...)
+		_, failure, code := command_tester.Run(t, c, arguments...)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "foxtrot", failure)
 	}
 }
 
 func TestEditPrintsNothingOnSuccess(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	var output, failure string
 	var code int
 	stray := assert.Capture(
 		t,
 		func() {
-			output, failure, code = run(
+			output, failure, code = command_tester.Run(
 				t,
 				c,
 				"session",
@@ -84,13 +88,25 @@ func TestEditPrintsNothingOnSuccess(t *testing.T) {
 }
 
 func TestEditWithoutChangeIsRefused(t *testing.T) {
-	_, failure, code := run(t, newMock(t), "session", soil.Edit, "alfa")
+	_, failure, code := command_tester.Run(
+		t,
+		command_tester.Mock(t),
+		"session",
+		soil.Edit,
+		"alfa",
+	)
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "provide --name or --description", failure)
 }
 
 func TestCostEmitsItsWindow(t *testing.T) {
-	output, _, code := run(t, newMock(t), "cost", "--days", "7")
+	output, _, code := command_tester.Run(
+		t,
+		command_tester.Mock(t),
+		"cost",
+		"--days",
+		"7",
+	)
 	assert.Integer(t, 0, code)
 	var r client.CostResponse
 	notation.MustDecode(output, &r, false)
@@ -98,28 +114,34 @@ func TestCostEmitsItsWindow(t *testing.T) {
 }
 
 func TestPrintIsDocument(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.Messages = []client.SessionMessage{
 		{Role: "user", Text: "kilo"},
 		{Role: "assistant", Text: "lima"},
 	}
-	output, failure, code := run(t, c, "session", "print", "alfa")
+	output, failure, code := command_tester.Run(
+		t,
+		c,
+		"session",
+		"print",
+		"alfa",
+	)
 	assert.Integer(t, 0, code)
 	assert.String(t, "", failure)
 	assert.String(t, "## user [1]\n\nkilo\n\n## assistant\n\nlima\n\n", output)
 }
 
 func TestNoUsageYetIsNotFound(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.UsageMissing = true
-	output, failure, code := run(t, c, "usage")
+	output, failure, code := command_tester.Run(t, c, "usage")
 	assert.Integer(t, 1, code)
 	assert.String(t, "", output)
 	assert.StringContains(t, "no usage data yet", failure)
 }
 
 func TestContextCutsLongMessageAtThreeHundredCharacters(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	long := fmt.Sprintf("x%s", strings.Repeat("ä", 300))
 	c.ToolContext = []client.ToolContextResult{
 		{
@@ -127,7 +149,14 @@ func TestContextCutsLongMessageAtThreeHundredCharacters(t *testing.T) {
 			Before:   &[]client.SessionMessage{{Role: "user", Text: long}},
 		},
 	}
-	output, _, code := run(t, c, "session", "context", "alfa", "Bash")
+	output, _, code := command_tester.Run(
+		t,
+		c,
+		"session",
+		"context",
+		"alfa",
+		"Bash",
+	)
 	assert.Integer(t, 0, code)
 	assert.StringContains(
 		t,
@@ -138,9 +167,9 @@ func TestContextCutsLongMessageAtThreeHundredCharacters(t *testing.T) {
 }
 
 func TestInvalidTurnRangeIsRefused(t *testing.T) {
-	_, failure, code := run(
+	_, failure, code := command_tester.Run(
 		t,
-		newMock(t),
+		command_tester.Mock(t),
 		"session",
 		"print",
 		"alfa",

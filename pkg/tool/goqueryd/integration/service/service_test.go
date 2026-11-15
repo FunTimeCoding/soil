@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
@@ -57,12 +58,12 @@ func TestCollectionFacets(t *testing.T) {
 		),
 	)
 	facets := s.Service.CollectionFacets("notes", nil)
-	authorFacet := findFacet(facets, constant.FixtureAuthorKey)
+	authorFacet := store_tester.FindFacet(facets, constant.FixtureAuthorKey)
 	assert.NotNil(t, authorFacet)
 	assert.Integer(t, 2, authorFacet.Distinct)
 	assert.Integer(t, 2, authorFacet.Values["alice"])
 	assert.Integer(t, 1, authorFacet.Values["bob"])
-	tagFacet := findFacet(facets, constant.FixtureTagKey)
+	tagFacet := store_tester.FindFacet(facets, constant.FixtureTagKey)
 	assert.NotNil(t, tagFacet)
 	assert.Integer(t, 2, tagFacet.Distinct)
 	assert.Integer(t, 2, tagFacet.Values[constant.FixtureBuildValue])

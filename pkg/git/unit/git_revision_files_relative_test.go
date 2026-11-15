@@ -4,7 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/git/constant"
-	"github.com/funtimecoding/soil/pkg/git/unit/repository_tester"
+	"github.com/funtimecoding/soil/pkg/git/repository_tester"
+	"github.com/funtimecoding/soil/pkg/system"
 	"os"
 	"path/filepath"
 	"testing"
@@ -18,7 +19,11 @@ func TestRevisionFilesAcceptRelativePath(t *testing.T) {
 	assert.FatalOnError(t, e)
 	relative, f := filepath.Rel(work, r.Clone)
 	assert.FatalOnError(t, f)
-	files, g := git.RevisionFiles(relative, constant.HeadReference, goFile)
+	files, g := git.RevisionFiles(
+		relative,
+		constant.HeadReference,
+		system.IsGoFile,
+	)
 	assert.FatalOnError(t, g)
 	assert.Any(t, map[string][]byte{"alfa.go": []byte("package alfa\n")}, files)
 }

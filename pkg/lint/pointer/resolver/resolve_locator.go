@@ -15,24 +15,21 @@ func resolveLocator(
 ) *pointer.Resolution {
 	if !strings.HasPrefix(candidate, webConstant.SecurePrefix) &&
 		!strings.HasPrefix(candidate, webConstant.InsecurePrefix) {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonScheme
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonScheme)
 	}
 
 	parsed, e := url.Parse(candidate)
 
 	if e != nil {
-		return pointer.NewResolution(constant.VerdictUndeclaredHost)
+		return pointer.NewConcern(constant.UndeclaredHostKey)
 	}
 
 	host := parsed.Hostname()
 
 	if slices.Contains(constant.ImplicitHosts, host) ||
 		slices.Contains(hosts, host) {
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
-	return pointer.NewResolution(constant.VerdictUndeclaredHost)
+	return pointer.NewConcern(constant.UndeclaredHostKey)
 }

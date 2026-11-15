@@ -2,10 +2,11 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/save_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"path/filepath"
 	"testing"
@@ -13,10 +14,18 @@ import (
 
 func TestRetargetReferencesRewritesAfterMove(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "pkg/bravo/service/run.go", "package service\n")
+	system_tester.Write(
+		t,
+		root,
+		"pkg/bravo/service/run.go",
+		"package service\n",
+	)
 	o := service_tester.NewReferenced(t, root)
-	plain := memoryOption("plain", "Read `pkg/alfa/service/run.go` first.")
-	based := memoryOption("based", "See `service/run.go`.")
+	plain := save_tester.Content(
+		"plain",
+		"Read `pkg/alfa/service/run.go` first.",
+	)
+	based := save_tester.Content("based", "See `service/run.go`.")
 	based.Base = new("pkg/alfa")
 	p, e := o.Service.CreateMemory(plain)
 	assert.FatalOnError(t, e)
@@ -51,10 +60,10 @@ func TestRetargetReferencesRewritesAfterMove(t *testing.T) {
 
 func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "pkg/bravo/run.go", "package bravo\n")
+	system_tester.Write(t, root, "pkg/bravo/run.go", "package bravo\n")
 	o := service_tester.NewReferenced(t, root)
 	m, e := o.Service.CreateMemory(
-		memoryOption("plain", "Read `pkg/alfa/run.go` first."),
+		save_tester.Content("plain", "Read `pkg/alfa/run.go` first."),
 	)
 	assert.FatalOnError(t, e)
 	reports, f := o.Service.RetargetReferences(

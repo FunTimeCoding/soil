@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/kubernetes/dial_error"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/port_forward"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
@@ -83,7 +84,10 @@ func (s *Service) portForwardOn(
 	)
 
 	if j := port_forward.AwaitReady(ready, failed); j != nil {
-		return nil, fmt.Errorf("start port forward: %w", j)
+		return nil, fmt.Errorf(
+			"start port forward: %w",
+			dial_error.Translate(j, c.Configuration().Host),
+		)
 	}
 
 	return result, nil

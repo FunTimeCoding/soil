@@ -6,5 +6,13 @@ func (c *Client) Search(
 	string,
 	...any,
 ) ([]*issue.Issue, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
 	return c.Issues, nil
 }

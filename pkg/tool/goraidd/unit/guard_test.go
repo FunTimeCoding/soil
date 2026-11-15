@@ -1,9 +1,12 @@
 package unit
 
-import "testing"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/base"
+	"testing"
+)
 
 func TestGuard(t *testing.T) {
-	v := mountedReports(t, t.TempDir())
+	v := base.Reports(t, t.TempDir())
 	v.VerifyBase(t)
 	v.VerifyFavicon(t)
 	v.VerifySignIn(t)

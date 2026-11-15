@@ -9,9 +9,9 @@ import (
 
 func TestDashboardViewCountsOnlyVisibleMemories(t *testing.T) {
 	o := service_tester.NewHidden(t, "private")
-	alfa := createTagged(t, o, "alfa", "shared")
-	bravo := createTagged(t, o, "bravo", "shared", "private")
-	charlie := createTagged(t, o, "charlie")
+	alfa := o.CreateTagged("alfa", "shared")
+	bravo := o.CreateTagged("bravo", "shared", "private")
+	charlie := o.CreateTagged("charlie")
 	assert.FatalOnError(
 		t,
 		o.Service.CreateRelation(alfa.Identifier, bravo.Identifier, ""),
@@ -38,8 +38,8 @@ func TestDashboardViewCountsOnlyVisibleMemories(t *testing.T) {
 
 func TestMemoryListLeavesHiddenMemoriesOut(t *testing.T) {
 	o := service_tester.NewHidden(t, "private")
-	createTagged(t, o, "alfa")
-	createTagged(t, o, "bravo", "private")
+	o.CreateTagged("alfa")
+	o.CreateTagged("bravo", "private")
 	l, e := o.Service.MemoryList("", "", "", 1)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, l.Total)
@@ -49,16 +49,16 @@ func TestMemoryListLeavesHiddenMemoriesOut(t *testing.T) {
 
 func TestHiddenMemoryViewReadsAsNotFound(t *testing.T) {
 	o := service_tester.NewHidden(t, "private")
-	bravo := createTagged(t, o, "bravo", "private")
+	bravo := o.CreateTagged("bravo", "private")
 	_, e := o.Service.MemoryView(bravo.Identifier)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestMemoryViewLeavesHiddenRelatedOut(t *testing.T) {
 	o := service_tester.NewHidden(t, "private")
-	alfa := createTagged(t, o, "alfa")
-	bravo := createTagged(t, o, "bravo", "private")
-	charlie := createTagged(t, o, "charlie")
+	alfa := o.CreateTagged("alfa")
+	bravo := o.CreateTagged("bravo", "private")
+	charlie := o.CreateTagged("charlie")
 	assert.FatalOnError(
 		t,
 		o.Service.CreateRelation(alfa.Identifier, bravo.Identifier, ""),
@@ -75,9 +75,9 @@ func TestMemoryViewLeavesHiddenRelatedOut(t *testing.T) {
 
 func TestVisibleRelationsLeaveHiddenEndpointsOut(t *testing.T) {
 	o := service_tester.NewHidden(t, "private")
-	alfa := createTagged(t, o, "alfa")
-	bravo := createTagged(t, o, "bravo", "private")
-	charlie := createTagged(t, o, "charlie")
+	alfa := o.CreateTagged("alfa")
+	bravo := o.CreateTagged("bravo", "private")
+	charlie := o.CreateTagged("charlie")
 	assert.FatalOnError(
 		t,
 		o.Service.CreateRelation(bravo.Identifier, alfa.Identifier, ""),

@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/event"
@@ -11,12 +12,12 @@ import (
 )
 
 func TestEventWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, clock_tester.Window)
 	assert.FatalOnError(
 		t,
 		store.New(s.Mapper).CreateEvent(
 			*event.New(
-				windowNow().Add(-30*time.Minute),
+				clock_tester.Window().Add(-30*time.Minute),
 				"airportd",
 				"com.apple.wifi",
 				"scan",

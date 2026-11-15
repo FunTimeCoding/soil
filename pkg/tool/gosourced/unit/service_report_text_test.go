@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/report"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/revision_tester"
 	"testing"
 )
 
@@ -19,12 +20,12 @@ func TestReportTextKeepsSourceAsWritten(t *testing.T) {
 	assert.String(
 		t,
 		"Charlie = Bravo",
-		revisionSymbol(t, r, ". alfa Charlie").Text,
+		revision_tester.Symbol(t, r, ". alfa Charlie").Text,
 	)
 	assert.String(
 		t,
 		"func Delta() int {\n\t// echo\n\treturn Charlie\n}",
-		revisionSymbol(t, r, ". alfa Delta").Text,
+		revision_tester.Symbol(t, r, ". alfa Delta").Text,
 	)
 }
 

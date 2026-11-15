@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
 	"testing"
@@ -13,20 +14,20 @@ func TestIgnoreStubOverlayHidesMovedFile(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() {}\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/charlie.go",
 		"package alfa\n\nfunc Charlie() {}\n",
 	)
-	testutil.WriteFile(t, root, "delta/delta.go", "package delta\n")
-	testutil.WriteFile(
+	system_tester.Write(t, root, "delta/delta.go", "package delta\n")
+	system_tester.Write(
 		t,
 		root,
 		"echo/echo.go",
@@ -66,13 +67,13 @@ func TestIgnoreStubOverlayOnWholePackage(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() {}\n",
 	)
-	testutil.WriteFile(t, root, "delta/delta.go", "package delta\n")
+	system_tester.Write(t, root, "delta/delta.go", "package delta\n")
 	overlay := map[string][]byte{
 		filepath.Join(root, "alfa/alfa.go"): []byte(
 			"//go:build ignore\n\npackage alfa\n",

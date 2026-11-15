@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -131,72 +132,72 @@ func TestCompositeFormatFix(t *testing.T) {
 	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
-			applied := filterApplied(r.Entries)
+			applied := fix_tester.Applied(r.Entries)
 			assert.Integer(t, 10, len(applied))
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"shared_line.go",
 				4,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"first_on_brace_line.go",
 				4,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"nested_calls.go",
 				12,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"nested_calls.go",
 				13,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"compliant.go",
 				8,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"single_line_long.go",
 				6,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"map_collapses.go",
 				4,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"multi_line_element.go",
 				4,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"multi_line_element.go",
 				5,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"collapse_short_slice.go",
@@ -208,7 +209,7 @@ func TestCompositeFormatFix(t *testing.T) {
 	t.Run(
 		"SecondRunChangesNothing",
 		func(t *testing.T) {
-			assertSecondRunQuiet(t, directory)
+			fix_tester.SecondRunQuiet(t, directory)
 		},
 	)
 }

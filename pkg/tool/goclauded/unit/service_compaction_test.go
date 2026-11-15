@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 )
@@ -58,7 +58,7 @@ func TestStartedCompactionWaitsForWatchersPrompt(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(
+		delivery_tester.KindEntries(
 			s.Check("watcher").Entries,
 			constant.QueueNotification,
 		),
@@ -86,7 +86,7 @@ func TestWatcherIsNotToldOfItsOwnCompaction(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		fixture.KindEntries(
+		delivery_tester.KindEntries(
 			s.Check("watcher").Entries,
 			constant.QueueNotification,
 		),

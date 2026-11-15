@@ -3,12 +3,13 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/event_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
@@ -25,7 +26,7 @@ func TestClientSubscribeDeliversParsedEvents(t *testing.T) {
 		memory.New(),
 	)
 	defer stop()
-	e := fixture.NextStreamEvent(t, events)
+	e := event_tester.NextStream(t, events)
 	assert.String(t, "announce", e.Kind)
 	assert.String(t, "client topic", e.Metadata[constant.Topic])
 	assert.True(t, e.Identifier > 0)
@@ -46,7 +47,7 @@ func TestClientSubscribeFiltersKinds(t *testing.T) {
 		memory.New(),
 	)
 	defer stop()
-	e := fixture.NextStreamEvent(t, events)
+	e := event_tester.NextStream(t, events)
 	assert.String(t, "label", e.Kind)
 	assert.String(t, "green", e.Metadata[constant.Now])
 }
@@ -61,7 +62,7 @@ func TestClientSubscribeResumesAfterStop(t *testing.T) {
 		logger.New(context.Background()),
 		memory.New(),
 	)
-	fixture.NextStreamEvent(t, first)
+	event_tester.NextStream(t, first)
 	stop()
 	a.Announce(a.Name(), "later topic")
 	second, halt := s.Client(t).Subscribe(
@@ -71,7 +72,7 @@ func TestClientSubscribeResumesAfterStop(t *testing.T) {
 		memory.New(),
 	)
 	defer halt()
-	e := fixture.NextStreamEvent(t, second)
+	e := event_tester.NextStream(t, second)
 	assert.String(t, "later topic", e.Metadata[constant.Topic])
 }
 
@@ -84,7 +85,7 @@ func TestClientSubscribeClosesItsChannelOnStop(t *testing.T) {
 		memory.New(),
 	)
 	stop()
-	fixture.DrainStreamEvents(t, events)
+	event_tester.Drain(t, events)
 }
 
 func TestClientSubscribeReportsRefusedTokenOnce(t *testing.T) {
@@ -103,6 +104,6 @@ func TestClientSubscribeReportsRefusedTokenOnce(t *testing.T) {
 		r,
 	)
 	defer stop()
-	awaitEvents(t, r, 1)
+	r.Await(1, soil.FixtureSignalWait)
 	assert.Count(t, 1, r.Events())
 }

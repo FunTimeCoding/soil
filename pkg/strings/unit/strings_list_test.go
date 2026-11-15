@@ -9,20 +9,20 @@ import (
 )
 
 func TestCompare(t *testing.T) {
-	assertCompare(t, strings_tester.Compare{}, []string{}, []string{})
-	assertCompare(
+	strings_tester.Compared(t, strings_tester.Compare{}, []string{}, []string{})
+	strings_tester.Compared(
 		t,
 		strings_tester.Compare{Add: []string{"Alfa"}},
 		[]string{},
 		[]string{constant.UpperAlfa},
 	)
-	assertCompare(
+	strings_tester.Compared(
 		t,
 		strings_tester.Compare{Remove: []string{"Alfa"}},
 		[]string{constant.UpperAlfa},
 		[]string{},
 	)
-	assertCompare(
+	strings_tester.Compared(
 		t,
 		strings_tester.Compare{Stay: []string{"Alfa"}},
 		[]string{constant.UpperAlfa},

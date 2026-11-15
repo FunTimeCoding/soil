@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
@@ -12,13 +13,13 @@ import (
 
 func TestReflowClean(t *testing.T) {
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader("one two\n"))
-	assertReport(t, "Alfa", false, nil, "", l)
+	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }
 
 func TestReflowRewrapsOverrunningParagraph(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end\n")
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -41,7 +42,7 @@ func TestReflowRewrapsOverrunningParagraph(t *testing.T) {
 func TestReflowRefusesHardLineBreak(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end  \nnext\n")
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,

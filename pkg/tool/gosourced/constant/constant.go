@@ -162,21 +162,21 @@ var LintSources = []string{
 }
 
 const (
-	GormPath            = "gorm.io/gorm"
-	GormType            = "DB"
-	TableNameMethod     = "TableName"
-	AtomicallyMethod    = "Atomically"
-	CallerProduction    = "production"
-	CallerSupport       = "support"
-	CallerTest          = "test"
-	CallerInternal      = "internal"
-	CensusLostCallers   = "callers"
-	CensusLostTables    = "tables"
-	PackageScope        = "<package scope>"
-	TestFileSuffix      = "_test.go"
-	UnitSegment         = "unit"
-	IntegrationSegment  = "integration"
-	CensusTypeParameter = "type"
+	GormPath           = "gorm.io/gorm"
+	GormType           = "DB"
+	TableNameMethod    = "TableName"
+	AtomicallyMethod   = "Atomically"
+	CallerProduction   = "production"
+	CallerSupport      = "support"
+	CallerTest         = "test"
+	CallerInternal     = "internal"
+	UsageLostCallers   = "callers"
+	UsageLostTables    = "tables"
+	PackageScope       = "<package scope>"
+	TestFileSuffix     = "_test.go"
+	UnitSegment        = "unit"
+	IntegrationSegment = "integration"
+	UsageTypeParameter = "type"
 )
 
 var GormReadVerbs = []string{

@@ -3,24 +3,26 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestReportFixRefusedWhenFixedFileChanges(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"pkg/alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() int {\n\tcharlie := 1\n\treturn charlie\n}\n",
 	)
-	r := reportFixing(
+	r := lint_tester.FixingReport(
 		t,
 		root,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				root,
 				"pkg/alfa/alfa.go",
@@ -49,23 +51,28 @@ func TestReportFixRefusedWhenFixedFileChanges(t *testing.T) {
 
 func TestReportFixCommitsPastChangeToOtherFile(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"pkg/alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() int {\n\tcharlie := 1\n\treturn charlie\n}\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"pkg/delta/delta.go",
 		"package delta\n\nfunc Echo() int {\n\treturn 1\n}\n",
 	)
-	reportFixing(
+	lint_tester.FixingReport(
 		t,
 		root,
 		func() {
-			testutil.WriteFile(t, root, "pkg/delta/delta.go", "package delta\n")
+			system_tester.Write(
+				t,
+				root,
+				"pkg/delta/delta.go",
+				"package delta\n",
+			)
 		},
 	)
 	assert.String(
@@ -77,13 +84,13 @@ func TestReportFixCommitsPastChangeToOtherFile(t *testing.T) {
 
 func TestReportFixKeepsEmptyFileFilledBeforeCommit(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "pkg/alfa/alfa.go", "package alfa\n")
-	testutil.WriteFile(t, root, "pkg/alfa/empty.go", "")
-	reportFixing(
+	system_tester.Write(t, root, "pkg/alfa/alfa.go", "package alfa\n")
+	system_tester.Write(t, root, "pkg/alfa/empty.go", "")
+	lint_tester.FixingReport(
 		t,
 		root,
 		func() {
-			testutil.WriteFile(t, root, "pkg/alfa/empty.go", "package alfa\n")
+			system_tester.Write(t, root, "pkg/alfa/empty.go", "package alfa\n")
 		},
 	)
 	assert.True(t, system.FileExists(filepath.Join(root, "pkg/alfa/empty.go")))
@@ -91,8 +98,8 @@ func TestReportFixKeepsEmptyFileFilledBeforeCommit(t *testing.T) {
 
 func TestReportFixRemovesEmptyFile(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "pkg/alfa/alfa.go", "package alfa\n")
-	testutil.WriteFile(t, root, "pkg/alfa/empty.go", "")
-	reportFixing(t, root, nil)
+	system_tester.Write(t, root, "pkg/alfa/alfa.go", "package alfa\n")
+	system_tester.Write(t, root, "pkg/alfa/empty.go", "")
+	lint_tester.FixingReport(t, root, nil)
 	assert.False(t, system.FileExists(filepath.Join(root, "pkg/alfa/empty.go")))
 }

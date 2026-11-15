@@ -3,6 +3,7 @@ package integration
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/argument/unit/argument_tester"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/strings/split"
@@ -22,7 +23,7 @@ func TestUnknownFlagPrintsUsageAndExitsTwo(t *testing.T) {
 		return
 	}
 
-	r := child(t, "alfa --charlie delta")
+	r := argument_tester.Child(t, "alfa --charlie delta")
 	assert.Integer(t, 2, r.Exit)
 	assert.StringContains(t, "unknown flag: --charlie", r.ErrorString)
 	assert.StringContains(t, "Usage:\n  alfa [flags]", r.ErrorString)
@@ -39,7 +40,7 @@ func TestSimpleInstanceRefusesUnknownFlagWithExitTwo(t *testing.T) {
 		return
 	}
 
-	r := child(t, "alfa --charlie")
+	r := argument_tester.Child(t, "alfa --charlie")
 	assert.Integer(t, 2, r.Exit)
 	assert.StringContains(t, "unknown flag: --charlie", r.ErrorString)
 	assert.StringContains(t, "--bravo", r.ErrorString)
@@ -55,7 +56,7 @@ func TestSimpleInstanceAnswersHelpWithExitZero(t *testing.T) {
 		return
 	}
 
-	r := child(t, "alfa --help")
+	r := argument_tester.Child(t, "alfa --help")
 	assert.Integer(t, 0, r.Exit)
 	assert.StringContains(t, "--bravo", r.ErrorString)
 }

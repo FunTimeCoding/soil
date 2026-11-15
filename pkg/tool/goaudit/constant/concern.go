@@ -80,6 +80,8 @@ const (
 	MissingStrictServerText          = "openapi.yaml exists but strict-server not enabled"
 	MisplacedTestKey                 = "misplaced_test"
 	MisplacedTestText                = "test file outside a domain root unit/ or integration/"
+	StrayHelperKey                   = "stray_helper"
+	StrayHelperText                  = "non-test file in a test home; move it into a named helper package"
 	StaleToolPermissionKey           = "stale_tool_permission"
 	MappedServiceMissingKey          = "mapped_service_missing"
 	MappedServiceMissingText         = "mapped service has no model_context/"

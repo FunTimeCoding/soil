@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
@@ -17,7 +18,7 @@ func TestModelContextAlertsNeedSelectedInstance(t *testing.T) {
 	v := model_context_server.New(
 		t,
 		func(g *guard.Mux) {
-			healthyDaemon(t, "alfa", "bravo").Mount(
+			daemon_tester.NewHealthy(t, "alfa", "bravo").Mount(
 				memory.New(),
 				mock_recorder.New(),
 				g,

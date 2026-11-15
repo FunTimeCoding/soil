@@ -3,13 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/git/unit/repository_tester"
+	"github.com/funtimecoding/soil/pkg/git/repository_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestModifiedFilesAtRoot(t *testing.T) {
-	r := modifiedRepository(t)
+	r := repository_tester.Modified(t)
 	assert.Strings(
 		t,
 		[]string{"go.mod", "graft/bravo/go.mod", "graft/bravo/staged.md"},
@@ -18,7 +18,7 @@ func TestModifiedFilesAtRoot(t *testing.T) {
 }
 
 func TestModifiedFilesInSubdirectory(t *testing.T) {
-	r := modifiedRepository(t)
+	r := repository_tester.Modified(t)
 	assert.Strings(
 		t,
 		[]string{"go.mod", "staged.md"},
@@ -27,7 +27,7 @@ func TestModifiedFilesInSubdirectory(t *testing.T) {
 }
 
 func TestModifiedFilesStatusStaysRootRelative(t *testing.T) {
-	r := modifiedRepository(t)
+	r := repository_tester.Modified(t)
 	s := git.Status(filepath.Join(r.Clone, "graft", "bravo"))
 	_, okay := s["graft/bravo/go.mod"]
 	assert.True(t, okay)

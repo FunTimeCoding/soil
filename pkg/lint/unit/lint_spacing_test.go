@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/spacing"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -16,7 +17,7 @@ func TestSpacingRawStringBraceIsNotBlock(t *testing.T) {
 			"package example\n\nvar Script = `(function() {\n\treturn 1;\n})()`\n\nvar Pattern = 1\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Delta",
 		false,
@@ -33,7 +34,7 @@ func TestSpacingTopLevelRulesSurviveRawString(t *testing.T) {
 			"package example\n\nvar Script = `(function() {\n\treturn 1;\n})()`\n\nvar A = 1\nconst B = 2\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Echo",
 		true,
@@ -60,7 +61,7 @@ func TestSpacingBlankBeforeControl(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -87,7 +88,7 @@ func TestSpacingBlankBeforeReturn(t *testing.T) {
 			"package example\n\nfunc Example() int {\n\tx := 1\n\treturn x\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Bravo",
 		true,
@@ -114,7 +115,7 @@ func TestSpacingBlankAfterControl(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n\tfmt.Println(\"b\")\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Charlie",
 		true,
@@ -141,7 +142,7 @@ func TestSpacingReturnFirstInBlock(t *testing.T) {
 			"package example\n\nfunc Example() int {\n\treturn 1\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -158,7 +159,7 @@ func TestSpacingControlFirstInBlock(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -175,7 +176,7 @@ func TestSpacingConsecutiveClosingBraces(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tif true {\n\t\t\tfmt.Println(\"a\")\n\t\t}\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -192,7 +193,7 @@ func TestSpacingElse(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t} else {\n\t\tfmt.Println(\"b\")\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -209,7 +210,7 @@ func TestSpacingExtraneousBlanks(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\n\ty := 2\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Delta",
 		true,
@@ -245,7 +246,7 @@ func TestSpacingClean(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tfmt.Println(\"a\")\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -262,7 +263,7 @@ func TestSpacingClosingBraceBeforeDefault(t *testing.T) {
 			"package example\n\nfunc Example(x int) {\n\tswitch x {\n\tcase 1:\n\t\tif x > 0 {\n\t\t\tfmt.Println(\"a\")\n\t\t}\n\tdefault:\n\t\tfmt.Println(\"b\")\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -279,7 +280,7 @@ func TestSpacingClosingBraceBeforeComma(t *testing.T) {
 			"package example\n\nfunc Example(run func()) {\n\trun()\n}\n\nfunc Call() {\n\tExample(func() {\n\t\tif true {\n\t\t\tfmt.Println(\"a\")\n\t\t}\n\t})\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -296,7 +297,7 @@ func TestSpacingContinueAsIdentifierPrefix(t *testing.T) {
 			"package example\n\nfunc Example(\n\tcontinueOnError bool,\n) {\n\tfmt.Println(continueOnError)\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -313,7 +314,7 @@ func TestSpacingCommentBeforeControl(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\t// Check condition\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -330,7 +331,7 @@ func TestSpacingCompositeLiteralInFunction(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := map[string]int{\n\t\t\"a\": 1,\n\t}\n\ty := 2\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -347,7 +348,7 @@ func TestSpacingRawStringLiteral(t *testing.T) {
 			"package example\n\nvar Template = `\nif (x) {\n\treturn false;\n}\ny = 1;\n`\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -364,7 +365,7 @@ func TestSpacingVariableBlockCompositeLiteral(t *testing.T) {
 			"package example\n\nvar (\n\tStatuses = []string{\n\t\t\"open\",\n\t\t\"closed\",\n\t}\n\tOther = \"other\"\n)\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -381,7 +382,7 @@ func TestSpacingBlankBetweenAssignments(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\ty := 2\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -408,7 +409,7 @@ func TestSpacingBlankAtStartOfFunction(t *testing.T) {
 			"package example\n\nfunc Example() {\n\n\tx := 1\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -435,7 +436,7 @@ func TestSpacingBlankAtEndOfFunction(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -462,7 +463,7 @@ func TestSpacingBlankBeforeReturnFirstInBlock(t *testing.T) {
 			"package example\n\nfunc Example() int {\n\n\treturn 1\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -489,7 +490,7 @@ func TestSpacingBlankBetweenAssignmentsInNestedBlock(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tx := 1\n\n\t\ty := 2\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -516,7 +517,7 @@ func TestSpacingBlankAfterControlBeforeStatement(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n\n\tfmt.Println(\"b\")\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -533,7 +534,7 @@ func TestSpacingBlankBeforeIfInFunction(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -550,7 +551,7 @@ func TestSpacingBlankInFunctionLiteral(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tf := func() {\n\t\tx := 1\n\n\t\ty := 2\n\t}\n\tf()\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -577,7 +578,7 @@ func TestSpacingCompositeLiteralCloserDoesNotLeakDepth(t *testing.T) {
 			"package example\n\nfunc First() {\n\t_ = []string{\n\t\t\"a\",\n\t}\n}\n\nfunc Second() {}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"composite",
 		false,
@@ -594,7 +595,7 @@ func TestSpacingBlankBeforeCommentBeforeControl(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\t// check\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -611,7 +612,7 @@ func TestSpacingBlankBeforeCommentBeforeAssignment(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\t// note\n\ty := 2\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		false,
@@ -628,7 +629,7 @@ func TestSpacingMultiLineConditionBlankAfterControl(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif strings.Contains(\n\t\ts,\n\t\t\"x\",\n\t) {\n\t\tcontinue\n\t}\n\n\tx := 1\n\t_ = x\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"multiline",
 		false,
@@ -645,7 +646,7 @@ func TestSpacingBlankBeforeDefer(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx, e := f()\n\n\tdefer g()\n\t_ = x\n\t_ = e\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"defer",
 		false,
@@ -662,7 +663,7 @@ func TestSpacingMissingBlankBetweenFunctions(t *testing.T) {
 			"package example\n\nfunc First() {}\nfunc Second() {}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"decl",
 		true,
@@ -689,7 +690,7 @@ func TestSpacingConsecutiveTopLevelVariableNoBlankAdded(t *testing.T) {
 			"package example\n\nvar A = 1\nvar B = 2\nvar C = 3\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"topvar",
 		false,
@@ -706,7 +707,7 @@ func TestSpacingSpuriousBlankBetweenTopLevelVarsRemoved(t *testing.T) {
 			"package example\n\nvar A = 1\n\nvar B = 2\n\nvar C = 3\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"topvar2",
 		true,
@@ -738,7 +739,7 @@ func TestSpacingSpuriousBlankBetweenTopLevelVarsRemoved(t *testing.T) {
 func TestSpacingBlankBeforeCommentAfterControlIdempotent(t *testing.T) {
 	input := "package example\n\nfunc Example() {\n\tif true {\n\t\tx := 1\n\t\t_ = x\n\t}\n\n\t// note\n\ty := 2\n\t_ = y\n}\n"
 	l := spacing.Check("idempotent", strings.NewReader(input))
-	assertReport(t, "idempotent", false, nil, input, l)
+	lint_tester.Report(t, "idempotent", false, nil, input, l)
 }
 
 func TestSpacingBlankAfterControlBeforeRegularStatementPreserved(t *testing.T) {
@@ -748,7 +749,7 @@ func TestSpacingBlankAfterControlBeforeRegularStatementPreserved(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tx := 1\n\t\t_ = x\n\t}\n\n\ty := 2\n\t_ = y\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"ctrlblank",
 		false,
@@ -765,7 +766,7 @@ func TestSpacingBlankAfterNestedControlBeforeRegularStatementPreserved(t *testin
 			"package example\n\nfunc Example() {\n\tfor _, s := range []string{\n\t\t\"a\",\n\t\t\"b\",\n\t} {\n\t\tif !contains(s) {\n\t\t\tadd(s)\n\t\t}\n\t}\n\n\tif !contains(\"c\") {\n\t\tadd(\"c\")\n\t}\n\n\tresult := count()\n\t_ = result\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"nestedctrl",
 		false,
@@ -782,7 +783,7 @@ func TestSpacingBlankAfterCommentRemoved(t *testing.T) {
 			"package example\n\nfunc Example() {\n\t// note\n\n\tif true {\n\t\treturn\n\t}\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"aftercomment",
 		true,
@@ -809,7 +810,7 @@ func TestSpacingInterFunctionBlankAfterNestedFuncLiteral(t *testing.T) {
 			"package example\n\nfunc First() {\n\tn(\n\t\tfunc(m *M) {\n\t\t\tm.H(\n\t\t\t\t\"/\",\n\t\t\t\tfunc(\n\t\t\t\t\tw W,\n\t\t\t\t\t_ R,\n\t\t\t\t) {\n\t\t\t\t\tw.Write()\n\t\t\t\t},\n\t\t\t)\n\t\t},\n\t)\n}\n\nfunc Second() {}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"interfunc",
 		false,
@@ -822,13 +823,13 @@ func TestSpacingInterFunctionBlankAfterNestedFuncLiteral(t *testing.T) {
 func TestSpacingBlankBetweenTopLevelConstantAndVariablePreserved(t *testing.T) {
 	input := "package example\n\nconst A = 1\n\nvar B = 2\n"
 	l := spacing.Check("constvarblank", strings.NewReader(input))
-	assertReport(t, "constvarblank", false, nil, input, l)
+	lint_tester.Report(t, "constvarblank", false, nil, input, l)
 }
 
 func TestSpacingBlankBetweenTopLevelVariableAndConstantPreserved(t *testing.T) {
 	input := "package example\n\nvar A = 1\n\nconst B = 2\n"
 	l := spacing.Check("varconstblank", strings.NewReader(input))
-	assertReport(t, "varconstblank", false, nil, input, l)
+	lint_tester.Report(t, "varconstblank", false, nil, input, l)
 }
 
 func TestSpacingMissingBlankBetweenTopLevelConstantAndVariableInserted(t *testing.T) {
@@ -836,7 +837,7 @@ func TestSpacingMissingBlankBetweenTopLevelConstantAndVariableInserted(t *testin
 		"constvarinsert",
 		strings.NewReader("package example\n\nconst A = 1\nvar B = 2\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"constvarinsert",
 		true,
@@ -861,7 +862,7 @@ func TestSpacingMissingBlankBetweenTopLevelVariableAndConstantInserted(t *testin
 		"varconstinsert",
 		strings.NewReader("package example\n\nvar A = 1\nconst B = 2\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"varconstinsert",
 		true,
@@ -884,7 +885,7 @@ func TestSpacingMissingBlankBetweenTopLevelVariableAndConstantInserted(t *testin
 func TestSpacingMultiLineConditionThreeLineBlankAfterControl(t *testing.T) {
 	input := "package example\n\nfunc Example() {\n\tif a == 0 &&\n\t\tb == 0 &&\n\t\tc == 0 {\n\t\treturn\n\t}\n\n\tx := 1\n\t_ = x\n}\n"
 	l := spacing.Check("multiline3", strings.NewReader(input))
-	assertReport(t, "multiline3", false, nil, input, l)
+	lint_tester.Report(t, "multiline3", false, nil, input, l)
 }
 
 func TestSpacingDoubleBlankAfterClosingBrace(t *testing.T) {
@@ -894,7 +895,7 @@ func TestSpacingDoubleBlankAfterClosingBrace(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n\n\n\tfmt.Println(\"b\")\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -917,5 +918,5 @@ func TestSpacingDoubleBlankAfterClosingBrace(t *testing.T) {
 func TestSpacingKeepsBlankAfterRangeWithMultilineLiteral(t *testing.T) {
 	source := "package example\n\nfunc Example() {\n\tvar total int\n\n\tfor _, name := range []string{\n\t\t\"alfa\",\n\t\t\"bravo\",\n\t} {\n\t\ttotal += len(name)\n\t}\n\n\tfmt.Println(total)\n}\n"
 	l := spacing.Check(stringsConstant.UpperAlfa, strings.NewReader(source))
-	assertReport(t, "Alfa", false, nil, source, l)
+	lint_tester.Report(t, "Alfa", false, nil, source, l)
 }

@@ -6,7 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/provision/salt/salt_tester"
+	"github.com/funtimecoding/soil/pkg/provision/salt/salt_server"
+	"github.com/funtimecoding/soil/pkg/provision/unit/salt_tester"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -14,8 +15,8 @@ import (
 )
 
 func TestFirstCallLogsInAndSendsToken(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	defer c.Close()
 	assert.Integer(t, 0, s.Logins())
 	keys, e := c.ListKeys()
@@ -26,8 +27,8 @@ func TestFirstCallLogsInAndSendsToken(t *testing.T) {
 }
 
 func TestExpiredTokenRenewsOnce(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	defer c.Close()
 	_, e := c.ListKeys()
 	assert.FatalOnError(t, e)
@@ -39,8 +40,8 @@ func TestExpiredTokenRenewsOnce(t *testing.T) {
 }
 
 func TestRefusalCarriesParagraph(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	_, e := newSaltClient(t, s.URL, "bravo").ListJobs()
+	s := salt_server.New(t, "bravo")
+	_, e := salt_tester.New(t, s.URL, "bravo").ListJobs()
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
@@ -50,8 +51,8 @@ func TestRefusalCarriesParagraph(t *testing.T) {
 }
 
 func TestGatewayTimeoutIsUnavailable(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	assert.FatalOnError(t, c.Login(t.Context()))
 	s.Gateway(http.StatusGatewayTimeout)
 	_, e := c.ListJobs()
@@ -60,8 +61,8 @@ func TestGatewayTimeoutIsUnavailable(t *testing.T) {
 }
 
 func TestBadGatewayIsUnavailable(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	assert.FatalOnError(t, c.Login(t.Context()))
 	s.Gateway(http.StatusBadGateway)
 	_, e := c.ListJobs()
@@ -69,8 +70,8 @@ func TestBadGatewayIsUnavailable(t *testing.T) {
 }
 
 func TestClassifiedStatusWinsOverParagraph(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	assert.FatalOnError(t, c.Login(t.Context()))
 	s.Refuse(http.StatusServiceUnavailable, "salt master is restarting")
 	_, e := c.ListJobs()
@@ -83,8 +84,8 @@ func TestClassifiedStatusWinsOverParagraph(t *testing.T) {
 }
 
 func TestWrongPasswordIsRefusedWithReason(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "charlie")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "charlie")
 	defer c.Close()
 	e := c.Login(t.Context())
 	assert.Nil(t, connection.Classify(e))
@@ -98,16 +99,16 @@ func TestWrongPasswordIsRefusedWithReason(t *testing.T) {
 }
 
 func TestLoginNobodyAnswersIsConnectionFailure(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	defer c.Close()
 	s.Close()
 	assert.NotNil(t, connection.Classify(c.Login(t.Context())))
 }
 
 func TestPostThatHangsEndsWithItsContext(t *testing.T) {
-	s := salt_tester.New(t, "bravo")
-	c := newSaltClient(t, s.URL, "bravo")
+	s := salt_server.New(t, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	defer c.Close()
 	assert.FatalOnError(t, c.Login(t.Context()))
 	s.HoldPost()
@@ -149,7 +150,7 @@ func TestLoginThatHangsEndsWithItsContext(t *testing.T) {
 	)
 	defer s.Close()
 	defer close(release)
-	c := newSaltClient(t, s.URL, "bravo")
+	c := salt_tester.New(t, s.URL, "bravo")
 	defer c.Close()
 	x, cancel := context.WithTimeout(t.Context(), 50*time.Millisecond)
 	defer cancel()

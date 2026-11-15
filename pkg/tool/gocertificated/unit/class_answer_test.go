@@ -13,7 +13,7 @@ import (
 
 func TestMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	r, e := restClient(t, s).GetAuthorityWithResponse(
+	r, e := base.Rest(t, s).GetAuthorityWithResponse(
 		t.Context(),
 		constant.FixtureClusterAuthority,
 	)
@@ -26,7 +26,7 @@ func TestMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 
 func TestRootBeforeCreationAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	r, e := restClient(t, s).GetRootWithResponse(t.Context())
+	r, e := base.Rest(t, s).GetRootWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
 	assert.NotNil(t, r.JSON404)
@@ -36,7 +36,7 @@ func TestRootBeforeCreationAnswersNotFoundQuietly(t *testing.T) {
 func TestRootFaultIsCapturedAsServerError(t *testing.T) {
 	s := base.New(t)
 	s.Daemon.Close()
-	r, e := restClient(t, s).GetRootWithResponse(t.Context())
+	r, e := base.Rest(t, s).GetRootWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())
 	assert.Count(t, 1, s.Reporter.Events())
@@ -44,9 +44,9 @@ func TestRootFaultIsCapturedAsServerError(t *testing.T) {
 
 func TestSecondRootAnswersConflictQuietly(t *testing.T) {
 	s := base.New(t)
-	c := restClient(t, s)
-	postAuthority(t, c, server_tester.RootBody())
-	r := postAuthority(t, c, server_tester.RootBody())
+	c := base.Rest(t, s)
+	server_tester.PostAuthority(t, c, server_tester.RootBody())
+	r := server_tester.PostAuthority(t, c, server_tester.RootBody())
 	assert.Integer(t, http.StatusConflict, r.StatusCode())
 	assert.FatalNotNil(t, r.JSON409)
 	assert.StringContains(t, "already live", r.JSON409.Error)
@@ -55,11 +55,11 @@ func TestSecondRootAnswersConflictQuietly(t *testing.T) {
 
 func TestUnusableAddressAnswersBadRequestQuietly(t *testing.T) {
 	s := base.New(t)
-	c := restClient(t, s)
-	postAuthority(t, c, server_tester.RootBody())
+	c := base.Rest(t, s)
+	server_tester.PostAuthority(t, c, server_tester.RootBody())
 	b := server_tester.ClusterBody()
 	b.PermittedAddress = &[]string{"nowhere"}
-	r := postAuthority(t, c, b)
+	r := server_tester.PostAuthority(t, c, b)
 	assert.Integer(t, http.StatusBadRequest, r.StatusCode())
 	assert.FatalNotNil(t, r.JSON400)
 	assert.StringContains(t, "nowhere", r.JSON400.Error)
@@ -68,7 +68,7 @@ func TestUnusableAddressAnswersBadRequestQuietly(t *testing.T) {
 
 func TestIssuingFromMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	r := postCertificate(t, restClient(t, s))
+	r := server_tester.PostCertificate(t, base.Rest(t, s))
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
 	assert.NotNil(t, r.JSON404)
 	assert.Count(t, 0, s.Reporter.Events())
@@ -76,10 +76,10 @@ func TestIssuingFromMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 
 func TestRevokingTwiceAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	c := restClient(t, s)
-	postAuthority(t, c, server_tester.RootBody())
-	postAuthority(t, c, server_tester.ClusterBody())
-	issued := postCertificate(t, c)
+	c := base.Rest(t, s)
+	server_tester.PostAuthority(t, c, server_tester.RootBody())
+	server_tester.PostAuthority(t, c, server_tester.ClusterBody())
+	issued := server_tester.PostCertificate(t, c)
 	assert.FatalNotNil(t, issued.JSON200)
 	serial := issued.JSON200.Serial
 	_, e := c.PostRevocationWithResponse(t.Context(), serial)
@@ -118,15 +118,18 @@ func TestRootPathAnswersMissingRootWithNotFound(t *testing.T) {
 
 func TestFormRejectionIsNotCaptured(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
-	o.Submit(constant.CreateAuthorityPath, rootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
 	assert.Count(t, 0, o.Server.Reporter.Events())
 }
 
 func TestFormFaultIsCapturedNotInlined(t *testing.T) {
 	o := web_interface_tester.New(t)
 	o.Server.Daemon.Close()
-	page := o.Submit(constant.CreateAuthorityPath, rootValues())
+	page := o.Submit(
+		constant.CreateAuthorityPath,
+		web_interface_tester.RootValues(),
+	)
 	assert.Count(t, 1, o.Server.Reporter.Events())
 	assert.StringNotContains(t, "Example Root CA", page)
 }

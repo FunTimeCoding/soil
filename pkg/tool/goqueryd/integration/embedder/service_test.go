@@ -6,11 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/embedder_tester"
 	"testing"
 )
 
 func TestGoquerydEmbedsWholeManual(t *testing.T) {
-	v := newService(t)
+	v := embedder_tester.NewService(t)
 	assert.String(
 		t,
 		"",
@@ -26,7 +27,7 @@ func TestGoquerydEmbedsWholeManual(t *testing.T) {
 }
 
 func TestGoquerydRefusesDenseChunkItself(t *testing.T) {
-	v := newService(t)
+	v := embedder_tester.NewService(t)
 	v.MustPushDocument(
 		t.Context(),
 		"dense",

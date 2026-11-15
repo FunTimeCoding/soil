@@ -3,7 +3,7 @@ package integration
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/git/unit/repository_tester"
+	"github.com/funtimecoding/soil/pkg/git/repository_tester"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"

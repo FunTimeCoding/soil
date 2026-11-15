@@ -3,7 +3,6 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 	"time"
@@ -15,7 +14,11 @@ func TestAwaitCallsignHoldsUntilSessionTakesPrompt(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.AwaitCallsign(fixture.Cancelled(), "session-1", s.Store.Clock()()),
+		s.AwaitCallsign(
+			service_tester.Cancelled(),
+			"session-1",
+			s.Store.Clock()(),
+		),
 	)
 }
 
@@ -26,7 +29,7 @@ func TestAwaitCallsignReturnsOnPromptAfterChannelStarted(t *testing.T) {
 	assert.String(
 		t,
 		r.Callsign,
-		s.AwaitCallsign(fixture.Cancelled(), "session-1", since),
+		s.AwaitCallsign(service_tester.Cancelled(), "session-1", since),
 	)
 }
 
@@ -37,7 +40,11 @@ func TestAwaitCallsignIgnoresPromptOlderThanChannel(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		s.AwaitCallsign(fixture.Cancelled(), "session-1", s.Store.Clock()()),
+		s.AwaitCallsign(
+			service_tester.Cancelled(),
+			"session-1",
+			s.Store.Clock()(),
+		),
 	)
 }
 
@@ -49,7 +56,7 @@ func TestAwaitCallsignNeedsNoAnnounce(t *testing.T) {
 	assert.String(
 		t,
 		r.Callsign,
-		s.AwaitCallsign(fixture.Cancelled(), "session-1", since),
+		s.AwaitCallsign(service_tester.Cancelled(), "session-1", since),
 	)
 }
 

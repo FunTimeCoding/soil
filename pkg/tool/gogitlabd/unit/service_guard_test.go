@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 		constant.FixtureOtherInstance,
 	)
 	alfa := clients[constant.FixtureInstance]
-	alfa.FailProjects(refusedConnection())
+	alfa.FailProjects(outage_tester.RefusedDial())
 	_, e := s.Projects(t.Context(), constant.FixtureInstance, "")
 	assert.True(t, unavailable.Is(e))
 	alfa.FailProjects(nil)

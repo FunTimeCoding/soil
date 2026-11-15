@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"reflect"
@@ -57,7 +58,7 @@ func TestClientRoundTripsThroughDaemon(t *testing.T) {
 	source := service_tester.NewSource(t)
 	c := client.New(
 		locator.New("localhost").Port(
-			servedPort(t, source, memory.New()),
+			daemon_tester.ServedPort(t, source, memory.New()),
 		).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
@@ -73,7 +74,11 @@ func TestClientRoundTripsThroughDaemon(t *testing.T) {
 func TestClientReadsEveryDeleteAnsweredAsDone(t *testing.T) {
 	c := client.New(
 		locator.New("localhost").Port(
-			servedPort(t, service_tester.NewSource(t), memory.New()),
+			daemon_tester.ServedPort(
+				t,
+				service_tester.NewSource(t),
+				memory.New(),
+			),
 		).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)

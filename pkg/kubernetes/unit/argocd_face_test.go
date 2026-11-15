@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/argocd"
 	"github.com/funtimecoding/soil/pkg/kubernetes/argocd/mock_client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/face"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/kubernetes/unit/argocd_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
@@ -20,9 +20,9 @@ func TestArgocdClientAndItsMockShareFace(t *testing.T) {
 }
 
 func TestArgocdThatListsItsApplicationsIsReachable(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"items":[]}`)
-	c := newArgocdClient(t, s.URL)
+	s := upstream_server.New(t, upstream_server.WithAnswer(`{"items":[]}`))
+	c := argocd_tester.New(t, s.URL)
 	defer c.Close()
 	assert.FatalOnError(t, c.Reachable(t.Context()))
-	assert.String(t, "/api/v1/applications", last().URL.Path)
+	assert.String(t, "/api/v1/applications", s.Last().URL.Path)
 }

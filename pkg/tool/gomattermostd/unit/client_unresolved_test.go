@@ -5,12 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"testing"
 	"time"
 )
 
 func TestClientListsUnresolvedThreads(t *testing.T) {
-	r := client_tester.New(t, unresolvedUpstream)
+	r := client_tester.New(t, mattermost_server.Unresolved)
 	threads, e := r.Client.GetUnresolvedThreads(
 		t.Context(),
 		"alfa",
@@ -25,7 +26,7 @@ func TestClientListsUnresolvedThreads(t *testing.T) {
 }
 
 func TestUnresolvedThreadsOfUnknownChannelAreNotFound(t *testing.T) {
-	r := client_tester.New(t, unresolvedUpstream)
+	r := client_tester.New(t, mattermost_server.Unresolved)
 	_, e := r.Client.GetUnresolvedThreads(
 		t.Context(),
 		"missing",

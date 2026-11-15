@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -29,9 +30,9 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 					filepath.Join(directory, "pkg/echo/fail.go"),
 				),
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
-				filterApplied(r.Entries),
+				fix_tester.Applied(r.Entries),
 				"pkg/echo/fail.go",
 				"re-aliased library → testmoduleErrors (testmodule/pkg/errors)",
 			)
@@ -61,9 +62,9 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 					filepath.Join(directory, "pkg/alfa/pod.go"),
 				),
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
-				filterApplied(r.Entries),
+				fix_tester.Applied(r.Entries),
 				"pkg/alfa/pod.go",
 				"re-aliased v1 → core (testmodule/pkg/core/v1)",
 			)
@@ -80,9 +81,9 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 					filepath.Join(directory, "pkg/bravo/lower/lower.go"),
 				),
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
-				filterApplied(r.Entries),
+				fix_tester.Applied(r.Entries),
 				"pkg/bravo/lower/lower.go",
 				"de-aliased chain1 → chain (testmodule/pkg/bravo/chain)",
 			)
@@ -91,7 +92,7 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 	t.Run(
 		"ModuleStillBuilds",
 		func(t *testing.T) {
-			assertBuilds(t, directory)
+			fix_tester.Builds(t, directory)
 		},
 	)
 }

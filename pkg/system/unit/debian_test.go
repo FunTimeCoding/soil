@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly/face"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly/mock_client"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/packager"
+	"github.com/funtimecoding/soil/pkg/system/unit/aptly_tester"
 	"path/filepath"
 	"testing"
 )
@@ -68,18 +69,26 @@ func TestAptlyMockPropagatesFailure(t *testing.T) {
 }
 
 func TestPackageVersionsReadsAptlyKeyFormat(t *testing.T) {
-	v := aptly.PackageVersions(packageKeys(), "foxtrot")
+	v := aptly.PackageVersions(aptly_tester.PackageKeys(), "foxtrot")
 	assert.Count(t, 3, v)
 	assert.String(t, "1.2.1", v[0])
 	assert.String(t, "1.2.5", v[1])
 }
 
 func TestPackageVersionsRefusesAnotherPackage(t *testing.T) {
-	assert.Count(t, 2, aptly.PackageVersions(packageKeys(), "gohw"))
+	assert.Count(
+		t,
+		2,
+		aptly.PackageVersions(aptly_tester.PackageKeys(), "gohw"),
+	)
 }
 
 func TestPackageVersionsRefusesAbsentPackage(t *testing.T) {
-	assert.Count(t, 0, aptly.PackageVersions(packageKeys(), "gooutpostd"))
+	assert.Count(
+		t,
+		0,
+		aptly.PackageVersions(aptly_tester.PackageKeys(), "gooutpostd"),
+	)
 }
 
 func TestPackageVersion(t *testing.T) {
@@ -228,7 +237,7 @@ func TestDebianPackager(t *testing.T) {
 		"John Doe",
 		"john.doe@example.org",
 	)
-	root := packageRoot()
+	root := filepath.Join(system.WorkDirectory(), "goexample_1.0.0-1_amd64")
 	assert.Any(
 		t,
 		&packager.Packager{
@@ -262,7 +271,7 @@ func TestSubPath(t *testing.T) {
 		"John Doe",
 		"john.doe@example.org",
 	)
-	root := packageRoot()
+	root := filepath.Join(system.WorkDirectory(), "goexample_1.0.0-1_amd64")
 	assert.Any(
 		t,
 		&packager.Packager{

@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
@@ -16,7 +15,7 @@ func TestGuard(t *testing.T) {
 		service_tester.NewOption(
 			t,
 			service_tester.FixtureBoard(),
-			newPrometheus(t),
+			service_tester.NewPrometheus(t),
 			nil,
 			nil,
 		),
@@ -24,13 +23,12 @@ func TestGuard(t *testing.T) {
 		memory.New(),
 	)
 	t.Cleanup(d.Close)
-	s := model_context_server.NewSignedOn(
+	s := model_context_server.New(
 		t,
-		authorization_tester.Client,
 		func(g *guard.Mux) {
 			d.Mount(g)
 		},
-	)
+		model_context_server.WithSignOn())
 	defer s.Close()
 	s.VerifyBase(t)
 	s.VerifyFavicon(t)

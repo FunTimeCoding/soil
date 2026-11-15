@@ -12,7 +12,7 @@ import (
 )
 
 func TestReaperInterruptStopsOwnedProcess(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	owned := reporter.NewOptional(identity.Example().Name())
 	defer owned.Close()
 	r := reaper.New(owned, prometheus.NewRegistry())

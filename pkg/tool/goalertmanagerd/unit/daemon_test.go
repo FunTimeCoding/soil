@@ -10,7 +10,7 @@ import (
 )
 
 func TestDaemonHandsTwoGuardsPerInstanceToLifecycle(t *testing.T) {
-	assert.Count(t, 4, healthyDaemon(t, "alfa", "bravo").Workers())
+	assert.Count(t, 4, daemon_tester.NewHealthy(t, "alfa", "bravo").Workers())
 }
 
 func TestClosingDaemonClosesBothClientsOfEveryInstance(t *testing.T) {

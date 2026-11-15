@@ -6,42 +6,42 @@ import (
 	"testing"
 )
 
-func TestQuestionLetsRipgrepSearchesThrough(t *testing.T) {
-	assert.String(t, "", guard.Question("rg -n 'func New' pkg"))
-	assert.String(t, "", guard.Question(`rg -l "\b$b\(" --type go .`))
-	assert.String(t, "", guard.Question(`rg -q foo -- "$f" --pre`))
-	assert.String(t, "", guard.Question("rg --pre-glob '*.gz' --no-pre foo"))
-	assert.String(t, "", guard.Question("git ls-files | rg -c foo"))
-	assert.String(t, "", guard.Question("timeout 5 rg foo pkg/a.go"))
-	assert.String(t, "", guard.Question("command -v rg"))
-	assert.String(t, "", guard.Question("xargs grep -l rg < list"))
-	assert.String(t, "", guard.Question("grep -l foo pkg && ("))
+func TestRipgrepSearchNeedsNoApproval(t *testing.T) {
+	assert.String(t, "", guard.AskReason("rg -n 'func New' pkg"))
+	assert.String(t, "", guard.AskReason(`rg -l "\b$b\(" --type go .`))
+	assert.String(t, "", guard.AskReason(`rg -q foo -- "$f" --pre`))
+	assert.String(t, "", guard.AskReason("rg --pre-glob '*.gz' --no-pre foo"))
+	assert.String(t, "", guard.AskReason("git ls-files | rg -c foo"))
+	assert.String(t, "", guard.AskReason("timeout 5 rg foo pkg/a.go"))
+	assert.String(t, "", guard.AskReason("command -v rg"))
+	assert.String(t, "", guard.AskReason("xargs grep -l rg < list"))
+	assert.String(t, "", guard.AskReason("grep -l foo pkg && ("))
 }
 
-func TestQuestionAsksForRipgrepProgram(t *testing.T) {
+func TestRipgrepProgramNeedsApproval(t *testing.T) {
 	assert.String(
 		t,
 		"rg --pre runs a program",
-		guard.Question("rg --pre gunzip foo ."),
+		guard.AskReason("rg --pre gunzip foo ."),
 	)
 	assert.String(
 		t,
 		"rg --pre=cat runs a program",
-		guard.Question("n=$(rg -n --'pre'=cat foo)"),
+		guard.AskReason("n=$(rg -n --'pre'=cat foo)"),
 	)
 	assert.String(
 		t,
 		"rg --hostname-bin=/bin/hostname runs a program",
-		guard.Question("rg --hostname-bin=/bin/hostname foo"),
+		guard.AskReason("rg --hostname-bin=/bin/hostname foo"),
 	)
 	assert.String(
 		t,
 		"rg --pre runs a program",
-		guard.Question("nice -n 5 timeout -s KILL 5 rg --pre cat foo"),
+		guard.AskReason("nice -n 5 timeout -s KILL 5 rg --pre cat foo"),
 	)
 }
 
-func TestQuestionAsksForUnreadableRipgrepArguments(t *testing.T) {
+func TestUnreadableRipgrepArgumentsNeedApproval(t *testing.T) {
 	reason := "rg with an argument from an expansion, a glob or xargs input, or with a config file from RIPGREP_CONFIG_PATH, could run a program through --pre"
 
 	for _, command := range []string{
@@ -60,15 +60,15 @@ func TestQuestionAsksForUnreadableRipgrepArguments(t *testing.T) {
 		"rg foo pkg && (",
 		`rg foo pkg; bash -c 'if'`,
 	} {
-		assert.String(t, reason, guard.Question(command))
+		assert.String(t, reason, guard.AskReason(command))
 	}
 }
 
-func TestQuestionJoinsGitAndRipgrepReasons(t *testing.T) {
+func TestGitAndRipgrepReasonsJoined(t *testing.T) {
 	assert.String(
 		t,
 		"git mv rewrites the shared index or work tree: pkg/a.go pkg/b.go; rg --pre runs a program",
-		guard.Question(
+		guard.AskReason(
 			"git mv pkg/a.go pkg/b.go && rg --pre cat x && rg --pre cat y",
 		),
 	)

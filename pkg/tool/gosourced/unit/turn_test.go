@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/turn_tester"
 	"testing"
 	"time"
 )
@@ -21,9 +22,9 @@ func TestTurnsRotateBetweenSessions(t *testing.T) {
 	holder, e := s.Take(t.Context(), "charlie")
 	assert.FatalOnError(t, e)
 	granted := make(chan string, 3)
-	queueTurn(t, s, "alfa", "alfa one", granted)
-	queueTurn(t, s, "alfa", "alfa two", granted)
-	queueTurn(t, s, "bravo", "bravo one", granted)
+	turn_tester.Queue(t, s, "alfa", "alfa one", granted)
+	turn_tester.Queue(t, s, "alfa", "alfa two", granted)
+	turn_tester.Queue(t, s, "bravo", "bravo one", granted)
 	holder.Release()
 	var order []string
 
@@ -54,7 +55,7 @@ func TestCancelledWaiterLeavesQueue(t *testing.T) {
 		_, f := s.Take(x, "bravo")
 		done <- f
 	}()
-	waitQueue(t, s, 1)
+	turn_tester.Wait(t, s, 1)
 	cancel()
 	assert.String(t, "context canceled", (<-done).Error())
 	assert.Integer(t, 0, s.Waiting())

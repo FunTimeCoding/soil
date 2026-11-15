@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -145,41 +146,41 @@ func TestImportAliasFix(t *testing.T) {
 	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
-			applied := filterApplied(r.Entries)
-			blocked := filterBlocked(r.Entries)
+			applied := fix_tester.Applied(r.Entries)
+			blocked := fix_tester.Blocked(r.Entries)
 			assert.Integer(t, 4, len(applied))
-			assertResult(
+			fix_tester.Result(
 				t,
 				applied,
 				"superfluous.go",
 				"de-aliased helper (redundant)",
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
 				applied,
 				"unnecessary_rename.go",
 				"de-aliased h → helper",
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
 				applied,
 				"different_name.go",
 				"de-aliased u → util",
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
 				applied,
 				"struct_field.go",
 				"de-aliased h → helper",
 			)
 			assert.Integer(t, 2, len(blocked))
-			assertResult(
+			fix_tester.Result(
 				t,
 				blocked,
 				"collision.go",
 				"cannot de-alias h → helper (local collision with \"helper\")",
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
 				blocked,
 				"builtin_collision.go",

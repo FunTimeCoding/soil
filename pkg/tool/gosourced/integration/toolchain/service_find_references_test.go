@@ -8,10 +8,7 @@ import (
 )
 
 func TestFindReferences(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-references/src"),
-	)
+	d := service_tester.Prepare(t, "find-references/src")
 	s := service_tester.NewService(t)
 	r, references, e := s.Reference.FindReferences(
 		d,
@@ -31,10 +28,7 @@ func TestFindReferences(t *testing.T) {
 }
 
 func TestFindReferencesMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-references/src"),
-	)
+	d := service_tester.Prepare(t, "find-references/src")
 	s := service_tester.NewService(t)
 	r, references, e := s.Reference.FindReferences(
 		d,
@@ -50,10 +44,7 @@ func TestFindReferencesMethod(t *testing.T) {
 }
 
 func TestFindReferencesUnknownSymbol(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-references/src"),
-	)
+	d := service_tester.Prepare(t, "find-references/src")
 	s := service_tester.NewService(t)
 	r, references, e := s.Reference.FindReferences(
 		d,
@@ -67,10 +58,7 @@ func TestFindReferencesUnknownSymbol(t *testing.T) {
 }
 
 func TestFileReferences(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-references/src"),
-	)
+	d := service_tester.Prepare(t, "find-references/src")
 	s := service_tester.NewService(t)
 	r, references, e := s.Reference.FileReferences(
 		d,
@@ -89,10 +77,7 @@ func TestFileReferences(t *testing.T) {
 }
 
 func TestFileReferencesMethods(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-references/src"),
-	)
+	d := service_tester.Prepare(t, "find-references/src")
 	s := service_tester.NewService(t)
 	r, references, e := s.Reference.FileReferences(
 		d,
@@ -110,10 +95,7 @@ func TestFileReferencesMethods(t *testing.T) {
 }
 
 func TestFileReferencesUnknownFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("find-references/src"),
-	)
+	d := service_tester.Prepare(t, "find-references/src")
 	s := service_tester.NewService(t)
 	r, references, e := s.Reference.FileReferences(
 		d,

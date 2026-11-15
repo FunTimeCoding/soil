@@ -4,27 +4,34 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 	"testing"
 )
 
 func TestHybridSearchReturnsResults(t *testing.T) {
-	s, o := indexedTestStore(t)
-	e := embedTestDocuments(s, o)
+	s, o := store_tester.Indexed(t)
+	e := store_tester.EmbedPending(s, o)
 	assert.FatalOnError(t, e)
 	option := search_option.New("search pipeline", 10)
-	results, e := s.SearchHybrid(option, queryVector(t, o, option.Query))
+	results, e := s.SearchHybrid(
+		option,
+		store_tester.QueryVector(t, o, option.Query),
+	)
 	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, len(results))
 }
 
 func TestHybridSearchDiffersFromKeyword(t *testing.T) {
-	s, o := indexedTestStore(t)
-	e := embedTestDocuments(s, o)
+	s, o := store_tester.Indexed(t)
+	e := store_tester.EmbedPending(s, o)
 	assert.FatalOnError(t, e)
 	keyword := s.MustSearchKeyword("context resolution", 5, "", false, nil)
 	option := search_option.New("context resolution", 5)
-	hybrid, e := s.SearchHybrid(option, queryVector(t, o, option.Query))
+	hybrid, e := s.SearchHybrid(
+		option,
+		store_tester.QueryVector(t, o, option.Query),
+	)
 	assert.FatalOnError(t, e)
 
 	if len(keyword) > 1 && len(hybrid) > 1 {
@@ -40,8 +47,8 @@ func TestHybridSearchDiffersFromKeyword(t *testing.T) {
 }
 
 func TestHybridSearchMetadataFilter(t *testing.T) {
-	s, o := indexedTestStore(t)
-	e := embedTestDocuments(s, o)
+	s, o := store_tester.Indexed(t)
+	e := store_tester.EmbedPending(s, o)
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(
 		t,
@@ -49,7 +56,10 @@ func TestHybridSearchMetadataFilter(t *testing.T) {
 	)
 	option := search_option.New("search pipeline", 10)
 	option.Metadata = map[string]string{"scope": "alfa"}
-	results, f := s.SearchHybrid(option, queryVector(t, o, option.Query))
+	results, f := s.SearchHybrid(
+		option,
+		store_tester.QueryVector(t, o, option.Query),
+	)
 	assert.FatalOnError(t, f)
 	assert.Greater(t, 0, len(results))
 

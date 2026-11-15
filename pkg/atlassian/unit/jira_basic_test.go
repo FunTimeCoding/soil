@@ -3,17 +3,18 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/unit/atlassian_tester"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestGetSendsBasicAuthToLocator(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"total":3}`)
-	c := newJiraClient(t, s.URL)
+	s := upstream_server.New(t, upstream_server.WithAnswer(`{"total":3}`))
+	c := atlassian_tester.Jira(t, s.URL)
 	defer c.Close()
 	var out map[string]int
 	assert.FatalOnError(
@@ -27,7 +28,7 @@ func TestGetSendsBasicAuthToLocator(t *testing.T) {
 		),
 	)
 	assert.Integer(t, 3, out["total"])
-	r := last()
+	r := s.Last()
 	assert.String(t, "/rest/api/3/search/jql", r.URL.Path)
 	assert.String(t, "project = ALFA", r.URL.Query().Get(constant.JiraQueryKey))
 	user, password, okay := r.BasicAuth()
@@ -38,22 +39,27 @@ func TestGetSendsBasicAuthToLocator(t *testing.T) {
 }
 
 func TestGetPathJoinsHost(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"issueLinkTypes":[]}`)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"issueLinkTypes":[]}`),
+	)
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		newJiraClient(t, s.URL).GetPath(constant.JiraLinkTypes, &out),
+		atlassian_tester.Jira(t, s.URL).GetPath(constant.JiraLinkTypes, &out),
 	)
-	assert.String(t, "/rest/api/2/issueLinkType", last().URL.Path)
+	assert.String(t, "/rest/api/2/issueLinkType", s.Last().URL.Path)
 }
 
 func TestRefusalIsNotReadAsAnswer(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"errorMessages":["You are not authenticated."],"errors":{}}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(
+			`{"errorMessages":["You are not authenticated."],"errors":{}}`,
+		),
 	)
-	c := newJiraClient(t, s.URL)
+	c := atlassian_tester.Jira(t, s.URL)
 	defer c.Close()
 	var out map[string]any
 	e := c.Get(c.Base().Copy().Path("rest/api/2/issue/ALFA-1").String(), &out)
@@ -67,20 +73,22 @@ func TestRefusalIsNotReadAsAnswer(t *testing.T) {
 }
 
 func TestMissingIssueIsNotFound(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusNotFound,
-		`{"errorMessages":["Issue does not exist"],"errors":{}}`,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(
+			`{"errorMessages":["Issue does not exist"],"errors":{}}`,
+		),
 	)
-	c := newJiraClient(t, s.URL)
+	c := atlassian_tester.Jira(t, s.URL)
 	defer c.Close()
 	_, e := c.Bytes(c.Base().Copy().Path("rest/api/3/issue/ALFA-99").String())
 	assert.True(t, not_found.Is(e))
 }
 
 func TestBytesReturnsRawAnswer(t *testing.T) {
-	s, _ := upstream_tester.New(t, http.StatusOK, `{"key":"ALFA-1"}`)
-	c := newJiraClient(t, s.URL)
+	s := upstream_server.New(t, upstream_server.WithAnswer(`{"key":"ALFA-1"}`))
+	c := atlassian_tester.Jira(t, s.URL)
 	defer c.Close()
 	b, e := c.Bytes(c.Base().Copy().Path("rest/api/3/issue/ALFA-1").String())
 	assert.FatalOnError(t, e)

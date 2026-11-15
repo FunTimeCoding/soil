@@ -17,14 +17,14 @@ func TestSetReplacesWholeSet(t *testing.T) {
 		constant.FixtureLabelKey,
 		constant.FixtureCompatible,
 	)
-	assert.String(t, "lead", labelled(t, s, constant.FixtureLabelKey))
+	assert.String(t, "lead", s.Labelled(constant.FixtureLabelKey))
 }
 
 func TestSetReadsBackSortedWithoutRepeats(t *testing.T) {
 	s := service_tester.New(t)
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, " on_call, lead,on_call,")
-	assert.String(t, "lead,on_call", labelled(t, s, constant.FixtureLabelKey))
+	assert.String(t, "lead,on_call", s.Labelled(constant.FixtureLabelKey))
 }
 
 func TestEmptySetClearsKey(t *testing.T) {
@@ -32,7 +32,7 @@ func TestEmptySetClearsKey(t *testing.T) {
 	s.Check("session-1")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "on_call,lead")
 	s.SetLabel("session-1", constant.FixtureLabelKey, "")
-	assert.String(t, "", labelled(t, s, constant.FixtureLabelKey))
+	assert.String(t, "", s.Labelled(constant.FixtureLabelKey))
 }
 
 func TestAddKeepsOtherValues(t *testing.T) {
@@ -44,7 +44,7 @@ func TestAddKeepsOtherValues(t *testing.T) {
 		constant.FixtureLabelKey,
 		constant.FixtureCompatible,
 	)
-	assert.String(t, "lead,on_call", labelled(t, s, constant.FixtureLabelKey))
+	assert.String(t, "lead,on_call", s.Labelled(constant.FixtureLabelKey))
 }
 
 func TestRemoveTakesOnlyItsValue(t *testing.T) {
@@ -56,7 +56,7 @@ func TestRemoveTakesOnlyItsValue(t *testing.T) {
 		constant.FixtureLabelKey,
 		constant.FixtureCompatible,
 	)
-	assert.String(t, "on_call", labelled(t, s, constant.FixtureLabelKey))
+	assert.String(t, "on_call", s.Labelled(constant.FixtureLabelKey))
 }
 
 func TestEventCarriesBothWholeSets(t *testing.T) {

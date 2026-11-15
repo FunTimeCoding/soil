@@ -9,6 +9,14 @@ func (c *Client) SpacePages(
 	identifier string,
 	status string,
 ) ([]*page.Page, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	if f := c.failures.Caller(); f != nil {
+		return nil, f
+	}
+
 	if status == "" {
 		status = constant.ConfluenceCurrentStatus
 	}

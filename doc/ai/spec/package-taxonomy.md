@@ -33,7 +33,7 @@ direction, and the criteria for introducing them.
 | `pkg/web/component/` | Shared UI parts, one package each (`action`, `entry`, `table`, `card`, ...). Classes, no inline styles. |
 | `pkg/web/constant/` | CSS palette constants (pico.css overrides, `palette.go`) and the parts' `ComponentStyle`, which the layout writes ahead of a daemon's own style. Downstream repos can define additional palettes. |
 | `pkg/web/style_sheet/` | Parses a stylesheet constant into rules, for tests and style tools. |
-| `pkg/web/unit/markup_tester/` | CSS-selector asserts over rendered markup, with specificity computed for `:where` and `:is`. |
+| `pkg/web/markup_tester/` | CSS-selector asserts over rendered markup, with specificity computed for `:where` and `:is`. |
 
 ## Dependency Direction
 

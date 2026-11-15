@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret"
+	"github.com/funtimecoding/soil/pkg/tool/gosecret/unit/secret_tester"
 	"go.yaml.in/yaml/v4"
 	"os"
 	"strings"
@@ -12,7 +13,7 @@ import (
 )
 
 func TestEncodeSecret(t *testing.T) {
-	path := writeSecret(t)
+	path := secret_tester.Manifest(t)
 	decodedPath := gosecret.GetDecodedPath(path)
 	errors.PanicOnError(
 		os.WriteFile(
@@ -44,13 +45,13 @@ func TestEncodeSecret(t *testing.T) {
 }
 
 func TestEncodeSecretWithoutDecoded(t *testing.T) {
-	s, e := gosecret.EncodeSecret(writeSecret(t))
+	s, e := gosecret.EncodeSecret(secret_tester.Manifest(t))
 	errors.PanicOnError(e)
 	assert.True(t, s == nil)
 }
 
 func TestCheckSyncAfterDecode(t *testing.T) {
-	path := writeSecret(t)
+	path := secret_tester.Manifest(t)
 	s, e := gosecret.ProcessSecret(path, false)
 	errors.PanicOnError(e)
 	assert.True(t, s.InSync)

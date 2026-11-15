@@ -3,6 +3,8 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -10,10 +12,7 @@ import (
 )
 
 func TestMoveMethodsRetypesReceiver(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods/src"),
-	)
+	d := service_tester.Prepare(t, "move-methods/src")
 	r, e := service_tester.NewService(t).Symbol.MoveMethods(
 		t.Context(),
 		d,
@@ -34,14 +33,11 @@ func TestMoveMethodsRetypesReceiver(t *testing.T) {
 	)
 	_, f := os.Stat(filepath.Join(d, "pkg/alfa/greet.go"))
 	assert.True(t, os.IsNotExist(f))
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestMoveMethodsQualifiesBackReference(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods/src"),
-	)
+	d := service_tester.Prepare(t, "move-methods/src")
 	r, e := service_tester.NewService(t).Symbol.MoveMethods(
 		t.Context(),
 		d,
@@ -55,28 +51,28 @@ func TestMoveMethodsQualifiesBackReference(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertFixedContains(t, "prefix → Prefix", r)
+	rewrite_tester.FixedContains(t, "prefix → Prefix", r)
 	assert.String(
 		t,
 		"package bravo\n\nimport \"example/pkg/alfa\"\n\nfunc (s *Worker) Label() string {\n\treturn alfa.Prefix() + \"label\"\n}\n",
 		service_tester.ReadFixtureFile(t, d, "pkg/bravo/label.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestMoveMethodsKeepsReceiverFieldOfSameType(t *testing.T) {
-	d, r := moveFixtureMethods(t, "Describe")
+	d, r := module_tester.MoveMethods(t, "Describe")
 	testutil.AssertBlocked(t, r, 0)
 	assert.StringContains(
 		t,
 		"func (s *Worker) Describe() string {\n\treturn s.Name\n}",
 		service_tester.ReadFixtureFile(t, d, "pkg/bravo/describe.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestMoveMethodsRefusesMissingField(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Count")
+	_, r := module_tester.MoveMethods(t, "Count")
 	testutil.AssertBlockedContains(
 		t,
 		r,
@@ -85,7 +81,7 @@ func TestMoveMethodsRefusesMissingField(t *testing.T) {
 }
 
 func TestMoveMethodsRefusesFieldOfOtherType(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Mismatch")
+	_, r := module_tester.MoveMethods(t, "Mismatch")
 	testutil.AssertBlockedContains(
 		t,
 		r,
@@ -94,7 +90,7 @@ func TestMoveMethodsRefusesFieldOfOtherType(t *testing.T) {
 }
 
 func TestMoveMethodsRefusesUnmovedSibling(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Shout")
+	_, r := module_tester.MoveMethods(t, "Shout")
 	testutil.AssertBlockedContains(
 		t,
 		r,
@@ -103,19 +99,19 @@ func TestMoveMethodsRefusesUnmovedSibling(t *testing.T) {
 }
 
 func TestMoveMethodsMovesSiblingsTogether(t *testing.T) {
-	d, r := moveFixtureMethods(t, "Shout", "Loud")
+	d, r := module_tester.MoveMethods(t, "Shout", "Loud")
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestMoveMethodsKeepsSiblingDeclaredOnTarget(t *testing.T) {
-	d, r := moveFixtureMethods(t, "Repeat")
+	d, r := module_tester.MoveMethods(t, "Repeat")
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestMoveMethodsRefusesSiblingOfOtherSignature(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Mark")
+	_, r := module_tester.MoveMethods(t, "Mark")
 	testutil.AssertBlockedContains(
 		t,
 		r,
@@ -124,17 +120,17 @@ func TestMoveMethodsRefusesSiblingOfOtherSignature(t *testing.T) {
 }
 
 func TestMoveMethodsRefusesTakenName(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Echo")
+	_, r := module_tester.MoveMethods(t, "Echo")
 	testutil.AssertBlockedContains(t, r, "bravo.Worker already has Echo")
 }
 
 func TestMoveMethodsRefusesPromotedName(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Hello")
+	_, r := module_tester.MoveMethods(t, "Hello")
 	testutil.AssertBlockedContains(t, r, "bravo.Worker already has Hello")
 }
 
 func TestMoveMethodsRefusesInterfaceMethod(t *testing.T) {
-	_, r := moveFixtureMethods(t, "String")
+	_, r := module_tester.MoveMethods(t, "String")
 	testutil.AssertBlockedContains(
 		t,
 		r,
@@ -143,15 +139,12 @@ func TestMoveMethodsRefusesInterfaceMethod(t *testing.T) {
 }
 
 func TestMoveMethodsRefusesPassedReceiver(t *testing.T) {
-	_, r := moveFixtureMethods(t, "Pass")
+	_, r := module_tester.MoveMethods(t, "Pass")
 	testutil.AssertBlockedContains(t, r, "Pass uses its receiver s as a value")
 }
 
 func TestMoveMethodsRefusesOutsideCaller(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-called/src"),
-	)
+	d := service_tester.Prepare(t, "move-methods-called/src")
 	r, e := service_tester.NewService(t).Symbol.MoveMethods(
 		t.Context(),
 		d,

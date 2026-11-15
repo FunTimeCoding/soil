@@ -3,13 +3,14 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/generative/unit/identified_reporter"
+	"github.com/funtimecoding/soil/pkg/generative/unit/server_tester"
 	"github.com/mark3labs/mcp-go/mcp"
 	"testing"
 )
 
 func TestPanickingToolAnswersReadableErrorWithEventIdentifier(t *testing.T) {
 	r := identified_reporter.New("echo")
-	c := recoveringClient(t, r)
+	c := server_tester.Panicking(t, r)
 	q := mcp.CallToolRequest{}
 	q.Params.Name = "golf"
 	result, e := c.CallTool(t.Context(), q)
@@ -25,7 +26,7 @@ func TestPanickingToolAnswersReadableErrorWithEventIdentifier(t *testing.T) {
 
 func TestPanickingResourceAnswersErrorWithEventIdentifier(t *testing.T) {
 	r := identified_reporter.New("foxtrot")
-	c := recoveringClient(t, r)
+	c := server_tester.Panicking(t, r)
 	q := mcp.ReadResourceRequest{}
 	q.Params.URI = "test://charlie"
 	_, e := c.ReadResource(t.Context(), q)

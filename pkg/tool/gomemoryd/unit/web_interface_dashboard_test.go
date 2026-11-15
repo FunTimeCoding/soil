@@ -18,7 +18,7 @@ func TestDashboardCountsSitInSummaryStrip(t *testing.T) {
 	o.Tags = []string{"shared"}
 	_, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
-	page := body(t, s.Server, constant.DashboardPath, false)
+	page := s.Body(t, constant.DashboardPath)
 	assert.StringContains(t, "1 active · 0 relations", page)
 	assert.StringContains(
 		t,

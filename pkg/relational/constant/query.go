@@ -1,6 +1,7 @@
 package constant
 
 const (
+	LiteColumnExistsQuery  = "SELECT COUNT(*) FROM pragma_table_info(?) WHERE name = ?"
 	LiteTableExistsQuery   = "SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?"
 	LiteTableQuery         = "SELECT name FROM pragma_table_list WHERE schema = 'main' AND type = 'table' AND name NOT LIKE 'sqlite_%'"
 	LiteTextColumnQuery    = "SELECT name FROM pragma_table_info(?) WHERE type = '' OR upper(type) GLOB '*TEXT*' OR upper(type) GLOB '*CHAR*' OR upper(type) GLOB '*CLOB*' OR upper(type) GLOB '*DATE*' OR upper(type) GLOB '*TIME*'"

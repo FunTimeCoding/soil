@@ -15,22 +15,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/query"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"github.com/funtimecoding/soil/pkg/web/types/renewing_authorizer"
+	"github.com/funtimecoding/soil/pkg/web/unit/requester_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"net/url"
 	"testing"
 )
 
 func TestNotationSendsAgentHeaderAndAuthorization(t *testing.T) {
-	s, seen := newScriptedServer(t, `{"name":"alfa"}`, http.StatusOK)
-	var out Named
-	e := newRequester(t, s.URL).
+	s := upstream_server.New(t, upstream_server.WithAnswer(`{"name":"alfa"}`))
+	var out requester_tester.Named
+	e := requester_tester.New(t, s.URL).
 		WithUserAgent("bravo/1.0").
 		WithHeader(constant.Accept, "text/css").
 		WithAuthorizer(basic.New("charlie", "delta")).
 		Notation(request.Get("/items").WithParameter("page", "2"), &out)
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", out.Name)
-	r := seen()[0]
+	r := s.Last()
 	assert.String(t, "/items", r.URL.Path)
 	assert.String(t, "2", r.URL.Query().Get("page"))
 	assert.String(t, "bravo/1.0", r.Header.Get(constant.UserAgent))
@@ -41,25 +43,29 @@ func TestNotationSendsAgentHeaderAndAuthorization(t *testing.T) {
 }
 
 func TestMissingIsNotFound(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusNotFound)
-	_, e := newRequester(t, s.URL).Bytes(request.Get("/missing"))
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusNotFound))
+	_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/missing"))
 	assert.True(t, not_found.Is(e))
 }
 
 func TestRefusalCarriesSitesReason(t *testing.T) {
-	s, _ := newScriptedServer(
+	s := upstream_server.New(
 		t,
-		`{"message":"quota spent"}`,
-		http.StatusBadRequest,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(`{"message":"quota spent"}`),
 	)
-	_, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
+	_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items"))
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 400: quota spent", e.Error())
 }
 
 func TestRefusalCanBeReadBySite(t *testing.T) {
-	s, _ := newScriptedServer(t, "spent", http.StatusBadRequest)
-	_, e := newRequester(t, s.URL).
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer("spent"),
+	)
+	_, e := requester_tester.New(t, s.URL).
 		WithRefusal(
 			func(
 				status int,
@@ -74,8 +80,8 @@ func TestRefusalCanBeReadBySite(t *testing.T) {
 }
 
 func TestTransportFailureHidesKey(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusOK)
-	r := newRequester(t, s.URL)
+	s := upstream_server.New(t)
+	r := requester_tester.New(t, s.URL)
 	r.WithAuthorizer(query.New(url.Values{"api_key": {"secret"}}))
 	s.Close()
 	_, e := r.Bytes(request.Get("/items"))
@@ -84,31 +90,41 @@ func TestTransportFailureHidesKey(t *testing.T) {
 }
 
 func TestGetRetriesTransientStatus(t *testing.T) {
-	s, seen := newScriptedServer(
+	s := upstream_server.New(
 		t,
-		"alfa",
-		http.StatusServiceUnavailable,
-		http.StatusOK,
+		upstream_server.WithStatus(
+			http.StatusServiceUnavailable,
+			http.StatusOK,
+		),
+		upstream_server.WithAnswer("alfa"),
 	)
-	b, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
+	b, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items"))
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", string(b))
-	assert.Count(t, 2, seen())
+	assert.Integer(t, 2, s.Count())
 }
 
 func TestPostIsSentOnce(t *testing.T) {
-	s, seen := newScriptedServer(t, "", http.StatusServiceUnavailable)
-	_, e := newRequester(t, s.URL).Bytes(
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusServiceUnavailable),
+	)
+	_, e := requester_tester.New(t, s.URL).Bytes(
 		request.PostForm("/items", url.Values{"name": {"alfa"}}),
 	)
 	assert.True(t, unavailable.Is(e))
-	assert.Count(t, 1, seen())
+	assert.Integer(t, 1, s.Count())
 }
 
 func TestUnauthorizedRenewsOnce(t *testing.T) {
 	a := renewing_authorizer.New("stale")
-	var out Named
-	e := newRequester(t, newRenewingServer(t, "Bearer fresh").URL).
+	var out requester_tester.Named
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAuthorization("Bearer fresh"),
+		upstream_server.WithAnswer(`{"name":"alfa"}`),
+	)
+	e := requester_tester.New(t, s.URL).
 		WithAuthorizer(a).
 		Notation(request.Get("/items"), &out)
 	assert.FatalOnError(t, e)
@@ -118,7 +134,12 @@ func TestUnauthorizedRenewsOnce(t *testing.T) {
 
 func TestSecondUnauthorizedIsReturned(t *testing.T) {
 	a := renewing_authorizer.New("stale")
-	_, e := newRequester(t, newRenewingServer(t, "Bearer never").URL).
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAuthorization("Bearer never"),
+		upstream_server.WithAnswer(`{"name":"alfa"}`),
+	)
+	_, e := requester_tester.New(t, s.URL).
 		WithAuthorizer(a).
 		Bytes(request.Get("/items"))
 	assert.True(t, unexpected.Is(e))
@@ -127,17 +148,17 @@ func TestSecondUnauthorizedIsReturned(t *testing.T) {
 }
 
 func TestAbsoluteLocatorLeavesBase(t *testing.T) {
-	s, seen := newScriptedServer(t, "alfa", http.StatusOK)
+	s := upstream_server.New(t, upstream_server.WithAnswer("alfa"))
 	owned := requester.New(locator.New("unused.example"))
 	defer owned.Close()
 	b, e := owned.Bytes(request.Absolute(join.Empty(s.URL, "/files/a.png")))
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", string(b))
-	assert.String(t, "/files/a.png", seen()[0].URL.Path)
+	assert.String(t, "/files/a.png", s.Last().URL.Path)
 }
 
 func TestAbsoluteLocatorKeepsItsParameters(t *testing.T) {
-	s, seen := newScriptedServer(t, "alfa", http.StatusOK)
+	s := upstream_server.New(t, upstream_server.WithAnswer("alfa"))
 	owned := requester.New(locator.New("unused.example"))
 	defer owned.Close()
 	_, e := owned.Bytes(
@@ -145,6 +166,6 @@ func TestAbsoluteLocatorKeepsItsParameters(t *testing.T) {
 			WithParameter("sid", "bravo"),
 	)
 	assert.FatalOnError(t, e)
-	assert.String(t, "full", seen()[0].URL.Query().Get("size"))
-	assert.String(t, "bravo", seen()[0].URL.Query().Get("sid"))
+	assert.String(t, "full", s.Last().URL.Query().Get("size"))
+	assert.String(t, "bravo", s.Last().URL.Query().Get("sid"))
 }

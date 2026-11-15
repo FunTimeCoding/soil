@@ -12,20 +12,14 @@ func (r *Resolver) resolveSibling(
 	normalized := pointer.Normalize(candidate)
 
 	if r.SiblingExists(normalized) || r.Ignored(normalized) {
-		result := pointer.NewResolution(constant.VerdictLive)
-		result.Target = normalized
-
-		return result
+		return pointer.NewLive(normalized)
 	}
 
 	relative, inside := pointer.Relative(path, candidate)
 
 	if inside && r.Exists(relative) {
-		result := pointer.NewResolution(constant.VerdictLive)
-		result.Target = relative
-
-		return result
+		return pointer.NewLive(relative)
 	}
 
-	return pointer.NewResolution(constant.VerdictDead)
+	return pointer.NewConcern(constant.DeadPointerKey)
 }

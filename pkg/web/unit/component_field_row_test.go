@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/component/field_row"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"testing"
@@ -12,7 +13,7 @@ func TestFieldRowShowsItsLabelValueAndActions(t *testing.T) {
 	assert.String(
 		t,
 		`<div id="field-alfa" class="field-row"><span class="field-label"><span data-tooltip="Bravo help">Bravo</span></span><span class="field-value">charlie</span><span class="field-actions"><button>delta</button></span></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			field_row.New("Bravo").
 				Identifier("field-alfa").
@@ -28,7 +29,7 @@ func TestEmptyFieldRowReadsNotSet(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row field-unset"><span class="field-label">Echo</span><span class="field-value"><span class="absent">not set</span></span></div>`,
-		renderedNode(t, field_row.New("Echo").Value("").Node()),
+		web_tester.Render(t, field_row.New("Echo").Value("").Node()),
 	)
 }
 
@@ -36,7 +37,7 @@ func TestNoteIsMutedWithoutMarkingRowUnset(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row"><span class="field-label">Foxtrot</span><span class="field-value"><small class="field-note">text · required</small></span></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			field_row.New("Foxtrot").Note("text · required").Node(),
 		),
@@ -47,7 +48,7 @@ func TestUnlabelledRowCarriesItsContent(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row"><span class="field-value"><a href="/golf">Golf</a></span></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			field_row.New("").
 				ValueNode(html.A(html.Href("/golf"), gomponents.Text("Golf"))).

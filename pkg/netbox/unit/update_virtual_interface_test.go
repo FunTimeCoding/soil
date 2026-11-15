@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/fixture"
+	"github.com/funtimecoding/soil/pkg/netbox/unit/netbox_tester"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
@@ -21,7 +22,7 @@ func TestUpdateVirtualInterfaceSetsPrimaryAddress(t *testing.T) {
 	)
 	defer c.Close()
 	_, e := c.UpdateVirtualInterface(
-		newAlfa(),
+		netbox_tester.Alfa(),
 		"ens3",
 		network.PhysicalAddress(constant.FixturePhysicalAddress),
 	)
@@ -41,7 +42,7 @@ func TestUpdateVirtualInterfaceAssignsToVirtualInterface(t *testing.T) {
 	)
 	defer c.Close()
 	_, e := c.UpdateVirtualInterface(
-		newAlfa(),
+		netbox_tester.Alfa(),
 		"ens3",
 		network.PhysicalAddress(constant.FixturePhysicalAddress),
 	)

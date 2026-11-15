@@ -3,20 +3,21 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestRenameTestRetargetsBareCitation(t *testing.T) {
-	d := renameFollowFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-follow/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/shop/unit/shop_test.go",
 		"package unit\n\nimport \"testing\"\n\nfunc TestShelfHoldsStock(t *testing.T) {}\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",
@@ -41,13 +42,13 @@ func TestRenameTestRetargetsBareCitation(t *testing.T) {
 }
 
 func TestRenameRepeatedTestLeavesCitationForHand(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 
 	for _, p := range []string{
 		"pkg/shop/unit/shop_test.go",
 		"pkg/stock/unit/stock_test.go",
 	} {
-		testutil.WriteFile(
+		system_tester.Write(
 			t,
 			d,
 			p,
@@ -55,7 +56,7 @@ func TestRenameRepeatedTestLeavesCitationForHand(t *testing.T) {
 		)
 	}
 
-	testutil.WriteFile(t, d, "doc/note.md", "Pinned by `TestGuard`.\n")
+	system_tester.Write(t, d, "doc/note.md", "Pinned by `TestGuard`.\n")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,

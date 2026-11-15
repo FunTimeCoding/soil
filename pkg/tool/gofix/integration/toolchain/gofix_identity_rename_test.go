@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"strings"
@@ -20,9 +21,9 @@ func TestRenameMovesFileNamedForIdentity(t *testing.T) {
 		module_tester.Options(t, directory, false, false, "./..."),
 		r,
 	)
-	assertResult(
+	fix_tester.Result(
 		t,
-		filterApplied(r.Entries),
+		fix_tester.Applied(r.Entries),
 		"alfa/send_msg.go",
 		"moved send_msg.go → send_message.go",
 	)
@@ -38,7 +39,7 @@ func TestRenameMovesFileNamedForIdentity(t *testing.T) {
 			filepath.Join(directory, "alfa", "send_message.go"),
 		),
 	)
-	assertBuilds(t, directory)
+	fix_tester.Builds(t, directory)
 }
 
 func TestRenameRealignsDeclarationBlock(t *testing.T) {
@@ -63,9 +64,9 @@ func TestRenameKeepsFileWhoseNameIsTaken(t *testing.T) {
 		module_tester.Options(t, directory, false, false, "./..."),
 		r,
 	)
-	assertResult(
+	fix_tester.Result(
 		t,
-		filterBlocked(r.Entries),
+		fix_tester.Blocked(r.Entries),
 		"alfa/send_msg.go",
 		"send_message.go is taken; send_msg.go keeps its name",
 	)
@@ -86,7 +87,7 @@ func TestRenameKeepsFileWhoseNameIsTaken(t *testing.T) {
 
 func TestRenameDiffShowsMoveWithoutWriting(t *testing.T) {
 	directory := module_tester.RenamedIdentity(t)
-	before := readGoFiles(t, filepath.Join(directory, "alfa"))
+	before := fix_tester.GoFiles(t, filepath.Join(directory, "alfa"))
 	printed := assert.Capture(
 		t,
 		func() {
@@ -97,7 +98,11 @@ func TestRenameDiffShowsMoveWithoutWriting(t *testing.T) {
 			)
 		},
 	)
-	assert.Any(t, before, readGoFiles(t, filepath.Join(directory, "alfa")))
+	assert.Any(
+		t,
+		before,
+		fix_tester.GoFiles(t, filepath.Join(directory, "alfa")),
+	)
 	assert.True(
 		t,
 		strings.Contains(

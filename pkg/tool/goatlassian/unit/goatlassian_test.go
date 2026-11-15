@@ -4,19 +4,25 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassian/unit/command_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
 	"testing"
 )
 
 func TestWriteWithoutResultPrintsNothingOnSuccess(t *testing.T) {
-	for _, arguments := range writes() {
+	for _, arguments := range command_tester.Writes() {
 		c := mock_client.New()
 		var output, failure string
 		var code int
 		stray := assert.Capture(
 			t,
-			func() { output, failure, code = run(t, c, arguments...) },
+			func() {
+				output, failure, code = command_tester.Run(
+					t,
+					c,
+					arguments...)
+			},
 		)
 		assert.Integer(t, 0, code)
 		assert.String(t, "", output)
@@ -27,10 +33,10 @@ func TestWriteWithoutResultPrintsNothingOnSuccess(t *testing.T) {
 }
 
 func TestFailedWriteExitsWithItsMessage(t *testing.T) {
-	for _, arguments := range writes() {
+	for _, arguments := range command_tester.Writes() {
 		c := mock_client.New()
 		c.Failure = errors.New("foxtrot")
-		_, failure, code := run(t, c, arguments...)
+		_, failure, code := command_tester.Run(t, c, arguments...)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "foxtrot", failure)
 		c.Close()
@@ -41,7 +47,7 @@ func TestSearchIssuesEmitsIssues(t *testing.T) {
 	c := mock_client.New()
 	defer c.Close()
 	c.Found = []*client.JiraIssue{{Key: "ALFA-1"}}
-	output, _, code := run(t, c, "search-issues", "bravo")
+	output, _, code := command_tester.Run(t, c, "search-issues", "bravo")
 	assert.Integer(t, 0, code)
 	var found []client.JiraIssue
 	notation.MustDecode(output, &found, false)

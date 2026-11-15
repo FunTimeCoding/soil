@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/base"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
@@ -15,8 +16,8 @@ func TestOpenbaoOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 ) {
 	s := base.New(t)
 	defer s.Close()
-	s.MockClient.Failure = refusedDial()
-	c := interfaceClient(t, s)
+	s.MockClient.Failure = outage_tester.RefusedDial()
+	c := base.Rest(t, s)
 
 	for range 2 {
 		answer, e := c.ListSecretsWithResponse(
@@ -34,7 +35,7 @@ func TestOpenbaoOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 func TestOpenbaoOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	s.MockClient.Failure = refusedDial()
+	s.MockClient.Failure = outage_tester.RefusedDial()
 	c := s.ContextServer.Connect(t)
 	defer c.Close()
 	assert.StringContains(
@@ -46,11 +47,11 @@ func TestOpenbaoOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestDaemonHandsOutOpenbaoGuardFirst(t *testing.T) {
-	d := newOpenbaoDaemon(t)
+	d := base.Daemon(t)
 	_, okay := d.Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestWaitAnswersOnceOpenbaoAnswers(t *testing.T) {
-	assert.FatalOnError(t, newOpenbaoDaemon(t).Wait(t.Context()))
+	assert.FatalOnError(t, base.Daemon(t).Wait(t.Context()))
 }

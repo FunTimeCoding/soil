@@ -7,19 +7,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusal_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusing_source"
 	"net/http"
 	"testing"
 )
 
 func TestRejectedCreateIsBadRequestWithoutSentry(t *testing.T) {
-	status, events := refusedCreate(t, validation.New("slug: exists"))
+	status, events := refusal_tester.Create(t, validation.New("slug: exists"))
 	assert.Integer(t, http.StatusBadRequest, status)
 	assert.Integer(t, 0, events)
 }
 
 func TestRefusedTokenIsCaptured(t *testing.T) {
-	status, events := refusedCreate(
+	status, events := refusal_tester.Create(
 		t,
 		unexpected.Format("netbox status 403: no permission"),
 	)
@@ -28,18 +30,17 @@ func TestRefusedTokenIsCaptured(t *testing.T) {
 }
 
 func TestConflictWithoutConflictAnswerIsCaptured(t *testing.T) {
-	status, events := refusedCreate(t, conflict.Format("dependent objects"))
+	status, events := refusal_tester.Create(
+		t,
+		conflict.Format("dependent objects"),
+	)
 	assert.Integer(t, http.StatusInternalServerError, status)
 	assert.Integer(t, 1, events)
 }
 
 func TestRejectedCreateIsQuietToolFailure(t *testing.T) {
 	r := memory.New()
-	s := newNetboxServer(
-		t,
-		refusing_source.New(validation.New("slug: exists")),
-		r,
-	)
+	s := base.New(t, refusing_source.New(validation.New("slug: exists")), r)
 	c := s.Connect(t)
 	defer c.Close()
 	assert.StringContains(

@@ -4,13 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/clock"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"github.com/funtimecoding/soil/pkg/web/web_client"
 	"io"
 	"testing"
 )
 
 func TestWebClientCloseDropsIdleConnections(t *testing.T) {
-	s, opened := newCountingServer(t)
+	s := upstream_server.New(t, upstream_server.WithAnswer("counted"))
 	c := web_client.New(clock.New())
 	defer c.Close()
 
@@ -23,5 +24,5 @@ func TestWebClientCloseDropsIdleConnections(t *testing.T) {
 		c.Close()
 	}
 
-	assert.Integer(t, int64(2), opened.Load())
+	assert.Integer(t, 2, s.Opened())
 }

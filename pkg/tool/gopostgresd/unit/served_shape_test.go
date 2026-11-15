@@ -5,18 +5,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/postgres/types/result"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/base"
 	"testing"
 )
 
 func TestModelContextAnswersColumnsAndRows(t *testing.T) {
-	s, _, _, m := served(t, nil)
+	s, _, _, m := base.Serve(t, nil)
 	m.SeedResult(
 		"SELECT a.id, b.id",
 		result.New([]string{"id", "id"}, [][]any{{1, 7}}),
 	)
 	c := s.Connect(t)
 	defer c.Close()
-	var v wireResult
+	var v client.QueryResult
 	notation.MustDecodeBytes(
 		[]byte(
 			c.MustCallTool(

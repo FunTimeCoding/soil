@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/github/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"slices"
 	"strings"
@@ -11,7 +13,12 @@ import (
 )
 
 func TestEveryOperationClassifiesMissingResource(t *testing.T) {
-	c := refusingGithub(t, http.StatusNotFound, nil, `{"message":"Not Found"}`)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(`{"message":"Not Found"}`),
+	)
+	c := client_tester.New(t, s.URL)
 	operations := map[string]func() error{
 		"ActionRepository": func() error {
 			_, e := c.ActionRepository()
@@ -149,12 +156,12 @@ func TestEveryOperationClassifiesMissingResource(t *testing.T) {
 }
 
 func TestBranchRequestDuringOutageIsUnavailable(t *testing.T) {
-	c := refusingGithub(
+	s := upstream_server.New(
 		t,
-		http.StatusServiceUnavailable,
-		nil,
-		`{"message":"Service Unavailable"}`,
+		upstream_server.WithStatus(http.StatusServiceUnavailable),
+		upstream_server.WithAnswer(`{"message":"Service Unavailable"}`),
 	)
+	c := client_tester.New(t, s.URL)
 	_, e := c.BranchRequest("alfa", "bravo", "charlie")
 	assert.True(t, unavailable.Is(e))
 	_, _, f := c.FindBranchRequest("alfa", "bravo", "charlie")

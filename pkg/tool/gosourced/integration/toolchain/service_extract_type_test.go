@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -11,10 +12,7 @@ import (
 )
 
 func TestExtractType(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-basic/src"),
-	)
+	d := service_tester.Prepare(t, "extract-basic/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -33,29 +31,26 @@ func TestExtractType(t *testing.T) {
 	_, e = os.Stat(filepath.Join(d, "pkg/target/save.go"))
 	assert.True(t, os.IsNotExist(e))
 	store := service_tester.ReadFixtureFile(t, d, "pkg/model/store.go")
-	assertFormatted(t, store)
+	rewrite_tester.Formatted(t, store)
 	assert.StringContains(t, "package model", store)
 	assert.StringContains(t, "Name string", store)
 	save := service_tester.ReadFixtureFile(t, d, "pkg/model/save.go")
-	assertFormatted(t, save)
+	rewrite_tester.Formatted(t, save)
 	assert.StringContains(t, "func (s *Store) Save() string", save)
 	assert.StringContains(t, "return s.Name", save)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	assertFormatted(t, run)
+	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "v := model.Store{Name: \"alfa\"}", run)
 	assert.StringContains(t, "return v.Save()", run)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	assertFormatted(t, caller)
+	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "func Run() *model.Store", caller)
 	assert.StringContains(t, "return &model.Store{}", caller)
 	assert.False(t, strings.Contains(caller, "target"))
 }
 
 func TestExtractTypeIntoNamesakePackageImportsPlain(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-namesake/src"),
-	)
+	d := service_tester.Prepare(t, "extract-namesake/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -72,14 +67,11 @@ func TestExtractTypeIntoNamesakePackageImportsPlain(t *testing.T) {
 	queue := service_tester.ReadFixtureFile(t, d, "pkg/alfa/queue.go")
 	assert.StringContains(t, "import \"example/pkg/alfa/waiter\"\n", queue)
 	assert.StringContains(t, "[]*waiter.Waiter", queue)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestExtractTypeInternalStaysUnexported(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-internal/src"),
-	)
+	d := service_tester.Prepare(t, "extract-internal/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -94,7 +86,7 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	helper := service_tester.ReadFixtureFile(t, d, "pkg/model/helper.go")
-	assertFormatted(t, helper)
+	rewrite_tester.Formatted(t, helper)
 	assert.StringContains(t, "func (s *Store) helper() string", helper)
 	describe := service_tester.ReadFixtureFile(t, d, "pkg/model/describe.go")
 	assert.StringContains(t, "return s.helper()", describe)
@@ -103,10 +95,7 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 }
 
 func TestExtractTypeCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-collision/src"),
-	)
+	d := service_tester.Prepare(t, "extract-collision/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -124,10 +113,7 @@ func TestExtractTypeCollision(t *testing.T) {
 }
 
 func TestExtractTypeQualifiesBackReference(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-dependency/src"),
-	)
+	d := service_tester.Prepare(t, "extract-dependency/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -141,8 +127,12 @@ func TestExtractTypeQualifiesBackReference(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertFixedContains(t, "prefix → Prefix", r)
-	assertFixedContains(t, "prefix → target.Prefix (back reference)", r)
+	rewrite_tester.FixedContains(t, "prefix → Prefix", r)
+	rewrite_tester.FixedContains(
+		t,
+		"prefix → target.Prefix (back reference)",
+		r,
+	)
 	assert.StringContains(
 		t,
 		"return target.Prefix()",
@@ -153,14 +143,11 @@ func TestExtractTypeQualifiesBackReference(t *testing.T) {
 		"func Prefix() string",
 		service_tester.ReadFixtureFile(t, d, "pkg/target/prefix.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestExtractTypeBackReferenceCycleRefused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-dependency-cycle/src"),
-	)
+	d := service_tester.Prepare(t, "extract-dependency-cycle/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -182,10 +169,7 @@ func TestExtractTypeBackReferenceCycleRefused(t *testing.T) {
 }
 
 func TestExtractTypeFieldCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-field-collision/src"),
-	)
+	d := service_tester.Prepare(t, "extract-field-collision/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -203,10 +187,7 @@ func TestExtractTypeFieldCollision(t *testing.T) {
 }
 
 func TestExtractTypeUnexported(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-unexported-type/src"),
-	)
+	d := service_tester.Prepare(t, "extract-unexported-type/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -221,19 +202,16 @@ func TestExtractTypeUnexported(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/model/store.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "type Store struct{}", moved)
 	factory := service_tester.ReadFixtureFile(t, d, "pkg/target/new.go")
-	assertFormatted(t, factory)
+	rewrite_tester.Formatted(t, factory)
 	assert.StringContains(t, "func New() *model.Store", factory)
 	assert.StringContains(t, "return &model.Store{}", factory)
 }
 
 func TestExtractTypeTargetFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-internal/src"),
-	)
+	d := service_tester.Prepare(t, "extract-internal/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.ExtractType(
 		t.Context(),
@@ -248,7 +226,7 @@ func TestExtractTypeTargetFile(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/model/store.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "type Store struct{}", moved)
 	assert.StringContains(t, "func (s *Store) helper() string", moved)
 	assert.StringContains(t, "func (s *Store) Describe() string", moved)

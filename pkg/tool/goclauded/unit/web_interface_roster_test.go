@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"net/url"
 	"testing"
 	"time"
@@ -28,27 +28,19 @@ func TestRosterCardCountsWhatIsQueued(t *testing.T) {
 		)
 	}
 
-	assert.StringContains(
-		t,
-		"3 queued",
-		body(t, s.Server, constant.DashboardPath),
-	)
+	assert.StringContains(t, "3 queued", s.Body(t, constant.DashboardPath))
 }
 
 func TestRosterCardShowsNothingQueuedWhenNothingWaits(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
-	assert.StringNotContains(
-		t,
-		"queued",
-		body(t, s.Server, constant.DashboardPath),
-	)
+	assert.StringNotContains(t, "queued", s.Body(t, constant.DashboardPath))
 }
 
 func TestRosterCruiseSitsInFooterOutsideLink(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
-	page := body(t, s.Server, constant.DashboardPath)
+	page := s.Body(t, constant.DashboardPath)
 	action := session_page.ActionPath("session-1", constant.CruiseAction)
 	markup_tester.AssertCount(
 		t,
@@ -63,9 +55,7 @@ func TestRosterCruiseSitsInFooterOutsideLink(t *testing.T) {
 func TestRefusedGraceAnswersCardsFormWithItsAlert(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
-	answer := submit(
-		t,
-		s,
+	answer := s.Submit(
 		session_page.ActionPath("session-1", constant.CruiseAction),
 		url.Values{
 			constant.GraceKind: {constant.CruiseMinutes},
@@ -91,9 +81,7 @@ func TestRefusedGraceAnswersCardsFormWithItsAlert(t *testing.T) {
 func TestDetailPageTakesGraceInRange(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
-	submit(
-		t,
-		s,
+	s.Submit(
 		session_page.ActionPath("session-1", constant.CruiseAction),
 		url.Values{
 			constant.GraceKind: {constant.CruiseMinutes},
@@ -109,9 +97,7 @@ func TestDetailPageTakesGraceInRange(t *testing.T) {
 func TestDetailPageTurnsCruiseOff(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
-	submit(
-		t,
-		s,
+	s.Submit(
 		session_page.ActionPath("session-1", constant.CruiseAction),
 		url.Values{constant.GraceKind: {constant.CruiseOff}},
 		false,

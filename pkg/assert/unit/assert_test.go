@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/assert/unit/skip_recorder"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"net"
 	"net/http"
@@ -183,25 +184,25 @@ func TestFatalOnError(t *testing.T) {
 }
 
 func TestSkipOnOutageSkipsTimeout(t *testing.T) {
-	r := &skipRecorder{TB: t}
+	r := skip_recorder.New(t)
 	assert.SkipOnOutage(r, context.DeadlineExceeded)
-	assert.True(t, r.skipped)
+	assert.True(t, r.Skipped())
 }
 
 func TestSkipOnOutageLetsOtherErrorsThrough(t *testing.T) {
-	r := &skipRecorder{TB: t}
+	r := skip_recorder.New(t)
 	assert.SkipOnOutage(r, nil)
 	assert.SkipOnOutage(r, errors.New("unexpected status: 500"))
-	assert.False(t, r.skipped)
+	assert.False(t, r.Skipped())
 }
 
 func TestSkipUnlessDialableLetsListeningHostThrough(t *testing.T) {
 	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
 	assert.FatalOnError(t, e)
-	r := &skipRecorder{TB: t}
+	r := skip_recorder.New(t)
 	assert.SkipUnlessDialable(r, l.Addr().String())
 	assert.FatalOnError(t, l.Close())
-	assert.False(t, r.skipped)
+	assert.False(t, r.Skipped())
 }
 
 func TestSkipUnlessDialableSkipsClosedPort(t *testing.T) {
@@ -209,20 +210,20 @@ func TestSkipUnlessDialableSkipsClosedPort(t *testing.T) {
 	assert.FatalOnError(t, e)
 	address := l.Addr().String()
 	assert.FatalOnError(t, l.Close())
-	r := &skipRecorder{TB: t}
+	r := skip_recorder.New(t)
 	assert.SkipUnlessDialable(r, address)
-	assert.True(t, r.skipped)
+	assert.True(t, r.Skipped())
 }
 
-func TestSkipUnlessDialableRemembersVerdict(t *testing.T) {
+func TestSkipUnlessDialableCachesDialResult(t *testing.T) {
 	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
 	assert.FatalOnError(t, e)
 	address := l.Addr().String()
 	assert.SkipUnlessDialable(t, address)
 	assert.FatalOnError(t, l.Close())
-	r := &skipRecorder{TB: t}
+	r := skip_recorder.New(t)
 	assert.SkipUnlessDialable(r, address)
-	assert.False(t, r.skipped)
+	assert.False(t, r.Skipped())
 }
 
 func TestExported(t *testing.T) {

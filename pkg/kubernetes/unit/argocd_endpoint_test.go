@@ -3,17 +3,18 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/kubernetes/unit/argocd_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestApplicationsSendToken(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"items":[]}`)
-	_, e := newArgocdClient(t, s.URL).Applications()
+	s := upstream_server.New(t, upstream_server.WithAnswer(`{"items":[]}`))
+	_, e := argocd_tester.New(t, s.URL).Applications()
 	assert.FatalOnError(t, e)
-	r := last()
+	r := s.Last()
 	assert.String(t, "/api/v1/applications", r.URL.Path)
 	assert.String(
 		t,
@@ -23,12 +24,14 @@ func TestApplicationsSendToken(t *testing.T) {
 }
 
 func TestRefusalCarriesReason(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusForbidden,
-		`{"error":"permission denied","code":7,"message":"permission denied"}`,
+		upstream_server.WithStatus(http.StatusForbidden),
+		upstream_server.WithAnswer(
+			`{"error":"permission denied","code":7,"message":"permission denied"}`,
+		),
 	)
-	_, e := newArgocdClient(t, s.URL).Applications()
+	_, e := argocd_tester.New(t, s.URL).Applications()
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 403: permission denied", e.Error())
 }

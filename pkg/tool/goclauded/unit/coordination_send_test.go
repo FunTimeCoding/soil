@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -23,7 +24,10 @@ func TestSendDirectMessage(t *testing.T) {
 		},
 	)
 	r := b.CheckLive()
-	messages := clientKindEntries(r.Entries, constant.QueueMessage)
+	messages := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueMessage,
+	)
 	assert.Count(t, 1, messages)
 	assert.StringContains(t, a.Name(), messages[0].Body)
 	assert.StringContains(t, "heads up: running lint", messages[0].Body)
@@ -110,7 +114,10 @@ func TestBroadcastReachesAnotherSession(t *testing.T) {
 		map[string]any{constant.Body: "deploying service"},
 	)
 	r := b.CheckLive()
-	messages := clientKindEntries(r.Entries, constant.QueueMessage)
+	messages := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueMessage,
+	)
 	assert.Count(t, 1, messages)
 	assert.StringContains(t, "deploying service", messages[0].Body)
 }

@@ -3,12 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/source/layer"
+	"github.com/funtimecoding/soil/pkg/source/layer/layer_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestLayerChangesSpanStack(t *testing.T) {
-	root := layerModule(t)
+	root := layer_tester.Module(t)
 	base := layer.New(nil, root)
 	alfa := filepath.Join(root, "alfa/alfa.go")
 	base.Write(alfa, []byte("package alfa\n\n"))

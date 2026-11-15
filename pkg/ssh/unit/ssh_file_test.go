@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/ssh"
 	"github.com/funtimecoding/soil/pkg/ssh/unit/server_tester"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"os"
 	"path/filepath"
 	"sync"
@@ -44,8 +45,7 @@ func TestMissingFileIsNotFound(t *testing.T) {
 func TestRefusedWriteIsForbidden(t *testing.T) {
 	c := server_tester.New(t).Dial()
 	directory := t.TempDir()
-	assert.FatalOnError(t, os.Chmod(directory, 0500))
-	t.Cleanup(func() { assert.FatalOnError(t, os.Chmod(directory, 0700)) })
+	system_tester.ReadOnly(t, directory)
 	e := c.WriteFile(filepath.Join(directory, "alfa.yaml"), []byte("bravo"))
 	assert.True(t, forbidden.Is(e))
 }

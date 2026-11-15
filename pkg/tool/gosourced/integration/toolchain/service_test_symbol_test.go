@@ -8,10 +8,7 @@ import (
 )
 
 func TestRenameTestFunctionInTestOnlyPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-symbols/src"),
-	)
+	d := service_tester.Prepare(t, "test-symbols/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -29,10 +26,7 @@ func TestRenameTestFunctionInTestOnlyPackage(t *testing.T) {
 }
 
 func TestRenameTestFunctionBesideProduction(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-symbols/src"),
-	)
+	d := service_tester.Prepare(t, "test-symbols/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -54,10 +48,7 @@ func TestRenameTestFunctionBesideProduction(t *testing.T) {
 }
 
 func TestListCallsCountsTestVariantPackageOnce(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-symbols/src"),
-	)
+	d := service_tester.Prepare(t, "test-symbols/src")
 	s := service_tester.NewService(t)
 	r, inventory, e := s.Reference.ListCalls(d, "example/pkg/measure", 0)
 	assert.FatalOnError(t, e)
@@ -74,10 +65,7 @@ func TestListCallsCountsTestVariantPackageOnce(t *testing.T) {
 }
 
 func TestRenameProductionSymbolRewritesTestFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-symbols/src"),
-	)
+	d := service_tester.Prepare(t, "test-symbols/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),

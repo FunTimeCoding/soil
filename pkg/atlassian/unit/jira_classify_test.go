@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/unit/atlassian_tester"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/dropped"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
@@ -17,7 +18,7 @@ import (
 
 func TestUnknownIssueIsNotFound(t *testing.T) {
 	e := jira.WrapError(
-		jiraFailure(
+		atlassian_tester.JiraFailure(
 			http.StatusNotFound,
 			[]string{
 				"Issue does not exist or you do not have permission to see it.",
@@ -31,7 +32,7 @@ func TestUnknownIssueIsNotFound(t *testing.T) {
 
 func TestRejectedRequestIsValidation(t *testing.T) {
 	e := jira.WrapError(
-		jiraFailure(
+		atlassian_tester.JiraFailure(
 			http.StatusBadRequest,
 			nil,
 			map[string]string{"comment": "Comment body can not be empty!"},
@@ -43,7 +44,7 @@ func TestRejectedRequestIsValidation(t *testing.T) {
 
 func TestUpstreamFailureKeepsItsDetail(t *testing.T) {
 	e := jira.WrapError(
-		jiraFailure(
+		atlassian_tester.JiraFailure(
 			http.StatusInternalServerError,
 			[]string{"Internal server error"},
 			nil,
@@ -75,7 +76,11 @@ func TestLostConnectionWithoutResponseIsDropped(t *testing.T) {
 }
 
 func TestFailureWithoutResponseKeepsItsDetail(t *testing.T) {
-	_, f := jiraFailure(http.StatusNotFound, []string{"alfa"}, nil)
+	_, f := atlassian_tester.JiraFailure(
+		http.StatusNotFound,
+		[]string{"alfa"},
+		nil,
+	)
 	e := jira.WrapError(nil, f)
 	assert.False(t, not_found.Is(e))
 	_, okay := errors.AsType[*detail_error.Detail](e)

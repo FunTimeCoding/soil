@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestModelContextWorksOnSelectedInstance(t *testing.T) {
 	)
 	clients[constant.FixtureInstance].SeedProject(1, "group", "app")
 	clients[constant.FixtureOtherInstance].SeedProject(2, "group", "web")
-	v := startServer(t, d, r)
+	v := base.Mount(t, d, r)
 	defer v.Close()
 	c := v.Connect(t)
 	defer c.Close()

@@ -6,5 +6,9 @@ func (c *Client) Assign(
 	_ string,
 	_ *jira.User,
 ) error {
-	return nil
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	return c.failures.Caller()
 }

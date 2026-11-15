@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 	"time"
@@ -16,7 +15,7 @@ func TestAwaitImmediateQueueReturnsEntriesAlreadyWaiting(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	s.SendImmediate(r2.Callsign, r1.Callsign, "immediate message")
 	drained := s.AwaitImmediateQueue(
-		fixture.Cancelled(),
+		service_tester.Cancelled(),
 		"session-1",
 		r1.Callsign,
 	)
@@ -30,7 +29,11 @@ func TestAwaitImmediateQueueReturnsNothingWhenQueueIsEmpty(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		s.AwaitImmediateQueue(fixture.Cancelled(), "session-1", r1.Callsign),
+		s.AwaitImmediateQueue(
+			service_tester.Cancelled(),
+			"session-1",
+			r1.Callsign,
+		),
 	)
 }
 

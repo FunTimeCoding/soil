@@ -23,13 +23,14 @@ func Main() {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			v = client.NewLong(
+			v = client.New(
 				locator.Environment(
 					constant.HostEnvironment,
 					constant.PortEnvironment,
 					constant.InsecureEnvironment,
 				),
 				t.Required(constant.TokenEnvironment),
+				client.WithLong(),
 			)
 		},
 		PersistentPostRun: func(

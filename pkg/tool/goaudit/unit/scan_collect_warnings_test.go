@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestWarningMissingOption(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.MissingOptionKey)
+	scan_tester.Concern(t, constant.MissingOptionKey, s[0])
 }
 
 func TestWarningMissingRun(t *testing.T) {
@@ -24,7 +25,7 @@ func TestWarningMissingRun(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.MissingRunKey)
+	scan_tester.Concern(t, constant.MissingRunKey, s[0])
 }
 
 func TestWarningNoSuffix(t *testing.T) {
@@ -34,7 +35,7 @@ func TestWarningNoSuffix(t *testing.T) {
 	v.WriteString("pkg/tool/gotest/run.go", "package gotest\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.MissingSuffixKey)
+	scan_tester.Concern(t, constant.MissingSuffixKey, s[0])
 }
 
 func TestWarningRouteExists(t *testing.T) {
@@ -43,10 +44,10 @@ func TestWarningRouteExists(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/route/r.go", "package route\n")
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	assertConcern(
+	scan_tester.Concern(
 		t,
-		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.StaleRouteKey,
+		scan.Services(v, "test", audit_configuration.New())[0],
 	)
 }
 
@@ -58,10 +59,10 @@ func TestWarningMissingMountGo(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	assertConcern(
+	scan_tester.Concern(
 		t,
-		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.MissingMountKey,
+		scan.Services(v, "test", audit_configuration.New())[0],
 	)
 }
 
@@ -73,10 +74,10 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	assertConcern(
+	scan_tester.Concern(
 		t,
-		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.MissingCaptureFailKey,
+		scan.Services(v, "test", audit_configuration.New())[0],
 	)
 }
 
@@ -92,10 +93,10 @@ func TestAnswerMessageSatisfiesCaptureCheck(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	assertNoConcern(
+	scan_tester.NoConcern(
 		t,
-		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.MissingCaptureFailKey,
+		scan.Services(v, "test", audit_configuration.New())[0],
 	)
 }
 

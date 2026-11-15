@@ -6,8 +6,8 @@ import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	integration "github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/transcript_tester"
 	"os"
 	"path/filepath"
 	"testing"
@@ -18,7 +18,7 @@ func TestOversizedLineDoesNotStopExtraction(t *testing.T) {
 	s.Store.EnsureSession("oversized-session")
 	body := join.Empty(
 		fixture.Read("claude", "context-loads.jsonl"),
-		integration.OversizedLine(),
+		transcript_tester.OversizedLine(),
 		"\n",
 	)
 	errors.PanicOnError(

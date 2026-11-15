@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
 	"testing"
 )
@@ -14,7 +15,7 @@ func TestInvalidStatIsAnsweredAsBadRequest(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("%q is not a valid Stat.", "bravo")
 	m := memory.New()
-	r, e := restClient(t, c, m).AllocateStatWithResponse(
+	r, e := daemon_tester.RestClient(t, c, m).AllocateStatWithResponse(
 		context.Background(),
 		client.AllocateStatParamsStat("bravo"),
 	)

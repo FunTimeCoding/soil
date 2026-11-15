@@ -61,70 +61,70 @@ const FixtureBreaks = `packages: [./shape]
 
 breaks:
   - name: high_bound
-    expect: red
+    expect: killed
     edits:
       - file: shape/shape.go
         find: score >= 90
         replace: score > 900
 
   - name: zero_divisor
-    expect: red
+    expect: killed
     edits:
       - file: shape/shape.go
         find: a / b
         replace: a / (b - b)
 
   - name: invalid_word
-    expect: survive
+    expect: survived
     edits:
       - file: shape/shape.go
         find: return "invalid"
         replace: return "broken"
 
   - name: label_suffix
-    expect: survive
+    expect: survived
     edits:
       - file: shape/shape.go
         find: '+ "!"'
         replace: '+ "?"'
 
   - name: absent_text
-    expect: red
+    expect: killed
     edits:
       - file: shape/shape.go
         find: nothing like this
         replace: anything
 
   - name: unused_local
-    expect: red
+    expect: killed
     edits:
       - file: shape/shape.go
         find: 'if score < 0 {'
         replace: 'if unused := 1; score < 0 {'
 
   - name: init_panic
-    expect: red
+    expect: killed
     edits:
       - file: shape/shape.go
         find: 'const Ceiling = 100'
         replace: "const Ceiling = 100\n\nfunc init() { panic(\"setup\") }"
 
   - name: ceiling_value
-    expect: survive
+    expect: survived
     edits:
       - file: shape/shape.go
         find: 'const Ceiling = 100'
         replace: 'const Ceiling = 200'
 
   - name: invalid_through_bound
-    expect: survive
+    expect: survived
     edits:
       - file: shape/shape.go
         find: "return \"invalid\"\n\t}\n\n\tif score >= 90 {"
         replace: "return \"broken\"\n\t}\n\n\tif score >= 90 {"
 
   - name: empty_find
-    expect: red
+    expect: killed
     edits:
       - file: shape/shape.go
         find: ''
@@ -133,6 +133,17 @@ breaks:
 
 const FixtureNoTestsBreaks = `packages: [./shape]
 tests: Nothing
+`
+
+const FixtureUnknownExpectBreaks = `packages: [./shape]
+
+breaks:
+  - name: high_bound
+    expect: red
+    edits:
+      - file: shape/shape.go
+        find: score >= 90
+        replace: score > 900
 `
 
 const FixtureFailingTest = `package shape

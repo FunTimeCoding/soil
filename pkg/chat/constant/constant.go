@@ -43,6 +43,7 @@ const (
 
 	MattermostPostField     = "post"
 	MattermostReactionField = "reaction"
+	MattermostFileField     = "file"
 
 	MattermostDoneReaction      = "white_check_mark"
 	MattermostProgressReaction  = "construction"

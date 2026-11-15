@@ -16,10 +16,7 @@ func (r *Resolver) resolveRoute(
 	route, _, _ = strings.Cut(route, "?")
 
 	if len(bases) == 0 {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonRoute
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonRoute)
 	}
 
 	needle := pointer.RouteLiteral(route)
@@ -30,20 +27,20 @@ func (r *Resolver) resolveRoute(
 				route,
 				paths,
 			) {
-				return pointer.NewResolution(constant.VerdictLive)
+				return pointer.NewLive("")
 			}
 		}
 
 		if r.Literal(base, needle) {
-			return pointer.NewResolution(constant.VerdictLive)
+			return pointer.NewLive("")
 		}
 	}
 
 	for _, base := range r.ImplicitBases {
 		if r.Literal(base, needle) {
-			return pointer.NewResolution(constant.VerdictLive)
+			return pointer.NewLive("")
 		}
 	}
 
-	return pointer.NewResolution(constant.VerdictDead)
+	return pointer.NewConcern(constant.DeadPointerKey)
 }

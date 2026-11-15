@@ -14,6 +14,14 @@ func (c *Client) PutPage(
 	message string,
 	status string,
 ) (*page.Page, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	if f := c.failures.Caller(); f != nil {
+		return nil, f
+	}
+
 	e, okay := c.pages[identifier]
 
 	if !okay || e.Deleted {

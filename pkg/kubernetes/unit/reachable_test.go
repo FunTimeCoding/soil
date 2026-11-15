@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/unit/refusing_clientset"
 	kubernetes "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/kubernetes/fake"
@@ -21,7 +22,7 @@ func TestAnsweringClusterIsReachable(t *testing.T) {
 }
 
 func TestRefusedVersionIsForbidden(t *testing.T) {
-	e := refusingClientset(
+	e := refusing_clientset.New(
 		kubernetes.NewForbidden(
 			schema.GroupResource{Resource: "version"},
 			"",

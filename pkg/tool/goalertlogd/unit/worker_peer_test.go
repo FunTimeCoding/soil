@@ -5,12 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/worker_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestAlertmanagerOutageIsLeftToGuard(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Fail(refusedConnection())
+	o.MockClient.Fail(outage_tester.RefusedDial())
 	o.Worker.Poll()
 	o.Worker.Poll()
 	assert.Count(t, 0, o.Reporter.Events())

@@ -3,18 +3,18 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMoveMethodsRoutesCallersThroughHolder(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-held/src"),
-	)
-	r := moveHeldGreet(t, d)
+	d := service_tester.Prepare(t, "move-methods-held/src")
+	r := module_tester.MoveHeldGreet(t, d)
 	testutil.AssertBlocked(t, r, 0)
-	assertFixedContains(t, "Greet → Worker.Greet", r)
+	rewrite_tester.FixedContains(t, "Greet → Worker.Greet", r)
 	assert.StringContains(
 		t,
 		"return s.Worker.Greet(s.Name)",
@@ -35,15 +35,12 @@ func TestMoveMethodsRoutesCallersThroughHolder(t *testing.T) {
 		"return s.Worker.Greet\n",
 		service_tester.ReadFixtureFile(t, d, "pkg/charlie/hold.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestMoveMethodsRefusesTwoHolders(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-held/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-methods-held/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/alfa/service.go",
@@ -51,17 +48,14 @@ func TestMoveMethodsRefusesTwoHolders(t *testing.T) {
 	)
 	testutil.AssertBlockedContains(
 		t,
-		moveHeldGreet(t, d),
+		module_tester.MoveHeldGreet(t, d),
 		"alfa.Service holds no single field of type bravo.Worker",
 	)
 }
 
 func TestMoveMethodsRefusesUnexportedHolderAcrossPackages(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-held/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-methods-held/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/alfa/service.go",
@@ -69,17 +63,14 @@ func TestMoveMethodsRefusesUnexportedHolderAcrossPackages(t *testing.T) {
 	)
 	testutil.AssertBlockedContains(
 		t,
-		moveHeldGreet(t, d),
+		module_tester.MoveHeldGreet(t, d),
 		"where the unexported worker cannot be reached",
 	)
 }
 
 func TestMoveMethodsRefusesCallThroughEmbedding(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-held/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-methods-held/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/charlie/outer.go",
@@ -87,17 +78,14 @@ func TestMoveMethodsRefusesCallThroughEmbedding(t *testing.T) {
 	)
 	testutil.AssertBlockedContains(
 		t,
-		moveHeldGreet(t, d),
+		module_tester.MoveHeldGreet(t, d),
 		"through an embedding",
 	)
 }
 
 func TestMoveMethodsRefusesValueHolderOnValue(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-held/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-methods-held/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/alfa/service.go",
@@ -105,17 +93,14 @@ func TestMoveMethodsRefusesValueHolderOnValue(t *testing.T) {
 	)
 	testutil.AssertBlockedContains(
 		t,
-		moveHeldGreet(t, d),
+		module_tester.MoveHeldGreet(t, d),
 		"on a value, where alfa.Service.Worker may not be addressable",
 	)
 }
 
 func TestMoveMethodsRefusesMethodExpression(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods-held/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-methods-held/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/charlie/expression.go",
@@ -123,7 +108,7 @@ func TestMoveMethodsRefusesMethodExpression(t *testing.T) {
 	)
 	testutil.AssertBlockedContains(
 		t,
-		moveHeldGreet(t, d),
+		module_tester.MoveHeldGreet(t, d),
 		"as a method expression",
 	)
 }

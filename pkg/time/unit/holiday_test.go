@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/time/day"
 	"github.com/funtimecoding/soil/pkg/time/holiday"
+	"github.com/funtimecoding/soil/pkg/time/unit/holiday_tester"
 	"testing"
 	"time"
 )
@@ -61,7 +62,7 @@ func TestPublicHolidayCalendarFrom2024To2027(t *testing.T) {
 			day.New(2027, time.December, 25),
 			day.New(2027, time.December, 26),
 		},
-		holidays(
+		holiday_tester.Between(
 			day.New(2024, time.November, 1),
 			day.New(2027, time.December, 31),
 		),

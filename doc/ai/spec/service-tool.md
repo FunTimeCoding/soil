@@ -96,8 +96,8 @@ defaulted in `option.New()` (`o.Metric`, gobotd's `o.Public`, goalpined's
 `server.New(constant.Identity, &o.Metric, r, m.Mount)`, `d.MountFiles` - so
 `run.go` only wires. A set `Authorization` adds sign-on, built with the reporter
 `r` and closed with the server. The test battery builds its guard the same way:
-`model_context_server.New` with the test token, and
-`NewSignedOn(t, authorization_tester.Client, setup)` for a daemon that signs on.
+`model_context_server.New` with the test token, and its `WithSignOn()` option
+for a daemon that signs on.
 
 `a.Web()` registers `--port` and `--bind-address`. Each resolves
 through the chain flag > environment > default: `--port` falls back

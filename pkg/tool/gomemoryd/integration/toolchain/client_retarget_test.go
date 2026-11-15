@@ -2,9 +2,9 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
@@ -12,7 +12,7 @@ import (
 
 func TestClientRoundTripsRetarget(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "pkg/bravo/run.go", "package bravo\n")
+	system_tester.Write(t, root, "pkg/bravo/run.go", "package bravo\n")
 	c := base.NewRooted(t, root).MemoryClient(t)
 	_, e := c.PostMemory(
 		t.Context(),

@@ -5,15 +5,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/measure"
 	"github.com/funtimecoding/soil/pkg/measure/option"
 	"github.com/funtimecoding/soil/pkg/measure/registry"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestScanSkipByNameEverywhere(t *testing.T) {
 	root := t.TempDir()
-	write(root, "tmp/a.go", "package a\n")
-	write(root, "pkg/tmp/b.go", "package b\n")
-	write(root, "pkg/keep.go", "package keep\n")
+	system_tester.Write(t, root, "tmp/a.go", "package a\n")
+	system_tester.Write(t, root, "pkg/tmp/b.go", "package b\n")
+	system_tester.Write(t, root, "pkg/keep.go", "package keep\n")
 	o := option.New()
 	o.Paths = []string{root}
 	o.Skips = []string{"tmp"}
@@ -24,9 +25,9 @@ func TestScanSkipByNameEverywhere(t *testing.T) {
 
 func TestScanSkipByPathPrefixOnly(t *testing.T) {
 	root := t.TempDir()
-	write(root, "tmp/a.go", "package a\n")
-	write(root, "pkg/tmp/b.go", "package b\n")
-	write(root, "tmpfile.go", "package c\n")
+	system_tester.Write(t, root, "tmp/a.go", "package a\n")
+	system_tester.Write(t, root, "pkg/tmp/b.go", "package b\n")
+	system_tester.Write(t, root, "tmpfile.go", "package c\n")
 	o := option.New()
 	o.Paths = []string{root}
 	o.Skips = []string{"tmp/"}
@@ -39,8 +40,8 @@ func TestScanSkipByPathPrefixOnly(t *testing.T) {
 
 func TestScanSkipNestedPathPrefix(t *testing.T) {
 	root := t.TempDir()
-	write(root, "pkg/tmp/b.go", "package b\n")
-	write(root, "pkg/keep.go", "package keep\n")
+	system_tester.Write(t, root, "pkg/tmp/b.go", "package b\n")
+	system_tester.Write(t, root, "pkg/keep.go", "package keep\n")
 	o := option.New()
 	o.Paths = []string{root}
 	o.Skips = []string{"pkg/tmp/"}

@@ -3,16 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestMoveCommentTargetDrift(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-comment/src"),
-	)
+	d := service_tester.Prepare(t, "move-comment/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -32,7 +30,7 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "const Host = \"bravo\" // host trailing", moved)
 	assert.StringContains(t, "// Alfa document.", moved)
 	assert.StringContains(t, "const Alfa = \"kilo\" // alfa trailing", moved)
@@ -44,10 +42,7 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 }
 
 func TestMoveCommentSourceScrub(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-comment/src"),
-	)
+	d := service_tester.Prepare(t, "move-comment/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -63,7 +58,7 @@ func TestMoveCommentSourceScrub(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "// Kept document.", source)
 	assert.StringContains(t, "const kept = \"golf\" // kept trailing", source)
 	assert.False(t, strings.Contains(source, "// Moved document."))
@@ -73,16 +68,13 @@ func TestMoveCommentSourceScrub(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "// Moved document.", moved)
 	assert.StringContains(t, "const Moved = \"hotel\" // moved trailing", moved)
 }
 
 func TestMoveCommentGroupScrub(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-comment/src"),
-	)
+	d := service_tester.Prepare(t, "move-comment/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -98,7 +90,7 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "echo = \"juliet\"", source)
 	assert.StringContains(t, "// Keeper vocabulary.", source)
 	assert.False(t, strings.Contains(source, "// Delta document."))
@@ -108,17 +100,14 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "// Delta document.", moved)
 	assert.StringContains(t, "const Delta = \"india\" // delta trailing", moved)
 	assert.False(t, strings.Contains(moved, "// Keeper vocabulary."))
 }
 
 func TestMoveCommentGroupDocument(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-comment/src"),
-	)
+	d := service_tester.Prepare(t, "move-comment/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -134,14 +123,14 @@ func TestMoveCommentGroupDocument(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.False(t, strings.Contains(source, "// Keeper vocabulary."))
 	moved := service_tester.ReadFixtureFile(
 		t,
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "// Keeper vocabulary.", moved)
 	assert.StringContains(t, "// Delta document.", moved)
 	assert.StringContains(t, "Delta = \"india\" // delta trailing", moved)

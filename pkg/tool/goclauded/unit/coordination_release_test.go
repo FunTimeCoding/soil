@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -16,7 +17,10 @@ func TestReleaseReachesAnotherSession(t *testing.T) {
 	b.CheckLive()
 	a.MustCallTool(constant.Release, map[string]any{})
 	r := b.CheckLive()
-	releases := clientKindEntries(r.Entries, constant.QueueSessionRelease)
+	releases := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionRelease,
+	)
 	assert.True(t, len(releases) > 0)
 	assert.StringContains(t, a.Name(), releases[0].Body)
 }

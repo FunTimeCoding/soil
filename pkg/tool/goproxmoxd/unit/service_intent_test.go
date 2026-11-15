@@ -33,7 +33,7 @@ func TestShutDownContainerIsRecordedOffline(t *testing.T) {
 }
 
 func TestUpwardReconcileOnlyPromotes(t *testing.T) {
-	c, machines := reconcileFloor()
+	c, machines := service_tester.ReconcileFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	p, e := v.Reconcile(context.Background(), "test", false, false)
@@ -48,7 +48,7 @@ func TestUpwardReconcileOnlyPromotes(t *testing.T) {
 }
 
 func TestFullReconcileAlsoDemotesAndWrites(t *testing.T) {
-	c, machines := reconcileFloor()
+	c, machines := service_tester.ReconcileFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	p, e := v.Reconcile(context.Background(), "test", true, true)
@@ -65,7 +65,7 @@ func TestFullReconcileAlsoDemotesAndWrites(t *testing.T) {
 }
 
 func TestReconcileWithoutSwitchIsNotConfigured(t *testing.T) {
-	c, _ := reconcileFloor()
+	c, _ := service_tester.ReconcileFloor()
 	defer c.Close()
 	_, e := service_tester.ContainerService(t, c).Reconcile(
 		context.Background(),

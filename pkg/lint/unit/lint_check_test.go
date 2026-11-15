@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/repository"
 	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
+	"github.com/funtimecoding/soil/pkg/source/layer/layer_tester"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 	"testing"
@@ -25,7 +26,7 @@ func TestCheckImportFix(t *testing.T) {
 	assert.String(
 		t,
 		"package foo\n\nimport \"fmt\"\n\nfunc Foo() {\n\tfmt.Println(\"hello\")\n}\n",
-		layerContent(t, fixes, filepath.Join(root, "pkg/foo/foo.go")),
+		layer_tester.Content(t, fixes, filepath.Join(root, "pkg/foo/foo.go")),
 	)
 }
 
@@ -176,11 +177,12 @@ func TestCheckResultImportCollapsed(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
-	assertApplied(
+	lint_tester.Concern(
 		t,
-		r.Entries,
+		true,
 		"pkg/foo/foo.go",
 		constant.SingleMultiImportText,
+		r.Entries,
 	)
 }
 
@@ -192,11 +194,12 @@ func TestCheckReportsFixableConcernWithoutFix(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), option.New("", false), &r)
-	assertUnfixed(
+	lint_tester.Concern(
 		t,
-		r.Entries,
+		false,
 		"pkg/foo/foo.go",
 		constant.SingleMultiImportText,
+		r.Entries,
 	)
 }
 
@@ -208,11 +211,12 @@ func TestCheckResultBlankLineRemoved(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
-	assertApplied(
+	lint_tester.Concern(
 		t,
-		r.Entries,
+		true,
 		"pkg/foo/foo.go",
 		constant.BlankInsideFunctionText,
+		r.Entries,
 	)
 }
 
@@ -224,10 +228,11 @@ func TestCheckResultBlankLineInserted(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
-	assertApplied(
+	lint_tester.Concern(
 		t,
-		r.Entries,
+		true,
 		"pkg/foo/foo.go",
 		constant.MissingBlankBeforeControlText,
+		r.Entries,
 	)
 }

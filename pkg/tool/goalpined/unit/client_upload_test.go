@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
 	"path/filepath"
 	"testing"
@@ -13,7 +14,7 @@ import (
 
 func TestClientUploadsToDaemon(t *testing.T) {
 	o := service_tester.New(t)
-	c := mountedClient(t, o)
+	c := base.Client(t, o)
 	assert.FatalOnError(
 		t,
 		c.PostPackage(
@@ -34,7 +35,7 @@ func TestClientUploadsToDaemon(t *testing.T) {
 }
 
 func TestClientSeesRefusedUploadAsValidation(t *testing.T) {
-	c := mountedClient(t, service_tester.New(t))
+	c := base.Client(t, service_tester.New(t))
 	e := c.PostPackage(
 		t.Context(),
 		"v3.21",
@@ -48,13 +49,13 @@ func TestClientSeesRefusedUploadAsValidation(t *testing.T) {
 }
 
 func TestClientListsWhatDaemonIndexed(t *testing.T) {
-	c := mountedClient(t, service_tester.New(t))
+	c := base.Client(t, service_tester.New(t))
 	result, e := c.GetPackages(t.Context(), &client.GetPackagesParams{})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, result)
 }
 
 func TestClientReachesGoalpined(t *testing.T) {
-	c := mountedClient(t, service_tester.New(t))
+	c := base.Client(t, service_tester.New(t))
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }

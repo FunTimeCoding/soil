@@ -7,13 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	o := newOption(t)
+	o := service_tester.NewOption(t)
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
 		o,
@@ -38,7 +39,12 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 
 func TestDaemonCountsReapsOnItsRegistry(t *testing.T) {
 	y := prometheus.NewRegistry()
-	d := daemon.New(newOption(t), logger.New(t.Context()), memory.New(), y)
+	d := daemon.New(
+		service_tester.NewOption(t),
+		logger.New(t.Context()),
+		memory.New(),
+		y,
+	)
 	t.Cleanup(d.Close)
 	assert.True(t, reaper.CountsOn(y))
 }

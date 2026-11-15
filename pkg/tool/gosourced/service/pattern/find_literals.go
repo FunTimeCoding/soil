@@ -17,7 +17,7 @@ func (s *Service) FindLiterals(
 	name string,
 ) (*output.Results, *result.Literals, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, set, e := s.workspace.CensusPackages(directory, packagePath)
+	all, set, e := s.workspace.DependentPackages(directory, packagePath)
 
 	if e != nil {
 		return nil, nil, e
@@ -48,11 +48,11 @@ func (s *Service) FindLiterals(
 		return r, nil, nil
 	}
 
-	census := literals.Census(all, set, named, structure, packagePath)
+	found := literals.Report(all, set, named, structure, packagePath)
 	contents := map[string][]byte{}
 	var entries []*pattern_site.Entry
 
-	for _, site := range census.Sites {
+	for _, site := range found.Sites {
 		entry, g := literals.Entry(directory, set, contents, site, site.Shape)
 
 		if g != nil {
@@ -64,9 +64,9 @@ func (s *Service) FindLiterals(
 
 	return r, result.NewLiterals(
 		name,
-		census.Total,
-		census.Inside,
-		census.Expected,
+		found.Total,
+		found.Inside,
+		found.Expected,
 		literals.GroupEntries(entries),
 	), nil
 }

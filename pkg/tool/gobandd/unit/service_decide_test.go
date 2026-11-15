@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
@@ -14,7 +15,7 @@ func TestShutdownAsksOperatingSystemByDefault(t *testing.T) {
 	state, e := service.Decide(
 		constant.OperationShutdown,
 		false,
-		runningStates(),
+		service_tester.RunningStates(),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 12, state)
@@ -24,32 +25,48 @@ func TestShutdownWithForceCutsPower(t *testing.T) {
 	state, e := service.Decide(
 		constant.OperationShutdown,
 		true,
-		runningStates(),
+		service_tester.RunningStates(),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 8, state)
 }
 
 func TestRebootAsksOperatingSystemByDefault(t *testing.T) {
-	state, e := service.Decide(constant.OperationReboot, false, runningStates())
+	state, e := service.Decide(
+		constant.OperationReboot,
+		false,
+		service_tester.RunningStates(),
+	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 14, state)
 }
 
 func TestRebootWithForcePowerCycles(t *testing.T) {
-	state, e := service.Decide(constant.OperationReboot, true, runningStates())
+	state, e := service.Decide(
+		constant.OperationReboot,
+		true,
+		service_tester.RunningStates(),
+	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 5, state)
 }
 
 func TestGracefulShutdownNeverFallsBackToCut(t *testing.T) {
-	_, e := service.Decide(constant.OperationShutdown, false, hardStates())
+	_, e := service.Decide(
+		constant.OperationShutdown,
+		false,
+		service_tester.HardStates(),
+	)
 	assert.True(t, conflict.Is(e))
 	assert.StringContains(t, "force cuts power instead", e.Error())
 }
 
 func TestGracefulRebootNeverFallsBackToCycle(t *testing.T) {
-	_, e := service.Decide(constant.OperationReboot, false, hardStates())
+	_, e := service.Decide(
+		constant.OperationReboot,
+		false,
+		service_tester.HardStates(),
+	)
 	assert.True(t, conflict.Is(e))
 }
 
@@ -82,7 +99,11 @@ func TestGracefulRebootOfMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
 }
 
 func TestStartIsRefusedWhileMachineRuns(t *testing.T) {
-	_, e := service.Decide(constant.OperationStart, false, runningStates())
+	_, e := service.Decide(
+		constant.OperationStart,
+		false,
+		service_tester.RunningStates(),
+	)
 	assert.True(t, conflict.Is(e))
 }
 
@@ -97,6 +118,6 @@ func TestStartPowersOnMachineThatIsOff(t *testing.T) {
 }
 
 func TestUnknownOperationIsCallersMistake(t *testing.T) {
-	_, e := service.Decide("hibernate", false, runningStates())
+	_, e := service.Decide("hibernate", false, service_tester.RunningStates())
 	assert.True(t, validation.Is(e))
 }

@@ -6,12 +6,13 @@ import (
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
 func TestShutdownToolRefusesWithoutSendingAnything(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
 	c := s.Connect(t)
 	defer c.Close()
 	c.MustCallTool(
@@ -28,7 +29,7 @@ func TestShutdownToolRefusesWithoutSendingAnything(t *testing.T) {
 
 func TestShutdownToolWithForceCutsPower(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
 	c := s.Connect(t)
 	defer c.Close()
 	c.MustCallTool(

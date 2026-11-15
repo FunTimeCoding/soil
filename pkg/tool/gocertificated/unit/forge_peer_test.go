@@ -12,15 +12,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/server_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/store_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
 
 func TestForgeOutageAnswersUnavailableQuietly(t *testing.T) {
 	s := base.New(t)
-	c := restClient(t, s)
-	postAuthority(t, c, server_tester.RootBody())
-	s.Forge.Fail(refusedConnection())
+	c := base.Rest(t, s)
+	server_tester.PostAuthority(t, c, server_tester.RootBody())
+	s.Forge.Fail(outage_tester.RefusedDial())
 	r, e := c.PostPublicationWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusServiceUnavailable, r.StatusCode())
@@ -29,20 +30,20 @@ func TestForgeOutageAnswersUnavailableQuietly(t *testing.T) {
 
 func TestForgeOutageLeavesIssuingServing(t *testing.T) {
 	s := base.New(t)
-	c := restClient(t, s)
-	postAuthority(t, c, server_tester.RootBody())
-	postAuthority(t, c, server_tester.ClusterBody())
-	s.Forge.Fail(refusedConnection())
+	c := base.Rest(t, s)
+	server_tester.PostAuthority(t, c, server_tester.RootBody())
+	server_tester.PostAuthority(t, c, server_tester.ClusterBody())
+	s.Forge.Fail(outage_tester.RefusedDial())
 	_, e := c.PostPublicationWithResponse(t.Context())
 	assert.FatalOnError(t, e)
-	r := postCertificate(t, c)
+	r := server_tester.PostCertificate(t, c)
 	assert.Integer(t, http.StatusOK, r.StatusCode())
 }
 
 func TestForgeFaultIsCaptured(t *testing.T) {
 	s := base.New(t)
-	c := restClient(t, s)
-	postAuthority(t, c, server_tester.RootBody())
+	c := base.Rest(t, s)
+	server_tester.PostAuthority(t, c, server_tester.RootBody())
 	s.Forge.Fail(errors.Format("commit rejected", constant.PublishBranch))
 	r, e := c.PostPublicationWithResponse(t.Context())
 	assert.FatalOnError(t, e)
@@ -52,7 +53,7 @@ func TestForgeFaultIsCaptured(t *testing.T) {
 
 func TestDaemonStartsWhileForgeIsDown(t *testing.T) {
 	f := service_tester.NewForge(t)
-	f.Fail(refusedConnection())
+	f.Fail(outage_tester.RefusedDial())
 	d := daemon_tester.New(t, store_tester.NewOption(t, f), memory.New())
 	_, guard := d.Workers()[0].(*peer.Guard)
 	assert.True(t, guard)
@@ -61,7 +62,7 @@ func TestDaemonStartsWhileForgeIsDown(t *testing.T) {
 func TestForgeOutageRefusesToolQuietly(t *testing.T) {
 	o := model_context_tester.New(t)
 	o.CreateRoot()
-	o.Server.Forge.Fail(refusedConnection())
+	o.Server.Forge.Fail(outage_tester.RefusedDial())
 	o.Client.MustCallToolError(constant.Publish, map[string]any{})
 	assert.Count(t, 0, o.Server.Reporter.Events())
 }

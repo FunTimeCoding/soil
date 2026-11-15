@@ -9,4 +9,5 @@ type Server struct {
 	Port      int
 	Lifecycle *lifecycle.Lifecycle
 	pool      *pool.Pool
+	signOn    bool
 }

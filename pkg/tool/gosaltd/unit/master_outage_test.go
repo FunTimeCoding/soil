@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 	"time"
@@ -14,7 +15,7 @@ import (
 
 func TestMasterOutageFailsToolWithoutCapture(t *testing.T) {
 	r := memory.New()
-	d := newDownDaemon(t, r)
+	d := service_tester.NewDownDaemon(t, r)
 	s := model_context_server.New(
 		t,
 		func(g *guard.Mux) {
@@ -34,7 +35,7 @@ func TestMasterOutageFailsToolWithoutCapture(t *testing.T) {
 
 func TestKeySyncStaysQuietWhileMasterIsDown(t *testing.T) {
 	r := memory.New()
-	d := newDownDaemon(t, r)
+	d := service_tester.NewDownDaemon(t, r)
 	workers := d.Workers()
 
 	for _, w := range workers {
@@ -51,6 +52,6 @@ func TestKeySyncStaysQuietWhileMasterIsDown(t *testing.T) {
 }
 
 func TestDaemonHandsOutMasterGuardFirst(t *testing.T) {
-	_, okay := newDownDaemon(t, memory.New()).Workers()[0].(*peer.Guard)
+	_, okay := service_tester.NewDownDaemon(t, memory.New()).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

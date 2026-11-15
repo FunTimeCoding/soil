@@ -13,54 +13,89 @@ import (
 	"github.com/funtimecoding/soil/pkg/postgres"
 	"github.com/funtimecoding/soil/pkg/postgres/constant"
 	"github.com/funtimecoding/soil/pkg/postgres/refusal"
+	"github.com/funtimecoding/soil/pkg/postgres/unit/postgres_tester"
 	"testing"
 )
 
 func TestSyntaxErrorIsCallersMistake(t *testing.T) {
-	assert.True(t, validation.Is(refusal.Classify(refused("42601"))))
+	assert.True(
+		t,
+		validation.Is(refusal.Classify(postgres_tester.Refused("42601"))),
+	)
 }
 
 func TestDivisionByZeroIsCallersMistake(t *testing.T) {
-	assert.True(t, validation.Is(refusal.Classify(refused("22012"))))
+	assert.True(
+		t,
+		validation.Is(refusal.Classify(postgres_tester.Refused("22012"))),
+	)
 }
 
 func TestMissingPrivilegeIsForbidden(t *testing.T) {
-	assert.True(t, forbidden.Is(refusal.Classify(refused("42501"))))
+	assert.True(
+		t,
+		forbidden.Is(refusal.Classify(postgres_tester.Refused("42501"))),
+	)
 }
 
 func TestUniqueViolationIsConflict(t *testing.T) {
-	assert.True(t, conflict.Is(refusal.Classify(refused("23505"))))
+	assert.True(
+		t,
+		conflict.Is(refusal.Classify(postgres_tester.Refused("23505"))),
+	)
 }
 
 func TestSerializationFailureIsConflict(t *testing.T) {
-	assert.True(t, conflict.Is(refusal.Classify(refused("40001"))))
+	assert.True(
+		t,
+		conflict.Is(refusal.Classify(postgres_tester.Refused("40001"))),
+	)
 }
 
 func TestServerStartingUpIsUnavailable(t *testing.T) {
-	assert.True(t, unavailable.Is(refusal.Classify(refused("57P03"))))
+	assert.True(
+		t,
+		unavailable.Is(refusal.Classify(postgres_tester.Refused("57P03"))),
+	)
 }
 
 func TestTooManyConnectionsIsUnavailable(t *testing.T) {
-	assert.True(t, unavailable.Is(refusal.Classify(refused("53300"))))
+	assert.True(
+		t,
+		unavailable.Is(refusal.Classify(postgres_tester.Refused("53300"))),
+	)
 }
 
 func TestCanceledQueryIsTimeout(t *testing.T) {
 	assert.True(
 		t,
-		timeout.Is(refusal.Classify(refused(constant.QueryCanceledCode))),
+		timeout.Is(
+			refusal.Classify(
+				postgres_tester.Refused(constant.QueryCanceledCode),
+			),
+		),
 	)
 }
 
 func TestBadPasswordIsOursToLookAt(t *testing.T) {
-	assert.True(t, classify.Reportable(refusal.Classify(refused("28P01"))))
+	assert.True(
+		t,
+		classify.Reportable(refusal.Classify(postgres_tester.Refused("28P01"))),
+	)
 }
 
 func TestInternalErrorIsOursToLookAt(t *testing.T) {
-	assert.True(t, classify.Reportable(refusal.Classify(refused("XX000"))))
+	assert.True(
+		t,
+		classify.Reportable(refusal.Classify(postgres_tester.Refused("XX000"))),
+	)
 }
 
 func TestCodeShorterThanClassIsOursToLookAt(t *testing.T) {
-	assert.True(t, classify.Reportable(refusal.Classify(refused("4"))))
+	assert.True(
+		t,
+		classify.Reportable(refusal.Classify(postgres_tester.Refused("4"))),
+	)
 }
 
 func TestErrorFromElsewherePassesThrough(t *testing.T) {

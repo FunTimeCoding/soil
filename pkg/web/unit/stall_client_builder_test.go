@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -60,11 +61,11 @@ func TestStallClientHaltingStopsAtRedirect(t *testing.T) {
 }
 
 func TestStallClientCloseDropsIdleConnections(t *testing.T) {
-	s, opened := newCountingServer(t)
+	s := upstream_server.New(t, upstream_server.WithAnswer("counted"))
 	p := stall_client.New().Build()
 	defer p.Close()
 	assert.String(t, "counted", web.GetString(p.Client(), s.URL))
 	p.Close()
 	assert.String(t, "counted", web.GetString(p.Client(), s.URL))
-	assert.Integer(t, int64(2), opened.Load())
+	assert.Integer(t, 2, s.Opened())
 }

@@ -134,7 +134,7 @@ back through `Reachable` on a backoff (`ProbeMinimum` to `ProbeMaximum`).
 answers while it is sealed or on standby would restore the guard on the
 probe and open it again on the next call, once per request.
 An `unavailable` from the call itself - the upstream's own 503, or a
-guarded daemon passing on its guard's verdict - is a peer that answers
+guarded daemon passing on its guard's error - is a peer that answers
 and refuses, where `Reachable` would pass while every operation fails.
 That outage is tested by the calls: once the backoff delay has passed,
 one call goes through as the trial while every other still fails at
@@ -198,7 +198,7 @@ and anything else a refusal; a local device that is absent answers
 Edges are logged and refusals captured unless `WithReport` hands both to
 the caller - a terminal UI shows them on screen, where log lines would tear
 the display; a lasting outage and a panic still reach the reporter.
-`Unavailable` is the hold's verdict for the surfaces: nil while a session
+`Unavailable` is the hold's status for the surfaces: nil while a session
 serves, the outage's start and reason while down. A type that is already a
 worker, with a `Close` of its own, is held through `hold/adapter`, which
 builds a `face.Connection` from three functions. `Done` closes when the loop

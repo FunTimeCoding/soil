@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/source/unit/import_tester"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestChooseAliasPrefersBareSubsystem(t *testing.T) {
 			"example.org/alfa/pkg/web/constant",
 			"example.org/alfa",
 			constant.ConstantPackage,
-			taken(),
+			import_tester.Among(),
 		),
 	)
 }
@@ -28,7 +29,7 @@ func TestChooseAliasFallsBackToSubsystemAndName(t *testing.T) {
 			"example.org/alfa/pkg/strings/constant",
 			"example.org/alfa",
 			constant.ConstantPackage,
-			taken("strings"),
+			import_tester.Among("strings"),
 		),
 	)
 }
@@ -41,7 +42,7 @@ func TestChooseAliasFallbackCamelsSnakeName(t *testing.T) {
 			"example.org/alfa/pkg/tool/goalfa/client/mock_client",
 			"example.org/alfa",
 			constant.MockPackage,
-			taken("client"),
+			import_tester.Among("client"),
 		),
 	)
 }
@@ -54,7 +55,7 @@ func TestChooseAliasKeepsBareSnakeSubsystem(t *testing.T) {
 			"example.org/alfa/pkg/bravo_charlie/constant",
 			"example.org/alfa",
 			constant.ConstantPackage,
-			taken(),
+			import_tester.Among(),
 		),
 	)
 }
@@ -67,7 +68,7 @@ func TestChooseAliasFallbackCamelsSnakeSubsystem(t *testing.T) {
 			"example.org/alfa/pkg/bravo_charlie/constant",
 			"example.org/alfa",
 			constant.ConstantPackage,
-			taken("bravo_charlie"),
+			import_tester.Among("bravo_charlie"),
 		),
 	)
 }
@@ -80,7 +81,7 @@ func TestChooseAliasAtLayoutRootIsModulePlusName(t *testing.T) {
 			"example.org/alfa/pkg/errors",
 			"example.org/alfa",
 			"errors",
-			taken("errors"),
+			import_tester.Among("errors"),
 		),
 	)
 }
@@ -93,7 +94,7 @@ func TestChooseAliasAtLayoutRootLeavesBareModuleToConstant(t *testing.T) {
 			"example.org/alfa/pkg/constant",
 			"example.org/alfa",
 			constant.ConstantPackage,
-			taken(constant.ConstantPackage),
+			import_tester.Among(constant.ConstantPackage),
 		),
 	)
 }
@@ -106,7 +107,7 @@ func TestChooseAliasGivesUpWhenBothAreTaken(t *testing.T) {
 			"example.org/alfa/pkg/strings/constant",
 			"example.org/alfa",
 			constant.ConstantPackage,
-			taken("strings", "stringsConstant"),
+			import_tester.Among("strings", "stringsConstant"),
 		),
 	)
 }

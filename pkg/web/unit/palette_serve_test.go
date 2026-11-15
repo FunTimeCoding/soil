@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"net/http"
 	"net/http/httptest"
 	"testing"

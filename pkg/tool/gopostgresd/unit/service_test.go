@@ -6,12 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"strings"
 	"testing"
 )
 
 func TestQueryAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Query.Query(t.Context(), "alfa", "SELECT 1")
 	assert.FatalOnError(t, e)
 	_, f := s.Query.Query(t.Context(), "bravo", "SELECT 1")
@@ -19,7 +20,7 @@ func TestQueryAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestExplainAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Query.Explain(t.Context(), "alfa", "SELECT 1", false)
 	assert.FatalOnError(t, e)
 	_, f := s.Query.Explain(t.Context(), "bravo", "SELECT 1", false)
@@ -27,7 +28,7 @@ func TestExplainAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestListSchemasAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Catalog.ListSchemas(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	_, f := s.Catalog.ListSchemas(t.Context(), "bravo")
@@ -35,7 +36,7 @@ func TestListSchemasAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestListTablesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Catalog.ListTables(t.Context(), "alfa", "")
 	assert.FatalOnError(t, e)
 	_, f := s.Catalog.ListTables(t.Context(), "bravo", "")
@@ -43,7 +44,7 @@ func TestListTablesAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestDescribeTableAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Catalog.DescribeTable(t.Context(), "alfa", "", "orders")
 	assert.FatalOnError(t, e)
 	_, f := s.Catalog.DescribeTable(t.Context(), "bravo", "", "orders")
@@ -51,7 +52,7 @@ func TestDescribeTableAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestListIndexesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Catalog.ListIndexes(t.Context(), "alfa", "", "orders")
 	assert.FatalOnError(t, e)
 	_, f := s.Catalog.ListIndexes(t.Context(), "bravo", "", "orders")
@@ -59,7 +60,7 @@ func TestListIndexesAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestTableSizesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Catalog.TableSizes(t.Context(), "alfa", "")
 	assert.FatalOnError(t, e)
 	_, f := s.Catalog.TableSizes(t.Context(), "bravo", "")
@@ -101,7 +102,7 @@ func TestExplainPrefixesStatement(t *testing.T) {
 func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	s, clients := service_tester.New(t, "alfa")
 	c := clients["alfa"]
-	c.Failure = refusedConnection()
+	c.Failure = outage_tester.RefusedDial()
 	_, e := s.Query.Query(t.Context(), "alfa", "SELECT 1")
 	assert.True(t, unavailable.Is(e))
 	c.Failure = nil
@@ -113,7 +114,7 @@ func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 
 func TestOneUnreachableInstanceLeavesOthersAnswering(t *testing.T) {
 	s, clients := service_tester.New(t, "alfa", "bravo")
-	clients["alfa"].Failure = refusedConnection()
+	clients["alfa"].Failure = outage_tester.RefusedDial()
 	_, e := s.Query.Query(t.Context(), "alfa", "SELECT 1")
 	assert.True(t, unavailable.Is(e))
 	_, f := s.Query.Query(t.Context(), "bravo", "SELECT 1")

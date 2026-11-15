@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -13,7 +15,7 @@ func TestFixRefusedWhenReachedPackageChangesBeforeCommit(t *testing.T) {
 	directory := module_tester.NamesakeExported(t)
 	o := module_tester.Options(t, directory, false, false, "./alfa/...")
 	o.BeforeCommit = func() {
-		testutil.WriteFile(t, directory, "bravo/extra.go", "package bravo\n")
+		system_tester.Write(t, directory, "bravo/extra.go", "package bravo\n")
 	}
 	r := output.NewResultsWithDirectory(directory)
 	module_tester.RunDefault(t, o, r)
@@ -22,7 +24,7 @@ func TestFixRefusedWhenReachedPackageChangesBeforeCommit(t *testing.T) {
 		"package alfa\n\nfunc SendMsg() string {\n\treturn \"x\"\n}\n",
 		testutil.ReadFile(t, filepath.Join(directory, "alfa", "send.go")),
 	)
-	assert.Integer(t, 0, len(filterApplied(r.Entries)))
+	assert.Integer(t, 0, len(fix_tester.Applied(r.Entries)))
 	last := r.Entries[len(r.Entries)-1]
 	assert.String(t, "bravo/extra.go", last.Path)
 	assert.String(
@@ -36,7 +38,7 @@ func TestFixCommitsPastChangeOutsideReach(t *testing.T) {
 	directory := module_tester.NamesakeExported(t)
 	o := module_tester.Options(t, directory, false, false, "./alfa/...")
 	o.BeforeCommit = func() {
-		testutil.WriteFile(
+		system_tester.Write(
 			t,
 			directory,
 			"delta/other.go",
@@ -61,7 +63,7 @@ func TestFixRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 	o := module_tester.Options(t, library, false, false, "./alfa/...")
 	o.Replacing = []string{user}
 	o.BeforeCommit = func() {
-		testutil.WriteFile(t, user, "user/extra.go", "package user\n")
+		system_tester.Write(t, user, "user/extra.go", "package user\n")
 	}
 	module_tester.RunDefault(t, o, output.NewResultsWithDirectory(library))
 	assert.String(

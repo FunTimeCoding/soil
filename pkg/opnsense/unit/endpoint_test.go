@@ -7,8 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/opnsense/constant"
+	"github.com/funtimecoding/soil/pkg/opnsense/unit/opnsense_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -16,18 +17,21 @@ import (
 )
 
 func TestGetSendsKeyAndQuery(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `[{"action":"pass"}]`)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`[{"action":"pass"}]`),
+	)
 	var out []map[string]string
 	assert.FatalOnError(
 		t,
-		newClient(t, s.URL, false).Get(
+		opnsense_tester.Basic(t, s.URL, false).Get(
 			constant.LogRead,
 			map[string]string{"limit": "5"},
 			&out,
 		),
 	)
 	assert.String(t, "pass", out[0]["action"])
-	r := last()
+	r := s.Last()
 	assert.String(t, "/api/diagnostics/firewall/log", r.URL.Path)
 	assert.String(t, "5", r.URL.Query().Get("limit"))
 	key, secret, okay := r.BasicAuth()
@@ -38,18 +42,21 @@ func TestGetSendsKeyAndQuery(t *testing.T) {
 }
 
 func TestPostSendsNotation(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"result":"saved"}`)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"result":"saved"}`),
+	)
 	var out map[string]string
 	assert.FatalOnError(
 		t,
-		newClient(t, s.URL, false).Post(
+		opnsense_tester.Basic(t, s.URL, false).Post(
 			constant.HostAdd,
 			map[string]string{"host": "charlie"},
 			&out,
 		),
 	)
 	assert.String(t, "saved", out["result"])
-	r := last()
+	r := s.Last()
 	assert.String(t, http.MethodPost, r.Method)
 	assert.String(t, "application/json", r.Header.Get(webConstant.ContentType))
 	b, e := io.ReadAll(r.Body)
@@ -58,20 +65,22 @@ func TestPostSendsNotation(t *testing.T) {
 }
 
 func TestMissingEndpointIsNotFound(t *testing.T) {
-	s, _ := upstream_tester.New(t, http.StatusNotFound, "")
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusNotFound))
 	var out map[string]any
-	e := newClient(t, s.URL, false).Get("delta/echo", nil, &out)
+	e := opnsense_tester.Basic(t, s.URL, false).Get("delta/echo", nil, &out)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestRefusalCarriesMessage(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"status":401,"message":"Authentication Failed"}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(
+			`{"status":401,"message":"Authentication Failed"}`,
+		),
 	)
 	var out map[string]any
-	e := newClient(t, s.URL, false).Get("delta/echo", nil, &out)
+	e := opnsense_tester.Basic(t, s.URL, false).Get("delta/echo", nil, &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 401: Authentication Failed", e.Error())
 }
@@ -90,9 +99,12 @@ func TestUntrustedReachesSelfSignedFirewall(t *testing.T) {
 	)
 	t.Cleanup(s.Close)
 	var out map[string]string
-	assert.FatalOnError(t, newClient(t, s.URL, true).Get("foxtrot", nil, &out))
+	assert.FatalOnError(
+		t,
+		opnsense_tester.Basic(t, s.URL, true).Get("foxtrot", nil, &out),
+	)
 	assert.String(t, "ok", out["status"])
-	e := newClient(t, s.URL, false).Get("foxtrot", nil, &out)
+	e := opnsense_tester.Basic(t, s.URL, false).Get("foxtrot", nil, &out)
 	assert.True(t, unreachable.Is(e))
 	assert.StringContains(t, "untrusted certificate", e.Error())
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"net/url"
 	"strings"
 	"testing"
@@ -21,7 +21,7 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 	o.Type = "feedback"
 	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
-	page := body(t, s.Server, constant.MemoriesPath, false)
+	page := s.Body(t, constant.MemoriesPath)
 	markup_tester.AssertCount(t, 1, page, "tbody tr.opening-row")
 	markup_tester.AssertAttribute(
 		t,
@@ -30,7 +30,7 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 		"tr.opening-row",
 		"hx-get",
 	)
-	opened := body(t, s.Server, "/memories/1/open", true)
+	opened := s.ExtendedBody(t, "/memories/1/open")
 	assert.StringContains(t, `class="opening-detail"><td colspan="3">`, opened)
 	markup_tester.AssertText(t, "alfa content", opened, "pre")
 	markup_tester.AssertAttribute(
@@ -40,16 +40,15 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 		".action-row a[hx-get]",
 		"href",
 	)
-	editor := body(t, s.Server, "/memories/1/edit", true)
+	editor := s.ExtendedBody(t, "/memories/1/edit")
 	markup_tester.AssertText(
 		t,
 		"alfa content",
 		editor,
 		"textarea[name=content]",
 	)
-	refused := submit(
+	refused := s.PostBody(
 		t,
-		s.Server,
 		"/memories/1/edit",
 		url.Values{
 			constant.MemoryName:  {"alfa"},
@@ -59,9 +58,8 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 	)
 	assert.StringContains(t, "description must be one line", refused)
 	markup_tester.AssertText(t, "typed", refused, "textarea[name=content]")
-	saved := submit(
+	saved := s.PostBody(
 		t,
-		s.Server,
 		"/memories/1/edit",
 		url.Values{
 			constant.MemoryName:  {"alfa"},
@@ -75,7 +73,7 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 	history, f := s.Store().GetMemoryHistory(identifier)
 	assert.FatalOnError(t, f)
 	assert.String(t, "web", history[len(history)-1].Source)
-	closed := body(t, s.Server, "/memories/1/close", true)
+	closed := s.ExtendedBody(t, "/memories/1/close")
 	assert.True(t, !strings.Contains(closed, "alfa edited"))
 	markup_tester.AssertAttribute(
 		t,
@@ -95,12 +93,11 @@ func TestDocumentSourcedMemoryOpensReadOnly(t *testing.T) {
 	o.ProvenanceFile = "doc/lore.md"
 	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
-	opened := body(t, s.Server, "/memories/1/open", true)
+	opened := s.ExtendedBody(t, "/memories/1/open")
 	assert.StringContains(t, "loaded from doc/lore.md", opened)
 	markup_tester.AssertCount(t, 0, opened, `a[href="/memories/1/edit"]`)
-	refused := submit(
+	refused := s.PostBody(
 		t,
-		s.Server,
 		"/memories/1/edit",
 		url.Values{
 			constant.MemoryName: {"lore"},
@@ -122,9 +119,8 @@ func TestHiddenMemoryRefusesWebEdit(t *testing.T) {
 	o.Tags = []string{"private"}
 	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
-	answer := submit(
+	answer := s.PostBody(
 		t,
-		s.Server,
 		"/memories/1/edit",
 		url.Values{
 			constant.MemoryName: {"zulu"},

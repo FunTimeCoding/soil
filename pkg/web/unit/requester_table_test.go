@@ -10,6 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
+	"github.com/funtimecoding/soil/pkg/web/unit/requester_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
@@ -21,15 +23,15 @@ func TestTableAnswersGatewayStatusesUnavailable(t *testing.T) {
 		http.StatusServiceUnavailable,
 		http.StatusGatewayTimeout,
 	} {
-		s, _ := newScriptedServer(t, "", status)
-		_, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
+		s := upstream_server.New(t, upstream_server.WithStatus(status))
+		_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items"))
 		assert.True(t, unavailable.Is(e))
 	}
 }
 
 func TestTableAnswersConflictAsConflict(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusConflict)
-	_, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusConflict))
+	_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items"))
 	assert.True(t, conflict.Is(e))
 }
 
@@ -41,34 +43,40 @@ func TestTableKeepsOurOwnRefusalsUnexpected(t *testing.T) {
 		http.StatusUnprocessableEntity,
 		http.StatusInternalServerError,
 	} {
-		s, _ := newScriptedServer(t, "", status)
-		_, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
+		s := upstream_server.New(t, upstream_server.WithStatus(status))
+		_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items"))
 		assert.True(t, unexpected.Is(e))
 	}
 }
 
 func TestNotFoundCarriesSitesReason(t *testing.T) {
-	s, _ := newScriptedServer(
+	s := upstream_server.New(
 		t,
-		`{"message":"no such item"}`,
-		http.StatusNotFound,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(`{"message":"no such item"}`),
 	)
-	_, e := newRequester(t, s.URL).Bytes(request.Get("/items/7"))
+	_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items/7"))
 	assert.True(t, not_found.Is(e))
 	assert.StringContains(t, "/items/7 status: 404: no such item", e.Error())
 }
 
 func TestClientRowOverridesTable(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusForbidden)
-	_, e := newRequester(t, s.URL).
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusForbidden),
+	)
+	_, e := requester_tester.New(t, s.URL).
 		WithStatus(http.StatusForbidden, errorsConstant.ForbiddenClass).
 		Bytes(request.Get("/items"))
 	assert.True(t, forbidden.Is(e))
 }
 
 func TestRequestRowOverridesClientRow(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusBadRequest)
-	_, e := newRequester(t, s.URL).
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusBadRequest),
+	)
+	_, e := requester_tester.New(t, s.URL).
 		WithStatus(http.StatusBadRequest, errorsConstant.ForbiddenClass).
 		Bytes(
 			request.Get("/items").WithStatus(
@@ -80,8 +88,8 @@ func TestRequestRowOverridesClientRow(t *testing.T) {
 }
 
 func TestRefusalHookDecidesBeforeTable(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusConflict)
-	_, e := newRequester(t, s.URL).
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusConflict))
+	_, e := requester_tester.New(t, s.URL).
 		WithRefusal(
 			func(
 				int,
@@ -95,8 +103,12 @@ func TestRefusalHookDecidesBeforeTable(t *testing.T) {
 }
 
 func TestSubjectAndReaderShapeMessage(t *testing.T) {
-	s, _ := newScriptedServer(t, "<p>bravo</p>", http.StatusInternalServerError)
-	_, e := newRequester(t, s.URL).
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+		upstream_server.WithAnswer("<p>bravo</p>"),
+	)
+	_, e := requester_tester.New(t, s.URL).
 		WithSubject("alfa").
 		WithReason(
 			func(

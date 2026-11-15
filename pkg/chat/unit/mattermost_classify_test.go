@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost_client_tester"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/dropped"
@@ -14,7 +14,10 @@ import (
 )
 
 func TestClientClassifiesRefusals(t *testing.T) {
-	c := mattermost_client_tester.New(t, statusUpstream).Client
+	c := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	).Client
 	_, e := c.FindPost("forbidden")
 	assert.True(t, forbidden.Is(e))
 	_, f := c.FindPost("missing")
@@ -24,7 +27,10 @@ func TestClientClassifiesRefusals(t *testing.T) {
 }
 
 func TestUnauthorizedTokenStaysFault(t *testing.T) {
-	c := mattermost_client_tester.New(t, statusUpstream).Client
+	c := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	).Client
 	_, e := c.FindPost("unauthorized")
 	assert.True(t, classify.Reportable(e))
 	_, okay := e.(*detail_error.Detail)
@@ -32,7 +38,10 @@ func TestUnauthorizedTokenStaysFault(t *testing.T) {
 }
 
 func TestUnknownStatusKeepsItsDetail(t *testing.T) {
-	c := mattermost_client_tester.New(t, statusUpstream).Client
+	c := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	).Client
 	_, e := c.FindPost("teapot")
 	d, okay := e.(*detail_error.Detail)
 	assert.True(t, okay)
@@ -40,19 +49,28 @@ func TestUnknownStatusKeepsItsDetail(t *testing.T) {
 }
 
 func TestTruncatedBodyIsDropped(t *testing.T) {
-	c := mattermost_client_tester.New(t, statusUpstream).Client
+	c := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	).Client
 	_, e := c.FindPost("truncated")
 	assert.True(t, dropped.Is(e))
 }
 
 func TestEmptyRefusalKeepsItsStatus(t *testing.T) {
-	c := mattermost_client_tester.New(t, statusUpstream).Client
+	c := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	).Client
 	_, e := c.FindPost("hollow")
 	assert.True(t, not_found.Is(e))
 }
 
 func TestTransportFailureKeepsItsCause(t *testing.T) {
-	r := mattermost_client_tester.New(t, statusUpstream)
+	r := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	)
 	r.Stop()
 	_, e := r.Client.FindPost("missing")
 	assert.NotNil(t, connection.Classify(e))

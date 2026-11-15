@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -14,7 +15,7 @@ import (
 func TestFormatDiffShowsFullRun(t *testing.T) {
 	directory := module_tester.FormatDiff(t)
 	path := filepath.Join(directory, "exploded_nested.go")
-	before := readGoFiles(t, directory)
+	before := fix_tester.GoFiles(t, directory)
 	printed := assert.Capture(
 		t,
 		func() {
@@ -26,7 +27,7 @@ func TestFormatDiffShowsFullRun(t *testing.T) {
 			)
 		},
 	)
-	assert.Any(t, before, readGoFiles(t, directory))
+	assert.Any(t, before, fix_tester.GoFiles(t, directory))
 	assert.String(
 		t,
 		fmt.Sprintf(

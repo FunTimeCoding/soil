@@ -1,0 +1,21 @@
+package service_tester
+
+import (
+	proxmoxConstant "github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
+	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+)
+
+func AmbiguousFloor() (*mock_client.Client, []*client.VirtualMachine) {
+	c := mock_client.New()
+	c.AddNode("test")
+	c.AddMachine("test", 101, "alfa")
+	c.SetMachineStatus("test", 101, proxmoxConstant.RunningStatus)
+	here := netboxMachine("alfa", gonetboxdConstant.StatusOffline)
+	here.Cluster = new("test")
+	there := netboxMachine("alfa", gonetboxdConstant.StatusOffline)
+	there.Cluster = new("other")
+
+	return c, []*client.VirtualMachine{here, there}
+}

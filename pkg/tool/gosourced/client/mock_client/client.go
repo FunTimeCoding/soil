@@ -7,7 +7,7 @@ import (
 
 type Client struct {
 	mutex   sync.Mutex
-	Census  client.Census
+	Usage   client.Usage
 	Check   client.CheckResponse
 	Diff    client.DiffResponse
 	Removed []string

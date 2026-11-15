@@ -14,7 +14,7 @@ func (s *Server) checkReferences(
 	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	reports, e := s.service.ReferenceCensus()
+	reports, e := s.service.ReferenceReports()
 
 	if e != nil {
 		return s.answer(x, e)

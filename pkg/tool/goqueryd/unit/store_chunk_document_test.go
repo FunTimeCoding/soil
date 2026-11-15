@@ -5,13 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestDocumentShortContent(t *testing.T) {
 	content := "# Short\n\nThis is a short document.\n"
-	chunks := chunk.Document(content, "test.md", newReranker(t))
+	chunks := chunk.Document(content, "test.md", service_tester.NewReranker(t))
 	assert.Count(t, 1, chunks)
 	assert.String(t, content, chunks[0].Text)
 	assert.Integer(t, 0, chunks[0].Position)
@@ -32,7 +33,7 @@ func TestDocumentSplitsAtHeadings(t *testing.T) {
 		sections[3],
 		sections[4],
 	)
-	chunks := chunk.Document(content, "test.md", newReranker(t))
+	chunks := chunk.Document(content, "test.md", service_tester.NewReranker(t))
 	assert.Greater(t, 1, len(chunks))
 	assert.StringContains(t, "# First", chunks[0].Text)
 }
@@ -47,7 +48,7 @@ func TestDocumentPreservesCodeFences(t *testing.T) {
 		code,
 		after,
 	)
-	chunks := chunk.Document(content, "test.md", newReranker(t))
+	chunks := chunk.Document(content, "test.md", service_tester.NewReranker(t))
 
 	for _, c := range chunks {
 		opens := strings.Count(c.Text, constant.BacktickFence)

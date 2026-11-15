@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/instrument/unit/sentry_receiver"
+	"github.com/funtimecoding/soil/pkg/log/log_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 	"time"
@@ -20,7 +21,7 @@ func TestFlushDeliversReportedEvent(t *testing.T) {
 			stringsConstant.LowerAlfa,
 		),
 	)
-	l := captureLog(t)
+	l := log_tester.Capture(t)
 	func() {
 		defer func() { i.Flush(recover()) }()
 		i.Reporter().CaptureException(fmt.Errorf("alfa"))

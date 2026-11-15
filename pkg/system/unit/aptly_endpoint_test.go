@@ -3,7 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/system/unit/aptly_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -12,15 +13,13 @@ import (
 )
 
 func TestPackagesReadsList(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`["Pamd64 charlie 1.2.3 abc"]`,
-	)
-	result, e := newAptlyClient(t, s.URL).Packages("delta")
+		upstream_server.WithAnswer(`["Pamd64 charlie 1.2.3 abc"]`))
+	result, e := aptly_tester.New(t, s.URL).Packages("delta")
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"Pamd64 charlie 1.2.3 abc"}, result)
-	r := last()
+	r := s.Last()
 	assert.String(t, "/api/repos/delta/packages", r.URL.Path)
 	user, password, okay := r.BasicAuth()
 	assert.True(t, okay)
@@ -29,22 +28,22 @@ func TestPackagesReadsList(t *testing.T) {
 }
 
 func TestRefusedPackagesIsErrorNotPanic(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"error":"authorization required"}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(`{"error":"authorization required"}`),
 	)
-	_, e := newAptlyClient(t, s.URL).Packages("delta")
+	_, e := aptly_tester.New(t, s.URL).Packages("delta")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "authorization required", e.Error())
 }
 
 func TestUploadSendsMultipart(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `["echo.deb"]`)
+	s := upstream_server.New(t, upstream_server.WithAnswer(`["echo.deb"]`))
 	path := filepath.Join(t.TempDir(), "echo.deb")
 	assert.FatalOnError(t, os.WriteFile(path, []byte("foxtrot"), 0o600))
-	assert.FatalOnError(t, newAptlyClient(t, s.URL).Upload("golf", path))
-	r := last()
+	assert.FatalOnError(t, aptly_tester.New(t, s.URL).Upload("golf", path))
+	r := s.Last()
 	assert.String(t, "/api/files/golf", r.URL.Path)
 	assert.True(
 		t,
@@ -53,7 +52,7 @@ func TestUploadSendsMultipart(t *testing.T) {
 }
 
 func TestMissingUploadFileIsError(t *testing.T) {
-	s, _ := upstream_tester.New(t, http.StatusOK, "")
-	e := newAptlyClient(t, s.URL).Upload("golf", "/nonexistent/hotel.deb")
+	s := upstream_server.New(t)
+	e := aptly_tester.New(t, s.URL).Upload("golf", "/nonexistent/hotel.deb")
 	assert.True(t, e != nil)
 }

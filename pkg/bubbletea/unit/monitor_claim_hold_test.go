@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim/message"
+	"github.com/funtimecoding/soil/pkg/bubbletea/unit/monitor_tester"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -18,7 +19,7 @@ import (
 
 func TestWindowReceivesClaimsThroughHold(t *testing.T) {
 	s := base.New(t)
-	g := nextClaimMessage(
+	g := monitor_tester.ClaimMessage(
 		t,
 		s.Port,
 		generativeConstant.ModelContextTestToken,
@@ -60,7 +61,7 @@ func TestClosingWindowReleasesNoticeNobodyReads(t *testing.T) {
 func TestWindowShowsRefusedClaimStream(t *testing.T) {
 	s := base.New(t)
 	r := memory.New()
-	g := nextClaimMessage(t, s.Port, "bogus", r)
+	g := monitor_tester.ClaimMessage(t, s.Port, "bogus", r)
 	assert.StringContains(t, "stream status: 401", g.Error.Error())
 	assert.Count(t, 0, r.Events())
 }

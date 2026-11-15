@@ -15,93 +15,65 @@ func (r *Resolver) resolveShort(
 ) *pointer.Resolution {
 	if full, anchored := r.anchored(bases, candidate); anchored {
 		if r.Exists(full) || r.SiblingExists(full) || r.Ignored(full) {
-			result := pointer.NewResolution(constant.VerdictLive)
-			result.Target = full
-
-			return result
+			return pointer.NewLive(full)
 		}
 
-		return pointer.NewResolution(constant.VerdictDead)
+		return pointer.NewConcern(constant.DeadPointerKey)
 	}
 
 	if relative, inside := pointer.Relative(path, candidate); inside &&
 		r.Exists(relative) {
-		result := pointer.NewResolution(constant.VerdictLive)
-		result.Target = relative
-
-		return result
+		return pointer.NewLive(relative)
 	}
 
 	normalized := pointer.Normalize(candidate)
 
 	if target, found := r.ancestor(path, normalized); found {
-		result := pointer.NewResolution(constant.VerdictLive)
-		result.Target = target
-
-		return result
+		return pointer.NewLive(target)
 	}
 
 	first, _, _ := strings.Cut(normalized, stringsConstant.Slash)
 
 	if slices.Contains(constant.ConventionDirectories, first) {
-		return pointer.NewResolution(constant.VerdictConvention)
+		return pointer.NewConcern(constant.ConventionWordKey)
 	}
 
 	if r.Dependency(normalized) || r.Stdlib(normalized) {
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
 	if strings.HasPrefix(normalized, constant.HomePrefix) {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonHome
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonHome)
 	}
 
 	if slices.Contains(constant.ImageRegistries, first) ||
 		slices.Contains(r.Registries, first) {
 		if r.Literal("", normalized) {
-			return pointer.NewResolution(constant.VerdictLive)
+			return pointer.NewLive("")
 		}
 
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonImage
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonImage)
 	}
 
 	if constant.Address.MatchString(first) {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonNetwork
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonNetwork)
 	}
 
 	if strings.Contains(first, stringsConstant.Dot) {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonExternal
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonExternal)
 	}
 
 	if full, anchored := r.anchored(r.ImplicitBases, candidate); anchored {
 		if r.Exists(full) || r.SiblingExists(full) || r.Ignored(full) {
-			result := pointer.NewResolution(constant.VerdictLive)
-			result.Target = full
-
-			return result
+			return pointer.NewLive(full)
 		}
 
-		return pointer.NewResolution(constant.VerdictDead)
+		return pointer.NewConcern(constant.DeadPointerKey)
 	}
-
-	result := pointer.NewResolution(constant.VerdictTallied)
 
 	if len(bases) > 0 {
-		result.Reason = constant.ReasonUnanchored
-	} else {
-		result.Reason = constant.ReasonUnknown
+		return pointer.NewUnchecked(constant.ReasonUnanchored)
 	}
 
-	return result
+	return pointer.NewUnchecked(constant.ReasonUnknown)
 }

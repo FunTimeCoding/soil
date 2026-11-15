@@ -2,21 +2,21 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/build_tag"
 	"github.com/funtimecoding/soil/pkg/source/warm_tree"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
 func TestDiscoverLeavesOutUnixConstraint(t *testing.T) {
 	d := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"alfa/alfa.go",
 		"//go:build unix\n\npackage alfa\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"alfa/bravo.go",
@@ -27,13 +27,13 @@ func TestDiscoverLeavesOutUnixConstraint(t *testing.T) {
 
 func TestDiscoverSkipsWhatGoToolSkips(t *testing.T) {
 	d := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"tmp/alfa/alfa.go",
 		"//go:build browser\n\npackage alfa\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"_probe/bravo.go",
@@ -49,13 +49,13 @@ func TestDiscoverSkipsWhatGoToolSkips(t *testing.T) {
 
 func TestTreeFilesSkipTestdata(t *testing.T) {
 	d := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"alfa/alfa.go",
 		"//go:build browser\n\npackage alfa\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		d,
 		"alfa/testdata/bravo.go",

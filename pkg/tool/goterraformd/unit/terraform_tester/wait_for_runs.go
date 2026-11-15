@@ -2,29 +2,29 @@ package terraform_tester
 
 import (
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
+	"github.com/funtimecoding/soil/pkg/time/wait_tester"
 	"time"
 )
 
 func (o *Tester) WaitForRuns(count int) {
 	o.t.Helper()
-	deadline := time.Now().Add(10 * time.Second)
+	wait_tester.Until(
+		o.t,
+		func() bool {
+			runs := o.runs()
 
-	for time.Now().Before(deadline) {
-		runs := o.runs()
-		finished := len(runs) >= count
-
-		for _, r := range runs {
-			if r.Status == provisionConstant.StoreStatusRunning {
-				finished = false
+			if len(runs) < count {
+				return false
 			}
-		}
 
-		if finished {
-			return
-		}
+			for _, r := range runs {
+				if r.Status == provisionConstant.StoreStatusRunning {
+					return false
+				}
+			}
 
-		time.Sleep(10 * time.Millisecond)
-	}
-
-	o.t.Fatalf("timed out waiting for %d finished runs", count)
+			return true
+		},
+		10*time.Second,
+	)
 }

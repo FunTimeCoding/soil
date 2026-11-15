@@ -4,9 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/warm_tree"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"os"
 	"path/filepath"
 	"testing"
@@ -14,9 +14,9 @@ import (
 
 func TestWarmTreeHoldsEntriesButGit(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "alfa.txt", "bravo\n")
-	testutil.WriteFile(t, root, "charlie/delta.go", "package charlie\n")
-	testutil.WriteFile(t, root, ".git/config", "echo\n")
+	system_tester.Write(t, root, "alfa.txt", "bravo\n")
+	system_tester.Write(t, root, "charlie/delta.go", "package charlie\n")
+	system_tester.Write(t, root, ".git/config", "echo\n")
 	system.MakeDirectory(filepath.Join(root, "empty"))
 	assert.FatalOnError(
 		t,
@@ -46,7 +46,7 @@ func TestWarmTreeHoldsEntriesButGit(t *testing.T) {
 
 func TestWarmTreeReadsOnceThenFromMemory(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "alfa.txt", "bravo\n")
+	system_tester.Write(t, root, "alfa.txt", "bravo\n")
 	tree := warm_tree.New(root)
 	first, e := tree.Read("alfa.txt")
 	assert.FatalOnError(t, e)
@@ -59,14 +59,14 @@ func TestWarmTreeReadsOnceThenFromMemory(t *testing.T) {
 
 func TestWarmTreeRefreshNamesWhatChanged(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "alfa.txt", "bravo\n")
-	testutil.WriteFile(t, root, "charlie/delta.go", "package charlie\n")
-	testutil.WriteFile(t, root, "echo/foxtrot.go", "package echo\n")
+	system_tester.Write(t, root, "alfa.txt", "bravo\n")
+	system_tester.Write(t, root, "charlie/delta.go", "package charlie\n")
+	system_tester.Write(t, root, "echo/foxtrot.go", "package echo\n")
 	tree := warm_tree.New(root)
 	_, e := tree.Read("alfa.txt")
 	assert.FatalOnError(t, e)
-	testutil.WriteFile(t, root, "alfa.txt", "golf hotel\n")
-	testutil.WriteFile(t, root, "charlie/india.go", "package charlie\n")
+	system_tester.Write(t, root, "alfa.txt", "golf hotel\n")
+	system_tester.Write(t, root, "charlie/india.go", "package charlie\n")
 	assert.FatalOnError(t, os.Remove(filepath.Join(root, "echo/foxtrot.go")))
 	changed := tree.Refresh()
 	assert.Strings(
@@ -88,17 +88,17 @@ func TestWarmTreeRefreshNamesWhatChanged(t *testing.T) {
 
 func TestWarmTreeIgnoreMatcherAgreesWithGit(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, ".gitignore", "build/\n*.log\n!keep.log\n")
-	testutil.WriteFile(t, root, ".git/info/exclude", "local/\n")
-	testutil.WriteFile(t, root, "build/.gitignore", "!inside.txt\n")
-	testutil.WriteFile(t, root, "build/inside.txt", "alfa\n")
-	testutil.WriteFile(t, root, "local/.gitignore", "!secret.txt\n")
-	testutil.WriteFile(t, root, "local/secret.txt", "bravo\n")
-	testutil.WriteFile(t, root, "doc/.gitignore", "draft.md\n")
-	testutil.WriteFile(t, root, "doc/draft.md", "charlie\n")
-	testutil.WriteFile(t, root, "doc/final.md", "delta\n")
-	testutil.WriteFile(t, root, "alfa.log", "echo\n")
-	testutil.WriteFile(t, root, "keep.log", "foxtrot\n")
+	system_tester.Write(t, root, ".gitignore", "build/\n*.log\n!keep.log\n")
+	system_tester.Write(t, root, ".git/info/exclude", "local/\n")
+	system_tester.Write(t, root, "build/.gitignore", "!inside.txt\n")
+	system_tester.Write(t, root, "build/inside.txt", "alfa\n")
+	system_tester.Write(t, root, "local/.gitignore", "!secret.txt\n")
+	system_tester.Write(t, root, "local/secret.txt", "bravo\n")
+	system_tester.Write(t, root, "doc/.gitignore", "draft.md\n")
+	system_tester.Write(t, root, "doc/draft.md", "charlie\n")
+	system_tester.Write(t, root, "doc/final.md", "delta\n")
+	system_tester.Write(t, root, "alfa.log", "echo\n")
+	system_tester.Write(t, root, "keep.log", "foxtrot\n")
 	paths := []string{
 		"alfa.log",
 		"build/inside.txt",

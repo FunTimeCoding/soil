@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -14,7 +15,7 @@ func TestFunctionEmptyBody(t *testing.T) {
 		stringsConstant.UpperBravo,
 		strings.NewReader("package main\n\nfunc main() {\n}\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Bravo",
 		true,
@@ -41,5 +42,5 @@ func TestFunctionClean(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tfmt.Println(\"hello\")\n}\n",
 		),
 	)
-	assertReport(t, "Alfa", false, nil, "", l)
+	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }

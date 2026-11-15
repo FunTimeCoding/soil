@@ -6,13 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"slices"
 	"strings"
 	"testing"
 )
 
 func TestDeliveryOrdersSections(t *testing.T) {
-	m := storedMessage(7, "Dale", "hello")
+	m := delivery_tester.StoredMessage(7, "Dale", "hello")
 	assert.String(
 		t,
 		`Re-announce required: MCP binding lost during service restart.
@@ -26,24 +27,27 @@ Memory activity:
   thread updated by Glen
 Messages:
   Dale: hello`,
-		render(
+		delivery_tester.Render(
 			[]*queue.Entry{
-				messageEntry(m),
-				deliveryEntry(
+				delivery_tester.MessageEntry(m),
+				delivery_tester.Entry(
 					constant.QueueMemoryUpdate,
 					"thread updated by Glen",
 				),
-				deliveryEntry(
+				delivery_tester.Entry(
 					constant.QueueNotification,
 					"mattermost: a digest",
 				),
-				deliveryEntry(
+				delivery_tester.Entry(
 					constant.QueueSessionUpdate,
 					"Frost updated scope: lint",
 				),
-				deliveryEntry(constant.QueueTimeout, "1 hour since last turn."),
-				deliveryEntry(constant.QueuePulse, "deploy finished"),
-				deliveryEntry(
+				delivery_tester.Entry(
+					constant.QueueTimeout,
+					"1 hour since last turn.",
+				),
+				delivery_tester.Entry(constant.QueuePulse, "deploy finished"),
+				delivery_tester.Entry(
 					constant.QueueReannounce,
 					"Re-announce required: MCP binding lost during service restart.",
 				),
@@ -54,7 +58,7 @@ Messages:
 }
 
 func TestRenderCutsLongMessage(t *testing.T) {
-	m := storedMessage(12, "Ash", strings.Repeat("a", 5000))
+	m := delivery_tester.StoredMessage(12, "Ash", strings.Repeat("a", 5000))
 	assert.String(
 		t,
 		join.NewLine(
@@ -68,16 +72,23 @@ func TestRenderCutsLongMessage(t *testing.T) {
 				),
 			},
 		),
-		render([]*queue.Entry{messageEntry(m)}, m),
+		delivery_tester.Render(
+			[]*queue.Entry{delivery_tester.MessageEntry(m)},
+			m,
+		),
 	)
 }
 
 func TestRenderWaitsBelowCutFloor(t *testing.T) {
 	var entries []*queue.Entry
-	stored := storedMessages(4, "Blair", strings.Repeat("c", 3000))
+	stored := delivery_tester.StoredMessages(
+		4,
+		"Blair",
+		strings.Repeat("c", 3000),
+	)
 
 	for _, m := range stored {
-		entries = append(entries, messageEntry(m))
+		entries = append(entries, delivery_tester.MessageEntry(m))
 	}
 
 	assert.String(
@@ -96,12 +107,12 @@ func TestRenderWaitsBelowCutFloor(t *testing.T) {
 				"  Message 4 from Blair at 14:35 (3,000 characters) is waiting - read it with read_message",
 			},
 		),
-		render(entries, stored...),
+		delivery_tester.Render(entries, stored...),
 	)
 }
 
 func TestDeliveryTrimsMemoryBeforeMessages(t *testing.T) {
-	m := storedMessage(9, "Dale", "after the memories")
+	m := delivery_tester.StoredMessage(9, "Dale", "after the memories")
 	var entries []*queue.Entry
 	var kept []string
 
@@ -109,7 +120,7 @@ func TestDeliveryTrimsMemoryBeforeMessages(t *testing.T) {
 		line := fmt.Sprintf("memory number %02d updated by Ellis", i)
 		entries = append(
 			entries,
-			deliveryEntry(constant.QueueMemoryUpdate, line),
+			delivery_tester.Entry(constant.QueueMemoryUpdate, line),
 		)
 
 		if i < 52 {
@@ -130,7 +141,10 @@ func TestDeliveryTrimsMemoryBeforeMessages(t *testing.T) {
 				},
 			),
 		),
-		render(append(entries, messageEntry(m)), m),
+		delivery_tester.Render(
+			append(entries, delivery_tester.MessageEntry(m)),
+			m,
+		),
 	)
 }
 
@@ -147,13 +161,16 @@ func TestDeliveryKeepsMemoryHeaderWhenNothingFits(t *testing.T) {
 				join.Empty("  Ash: ", body),
 			},
 		),
-		render(
+		delivery_tester.Render(
 			[]*queue.Entry{
-				deliveryEntry(
+				delivery_tester.Entry(
 					constant.QueueMemoryUpdate,
 					"thread updated by Glen",
 				),
-				deliveryEntry(constant.QueueMessage, join.Empty("Ash: ", body)),
+				delivery_tester.Entry(
+					constant.QueueMessage,
+					join.Empty("Ash: ", body),
+				),
 			},
 		),
 	)
@@ -170,9 +187,12 @@ func TestDeliveryKeepsMessageWithoutRowInline(t *testing.T) {
 				join.Empty("  Ash: ", body),
 			},
 		),
-		render(
+		delivery_tester.Render(
 			[]*queue.Entry{
-				deliveryEntry(constant.QueueMessage, join.Empty("Ash: ", body)),
+				delivery_tester.Entry(
+					constant.QueueMessage,
+					join.Empty("Ash: ", body),
+				),
 			},
 		),
 	)

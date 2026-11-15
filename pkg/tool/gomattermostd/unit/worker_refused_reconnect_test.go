@@ -4,18 +4,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/cross_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/event_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
 	"time"
 )
 
 func TestWatcherRetriesRefusedReconnectAndReportsItOnce(t *testing.T) {
-	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
+	r := cross_service_tester.New(
+		t,
+		mattermost_server.Notification,
+		10*time.Millisecond,
+	)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Start()
 	r.Upstream.Push(
-		postEvent(
+		event_tester.Posted(
 			&model.Post{
 				Id:       "reply",
 				RootId:   "alfa",
@@ -25,7 +31,7 @@ func TestWatcherRetriesRefusedReconnectAndReportsItOnce(t *testing.T) {
 			},
 		),
 	)
-	assert.Integer(t, 1, len(waitForNotification(t, r)))
+	assert.Integer(t, 1, len(r.AwaitNotification()))
 	r.Upstream.Refuse(2)
 	r.Upstream.Drop()
 	deadline := time.Now().Add(30 * time.Second)
@@ -36,7 +42,7 @@ func TestWatcherRetriesRefusedReconnectAndReportsItOnce(t *testing.T) {
 
 	assert.Integer(t, 2, r.Upstream.Accepted())
 	r.Upstream.Push(
-		postEvent(
+		event_tester.Posted(
 			&model.Post{
 				Id:       "second",
 				RootId:   "alfa",
@@ -46,7 +52,7 @@ func TestWatcherRetriesRefusedReconnectAndReportsItOnce(t *testing.T) {
 			},
 		),
 	)
-	result := waitForNotification(t, r)
+	result := r.AwaitNotification()
 	assert.Integer(t, 1, len(result))
 	assert.StringContains(t, "second message", result[0].Body)
 	reported := r.Reporter.Events()

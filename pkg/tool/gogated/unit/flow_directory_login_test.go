@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/directory/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/directory_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/tester"
 	"net/http"
 	"testing"
@@ -14,7 +15,7 @@ func TestLoginWhileDirectoryIsAwaySaysSo(t *testing.T) {
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	o := tester.NewWith(t, d)
 	reg := o.Register(t, []string{"http://localhost/callback"})
-	d.Failure = directoryDown()
+	d.Failure = directory_tester.Down()
 	status, body := o.Login(
 		t,
 		reg.ClientIdentifier,
@@ -47,7 +48,7 @@ func TestWrongDirectoryPasswordIsStillRejected(t *testing.T) {
 
 func TestLocalLoginWorksWhileDirectoryIsAway(t *testing.T) {
 	d := mock_client.New("")
-	d.Failure = directoryDown()
+	d.Failure = directory_tester.Down()
 	o := tester.NewWith(t, d)
 	reg := o.Register(t, []string{"http://localhost/callback"})
 	status, _ := o.Login(

@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/store_tester"
 	"testing"
 )
 
 func TestClaimingTwiceKeepsOneClaim(t *testing.T) {
-	s := newStore(t, notifier.New())
+	s := store_tester.New(t, notifier.New())
 	_, e := s.ClaimItem("jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)
 	_, e = s.ClaimItem("jira-ABC-1", "alfa@host.example")
@@ -18,7 +19,7 @@ func TestClaimingTwiceKeepsOneClaim(t *testing.T) {
 }
 
 func TestTwoOwnersClaimSameItem(t *testing.T) {
-	s := newStore(t, notifier.New())
+	s := store_tester.New(t, notifier.New())
 	_, e := s.ClaimItem("jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)
 	_, e = s.ClaimItem("jira-ABC-1", "bravo@host.example")
@@ -29,7 +30,7 @@ func TestTwoOwnersClaimSameItem(t *testing.T) {
 }
 
 func TestReleaseRemovesOnlyOwnersClaim(t *testing.T) {
-	s := newStore(t, notifier.New())
+	s := store_tester.New(t, notifier.New())
 	_, e := s.ClaimItem("jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)
 	_, e = s.ClaimItem("jira-ABC-1", "bravo@host.example")

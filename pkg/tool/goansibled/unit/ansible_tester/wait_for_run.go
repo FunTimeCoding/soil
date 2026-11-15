@@ -3,24 +3,23 @@ package ansible_tester
 import (
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/model/run"
+	"github.com/funtimecoding/soil/pkg/time/wait_tester"
 	"time"
 )
 
 func (o *Tester) WaitForRun() *run.Run {
 	o.t.Helper()
-	deadline := time.Now().Add(30 * time.Second)
+	var result *run.Run
+	wait_tester.Until(
+		o.t,
+		func() bool {
+			latest, found := o.latest()
+			result = latest
 
-	for time.Now().Before(deadline) {
-		latest, found := o.latest()
+			return found && latest.Status != provisionConstant.StoreStatusRunning
+		},
+		30*time.Second,
+	)
 
-		if found && latest.Status != provisionConstant.StoreStatusRunning {
-			return latest
-		}
-
-		time.Sleep(50 * time.Millisecond)
-	}
-
-	o.t.Fatal("no finished run")
-
-	return nil
+	return result
 }

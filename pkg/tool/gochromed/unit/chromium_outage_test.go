@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/outage_server"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
@@ -16,7 +17,7 @@ func TestToolsOnChromiumOutage(t *testing.T) {
 	outage_tester.Tools(
 		t,
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
-			return outageServer(t, r)
+			return outage_server.New(t, r)
 		},
 		webConstant.OutageReaches,
 		nil,

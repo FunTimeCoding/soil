@@ -7,14 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"net/url"
 	"testing"
 )
 
 func TestConversationsPageSharesFullWindowFrame(t *testing.T) {
 	s := base.New(t)
-	page := body(t, s.Server, constant.ConversationsPath)
+	page := s.Body(t, constant.ConversationsPath)
 	markup_tester.AssertCount(t, 1, page, "body.full-window")
 	markup_tester.AssertCount(t, 1, page, "nav.container-fluid")
 	markup_tester.AssertCount(t, 1, page, "#notifications")
@@ -31,12 +31,12 @@ func TestConversationsLinkOpensSessionAndMarksIt(t *testing.T) {
 	s := base.New(t)
 	s.WriteSessionFile("echo", "echo-slug")
 	s.Restart()
-	s.Set.Client.AddSession(session.New("echo"))
-	s.Set.Client.AddMessage(
+	s.Peers.Client.AddSession(session.New("echo"))
+	s.Peers.Client.AddMessage(
 		"echo",
 		message.New("user", "can you help me fix the login bug"),
 	)
-	page := body(t, s.Server, constant.ConversationsPath)
+	page := s.Body(t, constant.ConversationsPath)
 	markup_tester.AssertAttribute(
 		t,
 		"/conversations/echo",
@@ -52,7 +52,7 @@ func TestConversationsLinkOpensSessionAndMarksIt(t *testing.T) {
 		"hx-push-url",
 	)
 	markup_tester.AssertCount(t, 0, page, ".sidebar-entry[aria-current]")
-	opened := body(t, s.Server, "/conversations/echo")
+	opened := s.Body(t, "/conversations/echo")
 	markup_tester.AssertCount(t, 1, opened, "body.full-window")
 	markup_tester.AssertAttribute(
 		t,
@@ -71,22 +71,13 @@ func TestConversationsLinkOpensSessionAndMarksIt(t *testing.T) {
 
 func TestConversationsUnknownSessionIsNotFound(t *testing.T) {
 	s := base.New(t)
+	assert.Integer(t, 404, s.Status(t, "/conversations/nosuch"))
+	assert.Integer(t, 404, s.Status(t, "/conversations/nosuch/edit"))
 	assert.Integer(
 		t,
 		404,
-		statusCode(t, s.Server, "/conversations/nosuch", nil),
-	)
-	assert.Integer(
-		t,
-		404,
-		statusCode(t, s.Server, "/conversations/nosuch/edit", nil),
-	)
-	assert.Integer(
-		t,
-		404,
-		statusCode(
+		s.PostStatus(
 			t,
-			s.Server,
 			"/conversations/nosuch/edit",
 			url.Values{constant.Alias: {"renamed"}},
 		),
@@ -101,7 +92,7 @@ func TestConversationsSidebarPagesWhenShown(t *testing.T) {
 	}
 
 	s.Restart()
-	first := body(t, s.Server, "/conversations/sidebar")
+	first := s.Body(t, "/conversations/sidebar")
 	markup_tester.AssertCount(t, 30, first, ".sidebar-entry")
 	markup_tester.AssertAttribute(
 		t,
@@ -117,7 +108,7 @@ func TestConversationsSidebarPagesWhenShown(t *testing.T) {
 		"small.sidebar-more",
 		"hx-trigger",
 	)
-	rest := body(t, s.Server, "/conversations/sidebar?offset=30")
+	rest := s.Body(t, "/conversations/sidebar?offset=30")
 	markup_tester.AssertCount(t, 1, rest, ".sidebar-entry")
 	markup_tester.AssertCount(t, 0, rest, ".sidebar-more")
 }

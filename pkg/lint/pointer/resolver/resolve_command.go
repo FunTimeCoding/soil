@@ -13,20 +13,20 @@ func (r *Resolver) resolveCommand(
 	candidate string,
 ) *pointer.Resolution {
 	if slices.Contains(declared, candidate) {
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
 	name := strings.TrimPrefix(candidate, stringsConstant.Slash)
 
 	if slices.Contains(constant.HarnessCommands, name) {
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
 	for _, p := range pointer.CommandPaths(candidate) {
 		if r.Exists(p) || r.SiblingExists(p) {
-			return pointer.NewResolution(constant.VerdictLive)
+			return pointer.NewLive("")
 		}
 	}
 
-	return pointer.NewResolution(constant.VerdictDead)
+	return pointer.NewConcern(constant.DeadPointerKey)
 }

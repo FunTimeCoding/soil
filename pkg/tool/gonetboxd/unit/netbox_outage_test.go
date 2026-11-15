@@ -9,16 +9,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
 
 func TestNetBoxOutageIsAnsweredUnavailableWithoutCaptureOverRest(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
-	s := newClient(t, newNetboxServer(t, c, r))
+	s := base.Rest(t, base.New(t, c, r))
 
 	for range 2 {
 		answer, e := s.ListDevicesWithResponse(t.Context(), nil)
@@ -32,9 +34,9 @@ func TestNetBoxOutageIsAnsweredUnavailableWithoutCaptureOverRest(t *testing.T) {
 
 func TestNetBoxOutageFailsToolWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
-	m := newNetboxServer(t, c, r).Connect(t)
+	m := base.New(t, c, r).Connect(t)
 	defer m.Close()
 	assert.StringContains(
 		t,
@@ -46,9 +48,9 @@ func TestNetBoxOutageFailsToolWithoutCapture(t *testing.T) {
 
 func TestNetBoxOutageAnswersBookmarkPageUnavailable(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
-	s := newNetboxServer(t, c, r)
+	s := base.New(t, c, r)
 	answer, e := s.Client().Get(s.Address(constant.BookmarkPath))
 	assert.FatalOnError(t, e)
 	defer errors.PanicClose(answer.Body)
@@ -68,6 +70,6 @@ func TestDaemonHandsOutNetBoxGuardFirst(t *testing.T) {
 func TestWaitAnswersOnceNetBoxAnswers(t *testing.T) {
 	assert.FatalOnError(
 		t,
-		newDaemon(t, service_tester.NewSource(t)).Wait(t.Context()),
+		base.Daemon(t, service_tester.NewSource(t)).Wait(t.Context()),
 	)
 }

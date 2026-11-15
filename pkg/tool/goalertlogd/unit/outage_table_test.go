@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/outage_server"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
@@ -16,7 +17,7 @@ func TestOperationsOnAlertmanagerOutage(t *testing.T) {
 	outage_tester.Operations(
 		t,
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
-			return outageServer(t, r)
+			return outage_server.New(t, r)
 		},
 		spec,
 		webConstant.OutageElsewhere,
@@ -30,7 +31,7 @@ func TestToolsOnAlertmanagerOutage(t *testing.T) {
 	outage_tester.Tools(
 		t,
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
-			return outageServer(t, r)
+			return outage_server.New(t, r)
 		},
 		webConstant.OutageElsewhere,
 		nil,

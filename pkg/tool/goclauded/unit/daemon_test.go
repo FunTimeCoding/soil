@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
@@ -23,7 +24,7 @@ import (
 )
 
 func TestDaemonClosesBothPeerClientsOnce(t *testing.T) {
-	o, m, q := newDaemonOption(t)
+	o, m, q := peer_tester.NewOption(t)
 	defer m.Close()
 	defer q.Close()
 	d := daemon.New(
@@ -39,7 +40,7 @@ func TestDaemonClosesBothPeerClientsOnce(t *testing.T) {
 }
 
 func TestDaemonMigratesFreshDatabase(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	daemon.New(
 		o,
 		logger.New(t.Context()),
@@ -48,20 +49,22 @@ func TestDaemonMigratesFreshDatabase(t *testing.T) {
 	).Close()
 	d := lite.New(logger.New(t.Context()), o.LitePath)
 	defer relational.CloseMapper(d)
-	assert.Integer(
+	assert.True(
 		t,
-		1,
-		columnCount(t, d, constant.CruiseSettingTable, constant.GraceColumn),
+		lite.ColumnExists(d, constant.CruiseSettingTable, constant.GraceColumn),
 	)
-	assert.Integer(
+	assert.True(
 		t,
-		1,
-		columnCount(t, d, constant.CompletionTable, constant.CompletedAtColumn),
+		lite.ColumnExists(
+			d,
+			constant.CompletionTable,
+			constant.CompletedAtColumn,
+		),
 	)
 }
 
 func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	u := mock_client.New()
 	o.UtilizationFallback = true
 	o.Utilization = func() face.AnthropicClient { return u }
@@ -85,7 +88,7 @@ func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {
 }
 
 func TestUtilizationClockReadsOptionsCredential(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	u := mock_client.New()
 	u.Result = utilization.Parse(
 		[]byte(fixture.Read("claude", "utilization.json")),
@@ -117,7 +120,7 @@ func TestUtilizationClockReadsOptionsCredential(t *testing.T) {
 }
 
 func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	d := daemon.New(
 		o,
 		logger.New(t.Context()),
@@ -135,7 +138,7 @@ func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 }
 
 func TestDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	s := store_tester.NewOnFile(t, o.LitePath)
 	r := s.EnsureSession("session-1")
 	s.BindModelContextSession(r.Callsign, "mcp-session-abc")
@@ -150,7 +153,7 @@ func TestDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
 		o,

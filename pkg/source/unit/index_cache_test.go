@@ -2,10 +2,11 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/index/cache"
 	"github.com/funtimecoding/soil/pkg/source/snapshot"
 	"github.com/funtimecoding/soil/pkg/source/unit/kind_tester"
+	"github.com/funtimecoding/soil/pkg/source/unit/module_graph_tester"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
@@ -20,7 +21,7 @@ func TestCacheRebuildsAfterEdit(t *testing.T) {
 	directory := kind_tester.Module(t)
 	c := cache.New(t.TempDir())
 	first := c.Workspace(directory)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"two/more.go",
@@ -30,11 +31,11 @@ func TestCacheRebuildsAfterEdit(t *testing.T) {
 }
 
 func TestCacheRebuildsAfterEditInReplacedModule(t *testing.T) {
-	library, user := replacedModules(t)
+	library, user := module_graph_tester.Replaced(t)
 	c := cache.New(t.TempDir())
 	first := c.Workspace(user)
 	assert.True(t, first == c.Workspace(user))
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		library,
 		"extra.go",
@@ -47,6 +48,6 @@ func TestSnapshotSame(t *testing.T) {
 	directory := kind_tester.Module(t)
 	before := snapshot.Take(directory)
 	assert.True(t, before.Same(snapshot.Take(directory)))
-	testutil.WriteFile(t, directory, "one/one.go", "package one\n")
+	system_tester.Write(t, directory, "one/one.go", "package one\n")
 	assert.False(t, before.Same(snapshot.Take(directory)))
 }

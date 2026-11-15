@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -17,13 +18,13 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"OwnIsPlainForeignCarriesItsDomain",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/alfa/own.go",
 				"suggest de-alias own → constant (testmodule/pkg/alfa/constant)",
 			)
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/alfa/own.go",
@@ -34,7 +35,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"ForeignCarriesItsDomainEvenAlone",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/charlie/lone.go",
@@ -45,7 +46,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"LayoutRootCarriesTheModuleName",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/delta/root.go",
@@ -56,13 +57,13 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"DeeperOwnIsPlain",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/system/linux/debian/deeper.go",
 				"suggest de-alias linux → constant (testmodule/pkg/system/linux/constant)",
 			)
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/system/linux/debian/deeper.go",
@@ -73,7 +74,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"RefusesALocalName",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/juliet/local.go",
@@ -84,7 +85,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"RefusesANameAnotherImportHolds",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/kilo/held.go",
@@ -205,7 +206,7 @@ func TestConstantAliasFix(t *testing.T) {
 	t.Run(
 		"ModuleStillBuilds",
 		func(t *testing.T) {
-			assertBuilds(t, directory)
+			fix_tester.Builds(t, directory)
 		},
 	)
 }

@@ -1,7 +1,6 @@
 package reference
 
 import (
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
@@ -44,11 +43,10 @@ func spanFindings(
 
 		v := r.Resolve("", d, c)
 
-		if v.Verdict != lintConstant.VerdictLive &&
-			v.Verdict != lintConstant.VerdictTallied {
+		if v.Concern != "" {
 			result = append(
 				result,
-				NewFinding(c.Span, pointer.Message(v.Verdict, v.Hint)),
+				NewFinding(c.Span, pointer.Message(v.Concern, v.Hint)),
 			)
 		}
 	}

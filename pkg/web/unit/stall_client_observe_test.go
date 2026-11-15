@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/funtimecoding/soil/pkg/web/unit/observation_tester"
 	"net"
@@ -47,9 +48,9 @@ func TestStallClientObservesDefaultPort(t *testing.T) {
 	defer p.Close()
 	x, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, e := p.Client().Do(contextGet(x, "https://charlie.example/"))
+	_, e := p.Client().Do(web.NewGet("https://charlie.example/").WithContext(x))
 	assert.True(t, e != nil)
-	_, e = p.Client().Do(contextGet(x, "http://charlie.example/"))
+	_, e = p.Client().Do(web.NewGet("http://charlie.example/").WithContext(x))
 	assert.True(t, e != nil)
 	assert.Strings(
 		t,
@@ -75,11 +76,11 @@ func TestStallClientObservesTimeoutAndCancel(t *testing.T) {
 	defer p.Close()
 	x, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
-	_, e := p.Client().Do(contextGet(x, s.URL))
+	_, e := p.Client().Do(web.NewGet(s.URL).WithContext(x))
 	assert.True(t, e != nil)
 	y, stop := context.WithCancel(context.Background())
 	time.AfterFunc(100*time.Millisecond, stop)
-	_, e = p.Client().Do(contextGet(y, s.URL))
+	_, e = p.Client().Do(web.NewGet(s.URL).WithContext(y))
 	assert.True(t, e != nil)
 	assert.Any(
 		t,

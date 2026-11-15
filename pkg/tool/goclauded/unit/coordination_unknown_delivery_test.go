@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -28,7 +29,10 @@ func TestRestSendRefusesUnknownDelivery(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		clientKindEntries(b.CheckLive().Entries, constant.QueueMessage),
+		delivery_tester.ClientKindEntries(
+			b.CheckLive().Entries,
+			constant.QueueMessage,
+		),
 	)
 }
 
@@ -51,7 +55,10 @@ func TestRestNotifyRefusesUnknownDelivery(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		clientKindEntries(a.CheckLive().Entries, constant.QueueNotification),
+		delivery_tester.ClientKindEntries(
+			a.CheckLive().Entries,
+			constant.QueueNotification,
+		),
 	)
 }
 
@@ -73,6 +80,9 @@ func TestRestPulseRefusesUnknownDelivery(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		clientKindEntries(a.CheckLive().Entries, constant.QueuePulse),
+		delivery_tester.ClientKindEntries(
+			a.CheckLive().Entries,
+			constant.QueuePulse,
+		),
 	)
 }

@@ -7,12 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestItermOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.Failure = refusedDial()
+	s.MockClient.Failure = outage_tester.RefusedDial()
 	c := s.Connect(t)
 	defer c.Close()
 

@@ -3,10 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/keepass"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/database_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/service_tester"
 	"os"
 	"path/filepath"
 	"testing"
@@ -14,15 +16,15 @@ import (
 )
 
 func TestFailedSaveLeavesEntriesReadable(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	c := keepass.MustNew(path, "secret")
-	readOnly(t, filepath.Dir(path))
+	system_tester.ReadOnly(t, filepath.Dir(path))
 	assert.Error(t, c.Save())
 	assert.String(t, "hunter2", c.ByTitle("Forge").GetPassword())
 }
 
 func TestSaveOverChangeOnDiskIsConflict(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	c := keepass.MustNew(path, "secret")
 	at := time.Now().Add(time.Hour)
 	assert.FatalOnError(t, os.Chtimes(path, at, at))
@@ -30,10 +32,10 @@ func TestSaveOverChangeOnDiskIsConflict(t *testing.T) {
 }
 
 func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := openReported(t, path, nil, memory.New())
+	path := database_tester.Write(t)
+	s := service_tester.New(t, path)
 	identifier := s.Search("forge")[0].Identifier
-	readOnly(t, filepath.Dir(path))
+	system_tester.ReadOnly(t, filepath.Dir(path))
 	assert.Error(
 		t,
 		s.Update(identifier, map[string]string{constant.PasswordKey: "changed"}),
@@ -43,9 +45,9 @@ func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
 }
 
 func TestFailedBackupRefusesWrite(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	at := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
-	s := openAt(t, path, at)
+	s := service_tester.New(t, path, service_tester.WithClock(at))
 	identifier := s.Search("forge")[0].Identifier
 	assert.FatalOnError(
 		t,
@@ -55,12 +57,14 @@ func TestFailedBackupRefusesWrite(t *testing.T) {
 		t,
 		s.Update(identifier, map[string]string{constant.PasswordKey: "changed"}),
 	)
-	password, _ := openAt(t, path, at).Reveal(identifier)
+	password, _ := service_tester.New(t, path, service_tester.WithClock(at)).Reveal(
+		identifier,
+	)
 	assert.String(t, "hunter2", password)
 }
 
 func TestFailedSaveLeavesNoTemporaryFile(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	c := keepass.MustNew(path, "secret")
 	i, e := os.Stat(path)
 	assert.FatalOnError(t, e)

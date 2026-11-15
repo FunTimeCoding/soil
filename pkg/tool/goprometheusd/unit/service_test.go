@@ -6,12 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 	"time"
 )
 
 func TestQueryAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Query(t.Context(), "alfa", "up")
 	assert.FatalOnError(t, e)
 	_, f := s.Query(t.Context(), "bravo", "up")
@@ -19,7 +20,7 @@ func TestQueryAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestQueryRangeAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.QueryRange(t.Context(), "alfa", "up", "1h", "", time.Minute)
 	assert.FatalOnError(t, e)
 	_, f := s.QueryRange(t.Context(), "bravo", "up", "1h", "", time.Minute)
@@ -27,7 +28,7 @@ func TestQueryRangeAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestLabelNamesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.LabelNames(t.Context(), "alfa", nil, time.Hour)
 	assert.FatalOnError(t, e)
 	_, f := s.LabelNames(t.Context(), "bravo", nil, time.Hour)
@@ -35,7 +36,7 @@ func TestLabelNamesAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestLabelValuesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.LabelValues(t.Context(), "alfa", "job", nil, time.Hour)
 	assert.FatalOnError(t, e)
 	_, f := s.LabelValues(t.Context(), "bravo", "job", nil, time.Hour)
@@ -43,7 +44,7 @@ func TestLabelValuesAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestRulesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Rules(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	_, f := s.Rules(t.Context(), "bravo")
@@ -51,7 +52,7 @@ func TestRulesAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestSeriesAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.RefusingBravo(t)
 	_, e := s.Series(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	_, f := s.Series(t.Context(), "bravo")
@@ -60,7 +61,7 @@ func TestSeriesAnswersFromNamedInstance(t *testing.T) {
 
 func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	alfa := mock_client.New()
-	alfa.Failure = refusedConnection()
+	alfa.Failure = outage_tester.RefusedDial()
 	s := service_tester.New(t, map[string]*mock_client.Client{"alfa": alfa})
 	_, e := s.Query(t.Context(), "alfa", "up")
 	assert.True(t, unavailable.Is(e))
@@ -72,7 +73,7 @@ func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
 
 func TestOneUnreachableInstanceLeavesOthersAnswering(t *testing.T) {
 	alfa := mock_client.New()
-	alfa.Failure = refusedConnection()
+	alfa.Failure = outage_tester.RefusedDial()
 	s := service_tester.New(
 		t,
 		map[string]*mock_client.Client{"alfa": alfa, "bravo": mock_client.New()},

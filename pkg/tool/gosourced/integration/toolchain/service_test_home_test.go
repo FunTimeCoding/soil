@@ -11,10 +11,7 @@ import (
 )
 
 func TestRenamePackageTestHome(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-home/src"),
-	)
+	d := service_tester.Prepare(t, "test-home/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.RenamePackage(
 		t.Context(),
@@ -39,10 +36,7 @@ func TestRenamePackageTestHome(t *testing.T) {
 }
 
 func TestMovePackageTestFacet(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-home/src"),
-	)
+	d := service_tester.Prepare(t, "test-home/src")
 	e := os.MkdirAll(filepath.Join(d, "pkg/alfa/integration"), 0755)
 	assert.FatalOnError(t, e)
 	s := service_tester.NewService(t)

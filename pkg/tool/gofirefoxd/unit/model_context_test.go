@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/model_context_tester"
 	"testing"
 )
 
 func TestModelContextTabs(t *testing.T) {
-	o := newTabbed(t)
+	o := model_context_tester.NewTabbed(t)
 	assert.Count(t, 16, o.Client.ListTools())
 	assert.StringContains(
 		t,
@@ -35,7 +36,7 @@ func TestModelContextTabs(t *testing.T) {
 }
 
 func TestModelContextNavigation(t *testing.T) {
-	o := newTabbed(t)
+	o := model_context_tester.NewTabbed(t)
 	assert.StringContains(
 		t,
 		"navigated to",
@@ -63,7 +64,7 @@ func TestModelContextNavigation(t *testing.T) {
 }
 
 func TestModelContextGroups(t *testing.T) {
-	o := newTabbed(t)
+	o := model_context_tester.NewTabbed(t)
 	assert.StringContains(
 		t,
 		"grouped into group",
@@ -95,7 +96,7 @@ func TestModelContextGroups(t *testing.T) {
 }
 
 func TestModelContextPage(t *testing.T) {
-	o := newTabbed(t)
+	o := model_context_tester.NewTabbed(t)
 	assert.StringContains(
 		t,
 		"document.title",
@@ -135,7 +136,7 @@ func TestModelContextPage(t *testing.T) {
 }
 
 func TestModelContextDownloads(t *testing.T) {
-	o := newTabbed(t)
+	o := model_context_tester.NewTabbed(t)
 	assert.StringContains(
 		t,
 		"download_id",

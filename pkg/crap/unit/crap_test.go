@@ -11,8 +11,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/crap/index"
 	"github.com/funtimecoding/soil/pkg/crap/mutation"
 	"github.com/funtimecoding/soil/pkg/crap/score"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/crap/unit/crap_tester"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
@@ -50,8 +51,10 @@ func TestMatrixEmpty(t *testing.T) {
 
 func TestBaselineRoundTrip(t *testing.T) {
 	root := t.TempDir()
-	previous := build(map[string]float64{"m/a.go:1": 100, "m/b.go:1": 0})
-	testutil.WriteFile(
+	previous := crap_tester.Build(
+		map[string]float64{"m/a.go:1": 100, "m/b.go:1": 0},
+	)
+	system_tester.Write(
 		t,
 		root,
 		"baseline.json",
@@ -68,10 +71,12 @@ func TestBaselineRoundTrip(t *testing.T) {
 
 func TestCompareMarksDeltas(t *testing.T) {
 	previous := baseline.New(
-		build(map[string]float64{"m/a.go:1": 100, "m/b.go:1": 0}),
+		crap_tester.Build(map[string]float64{"m/a.go:1": 100, "m/b.go:1": 0}),
 	)
-	current := build(map[string]float64{"m/a.go:1": 50, "m/b.go:1": 100})
-	current.Add(entryFor("m", "/r/c.go", "C", 3, 0))
+	current := crap_tester.Build(
+		map[string]float64{"m/a.go:1": 50, "m/b.go:1": 100},
+	)
+	current.Add(crap_tester.Entry("m", "/r/c.go", "C", 3, 0))
 	crap.Compare(current, previous)
 	byName := map[string]float64{}
 	isNew := map[string]bool{}
@@ -91,8 +96,10 @@ func TestCompareMarksDeltas(t *testing.T) {
 }
 
 func TestRegressionsIgnoreCovered(t *testing.T) {
-	previous := baseline.New(build(map[string]float64{"m/a.go:1": 100}))
-	current := build(map[string]float64{"m/a.go:1": 100})
+	previous := baseline.New(
+		crap_tester.Build(map[string]float64{"m/a.go:1": 100}),
+	)
+	current := crap_tester.Build(map[string]float64{"m/a.go:1": 100})
 	current.Entries[0].Function.Complexity = 5
 	current.Entries[0].Score = 5
 	crap.Compare(current, previous)
@@ -102,8 +109,10 @@ func TestRegressionsIgnoreCovered(t *testing.T) {
 }
 
 func TestUnchangedWithinTolerance(t *testing.T) {
-	previous := baseline.New(build(map[string]float64{"m/a.go:1": 100}))
-	current := build(map[string]float64{"m/a.go:1": 100})
+	previous := baseline.New(
+		crap_tester.Build(map[string]float64{"m/a.go:1": 100}),
+	)
+	current := crap_tester.Build(map[string]float64{"m/a.go:1": 100})
 	crap.Compare(current, previous)
 	assert.True(t, current.Entries[0].Unchanged(0.01))
 	assert.False(t, current.Entries[0].Regressed(0.01))
@@ -145,14 +154,18 @@ func TestReportOrderAndSummary(t *testing.T) {
 }
 
 func TestComplexityStraightLine(t *testing.T) {
-	assert.Integer(t, 1, measure(t, `func f() { a := 1; _ = a }`))
+	assert.Integer(
+		t,
+		1,
+		crap_tester.Complexity(t, `func f() { a := 1; _ = a }`),
+	)
 }
 
 func TestComplexityBranches(t *testing.T) {
 	assert.Integer(
 		t,
 		4,
-		measure(
+		crap_tester.Complexity(
 			t,
 			`func f(a, b bool) {
 	if a { }
@@ -167,7 +180,7 @@ func TestComplexitySwitchAndSelect(t *testing.T) {
 	assert.Integer(
 		t,
 		4,
-		measure(
+		crap_tester.Complexity(
 			t,
 			`func f(a int, c chan int) {
 	switch a {
@@ -188,7 +201,10 @@ func TestComplexityBooleanOperators(t *testing.T) {
 	assert.Integer(
 		t,
 		3,
-		measure(t, `func f(a, b, c bool) bool { return a && b || c }`),
+		crap_tester.Complexity(
+			t,
+			`func f(a, b, c bool) bool { return a && b || c }`,
+		),
 	)
 }
 
@@ -211,7 +227,7 @@ func TestParseEmpty(t *testing.T) {
 }
 
 func TestMutationLoadAndByFile(t *testing.T) {
-	m := loadGremlins(t)
+	m := crap_tester.Gremlins(t)
 	assert.String(t, "example.test/m", m.Module)
 	byFile := m.ByFile()
 	assert.Count(t, 2, byFile)
@@ -261,7 +277,7 @@ func TestAnnotateRescoresSurvivors(t *testing.T) {
 		},
 		constant.Pessimistic,
 	)
-	crap.Annotate(r, loadGremlins(t))
+	crap.Annotate(r, crap_tester.Gremlins(t))
 	byName := map[string]float64{}
 	untrusted := map[string]bool{}
 

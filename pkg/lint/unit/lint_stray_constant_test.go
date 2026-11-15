@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -14,7 +15,7 @@ func TestStrayConstantFlagged(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -40,7 +41,7 @@ func TestStrayConstantBlockFlagged(t *testing.T) {
 			"package example\n\nconst (\n\tFoo = 1\n\tBar = 2\n)\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Bravo",
 		true,
@@ -64,7 +65,7 @@ func TestStrayConstantFlaggedInBareConstantFile(t *testing.T) {
 		"constant.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"constant.go",
 		true,
@@ -88,7 +89,7 @@ func TestStrayConstantFlaggedInConstantTestFile(t *testing.T) {
 		"constant_test.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"constant_test.go",
 		true,
@@ -112,7 +113,7 @@ func TestStrayConstantExemptByPackage(t *testing.T) {
 		stringsConstant.UpperCharlie,
 		strings.NewReader("package constant\n\nconst Foo = 1\n"),
 	)
-	assertReport(t, "Charlie", false, nil, "", l)
+	lint_tester.Report(t, "Charlie", false, nil, "", l)
 }
 
 func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
@@ -120,7 +121,7 @@ func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
 		"pkg/tool/example/constant/color/item.go",
 		strings.NewReader("package color\n\nconst Foo = 1\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"pkg/tool/example/constant/color/item.go",
 		false,
@@ -135,7 +136,7 @@ func TestStrayConstantDirectoryMatchesExactly(t *testing.T) {
 		"pkg/example/constants/foo.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"pkg/example/constants/foo.go",
 		true,
@@ -161,5 +162,5 @@ func TestStrayConstantInsideFunctionNotFlagged(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tconst x = 1\n\t_ = x\n}\n",
 		),
 	)
-	assertReport(t, "Delta", false, nil, "", l)
+	lint_tester.Report(t, "Delta", false, nil, "", l)
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/web_service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"testing"
@@ -38,11 +39,15 @@ func TestLiveDashboardHearsWrite(t *testing.T) {
 	assert.FatalOnError(t, f)
 	defer errors.PanicClose(r.Body)
 	stream := bufio.NewReader(r.Body)
-	awaitLine(t, stream, join.Empty("event: ", constant.EventRecent))
+	web_service_tester.Line(
+		t,
+		stream,
+		join.Empty("event: ", constant.EventRecent),
+	)
 	_, g := s.MaintenanceClient(t).PostEntry(
 		x,
 		client.PostEntryRequest{Action: "restart", User: "zulu"},
 	)
 	assert.FatalOnError(t, g)
-	awaitLine(t, stream, "zulu")
+	web_service_tester.Line(t, stream, "zulu")
 }

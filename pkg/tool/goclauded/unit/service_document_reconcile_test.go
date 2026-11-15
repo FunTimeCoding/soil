@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
@@ -19,7 +20,7 @@ func TestReconcileCountsPushedSummary(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		sample(
+		metric_tester.Sample(
 			t,
 			s.Registry,
 			"goclauded_reconciled_total",
@@ -32,7 +33,7 @@ func TestReconcileCountsPushedSummary(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		sample(
+		metric_tester.Sample(
 			t,
 			s.Registry,
 			"goclauded_indexed_documents",
@@ -75,7 +76,7 @@ func TestReconcileLeavesCurrentSummaryAlone(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		sample(
+		metric_tester.Sample(
 			t,
 			s.Registry,
 			"goclauded_reconciled_total",
@@ -88,7 +89,7 @@ func TestReconcileLeavesCurrentSummaryAlone(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		sample(
+		metric_tester.Sample(
 			t,
 			s.Registry,
 			"goclauded_indexed_documents",

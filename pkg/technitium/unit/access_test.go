@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/funtimecoding/soil/pkg/technitium/constant"
 	"github.com/funtimecoding/soil/pkg/technitium/policy"
+	"github.com/funtimecoding/soil/pkg/technitium/unit/technitium_tester"
 	"testing"
 )
 
@@ -29,7 +30,7 @@ func TestWidenAccessNeverNarrowsOpenZone(t *testing.T) {
 }
 
 func TestAllowUpdateOnFreshZone(t *testing.T) {
-	o := zoneOptions(
+	o := technitium_tester.ZoneOptions(
 		`{"name":"alfa.example","update":"Deny","updateNetworkACL":[],"updateSecurityPolicies":[]}`,
 	)
 	technitium.AllowUpdate(
@@ -44,7 +45,9 @@ func TestAllowUpdateOnFreshZone(t *testing.T) {
 }
 
 func TestAllowUpdateTwiceAddsNothingTwice(t *testing.T) {
-	o := zoneOptions(`{"name":"alfa.example","update":"Deny"}`)
+	o := technitium_tester.ZoneOptions(
+		`{"name":"alfa.example","update":"Deny"}`,
+	)
 	p := policy.New("alfa", "*.alfa.example", []string{"A"})
 	technitium.AllowUpdate(o, "198.51.100.0/24", p)
 	technitium.AllowUpdate(o, "198.51.100.0/24", p)
@@ -53,7 +56,7 @@ func TestAllowUpdateTwiceAddsNothingTwice(t *testing.T) {
 }
 
 func TestAllowUpdateKeepsExistingNetworksAndPolicies(t *testing.T) {
-	o := zoneOptions(
+	o := technitium_tester.ZoneOptions(
 		`{"name":"alfa.example","update":"UseSpecifiedNetworkACL",
 		"updateNetworkACL":["192.0.2.0/24"],
 		"updateSecurityPolicies":[{"tsigKeyName":"bravo","domain":"alfa.example","allowedTypes":["A"]}]}`,
@@ -72,7 +75,7 @@ func TestAllowUpdateKeepsExistingNetworksAndPolicies(t *testing.T) {
 }
 
 func TestAllowTransferKeepsZoneNameServersAndAddsKey(t *testing.T) {
-	o := zoneOptions(
+	o := technitium_tester.ZoneOptions(
 		`{"name":"alfa.example","zoneTransfer":"AllowOnlyZoneNameServers",
 		"zoneTransferNetworkACL":[],"zoneTransferTsigKeyNames":[]}`,
 	)

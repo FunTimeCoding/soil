@@ -2,35 +2,49 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/unit/aptly_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestAptlyPublishSignsDistribution(t *testing.T) {
-	var seen aptlySeen
-	c := fakeAptly(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"Distribution":"rolling","Prefix":".","SourceKind":"local"}`,
-		&seen,
+		upstream_server.WithAnswer(
+			`{"Distribution":"rolling","Prefix":".","SourceKind":"local"}`,
+		),
 	)
-	assert.FatalOnError(t, c.UpdatePublish("rolling", "/srv/alfa/passphrase"))
-	assert.String(t, http.MethodPut, seen.Method)
-	assert.String(t, "/api/publish/:./rolling", seen.Path)
+	assert.FatalOnError(
+		t,
+		aptly_tester.New(t, s.URL).UpdatePublish(
+			"rolling",
+			"/srv/alfa/passphrase",
+		),
+	)
+	r := s.Last()
+	assert.String(t, http.MethodPut, r.Method)
+	assert.String(t, "/api/publish/:./rolling", r.URL.Path)
 	assert.StringContains(
 		t,
 		`"PassphraseFile":"/srv/alfa/passphrase"`,
-		seen.Body,
+		s.LastBody(),
 	)
 }
 
 func TestAptlyPublishRefusesWhatAptlyRefused(t *testing.T) {
-	var seen aptlySeen
-	c := fakeAptly(
+	s := upstream_server.New(
 		t,
-		http.StatusInternalServerError,
-		`{"error":"unable to update: unable to sign: gpg: signing failed"}`,
-		&seen,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+		upstream_server.WithAnswer(
+			`{"error":"unable to update: unable to sign: gpg: signing failed"}`,
+		),
 	)
-	assert.NotNil(t, c.UpdatePublish("rolling", "/srv/alfa/passphrase"))
+	assert.NotNil(
+		t,
+		aptly_tester.New(t, s.URL).UpdatePublish(
+			"rolling",
+			"/srv/alfa/passphrase",
+		),
+	)
 }

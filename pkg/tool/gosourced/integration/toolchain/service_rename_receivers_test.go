@@ -3,13 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/receiver_rename"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -19,7 +20,7 @@ func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 	shelf := service_tester.ReadFixtureFile(t, d, "pkg/target/shelf.go")
 	assert.StringContains(
 		t,
@@ -57,7 +58,7 @@ func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesLocalOfName(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -76,7 +77,7 @@ func TestRenameReceiversRefusesLocalOfName(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesParameterOfName(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -90,7 +91,7 @@ func TestRenameReceiversRefusesParameterOfName(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesOuterNameReceiverWouldShadow(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -106,7 +107,7 @@ func TestRenameReceiversRefusesOuterNameReceiverWouldShadow(t *testing.T) {
 }
 
 func TestRenameReceiversLeavesReceiversAlreadyNamed(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -120,7 +121,7 @@ func TestRenameReceiversLeavesReceiversAlreadyNamed(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesBuiltInName(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -134,7 +135,7 @@ func TestRenameReceiversRefusesBuiltInName(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesTypeWithoutMethods(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,
@@ -148,7 +149,7 @@ func TestRenameReceiversRefusesTypeWithoutMethods(t *testing.T) {
 }
 
 func TestRenameReceiversDryRunWritesNothing(t *testing.T) {
-	d := renameReceiversFixture(t)
+	d := service_tester.Prepare(t, "rename-receivers/src")
 	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
 		t.Context(),
 		d,

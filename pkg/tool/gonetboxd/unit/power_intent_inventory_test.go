@@ -9,13 +9,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
 
 func TestPowerIntentServiceKeepsActiveHosts(t *testing.T) {
 	c := service_tester.NewSource(t)
-	seedIntentHosts(c)
+	service_tester.SeedIntentHosts(c)
 	i, e := service_tester.Service(t, c).
 		WithPowerIntent().
 		AnsibleInventory(constant.AnsibleField, "")
@@ -43,14 +44,14 @@ func TestPowerIntentServiceKeepsActiveHosts(t *testing.T) {
 
 func TestPowerIntentDaemonKeepsActiveHosts(t *testing.T) {
 	c := service_tester.NewSource(t)
-	seedIntentHosts(c)
+	service_tester.SeedIntentHosts(c)
 	o := service_tester.NewOption(t, c)
 	o.PowerIntent = true
 	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())
 	t.Cleanup(d.Close)
-	response, e := newClient(
+	response, e := base.Rest(
 		t,
-		newDaemonServer(t, d, memory.New()),
+		base.Mount(t, d, memory.New()),
 	).GetAnsibleInventoryWithResponse(
 		context.Background(),
 		&client.GetAnsibleInventoryParams{},
@@ -71,7 +72,7 @@ func TestPowerIntentDaemonKeepsActiveHosts(t *testing.T) {
 
 func TestInventoryKeepsEveryHost(t *testing.T) {
 	c := service_tester.NewSource(t)
-	seedIntentHosts(c)
+	service_tester.SeedIntentHosts(c)
 	i, e := service_tester.Service(t, c).AnsibleInventory(
 		constant.AnsibleField,
 		"",

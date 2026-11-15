@@ -4,9 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/option"
+	"github.com/funtimecoding/soil/pkg/lint/unit/repository_tester"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"os"
 	"path/filepath"
 	"testing"
@@ -14,8 +15,8 @@ import (
 
 func TestRepositoryExistsIndependentOfWorkingDirectory(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
-	testutil.WriteFile(t, root, "tmp/note.txt", "draft\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "tmp/note.txt", "draft\n")
 	system.MakeDirectory(filepath.Join(root, "empty"))
 	system.MakeDirectory(filepath.Join(root, soil.ParentDirectory, "beside"))
 	repo, _ := lint.Walk(root, option.New("", false))
@@ -35,7 +36,7 @@ func TestRepositoryExistsIndependentOfWorkingDirectory(t *testing.T) {
 
 func TestRepositoryExistsAnswersFromWalk(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
 	system.MakeDirectory(filepath.Join(root, "real"))
 	assert.FatalOnError(
 		t,
@@ -50,7 +51,7 @@ func TestRepositoryExistsAnswersFromWalk(t *testing.T) {
 }
 
 func TestRepositoryExistsIntoSiblingFromOneWalk(t *testing.T) {
-	repo, sibling := siblingRepository(t)
+	repo, sibling := repository_tester.Sibling(t)
 	assert.True(t, repo.Exists("../bravo/pkg/charlie"))
 	assert.True(t, repo.Exists("../bravo/pkg/empty"))
 	assert.Boolean(t, false, repo.Exists("../bravo/ghost"))
@@ -59,7 +60,7 @@ func TestRepositoryExistsIntoSiblingFromOneWalk(t *testing.T) {
 }
 
 func TestRepositoryLiteralInSiblingFromOneWalk(t *testing.T) {
-	repo, _ := siblingRepository(t)
+	repo, _ := repository_tester.Sibling(t)
 	assert.True(t, repo.Literal("../bravo/pkg", "delta echo"))
 	assert.Boolean(t, false, repo.Literal("../bravo/pkg", "foxtrot golf"))
 	assert.True(
@@ -70,10 +71,10 @@ func TestRepositoryLiteralInSiblingFromOneWalk(t *testing.T) {
 
 func TestRepositoryExistsIntoNestedModule(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "go.mod", "module alfa\n")
-	testutil.WriteFile(t, root, "graft/bravo/go.mod", "module bravo\n")
-	testutil.WriteFile(t, root, "graft/bravo/taskfile.yaml", "version: 3\n")
-	testutil.WriteFile(t, root, "graft/charlie.txt", "charlie\n")
+	system_tester.Write(t, root, "go.mod", "module alfa\n")
+	system_tester.Write(t, root, "graft/bravo/go.mod", "module bravo\n")
+	system_tester.Write(t, root, "graft/bravo/taskfile.yaml", "version: 3\n")
+	system_tester.Write(t, root, "graft/charlie.txt", "charlie\n")
 	repo, _ := lint.Walk(root, option.New("", false))
 	assert.Strings(t, []string{"graft/bravo"}, repo.NestedModules)
 	assert.Boolean(t, false, repo.Files.Has("graft/bravo/taskfile.yaml"))

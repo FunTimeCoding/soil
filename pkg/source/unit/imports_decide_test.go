@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/types/import_entry"
 	"github.com/funtimecoding/soil/pkg/source/types/import_view"
+	"github.com/funtimecoding/soil/pkg/source/unit/import_tester"
 	"testing"
 )
 
@@ -14,13 +15,13 @@ func TestDecideOwnConstantStaysPlain(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/web/server",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/web/constant",
 					constant.ConstantPackage,
 					"foxtrot",
 				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 1, d)
@@ -33,13 +34,13 @@ func TestDecideForeignConstantCarriesItsDomain(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/web/constant",
 					constant.ConstantPackage,
 					constant.ConstantPackage,
 				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.String(t, "webConstant", d[0].Want)
@@ -51,7 +52,7 @@ func TestDecideRefusesNameLaterConstantKeeps(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/web/constant",
 					constant.ConstantPackage,
 					constant.ConstantPackage,
@@ -64,7 +65,7 @@ func TestDecideRefusesNameLaterConstantKeeps(t *testing.T) {
 					false,
 				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 2, d)
@@ -74,7 +75,7 @@ func TestDecideRefusesNameLaterConstantKeeps(t *testing.T) {
 }
 
 func TestDecideIgnoresImportThatIsLeaving(t *testing.T) {
-	arriving := entry(
+	arriving := import_tester.Entry(
 		"example.org/alfa/pkg/tool/goalfa/constant",
 		constant.ConstantPackage,
 		constant.ConstantPackage,
@@ -83,8 +84,8 @@ func TestDecideIgnoresImportThatIsLeaving(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa/server",
 			[]*import_entry.Entry{
-				leaving(
-					entry(
+				import_tester.Leaving(
+					import_tester.Entry(
 						"example.org/alfa/pkg/system/constant",
 						constant.ConstantPackage,
 						constant.ConstantPackage,
@@ -92,7 +93,7 @@ func TestDecideIgnoresImportThatIsLeaving(t *testing.T) {
 				),
 				arriving,
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 1, d)
@@ -106,18 +107,18 @@ func TestDecideLeavesLosersWhenKeeperIsRefused(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa/face/service",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/goalfa/definition/object",
 					"object",
 					"definition",
 				),
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/goalfa/store/object",
 					"object",
 					"repository",
 				),
 			},
-			taken("object"),
+			import_tester.Among("object"),
 		),
 	)
 	assert.Count(t, 2, d)
@@ -132,13 +133,13 @@ func TestDecideRefusesNameLocalHolds(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/web/server",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/web/constant",
 					constant.ConstantPackage,
 					"foxtrot",
 				),
 			},
-			taken(constant.ConstantPackage),
+			import_tester.Among(constant.ConstantPackage),
 		),
 	)
 	assert.True(t, d[0].Kind == constant.DecisionRefused)

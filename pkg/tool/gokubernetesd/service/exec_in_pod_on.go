@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
+	"github.com/funtimecoding/soil/pkg/kubernetes/dial_error"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/exec_result"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
@@ -63,9 +64,12 @@ func execInPodOn(
 
 	stdout := &bytes.Buffer{}
 	stderr := &bytes.Buffer{}
-	h := executor.StreamWithContext(
-		b,
-		remotecommand.StreamOptions{Stdout: stdout, Stderr: stderr},
+	h := dial_error.Translate(
+		executor.StreamWithContext(
+			b,
+			remotecommand.StreamOptions{Stdout: stdout, Stderr: stderr},
+		),
+		c.Configuration().Host,
 	)
 
 	if i := connection.Classify(h); i != nil {

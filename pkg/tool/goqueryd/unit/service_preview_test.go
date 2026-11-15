@@ -4,15 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/preview_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"math"
 	"strings"
 	"testing"
 )
 
 func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
-	r := newReranker(t)
+	r := service_tester.NewReranker(t)
 	r.SetAllowance(40)
-	p := newService(t, newEmbedder(t), r).Preview(
+	p := service_tester.NewService(t, service_tester.NewEmbedder(t), r).Preview(
 		"results.md",
 		constant.FixtureTableDocument,
 	)
@@ -25,9 +27,9 @@ func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
 }
 
 func TestPreviewCountsEachWindowForEmbedder(t *testing.T) {
-	r := newReranker(t)
+	r := service_tester.NewReranker(t)
 	r.SetAllowance(40)
-	p := newService(t, newEmbedder(t), r).Preview(
+	p := service_tester.NewService(t, service_tester.NewEmbedder(t), r).Preview(
 		"alfa.md",
 		"# Alfa\n\none two three four\n",
 	)
@@ -38,7 +40,11 @@ func TestPreviewCountsEachWindowForEmbedder(t *testing.T) {
 }
 
 func TestPreviewNamesLinesWhereHeadingFixesWindow(t *testing.T) {
-	c := windowPreview(t, 560, strings.Repeat(constant.FixtureWindowLine, 200))
+	c := preview_tester.Window(
+		t,
+		560,
+		strings.Repeat(constant.FixtureWindowLine, 200),
+	)
 	assert.Integer(t, 600, c.Tokens)
 	assert.True(t, c.CutChecked)
 	assert.Integer(t, 6, c.CutLevel)
@@ -48,14 +54,18 @@ func TestPreviewNamesLinesWhereHeadingFixesWindow(t *testing.T) {
 }
 
 func TestPreviewMarksWindowNoHeadingCanFix(t *testing.T) {
-	c := windowPreview(t, 400, strings.Repeat(constant.FixtureWindowLine, 200))
+	c := preview_tester.Window(
+		t,
+		400,
+		strings.Repeat(constant.FixtureWindowLine, 200),
+	)
 	assert.True(t, c.CutChecked)
 	assert.Integer(t, 0, c.CutLevel)
 	assert.Count(t, 0, c.CutLines)
 }
 
 func TestPreviewAccountsForLaterHeadingThatWinsCut(t *testing.T) {
-	c := windowPreview(
+	c := preview_tester.Window(
 		t,
 		560,
 		join.Empty(

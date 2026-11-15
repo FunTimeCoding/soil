@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/source/constant"
 	"github.com/funtimecoding/soil/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/source/unit/import_tester"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestKeeperIsStandardLibrary(t *testing.T) {
 		"time",
 		[]string{"example.org/alfa/pkg/time", "time"},
 		"example.org/alfa/pkg/time",
-		standard("time"),
+		import_tester.Among("time"),
 	)
 	assert.String(t, "time", keeper)
 	assert.String(t, "stdlib", reason)
@@ -28,7 +29,7 @@ func TestKeeperIsImportSharingLongestPath(t *testing.T) {
 			"example.org/alfa/pkg/tool/goalfa/constant",
 		},
 		"example.org/alfa/pkg/web/constant",
-		standard(),
+		import_tester.Among(),
 	)
 	assert.String(t, "example.org/alfa/pkg/tool/goalfa/constant", keeper)
 	assert.String(t, "own", reason)
@@ -43,7 +44,7 @@ func TestKeeperOnTieIsDeeperPackage(t *testing.T) {
 			"example.org/alfa/pkg/monitor/constant",
 		},
 		"example.org/alfa/pkg/constant",
-		standard(),
+		import_tester.Among(),
 	)
 	assert.String(t, "example.org/alfa/pkg/monitor/constant", keeper)
 	assert.String(t, "deeper", reason)
@@ -58,7 +59,7 @@ func TestKeeperOnEqualDepthIsOneAlreadyPlain(t *testing.T) {
 			"example.org/alfa/pkg/generative/constant",
 		},
 		"example.org/alfa/pkg/web/constant",
-		standard(),
+		import_tester.Among(),
 	)
 	assert.String(t, "example.org/alfa/pkg/web/constant", keeper)
 	assert.String(t, "already plain", reason)
@@ -73,7 +74,7 @@ func TestKeeperOtherwiseIsFirstByPath(t *testing.T) {
 			"example.org/alfa/pkg/generative/constant",
 		},
 		"",
-		standard(),
+		import_tester.Among(),
 	)
 	assert.String(t, "example.org/alfa/pkg/generative/constant", keeper)
 	assert.String(t, "first by path", reason)
@@ -85,7 +86,7 @@ func TestKeeperOfVersionNamesIsNobody(t *testing.T) {
 		"v1",
 		[]string{"example.org/core/v1", "example.org/meta/v1"},
 		"example.org/meta/v1",
-		standard(),
+		import_tester.Among(),
 	)
 	assert.String(t, "", keeper)
 	assert.String(t, "version name", reason)

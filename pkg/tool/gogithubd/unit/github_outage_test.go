@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/worker"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -21,7 +22,7 @@ func TestGitHubOutageStaysQuietAndFaultIsCapturedOnce(t *testing.T) {
 	assert.True(t, okay)
 	w.Poll()
 	assert.Count(t, 1, r.Events())
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 
 	for range 2 {
 		w.Poll()

@@ -5,13 +5,13 @@ import (
 	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
 	"testing"
 	"time"
 )
 
 func TestReacherEdgesOnlyOnTransition(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	r := reacher.New(memory.New()).WithClock(c.Now)
 	down := r.Fail("sentry", errorsConstant.Refused)
 	assert.NotNil(t, down)

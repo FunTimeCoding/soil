@@ -3,16 +3,16 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameRefusesMethodSatisfyingInterface(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface/src"),
-	)
-	before := directoryTree(t, d)
+	d := service_tester.Prepare(t, "rename-interface/src")
+	before := rewrite_tester.DirectoryTree(t, d)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -29,14 +29,11 @@ func TestRenameRefusesMethodSatisfyingInterface(t *testing.T) {
 		r,
 		"Size satisfies example/pkg/shape.Sizer - renaming it breaks that interface",
 	)
-	assert.String(t, before, directoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
 }
 
 func TestRenameRefusesMethodSatisfyingStandardInterface(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -51,10 +48,7 @@ func TestRenameRefusesMethodSatisfyingStandardInterface(t *testing.T) {
 }
 
 func TestRenameOfInterfaceMethodRenamesItsImplementation(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -79,10 +73,7 @@ func TestRenameOfInterfaceMethodRenamesItsImplementation(t *testing.T) {
 }
 
 func TestRenameAllowsMethodNoInterfaceNames(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -102,21 +93,21 @@ func TestRenameAllowsMethodNoInterfaceNames(t *testing.T) {
 }
 
 func TestRenameRefusesMethodSatisfyingReplacingModuleInterface(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	testutil.WriteFile(
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	system_tester.Write(
 		t,
 		library,
 		"meter/meter.go",
 		"package meter\n\ntype Meter struct{}\n\nfunc (m *Meter) Read() int {\n\treturn 1\n}\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		user,
 		"pkg/reader/reader.go",
 		"package reader\n\nimport \"other.test/lib/meter\"\n\ntype Reader interface {\n\tRead() int\n}\n\nvar Default Reader = &meter.Meter{}\n",
 	)
 	source := service_tester.ReadFixtureFile(t, library, "meter/meter.go")
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/meter",

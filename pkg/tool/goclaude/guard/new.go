@@ -29,17 +29,17 @@ func New(t *terminal.Terminal) *cobra.Command {
 				return
 			}
 
-			if v := Verdict(runtime.GOOS, i.ToolInput.Command); v != "" {
-				t.Blockln(constant.GuardBlockExit, v)
+			if b := BlockReason(runtime.GOOS, i.ToolInput.Command); b != "" {
+				t.Blockln(constant.GuardBlockExit, b)
 
 				return
 			}
 
-			q := Question(i.ToolInput.Command)
+			a := AskReason(i.ToolInput.Command)
 			h := Hint(i.ToolInput.Command)
 
-			if q != "" || h != "" {
-				t.Line(string(notation.Marshal(response.NewDecision(q, h))))
+			if a != "" || h != "" {
+				t.Line(string(notation.Marshal(response.NewDecision(a, h))))
 			}
 		},
 	}

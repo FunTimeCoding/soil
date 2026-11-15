@@ -3,15 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameOfInterfaceMethodRenamesItsFamily(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-family/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface-family/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -46,11 +45,8 @@ func TestRenameOfInterfaceMethodRenamesItsFamily(t *testing.T) {
 }
 
 func TestRenameOfInterfaceMethodListsFamilyBeforeWriting(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-family/src"),
-	)
-	before := directoryTree(t, d)
+	d := service_tester.Prepare(t, "rename-interface-family/src")
+	before := rewrite_tester.DirectoryTree(t, d)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -69,17 +65,14 @@ func TestRenameOfInterfaceMethodListsFamilyBeforeWriting(t *testing.T) {
 			"func (example/pkg/shape.Measured).Size() int",
 			"func (example/pkg/shape.Sizer).Size() int",
 		},
-		familyMembers(r),
+		rewrite_tester.FamilyMembers(r),
 	)
-	assert.String(t, before, directoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
 }
 
 func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-family/src"),
-	)
-	before := directoryTree(t, d)
+	d := service_tester.Prepare(t, "rename-interface-family/src")
+	before := rewrite_tester.DirectoryTree(t, d)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -95,21 +88,18 @@ func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
 		r,
 		"example/pkg/box.Box satisfies fmt.Stringer outside the workspace",
 	)
-	assert.String(t, before, directoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
 }
 
 func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-family/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-interface-family/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/mock/area.go",
 		"package mock\n\nfunc (m *Mock) Area() int {\n\treturn 3\n}\n",
 	)
-	before := directoryTree(t, d)
+	before := rewrite_tester.DirectoryTree(t, d)
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -125,14 +115,11 @@ func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
 		r,
 		"example/pkg/mock.Mock already has Area",
 	)
-	assert.String(t, before, directoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
 }
 
 func TestRenameOfEmbeddedInterfaceMethodNamesItsDeclarer(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-family/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface-family/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -151,10 +138,7 @@ func TestRenameOfEmbeddedInterfaceMethodNamesItsDeclarer(t *testing.T) {
 }
 
 func TestRenameOfImplementationPointsToItsInterface(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-family/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface-family/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -173,10 +157,7 @@ func TestRenameOfImplementationPointsToItsInterface(t *testing.T) {
 }
 
 func TestRenameOfInterfaceMethodRenamesWideStructuralFamily(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-interface-wide/src"),
-	)
+	d := service_tester.Prepare(t, "rename-interface-wide/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -188,7 +169,7 @@ func TestRenameOfInterfaceMethodRenamesWideStructuralFamily(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.Count(t, 6, familyMembers(r))
+	assert.Count(t, 6, rewrite_tester.FamilyMembers(r))
 	assert.StringContains(
 		t,
 		"return (&Alfa{}).Area() + Bravo{}.Area() + d.Area() + Echo(4).Area()",

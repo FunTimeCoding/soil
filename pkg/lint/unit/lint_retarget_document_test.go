@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/pointer_tester"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
 	"github.com/funtimecoding/soil/pkg/lint/types/symbol_move"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"testing"
 )
 
@@ -14,7 +15,7 @@ func TestRetargetRepositoryPathKeepsItsLine(t *testing.T) {
 		pointer_tester.Resolver("pkg/alfa/bravo.go"),
 		"doc/note.md",
 		"Read `pkg/alfa/bravo.go:12` first.\n",
-		pathMoves(path_move.New("pkg/alfa", "pkg/charlie")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/charlie")),
 	)
 	assert.String(t, "Read `pkg/charlie/bravo.go:12` first.\n", after)
 	assert.Count(t, 1, changes)
@@ -25,7 +26,9 @@ func TestRetargetRenamedFile(t *testing.T) {
 		pointer_tester.Resolver("pkg/alfa/old_name.go"),
 		"doc/note.md",
 		"See `pkg/alfa/old_name.go`.\n",
-		pathMoves(path_move.New("pkg/alfa/old_name.go", "pkg/alfa/new_name.go")),
+		lint_tester.PathMoves(
+			path_move.New("pkg/alfa/old_name.go", "pkg/alfa/new_name.go"),
+		),
 	)
 	assert.String(t, "See `pkg/alfa/new_name.go`.\n", after)
 }
@@ -35,7 +38,9 @@ func TestRetargetSiblingDirectory(t *testing.T) {
 		pointer_tester.Resolver("../soil/pkg/alfa"),
 		"doc/note.md",
 		"Lives in `../soil/pkg/alfa/`.\n",
-		pathMoves(path_move.New("../soil/pkg/alfa", "../soil/pkg/bravo")),
+		lint_tester.PathMoves(
+			path_move.New("../soil/pkg/alfa", "../soil/pkg/bravo"),
+		),
 	)
 	assert.String(t, "Lives in `../soil/pkg/bravo/`.\n", after)
 }
@@ -45,7 +50,7 @@ func TestRetargetSymbolPackage(t *testing.T) {
 		pointer_tester.Resolver(),
 		"doc/note.md",
 		"Grep `go:pkg/alfa.Value` for it.\n",
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(t, "Grep `go:pkg/bravo.Value` for it.\n", after)
 }
@@ -59,7 +64,7 @@ func TestRetargetBaseMovesWithItsShortPaths(t *testing.T) {
 		),
 		"doc/note.md",
 		"---\nbase: pkg/alfa\n---\n\nSee `service/run.go`.\n",
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(
 		t,
@@ -78,7 +83,9 @@ func TestRetargetShortPathLeavingItsBase(t *testing.T) {
 		),
 		"doc/note.md",
 		"---\nbase: pkg/alfa\n---\n\nSee `service/run.go`.\n",
-		pathMoves(path_move.New("pkg/alfa/service", "pkg/bravo/service")),
+		lint_tester.PathMoves(
+			path_move.New("pkg/alfa/service", "pkg/bravo/service"),
+		),
 	)
 	assert.String(
 		t,
@@ -92,7 +99,7 @@ func TestRetargetRelativeLink(t *testing.T) {
 		pointer_tester.Resolver("pkg/alfa/run.go"),
 		"doc/ai/note.md",
 		"The [runner](../../pkg/alfa/run.go) starts it.\n",
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(t, "The [runner](../../pkg/bravo/run.go) starts it.\n", after)
 }
@@ -102,7 +109,7 @@ func TestRetargetBracedDirectory(t *testing.T) {
 		pointer_tester.Resolver("doc/alfa/bravo.md", "doc/alfa/charlie.md"),
 		"doc/note.md",
 		"Read `doc/alfa/{bravo,charlie}.md`.\n",
-		pathMoves(path_move.New("doc/alfa", "doc/delta")),
+		lint_tester.PathMoves(path_move.New("doc/alfa", "doc/delta")),
 	)
 	assert.String(t, "Read `doc/delta/{bravo,charlie}.md`.\n", after)
 }
@@ -113,7 +120,9 @@ func TestRetargetBracedSplitIsLeftForHand(t *testing.T) {
 		pointer_tester.Resolver("doc/alfa/bravo.md", "doc/alfa/charlie.md"),
 		"doc/note.md",
 		content,
-		pathMoves(path_move.New("doc/alfa/bravo.md", "doc/echo/bravo.md")),
+		lint_tester.PathMoves(
+			path_move.New("doc/alfa/bravo.md", "doc/echo/bravo.md"),
+		),
 	)
 	assert.String(t, content, after)
 	assert.Count(t, 1, changes)
@@ -125,7 +134,7 @@ func TestRetargetKeepsFragment(t *testing.T) {
 		pointer_tester.Resolver("doc/alfa.md"),
 		"doc/note.md",
 		"See `doc/alfa.md#usage`.\n",
-		pathMoves(path_move.New("doc/alfa.md", "doc/bravo.md")),
+		lint_tester.PathMoves(path_move.New("doc/alfa.md", "doc/bravo.md")),
 	)
 	assert.String(t, "See `doc/bravo.md#usage`.\n", after)
 }
@@ -136,7 +145,7 @@ func TestRetargetLeavesProseAndUnrelatedPaths(t *testing.T) {
 		pointer_tester.Resolver("pkg/alfabet/run.go"),
 		"doc/note.md",
 		content,
-		pathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
+		lint_tester.PathMoves(path_move.New("pkg/alfa", "pkg/bravo")),
 	)
 	assert.String(t, content, after)
 	assert.Count(t, 0, changes)
@@ -147,7 +156,9 @@ func TestRetargetRenamedSymbolLeavesLongerName(t *testing.T) {
 		pointer_tester.Resolver(),
 		"doc/note.md",
 		"Use `go:pkg/alfa.Old`, not `go:pkg/alfa.Older`.\n",
-		symbolMoves(symbol_move.New("pkg/alfa", "Old", "pkg/alfa", "New")),
+		lint_tester.SymbolMoves(
+			symbol_move.New("pkg/alfa", "Old", "pkg/alfa", "New"),
+		),
 	)
 	assert.String(t, "Use `go:pkg/alfa.New`, not `go:pkg/alfa.Older`.\n", after)
 }
@@ -157,7 +168,9 @@ func TestRetargetMethodFollowsItsMovedType(t *testing.T) {
 		pointer_tester.Resolver(),
 		"doc/note.md",
 		"Call `go:pkg/alfa.Store.Save()` last.\n",
-		symbolMoves(symbol_move.New("pkg/alfa", "Store", "pkg/bravo", "Store")),
+		lint_tester.SymbolMoves(
+			symbol_move.New("pkg/alfa", "Store", "pkg/bravo", "Store"),
+		),
 	)
 	assert.String(t, "Call `go:pkg/bravo.Store.Save()` last.\n", after)
 }
@@ -167,7 +180,7 @@ func TestRetargetSiblingSymbol(t *testing.T) {
 		pointer_tester.Resolver(),
 		"doc/note.md",
 		"Grep `go:../soil/pkg/alfa.Value` for it.\n",
-		symbolMoves(
+		lint_tester.SymbolMoves(
 			symbol_move.New(
 				"../soil/pkg/alfa",
 				"Value",

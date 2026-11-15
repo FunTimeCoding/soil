@@ -3,24 +3,28 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck"
+	"github.com/funtimecoding/soil/pkg/tool/gocheck/integration/check_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/option"
 	"testing"
 )
 
 func TestFixModeAnalysisSkipsWhatFixFixed(t *testing.T) {
-	root := stackModule(t)
+	root := check_tester.StackModule(t)
 	o := option.New()
 	o.Root = root
 	o.Fix = true
 	o.Index = t.TempDir()
-	printed := testutil.CaptureStdout(func() { gocheck.Print(checked(t, o)) })
+	printed := testutil.CaptureStdout(
+		func() { gocheck.Print(check_tester.Run(t, o)) },
+	)
 	assert.StringNotContains(t, "pkg/format/delta.go:6: call exceeds", printed)
 }
 
 func TestReportModeMarksFindingOnRewrittenLine(t *testing.T) {
-	root := stackModule(t)
-	testutil.WriteFile(
+	root := check_tester.StackModule(t)
+	system_tester.Write(
 		t,
 		root,
 		"pkg/format/delta.go",
@@ -29,14 +33,16 @@ func TestReportModeMarksFindingOnRewrittenLine(t *testing.T) {
 	o := option.New()
 	o.Root = root
 	o.Index = t.TempDir()
-	printed := testutil.CaptureStdout(func() { gocheck.Print(checked(t, o)) })
+	printed := testutil.CaptureStdout(
+		func() { gocheck.Print(check_tester.Run(t, o)) },
+	)
 	assert.StringContains(t, "pkg/format/delta.go:6: ", printed)
 	assert.StringContains(t, " - on a line the fixes rewrite\n", printed)
 }
 
 func TestReportModeAnalysisNamesLineOnDisk(t *testing.T) {
-	root := stackModule(t)
-	testutil.WriteFile(
+	root := check_tester.StackModule(t)
+	system_tester.Write(
 		t,
 		root,
 		"pkg/response/types.go",
@@ -45,7 +51,9 @@ func TestReportModeAnalysisNamesLineOnDisk(t *testing.T) {
 	o := option.New()
 	o.Root = root
 	o.Index = t.TempDir()
-	printed := testutil.CaptureStdout(func() { gocheck.Print(checked(t, o)) })
+	printed := testutil.CaptureStdout(
+		func() { gocheck.Print(check_tester.Run(t, o)) },
+	)
 	assert.StringContains(
 		t,
 		"pkg/response/types.go:8: struct LinkResponse repeats the bag's name response - rename it Link\n",

@@ -23,6 +23,10 @@ func (s *Service) SendPulse(
 		}
 	}
 
+	if e := s.requireSession(sessionIdentifier); e != nil {
+		return false, e
+	}
+
 	if e := s.store.SendPulse(sessionIdentifier, fromName, body); e != nil {
 		return false, e
 	}

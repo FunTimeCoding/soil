@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/revision"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/revision_tester"
 	"testing"
 )
 
@@ -18,7 +19,7 @@ func TestRevisionQualifiesImportedAndOwnReferences(t *testing.T) {
 			),
 		},
 	)
-	run := revisionSymbol(t, r, "bravo bravo Run")
+	run := revision_tester.Symbol(t, r, "bravo bravo Run")
 	assert.String(
 		t,
 		"func Run ( count int ) int { total := \"example.org/alfa/charlie\" . Sum ( count , \"example.org/alfa/bravo\" . Limit ) return \"example.org/delta/go-echo/v2\" . Clamp ( total ) }",
@@ -41,12 +42,12 @@ func TestRevisionKeepsLocalsUnqualified(t *testing.T) {
 	assert.String(
 		t,
 		"func Next ( count int ) int { return count + 1 }",
-		revisionSymbol(t, r, ". alfa Next").Body,
+		revision_tester.Symbol(t, r, ". alfa Next").Body,
 	)
 	assert.String(
 		t,
 		"func Last ( ) int { return \"example.org/alfa\" . count }",
-		revisionSymbol(t, r, ". alfa Last").Body,
+		revision_tester.Symbol(t, r, ". alfa Last").Body,
 	)
 }
 
@@ -62,9 +63,9 @@ func TestRevisionKeysMethodsByReceiver(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{". alfa Tank", ". alfa Tank.Fill"},
-		revisionKeys(r),
+		revision_tester.Keys(r),
 	)
-	fill := revisionSymbol(t, r, ". alfa Tank.Fill")
+	fill := revision_tester.Symbol(t, r, ". alfa Tank.Fill")
 	assert.String(t, "method", fill.Kind)
 	assert.String(
 		t,
@@ -85,7 +86,7 @@ func TestRevisionCountsIotaPositions(t *testing.T) {
 	assert.String(
 		t,
 		"const Busy \"example.org/alfa\" . Mode = iota // iota 1",
-		revisionSymbol(t, r, ". alfa Busy").Body,
+		revision_tester.Symbol(t, r, ". alfa Busy").Body,
 	)
 }
 
@@ -106,7 +107,7 @@ func TestRevisionDistinguishesRepeatedNames(t *testing.T) {
 			". alfa init @bravo.go#1",
 			". alfa init @bravo.go#2",
 		},
-		revisionKeys(r),
+		revision_tester.Keys(r),
 	)
 }
 
@@ -119,5 +120,5 @@ func TestRevisionReportsUnparsedFiles(t *testing.T) {
 		},
 	)
 	assert.Strings(t, []string{"broken.go"}, r.Unparsed)
-	assert.Strings(t, []string{". alfa Bravo"}, revisionKeys(r))
+	assert.Strings(t, []string{". alfa Bravo"}, revision_tester.Keys(r))
 }

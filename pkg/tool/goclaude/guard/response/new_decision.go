@@ -3,7 +3,7 @@ package response
 import "github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 
 func NewDecision(
-	question string,
+	askReason string,
 	hint string,
 ) *Decision {
 	result := &SpecificOutput{
@@ -11,9 +11,9 @@ func NewDecision(
 		AdditionalContext: hint,
 	}
 
-	if question != "" {
+	if askReason != "" {
 		result.PermissionDecision = constant.AskDecision
-		result.PermissionDecisionReason = question
+		result.PermissionDecisionReason = askReason
 	}
 
 	return &Decision{HookSpecificOutput: result}

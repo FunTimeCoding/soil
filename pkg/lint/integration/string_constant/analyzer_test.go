@@ -3,6 +3,7 @@ package string_constant
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
@@ -26,13 +27,13 @@ func TestFlagged(t *testing.T) {
 func TestFlaggedFromOwnConstantFile(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "alfa")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"constant.go",
 		"package alfa\n\nconst Bravo = \"charlie delta\"\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"echo.go",
@@ -51,13 +52,13 @@ func TestFlaggedFromOwnConstantFile(t *testing.T) {
 func TestFlaggedFromParentConstantDirectory(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "alfa")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"pkg/constant/constant.go",
 		"package constant\n\nconst Bravo = \"charlie delta\"\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"pkg/echo/echo.go",

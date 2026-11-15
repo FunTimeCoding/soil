@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -17,7 +18,10 @@ func TestCompleteToolReachesSessionActivity(t *testing.T) {
 		map[string]any{constant.Message: "search index and refresh implemented"},
 	)
 	r := a.CheckLive()
-	completions := clientKindEntries(r.Entries, constant.QueueSessionComplete)
+	completions := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionComplete,
+	)
 	assert.True(t, len(completions) > 0)
 	assert.StringContains(t, "building search index", completions[0].Body)
 }
@@ -48,7 +52,10 @@ func TestCompleteAndReannounce(t *testing.T) {
 	)
 	a.Announce(a.Name(), "second task")
 	r := a.CheckLive()
-	announces := clientKindEntries(r.Entries, constant.QueueSessionAnnounce)
+	announces := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionAnnounce,
+	)
 	assert.True(t, len(announces) > 0)
 	assert.StringContains(t, "second task", announces[len(announces)-1].Body)
 }

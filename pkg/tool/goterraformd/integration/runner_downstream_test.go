@@ -21,7 +21,7 @@ func TestApplySendsHostEventsDownstream(t *testing.T) {
 		constant.FixturePlan,
 		d,
 	)
-	waitForCalls(t, d, 1)
+	assert.Eventually(t, func() bool { return d.Calls() >= 1 })
 	triggered := d.Triggered()
 	assert.Any(
 		t,
@@ -48,7 +48,7 @@ func TestRestartingDownstreamIsHeldOffAndNotCaptured(t *testing.T) {
 		constant.FixturePlan,
 		d,
 	)
-	waitForCalls(t, d, 1)
+	assert.Eventually(t, func() bool { return d.Calls() >= 1 })
 	s.TriggerServed()
 	s.WaitForRuns(2)
 	assert.Integer(t, 1, d.Calls())

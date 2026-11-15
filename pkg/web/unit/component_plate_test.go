@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/component/plate"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"testing"
@@ -12,7 +13,7 @@ func TestPlateStacksNameHeadlineCaptionAndRows(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate"><div class="plate-name">alfa</div><div class="plate-headline">12 kg</div><div class="plate-caption">bravo</div><div class="plate-row"><span class="plate-label">charlie</span><div class="plate-value">delta</div></div></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			plate.New().
 				Name("alfa").
@@ -28,7 +29,7 @@ func TestPlateLeavesOutEmptyLines(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate"><div class="plate-row"><span class="plate-label">charlie</span><div class="plate-value">delta</div></div></div>`,
-		renderedNode(t, plate.New().Row("charlie", "delta").Node()),
+		web_tester.Render(t, plate.New().Row("charlie", "delta").Node()),
 	)
 }
 
@@ -36,7 +37,7 @@ func TestPlateRowNodeCarriesAttributesToValue(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate"><div class="plate-row"><span class="plate-label">charlie</span><div class="plate-value" style="--alfa: 1"><b>delta</b></div></div></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			plate.New().
 				RowNode(
@@ -55,7 +56,7 @@ func TestPlateGroupWrapsPlates(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate-group"><div class="plate"><div class="plate-headline">1 kg</div></div><div class="plate"><div class="plate-headline">2 kg</div></div></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			plate.Group(
 				plate.New().Headline("1 kg").Node(),

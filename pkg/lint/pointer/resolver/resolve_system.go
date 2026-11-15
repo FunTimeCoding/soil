@@ -9,24 +9,18 @@ import (
 
 func resolveSystem(candidate string) *pointer.Resolution {
 	if strings.HasPrefix(candidate, constant.RestRoutePrefix) {
-		return pointer.NewResolution(constant.VerdictBareSlash)
+		return pointer.NewConcern(constant.BareSlashKey)
 	}
 
-	result := pointer.NewResolution(constant.VerdictTallied)
-
 	if strings.HasSuffix(candidate, stringsConstant.Slash) {
-		result.Reason = constant.ReasonSystem
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonSystem)
 	}
 
 	base := candidate[strings.LastIndex(candidate, stringsConstant.Slash)+1:]
 
 	if strings.Contains(base, stringsConstant.Dot) {
-		result.Reason = constant.ReasonSystem
-	} else {
-		result.Reason = constant.ReasonSlash
+		return pointer.NewUnchecked(constant.ReasonSystem)
 	}
 
-	return result
+	return pointer.NewUnchecked(constant.ReasonSlash)
 }

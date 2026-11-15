@@ -8,10 +8,7 @@ import (
 )
 
 func TestRenameField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -33,10 +30,7 @@ func TestRenameField(t *testing.T) {
 }
 
 func TestRenameExportedFieldAcrossPackages(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -56,10 +50,7 @@ func TestRenameExportedFieldAcrossPackages(t *testing.T) {
 }
 
 func TestRenameFieldCollidesWithField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -75,10 +66,7 @@ func TestRenameFieldCollidesWithField(t *testing.T) {
 }
 
 func TestRenameFieldCollidesWithMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -94,10 +82,7 @@ func TestRenameFieldCollidesWithMethod(t *testing.T) {
 }
 
 func TestRenameEmbeddedFieldRefused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -115,10 +100,7 @@ func TestRenameEmbeddedFieldRefused(t *testing.T) {
 }
 
 func TestRenameFieldToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -133,10 +115,7 @@ func TestRenameFieldToUnexportedBlockedByCrossPackage(t *testing.T) {
 }
 
 func TestFindReferencesField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, references, e := service_tester.NewService(t).Reference.FindReferences(
 		d,
 		"example/pkg/target",
@@ -151,10 +130,7 @@ func TestFindReferencesField(t *testing.T) {
 }
 
 func TestChangeVisibilityField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-field/src"),
-	)
+	d := service_tester.Prepare(t, "rename-field/src")
 	r, e := service_tester.NewService(t).Symbol.ChangeVisibility(
 		t.Context(),
 		d,

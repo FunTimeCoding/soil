@@ -22,15 +22,14 @@ func underBases(
 			pointer.NewSpan(join.Empty(base, stringsConstant.Slash, span)),
 		)
 
-		if v.Verdict == lintConstant.VerdictLive ||
-			v.Verdict == lintConstant.VerdictTallied {
+		if v.Concern == "" {
 			return nil
 		}
 
-		if closest == nil || closest.Verdict == lintConstant.VerdictDead {
+		if closest == nil || closest.Concern == lintConstant.DeadPointerKey {
 			closest = v
 		}
 	}
 
-	return NewFinding(span, pointer.Message(closest.Verdict, closest.Hint))
+	return NewFinding(span, pointer.Message(closest.Concern, closest.Hint))
 }

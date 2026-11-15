@@ -9,8 +9,8 @@ import (
 )
 
 func TestUnavailablePeerIsHeldOffWithoutBeingAsked(t *testing.T) {
-	p := newPrometheus(t)
-	u := newUsage(t)
+	p := service_tester.NewPrometheus(t)
+	u := service_tester.NewUsage(t)
 	u.Failure = unavailable.Format("nextcloud restarting")
 	r := memory.New()
 	v := service_tester.New(

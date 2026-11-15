@@ -2,42 +2,23 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/prometheus"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/strings/join"
-	"net"
-	"net/http"
-	"net/http/httptest"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
 func TestClientSendsBasicAuth(t *testing.T) {
-	var seen string
-	s := httptest.NewServer(
-		http.HandlerFunc(
-			func(
-				w http.ResponseWriter,
-				r *http.Request,
-			) {
-				user, password, _ := r.BasicAuth()
-				seen = join.Empty(user, stringsConstant.Colon, password)
-				_, e := w.Write([]byte(`{"status":"success","data":["job"]}`))
-				errors.PanicOnError(e)
-			},
-		),
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"status":"success","data":["job"]}`),
 	)
-	defer s.Close()
-	c := prometheus.New(
-		"127.0.0.1",
-		s.Listener.Addr().(*net.TCPAddr).Port,
-		false,
-		"alfa",
-		"bravo",
-	)
+	host, port := upstream_server.HostPort(t, s.URL)
+	c := prometheus.New(host, port, false, "alfa", "bravo")
 	defer c.Close()
 	labels, e := c.AllLabels()
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"job"}, labels)
-	assert.String(t, "alfa:bravo", seen)
+	user, password, _ := s.Last().BasicAuth()
+	assert.String(t, "alfa", user)
+	assert.String(t, "bravo", password)
 }

@@ -3,15 +3,13 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMoveIntoOwnConstantDropsOrphan(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-orphan/src"),
-	)
+	d := service_tester.Prepare(t, "move-orphan/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -32,10 +30,7 @@ func TestMoveIntoOwnConstantDropsOrphan(t *testing.T) {
 }
 
 func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-foreign-constant/src"),
-	)
+	d := service_tester.Prepare(t, "move-foreign-constant/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -58,10 +53,7 @@ func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
 }
 
 func TestMoveIntoNewFileNamesCarriedConstants(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-two-constants/src"),
-	)
+	d := service_tester.Prepare(t, "move-two-constants/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -82,10 +74,7 @@ func TestMoveIntoNewFileNamesCarriedConstants(t *testing.T) {
 }
 
 func TestMoveIntoExistingFileNamesCarriedConstants(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-two-constants/src"),
-	)
+	d := service_tester.Prepare(t, "move-two-constants/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -106,7 +95,7 @@ func TestMoveIntoExistingFileNamesCarriedConstants(t *testing.T) {
 }
 
 func TestMoveKeepsOneImportBlock(t *testing.T) {
-	d := prepareDottedModule(t, "move-dotted/src")
+	d := module_tester.DottedModule(t, "move-dotted/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,

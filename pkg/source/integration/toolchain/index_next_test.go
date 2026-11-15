@@ -2,11 +2,11 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/snapshot"
 	"github.com/funtimecoding/soil/pkg/source/unit/kind_tester"
 	"github.com/funtimecoding/soil/pkg/source/unit/reference_tester"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"os"
 	"testing"
 )
@@ -18,7 +18,7 @@ func TestNextAnswersLikeFreshWorkspace(t *testing.T) {
 	previous := index.New(store, directory)
 	before := previous.References().Locations(start)
 	taken := snapshot.Take(directory)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"bravo/use.go",
@@ -46,7 +46,7 @@ func TestNextCarriesFactsOfUnchangedPackages(t *testing.T) {
 	assert.Integer(t, 2, extracted)
 	assert.FatalOnError(t, os.RemoveAll(store))
 	taken := snapshot.Take(directory)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"two/two.go",

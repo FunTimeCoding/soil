@@ -3,30 +3,31 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/reachable_probe"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/unit/guarded_server"
 	"testing"
 )
 
 func TestProbeReachesGuardedDaemon(t *testing.T) {
-	s := reachableServer(t)
+	s := guarded_server.New(t)
 	assert.FatalOnError(
 		t,
 		reachable_probe.Reach(
 			context.Background(),
 			s.Client(),
-			upstream_tester.Locator(t, s.URL),
+			locator.NewOrigin(s.URL),
 			"alfa",
 		),
 	)
 }
 
 func TestProbeFailsOnWrongToken(t *testing.T) {
-	s := reachableServer(t)
+	s := guarded_server.New(t)
 	e := reachable_probe.Reach(
 		context.Background(),
 		s.Client(),
-		upstream_tester.Locator(t, s.URL),
+		locator.NewOrigin(s.URL),
 		"bravo",
 	)
 	assert.True(t, e != nil)
@@ -34,11 +35,11 @@ func TestProbeFailsOnWrongToken(t *testing.T) {
 }
 
 func TestProbeFailsWithoutToken(t *testing.T) {
-	s := reachableServer(t)
+	s := guarded_server.New(t)
 	e := reachable_probe.Reach(
 		context.Background(),
 		s.Client(),
-		upstream_tester.Locator(t, s.URL),
+		locator.NewOrigin(s.URL),
 		"",
 	)
 	assert.True(t, e != nil)

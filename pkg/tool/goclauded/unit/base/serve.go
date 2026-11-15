@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/double"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
@@ -17,7 +17,7 @@ import (
 func serve(
 	t *testing.T,
 	hold time.Duration,
-	d *double.Set,
+	d *peer_tester.Peers,
 ) *Server {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "goclauded.sqlite")
@@ -31,7 +31,7 @@ func serve(
 	)
 	t.Cleanup(g.Close)
 	result := &Server{
-		Set:    d,
+		Peers:  d,
 		t:      t,
 		daemon: g,
 		option: o,

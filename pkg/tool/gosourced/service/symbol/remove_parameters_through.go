@@ -22,7 +22,7 @@ func (s *Service) removeParametersThrough(
 		paths = append(paths, p.PackagePath)
 	}
 
-	all, set, e := s.workspace.CensusPackages(directory, paths...)
+	all, set, e := s.workspace.DependentPackages(directory, paths...)
 
 	if e != nil {
 		return nil, e

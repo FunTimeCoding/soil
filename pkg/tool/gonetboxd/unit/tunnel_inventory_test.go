@@ -9,13 +9,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
 
 func TestInventoryDialsHostsOffSiteAtTunnelAddress(t *testing.T) {
 	c := service_tester.NewSource(t)
-	seedTunnelHosts(c)
+	service_tester.SeedTunnelHosts(c)
 	i, e := service_tester.Service(t, c).AnsibleInventory(
 		constant.AnsibleField,
 		"kilo",
@@ -40,7 +41,7 @@ func TestInventoryDialsHostsOffSiteAtTunnelAddress(t *testing.T) {
 
 func TestInventoryWithoutSiteKeepsPrimaryAddresses(t *testing.T) {
 	c := service_tester.NewSource(t)
-	seedTunnelHosts(c)
+	service_tester.SeedTunnelHosts(c)
 	i, e := service_tester.Service(t, c).AnsibleInventory(
 		constant.AnsibleField,
 		"",
@@ -89,7 +90,7 @@ func TestInventoryOffSiteWithoutTunnelKeepsPrimaryAddress(t *testing.T) {
 
 func TestInventoryRouteTakesCallerSite(t *testing.T) {
 	c := service_tester.NewSource(t)
-	seedTunnelHosts(c)
+	service_tester.SeedTunnelHosts(c)
 	d := daemon.New(
 		service_tester.NewOption(t, c),
 		logger.New(t.Context()),
@@ -98,9 +99,9 @@ func TestInventoryRouteTakesCallerSite(t *testing.T) {
 	)
 	t.Cleanup(d.Close)
 	site := "kilo"
-	response, e := newClient(
+	response, e := base.Rest(
 		t,
-		newDaemonServer(t, d, memory.New()),
+		base.Mount(t, d, memory.New()),
 	).GetAnsibleInventoryWithResponse(
 		context.Background(),
 		&client.GetAnsibleInventoryParams{Site: &site},

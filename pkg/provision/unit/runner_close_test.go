@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
+	"github.com/funtimecoding/soil/pkg/provision/unit/runner_tester"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -19,7 +20,7 @@ func TestLifecycleClosesNeverStartedRunner(t *testing.T) {
 	var setup atomic.Bool
 	l := lifecycle.New(
 		logger.New(context.Background()),
-	).WithWorker(newSetupProbe(&setup))
+	).WithWorker(runner_tester.SetupProbe(&setup))
 	start := time.Now()
 	l.Close()
 	assert.Less(t, time.Second, time.Since(start))
@@ -50,19 +51,19 @@ func TestClosingRunnerEndsItsSetup(t *testing.T) {
 
 func TestTriggerAfterCloseIsRefused(t *testing.T) {
 	var setup atomic.Bool
-	r := newSetupProbe(&setup)
+	r := runner_tester.SetupProbe(&setup)
 	r.Start()
 	r.Close()
-	awaitFinished(t, r)
+	assert.Signalled(t, r.Finished())
 	assert.True(t, unavailable.Is(r.Trigger(trigger.Request{})))
 }
 
 func TestSyncAfterCloseIsRefused(t *testing.T) {
 	var setup atomic.Bool
-	r := newSetupProbe(&setup)
+	r := runner_tester.SetupProbe(&setup)
 	r.Start()
 	r.Close()
-	awaitFinished(t, r)
+	assert.Signalled(t, r.Finished())
 	refused := make(chan error, 1)
 	go func() {
 		_, e := r.Sync()
@@ -79,7 +80,7 @@ func TestSyncAfterCloseIsRefused(t *testing.T) {
 
 func TestTriggerQueuedBeforeStartIsAnsweredOnClose(t *testing.T) {
 	var setup atomic.Bool
-	r := newSetupProbe(&setup)
+	r := runner_tester.SetupProbe(&setup)
 	response := make(chan *trigger.Result, 1)
 	assert.FatalOnError(t, r.Trigger(trigger.Request{Response: response}))
 	r.Close()
@@ -94,7 +95,7 @@ func TestTriggerQueuedBeforeStartIsAnsweredOnClose(t *testing.T) {
 
 func TestRunnerStartAfterCloseDoesNotRun(t *testing.T) {
 	var setup atomic.Bool
-	r := newSetupProbe(&setup)
+	r := runner_tester.SetupProbe(&setup)
 	r.Close()
 	r.Start()
 	time.Sleep(100 * time.Millisecond)

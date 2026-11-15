@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/worker"
 	"go.uber.org/goleak"
@@ -15,7 +16,11 @@ import (
 func TestDaemonClosesQueryClientOnce(t *testing.T) {
 	q := mock_client.New()
 	t.Cleanup(q.Close)
-	d := daemon.New(daemonOption(t, q), logger.New(t.Context()), memory.New())
+	d := daemon.New(
+		service_tester.NewOption(t, q),
+		logger.New(t.Context()),
+		memory.New(),
+	)
 	d.Close()
 	d.Close()
 	assert.Integer(t, 1, q.Closed)
@@ -23,7 +28,7 @@ func TestDaemonClosesQueryClientOnce(t *testing.T) {
 
 func TestDaemonHandsItsGuardThenItsReconcileClockToLifecycle(t *testing.T) {
 	d := daemon.New(
-		daemonOption(t, mock_client.New()),
+		service_tester.NewOption(t, mock_client.New()),
 		logger.New(t.Context()),
 		memory.New(),
 	)
@@ -39,7 +44,7 @@ func TestDaemonHandsItsGuardThenItsReconcileClockToLifecycle(t *testing.T) {
 func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
-		daemonOption(t, mock_client.New()),
+		service_tester.NewOption(t, mock_client.New()),
 		logger.New(t.Context()),
 		memory.New(),
 	)

@@ -9,7 +9,7 @@ import (
 )
 
 func TestSameNamedGuestIsNeverReconciled(t *testing.T) {
-	c, machines := ambiguousFloor()
+	c, machines := service_tester.AmbiguousFloor()
 	defer c.Close()
 	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
 	p, e := v.Reconcile(context.Background(), "test", true, true)
@@ -20,7 +20,7 @@ func TestSameNamedGuestIsNeverReconciled(t *testing.T) {
 }
 
 func TestSameNamedGuestIsNeverRecordedOnStart(t *testing.T) {
-	c, machines := ambiguousFloor()
+	c, machines := service_tester.AmbiguousFloor()
 	defer c.Close()
 	m := memory.New()
 	v, n := service_tester.IntentService(t, c, m, machines...)

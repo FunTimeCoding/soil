@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/component/dial"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"testing"
@@ -12,7 +13,7 @@ func TestDialIsTrackWithCenter(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="dial" style="--dial-background: #111"><div class="dial-center"><strong>alfa</strong></div></div>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			dial.New("#111").
 				Center(html.Strong(gomponents.Text("alfa"))).
@@ -25,17 +26,17 @@ func TestFillCoversTrackUpToItsShare(t *testing.T) {
 	assert.StringContains(
 		t,
 		`style="--dial-background: conic-gradient(#222 0deg 90.0deg, #111 90.0deg 360deg)"`,
-		renderedNode(t, dial.New("#111").Fill("#222", 0.25).Node()),
+		web_tester.Render(t, dial.New("#111").Fill("#222", 0.25).Node()),
 	)
 	assert.StringContains(
 		t,
 		`style="--dial-background: #222"`,
-		renderedNode(t, dial.New("#111").Fill("#222", 1).Node()),
+		web_tester.Render(t, dial.New("#111").Fill("#222", 1).Node()),
 	)
 	assert.StringContains(
 		t,
 		`style="--dial-background: #111"`,
-		renderedNode(t, dial.New("#111").Fill("#222", 0).Node()),
+		web_tester.Render(t, dial.New("#111").Fill("#222", 0).Node()),
 	)
 }
 
@@ -43,12 +44,12 @@ func TestArcsLayerOverTrack(t *testing.T) {
 	assert.StringContains(
 		t,
 		`style="--dial-background: conic-gradient(transparent 0deg 36.0deg, #333 36.0deg 72.0deg, transparent 72.0deg 360deg), #111"`,
-		renderedNode(t, dial.New("#111").Arc("#333", 0.1, 0.2).Node()),
+		web_tester.Render(t, dial.New("#111").Arc("#333", 0.1, 0.2).Node()),
 	)
 }
 
 func TestMarkersTurnFromTop(t *testing.T) {
-	ring := renderedNode(
+	ring := web_tester.Render(
 		t,
 		dial.New("#111").
 			Point(0.25, "#444", "bravo").

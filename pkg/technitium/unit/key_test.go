@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/technitium/constant"
 	"github.com/funtimecoding/soil/pkg/technitium/key"
+	"github.com/funtimecoding/soil/pkg/technitium/unit/technitium_tester"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestKeyEncodeJoinsEveryFieldOfEveryRow(t *testing.T) {
 		t,
 		"alfa|YWxmYQ==|hmac-sha256|bravo|YnJhdm8=|hmac-sha512",
 		key.Encode(
-			settings(
+			technitium_tester.Settings(
 				`{"tsigKeys":[
 					{"keyName":"alfa","sharedSecret":"YWxmYQ==","algorithmName":"hmac-sha256"},
 					{"keyName":"bravo","sharedSecret":"YnJhdm8=","algorithmName":"hmac-sha512"}
@@ -47,7 +48,7 @@ func TestKeyGenerateNeverRepeatsSecret(t *testing.T) {
 }
 
 func TestKeyFindByName(t *testing.T) {
-	v := settings(
+	v := technitium_tester.Settings(
 		`{"tsigKeys":[{"keyName":"alfa","sharedSecret":"YWxmYQ==","algorithmName":"hmac-sha256"}]}`,
 	).Keys
 	assert.String(t, "YWxmYQ==", key.Find(v, "alfa").Secret)

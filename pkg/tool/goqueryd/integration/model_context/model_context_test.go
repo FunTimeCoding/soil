@@ -50,20 +50,20 @@ func TestDeleteDocumentNotFound(t *testing.T) {
 }
 
 func TestGetDocument(t *testing.T) {
-	s := indexFixtures(t)
+	s := model_context_tester.Indexed(t)
 	result := s.Get("test/alfa.md")
 	assert.StringContains(t, "Search Pipeline", result)
 	assert.StringContains(t, "hybrid search pipeline", result)
 }
 
 func TestGetDocumentVirtualPath(t *testing.T) {
-	s := indexFixtures(t)
+	s := model_context_tester.Indexed(t)
 	result := s.Get("qmd://test/alfa.md")
 	assert.StringContains(t, "Search Pipeline", result)
 }
 
 func TestGetDocumentNotFoundSuggestsAlternatives(t *testing.T) {
-	s := indexFixtures(t)
+	s := model_context_tester.Indexed(t)
 	result := s.MustCallToolError(
 		constant.Get,
 		map[string]any{constant.Path: "test/alfaa.md"},
@@ -86,7 +86,7 @@ func TestStatusAfterIndex(t *testing.T) {
 }
 
 func TestListDocuments(t *testing.T) {
-	s := indexFixtures(t)
+	s := model_context_tester.Indexed(t)
 	result := s.ListDocuments("test")
 	assert.StringContains(t, "alfa.md", result)
 	assert.StringContains(t, "tools/charlie.md", result)
@@ -280,13 +280,13 @@ func TestPushWithSourceType(t *testing.T) {
 }
 
 func TestSearchKeyword(t *testing.T) {
-	s := indexFixtures(t)
+	s := model_context_tester.Indexed(t)
 	result := s.SearchKeyword("hybrid search pipeline")
 	assert.StringContains(t, "Search Pipeline", result)
 }
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
-	s := indexFixtures(t)
+	s := model_context_tester.Indexed(t)
 	result := s.MustCallTool(
 		constant.Search,
 		map[string]any{

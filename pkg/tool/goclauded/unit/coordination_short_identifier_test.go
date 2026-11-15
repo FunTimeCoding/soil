@@ -18,6 +18,6 @@ func TestShortIdentifierSurvivesDisplayPaths(t *testing.T) {
 	a := s.NewSession(t)
 	a.Announce(a.Name(), "short identifier")
 	a.MustCallTool(constant.ListSessions, map[string]any{})
-	assert.Integer(t, http.StatusOK, pageStatus(t, s, "/sessions/tiny"))
-	assert.Integer(t, http.StatusOK, pageStatus(t, s, constant.SessionsPath))
+	assert.Integer(t, http.StatusOK, s.Status(t,"/sessions/tiny"))
+	assert.Integer(t, http.StatusOK, s.Status(t,constant.SessionsPath))
 }

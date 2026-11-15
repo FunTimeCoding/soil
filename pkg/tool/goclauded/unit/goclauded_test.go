@@ -10,6 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/coverage"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/label_change"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/coverage_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/usage_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 	"os"
 	"path/filepath"
@@ -20,15 +22,21 @@ import (
 func TestCoverageComputeWindows(t *testing.T) {
 	servers := coverage.Compute(
 		[]*tool_call.Call{
-			coverageCall("mcp__alfa__list_items", "2026-08-20T10:00:00Z"),
-			coverageCall("mcp__alfa__list_items", "2026-01-05T10:00:00Z"),
-			coverageCall("mcp__alfa__get_item", "2026-01-05T10:00:00Z"),
+			coverage_tester.Call(
+				"mcp__alfa__list_items",
+				"2026-08-20T10:00:00Z",
+			),
+			coverage_tester.Call(
+				"mcp__alfa__list_items",
+				"2026-01-05T10:00:00Z",
+			),
+			coverage_tester.Call("mcp__alfa__get_item", "2026-01-05T10:00:00Z"),
 		},
 		map[string][]string{"alfa": {"list_items", "get_item", "delete_item"}},
 		map[string]string{"alfa": "pkg/tool/goalfad"},
 		map[string]bool{"alfa": true},
 		nil,
-		coverageNow(),
+		coverage_tester.Now(),
 	)
 	assert.Integer(t, 1, len(servers))
 	s := servers[0]
@@ -49,13 +57,13 @@ func TestCoverageComputeWindows(t *testing.T) {
 func TestCoverageComputeRetiredName(t *testing.T) {
 	servers := coverage.Compute(
 		[]*tool_call.Call{
-			coverageCall("mcp__alfa__old_name", "2026-08-20T10:00:00Z"),
+			coverage_tester.Call("mcp__alfa__old_name", "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{"alfa": {"new_name"}},
 		map[string]string{"alfa": "pkg/tool/goalfad"},
 		map[string]bool{"alfa": true},
 		nil,
-		coverageNow(),
+		coverage_tester.Now(),
 	)
 	s := servers[0]
 	assert.Integer(t, 1, s.Registered)
@@ -73,7 +81,7 @@ func TestCoverageComputeConfiguredOnly(t *testing.T) {
 		map[string]string{},
 		map[string]bool{"github": true},
 		nil,
-		coverageNow(),
+		coverage_tester.Now(),
 	)
 	assert.Integer(t, 1, len(servers))
 	assert.String(t, "github", servers[0].Name)
@@ -84,14 +92,14 @@ func TestCoverageComputeConfiguredOnly(t *testing.T) {
 func TestCoverageComputeIgnoresOtherTools(t *testing.T) {
 	servers := coverage.Compute(
 		[]*tool_call.Call{
-			coverageCall("Bash", "2026-08-20T10:00:00Z"),
-			coverageCall(constant.ReadTool, "2026-08-20T10:00:00Z"),
+			coverage_tester.Call("Bash", "2026-08-20T10:00:00Z"),
+			coverage_tester.Call(constant.ReadTool, "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{},
 		map[string]string{},
 		map[string]bool{},
 		nil,
-		coverageNow(),
+		coverage_tester.Now(),
 	)
 	assert.Integer(t, 0, len(servers))
 }
@@ -99,18 +107,21 @@ func TestCoverageComputeIgnoresOtherTools(t *testing.T) {
 func TestCoverageComputeAliasFold(t *testing.T) {
 	servers := coverage.Compute(
 		[]*tool_call.Call{
-			coverageCall("mcp__alfa__list_items", "2026-08-20T10:00:00Z"),
-			coverageCall(
+			coverage_tester.Call(
+				"mcp__alfa__list_items",
+				"2026-08-20T10:00:00Z",
+			),
+			coverage_tester.Call(
 				"mcp__claude_ai_Alfa__list_items",
 				"2026-08-20T11:00:00Z",
 			),
-			coverageCall("mcp__bravo__inspect", "2026-08-20T10:00:00Z"),
+			coverage_tester.Call("mcp__bravo__inspect", "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{"alfa": {"list_items"}},
 		map[string]string{"alfa": "pkg/tool/goalfad"},
 		map[string]bool{"alfa": true},
 		map[string]string{"claude_ai_Alfa": "alfa"},
-		coverageNow(),
+		coverage_tester.Now(),
 	)
 	assert.Integer(t, 2, len(servers))
 	assert.String(t, "alfa", servers[0].Name)
@@ -123,13 +134,13 @@ func TestCoverageComputeAliasFold(t *testing.T) {
 func TestCoverageComputeUnconfiguredObserved(t *testing.T) {
 	servers := coverage.Compute(
 		[]*tool_call.Call{
-			coverageCall("mcp__gone__old_tool", "2026-08-20T10:00:00Z"),
+			coverage_tester.Call("mcp__gone__old_tool", "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{},
 		map[string]string{},
 		map[string]bool{},
 		nil,
-		coverageNow(),
+		coverage_tester.Now(),
 	)
 	assert.Integer(t, 1, len(servers))
 	assert.String(t, "gone", servers[0].Name)
@@ -166,7 +177,7 @@ func TestTranscriptCacheParity(t *testing.T) {
 	base := t.TempDir()
 	system.WriteFile(
 		filepath.Join(base, "alfa.jsonl"),
-		[]byte(transcriptLine("Bash", "2026-08-20T10:00:00Z")),
+		[]byte(coverage_tester.TranscriptLine("Bash", "2026-08-20T10:00:00Z")),
 		0644,
 	)
 	c := transcript_cache.New(claude.NewDirectory(base))
@@ -183,7 +194,7 @@ func TestTranscriptCacheGrownFile(t *testing.T) {
 	path := filepath.Join(base, "alfa.jsonl")
 	system.WriteFile(
 		path,
-		[]byte(transcriptLine("Bash", "2026-08-20T10:00:00Z")),
+		[]byte(coverage_tester.TranscriptLine("Bash", "2026-08-20T10:00:00Z")),
 		0644,
 	)
 	c := transcript_cache.New(claude.NewDirectory(base))
@@ -191,7 +202,10 @@ func TestTranscriptCacheGrownFile(t *testing.T) {
 	f, e := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
 	assert.Nil(t, e)
 	_, e = f.WriteString(
-		transcriptLine(constant.ReadTool, "2026-08-20T11:00:00Z"),
+		coverage_tester.TranscriptLine(
+			constant.ReadTool,
+			"2026-08-20T11:00:00Z",
+		),
 	)
 	assert.Nil(t, e)
 	errors.PanicClose(f)
@@ -202,7 +216,7 @@ func TestTranscriptCacheDelete(t *testing.T) {
 	base := t.TempDir()
 	system.WriteFile(
 		filepath.Join(base, "alfa.jsonl"),
-		[]byte(transcriptLine("Bash", "2026-08-20T10:00:00Z")),
+		[]byte(coverage_tester.TranscriptLine("Bash", "2026-08-20T10:00:00Z")),
 		0644,
 	)
 	c := transcript_cache.New(claude.NewDirectory(base))
@@ -216,7 +230,7 @@ func TestFiveHourResetTextMinutes(t *testing.T) {
 	assert.String(
 		t,
 		"in 33 min",
-		result(time.Now().Add(33*time.Minute+time.Second)).FiveHourResetText(),
+		usage_tester.Result(time.Now().Add(33*time.Minute+time.Second)).FiveHourResetText(),
 	)
 }
 
@@ -224,7 +238,7 @@ func TestFiveHourResetTextHours(t *testing.T) {
 	assert.String(
 		t,
 		"in 2 hr 5 min",
-		result(
+		usage_tester.Result(
 			time.Now().Add(2*time.Hour+5*time.Minute+time.Second),
 		).FiveHourResetText(),
 	)
@@ -234,28 +248,36 @@ func TestFiveHourResetTextPassed(t *testing.T) {
 	assert.String(
 		t,
 		"now",
-		result(time.Now().Add(-time.Minute)).FiveHourResetText(),
+		usage_tester.Result(time.Now().Add(-time.Minute)).FiveHourResetText(),
 	)
 }
 
 func TestSevenDayResetText(t *testing.T) {
-	assert.String(t, "Wed 21:00", result(time.Now()).SevenDayResetText())
+	assert.String(
+		t,
+		"Wed 21:00",
+		usage_tester.Result(time.Now()).SevenDayResetText(),
+	)
 }
 
 func TestHasSession(t *testing.T) {
-	assert.True(t, result(time.Now()).HasSession())
+	assert.True(t, usage_tester.Result(time.Now()).HasSession())
 }
 
 func TestHasNoSessionWithoutReset(t *testing.T) {
-	assert.False(t, result(time.Time{}).HasSession())
+	assert.False(t, usage_tester.Result(time.Time{}).HasSession())
 }
 
 func TestHasFable(t *testing.T) {
-	assert.True(t, result(time.Now()).HasFable())
+	assert.True(t, usage_tester.Result(time.Now()).HasFable())
 }
 
 func TestFableResetTextFallsBackToText(t *testing.T) {
-	assert.String(t, "Wed 8:59 PM", result(time.Now()).FableResetText())
+	assert.String(
+		t,
+		"Wed 8:59 PM",
+		usage_tester.Result(time.Now()).FableResetText(),
+	)
 }
 
 func TestFableResetTextPrefersTimestamp(t *testing.T) {

@@ -6,7 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -15,7 +17,7 @@ func TestUnknownIssueIsAnsweredQuietly(t *testing.T) {
 	assert.String(
 		t,
 		"issue not found: 100",
-		servedTools(t, service_tester.NewSource(t), m).MustCallToolError(
+		daemon_tester.ServedTools(t, service_tester.NewSource(t), m).MustCallToolError(
 			constant.GetIssue,
 			map[string]any{"identifier": "100"},
 		),
@@ -27,7 +29,7 @@ func TestForbiddenSearchIsAnsweredQuietly(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("sentry: %s", "token lacks event:read")
 	m := memory.New()
-	servedTools(t, c, m).MustCallToolError(
+	daemon_tester.ServedTools(t, c, m).MustCallToolError(
 		constant.SearchIssues,
 		map[string]any{},
 	)
@@ -38,15 +40,18 @@ func TestUnclassifiedFailureIsCaptured(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = errors.New("sentry answered nonsense")
 	m := memory.New()
-	servedTools(t, c, m).MustCallToolError(constant.Whoami, map[string]any{})
+	daemon_tester.ServedTools(t, c, m).MustCallToolError(
+		constant.Whoami,
+		map[string]any{},
+	)
 	assert.Count(t, 1, m.Events())
 }
 
 func TestOutageIsAnsweredWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
-	s := servedTools(t, c, m)
+	s := daemon_tester.ServedTools(t, c, m)
 
 	for range 2 {
 		s.MustCallToolError(constant.Whoami, map[string]any{})

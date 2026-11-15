@@ -1,7 +1,7 @@
 package scope_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ func HelperWithoutCleanup(
 	directory string,
 ) {
 	t.Helper()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"helper/server.go",

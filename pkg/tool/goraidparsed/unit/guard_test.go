@@ -1,11 +1,12 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fake_parser"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/mock_parser"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/base"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	v := mounted(t, fake_parser.New(0, nil))
+	v := base.New(t, mock_parser.New(0, nil))
 	v.VerifyBase(t)
 }

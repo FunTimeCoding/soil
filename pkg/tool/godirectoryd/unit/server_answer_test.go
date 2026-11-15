@@ -4,16 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
 
 func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource()
-	c.Failure = refusedConnection()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
-	s := restClient(t, c, m)
+	s := base.Rest(t, base.NewWith(t, c, m))
 
 	for range 2 {
 		r, e := s.GetUserWithResponse(t.Context())
@@ -32,7 +34,9 @@ func TestRefusedServiceAccountIsAnsweredAsForbidden(t *testing.T) {
 		"invalid credentials",
 	)
 	m := memory.New()
-	r, e := restClient(t, c, m).GetGroupWithResponse(t.Context())
+	r, e := base.Rest(t, base.NewWith(t, c, m)).GetGroupWithResponse(
+		t.Context(),
+	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusForbidden, r.StatusCode())
 	assert.NotNil(t, r.JSON403)

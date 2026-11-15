@@ -14,7 +14,7 @@ func Undeclared(
 		concern.NewLine(
 			constant.DeadPointerKey,
 			pointer.Message(
-				constant.VerdictDead,
+				constant.DeadPointerKey,
 				constant.UndeclaredSymbolHint,
 			),
 			path,

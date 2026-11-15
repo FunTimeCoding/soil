@@ -11,6 +11,14 @@ func (c *Client) CreateDraftPage(
 	title string,
 	markdown string,
 ) (*page.Page, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	if e := c.failures.Caller(); e != nil {
+		return nil, e
+	}
+
 	return c.createWithStatus(
 		spaceIdentifier,
 		parentIdentifier,

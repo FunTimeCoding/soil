@@ -2,12 +2,13 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/legacy_store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"testing"
 )
 
 func TestSummarySessionMigrationKeepsNewestRow(t *testing.T) {
-	s := store_tester.NewOnFile(t, seedDuplicateSummaries(t))
+	s := store_tester.NewOnFile(t, legacy_store.DuplicateSummaries(t))
 	summaries := s.ListSummaries()
 	assert.Count(t, 1, summaries)
 	assert.String(t, "rewrite", summaries[0].Body)

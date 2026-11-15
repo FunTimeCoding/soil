@@ -19,5 +19,5 @@ func (v *Result) Line() string {
 		marker = fmt.Sprintf(constant.UnexpectedMarker, v.Expect)
 	}
 
-	return fmt.Sprintf(constant.LineFormat, v.Name, v.Kind, detail, marker)
+	return fmt.Sprintf(constant.LineFormat, v.Name, v.Status, detail, marker)
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/git/changed"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gohook"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
@@ -16,7 +17,8 @@ import (
 
 func TestLoadToolPath(t *testing.T) {
 	root := t.TempDir()
-	write(
+	system_tester.Write(
+		t,
 		root,
 		constant.ToolFile,
 		"pre-push:\n  - paths: ['**/*.go']\n    run: task lint\n  - run: task always\n",
@@ -32,8 +34,18 @@ func TestLoadToolPath(t *testing.T) {
 
 func TestLoadRootBeatsTool(t *testing.T) {
 	root := t.TempDir()
-	write(root, constant.RootFile, "pre-push:\n  - run: root\n")
-	write(root, constant.ToolFile, "pre-push:\n  - run: tool\n")
+	system_tester.Write(
+		t,
+		root,
+		constant.RootFile,
+		"pre-push:\n  - run: root\n",
+	)
+	system_tester.Write(
+		t,
+		root,
+		constant.ToolFile,
+		"pre-push:\n  - run: tool\n",
+	)
 	c := configuration.Load(root)
 	assert.String(t, filepath.Join(root, ".gohook.yaml"), c.Path)
 	assert.String(t, "root", c.Hooks["pre-push"][0].Run)
@@ -46,19 +58,25 @@ func TestLoadMissingPanics(t *testing.T) {
 
 func TestLoadUnknownHookPanics(t *testing.T) {
 	root := t.TempDir()
-	write(root, constant.RootFile, "pre-psuh:\n  - run: x\n")
+	system_tester.Write(t, root, constant.RootFile, "pre-psuh:\n  - run: x\n")
 	assert.Panic(t, func() { configuration.Load(root) })
 }
 
 func TestLoadMissingRunPanics(t *testing.T) {
 	root := t.TempDir()
-	write(root, constant.RootFile, "pre-push:\n  - paths: [a/]\n")
+	system_tester.Write(
+		t,
+		root,
+		constant.RootFile,
+		"pre-push:\n  - paths: [a/]\n",
+	)
 	assert.Panic(t, func() { configuration.Load(root) })
 }
 
 func TestHookNamesSorted(t *testing.T) {
 	root := t.TempDir()
-	write(
+	system_tester.Write(
+		t,
 		root,
 		constant.RootFile,
 		"pre-push:\n  - run: a\npre-commit:\n  - run: b\n",

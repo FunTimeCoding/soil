@@ -11,10 +11,7 @@ import (
 )
 
 func TestApplyPatternDryRun(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, apply, e := s.Pattern.ApplyPattern(
 		t.Context(),
@@ -40,10 +37,7 @@ func TestApplyPatternDryRun(t *testing.T) {
 }
 
 func TestApplyPatternPartial(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, apply, e := s.Pattern.ApplyPattern(
 		t.Context(),
@@ -68,10 +62,7 @@ func TestApplyPatternPartial(t *testing.T) {
 }
 
 func TestApplyPatternAllOrNothing(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, apply, e := s.Pattern.ApplyPattern(
 		t.Context(),
@@ -96,10 +87,7 @@ func TestApplyPatternAllOrNothing(t *testing.T) {
 }
 
 func TestApplyPatternImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, apply, e := s.Pattern.ApplyPattern(
 		t.Context(),

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -37,6 +38,9 @@ func TestRosterAfterComplete(t *testing.T) {
 	a.CheckLive()
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	r := a.CheckLive()
-	completions := clientKindEntries(r.Entries, constant.QueueSessionComplete)
+	completions := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionComplete,
+	)
 	assert.True(t, len(completions) > 0)
 }

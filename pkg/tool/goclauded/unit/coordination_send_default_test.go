@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/model_context_tester"
 	"testing"
 )
 
@@ -119,14 +120,14 @@ func TestDeliveryDescriptionWithoutChannelPromise(t *testing.T) {
 	assert.StringContains(
 		t,
 		"immediate (default) wakes each named recipient now; one without a channel gets it with their next prompt.",
-		sendToolNotation(t, a.ListTools()),
+		model_context_tester.SendToolNotation(t, a.ListTools()),
 	)
 }
 
 func TestDeliveryDescriptionUnderChannelPromise(t *testing.T) {
 	s := base.NewWithChannelAlways(t)
 	a := s.NewSession(t)
-	tool := sendToolNotation(t, a.ListTools())
+	tool := model_context_tester.SendToolNotation(t, a.ListTools())
 	assert.StringContains(
 		t,
 		"immediate (default) wakes each named recipient now. queued arrives",

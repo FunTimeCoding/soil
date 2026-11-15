@@ -9,33 +9,39 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/unit/failing_dialer"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
+	"net/http"
 	"testing"
 )
 
 func TestDoBytesReturnsBody(t *testing.T) {
-	s := newStatusServer(t)
+	s := upstream_server.New(t, upstream_server.WithAnswer("alfa"))
 	b, e := web.DoBytes(s.Client(), web.NewGet(join.Empty(s.URL, "/okay")))
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", string(b))
 }
 
 func TestDoClassifiesNotFound(t *testing.T) {
-	s := newStatusServer(t)
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusNotFound))
 	_, e := web.Do(s.Client(), web.NewGet(join.Empty(s.URL, "/missing")))
 	assert.True(t, not_found.Is(e))
 }
 
 func TestDoClassifiesOtherStatusAsUnexpected(t *testing.T) {
-	s := newStatusServer(t)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+	)
 	_, e := web.Do(s.Client(), web.NewGet(join.Empty(s.URL, "/broken")))
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 500", e.Error())
 }
 
 func TestDoReadsLostHttp2ConnectionAsDropped(t *testing.T) {
-	c, _ := newFailingClient(errors.New(errorsConstant.ConnectionLost))
+	d := failing_dialer.New(errors.New(errorsConstant.ConnectionLost))
 	_, e := web.Do(
-		c,
+		d.Client(),
 		web.NewGet("https://foxtrot.example/wiki/rest/api/content/search"),
 	)
 	assert.True(t, dropped.Is(e))
@@ -43,7 +49,7 @@ func TestDoReadsLostHttp2ConnectionAsDropped(t *testing.T) {
 }
 
 func TestDoLeavesQueryOutOfTransportFailures(t *testing.T) {
-	s := newStatusServer(t)
+	s := upstream_server.New(t)
 	locator := join.Empty(s.URL, "/okay?password=secret")
 	s.Close()
 	_, e := web.Do(s.Client(), web.NewGet(locator))
@@ -52,7 +58,7 @@ func TestDoLeavesQueryOutOfTransportFailures(t *testing.T) {
 }
 
 func TestDoLeavesQueryOutOfMessages(t *testing.T) {
-	s := newStatusServer(t)
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusNotFound))
 	_, e := web.Do(
 		s.Client(),
 		web.NewGet(join.Empty(s.URL, "/missing?api_key=secret")),

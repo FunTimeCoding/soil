@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost_client_tester"
 	"github.com/mattermost/mattermost/server/public/model"
 	"sync"
 	"testing"
@@ -14,7 +14,7 @@ func TestClearDeletesRootsAndReplies(t *testing.T) {
 	var guard sync.Mutex
 	c := mattermost_client_tester.New(
 		t,
-		threadChannel(
+		mattermost_client_tester.ThreadChannel(
 			&deleted,
 			&guard,
 			&model.Post{Id: "root", UserId: "bot", CreateAt: 1},
@@ -40,7 +40,7 @@ func TestClearOldKeepsNewestAndRecent(t *testing.T) {
 	cutoff := time.UnixMilli(100)
 	c := mattermost_client_tester.New(
 		t,
-		threadChannel(
+		mattermost_client_tester.ThreadChannel(
 			&deleted,
 			&guard,
 			&model.Post{Id: "oldest", UserId: "bot", CreateAt: 10},

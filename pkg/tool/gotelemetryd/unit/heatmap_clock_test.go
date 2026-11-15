@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
@@ -11,7 +12,7 @@ import (
 )
 
 func TestHeatmapWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, clock_tester.Window)
 	assert.FatalOnError(
 		t,
 		s.Store.Create(
@@ -21,7 +22,7 @@ func TestHeatmapWindowRunsOnServiceClock(t *testing.T) {
 				Actor:     "tester",
 				Outcome:   constant.OutcomeSuccess,
 				Kind:      "call",
-				CreatedAt: windowNow().Add(-time.Hour),
+				CreatedAt: clock_tester.Window().Add(-time.Hour),
 			},
 		),
 	)

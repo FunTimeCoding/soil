@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 	"time"
@@ -48,7 +48,11 @@ func TestHalfHourQuietIsNoTimeout(t *testing.T) {
 	s.Store.Advance(30 * time.Minute)
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
-	assert.Count(t, 0, fixture.KindEntries(r.Entries, constant.QueueTimeout))
+	assert.Count(
+		t,
+		0,
+		delivery_tester.KindEntries(r.Entries, constant.QueueTimeout),
+	)
 }
 
 func TestTimeoutIsDeliveredOnce(t *testing.T) {
@@ -62,13 +66,13 @@ func TestTimeoutIsDeliveredOnce(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(first.Entries, constant.QueueTimeout),
+		delivery_tester.KindEntries(first.Entries, constant.QueueTimeout),
 	)
 	second := s.Check("session-1")
 	assert.Count(
 		t,
 		0,
-		fixture.KindEntries(second.Entries, constant.QueueTimeout),
+		delivery_tester.KindEntries(second.Entries, constant.QueueTimeout),
 	)
 }
 

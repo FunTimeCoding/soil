@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"net/http"
 	"testing"
@@ -15,7 +16,7 @@ func TestVirtualMachineCustomFieldRoundTrip(t *testing.T) {
 	x := context.Background()
 	m := service_tester.NewSource(t)
 	m.SeedVirtualMachine("charlie")
-	c := newClient(t, newNetboxServer(t, m, memory.New()))
+	c := base.Rest(t, base.New(t, m, memory.New()))
 	set, e := c.CreateChoiceSetWithResponse(
 		x,
 		client.CreateChoiceSetRequest{
@@ -53,7 +54,7 @@ func TestAnsibleInventoryGroupsByPlaybook(t *testing.T) {
 	m := service_tester.NewSource(t)
 	m.SeedVirtualMachine("charlie")
 	m.SeedVirtualMachine("delta")
-	c := newClient(t, newNetboxServer(t, m, memory.New()))
+	c := base.Rest(t, base.New(t, m, memory.New()))
 	_, e := c.UpdateVirtualMachineWithResponse(
 		x,
 		"charlie",
@@ -87,7 +88,7 @@ func TestAnsibleInventoryGroupsByPlaybook(t *testing.T) {
 
 func TestCustomFieldOnMissingChoiceSetIsNotFound(t *testing.T) {
 	r := memory.New()
-	c := newClient(t, newNetboxServer(t, service_tester.NewSource(t), r))
+	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
 	response, e := c.CreateCustomFieldWithResponse(
 		context.Background(),
 		client.CreateCustomFieldRequest{Name: "bravo", ChoiceSet: "alfa"},
@@ -100,7 +101,7 @@ func TestCustomFieldOnMissingChoiceSetIsNotFound(t *testing.T) {
 func TestSetVirtualCustomFieldTool(t *testing.T) {
 	m := service_tester.NewSource(t)
 	m.SeedVirtualMachine("charlie")
-	o := newNetboxServer(t, m, memory.New()).Connect(t)
+	o := base.New(t, m, memory.New()).Connect(t)
 	defer o.Close()
 	result := o.MustCallToolNotation(
 		constant.SetVirtualCustomField,

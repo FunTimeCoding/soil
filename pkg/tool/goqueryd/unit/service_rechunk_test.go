@@ -2,11 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/rechunk_tester"
 	"testing"
 )
 
 func TestRechunkLeavesMatchingEmbeddings(t *testing.T) {
-	v, s := rechunkService(t, 0)
+	v, s := rechunk_tester.New(t, 0)
 	documents, e := v.Rechunk()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, documents)
@@ -14,7 +15,7 @@ func TestRechunkLeavesMatchingEmbeddings(t *testing.T) {
 }
 
 func TestRechunkDeletesEmbeddingsAtStalePositions(t *testing.T) {
-	v, s := rechunkService(t, 7)
+	v, s := rechunk_tester.New(t, 7)
 	documents, e := v.Rechunk()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, documents)

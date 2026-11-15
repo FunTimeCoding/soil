@@ -20,12 +20,12 @@ func checkFile(
 			}
 
 			if x, okay := n.(*ast.IfStmt); okay &&
-				judge(p, results, ifClasses(p, x), x.Body.List, x.Cond.Pos()) {
+				checkBranch(p, results, ifClasses(p, x), x.Body.List, x.Cond.Pos()) {
 				guarded = append(guarded, x.Body)
 			}
 
 			if x, okay := n.(*ast.CaseClause); okay && len(x.List) > 0 &&
-				judge(p, results, listClasses(p, x.List), x.Body, x.Pos()) {
+				checkBranch(p, results, listClasses(p, x.List), x.Body, x.Pos()) {
 				guarded = append(guarded, x)
 			}
 

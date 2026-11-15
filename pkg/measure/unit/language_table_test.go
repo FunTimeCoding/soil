@@ -35,7 +35,7 @@ func TestTableExtensionsUnique(t *testing.T) {
 	}
 }
 
-func TestTableCensus(t *testing.T) {
+func TestTableLanguageByPath(t *testing.T) {
 	r := registry.NewDefault()
 	assert.String(t, "PHP", r.ByPath("index.php").Name)
 	assert.String(t, "Terraform", r.ByPath("main.tf").Name)

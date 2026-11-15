@@ -1,3 +1,0 @@
-package unit
-
-func Fixture() {}

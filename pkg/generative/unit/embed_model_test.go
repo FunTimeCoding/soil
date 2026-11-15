@@ -2,68 +2,54 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/generative/openai"
+	"github.com/funtimecoding/soil/pkg/generative/unit/embedding_tester"
+	"github.com/funtimecoding/soil/pkg/generative/unit/ollama_tester"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
-	"net/http"
-	"net/http/httptest"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
 func TestOpenAIClientSendsItsModel(t *testing.T) {
-	var model string
-	s := httptest.NewServer(
-		http.HandlerFunc(
-			func(
-				w http.ResponseWriter,
-				r *http.Request,
-			) {
-				model = sentModel(r)
-				w.Header().Set(webConstant.ContentType, webConstant.Object)
-				_, e := w.Write(
-					[]byte(
-						`{"object":"list","data":[{"object":"embedding","index":0,"embedding":[0.5]}]}`,
-					),
-				)
-				errors.PanicOnError(e)
-			},
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(
+			`{"object":"list","data":[{"object":"embedding","index":0,"embedding":[0.5]}]}`,
 		),
+		upstream_server.WithObject(),
 	)
-	defer s.Close()
 	c := openai.NewBase(join.Empty(s.URL, "/v1"), "nomic-embed-text-v1.5.f16")
 	defer c.Close()
 	_, e := c.Embed(t.Context(), []string{"alfa"})
 	assert.FatalOnError(t, e)
-	assert.String(t, "nomic-embed-text-v1.5.f16", model)
+	assert.String(t, "nomic-embed-text-v1.5.f16", embedding_tester.Model(s))
 }
 
 func TestOllamaClientSendsItsModel(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"embeddings":[[0.5]]}`)
-	host, port := upstream_tester.HostPort(t, s.URL)
-	c := ollama.New(
-		ollama.WithHost(host),
-		ollama.WithPort(port),
-		ollama.WithEmbedModel("nomic-embed-text:v1.5"),
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"embeddings":[[0.5]]}`),
 	)
-	defer c.Close()
-	_, e := c.Embed(t.Context(), []string{"alfa"})
+	_, e := ollama_tester.New(
+		t,
+		s.URL,
+		ollama.WithEmbedModel("nomic-embed-text:v1.5"),
+	).Embed(t.Context(), []string{"alfa"})
 	assert.FatalOnError(t, e)
-	assert.String(t, "nomic-embed-text:v1.5", sentModel(last()))
+	assert.String(t, "nomic-embed-text:v1.5", embedding_tester.Model(s))
 }
 
 func TestOllamaClientWithoutModelSendsDefault(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"embeddings":[[0.5]]}`)
-	host, port := upstream_tester.HostPort(t, s.URL)
-	c := ollama.New(ollama.WithHost(host), ollama.WithPort(port))
-	defer c.Close()
-	_, e := c.Embed(t.Context(), []string{"alfa"})
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"embeddings":[[0.5]]}`),
+	)
+	_, e := ollama_tester.New(t, s.URL).Embed(t.Context(), []string{"alfa"})
 	assert.FatalOnError(t, e)
-	assert.String(t, "nomic-embed-text", sentModel(last()))
+	assert.String(t, "nomic-embed-text", embedding_tester.Model(s))
 }
 
 func TestEmbedModelDefaultsPerScheme(t *testing.T) {

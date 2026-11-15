@@ -9,8 +9,8 @@ import (
 )
 
 func TestDocumentIsEmbeddedWithItsModelsDocumentPrompt(t *testing.T) {
-	m := newEmbedder(t)
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -26,15 +26,19 @@ func TestDocumentIsEmbeddedWithItsModelsDocumentPrompt(t *testing.T) {
 }
 
 func TestQueryIsEmbeddedWithItsModelsQueryPrompt(t *testing.T) {
-	m := newEmbedder(t)
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	_, e := v.Search(t.Context(), search_option.New("zulu", 10))
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"search_query: zulu"}, m.Inputs())
 }
 
 func TestUnknownEmbedModelNamesKnownOnes(t *testing.T) {
-	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
+	o := service_tester.NewOption(
+		t,
+		service_tester.NewEmbedder(t),
+		service_tester.NewReranker(t),
+	)
 	o.EmbedModel = "unknown"
 	assert.PanicContains(
 		t,

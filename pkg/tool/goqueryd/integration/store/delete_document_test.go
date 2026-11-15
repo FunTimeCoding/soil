@@ -4,14 +4,15 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/store_tester"
 	"testing"
 )
 
 func TestDeleteDocument(t *testing.T) {
-	s, o := openTestStore(t)
+	s, o := store_tester.Open(t)
 	assert.FatalOnError(
 		t,
-		pushTestDocument(
+		store_tester.Push(
 			s,
 			o,
 			"notes",
@@ -28,17 +29,17 @@ func TestDeleteDocument(t *testing.T) {
 }
 
 func TestDeleteDocumentNotFound(t *testing.T) {
-	s, _ := openTestStore(t)
+	s, _ := store_tester.Open(t)
 	deleted, e := s.DeleteDocument("notes", "nonexistent.md")
 	assert.FatalOnError(t, e)
 	assert.False(t, deleted)
 }
 
 func TestDeleteDocumentCleansOrphanedContent(t *testing.T) {
-	s, o := openTestStore(t)
+	s, o := store_tester.Open(t)
 	assert.FatalOnError(
 		t,
-		pushTestDocument(
+		store_tester.Push(
 			s,
 			o,
 			"notes",
@@ -53,15 +54,15 @@ func TestDeleteDocumentCleansOrphanedContent(t *testing.T) {
 }
 
 func TestDeleteDocumentPreservesSharedContent(t *testing.T) {
-	s, o := openTestStore(t)
+	s, o := store_tester.Open(t)
 	body := "# Shared\n\nTwo documents share this body.\n"
 	assert.FatalOnError(
 		t,
-		pushTestDocument(s, o, "first", "shared.md", body, ""),
+		store_tester.Push(s, o, "first", "shared.md", body, ""),
 	)
 	assert.FatalOnError(
 		t,
-		pushTestDocument(s, o, "second", "shared.md", body, ""),
+		store_tester.Push(s, o, "second", "shared.md", body, ""),
 	)
 	_, e := s.DeleteDocument("first", "shared.md")
 	assert.FatalOnError(t, e)
@@ -71,10 +72,10 @@ func TestDeleteDocumentPreservesSharedContent(t *testing.T) {
 }
 
 func TestDeleteDocumentRemovesFromSearch(t *testing.T) {
-	s, o := openTestStore(t)
+	s, o := store_tester.Open(t)
 	assert.FatalOnError(
 		t,
-		pushTestDocument(
+		store_tester.Push(
 			s,
 			o,
 			"notes",

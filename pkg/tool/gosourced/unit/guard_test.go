@@ -12,6 +12,6 @@ func TestGuard(t *testing.T) {
 	c := s.Server
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, "/api/diff")
-	c.VerifyGuarded(t, "/api/census")
+	c.VerifyGuarded(t, "/api/usage")
 	c.VerifyModelContext(t)
 }

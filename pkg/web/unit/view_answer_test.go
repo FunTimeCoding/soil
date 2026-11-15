@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/unit/view_tester"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,7 +16,7 @@ import (
 func TestQuietPanicRendersWithoutReport(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
-	recoveryView().Recovery(r)(
+	view_tester.New().Recovery(r)(
 		http.HandlerFunc(
 			func(http.ResponseWriter, *http.Request) {
 				panic(unavailable.Format("goalfa unreachable"))
@@ -33,7 +34,7 @@ func TestQuietPanicRendersWithoutReport(t *testing.T) {
 func TestFaultingPanicIsReported(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
-	recoveryView().Recovery(r)(
+	view_tester.New().Recovery(r)(
 		http.HandlerFunc(
 			func(http.ResponseWriter, *http.Request) {
 				panic(errors.New("bravo exploded"))
@@ -49,7 +50,7 @@ func TestFaultingPanicIsReported(t *testing.T) {
 func TestAnswerCarriesStatusOfItsClass(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
-	recoveryView().Answer(
+	view_tester.New().Answer(
 		recorder,
 		httptest.NewRequest(http.MethodPost, constant.RootPath, nil),
 		r,
@@ -63,7 +64,7 @@ func TestAnswerCarriesStatusOfItsClass(t *testing.T) {
 func TestAnswerToFaultIsReported(t *testing.T) {
 	r := memory.New()
 	recorder := httptest.NewRecorder()
-	recoveryView().Answer(
+	view_tester.New().Answer(
 		recorder,
 		httptest.NewRequest(http.MethodPost, constant.RootPath, nil),
 		r,

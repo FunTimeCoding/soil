@@ -2,12 +2,13 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/service"
 	"testing"
 )
 
 func TestParseSearchMapsPathToPackage(t *testing.T) {
-	v := service.ParseSearch(searchOutput())
+	v := service.ParseSearch(constant.FixtureDpkgSearch)
 	assert.String(
 		t,
 		"avahi-daemon",
@@ -17,5 +18,5 @@ func TestParseSearchMapsPathToPackage(t *testing.T) {
 }
 
 func TestParseSearchRefusesNotFoundLine(t *testing.T) {
-	assert.Integer(t, 2, len(service.ParseSearch(searchOutput())))
+	assert.Integer(t, 2, len(service.ParseSearch(constant.FixtureDpkgSearch)))
 }

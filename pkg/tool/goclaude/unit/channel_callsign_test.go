@@ -3,38 +3,51 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 	"time"
 )
 
 func TestAwaitCallsignAsksAgainAfterReleasedHold(t *testing.T) {
-	c := stubServer(
+	s := upstream_server.New(
 		t,
-		`{"callsign":"Ash"}`,
-		http.StatusNoContent,
-		http.StatusNoContent,
-		http.StatusNoContent,
-		http.StatusNoContent,
+		upstream_server.WithStatus(
+			http.StatusNoContent,
+			http.StatusNoContent,
+			http.StatusNoContent,
+			http.StatusNoContent,
+			http.StatusOK,
+		),
+		upstream_server.WithAnswer(`{"callsign":"Ash"}`),
+		upstream_server.WithObject(),
 	)
 	assert.String(
 		t,
 		"Ash",
-		goclaude.AwaitCallsign(c, "session-1", time.Now(), time.Millisecond),
+		goclaude.AwaitCallsign(
+			client_tester.New(t, s.URL),
+			"session-1",
+			time.Now(),
+			time.Millisecond,
+		),
 	)
 }
 
 func TestAwaitCallsignGivesUpAfterRepeatedFailures(t *testing.T) {
-	c := stubServer(
+	s := upstream_server.New(
 		t,
-		`{"callsign":"Ash"}`,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
-		http.StatusInternalServerError,
+		upstream_server.WithStatus(http.StatusInternalServerError),
 	)
 	assert.String(
 		t,
 		"",
-		goclaude.AwaitCallsign(c, "session-1", time.Now(), time.Millisecond),
+		goclaude.AwaitCallsign(
+			client_tester.New(t, s.URL),
+			"session-1",
+			time.Now(),
+			time.Millisecond,
+		),
 	)
 }

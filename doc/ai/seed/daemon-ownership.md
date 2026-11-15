@@ -11,21 +11,10 @@ open work in a seed of its own. An item leaves this seed when it is done.
 
 ## Order
 
-1. A consumer in another repository wraps goclauded's generated client for
-   its own short timeout: the typed client builds its pool only through an
-   unexported constructor, so it needs a timeout or builder constructor
-   first
-2. The bubbletea monitor builds gomonitord's client itself in `New`, so its
+1. The bubbletea monitor builds gomonitord's client itself in `New`, so its
    mock cannot reach the model; a factory would let a test drive claiming
    and releasing without a daemon
-3. Outage tables (`testing.md`, Peer Guard Tests) still owed by goatlassiand,
-   gomattermostd, goclauded and goatlasd, each guarding more than one peer, and
-   by the pooled goalertmanagerd, gobandd, gogitlabd, gopostgresd,
-   goprometheusd, goproxmoxd, gokubernetesd and goterraformd. gobackrestd,
-   godashboardd, gogithubd and gopatrold have no REST or MCP surface to tab.
-   A provisioning runner never started by a table waits forever on `sync`, so
-   gosaltd's and goansibled's tables close it first
-4. Request contexts into the guarded services
+2. Request contexts into the guarded services
    (`error-handling/infrastructure.md`, The guard): calls a caller starts
    still pass `context.Background()` to `go:pkg/peer.Guarded` or
    `Guard.Attempt` at each call, or inside the pooled helper, in
@@ -39,7 +28,7 @@ open work in a seed of its own. An item leaves this seed when it is done.
    refresh, gogithubd's worker, goterraformd's run targets, gomattermostd's
    monitor, notifier and watcher, gosaltd's runner, goalertlogd's recording
    tick and goclauded's reconcile and sweep
-5. The daemon as owner in goanalyze: `unclosed_resource` was taught on a
+3. The daemon as owner in goanalyze: `unclosed_resource` was taught on a
    service owning what it built, so a test seam holding a daemon built from
    finished clients is not flagged. Nor does it see a release the
    constructor registered itself: a tester holding goclauded's test server
@@ -47,12 +36,12 @@ open work in a seed of its own. An item leaves this seed when it is done.
    it, is flagged unless the tester registers the release again. How the
    analyzer learns which type owns is not worked out; a case goes into the
    `unclosed_resource` testdata when it is
-6. `goaudit --daemon` lists no daemon here, but no repository's
+4. `goaudit --daemon` lists no daemon here, but no repository's
    `goaudit.yaml` sets `daemon: true`, so the check runs only when asked
-7. goaudit's `error_response_on_non_500` allows 503 too, so its name no
+5. goaudit's `error_response_on_non_500` allows 503 too, so its name no
    longer says what it checks; `missing_capture_fail` is met by
    `answer_message.go` too, yet its text still names `capture_fail.go`
-8. Selection rides on the MCP session of the legacy protocol versions.
+6. Selection rides on the MCP session of the legacy protocol versions.
    Protocol version 2026-07-28 drops protocol-level sessions, so moving to
    it needs another home for the choice
 
@@ -68,13 +57,27 @@ open work in a seed of its own. An item leaves this seed when it is done.
   shared-answers test. `pkg/linkace`'s `FromDaemon` converters and `Format`
   methods have no caller in this module; they stay as exports until a
   consumer outside it is ruled out
-- 59 methods of
-  `github.com/funtimecoding/soil/pkg/netbox/mock_client` answer `nil, nil` -
-  each gains state, the `Failure` check and the per-method one through
-  `github.com/funtimecoding/soil/pkg/failure` when a test needs it. Most of
-  the Proxmox mock's methods ignore `SetFailure`, and 36 method files of
-  `github.com/funtimecoding/soil/pkg/gitlab/mock_client` ignore `Fail` - each
+- Mock methods answering `nil, nil` where the client returns a value, each
+  gaining state when a test needs it: 59 of
+  `github.com/funtimecoding/soil/pkg/netbox/mock_client`, which also gain the
+  `Failure` check and the per-method one through
+  `github.com/funtimecoding/soil/pkg/failure`; `FieldMap`, `User`, `Project`
+  and `MetaIssueType` of the Jira mock
+  (`github.com/funtimecoding/soil/pkg/atlassian/jira/mock_client`); and `Post`,
+  `PostDefault`, `Reply`, `SubmitDialog`, `Team`, `UpdateChannelHeader` and
+  `UploadFile` of the Mattermost mock
+  (`github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client`)
+- Most of the Proxmox mock's methods ignore `SetFailure`, 35 method files of
+  `github.com/funtimecoding/soil/pkg/gitlab/mock_client` ignore `Fail`, and
+  `RequestPowerState`, `ScreenService`, `ScreenSettings`, `Consent`, `Setup`,
+  `EnableListener` and `EnableScreenService` of
+  `github.com/funtimecoding/soil/pkg/band/mock_client` ignore it too - each
   gains it when a test needs it
+- gopostgresd's backup create runs `pg_dump` through the `Dump` seam outside
+  the instance's guard, so a dump during an outage fails on its own error path
+  rather than answering `unavailable`, and does not open the guard
+- A pointer answered `nil, nil` by a mock is mechanically detectable; a
+  goanalyze check on mock methods would replace the list above
 - REST and MCP still decide an expected error with no class differently: MCP's
   `go:pkg/generative/mark/response.AnswerMessage` honours
   `go:pkg/errors/classify.Reportable`, while REST's
@@ -137,6 +140,12 @@ open work in a seed of its own. An item leaves this seed when it is done.
 
 ## Untested
 
+- Tests still pick a guard as `Workers()[i].(*peer.Guard)`, by index and
+  without a checked assertion - soil's service and peer tests; a table expecting
+  `OutageElsewhere` passes with the wrong index, since a healthy guard never
+  opens. Each moves to `go:pkg/web/outage_tester.Guard`, which looks the guard
+  up by peer name. What is left in a repository:
+  `grep -rln 'Workers()\[' --include=*.go pkg/tool/*/unit`
 - goterraformd's downstream guards and goansibled's inventory guard: nothing
   proves the probe loop brings a peer back after a hold-off. Both build
   their guards at the default backoff, so such a test waits out

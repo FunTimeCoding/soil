@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"net/http/httptest"
 	"sync/atomic"
@@ -26,7 +26,7 @@ func TestFlushWaitsForRecordDelivery(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	host, port := upstream_tester.HostPort(t, s.URL)
+	host, port := upstream_server.HostPort(t, s.URL)
 	c := telemetry.New(host, port, true)
 	defer c.Close()
 	c.Record(

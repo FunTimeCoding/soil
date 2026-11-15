@@ -5,23 +5,25 @@ package integration
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/git/repository_tester"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohook/integration/gohook_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestPreCommitThroughGitRefusesFixer(t *testing.T) {
-	clone := installed(
+	clone := gohook_tester.Installed(
 		t,
 		`pre-commit:
   - paths: ['**/*.go']
     run: printf 'package a // fixed\n' > a.go
 `,
 	)
-	write(clone, "a.go", "package a\n")
-	command(clone, "add", "a.go")
-	r := attempt(
+	repository_tester.NewAt(clone).Write("a.go", "package a\n")
+	repository_tester.Command(clone, "add", "a.go")
+	r := gohook_tester.Attempt(
 		clone,
 		nil,
 		"commit",
@@ -41,11 +43,11 @@ func TestPreCommitThroughGitRefusesFixer(t *testing.T) {
 		"package a // fixed\n",
 		system.ReadFileUnsafe(filepath.Join(clone, "a.go")),
 	)
-	command(clone, "add", "a.go")
+	repository_tester.Command(clone, "add", "a.go")
 	assert.Integer(
 		t,
 		0,
-		attempt(
+		gohook_tester.Attempt(
 			clone,
 			nil,
 			"commit",
@@ -57,10 +59,13 @@ func TestPreCommitThroughGitRefusesFixer(t *testing.T) {
 }
 
 func TestCommitMessageThroughGitReceivesArgument(t *testing.T) {
-	clone := installed(t, "commit-msg:\n  - run: grep -q '^[a-z]' {1}\n")
-	write(clone, "b.go", "package b\n")
-	command(clone, "add", "b.go")
-	r := attempt(
+	clone := gohook_tester.Installed(
+		t,
+		"commit-msg:\n  - run: grep -q '^[a-z]' {1}\n",
+	)
+	repository_tester.NewAt(clone).Write("b.go", "package b\n")
+	repository_tester.Command(clone, "add", "b.go")
+	r := gohook_tester.Attempt(
 		clone,
 		nil,
 		"commit",
@@ -73,7 +78,7 @@ func TestCommitMessageThroughGitReceivesArgument(t *testing.T) {
 	assert.Integer(
 		t,
 		0,
-		attempt(
+		gohook_tester.Attempt(
 			clone,
 			nil,
 			"commit",
@@ -85,13 +90,13 @@ func TestCommitMessageThroughGitReceivesArgument(t *testing.T) {
 }
 
 func TestSkipVariableThroughGit(t *testing.T) {
-	clone := installed(t, "pre-commit:\n  - run: exit 1\n")
-	write(clone, "c.go", "package c\n")
-	command(clone, "add", "c.go")
+	clone := gohook_tester.Installed(t, "pre-commit:\n  - run: exit 1\n")
+	repository_tester.NewAt(clone).Write("c.go", "package c\n")
+	repository_tester.Command(clone, "add", "c.go")
 	assert.Integer(
 		t,
 		1,
-		attempt(
+		gohook_tester.Attempt(
 			clone,
 			nil,
 			"commit",
@@ -103,7 +108,7 @@ func TestSkipVariableThroughGit(t *testing.T) {
 	assert.Integer(
 		t,
 		0,
-		attempt(
+		gohook_tester.Attempt(
 			clone,
 			map[string]string{constant.SkipEnvironment: constant.SkipValue},
 			"commit",
@@ -115,7 +120,7 @@ func TestSkipVariableThroughGit(t *testing.T) {
 }
 
 func TestPrePushThroughGitFiltersByPath(t *testing.T) {
-	clone := installed(
+	clone := gohook_tester.Installed(
 		t,
 		`pre-push:
   - paths: [doc/]
@@ -124,9 +129,9 @@ func TestPrePushThroughGitFiltersByPath(t *testing.T) {
     run: touch ran-pkg
 `,
 	)
-	write(clone, "doc/x.md", "x\n")
-	commit(clone, "doc only")
-	assert.Integer(t, 0, attempt(clone, nil, "push", "-q").Exit)
+	repository_tester.NewAt(clone).Write("doc/x.md", "x\n")
+	repository_tester.NewAt(clone).Commit("doc only")
+	assert.Integer(t, 0, gohook_tester.Attempt(clone, nil, "push", "-q").Exit)
 	assert.True(t, system.FileExists(filepath.Join(clone, "ran-doc")))
 	assert.False(t, system.FileExists(filepath.Join(clone, "ran-pkg")))
 }

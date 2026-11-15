@@ -3,16 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestMoveBuildTagCarry(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-build-tag/src"),
-	)
+	d := service_tester.Prepare(t, "move-build-tag/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -28,16 +26,13 @@ func TestMoveBuildTagCarry(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/tagged/hold/hold.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.True(t, strings.HasPrefix(moved, "//go:build local\n\npackage hold"))
 	assert.StringContains(t, "func Flag", moved)
 }
 
 func TestMoveBuildTagMismatchBlocked(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-build-tag/src"),
-	)
+	d := service_tester.Prepare(t, "move-build-tag/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -55,10 +50,7 @@ func TestMoveBuildTagMismatchBlocked(t *testing.T) {
 }
 
 func TestMoveBuildTagMixedSourcesBlocked(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-build-tag/src"),
-	)
+	d := service_tester.Prepare(t, "move-build-tag/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -76,10 +68,7 @@ func TestMoveBuildTagMixedSourcesBlocked(t *testing.T) {
 }
 
 func TestMoveBuildTagSameTagAppend(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-build-tag/src"),
-	)
+	d := service_tester.Prepare(t, "move-build-tag/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -95,7 +84,7 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/home/tagged.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.True(t, strings.HasPrefix(moved, "//go:build local"))
 	assert.Integer(t, 1, strings.Count(moved, "//go:build"))
 	assert.StringContains(t, "func Flag", moved)
@@ -103,10 +92,7 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 }
 
 func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-build-tag/src"),
-	)
+	d := service_tester.Prepare(t, "move-build-tag/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -122,7 +108,7 @@ func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/tagged/hold/hold.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.False(t, strings.Contains(moved, "//go:build"))
 	assert.StringContains(t, "func Plain", moved)
 }

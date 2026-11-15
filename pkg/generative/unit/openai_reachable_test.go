@@ -2,44 +2,31 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/openai"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
-func TestOpenAIServerThatListsItsModelsIsReachable(t *testing.T) {
-	var path string
-	s := httptest.NewServer(
-		http.HandlerFunc(
-			func(
-				w http.ResponseWriter,
-				r *http.Request,
-			) {
-				path = r.URL.Path
-				w.Header().Set(webConstant.ContentType, webConstant.Object)
-				_, e := w.Write([]byte(`{"object":"list","data":[]}`))
-				errors.PanicOnError(e)
-			},
-		),
+func TestOpenAIServerListingModelsReachable(t *testing.T) {
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"object":"list","data":[]}`),
+		upstream_server.WithObject(),
 	)
-	defer s.Close()
 	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
 	defer c.Close()
 	assert.FatalOnError(t, c.Reachable(t.Context()))
-	assert.String(t, "/v1/models", path)
+	assert.String(t, "/v1/models", s.Last().URL.Path)
 }
 
-func TestOpenAIServerThatRefusesIsNotReachable(t *testing.T) {
-	s, _ := upstream_tester.New(
+func TestUnauthorizedOpenAIServerUnreachable(t *testing.T) {
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"error":{"message":"bad key"}}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(`{"error":{"message":"bad key"}}`),
 	)
 	c := openai.NewBase(join.Empty(s.URL, "/v1"), constant.OpenAIEmbedModel)
 	defer c.Close()

@@ -18,11 +18,7 @@ func TestSearchPartialWordMatches(t *testing.T) {
 	_, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	target := "/search?query=scr"
-	assert.StringContains(
-		t,
-		"scripted rewrites",
-		body(t, s.Server, target, false),
-	)
+	assert.StringContains(t, "scripted rewrites", s.Body(t, target))
 }
 
 func TestSearchOmitsHiddenMemories(t *testing.T) {
@@ -42,8 +38,10 @@ func TestSearchOmitsHiddenMemories(t *testing.T) {
 	assert.FatalOnError(t, f)
 	target := "/search?query=scr"
 
-	for _, extended := range []bool{false, true} {
-		page := body(t, s.Server, target, extended)
+	for _, page := range []string{
+		s.Body(t, target),
+		s.ExtendedBody(t, target),
+	} {
 		assert.StringContains(t, "scripted reads", page)
 		assert.True(t, !strings.Contains(page, "scripted rewrites"))
 		assert.True(t, !strings.Contains(page, "private"))
@@ -53,14 +51,14 @@ func TestSearchOmitsHiddenMemories(t *testing.T) {
 func TestSearchFragmentOmitsPageChrome(t *testing.T) {
 	s := base.New(t)
 	target := "/search?query=scr"
-	assert.True(t, !strings.Contains(body(t, s.Server, target, true), "<html"))
-	assert.StringContains(t, "<html", body(t, s.Server, target, false))
+	assert.True(t, !strings.Contains(s.ExtendedBody(t, target), "<html"))
+	assert.StringContains(t, "<html", s.Body(t, target))
 }
 
 func TestSearchPageCarriesLiveWiring(t *testing.T) {
 	s := base.New(t)
 	target := "/search"
-	page := body(t, s.Server, target, false)
+	page := s.Body(t, target)
 	assert.StringContains(t, `hx-trigger="input delay:200ms, submit"`, page)
 	assert.StringContains(t, `hx-target="#search-results"`, page)
 	assert.StringContains(t, `hx-push-url="true"`, page)
@@ -78,6 +76,6 @@ func TestSearchMarksStemmedMatchInSnippet(t *testing.T) {
 	assert.StringContains(
 		t,
 		`kept <mark class="highlight">rowing</mark> home`,
-		body(t, s.Server, "/search?query=rowed", true),
+		s.ExtendedBody(t, "/search?query=rowed"),
 	)
 }

@@ -5,7 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck"
+	"github.com/funtimecoding/soil/pkg/tool/gocheck/integration/check_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/option"
 	gosourcedConstant "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"path/filepath"
@@ -14,10 +16,10 @@ import (
 )
 
 func TestDelegatedCheckMatchesLocalRun(t *testing.T) {
-	root := stackModule(t)
+	root := check_tester.StackModule(t)
 	i := inventory.New()
 	i.Add("example", root)
-	servedSource(t, i)
+	check_tester.ServeSource(t, i)
 	local := option.New()
 	local.Root = root
 	local.Index = t.TempDir()
@@ -34,10 +36,10 @@ func TestDelegatedCheckMatchesLocalRun(t *testing.T) {
 }
 
 func TestDelegatedFixCommitsThroughDaemon(t *testing.T) {
-	root := stackModule(t)
+	root := check_tester.StackModule(t)
 	i := inventory.New()
 	i.Add("example", root)
-	servedSource(t, i)
+	check_tester.ServeSource(t, i)
 	o := option.New()
 	o.Root = root
 	o.Fix = true
@@ -53,16 +55,16 @@ func TestDelegatedFixCommitsThroughDaemon(t *testing.T) {
 }
 
 func TestDelegatedCheckSeesChangeBetweenChecks(t *testing.T) {
-	root := stackModule(t)
+	root := check_tester.StackModule(t)
 	i := inventory.New()
 	i.Add("example", root)
-	servedSource(t, i)
+	check_tester.ServeSource(t, i)
 	first := option.New()
 	first.Root = root
 	before, _, e := gocheck.Delegate(first)
 	assert.FatalOnError(t, e)
-	assert.True(t, changes(before, "pkg/spacing/alfa.go"))
-	testutil.WriteFile(
+	assert.True(t, check_tester.Changes(before, "pkg/spacing/alfa.go"))
+	system_tester.Write(
 		t,
 		root,
 		"pkg/spacing/alfa.go",
@@ -72,13 +74,13 @@ func TestDelegatedCheckSeesChangeBetweenChecks(t *testing.T) {
 	second.Root = root
 	after, _, f := gocheck.Delegate(second)
 	assert.FatalOnError(t, f)
-	assert.False(t, changes(after, "pkg/spacing/alfa.go"))
+	assert.False(t, check_tester.Changes(after, "pkg/spacing/alfa.go"))
 }
 
 func TestDelegateDeclinesRootOutsideInventory(t *testing.T) {
-	servedSource(t, inventory.New())
+	check_tester.ServeSource(t, inventory.New())
 	o := option.New()
-	o.Root = stackModule(t)
+	o.Root = check_tester.StackModule(t)
 	_, delegated, e := gocheck.Delegate(o)
 	assert.FatalOnError(t, e)
 	assert.False(t, delegated)

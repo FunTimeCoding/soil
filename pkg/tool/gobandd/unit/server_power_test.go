@@ -5,12 +5,13 @@ import (
 	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
 func TestRefusedPowerRequestSendsNothingToEngine(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, hardStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
@@ -26,7 +27,7 @@ func TestRefusedPowerRequestSendsNothingToEngine(t *testing.T) {
 
 func TestGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
@@ -43,7 +44,7 @@ func TestGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 
 func TestForcedRebootRequestsPowerCycle(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
@@ -60,8 +61,8 @@ func TestForcedRebootRequestsPowerCycle(t *testing.T) {
 
 func TestPowerWithoutInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, runningStates()...)
-	s.Bravo.SetPower(bandConstant.PowerOn, runningStates()...)
+	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	s.Bravo.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
 	r, e := s.Client.RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{

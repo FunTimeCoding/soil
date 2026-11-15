@@ -223,7 +223,7 @@ func TestEveryTicksAtStart(t *testing.T) {
 		time.Hour,
 	)
 	w.Start()
-	await(t, func() bool { return ticks.Load() == 1 })
+	assert.Eventually(t, func() bool { return ticks.Load() == 1 })
 	w.Close()
 	assert.Integer(t, int64(1), ticks.Load())
 }
@@ -259,6 +259,6 @@ func TestDelayedStartTicksAfterItsInterval(t *testing.T) {
 		20*time.Millisecond,
 	).WithDelayedStart()
 	w.Start()
-	await(t, func() bool { return ticks.Load() >= 1 })
+	assert.Eventually(t, func() bool { return ticks.Load() >= 1 })
 	w.Close()
 }

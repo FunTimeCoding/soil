@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/component/chip"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"testing"
@@ -13,12 +14,12 @@ func TestChipIsSpanLinkOrButton(t *testing.T) {
 	assert.String(
 		t,
 		`<span class="chip">alfa</span>`,
-		renderedNode(t, chip.New("alfa").Node()),
+		web_tester.Render(t, chip.New("alfa").Node()),
 	)
 	assert.String(
 		t,
 		`<a href="/bravo" class="chip service" style="--chip-color: #3d9970">bravo<small>healthy</small></a>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			chip.New("bravo").
 				Link("/bravo").
@@ -34,7 +35,7 @@ func TestToggleChipIsPressableButtonCarryingItsHooks(t *testing.T) {
 	assert.String(
 		t,
 		`<button type="button" aria-pressed="true" class="chip toggle active" title="charlie help" data-tag="charlie" onclick="toggleTag(this)">charlie</button>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			chip.New("charlie").
 				Toggle(true).
@@ -47,7 +48,7 @@ func TestToggleChipIsPressableButtonCarryingItsHooks(t *testing.T) {
 	assert.StringContains(
 		t,
 		`aria-pressed="false" class="chip toggle"`,
-		renderedNode(t, chip.New("delta").Toggle(false).Node()),
+		web_tester.Render(t, chip.New("delta").Toggle(false).Node()),
 	)
 }
 
@@ -55,6 +56,6 @@ func TestCurrentLinkChipCarriesActiveLookAndMark(t *testing.T) {
 	assert.String(
 		t,
 		`<a href="/golf" class="chip active" aria-current="true">golf</a>`,
-		renderedNode(t, chip.New("golf").Link("/golf").Current().Node()),
+		web_tester.Render(t, chip.New("golf").Link("/golf").Current().Node()),
 	)
 }

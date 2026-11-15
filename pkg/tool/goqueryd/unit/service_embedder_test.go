@@ -4,12 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestPushIsEmbeddedWhileEmbedderAnswers(t *testing.T) {
-	m := newEmbedder(t)
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	assert.String(
 		t,
 		"",
@@ -25,9 +27,9 @@ func TestPushIsEmbeddedWhileEmbedderAnswers(t *testing.T) {
 }
 
 func TestPushWhileEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	warning := v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -50,9 +52,9 @@ func TestPushWhileEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
 }
 
 func TestHybridSearchFailsAtOnceWhileEmbedderIsDown(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	_, e := v.Search(t.Context(), search_option.New("zulu", 10))
 	assert.True(t, unavailable.Is(e))
 	_, f := v.Search(t.Context(), search_option.New("zulu", 10))
@@ -62,9 +64,9 @@ func TestHybridSearchFailsAtOnceWhileEmbedderIsDown(t *testing.T) {
 }
 
 func TestKeywordSearchNeedsNoEmbedder(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -80,9 +82,9 @@ func TestKeywordSearchNeedsNoEmbedder(t *testing.T) {
 }
 
 func TestPendingDocumentsWaitWhileEmbedderIsDown(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	v.MustPushDocument(
 		t.Context(),
 		"notes",

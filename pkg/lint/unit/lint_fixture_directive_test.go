@@ -4,35 +4,36 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"strings"
 	"testing"
 )
 
-func TestFixtureDirectiveSanctionsStrayConstant(t *testing.T) {
+func TestFixtureDirectiveExemptsStrayConstant(t *testing.T) {
 	path := "pkg/example/testdata/src/inner/machinery_test.go"
 	l := lint.StrayConstant(
 		path,
-		strings.NewReader(constant.FixtureSanctionedSample),
+		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	assertReport(t, path, false, nil, "", l)
+	lint_tester.Report(t, path, false, nil, "", l)
 }
 
 func TestFixtureDirectiveValidInTestdata(t *testing.T) {
 	path := "pkg/example/testdata/src/inner/machinery_test.go"
 	l := lint.FixtureDirective(
 		path,
-		strings.NewReader(constant.FixtureSanctionedSample),
+		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	assertReport(t, path, false, nil, "", l)
+	lint_tester.Report(t, path, false, nil, "", l)
 }
 
 func TestFixtureDirectiveOutsideTestdata(t *testing.T) {
 	path := "pkg/example/machinery.go"
 	l := lint.FixtureDirective(
 		path,
-		strings.NewReader(constant.FixtureSanctionedSample),
+		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		path,
 		true,
@@ -51,13 +52,13 @@ func TestFixtureDirectiveOutsideTestdata(t *testing.T) {
 	)
 }
 
-func TestFixtureDirectiveOutsideTestdataDoesNotSanction(t *testing.T) {
+func TestFixtureDirectiveOutsideTestdataExemptsNothing(t *testing.T) {
 	path := "pkg/example/machinery.go"
 	l := lint.StrayConstant(
 		path,
-		strings.NewReader(constant.FixtureSanctionedSample),
+		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		path,
 		true,
@@ -84,7 +85,7 @@ func TestFixtureDirectiveUnknownRule(t *testing.T) {
 			"// golint:fixture unknown_rule\n\npackage example\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		path,
 		true,
@@ -109,7 +110,7 @@ func TestFixtureDirectiveMisplaced(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureMisplacedSample),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		path,
 		true,
@@ -134,7 +135,7 @@ func TestFixtureDirectiveDangling(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureDanglingSample),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		path,
 		true,
@@ -153,13 +154,13 @@ func TestFixtureDirectiveDangling(t *testing.T) {
 	)
 }
 
-func TestFixtureDirectiveMisplacedDoesNotSanction(t *testing.T) {
+func TestMisplacedFixtureDirectiveExemptsNothing(t *testing.T) {
 	path := "pkg/example/testdata/src/inner/machinery.go"
 	l := lint.StrayConstant(
 		path,
 		strings.NewReader(constant.FixtureMisplacedSample),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		path,
 		true,

@@ -5,6 +5,7 @@ import (
 	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goband/plan"
+	"github.com/funtimecoding/soil/pkg/tool/goband/unit/command_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
@@ -13,7 +14,13 @@ import (
 func TestRedirectionDryRunNamesPendingWrites(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetRedirection(false, 3)
-	output, _, code := run(t, s, "redirection", "--instance", "alfa")
+	output, _, code := command_tester.Run(
+		t,
+		s,
+		"redirection",
+		"--instance",
+		"alfa",
+	)
 	assert.Integer(t, 0, code)
 	var p plan.Redirection
 	notation.MustDecode(output, &p, false)
@@ -25,7 +32,14 @@ func TestRedirectionDryRunNamesPendingWrites(t *testing.T) {
 func TestRedirectionWithYesEnablesWhatIsMissing(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetRedirection(false, 3)
-	output, _, code := run(t, s, "redirection", "--instance", "alfa", "--yes")
+	output, _, code := command_tester.Run(
+		t,
+		s,
+		"redirection",
+		"--instance",
+		"alfa",
+		"--yes",
+	)
 	assert.Integer(t, 0, code)
 	var r client.RedirectionResult
 	notation.MustDecode(output, &r, false)
@@ -37,7 +51,14 @@ func TestRedirectionWithYesEnablesWhatIsMissing(t *testing.T) {
 func TestRedirectionSaysWhenNothingIsMissing(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetRedirection(true, bandConstant.ScreenServiceOffline)
-	output, _, code := run(t, s, "redirection", "--instance", "alfa", "--yes")
+	output, _, code := command_tester.Run(
+		t,
+		s,
+		"redirection",
+		"--instance",
+		"alfa",
+		"--yes",
+	)
 	assert.Integer(t, 0, code)
 	var p plan.Redirection
 	notation.MustDecode(output, &p, false)

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/client"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
@@ -20,9 +21,9 @@ func TestMockAnswersEveryViewAsDaemonDoes(t *testing.T) {
 	defer c.Close()
 	m := mock_client.New()
 	defer m.Close()
-	served := viewAnswers(t.Context(), c)
+	served := client_tester.ViewAnswers(t.Context(), c)
 	assert.Count(t, 19, served)
-	assert.Strings(t, served, viewAnswers(t.Context(), m))
+	assert.Strings(t, served, client_tester.ViewAnswers(t.Context(), m))
 }
 
 func TestMockFailsOnlyMethodItIsToldTo(t *testing.T) {

@@ -46,7 +46,7 @@ func TestRunStart(t *testing.T) {
 }
 
 func TestStartFailureCarriesCommandError(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	c := run.New().NoPanic()
 	c.Start(constant.Shell, constant.ShellCommand, "echo oops >&2; exit 3")
 	assert.NotNil(t, c.Error)
@@ -62,7 +62,7 @@ func TestStartFailureCarriesCommandError(t *testing.T) {
 }
 
 func TestRunPanicMode(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	assert.Panic(
 		t,
 		func() {
@@ -72,7 +72,7 @@ func TestRunPanicMode(t *testing.T) {
 }
 
 func TestRunDirectory(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	directory, e := filepath.EvalSymlinks(t.TempDir())
 	errors.PanicOnError(e)
 	r := run.New()
@@ -82,7 +82,7 @@ func TestRunDirectory(t *testing.T) {
 }
 
 func TestRunEnvironment(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	r := run.New()
 	r.Environment("INTEGRATION_VALUE", "expected")
 	output := r.Start(
@@ -94,7 +94,7 @@ func TestRunEnvironment(t *testing.T) {
 }
 
 func TestRunSetEnvironment(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	r := run.New()
 	r.SetEnvironment([]string{"INTEGRATION_ONLY=replaced"})
 	output := r.Start(
@@ -106,7 +106,7 @@ func TestRunSetEnvironment(t *testing.T) {
 }
 
 func TestRunInput(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	r := run.New()
 	r.Input = strings.NewReader("first\nsecond\n")
 	output := r.Start("cat")
@@ -116,7 +116,7 @@ func TestRunInput(t *testing.T) {
 }
 
 func TestRunInputWithWriters(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	var stderr bytes.Buffer
 	r := run.New()
 	r.NoPanic()
@@ -129,14 +129,14 @@ func TestRunInputWithWriters(t *testing.T) {
 }
 
 func TestRunPipe(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	stdout, stderr := run.New().Pipe("pipe input\n", "cat")
 	assert.String(t, "pipe input\n", stdout)
 	assert.String(t, "", stderr)
 }
 
 func TestRunWritersStdout(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	var stdout bytes.Buffer
 	r := run.New()
 	r.Writers(&stdout, nil)
@@ -152,7 +152,7 @@ func TestRunWritersStdout(t *testing.T) {
 }
 
 func TestRunWritersStderr(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	var stderr bytes.Buffer
 	r := run.New()
 	r.Writers(nil, &stderr)
@@ -168,7 +168,7 @@ func TestRunWritersStderr(t *testing.T) {
 }
 
 func TestProcessKillIsNotError(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	p := run.New().Open("sleep", "30")
 	assert.Nil(t, p.Kill())
 	assert.Integer(t, -1, p.ExitCode())

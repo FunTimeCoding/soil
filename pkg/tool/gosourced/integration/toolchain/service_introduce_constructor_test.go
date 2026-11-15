@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/usage_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -10,10 +11,7 @@ import (
 )
 
 func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	r, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -61,10 +59,7 @@ func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
 }
 
 func TestIntroduceConstructorReportsWhySiteStays(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -87,15 +82,12 @@ func TestIntroduceConstructorReportsWhySiteStays(t *testing.T) {
 			"{Draw, Inhale, Wait} elided nested - sets Wait beyond the constructor",
 			"{Draw, Inhale} value nested - value literal",
 		},
-		remainingShapes(c),
+		usage_tester.RemainingShapes(c),
 	)
 }
 
 func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	_, _, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -117,10 +109,7 @@ func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
 }
 
 func TestIntroduceConstructorNamesBagConstructorsAfterType(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -145,10 +134,7 @@ func TestIntroduceConstructorNamesBagConstructorsAfterType(t *testing.T) {
 }
 
 func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -172,10 +158,7 @@ func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
 }
 
 func TestIntroduceConstructorRefusesTaintedPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	r, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -196,10 +179,7 @@ func TestIntroduceConstructorRefusesTaintedPackage(t *testing.T) {
 }
 
 func TestIntroduceConstructorRefusesUnknownParameter(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	r, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,
@@ -216,10 +196,7 @@ func TestIntroduceConstructorRefusesUnknownParameter(t *testing.T) {
 }
 
 func TestIntroduceConstructorDryRunWritesNothing(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("introduce-constructor/src"),
-	)
+	d := service_tester.Prepare(t, "introduce-constructor/src")
 	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
 		t.Context(),
 		d,

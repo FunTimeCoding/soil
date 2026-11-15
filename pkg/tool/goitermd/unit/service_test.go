@@ -9,7 +9,7 @@ import (
 )
 
 func TestReadHistoryDefaultsCount(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	v, e := service_tester.New(t, c).ReadHistory("alfa", 0)
 	assert.FatalOnError(t, e)
@@ -17,7 +17,7 @@ func TestReadHistoryDefaultsCount(t *testing.T) {
 }
 
 func TestSendKeysSendsEveryKeyInOrder(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	assert.FatalOnError(
 		t,
@@ -31,7 +31,7 @@ func TestSendKeysSendsEveryKeyInOrder(t *testing.T) {
 }
 
 func TestSendKeysNamesFailingStep(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	e := service_tester.New(t, c).SendKeys("bravo", []string{"up"}, 0)
 	assert.True(t, not_found.Is(e))
@@ -39,14 +39,14 @@ func TestSendKeysNamesFailingStep(t *testing.T) {
 }
 
 func TestSendKeysRequiresKeys(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	e := service_tester.New(t, c).SendKeys("alfa", nil, 0)
 	assert.True(t, validation.Is(e))
 }
 
 func TestSendTextFollowsWithEnterWhenAsked(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	assert.FatalOnError(
 		t,
@@ -56,14 +56,14 @@ func TestSendTextFollowsWithEnterWhenAsked(t *testing.T) {
 }
 
 func TestSendTextRequiresText(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	e := service_tester.New(t, c).SendText("alfa", "", false)
 	assert.True(t, validation.Is(e))
 }
 
 func TestSetTabTitleRequiresTitle(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	e := service_tester.New(t, c).SetTabTitle("tab-1", "")
 	assert.True(t, validation.Is(e))

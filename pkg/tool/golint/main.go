@@ -21,7 +21,7 @@ func Main() {
 		"Print one line per modified file instead of per-edit detail",
 	)
 	a.Boolean(
-		argumentConstant.Census,
+		argumentConstant.Unchecked,
 		false,
 		"List every unchecked markdown reference sorted by reason, with counts",
 	)
@@ -45,7 +45,7 @@ func Main() {
 		a.GetBoolean(argumentConstant.Verbose),
 	)
 	o.Scopes = scopes
-	o.Census = a.GetBoolean(argumentConstant.Census)
+	o.Unchecked = a.GetBoolean(argumentConstant.Unchecked)
 	o.Fix = a.GetBoolean(argumentConstant.Fix)
 	o.Summary = a.GetBoolean(argumentConstant.Summary)
 	lint.Lint(constant.Identity.Name(), root, o)

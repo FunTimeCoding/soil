@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/pointer_tester"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"strings"
 	"testing"
 )
@@ -15,7 +16,7 @@ func TestPointersHeadingLinkLive(t *testing.T) {
 		"doc/guide/index.md",
 		strings.NewReader("See [other](other.md#part) there.\n"),
 	)
-	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/guide/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingLinkDead(t *testing.T) {
@@ -26,7 +27,7 @@ func TestPointersHeadingLinkDead(t *testing.T) {
 		"doc/guide/index.md",
 		strings.NewReader("See [other](other.md#parts) there.\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/guide/index.md",
 		true,
@@ -49,7 +50,7 @@ func TestPointersHeadingSpanLive(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("Read `doc/guide/other.md#part` first.\n"),
 	)
-	assertReport(t, "doc/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingSpanDead(t *testing.T) {
@@ -60,7 +61,7 @@ func TestPointersHeadingSpanDead(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("Read `doc/guide/other.md#gone` first.\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/index.md",
 		true,
@@ -81,7 +82,7 @@ func TestPointersHeadingSameFileLive(t *testing.T) {
 		map[string]string{"doc/guide/index.md": content},
 		"doc/guide/index.md",
 	)("doc/guide/index.md", strings.NewReader(content))
-	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/guide/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingSameFileDead(t *testing.T) {
@@ -90,7 +91,7 @@ func TestPointersHeadingSameFileDead(t *testing.T) {
 		map[string]string{"doc/guide/index.md": content},
 		"doc/guide/index.md",
 	)("doc/guide/index.md", strings.NewReader(content))
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/guide/index.md",
 		true,
@@ -113,7 +114,7 @@ func TestPointersHeadingSpanOpeningWithHashIsNoAnchor(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("Open `#settings/usage` in the browser.\n"),
 	)
-	assertReport(t, "doc/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingLinkInsideCodeSpanIsNoLink(t *testing.T) {
@@ -124,7 +125,7 @@ func TestPointersHeadingLinkInsideCodeSpanIsNoLink(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("Write anchors as `[top](#top)` links.\n"),
 	)
-	assertReport(t, "doc/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingOnNonMarkdownTarget(t *testing.T) {
@@ -132,7 +133,7 @@ func TestPointersHeadingOnNonMarkdownTarget(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("See `pkg/lint/check.go#pointers` for the loop.\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/index.md",
 		true,
@@ -150,7 +151,7 @@ func TestPointersHeadingOnDirectory(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("Everything in `doc/guide/#part` applies.\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/index.md",
 		true,
@@ -168,7 +169,7 @@ func TestPointersHeadingOnDeadFileReportsPath(t *testing.T) {
 		"doc/index.md",
 		strings.NewReader("Read `doc/gone.md#part` first.\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/index.md",
 		true,
@@ -180,7 +181,7 @@ func TestPointersHeadingOnDeadFileReportsPath(t *testing.T) {
 
 func TestPointersHeadingUnreadableIsTallied(t *testing.T) {
 	l, seen := pointer_tester.Recording("doc/guide/other.md")
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/index.md",
 		false,
@@ -205,7 +206,7 @@ func TestPointersHeadingOnLocatorIsLeftAlone(t *testing.T) {
 			"---\nhosts: alfa.example\n---\nSee [the page](https://alfa.example/page#part).\n",
 		),
 	)
-	assertReport(t, "doc/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingEncodedLinkLive(t *testing.T) {
@@ -216,7 +217,7 @@ func TestPointersHeadingEncodedLinkLive(t *testing.T) {
 		"doc/guide/index.md",
 		strings.NewReader("See [two](two%20words.md#part) there.\n"),
 	)
-	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+	lint_tester.Report(t, "doc/guide/index.md", false, nil, "", l)
 }
 
 func TestPointersHeadingEncodedLinkDead(t *testing.T) {
@@ -227,7 +228,7 @@ func TestPointersHeadingEncodedLinkDead(t *testing.T) {
 		"doc/guide/index.md",
 		strings.NewReader("See [two](two%20words.md#parts) there.\n"),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"doc/guide/index.md",
 		true,

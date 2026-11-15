@@ -29,7 +29,7 @@ func Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.RootRouteKey)
+	scan_tester.Concern(t, constant.RootRouteKey, s[0])
 }
 
 func TestRootRouteExplicitMountsClean(t *testing.T) {
@@ -60,7 +60,7 @@ func Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], constant.RootRouteKey)
+	scan_tester.NoConcern(t, constant.RootRouteKey, s[0])
 }
 
 func TestRootRouteDaemonMountClean(t *testing.T) {
@@ -91,7 +91,7 @@ func (d *Daemon) Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], constant.RootRouteKey)
+	scan_tester.NoConcern(t, constant.RootRouteKey, s[0])
 }
 
 func TestRootRouteSlashMountClean(t *testing.T) {
@@ -113,5 +113,5 @@ func Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], constant.RootRouteKey)
+	scan_tester.NoConcern(t, constant.RootRouteKey, s[0])
 }

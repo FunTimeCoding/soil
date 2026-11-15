@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"testing"
@@ -12,7 +13,7 @@ import (
 )
 
 func TestSessionPastItsWindowIsNotSweptWhenDaemonStarts(t *testing.T) {
-	o, _, _ := newDaemonOption(t)
+	o, _, _ := peer_tester.NewOption(t)
 	s := store_tester.NewOnFile(t, o.LitePath)
 	r := s.EnsureSession("session-1")
 	s.Announce(r.Callsign, "working through an outage", "")

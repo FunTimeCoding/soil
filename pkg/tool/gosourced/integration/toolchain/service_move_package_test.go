@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -11,10 +12,7 @@ import (
 )
 
 func TestMovePackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-move/src"),
-	)
+	d := service_tester.Prepare(t, "package-move/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.MovePackage(
 		t.Context(),
@@ -30,21 +28,18 @@ func TestMovePackage(t *testing.T) {
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/store/store.go")
 	assert.StringContains(t, "package store", moved)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/store/run.go")
-	assertFormatted(t, run)
+	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "example/pkg/store/sub", run)
 	assert.False(t, strings.Contains(run, "outer"))
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	assertFormatted(t, caller)
+	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "\"example/pkg/store\"", caller)
 	assert.StringContains(t, "\"example/pkg/store/sub\"", caller)
 	assert.False(t, strings.Contains(caller, "outer"))
 }
 
 func TestMovePackageTargetExists(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-move/src"),
-	)
+	d := service_tester.Prepare(t, "package-move/src")
 	e := os.MkdirAll(filepath.Join(d, "pkg/store"), 0755)
 	assert.FatalOnError(t, e)
 	s := service_tester.NewService(t)
@@ -61,10 +56,7 @@ func TestMovePackageTargetExists(t *testing.T) {
 }
 
 func TestMovePackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-move/src"),
-	)
+	d := service_tester.Prepare(t, "package-move/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.MovePackage(
 		t.Context(),

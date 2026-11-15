@@ -14,7 +14,7 @@ func Main() {
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Notation, false, "Print the results as JSON")
 	a.Parse()
-	results, passed, e := Results(
+	results, passed, e := Run(
 		a.RequiredPositional(constant.BreakFile, constant.BreakFileUsage),
 	)
 

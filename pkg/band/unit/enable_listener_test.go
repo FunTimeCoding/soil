@@ -4,24 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/band"
 	"github.com/funtimecoding/soil/pkg/band/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
-	"io"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
 func TestListenerPutBindsEnvelopePrefix(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		constant.FixtureRedirection,
-	)
+		upstream_server.WithAnswer(constant.FixtureRedirection))
 	c := band.New(s.URL, "alfa", "bravo")
 	defer c.Close()
 	assert.FatalOnError(t, c.EnableListener())
-	b, e := io.ReadAll(last().Body)
-	assert.FatalOnError(t, e)
-	put := string(b)
+	put := s.LastBody()
 	assert.StringContains(
 		t,
 		"http://schemas.xmlsoap.org/ws/2004/09/transfer/Put",

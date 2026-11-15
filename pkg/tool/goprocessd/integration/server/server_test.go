@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/integration/tester"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/integration/base"
 	"strings"
 	"sync"
 	"testing"
@@ -15,22 +15,22 @@ import (
 )
 
 func TestStatusShowsRunning(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
 }
 
 func TestListShowsAllProcesses(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	assert.String(t, "alfa,bravo", s.Names())
 }
 
 func TestClientReachesSocket(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	assert.FatalOnError(t, s.Client.Reachable(context.Background()))
 }
 
 func TestRestartProcess(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	assert.FatalOnError(
 		t,
 		s.Client.RestartProcess(context.Background(), "alfa"),
@@ -39,13 +39,13 @@ func TestRestartProcess(t *testing.T) {
 }
 
 func TestStopProcess(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	assert.FatalOnError(t, s.Client.StopProcess(context.Background(), "alfa"))
 	s.Wait(t, "", s.Running)
 }
 
 func TestStartStoppedProcess(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	assert.FatalOnError(t, s.Client.StopProcess(context.Background(), "alfa"))
 	s.Wait(t, "", s.Running)
 	assert.FatalOnError(t, s.Client.StartProcess(context.Background(), "alfa"))
@@ -53,7 +53,7 @@ func TestStartStoppedProcess(t *testing.T) {
 }
 
 func TestUnknownProcessIsNotFound(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	x := context.Background()
 	assert.True(t, not_found.Is(s.Client.RestartProcess(x, "nonexistent")))
 	assert.True(t, not_found.Is(s.Client.StopProcess(x, "nonexistent")))
@@ -64,7 +64,7 @@ func TestUnknownProcessIsNotFound(t *testing.T) {
 }
 
 func TestRestartAllLeavesEveryProcessRunning(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
 	count, e := s.Client.RestartAll(context.Background())
 	assert.FatalOnError(t, e)
@@ -75,7 +75,7 @@ func TestRestartAllLeavesEveryProcessRunning(t *testing.T) {
 }
 
 func TestSecondWaveIsConflict(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
 	_, e := s.Client.RestartAll(context.Background())
 	assert.FatalOnError(t, e)
@@ -85,7 +85,7 @@ func TestSecondWaveIsConflict(t *testing.T) {
 }
 
 func TestRestartingEveryProcessOneByOneLeavesThemRunning(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
 	assert.FatalOnError(
 		t,
@@ -102,50 +102,50 @@ func TestRestartingEveryProcessOneByOneLeavesThemRunning(t *testing.T) {
 }
 
 func TestReloadProcfileAddsNewEntry(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	s.WriteProcfile("alfa: sleep 60\nbravo: sleep 60\n")
 	assert.FatalOnError(t, s.Client.ReloadProcfile(context.Background()))
 	s.Wait(t, "alfa,bravo", s.Running)
 }
 
 func TestReloadProcfileRemovesEntry(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.WriteProcfile("alfa: sleep 60\n")
 	assert.FatalOnError(t, s.Client.ReloadProcfile(context.Background()))
 	s.Wait(t, "alfa", s.Names)
 }
 
 func TestReloadProcfileChangedCommand(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\n", "")
 	s.WriteProcfile("alfa: sleep 120\n")
 	assert.FatalOnError(t, s.Client.ReloadProcfile(context.Background()))
 	s.Wait(t, "alfa", s.Running)
 }
 
 func TestReloadProcfileUnchangedLeavesProcessRunning(t *testing.T) {
-	marker, entry := countingEntry(t, "alfa")
-	s := tester.New(t, entry, "")
+	marker, entry := base.CountingEntry(t, "alfa")
+	s := base.New(t, entry, "")
 	s.Wait(t, "alfa", s.Running)
-	assert.Integer(t, 1, launchCount(t, marker))
+	assert.Integer(t, 1, base.LaunchCount(t, marker))
 	assert.FatalOnError(t, s.Client.ReloadProcfile(context.Background()))
 	s.Wait(t, "alfa", s.Running)
 	time.Sleep(300 * time.Millisecond)
-	assert.Integer(t, 1, launchCount(t, marker))
+	assert.Integer(t, 1, base.LaunchCount(t, marker))
 }
 
 func TestReloadProcfileRemovingOneLeavesOthersRunning(t *testing.T) {
-	marker, entry := countingEntry(t, "alfa")
-	s := tester.New(t, fmt.Sprintf("%sbravo: sleep 60\n", entry), "")
+	marker, entry := base.CountingEntry(t, "alfa")
+	s := base.New(t, fmt.Sprintf("%sbravo: sleep 60\n", entry), "")
 	s.Wait(t, "alfa,bravo", s.Running)
 	s.WriteProcfile(entry)
 	assert.FatalOnError(t, s.Client.ReloadProcfile(context.Background()))
 	s.Wait(t, "alfa", s.Running)
 	time.Sleep(300 * time.Millisecond)
-	assert.Integer(t, 1, launchCount(t, marker))
+	assert.Integer(t, 1, base.LaunchCount(t, marker))
 }
 
 func TestReloadEnvironment(t *testing.T) {
-	s := tester.New(
+	s := base.New(
 		t,
 		"alfa: sh -c 'echo $TEST_VALUE && sleep 60'\n",
 		"export TEST_VALUE=original\n",
@@ -162,7 +162,7 @@ func TestReloadEnvironment(t *testing.T) {
 
 func TestReloadEnvironmentRemovesVanishedExport(t *testing.T) {
 	t.Setenv("TEST_REMOVED", "ghost")
-	s := tester.New(
+	s := base.New(
 		t,
 		"alfa: sh -c 'echo removed=${TEST_REMOVED:-gone} && sleep 60'\n",
 		"export TEST_REMOVED=ghost\n",
@@ -178,12 +178,12 @@ func TestReloadEnvironmentRemovesVanishedExport(t *testing.T) {
 }
 
 func TestLogCapturesOutput(t *testing.T) {
-	s := tester.New(t, "alfa: sh -c 'echo hello-from-alfa && sleep 60'\n", "")
+	s := base.New(t, "alfa: sh -c 'echo hello-from-alfa && sleep 60'\n", "")
 	s.WaitLog(t, "hello-from-alfa", "alfa")
 }
 
 func TestLogShowsCurrentGenerationAfterRestart(t *testing.T) {
-	s := tester.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
+	s := base.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
 	s.WaitLog(t, "mark", "alfa")
 	assert.FatalOnError(
 		t,
@@ -198,7 +198,7 @@ func TestLogShowsCurrentGenerationAfterRestart(t *testing.T) {
 }
 
 func TestLogAllShowsEveryGeneration(t *testing.T) {
-	s := tester.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
+	s := base.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
 	s.WaitLog(t, "mark", "alfa")
 	assert.FatalOnError(
 		t,
@@ -211,14 +211,14 @@ func TestLogAllShowsEveryGeneration(t *testing.T) {
 }
 
 func TestLogClearDiscardsHistory(t *testing.T) {
-	s := tester.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
+	s := base.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
 	s.WaitLog(t, "mark", "alfa")
 	assert.FatalOnError(t, s.Client.ClearLog(context.Background(), "alfa"))
 	assert.Count(t, 0, s.Log("alfa", true).Lines)
 }
 
 func TestReloadProcfileKeepsLogHistory(t *testing.T) {
-	s := tester.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
+	s := base.New(t, "alfa: sh -c 'echo mark && sleep 60'\n", "")
 	s.WaitLog(t, "mark", "alfa")
 	s.WriteProcfile("alfa: sh -c 'echo mark && sleep 120'\n")
 	assert.FatalOnError(t, s.Client.ReloadProcfile(context.Background()))
@@ -235,17 +235,17 @@ func TestReloadProcfileKeepsLogHistory(t *testing.T) {
 }
 
 func TestProcessFailToStartDoesNotCrashManager(t *testing.T) {
-	s := tester.New(t, "broken: /nonexistent/binary\nhealthy: sleep 60\n", "")
+	s := base.New(t, "broken: /nonexistent/binary\nhealthy: sleep 60\n", "")
 	s.Wait(t, "healthy", s.Running)
 }
 
 func TestProcessCrashMidSessionDoesNotCrashManager(t *testing.T) {
-	s := tester.New(t, "short: sleep 0.1\nhealthy: sleep 60\n", "")
+	s := base.New(t, "short: sleep 0.1\nhealthy: sleep 60\n", "")
 	s.Wait(t, "healthy", s.Running)
 }
 
 func TestStatusDuringReloadProcfile(t *testing.T) {
-	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
+	s := base.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.Wait(t, "alfa,bravo", s.Running)
 	stop := make(chan struct{})
 	var group sync.WaitGroup

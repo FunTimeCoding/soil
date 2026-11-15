@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -248,89 +249,107 @@ func TestCallFormatFix(t *testing.T) {
 	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
-			applied := filterApplied(r.Entries)
+			applied := fix_tester.Applied(r.Entries)
 			assert.Integer(t, 15, len(applied))
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"long_single_line.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(t, applied, "shared_line.go", 8, "formatted call")
-			assertLineResult(
+			fix_tester.LineResult(
+				t,
+				applied,
+				"shared_line.go",
+				8,
+				"formatted call",
+			)
+			fix_tester.LineResult(
 				t,
 				applied,
 				"shared_line.go",
 				9,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"first_arg_on_paren_line.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"first_arg_on_paren_line.go",
 				5,
 				"formatted composite literal",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"nested_indent.go",
 				6,
 				"formatted call",
 			)
-			assertLineResult(t, applied, "compliant.go", 5, "formatted call")
-			assertLineResult(
+			fix_tester.LineResult(
+				t,
+				applied,
+				"compliant.go",
+				5,
+				"formatted call",
+			)
+			fix_tester.LineResult(
 				t,
 				applied,
 				"multiple_violations.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(t, applied, "deep_method.go", 14, "formatted call")
-			assertLineResult(
+			fix_tester.LineResult(
+				t,
+				applied,
+				"deep_method.go",
+				14,
+				"formatted call",
+			)
+			fix_tester.LineResult(
 				t,
 				applied,
 				"collapse_single_arg.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"boundary_at_80.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"collapse_multi_line.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"nested_long_line.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"exploded_nested.go",
 				4,
 				"formatted call",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"exploded_nested.go",
@@ -342,7 +361,7 @@ func TestCallFormatFix(t *testing.T) {
 	t.Run(
 		"SecondRunChangesNothing",
 		func(t *testing.T) {
-			assertSecondRunQuiet(t, directory)
+			fix_tester.SecondRunQuiet(t, directory)
 		},
 	)
 }

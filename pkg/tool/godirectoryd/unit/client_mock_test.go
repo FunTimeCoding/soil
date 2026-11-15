@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/client/mock_client"
 	generated "github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
@@ -22,15 +23,15 @@ func TestMockAnswersDirectoryAsDaemonDoes(t *testing.T) {
 	defer c.Close()
 	m := mock_client.New()
 	defer m.Close()
-	served := directoryAnswers(t.Context(), c)
+	served := client_tester.DirectoryAnswers(t.Context(), c)
 	assert.Count(t, 25, served)
-	assert.Strings(t, served, directoryAnswers(t.Context(), m))
+	assert.Strings(t, served, client_tester.DirectoryAnswers(t.Context(), m))
 }
 
 func TestMockKeepsPasswordItWasGiven(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
-	directoryAnswers(t.Context(), m)
+	client_tester.DirectoryAnswers(t.Context(), m)
 	assert.Count(t, 0, m.Passwords)
 	_, e := m.PostUser(
 		t.Context(),

@@ -12,11 +12,8 @@ func (r *Resolver) resolveLink(
 	relative, inside := pointer.Relative(path, target)
 
 	if inside && r.Exists(relative) {
-		result := pointer.NewResolution(constant.VerdictLive)
-		result.Target = relative
-
-		return result
+		return pointer.NewLive(relative)
 	}
 
-	return pointer.NewResolution(constant.VerdictDead)
+	return pointer.NewConcern(constant.DeadPointerKey)
 }

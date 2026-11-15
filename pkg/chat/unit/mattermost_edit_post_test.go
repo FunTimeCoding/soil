@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client"
-	"github.com/funtimecoding/soil/pkg/chat/unit/mattermost_client_tester"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost_client_tester"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/mattermost/mattermost/server/public/model"
@@ -44,7 +44,10 @@ func TestEditPostPatchesOnlyMessage(t *testing.T) {
 }
 
 func TestEditingMissingPostIsNotFound(t *testing.T) {
-	_, e := mattermost_client_tester.New(t, statusUpstream).Client.EditPost(
+	_, e := mattermost_client_tester.New(
+		t,
+		mattermost_client_tester.StatusUpstream,
+	).Client.EditPost(
 		&model.Post{Id: "missing"},
 		"done",
 	)

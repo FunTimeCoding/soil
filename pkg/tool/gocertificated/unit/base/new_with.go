@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/store_tester"
-	"github.com/funtimecoding/soil/pkg/web/authorization/authorization_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 	"time"
@@ -28,12 +27,12 @@ func NewWith(
 		Forge:    f,
 		Reporter: r,
 		LitePath: o.LitePath,
-		Server: model_context_server.NewSignedOn(
+		Server: model_context_server.New(
 			t,
-			authorization_tester.Client,
 			func(g *guard.Mux) {
 				d.Mount(r, mock_recorder.New(), g)
 			},
+			model_context_server.WithSignOn(),
 		),
 	}
 	t.Cleanup(result.Close)

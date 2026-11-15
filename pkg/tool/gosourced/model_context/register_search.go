@@ -44,7 +44,7 @@ func (s *Server) registerSearch() {
 		mcp.NewTool(
 			constant.FindLiterals,
 			mcp.WithDescription(
-				"Census of every composite literal and new() of a struct type across the module, before giving it a constructor. Sites outside the declaring package come back grouped by shape - the fields each sets in declaration order, & for an address, markers unkeyed, elided (type left out in a slice or map literal), value (no &), nested (not the sole value of an assignment or var) - with an exemplar and locations per group. Sites inside the declaring package and on the expected side of an assert are only counted. Read-only, no files change.",
+				"Report of every composite literal and new() of a struct type across the module, before giving it a constructor. Sites outside the declaring package come back grouped by shape - the fields each sets in declaration order, & for an address, markers unkeyed, elided (type left out in a slice or map literal), value (no &), nested (not the sole value of an assignment or var) - with an exemplar and locations per group. Sites inside the declaring package and on the expected side of an assert are only counted. Read-only, no files change.",
 			),
 			mcp.WithString(
 				"package_path",

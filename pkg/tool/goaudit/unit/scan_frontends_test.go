@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
 
@@ -18,7 +19,7 @@ func TestFrontendsReadsLayout(t *testing.T) {
 		constant.FixtureFrontendMountSample,
 	)
 	v.WriteString("pkg/tool/gotestd/web/favicon.png", "png")
-	f := frontends(v)
+	f := scan_tester.Frontends(v)
 	assert.Integer(t, 1, len(f))
 	assert.String(t, "Straw", f[0].Theme)
 	assert.Boolean(t, true, f[0].Style)
@@ -36,7 +37,7 @@ func TestFrontendsSkipsNonLayoutWebPackage(t *testing.T) {
 		"pkg/tool/gotestd/web/new.go",
 		"package web\n\nfunc Get() {}\n",
 	)
-	assert.Integer(t, 0, len(frontends(v)))
+	assert.Integer(t, 0, len(scan_tester.Frontends(v)))
 }
 
 func TestFrontendsReportsMissingRoutes(t *testing.T) {
@@ -45,7 +46,7 @@ func TestFrontendsReportsMissingRoutes(t *testing.T) {
 		"pkg/tool/gotestd/web/new.go",
 		constant.FixtureFrontendNewSample,
 	)
-	f := frontends(v)
+	f := scan_tester.Frontends(v)
 	assert.Integer(t, 1, len(f))
 	assert.Boolean(t, true, f[0].Palette)
 	assert.Boolean(t, false, f[0].PaletteRoute)
@@ -59,7 +60,7 @@ func TestFrontendWithNothingToListHasNoPalette(t *testing.T) {
 		"pkg/tool/gotestd/web/new.go",
 		constant.FixtureFrontendPlainSample,
 	)
-	f := frontends(v)
+	f := scan_tester.Frontends(v)
 	assert.Integer(t, 1, len(f))
 	assert.Boolean(t, false, f[0].Palette)
 	assert.String(t, "?", f[0].Theme)
@@ -75,7 +76,7 @@ func TestOnlyViewsMountServesIconAndPalette(t *testing.T) {
 		"pkg/tool/gotestd/web/mount.go",
 		constant.FixtureFrontendSignOnMount,
 	)
-	f := frontends(v)
+	f := scan_tester.Frontends(v)
 	assert.Boolean(t, false, f[0].PaletteRoute)
 	assert.Boolean(t, false, f[0].FaviconRoute)
 }

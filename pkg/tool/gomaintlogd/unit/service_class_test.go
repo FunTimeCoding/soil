@@ -18,16 +18,16 @@ func TestServiceRefusesEntryWithoutAction(t *testing.T) {
 	o := service_tester.New(t)
 	c := o.Notifier.Subscribe()
 	defer o.Notifier.Unsubscribe(c)
-	v := sample()
+	v := service_tester.Sample()
 	v.Action = ""
 	assert.True(t, validation.Is(o.Service.Add(v)))
-	assert.False(t, fired(c))
+	assert.NotSignalled(t, c)
 }
 
 func TestServiceRefusesUpdateClearingUser(t *testing.T) {
 	o := service_tester.New(t)
 	s := o.Service
-	v := sample()
+	v := service_tester.Sample()
 	assert.FatalOnError(t, s.Add(v))
 	c := o.Notifier.Subscribe()
 	defer o.Notifier.Unsubscribe(c)
@@ -36,7 +36,7 @@ func TestServiceRefusesUpdateClearingUser(t *testing.T) {
 	h.User = &empty
 	_, e := s.Update(v.Identifier, h)
 	assert.True(t, validation.Is(e))
-	assert.False(t, fired(c))
+	assert.NotSignalled(t, c)
 	stored, f := s.Entry(v.Identifier)
 	assert.FatalOnError(t, f)
 	assert.String(t, "alice", stored.User)

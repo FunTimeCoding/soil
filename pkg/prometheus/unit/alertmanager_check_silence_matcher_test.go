@@ -14,7 +14,7 @@ import (
 func TestMatchesExactExistingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test",
 			true,
@@ -27,7 +27,7 @@ func TestMatchesExactExistingLabel(t *testing.T) {
 func TestMatchesExactDifferentValue(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test",
 			true,
@@ -40,7 +40,7 @@ func TestMatchesExactDifferentValue(t *testing.T) {
 func TestMatchesExactMissingLabel(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test",
 			true,
@@ -53,7 +53,7 @@ func TestMatchesExactMissingLabel(t *testing.T) {
 func TestMatchesExactEmptyMissingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"",
 			true,
@@ -66,7 +66,7 @@ func TestMatchesExactEmptyMissingLabel(t *testing.T) {
 func TestMatchesExactEmptyExistingEmptyLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"",
 			true,
@@ -79,7 +79,7 @@ func TestMatchesExactEmptyExistingEmptyLabel(t *testing.T) {
 func TestMatchesNotEqualMatchingValue(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test",
 			false,
@@ -92,7 +92,7 @@ func TestMatchesNotEqualMatchingValue(t *testing.T) {
 func TestMatchesNotEqualDifferentValue(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test",
 			false,
@@ -105,7 +105,7 @@ func TestMatchesNotEqualDifferentValue(t *testing.T) {
 func TestMatchesNotEqualMissingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test",
 			false,
@@ -118,7 +118,7 @@ func TestMatchesNotEqualMissingLabel(t *testing.T) {
 func TestMatchesNotEqualEmptyMissingLabel(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"",
 			false,
@@ -131,7 +131,7 @@ func TestMatchesNotEqualEmptyMissingLabel(t *testing.T) {
 func TestMatchesNotEqualEmptyNonEmptyLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"",
 			false,
@@ -144,7 +144,7 @@ func TestMatchesNotEqualEmptyNonEmptyLabel(t *testing.T) {
 func TestMatchesRegexMatchingValue(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test.*",
 			true,
@@ -157,7 +157,7 @@ func TestMatchesRegexMatchingValue(t *testing.T) {
 func TestMatchesRegexNonMatchingValue(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test.*",
 			true,
@@ -170,7 +170,7 @@ func TestMatchesRegexNonMatchingValue(t *testing.T) {
 func TestMatchesRegexMissingLabel(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test.*",
 			true,
@@ -183,7 +183,7 @@ func TestMatchesRegexMissingLabel(t *testing.T) {
 func TestMatchesRegexEmptyMissingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"",
 			true,
@@ -196,7 +196,7 @@ func TestMatchesRegexEmptyMissingLabel(t *testing.T) {
 func TestMatchesRegexWildcardMissingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			".*",
 			true,
@@ -209,7 +209,7 @@ func TestMatchesRegexWildcardMissingLabel(t *testing.T) {
 func TestMatchesRegexWildcardExistingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			".*",
 			true,
@@ -222,7 +222,7 @@ func TestMatchesRegexWildcardExistingLabel(t *testing.T) {
 func TestMatchesNotRegexMatchingValue(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test.*",
 			false,
@@ -235,7 +235,7 @@ func TestMatchesNotRegexMatchingValue(t *testing.T) {
 func TestMatchesNotRegexNonMatchingValue(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test.*",
 			false,
@@ -248,7 +248,7 @@ func TestMatchesNotRegexNonMatchingValue(t *testing.T) {
 func TestMatchesNotRegexMissingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			"test.*",
 			false,
@@ -261,7 +261,7 @@ func TestMatchesNotRegexMissingLabel(t *testing.T) {
 func TestMatchesNotRegexWildcardMissingLabel(t *testing.T) {
 	assert.False(
 		t,
-		matchesSingle(
+		silence_tester.MatchesSingle(
 			"job",
 			".*",
 			false,
@@ -274,7 +274,7 @@ func TestMatchesNotRegexWildcardMissingLabel(t *testing.T) {
 func TestMatchesSetAllMatch(t *testing.T) {
 	assert.True(
 		t,
-		matchesSet(
+		silence_tester.MatchesSet(
 			[]*models.Matcher{
 				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
 				silence_tester.NewMatcher(
@@ -292,7 +292,7 @@ func TestMatchesSetAllMatch(t *testing.T) {
 func TestMatchesSetOneMismatch(t *testing.T) {
 	assert.False(
 		t,
-		matchesSet(
+		silence_tester.MatchesSet(
 			[]*models.Matcher{
 				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
 				silence_tester.NewMatcher(
@@ -310,7 +310,7 @@ func TestMatchesSetOneMismatch(t *testing.T) {
 func TestMatchesSetPositiveAndNegative(t *testing.T) {
 	assert.True(
 		t,
-		matchesSet(
+		silence_tester.MatchesSet(
 			[]*models.Matcher{
 				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
 				silence_tester.NewMatcher("job", "test", false, false),
@@ -323,7 +323,7 @@ func TestMatchesSetPositiveAndNegative(t *testing.T) {
 func TestMatchesSetNegativeMissingLabel(t *testing.T) {
 	assert.True(
 		t,
-		matchesSet(
+		silence_tester.MatchesSet(
 			[]*models.Matcher{
 				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
 				silence_tester.NewMatcher("job", "test", false, false),
@@ -337,7 +337,11 @@ func TestMatchesWindowActive(t *testing.T) {
 	now := time.Now()
 	assert.True(
 		t,
-		matchesWindow(now.Add(-1*time.Hour), now.Add(1*time.Hour), now),
+		silence_tester.MatchesWindow(
+			now.Add(-1*time.Hour),
+			now.Add(1*time.Hour),
+			now,
+		),
 	)
 }
 
@@ -345,7 +349,11 @@ func TestMatchesWindowNotStarted(t *testing.T) {
 	now := time.Now()
 	assert.False(
 		t,
-		matchesWindow(now.Add(1*time.Hour), now.Add(2*time.Hour), now),
+		silence_tester.MatchesWindow(
+			now.Add(1*time.Hour),
+			now.Add(2*time.Hour),
+			now,
+		),
 	)
 }
 
@@ -353,18 +361,25 @@ func TestMatchesWindowExpired(t *testing.T) {
 	now := time.Now()
 	assert.False(
 		t,
-		matchesWindow(now.Add(-2*time.Hour), now.Add(-1*time.Hour), now),
+		silence_tester.MatchesWindow(
+			now.Add(-2*time.Hour),
+			now.Add(-1*time.Hour),
+			now,
+		),
 	)
 }
 
 func TestMatchesWindowStartsNow(t *testing.T) {
 	now := time.Now()
-	assert.True(t, matchesWindow(now, now.Add(1*time.Hour), now))
+	assert.True(t, silence_tester.MatchesWindow(now, now.Add(1*time.Hour), now))
 }
 
 func TestMatchesWindowEndsNow(t *testing.T) {
 	now := time.Now()
-	assert.False(t, matchesWindow(now.Add(-1*time.Hour), now, now))
+	assert.False(
+		t,
+		silence_tester.MatchesWindow(now.Add(-1*time.Hour), now, now),
+	)
 }
 
 func TestMatchesWithMultipleAlerts(t *testing.T) {

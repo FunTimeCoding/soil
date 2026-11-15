@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 )
@@ -15,10 +15,10 @@ func TestPeekQueueDoesNotConsume(t *testing.T) {
 	s.Send(r2.Callsign, r.Callsign, "hello")
 	peeked, e := s.Message.PeekQueue("session-1", "")
 	assert.FatalOnError(t, e)
-	messages := fixture.KindEntries(peeked, constant.QueueMessage)
+	messages := delivery_tester.KindEntries(peeked, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	drained := s.Check("session-1")
-	drainedMessages := fixture.KindEntries(
+	drainedMessages := delivery_tester.KindEntries(
 		drained.Entries,
 		constant.QueueMessage,
 	)

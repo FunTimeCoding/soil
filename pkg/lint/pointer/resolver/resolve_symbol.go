@@ -15,20 +15,17 @@ func (r *Resolver) resolveSymbol(candidate string) *pointer.Resolution {
 		name := pointer.SymbolName(reference, directory)
 
 		if name != "" && !r.Declares(directory, name) {
-			result := pointer.NewResolution(constant.VerdictDead)
+			result := pointer.NewConcern(constant.DeadPointerKey)
 			result.Hint = constant.UndeclaredSymbolHint
 
 			return result
 		}
 
 		if r.undeclaredMember(reference, directory, name) {
-			result := pointer.NewResolution(constant.VerdictTallied)
-			result.Reason = constant.ReasonMember
-
-			return result
+			return pointer.NewUnchecked(constant.ReasonMember)
 		}
 
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
 	if r.Stdlib(directory) ||
@@ -36,8 +33,8 @@ func (r *Resolver) resolveSymbol(candidate string) *pointer.Resolution {
 		r.SiblingExists(whole) ||
 		r.Stdlib(whole) ||
 		r.Ignored(directory) {
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
-	return pointer.NewResolution(constant.VerdictDead)
+	return pointer.NewConcern(constant.DeadPointerKey)
 }

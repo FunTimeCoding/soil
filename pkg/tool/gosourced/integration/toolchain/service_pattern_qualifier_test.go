@@ -3,15 +3,13 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMatchPatternComparesQualifiersByPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("pattern-aliased/src"),
-	)
+	d := service_tester.Prepare(t, "pattern-aliased/src")
 	r, match, e := service_tester.NewService(t).Pattern.MatchPattern(
 		d,
 		"example/pkg/alfa",
@@ -28,10 +26,7 @@ func TestMatchPatternComparesQualifiersByPackage(t *testing.T) {
 }
 
 func TestApplyPatternKeepsSiteAliases(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("pattern-aliased/src"),
-	)
+	d := service_tester.Prepare(t, "pattern-aliased/src")
 	r, _, e := service_tester.NewService(t).Pattern.ApplyPattern(
 		t.Context(),
 		d,
@@ -55,5 +50,5 @@ func TestApplyPatternKeepsSiteAliases(t *testing.T) {
 		"return alfa.Advance(n, deltaConstant.Step)\n",
 		service_tester.ReadFixtureFile(t, d, "pkg/foxtrot/run.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }

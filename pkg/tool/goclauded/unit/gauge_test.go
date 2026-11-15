@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/finding"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/gauge_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"testing"
@@ -28,7 +29,7 @@ func TestGaugePublishesEveryKind(t *testing.T) {
 	g.Poll()
 
 	for _, kind := range constant.FindingKinds {
-		assert.Float(t, 0, value(t, r, kind))
+		assert.Float(t, 0, gauge_tester.Findings(t, r, kind))
 	}
 }
 
@@ -57,7 +58,7 @@ func TestGaugeCarriesCountNotFindingTally(t *testing.T) {
 	)
 	defer g.Close()
 	g.Poll()
-	assert.Float(t, 3, value(t, r, constant.UnownedQueue))
+	assert.Float(t, 3, gauge_tester.Findings(t, r, constant.UnownedQueue))
 }
 
 func TestGaugeResetsWhenFindingResolves(t *testing.T) {
@@ -81,13 +82,13 @@ func TestGaugeResetsWhenFindingResolves(t *testing.T) {
 	)
 	defer g.Close()
 	g.Poll()
-	assert.Float(t, 1, value(t, r, constant.UnownedQueue))
+	assert.Float(t, 1, gauge_tester.Findings(t, r, constant.UnownedQueue))
 	assert.FatalOnError(
 		t,
 		s.Store.Store.DeletePendingQueue("", "Nobody", constant.QueueTimeout),
 	)
 	g.Poll()
-	assert.Float(t, 0, value(t, r, constant.UnownedQueue))
+	assert.Float(t, 0, gauge_tester.Findings(t, r, constant.UnownedQueue))
 }
 
 func TestGaugeReportsFailedPoll(t *testing.T) {

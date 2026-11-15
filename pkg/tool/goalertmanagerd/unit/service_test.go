@@ -8,12 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
 	prometheusMock "github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 	"time"
 )
 
 func TestAlertsAnswerFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.NewRefusingBravo(t)
 	_, _, e := s.Alerts(t.Context(), "alfa", alert_filter.New())
 	assert.FatalOnError(t, e)
 	_, _, f := s.Alerts(t.Context(), "bravo", alert_filter.New())
@@ -21,7 +22,7 @@ func TestAlertsAnswerFromNamedInstance(t *testing.T) {
 }
 
 func TestSilencesAnswerFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.NewRefusingBravo(t)
 	_, e := s.Silences(t.Context(), "alfa", false)
 	assert.FatalOnError(t, e)
 	_, f := s.Silences(t.Context(), "bravo", false)
@@ -29,7 +30,7 @@ func TestSilencesAnswerFromNamedInstance(t *testing.T) {
 }
 
 func TestCreateSilenceAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.NewRefusingBravo(t)
 	_, e := s.CreateSilence(t.Context(), "alfa", "Watchdog", "", time.Hour)
 	assert.FatalOnError(t, e)
 	_, f := s.CreateSilence(t.Context(), "bravo", "Watchdog", "", time.Hour)
@@ -37,7 +38,7 @@ func TestCreateSilenceAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestDeleteSilenceAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.NewRefusingBravo(t)
 	assert.FatalOnError(t, s.DeleteSilence(t.Context(), "alfa", "silence-1"))
 	assert.True(
 		t,
@@ -46,7 +47,7 @@ func TestDeleteSilenceAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestStatusAnswersFromNamedInstance(t *testing.T) {
-	s := refusingBravo(t)
+	s := service_tester.NewRefusingBravo(t)
 	_, e := s.Status(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	_, f := s.Status(t.Context(), "bravo")
@@ -79,7 +80,7 @@ func TestCreateSilenceReadsItsRulesFromPrometheusPeer(t *testing.T) {
 
 func TestPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
 	p := prometheusMock.New()
-	p.Failure = refusedConnection()
+	p.Failure = outage_tester.RefusedDial()
 	s := service_tester.New(
 		t,
 		map[string]*mock_client.Client{"alfa": mock_client.New()},
@@ -94,7 +95,7 @@ func TestPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
 
 func TestUnreachableAlertmanagerFailsFastWithoutBeingAskedAgain(t *testing.T) {
 	a := mock_client.New()
-	a.Fail(refusedConnection())
+	a.Fail(outage_tester.RefusedDial())
 	s := service_tester.New(
 		t,
 		map[string]*mock_client.Client{"alfa": a},

@@ -7,6 +7,7 @@ import (
 	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/client_tester"
 	"testing"
 )
 
@@ -28,7 +29,7 @@ func TestMockAnswersWhatServerAnswers(t *testing.T) {
 	s.MockClient.Remove("fp1")
 	s.Clock.Poll()
 	c := s.AlertClient(t)
-	m := mirrorAlerts(t, c)
+	m := client_tester.Mirror(t, c)
 	defer m.Close()
 	served, e := c.GetStatus(t.Context())
 	assert.FatalOnError(t, e)
@@ -52,7 +53,11 @@ func TestMockAnswersWhatServerAnswers(t *testing.T) {
 		assert.FatalOnError(t, g)
 		got, h := m.GetAlertsAfter(t.Context(), p)
 		assert.FatalOnError(t, h)
-		assert.String(t, alertLines(want), alertLines(got))
+		assert.String(
+			t,
+			client_tester.AlertLines(want),
+			client_tester.AlertLines(got),
+		)
 	}
 
 	var all []int
@@ -71,6 +76,10 @@ func TestMockAnswersWhatServerAnswers(t *testing.T) {
 		assert.FatalOnError(t, g)
 		got, h := m.GetAlertsByIdentifier(t.Context(), p)
 		assert.FatalOnError(t, h)
-		assert.String(t, alertLines(want), alertLines(got))
+		assert.String(
+			t,
+			client_tester.AlertLines(want),
+			client_tester.AlertLines(got),
+		)
 	}
 }

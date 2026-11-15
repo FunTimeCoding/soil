@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	"github.com/funtimecoding/soil/pkg/hypertext"
+	"github.com/funtimecoding/soil/pkg/hypertext/unit/hypertext_tester"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"testing"
 )
@@ -17,7 +18,7 @@ func TestParsedFixturesLeaveNoHandleOpen(t *testing.T) {
 				assert.NotNil(
 					t,
 					hypertext.Document(
-						openFixture(
+						hypertext_tester.Open(
 							t,
 							systemConstant.HypertextPath,
 							"test.html",

@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/netbox/bookmark"
+	"github.com/funtimecoding/soil/pkg/netbox/unit/netbox_tester"
 	"testing"
 )
 
 func TestBookmarkLinkDropsInterfaceSegment(t *testing.T) {
-	raw := newBookmark()
+	raw := netbox_tester.Bookmark()
 	raw.Object = map[string]any{
 		"url": "https://host.example/api/dcim/devices/2132/",
 	}
@@ -18,11 +19,11 @@ func TestBookmarkLinkDropsInterfaceSegment(t *testing.T) {
 }
 
 func TestBookmarkLinkEmptyWithoutObjectLink(t *testing.T) {
-	assert.String(t, "", bookmark.New(newBookmark()).Link)
+	assert.String(t, "", bookmark.New(netbox_tester.Bookmark()).Link)
 }
 
 func TestBookmarkLinkEmptyWhenObjectCarriesNoLink(t *testing.T) {
-	raw := newBookmark()
+	raw := netbox_tester.Bookmark()
 	raw.Object = map[string]any{"display": "alfa"}
 	assert.String(t, "", bookmark.New(raw).Link)
 }

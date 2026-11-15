@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -12,7 +13,7 @@ import (
 func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 	directory := module_tester.Interacting(t)
 	path := filepath.Join(directory, "interact.go")
-	before := readGoFiles(t, directory)
+	before := fix_tester.GoFiles(t, directory)
 	printed := assert.Capture(
 		t,
 		func() {
@@ -23,7 +24,7 @@ func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 			)
 		},
 	)
-	assert.Any(t, before, readGoFiles(t, directory))
+	assert.Any(t, before, fix_tester.GoFiles(t, directory))
 	assert.String(
 		t,
 		fmt.Sprintf(
@@ -40,6 +41,6 @@ func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 	assert.String(
 		t,
 		"package example\n\nfunc Interact(directoryName string, directoryPath string) string {\n\treturn join(\n\t\tdirectoryName,\n\t\tdirectoryPath,\n\t\t\"some-moderately-long-literal-value-here\",\n\t)\n}\n\nfunc join(a, b, c string) string { return a + b + c }\n",
-		readGoFiles(t, directory)["interact.go"],
+		fix_tester.GoFiles(t, directory)["interact.go"],
 	)
 }

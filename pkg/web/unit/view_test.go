@@ -6,7 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
-	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
+	"github.com/funtimecoding/soil/pkg/web/unit/view_tester"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -16,7 +17,7 @@ import (
 )
 
 func TestRecoveryPage(t *testing.T) {
-	v := recoveryView()
+	v := view_tester.New()
 	wrapped := v.Recovery(memory.New())(http.HandlerFunc(web_tester.PanicServe))
 	recorder := httptest.NewRecorder()
 	wrapped.ServeHTTP(
@@ -58,7 +59,7 @@ func TestLiveBrandCarriesConnectionDot(t *testing.T) {
 
 func TestRenderPageWithSummary(t *testing.T) {
 	recorder := httptest.NewRecorder()
-	recoveryView().RenderSummaryPage(
+	view_tester.New().RenderSummaryPage(
 		recorder,
 		"Dashboard",
 		constant.RootPath,
@@ -74,7 +75,7 @@ func TestRenderPageWithSummary(t *testing.T) {
 }
 
 func TestRecoveryFragment(t *testing.T) {
-	v := recoveryView()
+	v := view_tester.New()
 	wrapped := v.Recovery(memory.New())(http.HandlerFunc(web_tester.PanicServe))
 	recorder := httptest.NewRecorder()
 	request := httptest.NewRequest(http.MethodGet, constant.RootPath, nil)

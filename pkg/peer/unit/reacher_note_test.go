@@ -5,20 +5,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 	"time"
 )
 
 func TestNotedOutageLogsItsEdgesButNeverReports(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
-	down, e := r.Note("ilo", refusedConnection())
+	down, e := r.Note("ilo", outage_tester.RefusedDial())
 	assert.Nil(t, e)
 	assert.NotNil(t, down)
 	c.Advance(time.Hour)
-	again, f := r.Note("ilo", refusedConnection())
+	again, f := r.Note("ilo", outage_tester.RefusedDial())
 	assert.Nil(t, f)
 	assert.Nil(t, again)
 	assert.Count(t, 0, m.Events())

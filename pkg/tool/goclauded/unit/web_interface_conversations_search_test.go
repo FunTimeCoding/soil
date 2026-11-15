@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"strings"
 	"testing"
 )
@@ -13,7 +13,7 @@ func TestConversationsSearchResults(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
 	s.Tick()
-	page := body(t, s.Server, "/conversations/search?query=legacy+pin")
+	page := s.Body(t, "/conversations/search?query=legacy+pin")
 	assert.StringContains(t, `class="search-result"`, page)
 	assert.StringContains(t, "2 hits", page)
 	assert.StringContains(t, `<mark class="highlight">legacy</mark>`, page)
@@ -24,9 +24,8 @@ func TestConversationsSearchAddressRestoresSearch(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
 	s.Tick()
-	page := body(
+	page := s.Body(
 		t,
-		s.Server,
 		"/conversations/search?query=legacy+pin&kind=message&kind=call",
 	)
 	markup_tester.AssertCount(t, 1, page, "body.full-window")
@@ -63,11 +62,7 @@ func TestConversationsSearchAnswersExtendedRequestWithResultsOnly(t *testing.T) 
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
 	s.Tick()
-	answer := extendedBody(
-		t,
-		s.Server,
-		"/conversations/search?query=legacy+pin",
-	)
+	answer := s.ExtendedBody(t, "/conversations/search?query=legacy+pin")
 	assert.StringContains(t, `class="search-result"`, answer)
 	assert.True(t, !strings.Contains(answer, "<html"))
 }
@@ -76,9 +71,8 @@ func TestConversationsHitAddressRestoresSearchAndHits(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
 	s.Tick()
-	page := body(
+	page := s.Body(
 		t,
-		s.Server,
 		"/conversations/delta/hits?query=pin&kind=message&around=a1",
 	)
 	markup_tester.AssertCount(t, 1, page, "#sidebar-entries .search-result")
@@ -96,7 +90,7 @@ func TestConversationsSearchEmptyQueryListsSessions(t *testing.T) {
 	s := base.New(t)
 	s.WriteSessionFile("echo", "echo-slug")
 	s.Restart()
-	page := body(t, s.Server, "/conversations/search?query=")
+	page := s.Body(t, "/conversations/search?query=")
 	markup_tester.AssertCount(t, 1, page, "#sidebar-entries .sidebar-entry")
 	markup_tester.AssertCount(t, 0, page, "#sidebar-entries .search-result")
 }
@@ -105,9 +99,8 @@ func TestConversationsHitsPanel(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("delta")
 	s.Tick()
-	page := body(
+	page := s.Body(
 		t,
-		s.Server,
 		"/conversations/delta/hits?query=pin+go&kind=message&kind=call&around=a1",
 	)
 	assert.StringContains(t, `id="block-a1"`, page)
@@ -127,7 +120,7 @@ func TestConversationsHitsPanel(t *testing.T) {
 
 func TestConversationsPageCarriesSearchWiring(t *testing.T) {
 	s := base.New(t)
-	page := body(t, s.Server, constant.ConversationsPath)
+	page := s.Body(t, constant.ConversationsPath)
 	assert.StringContains(t, `hx-sync="this:replace"`, page)
 	assert.StringContains(t, "input delay:200ms, submit", page)
 	assert.StringContains(t, `name="kind"`, page)

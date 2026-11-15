@@ -10,10 +10,7 @@ import (
 )
 
 func TestExtractFunctionNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-function/src"),
-	)
+	d := service_tester.Prepare(t, "extract-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -28,10 +25,7 @@ func TestExtractFunctionNotFound(t *testing.T) {
 }
 
 func TestExtractFunctionFileNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-function/src"),
-	)
+	d := service_tester.Prepare(t, "extract-function/src")
 	s := service_tester.NewService(t)
 	_, e := s.File.ExtractToFile(
 		t.Context(),
@@ -44,10 +38,7 @@ func TestExtractFunctionFileNotFound(t *testing.T) {
 }
 
 func TestExtractFunctionTargetExists(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-function/src"),
-	)
+	d := service_tester.Prepare(t, "extract-function/src")
 	target := filepath.Join(d, "pkg/target/format_name.go")
 	e := os.WriteFile(target, []byte("package target\n"), 0644)
 	assert.FatalOnError(t, e)
@@ -65,10 +56,7 @@ func TestExtractFunctionTargetExists(t *testing.T) {
 }
 
 func TestExtractFunctionRenamesSourceToType(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-type-pair/src"),
-	)
+	d := service_tester.Prepare(t, "extract-type-pair/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -92,10 +80,7 @@ func TestExtractFunctionRenamesSourceToType(t *testing.T) {
 }
 
 func TestExtractTypeRenamesSourceToFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-type-pair/src"),
-	)
+	d := service_tester.Prepare(t, "extract-type-pair/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -115,10 +100,7 @@ func TestExtractTypeRenamesSourceToFunction(t *testing.T) {
 }
 
 func TestExtractGroupedTypeRefuses(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-type-group/src"),
-	)
+	d := service_tester.Prepare(t, "extract-type-group/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -135,10 +117,7 @@ func TestExtractGroupedTypeRefuses(t *testing.T) {
 }
 
 func TestExtractTypeRefusesEmptyFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-type-single/src"),
-	)
+	d := service_tester.Prepare(t, "extract-type-single/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -153,10 +132,7 @@ func TestExtractTypeRefusesEmptyFile(t *testing.T) {
 }
 
 func TestExtractLeavesVariableBehind(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-var-companion/src"),
-	)
+	d := service_tester.Prepare(t, "extract-var-companion/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),
@@ -177,10 +153,7 @@ func TestExtractLeavesVariableBehind(t *testing.T) {
 }
 
 func TestExtractRefusesEmptyFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-single/src"),
-	)
+	d := service_tester.Prepare(t, "extract-single/src")
 	s := service_tester.NewService(t)
 	r, e := s.File.ExtractToFile(
 		t.Context(),

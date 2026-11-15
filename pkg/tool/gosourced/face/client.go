@@ -6,14 +6,14 @@ import (
 )
 
 type Client interface {
-	GetCensus(
-		x context.Context,
-		p *client.GetCensusParams,
-	) (client.Census, error)
 	GetDiff(
 		x context.Context,
 		p *client.GetDiffParams,
 	) (client.DiffResponse, error)
+	GetUsage(
+		x context.Context,
+		p *client.GetUsageParams,
+	) (client.Usage, error)
 	PostCheck(
 		x context.Context,
 		b client.CheckRequest,

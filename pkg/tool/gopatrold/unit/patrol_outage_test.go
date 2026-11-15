@@ -29,7 +29,7 @@ func TestHostOutageStaysQuietAndStopsAsking(t *testing.T) {
 	)
 
 	for range 3 {
-		poll(t, d)
+		daemon_tester.Poll(t, d)
 	}
 
 	assert.Count(t, 0, r.Events())
@@ -46,7 +46,7 @@ func TestHostFaultIsCapturedEachRound(t *testing.T) {
 		metric.New(),
 		r,
 	)
-	poll(t, d)
-	poll(t, d)
+	daemon_tester.Poll(t, d)
+	daemon_tester.Poll(t, d)
 	assert.Count(t, 2, r.Events())
 }

@@ -7,7 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
+	"github.com/funtimecoding/soil/pkg/peer/unit/guard_tester"
+	"github.com/funtimecoding/soil/pkg/peer/unit/switchable_peer"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -18,7 +21,7 @@ func TestUpstreamUnavailableMarksGuardDown(t *testing.T) {
 	g := peer.New(
 		"kilo",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		r,
 	)
@@ -27,7 +30,7 @@ func TestUpstreamUnavailableMarksGuardDown(t *testing.T) {
 	call := func(context.Context) error {
 		calls++
 
-		return upstreamUnavailable()
+		return outage_tester.Unavailable(t)
 	}
 	e := g.Attempt(t.Context(), call)
 	assert.True(t, unavailable.Is(e))
@@ -38,7 +41,7 @@ func TestUpstreamUnavailableMarksGuardDown(t *testing.T) {
 }
 
 func TestProbeDoesNotBringUnavailablePeerBack(t *testing.T) {
-	p := new(SwitchablePeer)
+	p := switchable_peer.New()
 	g := peer.New(
 		"oscar",
 		"http://server.test:8080",
@@ -53,7 +56,9 @@ func TestProbeDoesNotBringUnavailablePeerBack(t *testing.T) {
 		unavailable.Is(
 			g.Attempt(
 				t.Context(),
-				func(context.Context) error { return upstreamUnavailable() },
+				func(context.Context) error {
+					return outage_tester.Unavailable(t)
+				},
 			),
 		),
 	)
@@ -63,8 +68,8 @@ func TestProbeDoesNotBringUnavailablePeerBack(t *testing.T) {
 }
 
 func TestNextSuccessfulCallBringsUnavailablePeerBack(t *testing.T) {
-	c := fake_clock.New()
-	p := new(SwitchablePeer)
+	c := clock_tester.New()
+	p := switchable_peer.New()
 	g := peer.New(
 		"lima",
 		"http://server.test:8080",
@@ -80,7 +85,7 @@ func TestNextSuccessfulCallBringsUnavailablePeerBack(t *testing.T) {
 		calls++
 
 		if failing {
-			return upstreamUnavailable()
+			return outage_tester.Unavailable(t)
 		}
 
 		return nil
@@ -104,11 +109,11 @@ func TestNextSuccessfulCallBringsUnavailablePeerBack(t *testing.T) {
 }
 
 func TestPanickingTrialLeavesNextTrialAdmitted(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	g := peer.New(
 		"papa",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		memory.New(),
 	).WithBackoff(time.Second, time.Minute).WithClock(c.Now)
@@ -118,12 +123,14 @@ func TestPanickingTrialLeavesNextTrialAdmitted(t *testing.T) {
 		unavailable.Is(
 			g.Attempt(
 				t.Context(),
-				func(context.Context) error { return upstreamUnavailable() },
+				func(context.Context) error {
+					return outage_tester.Unavailable(t)
+				},
 			),
 		),
 	)
 	c.Advance(time.Second)
-	assert.Any(t, "trial", panicking(t.Context(), g))
+	assert.Any(t, "trial", guard_tester.Panicked(t.Context(), g))
 	calls := 0
 	assert.Nil(
 		t,
@@ -141,17 +148,17 @@ func TestPanickingTrialLeavesNextTrialAdmitted(t *testing.T) {
 }
 
 func TestLastingUnavailablePeerIsCapturedOnce(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	r := memory.New()
 	g := peer.New(
 		"mike",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		r,
 	).WithBackoff(time.Second, time.Minute).WithClock(c.Now)
 	defer g.Close()
-	call := func(context.Context) error { return upstreamUnavailable() }
+	call := func(context.Context) error { return outage_tester.Unavailable(t) }
 
 	for range 20 {
 		assert.True(t, unavailable.Is(g.Attempt(t.Context(), call)))
@@ -163,11 +170,11 @@ func TestLastingUnavailablePeerIsCapturedOnce(t *testing.T) {
 }
 
 func TestOnlyOneTrialReachesUnavailablePeer(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	g := peer.New(
 		"november",
 		"http://server.test:8080",
-		new(SwitchablePeer),
+		switchable_peer.New(),
 		logger.New(context.Background()),
 		memory.New(),
 	).WithBackoff(time.Second, time.Minute).WithClock(c.Now)
@@ -177,7 +184,9 @@ func TestOnlyOneTrialReachesUnavailablePeer(t *testing.T) {
 		unavailable.Is(
 			g.Attempt(
 				t.Context(),
-				func(context.Context) error { return upstreamUnavailable() },
+				func(context.Context) error {
+					return outage_tester.Unavailable(t)
+				},
 			),
 		),
 	)

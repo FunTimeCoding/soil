@@ -138,13 +138,13 @@ row, `Reportable` its Sentry column, `Message` the text and `Capture` the
 REST answer. The `error_answer` analyzer and both surfaces' answers
 (`mcp.md`, `rest.md`) read the same table.
 
-`unavailable` is a guard's verdict that a peer is down, and the guard reports a
-lasting outage once (`infrastructure.md`, Peer Outages and Refusals). An
-upstream client maps its peer's 503 to `unavailable`, which becomes the guard's
-verdict once it reaches the guard; a caller without a guard in front receiving
-one captures it. A transport failure that reaches a surface without a guard in
-front has nobody else to report it, so the surface captures it - and one that
-keeps arriving names a call path that wants a guard.
+`unavailable` is the error a guard returns while its peer is down, and the guard
+reports a lasting outage once (`infrastructure.md`, Peer Outages and Refusals).
+An upstream client maps its peer's 503 to `unavailable`, which the guard returns
+as its own once it reaches the guard; a caller without a guard in front
+receiving one captures it. A transport failure that reaches a surface without a
+guard in front has nobody else to report it, so the surface captures it - and
+one that keeps arriving names a call path that wants a guard.
 
 Who wrote the request decides whose move a refusal is. A refusal of a
 request the daemon composed - its own catalogue SQL, a protocol message it

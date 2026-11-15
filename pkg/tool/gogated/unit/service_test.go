@@ -17,7 +17,7 @@ func TestOnlySuperUserIsAdministrator(t *testing.T) {
 	b := base.New(t)
 	row, e := b.Store.UserByMail(constant.FixtureMail)
 	assert.FatalOnError(t, e)
-	assert.True(t, administrator(t, b, row.Identifier))
+	assert.True(t, base.Administrator(t, b, row.Identifier))
 	other, f := b.Store.CreateDirectoryUser(
 		"unique-9",
 		"other",
@@ -25,9 +25,9 @@ func TestOnlySuperUserIsAdministrator(t *testing.T) {
 		"Other",
 	)
 	assert.FatalOnError(t, f)
-	assert.False(t, administrator(t, b, other.Identifier))
-	assert.False(t, administrator(t, b, "missing"))
-	assert.False(t, administrator(t, b, ""))
+	assert.False(t, base.Administrator(t, b, other.Identifier))
+	assert.False(t, base.Administrator(t, b, "missing"))
+	assert.False(t, base.Administrator(t, b, ""))
 }
 
 func TestFailingStoreIsNotAnswerAboutAdministrator(t *testing.T) {

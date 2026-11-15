@@ -12,14 +12,11 @@ func (r *Resolver) resolveFragment(
 	fragment string,
 ) *pointer.Resolution {
 	if target == "" {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonHeading
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonHeading)
 	}
 
 	if !strings.HasSuffix(target, soil.MarkdownExtension) {
-		result := pointer.NewResolution(constant.VerdictFragmentTarget)
+		result := pointer.NewConcern(constant.FragmentTargetKey)
 		result.Target = target
 
 		return result
@@ -28,8 +25,7 @@ func (r *Resolver) resolveFragment(
 	headings, found := r.Headings(target)
 
 	if !found {
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonHeading
+		result := pointer.NewUnchecked(constant.ReasonHeading)
 		result.Target = target
 
 		return result
@@ -37,14 +33,11 @@ func (r *Resolver) resolveFragment(
 
 	for _, h := range headings {
 		if h.Slug == fragment {
-			result := pointer.NewResolution(constant.VerdictLive)
-			result.Target = target
-
-			return result
+			return pointer.NewLive(target)
 		}
 	}
 
-	result := pointer.NewResolution(constant.VerdictDeadHeading)
+	result := pointer.NewConcern(constant.DeadHeadingKey)
 	result.Target = target
 	result.Hint = nearest(fragment, headings)
 

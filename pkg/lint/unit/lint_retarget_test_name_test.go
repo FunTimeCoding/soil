@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/pointer/retarget"
 	"github.com/funtimecoding/soil/pkg/lint/pointer_tester"
 	"github.com/funtimecoding/soil/pkg/lint/types/symbol_move"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"testing"
 )
 
@@ -14,7 +15,7 @@ func TestRetargetRenamedTestCarriesBareCitation(t *testing.T) {
 		pointer_tester.Resolver(),
 		"doc/note.md",
 		"Pinned by `TestShelfHoldsStock` and `TestShelfHoldsStock()`, not `TestShelfHoldsStockLong`; the TestShelfHoldsStock prose stays.\n",
-		symbolMoves(
+		lint_tester.SymbolMoves(
 			symbol_move.New(
 				"pkg/shop/unit",
 				"TestShelfHoldsStock",
@@ -44,7 +45,7 @@ func TestRetargetRepeatedTestNameIsLeftForHand(t *testing.T) {
 		r,
 		"doc/note.md",
 		content,
-		symbolMoves(
+		lint_tester.SymbolMoves(
 			symbol_move.New(
 				"pkg/shop/unit",
 				"TestGuard",
@@ -63,7 +64,7 @@ func TestRetargetRepeatedTestNameIsLeftForHand(t *testing.T) {
 }
 
 func TestRetargetMentionsDocumentCitingRenamedTest(t *testing.T) {
-	moves := symbolMoves(
+	moves := lint_tester.SymbolMoves(
 		symbol_move.New(
 			"pkg/shop/unit",
 			"TestShelfHoldsStock",

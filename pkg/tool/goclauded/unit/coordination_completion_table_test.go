@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -59,8 +60,14 @@ func TestCompletionTableHookContext(t *testing.T) {
 	)
 	r := b.CheckLive()
 	assert.True(t, r.Changed)
-	completions := clientKindEntries(r.Entries, constant.QueueSessionComplete)
-	updates := clientKindEntries(r.Entries, constant.QueueSessionUpdate)
+	completions := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionComplete,
+	)
+	updates := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionUpdate,
+	)
 	assert.True(t, len(completions) > 0)
 	assert.True(t, len(updates) > 0)
 }

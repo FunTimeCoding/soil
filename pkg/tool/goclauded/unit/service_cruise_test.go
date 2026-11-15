@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 	"time"
@@ -61,7 +61,7 @@ func TestRosterActivityNeverPops(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(
+		delivery_tester.KindEntries(
 			s.Check("session-1").Entries,
 			constant.QueueSessionAnnounce,
 		),
@@ -80,7 +80,10 @@ func TestCruiseOffWaitsForPrompt(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(s.Check("session-1").Entries, constant.QueuePulse),
+		delivery_tester.KindEntries(
+			s.Check("session-1").Entries,
+			constant.QueuePulse,
+		),
 	)
 }
 

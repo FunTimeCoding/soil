@@ -11,6 +11,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
+	"github.com/funtimecoding/soil/pkg/web/unit/failing_dialer"
+	"github.com/funtimecoding/soil/pkg/web/unit/requester_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"io"
 	"net"
 	"net/http"
@@ -21,55 +24,53 @@ import (
 )
 
 func TestCredentialsStayOnTheirHost(t *testing.T) {
-	own, ownSeen := newScriptedServer(t, "alfa", http.StatusOK)
-	other, otherSeen := newScriptedServer(t, "bravo", http.StatusOK)
-	r := newRequester(t, own.URL)
+	own := upstream_server.New(t, upstream_server.WithAnswer("alfa"))
+	other := upstream_server.New(t, upstream_server.WithAnswer("bravo"))
+	r := requester_tester.New(t, own.URL)
 	r.WithAuthorizer(basic.New("charlie", "delta"))
 	_, e := r.Bytes(request.Get("/items"))
 	assert.FatalOnError(t, e)
 	_, e = r.Bytes(request.Absolute(join.Empty(other.URL, "/files/a.png")))
 	assert.FatalOnError(t, e)
-	assert.True(t, ownSeen()[0].Header.Get(constant.Authorization) != "")
-	assert.String(t, "", otherSeen()[0].Header.Get(constant.Authorization))
+	assert.True(t, own.Last().Header.Get(constant.Authorization) != "")
+	assert.String(t, "", other.Last().Header.Get(constant.Authorization))
 }
 
 func TestUnknownHostIsNotRetried(t *testing.T) {
-	client, attempts := newFailingClient(
+	d := failing_dialer.New(
 		&net.DNSError{Err: "no such host", Name: "echo.example"},
 	)
 	owned := requester.New(locator.New("echo.example")).
-		WithClient(client).
+		WithClient(d.Client()).
 		WithBackoff(0)
 	defer owned.Close()
 	_, e := owned.
 		Bytes(request.Get("/items"))
 	assert.True(t, unreachable.Is(e))
-	assert.Integer(t, 1, int(attempts.Load()))
+	assert.Integer(t, 1, d.Attempts())
 }
 
 func TestRefusedConnectionIsRetried(t *testing.T) {
-	client, attempts := newFailingClient(
-		os.NewSyscallError("connect", syscall.ECONNREFUSED),
-	)
+	d := failing_dialer.New(os.NewSyscallError("connect", syscall.ECONNREFUSED))
 	owned := requester.New(locator.New("echo.example")).
-		WithClient(client).
+		WithClient(d.Client()).
 		WithBackoff(0)
 	defer owned.Close()
 	_, e := owned.
 		Bytes(request.Get("/items"))
 	assert.True(t, unreachable.Is(e))
-	assert.Integer(t, 3, int(attempts.Load()))
+	assert.Integer(t, 3, d.Attempts())
 }
 
 func TestPatchSendsNotation(t *testing.T) {
-	s, seen := newScriptedServer(t, "{}", http.StatusOK)
-	_, e := newRequester(t, s.URL).Bytes(
+	s := upstream_server.New(t, upstream_server.WithAnswer("{}"))
+	_, e := requester_tester.New(t, s.URL).Bytes(
 		request.New(http.MethodPatch, "/items/1").WithNotation(
 			map[string]string{"name": "alfa"},
 		),
 	)
 	assert.FatalOnError(t, e)
-	r := seen()[0]
+	r := s.Last()
 	assert.String(t, http.MethodPatch, r.Method)
 	assert.String(t, "application/json", r.Header.Get(constant.ContentType))
 	b, f := io.ReadAll(r.Body)
@@ -105,23 +106,30 @@ func TestRefusalReadsCommonShapes(t *testing.T) {
 		`{"title":"golf"}`:                   "golf",
 		`{"title":"hotel","detail":"india"}`: "india",
 	} {
-		s, _ := newScriptedServer(t, body, http.StatusBadRequest)
-		_, e := newRequester(t, s.URL).Bytes(request.Get("/items"))
+		s := upstream_server.New(
+			t,
+			upstream_server.WithStatus(http.StatusBadRequest),
+			upstream_server.WithAnswer(body),
+		)
+		_, e := requester_tester.New(t, s.URL).Bytes(request.Get("/items"))
 		assert.StringContains(t, join.Empty("status: 400: ", expect), e.Error())
 	}
 }
 
 func TestAnswerThatIsNotNotationIsUnexpected(t *testing.T) {
-	s, _ := newScriptedServer(t, "<html>", http.StatusOK)
-	var out Named
-	e := newRequester(t, s.URL).Notation(request.Get("/items"), &out)
+	s := upstream_server.New(t, upstream_server.WithAnswer("<html>"))
+	var out requester_tester.Named
+	e := requester_tester.New(t, s.URL).Notation(request.Get("/items"), &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "/items: answer is not JSON", e.Error())
 }
 
 func TestNoContentSucceeds(t *testing.T) {
-	s, _ := newScriptedServer(t, "", http.StatusNoContent)
-	b, e := newRequester(t, s.URL).Bytes(
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusNoContent),
+	)
+	b, e := requester_tester.New(t, s.URL).Bytes(
 		request.New(http.MethodDelete, "/items/1"),
 	)
 	assert.FatalOnError(t, e)

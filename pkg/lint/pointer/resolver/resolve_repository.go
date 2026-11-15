@@ -9,11 +9,8 @@ func (r *Resolver) resolveRepository(candidate string) *pointer.Resolution {
 	normalized := pointer.Normalize(candidate)
 
 	if r.Exists(normalized) || r.Ignored(normalized) {
-		result := pointer.NewResolution(constant.VerdictLive)
-		result.Target = normalized
-
-		return result
+		return pointer.NewLive(normalized)
 	}
 
-	return pointer.NewResolution(constant.VerdictDead)
+	return pointer.NewConcern(constant.DeadPointerKey)
 }

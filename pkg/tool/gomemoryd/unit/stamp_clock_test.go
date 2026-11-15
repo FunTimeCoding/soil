@@ -5,13 +5,14 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/window_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
 
 func TestRelationStampRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, window_tester.Now)
 	c := s.MemoryClient(t)
 	target, e := c.PostMemory(
 		t.Context(),
@@ -28,7 +29,7 @@ func TestRelationStampRunsOnServiceClock(t *testing.T) {
 		c.PostRelation(
 			t.Context(),
 			client.PostRelationJSONRequestBody{
-				SourceIdentifier: clockedMemory(t, s),
+				SourceIdentifier: s.ClockedMemory(),
 				TargetIdentifier: target.Identifier,
 			},
 		),
@@ -40,15 +41,15 @@ func TestRelationStampRunsOnServiceClock(t *testing.T) {
 }
 
 func TestMemoryCreateStampRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
-	m, e := s.Store().GetMemory(clockedMemory(t, s))
+	s := base.NewWith(t, window_tester.Now)
+	m, e := s.Store().GetMemory(s.ClockedMemory())
 	assert.FatalOnError(t, e)
 	assert.String(t, "2026-08-16T20:00:00Z", m.CreatedAt)
 }
 
 func TestMemoryUpdateStampRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
-	identifier := clockedMemory(t, s)
+	s := base.NewWith(t, window_tester.Now)
+	identifier := s.ClockedMemory()
 	_, e := s.MemoryClient(t).PutMemory(
 		t.Context(),
 		identifier,
@@ -61,8 +62,8 @@ func TestMemoryUpdateStampRunsOnServiceClock(t *testing.T) {
 }
 
 func TestMemoryForgetStampRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
-	identifier := clockedMemory(t, s)
+	s := base.NewWith(t, window_tester.Now)
+	identifier := s.ClockedMemory()
 	_, e := s.MemoryClient(t).DeleteMemory(
 		t.Context(),
 		identifier,
@@ -76,7 +77,7 @@ func TestMemoryForgetStampRunsOnServiceClock(t *testing.T) {
 }
 
 func TestImpressionArrivalStampRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, window_tester.Now)
 	c, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),

@@ -61,9 +61,9 @@ markdown pointer checks stay exact. `--root` points it at another
 repository from wherever you stand, and `GOLINT_CONFIGURATION` (or
 `--configuration`) names an optional YAML with repository-private
 vocabulary such as container registries. Comment-only and other
-lint-inert edits need no run at all. `golint --census` prints the
-markdown references the pointer check could not resolve, sorted by
-reason with a count per reason; `--verbose` is the per-file trace.
+lint-inert edits need no run at all. `golint --unchecked` reports the
+markdown references the pointer check left unchecked, sorted by reason with
+a count per reason; `--verbose` is the per-file trace.
 
 Markdown front matter anchors the pointer check: `base:` names the
 package a document's short paths and `route:` spans resolve
@@ -72,7 +72,7 @@ locators may name, and `commands:` lists slash-led spans that are
 neither skills nor paths (an ACL path, a znode, a harness command a
 document describes). Each takes a scalar or a list. A locator
 against an undeclared host fails; `localhost` and `127.0.0.1` need
-no declaration, and other schemes are only tallied in the census.
+no declaration, and other schemes are only counted in the unchecked report.
 
 ## Relevant specs
 

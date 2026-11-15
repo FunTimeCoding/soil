@@ -3,16 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestRenameEmbeddedTypeRenamesItsField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-embedded/src"),
-	)
+	d := service_tester.Prepare(t, "rename-embedded/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -43,14 +41,11 @@ func TestRenameEmbeddedTypeRenamesItsField(t *testing.T) {
 		"package charlie\n\nimport \"example/pkg/alfa\"\n\ntype Reserve = alfa.Budget\n\ntype Keeper struct {\n\tReserve\n}\n\nfunc Make() Keeper {\n\treturn Keeper{Reserve: Reserve{Amount: 2}}\n}\n",
 		service_tester.ReadFixtureFile(t, d, "pkg/charlie/keeper.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestRenameEmbeddedTypeRefusesCapture(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-embedded-capture/src"),
-	)
+	d := service_tester.Prepare(t, "rename-embedded-capture/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -71,10 +66,7 @@ func TestRenameEmbeddedTypeRefusesCapture(t *testing.T) {
 }
 
 func TestMoveExportingEmbeddedTypeRenamesItsField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-embedded-flip/src"),
-	)
+	d := service_tester.Prepare(t, "move-embedded-flip/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -94,14 +86,11 @@ func TestMoveExportingEmbeddedTypeRenamesItsField(t *testing.T) {
 		source,
 	)
 	assert.StringContains(t, "h.Reserve.Amount", source)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestExtractTypeExportingEmbeddedTypeRenamesItsField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-embedded-flip/src"),
-	)
+	d := service_tester.Prepare(t, "move-embedded-flip/src")
 	r, e := service_tester.NewService(t).Symbol.ExtractType(
 		t.Context(),
 		d,
@@ -120,14 +109,11 @@ func TestExtractTypeExportingEmbeddedTypeRenamesItsField(t *testing.T) {
 		"Holder{Reserve: bravo.Reserve{Amount: 1}}",
 		source,
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestBackReferenceExportingEmbeddedTypeRenamesItsField(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-embedded-flip/src"),
-	)
+	d := service_tester.Prepare(t, "move-embedded-flip/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
 		t.Context(),
 		d,
@@ -143,5 +129,5 @@ func TestBackReferenceExportingEmbeddedTypeRenamesItsField(t *testing.T) {
 	source := service_tester.ReadFixtureFile(t, d, "pkg/alfa/reserve.go")
 	assert.StringContains(t, "Holder{Reserve: Reserve{Amount: 1}}", source)
 	assert.StringContains(t, "h.Reserve.Amount", source)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }

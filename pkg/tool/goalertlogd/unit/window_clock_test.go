@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
@@ -13,7 +14,7 @@ import (
 )
 
 func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, clock_tester.Window)
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -23,7 +24,7 @@ func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
 				Fingerprint: "clocked",
 				Name:        "HypervisorUnreachable",
 				Severity:    "warning",
-				Start:       windowNow().Add(-30 * time.Minute),
+				Start:       clock_tester.Window().Add(-30 * time.Minute),
 			},
 		),
 	)
@@ -37,7 +38,7 @@ func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
 }
 
 func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, clock_tester.Window)
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -47,7 +48,7 @@ func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
 				Fingerprint: "clocked",
 				Name:        "HypervisorUnreachable",
 				Severity:    "warning",
-				Start:       windowNow().Add(-48 * time.Hour),
+				Start:       clock_tester.Window().Add(-48 * time.Hour),
 			},
 		),
 	)
@@ -61,7 +62,7 @@ func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
 }
 
 func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, clock_tester.Window)
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -71,11 +72,11 @@ func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 				Fingerprint: "earlier",
 				Name:        "HypervisorUnreachable",
 				Severity:    "warning",
-				Start:       windowNow().Add(-150 * time.Minute),
+				Start:       clock_tester.Window().Add(-150 * time.Minute),
 			},
 		),
 	)
-	end := windowNow().Add(-2 * time.Hour)
+	end := clock_tester.Window().Add(-2 * time.Hour)
 	recent, e := s.AlertClient(t).GetRecentAlerts(
 		t.Context(),
 		&client.GetRecentAlertsParams{End: &end},
@@ -86,7 +87,7 @@ func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 }
 
 func TestTopAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
-	s := base.NewWith(t, windowNow)
+	s := base.NewWith(t, clock_tester.Window)
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -96,11 +97,11 @@ func TestTopAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 				Fingerprint: "earlier",
 				Name:        "HypervisorUnreachable",
 				Severity:    "warning",
-				Start:       windowNow().Add(-180 * time.Hour),
+				Start:       clock_tester.Window().Add(-180 * time.Hour),
 			},
 		),
 	)
-	end := windowNow().Add(-24 * time.Hour)
+	end := clock_tester.Window().Add(-24 * time.Hour)
 	top, e := s.AlertClient(t).GetTopAlerts(
 		t.Context(),
 		&client.GetTopAlertsParams{End: &end},

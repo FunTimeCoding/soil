@@ -1,9 +1,9 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/keepass"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
 	"github.com/tobischo/gokeepasslib/v3"
-	"github.com/tobischo/gokeepasslib/v3/wrappers"
 )
 
 func applyFields(
@@ -29,13 +29,7 @@ func applyFields(
 
 		entry.Values = append(
 			entry.Values,
-			gokeepasslib.ValueData{
-				Key: key,
-				Value: gokeepasslib.V{
-					Content:   content,
-					Protected: wrappers.NewBoolWrapper(protected),
-				},
-			},
+			keepass.NewValue(key, content, protected),
 		)
 	}
 }

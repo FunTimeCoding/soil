@@ -19,7 +19,7 @@ type Lint struct {
 	Scopes       []string
 	Registries   []string
 	Verbose      bool
-	Census       bool
+	Unchecked    bool
 	Fix          bool
 	Summary      bool
 	Metadata     bool

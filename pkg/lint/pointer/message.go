@@ -6,16 +6,12 @@ import (
 )
 
 func Message(
-	verdict constant.Verdict,
+	key string,
 	hint string,
 ) string {
 	if hint == "" {
-		return constant.VerdictTexts[verdict]
+		return constant.PointerTexts[key]
 	}
 
-	return join.Empty(
-		constant.VerdictTexts[verdict],
-		constant.HintSeparator,
-		hint,
-	)
+	return join.Empty(constant.PointerTexts[key], constant.HintSeparator, hint)
 }

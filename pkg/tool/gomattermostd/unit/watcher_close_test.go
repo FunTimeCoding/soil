@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/cross_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/event_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"github.com/mattermost/mattermost/server/public/model"
 	"sync"
 	"testing"
@@ -16,7 +18,7 @@ func TestCloseFlushesEventStillBeingDispatched(t *testing.T) {
 	var releasing sync.Once
 	r := cross_service_tester.New(
 		t,
-		heldAuthorUpstream(asked, release),
+		mattermost_server.HeldAuthor(asked, release),
 		time.Hour,
 	)
 	t.Cleanup(func() { releasing.Do(func() { close(release) }) })
@@ -24,7 +26,7 @@ func TestCloseFlushesEventStillBeingDispatched(t *testing.T) {
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Start()
 	r.Upstream.Push(
-		postEvent(
+		event_tester.Posted(
 			&model.Post{
 				Id:       "reply",
 				RootId:   "alfa",

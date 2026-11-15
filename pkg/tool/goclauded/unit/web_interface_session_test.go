@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/session_page"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"net/http"
 	"testing"
 )
@@ -13,7 +13,7 @@ import (
 func TestPulseFormSitsOutsideLiveRegion(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
-	page := body(t, s.Server, session_page.Path("session-1"))
+	page := s.Body(t, session_page.Path("session-1"))
 	markup_tester.AssertCount(
 		t,
 		1,
@@ -27,7 +27,7 @@ func TestDashboardActivityIsReadOnly(t *testing.T) {
 	s := base.New(t)
 	r := s.Store.EnsureSession("session-1")
 	s.Moment("session-1", r.Callsign, "figured out the root cause")
-	page := body(t, s.Server, constant.DashboardPath)
+	page := s.Body(t, constant.DashboardPath)
 	assert.StringContains(t, "figured out the root cause", page)
 	markup_tester.AssertCount(t, 0, page, `a[href$="/edit"]`)
 }
@@ -37,6 +37,6 @@ func TestUnknownSessionIsNotFound(t *testing.T) {
 	assert.Integer(
 		t,
 		http.StatusNotFound,
-		pageStatus(t, s, session_page.Path("no-such-session")),
+		s.Status(t, session_page.Path("no-such-session")),
 	)
 }

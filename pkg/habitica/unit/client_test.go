@@ -6,7 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/habitica"
 	"github.com/funtimecoding/soil/pkg/habitica/face"
 	"github.com/funtimecoding/soil/pkg/habitica/mock_client"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/habitica/unit/habitica_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
@@ -21,12 +22,14 @@ func TestHabiticaClientAndItsMockShareFace(t *testing.T) {
 }
 
 func TestRefusedUserReadReturnsError(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"success":false,"error":"NotAuthorized","message":"token expired"}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"NotAuthorized","message":"token expired"}`,
+		),
 	)
-	c := habitica.FromBasic(newClient(t, s.URL))
+	c := habitica.FromBasic(habitica_tester.New(t, s.URL))
 	defer c.Close()
 	g, e := c.UserGear()
 	assert.True(t, unexpected.Is(e))

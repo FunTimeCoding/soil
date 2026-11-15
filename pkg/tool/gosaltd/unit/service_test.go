@@ -5,23 +5,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
 	"github.com/funtimecoding/soil/pkg/provision/salt/face"
-	"github.com/funtimecoding/soil/pkg/provision/salt/salt_tester"
+	"github.com/funtimecoding/soil/pkg/provision/salt/salt_server"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 	"time"
 )
 
 func TestKeysWhileMasterIsDownAnswerUnavailable(t *testing.T) {
-	v, _ := service_tester.New(t, newOption(t))
+	v, _ := service_tester.New(t, service_tester.NewOption(t))
 	_, e := v.Keys()
 	assert.True(t, unavailable.Is(e))
 }
 
 func TestKeysAfterLoginAnswerMastersKeys(t *testing.T) {
-	m := salt_tester.New(t, "bravo")
-	host, port := upstream_tester.HostPort(t, m.URL)
-	o := newOption(t)
+	m := salt_server.New(t, "bravo")
+	host, port := upstream_server.HostPort(t, m.URL)
+	o := service_tester.NewOption(t)
 	o.Master = func() face.SaltClient {
 		return salt.New(host, port, "alfa", "bravo", salt.WithInsecure())
 	}
@@ -45,7 +45,7 @@ func TestKeysAfterLoginAnswerMastersKeys(t *testing.T) {
 }
 
 func TestServiceReadsRunsFromItsOwnDatabase(t *testing.T) {
-	v, _ := service_tester.New(t, newOption(t))
+	v, _ := service_tester.New(t, service_tester.NewOption(t))
 	runs, e := v.Recent(10)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, runs)

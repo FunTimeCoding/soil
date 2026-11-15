@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/cross_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"testing"
 	"time"
 )
@@ -13,16 +14,19 @@ func TestFlushNotifiesEverySubscriberAndTouchesRoot(t *testing.T) {
 	asked := make(chan struct{}, 1)
 	release := make(chan struct{})
 	close(release)
-	r := cross_service_tester.New(t, heldAuthorUpstream(asked, release), 0)
+	r := cross_service_tester.New(
+		t,
+		mattermost_server.HeldAuthor(asked, release),
+		0,
+	)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Goclauded.Store.HoldCallsign("lima-session", "lima")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Store.MustCreate(subscription.New("lima", "alfa", "bravo", ""))
 	r.Store.MustTouchRoot("alfa", time.Now().Add(-8*24*time.Hour))
 	r.Start()
-	pushReply(r, asked)
-	eventually(
-		t,
+	r.PushReply(asked)
+	r.Eventually(
 		func() bool {
 			return r.Store.MustByRoot("alfa")[0].LastEvent.After(
 				time.Now().Add(-time.Minute),
@@ -43,13 +47,13 @@ func TestRootInsideItsWindowWaitsForCloseToFlush(t *testing.T) {
 	close(release)
 	r := cross_service_tester.New(
 		t,
-		heldAuthorUpstream(asked, release),
+		mattermost_server.HeldAuthor(asked, release),
 		time.Hour,
 	)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Start()
-	pushReply(r, asked)
+	r.PushReply(asked)
 	time.Sleep(10 * constant.FixtureFlushInterval)
 	assert.Count(t, 0, r.Goclauded.Store.PendingNotifications("kilo-session"))
 	r.Daemon.Close()

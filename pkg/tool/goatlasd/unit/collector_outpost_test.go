@@ -19,7 +19,7 @@ func TestOutpostPlacesDeployedService(t *testing.T) {
 		systemConstant.ServiceOriginVendor,
 		"https://apt.example.test",
 	)
-	v, e := outpostCollector(t, f).Collect(
+	v, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -38,7 +38,7 @@ func TestOutpostRefusesBaseSystem(t *testing.T) {
 		systemConstant.ServiceOriginSystem,
 		"mirror+file:/etc/apt/mirrors/debian.list",
 	)
-	v, e := outpostCollector(t, f).Collect(
+	v, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -54,7 +54,7 @@ func TestOutpostRefusesSynthesizedUnit(t *testing.T) {
 		systemConstant.ServiceOriginLocal,
 		"",
 	)
-	v, e := outpostCollector(t, f).Collect(
+	v, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -74,7 +74,7 @@ func TestOutpostResolvesByHardwareAddress(t *testing.T) {
 		systemConstant.ServiceOriginLocal,
 		"/run/systemd/generator/percona-postgresql.service",
 	)
-	v, e := outpostCollector(t, f).Collect(
+	v, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -91,7 +91,7 @@ func TestOutpostRefusesUnknownHost(t *testing.T) {
 		systemConstant.ServiceOriginVendor,
 		"x",
 	)
-	_, e := outpostCollector(t, f).Collect(
+	_, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -108,7 +108,7 @@ func TestOutpostCarriesPackageAndVersion(t *testing.T) {
 		"goagentd",
 		"0.11.154",
 	)
-	v, e := outpostCollector(t, f).Collect(
+	v, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -126,7 +126,7 @@ func TestOutpostWithoutPackageCarriesNone(t *testing.T) {
 		systemConstant.ServiceOriginVendor,
 		"https://apt.example.test",
 	)
-	v, e := outpostCollector(t, f).Collect(
+	v, e := collector_tester.Outpost(t, f).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -156,7 +156,7 @@ func TestOutpostCollectsPastFailedTarget(t *testing.T) {
 		"goagentd",
 		"0.11.154",
 	)
-	v, e := outpostCollector(t, dead, alive).Collect(
+	v, e := collector_tester.Outpost(t, dead, alive).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
@@ -172,7 +172,7 @@ func TestOutpostFailsWhenEveryTargetFails(t *testing.T) {
 		nil,
 	)
 	dead.Failure = unexpected.Format("dial %s: refused", "alfa")
-	_, e := outpostCollector(t, dead).Collect(
+	_, e := collector_tester.Outpost(t, dead).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)

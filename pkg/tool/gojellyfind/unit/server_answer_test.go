@@ -6,13 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/jellyfin/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/rejecting_command"
 	"testing"
 )
 
 func TestUnknownItemIsAnsweredNotFound(t *testing.T) {
 	m := memory.New()
-	r, e := restClient(t, mock_client.New(), m).GetItemWithResponse(
+	r, e := base.Rest(t, mock_client.New(), m).GetItemWithResponse(
 		context.Background(),
 		"charlie",
 	)
@@ -24,7 +25,7 @@ func TestUnknownItemIsAnsweredNotFound(t *testing.T) {
 
 func TestRejectedCommandIsAnsweredAsBadRequest(t *testing.T) {
 	m := memory.New()
-	r, e := restClient(
+	r, e := base.Rest(
 		t,
 		rejecting_command.New(),
 		m,
@@ -41,7 +42,7 @@ func TestRejectedCommandIsAnsweredAsBadRequest(t *testing.T) {
 
 func TestPlayWithoutItemsIsAnsweredAsBadRequest(t *testing.T) {
 	m := memory.New()
-	r, e := restClient(t, mock_client.New(), m).PlayWithResponse(
+	r, e := base.Rest(t, mock_client.New(), m).PlayWithResponse(
 		context.Background(),
 		"delta",
 		client.PlayJSONRequestBody{ItemIds: []string{}},
@@ -54,7 +55,7 @@ func TestPlayWithoutItemsIsAnsweredAsBadRequest(t *testing.T) {
 
 func TestVolumeOutOfRangeIsAnsweredAsBadRequest(t *testing.T) {
 	m := memory.New()
-	r, e := restClient(t, mock_client.New(), m).SetVolumeWithResponse(
+	r, e := base.Rest(t, mock_client.New(), m).SetVolumeWithResponse(
 		context.Background(),
 		"delta",
 		client.SetVolumeJSONRequestBody{Level: 101},

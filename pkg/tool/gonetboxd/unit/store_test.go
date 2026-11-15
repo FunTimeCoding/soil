@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/store_tester"
 	"testing"
 )
 
 func TestStoreRoundTrip(t *testing.T) {
-	s := newStore(t)
+	s := store_tester.New(t)
 	first, e := s.SetLabel("dcim.device", 7, "owner", "admin")
 	errors.PanicOnError(e)
 	assert.String(t, "admin", first.Value)

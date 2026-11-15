@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -70,16 +71,16 @@ func TestSingleParameterFix(t *testing.T) {
 	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
-			applied := filterApplied(r.Entries)
+			applied := fix_tester.Applied(r.Entries)
 			assert.Integer(t, 2, len(applied))
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"method.go",
 				7,
 				"collapsed single parameter",
 			)
-			assertLineResult(
+			fix_tester.LineResult(
 				t,
 				applied,
 				"function.go",

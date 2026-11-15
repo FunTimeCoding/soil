@@ -19,7 +19,7 @@ func TestExpiryHorizonRunsOnServiceClock(t *testing.T) {
 		t,
 		func() time.Time { return time.Unix(0, now.Load()) },
 	)
-	o.Submit(constant.CreateAuthorityPath, rootValues())
+	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
 	d := relational.Open(logger.New(t.Context()), "", o.Server.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	root := record.Record{}

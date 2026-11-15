@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -24,7 +25,7 @@ func TestNotifyReachesSessionViaQueue(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	check := a.CheckLive()
-	notifications := clientKindEntries(
+	notifications := delivery_tester.ClientKindEntries(
 		check.Entries,
 		constant.QueueNotification,
 	)
@@ -49,13 +50,13 @@ func TestNotifyConsumedOnDrain(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	first := a.CheckLive()
-	notifications := clientKindEntries(
+	notifications := delivery_tester.ClientKindEntries(
 		first.Entries,
 		constant.QueueNotification,
 	)
 	assert.Count(t, 1, notifications)
 	second := a.CheckLive()
-	notifications = clientKindEntries(
+	notifications = delivery_tester.ClientKindEntries(
 		second.Entries,
 		constant.QueueNotification,
 	)

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
@@ -16,9 +17,9 @@ func TestJellyfinOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	c := mock_client.New()
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
-	s := restClient(t, c, r)
+	s := base.Rest(t, c, r)
 
 	for range 2 {
 		answer, e := s.ListLibrariesWithResponse(t.Context())
@@ -33,7 +34,7 @@ func TestJellyfinOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 func TestJellyfinOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	s.MockClient.Failure = refusedDial()
+	s.MockClient.Failure = outage_tester.RefusedDial()
 	c := s.ContextServer.Connect(t)
 	defer c.Close()
 	assert.StringContains(

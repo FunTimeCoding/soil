@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -16,7 +17,7 @@ func TestImportClean(t *testing.T) {
 			"package example\n\nimport \"fmt\"\n\nfunc Example() {\n\tfmt.Println(\"Hello.\")\n}\n",
 		),
 	)
-	assertReport(t, "Bravo", false, nil, "", l)
+	lint_tester.Report(t, "Bravo", false, nil, "", l)
 }
 
 func TestImportBlank(t *testing.T) {
@@ -26,7 +27,7 @@ func TestImportBlank(t *testing.T) {
 			"package example\n\nimport (\n\t\"fmt\"\n\n\t\"log\"\n)\n\nfunc Example() {\n\tfmt.Printf(\"test\")\n\tlog.Printf(\"test\")\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Charlie",
 		true,
@@ -53,7 +54,7 @@ func TestGo(t *testing.T) {
 			"package example\n\nimport (\n\t\"example.org/example/fmt\"\n)\n\nfunc Example() {\n\tfmt.Println(\"Hello friend.\")\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,

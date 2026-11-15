@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -22,9 +23,9 @@ func TestDefaultRewritesConstantImport(t *testing.T) {
 		"package charlie\n\nimport bravoConstant \"testmodule/pkg/bravo/constant\"\n\nfunc Lone() string {\n\treturn bravoConstant.Bravo\n}\n",
 		testutil.ReadFile(t, filepath.Join(directory, "pkg/charlie/lone.go")),
 	)
-	assertResult(
+	fix_tester.Result(
 		t,
-		filterApplied(r.Entries),
+		fix_tester.Applied(r.Entries),
 		"pkg/charlie/lone.go",
 		"re-aliased constant → bravoConstant (testmodule/pkg/bravo/constant)",
 	)

@@ -17,7 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/transcript"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/usage"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/double"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync"
@@ -25,7 +25,7 @@ import (
 )
 
 type Tester struct {
-	*double.Set
+	*peer_tester.Peers
 	Store          *store_tester.Tester
 	t              *testing.T
 	Roster         *roster.Service

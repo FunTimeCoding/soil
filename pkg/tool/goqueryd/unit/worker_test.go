@@ -5,9 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync/atomic"
 	"testing"
@@ -15,9 +18,9 @@ import (
 )
 
 func TestWorkerIndexesWhileEmbedderIsDown(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
-	v := newService(t, m, newReranker(t))
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
+	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
 	d := t.TempDir()
 	store_tester.WriteFixture(t, d, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("test", d, constant.DefaultGlob)
@@ -42,7 +45,11 @@ func TestWorkerIndexesWhileEmbedderIsDown(t *testing.T) {
 }
 
 func TestWorkerCountsWhatItPrunes(t *testing.T) {
-	v := newService(t, newEmbedder(t), newReranker(t))
+	v := service_tester.NewService(
+		t,
+		service_tester.NewEmbedder(t),
+		service_tester.NewReranker(t),
+	)
 	v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -69,11 +76,16 @@ func TestWorkerCountsWhatItPrunes(t *testing.T) {
 	defer w.Close()
 	deadline := time.Now().Add(time.Second)
 
-	for time.Now().Before(deadline) && prunedContents(g) == 0 {
+	for time.Now().Before(deadline) &&
+		metric_tester.Sample(t, g, "goqueryd_pruned_contents_total", nil) < 1 {
 		time.Sleep(time.Millisecond)
 	}
 
-	assert.Float(t, 1, prunedContents(g))
+	assert.Float(
+		t,
+		1,
+		metric_tester.Sample(t, g, "goqueryd_pruned_contents_total", nil),
+	)
 }
 
 func TestWorkerCloseWaitsForRunningPoll(t *testing.T) {

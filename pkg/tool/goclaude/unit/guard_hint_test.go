@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestHintPointsDirectCodegenAtTask(t *testing.T) {
+func TestTaskHintForDirectCodegen(t *testing.T) {
 	assert.String(
 		t,
 		"`task generate` in the repository root regenerates every service's client and server from its openapi.yaml with this same oapi-codegen invocation; it is how this repository runs code generation, and it runs quietly",
@@ -26,14 +26,14 @@ func TestHintPointsDirectCodegenAtTask(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		guard.Verdict(
+		guard.BlockReason(
 			"darwin",
 			"cd generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml",
 		),
 	)
 }
 
-func TestHintStaysQuietWithoutCodegen(t *testing.T) {
+func TestHintEmptyWithoutCodegen(t *testing.T) {
 	assert.String(t, "", guard.Hint("task generate"))
 	assert.String(t, "", guard.Hint("grep -n oapi-codegen taskfile.yaml"))
 	assert.String(t, "", guard.Hint("git status --short"))

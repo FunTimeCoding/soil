@@ -3,13 +3,15 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMoveSymbolsRequalifiesReplacingModule(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
+	library, user := module_tester.ReplacedLibrary(t, "move-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -28,19 +30,19 @@ func TestMoveSymbolsRequalifiesReplacingModule(t *testing.T) {
 		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
 	)
 	both := service_tester.ReadFixtureFile(t, user, "pkg/both/both.go")
-	assertFormatted(t, both)
+	rewrite_tester.Formatted(t, both)
 	assert.StringContains(t, "\"other.test/lib/source\"", both)
 	assert.StringContains(t, "\"other.test/lib/target\"", both)
 	assert.StringContains(t, "return target.Helper() + source.Keep()", both)
 	clash := service_tester.ReadFixtureFile(t, user, "pkg/clash/clash.go")
-	assertFormatted(t, clash)
+	rewrite_tester.Formatted(t, clash)
 	assert.StringContains(t, "lib \"other.test/lib/target\"", clash)
 	assert.StringContains(t, "return target.Local() + lib.Helper()", clash)
 }
 
 func TestMoveSymbolsToNewPackageRequalifiesReplacingModule(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
+	library, user := module_tester.ReplacedLibrary(t, "move-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -61,8 +63,8 @@ func TestMoveSymbolsToNewPackageRequalifiesReplacingModule(t *testing.T) {
 }
 
 func TestMoveSymbolsByFileRequalifiesReplacingModule(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
+	library, user := module_tester.ReplacedLibrary(t, "move-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -81,14 +83,14 @@ func TestMoveSymbolsByFileRequalifiesReplacingModule(t *testing.T) {
 		service_tester.ReadFixtureFile(t, user, "pkg/both/both.go"),
 	)
 	widget := service_tester.ReadFixtureFile(t, user, "pkg/widget/widget.go")
-	assertFormatted(t, widget)
+	rewrite_tester.Formatted(t, widget)
 	assert.StringContains(t, "return w.Run() + target.Limit", widget)
 	assert.StringContains(t, "\tsource.Widget\n", widget)
 }
 
 func TestExtractTypeRequalifiesReplacingModule(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "move-replacer")
-	r, e := replacingService(t, library, user).Symbol.ExtractType(
+	library, user := module_tester.ReplacedLibrary(t, "move-replacer")
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.ExtractType(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -101,15 +103,15 @@ func TestExtractTypeRequalifiesReplacingModule(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	widget := service_tester.ReadFixtureFile(t, user, "pkg/widget/widget.go")
-	assertFormatted(t, widget)
+	rewrite_tester.Formatted(t, widget)
 	assert.StringContains(t, "\ttarget.Widget\n", widget)
 	assert.StringContains(t, "w := &target.Widget{Size: 1}", widget)
 	assert.StringContains(t, "return w.Run() + source.Limit", widget)
 }
 
 func TestMoveSymbolsRequalifiesReplacingModuleOnWholeLoad(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "move-replacer")
-	s := replacingService(t, library, user)
+	library, user := module_tester.ReplacedLibrary(t, "move-replacer")
+	s := module_tester.ReplacingService(t, library, user)
 	s.Workspace.UseFullLoad()
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -132,9 +134,9 @@ func TestMoveSymbolsRequalifiesReplacingModuleOnWholeLoad(t *testing.T) {
 }
 
 func TestMoveSymbolsDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "move-replacer")
-	before := directoryTree(t, user)
-	r, e := replacingService(t, library, user).Symbol.MoveSymbols(
+	library, user := module_tester.ReplacedLibrary(t, "move-replacer")
+	before := rewrite_tester.DirectoryTree(t, user)
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.MoveSymbols(
 		t.Context(),
 		library,
 		"other.test/lib/source",
@@ -147,10 +149,10 @@ func TestMoveSymbolsDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(t, before, directoryTree(t, user))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, user))
 	assert.StringContains(
 		t,
 		"pkg/user/user.go: Helper → target.Helper",
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 }

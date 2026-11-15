@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/label_tester"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func TestRestLabelSetUpdateRemove(t *testing.T) {
 	set, e := a.RestClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
-		labelBody("environment", "staging", "reconciler"),
+		label_tester.Body("environment", "staging", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, set.StatusCode())
@@ -23,7 +24,7 @@ func TestRestLabelSetUpdateRemove(t *testing.T) {
 	update, e := a.RestClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
-		labelBody("environment", "production", "reconciler"),
+		label_tester.Body("environment", "production", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, update.StatusCode())
@@ -31,7 +32,7 @@ func TestRestLabelSetUpdateRemove(t *testing.T) {
 	remove, e := a.RestClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
-		labelBody("environment", "", "reconciler"),
+		label_tester.Body("environment", "", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, remove.StatusCode())
@@ -46,7 +47,7 @@ func TestRestLabelReadsBack(t *testing.T) {
 	_, e := a.RestClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
-		labelBody("environment", "staging", "reconciler"),
+		label_tester.Body("environment", "staging", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
 	read, e := a.RestClient.GetSessionLabelWithResponse(a.Context, a.UUID)

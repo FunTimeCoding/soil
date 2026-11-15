@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/component/panel"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"testing"
@@ -13,7 +14,7 @@ func TestPanelIsTitledArticle(t *testing.T) {
 	assert.String(
 		t,
 		`<article id="alfa"><header><strong>Bravo</strong></header><p>charlie</p></article>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			panel.New("Bravo").
 				Identifier("alfa").
@@ -27,7 +28,7 @@ func TestPanelFramesItsHeaderAndFooter(t *testing.T) {
 	assert.String(
 		t,
 		`<article><header>delta</header><p>charlie</p><footer>echo</footer></article>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			panel.New("").
 				Header(gomponents.Text("delta")).
@@ -42,7 +43,7 @@ func TestPanelTitleSharesBandWithHeaderInRow(t *testing.T) {
 	assert.String(
 		t,
 		`<article><header class="heading-row"><strong>Bravo</strong>delta</header><p>charlie</p></article>`,
-		renderedNode(
+		web_tester.Render(
 			t,
 			panel.New("Bravo").
 				Header(gomponents.Text("delta")).

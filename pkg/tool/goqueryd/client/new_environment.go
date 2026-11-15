@@ -5,9 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
-func NewEnvironment() *Client {
+func NewEnvironment(o ...Option) *Client {
 	return New(
 		environmentLocator(),
 		environment.Required(constant.TokenEnvironment),
+		o...,
 	)
 }

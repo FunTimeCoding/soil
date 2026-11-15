@@ -64,7 +64,7 @@ func Tools(
 		said := text(answer)
 		problems = append(
 			problems,
-			verdict(
+			operationProblems(
 				tool.Name,
 				want,
 				answer.IsError,

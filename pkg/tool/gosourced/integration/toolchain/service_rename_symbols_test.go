@@ -3,13 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/symbol_rename"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameSymbols(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
@@ -23,7 +24,7 @@ func TestRenameSymbols(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 	declaration := service_tester.ReadFixtureFile(
 		t,
 		d,
@@ -38,7 +39,7 @@ func TestRenameSymbols(t *testing.T) {
 }
 
 func TestRenameSymbolsRefusedItemBlocksBatch(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
@@ -62,7 +63,7 @@ func TestRenameSymbolsRefusedItemBlocksBatch(t *testing.T) {
 }
 
 func TestRenameSymbolsSameTarget(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
@@ -84,7 +85,7 @@ func TestRenameSymbolsSameTarget(t *testing.T) {
 }
 
 func TestRenameSymbolsListedTwice(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.RenameSymbols(
 		t.Context(),
@@ -102,7 +103,7 @@ func TestRenameSymbolsListedTwice(t *testing.T) {
 }
 
 func TestRenameSymbolsOntoFreedName(t *testing.T) {
-	d := renameFunctionFixture(t)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.RenameSymbols(
 		t.Context(),

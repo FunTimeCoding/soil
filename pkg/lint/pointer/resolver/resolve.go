@@ -19,8 +19,7 @@ func (r *Resolver) Resolve(
 		return r.resolveSpan(path, d, c)
 	}
 
-	result := pointer.NewResolution(constant.VerdictLive)
-	result.Target = path
+	result := pointer.NewLive(path)
 
 	if span != "" {
 		inner := pointer.NewSpan(span)
@@ -28,7 +27,7 @@ func (r *Resolver) Resolve(
 		result = r.resolveSpan(path, d, inner)
 	}
 
-	if result.Verdict != constant.VerdictLive {
+	if !result.Live() {
 		return result
 	}
 

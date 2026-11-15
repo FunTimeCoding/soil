@@ -1,0 +1,27 @@
+package delivery_tester
+
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/delivery_renderer"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+	"time"
+)
+
+func Render(
+	entries []*queue.Entry,
+	messages ...*message.Message,
+) string {
+	stored := map[uint]*message.Message{}
+
+	for _, m := range messages {
+		stored[m.Identifier] = m
+	}
+
+	var values []queue.Entry
+
+	for _, e := range entries {
+		values = append(values, *e)
+	}
+
+	return delivery_renderer.New(stored, time.UTC).Context(values)
+}

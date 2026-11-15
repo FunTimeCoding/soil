@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/argument/edit_session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"testing"
 )
 
@@ -21,7 +21,7 @@ func TestRosterCardClampsDescriptionAndKeepsItWhole(t *testing.T) {
 			),
 		),
 	)
-	page := body(t, s.Server, constant.DashboardPath)
+	page := s.Body(t, constant.DashboardPath)
 	markup_tester.AssertCount(t, 1, page, "p.card-meta.card-clamp")
 	assert.StringContains(
 		t,
@@ -42,7 +42,7 @@ func TestRosterCardClampsTopicAndKeepsItWhole(t *testing.T) {
 			),
 		),
 	)
-	page := body(t, s.Server, constant.DashboardPath)
+	page := s.Body(t, constant.DashboardPath)
 	markup_tester.AssertCount(t, 1, page, "p.card-subtitle.card-clamp")
 	assert.StringContains(
 		t,

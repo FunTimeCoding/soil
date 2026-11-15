@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"testing"
 )
@@ -17,6 +18,6 @@ func TestDefaultFormatsAfterDealiasing(t *testing.T) {
 	assert.String(
 		t,
 		"package example\n\nimport \"testmodule/pkg/helper\"\n\nfunc Use() string {\n\treturn helper.Join(\"first-literal-value\", \"second-literal-value\", \"third\")\n}\n",
-		readGoFiles(t, directory)["use.go"],
+		fix_tester.GoFiles(t, directory)["use.go"],
 	)
 }

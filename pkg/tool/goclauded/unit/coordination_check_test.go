@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/google/uuid"
 	"testing"
 )
@@ -43,7 +44,7 @@ func TestCheckRecentActivity(t *testing.T) {
 		map[string]any{constant.Message: "indexing done"},
 	)
 	check := b.CheckLive()
-	completions := clientKindEntries(
+	completions := delivery_tester.ClientKindEntries(
 		check.Entries,
 		constant.QueueSessionComplete,
 	)
@@ -71,7 +72,7 @@ func TestCheckRecentActivityLive(t *testing.T) {
 	)
 	check := b.CheckLive()
 	assert.True(t, check.Changed)
-	completions := clientKindEntries(
+	completions := delivery_tester.ClientKindEntries(
 		check.Entries,
 		constant.QueueSessionComplete,
 	)
@@ -92,6 +93,9 @@ func TestCheckRecentActivityUpdate(t *testing.T) {
 		},
 	)
 	check := b.CheckLive()
-	updates := clientKindEntries(check.Entries, constant.QueueSessionUpdate)
+	updates := delivery_tester.ClientKindEntries(
+		check.Entries,
+		constant.QueueSessionUpdate,
+	)
 	assert.True(t, len(updates) > 0)
 }

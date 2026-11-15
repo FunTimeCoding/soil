@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
 	"github.com/funtimecoding/soil/pkg/openbao/mock_client"
 	"github.com/funtimecoding/soil/pkg/openbao/status"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
@@ -29,8 +30,8 @@ func TestWatchReportsUnsealedStore(t *testing.T) {
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Float(t, 0, gauge(t, y, constant.SealedGauge))
-	assert.Float(t, 1, gauge(t, y, constant.ReachableGauge))
+	assert.Float(t, 0, metric_tester.Sample(t, y, constant.SealedGauge, nil))
+	assert.Float(t, 1, metric_tester.Sample(t, y, constant.ReachableGauge, nil))
 }
 
 func TestWatchReportsSealedStore(t *testing.T) {
@@ -46,7 +47,7 @@ func TestWatchReportsSealedStore(t *testing.T) {
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Float(t, 1, gauge(t, y, constant.SealedGauge))
+	assert.Float(t, 1, metric_tester.Sample(t, y, constant.SealedGauge, nil))
 }
 
 func TestWatchReportsUnreachableStore(t *testing.T) {
@@ -62,7 +63,7 @@ func TestWatchReportsUnreachableStore(t *testing.T) {
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Float(t, 0, gauge(t, y, constant.ReachableGauge))
+	assert.Float(t, 0, metric_tester.Sample(t, y, constant.ReachableGauge, nil))
 }
 
 func TestWatchCloseWaitsForTickInFlight(t *testing.T) {

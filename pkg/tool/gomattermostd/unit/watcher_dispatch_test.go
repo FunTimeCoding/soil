@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/dispatch_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
@@ -23,7 +24,7 @@ func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
 				RootId:   "alfa",
 				UserId:   "foxtrot",
 				Message:  "first message",
-				CreateAt: dispatchAt().UnixMilli(),
+				CreateAt: dispatch_tester.At().UnixMilli(),
 			},
 		),
 	)
@@ -31,7 +32,7 @@ func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
 	assert.Count(t, 1, events)
 	assert.String(t, "Foxtrot", events[0].Author)
 	assert.String(t, "first message", events[0].Text)
-	assert.True(t, events[0].At.Equal(dispatchAt()))
+	assert.True(t, events[0].At.Equal(dispatch_tester.At()))
 }
 
 func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {

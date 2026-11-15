@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/digest_tester"
 	"strings"
 	"testing"
 )
@@ -24,7 +25,7 @@ func TestDigestBuildSingleMessage(t *testing.T) {
 					constant.MessageEvent,
 					"Foxtrot",
 					"first message",
-					digestAt(14, 32),
+					digest_tester.At(14, 32),
 				),
 			},
 		),
@@ -42,7 +43,7 @@ func TestDigestBuildSingleReaction(t *testing.T) {
 					constant.ReactionAddedEvent,
 					"Golf",
 					"✅",
-					digestAt(15, 12),
+					digest_tester.At(15, 12),
 				),
 			},
 		),
@@ -60,7 +61,7 @@ func TestDigestBuildReactionRemoved(t *testing.T) {
 					constant.ReactionRemovedEvent,
 					"Golf",
 					"✅",
-					digestAt(15, 12),
+					digest_tester.At(15, 12),
 				),
 			},
 		),
@@ -84,19 +85,19 @@ func TestDigestBuildEnumerated(t *testing.T) {
 						constant.MessageEvent,
 						"Foxtrot",
 						"first message",
-						digestAt(14, 32),
+						digest_tester.At(14, 32),
 					),
 					event.New(
 						constant.MessageEvent,
 						"Foxtrot",
 						"second message",
-						digestAt(15, 0),
+						digest_tester.At(15, 0),
 					),
 					event.New(
 						constant.ReactionAddedEvent,
 						"Golf",
 						"👀",
-						digestAt(15, 10),
+						digest_tester.At(15, 10),
 					),
 				},
 			),
@@ -115,14 +116,19 @@ func TestDigestBuildCollapsesAboveEnumerateLimit(t *testing.T) {
 				constant.MessageEvent,
 				"Foxtrot",
 				"status update",
-				digestAt(9, i),
+				digest_tester.At(9, i),
 			),
 		)
 	}
 
 	events = append(
 		events,
-		event.New(constant.ReactionAddedEvent, "Golf", "✅", digestAt(10, 0)),
+		event.New(
+			constant.ReactionAddedEvent,
+			"Golf",
+			"✅",
+			digest_tester.At(10, 0),
+		),
 	)
 	assert.Strings(
 		t,
@@ -141,7 +147,12 @@ func TestDigestBuildCollapsesWhenOverBudget(t *testing.T) {
 	for i := range constant.EnumerateLimit {
 		events = append(
 			events,
-			event.New(constant.MessageEvent, "Foxtrot", long, digestAt(9, i)),
+			event.New(
+				constant.MessageEvent,
+				"Foxtrot",
+				long,
+				digest_tester.At(9, i),
+			),
 		)
 	}
 
@@ -158,7 +169,7 @@ func TestDigestBuildTruncatesLongMessage(t *testing.T) {
 				constant.MessageEvent,
 				"Foxtrot",
 				strings.Repeat("b", 260),
-				digestAt(9, 0),
+				digest_tester.At(9, 0),
 			),
 		},
 	)
@@ -177,7 +188,7 @@ func TestDigestBuildFlattensNewlines(t *testing.T) {
 					constant.MessageEvent,
 					"Foxtrot",
 					"one\n  two\n\nthree",
-					digestAt(9, 0),
+					digest_tester.At(9, 0),
 				),
 			},
 		),
@@ -196,7 +207,12 @@ func TestDigestBuildAuthorOverflow(t *testing.T) {
 	} {
 		events = append(
 			events,
-			event.New(constant.MessageEvent, name, "hello", digestAt(9, 0)),
+			event.New(
+				constant.MessageEvent,
+				name,
+				"hello",
+				digest_tester.At(9, 0),
+			),
 		)
 	}
 

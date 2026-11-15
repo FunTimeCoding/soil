@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/github/run"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/types/run_key"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/worker"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/testutil"
@@ -27,7 +28,7 @@ func TestPollDropsRunNoLongerLatest(t *testing.T) {
 					Repository: "bravo",
 					Workflow:   "release image",
 					Branch:     b,
-				}: workflowRun(1, b, "completed", "success"),
+				}: service_tester.WorkflowRun(1, b, "completed", "success"),
 			}, nil
 		},
 		"alfa",

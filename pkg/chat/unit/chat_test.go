@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/reaction"
 	"github.com/funtimecoding/soil/pkg/chat/telegram/message"
+	"github.com/funtimecoding/soil/pkg/chat/unit/store_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/mattermost/mattermost/server/public/model"
@@ -96,7 +97,7 @@ func TestNewSlice(t *testing.T) {
 }
 
 func TestStoreRoundTrip(t *testing.T) {
-	s := newStore(t)
+	s := store_tester.New(t)
 	s.MustSaveChannel(-100, "announcements")
 	s.MustSaveChannel(-100, "announcements")
 	s.MustSaveUser(7, "admin")

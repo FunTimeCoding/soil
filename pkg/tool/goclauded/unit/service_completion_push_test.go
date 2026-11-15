@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/completion_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"testing"
@@ -22,8 +23,8 @@ func TestRecompletionPushesLaterCompletionTime(t *testing.T) {
 	assert.Duration(
 		t,
 		time.Hour,
-		pushedCompletionTime(t, pushed[1]).Sub(
-			pushedCompletionTime(t, pushed[0]),
+		completion_tester.PushedTime(t, pushed[1]).Sub(
+			completion_tester.PushedTime(t, pushed[0]),
 		),
 	)
 	assert.Strings(

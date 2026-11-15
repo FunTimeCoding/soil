@@ -10,83 +10,90 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/unit/client_tester"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestMissingProjectIsNotFound(t *testing.T) {
-	_, e := refusingProject(t, http.StatusNotFound, "404 Project Not Found").
-		Client.Project(t.Context(), 7)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(`{"message":"404 Project Not Found"}`),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "Not Found", e.Error())
 }
 
 func TestForbiddenProjectIsForbidden(t *testing.T) {
-	_, e := refusingProject(t, http.StatusForbidden, "403 Forbidden").
-		Client.Project(t.Context(), 7)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusForbidden),
+		upstream_server.WithAnswer(`{"message":"403 Forbidden"}`),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, forbidden.Is(e))
 }
 
 func TestUnprocessableRequestIsCallersMistake(t *testing.T) {
-	_, e := refusingProject(t, http.StatusUnprocessableEntity, "name is taken").
-		Client.Project(t.Context(), 7)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusUnprocessableEntity),
+		upstream_server.WithAnswer(`{"message":"name is taken"}`),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, validation.Is(e))
 }
 
 func TestFailedPreconditionIsConflict(t *testing.T) {
-	_, e := refusingProject(t, http.StatusPreconditionFailed, "modified since").
-		Client.Project(t.Context(), 7)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusPreconditionFailed),
+		upstream_server.WithAnswer(`{"message":"modified since"}`),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, conflict.Is(e))
 }
 
 func TestRateLimitedRequestIsUnavailable(t *testing.T) {
-	_, e := refusingProject(t, http.StatusTooManyRequests, "slow down").
-		Client.Project(t.Context(), 7)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusTooManyRequests),
+		upstream_server.WithAnswer(`{"message":"slow down"}`),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, unavailable.Is(e))
 }
 
 func TestOutagePageIsUnavailable(t *testing.T) {
-	_, e := client_tester.New(
+	s := upstream_server.New(
 		t,
-		func(m *http.ServeMux) {
-			m.HandleFunc(
-				"/api/v4/projects/7",
-				func(
-					w http.ResponseWriter,
-					_ *http.Request,
-				) {
-					web.TextHeader(w)
-					web.Write(
-						w,
-						http.StatusBadGateway,
-						"GitLab is not responding",
-					)
-				},
-			)
-		},
-	).Client.Project(t.Context(), 7)
+		upstream_server.WithStatus(http.StatusBadGateway),
+		upstream_server.WithAnswer("GitLab is not responding"),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, unavailable.Is(e))
 }
 
 func TestUnauthorizedTokenIsOursToLookAt(t *testing.T) {
-	_, e := refusingProject(t, http.StatusUnauthorized, "401 Unauthorized").
-		Client.Project(t.Context(), 7)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(`{"message":"401 Unauthorized"}`),
+	)
+	_, e := client_tester.Connect(t, s.URL).Project(t.Context(), 7)
 	assert.True(t, classify.Reportable(e))
 	assert.False(t, forbidden.Is(e))
 }
 
 func TestRefusedDialIsConnectionFailure(t *testing.T) {
-	c := gitlab.New(
-		"127.0.0.1:1",
-		"test-token",
-		gitlab.WithInsecure(),
-		gitlab.WithRetryMax(0),
+	_, e := client_tester.Connect(t, outage_tester.RefusedAddress(t)).Project(
+		t.Context(),
+		7,
 	)
-	t.Cleanup(c.Close)
-	_, e := c.Project(t.Context(), 7)
 	var f *connection.Failure
 	assert.True(t, errors.As(e, &f))
 }

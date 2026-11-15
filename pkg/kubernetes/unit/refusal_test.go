@@ -7,19 +7,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/unit/refusing_clientset"
 	kubernetes "k8s.io/apimachinery/pkg/api/errors"
 	"testing"
 )
 
 func TestMissingJobIsNotFound(t *testing.T) {
-	_, e := refusingClientset(
+	_, e := refusing_clientset.New(
 		kubernetes.NewNotFound(constant.JobResource, "alfa"),
 	).Job("default", "alfa")
 	assert.True(t, not_found.Is(e))
 }
 
 func TestRefusedListIsForbidden(t *testing.T) {
-	_, e := refusingClientset(
+	_, e := refusing_clientset.New(
 		kubernetes.NewForbidden(
 			constant.JobResource,
 			"",
@@ -30,7 +31,7 @@ func TestRefusedListIsForbidden(t *testing.T) {
 }
 
 func TestConflictingWriteIsConflict(t *testing.T) {
-	e := refusingClientset(
+	e := refusing_clientset.New(
 		kubernetes.NewConflict(
 			constant.JobResource,
 			"alfa",
@@ -41,7 +42,7 @@ func TestConflictingWriteIsConflict(t *testing.T) {
 }
 
 func TestMissingJobIsNotRunning(t *testing.T) {
-	running, e := refusingClientset(
+	running, e := refusing_clientset.New(
 		kubernetes.NewNotFound(constant.JobResource, "alfa"),
 	).JobRunning("default", "alfa")
 	assert.FatalOnError(t, e)
@@ -51,7 +52,7 @@ func TestMissingJobIsNotRunning(t *testing.T) {
 func TestMissingJobIsAlreadyDeleted(t *testing.T) {
 	assert.FatalOnError(
 		t,
-		refusingClientset(
+		refusing_clientset.New(
 			kubernetes.NewNotFound(constant.JobResource, "alfa"),
 		).DeleteJob("default", "alfa"),
 	)

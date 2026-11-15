@@ -3,13 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
-	d := renameFollowFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-follow/src")
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",
@@ -34,11 +35,8 @@ func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
 }
 
 func TestRenameMethodRetargetsQualifiedName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-method/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-method/src")
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",
@@ -63,8 +61,8 @@ func TestRenameMethodRetargetsQualifiedName(t *testing.T) {
 }
 
 func TestMoveRetargetsExportedSymbol(t *testing.T) {
-	d := moveVisibilityFixture(t)
-	testutil.WriteFile(t, d, "doc/note.md", "See `go:pkg/alfa.lone`.\n")
+	d := service_tester.Prepare(t, "move-visibility/src")
+	system_tester.Write(t, d, "doc/note.md", "See `go:pkg/alfa.lone`.\n")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
@@ -86,11 +84,8 @@ func TestMoveRetargetsExportedSymbol(t *testing.T) {
 }
 
 func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods/src"),
-	)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "move-methods/src")
+	system_tester.Write(
 		t,
 		d,
 		"doc/note.md",
@@ -117,11 +112,8 @@ func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
 }
 
 func TestMoveMethodsRetargetsExportedBackReference(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-methods/src"),
-	)
-	testutil.WriteFile(t, d, "doc/note.md", "Uses `go:pkg/alfa.prefix`.\n")
+	d := service_tester.Prepare(t, "move-methods/src")
+	system_tester.Write(t, d, "doc/note.md", "Uses `go:pkg/alfa.prefix`.\n")
 	r, e := service_tester.NewService(t).Symbol.MoveMethods(
 		t.Context(),
 		d,
@@ -143,11 +135,8 @@ func TestMoveMethodsRetargetsExportedBackReference(t *testing.T) {
 }
 
 func TestMoveSymbolsRetargetsExportedBackReference(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("back-reference-unexported/src"),
-	)
-	testutil.WriteFile(t, d, "doc/note.md", "Uses `go:pkg/source.stayer`.\n")
+	d := service_tester.Prepare(t, "back-reference-unexported/src")
+	system_tester.Write(t, d, "doc/note.md", "Uses `go:pkg/source.stayer`.\n")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,
@@ -169,11 +158,8 @@ func TestMoveSymbolsRetargetsExportedBackReference(t *testing.T) {
 }
 
 func TestExtractTypeRetargetsExportedBackReference(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("extract-dependency/src"),
-	)
-	testutil.WriteFile(t, d, "doc/note.md", "Uses `go:pkg/target.prefix`.\n")
+	d := service_tester.Prepare(t, "extract-dependency/src")
+	system_tester.Write(t, d, "doc/note.md", "Uses `go:pkg/target.prefix`.\n")
 	r, e := service_tester.NewService(t).Symbol.ExtractType(
 		t.Context(),
 		d,

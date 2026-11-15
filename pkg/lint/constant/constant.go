@@ -72,7 +72,7 @@ const (
 	FixtureKey                 = "fixture_directive"
 	FixtureOutsideTestdataText = "golint:fixture directive outside testdata"
 	FixtureUnknownRuleText     = "unknown golint:fixture rule"
-	FixtureMisplacedText       = "golint:fixture directive must directly precede the declaration it sanctions"
+	FixtureMisplacedText       = "golint:fixture directive must directly precede the declaration it exempts"
 
 	StringConcatenationKey  = "string_concatenation"
 	StringConcatenationText = "use join.Empty for pure joins, fmt.Sprintf when formatting"

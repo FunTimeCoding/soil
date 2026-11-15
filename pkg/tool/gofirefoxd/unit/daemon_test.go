@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/firefox"
 	"github.com/funtimecoding/soil/pkg/firefox/face"
-	"github.com/funtimecoding/soil/pkg/firefox/unit/fake_extension"
+	"github.com/funtimecoding/soil/pkg/firefox/unit/extension_peer"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/base"
@@ -34,7 +34,7 @@ func TestDaemonLeavesNothingRunningWithExtensionConnected(t *testing.T) {
 	m := http.NewServeMux()
 	d.MountBridge(guard.New(m, nil))
 	s := httptest.NewServer(m)
-	x := fake_extension.Connect(t, s.URL)
+	x := extension_peer.Connect(t, s.URL)
 	defer x.Disconnect()
 	deadline := time.Now().Add(5 * time.Second)
 

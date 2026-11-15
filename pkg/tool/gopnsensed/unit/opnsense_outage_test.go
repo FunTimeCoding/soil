@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -19,7 +20,7 @@ func TestOpnsenseOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	c := mock_client.New()
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
 	s := client_tester.NewWith(t, c, r)
 
@@ -33,7 +34,7 @@ func TestOpnsenseOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 
 func TestOpnsenseOutageFailsToolWithoutCapture(t *testing.T) {
 	c := mock_client.New()
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
 	s := model_context_server.New(
 		t,

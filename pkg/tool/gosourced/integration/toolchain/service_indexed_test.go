@@ -3,13 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
-	directory, indexed, full := indexedAndFull(t)
+	directory, indexed, full := rewrite_tester.IndexedAndFull(t)
 	symbols := [][2]string{
 		{"NewServer", ""},
 		{"Start", "Server"},
@@ -18,7 +19,7 @@ func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
 	}
 
 	for _, s := range symbols {
-		sameResult(
+		rewrite_tester.SameResult(
 			t,
 			func(x *service_tester.Services) (any, any, error) {
 				return x.Reference.FindReferences(
@@ -48,7 +49,7 @@ func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
 }
 
 func TestFieldReferencesCrossTestVariant(t *testing.T) {
-	directory, indexed, full := indexedAndFull(t)
+	directory, indexed, full := rewrite_tester.IndexedAndFull(t)
 
 	for _, s := range []*service_tester.Services{indexed, full} {
 		_, references, e := s.Reference.FindReferences(
@@ -67,8 +68,8 @@ func TestFieldReferencesCrossTestVariant(t *testing.T) {
 }
 
 func TestIndexedFileReferencesMatchesFullLoad(t *testing.T) {
-	directory, indexed, full := indexedAndFull(t)
-	sameResult(
+	directory, indexed, full := rewrite_tester.IndexedAndFull(t)
+	rewrite_tester.SameResult(
 		t,
 		func(x *service_tester.Services) (any, any, error) {
 			return x.Reference.FileReferences(
@@ -83,8 +84,8 @@ func TestIndexedFileReferencesMatchesFullLoad(t *testing.T) {
 }
 
 func TestIndexedLiteralsReachElisionThroughThirdPackage(t *testing.T) {
-	directory, indexed, full := indexedAndFull(t)
-	result := sameResult(
+	directory, indexed, full := rewrite_tester.IndexedAndFull(t)
+	result := rewrite_tester.SameResult(
 		t,
 		func(x *service_tester.Services) (any, any, error) {
 			return x.Pattern.FindLiterals(directory, "example/alfa", "Server")
@@ -97,8 +98,8 @@ func TestIndexedLiteralsReachElisionThroughThirdPackage(t *testing.T) {
 }
 
 func TestIndexedListCallsMatchesFullLoad(t *testing.T) {
-	directory, indexed, full := indexedAndFull(t)
-	sameResult(
+	directory, indexed, full := rewrite_tester.IndexedAndFull(t)
+	rewrite_tester.SameResult(
 		t,
 		func(x *service_tester.Services) (any, any, error) {
 			return x.Reference.ListCalls(directory, "example/bravo", 20)

@@ -21,7 +21,7 @@ func TestClickOnBoardLabelIsCounted(t *testing.T) {
 		service_tester.NewOption(
 			t,
 			service_tester.FixtureBoard(),
-			newPrometheus(t),
+			service_tester.NewPrometheus(t),
 			nil,
 			nil,
 		),
@@ -36,12 +36,12 @@ func TestClickOnBoardLabelIsCounted(t *testing.T) {
 }
 
 func TestRefreshFillsEachPanel(t *testing.T) {
-	p := newPrometheus(t)
+	p := service_tester.NewPrometheus(t)
 	p.SeedResult(
 		"count(up == 1)",
 		query_result.New(model.Vector{&model.Sample{Value: 7}}, nil, nil),
 	)
-	u := newUsage(t)
+	u := service_tester.NewUsage(t)
 	u.Set(12, 3)
 	v := service_tester.New(
 		t,
@@ -61,9 +61,9 @@ func TestEveryRowLabelGetsValue(t *testing.T) {
 		service_tester.NewOption(
 			t,
 			service_tester.FixtureBoard(),
-			newPrometheus(t),
+			service_tester.NewPrometheus(t),
 			mock_client.New(),
-			newUsage(t),
+			service_tester.NewUsage(t),
 		),
 		memory.New(),
 	)
@@ -78,8 +78,8 @@ func TestEveryRowLabelGetsValue(t *testing.T) {
 }
 
 func TestFailingPanelIsReportedAndShownPending(t *testing.T) {
-	p := newPrometheus(t)
-	u := newUsage(t)
+	p := service_tester.NewPrometheus(t)
+	u := service_tester.NewUsage(t)
 	u.Failure = errors.New("token expired")
 	r := memory.New()
 	l := logger.New(t.Context())

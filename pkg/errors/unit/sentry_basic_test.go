@@ -6,9 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/unit/sentry_tester"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"io"
 	"net/http"
 	"net/url"
@@ -16,16 +17,16 @@ import (
 )
 
 func TestGetSendsTokenToTrailingPath(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `[{"id":"7"}]`)
+	s := upstream_server.New(t, upstream_server.WithAnswer(`[{"id":"7"}]`))
 	var out []map[string]string
-	e := newSentryClient(t, s.URL).Get(
+	e := sentry_tester.New(t, s.URL).Get(
 		"organizations/alfa/issues",
 		map[string]string{"query": "is:unresolved"},
 		&out,
 	)
 	assert.FatalOnError(t, e)
 	assert.String(t, "7", out[0]["id"])
-	r := last()
+	r := s.Last()
 	assert.String(t, http.MethodGet, r.Method)
 	assert.String(t, "/api/0/organizations/alfa/issues/", r.URL.Path)
 	assert.String(t, "is:unresolved", r.URL.Query().Get("query"))
@@ -38,28 +39,31 @@ func TestGetSendsTokenToTrailingPath(t *testing.T) {
 }
 
 func TestGetValuesKeepsRepeatedFields(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"data":[]}`)
+	s := upstream_server.New(t, upstream_server.WithAnswer(`{"data":[]}`))
 	var out map[string]any
-	e := newSentryClient(t, s.URL).GetValues(
+	e := sentry_tester.New(t, s.URL).GetValues(
 		"organizations/alfa/events",
 		url.Values{"field": {"id", "title"}},
 		&out,
 	)
 	assert.FatalOnError(t, e)
-	assert.Strings(t, []string{"id", "title"}, last().URL.Query()["field"])
+	assert.Strings(t, []string{"id", "title"}, s.Last().URL.Query()["field"])
 }
 
 func TestPutSendsNotation(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, `{"status":"resolved"}`)
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"status":"resolved"}`),
+	)
 	var out map[string]string
-	e := newSentryClient(t, s.URL).Put(
+	e := sentry_tester.New(t, s.URL).Put(
 		"organizations/alfa/issues/7",
 		map[string]string{"status": "resolved"},
 		&out,
 	)
 	assert.FatalOnError(t, e)
 	assert.String(t, "resolved", out[constant.Status])
-	r := last()
+	r := s.Last()
 	assert.String(t, http.MethodPut, r.Method)
 	assert.String(t, "/api/0/organizations/alfa/issues/7/", r.URL.Path)
 	b, f := io.ReadAll(r.Body)
@@ -68,22 +72,24 @@ func TestPutSendsNotation(t *testing.T) {
 }
 
 func TestDeleteAcceptsAccepted(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusAccepted, "")
+	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusAccepted))
 	assert.FatalOnError(
 		t,
-		newSentryClient(t, s.URL).Delete("organizations/alfa/issues/7"),
+		sentry_tester.New(t, s.URL).Delete("organizations/alfa/issues/7"),
 	)
-	assert.String(t, http.MethodDelete, last().Method)
+	assert.String(t, http.MethodDelete, s.Last().Method)
 }
 
 func TestMissingIssueIsNotFound(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusNotFound,
-		`{"detail":"The requested resource does not exist"}`,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(
+			`{"detail":"The requested resource does not exist"}`,
+		),
 	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Get(
+	e := sentry_tester.New(t, s.URL).Get(
 		"organizations/alfa/issues/99",
 		nil,
 		&out,
@@ -92,13 +98,15 @@ func TestMissingIssueIsNotFound(t *testing.T) {
 }
 
 func TestRefusalCarriesSentryDetail(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusForbidden,
-		`{"detail":"You do not have permission to perform this action."}`,
+		upstream_server.WithStatus(http.StatusForbidden),
+		upstream_server.WithAnswer(
+			`{"detail":"You do not have permission to perform this action."}`,
+		),
 	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
+	e := sentry_tester.New(t, s.URL).Get("organizations/alfa/issues", nil, &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
@@ -108,35 +116,35 @@ func TestRefusalCarriesSentryDetail(t *testing.T) {
 }
 
 func TestRejectedQueryIsValidation(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		`{"detail":"Invalid search query"}`,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(`{"detail":"Invalid search query"}`),
 	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
+	e := sentry_tester.New(t, s.URL).Get("organizations/alfa/issues", nil, &out)
 	assert.True(t, validation.Is(e))
 }
 
 func TestExpiredTokenIsFault(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"detail":"Invalid token"}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(`{"detail":"Invalid token"}`),
 	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Get("auth", nil, &out)
+	e := sentry_tester.New(t, s.URL).Get("auth", nil, &out)
 	assert.True(t, unexpected.Is(e))
 }
 
 func TestConflictingUpdateIsConflict(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusConflict,
-		`{"detail":"Issue is locked"}`,
+		upstream_server.WithStatus(http.StatusConflict),
+		upstream_server.WithAnswer(`{"detail":"Issue is locked"}`),
 	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Put(
+	e := sentry_tester.New(t, s.URL).Put(
 		"organizations/alfa/issues/7",
 		map[string]string{"status": "resolved"},
 		&out,
@@ -145,19 +153,22 @@ func TestConflictingUpdateIsConflict(t *testing.T) {
 }
 
 func TestAnyOtherRefusalStaysUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusInternalServerError,
-		`{"detail":"Internal error"}`,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+		upstream_server.WithAnswer(`{"detail":"Internal error"}`),
 	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
+	e := sentry_tester.New(t, s.URL).Get("organizations/alfa/issues", nil, &out)
 	assert.True(t, unexpected.Is(e))
 }
 
 func TestAnswerThatIsNotNotationIsUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(t, http.StatusOK, "<html>login</html>")
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer("<html>login</html>"),
+	)
 	var out map[string]any
-	e := newSentryClient(t, s.URL).Get("organizations/alfa/issues", nil, &out)
+	e := sentry_tester.New(t, s.URL).Get("organizations/alfa/issues", nil, &out)
 	assert.True(t, unexpected.Is(e))
 }

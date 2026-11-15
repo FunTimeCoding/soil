@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/stamp"
 	"github.com/funtimecoding/soil/pkg/stamp/constant"
+	"github.com/funtimecoding/soil/pkg/stamp/unit/stamp_tester"
 	"runtime/debug"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestReadTakesEverythingFromBuildInformation(t *testing.T) {
 			Dirty:      true,
 		},
 		stamp.Read(
-			buildInformation(
+			stamp_tester.BuildInformation(
 				"v1.2.3",
 				debug.BuildSetting{
 					Key:   "vcs.revision",
@@ -44,7 +45,7 @@ func TestDevelopmentBuildFallsBackToDefaults(t *testing.T) {
 			CommitDate: "empty",
 			Module:     "github.com/funtimecoding/soil",
 		},
-		stamp.Read(buildInformation(constant.DevelopmentVersion)),
+		stamp.Read(stamp_tester.BuildInformation(constant.DevelopmentVersion)),
 	)
 }
 
@@ -64,7 +65,7 @@ func TestTaggedVersionDisplaysAsItIs(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
-		stamp.Read(buildInformation("v0.11.170")).DisplayVersion(),
+		stamp.Read(stamp_tester.BuildInformation("v0.11.170")).DisplayVersion(),
 	)
 }
 
@@ -72,7 +73,7 @@ func TestDirtyTaggedVersionDisplaysWithoutSuffix(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
-		stamp.Read(buildInformation("v0.11.170+dirty")).DisplayVersion(),
+		stamp.Read(stamp_tester.BuildInformation("v0.11.170+dirty")).DisplayVersion(),
 	)
 }
 
@@ -81,7 +82,9 @@ func TestPseudoVersionDisplaysTagItFollows(t *testing.T) {
 		t,
 		"v0.11.170 (untagged)",
 		stamp.Read(
-			buildInformation("v0.11.171-0.20261003213813-fd20dc25a022+dirty"),
+			stamp_tester.BuildInformation(
+				"v0.11.171-0.20261003213813-fd20dc25a022+dirty",
+			),
 		).DisplayVersion(),
 	)
 }
@@ -91,7 +94,7 @@ func TestPseudoVersionWithoutAnyTagDisplaysAsUntagged(t *testing.T) {
 		t,
 		"untagged",
 		stamp.Read(
-			buildInformation("v0.0.0-20261003213813-fd20dc25a022"),
+			stamp_tester.BuildInformation("v0.0.0-20261003213813-fd20dc25a022"),
 		).DisplayVersion(),
 	)
 }
@@ -100,7 +103,7 @@ func TestDirtyTaggedBuildReleasesAsItsTag(t *testing.T) {
 	assert.String(
 		t,
 		"v0.11.170",
-		stamp.Read(buildInformation("v0.11.170+dirty")).Tag(),
+		stamp.Read(stamp_tester.BuildInformation("v0.11.170+dirty")).Tag(),
 	)
 }
 
@@ -109,7 +112,9 @@ func TestUntaggedBuildReleasesAsTagItFollows(t *testing.T) {
 		t,
 		"v0.11.170",
 		stamp.Read(
-			buildInformation("v0.11.171-0.20261003213813-fd20dc25a022+dirty"),
+			stamp_tester.BuildInformation(
+				"v0.11.171-0.20261003213813-fd20dc25a022+dirty",
+			),
 		).Tag(),
 	)
 }
@@ -119,7 +124,7 @@ func TestBuildBeforeAnyTagHasNoTag(t *testing.T) {
 		t,
 		"",
 		stamp.Read(
-			buildInformation("v0.0.0-20261003213813-fd20dc25a022"),
+			stamp_tester.BuildInformation("v0.0.0-20261003213813-fd20dc25a022"),
 		).Tag(),
 	)
 }
@@ -128,7 +133,7 @@ func TestDevelopmentBuildHasNoTag(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		stamp.Read(buildInformation(constant.DevelopmentVersion)).Tag(),
+		stamp.Read(stamp_tester.BuildInformation(constant.DevelopmentVersion)).Tag(),
 	)
 }
 
@@ -137,11 +142,17 @@ func TestPseudoVersionWithoutRevisionCarriesItsCommit(t *testing.T) {
 		t,
 		"fd20dc2",
 		stamp.Read(
-			buildInformation("v0.11.171-0.20261003213813-fd20dc25a022"),
+			stamp_tester.BuildInformation(
+				"v0.11.171-0.20261003213813-fd20dc25a022",
+			),
 		).GitHash,
 	)
 }
 
 func TestTaggedVersionWithoutRevisionHasNoCommit(t *testing.T) {
-	assert.String(t, "empty", stamp.Read(buildInformation("v0.11.170")).GitHash)
+	assert.String(
+		t,
+		"empty",
+		stamp.Read(stamp_tester.BuildInformation("v0.11.170")).GitHash,
+	)
 }

@@ -1,12 +1,17 @@
 package test_article
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/test_article"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"testing"
 )
 
 func TestArticleFlagsArticleInsideTestName(t *testing.T) {
-	results := analyze(t)
+	results := testutil.Analyze(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		test_article.Check,
+	)
 	testutil.AssertBlocked(t, results, 4)
 
 	for _, text := range []string{
@@ -20,7 +25,11 @@ func TestArticleFlagsArticleInsideTestName(t *testing.T) {
 }
 
 func TestArticleSparesLookalikesLabelsAndNonTests(t *testing.T) {
-	results := analyze(t)
+	results := testutil.Analyze(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		test_article.Check,
+	)
 
 	for _, name := range []string{
 		"TestThemeLoads ",

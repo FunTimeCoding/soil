@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -21,7 +22,10 @@ func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	check := a.CheckLive()
-	pulses := clientKindEntries(check.Entries, constant.QueuePulse)
+	pulses := delivery_tester.ClientKindEntries(
+		check.Entries,
+		constant.QueuePulse,
+	)
 	assert.Count(t, 1, pulses)
 	assert.StringContains(t, "deploy complete", pulses[0].Body)
 }
@@ -36,7 +40,10 @@ func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 		map[string]any{constant.Line: "still building"},
 	)
 	check := a.CheckLive()
-	pulses := clientKindEntries(check.Entries, constant.QueuePulse)
+	pulses := delivery_tester.ClientKindEntries(
+		check.Entries,
+		constant.QueuePulse,
+	)
 	assert.Count(t, 0, pulses)
 }
 
@@ -53,9 +60,15 @@ func TestExternalPulseConsumedOnDrain(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
 	first := a.CheckLive()
-	pulses := clientKindEntries(first.Entries, constant.QueuePulse)
+	pulses := delivery_tester.ClientKindEntries(
+		first.Entries,
+		constant.QueuePulse,
+	)
 	assert.Count(t, 1, pulses)
 	second := a.CheckLive()
-	pulses = clientKindEntries(second.Entries, constant.QueuePulse)
+	pulses = delivery_tester.ClientKindEntries(
+		second.Entries,
+		constant.QueuePulse,
+	)
 	assert.Count(t, 0, pulses)
 }

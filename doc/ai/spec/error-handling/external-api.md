@@ -110,11 +110,11 @@ a per-package sentinel for the same class:
   installation to serve the operation (a cluster without the CRD
   a tool reads); only the operator can fix it, so it is captured.
 - `unreachable` - a backing dependency is down or not connected.
-- `unavailable` - a peer guard's verdict that the peer is down;
+- `unavailable` - the error a peer guard returns while the peer is down;
   the guard has reported it, so a caller never does
   (`infrastructure.md`, Peer Outages and Refusals). A client maps
   its upstream's 503 to it; the guard takes it as an outage and
-  answers with its own verdict.
+  returns its own.
 - `reported` - a peer daemon answered with a failure it has
   already captured: its body carries a non-empty
   `event_identifier`. `refusal.New` produces it before the status

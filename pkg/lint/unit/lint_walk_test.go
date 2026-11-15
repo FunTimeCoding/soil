@@ -3,9 +3,9 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,10 +13,10 @@ import (
 
 func TestWalkSkippedTreeKnownNotRead(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
-	testutil.WriteFile(t, root, "tmp/note.txt", "draft\n")
-	testutil.WriteFile(t, root, ".git/HEAD", "ref: refs/heads/main\n")
-	testutil.WriteFile(t, root, "pkg/x/generated.go", "package x\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "tmp/note.txt", "draft\n")
+	system_tester.Write(t, root, ".git/HEAD", "ref: refs/heads/main\n")
+	system_tester.Write(t, root, "pkg/x/generated.go", "package x\n")
 	repo, empty := lint.Walk(root, option.New("", false))
 	assert.String(t, root, repo.Root)
 	assert.String(t, "# A\n", repo.Files.ReadString("doc/a.md"))
@@ -30,10 +30,10 @@ func TestWalkSkippedTreeKnownNotRead(t *testing.T) {
 
 func TestWalkStopsAtNestedModule(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "go.mod", "module alfa\n")
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
-	testutil.WriteFile(t, root, "graft/bravo/go.mod", "module bravo\n")
-	testutil.WriteFile(t, root, "graft/bravo/doc/b.md", "# Bravo\n")
+	system_tester.Write(t, root, "go.mod", "module alfa\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "graft/bravo/go.mod", "module bravo\n")
+	system_tester.Write(t, root, "graft/bravo/doc/b.md", "# Bravo\n")
 	repo, _ := lint.Walk(root, option.New("", false))
 	assert.True(t, repo.Files.Has("doc/a.md"))
 	assert.Boolean(t, false, repo.Files.Has("graft/bravo/go.mod"))
@@ -47,7 +47,7 @@ func TestWalkStopsAtNestedModule(t *testing.T) {
 
 func TestWalkEmptyDirectoriesOutsideSkips(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
 	system.MakeDirectory(filepath.Join(root, "doc", "empty"))
 	system.MakeDirectory(filepath.Join(root, "tmp", "empty"))
 	system.MakeDirectory(filepath.Join(root, ".git", "empty"))
@@ -57,7 +57,7 @@ func TestWalkEmptyDirectoriesOutsideSkips(t *testing.T) {
 
 func TestWalkDirectoryHoldingOnlyLinkIsNotEmpty(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
 	system.MakeDirectory(filepath.Join(root, "linked"))
 	assert.FatalOnError(
 		t,
@@ -72,7 +72,7 @@ func TestWalkDirectoryHoldingOnlyLinkIsNotEmpty(t *testing.T) {
 
 func TestWalkLinkToEmptyDirectoryIsNotEmpty(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	system_tester.Write(t, root, "doc/a.md", "# A\n")
 	system.MakeDirectory(filepath.Join(root, "doc", "empty"))
 	assert.FatalOnError(
 		t,
@@ -87,11 +87,11 @@ func TestWalkLinkToEmptyDirectoryIsNotEmpty(t *testing.T) {
 
 func TestWalkReadsForestTreeNotDisk(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(t, root, "alfa.md", "bravo\n")
+	system_tester.Write(t, root, "alfa.md", "bravo\n")
 	o := option.New("", false)
 	_, e := o.Trees.Tree(root).Read("alfa.md")
 	assert.FatalOnError(t, e)
-	testutil.WriteFile(t, root, "alfa.md", "charlie\n")
+	system_tester.Write(t, root, "alfa.md", "charlie\n")
 	repo, _ := lint.Walk(root, o)
 	assert.String(t, "bravo\n", repo.Files.ReadString("alfa.md"))
 }

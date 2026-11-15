@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"testing"
 )
 
@@ -20,7 +21,10 @@ func TestUpdateToolReachesSessionActivity(t *testing.T) {
 		},
 	)
 	r := a.CheckLive()
-	updates := clientKindEntries(r.Entries, constant.QueueSessionUpdate)
+	updates := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionUpdate,
+	)
 	assert.True(t, len(updates) > 0)
 	assert.StringContains(t, "second topic", updates[0].Body)
 }
@@ -45,7 +49,10 @@ func TestUpdateMultiple(t *testing.T) {
 		},
 	)
 	r := a.CheckLive()
-	updates := clientKindEntries(r.Entries, constant.QueueSessionUpdate)
+	updates := delivery_tester.ClientKindEntries(
+		r.Entries,
+		constant.QueueSessionUpdate,
+	)
 	assert.True(t, len(updates) >= 2)
 }
 

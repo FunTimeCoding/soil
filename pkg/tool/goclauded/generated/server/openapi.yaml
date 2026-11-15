@@ -287,6 +287,12 @@ paths:
       responses:
         "200":
           description: Session released.
+        "404":
+          description: Callsign not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -860,6 +866,12 @@ paths:
                 $ref: "#/components/schemas/DeliveryResponse"
         "400":
           description: Body over the delivery entry limit, or delivery neither immediate nor queued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Session not found.
           content:
             application/json:
               schema:

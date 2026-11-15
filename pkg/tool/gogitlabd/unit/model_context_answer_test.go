@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
 	"testing"
 )
@@ -16,7 +17,7 @@ func TestModelContextAnswersClassifiedRefusalQuietly(t *testing.T) {
 	clients[constant.FixtureInstance].FailProjects(
 		not_found.New("group", "kilo"),
 	)
-	v := startServer(t, d, r)
+	v := base.Mount(t, d, r)
 	defer v.Close()
 	c := v.Connect(t)
 	defer c.Close()
@@ -34,7 +35,7 @@ func TestModelContextCapturesUnclassifiedFailure(t *testing.T) {
 	clients[constant.FixtureInstance].FailProjects(
 		errors.New("refused for no known reason"),
 	)
-	v := startServer(t, d, r)
+	v := base.Mount(t, d, r)
 	defer v.Close()
 	c := v.Connect(t)
 	defer c.Close()

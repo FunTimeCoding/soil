@@ -11,14 +11,14 @@ func TestServiceNotifiesOnAdd(t *testing.T) {
 	o := service_tester.New(t)
 	c := o.Notifier.Subscribe()
 	defer o.Notifier.Unsubscribe(c)
-	assert.FatalOnError(t, o.Service.Add(sample()))
-	assert.True(t, fired(c))
+	assert.FatalOnError(t, o.Service.Add(service_tester.Sample()))
+	assert.Signalled(t, c)
 }
 
 func TestServiceNotifiesOnUpdateAndDelete(t *testing.T) {
 	o := service_tester.New(t)
 	s := o.Service
-	v := sample()
+	v := service_tester.Sample()
 	assert.FatalOnError(t, s.Add(v))
 	c := o.Notifier.Subscribe()
 	defer o.Notifier.Unsubscribe(c)
@@ -28,9 +28,9 @@ func TestServiceNotifiesOnUpdateAndDelete(t *testing.T) {
 	result, e := s.Update(v.Identifier, h)
 	assert.FatalOnError(t, e)
 	assert.String(t, user, result.User)
-	assert.True(t, fired(c))
+	assert.Signalled(t, c)
 	assert.FatalOnError(t, s.Delete(v.Identifier))
-	assert.True(t, fired(c))
+	assert.Signalled(t, c)
 }
 
 func TestServiceFailedWriteDoesNotNotify(t *testing.T) {
@@ -38,6 +38,6 @@ func TestServiceFailedWriteDoesNotNotify(t *testing.T) {
 	c := o.Notifier.Subscribe()
 	defer o.Notifier.Unsubscribe(c)
 	o.Close()
-	assert.Error(t, o.Service.Add(sample()))
-	assert.False(t, fired(c))
+	assert.Error(t, o.Service.Add(service_tester.Sample()))
+	assert.NotSignalled(t, c)
 }

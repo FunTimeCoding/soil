@@ -3,10 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/document_cache"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/lint/option"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"strings"
 	"testing"
 )
@@ -66,7 +66,7 @@ func TestDocumentCacheDropsWhatRotationLeftUnused(t *testing.T) {
 
 func TestReportWithSharedDocumentsSeesEditedFile(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/alfa.go",
@@ -82,7 +82,7 @@ func TestReportWithSharedDocumentsSeesEditedFile(t *testing.T) {
 		len(before.Entries),
 		len(lint.Report("golint", root, again).Entries),
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/alfa.go",
@@ -95,7 +95,7 @@ func TestReportWithSharedDocumentsSeesEditedFile(t *testing.T) {
 
 func TestReportWithSharedDocumentsResolvesPointersAgain(t *testing.T) {
 	root := t.TempDir()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"doc/alfa.md",
@@ -103,7 +103,7 @@ func TestReportWithSharedDocumentsResolvesPointersAgain(t *testing.T) {
 	)
 	first := option.New("", false)
 	assert.Count(t, 1, lint.Report("golint", root, first).Entries)
-	testutil.WriteFile(t, root, "doc/bravo.md", "# Bravo\n")
+	system_tester.Write(t, root, "doc/bravo.md", "# Bravo\n")
 	after := option.New("", false)
 	after.Documents = first.Documents
 	assert.Count(t, 0, lint.Report("golint", root, after).Entries)

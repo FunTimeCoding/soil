@@ -8,10 +8,7 @@ import (
 )
 
 func TestRenamePackageInvalidName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-rename/src"),
-	)
+	d := service_tester.Prepare(t, "package-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.RenamePackage(
 		t.Context(),

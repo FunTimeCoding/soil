@@ -17,7 +17,7 @@ func TestRefusedPermissionAnswersForbidden(t *testing.T) {
 	s.MockClient.SetFailure(
 		forbidden.Format("Permission check failed (/, Sys.Audit)"),
 	)
-	r, e := restClient(t, s).ListNodesWithResponse(
+	r, e := base.Rest(t, s).ListNodesWithResponse(
 		t.Context(),
 		&client.ListNodesParams{},
 	)
@@ -29,7 +29,7 @@ func TestRefusedPermissionAnswersForbidden(t *testing.T) {
 func TestLockedGuestAnswersConflict(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.SetFailure(conflict.Format("VM is locked (backup)"))
-	r, e := restClient(t, s).StartMachineWithResponse(
+	r, e := base.Rest(t, s).StartMachineWithResponse(
 		t.Context(),
 		101,
 		&client.StartMachineParams{},
@@ -48,7 +48,7 @@ func TestUnreachableHypervisorAnswersUnavailable(t *testing.T) {
 			errorsConstant.Refused,
 		),
 	)
-	r, e := restClient(t, s).ListNodesWithResponse(
+	r, e := base.Rest(t, s).ListNodesWithResponse(
 		t.Context(),
 		&client.ListNodesParams{},
 	)
@@ -59,7 +59,7 @@ func TestUnreachableHypervisorAnswersUnavailable(t *testing.T) {
 func TestUnexpectedFailureIsCapturedWithItsEvent(t *testing.T) {
 	s := base.New(t)
 	s.MockClient.SetFailure(errors.New("cfs lock timeout"))
-	r, e := restClient(t, s).ListNodesWithResponse(
+	r, e := base.Rest(t, s).ListNodesWithResponse(
 		t.Context(),
 		&client.ListNodesParams{},
 	)

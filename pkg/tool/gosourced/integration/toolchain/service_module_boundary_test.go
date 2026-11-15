@@ -2,7 +2,7 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -10,10 +10,7 @@ import (
 )
 
 func TestMoveWithCgoConsumerStaysInsideModule(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-cgo-reference/src"),
-	)
+	d := service_tester.Prepare(t, "move-cgo-reference/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbol(
 		t.Context(),
@@ -26,14 +23,11 @@ func TestMoveWithCgoConsumerStaysInsideModule(t *testing.T) {
 		true,
 	)
 	assert.FatalOnError(t, e)
-	assertModuleEntries(t, r)
+	rewrite_tester.ModuleEntries(t, r)
 }
 
 func TestMovePackageWithTestVariantsStaysInsideModule(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("test-home/src"),
-	)
+	d := service_tester.Prepare(t, "test-home/src")
 	e := os.MkdirAll(filepath.Join(d, "pkg/alfa/integration"), 0755)
 	assert.FatalOnError(t, e)
 	s := service_tester.NewService(t)
@@ -45,5 +39,5 @@ func TestMovePackageWithTestVariantsStaysInsideModule(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, f)
-	assertModuleEntries(t, r)
+	rewrite_tester.ModuleEntries(t, r)
 }

@@ -5,11 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/requester"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
 func TestRequesterCloseDropsIdleConnections(t *testing.T) {
-	s, opened := newCountingServer(t)
+	s := upstream_server.New(t, upstream_server.WithAnswer("counted"))
 	r := requester.New(locator.New("unused.example"))
 	defer r.Close()
 	_, e := r.Bytes(request.Absolute(s.URL))
@@ -17,5 +18,5 @@ func TestRequesterCloseDropsIdleConnections(t *testing.T) {
 	r.Close()
 	_, e = r.Bytes(request.Absolute(s.URL))
 	assert.FatalOnError(t, e)
-	assert.Integer(t, int64(2), opened.Load())
+	assert.Integer(t, 2, s.Opened())
 }

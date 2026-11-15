@@ -7,7 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/habitica/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/habitica/unit/habitica_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"io"
 	"net/http"
 	"net/url"
@@ -15,22 +16,22 @@ import (
 )
 
 func TestGetSendsCredentialsAndUnwrapsEnvelope(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"success":true,"data":[{"name":"charlie"}]}`,
-	)
+		upstream_server.WithAnswer(
+			`{"success":true,"data":[{"name":"charlie"}]}`,
+		))
 	var out []map[string]string
 	assert.FatalOnError(
 		t,
-		newClient(t, s.URL).Get(
+		habitica_tester.New(t, s.URL).Get(
 			"/tasks/user",
 			url.Values{constant.TypeParameter: {"todos"}},
 			&out,
 		),
 	)
 	assert.String(t, "charlie", out[0]["name"])
-	r := last()
+	r := s.Last()
 	assert.String(t, "/api/v3/tasks/user", r.URL.Path)
 	assert.String(t, "todos", r.URL.Query().Get(constant.TypeParameter))
 	assert.String(t, "alfa-user", r.Header.Get(constant.UserHeader))
@@ -38,15 +39,13 @@ func TestGetSendsCredentialsAndUnwrapsEnvelope(t *testing.T) {
 }
 
 func TestPostSendsParametersAndNotation(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"success":true,"data":{"str":3}}`,
-	)
+		upstream_server.WithAnswer(`{"success":true,"data":{"str":3}}`))
 	var out map[string]int
 	assert.FatalOnError(
 		t,
-		newClient(t, s.URL).Post(
+		habitica_tester.New(t, s.URL).Post(
 			"/user/allocate",
 			url.Values{constant.StatParameter: {"str"}},
 			map[string]string{"text": "delta"},
@@ -54,7 +53,7 @@ func TestPostSendsParametersAndNotation(t *testing.T) {
 		),
 	)
 	assert.Integer(t, 3, out["str"])
-	r := last()
+	r := s.Last()
 	assert.String(t, http.MethodPost, r.Method)
 	assert.String(t, "/api/v3/user/allocate", r.URL.Path)
 	assert.String(t, "str", r.URL.Query().Get(constant.StatParameter))
@@ -64,85 +63,109 @@ func TestPostSendsParametersAndNotation(t *testing.T) {
 }
 
 func TestPostDiscardIgnoresAnswer(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, "not notation")
-	assert.FatalOnError(t, newClient(t, s.URL).PostDiscard("/cron"))
-	assert.String(t, "/api/v3/cron", last().URL.Path)
+	s := upstream_server.New(t, upstream_server.WithAnswer("not notation"))
+	assert.FatalOnError(t, habitica_tester.New(t, s.URL).PostDiscard("/cron"))
+	assert.String(t, "/api/v3/cron", s.Last().URL.Path)
 }
 
 func TestRefusalCarriesMessage(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusUnauthorized,
-		`{"success":false,"error":"NotAuthorized","message":"echo refused"}`,
+		upstream_server.WithStatus(http.StatusUnauthorized),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"NotAuthorized","message":"echo refused"}`,
+		),
 	)
 	var out map[string]string
-	e := newClient(t, s.URL).Get("/user", nil, &out)
+	e := habitica_tester.New(t, s.URL).Get("/user", nil, &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "echo refused", e.Error())
 }
 
 func TestForbiddenAnswerIsFault(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusForbidden,
-		`{"success":false,"error":"Forbidden","message":"not yours"}`,
+		upstream_server.WithStatus(http.StatusForbidden),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"Forbidden","message":"not yours"}`,
+		),
 	)
 	var out map[string]string
-	e := newClient(t, s.URL).Get("/tasks/user", nil, &out)
+	e := habitica_tester.New(t, s.URL).Get("/tasks/user", nil, &out)
 	assert.True(t, unexpected.Is(e))
 }
 
 func TestConflictIsConflict(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusConflict,
-		`{"success":false,"error":"Conflict","message":"cron already run"}`,
+		upstream_server.WithStatus(http.StatusConflict),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"Conflict","message":"cron already run"}`,
+		),
 	)
-	e := newClient(t, s.URL).PostDiscard("/cron")
+	e := habitica_tester.New(t, s.URL).PostDiscard("/cron")
 	assert.True(t, conflict.Is(e))
 }
 
 func TestAnswerOtherThanClassesStaysUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusInternalServerError,
-		`{"success":false,"error":"InternalServerError","message":"boom"}`,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"InternalServerError","message":"boom"}`,
+		),
 	)
 	var out map[string]string
-	e := newClient(t, s.URL).Get("/user", nil, &out)
+	e := habitica_tester.New(t, s.URL).Get("/user", nil, &out)
 	assert.True(t, unexpected.Is(e))
 }
 
 func TestMissingTaskIsNotFound(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusNotFound,
-		`{"success":false,"error":"NotFound","message":"Task not found."}`,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"NotFound","message":"Task not found."}`,
+		),
 	)
 	var out map[string]string
-	e := newClient(t, s.URL).Post("/tasks/foxtrot/score/up", nil, nil, &out)
+	e := habitica_tester.New(t, s.URL).Post(
+		"/tasks/foxtrot/score/up",
+		nil,
+		nil,
+		&out,
+	)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestBadRequestIsValidation(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		`{"success":false,"error":"BadRequest","message":"\"bravo\" is not a valid Stat."}`,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"BadRequest","message":"\"bravo\" is not a valid Stat."}`,
+		),
 	)
 	var out map[string]string
-	e := newClient(t, s.URL).Rejecting().Post("/user/allocate", nil, nil, &out)
+	e := habitica_tester.New(t, s.URL).Rejecting().Post(
+		"/user/allocate",
+		nil,
+		nil,
+		&out,
+	)
 	assert.True(t, validation.Is(e))
 	assert.String(t, `"bravo" is not a valid Stat.`, e.Error())
 }
 
 func TestBadRequestElsewhereIsFault(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		`{"success":false,"error":"BadRequest","message":"malformed"}`,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(
+			`{"success":false,"error":"BadRequest","message":"malformed"}`,
+		),
 	)
 	var out map[string]string
-	e := newClient(t, s.URL).Post("/tasks/user", nil, nil, &out)
+	e := habitica_tester.New(t, s.URL).Post("/tasks/user", nil, nil, &out)
 	assert.True(t, unexpected.Is(e))
 }

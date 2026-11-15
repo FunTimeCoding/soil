@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"go.uber.org/goleak"
 	"strings"
@@ -26,8 +27,14 @@ func TestDaemonClosesClientItBuilt(t *testing.T) {
 
 func TestClockGaugesOwnersLatestRuns(t *testing.T) {
 	s := mock_client.New()
-	s.AddRun("bravo", workflowRun(1, "main", "completed", "failure"))
-	s.AddRun("bravo", workflowRun(2, "main", "completed", "success"))
+	s.AddRun(
+		"bravo",
+		service_tester.WorkflowRun(1, "main", "completed", "failure"),
+	)
+	s.AddRun(
+		"bravo",
+		service_tester.WorkflowRun(2, "main", "completed", "success"),
+	)
 	m := metric.New()
 
 	for _, w := range daemon_tester.New(t, s, m, memory.New()).Workers() {

@@ -8,17 +8,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/legacy_store"
 	"testing"
 	"time"
 )
 
 func TestMigrateAddsMessageIdentifierToQueue(t *testing.T) {
-	path := seedLegacyMessage(t)
+	path := legacy_store.Message(t)
 	d := lite.New(logger.New(context.Background()), path)
 	migrate.AutoMigrate(d)
 	s := store.New(d, func() time.Time { return time.Now().UTC() })
 	defer relational.CloseMapper(d)
-	assert.Integer(t, 1, columnCount(t, d, "queue", "message_identifier"))
+	assert.True(t, lite.ColumnExists(d, "queue", "message_identifier"))
 	drained, e := s.DrainQueue("session-1", "Cedar")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, drained)
@@ -27,7 +28,7 @@ func TestMigrateAddsMessageIdentifierToQueue(t *testing.T) {
 }
 
 func TestMigrateMessageIsIdempotent(t *testing.T) {
-	path := seedLegacyMessage(t)
+	path := legacy_store.Message(t)
 	clock := func() time.Time { return time.Now().UTC() }
 	first := lite.New(logger.New(context.Background()), path)
 	migrate.AutoMigrate(first)

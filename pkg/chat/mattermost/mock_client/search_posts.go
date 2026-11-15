@@ -6,5 +6,9 @@ func (c *Client) SearchPosts(
 	_ *model.Team,
 	_ string,
 ) (*model.PostList, error) {
-	return nil, c.Failure
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	return model.NewPostList(), nil
 }

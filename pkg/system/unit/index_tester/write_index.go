@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/linux/alpine/signature"
+	"github.com/funtimecoding/soil/pkg/system/unit/tar_tester"
 	"path/filepath"
 )
 
@@ -19,15 +20,7 @@ func WriteIndex(directory string) string {
 	b.Write(signature.CreateSignatureSegment([]byte("signature"), "test.rsa"))
 	z := gzip.NewWriter(&b)
 	w := tar.NewWriter(z)
-	system.TarWriteHeader(
-		w,
-		&tar.Header{
-			Name: constant.AlpineIndexFile,
-			Size: int64(len(content)),
-			Mode: 0644,
-		},
-	)
-	system.TarWrite(w, []byte(content))
+	tar_tester.Entry(constant.AlpineIndexFile, content)(w)
 	errors.PanicClose(w)
 	errors.PanicClose(z)
 	system.WriteFile(path, b.Bytes(), 0644)

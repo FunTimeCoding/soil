@@ -8,17 +8,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
+	"github.com/funtimecoding/soil/pkg/prometheus/unit/alertmanager_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestBadAlertmanagerFilterIsCallersMistake(t *testing.T) {
-	c := newRefusingAlertmanager(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		`"bad matcher format: severity~"`,
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(`"bad matcher format: severity~"`),
 	)
-	_, _, e := c.Alerts(
+	_, _, e := alertmanager_tester.New(t, s.URL).Alerts(
 		advanced_option.New(),
 		alert_filter.New(),
 		rule_list.New(),
@@ -28,18 +30,26 @@ func TestBadAlertmanagerFilterIsCallersMistake(t *testing.T) {
 }
 
 func TestUnknownSilenceIsNotFound(t *testing.T) {
-	c := newRefusingAlertmanager(t, http.StatusNotFound, `"silence not found"`)
-	e := c.DeleteSilence("8d1f0c4a-0000-4000-8000-000000000000")
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusNotFound),
+		upstream_server.WithAnswer(`"silence not found"`),
+	)
+	e := alertmanager_tester.New(t, s.URL).DeleteSilence(
+		"8d1f0c4a-0000-4000-8000-000000000000",
+	)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestAlertmanagerBehindUnavailableProxyIsUnavailable(t *testing.T) {
-	c := newRefusingAlertmanager(
+	s := upstream_server.New(
 		t,
-		http.StatusServiceUnavailable,
-		"<html>503 Service Temporarily Unavailable</html>",
+		upstream_server.WithStatus(http.StatusServiceUnavailable),
+		upstream_server.WithAnswer(
+			"<html>503 Service Temporarily Unavailable</html>",
+		),
 	)
-	_, _, e := c.Alerts(
+	_, _, e := alertmanager_tester.New(t, s.URL).Alerts(
 		advanced_option.New(),
 		alert_filter.New(),
 		rule_list.New(),
@@ -48,12 +58,12 @@ func TestAlertmanagerBehindUnavailableProxyIsUnavailable(t *testing.T) {
 }
 
 func TestAlertmanagerFaultKeepsItsText(t *testing.T) {
-	c := newRefusingAlertmanager(
+	s := upstream_server.New(
 		t,
-		http.StatusInternalServerError,
-		`"failed to iterate alerts"`,
+		upstream_server.WithStatus(http.StatusInternalServerError),
+		upstream_server.WithAnswer(`"failed to iterate alerts"`),
 	)
-	_, _, e := c.Alerts(
+	_, _, e := alertmanager_tester.New(t, s.URL).Alerts(
 		advanced_option.New(),
 		alert_filter.New(),
 		rule_list.New(),

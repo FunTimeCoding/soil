@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -17,9 +18,9 @@ func TestScopedExportedRenameReachesCallerTyped(t *testing.T) {
 		module_tester.Options(t, directory, false, false, "./alfa/..."),
 		r,
 	)
-	assertResult(
+	fix_tester.Result(
 		t,
-		filterApplied(r.Entries),
+		fix_tester.Applied(r.Entries),
 		"alfa/send.go",
 		"renamed SendMsg → SendMessage (2 references)",
 	)

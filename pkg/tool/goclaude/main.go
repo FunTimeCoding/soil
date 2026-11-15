@@ -25,7 +25,7 @@ func Main() {
 	c := command_context.New(
 		t,
 		client.New(base, untrusted, token),
-		client.NewLong(base, untrusted, token),
+		client.New(base, untrusted, token, client.WithLong()),
 	)
 	defer c.Close()
 	o := New(c, s.Reporter())

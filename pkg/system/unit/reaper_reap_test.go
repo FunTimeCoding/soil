@@ -3,6 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/system/types/zombie_detail"
@@ -12,7 +14,7 @@ import (
 )
 
 func TestReapedChildMovesCounterAndCapturesNothing(t *testing.T) {
-	windowsSkip(t)
+	assert.WindowsSkip(t)
 	child := run.New().Open("true").Pid()
 	m := memory.New()
 	y := prometheus.NewRegistry()
@@ -23,12 +25,18 @@ func TestReapedChildMovesCounterAndCapturesNothing(t *testing.T) {
 	)
 	defer r.Close()
 	deadline := time.Now().Add(5 * time.Second)
+	labels := map[string]string{constant.ReapedCommand: "true"}
 
-	for reaped(t, y, "true") == 0 && time.Now().Before(deadline) {
+	for metric_tester.Sample(t, y, "reaper_reaped_total", labels) < 1 &&
+		time.Now().Before(deadline) {
 		r.Reap()
 		time.Sleep(10 * time.Millisecond)
 	}
 
-	assert.Integer(t, 1, reaped(t, y, "true"))
+	assert.Float(
+		t,
+		1,
+		metric_tester.Sample(t, y, "reaper_reaped_total", labels),
+	)
 	assert.Count(t, 0, m.Events())
 }

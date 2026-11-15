@@ -18,6 +18,12 @@ func (s *Server) pulse(
 		return s.captureFail(x, e, soil.UnexpectedError)
 	}
 
+	if c.Callsign == "" {
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
+	}
+
 	line, e := q.RequireString(constant.Line)
 
 	if e != nil {

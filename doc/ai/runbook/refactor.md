@@ -60,7 +60,7 @@ is the procedure.
   proof can run in another session's package while it works there
 - A script running breaks compares each target with its backup and
   refuses a break that changed nothing, keeps backups under names unique
-  in the backup directory, reads a build failure as no verdict, and reads
+  in the backup directory, reads a build failure as no result, and reads
   `panic:` and a package `FAIL` as failures - checked by a control break
   that must survive. A break that blocks hangs to the package timeout and
   names no test, so a test of a blocking operation fails by name after a

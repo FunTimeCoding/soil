@@ -3,7 +3,7 @@ package break_result
 func New(
 	name string,
 	expect string,
-	kind string,
+	status string,
 ) *Result {
-	return &Result{Name: name, Expect: expect, Kind: kind}
+	return &Result{Name: name, Expect: expect, Status: status}
 }

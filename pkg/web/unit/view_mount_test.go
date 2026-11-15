@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"net/http"
 	"testing"
 )
@@ -29,12 +30,24 @@ func TestViewMountsPaletteBehindSignOnOnlyWhereThereIsSignOn(t *testing.T) {
 			},
 		),
 	)
-	assert.Integer(t, http.StatusOK, served(plain, constant.PalettePath).Code)
+	assert.Integer(
+		t,
+		http.StatusOK,
+		web_tester.Served(plain, constant.PalettePath).Code,
+	)
 	assert.Integer(
 		t,
 		http.StatusForbidden,
-		served(signed, constant.PalettePath).Code,
+		web_tester.Served(signed, constant.PalettePath).Code,
 	)
-	assert.Integer(t, http.StatusOK, served(plain, constant.FaviconPath).Code)
-	assert.Integer(t, http.StatusOK, served(signed, constant.FaviconPath).Code)
+	assert.Integer(
+		t,
+		http.StatusOK,
+		web_tester.Served(plain, constant.FaviconPath).Code,
+	)
+	assert.Integer(
+		t,
+		http.StatusOK,
+		web_tester.Served(signed, constant.FaviconPath).Code,
+	)
 }

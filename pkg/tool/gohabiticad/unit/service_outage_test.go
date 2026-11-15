@@ -5,12 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestOutageMarksGuardDownWithoutEarlyCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
 	v := service_tester.Shared(t, c, m)
 	_, e := v.UserStats()

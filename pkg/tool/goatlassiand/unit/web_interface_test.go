@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/web_interface_tester"
 	"testing"
 )
@@ -40,7 +41,7 @@ func TestNewestSectionKeepsLiveTargetWithConfiguredProject(t *testing.T) {
 
 func TestClockFillsPlatePage(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.Refresh(openIssue("ALFA-1"))
+	o.Refresh(service_tester.OpenIssue("ALFA-1"))
 	o.AssertContains("ALFA-1", constant.PlatePath)
 	o.AssertMissing("All clean.", constant.PlatePath)
 }

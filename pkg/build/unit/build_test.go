@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/build"
+	"github.com/funtimecoding/soil/pkg/build/unit/build_tester"
 	"testing"
 )
 
 func TestParseOriginReadsCommitAndTime(t *testing.T) {
-	v := build.ParseOrigin(originOutput())
+	v := build.ParseOrigin(build_tester.Origin())
 	assert.String(t, "v0.11.156", v.Version)
 	assert.String(t, "72ce25dbd0b797a65759efe648f5838cc9709481", v.Hash)
 	assert.String(t, "2026-09-27T14:17:43Z", v.Time)

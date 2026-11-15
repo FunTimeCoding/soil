@@ -5,16 +5,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"net/http"
 	"testing"
 )
 
 func TestRefusedPushIsReportedWithItsReason(t *testing.T) {
-	_, e := refusedClient(
+	s := upstream_server.New(
 		t,
-		http.StatusInternalServerError,
-		`{"error":"disk full","event_identifier":"bravo"}`,
-	).PostDocument(
+		upstream_server.WithStatus(http.StatusInternalServerError),
+		upstream_server.WithAnswer(
+			`{"error":"disk full","event_identifier":"bravo"}`,
+		),
+	)
+	_, e := client_tester.New(t, s.URL).PostDocument(
 		t.Context(),
 		client.PostDocumentJSONRequestBody{
 			Collection: "notes",
@@ -27,11 +32,17 @@ func TestRefusedPushIsReportedWithItsReason(t *testing.T) {
 }
 
 func TestRefusedListLeavesNoPartialResult(t *testing.T) {
-	outcome, e := refusedClient(
+	s := upstream_server.New(
 		t,
-		http.StatusServiceUnavailable,
-		`{"error":"embedder unreachable since 14:02: no route"}`,
-	).GetList(t.Context(), &client.GetListParams{Collection: "notes"})
+		upstream_server.WithStatus(http.StatusServiceUnavailable),
+		upstream_server.WithAnswer(
+			`{"error":"embedder unreachable since 14:02: no route"}`,
+		),
+	)
+	outcome, e := client_tester.New(t, s.URL).GetList(
+		t.Context(),
+		&client.GetListParams{Collection: "notes"},
+	)
 	assert.Nil(t, outcome)
 	assert.True(t, unavailable.Is(e))
 	assert.String(

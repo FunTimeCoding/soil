@@ -7,7 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/decision_page"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web/session_page"
-	"github.com/funtimecoding/soil/pkg/web/unit/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/markup_tester"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"strings"
 	"testing"
 )
@@ -22,7 +23,7 @@ func TestGridPreservesEveryCard(t *testing.T) {
 		nil,
 	)
 	assert.FatalOnError(t, e)
-	page := renderNode(
+	page := web_tester.Render(
 		t,
 		session_page.Grid(s.Service.Decisions(stringsConstant.LowerAlfa)),
 	)
@@ -33,7 +34,10 @@ func TestGridPreservesEveryCard(t *testing.T) {
 	)
 	assert.True(
 		t,
-		!strings.Contains(renderNode(t, decision_page.Card(d)), "hx-preserve"),
+		!strings.Contains(
+			web_tester.Render(t, decision_page.Card(d)),
+			"hx-preserve",
+		),
 	)
 }
 
@@ -47,7 +51,7 @@ func TestOpenedCardKeepsItsFormsOutsideLiveRegions(t *testing.T) {
 		nil,
 	)
 	assert.FatalOnError(t, e)
-	page := renderNode(t, decision_page.Hero(d, "", ""))
+	page := web_tester.Render(t, decision_page.Hero(d, "", ""))
 	markup_tester.AssertCount(t, 2, page, `input[type="text"]`)
 	markup_tester.AssertCount(t, 0, page, `[sse-swap] input[type="text"]`)
 	markup_tester.AssertCount(t, 4, page, "[sse-swap]")

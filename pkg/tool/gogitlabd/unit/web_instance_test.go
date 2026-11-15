@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -21,7 +22,7 @@ func TestWebRefusesUnresolvableInstanceAsBadRequest(t *testing.T) {
 		constant.FixtureInstance,
 		constant.FixtureOtherInstance,
 	)
-	v := startServer(t, d, r)
+	v := base.Mount(t, d, r)
 	defer v.Close()
 	unknown := locator.New(webConstant.Localhost).Insecure().Port(v.Port).Path(
 		constant.PipelinePath,

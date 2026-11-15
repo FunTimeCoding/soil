@@ -6,16 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/database_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/service_tester"
 	"os"
 	"testing"
 	"time"
 )
 
 func TestUnreadableChangeIsAnsweredFromCopyLoadedBefore(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	r := memory.New()
-	c := served(t, path, r)
-	corrupt(t, path, time.Now().Add(time.Hour))
+	c := base.New(t, path, r).Connect(t)
+	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
 	assert.StringContains(
 		t,
 		"Forge",
@@ -30,36 +33,36 @@ func TestUnreadableChangeIsAnsweredFromCopyLoadedBefore(t *testing.T) {
 }
 
 func TestEachUnreadableChangeIsReportedOnce(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	r := memory.New()
-	s := openReported(t, path, nil, r)
-	corrupt(t, path, time.Now().Add(time.Hour))
+	s := service_tester.New(t, path, service_tester.WithReporter(r))
+	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 1, r.Events())
-	corrupt(t, path, time.Now().Add(2*time.Hour))
+	database_tester.Corrupt(t, path, time.Now().Add(2*time.Hour))
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 2, r.Events())
 }
 
 func TestReadableChangeAfterUnreadableOneIsLoaded(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := openReported(t, path, nil, memory.New())
-	corrupt(t, path, time.Now().Add(time.Hour))
+	path := database_tester.Write(t)
+	s := service_tester.New(t, path)
+	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
 	assert.Count(t, 3, s.List())
-	replacement := fixtureDatabase(t)
-	o := openReported(t, replacement, nil, memory.New())
+	replacement := database_tester.Write(t)
+	o := service_tester.New(t, replacement)
 	_, e := o.Create("Root", "Fresh", map[string]string{})
 	assert.FatalOnError(t, e)
-	copyFile(t, replacement, path, time.Now().Add(2*time.Hour))
+	database_tester.Copy(t, replacement, path, time.Now().Add(2*time.Hour))
 	assert.Count(t, 4, s.List())
 }
 
 func TestWriteOnUnreadableChangeIsConflict(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := openReported(t, path, nil, memory.New())
+	path := database_tester.Write(t)
+	s := service_tester.New(t, path)
 	identifier := s.Search("forge")[0].Identifier
-	corrupt(t, path, time.Now().Add(time.Hour))
+	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
 	e := s.Update(
 		identifier,
 		map[string]string{constant.PasswordKey: "changed"},
@@ -70,10 +73,10 @@ func TestWriteOnUnreadableChangeIsConflict(t *testing.T) {
 }
 
 func TestConflictIsAnsweredWithoutEvent(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	r := memory.New()
-	c := served(t, path, r)
-	corrupt(t, path, time.Now().Add(time.Hour))
+	c := base.New(t, path, r).Connect(t)
+	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
 	assert.StringContains(
 		t,
 		"refusing to write",
@@ -86,14 +89,14 @@ func TestConflictIsAnsweredWithoutEvent(t *testing.T) {
 }
 
 func TestMissingFileIsReportedEachTimeItGoes(t *testing.T) {
-	path := fixtureDatabase(t)
+	path := database_tester.Write(t)
 	kept := join.Empty(path, ".kept")
 	r := memory.New()
-	s := openReported(t, path, nil, r)
+	s := service_tester.New(t, path, service_tester.WithReporter(r))
 	assert.FatalOnError(t, os.Rename(path, kept))
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 1, r.Events())
-	copyFile(t, kept, path, time.Now().Add(time.Hour))
+	database_tester.Copy(t, kept, path, time.Now().Add(time.Hour))
 	assert.Count(t, 3, s.List())
 	assert.FatalOnError(t, os.Remove(path))
 	assert.Count(t, 3, s.List())

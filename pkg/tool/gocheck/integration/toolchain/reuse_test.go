@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze"
 	goanalyzeOption "github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
@@ -19,7 +20,7 @@ func TestAnalysisOverCleanFixLoadMatchesFreshAnalysis(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"pkg/response/types.go",
@@ -59,7 +60,7 @@ func TestFixThatRewritesLeavesNoLoadToReuse(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"pkg/format/format.go",

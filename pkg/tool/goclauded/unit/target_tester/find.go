@@ -1,0 +1,16 @@
+package target_tester
+
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
+
+func Find(
+	targets []*target.Target,
+	identifier string,
+) *target.Target {
+	for _, t := range targets {
+		if t.Identifier == identifier {
+			return t
+		}
+	}
+
+	return nil
+}

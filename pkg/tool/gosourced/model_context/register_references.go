@@ -11,7 +11,7 @@ func (s *Server) registerReferences() {
 		mcp.NewTool(
 			constant.FindReferences,
 			mcp.WithDescription(
-				"Find all type-checked references to a Go symbol across the module, or census a file: per top-level symbol, the references outside the declaring file. Read-only, no files change. Counts are module-scoped - references from other modules are invisible, so a zero count only proves the symbol unused within this module.",
+				"Find all type-checked references to a Go symbol across the module, or report a file: per top-level symbol, the references outside the declaring file. Read-only, no files change. Counts are module-scoped - references from other modules are invisible, so a zero count only proves the symbol unused within this module.",
 			),
 			mcp.WithString(
 				"package_path",
@@ -35,7 +35,7 @@ func (s *Server) registerReferences() {
 			mcp.WithString(
 				"file",
 				mcp.Description(
-					"File path relative to module root - censuses every top-level symbol declared in it. Pass this or symbol, not both.",
+					"File path relative to module root - reports every top-level symbol declared in it. Pass this or symbol, not both.",
 				),
 			),
 			mcp.WithNumber(

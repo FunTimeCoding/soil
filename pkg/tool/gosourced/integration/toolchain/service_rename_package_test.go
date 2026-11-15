@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -11,10 +12,7 @@ import (
 )
 
 func TestRenamePackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-rename/src"),
-	)
+	d := service_tester.Prepare(t, "package-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.RenamePackage(
 		t.Context(),
@@ -28,15 +26,15 @@ func TestRenamePackage(t *testing.T) {
 	assert.StringContains(
 		t,
 		"pkg/outer/depot/store.go: package store → depot",
-		joinedConcerns(r),
+		rewrite_tester.JoinedConcerns(r),
 	)
 	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
 	assert.True(t, os.IsNotExist(e))
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/outer/depot/store.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "package depot", moved)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/outer/depot/run.go")
-	assertFormatted(t, run)
+	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "package depot", run)
 	assert.StringContains(t, "example/pkg/outer/depot/sub", run)
 	tests := service_tester.ReadFixtureFile(
@@ -46,21 +44,18 @@ func TestRenamePackage(t *testing.T) {
 	)
 	assert.StringContains(t, "package depot", tests)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	assertFormatted(t, caller)
+	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "\"example/pkg/outer/depot\"", caller)
 	assert.StringContains(t, "v := depot.Store{}", caller)
 	assert.False(t, strings.Contains(caller, "store"))
 	aliased := service_tester.ReadFixtureFile(t, d, "pkg/aliased/run.go")
-	assertFormatted(t, aliased)
+	rewrite_tester.Formatted(t, aliased)
 	assert.StringContains(t, "st \"example/pkg/outer/depot\"", aliased)
 	assert.StringContains(t, "return &st.Store{}", aliased)
 }
 
 func TestRenamePackageShadowed(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-collision/src"),
-	)
+	d := service_tester.Prepare(t, "rename-collision/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.RenamePackage(
 		t.Context(),
@@ -75,10 +70,7 @@ func TestRenamePackageShadowed(t *testing.T) {
 }
 
 func TestRenamePackageSameName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("package-rename/src"),
-	)
+	d := service_tester.Prepare(t, "package-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Packages.RenamePackage(
 		t.Context(),

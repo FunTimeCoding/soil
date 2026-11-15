@@ -2,7 +2,6 @@ package constant
 
 const (
 	Action      = "action"
-	Census      = "census"
 	Clean       = "clean"
 	Close       = "close"
 	Connect     = "connect"
@@ -45,6 +44,7 @@ const (
 	Pretend        = "pretend"
 	Single         = "single"
 	Skip           = "skip"
+	Unchecked      = "unchecked"
 	Verbose        = "verbose"
 	Wait           = "wait"
 )

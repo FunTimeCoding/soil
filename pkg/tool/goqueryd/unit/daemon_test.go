@@ -12,8 +12,8 @@ import (
 )
 
 func TestDaemonClosesWhatItBuiltOnce(t *testing.T) {
-	m := newEmbedder(t)
-	a := newReranker(t)
+	m := service_tester.NewEmbedder(t)
+	a := service_tester.NewReranker(t)
 	d := daemon.New(
 		service_tester.NewOption(t, m, a),
 		logger.New(t.Context()),
@@ -28,7 +28,11 @@ func TestDaemonClosesWhatItBuiltOnce(t *testing.T) {
 
 func TestDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 	d := daemon.New(
-		service_tester.NewOption(t, newEmbedder(t), newReranker(t)),
+		service_tester.NewOption(
+			t,
+			service_tester.NewEmbedder(t),
+			service_tester.NewReranker(t),
+		),
 		logger.New(t.Context()),
 		memory.New(),
 		prometheus.NewRegistry(),
@@ -38,7 +42,11 @@ func TestDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	o := service_tester.NewOption(t, newEmbedder(t), newReranker(t))
+	o := service_tester.NewOption(
+		t,
+		service_tester.NewEmbedder(t),
+		service_tester.NewReranker(t),
+	)
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
 		o,

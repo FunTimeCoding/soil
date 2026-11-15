@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
@@ -23,7 +24,7 @@ func TestReconcileSweepsCompletionUnderFormerName(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		sample(
+		metric_tester.Sample(
 			t,
 			s.Registry,
 			"goclauded_reconciled_total",

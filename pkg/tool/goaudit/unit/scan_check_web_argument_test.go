@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
 
@@ -27,7 +28,7 @@ func Main() {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.WebArgumentKey)
+	scan_tester.Concern(t, constant.WebArgumentKey, s[0])
 }
 
 func TestWebArgumentMetricPortFlagged(t *testing.T) {
@@ -49,7 +50,7 @@ func Main() {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], constant.WebArgumentKey)
+	scan_tester.Concern(t, constant.WebArgumentKey, s[0])
 }
 
 func TestWebArgumentClean(t *testing.T) {
@@ -72,5 +73,5 @@ func Main() {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], constant.WebArgumentKey)
+	scan_tester.NoConcern(t, constant.WebArgumentKey, s[0])
 }

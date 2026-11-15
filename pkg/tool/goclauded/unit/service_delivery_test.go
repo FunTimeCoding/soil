@@ -3,6 +3,7 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
@@ -127,12 +128,23 @@ func TestDeliveryOverBudgetIsCountedNotCaptured(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		sample(t, s.Registry, "goclauded_delivery_over_budget_total", nil),
+		metric_tester.Sample(
+			t,
+			s.Registry,
+			"goclauded_delivery_over_budget_total",
+			nil,
+		),
 	)
 	assert.Integer(
 		t,
 		2,
-		int(histogramCount(t, s.Registry, "goclauded_delivery_characters")),
+		int(
+			metric_tester.HistogramCount(
+				t,
+				s.Registry,
+				"goclauded_delivery_characters",
+			),
+		),
 	)
 }
 

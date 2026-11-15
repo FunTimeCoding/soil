@@ -1,13 +1,18 @@
 package migrate
 
 import (
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"gorm.io/gorm"
 	"log"
 )
 
 func migrateCompletedAt(d *gorm.DB) {
-	if !columnExists(d, constant.CompletionTable, constant.CompletedAtColumn) {
+	if !lite.ColumnExists(
+		d,
+		constant.CompletionTable,
+		constant.CompletedAtColumn,
+	) {
 		return
 	}
 

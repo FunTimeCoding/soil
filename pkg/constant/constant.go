@@ -115,3 +115,5 @@ var (
 
 	Statuses = []Status{Open, InProgress, Resolved, Closed}
 )
+
+const FixtureSignalWait = 5 * time.Second

@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -12,8 +14,8 @@ import (
 )
 
 func TestBrokenCallerNamesItself(t *testing.T) {
-	d := renameFunctionFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-function/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/broken/broken.go",
@@ -35,8 +37,8 @@ func TestBrokenCallerNamesItself(t *testing.T) {
 }
 
 func TestBrokenCallerNobodyTouchesIsSettled(t *testing.T) {
-	d := renameFunctionFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-function/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/broken/broken.go",
@@ -62,8 +64,8 @@ func TestBrokenCallerNobodyTouchesIsSettled(t *testing.T) {
 }
 
 func TestBrokenPackageOutsideReachDoesNotBlock(t *testing.T) {
-	d := renameFunctionFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-function/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/broken/broken.go",
@@ -88,8 +90,8 @@ func TestBrokenPackageOutsideReachDoesNotBlock(t *testing.T) {
 }
 
 func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
-	d := renameFunctionFixture(t)
-	testutil.WriteFile(
+	d := service_tester.Prepare(t, "rename-function/src")
+	system_tester.Write(
 		t,
 		d,
 		"pkg/broken/broken.go",
@@ -116,14 +118,14 @@ func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
 }
 
 func TestBrokenPackageOutsideReachInReplacingModuleDoesNotBlock(t *testing.T) {
-	library, user := prepareReplacedLibrary(t, "rename-replacer")
-	testutil.WriteFile(
+	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	system_tester.Write(
 		t,
 		user,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
-	r, e := replacingService(t, library, user).Symbol.Rename(
+	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",

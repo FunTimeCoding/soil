@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/label_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/target_tester"
 	"testing"
 )
 
@@ -15,14 +17,14 @@ func TestRecentSessionsCarriesLabels(t *testing.T) {
 	set, e := a.RestClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
-		labelBody("environment", "staging", "reconciler"),
+		label_tester.Body("environment", "staging", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, set.StatusCode())
 	targets, f := s.Client(t).RecentSessions(25)
 	assert.FatalOnError(t, f)
 	assert.True(t, len(targets) > 0)
-	found := identifiedTarget(targets, a.UUID)
+	found := target_tester.Find(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.Any(t, []string{"staging"}, found.Labels["environment"])
 }
@@ -44,7 +46,7 @@ func TestRecentSessionsCarriesEveryValueOfKey(t *testing.T) {
 	)
 	targets, e := c.RecentSessions(25)
 	assert.FatalOnError(t, e)
-	found := identifiedTarget(targets, a.UUID)
+	found := target_tester.Find(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.Any(
 		t,
@@ -61,7 +63,7 @@ func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 	a.CheckLive()
 	targets, e := s.Client(t).RecentSessions(25)
 	assert.FatalOnError(t, e)
-	found := identifiedTarget(targets, a.UUID)
+	found := target_tester.Find(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.False(t, found.LastSeen.IsZero())
 }
@@ -73,7 +75,7 @@ func TestRecentSessionsKeepsUnlabelledSessions(t *testing.T) {
 	a.CheckLive()
 	targets, e := s.Client(t).RecentSessions(25)
 	assert.FatalOnError(t, e)
-	found := identifiedTarget(targets, a.UUID)
+	found := target_tester.Find(targets, a.UUID)
 	assert.NotNil(t, found)
 	assert.Integer(t, 0, len(found.Labels))
 }

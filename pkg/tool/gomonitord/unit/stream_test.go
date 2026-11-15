@@ -5,15 +5,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/stream_tester"
 	"net/http"
 	"testing"
 )
 
 func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	s := base.New(t)
-	r := openStream(t, s.Server)
-	assert.String(t, "[]", readEvent(t, r))
-	c := newClient(t, s.Server)
+	r := stream_tester.Open(t, s.Server)
+	assert.String(t, "[]", stream_tester.ReadEvent(t, r))
+	c := base.Rest(t, s.Server)
 	claimed, e := c.PutClaimWithResponse(
 		context.Background(),
 		client.PutClaimJSONRequestBody{
@@ -26,7 +27,7 @@ func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	assert.StringContains(
 		t,
 		`"item":"jira-ABC-1","owner":"alfa@host.example"`,
-		readEvent(t, r),
+		stream_tester.ReadEvent(t, r),
 	)
 	released, f := c.DeleteClaimWithResponse(
 		context.Background(),
@@ -37,12 +38,12 @@ func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, http.StatusNoContent, released.StatusCode())
-	assert.String(t, "[]", readEvent(t, r))
+	assert.String(t, "[]", stream_tester.ReadEvent(t, r))
 }
 
 func TestClaimWithoutOwnerIsRejected(t *testing.T) {
 	s := base.New(t)
-	r, e := newClient(t, s.Server).PutClaimWithResponse(
+	r, e := base.Rest(t, s.Server).PutClaimWithResponse(
 		context.Background(),
 		client.PutClaimJSONRequestBody{Item: "jira-ABC-1"},
 	)

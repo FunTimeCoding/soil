@@ -12,11 +12,15 @@ func (s *Server) activeClusterName(x context.Context) (string, error) {
 		return "", e
 	}
 
-	if name == "" {
-		return "", not_selected.Format(
-			"no cluster selected - use use_cluster first",
-		)
+	if name != "" {
+		return name, nil
 	}
 
-	return name, nil
+	if clusters := s.service.Clusters(); len(clusters) == 1 {
+		return clusters[0].Name(), nil
+	}
+
+	return "", not_selected.Format(
+		"no cluster selected - use use_cluster first",
+	)
 }

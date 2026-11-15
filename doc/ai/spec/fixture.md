@@ -97,4 +97,4 @@ resolution pattern.
 
 **Exception:** analyzers under `pkg/lint/analyzer/` use `<path>/testdata/`
 because Go's `analysistest` framework requires that exact layout. That is the
-only sanctioned use.
+only allowed use.

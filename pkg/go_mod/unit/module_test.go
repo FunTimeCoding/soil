@@ -4,11 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/module"
+	"github.com/funtimecoding/soil/pkg/go_mod/unit/go_mod_tester"
 	"testing"
 )
 
 func TestModuleTakesLatestReleaseFromUpdate(t *testing.T) {
-	m := modules(
+	m := go_mod_tester.Modules(
 		`{"Path": "a", "Version": "v1.0.0", "Time": "2020-01-04T00:00:00Z", "Update": {"Path": "a", "Version": "v1.1.0", "Time": "2026-09-01T00:00:00Z"}}`,
 	)[0]
 	assert.String(t, "v1.0.0", m.Version)
@@ -18,7 +19,7 @@ func TestModuleTakesLatestReleaseFromUpdate(t *testing.T) {
 }
 
 func TestModuleIsStaleAtThreshold(t *testing.T) {
-	m := modules(
+	m := go_mod_tester.Modules(
 		`{"Path": "a", "Version": "v1.0.0", "Time": "2025-10-11T00:00:00Z"}`,
 	)[0]
 	assert.Integer(t, 12, m.Months)
@@ -26,7 +27,7 @@ func TestModuleIsStaleAtThreshold(t *testing.T) {
 }
 
 func TestModuleIsFreshBelowThreshold(t *testing.T) {
-	m := modules(
+	m := go_mod_tester.Modules(
 		`{"Path": "a", "Version": "v1.0.0", "Time": "2025-10-12T00:00:00Z"}`,
 	)[0]
 	assert.Integer(t, 11, m.Months)
@@ -36,21 +37,21 @@ func TestModuleIsFreshBelowThreshold(t *testing.T) {
 func TestModuleWithoutReleaseTimeHasNoConcern(t *testing.T) {
 	assert.False(
 		t,
-		modules(`{"Path": "a", "Version": "v1.0.0"}`)[0].HasConcerns(),
+		go_mod_tester.Modules(`{"Path": "a", "Version": "v1.0.0"}`)[0].HasConcerns(),
 	)
 }
 
 func TestModulePseudoVersionIsUntagged(t *testing.T) {
 	assert.True(
 		t,
-		modules(
+		go_mod_tester.Modules(
 			`{"Path": "a", "Version": "v1.5.4-0.20250319132907-e064f32e3674", "Time": "2025-03-19T13:29:07Z"}`,
 		)[0].Untagged,
 	)
 }
 
 func TestSortStalestPutsModulesWithoutReleaseTimeLast(t *testing.T) {
-	v := modules(
+	v := go_mod_tester.Modules(
 		`{"Path": "none", "Version": "v1.0.0"}
 {"Path": "new", "Version": "v1.0.0", "Time": "2026-01-01T00:00:00Z"}
 {"Path": "old", "Version": "v1.0.0", "Time": "2019-04-18T00:00:00Z"}`,

@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fake_parser"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/mock_parser"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/service_tester"
 	"path/filepath"
 	"testing"
@@ -14,10 +14,10 @@ import (
 )
 
 func TestGenerateMovesReportOutUnderItsDate(t *testing.T) {
-	p := fake_parser.New(3, nil)
+	p := mock_parser.New(3, nil)
 	s, output := service_tester.New(t, p)
 	v, e := s.Generate(
-		[]string{inputFile(t, "alfa.zevtc")},
+		[]string{service_tester.Input(t, "alfa.zevtc")},
 		time.Date(2026, 1, 2, 20, 0, 0, 0, time.UTC),
 	)
 	assert.FatalOnError(t, e)
@@ -37,12 +37,15 @@ func TestGenerateMovesReportOutUnderItsDate(t *testing.T) {
 }
 
 func TestTwoReportsMinuteApartBothSurvive(t *testing.T) {
-	s, output := service_tester.New(t, fake_parser.New(1, nil))
+	s, output := service_tester.New(t, mock_parser.New(1, nil))
 	first := time.Date(2026, 1, 2, 20, 0, 0, 0, time.UTC)
-	_, e := s.Generate([]string{inputFile(t, "foxtrot.zevtc")}, first)
+	_, e := s.Generate(
+		[]string{service_tester.Input(t, "foxtrot.zevtc")},
+		first,
+	)
 	assert.FatalOnError(t, e)
 	_, f := s.Generate(
-		[]string{inputFile(t, "golf.zevtc")},
+		[]string{service_tester.Input(t, "golf.zevtc")},
 		first.Add(time.Minute),
 	)
 	assert.FatalOnError(t, f)
@@ -61,7 +64,7 @@ func TestTwoReportsMinuteApartBothSurvive(t *testing.T) {
 }
 
 func TestGenerateAnswersMissingInput(t *testing.T) {
-	p := fake_parser.New(1, nil)
+	p := mock_parser.New(1, nil)
 	s, _ := service_tester.New(t, p)
 	_, e := s.Generate(
 		[]string{filepath.Join(t.TempDir(), "absent.zevtc")},
@@ -72,7 +75,7 @@ func TestGenerateAnswersMissingInput(t *testing.T) {
 }
 
 func TestGenerateRefusesNoFiles(t *testing.T) {
-	p := fake_parser.New(1, nil)
+	p := mock_parser.New(1, nil)
 	s, _ := service_tester.New(t, p)
 	_, e := s.Generate(nil, time.Now())
 	assert.True(t, validation.Is(e))
@@ -82,8 +85,11 @@ func TestGenerateRefusesNoFiles(t *testing.T) {
 
 func TestFailedParseNamesStep(t *testing.T) {
 	failure := errors.New("bravo parse failed")
-	s, _ := service_tester.New(t, fake_parser.New(0, failure))
-	_, e := s.Generate([]string{inputFile(t, "bravo.zevtc")}, time.Now())
+	s, _ := service_tester.New(t, mock_parser.New(0, failure))
+	_, e := s.Generate(
+		[]string{service_tester.Input(t, "bravo.zevtc")},
+		time.Now(),
+	)
 	assert.True(t, errors.Is(e, failure))
 	assert.String(t, "parse: bravo parse failed", e.Error())
 }

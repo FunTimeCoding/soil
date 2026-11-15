@@ -4,12 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
 	"testing"
 )
 
 func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	result := r.Client.MustCallToolNotation(
 		constant.SubscribeThread,
 		map[string]any{
@@ -27,7 +28,7 @@ func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 }
 
 func TestSubscribeThreadAnswersLatestReply(t *testing.T) {
-	r := model_context_tester.New(t, repliedUpstream)
+	r := model_context_tester.New(t, mattermost_server.Replied)
 	result := r.Client.MustCallToolNotation(
 		constant.SubscribeThread,
 		map[string]any{
@@ -43,7 +44,7 @@ func TestSubscribeThreadAnswersLatestReply(t *testing.T) {
 }
 
 func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	result := r.Client.MustCallToolNotation(
 		constant.SubscribeThread,
 		map[string]any{
@@ -57,7 +58,7 @@ func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
 }
 
 func TestSubscribeThreadIsIdempotent(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	arguments := map[string]any{
 		constant.ParameterRoot:     "alfa",
 		constant.ParameterCallsign: "kilo",
@@ -68,7 +69,7 @@ func TestSubscribeThreadIsIdempotent(t *testing.T) {
 }
 
 func TestSubscribeThreadStoresQueuedDelivery(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	r.Client.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{
@@ -85,7 +86,7 @@ func TestSubscribeThreadStoresQueuedDelivery(t *testing.T) {
 }
 
 func TestSubscribeThreadRejectsUnknownDelivery(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	r.Client.MustCallToolError(
 		constant.SubscribeThread,
 		map[string]any{
@@ -98,7 +99,7 @@ func TestSubscribeThreadRejectsUnknownDelivery(t *testing.T) {
 }
 
 func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	assert.StringContains(
 		t,
 		"missing property 'callsign'",
@@ -110,7 +111,7 @@ func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
 }
 
 func TestSubscribeThreadRejectsEmptyCallsign(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	assert.StringContains(
 		t,
 		"callsign is required",
@@ -125,7 +126,7 @@ func TestSubscribeThreadRejectsEmptyCallsign(t *testing.T) {
 }
 
 func TestUnsubscribeThreadRemovesEachSubscription(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	r.Client.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{
@@ -160,7 +161,7 @@ func TestUnsubscribeThreadRemovesEachSubscription(t *testing.T) {
 }
 
 func TestListSubscriptionsReturnsLabels(t *testing.T) {
-	r := model_context_tester.New(t, threadUpstream)
+	r := model_context_tester.New(t, mattermost_server.Thread)
 	r.Client.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{

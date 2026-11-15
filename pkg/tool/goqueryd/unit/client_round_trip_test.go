@@ -3,13 +3,27 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
 
 func TestClientRoundTripsDocument(t *testing.T) {
-	c := servedClient(t)
+	s := base.Serve(
+		t,
+		service_tester.NewOption(
+			t,
+			service_tester.NewEmbedder(t),
+			service_tester.NewReranker(t),
+		),
+		memory.New(),
+	)
+	c := client_tester.New(t, s.Address(webConstant.RootPath))
 	x := t.Context()
 	metadata := map[string][]string{"scope": {"alfa"}}
 	_, e := c.PostDocument(
@@ -83,7 +97,16 @@ func TestClientRoundTripsDocument(t *testing.T) {
 }
 
 func TestClientAnswersEachClass(t *testing.T) {
-	c := servedClient(t)
+	s := base.Serve(
+		t,
+		service_tester.NewOption(
+			t,
+			service_tester.NewEmbedder(t),
+			service_tester.NewReranker(t),
+		),
+		memory.New(),
+	)
+	c := client_tester.New(t, s.Address(webConstant.RootPath))
 	x := t.Context()
 	_, e := c.GetDocument(
 		x,

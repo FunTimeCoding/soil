@@ -4,12 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
 	"net/http"
 	"testing"
 )
 
 func TestRestTypoInTheirQueryIsQuiet(t *testing.T) {
-	_, c, r, _ := served(t, syntaxRefusal())
+	_, c, r, _ := base.Serve(t, service_tester.SyntaxRefusal())
 	v, e := c.QueryWithResponse(
 		t.Context(),
 		client.QueryJSONRequestBody{Instance: new("alfa"), Sql: "SELEC 1"},
@@ -20,7 +22,7 @@ func TestRestTypoInTheirQueryIsQuiet(t *testing.T) {
 }
 
 func TestRestRefusalOfOurCatalogueIsCaptured(t *testing.T) {
-	_, c, r, _ := served(t, syntaxRefusal())
+	_, c, r, _ := base.Serve(t, service_tester.SyntaxRefusal())
 	v, e := c.ListSchemasWithResponse(
 		t.Context(),
 		&client.ListSchemasParams{Instance: new("alfa")},
@@ -31,7 +33,7 @@ func TestRestRefusalOfOurCatalogueIsCaptured(t *testing.T) {
 }
 
 func TestModelContextTypoInTheirQueryIsQuiet(t *testing.T) {
-	s, _, r, _ := served(t, syntaxRefusal())
+	s, _, r, _ := base.Serve(t, service_tester.SyntaxRefusal())
 	m := s.Connect(t)
 	defer m.Close()
 	assert.StringContains(
@@ -43,7 +45,7 @@ func TestModelContextTypoInTheirQueryIsQuiet(t *testing.T) {
 }
 
 func TestModelContextRefusalOfOurCatalogueIsCaptured(t *testing.T) {
-	s, _, r, _ := served(t, syntaxRefusal())
+	s, _, r, _ := base.Serve(t, service_tester.SyntaxRefusal())
 	m := s.Connect(t)
 	defer m.Close()
 	m.MustCallToolError(constant.ListSchemas, nil)

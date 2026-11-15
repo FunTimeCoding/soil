@@ -32,6 +32,10 @@ func headless(
 		r.AddConcern(c)
 	}
 
+	for _, c := range scan.StrayHelpers(v) {
+		r.AddConcern(c)
+	}
+
 	for _, c := range scan.ConstantPlacement(v) {
 		r.AddConcern(c)
 	}

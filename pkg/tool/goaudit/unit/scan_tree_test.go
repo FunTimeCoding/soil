@@ -2,8 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/warm_tree"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
@@ -39,7 +39,7 @@ func TestTreeSkipsTemporaryDirectories(t *testing.T) {
 func TestTreeStopsAtNestedModule(t *testing.T) {
 	base := t.TempDir()
 	scan_tester.WriteSource(base, "pkg/alfa/alfa_test.go")
-	testutil.WriteFile(t, base, "graft/bravo/go.mod", "module bravo\n")
+	system_tester.Write(t, base, "graft/bravo/go.mod", "module bravo\n")
 	scan_tester.WriteSource(base, "graft/bravo/bravo_test.go")
 	assert.Strings(
 		t,

@@ -3,15 +3,13 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-function/src"),
-	)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -38,10 +36,7 @@ func TestRenameFunction(t *testing.T) {
 }
 
 func TestRenameFunctionSamePackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("unexport-function/src"),
-	)
+	d := service_tester.Prepare(t, "unexport-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -65,10 +60,7 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 }
 
 func TestRenameMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-method/src"),
-	)
+	d := service_tester.Prepare(t, "rename-method/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -95,10 +87,7 @@ func TestRenameMethod(t *testing.T) {
 }
 
 func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-unexport/src"),
-	)
+	d := service_tester.Prepare(t, "rename-unexport/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -117,10 +106,7 @@ func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
 }
 
 func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("unexport-function/src"),
-	)
+	d := service_tester.Prepare(t, "unexport-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -142,10 +128,7 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 }
 
 func TestRenameCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-function/src"),
-	)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -162,10 +145,7 @@ func TestRenameCollision(t *testing.T) {
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-function/src"),
-	)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -182,10 +162,7 @@ func TestRenameSymbolNotFound(t *testing.T) {
 }
 
 func TestRenamePackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-function/src"),
-	)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -202,10 +179,7 @@ func TestRenamePackageNotFound(t *testing.T) {
 }
 
 func TestRenameReceiverNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-method/src"),
-	)
+	d := service_tester.Prepare(t, "rename-method/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -222,10 +196,7 @@ func TestRenameReceiverNotFound(t *testing.T) {
 }
 
 func TestRenameMethodNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-method/src"),
-	)
+	d := service_tester.Prepare(t, "rename-method/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -242,10 +213,7 @@ func TestRenameMethodNotFound(t *testing.T) {
 }
 
 func TestRenameMethodCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("method-collision/src"),
-	)
+	d := service_tester.Prepare(t, "method-collision/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -262,10 +230,7 @@ func TestRenameMethodCollision(t *testing.T) {
 }
 
 func TestRenameSameName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-function/src"),
-	)
+	d := service_tester.Prepare(t, "rename-function/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -282,10 +247,7 @@ func TestRenameSameName(t *testing.T) {
 }
 
 func TestRenameLongerKeepsComments(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("rename-longer/src"),
-	)
+	d := service_tester.Prepare(t, "rename-longer/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -303,12 +265,12 @@ func TestRenameLongerKeepsComments(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "TargetLegendExtended = \"--legend\"", source)
 	assert.StringContains(t, "// alfa trailing", source)
 	assert.StringContains(t, "// bold trailing", source)
 	assert.StringContains(t, "// wide trailing", source)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	assertFormatted(t, run)
+	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "TargetLegendExtended", run)
 }

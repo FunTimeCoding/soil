@@ -6,12 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/postgres/types/result"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestRestDeleteOfAbsentBackupIsNotFound(t *testing.T) {
-	_, c, r, _ := served(t, nil)
+	_, c, r, _ := base.Serve(t, nil)
 	v, e := c.DeleteBackupWithResponse(
 		t.Context(),
 		"2030-01-02T03-04-05",
@@ -23,7 +24,7 @@ func TestRestDeleteOfAbsentBackupIsNotFound(t *testing.T) {
 }
 
 func TestRestBackupNameOutsidePatternIsRefused(t *testing.T) {
-	_, c, r, _ := served(t, nil)
+	_, c, r, _ := base.Serve(t, nil)
 	v, e := c.RestoreBackupWithResponse(
 		t.Context(),
 		"../alfa",
@@ -35,7 +36,7 @@ func TestRestBackupNameOutsidePatternIsRefused(t *testing.T) {
 }
 
 func TestRestRestoreInPlaceWhileOthersAreConnectedIsConflict(t *testing.T) {
-	_, c, r, postgres := served(t, nil)
+	_, c, r, postgres := base.Serve(t, nil)
 	created, e := c.CreateBackupWithResponse(
 		t.Context(),
 		client.CreateBackupJSONRequestBody{Instance: new("alfa")},
@@ -64,7 +65,7 @@ func TestRestRestoreInPlaceWhileOthersAreConnectedIsConflict(t *testing.T) {
 }
 
 func TestModelContextBackupIsCreatedListedAndDeleted(t *testing.T) {
-	s, _, r, _ := served(t, nil)
+	s, _, r, _ := base.Serve(t, nil)
 	m := s.Connect(t)
 	defer m.Close()
 	var created client.Backup
@@ -96,7 +97,7 @@ func TestModelContextBackupIsCreatedListedAndDeleted(t *testing.T) {
 }
 
 func TestModelContextRestoreOfAbsentBackupIsQuiet(t *testing.T) {
-	s, _, r, _ := served(t, nil)
+	s, _, r, _ := base.Serve(t, nil)
 	m := s.Connect(t)
 	defer m.Close()
 	m.MustCallToolError(

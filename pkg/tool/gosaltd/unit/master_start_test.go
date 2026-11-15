@@ -5,14 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/salt/face"
 	"github.com/funtimecoding/soil/pkg/provision/salt/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 	"time"
 )
 
 func TestStartUpRunWaitsForMasterAndHappensOnce(t *testing.T) {
 	c := mock_client.New()
-	c.Fail(c.Reachable, refusedDial())
-	o := newOption(t)
+	c.Fail(c.Reachable, outage_tester.RefusedDial())
+	o := service_tester.NewOption(t)
 	o.Master = func() face.SaltClient { return c }
 	_, r := service_tester.New(t, o)
 	r.Start()
@@ -31,8 +32,8 @@ func TestStartUpRunWaitsForMasterAndHappensOnce(t *testing.T) {
 
 func TestShutdownDuringOutageWritesNoStartUpRun(t *testing.T) {
 	c := mock_client.New()
-	c.Fail(c.Reachable, refusedDial())
-	o := newOption(t)
+	c.Fail(c.Reachable, outage_tester.RefusedDial())
+	o := service_tester.NewOption(t)
 	o.Master = func() face.SaltClient { return c }
 	v, r := service_tester.New(t, o)
 	r.Start()

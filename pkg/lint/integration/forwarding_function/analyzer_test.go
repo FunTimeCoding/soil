@@ -7,14 +7,22 @@ import (
 )
 
 func TestForwardingFunction(t *testing.T) {
-	results := analyze(t, forwarding_function.Check)
+	results := testutil.Analyze(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		forwarding_function.Check,
+	)
 	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(t, results, "small only forwards to NewSize")
 	testutil.AssertBlockedContains(t, results, "plain only forwards to add")
 }
 
 func TestDaemonForwardingToServiceFlagged(t *testing.T) {
-	results := analyze(t, forwarding_function.CheckDaemon)
+	results := testutil.Analyze(
+		t,
+		testutil.PrepareTestPackage(t, "testdata/src/example"),
+		forwarding_function.CheckDaemon,
+	)
 	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(
 		t,

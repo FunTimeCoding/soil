@@ -3,23 +3,29 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/web_interface_tester"
 	"net/http"
 	"path/filepath"
 	"testing"
 )
 
 func TestDeletingReportStaysInsideReportDirectory(t *testing.T) {
-	base := t.TempDir()
-	output := filepath.Join(base, "reports")
+	b := t.TempDir()
+	output := filepath.Join(b, "reports")
 	system.EnsurePathExists(output)
-	outside := filepath.Join(base, "secret.db")
+	outside := filepath.Join(b, "secret.db")
 	system.WriteFile(outside, []byte("keep"), 0o600)
 	report := filepath.Join(output, "alfa.html")
 	system.WriteFile(report, []byte("report"), 0o600)
-	v := mountedReports(t, output)
-	status := deleteReport(t, v, "..%2Fsecret.db")
+	v := base.Reports(t, output)
+	status := web_interface_tester.Delete(t, v, "..%2Fsecret.db")
 	assert.True(t, system.FileExists(outside))
 	assert.Integer(t, http.StatusNotFound, status)
-	assert.Integer(t, http.StatusSeeOther, deleteReport(t, v, "alfa.html"))
+	assert.Integer(
+		t,
+		http.StatusSeeOther,
+		web_interface_tester.Delete(t, v, "alfa.html"),
+	)
 	assert.False(t, system.FileExists(report))
 }

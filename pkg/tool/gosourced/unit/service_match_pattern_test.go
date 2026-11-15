@@ -9,10 +9,7 @@ import (
 )
 
 func TestMatchPatternSpreadHoleType(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, match, e := s.Pattern.MatchPattern(
 		d,
@@ -27,10 +24,7 @@ func TestMatchPatternSpreadHoleType(t *testing.T) {
 }
 
 func TestListCallsUnknownRegion(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, inventory, e := s.Reference.ListCalls(d, "example/pkg/missing", 0)
 	assert.FatalOnError(t, e)

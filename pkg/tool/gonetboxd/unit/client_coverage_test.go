@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/client_tester"
 	"reflect"
 	"slices"
 	"strings"
@@ -18,7 +19,7 @@ func TestClientCoversEveryOperation(t *testing.T) {
 
 	for _, p := range s.Paths.Map() {
 		for _, o := range p.Operations() {
-			name := operationMethod(o.OperationID)
+			name := client_tester.OperationMethod(o.OperationID)
 
 			if _, okay := methods.MethodByName(name); !okay {
 				missing = append(missing, name)

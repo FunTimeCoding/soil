@@ -10,8 +10,8 @@ import (
 
 func TestProfileStaysWithinByteBudget(t *testing.T) {
 	o := service_tester.New(t)
-	createTagged(t, o, "standing rule", constant.AlwaysTag)
-	createBulky(t, o)
+	o.CreateTagged("standing rule", constant.AlwaysTag)
+	o.CreateBulky()
 	result, d, e := o.Service.Profile("", "", true)
 	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, d.IndexTrimmed)
@@ -22,8 +22,8 @@ func TestProfileStaysWithinByteBudget(t *testing.T) {
 
 func TestProfileChargesNoticeToByteBudget(t *testing.T) {
 	o := service_tester.New(t)
-	createTagged(t, o, "standing rule", constant.AlwaysTag)
-	createBulky(t, o)
+	o.CreateTagged("standing rule", constant.AlwaysTag)
+	o.CreateBulky()
 	o.Indexer.Failure = unavailable.Format("goqueryd down")
 	result, d, e := o.Service.Profile("retry", "", true)
 	assert.FatalOnError(t, e)

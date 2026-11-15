@@ -25,7 +25,7 @@ func TestRoundGaugesHealthyHost(t *testing.T) {
 	d := daemon_tester.New(
 		t,
 		map[string]*mock_client.Client{
-			"alfa": fixtureClient(
+			"alfa": daemon_tester.Client(
 				"mdstat_healthy.txt",
 				"smartctl_nvme_healthy.json",
 			),
@@ -33,7 +33,7 @@ func TestRoundGaugesHealthyHost(t *testing.T) {
 		m,
 		memory.New(),
 	)
-	poll(t, d)
+	daemon_tester.Poll(t, d)
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
@@ -71,7 +71,7 @@ func TestRoundGaugesDegradedArrayAndFailingDrive(t *testing.T) {
 	d := daemon_tester.New(
 		t,
 		map[string]*mock_client.Client{
-			"alfa": fixtureClient(
+			"alfa": daemon_tester.Client(
 				"mdstat_degraded_derived.txt",
 				"smartctl_nvme_failing_derived.json",
 			),
@@ -79,7 +79,7 @@ func TestRoundGaugesDegradedArrayAndFailingDrive(t *testing.T) {
 		m,
 		memory.New(),
 	)
-	poll(t, d)
+	daemon_tester.Poll(t, d)
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
@@ -116,12 +116,12 @@ func TestUnreachedHostKeepsOtherHostsGauged(t *testing.T) {
 		t,
 		map[string]*mock_client.Client{
 			"alfa":  down,
-			"bravo": fixtureClient("mdstat_healthy.txt"),
+			"bravo": daemon_tester.Client("mdstat_healthy.txt"),
 		},
 		m,
 		memory.New(),
 	)
-	poll(t, d)
+	daemon_tester.Poll(t, d)
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
@@ -144,7 +144,7 @@ patrol_array_members_active{array="md1",host="bravo"} 2
 }
 
 func TestRoundDropsDriveNoLongerScanned(t *testing.T) {
-	c := fixtureClient(
+	c := daemon_tester.Client(
 		"mdstat_healthy.txt",
 		"smartctl_nvme_healthy.json",
 		"smartctl_nvme_system.json",
@@ -156,9 +156,9 @@ func TestRoundDropsDriveNoLongerScanned(t *testing.T) {
 		m,
 		memory.New(),
 	)
-	poll(t, d)
+	daemon_tester.Poll(t, d)
 	c.RemoveDrive("/dev/nvme1")
-	poll(t, d)
+	daemon_tester.Poll(t, d)
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(

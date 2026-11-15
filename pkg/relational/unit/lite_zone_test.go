@@ -6,33 +6,34 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/relational/lite/zone"
+	"github.com/funtimecoding/soil/pkg/relational/unit/relational_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 	"time"
 )
 
 func TestZoneStoresUniversalTime(t *testing.T) {
-	d := fallBackDatabase()
+	d := relational_tester.FallBackDatabase()
 	defer errors.PanicClose(d)
 	assert.Strings(
 		t,
 		[]string{"charlie", "alfa"},
-		textColumn(d, constant.FixtureEventNewestFirst),
+		relational_tester.TextColumn(d, constant.FixtureEventNewestFirst),
 	)
 	assert.Strings(
 		t,
 		[]string{"2026-10-25 00:30:00+00:00", "2026-10-25 01:30:00+00:00"},
-		textColumn(d, constant.FixtureEventStoredTime),
+		relational_tester.TextColumn(d, constant.FixtureEventStoredTime),
 	)
 }
 
 func TestZoneComparesUniversalArgument(t *testing.T) {
-	d := fallBackDatabase()
+	d := relational_tester.FallBackDatabase()
 	defer errors.PanicClose(d)
 	assert.Strings(
 		t,
 		[]string{"charlie"},
-		textColumn(
+		relational_tester.TextColumn(
 			d,
 			constant.FixtureEventAfter,
 			time.Date(2026, 10, 25, 2, 0, 0, 0, time.FixedZone("", 60*60)),
@@ -41,7 +42,7 @@ func TestZoneComparesUniversalArgument(t *testing.T) {
 }
 
 func TestZoneReadsLocalTime(t *testing.T) {
-	d := fallBackDatabase()
+	d := relational_tester.FallBackDatabase()
 	defer errors.PanicClose(d)
 	var read time.Time
 	errors.PanicOnError(
@@ -81,12 +82,12 @@ func TestNormalizeConvertsStoredOffsets(t *testing.T) {
 			"2026-10-25 00:30:00+00:00",
 			"2026-10-25 01:30:00+00:00",
 		},
-		textColumn(d, constant.FixtureEventStoredTime),
+		relational_tester.TextColumn(d, constant.FixtureEventStoredTime),
 	)
 	assert.Strings(
 		t,
 		[]string{"2026-13-45 02:30:00+02:00"},
-		textColumn(d, constant.FixtureEventNote),
+		relational_tester.TextColumn(d, constant.FixtureEventNote),
 	)
 }
 
@@ -106,6 +107,6 @@ func TestNormalizeRunsOnce(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"2026-10-25 02:30:00+02:00"},
-		textColumn(d, constant.FixtureEventStoredTime),
+		relational_tester.TextColumn(d, constant.FixtureEventStoredTime),
 	)
 }

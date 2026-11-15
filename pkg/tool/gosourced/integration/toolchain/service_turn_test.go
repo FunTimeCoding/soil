@@ -10,7 +10,7 @@ import (
 )
 
 func TestTwoSessionsRenameInOneModuleWithoutRefusing(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	s := service_tester.NewService(t)
 	results := make(chan *output.Results, 2)
 	failures := make(chan error, 2)

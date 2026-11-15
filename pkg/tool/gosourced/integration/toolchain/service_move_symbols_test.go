@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
@@ -12,10 +13,7 @@ import (
 )
 
 func TestBatchFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-file/src"),
-	)
+	d := service_tester.Prepare(t, "batch-file/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -37,13 +35,13 @@ func TestBatchFile(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.Integer(t, 1, strings.Count(moved, "const ("))
 	assert.StringContains(t, "First  = \"alfa\"", moved)
 	assert.StringContains(t, "Second = \"bravo\"", moved)
 	assert.StringContains(t, "Third  = \"charlie\"", moved)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	assertFormatted(t, run)
+	rewrite_tester.Formatted(t, run)
 	assert.StringContains(
 		t,
 		"constant.First + constant.Second + constant.Third",
@@ -52,10 +50,7 @@ func TestBatchFile(t *testing.T) {
 }
 
 func TestBatchEnum(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-enum/src"),
-	)
+	d := service_tester.Prepare(t, "batch-enum/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -75,26 +70,23 @@ func TestBatchEnum(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "type Mode int", moved)
 	assert.StringContains(t, "Off Mode = iota", moved)
 	assert.False(t, strings.Contains(moved, "constant.Mode"))
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
-	assertFormatted(t, run)
+	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "func Run() constant.Mode", run)
 	assert.StringContains(t, "return constant.On", run)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	assertFormatted(t, caller)
+	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "func Run() targetConstant.Mode", caller)
 	assert.StringContains(t, "targetConstant.Off == 0", caller)
 	assert.False(t, strings.Contains(caller, "target."))
 }
 
 func TestBatchSubset(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-file/src"),
-	)
+	d := service_tester.Prepare(t, "batch-file/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -110,7 +102,7 @@ func TestBatchSubset(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/target/constant.go")
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "third = \"charlie\"", source)
 	assert.False(t, strings.Contains(source, "first"))
 	moved := service_tester.ReadFixtureFile(
@@ -118,7 +110,7 @@ func TestBatchSubset(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "First  = \"alfa\"", moved)
 	assert.StringContains(t, "Second = \"bravo\"", moved)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
@@ -126,10 +118,7 @@ func TestBatchSubset(t *testing.T) {
 }
 
 func TestBatchCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-collision/src"),
-	)
+	d := service_tester.Prepare(t, "batch-collision/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -148,10 +137,7 @@ func TestBatchCollision(t *testing.T) {
 }
 
 func TestBatchDependencyTogether(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("move-dependency/src"),
-	)
+	d := service_tester.Prepare(t, "move-dependency/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -171,15 +157,12 @@ func TestBatchDependencyTogether(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "composed = prefix + \"bravo\"", moved)
 }
 
 func TestBatchMultiName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-multi-name/src"),
-	)
+	d := service_tester.Prepare(t, "batch-multi-name/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -199,17 +182,14 @@ func TestBatchMultiName(t *testing.T) {
 		d,
 		"pkg/target/constant/constant.go",
 	)
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "Alfa, Bravo = \"a\", \"b\"", moved)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
 	assert.StringContains(t, "constant.Alfa + constant.Bravo", run)
 }
 
 func TestBatchMultiNamePartial(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-multi-name/src"),
-	)
+	d := service_tester.Prepare(t, "batch-multi-name/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -228,10 +208,7 @@ func TestBatchMultiNamePartial(t *testing.T) {
 }
 
 func TestBatchMethodRefused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-method/src"),
-	)
+	d := service_tester.Prepare(t, "batch-method/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -254,10 +231,7 @@ func TestBatchMethodRefused(t *testing.T) {
 }
 
 func TestBatchMethodSetRefused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("batch-method/src"),
-	)
+	d := service_tester.Prepare(t, "batch-method/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -277,10 +251,7 @@ func TestBatchMethodSetRefused(t *testing.T) {
 }
 
 func TestBackReferenceQualified(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("back-reference/src"),
-	)
+	d := service_tester.Prepare(t, "back-reference/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -296,20 +267,17 @@ func TestBackReferenceQualified(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := service_tester.ReadFixtureFile(t, d, "pkg/target/mover.go")
-	assertFormatted(t, moved)
+	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "example/pkg/source", moved)
 	assert.StringContains(t, "source.Stayer()", moved)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/source/source.go")
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "func Stayer()", source)
 	assert.False(t, strings.Contains(source, "func Mover"))
 }
 
 func TestBackReferenceCycleRefused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("cycle/src"),
-	)
+	d := service_tester.Prepare(t, "cycle/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -328,10 +296,7 @@ func TestBackReferenceCycleRefused(t *testing.T) {
 }
 
 func TestBackReferenceUnexportedIsExported(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("back-reference-unexported/src"),
-	)
+	d := service_tester.Prepare(t, "back-reference-unexported/src")
 	s := service_tester.NewService(t)
 	r, e := s.Symbol.MoveSymbols(
 		t.Context(),
@@ -346,8 +311,12 @@ func TestBackReferenceUnexportedIsExported(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assertFixedContains(t, "stayer → Stayer", r)
-	assertFixedContains(t, "stayer → source.Stayer (back reference)", r)
+	rewrite_tester.FixedContains(t, "stayer → Stayer", r)
+	rewrite_tester.FixedContains(
+		t,
+		"stayer → source.Stayer (back reference)",
+		r,
+	)
 	assert.String(
 		t,
 		"package source\n\nfunc Stayer() string {\n\treturn \"stay\"\n}\n",
@@ -358,14 +327,11 @@ func TestBackReferenceUnexportedIsExported(t *testing.T) {
 		"return source.Stayer() + \" moved\"",
 		service_tester.ReadFixtureFile(t, d, "pkg/target/mover.go"),
 	)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestBackReferenceExportCollisionRefused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("back-reference-collision/src"),
-	)
+	d := service_tester.Prepare(t, "back-reference-collision/src")
 	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
 		t.Context(),
 		d,

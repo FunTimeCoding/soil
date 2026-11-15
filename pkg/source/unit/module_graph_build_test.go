@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
 	"github.com/funtimecoding/soil/pkg/source/warm_forest"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"maps"
 	"path/filepath"
 	"slices"
@@ -14,8 +15,13 @@ import (
 func TestBuildStopsAtNestedModule(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/alfa")
-	testutil.WriteFile(t, root, "bravo/bravo.go", "package bravo\n")
-	testutil.WriteFile(t, root, "graft/charlie/charlie.go", "package charlie\n")
+	system_tester.Write(t, root, "bravo/bravo.go", "package bravo\n")
+	system_tester.Write(
+		t,
+		root,
+		"graft/charlie/charlie.go",
+		"package charlie\n",
+	)
 	testutil.WriteModFile(
 		t,
 		filepath.Join(root, "graft", "charlie"),
@@ -31,12 +37,12 @@ func TestBuildStopsAtNestedModule(t *testing.T) {
 func TestBuildForestReadsTreeNotDisk(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/alfa")
-	testutil.WriteFile(t, root, "bravo/bravo.go", "package bravo\n")
-	testutil.WriteFile(t, root, "charlie/charlie.go", "package charlie\n")
+	system_tester.Write(t, root, "bravo/bravo.go", "package bravo\n")
+	system_tester.Write(t, root, "charlie/charlie.go", "package charlie\n")
 	f := warm_forest.New()
 	_, e := f.Tree(root).Read("bravo/bravo.go")
 	assert.FatalOnError(t, e)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"bravo/bravo.go",

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/trace_tester"
+	"github.com/funtimecoding/soil/pkg/errors/unit/reporter_tester"
 	"github.com/getsentry/sentry-go"
 	"io"
 	"testing"
@@ -36,7 +37,7 @@ func TestCaptureOutsideRequestHasNoTrace(t *testing.T) {
 }
 
 func TestReporterSendsOnItsOwnHubOutsideRequest(t *testing.T) {
-	r := sendingReporter(t, "http://key@localhost:1/1", io.Discard)
+	r := reporter_tester.Sending(t, "http://key@localhost:1/1", io.Discard)
 	m := &sentry.MockTransport{}
 	c, e := sentry.NewClient(
 		sentry.ClientOptions{Dsn: "http://key@localhost:1/1", Transport: m},
@@ -49,7 +50,7 @@ func TestReporterSendsOnItsOwnHubOutsideRequest(t *testing.T) {
 }
 
 func TestReporterSendsOnHubOfItsContext(t *testing.T) {
-	r := sendingReporter(t, "http://key@localhost:1/1", io.Discard)
+	r := reporter_tester.Sending(t, "http://key@localhost:1/1", io.Discard)
 	m := &sentry.MockTransport{}
 	c, e := sentry.NewClient(
 		sentry.ClientOptions{Dsn: "http://key@localhost:1/1", Transport: m},

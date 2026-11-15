@@ -6,35 +6,47 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/unit/alertmanager_tester"
+	"github.com/funtimecoding/soil/pkg/prometheus/unit/silence_tester"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"net"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
 func TestAlertmanagerLinkFollowsConnection(t *testing.T) {
-	s := silenceServer()
-	defer s.Close()
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(constant.FixtureSilences),
+		upstream_server.WithObject(),
+	)
+	_, port := upstream_server.HostPort(t, s.URL)
 	assert.String(
 		t,
 		join.Empty(
 			"http://127.0.0.1:",
-			integers.ToString(s.Listener.Addr().(*net.TCPAddr).Port),
+			integers.ToString(port),
 			"/#/silences/Alfa",
 		),
-		silenceLink(t, s),
+		silence_tester.Link(t, alertmanager_tester.New(t, s.URL)),
 	)
 }
 
 func TestAlertmanagerLinkUsesLinkEndpoint(t *testing.T) {
-	s := silenceServer()
-	defer s.Close()
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(constant.FixtureSilences),
+		upstream_server.WithObject(),
+	)
 	assert.String(
 		t,
 		"https://alertmanager.example/#/silences/Alfa",
-		silenceLink(
+		silence_tester.Link(
 			t,
-			s,
-			alertmanager.WithLink("alertmanager.example", 0, true),
+			alertmanager_tester.New(
+				t,
+				s.URL,
+				alertmanager.WithLink("alertmanager.example", 0, true),
+			),
 		),
 	)
 }

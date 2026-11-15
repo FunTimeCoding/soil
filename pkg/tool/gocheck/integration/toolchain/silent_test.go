@@ -6,8 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocheck/integration/check_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/option"
 	goclaudeConstant "github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
@@ -17,11 +19,11 @@ import (
 )
 
 func TestRunPrintsNothing(t *testing.T) {
-	root := stackModule(t)
+	root := check_tester.StackModule(t)
 	o := option.New()
 	o.Root = root
 	o.Index = t.TempDir()
-	printed := testutil.CaptureStdout(func() { checked(t, o) })
+	printed := testutil.CaptureStdout(func() { check_tester.Run(t, o) })
 	assert.String(t, "", printed)
 }
 
@@ -35,7 +37,7 @@ func TestFixReturnsLoadFailureInsteadOfExiting(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"pkg/broken/broken.go",

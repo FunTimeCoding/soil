@@ -13,8 +13,8 @@ import (
 )
 
 func TestDaemonClosesWhatItBuiltOnce(t *testing.T) {
-	p := newPrometheus(t)
-	u := newUsage(t)
+	p := service_tester.NewPrometheus(t)
+	u := service_tester.NewUsage(t)
 	d := daemon.New(
 		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
 		logger.New(t.Context()),
@@ -56,9 +56,9 @@ func TestDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
 		service_tester.NewOption(
 			t,
 			service_tester.FixtureBoard(),
-			newPrometheus(t),
+			service_tester.NewPrometheus(t),
 			nil,
-			newUsage(t),
+			service_tester.NewUsage(t),
 		),
 		logger.New(t.Context()),
 		memory.New(),

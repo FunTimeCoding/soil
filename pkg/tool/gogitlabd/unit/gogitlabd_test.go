@@ -9,18 +9,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/gitlab_tester"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 	"testing"
 )
 
 func TestLatestPipelineNewestWins(t *testing.T) {
 	r := latest_pipeline.New(
-		branches("main"),
+		gitlab_tester.Branches("main"),
 		nil,
 		[]*pipeline.Pipeline{
-			newPipeline(1, "main", "failed"),
-			newPipeline(3, "main", "success"),
-			newPipeline(2, "main", "failed"),
+			gitlab_tester.Pipeline(1, "main", "failed"),
+			gitlab_tester.Pipeline(3, "main", "success"),
+			gitlab_tester.Pipeline(2, "main", "failed"),
 		},
 	)
 	assert.Count(t, 1, r)
@@ -30,11 +31,11 @@ func TestLatestPipelineNewestWins(t *testing.T) {
 
 func TestLatestPipelineSkipsDeletedBranch(t *testing.T) {
 	r := latest_pipeline.New(
-		branches("main"),
+		gitlab_tester.Branches("main"),
 		nil,
 		[]*pipeline.Pipeline{
-			newPipeline(1, "main", "success"),
-			newPipeline(2, "renovate/gone", "failed"),
+			gitlab_tester.Pipeline(1, "main", "success"),
+			gitlab_tester.Pipeline(2, "renovate/gone", "failed"),
 		},
 	)
 	assert.Count(t, 1, r)
@@ -44,11 +45,11 @@ func TestLatestPipelineSkipsDeletedBranch(t *testing.T) {
 
 func TestLatestPipelineSeparatesReferences(t *testing.T) {
 	r := latest_pipeline.New(
-		branches("main", "topic"),
+		gitlab_tester.Branches("main", "topic"),
 		nil,
 		[]*pipeline.Pipeline{
-			newPipeline(1, "main", "success"),
-			newPipeline(2, "topic", "failed"),
+			gitlab_tester.Pipeline(1, "main", "success"),
+			gitlab_tester.Pipeline(2, "topic", "failed"),
 		},
 	)
 	assert.Count(t, 2, r)
@@ -57,7 +58,11 @@ func TestLatestPipelineSeparatesReferences(t *testing.T) {
 }
 
 func TestLatestPipelineWithoutPipelines(t *testing.T) {
-	assert.Count(t, 0, latest_pipeline.New(branches("main"), nil, nil))
+	assert.Count(
+		t,
+		0,
+		latest_pipeline.New(gitlab_tester.Branches("main"), nil, nil),
+	)
 }
 
 func TestLatestPipelineWithoutBranches(t *testing.T) {
@@ -67,20 +72,20 @@ func TestLatestPipelineWithoutBranches(t *testing.T) {
 		latest_pipeline.New(
 			nil,
 			nil,
-			[]*pipeline.Pipeline{newPipeline(1, "main", "success")},
+			[]*pipeline.Pipeline{gitlab_tester.Pipeline(1, "main", "success")},
 		),
 	)
 }
 
 func TestLatestPipelineIncludesLatestTag(t *testing.T) {
 	r := latest_pipeline.New(
-		branches("main"),
-		tags("v0.2.71", "v0.2.72"),
+		gitlab_tester.Branches("main"),
+		gitlab_tester.Tags("v0.2.71", "v0.2.72"),
 		[]*pipeline.Pipeline{
-			newPipeline(1, "main", "success"),
-			newPipeline(2, "v0.2.71", "success"),
-			newPipeline(4, "v0.2.72", "running"),
-			newPipeline(3, "v0.2.72", "canceled"),
+			gitlab_tester.Pipeline(1, "main", "success"),
+			gitlab_tester.Pipeline(2, "v0.2.71", "success"),
+			gitlab_tester.Pipeline(4, "v0.2.72", "running"),
+			gitlab_tester.Pipeline(3, "v0.2.72", "canceled"),
 		},
 	)
 	assert.Count(t, 2, r)
@@ -91,11 +96,11 @@ func TestLatestPipelineIncludesLatestTag(t *testing.T) {
 
 func TestLatestPipelineSkipsDeletedTag(t *testing.T) {
 	r := latest_pipeline.New(
-		branches("main"),
-		tags("v0.2.72"),
+		gitlab_tester.Branches("main"),
+		gitlab_tester.Tags("v0.2.72"),
 		[]*pipeline.Pipeline{
-			newPipeline(1, "main", "success"),
-			newPipeline(2, "v0.1.9", "failed"),
+			gitlab_tester.Pipeline(1, "main", "success"),
+			gitlab_tester.Pipeline(2, "v0.1.9", "failed"),
 		},
 	)
 	assert.Count(t, 1, r)
@@ -124,24 +129,24 @@ func TestModelContextResponseJobOmitsProjectAndRaw(t *testing.T) {
 
 func TestMergeRequestsUnionKeepsBothRoles(t *testing.T) {
 	r := service.MergeRequests(
-		[]*merge_request.Request{newRequest(1, 10, "assigned", 1)},
-		[]*merge_request.Request{newRequest(2, 20, "reviewing", 2)},
+		[]*merge_request.Request{gitlab_tester.Request(1, 10, "assigned", 1)},
+		[]*merge_request.Request{gitlab_tester.Request(2, 20, "reviewing", 2)},
 	)
 	assert.Count(t, 2, r)
 }
 
 func TestMergeRequestsDeduplicatesAcrossRoles(t *testing.T) {
 	r := service.MergeRequests(
-		[]*merge_request.Request{newRequest(1, 10, "both", 1)},
-		[]*merge_request.Request{newRequest(1, 10, "both", 1)},
+		[]*merge_request.Request{gitlab_tester.Request(1, 10, "both", 1)},
+		[]*merge_request.Request{gitlab_tester.Request(1, 10, "both", 1)},
 	)
 	assert.Count(t, 1, r)
 }
 
 func TestMergeRequestsSeparatesSameIdentifierInDifferentProjects(t *testing.T) {
 	r := service.MergeRequests(
-		[]*merge_request.Request{newRequest(1, 10, "first", 1)},
-		[]*merge_request.Request{newRequest(2, 10, "second", 2)},
+		[]*merge_request.Request{gitlab_tester.Request(1, 10, "first", 1)},
+		[]*merge_request.Request{gitlab_tester.Request(2, 10, "second", 2)},
 	)
 	assert.Count(t, 2, r)
 }
@@ -149,8 +154,8 @@ func TestMergeRequestsSeparatesSameIdentifierInDifferentProjects(t *testing.T) {
 func TestMergeRequestsNewestFirst(t *testing.T) {
 	r := service.MergeRequests(
 		[]*merge_request.Request{
-			newRequest(1, 10, "older", 9),
-			newRequest(1, 11, "newest", 1),
+			gitlab_tester.Request(1, 10, "older", 9),
+			gitlab_tester.Request(1, 11, "newest", 1),
 		},
 		nil,
 	)
@@ -161,13 +166,13 @@ func TestMergeRequestsNewestFirst(t *testing.T) {
 func TestMergeRequestsCapsAtThree(t *testing.T) {
 	r := service.MergeRequests(
 		[]*merge_request.Request{
-			newRequest(1, 10, "one", 1),
-			newRequest(1, 11, "two", 2),
-			newRequest(1, 12, "three", 3),
+			gitlab_tester.Request(1, 10, "one", 1),
+			gitlab_tester.Request(1, 11, "two", 2),
+			gitlab_tester.Request(1, 12, "three", 3),
 		},
 		[]*merge_request.Request{
-			newRequest(1, 13, "four", 4),
-			newRequest(1, 14, "five", 5),
+			gitlab_tester.Request(1, 13, "four", 4),
+			gitlab_tester.Request(1, 14, "five", 5),
 		},
 	)
 	assert.Count(t, 3, r)

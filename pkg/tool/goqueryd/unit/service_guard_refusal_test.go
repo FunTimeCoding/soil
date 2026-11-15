@@ -9,6 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
@@ -19,10 +21,17 @@ import (
 )
 
 func TestRefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
-	m := newEmbedder(t)
+	m := service_tester.NewEmbedder(t)
 	m.FailEmbedding(errors.New("embedder exploded"))
 	r := memory.New()
-	c := mountedClient(t, service_tester.NewOption(t, m, newReranker(t)), r)
+	c := client_tester.Rest(
+		t,
+		base.Serve(
+			t,
+			service_tester.NewOption(t, m, service_tester.NewReranker(t)),
+			r,
+		),
+	)
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},
@@ -33,13 +42,13 @@ func TestRefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
 }
 
 func TestWorkerReportsUnexpectedEmbeddingFailure(t *testing.T) {
-	m := newEmbedder(t)
+	m := service_tester.NewEmbedder(t)
 	m.FailEmbedding(errors.New("embedder exploded"))
 	r := memory.New()
 	l := logger.New(context.Background())
 	v := service_tester.New(
 		t,
-		service_tester.NewOption(t, m, newReranker(t)),
+		service_tester.NewOption(t, m, service_tester.NewReranker(t)),
 		r,
 	)
 	v.MustPushDocument(
@@ -64,13 +73,13 @@ func TestWorkerReportsUnexpectedEmbeddingFailure(t *testing.T) {
 }
 
 func TestWorkerLeavesQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
-	m := newEmbedder(t)
+	m := service_tester.NewEmbedder(t)
 	m.FailEmbedding(validation.New("input too long"))
 	r := memory.New()
 	l := logger.New(context.Background())
 	v := service_tester.New(
 		t,
-		service_tester.NewOption(t, m, newReranker(t)),
+		service_tester.NewOption(t, m, service_tester.NewReranker(t)),
 		r,
 	)
 	directory := t.TempDir()

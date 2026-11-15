@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -66,16 +67,21 @@ func TestVariableNamingFix(t *testing.T) {
 	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
-			applied := filterApplied(r.Entries)
-			assertResult(t, applied, "wrong_single.go", "renamed x → e")
-			assertResult(t, applied, "error_renamed.go", "renamed err → e")
-			assertResult(
+			applied := fix_tester.Applied(r.Entries)
+			fix_tester.Result(t, applied, "wrong_single.go", "renamed x → e")
+			fix_tester.Result(
+				t,
+				applied,
+				"error_renamed.go",
+				"renamed err → e",
+			)
+			fix_tester.Result(
 				t,
 				applied,
 				"error_chain_renamed.go",
 				"renamed err → e",
 			)
-			assertResult(
+			fix_tester.Result(
 				t,
 				applied,
 				"error_chain_renamed.go",

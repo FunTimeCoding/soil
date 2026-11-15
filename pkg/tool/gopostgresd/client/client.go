@@ -11,4 +11,5 @@ type Client struct {
 	base   *locator.Locator
 	token  string
 	pool   *pool.Pool
+	long   bool
 }

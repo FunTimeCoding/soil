@@ -8,8 +8,8 @@ import (
 )
 
 func baselineProblem(r *test_run.Run) string {
-	if output := r.BuildOutput(); len(output) > 0 {
-		return fmt.Sprintf(constant.BaselineBuild, compilerLine(output))
+	if len(r.BuildOutput()) > 0 {
+		return fmt.Sprintf(constant.BaselineBuild, r.CompilerLine())
 	}
 
 	if failed := r.Failed(); len(failed) > 0 {

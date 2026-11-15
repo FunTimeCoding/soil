@@ -3,13 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
-	tree := sameRewrite(
+	tree := rewrite_tester.SameRewrite(
 		t,
 		func(s *service_tester.Services, d string) (*output.Results, error) {
 			return s.Symbol.Rename(
@@ -27,7 +28,7 @@ func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 }
 
 func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
-	tree := sameRewrite(
+	tree := rewrite_tester.SameRewrite(
 		t,
 		func(s *service_tester.Services, d string) (*output.Results, error) {
 			return s.Symbol.Rename(
@@ -45,7 +46,7 @@ func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 }
 
 func TestTargetedMovePackageMatchesFullLoad(t *testing.T) {
-	tree := sameRewrite(
+	tree := rewrite_tester.SameRewrite(
 		t,
 		func(s *service_tester.Services, d string) (*output.Results, error) {
 			return s.Packages.MovePackage(

@@ -4,5 +4,9 @@ func (c *Client) DeleteComment(
 	_ string,
 	_ string,
 ) error {
-	return nil
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	return c.failures.Caller()
 }

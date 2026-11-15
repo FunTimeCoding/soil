@@ -5,8 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/stream"
+	"github.com/funtimecoding/soil/pkg/prometheus/unit/loki_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"io"
 	"net/http"
 	"testing"
@@ -14,21 +15,21 @@ import (
 )
 
 func TestQueryRangeSendsWindow(t *testing.T) {
-	s, last := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusOK,
-		`{"status":"success","data":{"resultType":"streams","result":[]}}`,
-	)
+		upstream_server.WithAnswer(
+			`{"status":"success","data":{"resultType":"streams","result":[]}}`,
+		))
 	start := time.Unix(100, 0)
 	end := time.Unix(200, 0)
-	_, e := newLokiClient(t, s.URL).QueryRange(
+	_, e := loki_tester.New(t, s.URL).QueryRange(
 		`{namespace="alfa"}`,
 		start,
 		end,
 		5,
 	)
 	assert.FatalOnError(t, e)
-	r := last()
+	r := s.Last()
 	assert.String(t, "/loki/api/v1/query_range", r.URL.Path)
 	assert.String(t, `{namespace="alfa"}`, r.URL.Query().Get("query"))
 	assert.String(t, "100000000000", r.URL.Query().Get("start"))
@@ -41,19 +42,27 @@ func TestQueryRangeSendsWindow(t *testing.T) {
 }
 
 func TestFailedStatusIsUnexpected(t *testing.T) {
-	s, _ := upstream_tester.New(t, http.StatusOK, `{"status":"error"}`)
-	_, e := newLokiClient(t, s.URL).Labels(time.Unix(100, 0), time.Unix(200, 0))
+	s := upstream_server.New(
+		t,
+		upstream_server.WithAnswer(`{"status":"error"}`),
+	)
+	_, e := loki_tester.New(t, s.URL).Labels(
+		time.Unix(100, 0),
+		time.Unix(200, 0),
+	)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "loki status: error", e.Error())
 }
 
 func TestPlainTextRefusalKeepsReason(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusBadRequest,
-		"parse error at line 1, col 1: syntax error: unexpected IDENTIFIER\n",
+		upstream_server.WithStatus(http.StatusBadRequest),
+		upstream_server.WithAnswer(
+			"parse error at line 1, col 1: syntax error: unexpected IDENTIFIER\n",
+		),
 	)
-	_, e := newLokiClient(t, s.URL).Query("charlie")
+	_, e := loki_tester.New(t, s.URL).Query("charlie")
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,
@@ -63,11 +72,14 @@ func TestPlainTextRefusalKeepsReason(t *testing.T) {
 }
 
 func TestPushPostsStreams(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusNoContent, "")
+	s := upstream_server.New(
+		t,
+		upstream_server.WithStatus(http.StatusNoContent),
+	)
 	v := stream.New(map[string]string{"application": "delta"})
 	v.Add(time.Unix(300, 0), "echo")
-	assert.FatalOnError(t, newLokiClient(t, s.URL).Push(v))
-	r := last()
+	assert.FatalOnError(t, loki_tester.New(t, s.URL).Push(v))
+	r := s.Last()
 	assert.String(t, http.MethodPost, r.Method)
 	assert.String(t, "/loki/api/v1/push", r.URL.Path)
 	assert.String(t, "application/json", r.Header.Get(webConstant.ContentType))
@@ -78,12 +90,14 @@ func TestPushPostsStreams(t *testing.T) {
 }
 
 func TestMarkupRefusalFallsBackToStatus(t *testing.T) {
-	s, _ := upstream_tester.New(
+	s := upstream_server.New(
 		t,
-		http.StatusBadGateway,
-		"<html><body><h1>502 Bad Gateway</h1></body></html>",
+		upstream_server.WithStatus(http.StatusBadGateway),
+		upstream_server.WithAnswer(
+			"<html><body><h1>502 Bad Gateway</h1></body></html>",
+		),
 	)
-	e := newLokiClient(t, s.URL).Push(stream.New(map[string]string{}))
+	e := loki_tester.New(t, s.URL).Push(stream.New(map[string]string{}))
 	assert.True(t, unavailable.Is(e))
 	assert.StringNotContains(t, "<html>", e.Error())
 	assert.StringContains(t, "status: 502", e.Error())

@@ -8,8 +8,8 @@ import (
 )
 
 func TestLatestKeepsNewestBackupPerType(t *testing.T) {
-	s := fixtureStanzas("backed_up.json")[0]
-	older := fixtureStanzas("backed_up.json")[0].Backup[0]
+	s := service_tester.Stanzas("backed_up.json")[0]
+	older := service_tester.Stanzas("backed_up.json")[0].Backup[0]
 	older.Label = "older"
 	older.Timestamp.Stop = 1
 	s.Backup = append(s.Backup, older)
@@ -30,7 +30,7 @@ func TestLatestKeepsNewestBackupPerType(t *testing.T) {
 
 func TestLatestCarriesStatusOfStanzaWithoutBackups(t *testing.T) {
 	c := mock_client.New()
-	c.Add(fixtureStanzas("no_backup.json")...)
+	c.Add(service_tester.Stanzas("no_backup.json")...)
 	v, e := service_tester.New(t, c).Latest(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, v)

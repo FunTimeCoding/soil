@@ -2,28 +2,29 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/index"
+	"github.com/funtimecoding/soil/pkg/source/unit/index_tester"
 	"github.com/funtimecoding/soil/pkg/source/unit/kind_tester"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
 func TestUnitKeysHoldWhenUnrelatedPackageChanges(t *testing.T) {
-	directory := keyedModule(t)
+	directory := index_tester.KeyedModule(t)
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, closure := alfaKeys(
+	unit, closure := index_tester.Keys(
 		t,
 		index.New(store, directory, declared),
 		declared,
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"delta/delta.go",
 		"package delta\n\nfunc Delta() int {\n\treturn 5\n}\n\nfunc Hotel() {}\n",
 	)
-	after, afterClosure := alfaKeys(
+	after, afterClosure := index_tester.Keys(
 		t,
 		index.New(store, directory, declared),
 		declared,
@@ -33,51 +34,67 @@ func TestUnitKeysHoldWhenUnrelatedPackageChanges(t *testing.T) {
 }
 
 func TestUnitKeyMovesWithTestFile(t *testing.T) {
-	directory := keyedModule(t)
+	directory := index_tester.KeyedModule(t)
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, _ := alfaKeys(t, index.New(store, directory, declared), declared)
-	testutil.WriteFile(
+	unit, _ := index_tester.Keys(
+		t,
+		index.New(store, directory, declared),
+		declared,
+	)
+	system_tester.Write(
 		t,
 		directory,
 		"alfa/alfa_test.go",
 		"package alfa\n\nimport \"testing\"\n\nfunc TestAlfa(t *testing.T) {\n\tAlfa()\n}\n",
 	)
-	after, _ := alfaKeys(t, index.New(store, directory, declared), declared)
+	after, _ := index_tester.Keys(
+		t,
+		index.New(store, directory, declared),
+		declared,
+	)
 	assert.True(t, unit != after)
 }
 
 func TestUnitKeyMovesWithImportedAPI(t *testing.T) {
-	directory := keyedModule(t)
+	directory := index_tester.KeyedModule(t)
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, _ := alfaKeys(t, index.New(store, directory, declared), declared)
-	testutil.WriteFile(
+	unit, _ := index_tester.Keys(
+		t,
+		index.New(store, directory, declared),
+		declared,
+	)
+	system_tester.Write(
 		t,
 		directory,
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example/charlie\"\n\nfunc Bravo() int {\n\treturn charlie.Charlie()\n}\n\nfunc Echo() {}\n",
 	)
-	after, _ := alfaKeys(t, index.New(store, directory, declared), declared)
-	assert.True(t, unit != after)
-}
-
-func TestKeysHoldWhenBodyDeepInClosureChanges(t *testing.T) {
-	directory := keyedModule(t)
-	store := t.TempDir()
-	declared := kind_tester.Declared("golf")
-	unit, closure := alfaKeys(
+	after, _ := index_tester.Keys(
 		t,
 		index.New(store, directory, declared),
 		declared,
 	)
-	testutil.WriteFile(
+	assert.True(t, unit != after)
+}
+
+func TestKeysHoldWhenBodyDeepInClosureChanges(t *testing.T) {
+	directory := index_tester.KeyedModule(t)
+	store := t.TempDir()
+	declared := kind_tester.Declared("golf")
+	unit, closure := index_tester.Keys(
+		t,
+		index.New(store, directory, declared),
+		declared,
+	)
+	system_tester.Write(
 		t,
 		directory,
 		"charlie/charlie.go",
 		"package charlie\n\nfunc Charlie() int {\n\treturn 2\n}\n",
 	)
-	after, afterClosure := alfaKeys(
+	after, afterClosure := index_tester.Keys(
 		t,
 		index.New(store, directory, declared),
 		declared,
@@ -87,21 +104,21 @@ func TestKeysHoldWhenBodyDeepInClosureChanges(t *testing.T) {
 }
 
 func TestOnlyClosureKeyMovesWithFactDeepInClosure(t *testing.T) {
-	directory := keyedModule(t)
+	directory := index_tester.KeyedModule(t)
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, closure := alfaKeys(
+	unit, closure := index_tester.Keys(
 		t,
 		index.New(store, directory, declared),
 		declared,
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"charlie/charlie.go",
 		"package charlie\n\nfunc Charlie() int {\n\treturn 1\n}\n\nfunc Echo() {}\n",
 	)
-	after, afterClosure := alfaKeys(
+	after, afterClosure := index_tester.Keys(
 		t,
 		index.New(store, directory, declared),
 		declared,
@@ -111,24 +128,32 @@ func TestOnlyClosureKeyMovesWithFactDeepInClosure(t *testing.T) {
 }
 
 func TestClosureKeySameWhetherFactsFreshOrStored(t *testing.T) {
-	directory := keyedModule(t)
+	directory := index_tester.KeyedModule(t)
 	store := t.TempDir()
 	listed := kind_tester.Listed("golf")
-	_, fresh := alfaKeys(t, index.New(store, directory, listed), listed)
-	_, stored := alfaKeys(t, index.New(store, directory, listed), listed)
+	_, fresh := index_tester.Keys(
+		t,
+		index.New(store, directory, listed),
+		listed,
+	)
+	_, stored := index_tester.Keys(
+		t,
+		index.New(store, directory, listed),
+		listed,
+	)
 	assert.String(t, fresh, stored)
 }
 
 func TestUnitKeyMovesWithExtractingBuild(t *testing.T) {
-	directory := keyedModule(t)
+	directory := index_tester.KeyedModule(t)
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	first, _ := alfaKeys(
+	first, _ := index_tester.Keys(
 		t,
 		index.New(store, directory, declared).WithFingerprint("first"),
 		declared,
 	)
-	second, _ := alfaKeys(
+	second, _ := index_tester.Keys(
 		t,
 		index.New(store, directory, declared).WithFingerprint("second"),
 		declared,
@@ -137,8 +162,8 @@ func TestUnitKeyMovesWithExtractingBuild(t *testing.T) {
 }
 
 func TestNoUnitKeysWhenImportDoesNotLoad(t *testing.T) {
-	directory := keyedModule(t)
-	testutil.WriteFile(
+	directory := index_tester.KeyedModule(t)
+	system_tester.Write(
 		t,
 		directory,
 		"bravo/bravo.go",

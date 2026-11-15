@@ -43,7 +43,7 @@ func TestCompactClosesGaps(t *testing.T) {
 
 func TestCompactNoOpWhenSequential(t *testing.T) {
 	s := store_tester.New(t)
-	threeSeeds(s)
+	store_tester.ThreeSeeds(s)
 	s.Store.Compact()
 	seeds := s.Store.Seeds()
 	assert.Integer(t, 1, seeds[0].Position)

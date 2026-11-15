@@ -50,7 +50,7 @@ func TestStoppingPortForwardEndsItAndForgetsIt(t *testing.T) {
 	r.Launch(f, func() { <-f.Stopping() })
 	assert.Count(t, 1, r.All())
 	assert.FatalOnError(t, r.StopOne(f.Identifier))
-	assert.True(t, stopped(f))
+	assert.True(t, service_tester.Stopped(f))
 	assert.Count(t, 0, r.All())
 }
 
@@ -61,8 +61,8 @@ func TestClosingRegistryStopsEveryPortForward(t *testing.T) {
 	r.Launch(f, func() { <-f.Stopping() })
 	r.Launch(g, func() { <-g.Stopping() })
 	r.Close()
-	assert.True(t, stopped(f))
-	assert.True(t, stopped(g))
+	assert.True(t, service_tester.Stopped(f))
+	assert.True(t, service_tester.Stopped(g))
 	assert.Count(t, 0, r.All())
 }
 
@@ -84,7 +84,7 @@ func TestPortForwardStopsSafelyTwice(t *testing.T) {
 	)
 	f.Stop()
 	f.Stop()
-	assert.True(t, stopped(f))
+	assert.True(t, service_tester.Stopped(f))
 }
 
 func TestPortForwardThatFailsBeforeReadyAnswersAtOnce(t *testing.T) {

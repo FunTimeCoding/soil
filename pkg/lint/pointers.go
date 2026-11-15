@@ -61,7 +61,7 @@ func Pointers(
 					for range dead {
 						addPointerConcern(
 							s,
-							constant.VerdictDead,
+							constant.DeadPointerKey,
 							"",
 							path,
 							number,
@@ -77,16 +77,16 @@ func Pointers(
 				for _, expanded := range pointer.Expand(c) {
 					v := r.Resolve(path, declared, expanded)
 
-					if v.Verdict == constant.VerdictTallied {
+					if v.Reason != "" {
 						unchecked(path, number, expanded.Span, v.Reason)
 
 						continue
 					}
 
-					if v.Verdict != constant.VerdictLive {
+					if v.Concern != "" {
 						addPointerConcern(
 							s,
-							v.Verdict,
+							v.Concern,
 							v.Hint,
 							path,
 							number,

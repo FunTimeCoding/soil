@@ -6,15 +6,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
-	s := restClient(t, c, m)
+	s := daemon_tester.RestClient(t, c, m)
 
 	for range 2 {
 		r, e := s.GetStatsWithResponse(context.Background())
@@ -29,7 +31,10 @@ func TestExpiredTokenIsAnsweredAsForbiddenWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("habitica: %s", "token expired")
 	m := memory.New()
-	r, e := restClient(t, c, m).GetTasksWithResponse(context.Background(), nil)
+	r, e := daemon_tester.RestClient(t, c, m).GetTasksWithResponse(
+		context.Background(),
+		nil,
+	)
 	assert.FatalOnError(t, e)
 	assert.NotNil(t, r.JSON403)
 	assert.Count(t, 0, m.Events())
@@ -39,7 +44,9 @@ func TestConflictingCronIsAnsweredAsConflict(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = conflict.Format("habitica: %s", "cron already run")
 	m := memory.New()
-	r, e := restClient(t, c, m).RunCronWithResponse(context.Background())
+	r, e := daemon_tester.RestClient(t, c, m).RunCronWithResponse(
+		context.Background(),
+	)
 	assert.FatalOnError(t, e)
 	assert.NotNil(t, r.JSON409)
 	assert.Count(t, 0, m.Events())

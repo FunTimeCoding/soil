@@ -7,42 +7,43 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer/constant"
 	"github.com/funtimecoding/soil/pkg/peer/outage"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"os"
 	"testing"
 	"time"
 )
 
 func TestShortOutageStaysOutOfSentry(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	c.Advance(4 * time.Minute)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	r.Observe("sentry", nil)
 	assert.Count(t, 0, m.Events())
 }
 
 func TestLastingOutageIsReportedOncePerEpisode(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	c.Advance(5 * time.Minute)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	c.Advance(time.Hour)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	assert.Count(t, 1, m.Events())
 	r.Observe("sentry", nil)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	c.Advance(5 * time.Minute)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	assert.Count(t, 2, m.Events())
 }
 
 func TestOutageCallerNamesLastsLikeAnyOther(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
 	assert.NotNil(
@@ -67,12 +68,12 @@ func TestOutageCallerNamesLastsLikeAnyOther(t *testing.T) {
 }
 
 func TestLastingOutageReportsTransportFailureWithItsEpisode(t *testing.T) {
-	c := fake_clock.New()
+	c := clock_tester.New()
 	m := memory.New()
 	r := reacher.New(m).WithClock(c.Now)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	c.Advance(6 * time.Minute)
-	r.Observe("sentry", refusedConnection())
+	r.Observe("sentry", outage_tester.RefusedDial())
 	assert.Count(t, 1, m.Events())
 	e := m.Events()[0].Error
 	assert.String(

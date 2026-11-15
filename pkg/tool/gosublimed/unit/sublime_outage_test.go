@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
@@ -15,8 +16,8 @@ func TestSublimeOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	s := base.New(t)
-	s.MockClient.Failure = refusedDial()
-	c := restClientOf(t, s)
+	s.MockClient.Failure = outage_tester.RefusedDial()
+	c := base.Rest(t, s)
 
 	for range 2 {
 		answer, e := c.GetViewsWithResponse(t.Context())
@@ -30,7 +31,7 @@ func TestSublimeOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 
 func TestSublimeOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.Failure = refusedDial()
+	s.MockClient.Failure = outage_tester.RefusedDial()
 	c := s.Connect(t)
 	defer c.Close()
 	assert.StringContains(

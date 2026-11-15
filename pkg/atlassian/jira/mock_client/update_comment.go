@@ -6,5 +6,9 @@ func (c *Client) UpdateComment(
 	_ string,
 	_ *jira.Comment,
 ) error {
-	return nil
+	if c.Failure != nil {
+		return c.Failure
+	}
+
+	return c.failures.Caller()
 }

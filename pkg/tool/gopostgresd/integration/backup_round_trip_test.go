@@ -6,21 +6,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/integration/postgres_tester"
 	"net/http"
 	"testing"
 )
 
 func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 	directory := t.TempDir()
-	container, i := startPostgres(t, directory)
-	psql(
+	container, i := postgres_tester.Start(t, directory)
+	postgres_tester.Psql(
 		t,
 		container,
 		i,
 		"alfa",
 		"CREATE TABLE item (name text); INSERT INTO item VALUES ('alfa'), ('bravo'), ('charlie')",
 	)
-	c, r := served(t, container, i, directory)
+	c, r := postgres_tester.Serve(t, container, i, directory)
 	created, e := c.CreateBackupWithResponse(
 		t.Context(),
 		client.CreateBackupJSONRequestBody{},
@@ -46,7 +47,7 @@ func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 	assert.String(
 		t,
 		"3",
-		psql(
+		postgres_tester.Psql(
 			t,
 			container,
 			i,
@@ -54,7 +55,7 @@ func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 			"SELECT count(*) FROM item",
 		),
 	)
-	psql(t, container, i, "alfa", "DELETE FROM item")
+	postgres_tester.Psql(t, container, i, "alfa", "DELETE FROM item")
 	place, h := c.RestoreBackupWithResponse(
 		t.Context(),
 		name,
@@ -65,7 +66,13 @@ func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 	assert.String(
 		t,
 		"3",
-		psql(t, container, i, "alfa", "SELECT count(*) FROM item"),
+		postgres_tester.Psql(
+			t,
+			container,
+			i,
+			"alfa",
+			"SELECT count(*) FROM item",
+		),
 	)
 	removed, j := c.DeleteBackupWithResponse(
 		t.Context(),

@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/argument/unit/argument_tester"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/stamp"
@@ -10,7 +11,11 @@ import (
 )
 
 func TestCobraToolPrintsSameVersionBlockAsEveryTool(t *testing.T) {
-	assert.String(t, stamp.New().Text(), cobraVersion(t, "--version"))
+	assert.String(
+		t,
+		stamp.New().Text(),
+		argument_tester.Version(t, "--version"),
+	)
 }
 
 func TestCobraToolPrintsVersionAsNotation(t *testing.T) {
@@ -20,6 +25,6 @@ func TestCobraToolPrintsVersionAsNotation(t *testing.T) {
 			string(notation.MarshalIndent(report.New("gotest", stamp.New()))),
 			"\n",
 		),
-		cobraVersion(t, "--version", "--notation"),
+		argument_tester.Version(t, "--version", "--notation"),
 	)
 }

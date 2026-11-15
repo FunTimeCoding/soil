@@ -5,12 +5,14 @@ import (
 	keepassConstant "github.com/funtimecoding/soil/pkg/keepass/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/database_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/unit/service_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestListAndSearch(t *testing.T) {
-	s := open(t, fixtureDatabase(t))
+	s := service_tester.New(t,database_tester.Write(t))
 	assert.Count(t, 3, s.List())
 	found := s.Search("forge")
 	assert.Count(t, 1, found)
@@ -19,7 +21,7 @@ func TestListAndSearch(t *testing.T) {
 }
 
 func TestGetMasksPassword(t *testing.T) {
-	s := open(t, fixtureDatabase(t))
+	s := service_tester.New(t,database_tester.Write(t))
 	entry := s.Get(s.Search("forge")[0].Identifier)
 	assert.NotNil(t, entry)
 	assert.String(t, "•••", entry.Fields[constant.PasswordKey])
@@ -30,8 +32,8 @@ func TestGetMasksPassword(t *testing.T) {
 }
 
 func TestRevealedFieldList(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := openRevealed(t, path, []string{"Extra"})
+	path := database_tester.Write(t)
+	s := service_tester.New(t, path, service_tester.WithRevealed("Extra"))
 	entry := s.Get(s.Search("forge")[0].Identifier)
 	assert.String(t, "extra-value", entry.Fields["Extra"])
 	assert.String(t, "•••", entry.Fields[constant.NotesKey])
@@ -39,15 +41,15 @@ func TestRevealedFieldList(t *testing.T) {
 }
 
 func TestRevealPassword(t *testing.T) {
-	s := open(t, fixtureDatabase(t))
+	s := service_tester.New(t,database_tester.Write(t))
 	password, found := s.Reveal(s.Search("forge")[0].Identifier)
 	assert.True(t, found)
 	assert.String(t, "hunter2", password)
 }
 
 func TestUpdatePersistsAcrossReopen(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := open(t, path)
+	path := database_tester.Write(t)
+	s := service_tester.New(t,path)
 	identifier := s.Search("forge")[0].Identifier
 	assert.FatalOnError(
 		t,
@@ -56,7 +58,7 @@ func TestUpdatePersistsAcrossReopen(t *testing.T) {
 			map[string]string{constant.PasswordKey: "changed"},
 		),
 	)
-	reopened := open(t, path)
+	reopened := service_tester.New(t,path)
 	password, found := reopened.Reveal(identifier)
 	assert.True(t, found)
 	assert.String(t, "changed", password)
@@ -66,8 +68,8 @@ func TestUpdatePersistsAcrossReopen(t *testing.T) {
 }
 
 func TestCreateAndDelete(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := open(t, path)
+	path := database_tester.Write(t)
+	s := service_tester.New(t,path)
 	identifier, e := s.Create(
 		"Root",
 		"Fresh",
@@ -83,22 +85,22 @@ func TestCreateAndDelete(t *testing.T) {
 }
 
 func TestMove(t *testing.T) {
-	path := fixtureDatabase(t)
-	s := open(t, path)
+	path := database_tester.Write(t)
+	s := service_tester.New(t,path)
 	identifier := s.Search("forge")[0].Identifier
 	assert.FatalOnError(t, s.Move(identifier, "Root/Environment"))
 	assert.String(t, "Root/Environment", s.Search("forge")[0].Path)
 }
 
 func TestAudit(t *testing.T) {
-	s := open(t, fixtureDatabase(t))
+	s := service_tester.New(t,database_tester.Write(t))
 	report := s.Audit(3)
 	assert.Count(t, 1, report.Stale)
 	assert.String(t, "Ancient", report.Stale[0].Title)
 }
 
 func TestLoadGroup(t *testing.T) {
-	s := open(t, fixtureDatabase(t))
+	s := service_tester.New(t,database_tester.Write(t))
 	group := s.LoadGroup("example")
 	assert.NotNil(t, group)
 	assert.String(t, "example.test", group["EXAMPLE_HOST"])

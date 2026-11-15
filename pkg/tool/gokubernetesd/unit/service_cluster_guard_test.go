@@ -7,13 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/types/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/recovering_clientset"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
 )
 
 func TestUnreachableClusterFailsFastWithoutBeingCalledAgain(t *testing.T) {
 	v := service_tester.New(t)
-	v.RefuseAll(refusedConnection())
+	v.RefuseAll(outage_tester.RefusedDial())
 	list := request.List{ResourceType: "pod", Namespace: "default"}
 	_, e := v.Service.ListResources(t.Context(), "test", list)
 	assert.True(t, unavailable.Is(e))
@@ -26,7 +27,7 @@ func TestUnreachableClusterFailsFastWithoutBeingCalledAgain(t *testing.T) {
 
 func TestOneUnreachableClusterLeavesOthersAnswering(t *testing.T) {
 	down := service_tester.New(t)
-	down.RefuseAll(refusedConnection())
+	down.RefuseAll(outage_tester.RefusedDial())
 	up := service_tester.New(t)
 	s := service_tester.NewService(
 		t,

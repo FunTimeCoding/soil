@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/outage_server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/server_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -18,7 +19,7 @@ func TestOperationsOnForgeOutage(t *testing.T) {
 	outage_tester.Operations(
 		t,
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
-			return outageServer(t, r)
+			return outage_server.New(t, r)
 		},
 		spec,
 		webConstant.OutageElsewhere,
@@ -36,7 +37,7 @@ func TestToolsOnForgeOutage(t *testing.T) {
 	outage_tester.Tools(
 		t,
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
-			return outageServer(t, r)
+			return outage_server.New(t, r)
 		},
 		webConstant.OutageElsewhere,
 		map[string]webConstant.OutageReach{"publish": webConstant.OutageReaches},

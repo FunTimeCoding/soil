@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer/hold/adapter"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/peer/unit/held_peer"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"sync"
 	"testing"
 	"time"
@@ -25,9 +26,9 @@ func TestHeldConnectionReopensAfterItDrops(t *testing.T) {
 	)
 	h.Start()
 	defer h.Close()
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	p.End(errors.New("event channel closed"))
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	assert.Integer(t, 2, p.Opens())
 	assert.Integer(t, 1, p.Closes())
 	assert.Count(t, 0, r.Events())
@@ -35,7 +36,11 @@ func TestHeldConnectionReopensAfterItDrops(t *testing.T) {
 
 func TestHeldConnectionWaitsOutOutage(t *testing.T) {
 	p := held_peer.New()
-	p.Refuse(refusedConnection(), refusedConnection(), upstreamUnavailable())
+	p.Refuse(
+		outage_tester.RefusedDial(),
+		outage_tester.RefusedDial(),
+		outage_tester.Unavailable(t),
+	)
 	r := memory.New()
 	h := hold.New("mike", p, logger.New(context.Background()), r).WithBackoff(
 		time.Millisecond,
@@ -43,7 +48,7 @@ func TestHeldConnectionWaitsOutOutage(t *testing.T) {
 	)
 	h.Start()
 	defer h.Close()
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	assert.Integer(t, 4, p.Opens())
 	assert.Count(t, 0, r.Events())
 }
@@ -64,14 +69,14 @@ func TestHeldConnectionReportsRefusalOnce(t *testing.T) {
 	).WithBackoff(time.Millisecond, 4*time.Millisecond)
 	h.Start()
 	defer h.Close()
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	assert.Integer(t, 4, p.Opens())
 	assert.Count(t, 1, r.Events())
 }
 
 func TestHeldConnectionReportsWhereItIsTold(t *testing.T) {
 	p := held_peer.New()
-	p.Refuse(errors.New("authentication invalid"), refusedConnection())
+	p.Refuse(errors.New("authentication invalid"), outage_tester.RefusedDial())
 	r := memory.New()
 	crossed := make(chan *edge.Edge, 4)
 	refused := make(chan error, 4)
@@ -86,7 +91,7 @@ func TestHeldConnectionReportsWhereItIsTold(t *testing.T) {
 	)
 	h.Start()
 	defer h.Close()
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	assert.Count(t, 1, refused)
 	assert.Count(t, 2, crossed)
 	assert.True(t, (<-crossed).Down)
@@ -96,7 +101,7 @@ func TestHeldConnectionReportsWhereItIsTold(t *testing.T) {
 
 func TestHeldConnectionIsUnavailableUntilItServes(t *testing.T) {
 	p := held_peer.New()
-	p.Refuse(refusedConnection())
+	p.Refuse(outage_tester.RefusedDial())
 	crossed := make(chan *edge.Edge, 4)
 	h := hold.New(
 		"romeo",
@@ -112,7 +117,7 @@ func TestHeldConnectionIsUnavailableUntilItServes(t *testing.T) {
 	assert.StringContains(t, "not connected", e.Error())
 	h.Start()
 	defer h.Close()
-	assert.True(t, await(t, crossed).Down)
+	assert.True(t, assert.Signalled(t, crossed).Down)
 	assert.StringContains(t, "romeo unreachable since", h.Unavailable().Error())
 }
 
@@ -121,7 +126,7 @@ func TestServingHoldIsAvailable(t *testing.T) {
 	h := hold.New("tango", p, logger.New(context.Background()), memory.New())
 	h.Start()
 	defer h.Close()
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	assert.Nil(t, h.Unavailable())
 }
 
@@ -152,10 +157,10 @@ func TestAdapterHoldsThreeFunctions(t *testing.T) {
 	).WithBackoff(time.Millisecond, 4*time.Millisecond)
 	h.Start()
 	defer h.Close()
-	await(t, opened)
+	assert.Signalled(t, opened)
 	end <- errors.New("device disconnected")
-	await(t, closed)
-	await(t, opened)
+	assert.Signalled(t, closed)
+	assert.Signalled(t, opened)
 }
 
 func TestClosingHeldConnectionEndsItWithoutReopening(t *testing.T) {
@@ -167,9 +172,9 @@ func TestClosingHeldConnectionEndsItWithoutReopening(t *testing.T) {
 		memory.New(),
 	).WithBackoff(time.Millisecond, 4*time.Millisecond)
 	h.Start()
-	await(t, p.Served())
+	assert.Signalled(t, p.Served())
 	h.Close()
-	await(t, h.Done())
+	assert.Signalled(t, h.Done())
 	assert.Integer(t, 1, p.Opens())
 	assert.Integer(t, 2, p.Closes())
 }
@@ -186,8 +191,8 @@ func TestNeverStartedHoldCloses(t *testing.T) {
 		h.Close()
 		close(closed)
 	}()
-	await(t, closed)
-	await(t, h.Done())
+	assert.Signalled(t, closed)
+	assert.Signalled(t, h.Done())
 }
 
 func TestClosingWaitsForServeInFlight(t *testing.T) {
@@ -209,7 +214,7 @@ func TestClosingWaitsForServeInFlight(t *testing.T) {
 		memory.New(),
 	)
 	h.Start()
-	await(t, serving)
+	assert.Signalled(t, serving)
 	closed := make(chan struct{})
 	go func() {
 		h.Close()
@@ -223,7 +228,7 @@ func TestClosingWaitsForServeInFlight(t *testing.T) {
 	}
 
 	close(release)
-	await(t, closed)
+	assert.Signalled(t, closed)
 }
 
 func TestClosingDuringOpenClosesWhatItOpened(t *testing.T) {
@@ -268,13 +273,13 @@ func TestClosingDuringOpenClosesWhatItOpened(t *testing.T) {
 		memory.New(),
 	)
 	h.Start()
-	await(t, opening)
+	assert.Signalled(t, opening)
 	closed := make(chan struct{})
 	go func() {
 		h.Close()
 		close(closed)
 	}()
-	await(t, closing)
+	assert.Signalled(t, closing)
 	close(release)
-	await(t, closed)
+	assert.Signalled(t, closed)
 }

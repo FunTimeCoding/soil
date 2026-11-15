@@ -7,13 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/directory_tester"
 	"testing"
 )
 
 func TestLocalUserNeverReachesDirectory(t *testing.T) {
 	d := mock_client.New("")
 	b := base.NewWith(t, d)
-	d.Failure = directoryDown()
+	d.Failure = directory_tester.Down()
 	row, e := b.Service.AuthenticateUser(
 		constant.FixtureMail,
 		constant.FixturePassword,
@@ -173,7 +174,7 @@ func TestDirectoryUnreachableRefuses(t *testing.T) {
 	d := mock_client.New("")
 	b := base.NewWith(t, d)
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
-	d.Failure = directoryDown()
+	d.Failure = directory_tester.Down()
 	_, e := b.Service.AuthenticateUser(
 		"member@example.test",
 		"secret",

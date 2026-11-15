@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/go_mod"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"github.com/funtimecoding/soil/pkg/go_mod/unit/go_mod_tester"
 	"golang.org/x/mod/modfile"
 	"testing"
 )
@@ -12,11 +13,11 @@ func TestSyncReplacesAddsManagedBlock(t *testing.T) {
 	assert.String(
 		t,
 		"module alfa\n\ngo 1.27\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.0.0\n\tcharlie.test/c => charlie.test/c v2.0.0\n)\n",
-		syncReplaces(
+		go_mod_tester.Sync(
 			t,
 			"module alfa\n\ngo 1.27\n",
-			managedReplace("bravo.test/b", "v1.0.0"),
-			managedReplace("charlie.test/c", "v2.0.0"),
+			go_mod_tester.Replace("bravo.test/b", "v1.0.0"),
+			go_mod_tester.Replace("charlie.test/c", "v2.0.0"),
 		),
 	)
 }
@@ -25,10 +26,10 @@ func TestSyncReplacesKeepsHandReplaces(t *testing.T) {
 	assert.String(
 		t,
 		"module alfa\n\ngo 1.27\n\nreplace delta.test/d => ../delta\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.1.0\n)\n",
-		syncReplaces(
+		go_mod_tester.Sync(
 			t,
 			"module alfa\n\ngo 1.27\n\nreplace delta.test/d => ../delta\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.0.0\n\tcharlie.test/c => charlie.test/c v2.0.0\n)\n",
-			managedReplace("bravo.test/b", "v1.1.0"),
+			go_mod_tester.Replace("bravo.test/b", "v1.1.0"),
 		),
 	)
 }
@@ -37,29 +38,29 @@ func TestSyncReplacesKeepsTrailingDirectives(t *testing.T) {
 	assert.String(
 		t,
 		"module alfa\n\ngo 1.27\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.1.0\n)\n\nretract v0.1.0\n",
-		syncReplaces(
+		go_mod_tester.Sync(
 			t,
 			"module alfa\n\ngo 1.27\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.0.0\n)\n\nretract v0.1.0\n",
-			managedReplace("bravo.test/b", "v1.1.0"),
+			go_mod_tester.Replace("bravo.test/b", "v1.1.0"),
 		),
 	)
 }
 
 func TestSyncReplacesStable(t *testing.T) {
-	first := syncReplaces(
+	first := go_mod_tester.Sync(
 		t,
 		"module alfa\n\ngo 1.27\n\nreplace delta.test/d => ../delta\n",
-		managedReplace("bravo.test/b", "v1.0.0"),
-		managedReplace("charlie.test/c", "v2.0.0"),
+		go_mod_tester.Replace("bravo.test/b", "v1.0.0"),
+		go_mod_tester.Replace("charlie.test/c", "v2.0.0"),
 	)
 	assert.String(
 		t,
 		first,
-		syncReplaces(
+		go_mod_tester.Sync(
 			t,
 			first,
-			managedReplace("bravo.test/b", "v1.0.0"),
-			managedReplace("charlie.test/c", "v2.0.0"),
+			go_mod_tester.Replace("bravo.test/b", "v1.0.0"),
+			go_mod_tester.Replace("charlie.test/c", "v2.0.0"),
 		),
 	)
 }
@@ -68,7 +69,7 @@ func TestSyncReplacesRemovesEmptyManagedBlock(t *testing.T) {
 	assert.String(
 		t,
 		"module alfa\n\ngo 1.27\n\nreplace delta.test/d => ../delta\n",
-		syncReplaces(
+		go_mod_tester.Sync(
 			t,
 			"module alfa\n\ngo 1.27\n\nreplace delta.test/d => ../delta\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.0.0\n)\n",
 		),
@@ -76,15 +77,19 @@ func TestSyncReplacesRemovesEmptyManagedBlock(t *testing.T) {
 }
 
 func TestSyncReplacesSingleEntryStaysManaged(t *testing.T) {
-	once := syncReplaces(
+	once := go_mod_tester.Sync(
 		t,
 		"module alfa\n",
-		managedReplace("bravo.test/b", "v1.0.0"),
+		go_mod_tester.Replace("bravo.test/b", "v1.0.0"),
 	)
 	assert.String(
 		t,
 		"module alfa\n\n// managed by replace\nreplace (\n\tbravo.test/b => bravo.test/b v1.1.0\n)\n",
-		syncReplaces(t, once, managedReplace("bravo.test/b", "v1.1.0")),
+		go_mod_tester.Sync(
+			t,
+			once,
+			go_mod_tester.Replace("bravo.test/b", "v1.1.0"),
+		),
 	)
 }
 
@@ -100,7 +105,7 @@ func TestSyncReplacesKeepsUpstreamComments(t *testing.T) {
 	assert.String(
 		t,
 		"module alfa\n\n// managed by replace\nreplace (\n\t// Avoid a CVE\n\tbravo.test/b => bravo.test/b v1.0.0\n)\n",
-		syncReplaces(t, "module alfa\n", upstream.Replace...),
+		go_mod_tester.Sync(t, "module alfa\n", upstream.Replace...),
 	)
 }
 

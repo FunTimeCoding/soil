@@ -21,7 +21,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/usage"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stopper"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/double"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"path/filepath"
@@ -33,10 +33,10 @@ func New(t *testing.T) *Tester {
 	directory := t.TempDir()
 	l := logger.New(t.Context())
 	s := store_tester.NewOnFile(t, filepath.Join(directory, "goclauded.sqlite"))
-	d := double.New(t)
+	d := peer_tester.New(t)
 	x := connection.New(l, filepath.Join(directory, constant.SearchIndexFile))
 	result := &Tester{
-		Set:            d,
+		Peers:          d,
 		Store:          s,
 		t:              t,
 		Index:          search_index.New(x),

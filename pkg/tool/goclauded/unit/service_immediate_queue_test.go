@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 )
@@ -20,7 +20,7 @@ func TestChannelDrainLeavesDeferredEntries(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
+		delivery_tester.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
@@ -37,7 +37,7 @@ func TestChannelDrainTakesImmediateEntries(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
+		delivery_tester.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
@@ -53,7 +53,7 @@ func TestBroadcastIsNeverImmediate(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(remaining.Entries, constant.QueueMessage),
+		delivery_tester.KindEntries(remaining.Entries, constant.QueueMessage),
 	)
 }
 
@@ -69,6 +69,9 @@ func TestRosterActivityIsNeverImmediate(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(remaining.Entries, constant.QueueSessionAnnounce),
+		delivery_tester.KindEntries(
+			remaining.Entries,
+			constant.QueueSessionAnnounce,
+		),
 	)
 }

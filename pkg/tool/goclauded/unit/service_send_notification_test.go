@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 )
@@ -36,6 +36,6 @@ func TestSendNotificationReachesHolder(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		fixture.KindEntries(drained.Entries, constant.QueueNotification),
+		delivery_tester.KindEntries(drained.Entries, constant.QueueNotification),
 	)
 }

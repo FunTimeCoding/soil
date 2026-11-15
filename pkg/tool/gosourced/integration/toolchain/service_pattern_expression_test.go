@@ -3,15 +3,13 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestApplyPatternRewritesCallWhereverItSits(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("pattern-expression/src"),
-	)
+	d := service_tester.Prepare(t, "pattern-expression/src")
 	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
 		t.Context(),
 		d,
@@ -33,14 +31,11 @@ func TestApplyPatternRewritesCallWhereverItSits(t *testing.T) {
 	assert.StringContains(t, "describe(alfa.Named(\"charlie\"))", holder)
 	assert.StringContains(t, "\talfa.Named(\"delta\")\n", holder)
 	assert.StringContains(t, "return alfa.Named(\"echo\")", holder)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestApplyPatternRefusesNestedCalls(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("pattern-expression/src"),
-	)
+	d := service_tester.Prepare(t, "pattern-expression/src")
 	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
 		t.Context(),
 		d,
@@ -66,14 +61,11 @@ func TestApplyPatternRefusesNestedCalls(t *testing.T) {
 	holder := service_tester.ReadFixtureFile(t, d, "pkg/bravo/holder.go")
 	assert.StringContains(t, "return alfa.Keep(s)\n", holder)
 	assert.StringContains(t, "return alfa.Wrap(alfa.Wrap(s))\n", holder)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestApplyPatternCallNeedsExpressionReplacement(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("pattern-expression/src"),
-	)
+	d := service_tester.Prepare(t, "pattern-expression/src")
 	r, _, e := service_tester.NewService(t).Pattern.ApplyPattern(
 		t.Context(),
 		d,

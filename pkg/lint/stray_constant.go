@@ -23,7 +23,7 @@ func StrayConstant(
 	}
 
 	var packageConstant bool
-	var sanction bool
+	var exempted bool
 	var depth int
 
 	for s.Scan() {
@@ -34,7 +34,7 @@ func StrayConstant(
 			packageConstant = strings.TrimPrefix(line, "package ") == "constant"
 		}
 
-		if !packageConstant && !sanction && depth == 0 &&
+		if !packageConstant && !exempted && depth == 0 &&
 			(strings.HasPrefix(trimmed, "const ") || trimmed == "const (") {
 			s.AddConcern(
 				constant.StrayConstantKey,
@@ -47,7 +47,7 @@ func StrayConstant(
 		}
 
 		rule, okay := parseFixtureRule(line)
-		sanction = okay &&
+		exempted = okay &&
 			rule == constant.StrayConstantRule &&
 			testdataPath(path)
 

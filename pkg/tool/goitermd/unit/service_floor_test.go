@@ -8,7 +8,7 @@ import (
 )
 
 func TestSendKeysPacesAtLeastFloor(t *testing.T) {
-	c := sessionClient("alfa")
+	c := service_tester.SessionClient("alfa")
 	defer c.Close()
 	s := service_tester.NewPaced(t, c, 50*time.Millisecond)
 	start := time.Now()

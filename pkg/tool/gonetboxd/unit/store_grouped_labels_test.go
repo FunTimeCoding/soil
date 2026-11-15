@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/store_tester"
 	"testing"
 )
 
 func TestGroupedLabelsGroupsByObject(t *testing.T) {
-	s := newStore(t)
+	s := store_tester.New(t)
 	_, e := s.SetLabel("dcim.device", 7, "owner", "admin")
 	errors.PanicOnError(e)
 	_, e = s.SetLabel("dcim.device", 7, "backup", "nightly")
@@ -27,7 +28,7 @@ func TestGroupedLabelsGroupsByObject(t *testing.T) {
 }
 
 func TestGroupedLabelsSkipsUnrequestedObjects(t *testing.T) {
-	s := newStore(t)
+	s := store_tester.New(t)
 	_, e := s.SetLabel("dcim.device", 7, "owner", "admin")
 	errors.PanicOnError(e)
 	_, e = s.SetLabel("dcim.device", 9, "owner", "operations")
@@ -39,7 +40,7 @@ func TestGroupedLabelsSkipsUnrequestedObjects(t *testing.T) {
 }
 
 func TestGroupedLabelsEmptyRequest(t *testing.T) {
-	s := newStore(t)
+	s := store_tester.New(t)
 	_, e := s.SetLabel("dcim.device", 7, "owner", "admin")
 	errors.PanicOnError(e)
 	grouped, f := s.GroupedLabels("dcim.device", nil)

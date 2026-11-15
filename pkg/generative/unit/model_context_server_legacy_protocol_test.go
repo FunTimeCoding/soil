@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	generative "github.com/funtimecoding/soil/pkg/generative/model_context/server"
+	"github.com/funtimecoding/soil/pkg/generative/unit/model_context_tester"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/mark3labs/mcp-go/server"
 	"io"
@@ -33,7 +34,7 @@ func TestModelContextServerLegacyProtocol(t *testing.T) {
 	assert.FatalOnError(t, e)
 	line, e := bufio.NewReader(outputReader).ReadString('\n')
 	assert.FatalOnError(t, e)
-	var r DiscoverResponse
+	var r model_context_tester.DiscoverResponse
 	notation.MustDecode(line, &r, true)
 	errors.PanicClose(inputWriter)
 	assert.FatalOnError(t, <-done)

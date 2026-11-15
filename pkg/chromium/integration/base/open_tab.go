@@ -2,6 +2,7 @@ package base
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/time/wait_tester"
 	"strings"
 	"time"
 )
@@ -11,19 +12,19 @@ func (s *Stack) OpenTab(route string) string {
 	identifier, e := s.Client.CreateTab(s.Locator(route))
 	assert.FatalOnError(s.T, e)
 	title := strings.TrimPrefix(route, "/")
-	deadline := time.Now().Add(15 * time.Second)
-
-	for time.Now().Before(deadline) {
-		for _, t := range s.tabs() {
-			if t.Identifier == identifier && t.Title == title {
-				return identifier
+	wait_tester.Until(
+		s.T,
+		func() bool {
+			for _, t := range s.tabs() {
+				if t.Identifier == identifier && t.Title == title {
+					return true
+				}
 			}
-		}
 
-		time.Sleep(50 * time.Millisecond)
-	}
+			return false
+		},
+		15*time.Second,
+	)
 
-	s.T.Fatalf("tab on %s never reported title %q", route, title)
-
-	return ""
+	return identifier
 }

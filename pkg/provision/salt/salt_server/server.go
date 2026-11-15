@@ -1,0 +1,21 @@
+package salt_server
+
+import (
+	"net/http/httptest"
+	"sync"
+)
+
+type Server struct {
+	*httptest.Server
+	mutex    sync.Mutex
+	password string
+	logins   int
+	valid    string
+	seen     []string
+	answers  map[string]string
+	held     string
+	hold     chan struct{}
+	holding  chan struct{}
+	gateway  int
+	page     string
+}

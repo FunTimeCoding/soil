@@ -6,12 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/iterm/unit/iterm_tester"
 	"net/http"
 	"testing"
 )
 
 func TestUnknownKeyIsValidation(t *testing.T) {
-	e := bridge(
+	e := iterm_tester.New(
 		t,
 		http.StatusUnprocessableEntity,
 		`{"error": "unknown key: alfa. valid keys: enter, tab"}`,
@@ -25,7 +26,7 @@ func TestUnknownKeyIsValidation(t *testing.T) {
 }
 
 func TestKeyToUnknownSessionIsNotFound(t *testing.T) {
-	e := bridge(
+	e := iterm_tester.New(
 		t,
 		http.StatusNotFound,
 		`{"error": "session not found"}`,
@@ -35,7 +36,7 @@ func TestKeyToUnknownSessionIsNotFound(t *testing.T) {
 }
 
 func TestTabWithoutWindowIsUnavailable(t *testing.T) {
-	_, e := bridge(
+	_, e := iterm_tester.New(
 		t,
 		http.StatusServiceUnavailable,
 		`{"error": "no window"}`,
@@ -45,7 +46,7 @@ func TestTabWithoutWindowIsUnavailable(t *testing.T) {
 }
 
 func TestMalformedRequestIsFault(t *testing.T) {
-	e := bridge(
+	e := iterm_tester.New(
 		t,
 		http.StatusBadRequest,
 		`{"error": "invalid JSON"}`,

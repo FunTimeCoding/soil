@@ -53,7 +53,7 @@ func Operations(
 
 			problems = append(
 				problems,
-				verdict(
+				operationProblems(
 					o.OperationID,
 					want,
 					answered == http.StatusServiceUnavailable,

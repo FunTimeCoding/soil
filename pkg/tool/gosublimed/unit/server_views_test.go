@@ -4,12 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestViewLifecycle(t *testing.T) {
-	c := restClient(t)
+	c := base.Rest(t, base.New(t))
 	created, e := c.CreateViewWithResponse(
 		context.Background(),
 		client.CreateViewJSONRequestBody{Title: "notes", Content: "alfa"},

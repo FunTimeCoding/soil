@@ -4,7 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/web_interface_tester"
 	"net/http"
 	"path/filepath"
 	"testing"
@@ -28,8 +30,12 @@ func TestDeletingMissingReportIsNotFound(t *testing.T) {
 }
 
 func TestDeletingMissingReportAnswersNotFound(t *testing.T) {
-	v := mountedReports(t, t.TempDir())
-	assert.Integer(t, http.StatusNotFound, deleteReport(t, v, "echo.html"))
+	v := base.Reports(t, t.TempDir())
+	assert.Integer(
+		t,
+		http.StatusNotFound,
+		web_interface_tester.Delete(t, v, "echo.html"),
+	)
 }
 
 func TestGeneratingReadsEliteFileOfEachLog(t *testing.T) {

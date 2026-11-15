@@ -1,0 +1,40 @@
+package store_tester
+
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
+)
+
+func insertEmbeddings(
+	s *store.Store,
+	o *ollama.Client,
+	hash string,
+	path string,
+	body string,
+	now string,
+) error {
+	r := mock_reranker.New()
+	defer errors.LogClose(r)
+	chunks := chunk.Document(body, path, r)
+	texts := make([]string, len(chunks))
+
+	for i, c := range chunks {
+		texts[i] = c.Text
+	}
+
+	embeddings, e := o.Embed(context.Background(), texts)
+
+	if e != nil {
+		return e
+	}
+
+	for i, embedding := range embeddings {
+		s.InsertEmbedding(hash, i, chunks[i].Position, embedding, now)
+	}
+
+	return nil
+}

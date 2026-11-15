@@ -14,7 +14,7 @@ import (
 )
 
 func TestRenameSendsItsMovesToMemories(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	s, m := service_tester.WithMemory(t)
 	r, e := s.Symbol.Rename(
 		t.Context(),
@@ -40,7 +40,7 @@ func TestRenameSendsItsMovesToMemories(t *testing.T) {
 }
 
 func TestMemoryFailurePeerCapturedIsNotCapturedAgain(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	p := base.New(t)
 	s, r := service_tester.WithMemoryPeer(t, p.MemoryClient(t))
 	result, e := s.Symbol.Rename(
@@ -63,7 +63,7 @@ func TestMemoryFailurePeerCapturedIsNotCapturedAgain(t *testing.T) {
 }
 
 func TestRenameCommitsWhileMemoriesAreDown(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	s, m := service_tester.WithMemory(t)
 	m.Failure = unavailable.New("gomemoryd", time.Now(), "connection refused")
 	r, e := s.Symbol.Rename(

@@ -3,16 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestRenameModule(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-rename/src"),
-	)
+	d := service_tester.Prepare(t, "module-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -25,17 +23,14 @@ func TestRenameModule(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	assertFormatted(t, caller)
+	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "\"example/lib/v3\"", caller)
 	assert.False(t, strings.Contains(caller, "example/lib/v2"))
 	assert.StringContains(t, "lib.Make(\"alfa\")", caller)
 }
 
 func TestRenameModuleBreakage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-break/src"),
-	)
+	d := service_tester.Prepare(t, "module-break/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -54,10 +49,7 @@ func TestRenameModuleBreakage(t *testing.T) {
 }
 
 func TestRenameModuleTreatsAnyAsEmptyInterface(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-any/src"),
-	)
+	d := service_tester.Prepare(t, "module-any/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -77,10 +69,7 @@ func TestRenameModuleTreatsAnyAsEmptyInterface(t *testing.T) {
 }
 
 func TestRenameModuleIgnoresParameterAndResultNames(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-result-names/src"),
-	)
+	d := service_tester.Prepare(t, "module-result-names/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -100,10 +89,7 @@ func TestRenameModuleIgnoresParameterAndResultNames(t *testing.T) {
 }
 
 func TestRenameModuleReadsInternalTypeThroughPublicAlias(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-internal-alias/src"),
-	)
+	d := service_tester.Prepare(t, "module-internal-alias/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -117,14 +103,11 @@ func TestRenameModuleReadsInternalTypeThroughPublicAlias(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assert.StringContains(t, "\"example/lib/v3\"", caller)
-	assertCompiles(t, d)
+	rewrite_tester.Compiles(t, d)
 }
 
 func TestRenameModuleReportsInternalTypeWithoutAlias(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-internal-hidden/src"),
-	)
+	d := service_tester.Prepare(t, "module-internal-hidden/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -141,10 +124,7 @@ func TestRenameModuleReportsInternalTypeWithoutAlias(t *testing.T) {
 }
 
 func TestRenameModuleForce(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-break/src"),
-	)
+	d := service_tester.Prepare(t, "module-break/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -161,10 +141,7 @@ func TestRenameModuleForce(t *testing.T) {
 }
 
 func TestRenameModuleDryRun(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-rename/src"),
-	)
+	d := service_tester.Prepare(t, "module-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -181,10 +158,7 @@ func TestRenameModuleDryRun(t *testing.T) {
 }
 
 func TestRenameModuleUnused(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-rename/src"),
-	)
+	d := service_tester.Prepare(t, "module-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),
@@ -199,10 +173,7 @@ func TestRenameModuleUnused(t *testing.T) {
 }
 
 func TestRenameModuleMissingTarget(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-rename/src"),
-	)
+	d := service_tester.Prepare(t, "module-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),

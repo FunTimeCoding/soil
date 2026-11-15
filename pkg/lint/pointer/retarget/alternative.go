@@ -31,7 +31,7 @@ func alternative(
 		inner.Link = c.Link
 		v := r.Resolve(source, declared, inner)
 
-		if v.Verdict != constant.VerdictLive || v.Target == "" {
+		if !v.Live() || v.Target == "" {
 			return ""
 		}
 

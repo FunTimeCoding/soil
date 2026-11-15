@@ -6,17 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/fake_parser"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/mock_parser"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/unit/service_tester"
 	"path/filepath"
 	"strings"
 	"testing"
 )
 
 func TestGenerateReturnsReport(t *testing.T) {
-	c := mountedClient(t, fake_parser.New(2, nil))
+	c := base.Client(t, mock_parser.New(2, nil))
 	result, e := c.PostGenerate(
 		t.Context(),
-		[]string{inputFile(t, "charlie.zevtc")},
+		[]string{service_tester.Input(t, "charlie.zevtc")},
 		nil,
 	)
 	assert.FatalOnError(t, e)
@@ -26,7 +28,7 @@ func TestGenerateReturnsReport(t *testing.T) {
 }
 
 func TestMissingInputFileIsNotFound(t *testing.T) {
-	c := mountedClient(t, fake_parser.New(1, nil))
+	c := base.Client(t, mock_parser.New(1, nil))
 	absent := filepath.Join(t.TempDir(), "delta.zevtc")
 	_, e := c.PostGenerate(t.Context(), []string{absent}, nil)
 	assert.True(t, not_found.Is(e))
@@ -34,16 +36,16 @@ func TestMissingInputFileIsNotFound(t *testing.T) {
 }
 
 func TestNoFilesAreCallersMistake(t *testing.T) {
-	c := mountedClient(t, fake_parser.New(1, nil))
+	c := base.Client(t, mock_parser.New(1, nil))
 	_, e := c.PostGenerate(t.Context(), []string{}, nil)
 	assert.True(t, validation.Is(e))
 }
 
 func TestFailedGenerateIsReported(t *testing.T) {
-	c := mountedClient(t, fake_parser.New(0, errors.New("echo parse failed")))
+	c := base.Client(t, mock_parser.New(0, errors.New("echo parse failed")))
 	_, e := c.PostGenerate(
 		t.Context(),
-		[]string{inputFile(t, "echo.zevtc")},
+		[]string{service_tester.Input(t, "echo.zevtc")},
 		nil,
 	)
 	assert.True(t, reported.Is(e))

@@ -8,11 +8,8 @@ import (
 
 func (r *Resolver) resolveTestName(span string) *pointer.Resolution {
 	if r.Tests(strings.TrimSuffix(span, constant.CallSuffix)) {
-		return pointer.NewResolution(constant.VerdictLive)
+		return pointer.NewLive("")
 	}
 
-	result := pointer.NewResolution(constant.VerdictTallied)
-	result.Reason = constant.ReasonTest
-
-	return result
+	return pointer.NewUnchecked(constant.ReasonTest)
 }

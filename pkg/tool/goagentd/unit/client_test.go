@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -22,7 +23,7 @@ func TestClientRunsAndReadsAgent(t *testing.T) {
 	s := mock_stream.New([]string{"lima"}, true, nil)
 	defer s.Close()
 	d := daemon_tester.New(t, service_tester.Fixed(s))
-	c := mountedClient(t, d, generativeConstant.ModelContextTestToken)
+	c := base.Connect(t, d, generativeConstant.ModelContextTestToken)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	assert.True(t, validation.Is(c.PostRun(t.Context(), "")))
 	assert.FatalOnError(t, c.PostRun(t.Context(), "mike"))
@@ -31,7 +32,7 @@ func TestClientRunsAndReadsAgent(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.String(t, "running", running.State)
 	d.Workers()[0].(soilFace.Drainer).Interrupt()
-	done := awaitServedDone(t, c)
+	done := service_tester.AwaitServedDone(t, c)
 	assert.String(t, "done", done.State)
 	assert.String(t, "lima", *done.Result)
 }
@@ -40,7 +41,7 @@ func TestClientHearsClosingRunner(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	d := daemon_tester.New(t, service_tester.Fixed(stream))
-	c := mountedClient(t, d, generativeConstant.ModelContextTestToken)
+	c := base.Connect(t, d, generativeConstant.ModelContextTestToken)
 	d.Close()
 	assert.True(t, unavailable.Is(c.PostRun(t.Context(), "oscar")))
 }
@@ -49,7 +50,7 @@ func TestRefusedTokenIsError(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	d := daemon_tester.New(t, service_tester.Fixed(stream))
-	c := mountedClient(t, d, "papa-wrong")
+	c := base.Connect(t, d, "papa-wrong")
 	_, e := c.GetStatus(t.Context())
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status status: 401", e.Error())

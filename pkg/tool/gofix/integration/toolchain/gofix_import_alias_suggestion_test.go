@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/fix_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester"
 	"path/filepath"
 	"testing"
@@ -17,7 +18,7 @@ func TestImportAliasSuggestion(t *testing.T) {
 	t.Run(
 		"StandardLibraryKeepsThePlainName",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/delta/clock.go",
@@ -28,13 +29,13 @@ func TestImportAliasSuggestion(t *testing.T) {
 	t.Run(
 		"OwnKeepsThePlainName",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/echo/service/service.go",
 				"suggest de-alias echoFace → face (own: testmodule/pkg/echo/face)",
 			)
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/echo/service/service.go",
@@ -45,7 +46,7 @@ func TestImportAliasSuggestion(t *testing.T) {
 	t.Run(
 		"KeeperRefusesABuiltinName",
 		func(t *testing.T) {
-			assertPlanned(
+			fix_tester.Planned(
 				t,
 				r.Entries,
 				"pkg/hotel/builtin.go",

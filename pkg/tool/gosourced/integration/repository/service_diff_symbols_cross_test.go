@@ -3,11 +3,12 @@ package repository
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/report_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/revision_tester"
 	"testing"
 )
 
 func TestDiffSymbolsFollowsMoveIntoRequiredModule(t *testing.T) {
-	v := crossService(t)
+	v := revision_tester.CrossService(t)
 	r, e := v.Diff.DiffSymbols("user", "HEAD~1", "HEAD")
 	assert.FatalOnError(t, e)
 	assert.Strings(

@@ -9,7 +9,7 @@ import (
 )
 
 func TestCreateDeviceWithTenantAndTags(t *testing.T) {
-	c := deviceCatalog(t)
+	c := service_tester.DeviceCatalog(t)
 	c.SeedTenant("acme")
 	d, e := service_tester.Service(t, c).CreateDevice(
 		"core",
@@ -25,7 +25,7 @@ func TestCreateDeviceWithTenantAndTags(t *testing.T) {
 }
 
 func TestCreateDeviceWithoutTenant(t *testing.T) {
-	d, e := service_tester.Service(t, deviceCatalog(t)).CreateDevice(
+	d, e := service_tester.Service(t, service_tester.DeviceCatalog(t)).CreateDevice(
 		"core",
 		"server",
 		"r640",

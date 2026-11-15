@@ -5,6 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
@@ -20,18 +22,18 @@ func TestRerankTextKeywordHitTakesChunkHoldingItsLine(t *testing.T) {
 		t,
 		"bravo",
 		store.RerankText(
-			halves(),
+			store_tester.Halves(),
 			result.NewSearch("halves.md", "", constant.NoChunkPosition, 1),
-			newReranker(t),
+			service_tester.NewReranker(t),
 		),
 	)
 	assert.StringContains(
 		t,
 		"bravo",
 		store.RerankText(
-			halves(),
+			store_tester.Halves(),
 			result.NewSearch("halves.md", "", constant.NoChunkPosition, 1200),
-			newReranker(t),
+			service_tester.NewReranker(t),
 		),
 	)
 }
@@ -41,9 +43,9 @@ func TestRerankTextVectorChunkWinsOverSnippetLine(t *testing.T) {
 		t,
 		"bravo",
 		store.RerankText(
-			halves(),
+			store_tester.Halves(),
 			result.NewSearch("halves.md", "", 0, 1200),
-			newReranker(t),
+			service_tester.NewReranker(t),
 		),
 	)
 }
@@ -60,7 +62,7 @@ func TestRerankTextWithoutBodyUsesSnippet(t *testing.T) {
 				constant.NoChunkPosition,
 				0,
 			),
-			newReranker(t),
+			service_tester.NewReranker(t),
 		),
 	)
 }

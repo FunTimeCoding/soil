@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
@@ -37,7 +38,7 @@ func TestQuietRefusalIsNotCapturedByGuard(t *testing.T) {
 
 func TestOutageIsAnsweredAsUnavailableByService(t *testing.T) {
 	c := service_tester.NewSource()
-	c.Failure = refusedConnection()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
 	_, e := service_tester.New(t, c, m).Users()
 	assert.True(t, unavailable.Is(e))

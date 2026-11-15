@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"net/http"
 	"testing"
@@ -13,7 +14,7 @@ import (
 
 func TestMissingPostIsAnsweredNotFound(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
-	c, r := servedDaemon(t, m)
+	c, r := base.Rest(t, m)
 	result, e := c.GetThreadWithResponse(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, result.StatusCode())
@@ -25,7 +26,7 @@ func TestMissingPostIsAnsweredNotFound(t *testing.T) {
 func TestRefusedPostIsAnsweredForbidden(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.Failure = forbidden.Format("no access to alfa")
-	c, r := servedDaemon(t, m)
+	c, r := base.Rest(t, m)
 	result, e := c.GetPostReactionsWithResponse(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusForbidden, result.StatusCode())
@@ -37,7 +38,7 @@ func TestRefusedPostIsAnsweredForbidden(t *testing.T) {
 func TestUnavailableMattermostIsAnsweredUnavailable(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
 	m.Failure = unavailable.Format("mattermost maintenance")
-	c, r := servedDaemon(t, m)
+	c, r := base.Rest(t, m)
 	result, e := c.GetChannelPostsWithResponse(
 		t.Context(),
 		"alfa",
@@ -50,8 +51,8 @@ func TestUnavailableMattermostIsAnsweredUnavailable(t *testing.T) {
 
 func TestMattermostFaultIsCaptured(t *testing.T) {
 	m := service_tester.NewMattermost(t, "kilo")
-	m.Failure = fault()
-	c, r := servedDaemon(t, m)
+	m.Failure = service_tester.Fault()
+	c, r := base.Rest(t, m)
 	result, e := c.GetThreadWithResponse(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, result.StatusCode())

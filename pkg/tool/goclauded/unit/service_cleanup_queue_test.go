@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/delivery_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
 	"testing"
 	"time"
@@ -17,7 +17,10 @@ func TestCleanupQueueRemovesConsumedEntries(t *testing.T) {
 	s.Store.Advance(25 * time.Hour)
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
-	announces := fixture.KindEntries(r.Entries, constant.QueueSessionAnnounce)
+	announces := delivery_tester.KindEntries(
+		r.Entries,
+		constant.QueueSessionAnnounce,
+	)
 	assert.Count(t, 0, announces)
 }
 
@@ -28,6 +31,9 @@ func TestCleanupQueuePreservesUnconsumedEntries(t *testing.T) {
 	s.Store.Advance(25 * time.Hour)
 	assert.Count(t, 0, s.Roster.RunTimeoutSweep())
 	r = s.Check("session-1")
-	announces := fixture.KindEntries(r.Entries, constant.QueueSessionAnnounce)
+	announces := delivery_tester.KindEntries(
+		r.Entries,
+		constant.QueueSessionAnnounce,
+	)
 	assert.True(t, len(announces) > 0)
 }

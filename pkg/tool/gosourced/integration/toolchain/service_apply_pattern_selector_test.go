@@ -8,10 +8,7 @@ import (
 )
 
 func TestApplyPatternRewritesSelectorChainBeforeAnchor(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("selector/src"),
-	)
+	d := service_tester.Prepare(t, "selector/src")
 	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
 		t.Context(),
 		d,
@@ -35,10 +32,7 @@ func TestApplyPatternRewritesSelectorChainBeforeAnchor(t *testing.T) {
 }
 
 func TestApplyPatternClaimsNoRewriteThatChangesNothing(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("selector/src"),
-	)
+	d := service_tester.Prepare(t, "selector/src")
 	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
 		t.Context(),
 		d,

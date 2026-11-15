@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/types/import_entry"
 	"github.com/funtimecoding/soil/pkg/source/types/import_view"
+	"github.com/funtimecoding/soil/pkg/source/unit/import_tester"
 	"testing"
 )
 
@@ -14,18 +15,18 @@ func TestDecideGivesEveryCollidingMockItsOwner(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa/unit",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/bravo/mock_client",
 					constant.MockPackage,
 					constant.MockPackage,
 				),
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/goalfa/client/mock_client",
 					constant.MockPackage,
 					"alfaMock",
 				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 2, d)
@@ -39,7 +40,7 @@ func TestDecideKeepsThirdPartyLosersAlias(t *testing.T) {
 	v := import_view.New(
 		"example.org/alfa/pkg/alert/store",
 		[]*import_entry.Entry{
-			entry("example.org/alfa/pkg/alert", "alert", "alert"),
+			import_tester.Entry("example.org/alfa/pkg/alert", "alert", "alert"),
 			import_entry.New(
 				"example.net/upstream/client/alert",
 				"alert",
@@ -48,7 +49,7 @@ func TestDecideKeepsThirdPartyLosersAlias(t *testing.T) {
 				false,
 			),
 		},
-		taken(),
+		import_tester.Among(),
 	)
 	v.Ours = func(modulePath string) bool {
 		return modulePath == "example.org/alfa"
@@ -64,20 +65,28 @@ func TestDecideNeverGivesTwoGroupsOneName(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/goalfa/client",
 					"client",
 					"client",
 				),
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/gobravo/client",
 					"client",
 					"bravoClient",
 				),
-				entry("example.org/alfa/pkg/tool/goalfa/face", "face", "face"),
-				entry("example.org/alfa/pkg/tool/gobravo/face", "face", "bravo"),
+				import_tester.Entry(
+					"example.org/alfa/pkg/tool/goalfa/face",
+					"face",
+					"face",
+				),
+				import_tester.Entry(
+					"example.org/alfa/pkg/tool/gobravo/face",
+					"face",
+					"bravo",
+				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 4, d)
@@ -90,24 +99,28 @@ func TestDecideKeepsAnotherGroupsPlainNameFree(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/tool/goalfa",
 			[]*import_entry.Entry{
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/goalfa/client",
 					"client",
 					"alfaClient",
 				),
-				entry(
+				import_tester.Entry(
 					"example.org/alfa/pkg/tool/gobravo/client",
 					"client",
 					"bravoClient",
 				),
-				entry("example.org/alfa/pkg/tool/goalfa/face", "face", "face"),
-				entry(
+				import_tester.Entry(
+					"example.org/alfa/pkg/tool/goalfa/face",
+					"face",
+					"face",
+				),
+				import_tester.Entry(
 					"example.org/alfa/pkg/charlie/client/face",
 					"face",
 					"charlie",
 				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 4, d)
@@ -119,10 +132,18 @@ func TestDecideRenamesFirstPartyLoser(t *testing.T) {
 		import_view.New(
 			"example.org/alfa/pkg/alert/store",
 			[]*import_entry.Entry{
-				entry("example.org/alfa/pkg/alert", "alert", "alert"),
-				entry("example.org/alfa/pkg/upstream/alert", "alert", "raw"),
+				import_tester.Entry(
+					"example.org/alfa/pkg/alert",
+					"alert",
+					"alert",
+				),
+				import_tester.Entry(
+					"example.org/alfa/pkg/upstream/alert",
+					"alert",
+					"raw",
+				),
 			},
-			taken(),
+			import_tester.Among(),
 		),
 	)
 	assert.Count(t, 2, d)

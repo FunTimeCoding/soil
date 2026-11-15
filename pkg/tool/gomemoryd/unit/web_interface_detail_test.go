@@ -20,8 +20,8 @@ func TestHiddenDetailReadsLikeMissingOne(t *testing.T) {
 	o.Tags = []string{"private"}
 	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
-	hidden := body(t, s.Server, memory_page.Path(identifier), false)
-	missing := body(t, s.Server, memory_page.Path(identifier+1), false)
+	hidden := s.Body(t, memory_page.Path(identifier))
+	missing := s.Body(t, memory_page.Path(identifier+1))
 	assert.StringContains(
 		t,
 		fmt.Sprintf("memory not found: %d", identifier),

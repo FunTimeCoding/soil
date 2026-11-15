@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
-func NewEnvironment() *Client {
+func NewEnvironment(o ...Option) *Client {
 	return New(
 		locator.Environment(
 			gopostgresConstant.HostEnvironment,
@@ -14,5 +14,6 @@ func NewEnvironment() *Client {
 			gopostgresConstant.InsecureEnvironment,
 		),
 		environment.Required(gopostgresConstant.TokenEnvironment),
+		o...,
 	)
 }

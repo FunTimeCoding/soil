@@ -5,6 +5,7 @@ import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/assert"
 	atlassian "github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/unit/atlassian_tester"
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
@@ -14,7 +15,7 @@ import (
 
 func TestRefusedProjectIsForbidden(t *testing.T) {
 	e := atlassian.WrapError(
-		jiraFailure(
+		atlassian_tester.JiraFailure(
 			http.StatusForbidden,
 			[]string{"You do not have permission to see this project."},
 			nil,
@@ -26,7 +27,7 @@ func TestRefusedProjectIsForbidden(t *testing.T) {
 
 func TestUnavailableJiraIsUnavailable(t *testing.T) {
 	e := atlassian.WrapError(
-		jiraFailure(
+		atlassian_tester.JiraFailure(
 			http.StatusServiceUnavailable,
 			[]string{"Down for upgrade"},
 			nil,
@@ -49,7 +50,7 @@ func TestUnavailableJiraWithoutNotationIsUnavailable(t *testing.T) {
 
 func TestRejectedTokenStaysFault(t *testing.T) {
 	e := atlassian.WrapError(
-		jiraFailure(
+		atlassian_tester.JiraFailure(
 			http.StatusUnauthorized,
 			[]string{"You are not authenticated."},
 			nil,

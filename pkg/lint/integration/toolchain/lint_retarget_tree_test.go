@@ -3,11 +3,11 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/types/move_set"
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
@@ -15,10 +15,10 @@ import (
 func TestRetargetTreeRewritesOnlyWhatMentionsMove(t *testing.T) {
 	d := t.TempDir()
 	note := "See `pkg/alfa/run.go` and `pkg/bravo/stay.go`.\n"
-	testutil.WriteFile(t, d, "doc/note.md", note)
-	testutil.WriteFile(t, d, "doc/other.md", "Nothing to move here.\n")
-	testutil.WriteFile(t, d, "pkg/alfa/run.go", "package alfa\n")
-	testutil.WriteFile(t, d, "pkg/bravo/stay.go", "package bravo\n")
+	system_tester.Write(t, d, "doc/note.md", note)
+	system_tester.Write(t, d, "doc/other.md", "Nothing to move here.\n")
+	system_tester.Write(t, d, "pkg/alfa/run.go", "package alfa\n")
+	system_tester.Write(t, d, "pkg/bravo/stay.go", "package bravo\n")
 	documents := lint.RetargetTree(
 		d,
 		move_set.New(
@@ -40,9 +40,9 @@ func TestRetargetTreeRewritesOnlyWhatMentionsMove(t *testing.T) {
 func TestRetargetFilesSkipsDocumentDeletedAfterWalk(t *testing.T) {
 	d := t.TempDir()
 	note := "See `pkg/alfa/run.go`.\n"
-	testutil.WriteFile(t, d, "doc/gone.md", note)
-	testutil.WriteFile(t, d, "doc/note.md", note)
-	testutil.WriteFile(t, d, "pkg/alfa/run.go", "package alfa\n")
+	system_tester.Write(t, d, "doc/gone.md", note)
+	system_tester.Write(t, d, "doc/note.md", note)
+	system_tester.Write(t, d, "pkg/alfa/run.go", "package alfa\n")
 	o := option.New("", false)
 	o.Metadata = true
 	repository, _ := lint.Walk(d, o)

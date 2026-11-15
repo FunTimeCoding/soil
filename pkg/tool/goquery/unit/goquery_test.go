@@ -9,19 +9,25 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/goquery/result"
+	"github.com/funtimecoding/soil/pkg/tool/goquery/unit/command_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"strings"
 	"testing"
 )
 
 func TestWriteWithoutResultPrintsNothing(t *testing.T) {
-	for _, arguments := range writes() {
-		c := newMock(t)
+	for _, arguments := range command_tester.Writes() {
+		c := command_tester.Mock(t)
 		var output, failure string
 		var code int
 		stray := assert.Capture(
 			t,
-			func() { output, failure, code = run(t, c, arguments...) },
+			func() {
+				output, failure, code = command_tester.Run(
+					t,
+					c,
+					arguments...)
+			},
 		)
 		assert.Integer(t, 0, code)
 		assert.String(t, "", output)
@@ -35,7 +41,7 @@ func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 	system.SaveFile(file, "# alfa\n\nbravo\n")
 
 	for _, arguments := range append(
-		writes(),
+		command_tester.Writes(),
 		[]string{"search", "bravo"},
 		[]string{soil.List, "alfa"},
 		[]string{"index"},
@@ -49,31 +55,42 @@ func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 		[]string{"rechunk"},
 		[]string{"chunk", file},
 	) {
-		c := newMock(t)
+		c := command_tester.Mock(t)
 		c.Failure = errors.New("foxtrot")
-		_, failure, code := run(t, c, arguments...)
+		_, failure, code := command_tester.Run(t, c, arguments...)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "foxtrot", failure)
 	}
 }
 
 func TestDeletingUnknownCollectionIsNotFound(t *testing.T) {
-	_, failure, code := run(t, newMock(t), "delete-collection", "zulu")
+	_, failure, code := command_tester.Run(
+		t,
+		command_tester.Mock(t),
+		"delete-collection",
+		"zulu",
+	)
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "collection not found: zulu", failure)
 }
 
 func TestRemovingUnknownContextIsNotFound(t *testing.T) {
-	_, failure, code := run(t, newMock(t), "context-remove", "alfa", "zulu")
+	_, failure, code := command_tester.Run(
+		t,
+		command_tester.Mock(t),
+		"context-remove",
+		"alfa",
+		"zulu",
+	)
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "context not found: alfa zulu", failure)
 }
 
 func TestRechunkEmitsWhatItQueuedAndEmbedded(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.Queued = []string{"alfa/kilo.md"}
 	c.EmbedResult = &client.EmbedResult{Documents: 1, Chunks: 3}
-	output, _, code := run(t, c, "rechunk")
+	output, _, code := command_tester.Run(t, c, "rechunk")
 	assert.Integer(t, 0, code)
 	var r result.Rechunk
 	notation.MustDecode(output, &r, false)
@@ -85,15 +102,15 @@ func TestRechunkEmitsWhatItQueuedAndEmbedded(t *testing.T) {
 }
 
 func TestFailedRechunkEmbedsNothing(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.Failure = errors.New("foxtrot")
-	_, _, code := run(t, c, "rechunk")
+	_, _, code := command_tester.Run(t, c, "rechunk")
 	assert.Integer(t, 1, code)
 	assert.Integer(t, 0, c.Embedded)
 }
 
 func TestOversizeEmitsReportWithItsSummary(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.OversizeReport = &client.OversizeReport{
 		Allowance:      512,
 		EmbedAllowance: 2048,
@@ -108,7 +125,7 @@ func TestOversizeEmitsReportWithItsSummary(t *testing.T) {
 			},
 		},
 	}
-	output, _, code := run(t, c, "oversize")
+	output, _, code := command_tester.Run(t, c, "oversize")
 	assert.Integer(t, 1, code)
 	var r result.Oversize
 	notation.MustDecode(output, &r, false)
@@ -119,7 +136,7 @@ func TestOversizeEmitsReportWithItsSummary(t *testing.T) {
 }
 
 func TestNothingOversizeExitsZero(t *testing.T) {
-	output, _, code := run(t, newMock(t), "oversize")
+	output, _, code := command_tester.Run(t, command_tester.Mock(t), "oversize")
 	assert.Integer(t, 0, code)
 	var r result.Oversize
 	notation.MustDecode(output, &r, false)
@@ -128,11 +145,11 @@ func TestNothingOversizeExitsZero(t *testing.T) {
 }
 
 func TestFailedEmitsRefusedCount(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.FailedReport = &client.FailedReport{
 		Chunks: []client.FailedChunk{{Path: "kilo.md"}, {Path: "lima.md"}},
 	}
-	output, _, code := run(t, c, "failed")
+	output, _, code := command_tester.Run(t, c, "failed")
 	assert.Integer(t, 1, code)
 	var r result.Failed
 	notation.MustDecode(output, &r, false)
@@ -141,7 +158,7 @@ func TestFailedEmitsRefusedCount(t *testing.T) {
 }
 
 func TestStatusEmitsStatus(t *testing.T) {
-	output, _, code := run(t, newMock(t), "status")
+	output, _, code := command_tester.Run(t, command_tester.Mock(t), "status")
 	assert.Integer(t, 0, code)
 	var s client.Status
 	notation.MustDecode(output, &s, false)
@@ -149,7 +166,7 @@ func TestStatusEmitsStatus(t *testing.T) {
 }
 
 func TestChunkPrintsPreviewAsDocument(t *testing.T) {
-	c := newMock(t)
+	c := command_tester.Mock(t)
 	c.Preview = &client.ChunkPreview{
 		Allowance:      512,
 		EmbedAllowance: 2048,
@@ -161,7 +178,7 @@ func TestChunkPrintsPreviewAsDocument(t *testing.T) {
 	}
 	file := join.Join(t.TempDir(), "alfa.md")
 	system.SaveFile(file, "# alfa\n\nbravo\n")
-	output, failure, code := run(t, c, "chunk", file)
+	output, failure, code := command_tester.Run(t, c, "chunk", file)
 	assert.Integer(t, 1, code)
 	assert.String(t, "", failure)
 	assert.StringContains(t, "windows\n", output)
@@ -177,7 +194,13 @@ func TestCutWordListGivesOneNotice(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	file := join.Join(t.TempDir(), "alfa.md")
 	system.SaveFile(file, "# alfa\n\nbravo\n\n# charlie\n\ndelta\n")
-	_, _, code := run(t, newMock(t), "chunk", "--snapshot", file)
+	_, _, code := command_tester.Run(
+		t,
+		command_tester.Mock(t),
+		"chunk",
+		"--snapshot",
+		file,
+	)
 	assert.Integer(t, 0, code)
 	var words []string
 
@@ -196,7 +219,13 @@ func TestCutWordListGivesOneNotice(t *testing.T) {
 			"\n",
 		),
 	)
-	output, failure, code := run(t, newMock(t), "chunk", "--compare", file)
+	output, failure, code := command_tester.Run(
+		t,
+		command_tester.Mock(t),
+		"chunk",
+		"--compare",
+		file,
+	)
 	assert.Integer(t, 0, code)
 	assert.StringContains(t, "compared with snapshot\n", output)
 	assert.StringContains(t, " ...\n", output)

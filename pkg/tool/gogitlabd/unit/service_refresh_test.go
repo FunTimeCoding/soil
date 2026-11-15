@@ -10,16 +10,16 @@ import (
 func TestRefreshNotifiesOnlyWhenBoardMoves(t *testing.T) {
 	s, clients := service_tester.New(t, constant.FixtureInstance)
 	c := clients[constant.FixtureInstance]
-	seedForge(c, 1, "app")
+	service_tester.SeedForge(c, 1, "app")
 	n := s.Notifier().Subscribe()
 	defer s.Notifier().Unsubscribe(n)
 	assert.Count(t, 0, s.Refresh(t.Context()))
-	assert.True(t, fired(n))
+	assert.Signalled(t, n)
 	assert.Count(t, 0, s.Refresh(t.Context()))
-	assert.False(t, fired(n))
+	assert.NotSignalled(t, n)
 	c.SeedBranch("feature", "bbb")
 	c.SeedPipeline(11, "feature", "bbb", "running")
 	assert.Count(t, 0, s.Refresh(t.Context()))
-	assert.True(t, fired(n))
+	assert.Signalled(t, n)
 	assert.Count(t, 2, s.Entries())
 }

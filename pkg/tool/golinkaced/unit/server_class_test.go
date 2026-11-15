@@ -8,15 +8,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestOutageIsAnsweredAsUnavailableWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
-	c.Failure = refusedDial()
+	c.Failure = outage_tester.RefusedDial()
 	m := memory.New()
-	s := restClient(t, c, m)
+	s := daemon_tester.RestClient(t, c, m)
 
 	for range 2 {
 		r, e := s.GetListsWithResponse(context.Background(), nil)
@@ -31,7 +33,10 @@ func TestRefusedTokenIsAnsweredAsForbiddenWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = forbidden.Format("linkace: %s", "Unauthenticated.")
 	m := memory.New()
-	r, e := restClient(t, c, m).GetTagsWithResponse(context.Background(), nil)
+	r, e := daemon_tester.RestClient(t, c, m).GetTagsWithResponse(
+		context.Background(),
+		nil,
+	)
 	assert.FatalOnError(t, e)
 	assert.NotNil(t, r.JSON403)
 	assert.Count(t, 0, m.Events())
@@ -41,7 +46,7 @@ func TestRejectedLinkIsAnsweredAsBadRequestWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = validation.New("linkace: %s", "The url field is required.")
 	m := memory.New()
-	r, e := restClient(t, c, m).AddLinkWithResponse(
+	r, e := daemon_tester.RestClient(t, c, m).AddLinkWithResponse(
 		context.Background(),
 		client.AddLinkJSONRequestBody{Link: "not a url"},
 	)
@@ -54,7 +59,7 @@ func TestTakenTagNameIsAnsweredAsConflictWithoutCapture(t *testing.T) {
 	c := service_tester.NewSource(t)
 	c.Failure = conflict.Format("linkace: %s", "The tag already exists.")
 	m := memory.New()
-	r, e := restClient(t, c, m).CreateTagWithResponse(
+	r, e := daemon_tester.RestClient(t, c, m).CreateTagWithResponse(
 		context.Background(),
 		client.CreateTagJSONRequestBody{Name: "deploy"},
 	)

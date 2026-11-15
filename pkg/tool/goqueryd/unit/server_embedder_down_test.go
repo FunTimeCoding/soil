@@ -4,16 +4,26 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
 )
 
 func TestSearchWhileEmbedderIsDownAnswers503WithoutReport(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
 	r := memory.New()
-	c := mountedClient(t, service_tester.NewOption(t, m, newReranker(t)), r)
+	c := client_tester.Rest(
+		t,
+		base.Serve(
+			t,
+			service_tester.NewOption(t, m, service_tester.NewReranker(t)),
+			r,
+		),
+	)
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},
@@ -26,12 +36,15 @@ func TestSearchWhileEmbedderIsDownAnswers503WithoutReport(t *testing.T) {
 }
 
 func TestPushWhileEmbedderIsDownAnswersItsWarning(t *testing.T) {
-	m := newEmbedder(t)
-	m.Fail(refusedConnection())
-	c := mountedClient(
+	m := service_tester.NewEmbedder(t)
+	m.Fail(outage_tester.RefusedDial())
+	c := client_tester.Rest(
 		t,
-		service_tester.NewOption(t, m, newReranker(t)),
-		memory.New(),
+		base.Serve(
+			t,
+			service_tester.NewOption(t, m, service_tester.NewReranker(t)),
+			memory.New(),
+		),
 	)
 	answer, e := c.PostDocumentWithResponse(
 		t.Context(),

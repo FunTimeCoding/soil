@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/directory"
 	"github.com/funtimecoding/soil/pkg/directory/constant"
+	"github.com/funtimecoding/soil/pkg/directory/directory_tester"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
@@ -15,12 +16,12 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	bootstrap(directory.NewEnvironment())
+	directory_tester.Populate(directory.NewEnvironment())
 	os.Exit(m.Run())
 }
 
 func TestServiceAccountWritesUsers(t *testing.T) {
-	c := service(t)
+	c := directory_tester.Service(t)
 	name := fmt.Sprintf("uid=authorized,ou=people,%s", c.Base())
 	assert.FatalOnError(
 		t,
@@ -43,7 +44,7 @@ func TestServiceAccountWritesUsers(t *testing.T) {
 }
 
 func TestServiceAccountRefusedOutsideScope(t *testing.T) {
-	c := service(t)
+	c := directory_tester.Service(t)
 	e := c.Add(
 		fmt.Sprintf("ou=elsewhere,%s", c.Base()),
 		map[string][]string{
@@ -62,7 +63,7 @@ func TestServiceAccountRefusedOutsideScope(t *testing.T) {
 }
 
 func TestServiceAccountRefusedOnConfiguration(t *testing.T) {
-	c := service(t)
+	c := directory_tester.Service(t)
 	e := c.Modify(
 		"olcDatabase={1}mdb,cn=config",
 		map[string][]string{"olcDbIndex": {"uid eq"}},
@@ -140,8 +141,8 @@ func TestUniqueIdentifierStable(t *testing.T) {
 
 func TestAddModifyDelete(t *testing.T) {
 	c := directory.NewEnvironment()
-	name := distinguished("written")
-	assert.FatalOnError(t, c.Add(name, person("written")))
+	name := directory_tester.Distinguished("written")
+	assert.FatalOnError(t, c.Add(name, directory_tester.Attributes("written")))
 	found, e := c.Search(
 		"(uid=written)",
 		[]string{constant.NameAttribute, "sn"},
@@ -171,17 +172,27 @@ func TestAddModifyDelete(t *testing.T) {
 
 func TestAddDuplicateConflicts(t *testing.T) {
 	c := directory.NewEnvironment()
-	name := distinguished("duplicate")
-	assert.FatalOnError(t, c.Add(name, person("duplicate")))
+	name := directory_tester.Distinguished("duplicate")
+	assert.FatalOnError(
+		t,
+		c.Add(name, directory_tester.Attributes("duplicate")),
+	)
 
 	defer func() { assert.FatalOnError(t, c.Delete(name)) }()
-	assert.True(t, conflict.Is(c.Add(name, person("duplicate"))))
+	assert.True(
+		t,
+		conflict.Is(c.Add(name, directory_tester.Attributes("duplicate"))),
+	)
 }
 
 func TestDeleteMissingNotFound(t *testing.T) {
 	assert.True(
 		t,
-		not_found.Is(directory.NewEnvironment().Delete(distinguished("ghost"))),
+		not_found.Is(
+			directory.NewEnvironment().Delete(
+				directory_tester.Distinguished("ghost"),
+			),
+		),
 	)
 }
 
@@ -190,7 +201,7 @@ func TestModifyMissingNotFound(t *testing.T) {
 		t,
 		not_found.Is(
 			directory.NewEnvironment().Modify(
-				distinguished("ghost"),
+				directory_tester.Distinguished("ghost"),
 				map[string][]string{constant.NameAttribute: {"Nobody"}},
 			),
 		),
@@ -199,8 +210,8 @@ func TestModifyMissingNotFound(t *testing.T) {
 
 func TestSetPasswordAuthenticates(t *testing.T) {
 	c := directory.NewEnvironment()
-	name := distinguished("rotated")
-	attributes := person("rotated")
+	name := directory_tester.Distinguished("rotated")
+	attributes := directory_tester.Attributes("rotated")
 	attributes["userPassword"] = []string{"firstpassword"}
 	assert.FatalOnError(t, c.Add(name, attributes))
 
@@ -213,8 +224,8 @@ func TestSetPasswordAuthenticates(t *testing.T) {
 
 func TestDeleteRemovesAuthentication(t *testing.T) {
 	c := directory.NewEnvironment()
-	name := distinguished("transient")
-	attributes := person("transient")
+	name := directory_tester.Distinguished("transient")
+	attributes := directory_tester.Attributes("transient")
 	attributes["userPassword"] = []string{"transientpassword"}
 	assert.FatalOnError(t, c.Add(name, attributes))
 	_, e := c.Authenticate("transient", "transientpassword")

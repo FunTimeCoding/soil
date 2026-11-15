@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"go.uber.org/goleak"
 	"strings"
@@ -19,7 +20,7 @@ import (
 
 func TestClockGaugesLatestBackups(t *testing.T) {
 	c := mock_client.New()
-	c.Add(fixtureStanzas("backed_up.json")...)
+	c.Add(service_tester.Stanzas("backed_up.json")...)
 	m := metric.New()
 
 	for _, w := range daemon_tester.New(t, c, m, memory.New()).Workers() {
@@ -60,7 +61,7 @@ pgbackrest_backup_error{stanza="fixture",type="full"} 0
 
 func TestClockGaugesStatusOfStanzaWithoutBackups(t *testing.T) {
 	c := mock_client.New()
-	c.Add(fixtureStanzas("no_backup.json")...)
+	c.Add(service_tester.Stanzas("no_backup.json")...)
 	m := metric.New()
 
 	for _, w := range daemon_tester.New(t, c, m, memory.New()).Workers() {

@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"net/http"
 	"testing"
 )
@@ -65,7 +65,7 @@ func TestSessionUsesMiddleware(t *testing.T) {
 
 func TestSessionAcceptsServiceBearerWithoutSigningIn(t *testing.T) {
 	m := http.NewServeMux()
-	guard.New(m, []string{"alfa"}).WithSession(refuse).Session(
+	guard.New(m, []string{"alfa"}).WithSession(web_tester.Refuse).Session(
 		"GET /target",
 		web_tester.Serve,
 	)
@@ -75,7 +75,7 @@ func TestSessionAcceptsServiceBearerWithoutSigningIn(t *testing.T) {
 
 func TestSessionWithWrongBearerStillNeedsSignIn(t *testing.T) {
 	m := http.NewServeMux()
-	guard.New(m, []string{"alfa"}).WithSession(refuse).Session(
+	guard.New(m, []string{"alfa"}).WithSession(web_tester.Refuse).Session(
 		"GET /target",
 		web_tester.Serve,
 	)
@@ -110,10 +110,10 @@ func TestTokenlessGuardRefusesEveryProtectedRoute(t *testing.T) {
 	)
 	m := http.NewServeMux()
 	guard.New(m, nil).Open("GET /target", web_tester.Serve)
-	assert.Integer(t, http.StatusOK, served(m, "/target").Code)
+	assert.Integer(t, http.StatusOK, web_tester.Served(m, "/target").Code)
 	assert.Integer(
 		t,
 		http.StatusNotFound,
-		served(m, constant.ReachablePath).Code,
+		web_tester.Served(m, constant.ReachablePath).Code,
 	)
 }

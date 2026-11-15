@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/types/service"
+	"github.com/funtimecoding/soil/pkg/system/unit/service_tester"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestNewUnitServiceCarriesOwningPackage(t *testing.T) {
 		constant.ServiceRunning,
 		"/lib/systemd/system/foxtrot.service",
 		"foxtrot",
-		servicePolicies(),
+		service_tester.Policies(),
 		map[string]bool{"foxtrot": true},
 	)
 	assert.String(t, "foxtrot.service", v.Name)
@@ -28,7 +29,7 @@ func TestNewUnitServiceWithoutPackageCarriesNone(t *testing.T) {
 		constant.ServiceFailed,
 		"/etc/systemd/system/charlie.service",
 		"",
-		servicePolicies(),
+		service_tester.Policies(),
 		map[string]bool{},
 	)
 	assert.String(t, "charlie.service", v.Name)

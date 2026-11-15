@@ -8,10 +8,7 @@ import (
 )
 
 func TestApplyPatternUnknownHole(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("census/src"),
-	)
+	d := service_tester.Prepare(t, "pattern/src")
 	s := service_tester.NewService(t)
 	r, apply, e := s.Pattern.ApplyPattern(
 		t.Context(),

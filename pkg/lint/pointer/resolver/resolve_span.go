@@ -26,29 +26,17 @@ func (r *Resolver) resolveSpan(
 	case constant.PointerClassSystem:
 		return resolveSystem(c.Span)
 	case constant.PointerClassPath:
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonSystem
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonSystem)
 	case constant.PointerClassImport:
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonImport
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonImport)
 	case constant.PointerClassPattern:
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonPattern
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonPattern)
 	case constant.PointerClassTest:
 		return r.resolveTestName(c.Span)
 	case constant.PointerClassBareSymbol:
-		result := pointer.NewResolution(constant.VerdictTallied)
-		result.Reason = constant.ReasonBareSymbol
-
-		return result
+		return pointer.NewUnchecked(constant.ReasonBareSymbol)
 	case constant.PointerClassAbsolute:
-		return pointer.NewResolution(constant.VerdictAbsolute)
+		return pointer.NewConcern(constant.AbsolutePointerKey)
 	case constant.PointerClassSibling:
 		return r.resolveSibling(path, c.Span)
 	case constant.PointerClassSymbol:
@@ -57,5 +45,5 @@ func (r *Resolver) resolveSpan(
 		return r.resolveRepository(c.Span)
 	}
 
-	return pointer.NewResolution(constant.VerdictLive)
+	return pointer.NewLive("")
 }

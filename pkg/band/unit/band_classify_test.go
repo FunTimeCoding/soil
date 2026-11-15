@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/band"
 	"github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/band/unit/band_server"
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/forbidden"
@@ -16,7 +17,11 @@ import (
 
 func TestAccessDeniedFaultIsForbidden(t *testing.T) {
 	c := band.New(
-		faulting(t, http.StatusBadRequest, constant.FixtureAccessDeniedFault),
+		band_server.New(
+			t,
+			http.StatusBadRequest,
+			constant.FixtureAccessDeniedFault,
+		),
 		constant.DefaultUser,
 		"secret",
 	)
@@ -27,7 +32,7 @@ func TestAccessDeniedFaultIsForbidden(t *testing.T) {
 
 func TestSenderFaultOfOurOwnEnvelopeIsOursToLookAt(t *testing.T) {
 	c := band.New(
-		faulting(
+		band_server.New(
 			t,
 			http.StatusBadRequest,
 			constant.FixtureInvalidParameterFault,
@@ -43,7 +48,7 @@ func TestSenderFaultOfOurOwnEnvelopeIsOursToLookAt(t *testing.T) {
 
 func TestTimedOutFaultIsUnavailable(t *testing.T) {
 	c := band.New(
-		faulting(
+		band_server.New(
 			t,
 			http.StatusInternalServerError,
 			constant.FixtureTimedOutFault,
@@ -58,7 +63,7 @@ func TestTimedOutFaultIsUnavailable(t *testing.T) {
 
 func TestProxysServiceUnavailableIsUnavailable(t *testing.T) {
 	c := band.New(
-		faulting(t, http.StatusServiceUnavailable, ""),
+		band_server.New(t, http.StatusServiceUnavailable, ""),
 		constant.DefaultUser,
 		"secret",
 	)
@@ -69,7 +74,7 @@ func TestProxysServiceUnavailableIsUnavailable(t *testing.T) {
 
 func TestRefusedCredentialIsOursToLookAt(t *testing.T) {
 	c := band.New(
-		faulting(t, http.StatusUnauthorized, ""),
+		band_server.New(t, http.StatusUnauthorized, ""),
 		constant.DefaultUser,
 		"secret",
 	)

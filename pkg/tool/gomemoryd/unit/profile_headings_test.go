@@ -5,14 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/save_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"testing"
 )
 
 func TestProfileHeadingsReadBackServedTiers(t *testing.T) {
 	o := service_tester.New(t)
-	standing := createTagged(t, o, "standing rule", constant.AlwaysTag)
-	retry, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
+	standing := o.CreateTagged("standing rule", constant.AlwaysTag)
+	retry, e := o.Service.CreateMemory(save_tester.Scoped("retry policy", ""))
 	assert.FatalOnError(t, e)
 	result, _, f := o.Service.Profile(constant.FixtureContent, "", true)
 	assert.FatalOnError(t, f)
@@ -28,8 +29,8 @@ func TestProfileHeadingsReadBackServedTiers(t *testing.T) {
 
 func TestProfileHeadingsSkipIndexTier(t *testing.T) {
 	o := service_tester.New(t)
-	createTagged(t, o, "standing rule", constant.AlwaysTag)
-	_, e := o.Service.CreateMemory(scopedOption("retry policy", ""))
+	o.CreateTagged("standing rule", constant.AlwaysTag)
+	_, e := o.Service.CreateMemory(save_tester.Scoped("retry policy", ""))
 	assert.FatalOnError(t, e)
 	result, _, f := o.Service.Profile("", "", true)
 	assert.FatalOnError(t, f)

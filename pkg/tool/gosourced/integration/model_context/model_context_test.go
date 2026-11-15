@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/model_context_tester"
 	"os"
@@ -119,7 +119,7 @@ func TestRenameSymbolNamesPackageThatDoesNotLoad(t *testing.T) {
 		t,
 		"../../service/testdata/rename-function/src",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		o.Directory,
 		"pkg/broken/broken.go",

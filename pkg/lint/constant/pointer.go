@@ -22,13 +22,13 @@ const (
 	FragmentTargetKey  = "fragment_target"
 	FragmentTargetText = "Fragment on a non-markdown target - only markdown headings can be referenced"
 
-	FragmentSeparator = "#"
-	LocatorSeparator  = "://"
-	HintSeparator     = " - "
+	FragmentSeparator    = "#"
+	LocatorSeparator     = "://"
+	HintSeparator        = " - "
 	UndeclaredSymbolHint = "the package declares no such symbol"
-	NearestPrefix     = "nearest: "
-	NearestFormat     = "#%s (%q)"
-	NearestLimit      = 3
+	NearestPrefix        = "nearest: "
+	NearestFormat        = "#%s (%q)"
+	NearestLimit         = 3
 
 	PluginRootPrefix = "${CLAUDE_PLUGIN_ROOT}/"
 
@@ -56,24 +56,14 @@ const (
 )
 
 var (
-	VerdictKeys = map[Verdict]string{
-		VerdictDead:           DeadPointerKey,
-		VerdictAbsolute:       AbsolutePointerKey,
-		VerdictConvention:     ConventionWordKey,
-		VerdictBareSlash:      BareSlashKey,
-		VerdictUndeclaredHost: UndeclaredHostKey,
-		VerdictDeadHeading:    DeadHeadingKey,
-		VerdictFragmentTarget: FragmentTargetKey,
-	}
-
-	VerdictTexts = map[Verdict]string{
-		VerdictDead:           DeadPointerText,
-		VerdictAbsolute:       AbsolutePointerText,
-		VerdictConvention:     ConventionWordText,
-		VerdictBareSlash:      BareSlashText,
-		VerdictUndeclaredHost: UndeclaredHostText,
-		VerdictDeadHeading:    DeadHeadingText,
-		VerdictFragmentTarget: FragmentTargetText,
+	PointerTexts = map[string]string{
+		DeadPointerKey:     DeadPointerText,
+		AbsolutePointerKey: AbsolutePointerText,
+		ConventionWordKey:  ConventionWordText,
+		BareSlashKey:       BareSlashText,
+		UndeclaredHostKey:  UndeclaredHostText,
+		DeadHeadingKey:     DeadHeadingText,
+		FragmentTargetKey:  FragmentTargetText,
 	}
 
 	ImplicitHosts = []string{webConstant.Localhost, webConstant.Loopback}

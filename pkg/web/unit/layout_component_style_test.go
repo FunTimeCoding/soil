@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
-	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
+	"github.com/funtimecoding/soil/pkg/web/web_tester"
 	"strings"
 	"testing"
 )

@@ -3,12 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/time/window"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/store_tester"
 	"testing"
 	"time"
 )
 
 func TestTopAggregates(t *testing.T) {
-	s := newStore(t)
+	s := store_tester.New(t)
 
 	if e := s.Create(
 		record.Record{

@@ -22,6 +22,4 @@ const (
 	ProbeMinimum = 5 * time.Second
 	ProbeMaximum = 5 * time.Minute
 	Lasting      = 5 * time.Minute
-
-	FixtureSignalWait = 5 * time.Second
 )

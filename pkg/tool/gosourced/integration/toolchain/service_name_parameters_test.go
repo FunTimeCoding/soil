@@ -3,16 +3,14 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/naming"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestNameParametersNamesEveryBlankContext(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("name-parameters/src"),
-	)
+	d := service_tester.Prepare(t, "name-parameters/src")
 	r, e := service_tester.NewService(t).Symbol.NameParameters(
 		t.Context(),
 		d,
@@ -54,7 +52,7 @@ func TestNameParametersNamesEveryBlankContext(t *testing.T) {
 		"func Literal() func(context.Context) string {",
 		source,
 	)
-	assertFormatted(t, source)
+	rewrite_tester.Formatted(t, source)
 	assert.StringContains(
 		t,
 		"func Sub(_ context.Context) {}",
@@ -63,10 +61,7 @@ func TestNameParametersNamesEveryBlankContext(t *testing.T) {
 }
 
 func TestNameParametersCoversSubtree(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("name-parameters/src"),
-	)
+	d := service_tester.Prepare(t, "name-parameters/src")
 	r, e := service_tester.NewService(t).Symbol.NameParameters(
 		t.Context(),
 		d,
@@ -89,10 +84,7 @@ func TestNameParametersCoversSubtree(t *testing.T) {
 }
 
 func TestNameParametersNamesOnlyListedFunctions(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("name-parameters/src"),
-	)
+	d := service_tester.Prepare(t, "name-parameters/src")
 	r, e := service_tester.NewService(t).Symbol.NameParameters(
 		t.Context(),
 		d,
@@ -121,10 +113,7 @@ func TestNameParametersNamesOnlyListedFunctions(t *testing.T) {
 }
 
 func TestNameParametersDryRunWritesNothing(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("name-parameters/src"),
-	)
+	d := service_tester.Prepare(t, "name-parameters/src")
 	before := service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go")
 	r, e := service_tester.NewService(t).Symbol.NameParameters(
 		t.Context(),
@@ -140,7 +129,7 @@ func TestNameParametersDryRunWritesNothing(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.StringContains(t, "Get: named x", joinedConcerns(r))
+	assert.StringContains(t, "Get: named x", rewrite_tester.JoinedConcerns(r))
 	assert.String(
 		t,
 		before,
@@ -149,17 +138,17 @@ func TestNameParametersDryRunWritesNothing(t *testing.T) {
 }
 
 func TestNameParametersRefusesNameBodyDeclares(t *testing.T) {
-	assertNamingRefused(t, "already uses x", "Declared")
+	rewrite_tester.NamingRefused(t, "already uses x", "Declared")
 }
 
 func TestNameParametersRefusesShadowingPackageName(t *testing.T) {
-	assertNamingRefused(t, "already uses x", "Outer")
+	rewrite_tester.NamingRefused(t, "already uses x", "Outer")
 }
 
 func TestNameParametersRefusesResultOfThatName(t *testing.T) {
-	assertNamingRefused(t, "already uses x", "Result")
+	rewrite_tester.NamingRefused(t, "already uses x", "Result")
 }
 
 func TestNameParametersRefusesAmbiguousSignature(t *testing.T) {
-	assertNamingRefused(t, "ambiguous", "Twice")
+	rewrite_tester.NamingRefused(t, "ambiguous", "Twice")
 }

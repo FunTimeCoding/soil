@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/hypertext"
+	"github.com/funtimecoding/soil/pkg/hypertext/unit/hypertext_tester"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"testing"
 )
@@ -13,7 +14,11 @@ func TestTitle(t *testing.T) {
 		"Test Title",
 		hypertext.Title(
 			hypertext.Document(
-				openFixture(t, systemConstant.HypertextPath, "test.html"),
+				hypertext_tester.Open(
+					t,
+					systemConstant.HypertextPath,
+					"test.html",
+				),
 			),
 		),
 	)
@@ -32,7 +37,11 @@ func TestHeaders(t *testing.T) {
 		},
 		hypertext.Headers(
 			hypertext.Document(
-				openFixture(t, systemConstant.HypertextPath, "test.html"),
+				hypertext_tester.Open(
+					t,
+					systemConstant.HypertextPath,
+					"test.html",
+				),
 			),
 		),
 	)
@@ -44,7 +53,11 @@ func TestDivisions(t *testing.T) {
 		[]string{"Example DT", "Example DD"},
 		hypertext.Divisions(
 			hypertext.Document(
-				openFixture(t, systemConstant.HypertextPath, "test.html"),
+				hypertext_tester.Open(
+					t,
+					systemConstant.HypertextPath,
+					"test.html",
+				),
 			),
 		),
 	)
@@ -56,7 +69,11 @@ func TestTables(t *testing.T) {
 		[]string{"Example TD"},
 		hypertext.Tables(
 			hypertext.Document(
-				openFixture(t, systemConstant.HypertextPath, "test.html"),
+				hypertext_tester.Open(
+					t,
+					systemConstant.HypertextPath,
+					"test.html",
+				),
 			),
 		),
 	)

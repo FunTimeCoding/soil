@@ -1,13 +1,8 @@
 package runner_tester
 
-import "time"
+import "github.com/funtimecoding/soil/pkg/assert"
 
 func (o *Tester) WaitForFinish() {
 	o.t.Helper()
-
-	select {
-	case <-o.Runner.Finished():
-	case <-time.After(5 * time.Second):
-		o.t.Fatal("runner did not finish")
-	}
+	assert.Signalled(o.t, o.Runner.Finished())
 }

@@ -2,14 +2,14 @@ package service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/event/mock_notifier"
+	"github.com/funtimecoding/soil/pkg/time/clock_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"testing"
-	"time"
 )
 
 type Tester struct {
 	Service  *service.Service
 	Notifier *mock_notifier.Notifier
-	now      *time.Time
+	clock    *clock_tester.Clock
 	t        *testing.T
 }

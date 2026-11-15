@@ -5,19 +5,21 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/directory"
+	"github.com/funtimecoding/soil/pkg/directory/directory_tester"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/service_tester"
 	"os"
 	"testing"
 )
 
 func TestMain(m *testing.M) {
-	bootstrap(directory.NewEnvironment())
+	directory_tester.Bootstrap(directory.NewEnvironment())
 	os.Exit(m.Run())
 }
 
 func TestUserLifecycle(t *testing.T) {
-	s := stack(t)
+	s := service_tester.Stack(t)
 	created, e := s.CreateUser(
 		"lifecycle",
 		"Lifecycle Person",
@@ -43,7 +45,7 @@ func TestUserLifecycle(t *testing.T) {
 }
 
 func TestCreateUserDuplicateConflicts(t *testing.T) {
-	s := stack(t)
+	s := service_tester.Stack(t)
 	_, e := s.CreateUser("twice", "Twice", "Person", "", "")
 	assert.FatalOnError(t, e)
 
@@ -53,7 +55,7 @@ func TestCreateUserDuplicateConflicts(t *testing.T) {
 }
 
 func TestSetPasswordThenAuthenticate(t *testing.T) {
-	s := stack(t)
+	s := service_tester.Stack(t)
 	_, e := s.CreateUser("rotate", "Rotate", "Person", "", "firstpassword")
 	assert.FatalOnError(t, e)
 
@@ -68,7 +70,7 @@ func TestSetPasswordThenAuthenticate(t *testing.T) {
 }
 
 func TestGroupLifecycle(t *testing.T) {
-	s := stack(t)
+	s := service_tester.Stack(t)
 	created, e := s.CreateGroup("editors")
 	assert.FatalOnError(t, e)
 	assert.String(t, "editors", created.Name)
@@ -91,7 +93,7 @@ func TestGroupLifecycle(t *testing.T) {
 }
 
 func TestAddMemberUnknownUser(t *testing.T) {
-	s := stack(t)
+	s := service_tester.Stack(t)
 	_, e := s.CreateGroup("empty")
 	assert.FatalOnError(t, e)
 
@@ -101,7 +103,7 @@ func TestAddMemberUnknownUser(t *testing.T) {
 }
 
 func TestGroupNumberIncrements(t *testing.T) {
-	s := stack(t)
+	s := service_tester.Stack(t)
 	first, e := s.CreateGroup("alfa")
 	assert.FatalOnError(t, e)
 

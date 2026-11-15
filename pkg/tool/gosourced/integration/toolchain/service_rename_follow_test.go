@@ -12,7 +12,7 @@ import (
 )
 
 func TestRenameMovesFunctionsFile(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -33,7 +33,7 @@ func TestRenameMovesFunctionsFile(t *testing.T) {
 }
 
 func TestRenameMovesTypesFile(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -50,7 +50,7 @@ func TestRenameMovesTypesFile(t *testing.T) {
 }
 
 func TestRenameLeavesFileWithTwoIdentities(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -70,7 +70,7 @@ func TestRenameLeavesFileWithTwoIdentities(t *testing.T) {
 }
 
 func TestRenameLeavesFileWhoseNameIsTaken(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	r, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,
@@ -96,7 +96,7 @@ func TestRenameLeavesFileWhoseNameIsTaken(t *testing.T) {
 }
 
 func TestVisibilityFlipLeavesFile(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	r, e := service_tester.NewService(t).Symbol.ChangeVisibility(
 		t.Context(),
 		d,
@@ -115,7 +115,7 @@ func TestVisibilityFlipLeavesFile(t *testing.T) {
 }
 
 func TestRenameDryRunLeavesFile(t *testing.T) {
-	d := renameFollowFixture(t)
+	d := service_tester.Prepare(t, "rename-follow/src")
 	_, e := service_tester.NewService(t).Symbol.Rename(
 		t.Context(),
 		d,

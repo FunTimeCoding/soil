@@ -6,12 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/revision_tester"
 	"testing"
 )
 
 func TestClientReadsDiff(t *testing.T) {
-	r := diffRepository(t)
-	c := mountedClient(t, r.Clone, generativeConstant.ModelContextTestToken)
+	r := revision_tester.DiffRepository(t)
+	c := base.Module(t, r.Clone, generativeConstant.ModelContextTestToken)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	d, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "echo"})
 	assert.FatalOnError(t, e)
@@ -26,8 +28,8 @@ func TestClientReadsDiff(t *testing.T) {
 }
 
 func TestClientReadsTextOfChange(t *testing.T) {
-	r := diffRepository(t)
-	c := mountedClient(t, r.Clone, generativeConstant.ModelContextTestToken)
+	r := revision_tester.DiffRepository(t)
+	c := base.Module(t, r.Clone, generativeConstant.ModelContextTestToken)
 	d, e := c.GetDiff(
 		t.Context(),
 		&client.GetDiffParams{Module: "echo", Text: new(true)},
@@ -42,15 +44,15 @@ func TestClientReadsTextOfChange(t *testing.T) {
 }
 
 func TestClientHearsUnknownModule(t *testing.T) {
-	r := diffRepository(t)
-	c := mountedClient(t, r.Clone, generativeConstant.ModelContextTestToken)
+	r := revision_tester.DiffRepository(t)
+	c := base.Module(t, r.Clone, generativeConstant.ModelContextTestToken)
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "golf"})
 	assert.True(t, not_found.Is(e))
 }
 
 func TestRefusedTokenIsError(t *testing.T) {
-	r := diffRepository(t)
-	c := mountedClient(t, r.Clone, "hotel-wrong")
+	r := revision_tester.DiffRepository(t)
+	c := base.Module(t, r.Clone, "hotel-wrong")
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "echo"})
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "diff status: 401", e.Error())

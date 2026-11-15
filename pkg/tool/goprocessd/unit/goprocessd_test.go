@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/unit/procfile_tester"
 	"sort"
 	"strings"
 	"testing"
@@ -85,7 +86,7 @@ func TestSplitNullNoTrailingNull(t *testing.T) {
 }
 
 func TestParseValidEntries(t *testing.T) {
-	path := writeProcfile(
+	path := procfile_tester.Write(
 		t,
 		"goansibled: go run cmd/goansibled/main.go\ngoclauded: go run cmd/goclauded/main.go\n",
 	)
@@ -99,7 +100,7 @@ func TestParseValidEntries(t *testing.T) {
 }
 
 func TestParseSkipsCommentsAndBlankLines(t *testing.T) {
-	path := writeProcfile(
+	path := procfile_tester.Write(
 		t,
 		"# comment\n\ngoansibled: go run cmd/goansibled/main.go\n\n# another comment\n",
 	)
@@ -110,7 +111,7 @@ func TestParseSkipsCommentsAndBlankLines(t *testing.T) {
 }
 
 func TestParseTrimsWhitespace(t *testing.T) {
-	path := writeProcfile(
+	path := procfile_tester.Write(
 		t,
 		"  goansibled  :  go run cmd/goansibled/main.go  \n",
 	)
@@ -121,13 +122,13 @@ func TestParseTrimsWhitespace(t *testing.T) {
 }
 
 func TestParseEmptyFileReturnsError(t *testing.T) {
-	path := writeProcfile(t, "")
+	path := procfile_tester.Write(t, "")
 	_, e := procfile.Parse(path)
 	assert.True(t, e != nil)
 }
 
 func TestParseCommandWithColons(t *testing.T) {
-	path := writeProcfile(t, "web: sh -c \"echo host:port\"\n")
+	path := procfile_tester.Write(t, "web: sh -c \"echo host:port\"\n")
 	entries, e := procfile.Parse(path)
 	errors.PanicOnError(e)
 	assert.String(t, "sh -c \"echo host:port\"", entries[0].Command)

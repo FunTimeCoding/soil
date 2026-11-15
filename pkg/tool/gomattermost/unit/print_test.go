@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/terminal"
-	"github.com/funtimecoding/soil/pkg/terminal/unit/command_end_recorder"
+	"github.com/funtimecoding/soil/pkg/terminal/command_end_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermost"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermost/thread_summary"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"

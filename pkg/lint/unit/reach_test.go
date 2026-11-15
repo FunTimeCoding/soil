@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/reach"
 	"github.com/funtimecoding/soil/pkg/lint/unit/transcript_tester"
 	"github.com/funtimecoding/soil/pkg/source/warm_forest"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
 	"testing"
 )
@@ -124,20 +125,20 @@ func TestReachResolvesAndCountsBashWritesFromLineDirectory(t *testing.T) {
 func TestReachTakesImportersAndKeepsDocumentsApart(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Alfa() {}\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example.org/reach/alfa\"\n\nfunc Bravo() { alfa.Alfa() }\n",
 	)
-	testutil.WriteFile(t, root, "charlie/charlie.go", "package charlie\n")
-	testutil.WriteFile(t, root, "alfa/testdata/delta.go", "package delta\n")
+	system_tester.Write(t, root, "charlie/charlie.go", "package charlie\n")
+	system_tester.Write(t, root, "alfa/testdata/delta.go", "package delta\n")
 	r := reach.Directories(
 		warm_forest.New(),
 		root,
@@ -154,7 +155,7 @@ func TestReachTakesImportersAndKeepsDocumentsApart(t *testing.T) {
 func TestReachKeepsImportersOfDeletedPackageAndDropsIt(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"bravo/bravo.go",
@@ -171,7 +172,7 @@ func TestReachKeepsImportersOfDeletedPackageAndDropsIt(t *testing.T) {
 func TestReachCarriesGraphItWidenedThrough(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		root,
 		"alfa/alfa.go",

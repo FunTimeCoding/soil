@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -16,7 +17,7 @@ func TestVariableErrorAssignment(t *testing.T) {
 			"package example\n\nfunc Example() {\n\terr := foo()\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Alfa",
 		true,
@@ -42,7 +43,7 @@ func TestVariableErrorMultiReturn(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx, err := foo()\n}\n",
 		),
 	)
-	assertReport(
+	lint_tester.Report(
 		t,
 		"Bravo",
 		true,
@@ -68,7 +69,7 @@ func TestVariableErrorComparison(t *testing.T) {
 			"package example\n\nfunc Example() bool {\n\treturn err == nil\n}\n",
 		),
 	)
-	assertReport(t, "Charlie", false, nil, "", l)
+	lint_tester.Report(t, "Charlie", false, nil, "", l)
 }
 
 func TestVariableEOkay(t *testing.T) {
@@ -78,7 +79,7 @@ func TestVariableEOkay(t *testing.T) {
 			"package example\n\nfunc Example() {\n\te := foo()\n}\n",
 		),
 	)
-	assertReport(t, "Delta", false, nil, "", l)
+	lint_tester.Report(t, "Delta", false, nil, "", l)
 }
 
 func TestVariableErrorInString(t *testing.T) {
@@ -88,7 +89,7 @@ func TestVariableErrorInString(t *testing.T) {
 			"package example\n\nfunc Example() {\n\ts := \"err := foo()\"\n\t_ = s\n}\n",
 		),
 	)
-	assertReport(t, "Alfa", false, nil, "", l)
+	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }
 
 func TestVariableErrorComment(t *testing.T) {
@@ -96,5 +97,5 @@ func TestVariableErrorComment(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("package example\n\n// err := foo()\n"),
 	)
-	assertReport(t, "Alfa", false, nil, "", l)
+	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }

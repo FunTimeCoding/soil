@@ -22,75 +22,6 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
-// Census defines model for Census.
-type Census struct {
-	Fields   []string         `json:"fields"`
-	Methods  []CensusMethod   `json:"methods"`
-	Package  string           `json:"package"`
-	Type     string           `json:"type"`
-	Unloaded []CensusUnloaded `json:"unloaded"`
-}
-
-// CensusCaller defines model for CensusCaller.
-type CensusCaller struct {
-	Count    int    `json:"count"`
-	Function string `json:"function"`
-
-	// Kind production, support, test or internal.
-	Kind    string `json:"kind"`
-	Package string `json:"package"`
-}
-
-// CensusMethod defines model for CensusMethod.
-type CensusMethod struct {
-	// Atomically It opens a transaction through the store's Atomically.
-	Atomically bool           `json:"atomically"`
-	Callers    []CensusCaller `json:"callers"`
-
-	// Calls Methods of the type it calls, through free functions too.
-	Calls []string `json:"calls"`
-
-	// Fields Receiver fields it reads.
-	Fields []string `json:"fields"`
-	File   string   `json:"file"`
-
-	// Functions Free functions of the package it reaches.
-	Functions []string `json:"functions"`
-	Name      string   `json:"name"`
-
-	// Packages The module's other packages it references.
-	Packages []string `json:"packages"`
-
-	// Reach The tables with every method it calls, transitively.
-	Reach  CensusTables `json:"reach"`
-	Tables CensusTables `json:"tables"`
-
-	// TransactionStep It takes the transaction store as a parameter.
-	TransactionStep bool `json:"transaction_step"`
-
-	// Uses Methods it calls on the module's other types, by type.
-	Uses []CensusUse `json:"uses"`
-}
-
-// CensusTables defines model for CensusTables.
-type CensusTables struct {
-	Read    []string `json:"read"`
-	Written []string `json:"written"`
-}
-
-// CensusUnloaded defines model for CensusUnloaded.
-type CensusUnloaded struct {
-	Cause   string `json:"cause"`
-	Lost    string `json:"lost"`
-	Package string `json:"package"`
-}
-
-// CensusUse defines model for CensusUse.
-type CensusUse struct {
-	Methods []string `json:"methods"`
-	Type    string   `json:"type"`
-}
-
 // CheckChange defines model for CheckChange.
 type CheckChange struct {
 	Current     []byte `json:"current"`
@@ -211,15 +142,73 @@ type PruneResponse struct {
 	Removed []string `json:"removed"`
 }
 
-// GetCensusParams defines parameters for GetCensus.
-type GetCensusParams struct {
-	Module string `form:"module" json:"module"`
+// Usage defines model for Usage.
+type Usage struct {
+	Fields   []string        `json:"fields"`
+	Methods  []UsageMethod   `json:"methods"`
+	Package  string          `json:"package"`
+	Type     string          `json:"type"`
+	Unloaded []UsageUnloaded `json:"unloaded"`
+}
 
-	// Package Full import path of the package declaring the type.
-	Package string `form:"package" json:"package"`
+// UsageCaller defines model for UsageCaller.
+type UsageCaller struct {
+	Count    int    `json:"count"`
+	Function string `json:"function"`
 
-	// Type The struct type whose methods are counted.
-	Type string `form:"type" json:"type"`
+	// Kind production, support, test or internal.
+	Kind    string `json:"kind"`
+	Package string `json:"package"`
+}
+
+// UsageMethod defines model for UsageMethod.
+type UsageMethod struct {
+	// Atomically It opens a transaction through the store's Atomically.
+	Atomically bool          `json:"atomically"`
+	Callers    []UsageCaller `json:"callers"`
+
+	// Calls Methods of the type it calls, through free functions too.
+	Calls []string `json:"calls"`
+
+	// Fields Receiver fields it reads.
+	Fields []string `json:"fields"`
+	File   string   `json:"file"`
+
+	// Functions Free functions of the package it reaches.
+	Functions []string `json:"functions"`
+	Name      string   `json:"name"`
+
+	// Packages The module's other packages it references.
+	Packages []string `json:"packages"`
+
+	// Reach The tables with every method it calls, transitively.
+	Reach  UsageTables `json:"reach"`
+	Tables UsageTables `json:"tables"`
+
+	// TransactionStep It takes the transaction store as a parameter.
+	TransactionStep bool `json:"transaction_step"`
+
+	// Uses Methods it calls on the module's other types, by type.
+	Uses []UsedType `json:"uses"`
+}
+
+// UsageTables defines model for UsageTables.
+type UsageTables struct {
+	Read    []string `json:"read"`
+	Written []string `json:"written"`
+}
+
+// UsageUnloaded defines model for UsageUnloaded.
+type UsageUnloaded struct {
+	Cause   string `json:"cause"`
+	Lost    string `json:"lost"`
+	Package string `json:"package"`
+}
+
+// UsedType defines model for UsedType.
+type UsedType struct {
+	Methods []string `json:"methods"`
+	Type    string   `json:"type"`
 }
 
 // GetDiffParams defines parameters for GetDiff.
@@ -236,14 +225,22 @@ type GetDiffParams struct {
 	Text *bool `form:"text,omitempty" json:"text,omitempty"`
 }
 
+// GetUsageParams defines parameters for GetUsage.
+type GetUsageParams struct {
+	Module string `form:"module" json:"module"`
+
+	// Package Full import path of the package declaring the type.
+	Package string `form:"package" json:"package"`
+
+	// Type The struct type whose methods are counted.
+	Type string `form:"type" json:"type"`
+}
+
 // PostCheckJSONRequestBody defines body for PostCheck for application/json ContentType.
 type PostCheckJSONRequestBody = CheckRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-
-	// (GET /api/census)
-	GetCensus(w http.ResponseWriter, r *http.Request, params GetCensusParams)
 
 	// (POST /api/check)
 	PostCheck(w http.ResponseWriter, r *http.Request)
@@ -253,6 +250,9 @@ type ServerInterface interface {
 
 	// (POST /api/index/prune)
 	PostIndexPrune(w http.ResponseWriter, r *http.Request)
+
+	// (GET /api/usage)
+	GetUsage(w http.ResponseWriter, r *http.Request, params GetUsageParams)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -263,65 +263,6 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
-
-// GetCensus operation middleware
-func (siw *ServerInterfaceWrapper) GetCensus(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-	_ = err
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetCensusParams
-
-	// ------------- Required query parameter "module" -------------
-
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "module", r.URL.Query(), &params.Module, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
-	if err != nil {
-		var requiredError *runtime.RequiredParameterError
-		if errors.As(err, &requiredError) {
-			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "module"})
-		} else {
-			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "module", Err: err})
-		}
-		return
-	}
-
-	// ------------- Required query parameter "package" -------------
-
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "package", r.URL.Query(), &params.Package, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
-	if err != nil {
-		var requiredError *runtime.RequiredParameterError
-		if errors.As(err, &requiredError) {
-			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "package"})
-		} else {
-			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "package", Err: err})
-		}
-		return
-	}
-
-	// ------------- Required query parameter "type" -------------
-
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "type", r.URL.Query(), &params.Type, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
-	if err != nil {
-		var requiredError *runtime.RequiredParameterError
-		if errors.As(err, &requiredError) {
-			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "type"})
-		} else {
-			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "type", Err: err})
-		}
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetCensus(w, r, params)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
 
 // PostCheck operation middleware
 func (siw *ServerInterfaceWrapper) PostCheck(w http.ResponseWriter, r *http.Request) {
@@ -414,6 +355,65 @@ func (siw *ServerInterfaceWrapper) PostIndexPrune(w http.ResponseWriter, r *http
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostIndexPrune(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetUsage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetUsageParams
+
+	// ------------- Required query parameter "module" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "module", r.URL.Query(), &params.Module, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "module"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "module", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "package" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "package", r.URL.Query(), &params.Package, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "package"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "package", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "type" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "type", r.URL.Query(), &params.Type, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "type"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "type", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetUsage(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -544,75 +544,11 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/diff", wrapper.GetDiff)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/census", wrapper.GetCensus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/usage", wrapper.GetUsage)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/index/prune", wrapper.PostIndexPrune)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/check", wrapper.PostCheck)
 
 	return m
-}
-
-type GetCensusRequestObject struct {
-	Params GetCensusParams
-}
-
-type GetCensusResponseObject interface {
-	VisitGetCensusResponse(w http.ResponseWriter) error
-}
-
-type GetCensus200JSONResponse Census
-
-func (response GetCensus200JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
-	_, err := buf.WriteTo(w)
-	return err
-}
-
-type GetCensus400JSONResponse Error
-
-func (response GetCensus400JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(400)
-	_, err := buf.WriteTo(w)
-	return err
-}
-
-type GetCensus404JSONResponse Error
-
-func (response GetCensus404JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(404)
-	_, err := buf.WriteTo(w)
-	return err
-}
-
-type GetCensus500JSONResponse ErrorResponse
-
-func (response GetCensus500JSONResponse) VisitGetCensusResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(500)
-	_, err := buf.WriteTo(w)
-	return err
 }
 
 type PostCheckRequestObject struct {
@@ -764,11 +700,72 @@ func (response PostIndexPrune500JSONResponse) VisitPostIndexPruneResponse(w http
 	return err
 }
 
+type GetUsageRequestObject struct {
+	Params GetUsageParams
+}
+
+type GetUsageResponseObject interface {
+	VisitGetUsageResponse(w http.ResponseWriter) error
+}
+
+type GetUsage200JSONResponse Usage
+
+func (response GetUsage200JSONResponse) VisitGetUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUsage400JSONResponse Error
+
+func (response GetUsage400JSONResponse) VisitGetUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUsage404JSONResponse Error
+
+func (response GetUsage404JSONResponse) VisitGetUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUsage500JSONResponse ErrorResponse
+
+func (response GetUsage500JSONResponse) VisitGetUsageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
-
-	// (GET /api/census)
-	GetCensus(ctx context.Context, request GetCensusRequestObject) (GetCensusResponseObject, error)
 
 	// (POST /api/check)
 	PostCheck(ctx context.Context, request PostCheckRequestObject) (PostCheckResponseObject, error)
@@ -778,6 +775,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/index/prune)
 	PostIndexPrune(ctx context.Context, request PostIndexPruneRequestObject) (PostIndexPruneResponseObject, error)
+
+	// (GET /api/usage)
+	GetUsage(ctx context.Context, request GetUsageRequestObject) (GetUsageResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -817,32 +817,6 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
-}
-
-// GetCensus operation middleware
-func (sh *strictHandler) GetCensus(w http.ResponseWriter, r *http.Request, params GetCensusParams) {
-	var request GetCensusRequestObject
-
-	request.Params = params
-
-	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
-		return sh.ssi.GetCensus(ctx, request.(GetCensusRequestObject))
-	}
-	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "GetCensus")
-	}
-
-	response, err := handler(r.Context(), w, r, request)
-
-	if err != nil {
-		sh.options.ResponseErrorHandlerFunc(w, r, err)
-	} else if validResponse, ok := response.(GetCensusResponseObject); ok {
-		if err := validResponse.VisitGetCensusResponse(w); err != nil {
-			sh.options.ResponseErrorHandlerFunc(w, r, err)
-		}
-	} else if response != nil {
-		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
-	}
 }
 
 // PostCheck operation middleware
@@ -926,48 +900,74 @@ func (sh *strictHandler) PostIndexPrune(w http.ResponseWriter, r *http.Request) 
 	}
 }
 
+// GetUsage operation middleware
+func (sh *strictHandler) GetUsage(w http.ResponseWriter, r *http.Request, params GetUsageParams) {
+	var request GetUsageRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetUsage(ctx, request.(GetUsageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetUsage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetUsageResponseObject); ok {
+		if err := validResponse.VisitGetUsageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"//8=",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

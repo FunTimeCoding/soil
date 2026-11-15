@@ -8,10 +8,7 @@ import (
 )
 
 func TestRenameModuleSamePath(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		service_tester.ServiceTestdata("module-rename/src"),
-	)
+	d := service_tester.Prepare(t, "module-rename/src")
 	s := service_tester.NewService(t)
 	r, e := s.Module.RenameModule(
 		t.Context(),

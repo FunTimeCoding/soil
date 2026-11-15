@@ -15,10 +15,16 @@ func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
 		10,
 		"",
 		false,
-		tagFilter(constant.FixtureBuildValue),
+		store_tester.TagFilter(constant.FixtureBuildValue),
 	)
 	assert.Count(t, 2, build)
-	groom := s.MustSearchKeyword("quasar", 10, "", false, tagFilter("groom"))
+	groom := s.MustSearchKeyword(
+		"quasar",
+		10,
+		"",
+		false,
+		store_tester.TagFilter("groom"),
+	)
 	assert.Count(t, 2, groom)
 }
 
@@ -27,7 +33,13 @@ func TestAbsentValueMatchesNothing(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		s.MustSearchKeyword("quasar", 10, "", false, tagFilter("absent")),
+		s.MustSearchKeyword(
+			"quasar",
+			10,
+			"",
+			false,
+			store_tester.TagFilter("absent"),
+		),
 	)
 }
 
@@ -62,7 +74,13 @@ func TestReplaceRemovesDroppedValues(t *testing.T) {
 	assert.Count(
 		t,
 		1,
-		s.MustSearchKeyword("quasar", 10, "", false, tagFilter("groom")),
+		s.MustSearchKeyword(
+			"quasar",
+			10,
+			"",
+			false,
+			store_tester.TagFilter("groom"),
+		),
 	)
 }
 
@@ -106,7 +124,7 @@ func TestCollectionFacetsCountEachValue(t *testing.T) {
 
 func TestPanelQueryShape(t *testing.T) {
 	s := store_tester.TaggedStore(t)
-	filter := tagFilter(constant.FixtureBuildValue)
+	filter := store_tester.TagFilter(constant.FixtureBuildValue)
 	found := s.MustSearchKeyword("quasar", 10, "", false, filter)
 	unread := s.EnrichResults(
 		store.ExcludePaths(found, []string{"alfa.md"}),
@@ -132,7 +150,7 @@ func TestRepeatedValueStoresOnce(t *testing.T) {
 			},
 		),
 	)
-	filter := tagFilter(constant.FixtureBuildValue)
+	filter := store_tester.TagFilter(constant.FixtureBuildValue)
 	results := s.EnrichResults(
 		s.MustSearchKeyword("quasar", 10, "", false, filter),
 		filter,

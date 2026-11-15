@@ -6,20 +6,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/errors/unit/reporter_tester"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"github.com/getsentry/sentry-go"
-	"net/http"
 	"strings"
 	"testing"
 	"time"
 )
 
 func TestPrintingReporterStillSendsToSentry(t *testing.T) {
-	s, last := upstream_tester.New(t, http.StatusOK, "{}")
+	s := upstream_server.New(t, upstream_server.WithAnswer("{}"))
 	var b bytes.Buffer
-	r := sendingReporter(
+	r := reporter_tester.Sending(
 		t,
 		join.Empty("http://key@", strings.TrimPrefix(s.URL, "http://"), "/1"),
 		&b,
@@ -27,14 +27,13 @@ func TestPrintingReporterStillSendsToSentry(t *testing.T) {
 	assert.NotNil(t, r.Hub())
 	r.CaptureException(fmt.Errorf("embed refused"))
 	assert.True(t, r.Hub().Flush(2*time.Second))
-	assert.NotNil(t, last())
-	assert.StringContains(t, "/api/1/envelope/", last().URL.Path)
+	assert.StringContains(t, "/api/1/envelope/", s.Last().URL.Path)
 	assert.StringContains(t, "alfa: embed refused", b.String())
 }
 
 func TestPrintingReporterPrintsCapturedException(t *testing.T) {
 	var b bytes.Buffer
-	r := printingReporter(t, &b)
+	r := reporter_tester.Printing(t, &b)
 	r.CaptureException(fmt.Errorf("embed refused"))
 	assert.String(
 		t,
@@ -57,7 +56,7 @@ func TestPrintingReporterPrintsCapturedException(t *testing.T) {
 
 func TestPrintingReporterPrintsCaptureContext(t *testing.T) {
 	var b bytes.Buffer
-	r := printingReporter(t, &b)
+	r := reporter_tester.Printing(t, &b)
 	r.CaptureWithContext(
 		fmt.Errorf("embed refused"),
 		"request",
@@ -69,7 +68,7 @@ func TestPrintingReporterPrintsCaptureContext(t *testing.T) {
 
 func TestPrintingReporterPrintsRecoveredPanic(t *testing.T) {
 	var b bytes.Buffer
-	r := printingReporter(t, &b)
+	r := reporter_tester.Printing(t, &b)
 	r.Recover("charlie broke")
 	assert.StringContains(t, "alfa: charlie broke", b.String())
 	assert.StringContains(

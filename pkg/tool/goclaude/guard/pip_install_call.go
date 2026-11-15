@@ -1,25 +1,21 @@
 package guard
 
-import (
-	"mvdan.cc/sh/v3/syntax"
-	"path"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goclaude/guard/shell_script"
 
-func pipInstallCall(call *syntax.CallExpr) bool {
-	base := path.Base(call.Args[0].Lit())
-	pip := base == "pip" || base == "pip3"
+func pipInstallCall(c *shell_script.Call) bool {
+	pip := c.Name == "pip" || c.Name == "pip3"
 
-	if !pip && base != "python" && base != "python3" {
+	if !pip && c.Name != "python" && c.Name != "python3" {
 		return false
 	}
 
 	module := false
 
-	for i, argument := range call.Args[1:] {
+	for i, argument := range c.Words[1:] {
 		literal := argument.Lit()
 
-		if !pip && literal == "-m" && i+2 < len(call.Args) {
-			next := call.Args[i+2].Lit()
+		if !pip && literal == "-m" && i+2 < len(c.Words) {
+			next := c.Words[i+2].Lit()
 
 			if next == "pip" || next == "pip3" {
 				module = true

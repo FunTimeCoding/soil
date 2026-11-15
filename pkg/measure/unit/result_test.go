@@ -5,14 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/measure/count"
 	"github.com/funtimecoding/soil/pkg/measure/file"
 	"github.com/funtimecoding/soil/pkg/measure/result"
+	"github.com/funtimecoding/soil/pkg/measure/unit/measure_tester"
 	"testing"
 )
 
 func TestByLanguageSortsByCode(t *testing.T) {
 	r := result.New()
-	r.Add(file.New("a.go", "Go", counted(2, 1, 0)))
-	r.Add(file.New("b.md", "Markdown", counted(9, 0, 1)))
-	r.Add(file.New("c.go", "Go", counted(3, 0, 0)))
+	r.Add(file.New("a.go", "Go", measure_tester.Counted(2, 1, 0)))
+	r.Add(file.New("b.md", "Markdown", measure_tester.Counted(9, 0, 1)))
+	r.Add(file.New("c.go", "Go", measure_tester.Counted(3, 0, 0)))
 	v := r.ByLanguage()
 	assert.Count(t, 2, v)
 	assert.String(t, "Markdown", v[0].Language)

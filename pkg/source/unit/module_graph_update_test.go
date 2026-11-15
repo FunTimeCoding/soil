@@ -3,19 +3,20 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/source/unit/module_graph_tester"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestUpdateFollowsBodyEdit(t *testing.T) {
-	_, user := replacedModules(t)
-	updateMatchesBuild(
+	_, user := module_graph_tester.Replaced(t)
+	module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"user/user.go",
@@ -26,18 +27,18 @@ func TestUpdateFollowsBodyEdit(t *testing.T) {
 }
 
 func TestUpdateFollowsNewPackageAndImport(t *testing.T) {
-	_, user := replacedModules(t)
-	g := updateMatchesBuild(
+	_, user := module_graph_tester.Replaced(t)
+	g := module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"extra/extra.go",
 				"package extra\n\nfunc Extra() string {\n\treturn \"extra\"\n}\n",
 			)
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"user/user.go",
@@ -49,8 +50,8 @@ func TestUpdateFollowsNewPackageAndImport(t *testing.T) {
 }
 
 func TestUpdateFollowsDeletedPackage(t *testing.T) {
-	_, user := replacedModules(t)
-	g := updateMatchesBuild(
+	_, user := module_graph_tester.Replaced(t)
+	g := module_graph_tester.Updated(
 		t,
 		user,
 		func() {
@@ -62,12 +63,12 @@ func TestUpdateFollowsDeletedPackage(t *testing.T) {
 }
 
 func TestUpdateFollowsTestOnlyDirectory(t *testing.T) {
-	_, user := replacedModules(t)
-	updateMatchesBuild(
+	_, user := module_graph_tester.Replaced(t)
+	module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"charlie/unit/only_test.go",
@@ -78,17 +79,17 @@ func TestUpdateFollowsTestOnlyDirectory(t *testing.T) {
 }
 
 func TestUpdateRebuildsWhenTagsChange(t *testing.T) {
-	_, user := replacedModules(t)
+	_, user := module_graph_tester.Replaced(t)
 	tagged := "//go:build custom\n\npackage user\n\nfunc Tagged() string {\n\treturn \"tagged\"\n}\n"
-	g := updateMatchesBuild(
+	g := module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(t, user, "user/tagged.go", tagged)
+			system_tester.Write(t, user, "user/tagged.go", tagged)
 		},
 	)
 	assert.Strings(t, []string{"custom"}, g.Tags)
-	updateMatchesBuild(
+	module_graph_tester.Updated(
 		t,
 		user,
 		func() {
@@ -101,18 +102,18 @@ func TestUpdateRebuildsWhenTagsChange(t *testing.T) {
 }
 
 func TestUpdateFollowsReplacedModule(t *testing.T) {
-	library, user := replacedModules(t)
-	testutil.WriteFile(
+	library, user := module_graph_tester.Replaced(t)
+	system_tester.Write(
 		t,
 		library,
 		"q/q.go",
 		"package q\n\nfunc Q() string {\n\treturn \"q\"\n}\n",
 	)
-	g := updateMatchesBuild(
+	g := module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				library,
 				"lib.go",
@@ -121,11 +122,11 @@ func TestUpdateFollowsReplacedModule(t *testing.T) {
 		},
 	)
 	assert.NotNil(t, g.Nodes["other.test/lib/q"])
-	g = updateMatchesBuild(
+	g = module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				library,
 				"lib.go",
@@ -137,24 +138,24 @@ func TestUpdateFollowsReplacedModule(t *testing.T) {
 }
 
 func TestUpdateKeepsWhatUnchangedReplacedPackageReaches(t *testing.T) {
-	library, user := replacedModules(t)
-	testutil.WriteFile(
+	library, user := module_graph_tester.Replaced(t)
+	system_tester.Write(
 		t,
 		library,
 		"q/q.go",
 		"package q\n\nfunc Q() string {\n\treturn \"q\"\n}\n",
 	)
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		library,
 		"lib.go",
 		"package lib\n\nimport \"other.test/lib/q\"\n\nfunc Name() string {\n\treturn q.Q()\n}\n",
 	)
-	g := updateMatchesBuild(
+	g := module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"user/more.go",
@@ -166,12 +167,12 @@ func TestUpdateKeepsWhatUnchangedReplacedPackageReaches(t *testing.T) {
 }
 
 func TestUpdateRebuildsWhenGoModChanges(t *testing.T) {
-	library, user := replacedModules(t)
-	updateMatchesBuild(
+	library, user := module_graph_tester.Replaced(t)
+	module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"go.mod",
@@ -185,12 +186,12 @@ func TestUpdateRebuildsWhenGoModChanges(t *testing.T) {
 }
 
 func TestUpdateIgnoresWhatModuleDoesNotBuild(t *testing.T) {
-	_, user := replacedModules(t)
-	updateMatchesBuild(
+	_, user := module_graph_tester.Replaced(t)
+	module_graph_tester.Updated(
 		t,
 		user,
 		func() {
-			testutil.WriteFile(
+			system_tester.Write(
 				t,
 				user,
 				"user/testdata/fixture.go",

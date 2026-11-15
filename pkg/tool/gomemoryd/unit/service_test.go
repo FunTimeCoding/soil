@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/save_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"testing"
 )
@@ -139,7 +140,7 @@ func TestServiceCreateMemoryRejectsReservedScope(t *testing.T) {
 		constant.AllScope,
 		constant.DefaultScope,
 	} {
-		_, e := o.Service.CreateMemory(scopedOption("reserved", reserved))
+		_, e := o.Service.CreateMemory(save_tester.Scoped("reserved", reserved))
 		assert.True(t, validation.Is(e))
 	}
 }
@@ -152,10 +153,10 @@ func TestServiceProfileRejectsReservedScope(t *testing.T) {
 
 func TestServiceCreateRoutesCollectionByScope(t *testing.T) {
 	o := service_tester.New(t)
-	_, e := o.Service.CreateMemory(scopedOption("default entry", ""))
+	_, e := o.Service.CreateMemory(save_tester.Scoped("default entry", ""))
 	assert.FatalOnError(t, e)
 	assert.String(t, "memories", o.Indexer.Pushed[0].Collection)
-	_, f := o.Service.CreateMemory(scopedOption("scoped entry", "alfa"))
+	_, f := o.Service.CreateMemory(save_tester.Scoped("scoped entry", "alfa"))
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, o.Indexer.Pushed)
 	assert.String(t, "alfa", o.Indexer.Pushed[1].Collection)
@@ -166,7 +167,7 @@ func TestServiceCreateRoutesCollectionByScope(t *testing.T) {
 
 func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {
 	o := service_tester.New(t)
-	p := scopedOption("scoped entry", "alfa")
+	p := save_tester.Scoped("scoped entry", "alfa")
 	p.Metadata = map[string]string{"kind": "mechanism"}
 	p.Ordinal = 2
 	m, e := o.Service.CreateMemory(p)
@@ -185,7 +186,7 @@ func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {
 
 func TestServiceCreateMemoryWithBase(t *testing.T) {
 	o := service_tester.New(t)
-	p := scopedOption("error capture", "")
+	p := save_tester.Scoped("error capture", "")
 	p.Base = new("../soil/doc/ai/spec/error-handling")
 	m, e := o.Service.CreateMemory(p)
 	assert.FatalOnError(t, e)
@@ -198,8 +199,8 @@ func TestServiceCreateMemoryWithBase(t *testing.T) {
 
 func TestServiceUpdateKeepsBaseWhenOmitted(t *testing.T) {
 	o := service_tester.New(t)
-	m := createBased(t, o)
-	updated, _, e := o.Service.UpdateMemory(m.Identifier, updateOption())
+	m := o.CreateBased()
+	updated, _, e := o.Service.UpdateMemory(m.Identifier, save_tester.Update())
 	assert.FatalOnError(t, e)
 	assert.String(t, "doc", updated.Metadata[constant.BaseKey])
 	assert.String(t, "mechanism", updated.Metadata["kind"])
@@ -207,8 +208,8 @@ func TestServiceUpdateKeepsBaseWhenOmitted(t *testing.T) {
 
 func TestServiceUpdateClearsBaseWhenEmpty(t *testing.T) {
 	o := service_tester.New(t)
-	m := createBased(t, o)
-	q := updateOption()
+	m := o.CreateBased()
+	q := save_tester.Update()
 	q.Base = new("")
 	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
@@ -219,8 +220,8 @@ func TestServiceUpdateClearsBaseWhenEmpty(t *testing.T) {
 
 func TestServiceUpdateReplacesBase(t *testing.T) {
 	o := service_tester.New(t)
-	m := createBased(t, o)
-	q := updateOption()
+	m := o.CreateBased()
+	q := save_tester.Update()
 	q.Base = new("pkg")
 	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
@@ -230,18 +231,18 @@ func TestServiceUpdateReplacesBase(t *testing.T) {
 
 func TestServiceProfileScoped(t *testing.T) {
 	o := service_tester.New(t)
-	_, e := o.Service.CreateMemory(scopedOption("default entry", ""))
+	_, e := o.Service.CreateMemory(save_tester.Scoped("default entry", ""))
 	assert.FatalOnError(t, e)
-	_, f := o.Service.CreateMemory(scopedOption("scoped entry", "alfa"))
+	_, f := o.Service.CreateMemory(save_tester.Scoped("scoped entry", "alfa"))
 	assert.FatalOnError(t, f)
 	parent, g := o.Service.GetMemory(2)
 	assert.FatalOnError(t, g)
-	second := scopedOption("second shard", "alfa")
+	second := save_tester.Scoped("second shard", "alfa")
 	second.ParentIdentifier = &parent.Identifier
 	second.Ordinal = 2
 	_, h := o.Service.CreateMemory(second)
 	assert.FatalOnError(t, h)
-	first := scopedOption("first shard", "alfa")
+	first := save_tester.Scoped("first shard", "alfa")
 	first.ParentIdentifier = &parent.Identifier
 	first.Ordinal = 1
 	_, i := o.Service.CreateMemory(first)
@@ -300,8 +301,8 @@ func TestServiceUpdateMemoryNonexistentFails(t *testing.T) {
 
 func TestServiceUpdateWritesGivenEmptyContent(t *testing.T) {
 	o := service_tester.New(t)
-	m := createNamed(t, o, "pace", "", "Original body.")
-	q := renameOption(m, "pace")
+	m := o.CreateNamed("pace", "", "Original body.")
+	q := save_tester.Rename(m, "pace")
 	q.Content = ""
 	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
@@ -311,15 +312,9 @@ func TestServiceUpdateWritesGivenEmptyContent(t *testing.T) {
 
 func TestServiceRenameRewritesCitations(t *testing.T) {
 	o := service_tester.New(t)
-	m := createNamed(t, o, "pace", "", "Original body.")
-	citing := createNamed(
-		t,
-		o,
-		"citing",
-		"",
-		"See `memory://default/pace` first.",
-	)
-	q := renameOption(m, "tempo")
+	m := o.CreateNamed("pace", "", "Original body.")
+	citing := o.CreateNamed("citing", "", "See `memory://default/pace` first.")
+	q := save_tester.Rename(m, "tempo")
 	_, rewritten, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, rewritten)
@@ -331,15 +326,13 @@ func TestServiceRenameRewritesCitations(t *testing.T) {
 
 func TestServiceRenameLeavesSimilarNames(t *testing.T) {
 	o := service_tester.New(t)
-	m := createNamed(t, o, "pace", "", "Original body.")
-	citing := createNamed(
-		t,
-		o,
+	m := o.CreateNamed("pace", "", "Original body.")
+	citing := o.CreateNamed(
 		"citing",
 		"",
 		"See `memory://default/pace of work` first.",
 	)
-	q := renameOption(m, "tempo")
+	q := save_tester.Rename(m, "tempo")
 	_, rewritten, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, rewritten)
@@ -354,15 +347,13 @@ func TestServiceRenameLeavesSimilarNames(t *testing.T) {
 
 func TestServiceRenameFollowsScope(t *testing.T) {
 	o := service_tester.New(t)
-	m := createNamed(t, o, "pace", "alfa", "Original body.")
-	citing := createNamed(
-		t,
-		o,
+	m := o.CreateNamed("pace", "alfa", "Original body.")
+	citing := o.CreateNamed(
 		"citing",
 		"",
 		"See `memory://alfa/pace` and `memory://default/pace`.",
 	)
-	q := renameOption(m, "tempo")
+	q := save_tester.Rename(m, "tempo")
 	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	reloaded, f := o.Service.GetMemory(citing.Identifier)
@@ -383,9 +374,9 @@ func TestServiceMissingMemoryIsNotFound(t *testing.T) {
 
 func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
 	o := service_tester.New(t)
-	m := createNamed(t, o, "pace", "", "Original body.")
-	createNamed(t, o, "tempo", "", "Another body.")
-	q := renameOption(m, "tempo")
+	m := o.CreateNamed("pace", "", "Original body.")
+	o.CreateNamed("tempo", "", "Another body.")
+	q := save_tester.Rename(m, "tempo")
 	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.True(t, conflict.Is(e))
 	reloaded, f := o.Service.GetMemory(m.Identifier)
@@ -395,9 +386,9 @@ func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
 
 func TestServiceRenameVersionsRewrittenMemory(t *testing.T) {
 	o := service_tester.New(t)
-	m := createNamed(t, o, "pace", "", "Original body.")
-	citing := createNamed(t, o, "citing", "", "See `memory://default/pace`.")
-	q := renameOption(m, "tempo")
+	m := o.CreateNamed("pace", "", "Original body.")
+	citing := o.CreateNamed("citing", "", "See `memory://default/pace`.")
+	q := save_tester.Rename(m, "tempo")
 	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	history, f := o.Service.GetMemoryHistory(citing.Identifier)

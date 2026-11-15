@@ -39,7 +39,7 @@ func (s *Service) introduceConstructorThrough(
 		return refuse("parameters and parameters_from_sites exclude each other")
 	}
 
-	all, set, e := s.workspace.CensusPackages(directory, packagePath)
+	all, set, e := s.workspace.DependentPackages(directory, packagePath)
 
 	if e != nil {
 		return nil, nil, e
@@ -71,10 +71,10 @@ func (s *Service) introduceConstructorThrough(
 		return refuse(refusal)
 	}
 
-	census := literals.Census(all, set, named, structure, packagePath)
+	found := literals.Report(all, set, named, structure, packagePath)
 
 	if fromSites {
-		parameters = siteIntersection(census.Sites)
+		parameters = siteIntersection(found.Sites)
 	}
 
 	chosen, g := constructorParameters(structure, parameters)
@@ -107,14 +107,14 @@ func (s *Service) introduceConstructorThrough(
 		system.RelativePath(directory, path),
 		names,
 	)
-	report.Total = census.Total
-	report.Inside = census.Inside
-	report.Expected = census.Expected
+	report.Total = found.Total
+	report.Inside = found.Inside
+	report.Expected = found.Expected
 	decorations := decoration.NewSet()
 	contents := map[string][]byte{}
 	var remaining []*pattern_site.Entry
 
-	for _, site := range census.Sites {
+	for _, site := range found.Sites {
 		reason, j := rewriteSite(
 			decorations,
 			set,

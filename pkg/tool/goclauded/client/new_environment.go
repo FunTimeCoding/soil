@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
-func NewEnvironment() *Client {
+func NewEnvironment(o ...Option) *Client {
 	return New(
 		locator.Environment(
 			goclaudeConstant.HostEnvironment,
@@ -15,5 +15,6 @@ func NewEnvironment() *Client {
 		).String(),
 		environment.Exists(goclaudeConstant.UntrustedEnvironment),
 		environment.Required(goclaudeConstant.TokenEnvironment),
+		o...,
 	)
 }

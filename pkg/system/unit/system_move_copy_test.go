@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/log/log_tester"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"testing"
@@ -30,11 +31,7 @@ func TestMoveCopyLogsNothing(t *testing.T) {
 	d := t.TempDir()
 	source := join.Absolute(d, "source")
 	system.SaveFile(source, "content")
-	assert.String(
-		t,
-		"",
-		captureLog(
-			func() { system.MoveCopy(source, join.Absolute(d, "destination")) },
-		),
-	)
+	b := log_tester.Capture(t)
+	system.MoveCopy(source, join.Absolute(d, "destination"))
+	assert.String(t, "", b.String())
 }

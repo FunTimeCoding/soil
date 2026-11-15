@@ -7,6 +7,7 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
 	"path/filepath"
 	"testing"
@@ -23,7 +24,7 @@ func TestClientListsLogsAndReports(t *testing.T) {
 	system.WriteFile(filepath.Join(output, "hotel.html"), []byte("h"), 0o600)
 	o := service_tester.NewOption(t, cache, output, service_tester.NewParser(t))
 	service_tester.NewService(t, o, memory.New()).SyncLogCache(t.Context())
-	c := mountedClient(t, o, generativeConstant.ModelContextTestToken)
+	c := base.Client(t, o, generativeConstant.ModelContextTestToken)
 	logs, e := c.GetLogs(t.Context(), &client.GetLogsParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, logs.Total)
@@ -41,7 +42,7 @@ func TestRefusedTokenIsError(t *testing.T) {
 		t.TempDir(),
 		service_tester.NewParser(t),
 	)
-	c := mountedClient(t, o, "india-wrong")
+	c := base.Client(t, o, "india-wrong")
 	_, e := c.GetReports(t.Context())
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "reports status: 401", e.Error())

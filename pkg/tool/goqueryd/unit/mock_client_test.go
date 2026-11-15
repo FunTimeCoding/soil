@@ -4,13 +4,14 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/mock_client_tester"
 	"testing"
 )
 
 func TestMockRecordsEachWrite(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
-	assert.Count(t, 0, writeEach(t, m))
+	assert.Count(t, 0, mock_client_tester.WriteEach(t, m))
 	assert.Count(t, 1, m.Indexed)
 	assert.String(t, "alfa", *m.Indexed[0].Collection)
 	assert.Integer(t, 1, m.Embedded)
@@ -31,7 +32,7 @@ func TestFailingMockRecordsNoWrite(t *testing.T) {
 	m := mock_client.New()
 	defer m.Close()
 	m.Failure = errors.New("down")
-	assert.Count(t, 8, writeEach(t, m))
+	assert.Count(t, 8, mock_client_tester.WriteEach(t, m))
 	assert.Count(t, 0, m.Indexed)
 	assert.Integer(t, 0, m.Embedded)
 	assert.Integer(t, 0, m.Rechunked)

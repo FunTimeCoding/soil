@@ -2,7 +2,7 @@ package scope_tester
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func Caller(
 	helperModule string,
 ) {
 	t.Helper()
-	testutil.WriteFile(
+	system_tester.Write(
 		t,
 		directory,
 		"caller/caller.go",
