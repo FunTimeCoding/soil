@@ -74,7 +74,7 @@ require (
 	github.com/pkg/sftp v1.13.12
 	github.com/prometheus/alertmanager v0.35.0
 	github.com/prometheus/client_golang v1.25.0
-	github.com/prometheus/common v0.73.1
+	github.com/prometheus/common v0.74.0
 	github.com/refraction-networking/utls v1.8.2
 	github.com/sashabaranov/go-openai v1.43.0
 	github.com/sergi/go-diff v1.4.0
