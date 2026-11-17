@@ -6,5 +6,9 @@ import (
 )
 
 func Manufacturer(m *manufacturer.Manufacturer) *server.Manufacturer {
-	return &server.Manufacturer{Identifier: m.Identifier, Name: m.Name}
+	return &server.Manufacturer{
+		Identifier: m.Identifier,
+		Name:       m.Name,
+		Slug:       m.Slug,
+	}
 }

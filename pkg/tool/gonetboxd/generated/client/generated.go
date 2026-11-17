@@ -61,6 +61,7 @@ type Cluster struct {
 type ClusterType struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // ConfigurationAssignment Objects this context applies to, by name. Empty everywhere applies it to everything.
@@ -360,6 +361,7 @@ type Device struct {
 type DeviceRole struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 
 	// VirtualMachine Whether virtual machines can take this role.
 	VirtualMachine bool `json:"virtualMachine"`
@@ -370,6 +372,7 @@ type DeviceType struct {
 	Identifier   int32   `json:"identifier"`
 	Manufacturer *string `json:"manufacturer,omitempty"`
 	Model        string  `json:"model"`
+	Slug         string  `json:"slug"`
 }
 
 // Error defines model for Error.
@@ -425,12 +428,14 @@ type Label struct {
 type Location struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // Manufacturer defines model for Manufacturer.
 type Manufacturer struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // PhysicalAddress defines model for PhysicalAddress.
@@ -458,6 +463,7 @@ type PhysicalAddressRequest struct {
 type Platform struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // PowerOutlet defines model for PowerOutlet.
@@ -499,18 +505,21 @@ type SetLabelRequest struct {
 type Site struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // Tag defines model for Tag.
 type Tag struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // Tenant defines model for Tenant.
 type Tenant struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // Tunnel defines model for Tunnel.
@@ -525,6 +534,7 @@ type Tunnel struct {
 type TunnelGroup struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }
 
 // TunnelTermination defines model for TunnelTermination.

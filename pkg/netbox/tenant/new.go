@@ -6,7 +6,12 @@ import (
 )
 
 func New(t *netbox.Tenant) *Tenant {
-	result := &Tenant{Identifier: t.GetId(), Name: t.GetName(), Raw: t}
+	result := &Tenant{
+		Identifier: t.GetId(),
+		Name:       t.GetName(),
+		Slug:       t.GetSlug(),
+		Raw:        t,
+	}
 
 	if t.Group.IsSet() {
 		result.Group = t.Group.Get().GetName()

@@ -6,6 +6,7 @@ func New(t *netbox.Tag) *Tag {
 	return &Tag{
 		Identifier: t.GetId(),
 		Name:       t.GetName(),
+		Slug:       t.GetSlug(),
 		Raw:        t,
 		Nested: &netbox.NestedTagRequest{
 			Color: t.Color,

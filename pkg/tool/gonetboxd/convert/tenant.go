@@ -6,5 +6,9 @@ import (
 )
 
 func Tenant(t *tenant.Tenant) *server.Tenant {
-	return &server.Tenant{Identifier: t.Identifier, Name: t.Name}
+	return &server.Tenant{
+		Identifier: t.Identifier,
+		Name:       t.Name,
+		Slug:       t.Slug,
+	}
 }

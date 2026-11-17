@@ -6,5 +6,9 @@ import (
 )
 
 func Site(s *site.Site) *server.Site {
-	return &server.Site{Identifier: s.Identifier, Name: s.Name}
+	return &server.Site{
+		Identifier: s.Identifier,
+		Name:       s.Name,
+		Slug:       s.Slug,
+	}
 }

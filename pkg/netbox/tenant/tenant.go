@@ -6,5 +6,6 @@ type Tenant struct {
 	Identifier int32
 	Group      string
 	Name       string
+	Slug       string
 	Raw        *netbox.Tenant
 }

@@ -6,5 +6,9 @@ import (
 )
 
 func Location(l *location.Location) *server.Location {
-	return &server.Location{Identifier: l.Identifier, Name: l.Name}
+	return &server.Location{
+		Identifier: l.Identifier,
+		Name:       l.Name,
+		Slug:       l.Slug,
+	}
 }

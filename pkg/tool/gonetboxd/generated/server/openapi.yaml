@@ -3706,34 +3706,43 @@ components:
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
+          type: string
+        slug:
           type: string
     Tenant:
       type: object
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
           type: string
+        slug:
+          type: string
     DeviceRole:
       type: object
       required:
       - identifier
       - name
+      - slug
       - virtualMachine
       properties:
         identifier:
           type: integer
           format: int32
         name:
+          type: string
+        slug:
           type: string
         virtualMachine:
           type: boolean
@@ -3753,22 +3762,28 @@ components:
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
           type: string
+        slug:
+          type: string
     DeviceType:
       type: object
       required:
       - identifier
       - model
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         model:
+          type: string
+        slug:
           type: string
         manufacturer:
           type: string
@@ -3882,11 +3897,14 @@ components:
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
+          type: string
+        slug:
           type: string
     Cluster:
       type: object
@@ -4064,11 +4082,14 @@ components:
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
+          type: string
+        slug:
           type: string
     CreateLocationRequest:
       type: object
@@ -4087,11 +4108,14 @@ components:
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
+          type: string
+        slug:
           type: string
     WirelessNetwork:
       type: object
@@ -4232,22 +4256,28 @@ components:
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
           type: string
+        slug:
+          type: string
     TunnelGroup:
       type: object
       required:
       - identifier
       - name
+      - slug
       properties:
         identifier:
           type: integer
           format: int32
         name:
+          type: string
+        slug:
           type: string
     Cable:
       type: object

@@ -9,6 +9,7 @@ func DeviceRole(r *device_role.Role) *server.DeviceRole {
 	return &server.DeviceRole{
 		Identifier:     r.Identifier,
 		Name:           r.Name,
+		Slug:           r.Slug,
 		VirtualMachine: r.VirtualMachine,
 	}
 }

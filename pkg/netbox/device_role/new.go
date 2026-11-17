@@ -6,6 +6,7 @@ func New(v *netbox.DeviceRole) *Role {
 	return &Role{
 		Identifier:     v.GetId(),
 		Name:           v.GetName(),
+		Slug:           v.GetSlug(),
 		VirtualMachine: v.GetVmRole(),
 		Raw:            v,
 	}

@@ -6,5 +6,9 @@ import (
 )
 
 func Platform(p *platform.Platform) *server.Platform {
-	return &server.Platform{Identifier: p.Identifier, Name: p.Name}
+	return &server.Platform{
+		Identifier: p.Identifier,
+		Name:       p.Name,
+		Slug:       p.Slug,
+	}
 }

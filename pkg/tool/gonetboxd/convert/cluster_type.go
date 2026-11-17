@@ -6,5 +6,9 @@ import (
 )
 
 func ClusterType(t *cluster_type.Type) *server.ClusterType {
-	return &server.ClusterType{Identifier: t.Identifier, Name: t.Name}
+	return &server.ClusterType{
+		Identifier: t.Identifier,
+		Name:       t.Name,
+		Slug:       t.Slug,
+	}
 }

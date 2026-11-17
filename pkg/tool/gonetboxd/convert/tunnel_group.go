@@ -6,5 +6,9 @@ import (
 )
 
 func TunnelGroup(g *tunnel_group.Group) *server.TunnelGroup {
-	return &server.TunnelGroup{Identifier: g.Identifier, Name: g.Name}
+	return &server.TunnelGroup{
+		Identifier: g.Identifier,
+		Name:       g.Name,
+		Slug:       g.Slug,
+	}
 }

@@ -6,5 +6,5 @@ import (
 )
 
 func Tag(t *tag.Tag) *server.Tag {
-	return &server.Tag{Identifier: t.Identifier, Name: t.Name}
+	return &server.Tag{Identifier: t.Identifier, Name: t.Name, Slug: t.Slug}
 }
