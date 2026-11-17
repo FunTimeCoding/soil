@@ -12,6 +12,7 @@ func addTagCommands(
 	o *cobra.Command,
 ) {
 	o.AddCommand(listTags(c, t))
+	o.AddCommand(listDeviceTags(c, t))
 	o.AddCommand(createTag(c, t))
 	o.AddCommand(addDeviceTag(c, t))
 	o.AddCommand(removeDeviceTag(c, t))

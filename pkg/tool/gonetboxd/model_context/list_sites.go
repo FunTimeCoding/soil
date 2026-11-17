@@ -10,11 +10,12 @@ import (
 func (s *Server) ListSites(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Sites()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "sites not listed")
 	}
 
 	return response.SuccessAny(convert.Sites(result))

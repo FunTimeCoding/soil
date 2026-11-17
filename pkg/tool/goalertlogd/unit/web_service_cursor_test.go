@@ -11,7 +11,8 @@ import (
 
 func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
 	s := base.New(t)
-	s.Seed(10)
+	s.SeedAlerts()
+	s.SeedUnreachable(10)
 	r, e := s.GeneratedClient().GetAlertsAfterWithResponse(
 		context.Background(),
 		&client.GetAlertsAfterParams{Identifier: 0},
@@ -24,7 +25,8 @@ func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
 
 func TestAlertsAfterCapsLimit(t *testing.T) {
 	s := base.New(t)
-	s.Seed(30)
+	s.SeedAlerts()
+	s.SeedUnreachable(30)
 	r, e := s.GeneratedClient().GetAlertsAfterWithResponse(
 		context.Background(),
 		&client.GetAlertsAfterParams{Identifier: 0, Limit: new(100)},
@@ -34,7 +36,9 @@ func TestAlertsAfterCapsLimit(t *testing.T) {
 }
 
 func TestAlertsByIdentifierReturnsOnesThatExist(t *testing.T) {
-	r, e := base.New(t).GeneratedClient().GetAlertsByIdentifierWithResponse(
+	s := base.New(t)
+	s.SeedAlerts()
+	r, e := s.GeneratedClient().GetAlertsByIdentifierWithResponse(
 		context.Background(),
 		&client.GetAlertsByIdentifierParams{Identifier: []int{2, 99}},
 	)
@@ -45,9 +49,9 @@ func TestAlertsByIdentifierReturnsOnesThatExist(t *testing.T) {
 }
 
 func TestStatusNamesLatestIdentifier(t *testing.T) {
-	r, e := base.New(t).GeneratedClient().GetStatusWithResponse(
-		context.Background(),
-	)
+	s := base.New(t)
+	s.SeedAlerts()
+	r, e := s.GeneratedClient().GetStatusWithResponse(context.Background())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, r.JSON200.LatestIdentifier)
 }

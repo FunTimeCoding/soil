@@ -3,31 +3,31 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) AddVirtualJournalEntry(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.VirtualJournalEntry,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
+	if a.VirtualMachine == "" || a.Comments == "" {
+		return response.Fail("virtual machine and comments are required")
 	}
 
-	comments, g := r.RequireString(constant.Comments)
+	result, e := s.service.AddVirtualJournalEntry(
+		a.VirtualMachine,
+		a.Kind,
+		a.Comments,
+	)
 
-	if g != nil {
-		return response.Fail("comments is required: %v", g)
-	}
-
-	kind := r.GetString(constant.Kind, "")
-	result, h := s.service.AddVirtualJournalEntry(name, kind, comments)
-
-	if h != nil {
-		return s.captureFail(x, h, "journal entry not added to virtual machine")
+	if e != nil {
+		return s.answerMessage(
+			x,
+			e,
+			"journal entry not added to virtual machine",
+		)
 	}
 
 	return response.SuccessAny(result)

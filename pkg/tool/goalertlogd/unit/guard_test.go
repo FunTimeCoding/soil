@@ -8,7 +8,8 @@ import (
 
 func TestGuard(t *testing.T) {
 	s := base.New(t)
-	c := s.Server
+	s.SeedAlerts()
+	c := s.Served()
 	c.VerifyBase(t)
 	c.VerifyFavicon(t)
 	c.VerifyGuarded(t, "/api/alerts")

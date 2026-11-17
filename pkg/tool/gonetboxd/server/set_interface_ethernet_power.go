@@ -13,18 +13,19 @@ func (s *Server) SetInterfaceEthernetPower(
 	x context.Context,
 	r server.SetInterfaceEthernetPowerRequestObject,
 ) (server.SetInterfaceEthernetPowerResponseObject, error) {
+	mode := ""
+
+	if r.Body.Mode != nil {
+		mode = *r.Body.Mode
+	}
+
 	kind := ""
 
 	if r.Body.Type != nil {
 		kind = *r.Body.Type
 	}
 
-	i, e := s.service.SetInterfaceEthernetPower(
-		r.Name,
-		r.Interface,
-		r.Body.Mode,
-		kind,
-	)
+	i, e := s.service.SetInterfaceEthernetPower(r.Name, r.Interface, mode, kind)
 
 	if not_found.Is(e) {
 		return server.SetInterfaceEthernetPower404JSONResponse(

@@ -3,31 +3,23 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) AddDeviceJournalEntry(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceJournalEntry,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
+	if a.Device == "" || a.Comments == "" {
+		return response.Fail("device and comments are required")
 	}
 
-	comments, g := r.RequireString(constant.Comments)
+	result, e := s.service.AddDeviceJournalEntry(a.Device, a.Kind, a.Comments)
 
-	if g != nil {
-		return response.Fail("comments is required: %v", g)
-	}
-
-	kind := r.GetString(constant.Kind, "")
-	result, h := s.service.AddDeviceJournalEntry(device, kind, comments)
-
-	if h != nil {
-		return s.captureFail(x, h, "journal entry not added to device")
+	if e != nil {
+		return s.answerMessage(x, e, "journal entry not added to device")
 	}
 
 	return response.SuccessAny(result)

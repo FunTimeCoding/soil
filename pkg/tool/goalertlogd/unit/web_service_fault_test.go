@@ -11,8 +11,9 @@ import (
 
 func TestStoreFaultCarriesItsOwnText(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	c := s.GeneratedClient()
-	s.Daemon.Close()
+	s.Daemon().Close()
 	r, e := c.GetAlertsWithResponse(
 		context.Background(),
 		&client.GetAlertsParams{Name: "HighMemory"},

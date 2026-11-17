@@ -12,7 +12,11 @@ func (c *Client) SetInterfaceEthernetPower(
 	mode string,
 	kind string,
 ) (client.Interface, error) {
-	c.EthernetPower = &client.EthernetPowerRequest{Mode: mode}
+	c.EthernetPower = &client.EthernetPowerRequest{}
+
+	if mode != "" {
+		c.EthernetPower.Mode = &mode
+	}
 
 	if kind != "" {
 		c.EthernetPower.Type = &kind

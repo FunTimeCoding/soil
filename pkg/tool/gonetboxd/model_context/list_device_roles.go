@@ -10,11 +10,12 @@ import (
 func (s *Server) ListDeviceRoles(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.DeviceRoles()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "device roles not listed")
 	}
 
 	return response.SuccessAny(convert.DeviceRoles(result))

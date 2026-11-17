@@ -2,40 +2,34 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) SetVirtualCustomField(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.VirtualCustomField,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(constant.VirtualMachine)
-
-	if e != nil {
-		return response.Fail("virtual_machine is required: %v", e)
+	if a.VirtualMachine == "" || a.Field == "" {
+		return response.Fail("virtual machine and field are required")
 	}
 
-	field, f := r.RequireString(constant.Field)
+	values := a.Values
 
-	if f != nil {
-		return response.Fail("field is required: %v", f)
+	if values == nil {
+		values = []string{}
 	}
 
-	result, g := s.service.SetVirtualMachineCustomFields(
-		name,
-		map[string]any{field: r.GetStringSlice(constant.Values, []string{})},
+	result, e := s.service.SetVirtualMachineCustomFields(
+		a.VirtualMachine,
+		map[string]any{a.Field: values},
 	)
 
-	if not_found.Is(g) {
-		return response.Fail("%v", g)
-	}
-
-	if g != nil {
-		return s.captureFail(x, g, "custom field not set")
+	if e != nil {
+		return s.answerMessage(x, e, "custom field not set")
 	}
 
 	return response.SuccessAny(convert.VirtualMachine(result))

@@ -2,45 +2,37 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/context_change"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) UpdateConfigurationContext(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.ConfigurationContext,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
-
-	if e != nil {
-		return response.Fail("name is required: %v", e)
+	if a.Name == "" {
+		return response.Fail("name is required")
 	}
 
 	c := context_change.New()
-	arguments := r.GetArguments()
 
-	if payload, okay := arguments[constant.Payload].(map[string]any); okay {
-		c.Payload = payload
+	if a.Payload != nil {
+		c.Payload = *a.Payload
 	}
 
-	if _, okay := arguments[constant.Weight]; okay {
-		c.Weight = new(int32(r.GetInt(constant.Weight, 0)))
+	if a.Weight != nil {
+		c.Weight = new(int32(*a.Weight))
 	}
 
-	c.Assignment = assignmentArgument(r)
-	result, f := s.service.UpdateConfigurationContext(name, c)
+	c.Assignment = assignmentArgument(a)
+	result, e := s.service.UpdateConfigurationContext(a.Name, c)
 
-	if not_found.Is(f) {
-		return response.Fail("%v", f)
-	}
-
-	if f != nil {
-		return s.captureFail(x, f, "configuration context not updated")
+	if e != nil {
+		return s.answerMessage(x, e, "configuration context not updated")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContext(result))

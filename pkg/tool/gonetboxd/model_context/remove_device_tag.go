@@ -3,31 +3,24 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) RemoveDeviceTag(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceTag,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
+	if a.Device == "" || a.Tag == "" {
+		return response.Fail("device and tag are required")
 	}
 
-	tag, g := r.RequireString(constant.Tag)
+	result, e := s.service.RemoveTag(a.Device, a.Tag)
 
-	if g != nil {
-		return response.Fail("tag is required: %v", g)
-	}
-
-	result, h := s.service.RemoveTag(device, tag)
-
-	if h != nil {
-		return s.captureFail(x, h, "tag not removed from device")
+	if e != nil {
+		return s.answerMessage(x, e, "tag not removed from device")
 	}
 
 	return response.SuccessAny(convert.Device(result))

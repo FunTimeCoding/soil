@@ -10,11 +10,12 @@ import (
 func (s *Server) ListClusterTypes(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.ClusterTypes()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "cluster types not listed")
 	}
 
 	return response.SuccessAny(convert.ClusterTypes(result))

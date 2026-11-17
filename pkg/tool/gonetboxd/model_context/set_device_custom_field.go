@@ -2,40 +2,34 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) SetDeviceCustomField(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceCustomField,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(constant.Device)
-
-	if e != nil {
-		return response.Fail("device is required: %v", e)
+	if a.Device == "" || a.Field == "" {
+		return response.Fail("device and field are required")
 	}
 
-	field, f := r.RequireString(constant.Field)
+	values := a.Values
 
-	if f != nil {
-		return response.Fail("field is required: %v", f)
+	if values == nil {
+		values = []string{}
 	}
 
-	result, g := s.service.SetDeviceCustomFields(
-		name,
-		map[string]any{field: r.GetStringSlice(constant.Values, []string{})},
+	result, e := s.service.SetDeviceCustomFields(
+		a.Device,
+		map[string]any{a.Field: values},
 	)
 
-	if not_found.Is(g) {
-		return response.Fail("%v", g)
-	}
-
-	if g != nil {
-		return s.captureFail(x, g, "custom field not set")
+	if e != nil {
+		return s.answerMessage(x, e, "custom field not set")
 	}
 
 	return response.SuccessAny(convert.Device(result))

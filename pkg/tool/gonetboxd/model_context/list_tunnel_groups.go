@@ -10,11 +10,12 @@ import (
 func (s *Server) ListTunnelGroups(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.TunnelGroups()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "tunnel groups not listed")
 	}
 
 	return response.SuccessAny(convert.TunnelGroups(result))

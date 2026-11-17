@@ -9,6 +9,7 @@ import (
 
 func TestClientWalksCursorFromHead(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	c := s.AlertClient()
 	status, e := c.GetStatus(t.Context())
 	assert.FatalOnError(t, e)
@@ -35,9 +36,10 @@ func TestClientWalksCursorFromHead(t *testing.T) {
 
 func TestClientSeesResolutionByIdentifier(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	c := s.AlertClient()
 	s.Alertmanager.Remove("fp1")
-	s.Clock.Poll()
+	s.Clock().Poll()
 	result, e := c.GetAlertsByIdentifier(
 		t.Context(),
 		&client.GetAlertsByIdentifierParams{Identifier: []int{1, 2}},

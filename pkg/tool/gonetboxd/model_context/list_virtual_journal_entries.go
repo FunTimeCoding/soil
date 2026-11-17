@@ -2,32 +2,30 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) ListVirtualJournalEntries(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.VirtualJournalPage,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
+	if a.VirtualMachine == "" {
+		return response.Fail("virtual machine is required")
 	}
 
-	result, g := s.service.VirtualJournalEntries(
-		name,
-		int32(r.GetInt(generativeConstant.ParameterLimit, 0)),
-		int32(r.GetInt(generativeConstant.ParameterOffset, 0)),
+	result, e := s.service.VirtualJournalEntries(
+		a.VirtualMachine,
+		int32(a.Limit),
+		int32(a.Offset),
 	)
 
-	if g != nil {
-		return s.captureFail(
+	if e != nil {
+		return s.answerMessage(
 			x,
-			g,
+			e,
 			"journal entries not listed for virtual machine",
 		)
 	}

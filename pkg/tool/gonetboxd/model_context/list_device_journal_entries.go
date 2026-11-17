@@ -2,30 +2,28 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) ListDeviceJournalEntries(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceJournalPage,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
+	if a.Device == "" {
+		return response.Fail("device is required")
 	}
 
-	result, g := s.service.DeviceJournalEntries(
-		device,
-		int32(r.GetInt(generativeConstant.ParameterLimit, 0)),
-		int32(r.GetInt(generativeConstant.ParameterOffset, 0)),
+	result, e := s.service.DeviceJournalEntries(
+		a.Device,
+		int32(a.Limit),
+		int32(a.Offset),
 	)
 
-	if g != nil {
-		return s.captureFail(x, g, "journal entries not listed for device")
+	if e != nil {
+		return s.answerMessage(x, e, "journal entries not listed for device")
 	}
 
 	return response.SuccessAny(result)

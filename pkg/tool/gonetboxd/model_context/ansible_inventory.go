@@ -4,20 +4,25 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) AnsibleInventory(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.AnsibleInventory,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.service.AnsibleInventory(
-		r.GetString(constant.Field, constant.AnsibleField),
-		r.GetString(constant.Site, ""),
-	)
+	field := a.Field
+
+	if field == "" {
+		field = constant.AnsibleField
+	}
+
+	result, e := s.service.AnsibleInventory(field, a.Site)
 
 	if e != nil {
-		return s.captureFail(x, e, "inventory not built")
+		return s.answerMessage(x, e, "inventory not built")
 	}
 
 	return response.Success(result.Markup())

@@ -3,42 +3,31 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateVirtualAddress(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateVirtualAddress,
 ) (*mcp.CallToolResult, error) {
-	vmName, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
-	}
-
-	interfaceName, g := r.RequireString(constant.Interface)
-
-	if g != nil {
-		return response.Fail("interface is required: %v", g)
-	}
-
-	address, h := r.RequireString(constant.Address)
-
-	if h != nil {
-		return response.Fail("address is required: %v", h)
+	if a.VirtualMachine == "" || a.Interface == "" || a.Address == "" {
+		return response.Fail(
+			"virtual machine, interface and address are required",
+		)
 	}
 
 	result, e := s.service.CreateVirtualAddress(
-		vmName,
-		interfaceName,
-		address,
-		r.GetString(constant.Status, ""),
+		a.VirtualMachine,
+		a.Interface,
+		a.Address,
+		a.Status,
 	)
 
 	if e != nil {
-		return s.serviceFail(x, e, "address not assigned")
+		return s.answerMessage(x, e, "address not assigned")
 	}
 
 	return response.SuccessAny(convert.Address(result))

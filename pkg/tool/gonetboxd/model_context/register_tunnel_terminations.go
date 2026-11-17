@@ -11,7 +11,7 @@ func (s *Server) registerTunnelTerminations() {
 			constant.ListTunnelTerminations,
 			mcp.WithDescription("List all VPN tunnel terminations"),
 		),
-		s.ListTunnelTerminations,
+		mcp.NewTypedToolHandler(s.ListTunnelTerminations),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -40,7 +40,7 @@ func (s *Server) registerTunnelTerminations() {
 				mcp.Description("Termination role (peer, hub, spoke)"),
 			),
 		),
-		s.CreateDeviceTunnelTermination,
+		mcp.NewTypedToolHandler(s.CreateDeviceTunnelTermination),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -67,6 +67,6 @@ func (s *Server) registerTunnelTerminations() {
 				mcp.Description("Termination role (peer, hub, spoke)"),
 			),
 		),
-		s.CreateVirtualTunnelTermination,
+		mcp.NewTypedToolHandler(s.CreateVirtualTunnelTermination),
 	)
 }

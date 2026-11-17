@@ -21,6 +21,7 @@ func addNetworkCommands(
 	o.AddCommand(listPrefixes(c, t))
 	o.AddCommand(createPrefix(c, t))
 	o.AddCommand(listCables(c, t))
+	o.AddCommand(listPhysicalAddresses(c, t))
 	o.AddCommand(createCable(c, t))
 	o.AddCommand(deleteCable(c, t))
 	o.AddCommand(setInterfaceEthernetPower(c, t))

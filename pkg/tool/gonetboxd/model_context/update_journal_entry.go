@@ -2,33 +2,28 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) UpdateJournalEntry(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.JournalEntryChange,
 ) (*mcp.CallToolResult, error) {
-	identifier, f := r.RequireInt(generativeConstant.ParameterIdentifier)
-
-	if f != nil {
-		return response.Fail("identifier is required: %v", f)
-	}
-
-	comments := r.GetString(constant.Comments, "")
-	kind := r.GetString(constant.Kind, "")
-
-	if comments == "" && kind == "" {
+	if a.Comments == "" && a.Kind == "" {
 		return response.Fail("nothing to update: pass comments or kind")
 	}
 
-	result, g := s.service.UpdateJournalEntry(int32(identifier), kind, comments)
+	result, e := s.service.UpdateJournalEntry(
+		int32(a.Identifier),
+		a.Kind,
+		a.Comments,
+	)
 
-	if g != nil {
-		return s.captureFail(x, g, "journal entry not updated")
+	if e != nil {
+		return s.answerMessage(x, e, "journal entry not updated")
 	}
 
 	return response.SuccessAny(result)

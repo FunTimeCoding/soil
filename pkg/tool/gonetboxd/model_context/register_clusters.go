@@ -12,14 +12,14 @@ func (s *Server) registerClusters() {
 			constant.ListClusterTypes,
 			mcp.WithDescription("List all NetBox cluster types"),
 		),
-		s.ListClusterTypes,
+		mcp.NewTypedToolHandler(s.ListClusterTypes),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListClusters,
 			mcp.WithDescription("List all NetBox clusters"),
 		),
-		s.ListClusters,
+		mcp.NewTypedToolHandler(s.ListClusters),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -31,7 +31,7 @@ func (s *Server) registerClusters() {
 				mcp.Description("Cluster type name"),
 			),
 		),
-		s.CreateClusterType,
+		mcp.NewTypedToolHandler(s.CreateClusterType),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -53,6 +53,6 @@ func (s *Server) registerClusters() {
 				mcp.Description("Site name"),
 			),
 		),
-		s.CreateCluster,
+		mcp.NewTypedToolHandler(s.CreateCluster),
 	)
 }

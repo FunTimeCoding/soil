@@ -2,35 +2,31 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) UpdateChoiceSet(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.ChoiceSet,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
+	if a.Name == "" {
+		return response.Fail("name is required")
+	}
+
+	choices := a.Choices
+
+	if choices == nil {
+		choices = []string{}
+	}
+
+	result, e := s.service.SetChoiceSetChoices(a.Name, choices)
 
 	if e != nil {
-		return response.Fail("name is required: %v", e)
-	}
-
-	result, f := s.service.SetChoiceSetChoices(
-		name,
-		r.GetStringSlice(constant.Choices, []string{}),
-	)
-
-	if not_found.Is(f) {
-		return response.Fail("%v", f)
-	}
-
-	if f != nil {
-		return s.captureFail(x, f, "choice set not updated")
+		return s.answerMessage(x, e, "choice set not updated")
 	}
 
 	return response.SuccessAny(convert.ChoiceSet(result))

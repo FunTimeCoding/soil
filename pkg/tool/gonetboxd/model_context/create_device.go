@@ -2,52 +2,32 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateDevice(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateDevice,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(generativeConstant.ParameterName)
-
-	if f != nil {
-		return response.Fail("name is required: %v", f)
-	}
-
-	roleName, g := r.RequireString(constant.Role)
-
-	if g != nil {
-		return response.Fail("role is required: %v", g)
-	}
-
-	typeName, h := r.RequireString(constant.Type)
-
-	if h != nil {
-		return response.Fail("type is required: %v", h)
-	}
-
-	siteName, i := r.RequireString(constant.Site)
-
-	if i != nil {
-		return response.Fail("site is required: %v", i)
+	if a.Name == "" || a.Role == "" || a.Type == "" || a.Site == "" {
+		return response.Fail("name, role, type and site are required")
 	}
 
 	result, e := s.service.CreateDevice(
-		name,
-		roleName,
-		typeName,
-		siteName,
-		r.GetString(constant.Tenant, ""),
-		r.GetStringSlice(constant.Tags, nil),
+		a.Name,
+		a.Role,
+		a.Type,
+		a.Site,
+		a.Tenant,
+		a.Tags,
 	)
 
 	if e != nil {
-		return s.serviceFail(x, e, "device not created")
+		return s.answerMessage(x, e, "device not created")
 	}
 
 	return response.SuccessAny(convert.Device(result))

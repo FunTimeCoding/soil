@@ -58,7 +58,7 @@ open work in a seed of its own. An item leaves this seed when it is done.
   methods have no caller in this module; they stay as exports until a
   consumer outside it is ruled out
 - Mock methods answering `nil, nil` where the client returns a value, each
-  gaining state when a test needs it: 59 of
+  gaining state when a test needs it: 58 of
   `github.com/funtimecoding/soil/pkg/netbox/mock_client`, which also gain the
   `Failure` check and the per-method one through
   `github.com/funtimecoding/soil/pkg/failure`; `FieldMap`, `User`, `Project`
@@ -117,7 +117,7 @@ open work in a seed of its own. An item leaves this seed when it is done.
   the boundary); gobandd's REST `captureDetail` replaces every message but an
   `unexpected` one with a generic text, where the message is the error's own
   (`README.md`, Answering an error). The `captureDetail` of goalertmanagerd,
-  gobandd's MCP, gokubernetesd, gonetboxd's MCP and REST, gopostgresd,
+  gobandd's MCP, gokubernetesd, gonetboxd's REST, gopostgresd,
   goprometheusd and gosourced only forwards to the answer helper - a name left
   over
 - gosourced's MCP handlers answer through its own `captureFail`, which answers
@@ -135,7 +135,7 @@ open work in a seed of its own. An item leaves this seed when it is done.
   `SetPosition`, `Reorder` and `Seeds` return no error, so a store failure
   panics inside them - its B loop
 - goansibled's `unit` package builds its fixture with `git init`, `clone` and
-  `push` (`ansible_tester.NewFixture`), which crosses the line
+  `push` (`service_tester.NewFixture`), which crosses the line
   `test-placement.md` draws for `<path>/unit/`
 
 ## Untested

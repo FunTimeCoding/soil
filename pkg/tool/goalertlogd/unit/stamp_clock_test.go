@@ -13,6 +13,7 @@ import (
 
 func TestRecordStartRunsOnServiceClock(t *testing.T) {
 	s := base.New(t, service_tester.WithClock(clock_tester.Window))
+	s.SeedAlerts()
 	limit := 5
 	all, e := s.AlertClient().GetAlertsAfter(
 		t.Context(),
@@ -27,8 +28,9 @@ func TestRecordStartRunsOnServiceClock(t *testing.T) {
 
 func TestResolveEndRunsOnServiceClock(t *testing.T) {
 	s := base.New(t, service_tester.WithClock(clock_tester.Window))
+	s.SeedAlerts()
 	s.Alertmanager.Remove("fp1")
-	s.Clock.Poll()
+	s.Clock().Poll()
 	limit := 5
 	all, e := s.AlertClient().GetAlertsAfter(
 		t.Context(),

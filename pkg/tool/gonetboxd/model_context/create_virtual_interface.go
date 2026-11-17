@@ -2,33 +2,25 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateVirtualInterface(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateVirtualInterface,
 ) (*mcp.CallToolResult, error) {
-	vmName, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
+	if a.VirtualMachine == "" || a.Name == "" {
+		return response.Fail("virtual machine and name are required")
 	}
 
-	name, g := r.RequireString(generativeConstant.ParameterName)
-
-	if g != nil {
-		return response.Fail("name is required: %v", g)
-	}
-
-	result, e := s.service.CreateVirtualInterface(vmName, name)
+	result, e := s.service.CreateVirtualInterface(a.VirtualMachine, a.Name)
 
 	if e != nil {
-		return s.serviceFail(x, e, "virtual interface not created")
+		return s.answerMessage(x, e, "virtual interface not created")
 	}
 
 	return response.SuccessAny(convert.VirtualInterface(result))

@@ -10,11 +10,12 @@ import (
 func (s *Server) ListTunnelTerminations(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.TunnelTerminations()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "tunnel terminations not listed")
 	}
 
 	return response.SuccessAny(convert.TunnelTerminations(result))

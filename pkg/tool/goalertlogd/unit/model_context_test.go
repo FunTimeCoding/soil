@@ -9,7 +9,9 @@ import (
 )
 
 func TestModelContext(t *testing.T) {
-	c := base.New(t).Tools()
+	s := base.New(t)
+	s.SeedAlerts()
+	c := s.Tools()
 	assert.Count(t, 4, c.ListTools())
 	status := c.MustCallTool(constant.GetStatus, map[string]any{})
 	assert.StringContains(t, "2", status)

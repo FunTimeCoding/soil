@@ -138,10 +138,9 @@ single function, so one shape reads across homes
 - `Service()` and `Daemon()` build on first call and hand back that instance
   after - never a bare return value, a field built at `New`, or a fresh
   build per call.
-- `base` embeds its `service_tester` and holds the daemon stack. Wrappers
-  over the stack fold into it, `client_tester` and `outage_server` build on
-  it, and a second object with methods keeps its own package
-  (`type_receiver`).
+- `base` holds the daemon stack. Wrappers over the stack fold into it,
+  `client_tester` and `outage_server` build on it, and a second object with
+  methods keeps its own package (`type_receiver`).
 - A multi-instance home builds one mock per name with `WithInstances`,
   reached through accessors that fail the test naming a missing instance
   (`go:pkg/tool/goproxmoxd/unit/service_tester`).

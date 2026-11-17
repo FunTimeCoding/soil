@@ -3,7 +3,7 @@ package base
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/collector_tester"
-	outpost "github.com/funtimecoding/soil/pkg/tool/gooutpostd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/face"
 )
 
 func WithOutpost() Option {
@@ -14,6 +14,6 @@ func WithOutpost() Option {
 			nil,
 		)
 		s.Option.OutpostHosts = []string{constant.FixtureVirtualMachineNode}
-		s.Option.Outpost = func(string) outpost.Client { return s.Outpost }
+		s.Option.Outpost = func(string) face.Client { return s.Outpost }
 	}
 }

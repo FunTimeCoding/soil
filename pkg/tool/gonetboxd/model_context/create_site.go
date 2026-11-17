@@ -2,26 +2,25 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateSite(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Name,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(generativeConstant.ParameterName)
-
-	if f != nil {
-		return response.Fail("name is required: %v", f)
+	if a.Name == "" {
+		return response.Fail("name is required")
 	}
 
-	result, g := s.service.CreateSite(name)
+	result, e := s.service.CreateSite(a.Name)
 
-	if g != nil {
-		return s.captureFail(x, g, "site not created")
+	if e != nil {
+		return s.answerMessage(x, e, "site not created")
 	}
 
 	return response.SuccessAny(convert.Site(result))

@@ -10,11 +10,12 @@ import (
 func (s *Server) ListTags(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Tags()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "tags not listed")
 	}
 
 	return response.SuccessAny(convert.Tags(result))

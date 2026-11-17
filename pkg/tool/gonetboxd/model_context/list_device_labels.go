@@ -3,25 +3,24 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) ListDeviceLabels(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Device,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
+	if a.Device == "" {
+		return response.Fail("device is required")
 	}
 
-	labels, e := s.service.DeviceLabels(device)
+	labels, e := s.service.DeviceLabels(a.Device)
 
 	if e != nil {
-		return s.serviceFail(x, e, "labels not listed for device")
+		return s.answerMessage(x, e, "labels not listed for device")
 	}
 
 	return response.SuccessAny(convert.Labels(labels))

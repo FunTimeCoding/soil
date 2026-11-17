@@ -25,6 +25,6 @@ func (s *Server) registerInventory() {
 				),
 			),
 		),
-		s.AnsibleInventory,
+		mcp.NewTypedToolHandler(s.AnsibleInventory),
 	)
 }

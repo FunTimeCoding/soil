@@ -3,31 +3,24 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) AddVirtualTag(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.VirtualTag,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
+	if a.VirtualMachine == "" || a.Tag == "" {
+		return response.Fail("virtual machine and tag are required")
 	}
 
-	tag, g := r.RequireString(constant.Tag)
+	result, e := s.service.AddVirtualTag(a.VirtualMachine, a.Tag)
 
-	if g != nil {
-		return response.Fail("tag is required: %v", g)
-	}
-
-	result, h := s.service.AddVirtualTag(name, tag)
-
-	if h != nil {
-		return s.captureFail(x, h, "tag not added to virtual machine")
+	if e != nil {
+		return s.answerMessage(x, e, "tag not added to virtual machine")
 	}
 
 	return response.SuccessAny(convert.VirtualMachine(result))

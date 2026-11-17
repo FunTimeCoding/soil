@@ -3,37 +3,24 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) SetDeviceLabel(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceLabel,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
+	if a.Device == "" || a.Key == "" || a.Value == "" {
+		return response.Fail("device, key and value are required")
 	}
 
-	key, g := r.RequireString(constant.Key)
-
-	if g != nil {
-		return response.Fail("key is required: %v", g)
-	}
-
-	value, h := r.RequireString(constant.Value)
-
-	if h != nil {
-		return response.Fail("value is required: %v", h)
-	}
-
-	result, e := s.service.SetDeviceLabel(device, key, value)
+	result, e := s.service.SetDeviceLabel(a.Device, a.Key, a.Value)
 
 	if e != nil {
-		return s.serviceFail(x, e, "label not set on device")
+		return s.answerMessage(x, e, "label not set on device")
 	}
 
 	return response.SuccessAny(convert.Label(result))

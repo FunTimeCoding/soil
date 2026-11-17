@@ -17,7 +17,7 @@ func (s *Server) registerInterfaces() {
 				mcp.Description("Device name"),
 			),
 		),
-		s.ListInterfaces,
+		mcp.NewTypedToolHandler(s.ListInterfaces),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -43,6 +43,6 @@ func (s *Server) registerInterfaces() {
 				mcp.Description("MAC address to attach (optional)"),
 			),
 		),
-		s.CreateInterface,
+		mcp.NewTypedToolHandler(s.CreateInterface),
 	)
 }

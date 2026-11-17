@@ -2,23 +2,18 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) DeleteJournalEntry(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Identifier,
 ) (*mcp.CallToolResult, error) {
-	identifier, f := r.RequireInt(generativeConstant.ParameterIdentifier)
-
-	if f != nil {
-		return response.Fail("identifier is required: %v", f)
-	}
-
-	if e := s.service.DeleteJournalEntry(int32(identifier)); e != nil {
-		return s.captureFail(x, e, "journal entry not deleted")
+	if e := s.service.DeleteJournalEntry(int32(a.Identifier)); e != nil {
+		return s.answerMessage(x, e, "journal entry not deleted")
 	}
 
 	return response.Success("journal entry deleted")

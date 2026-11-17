@@ -10,11 +10,12 @@ import (
 func (s *Server) ListTenants(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Tenants()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "tenants not listed")
 	}
 
 	return response.SuccessAny(convert.Tenants(result))

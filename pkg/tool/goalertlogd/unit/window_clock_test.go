@@ -16,7 +16,8 @@ import (
 
 func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
 	s := base.New(t, service_tester.WithClock(clock_tester.Window))
-	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
+	s.SeedAlerts()
+	d := relational.Open(logger.New(t.Context()), "", s.Path)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
 		t,
@@ -40,7 +41,8 @@ func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
 
 func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
 	s := base.New(t, service_tester.WithClock(clock_tester.Window))
-	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
+	s.SeedAlerts()
+	d := relational.Open(logger.New(t.Context()), "", s.Path)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
 		t,
@@ -64,7 +66,8 @@ func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
 
 func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 	s := base.New(t, service_tester.WithClock(clock_tester.Window))
-	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
+	s.SeedAlerts()
+	d := relational.Open(logger.New(t.Context()), "", s.Path)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
 		t,
@@ -89,7 +92,8 @@ func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 
 func TestTopAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 	s := base.New(t, service_tester.WithClock(clock_tester.Window))
-	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
+	s.SeedAlerts()
+	d := relational.Open(logger.New(t.Context()), "", s.Path)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
 		t,

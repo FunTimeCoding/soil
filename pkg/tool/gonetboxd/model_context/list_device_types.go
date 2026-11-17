@@ -10,11 +10,12 @@ import (
 func (s *Server) ListDeviceTypes(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.DeviceTypes()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "device types not listed")
 	}
 
 	return response.SuccessAny(convert.DeviceTypes(result))

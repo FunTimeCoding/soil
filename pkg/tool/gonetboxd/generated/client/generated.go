@@ -385,8 +385,8 @@ type ErrorResponse struct {
 
 // EthernetPowerRequest defines model for EthernetPowerRequest.
 type EthernetPowerRequest struct {
-	// Mode pse or pd; empty clears mode and type.
-	Mode string `json:"mode"`
+	// Mode pse or pd; left out or empty clears mode and type.
+	Mode *string `json:"mode,omitempty"`
 
 	// Type The standard, such as type2-ieee802.3at; empty leaves it unset.
 	Type *string `json:"type,omitempty"`

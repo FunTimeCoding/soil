@@ -19,7 +19,10 @@ func TestInterfaceEthernetPowerShowsOnInterfaceList(t *testing.T) {
 		x,
 		"alfa",
 		"bravo",
-		client.EthernetPowerRequest{Mode: "pd", Type: new("type1-ieee802.3af")},
+		client.EthernetPowerRequest{
+			Mode: new("pd"),
+			Type: new("type1-ieee802.3af"),
+		},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, set.StatusCode())

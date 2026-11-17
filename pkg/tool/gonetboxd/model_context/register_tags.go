@@ -12,7 +12,7 @@ func (s *Server) registerTags() {
 			constant.ListTags,
 			mcp.WithDescription("List all NetBox tags"),
 		),
-		s.ListTags,
+		mcp.NewTypedToolHandler(s.ListTags),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -24,7 +24,7 @@ func (s *Server) registerTags() {
 				mcp.Description("Tag name"),
 			),
 		),
-		s.CreateTag,
+		mcp.NewTypedToolHandler(s.CreateTag),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -41,7 +41,7 @@ func (s *Server) registerTags() {
 				mcp.Description("Tag name"),
 			),
 		),
-		s.AddDeviceTag,
+		mcp.NewTypedToolHandler(s.AddDeviceTag),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -58,7 +58,7 @@ func (s *Server) registerTags() {
 				mcp.Description("Tag name"),
 			),
 		),
-		s.RemoveDeviceTag,
+		mcp.NewTypedToolHandler(s.RemoveDeviceTag),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -75,7 +75,7 @@ func (s *Server) registerTags() {
 				mcp.Description("Tag name"),
 			),
 		),
-		s.AddVirtualTag,
+		mcp.NewTypedToolHandler(s.AddVirtualTag),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -92,6 +92,6 @@ func (s *Server) registerTags() {
 				mcp.Description("Tag name"),
 			),
 		),
-		s.RemoveVirtualTag,
+		mcp.NewTypedToolHandler(s.RemoveVirtualTag),
 	)
 }

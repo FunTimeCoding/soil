@@ -3598,11 +3598,10 @@ components:
           type: string
     EthernetPowerRequest:
       type: object
-      required: [mode]
       properties:
         mode:
           type: string
-          description: pse or pd; empty clears mode and type.
+          description: pse or pd; left out or empty clears mode and type.
         type:
           type: string
           description: The standard, such as type2-ieee802.3at; empty leaves it unset.

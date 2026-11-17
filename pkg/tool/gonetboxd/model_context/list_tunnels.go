@@ -10,11 +10,12 @@ import (
 func (s *Server) ListTunnels(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Tunnels()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "tunnels not listed")
 	}
 
 	return response.SuccessAny(convert.Tunnels(result))

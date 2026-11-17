@@ -10,11 +10,12 @@ import (
 func (s *Server) ListVirtualMachines(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, grouped, e := s.service.VirtualMachines()
 
 	if e != nil {
-		return s.serviceFail(x, e, "virtual machines not listed")
+		return s.answerMessage(x, e, "virtual machines not listed")
 	}
 
 	return response.SuccessAny(convert.LabeledVirtualMachines(result, grouped))

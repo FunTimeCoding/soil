@@ -10,7 +10,9 @@ import (
 )
 
 func TestWebService(t *testing.T) {
-	c := base.New(t).GeneratedClient()
+	s := base.New(t)
+	s.SeedAlerts()
+	c := s.GeneratedClient()
 	x := context.Background()
 	status, e := c.GetStatusWithResponse(x)
 	assert.FatalOnError(t, e)
@@ -44,10 +46,11 @@ func TestWebService(t *testing.T) {
 
 func TestWebServiceResolve(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	c := s.GeneratedClient()
 	x := context.Background()
 	s.Alertmanager.Remove("fp1")
-	s.Clock.Poll()
+	s.Clock().Poll()
 	alerts, e := c.GetAlertsWithResponse(
 		x,
 		&client.GetAlertsParams{Name: "HighMemory"},

@@ -23,7 +23,7 @@ func (s *Server) registerChoiceSets() {
 			constant.ListChoiceSets,
 			mcp.WithDescription("List NetBox custom field choice sets"),
 		),
-		s.ListChoiceSets,
+		mcp.NewTypedToolHandler(s.ListChoiceSets),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -32,7 +32,7 @@ func (s *Server) registerChoiceSets() {
 			name,
 			choices,
 		),
-		s.CreateChoiceSet,
+		mcp.NewTypedToolHandler(s.CreateChoiceSet),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -41,7 +41,7 @@ func (s *Server) registerChoiceSets() {
 			name,
 			choices,
 		),
-		s.UpdateChoiceSet,
+		mcp.NewTypedToolHandler(s.UpdateChoiceSet),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -49,14 +49,14 @@ func (s *Server) registerChoiceSets() {
 			mcp.WithDescription("Delete a NetBox custom field choice set"),
 			name,
 		),
-		s.DeleteChoiceSet,
+		mcp.NewTypedToolHandler(s.DeleteChoiceSet),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListCustomFields,
 			mcp.WithDescription("List NetBox custom fields"),
 		),
-		s.ListCustomFields,
+		mcp.NewTypedToolHandler(s.ListCustomFields),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -72,7 +72,7 @@ func (s *Server) registerChoiceSets() {
 			),
 			mcp.WithString(constant.Label, mcp.Description("Display label")),
 		),
-		s.CreateCustomField,
+		mcp.NewTypedToolHandler(s.CreateCustomField),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -80,6 +80,6 @@ func (s *Server) registerChoiceSets() {
 			mcp.WithDescription("Delete a NetBox custom field"),
 			name,
 		),
-		s.DeleteCustomField,
+		mcp.NewTypedToolHandler(s.DeleteCustomField),
 	)
 }

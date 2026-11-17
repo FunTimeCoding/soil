@@ -3,28 +3,21 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) RemoveDeviceLabel(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceLabelKey,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
+	if a.Device == "" || a.Key == "" {
+		return response.Fail("device and key are required")
 	}
 
-	key, g := r.RequireString(constant.Key)
-
-	if g != nil {
-		return response.Fail("key is required: %v", g)
-	}
-
-	if e := s.service.RemoveDeviceLabel(device, key); e != nil {
-		return s.serviceFail(x, e, "label not removed from device")
+	if e := s.service.RemoveDeviceLabel(a.Device, a.Key); e != nil {
+		return s.answerMessage(x, e, "label not removed from device")
 	}
 
 	return response.Success("label removed")

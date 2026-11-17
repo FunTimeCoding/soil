@@ -2,40 +2,24 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/configuration_assignment"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
-	"github.com/mark3labs/mcp-go/mcp"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 )
 
 func assignmentArgument(
-	r mcp.CallToolRequest,
+	a argument.ConfigurationContext,
 ) *configuration_assignment.Assignment {
-	arguments := r.GetArguments()
-	given := false
-
-	for _, k := range []string{
-		constant.Roles,
-		constant.Clusters,
-		constant.Platforms,
-		constant.Sites,
-		constant.Tenants,
-		constant.Tags,
-	} {
-		if _, okay := arguments[k]; okay {
-			given = true
-		}
-	}
-
-	if !given {
+	if a.Roles == nil && a.Clusters == nil && a.Platforms == nil &&
+		a.Sites == nil && a.Tenants == nil && a.Tags == nil {
 		return nil
 	}
 
 	result := configuration_assignment.New()
-	result.Roles = r.GetStringSlice(constant.Roles, nil)
-	result.Clusters = r.GetStringSlice(constant.Clusters, nil)
-	result.Platforms = r.GetStringSlice(constant.Platforms, nil)
-	result.Sites = r.GetStringSlice(constant.Sites, nil)
-	result.Tenants = r.GetStringSlice(constant.Tenants, nil)
-	result.Tags = r.GetStringSlice(constant.Tags, nil)
+	result.Roles = given(a.Roles)
+	result.Clusters = given(a.Clusters)
+	result.Platforms = given(a.Platforms)
+	result.Sites = given(a.Sites)
+	result.Tenants = given(a.Tenants)
+	result.Tags = given(a.Tags)
 
 	return result
 }

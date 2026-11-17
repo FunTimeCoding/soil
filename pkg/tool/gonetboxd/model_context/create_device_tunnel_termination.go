@@ -3,48 +3,29 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateDeviceTunnelTermination(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.DeviceTunnelTermination,
 ) (*mcp.CallToolResult, error) {
-	deviceName, e := r.RequireString(constant.Device)
-
-	if e != nil {
-		return response.Fail("device is required: %v", e)
+	if a.Device == "" || a.Tunnel == "" || a.Interface == "" || a.Role == "" {
+		return response.Fail("device, tunnel, interface and role are required")
 	}
 
-	tunnelName, f := r.RequireString(constant.Tunnel)
-
-	if f != nil {
-		return response.Fail("tunnel is required: %v", f)
-	}
-
-	interfaceName, g := r.RequireString(constant.Interface)
-
-	if g != nil {
-		return response.Fail("interface is required: %v", g)
-	}
-
-	role, h := r.RequireString(constant.Role)
-
-	if h != nil {
-		return response.Fail("role is required: %v", h)
-	}
-
-	tt, i := s.service.CreateDeviceTunnelTermination(
-		deviceName,
-		tunnelName,
-		interfaceName,
-		role,
+	tt, e := s.service.CreateDeviceTunnelTermination(
+		a.Device,
+		a.Tunnel,
+		a.Interface,
+		a.Role,
 	)
 
-	if i != nil {
-		return s.serviceFail(x, i, "tunnel termination not created")
+	if e != nil {
+		return s.answerMessage(x, e, "tunnel termination not created")
 	}
 
 	return response.SuccessAny(convert.TunnelTermination(tt))

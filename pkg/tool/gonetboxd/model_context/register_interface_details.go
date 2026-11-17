@@ -72,9 +72,8 @@ func (s *Server) registerInterfaceDetails() {
 			),
 			mcp.WithString(
 				constant.Mode,
-				mcp.Required(),
 				mcp.Description(
-					"pse when the port supplies power, pd when it is powered; empty clears mode and type",
+					"pse when the port supplies power, pd when it is powered; left out or empty clears mode and type",
 				),
 			),
 			mcp.WithString(

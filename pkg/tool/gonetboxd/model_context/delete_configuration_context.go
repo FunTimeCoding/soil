@@ -2,30 +2,24 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) DeleteConfigurationContext(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Name,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
+	if a.Name == "" {
+		return response.Fail("name is required")
+	}
+
+	e := s.service.DeleteConfigurationContext(a.Name)
 
 	if e != nil {
-		return response.Fail("name is required: %v", e)
-	}
-
-	f := s.service.DeleteConfigurationContext(name)
-
-	if not_found.Is(f) {
-		return response.Fail("%v", f)
-	}
-
-	if f != nil {
-		return s.captureFail(x, f, "configuration context not deleted")
+		return s.answerMessage(x, e, "configuration context not deleted")
 	}
 
 	return response.Success("configuration context deleted")

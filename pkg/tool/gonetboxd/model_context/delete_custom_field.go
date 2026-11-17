@@ -2,30 +2,24 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) DeleteCustomField(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Name,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
+	if a.Name == "" {
+		return response.Fail("name is required")
+	}
+
+	e := s.service.DeleteCustomField(a.Name)
 
 	if e != nil {
-		return response.Fail("name is required: %v", e)
-	}
-
-	f := s.service.DeleteCustomField(name)
-
-	if not_found.Is(f) {
-		return response.Fail("%v", f)
-	}
-
-	if f != nil {
-		return s.captureFail(x, f, "custom field not deleted")
+		return s.answerMessage(x, e, "custom field not deleted")
 	}
 
 	return response.Success("custom field deleted")

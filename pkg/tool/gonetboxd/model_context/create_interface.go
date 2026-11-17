@@ -2,44 +2,30 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateInterface(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateInterface,
 ) (*mcp.CallToolResult, error) {
-	device, f := r.RequireString(constant.Device)
-
-	if f != nil {
-		return response.Fail("device is required: %v", f)
-	}
-
-	name, g := r.RequireString(generativeConstant.ParameterName)
-
-	if g != nil {
-		return response.Fail("name is required: %v", g)
-	}
-
-	interfaceType, h := r.RequireString(constant.Type)
-
-	if h != nil {
-		return response.Fail("type is required: %v", h)
+	if a.Device == "" || a.Name == "" || a.Type == "" {
+		return response.Fail("device, name and type are required")
 	}
 
 	result, e := s.service.CreateInterface(
-		device,
-		name,
-		interfaceType,
-		r.GetString(constant.PhysicalAddress, ""),
+		a.Device,
+		a.Name,
+		a.Type,
+		a.PhysicalAddress,
 	)
 
 	if e != nil {
-		return s.serviceFail(x, e, "interface not created")
+		return s.answerMessage(x, e, "interface not created")
 	}
 
 	return response.SuccessAny(convert.Interface(result))

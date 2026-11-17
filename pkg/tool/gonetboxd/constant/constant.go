@@ -10,7 +10,7 @@ var Identity = identity.New(
 	"NetBox infrastructure inventory bridge",
 	"gonetboxd",
 ).WithInstructions(
-	"NetBox infrastructure inventory - devices, interfaces, IP addresses, sites, clusters, virtual machines. Both read and create operations.",
+	"NetBox infrastructure inventory - devices and virtual machines with their interfaces, addresses, local context, tags, labels and journal entries; cables, power outlets, ports and cables, ethernet power; sites, locations, platforms, roles, types, clusters, tunnels, prefixes and ranges; configuration contexts, custom fields and choice sets; the Ansible inventory NetBox describes. Reads, creates, updates and deletes.",
 )
 
 const (

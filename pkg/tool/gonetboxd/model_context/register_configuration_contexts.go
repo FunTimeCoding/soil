@@ -51,7 +51,7 @@ func (s *Server) registerConfigurationContexts() {
 				"List NetBox configuration contexts with their payload and what they apply to",
 			),
 		),
-		s.ListConfigurationContexts,
+		mcp.NewTypedToolHandler(s.ListConfigurationContexts),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -59,7 +59,7 @@ func (s *Server) registerConfigurationContexts() {
 			mcp.WithDescription("Get one NetBox configuration context by name"),
 			name,
 		),
-		s.GetConfigurationContext,
+		mcp.NewTypedToolHandler(s.GetConfigurationContext),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -87,7 +87,7 @@ func (s *Server) registerConfigurationContexts() {
 				assignment...,
 			)...,
 		),
-		s.CreateConfigurationContext,
+		mcp.NewTypedToolHandler(s.CreateConfigurationContext),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -112,7 +112,7 @@ func (s *Server) registerConfigurationContexts() {
 				assignment...,
 			)...,
 		),
-		s.UpdateConfigurationContext,
+		mcp.NewTypedToolHandler(s.UpdateConfigurationContext),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -120,6 +120,6 @@ func (s *Server) registerConfigurationContexts() {
 			mcp.WithDescription("Delete a NetBox configuration context"),
 			name,
 		),
-		s.DeleteConfigurationContext,
+		mcp.NewTypedToolHandler(s.DeleteConfigurationContext),
 	)
 }

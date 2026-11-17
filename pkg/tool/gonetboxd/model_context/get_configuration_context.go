@@ -2,31 +2,25 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) GetConfigurationContext(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Name,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
+	if a.Name == "" {
+		return response.Fail("name is required")
+	}
+
+	result, e := s.service.ConfigurationContextByName(a.Name)
 
 	if e != nil {
-		return response.Fail("name is required: %v", e)
-	}
-
-	result, f := s.service.ConfigurationContextByName(name)
-
-	if not_found.Is(f) {
-		return response.Fail("%v", f)
-	}
-
-	if f != nil {
-		return s.captureFail(x, f, "configuration context not read")
+		return s.answerMessage(x, e, "configuration context not read")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContext(result))

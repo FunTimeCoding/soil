@@ -6,7 +6,7 @@ import (
 	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
-func (s *Server) Seed(count int) {
+func (s *Server) SeedUnreachable(count int) {
 	for i := range count {
 		s.Alertmanager.Add(
 			alert.NewBasic(
@@ -18,5 +18,5 @@ func (s *Server) Seed(count int) {
 		)
 	}
 
-	s.Clock.Poll()
+	s.Clock().Poll()
 }

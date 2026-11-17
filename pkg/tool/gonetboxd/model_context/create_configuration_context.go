@@ -2,52 +2,48 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/netbox/configuration_assignment"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateConfigurationContext(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.ConfigurationContext,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
-
-	if e != nil {
-		return response.Fail("name is required: %v", e)
+	if a.Name == "" {
+		return response.Fail("name is required")
 	}
 
-	payload, okay := r.GetArguments()[constant.Payload].(map[string]any)
-
-	if !okay {
+	if a.Payload == nil {
 		return response.Fail("payload is required and must be an object")
 	}
 
-	a := assignmentArgument(r)
+	assignment := assignmentArgument(a)
 
-	if a == nil {
-		a = configuration_assignment.New()
+	if assignment == nil {
+		assignment = configuration_assignment.New()
 	}
 
-	result, f := s.service.CreateConfigurationContext(
-		name,
-		int32(
-			r.GetInt(constant.Weight, int(constant.ConfigurationContextWeight)),
-		),
-		payload,
-		a,
+	weight := constant.ConfigurationContextWeight
+
+	if a.Weight != nil {
+		weight = int32(*a.Weight)
+	}
+
+	result, e := s.service.CreateConfigurationContext(
+		a.Name,
+		weight,
+		*a.Payload,
+		assignment,
 	)
 
-	if not_found.Is(f) {
-		return response.Fail("%v", f)
-	}
-
-	if f != nil {
-		return s.captureFail(x, f, "configuration context not created")
+	if e != nil {
+		return s.answerMessage(x, e, "configuration context not created")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContext(result))

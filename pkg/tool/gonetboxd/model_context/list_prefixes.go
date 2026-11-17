@@ -10,11 +10,12 @@ import (
 func (s *Server) ListPrefixes(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Prefixes()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "prefixes not listed")
 	}
 
 	return response.SuccessAny(convert.Prefixes(result))

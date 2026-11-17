@@ -2,39 +2,25 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateCluster(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateCluster,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(generativeConstant.ParameterName)
-
-	if f != nil {
-		return response.Fail("name is required: %v", f)
+	if a.Name == "" || a.Type == "" || a.Site == "" {
+		return response.Fail("name, type and site are required")
 	}
 
-	typeName, g := r.RequireString(constant.Type)
-
-	if g != nil {
-		return response.Fail("type is required: %v", g)
-	}
-
-	siteName, h := r.RequireString(constant.Site)
-
-	if h != nil {
-		return response.Fail("site is required: %v", h)
-	}
-
-	result, e := s.service.CreateCluster(name, typeName, siteName)
+	result, e := s.service.CreateCluster(a.Name, a.Type, a.Site)
 
 	if e != nil {
-		return s.serviceFail(x, e, "cluster not created")
+		return s.answerMessage(x, e, "cluster not created")
 	}
 
 	return response.SuccessAny(convert.Cluster(result))

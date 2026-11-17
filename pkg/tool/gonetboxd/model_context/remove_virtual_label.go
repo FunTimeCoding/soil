@@ -3,28 +3,21 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) RemoveVirtualLabel(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.VirtualLabelKey,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
+	if a.VirtualMachine == "" || a.Key == "" {
+		return response.Fail("virtual machine and key are required")
 	}
 
-	key, g := r.RequireString(constant.Key)
-
-	if g != nil {
-		return response.Fail("key is required: %v", g)
-	}
-
-	if e := s.service.RemoveVirtualLabel(name, key); e != nil {
-		return s.serviceFail(x, e, "label not removed from virtual machine")
+	if e := s.service.RemoveVirtualLabel(a.VirtualMachine, a.Key); e != nil {
+		return s.answerMessage(x, e, "label not removed from virtual machine")
 	}
 
 	return response.Success("label removed")

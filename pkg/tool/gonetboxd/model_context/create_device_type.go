@@ -3,31 +3,24 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateDeviceType(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateDeviceType,
 ) (*mcp.CallToolResult, error) {
-	model, f := r.RequireString(constant.Model)
-
-	if f != nil {
-		return response.Fail("model is required: %v", f)
+	if a.Model == "" || a.Manufacturer == "" {
+		return response.Fail("model and manufacturer are required")
 	}
 
-	manufacturer, g := r.RequireString(constant.Manufacturer)
-
-	if g != nil {
-		return response.Fail("manufacturer is required: %v", g)
-	}
-
-	result, e := s.service.CreateDeviceType(model, manufacturer)
+	result, e := s.service.CreateDeviceType(a.Model, a.Manufacturer)
 
 	if e != nil {
-		return s.serviceFail(x, e, "device type not created")
+		return s.answerMessage(x, e, "device type not created")
 	}
 
 	return response.SuccessAny(convert.DeviceType(result))

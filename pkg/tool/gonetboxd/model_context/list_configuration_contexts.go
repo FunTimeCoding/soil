@@ -10,11 +10,12 @@ import (
 func (s *Server) ListConfigurationContexts(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.ConfigurationContexts()
 
 	if e != nil {
-		return s.captureFail(x, e, "configuration contexts not listed")
+		return s.answerMessage(x, e, "configuration contexts not listed")
 	}
 
 	return response.SuccessAny(convert.ConfigurationContexts(result))

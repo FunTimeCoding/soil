@@ -10,9 +10,10 @@ import (
 
 func (s *Server) GeneratedClient() *client.ClientWithResponses {
 	s.t.Helper()
+	v := s.Served()
 	result, e := client.NewClientWithResponses(
-		s.Address(webConstant.RootPath),
-		client.WithHTTPClient(s.Client()),
+		v.Address(webConstant.RootPath),
+		client.WithHTTPClient(v.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),

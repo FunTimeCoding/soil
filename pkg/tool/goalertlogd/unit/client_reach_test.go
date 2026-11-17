@@ -11,13 +11,15 @@ import (
 
 func TestClientReachesGoalertlogd(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	assert.FatalOnError(t, s.AlertClient().Reachable(t.Context()))
 }
 
 func TestRefusedTokenIsNotReachable(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	c := client.New(
-		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
+		locator.New(webConstant.Localhost).Insecure().Port(s.Served().Port),
 		"wrong-token",
 	)
 	t.Cleanup(c.Close)

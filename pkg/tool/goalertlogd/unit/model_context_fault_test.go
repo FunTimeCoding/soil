@@ -10,8 +10,9 @@ import (
 
 func TestStoreFaultCarriesItsOwnTextOverModelContext(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 	c := s.Tools()
-	s.Daemon.Close()
+	s.Daemon().Close()
 	assert.StringContains(
 		t,
 		`"error": "sql: database is closed"`,

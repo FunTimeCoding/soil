@@ -10,7 +10,7 @@ import (
 func (s *Server) AlertClient() *client.Client {
 	s.t.Helper()
 	result := client.New(
-		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
+		locator.New(webConstant.Localhost).Insecure().Port(s.Served().Port),
 		generativeConstant.ModelContextTestToken,
 	)
 	s.t.Cleanup(result.Close)

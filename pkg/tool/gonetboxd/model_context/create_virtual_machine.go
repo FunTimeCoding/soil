@@ -2,33 +2,25 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateVirtualMachine(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateVirtualMachine,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(generativeConstant.ParameterName)
-
-	if f != nil {
-		return response.Fail("name is required: %v", f)
+	if a.Name == "" || a.Cluster == "" {
+		return response.Fail("name and cluster are required")
 	}
 
-	clusterName, g := r.RequireString(constant.Cluster)
-
-	if g != nil {
-		return response.Fail("cluster is required: %v", g)
-	}
-
-	result, e := s.service.CreateVirtualMachine(name, clusterName)
+	result, e := s.service.CreateVirtualMachine(a.Name, a.Cluster)
 
 	if e != nil {
-		return s.serviceFail(x, e, "virtual machine not created")
+		return s.answerMessage(x, e, "virtual machine not created")
 	}
 
 	return response.SuccessAny(convert.VirtualMachine(result))

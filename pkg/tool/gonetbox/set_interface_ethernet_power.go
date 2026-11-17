@@ -13,15 +13,21 @@ func setInterfaceEthernetPower(
 ) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set-interface-ethernet-power [device] [interface] [mode] [type]",
-		Short: "Set a device interface's ethernet power: mode pse (supplies) or pd (powered), type such as type2-ieee802.3at; an empty mode clears both",
-		Args:  cobra.RangeArgs(3, 4),
+		Short: "Set a device interface's ethernet power: mode pse (supplies) or pd (powered), type such as type2-ieee802.3at; no mode clears both",
+		Args:  cobra.RangeArgs(2, 4),
 		Run: func(
 			_ *cobra.Command,
 			arguments []string,
 		) {
+			mode := ""
+
+			if len(arguments) > 2 {
+				mode = arguments[2]
+			}
+
 			kind := ""
 
-			if len(arguments) == 4 {
+			if len(arguments) > 3 {
 				kind = arguments[3]
 			}
 
@@ -30,7 +36,7 @@ func setInterfaceEthernetPower(
 					context.Background(),
 					arguments[0],
 					arguments[1],
-					arguments[2],
+					mode,
 					kind,
 				),
 			)

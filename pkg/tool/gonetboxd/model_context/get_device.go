@@ -2,26 +2,25 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) GetDevice(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.Name,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(generativeConstant.ParameterName)
-
-	if f != nil {
-		return response.Fail("name is required: %v", f)
+	if a.Name == "" {
+		return response.Fail("name is required")
 	}
 
-	d, labels, e := s.service.Device(name)
+	d, labels, e := s.service.Device(a.Name)
 
 	if e != nil {
-		return s.serviceFail(x, e, "device not retrieved")
+		return s.answerMessage(x, e, "device not retrieved")
 	}
 
 	return response.SuccessAny(convert.LabeledDevice(d, labels))

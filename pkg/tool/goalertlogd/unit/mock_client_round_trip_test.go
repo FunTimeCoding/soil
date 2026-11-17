@@ -13,6 +13,7 @@ import (
 
 func TestMockAnswersWhatServerAnswers(t *testing.T) {
 	s := base.New(t)
+	s.SeedAlerts()
 
 	for i := 3; i <= 30; i++ {
 		s.Alertmanager.Add(
@@ -25,9 +26,9 @@ func TestMockAnswersWhatServerAnswers(t *testing.T) {
 		)
 	}
 
-	s.Clock.Poll()
+	s.Clock().Poll()
 	s.Alertmanager.Remove("fp1")
-	s.Clock.Poll()
+	s.Clock().Poll()
 	c := s.AlertClient()
 	m := client_tester.Mirror(t, c)
 	defer m.Close()

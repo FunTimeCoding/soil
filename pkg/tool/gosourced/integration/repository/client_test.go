@@ -58,7 +58,9 @@ func TestClientHearsUnknownModule(t *testing.T) {
 
 func TestRefusedTokenIsError(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient("hotel-wrong")
+	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
+		"hotel-wrong",
+	)
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "echo"})
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "diff status: 401", e.Error())

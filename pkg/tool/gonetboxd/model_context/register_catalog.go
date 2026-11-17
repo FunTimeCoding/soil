@@ -12,35 +12,35 @@ func (s *Server) registerCatalog() {
 			constant.ListSites,
 			mcp.WithDescription("List all NetBox sites"),
 		),
-		s.ListSites,
+		mcp.NewTypedToolHandler(s.ListSites),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListTenants,
 			mcp.WithDescription("List all NetBox tenants"),
 		),
-		s.ListTenants,
+		mcp.NewTypedToolHandler(s.ListTenants),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListDeviceRoles,
 			mcp.WithDescription("List all NetBox device roles"),
 		),
-		s.ListDeviceRoles,
+		mcp.NewTypedToolHandler(s.ListDeviceRoles),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListManufacturers,
 			mcp.WithDescription("List all NetBox manufacturers"),
 		),
-		s.ListManufacturers,
+		mcp.NewTypedToolHandler(s.ListManufacturers),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListDeviceTypes,
 			mcp.WithDescription("List all NetBox device types"),
 		),
-		s.ListDeviceTypes,
+		mcp.NewTypedToolHandler(s.ListDeviceTypes),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -52,7 +52,7 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Site name"),
 			),
 		),
-		s.CreateSite,
+		mcp.NewTypedToolHandler(s.CreateSite),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -64,7 +64,7 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Tenant name"),
 			),
 		),
-		s.CreateTenant,
+		mcp.NewTypedToolHandler(s.CreateTenant),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -82,7 +82,7 @@ func (s *Server) registerCatalog() {
 				),
 			),
 		),
-		s.CreateDeviceRole,
+		mcp.NewTypedToolHandler(s.CreateDeviceRole),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -94,7 +94,7 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Manufacturer name"),
 			),
 		),
-		s.CreateManufacturer,
+		mcp.NewTypedToolHandler(s.CreateManufacturer),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -111,6 +111,6 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Manufacturer name (must exist)"),
 			),
 		),
-		s.CreateDeviceType,
+		mcp.NewTypedToolHandler(s.CreateDeviceType),
 	)
 }

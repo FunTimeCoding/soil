@@ -10,11 +10,12 @@ import (
 func (s *Server) ListManufacturers(
 	x context.Context,
 	_ mcp.CallToolRequest,
+	_ struct{},
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.Manufacturers()
 
 	if e != nil {
-		return s.captureDetail(x, e)
+		return s.answerMessage(x, e, "manufacturers not listed")
 	}
 
 	return response.SuccessAny(convert.Manufacturers(result))

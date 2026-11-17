@@ -3,25 +3,24 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) ListVirtualLabels(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.VirtualMachine,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(constant.VirtualMachine)
-
-	if f != nil {
-		return response.Fail("virtual_machine is required: %v", f)
+	if a.VirtualMachine == "" {
+		return response.Fail("virtual machine is required")
 	}
 
-	labels, e := s.service.VirtualLabels(name)
+	labels, e := s.service.VirtualLabels(a.VirtualMachine)
 
 	if e != nil {
-		return s.serviceFail(x, e, "labels not listed for virtual machine")
+		return s.answerMessage(x, e, "labels not listed for virtual machine")
 	}
 
 	return response.SuccessAny(convert.Labels(labels))

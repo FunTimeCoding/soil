@@ -2,39 +2,25 @@ package model_context
 
 import (
 	"context"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) CreateTunnel(
 	x context.Context,
-	r mcp.CallToolRequest,
+	_ mcp.CallToolRequest,
+	a argument.CreateTunnel,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generativeConstant.ParameterName)
+	if a.Name == "" || a.Encapsulation == "" || a.Group == "" {
+		return response.Fail("name, encapsulation and group are required")
+	}
+
+	t, e := s.service.CreateTunnel(a.Name, a.Encapsulation, a.Group)
 
 	if e != nil {
-		return response.Fail("name is required: %v", e)
-	}
-
-	encapsulation, f := r.RequireString(constant.Encapsulation)
-
-	if f != nil {
-		return response.Fail("encapsulation is required: %v", f)
-	}
-
-	groupName, g := r.RequireString(constant.Group)
-
-	if g != nil {
-		return response.Fail("group is required: %v", g)
-	}
-
-	t, h := s.service.CreateTunnel(name, encapsulation, groupName)
-
-	if h != nil {
-		return s.serviceFail(x, h, "tunnel not created")
+		return s.answerMessage(x, e, "tunnel not created")
 	}
 
 	return response.SuccessAny(convert.Tunnel(t))
