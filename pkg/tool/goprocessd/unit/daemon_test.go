@@ -4,14 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/unit/base"
 	"testing"
 	"time"
 )
 
 func TestDaemonHandsItsSupervisorToLifecycle(t *testing.T) {
-	d := daemon_tester.New(t, "alfa: sleep 60\n")
-	workers := d.Workers()
+	workers := base.New(t, "alfa: sleep 60\n").Daemon().Workers()
 	assert.Count(t, 1, workers)
 	_, okay := workers[0].(*supervisor.Supervisor)
 	assert.True(t, okay)

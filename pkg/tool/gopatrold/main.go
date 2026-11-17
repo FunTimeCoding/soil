@@ -19,6 +19,6 @@ func Main() {
 	o := option.New()
 	o.Metric.Address = a.MetricAddress()
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
-	o.Hosts = environment.Slice(constant.HostEnvironment)
+	o.Instances = environment.Slice(constant.InstanceEnvironment)
 	Run(o, s)
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"go.uber.org/goleak"
@@ -26,18 +26,17 @@ func TestDaemonClosesClientItBuilt(t *testing.T) {
 }
 
 func TestClockGaugesOwnersLatestRuns(t *testing.T) {
-	s := mock_client.New(t)
-	s.AddRun(
+	s := base.New(t)
+	s.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "failure"),
 	)
-	s.AddRun(
+	s.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(2, "main", "completed", "success"),
 	)
-	m := metric.New()
 
-	for _, w := range daemon_tester.New(t, s, m, memory.New()).Workers() {
+	for _, w := range s.Daemon().Workers() {
 		w.Start()
 		w.Close()
 	}
@@ -45,7 +44,7 @@ func TestClockGaugesOwnersLatestRuns(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP github_workflow_run_status Latest completed workflow run per repo/workflow/branch (1 per entry)

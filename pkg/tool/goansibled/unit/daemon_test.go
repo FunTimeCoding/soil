@@ -4,16 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/ansible_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonHandsOutItsInventoryGuardFirst(t *testing.T) {
-	f := ansible_tester.NewFixture(t, nil)
-	f.UnreachableInventory()
-	workers := daemon_tester.Build(t, f).Workers()
+	s := base.New(t)
+	s.UnreachableInventory()
+	workers := s.Daemon().Workers()
 	assert.Count(t, 3, workers)
 
 	for n, w := range workers {
@@ -23,33 +22,33 @@ func TestDaemonHandsOutItsInventoryGuardFirst(t *testing.T) {
 }
 
 func TestDaemonCountsReapsOnItsRegistry(t *testing.T) {
-	f := ansible_tester.NewFixture(t, nil)
-	daemon_tester.Build(t, f)
-	assert.True(t, reaper.CountsOn(f.Registry))
+	s := base.New(t)
+	s.Daemon()
+	assert.True(t, reaper.CountsOn(s.Registry))
 }
 
 func TestUnreachableInventoryIsLeftToGuard(t *testing.T) {
-	f := ansible_tester.NewFixture(t, nil)
-	f.UnreachableInventory()
-	daemon_tester.Start(daemon_tester.Build(t, f))
-	r := f.WaitForRun()
+	s := base.New(t)
+	s.UnreachableInventory()
+	s.Start()
+	r := s.WaitForRun()
 	assert.String(t, "error", r.Status)
 	assert.String(t, "inventory", r.Scope)
-	assert.Count(t, 0, f.Reporter.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	f := ansible_tester.NewFixture(t, nil)
-	f.UnreachableInventory()
+	s := base.New(t)
+	s.UnreachableInventory()
 	before := goleak.IgnoreCurrent()
-	d := daemon_tester.Build(t, f)
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {
 		w.Start()
 	}
 
-	f.WaitForRun()
+	s.WaitForRun()
 
 	for _, w := range workers {
 		w.Close()

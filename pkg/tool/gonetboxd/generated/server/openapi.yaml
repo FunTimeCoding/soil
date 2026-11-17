@@ -585,6 +585,139 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/devices/{name}/power-outlets:
+    get:
+      operationId: listPowerOutlets
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      responses:
+        "200":
+          description: Power outlets on the device, each with what its cable reaches.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/PowerOutlet"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to list power outlets.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/devices/{name}/power-outlets/create:
+    post:
+      operationId: createPowerOutlet
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePowerOutletRequest"
+      responses:
+        "201":
+          description: Created power outlet.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PowerOutlet"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create power outlet.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/devices/{name}/power-ports/create:
+    post:
+      operationId: createPowerPort
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePowerPortRequest"
+      responses:
+        "201":
+          description: Created power port.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PowerPort"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create power port.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/devices/{name}/interfaces/{interface}/physical-address:
     post:
       operationId: setInterfacePhysicalAddress
@@ -2444,6 +2577,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/power-cables:
+    post:
+      operationId: createPowerCable
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePowerCableRequest"
+      responses:
+        "201":
+          description: Created power cable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cable"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create power cable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/tunnel-terminations:
     get:
       operationId: listTunnelTerminations
@@ -3947,6 +4120,78 @@ components:
         interfaceB:
           type: string
           description: Interface name on side B.
+    PowerOutlet:
+      type: object
+      required:
+      - identifier
+      - name
+      - device
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        device:
+          type: string
+          description: Device the outlet sits on.
+        connectedDevice:
+          type: string
+          description: Device whose power port the outlet's cable reaches.
+        connectedPort:
+          type: string
+          description: Power port the outlet's cable reaches.
+    PowerPort:
+      type: object
+      required:
+      - identifier
+      - name
+      - device
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        device:
+          type: string
+          description: Device the port sits on.
+    CreatePowerOutletRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Outlet name, such as "battery 1".
+    CreatePowerPortRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Port name, such as "power".
+    CreatePowerCableRequest:
+      type: object
+      required:
+      - outletDevice
+      - outlet
+      - portDevice
+      - port
+      properties:
+        outletDevice:
+          type: string
+          description: Device carrying the power outlet, such as a UPS or a power strip.
+        outlet:
+          type: string
+          description: Power outlet name.
+        portDevice:
+          type: string
+          description: Device whose power port the cable plugs into.
+        port:
+          type: string
+          description: Power port name.
     Tunnel:
       type: object
       required:

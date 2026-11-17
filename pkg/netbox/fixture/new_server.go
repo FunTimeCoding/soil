@@ -50,6 +50,19 @@ func NewServer(r *Recorder) *httptest.Server {
 					respond(w, constant.FixtureDevice)
 				case path == "/api/dcim/devices/":
 					respond(w, constant.FixtureDeviceList)
+				case path == "/api/dcim/power-outlets/" &&
+					q.Method == http.MethodPost:
+					r.Created = decodeBody(q)
+					respond(w, constant.FixturePowerOutlet)
+				case path == "/api/dcim/power-outlets/":
+					respond(w, constant.FixturePowerOutletList)
+				case path == "/api/dcim/power-ports/" &&
+					q.Method == http.MethodPost:
+					r.Created = decodeBody(q)
+					respond(w, constant.FixturePowerPort)
+				case path == "/api/dcim/cables/" && q.Method == http.MethodPost:
+					r.Created = decodeBody(q)
+					respond(w, constant.FixtureCable)
 				case path == "/api/virtualization/virtual-machines/2/" &&
 					q.Method == http.MethodPatch:
 					r.Patched = decodeBody(q)

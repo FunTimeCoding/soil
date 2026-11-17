@@ -13,7 +13,7 @@ var Identity = identity.New(
 	"gopatrold [flags]",
 )
 
-const HostEnvironment = "PATROL_HOST"
+const InstanceEnvironment = "PATROL_INSTANCE"
 const PatrolPeer = "patrol"
 const (
 	HostLabel  = "host"

@@ -3,10 +3,10 @@ package worker
 import "github.com/funtimecoding/soil/pkg/smartctl/response"
 
 func (w *Worker) drive(
-	host string,
+	instance string,
 	r *response.Report,
 ) {
-	labels := []string{host, r.Device.Name, r.ModelName}
+	labels := []string{instance, r.Device.Name, r.ModelName}
 
 	if r.Status != nil {
 		w.passed.WithLabelValues(labels...).Set(flag(r.Status.Passed))

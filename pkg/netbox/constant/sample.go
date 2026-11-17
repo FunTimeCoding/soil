@@ -219,6 +219,79 @@ const FixtureVirtualMachine = `{
   "virtual_disk_count": 0
 }`
 
+const FixturePowerOutlet = `{
+  "id": 5,
+  "url": "http://example/api/dcim/power-outlets/5/",
+  "display": "india",
+  "device": {
+    "id": 3,
+    "url": "http://example/api/dcim/devices/3/",
+    "display": "bravo",
+    "name": "bravo"
+  },
+  "name": "india",
+  "link_peers": [],
+  "connected_endpoints_reachable": false,
+  "_occupied": false
+}`
+
+const FixturePowerOutletList = `{
+  "count": 1,
+  "results": [
+    {
+      "id": 5,
+      "url": "http://example/api/dcim/power-outlets/5/",
+      "display": "india",
+      "device": {
+        "id": 3,
+        "url": "http://example/api/dcim/devices/3/",
+        "display": "bravo",
+        "name": "bravo"
+      },
+      "name": "india",
+      "link_peers": [
+        {
+          "id": 6,
+          "url": "http://example/api/dcim/power-ports/6/",
+          "display": "juliett",
+          "device": {
+            "id": 4,
+            "url": "http://example/api/dcim/devices/4/",
+            "display": "kilo",
+            "name": "kilo"
+          },
+          "name": "juliett"
+        }
+      ],
+      "link_peers_type": "dcim.powerport",
+      "connected_endpoints_reachable": true,
+      "_occupied": true
+    }
+  ]
+}`
+
+const FixturePowerPort = `{
+  "id": 6,
+  "url": "http://example/api/dcim/power-ports/6/",
+  "display": "juliett",
+  "device": {
+    "id": 4,
+    "url": "http://example/api/dcim/devices/4/",
+    "display": "kilo",
+    "name": "kilo"
+  },
+  "name": "juliett",
+  "link_peers": [],
+  "connected_endpoints_reachable": false,
+  "_occupied": false
+}`
+
+const FixtureCable = `{
+  "id": 7,
+  "url": "http://example/api/dcim/cables/7/",
+  "display": "#7"
+}`
+
 const FixtureVirtualMachineList = `{
   "count": 1,
   "results": [

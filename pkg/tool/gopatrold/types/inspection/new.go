@@ -1,5 +1,5 @@
 package inspection
 
-func New(host string) *Inspection {
-	return &Inspection{Host: host}
+func New(instance string) *Inspection {
+	return &Inspection{Instance: instance}
 }

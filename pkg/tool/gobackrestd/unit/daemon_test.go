@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"go.uber.org/goleak"
@@ -19,11 +19,10 @@ import (
 )
 
 func TestClockGaugesLatestBackups(t *testing.T) {
-	c := mock_client.New()
-	c.Add(service_tester.Stanzas("backed_up.json")...)
-	m := metric.New()
+	s := base.New(t)
+	s.Source.Add(service_tester.Stanzas("backed_up.json")...)
 
-	for _, w := range daemon_tester.New(t, c, m, memory.New()).Workers() {
+	for _, w := range s.Daemon().Workers() {
 		w.Start()
 		w.Close()
 	}
@@ -31,7 +30,7 @@ func TestClockGaugesLatestBackups(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP pgbackrest_stanza_status Stanza status code from pgbackrest info, 0 is ok
@@ -60,11 +59,10 @@ pgbackrest_backup_error{stanza="fixture",type="full"} 0
 }
 
 func TestClockGaugesStatusOfStanzaWithoutBackups(t *testing.T) {
-	c := mock_client.New()
-	c.Add(service_tester.Stanzas("no_backup.json")...)
-	m := metric.New()
+	s := base.New(t)
+	s.Source.Add(service_tester.Stanzas("no_backup.json")...)
 
-	for _, w := range daemon_tester.New(t, c, m, memory.New()).Workers() {
+	for _, w := range s.Daemon().Workers() {
 		w.Start()
 		w.Close()
 	}
@@ -72,7 +70,7 @@ func TestClockGaugesStatusOfStanzaWithoutBackups(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP pgbackrest_stanza_status Stanza status code from pgbackrest info, 0 is ok
@@ -85,12 +83,7 @@ pgbackrest_stanza_status{stanza="fixture"} 2
 }
 
 func TestDaemonHandsOutGuardFirst(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(),
-		metric.New(),
-		memory.New(),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 

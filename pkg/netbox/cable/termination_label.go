@@ -18,14 +18,14 @@ func terminationLabel(terminations []netbox.GenericObject) string {
 		return fmt.Sprintf("%s #%d", t.ObjectType, t.ObjectId)
 	}
 
-	name, _ := o["name"].(string)
+	name, _ := o[constant.NameField].(string)
 	d, okay1 := o[constant.DeviceField].(map[string]any)
 
 	if !okay1 {
 		return name
 	}
 
-	deviceName, _ := d["name"].(string)
+	deviceName, _ := d[constant.NameField].(string)
 
 	return fmt.Sprintf("%s %s", deviceName, name)
 }

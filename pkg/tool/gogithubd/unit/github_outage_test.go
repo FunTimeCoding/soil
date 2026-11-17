@@ -4,59 +4,39 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/github/mock_client"
-	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/worker"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestGitHubOutageStaysQuietAndFaultIsCapturedOnce(t *testing.T) {
-	c := mock_client.New(t)
-	c.Failure = errors.New("github answered nonsense")
-	r := memory.New()
-	w, okay := daemon_tester.New(
-		t,
-		c,
-		metric.New(),
-		r,
-	).Workers()[1].(*worker.Worker)
+	s := base.New(t)
+	s.Source.Failure = errors.New("github answered nonsense")
+	w, okay := s.Daemon().Workers()[1].(*worker.Worker)
 	assert.True(t, okay)
 	w.Poll()
-	assert.Count(t, 1, r.Events())
-	c.Failure = outage_tester.RefusedDial()
+	assert.Count(t, 1, s.Reporter.Events())
+	s.Source.Failure = outage_tester.RefusedDial()
 
 	for range 2 {
 		w.Poll()
 	}
 
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, s.Reporter.Events())
 }
 
 func TestMissingOwnerIsCaptured(t *testing.T) {
-	c := mock_client.New(t)
-	c.Failure = not_found.Format("Not Found")
-	r := memory.New()
-	w, okay := daemon_tester.New(
-		t,
-		c,
-		metric.New(),
-		r,
-	).Workers()[1].(*worker.Worker)
+	s := base.New(t)
+	s.Source.Failure = not_found.Format("Not Found")
+	w, okay := s.Daemon().Workers()[1].(*worker.Worker)
 	assert.True(t, okay)
 	w.Poll()
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, s.Reporter.Events())
 }
 
 func TestDaemonHandsOutGitHubGuardFirst(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(t),
-		metric.New(),
-		memory.New(),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

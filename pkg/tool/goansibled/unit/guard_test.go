@@ -1,27 +1,12 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
-	"github.com/prometheus/client_golang/prometheus"
-	"path/filepath"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/base"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	o := option.New()
-	o.LitePath = filepath.Join(t.TempDir(), "goansibled.db")
-	d := daemon.New(
-		o,
-		logger.New(t.Context()),
-		memory.New(),
-		prometheus.NewRegistry(),
-	)
-	t.Cleanup(d.Close)
-	v := model_context_server.Mount(t, d, memory.New())
+	v := base.New(t).Served()
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyGuarded(t, "/api/trigger")

@@ -12,6 +12,7 @@ type NetBoxClient interface {
 	RackClient
 	ModuleClient
 	CablingClient
+	PowerClient
 	InterfaceClient
 	AddressClient
 	OrganizationClient

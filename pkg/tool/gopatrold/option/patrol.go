@@ -6,8 +6,8 @@ import (
 )
 
 type Patrol struct {
-	Metric  option.Web
-	Verbose bool
-	Hosts   []string
-	Source  func(host string) face.PatrolClient
+	Metric    option.Web
+	Verbose   bool
+	Instances []string
+	Source    func(instance string) face.PatrolClient
 }

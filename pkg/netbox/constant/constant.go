@@ -27,10 +27,13 @@ const (
 
 	ObjectLinkField  = "url"
 	DeviceField      = "device"
+	NameField        = "name"
 	InterfaceSegment = "/api/"
 
 	DeviceAddress           = "dcim.device"
 	InterfaceAddress        = "dcim.interface"
+	PowerOutletAddress      = "dcim.poweroutlet"
+	PowerPortAddress        = "dcim.powerport"
 	VirtualInterfaceAddress = "virtualization.vminterface"
 	VirtualMachineAddress   = "virtualization.virtualmachine"
 

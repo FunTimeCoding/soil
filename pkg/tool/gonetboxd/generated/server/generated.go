@@ -241,6 +241,33 @@ type CreateNameRequest struct {
 	Name string `json:"name"`
 }
 
+// CreatePowerCableRequest defines model for CreatePowerCableRequest.
+type CreatePowerCableRequest struct {
+	// Outlet Power outlet name.
+	Outlet string `json:"outlet"`
+
+	// OutletDevice Device carrying the power outlet, such as a UPS or a power strip.
+	OutletDevice string `json:"outletDevice"`
+
+	// Port Power port name.
+	Port string `json:"port"`
+
+	// PortDevice Device whose power port the cable plugs into.
+	PortDevice string `json:"portDevice"`
+}
+
+// CreatePowerOutletRequest defines model for CreatePowerOutletRequest.
+type CreatePowerOutletRequest struct {
+	// Name Outlet name, such as "battery 1".
+	Name string `json:"name"`
+}
+
+// CreatePowerPortRequest defines model for CreatePowerPortRequest.
+type CreatePowerPortRequest struct {
+	// Name Port name, such as "power".
+	Name string `json:"name"`
+}
+
 // CreatePrefixRequest defines model for CreatePrefixRequest.
 type CreatePrefixRequest struct {
 	// Description Description (optional).
@@ -420,6 +447,28 @@ type PhysicalAddressRequest struct {
 
 // Platform defines model for Platform.
 type Platform struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
+// PowerOutlet defines model for PowerOutlet.
+type PowerOutlet struct {
+	// ConnectedDevice Device whose power port the outlet's cable reaches.
+	ConnectedDevice *string `json:"connectedDevice,omitempty"`
+
+	// ConnectedPort Power port the outlet's cable reaches.
+	ConnectedPort *string `json:"connectedPort,omitempty"`
+
+	// Device Device the outlet sits on.
+	Device     string `json:"device"`
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
+// PowerPort defines model for PowerPort.
+type PowerPort struct {
+	// Device Device the port sits on.
+	Device     string `json:"device"`
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
 }
@@ -694,6 +743,12 @@ type AddDeviceJournalEntryJSONRequestBody = CreateJournalEntryRequest
 // SetDeviceLabelJSONRequestBody defines body for SetDeviceLabel for application/json ContentType.
 type SetDeviceLabelJSONRequestBody = SetLabelRequest
 
+// CreatePowerOutletJSONRequestBody defines body for CreatePowerOutlet for application/json ContentType.
+type CreatePowerOutletJSONRequestBody = CreatePowerOutletRequest
+
+// CreatePowerPortJSONRequestBody defines body for CreatePowerPort for application/json ContentType.
+type CreatePowerPortJSONRequestBody = CreatePowerPortRequest
+
 // CreateDeviceTunnelTerminationJSONRequestBody defines body for CreateDeviceTunnelTermination for application/json ContentType.
 type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
 
@@ -708,6 +763,9 @@ type CreateManufacturerJSONRequestBody = CreateNameRequest
 
 // CreatePlatformJSONRequestBody defines body for CreatePlatform for application/json ContentType.
 type CreatePlatformJSONRequestBody = CreateNameRequest
+
+// CreatePowerCableJSONRequestBody defines body for CreatePowerCable for application/json ContentType.
+type CreatePowerCableJSONRequestBody = CreatePowerCableRequest
 
 // CreatePrefixJSONRequestBody defines body for CreatePrefix for application/json ContentType.
 type CreatePrefixJSONRequestBody = CreatePrefixRequest
@@ -880,6 +938,15 @@ type ServerInterface interface {
 	// (PUT /api/devices/{name}/labels/{key})
 	SetDeviceLabel(w http.ResponseWriter, r *http.Request, name string, key string)
 
+	// (GET /api/devices/{name}/power-outlets)
+	ListPowerOutlets(w http.ResponseWriter, r *http.Request, name string)
+
+	// (POST /api/devices/{name}/power-outlets/create)
+	CreatePowerOutlet(w http.ResponseWriter, r *http.Request, name string)
+
+	// (POST /api/devices/{name}/power-ports/create)
+	CreatePowerPort(w http.ResponseWriter, r *http.Request, name string)
+
 	// (GET /api/devices/{name}/tags)
 	ListDeviceTags(w http.ResponseWriter, r *http.Request, name string)
 
@@ -921,6 +988,9 @@ type ServerInterface interface {
 
 	// (POST /api/platforms)
 	CreatePlatform(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/power-cables)
+	CreatePowerCable(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/prefixes)
 	ListPrefixes(w http.ResponseWriter, r *http.Request)
@@ -1909,6 +1979,84 @@ func (siw *ServerInterfaceWrapper) SetDeviceLabel(w http.ResponseWriter, r *http
 	handler.ServeHTTP(w, r)
 }
 
+// ListPowerOutlets operation middleware
+func (siw *ServerInterfaceWrapper) ListPowerOutlets(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListPowerOutlets(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreatePowerOutlet operation middleware
+func (siw *ServerInterfaceWrapper) CreatePowerOutlet(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreatePowerOutlet(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreatePowerPort operation middleware
+func (siw *ServerInterfaceWrapper) CreatePowerPort(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreatePowerPort(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListDeviceTags operation middleware
 func (siw *ServerInterfaceWrapper) ListDeviceTags(w http.ResponseWriter, r *http.Request) {
 
@@ -2218,6 +2366,20 @@ func (siw *ServerInterfaceWrapper) CreatePlatform(w http.ResponseWriter, r *http
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreatePlatform(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreatePowerCable operation middleware
+func (siw *ServerInterfaceWrapper) CreatePowerCable(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreatePowerCable(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3118,6 +3280,9 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/device-types", wrapper.ListDeviceTypes)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/device-types", wrapper.CreateDeviceType)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/interfaces/create", wrapper.CreateInterface)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}/power-outlets", wrapper.ListPowerOutlets)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/power-outlets/create", wrapper.CreatePowerOutlet)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/power-ports/create", wrapper.CreatePowerPort)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/interfaces/{interface}/physical-address", wrapper.SetInterfacePhysicalAddress)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/physical-addresses", wrapper.ListPhysicalAddresses)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/create", wrapper.CreateDevice)
@@ -3171,6 +3336,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/tunnels", wrapper.CreateTunnel)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/cables", wrapper.ListCables)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/cables", wrapper.CreateCable)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/power-cables", wrapper.CreatePowerCable)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tunnel-terminations", wrapper.ListTunnelTerminations)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/tunnel-terminations/create", wrapper.CreateDeviceTunnelTermination)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines/{name}/tunnel-terminations/create", wrapper.CreateVirtualTunnelTermination)
@@ -5852,6 +6018,228 @@ func (response SetDeviceLabel503JSONResponse) VisitSetDeviceLabelResponse(w http
 	return err
 }
 
+type ListPowerOutletsRequestObject struct {
+	Name string `json:"name"`
+}
+
+type ListPowerOutletsResponseObject interface {
+	VisitListPowerOutletsResponse(w http.ResponseWriter) error
+}
+
+type ListPowerOutlets200JSONResponse []*PowerOutlet
+
+func (response ListPowerOutlets200JSONResponse) VisitListPowerOutletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPowerOutlets404JSONResponse Error
+
+func (response ListPowerOutlets404JSONResponse) VisitListPowerOutletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPowerOutlets500JSONResponse ErrorResponse
+
+func (response ListPowerOutlets500JSONResponse) VisitListPowerOutletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPowerOutlets503JSONResponse Error
+
+func (response ListPowerOutlets503JSONResponse) VisitListPowerOutletsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerOutletRequestObject struct {
+	Name string `json:"name"`
+	Body *CreatePowerOutletJSONRequestBody
+}
+
+type CreatePowerOutletResponseObject interface {
+	VisitCreatePowerOutletResponse(w http.ResponseWriter) error
+}
+
+type CreatePowerOutlet201JSONResponse PowerOutlet
+
+func (response CreatePowerOutlet201JSONResponse) VisitCreatePowerOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerOutlet400JSONResponse Error
+
+func (response CreatePowerOutlet400JSONResponse) VisitCreatePowerOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerOutlet404JSONResponse Error
+
+func (response CreatePowerOutlet404JSONResponse) VisitCreatePowerOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerOutlet500JSONResponse ErrorResponse
+
+func (response CreatePowerOutlet500JSONResponse) VisitCreatePowerOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerOutlet503JSONResponse Error
+
+func (response CreatePowerOutlet503JSONResponse) VisitCreatePowerOutletResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerPortRequestObject struct {
+	Name string `json:"name"`
+	Body *CreatePowerPortJSONRequestBody
+}
+
+type CreatePowerPortResponseObject interface {
+	VisitCreatePowerPortResponse(w http.ResponseWriter) error
+}
+
+type CreatePowerPort201JSONResponse PowerPort
+
+func (response CreatePowerPort201JSONResponse) VisitCreatePowerPortResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerPort400JSONResponse Error
+
+func (response CreatePowerPort400JSONResponse) VisitCreatePowerPortResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerPort404JSONResponse Error
+
+func (response CreatePowerPort404JSONResponse) VisitCreatePowerPortResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerPort500JSONResponse ErrorResponse
+
+func (response CreatePowerPort500JSONResponse) VisitCreatePowerPortResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerPort503JSONResponse Error
+
+func (response CreatePowerPort503JSONResponse) VisitCreatePowerPortResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListDeviceTagsRequestObject struct {
 	Name string `json:"name"`
 }
@@ -6728,6 +7116,84 @@ func (response CreatePlatform500JSONResponse) VisitCreatePlatformResponse(w http
 type CreatePlatform503JSONResponse Error
 
 func (response CreatePlatform503JSONResponse) VisitCreatePlatformResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerCableRequestObject struct {
+	Body *CreatePowerCableJSONRequestBody
+}
+
+type CreatePowerCableResponseObject interface {
+	VisitCreatePowerCableResponse(w http.ResponseWriter) error
+}
+
+type CreatePowerCable201JSONResponse Cable
+
+func (response CreatePowerCable201JSONResponse) VisitCreatePowerCableResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerCable400JSONResponse Error
+
+func (response CreatePowerCable400JSONResponse) VisitCreatePowerCableResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerCable404JSONResponse Error
+
+func (response CreatePowerCable404JSONResponse) VisitCreatePowerCableResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerCable500JSONResponse ErrorResponse
+
+func (response CreatePowerCable500JSONResponse) VisitCreatePowerCableResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePowerCable503JSONResponse Error
+
+func (response CreatePowerCable503JSONResponse) VisitCreatePowerCableResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -9093,6 +9559,15 @@ type StrictServerInterface interface {
 	// (PUT /api/devices/{name}/labels/{key})
 	SetDeviceLabel(ctx context.Context, request SetDeviceLabelRequestObject) (SetDeviceLabelResponseObject, error)
 
+	// (GET /api/devices/{name}/power-outlets)
+	ListPowerOutlets(ctx context.Context, request ListPowerOutletsRequestObject) (ListPowerOutletsResponseObject, error)
+
+	// (POST /api/devices/{name}/power-outlets/create)
+	CreatePowerOutlet(ctx context.Context, request CreatePowerOutletRequestObject) (CreatePowerOutletResponseObject, error)
+
+	// (POST /api/devices/{name}/power-ports/create)
+	CreatePowerPort(ctx context.Context, request CreatePowerPortRequestObject) (CreatePowerPortResponseObject, error)
+
 	// (GET /api/devices/{name}/tags)
 	ListDeviceTags(ctx context.Context, request ListDeviceTagsRequestObject) (ListDeviceTagsResponseObject, error)
 
@@ -9134,6 +9609,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/platforms)
 	CreatePlatform(ctx context.Context, request CreatePlatformRequestObject) (CreatePlatformResponseObject, error)
+
+	// (POST /api/power-cables)
+	CreatePowerCable(ctx context.Context, request CreatePowerCableRequestObject) (CreatePowerCableResponseObject, error)
 
 	// (GET /api/prefixes)
 	ListPrefixes(ctx context.Context, request ListPrefixesRequestObject) (ListPrefixesResponseObject, error)
@@ -10409,6 +10887,98 @@ func (sh *strictHandler) SetDeviceLabel(w http.ResponseWriter, r *http.Request, 
 	}
 }
 
+// ListPowerOutlets operation middleware
+func (sh *strictHandler) ListPowerOutlets(w http.ResponseWriter, r *http.Request, name string) {
+	var request ListPowerOutletsRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListPowerOutlets(ctx, request.(ListPowerOutletsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListPowerOutlets")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListPowerOutletsResponseObject); ok {
+		if err := validResponse.VisitListPowerOutletsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreatePowerOutlet operation middleware
+func (sh *strictHandler) CreatePowerOutlet(w http.ResponseWriter, r *http.Request, name string) {
+	var request CreatePowerOutletRequestObject
+
+	request.Name = name
+
+	var body CreatePowerOutletJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreatePowerOutlet(ctx, request.(CreatePowerOutletRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreatePowerOutlet")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreatePowerOutletResponseObject); ok {
+		if err := validResponse.VisitCreatePowerOutletResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreatePowerPort operation middleware
+func (sh *strictHandler) CreatePowerPort(w http.ResponseWriter, r *http.Request, name string) {
+	var request CreatePowerPortRequestObject
+
+	request.Name = name
+
+	var body CreatePowerPortJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreatePowerPort(ctx, request.(CreatePowerPortRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreatePowerPort")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreatePowerPortResponseObject); ok {
+		if err := validResponse.VisitCreatePowerPortResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListDeviceTags operation middleware
 func (sh *strictHandler) ListDeviceTags(w http.ResponseWriter, r *http.Request, name string) {
 	var request ListDeviceTagsRequestObject
@@ -10789,6 +11359,37 @@ func (sh *strictHandler) CreatePlatform(w http.ResponseWriter, r *http.Request) 
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(CreatePlatformResponseObject); ok {
 		if err := validResponse.VisitCreatePlatformResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreatePowerCable operation middleware
+func (sh *strictHandler) CreatePowerCable(w http.ResponseWriter, r *http.Request) {
+	var request CreatePowerCableRequestObject
+
+	var body CreatePowerCableJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreatePowerCable(ctx, request.(CreatePowerCableRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreatePowerCable")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreatePowerCableResponseObject); ok {
+		if err := validResponse.VisitCreatePowerCableResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -11769,107 +12370,115 @@ func (sh *strictHandler) CreateWirelessNetwork(w http.ResponseWriter, r *http.Re
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"/f8HAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

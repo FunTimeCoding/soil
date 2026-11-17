@@ -6,8 +6,8 @@ import (
 )
 
 type Inspection struct {
-	Host    string
-	Reached bool
-	Arrays  []*array.Array
-	Drives  []*response.Report
+	Instance string
+	Reached  bool
+	Arrays   []*array.Array
+	Drives   []*response.Report
 }

@@ -12,7 +12,7 @@ func (s *Service) Round(x context.Context) ([]*inspection.Inspection, []error) {
 	var failures []error
 
 	for _, t := range s.targets {
-		i := inspection.New(t.Host)
+		i := inspection.New(t.Instance)
 		result = append(result, i)
 		arrays, e := peer.Guarded(x, t.Guard, t.Client.Arrays)
 

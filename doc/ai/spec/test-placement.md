@@ -126,49 +126,27 @@ test-side copy: look for it before writing a helper
 
 ### The tester object
 
-A home's `base` and `service_tester` are objects holding `t`, even when they
-hold a single function, so one shape reads across homes.
-`go:pkg/tool/gohabiticad/unit/base` and
-`go:pkg/tool/gobandd/unit/service_tester` are the patterns.
+A home's `base` and `service_tester` are objects holding `t`, even with a
+single function, so one shape reads across homes
+(`go:pkg/tool/gohabiticad/unit/base`,
+`go:pkg/tool/gobandd/unit/service_tester`).
 
 - `New(t, o ...Option)` builds the default parts, and a test swaps one with a
-  `With…` option, written when a caller needs it. Options add: a part most
-  callers want is still opt-in, named by its callers. A part every caller
-  names, with no sensible default, stays a positional argument. A
-  `NewWith…` beside `New`, or a hook editing the daemon's option, gives way
-  to options.
-- Parts are exported fields, for reading and for driving the fake
-  (`s.Source.Add(…)`, `s.Reporter.Events()`), never for configuring.
+  `With…` option; a part every caller names stays positional.
+- Parts are exported fields for reading and driving the fake, never for
+  configuring.
 - `Service()` and `Daemon()` build on first call and hand back that instance
-  after, so the tester's own helpers and the test share one subject. A
-  tester hands out its subject through them, never as a bare return value,
-  a field built at `New`, or a fresh build per call.
-- A tester built on another takes that tester's options and passes them
-  through, so each option is written once, beside the part it sets;
-  `base` embeds its `service_tester`.
-- `base` holds the daemon stack and hands out what the daemon serves: the
-  mock as `Source`, `Daemon()`, `Served()` mounted through
-  `model_context_server.Mount`, and `Tools()` or `GeneratedClient()` for the
-  surfaces it has. `client_tester` and `outage_server` build on it. A
-  daemon whose `Mount` takes more than reporter, recorder and mux, or
-  passes its own recorder, keeps `model_context_server.New` and its
-  closure.
-- Wrappers over the stack - `model_context_tester`, `web_service_tester`,
-  `web_interface_tester`, `daemon_tester` - fold into `base`, their helpers
-  becoming its methods, so a test holds one object. A second object with
-  methods keeps a package named for what it holds
-  (`go:pkg/tool/goclauded/unit/session_tester`, handed out by
-  `base.NewSession()`), as a package holds one receiver type
+  after - never a bare return value, a field built at `New`, or a fresh
+  build per call.
+- `base` embeds its `service_tester` and holds the daemon stack. Wrappers
+  over the stack fold into it, `client_tester` and `outage_server` build on
+  it, and a second object with methods keeps its own package
   (`type_receiver`).
-- A multi-instance home builds one mock per name: `WithInstances(names
-  ...string)`, `alfa` alone by default. Tests reach a mock through accessors
-  that fail the test naming a missing instance - `Alfa()` and `Bravo()` for
-  the fixture pair, `Instance(name)` for any other - handing out the mock, or
-  a `Clients` struct where an instance has several
+- A multi-instance home builds one mock per name with `WithInstances`,
+  reached through accessors that fail the test naming a missing instance
   (`go:pkg/tool/goproxmoxd/unit/service_tester`).
-- Fixtures filling a tester's parts are its methods; a fixture the subject
-  reads as it starts is an option instead, as a method would run too late. A
-  builder preparing a fixture returns the tester, not its directory.
+- Fixtures filling a tester's parts are its methods; one the subject reads
+  as it starts is an option.
 
 ## The line
 

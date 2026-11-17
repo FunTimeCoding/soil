@@ -7,8 +7,8 @@ import (
 
 func New() *Patrol {
 	return &Patrol{
-		Source: func(host string) face.PatrolClient {
-			return patrol.NewEnvironment(host)
+		Source: func(instance string) face.PatrolClient {
+			return patrol.NewEnvironment(instance)
 		},
 	}
 }

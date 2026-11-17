@@ -22,11 +22,17 @@ func New(
 	var guards []*peer.Guard
 	var targets []*target.Target
 
-	for _, host := range o.Hosts {
-		c := o.Source(host)
-		g := peer.New(join.Space(constant.PatrolPeer, host), host, c, l, r)
+	for _, instance := range o.Instances {
+		c := o.Source(instance)
+		g := peer.New(
+			join.Space(constant.PatrolPeer, instance),
+			instance,
+			c,
+			l,
+			r,
+		)
 		guards = append(guards, g)
-		targets = append(targets, target.New(host, c, g))
+		targets = append(targets, target.New(instance, c, g))
 	}
 
 	s := service.New(targets...)

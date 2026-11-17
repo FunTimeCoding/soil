@@ -6,7 +6,7 @@ import (
 )
 
 type Target struct {
-	Host   string
-	Client face.PatrolClient
-	Guard  *peer.Guard
+	Instance string
+	Client   face.PatrolClient
+	Guard    *peer.Guard
 }

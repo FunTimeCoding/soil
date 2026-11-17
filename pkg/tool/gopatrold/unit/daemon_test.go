@@ -12,7 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopatrold/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopatrold/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gopatrold/option"
-	"github.com/funtimecoding/soil/pkg/tool/gopatrold/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gopatrold/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gopatrold/worker"
 	"github.com/prometheus/client_golang/prometheus/testutil"
 	"go.uber.org/goleak"
@@ -21,23 +21,13 @@ import (
 )
 
 func TestRoundGaugesHealthyHost(t *testing.T) {
-	m := metric.New()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{
-			"alfa": daemon_tester.Client(
-				"mdstat_healthy.txt",
-				"smartctl_nvme_healthy.json",
-			),
-		},
-		m,
-		memory.New(),
-	)
-	daemon_tester.Poll(t, d)
+	s := base.New(t)
+	s.SeedDisks("alfa", "mdstat_healthy.txt", "smartctl_nvme_healthy.json")
+	s.Poll()
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP patrol_host_reached 1 when the last round read the host
@@ -67,23 +57,17 @@ patrol_drive_media_errors{drive="/dev/nvme1",host="alfa",model="Example NVMe 2TB
 }
 
 func TestRoundGaugesDegradedArrayAndFailingDrive(t *testing.T) {
-	m := metric.New()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{
-			"alfa": daemon_tester.Client(
-				"mdstat_degraded_derived.txt",
-				"smartctl_nvme_failing_derived.json",
-			),
-		},
-		m,
-		memory.New(),
+	s := base.New(t)
+	s.SeedDisks(
+		"alfa",
+		"mdstat_degraded_derived.txt",
+		"smartctl_nvme_failing_derived.json",
 	)
-	daemon_tester.Poll(t, d)
+	s.Poll()
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP patrol_array_members_active Members the array is running on
@@ -109,23 +93,14 @@ patrol_drive_critical_warning{drive="/dev/nvme1",host="alfa",model="Example NVMe
 }
 
 func TestUnreachedHostKeepsOtherHostsGauged(t *testing.T) {
-	down := mock_client.New()
-	down.Failure = errors.New("sudo: a password is required")
-	m := metric.New()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{
-			"alfa":  down,
-			"bravo": daemon_tester.Client("mdstat_healthy.txt"),
-		},
-		m,
-		memory.New(),
-	)
-	daemon_tester.Poll(t, d)
+	s := base.New(t, base.WithInstances("alfa", "bravo"))
+	s.Alfa().Failure = errors.New("sudo: a password is required")
+	s.SeedDisks("bravo", "mdstat_healthy.txt")
+	s.Poll()
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP patrol_host_reached 1 when the last round read the host
@@ -144,25 +119,20 @@ patrol_array_members_active{array="md1",host="bravo"} 2
 }
 
 func TestRoundDropsDriveNoLongerScanned(t *testing.T) {
-	c := daemon_tester.Client(
+	s := base.New(t)
+	s.SeedDisks(
+		"alfa",
 		"mdstat_healthy.txt",
 		"smartctl_nvme_healthy.json",
 		"smartctl_nvme_system.json",
 	)
-	m := metric.New()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": c},
-		m,
-		memory.New(),
-	)
-	daemon_tester.Poll(t, d)
-	c.RemoveDrive("/dev/nvme1")
-	daemon_tester.Poll(t, d)
+	s.Poll()
+	s.Alfa().RemoveDrive("/dev/nvme1")
+	s.Poll()
 	assert.FatalOnError(
 		t,
 		testutil.GatherAndCompare(
-			m.Registry(),
+			s.Metric.Registry(),
 			strings.NewReader(
 				`
 # HELP patrol_drive_health_passed 1 when the drive's own health assessment passes
@@ -176,15 +146,7 @@ patrol_drive_health_passed{drive="/dev/nvme0",host="alfa",model="Example NVMe 12
 }
 
 func TestDaemonHandsOutGuardsBeforeClock(t *testing.T) {
-	w := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{
-			"alfa":  mock_client.New(),
-			"bravo": mock_client.New(),
-		},
-		metric.New(),
-		memory.New(),
-	).Workers()
+	w := base.New(t, base.WithInstances("alfa", "bravo")).Daemon().Workers()
 	assert.Count(t, 3, w)
 
 	for _, g := range w[:2] {
@@ -200,7 +162,7 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
 	c := mock_client.New()
 	o := option.New()
-	o.Hosts = []string{"alfa"}
+	o.Instances = []string{"alfa"}
 	o.Source = func(string) face.PatrolClient { return c }
 	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())
 	workers := d.Workers()

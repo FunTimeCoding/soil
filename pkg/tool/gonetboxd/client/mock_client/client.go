@@ -6,6 +6,7 @@ type Client struct {
 	DeviceList          []*client.Device
 	VirtualMachineList  []*client.VirtualMachine
 	PhysicalAddressList []client.PhysicalAddressOwner
+	PowerOutletList     []*client.PowerOutlet
 	Failure             error
 	Closed              int
 	Updated             map[string]client.UpdateDeviceRequest

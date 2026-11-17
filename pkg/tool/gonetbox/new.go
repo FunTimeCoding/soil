@@ -20,6 +20,7 @@ func New(
 	addBuildCommands(t, c, result)
 	addTagCommands(t, c, result)
 	addNetworkCommands(t, c, result)
+	addPowerCommands(t, c, result)
 
 	return result
 }

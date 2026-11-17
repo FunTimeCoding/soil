@@ -43,6 +43,23 @@ type DeviceClient interface {
 		interfaceType string,
 		physicalAddress string,
 	) (client.Interface, error)
+	CreatePowerCable(
+		x context.Context,
+		outletDevice string,
+		outlet string,
+		portDevice string,
+		port string,
+	) (client.Cable, error)
+	CreatePowerOutlet(
+		x context.Context,
+		device string,
+		name string,
+	) (client.PowerOutlet, error)
+	CreatePowerPort(
+		x context.Context,
+		device string,
+		name string,
+	) (client.PowerPort, error)
 	GetDevice(
 		x context.Context,
 		name string,
@@ -64,6 +81,10 @@ type DeviceClient interface {
 		x context.Context,
 		name string,
 	) ([]*client.Interface, error)
+	ListPowerOutlets(
+		x context.Context,
+		name string,
+	) ([]*client.PowerOutlet, error)
 	UpdateDevice(
 		x context.Context,
 		name string,

@@ -6,9 +6,9 @@ import (
 )
 
 func New(
-	host string,
+	instance string,
 	c face.PatrolClient,
 	g *peer.Guard,
 ) *Target {
-	return &Target{Host: host, Client: c, Guard: g}
+	return &Target{Instance: instance, Client: c, Guard: g}
 }

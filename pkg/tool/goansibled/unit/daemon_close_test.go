@@ -2,19 +2,19 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/base"
 	"testing"
 	"time"
 )
 
 func TestCloseWaitsForRunInFlightToRecordItself(t *testing.T) {
-	s, d := daemon_tester.New(t)
+	s := base.New(t)
 	s.Hold()
-	daemon_tester.Start(d)
+	s.Start()
 	s.WaitForRunning()
 	closed := make(chan struct{})
 	go func() {
-		d.Close()
+		s.Daemon().Close()
 		close(closed)
 	}()
 
@@ -38,11 +38,11 @@ func TestCloseWaitsForRunInFlightToRecordItself(t *testing.T) {
 }
 
 func TestStartAbandonsRunPreviousProcessLeftRunning(t *testing.T) {
-	s, d := daemon_tester.New(t)
+	s := base.New(t)
 	s.Hold()
-	daemon_tester.Start(d)
+	s.Start()
 	s.WaitForRunning()
-	daemon_tester.Build(t, s)
+	s.Reload()
 	runs := s.StoredRuns()
 	assert.String(t, "error", runs[0].Status)
 	assert.String(

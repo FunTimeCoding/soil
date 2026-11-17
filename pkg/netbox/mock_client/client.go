@@ -10,6 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
 	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
 	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/netbox/power_outlet"
+	"github.com/funtimecoding/soil/pkg/netbox/power_port"
 	"github.com/funtimecoding/soil/pkg/netbox/rack"
 	"github.com/funtimecoding/soil/pkg/netbox/site"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
@@ -28,6 +30,8 @@ type Client struct {
 	racks      []*rack.Rack
 	tenants    []*tenant.Tenant
 	interfaces map[int32][]*network.Interface
+	outlets    map[int32][]*power_outlet.Outlet
+	ports      map[int32][]*power_port.Port
 	disks      map[int32][]*virtual_disk.Disk
 	contexts   []*configuration_context.Context
 	sets       []*choice_set.Set

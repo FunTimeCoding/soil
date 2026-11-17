@@ -235,6 +235,33 @@ type CreateNameRequest struct {
 	Name string `json:"name"`
 }
 
+// CreatePowerCableRequest defines model for CreatePowerCableRequest.
+type CreatePowerCableRequest struct {
+	// Outlet Power outlet name.
+	Outlet string `json:"outlet"`
+
+	// OutletDevice Device carrying the power outlet, such as a UPS or a power strip.
+	OutletDevice string `json:"outletDevice"`
+
+	// Port Power port name.
+	Port string `json:"port"`
+
+	// PortDevice Device whose power port the cable plugs into.
+	PortDevice string `json:"portDevice"`
+}
+
+// CreatePowerOutletRequest defines model for CreatePowerOutletRequest.
+type CreatePowerOutletRequest struct {
+	// Name Outlet name, such as "battery 1".
+	Name string `json:"name"`
+}
+
+// CreatePowerPortRequest defines model for CreatePowerPortRequest.
+type CreatePowerPortRequest struct {
+	// Name Port name, such as "power".
+	Name string `json:"name"`
+}
+
 // CreatePrefixRequest defines model for CreatePrefixRequest.
 type CreatePrefixRequest struct {
 	// Description Description (optional).
@@ -414,6 +441,28 @@ type PhysicalAddressRequest struct {
 
 // Platform defines model for Platform.
 type Platform struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
+// PowerOutlet defines model for PowerOutlet.
+type PowerOutlet struct {
+	// ConnectedDevice Device whose power port the outlet's cable reaches.
+	ConnectedDevice *string `json:"connectedDevice,omitempty"`
+
+	// ConnectedPort Power port the outlet's cable reaches.
+	ConnectedPort *string `json:"connectedPort,omitempty"`
+
+	// Device Device the outlet sits on.
+	Device     string `json:"device"`
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
+// PowerPort defines model for PowerPort.
+type PowerPort struct {
+	// Device Device the port sits on.
+	Device     string `json:"device"`
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
 }
@@ -688,6 +737,12 @@ type AddDeviceJournalEntryJSONRequestBody = CreateJournalEntryRequest
 // SetDeviceLabelJSONRequestBody defines body for SetDeviceLabel for application/json ContentType.
 type SetDeviceLabelJSONRequestBody = SetLabelRequest
 
+// CreatePowerOutletJSONRequestBody defines body for CreatePowerOutlet for application/json ContentType.
+type CreatePowerOutletJSONRequestBody = CreatePowerOutletRequest
+
+// CreatePowerPortJSONRequestBody defines body for CreatePowerPort for application/json ContentType.
+type CreatePowerPortJSONRequestBody = CreatePowerPortRequest
+
 // CreateDeviceTunnelTerminationJSONRequestBody defines body for CreateDeviceTunnelTermination for application/json ContentType.
 type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
 
@@ -702,6 +757,9 @@ type CreateManufacturerJSONRequestBody = CreateNameRequest
 
 // CreatePlatformJSONRequestBody defines body for CreatePlatform for application/json ContentType.
 type CreatePlatformJSONRequestBody = CreateNameRequest
+
+// CreatePowerCableJSONRequestBody defines body for CreatePowerCable for application/json ContentType.
+type CreatePowerCableJSONRequestBody = CreatePowerCableRequest
 
 // CreatePrefixJSONRequestBody defines body for CreatePrefix for application/json ContentType.
 type CreatePrefixJSONRequestBody = CreatePrefixRequest
@@ -1035,6 +1093,25 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	SetDeviceLabel(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListPowerOutlets performs a GET /api/devices/{name}/power-outlets (the `ListPowerOutlets` operationId) request.
+	ListPowerOutlets(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePowerOutletWithBody performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request,
+	// with any type of body and a specified content type.
+	CreatePowerOutletWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePowerOutlet performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreatePowerOutlet(ctx context.Context, name string, body CreatePowerOutletJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePowerPortWithBody performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request,
+	// with any type of body and a specified content type.
+	CreatePowerPortWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePowerPort performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreatePowerPort(ctx context.Context, name string, body CreatePowerPortJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListDeviceTags performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 	ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -1101,6 +1178,14 @@ type ClientInterface interface {
 	// CreatePlatform performs a POST /api/platforms (the `CreatePlatform` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreatePlatform(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePowerCableWithBody performs a POST /api/power-cables (the `CreatePowerCable` operationId) request,
+	// with any type of body and a specified content type.
+	CreatePowerCableWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePowerCable performs a POST /api/power-cables (the `CreatePowerCable` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreatePowerCable(ctx context.Context, body CreatePowerCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListPrefixes performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
 	ListPrefixes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -2075,6 +2160,75 @@ func (c *Client) SetDeviceLabel(ctx context.Context, name string, key string, bo
 	return c.Client.Do(req)
 }
 
+// ListPowerOutlets performs a GET /api/devices/{name}/power-outlets (the `ListPowerOutlets` operationId) request.
+func (c *Client) ListPowerOutlets(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListPowerOutletsRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePowerOutletWithBody performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreatePowerOutletWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePowerOutletRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePowerOutlet performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreatePowerOutlet(ctx context.Context, name string, body CreatePowerOutletJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePowerOutletRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePowerPortWithBody performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreatePowerPortWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePowerPortRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePowerPort performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreatePowerPort(ctx context.Context, name string, body CreatePowerPortJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePowerPortRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListDeviceTags performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 func (c *Client) ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceTagsRequest(c.Server, name)
@@ -2322,6 +2476,34 @@ func (c *Client) CreatePlatformWithBody(ctx context.Context, contentType string,
 // Takes a body of the `application/json` content type.
 func (c *Client) CreatePlatform(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePlatformRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePowerCableWithBody performs a POST /api/power-cables (the `CreatePowerCable` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreatePowerCableWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePowerCableRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePowerCable performs a POST /api/power-cables (the `CreatePowerCable` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreatePowerCable(ctx context.Context, body CreatePowerCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePowerCableRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -4555,6 +4737,134 @@ func NewSetDeviceLabelRequestWithBody(server string, name string, key string, co
 	return req, nil
 }
 
+// NewListPowerOutletsRequest constructs an http.Request for the ListPowerOutlets method
+func NewListPowerOutletsRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/devices/%s/power-outlets", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreatePowerOutletRequest calls the generic CreatePowerOutlet builder with application/json body
+func NewCreatePowerOutletRequest(server string, name string, body CreatePowerOutletJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreatePowerOutletRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewCreatePowerOutletRequestWithBody constructs an http.Request for the CreatePowerOutlet method, with any body, and a specified content type
+func NewCreatePowerOutletRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/devices/%s/power-outlets/create", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewCreatePowerPortRequest calls the generic CreatePowerPort builder with application/json body
+func NewCreatePowerPortRequest(server string, name string, body CreatePowerPortJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreatePowerPortRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewCreatePowerPortRequestWithBody constructs an http.Request for the CreatePowerPort method, with any body, and a specified content type
+func NewCreatePowerPortRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/devices/%s/power-ports/create", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListDeviceTagsRequest constructs an http.Request for the ListDeviceTags method
 func NewListDeviceTagsRequest(server string, name string) (*http.Request, error) {
 	var err error
@@ -5074,6 +5384,46 @@ func NewCreatePlatformRequestWithBody(server string, contentType string, body io
 	}
 
 	operationPath := fmt.Sprintf("/api/platforms")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewCreatePowerCableRequest calls the generic CreatePowerCable builder with application/json body
+func NewCreatePowerCableRequest(server string, body CreatePowerCableJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreatePowerCableRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreatePowerCableRequestWithBody constructs an http.Request for the CreatePowerCable method, with any body, and a specified content type
+func NewCreatePowerCableRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/power-cables")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -6746,6 +7096,31 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	SetDeviceLabelWithResponse(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error)
 
+	// ListPowerOutletsWithResponse performs a GET /api/devices/{name}/power-outlets (the `ListPowerOutlets` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListPowerOutletsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListPowerOutletsResponse, error)
+
+	// CreatePowerOutletWithBodyWithResponse performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreatePowerOutletWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePowerOutletResponse, error)
+
+	// CreatePowerOutletWithResponse performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreatePowerOutletWithResponse(ctx context.Context, name string, body CreatePowerOutletJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePowerOutletResponse, error)
+
+	// CreatePowerPortWithBodyWithResponse performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreatePowerPortWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePowerPortResponse, error)
+
+	// CreatePowerPortWithResponse performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreatePowerPortWithResponse(ctx context.Context, name string, body CreatePowerPortJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePowerPortResponse, error)
+
 	// ListDeviceTagsWithResponse performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -6840,6 +7215,16 @@ type ClientWithResponsesInterface interface {
 	// CreatePlatformWithResponse performs a POST /api/platforms (the `CreatePlatform` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreatePlatformWithResponse(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error)
+
+	// CreatePowerCableWithBodyWithResponse performs a POST /api/power-cables (the `CreatePowerCable` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreatePowerCableWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePowerCableResponse, error)
+
+	// CreatePowerCableWithResponse performs a POST /api/power-cables (the `CreatePowerCable` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreatePowerCableWithResponse(ctx context.Context, body CreatePowerCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePowerCableResponse, error)
 
 	// ListPrefixesWithResponse performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
 	//
@@ -9600,6 +9985,206 @@ func (r SetDeviceLabelResponse) ContentType() string {
 	return ""
 }
 
+type ListPowerOutletsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*PowerOutlet
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListPowerOutletsResponse) GetJSON200() *[]*PowerOutlet {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListPowerOutletsResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListPowerOutletsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListPowerOutletsResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r ListPowerOutletsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListPowerOutletsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListPowerOutletsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListPowerOutletsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreatePowerOutletResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *PowerOutlet
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreatePowerOutletResponse) GetJSON201() *PowerOutlet {
+	return r.JSON201
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r CreatePowerOutletResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreatePowerOutletResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreatePowerOutletResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreatePowerOutletResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r CreatePowerOutletResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreatePowerOutletResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreatePowerOutletResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreatePowerOutletResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreatePowerPortResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *PowerPort
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreatePowerPortResponse) GetJSON201() *PowerPort {
+	return r.JSON201
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r CreatePowerPortResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreatePowerPortResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreatePowerPortResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreatePowerPortResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r CreatePowerPortResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreatePowerPortResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreatePowerPortResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreatePowerPortResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListDeviceTagsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -10448,6 +11033,75 @@ func (r CreatePlatformResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreatePlatformResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreatePowerCableResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *Cable
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreatePowerCableResponse) GetJSON201() *Cable {
+	return r.JSON201
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r CreatePowerCableResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreatePowerCableResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreatePowerCableResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r CreatePowerCableResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r CreatePowerCableResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreatePowerCableResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreatePowerCableResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreatePowerCableResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -13221,6 +13875,61 @@ func (c *ClientWithResponses) SetDeviceLabelWithResponse(ctx context.Context, na
 	return ParseSetDeviceLabelResponse(rsp)
 }
 
+// ListPowerOutletsWithResponse performs a GET /api/devices/{name}/power-outlets (the `ListPowerOutlets` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListPowerOutletsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListPowerOutletsResponse, error) {
+	rsp, err := c.ListPowerOutlets(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListPowerOutletsResponse(rsp)
+}
+
+// CreatePowerOutletWithBodyWithResponse performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePowerOutletWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePowerOutletResponse, error) {
+	rsp, err := c.CreatePowerOutletWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePowerOutletResponse(rsp)
+}
+
+// CreatePowerOutletWithResponse performs a POST /api/devices/{name}/power-outlets/create (the `CreatePowerOutlet` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePowerOutletWithResponse(ctx context.Context, name string, body CreatePowerOutletJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePowerOutletResponse, error) {
+	rsp, err := c.CreatePowerOutlet(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePowerOutletResponse(rsp)
+}
+
+// CreatePowerPortWithBodyWithResponse performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePowerPortWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePowerPortResponse, error) {
+	rsp, err := c.CreatePowerPortWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePowerPortResponse(rsp)
+}
+
+// CreatePowerPortWithResponse performs a POST /api/devices/{name}/power-ports/create (the `CreatePowerPort` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePowerPortWithResponse(ctx context.Context, name string, body CreatePowerPortJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePowerPortResponse, error) {
+	rsp, err := c.CreatePowerPort(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePowerPortResponse(rsp)
+}
+
 // ListDeviceTagsWithResponse performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -13428,6 +14137,28 @@ func (c *ClientWithResponses) CreatePlatformWithResponse(ctx context.Context, bo
 		return nil, err
 	}
 	return ParseCreatePlatformResponse(rsp)
+}
+
+// CreatePowerCableWithBodyWithResponse performs a POST /api/power-cables (the `CreatePowerCable` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePowerCableWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePowerCableResponse, error) {
+	rsp, err := c.CreatePowerCableWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePowerCableResponse(rsp)
+}
+
+// CreatePowerCableWithResponse performs a POST /api/power-cables (the `CreatePowerCable` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePowerCableWithResponse(ctx context.Context, body CreatePowerCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePowerCableResponse, error) {
+	rsp, err := c.CreatePowerCable(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePowerCableResponse(rsp)
 }
 
 // ListPrefixesWithResponse performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
@@ -15903,6 +16634,161 @@ func ParseSetDeviceLabelResponse(rsp *http.Response) (*SetDeviceLabelResponse, e
 	return response, nil
 }
 
+// ParseListPowerOutletsResponse parses an HTTP response from a ListPowerOutletsWithResponse call
+func ParseListPowerOutletsResponse(rsp *http.Response) (*ListPowerOutletsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListPowerOutletsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*PowerOutlet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreatePowerOutletResponse parses an HTTP response from a CreatePowerOutletWithResponse call
+func ParseCreatePowerOutletResponse(rsp *http.Response) (*CreatePowerOutletResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreatePowerOutletResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest PowerOutlet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreatePowerPortResponse parses an HTTP response from a CreatePowerPortWithResponse call
+func ParseCreatePowerPortResponse(rsp *http.Response) (*CreatePowerPortResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreatePowerPortResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest PowerPort
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListDeviceTagsResponse parses an HTTP response from a ListDeviceTagsWithResponse call
 func ParseListDeviceTagsResponse(rsp *http.Response) (*ListDeviceTagsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -16530,6 +17416,60 @@ func ParseCreatePlatformResponse(rsp *http.Response) (*CreatePlatformResponse, e
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreatePowerCableResponse parses an HTTP response from a CreatePowerCableWithResponse call
+func ParseCreatePowerCableResponse(rsp *http.Response) (*CreatePowerCableResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreatePowerCableResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Cable
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
