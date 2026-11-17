@@ -3,6 +3,7 @@ package service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/daemon"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_embedder"
@@ -23,5 +24,6 @@ type Tester struct {
 	counter    queryd.EmbedCounter
 	service    *service.Service
 	daemon     *daemon.Daemon
+	served     *model_context_server.Server
 	t          *testing.T
 }

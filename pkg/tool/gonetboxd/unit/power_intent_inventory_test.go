@@ -3,7 +3,6 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
@@ -40,13 +39,9 @@ func TestPowerIntentServiceKeepsActiveHosts(t *testing.T) {
 }
 
 func TestPowerIntentDaemonKeepsActiveHosts(t *testing.T) {
-	o := service_tester.New(t, service_tester.WithPowerIntent())
-	service_tester.SeedIntentHosts(o.Source)
-	d := o.Daemon()
-	response, e := base.GeneratedClient(
-		t,
-		base.Mount(t, d, memory.New()),
-	).GetAnsibleInventoryWithResponse(
+	s := base.New(t, service_tester.WithPowerIntent())
+	service_tester.SeedIntentHosts(s.Source)
+	response, e := s.GeneratedClient().GetAnsibleInventoryWithResponse(
 		context.Background(),
 		&client.GetAnsibleInventoryParams{},
 	)

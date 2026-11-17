@@ -15,7 +15,7 @@ import (
 )
 
 func TestGenerateReturnsReport(t *testing.T) {
-	c := base.Client(t, mock_parser.New(2, nil))
+	c := base.New(t, mock_parser.New(2, nil)).Client()
 	result, e := c.PostGenerate(
 		t.Context(),
 		[]string{service_tester.Input(t, "charlie.zevtc")},
@@ -28,7 +28,7 @@ func TestGenerateReturnsReport(t *testing.T) {
 }
 
 func TestMissingInputFileIsNotFound(t *testing.T) {
-	c := base.Client(t, mock_parser.New(1, nil))
+	c := base.New(t, mock_parser.New(1, nil)).Client()
 	absent := filepath.Join(t.TempDir(), "delta.zevtc")
 	_, e := c.PostGenerate(t.Context(), []string{absent}, nil)
 	assert.True(t, not_found.Is(e))
@@ -36,13 +36,13 @@ func TestMissingInputFileIsNotFound(t *testing.T) {
 }
 
 func TestNoFilesAreCallersMistake(t *testing.T) {
-	c := base.Client(t, mock_parser.New(1, nil))
+	c := base.New(t, mock_parser.New(1, nil)).Client()
 	_, e := c.PostGenerate(t.Context(), []string{}, nil)
 	assert.True(t, validation.Is(e))
 }
 
 func TestFailedGenerateIsReported(t *testing.T) {
-	c := base.Client(t, mock_parser.New(0, errors.New("echo parse failed")))
+	c := base.New(t, mock_parser.New(0, errors.New("echo parse failed"))).Client()
 	_, e := c.PostGenerate(
 		t.Context(),
 		[]string{service_tester.Input(t, "echo.zevtc")},

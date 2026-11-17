@@ -4,10 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
@@ -34,12 +32,7 @@ func New(
 		),
 	)
 	d := o.Daemon()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(o.Reporter, mock_recorder.New(), g)
-		},
-	)
+	s := model_context_server.Mount(t, d, o.Reporter)
 	result := &Server{
 		Daemon:       d,
 		Alertmanager: o.Alertmanager,

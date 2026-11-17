@@ -14,21 +14,23 @@ func New(
 	t *testing.T,
 	path string,
 	o ...Option,
-) *service.Service {
+) *Tester {
 	t.Helper()
-	s := &Tester{now: time.Now, reporter: memory.New()}
+	result := &Tester{Reporter: memory.New(), now: time.Now}
 
 	for _, f := range o {
-		f(s)
+		f(result)
 	}
 
-	return service.New(
+	result.service = service.New(
 		keepass.MustNew(path, "secret"),
 		path,
 		"secret",
-		s.revealed,
-		s.now,
+		result.revealed,
+		result.now,
 		logger.New(context.Background()),
-		s.reporter,
+		result.Reporter,
 	)
+
+	return result
 }

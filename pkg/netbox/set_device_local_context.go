@@ -1,0 +1,22 @@
+package netbox
+
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/netbox-community/go-netbox/v4"
+)
+
+func (c *Client) SetDeviceLocalContext(
+	name string,
+	payload map[string]any,
+) (*device.Device, error) {
+	d, e := c.Device(name)
+
+	if e != nil {
+		return nil, e
+	}
+
+	q := netbox.NewPatchedWritableDeviceWithConfigContextRequest()
+	q.SetLocalContextData(localContext(payload))
+
+	return c.updateDevice(d, q)
+}

@@ -3,8 +3,6 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
@@ -14,8 +12,8 @@ import (
 
 func TestConfigurationContextRoundTrip(t *testing.T) {
 	x := context.Background()
-	r := memory.New()
-	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
+	s := base.New(t)
+	c := s.GeneratedClient()
 	created, e := c.CreateConfigurationContextWithResponse(
 		x,
 		client.CreateConfigurationContextRequest{
@@ -49,13 +47,12 @@ func TestConfigurationContextRoundTrip(t *testing.T) {
 	gone, e := c.GetConfigurationContextWithResponse(x, "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, gone.StatusCode())
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestUnknownConfigurationContextIsNotFoundWithoutSentry(t *testing.T) {
-	r := memory.New()
-	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
-	response, e := c.UpdateConfigurationContextWithResponse(
+	s := base.New(t)
+	response, e := s.GeneratedClient().UpdateConfigurationContextWithResponse(
 		context.Background(),
 		"alfa",
 		client.UpdateConfigurationContextRequest{Weight: new(int32(500))},
@@ -63,12 +60,11 @@ func TestUnknownConfigurationContextIsNotFoundWithoutSentry(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, response.StatusCode())
 	assert.StringContains(t, "alfa", response.JSON404.Error)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestConfigurationContextToolsKeepAssignmentOnPayloadUpdate(t *testing.T) {
-	m := base.New(t, mock_client.New(t), memory.New()).Connect(t)
-	defer m.Close()
+	m := base.New(t).Tools()
 	m.MustCallToolNotation(
 		constant.CreateConfigurationContext,
 		map[string]any{
@@ -97,9 +93,7 @@ func TestConfigurationContextToolsKeepAssignmentOnPayloadUpdate(t *testing.T) {
 }
 
 func TestConfigurationContextToolRefusesMissingPayload(t *testing.T) {
-	m := base.New(t, mock_client.New(t), memory.New()).Connect(t)
-	defer m.Close()
-	text, e := m.CallToolError(
+	text, e := base.New(t).Tools().CallToolError(
 		constant.CreateConfigurationContext,
 		map[string]any{"name": "alfa"},
 	)

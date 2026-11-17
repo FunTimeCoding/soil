@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/held_store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"testing"
@@ -11,7 +10,7 @@ import (
 
 func TestPushToolWhileAnotherWriterHoldsStoreFailsReported(t *testing.T) {
 	q := service_tester.New(t)
-	c := base.Serve(t, q).Connect(t)
+	c := q.Served().Connect(t)
 	defer c.Close()
 	held_store.New(t, q.Path)
 	assert.StringContains(

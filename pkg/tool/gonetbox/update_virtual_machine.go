@@ -19,6 +19,7 @@ func updateVirtualMachine(
 	var memory int
 	var status string
 	var customFields func() *map[string]any
+	var localContext func() *map[string]any
 	result := &cobra.Command{
 		Use:   "update-virtual-machine [name]",
 		Short: "Update virtual machine fields",
@@ -54,6 +55,7 @@ func updateVirtualMachine(
 			}
 
 			body.CustomFields = customFields()
+			body.LocalContext = localContext()
 			t.EmitValue(
 				c.UpdateVirtualMachine(
 					context.Background(),
@@ -64,6 +66,7 @@ func updateVirtualMachine(
 		},
 	}
 	customFields = customFieldFlag(result)
+	localContext = localContextFlag(result)
 	result.Flags().StringVar(
 		&platform,
 		"platform",

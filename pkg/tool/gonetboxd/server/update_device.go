@@ -23,6 +23,7 @@ func (s *Server) UpdateDevice(
 	c.Status = r.Body.Status
 	c.Serial = r.Body.Serial
 	c.Description = r.Body.Description
+	c.LocalContext = r.Body.LocalContext
 
 	if r.Body.CustomFields != nil {
 		c.CustomFields = *r.Body.CustomFields

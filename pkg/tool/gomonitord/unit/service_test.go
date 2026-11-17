@@ -8,19 +8,21 @@ import (
 )
 
 func TestServiceRejectsClaimWithoutItem(t *testing.T) {
-	_, e := service_tester.New(t).ClaimItem("", "alfa@host.example")
+	_, e := service_tester.New(t).Service().ClaimItem("", "alfa@host.example")
 	assert.True(t, validation.Is(e))
 }
 
 func TestServiceRejectsReleaseWithoutOwner(t *testing.T) {
 	assert.True(
 		t,
-		validation.Is(service_tester.New(t).Release("jira-ABC-1", "")),
+		validation.Is(
+			service_tester.New(t).Service().Release("jira-ABC-1", ""),
+		),
 	)
 }
 
 func TestServiceClaimsThroughItsOwnDatabase(t *testing.T) {
-	s := service_tester.New(t)
+	s := service_tester.New(t).Service()
 	_, e := s.ClaimItem("jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)
 	v, f := s.Claims()

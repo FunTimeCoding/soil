@@ -6,12 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
@@ -21,12 +19,10 @@ func GeneratedClient(
 ) (*client.ClientWithResponses, *memory.Memory) {
 	t.Helper()
 	r := memory.New()
-	d := service_tester.New(t, service_tester.WithMattermost(m)).Daemon()
-	s := model_context_server.New(
+	s := model_context_server.Mount(
 		t,
-		func(g *guard.Mux) {
-			d.Mount(r, mock_recorder.New(), g)
-		},
+		service_tester.New(t, service_tester.WithMattermost(m)).Daemon(),
+		r,
 	)
 	c, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),

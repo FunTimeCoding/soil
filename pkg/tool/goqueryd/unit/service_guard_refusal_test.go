@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
@@ -24,7 +23,7 @@ func TestRefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
 	m := q.Embedder
 	m.FailEmbedding(errors.New("embedder exploded"))
 	r := q.Reporter
-	c := client_tester.GeneratedClient(t, base.Serve(t, q))
+	c := client_tester.GeneratedClient(t, q.Served())
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},

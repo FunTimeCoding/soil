@@ -6,9 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/source/inventory/module"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
@@ -21,13 +19,10 @@ func New(
 	i := inventory.New()
 	i.Modules = []module.Module{{Name: "test", Directory: d}}
 	owner, _ := daemon_tester.New(t, i)
-	v := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			owner.Mount(memory.New(), mock_recorder.New(), g)
-		},
-	)
-	result := &Server{Server: v, Directory: d}
+	result := &Server{
+		Server:    model_context_server.Mount(t, owner, memory.New()),
+		Directory: d,
+	}
 	t.Cleanup(result.Close)
 
 	return result

@@ -87,6 +87,15 @@ func (s *Service) UpdateVirtualMachine(
 				}
 			}
 
+			if c.LocalContext != nil {
+				if _, e := s.client.SetVirtualMachineLocalContext(
+					name,
+					*c.LocalContext,
+				); e != nil {
+					return nil, e
+				}
+			}
+
 			if c.Name != nil {
 				renamed, e := s.client.RenameVirtualMachine(name, *c.Name)
 

@@ -19,7 +19,7 @@ require (
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.4
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.160.3
+	github.com/chromedp/cdproto v0.160.4
 	github.com/chromedp/chromedp v0.23.1
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
@@ -55,7 +55,7 @@ require (
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.4
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
-	github.com/luthermonson/go-proxmox v0.9.0
+	github.com/luthermonson/go-proxmox v0.10.0
 	github.com/mark3labs/mcp-go v1.5.0
 	github.com/mattermost/mattermost/server/public v0.6.1
 	github.com/mattn/go-isatty v0.0.24
@@ -77,7 +77,7 @@ require (
 	github.com/prometheus/common v0.74.0
 	github.com/refraction-networking/utls v1.8.2
 	github.com/sashabaranov/go-openai v1.43.0
-	github.com/sergi/go-diff v1.4.4
+	github.com/sergi/go-diff v1.4.5
 	github.com/shirou/gopsutil/v4 v4.26.10
 	github.com/sirupsen/logrus v1.10.2
 	github.com/slok/go-http-metrics v0.13.0
@@ -89,7 +89,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.16
-	gitlab.com/gitlab-org/api/client-go/v3 v3.51.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.52.0
 	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v4 v4.0.0
 	golang.org/x/crypto v0.59.0

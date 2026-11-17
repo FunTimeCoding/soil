@@ -5,14 +5,12 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"path/filepath"
 	"testing"
@@ -32,12 +30,7 @@ func New(t *testing.T) *Tester {
 	}
 	r := memory.New()
 	v := daemon.New(o, logger.New(t.Context()), r)
-	memoryServer := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			v.Mount(r, mock_recorder.New(), g)
-		},
-	)
+	memoryServer := model_context_server.Mount(t, v, r)
 	queryClient := q.Connect(t)
 	memoryClient := memoryServer.Connect(t)
 	t.Cleanup(

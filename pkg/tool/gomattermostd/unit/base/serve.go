@@ -6,12 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"path/filepath"
 	"testing"
@@ -32,16 +30,11 @@ func serve(
 	d := daemon.New(o, logger.New(t.Context()), r)
 	t.Cleanup(d.Close)
 	result := &Server{
-		Upstream: upstream,
-		Store:    worker_tester.NewStoreOnFile(t, o.LitePath),
-		Reporter: r,
-		ContextServer: model_context_server.New(
-			t,
-			func(g *guard.Mux) {
-				d.Mount(r, mock_recorder.New(), g)
-			},
-		),
-		t: t,
+		Upstream:      upstream,
+		Store:         worker_tester.NewStoreOnFile(t, o.LitePath),
+		Reporter:      r,
+		ContextServer: model_context_server.Mount(t, d, r),
+		t:             t,
 	}
 	t.Cleanup(result.Close)
 

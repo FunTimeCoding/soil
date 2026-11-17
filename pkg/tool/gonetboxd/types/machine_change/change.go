@@ -10,4 +10,5 @@ type Change struct {
 	Memory         *int32
 	Status         *string
 	CustomFields   map[string]any
+	LocalContext   *map[string]any
 }

@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -14,7 +13,7 @@ import (
 func TestSearchWhileEmbedderIsDownAnswers503WithoutReport(t *testing.T) {
 	q := service_tester.New(t)
 	q.Embedder.Fail(outage_tester.RefusedDial())
-	c := client_tester.GeneratedClient(t, base.Serve(t, q))
+	c := client_tester.GeneratedClient(t, q.Served())
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},
@@ -29,7 +28,7 @@ func TestSearchWhileEmbedderIsDownAnswers503WithoutReport(t *testing.T) {
 func TestPushWhileEmbedderIsDownAnswersItsWarning(t *testing.T) {
 	q := service_tester.New(t)
 	q.Embedder.Fail(outage_tester.RefusedDial())
-	c := client_tester.GeneratedClient(t, base.Serve(t, q))
+	c := client_tester.GeneratedClient(t, q.Served())
 	answer, e := c.PostDocumentWithResponse(
 		t.Context(),
 		client.PostDocumentJSONRequestBody{

@@ -42,6 +42,14 @@ type CustomizationClient interface {
 		name string,
 		fields map[string]any,
 	) (*virtual_machine.Machine, error)
+	SetDeviceLocalContext(
+		name string,
+		payload map[string]any,
+	) (*device.Device, error)
+	SetVirtualMachineLocalContext(
+		name string,
+		payload map[string]any,
+	) (*virtual_machine.Machine, error)
 	ConfigurationContext(
 		n string,
 	) (*configuration_context.Context, error)

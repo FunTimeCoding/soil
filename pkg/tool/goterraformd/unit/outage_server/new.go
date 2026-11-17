@@ -9,11 +9,9 @@ import (
 	provisionMock "github.com/funtimecoding/soil/pkg/provision/client/mock_client"
 	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"path/filepath"
@@ -38,10 +36,7 @@ func New(
 	t.Cleanup(d.Close)
 	workers := d.Workers()
 	workers[len(workers)-1].Close()
-	result := model_context_server.New(
-		t,
-		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
-	)
+	result := model_context_server.Mount(t, d, r)
 
 	return result, outage_tester.Guard(
 		t,

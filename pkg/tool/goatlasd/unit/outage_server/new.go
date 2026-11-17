@@ -7,7 +7,6 @@ import (
 	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/option"
@@ -20,7 +19,6 @@ import (
 	opnsense "github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	goprocessdConstant "github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	process "github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"path/filepath"
@@ -68,9 +66,10 @@ func New(
 	o.Lease = func() opnsense.Client { return l }
 	d := daemon.New(o, logger.New(t.Context()), r, prometheus.NewRegistry())
 	t.Cleanup(d.Close)
-	result := model_context_server.New(
+	result := model_context_server.Mount(
 		t,
-		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
+		d,
+		r,
 		model_context_server.WithSignOn(),
 	)
 

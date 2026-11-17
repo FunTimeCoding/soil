@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/backrest/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gobackrestd/unit/service_tester"
 	"testing"
 )
@@ -13,9 +12,9 @@ func TestLatestKeepsNewestBackupPerType(t *testing.T) {
 	older.Label = "older"
 	older.Timestamp.Stop = 1
 	s.Backup = append(s.Backup, older)
-	c := mock_client.New()
-	c.Add(s)
-	v, e := service_tester.New(t, c).Latest(t.Context())
+	o := service_tester.New(t)
+	o.Source.Add(s)
+	v, e := o.Service().Latest(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, v)
 	assert.Integer(t, 0, v[0].Status)
@@ -29,9 +28,9 @@ func TestLatestKeepsNewestBackupPerType(t *testing.T) {
 }
 
 func TestLatestCarriesStatusOfStanzaWithoutBackups(t *testing.T) {
-	c := mock_client.New()
-	c.Add(service_tester.Stanzas("no_backup.json")...)
-	v, e := service_tester.New(t, c).Latest(t.Context())
+	o := service_tester.New(t)
+	o.Source.Add(service_tester.Stanzas("no_backup.json")...)
+	v, e := o.Service().Latest(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, v)
 	assert.Integer(t, 2, v[0].Status)

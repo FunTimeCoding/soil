@@ -13,11 +13,10 @@ import (
 )
 
 func TestClientUploadsToDaemon(t *testing.T) {
-	o := service_tester.New(t)
-	c := base.Client(t, o)
+	s := base.New(t)
 	assert.FatalOnError(
 		t,
-		c.PostPackage(
+		s.Client().PostPackage(
 			t.Context(),
 			"v3.21",
 			"main",
@@ -29,13 +28,13 @@ func TestClientUploadsToDaemon(t *testing.T) {
 	assert.True(
 		t,
 		system.FileExists(
-			filepath.Join(o.PackageRoot, "v3.21", "main", "x86_64", "a.apk"),
+			filepath.Join(s.PackageRoot, "v3.21", "main", "x86_64", "a.apk"),
 		),
 	)
 }
 
 func TestClientSeesRefusedUploadAsValidation(t *testing.T) {
-	c := base.Client(t, service_tester.New(t))
+	c := base.New(t).Client()
 	e := c.PostPackage(
 		t.Context(),
 		"v3.21",
@@ -49,13 +48,13 @@ func TestClientSeesRefusedUploadAsValidation(t *testing.T) {
 }
 
 func TestClientListsWhatDaemonIndexed(t *testing.T) {
-	c := base.Client(t, service_tester.New(t))
+	c := base.New(t).Client()
 	result, e := c.GetPackages(t.Context(), &client.GetPackagesParams{})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, result)
 }
 
 func TestClientReachesGoalpined(t *testing.T) {
-	c := base.Client(t, service_tester.New(t))
+	c := base.New(t).Client()
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }

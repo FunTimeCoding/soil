@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/dump"
@@ -16,7 +15,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
@@ -42,12 +40,7 @@ func Serve(
 	d := daemon.New(o, logger.New(t.Context()), memory.New())
 	t.Cleanup(d.Close)
 	r := memory.New()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(r, mock_recorder.New(), g)
-		},
-	)
+	s := model_context_server.Mount(t, d, r)
 	result, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),

@@ -3,13 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusal_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusing_source"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"net/http"
 	"testing"
 )
@@ -39,10 +39,13 @@ func TestConflictWithoutConflictAnswerIsCaptured(t *testing.T) {
 }
 
 func TestRejectedCreateIsQuietToolFailure(t *testing.T) {
-	r := memory.New()
-	s := base.New(t, refusing_source.New(t, validation.New("slug: exists")), r)
-	c := s.Connect(t)
-	defer c.Close()
+	s := base.New(
+		t,
+		service_tester.WithClient(
+			refusing_source.New(t, validation.New("slug: exists")),
+		),
+	)
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"slug: exists",
@@ -51,5 +54,5 @@ func TestRejectedCreateIsQuietToolFailure(t *testing.T) {
 			map[string]any{"name": "alfa"},
 		),
 	)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }

@@ -4,10 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/shared_reranker"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
@@ -26,12 +24,7 @@ func New(t *testing.T) *Server {
 	result := &Server{
 		t:      t,
 		daemon: d,
-		Server: model_context_server.New(
-			t,
-			func(g *guard.Mux) {
-				d.Mount(s.Reporter, mock_recorder.New(), g)
-			},
-		),
+		Server: model_context_server.Mount(t, d, s.Reporter),
 	}
 	t.Cleanup(result.Close)
 

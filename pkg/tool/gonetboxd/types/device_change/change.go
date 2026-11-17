@@ -10,4 +10,5 @@ type Change struct {
 	Serial         *string
 	Description    *string
 	CustomFields   map[string]any
+	LocalContext   *map[string]any
 }

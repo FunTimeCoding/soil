@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/document_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
@@ -12,7 +11,7 @@ import (
 )
 
 func TestKeywordSearchFollowsTypingAndMarksTerms(t *testing.T) {
-	s := base.Serve(t, service_tester.New(t))
+	s := service_tester.New(t).Served()
 	c := client_tester.GeneratedClient(t, s)
 	document_tester.Push(
 		t,
@@ -47,7 +46,7 @@ func TestKeywordSearchFollowsTypingAndMarksTerms(t *testing.T) {
 }
 
 func TestHybridSearchKeepsItsButton(t *testing.T) {
-	s := base.Serve(t, service_tester.New(t))
+	s := service_tester.New(t).Served()
 	page := s.Body(t, "/search")
 	markup_tester.AssertCount(t, 0, page, "form.entry[hx-push-url]")
 	markup_tester.AssertCount(t, 1, page, "form.entry button[type=submit]")

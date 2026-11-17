@@ -1,10 +1,6 @@
 package base
 
-import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/web/guard"
-)
+import "github.com/funtimecoding/soil/pkg/generative/model_context_server"
 
 func (s *Server) Served() *model_context_server.Server {
 	s.t.Helper()
@@ -13,13 +9,7 @@ func (s *Server) Served() *model_context_server.Server {
 		return s.served
 	}
 
-	d := s.Daemon()
-	s.served = model_context_server.New(
-		s.t,
-		func(g *guard.Mux) {
-			d.Mount(s.Reporter, mock_recorder.New(), g)
-		},
-	)
+	s.served = model_context_server.Mount(s.t, s.Daemon(), s.Reporter)
 	s.t.Cleanup(s.served.Close)
 
 	return s.served

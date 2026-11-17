@@ -31,10 +31,12 @@ func New(v *netbox.VirtualMachineWithConfigContext) *Machine {
 	}
 
 	configuration, _ := v.ConfigContext.(map[string]any)
+	local, _ := v.LocalContextData.(map[string]any)
 	status := v.GetStatus()
 
 	return &Machine{
 		Configuration:  configuration,
+		LocalContext:   local,
 		CustomFields:   v.CustomFields,
 		Identifier:     v.GetId(),
 		Name:           v.GetName(),

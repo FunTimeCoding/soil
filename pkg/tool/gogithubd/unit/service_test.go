@@ -2,27 +2,26 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/github/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/types/run_key"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/unit/service_tester"
 	"testing"
 )
 
 func TestLatestKeepsNewestCompletedRun(t *testing.T) {
-	s := mock_client.New(t)
-	s.AddRun(
+	o := service_tester.New(t)
+	o.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "failure"),
 	)
-	s.AddRun(
+	o.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(3, "main", "completed", "success"),
 	)
-	s.AddRun(
+	o.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(2, "main", "completed", "failure"),
 	)
-	v, e := service_tester.New(t, s).Latest()
+	v, e := o.Service().Latest()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(v))
 	assert.String(
@@ -37,13 +36,16 @@ func TestLatestKeepsNewestCompletedRun(t *testing.T) {
 }
 
 func TestLatestSkipsRunInProgress(t *testing.T) {
-	s := mock_client.New(t)
-	s.AddRun(
+	o := service_tester.New(t)
+	o.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "success"),
 	)
-	s.AddRun("bravo", service_tester.WorkflowRun(2, "main", "in_progress", ""))
-	v, e := service_tester.New(t, s).Latest()
+	o.Source.AddRun(
+		"bravo",
+		service_tester.WorkflowRun(2, "main", "in_progress", ""),
+	)
+	v, e := o.Service().Latest()
 	assert.FatalOnError(t, e)
 	assert.Integer(
 		t,
@@ -57,20 +59,20 @@ func TestLatestSkipsRunInProgress(t *testing.T) {
 }
 
 func TestLatestKeepsBranchesApart(t *testing.T) {
-	s := mock_client.New(t)
-	s.AddRun(
+	o := service_tester.New(t)
+	o.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "success"),
 	)
-	s.AddRun(
+	o.Source.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(2, "feature", "completed", "failure"),
 	)
-	s.AddRun(
+	o.Source.AddRun(
 		"charlie",
 		service_tester.WorkflowRun(3, "main", "completed", "success"),
 	)
-	v, e := service_tester.New(t, s).Latest()
+	v, e := o.Service().Latest()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 3, len(v))
 }

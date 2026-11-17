@@ -36,6 +36,10 @@ func VirtualMachine(m *virtual_machine.Machine) *server.VirtualMachine {
 		result.Configuration = &m.Configuration
 	}
 
+	if len(m.LocalContext) > 0 {
+		result.LocalContext = &m.LocalContext
+	}
+
 	if len(m.CustomFields) > 0 {
 		result.CustomFields = &m.CustomFields
 	}

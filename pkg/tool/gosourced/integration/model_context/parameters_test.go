@@ -3,19 +3,17 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/base"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestAddParametersThroughTool(t *testing.T) {
-	o := model_context_tester.New(
-		t,
-		"../../service/testdata/add-parameters/src",
-	)
-	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
-	result := o.Client.MustCallTool(
+	s := base.New(t, "../../service/testdata/add-parameters/src")
+	c := s.Connect(t)
+	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
+	result := c.MustCallTool(
 		constant.AddParameters,
 		map[string]any{
 			"functions": []any{
@@ -31,18 +29,16 @@ func TestAddParametersThroughTool(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "Answer: passed x", result)
-	caller, e := os.ReadFile(filepath.Join(o.Directory, "pkg/caller/caller.go"))
+	caller, e := os.ReadFile(filepath.Join(s.Directory, "pkg/caller/caller.go"))
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, `target.Answer(x, "a", 1)`, string(caller))
 }
 
 func TestNameParametersThroughTool(t *testing.T) {
-	o := model_context_tester.New(
-		t,
-		"../../service/testdata/name-parameters/src",
-	)
-	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
-	result := o.Client.MustCallTool(
+	s := base.New(t, "../../service/testdata/name-parameters/src")
+	c := s.Connect(t)
+	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
+	result := c.MustCallTool(
 		constant.NameParameters,
 		map[string]any{
 			"package_path": "example/pkg/handler",
@@ -55,19 +51,17 @@ func TestNameParametersThroughTool(t *testing.T) {
 	)
 	assert.StringContains(t, "Get: named x", result)
 	source, e := os.ReadFile(
-		filepath.Join(o.Directory, "pkg/handler/handler.go"),
+		filepath.Join(s.Directory, "pkg/handler/handler.go"),
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "\tx context.Context,\n", string(source))
 }
 
 func TestAddParametersToolRefusesWithoutArgument(t *testing.T) {
-	o := model_context_tester.New(
-		t,
-		"../../service/testdata/add-parameters/src",
-	)
-	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
-	_, e := o.Client.CallTool(
+	s := base.New(t, "../../service/testdata/add-parameters/src")
+	c := s.Connect(t)
+	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
+	_, e := c.CallTool(
 		constant.AddParameters,
 		map[string]any{
 			"functions": []any{

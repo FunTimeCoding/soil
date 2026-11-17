@@ -6,12 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/mattermost/mattermost/server/public/model"
 	"net/http"
@@ -39,15 +37,13 @@ func New(
 		},
 		mattermost.WithTeam("tango"),
 	)
-	d := service_tester.New(
+	s := model_context_server.Mount(
 		t,
-		service_tester.WithMattermost(upstream.Client),
-	).Daemon()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(memory.New(), mock_recorder.New(), g)
-		},
+		service_tester.New(
+			t,
+			service_tester.WithMattermost(upstream.Client),
+		).Daemon(),
+		memory.New(),
 	)
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),

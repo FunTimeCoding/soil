@@ -3,26 +3,22 @@ package base
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"testing"
 )
 
-func GeneratedClient(
-	t *testing.T,
-	s *model_context_server.Server,
-) *client.ClientWithResponses {
-	t.Helper()
+func (s *Server) GeneratedClient() *client.ClientWithResponses {
+	s.t.Helper()
+	v := s.Served()
 	result, e := client.NewClientWithResponses(
-		s.Address(webConstant.RootPath),
-		client.WithHTTPClient(s.Client()),
+		v.Address(webConstant.RootPath),
+		client.WithHTTPClient(v.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(s.t, e)
 
 	return result
 }

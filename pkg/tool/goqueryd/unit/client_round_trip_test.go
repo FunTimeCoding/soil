@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -13,7 +12,7 @@ import (
 )
 
 func TestClientRoundTripsDocument(t *testing.T) {
-	s := base.Serve(t, service_tester.New(t))
+	s := service_tester.New(t).Served()
 	c := client_tester.New(t, s.Address(webConstant.RootPath))
 	x := t.Context()
 	metadata := map[string][]string{"scope": {"alfa"}}
@@ -88,7 +87,7 @@ func TestClientRoundTripsDocument(t *testing.T) {
 }
 
 func TestClientAnswersEachClass(t *testing.T) {
-	s := base.Serve(t, service_tester.New(t))
+	s := service_tester.New(t).Served()
 	c := client_tester.New(t, s.Address(webConstant.RootPath))
 	x := t.Context()
 	_, e := c.GetDocument(

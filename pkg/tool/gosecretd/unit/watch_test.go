@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
-	"github.com/funtimecoding/soil/pkg/openbao/mock_client"
 	"github.com/funtimecoding/soil/pkg/openbao/status"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/service_tester"
@@ -20,9 +19,8 @@ import (
 
 func TestWatchReportsUnsealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	c := mock_client.New(t)
 	owned := watch.New(
-		service_tester.New(t, c).Status,
+		service_tester.New(t).Service().Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),
@@ -35,10 +33,10 @@ func TestWatchReportsUnsealedStore(t *testing.T) {
 
 func TestWatchReportsSealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	c := mock_client.New(t)
-	c.Seal()
+	o := service_tester.New(t)
+	o.Source.Seal()
 	owned := watch.New(
-		service_tester.New(t, c).Status,
+		o.Service().Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),
@@ -50,10 +48,10 @@ func TestWatchReportsSealedStore(t *testing.T) {
 
 func TestWatchReportsUnreachableStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	c := mock_client.New(t)
-	c.FailHealth(errors.New("connection refused"))
+	o := service_tester.New(t)
+	o.Source.FailHealth(errors.New("connection refused"))
 	owned := watch.New(
-		service_tester.New(t, c).Status,
+		o.Service().Status,
 		y,
 		logger.New(context.Background()),
 		memory.New(),

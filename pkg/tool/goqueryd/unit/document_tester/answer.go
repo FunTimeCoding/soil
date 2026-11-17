@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"testing"
@@ -16,7 +15,7 @@ func Answer(
 ) (*client.GetDocumentResponse, *memory.Memory) {
 	t.Helper()
 	q := service_tester.New(t)
-	c := client_tester.GeneratedClient(t, base.Serve(t, q))
+	c := client_tester.GeneratedClient(t, q.Served())
 	Push(t, c, "notes", "alfa.md", "# Alfa\n\nzulu.\n")
 	answer, e := c.GetDocumentWithResponse(
 		t.Context(),

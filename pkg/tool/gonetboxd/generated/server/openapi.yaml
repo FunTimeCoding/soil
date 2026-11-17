@@ -3289,6 +3289,10 @@ components:
           type: object
           additionalProperties: true
           description: Resolved configuration context, every matching context merged.
+        localContext:
+          type: object
+          additionalProperties: true
+          description: The device's own context data, merged over every configuration context.
         customFields:
           type: object
           additionalProperties: true
@@ -3596,6 +3600,10 @@ components:
           type: object
           additionalProperties: true
           description: Resolved configuration context, every matching context merged.
+        localContext:
+          type: object
+          additionalProperties: true
+          description: The virtual machine's own context data, merged over every configuration context.
         customFields:
           type: object
           additionalProperties: true
@@ -3637,6 +3645,10 @@ components:
           type: object
           additionalProperties: true
           description: Custom field values to set, by field name; fields not named keep their value.
+        localContext:
+          type: object
+          additionalProperties: true
+          description: Local context data replacing the device's whole; an empty object clears it.
     UpdateVirtualMachineRequest:
       type: object
       properties:
@@ -3668,6 +3680,10 @@ components:
           type: object
           additionalProperties: true
           description: Custom field values to set, by field name; fields not named keep their value.
+        localContext:
+          type: object
+          additionalProperties: true
+          description: Local context data replacing the virtual machine's whole; an empty object clears it.
     AddressRange:
       type: object
       required:

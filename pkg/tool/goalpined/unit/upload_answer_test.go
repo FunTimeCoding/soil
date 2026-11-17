@@ -3,12 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/upload_tester"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -16,66 +14,45 @@ import (
 )
 
 func TestBodyThatIsNotPackageIsRefusedQuietly(t *testing.T) {
-	o := service_tester.New(t)
-	r := memory.New()
-	v := base.Mount(t, o.Option, r)
+	s := base.New(t)
 	assert.Integer(
 		t,
 		http.StatusBadRequest,
-		upload_tester.Post(
-			t,
-			v,
-			constant.FixtureUploadPath,
-			[]byte("not a package"),
-		),
+		s.Post(constant.FixtureUploadPath, []byte("not a package")),
 	)
-	assert.Count(t, 0, r.Events())
-	assert.Count(t, 0, o.Indexer.Directories)
+	assert.Count(t, 0, s.Reporter.Events())
+	assert.Count(t, 0, s.Indexer.Directories)
 	assert.False(
 		t,
 		system.FileExists(
-			filepath.Join(o.PackageRoot, "v3.21", "main", "x86_64", "a.apk"),
+			filepath.Join(s.PackageRoot, "v3.21", "main", "x86_64", "a.apk"),
 		),
 	)
 }
 
 func TestMissingSignatureKeyIsCaptured(t *testing.T) {
-	o := service_tester.New(t)
+	s := base.New(t)
 	assert.FatalOnError(
 		t,
-		os.Remove(filepath.Join(o.KeyDirectory, o.SignatureKey)),
+		os.Remove(filepath.Join(s.KeyDirectory, s.SignatureKey)),
 	)
-	r := memory.New()
-	v := base.Mount(t, o.Option, r)
 	assert.Integer(
 		t,
 		http.StatusInternalServerError,
-		upload_tester.Post(
-			t,
-			v,
-			constant.FixtureUploadPath,
-			service_tester.PackageBytes(t),
-		),
+		s.Post(constant.FixtureUploadPath, service_tester.PackageBytes(t)),
 	)
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, s.Reporter.Events())
 }
 
 func TestFailedIndexIsCaptured(t *testing.T) {
-	o := service_tester.New(t)
-	o.Indexer.Failure = errors.Format("index packages", "apk")
-	r := memory.New()
-	v := base.Mount(t, o.Option, r)
+	s := base.New(t)
+	s.Indexer.Failure = errors.Format("index packages", "apk")
 	assert.Integer(
 		t,
 		http.StatusInternalServerError,
-		upload_tester.Post(
-			t,
-			v,
-			constant.FixtureUploadPath,
-			service_tester.PackageBytes(t),
-		),
+		s.Post(constant.FixtureUploadPath, service_tester.PackageBytes(t)),
 	)
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, s.Reporter.Events())
 }
 
 func TestEmptyRootListsNothing(t *testing.T) {

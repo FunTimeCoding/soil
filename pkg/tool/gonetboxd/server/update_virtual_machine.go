@@ -21,6 +21,7 @@ func (s *Server) UpdateVirtualMachine(
 	c.Role = r.Body.Role
 	c.Tenant = r.Body.Tenant
 	c.Status = r.Body.Status
+	c.LocalContext = r.Body.LocalContext
 
 	if r.Body.CustomFields != nil {
 		c.CustomFields = *r.Body.CustomFields

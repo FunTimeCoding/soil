@@ -12,6 +12,7 @@ type Machine struct {
 	PrimaryAddress string
 	Tags           []string
 	Configuration  map[string]any
+	LocalContext   map[string]any
 	CustomFields   map[string]any
 	Raw            *netbox.VirtualMachineWithConfigContext
 }

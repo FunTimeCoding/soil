@@ -112,3 +112,123 @@ const FixtureVirtualInterface = `{
   "count_ipaddresses": 0,
   "count_fhrp_groups": 0
 }`
+
+const FixtureDevice = `{
+  "id": 3,
+  "url": "http://example/api/dcim/devices/3/",
+  "display": "bravo",
+  "name": "bravo",
+  "device_type": {
+    "id": 1,
+    "url": "http://example/api/dcim/device-types/1/",
+    "display": "charlie",
+    "manufacturer": {
+      "id": 1,
+      "url": "http://example/api/dcim/manufacturers/1/",
+      "display": "delta",
+      "name": "delta",
+      "slug": "delta"
+    },
+    "model": "charlie",
+    "slug": "charlie"
+  },
+  "role": {
+    "id": 1,
+    "url": "http://example/api/dcim/device-roles/1/",
+    "display": "echo",
+    "name": "echo",
+    "slug": "echo",
+    "_depth": 0
+  },
+  "site": {
+    "id": 1,
+    "url": "http://example/api/dcim/sites/1/",
+    "display": "foxtrot",
+    "name": "foxtrot",
+    "slug": "foxtrot"
+  },
+  "local_context_data": {"golf": "hotel"},
+  "console_port_count": 0,
+  "console_server_port_count": 0,
+  "power_port_count": 0,
+  "power_outlet_count": 0,
+  "front_port_count": 0,
+  "rear_port_count": 0,
+  "device_bay_count": 0,
+  "module_bay_count": 0,
+  "inventory_item_count": 0
+}`
+
+const FixtureDeviceList = `{
+  "count": 1,
+  "results": [
+    {
+      "id": 3,
+      "url": "http://example/api/dcim/devices/3/",
+      "display": "bravo",
+      "name": "bravo",
+      "device_type": {
+        "id": 1,
+        "url": "http://example/api/dcim/device-types/1/",
+        "display": "charlie",
+        "manufacturer": {
+          "id": 1,
+          "url": "http://example/api/dcim/manufacturers/1/",
+          "display": "delta",
+          "name": "delta",
+          "slug": "delta"
+        },
+        "model": "charlie",
+        "slug": "charlie"
+      },
+      "role": {
+        "id": 1,
+        "url": "http://example/api/dcim/device-roles/1/",
+        "display": "echo",
+        "name": "echo",
+        "slug": "echo",
+        "_depth": 0
+      },
+      "site": {
+        "id": 1,
+        "url": "http://example/api/dcim/sites/1/",
+        "display": "foxtrot",
+        "name": "foxtrot",
+        "slug": "foxtrot"
+      },
+      "local_context_data": {"golf": "hotel"},
+      "console_port_count": 0,
+      "console_server_port_count": 0,
+      "power_port_count": 0,
+      "power_outlet_count": 0,
+      "front_port_count": 0,
+      "rear_port_count": 0,
+      "device_bay_count": 0,
+      "module_bay_count": 0,
+      "inventory_item_count": 0
+    }
+  ]
+}`
+
+const FixtureVirtualMachine = `{
+  "id": 2,
+  "url": "http://example/api/virtualization/virtual-machines/2/",
+  "display": "alfa",
+  "name": "alfa",
+  "local_context_data": {"golf": "hotel"},
+  "virtual_disk_count": 0
+}`
+
+const FixtureVirtualMachineList = `{
+  "count": 1,
+  "results": [
+    {
+      "id": 2,
+      "url": "http://example/api/virtualization/virtual-machines/2/",
+      "display": "alfa",
+      "name": "alfa",
+      "local_context_data": {"golf": "hotel"},
+      "virtual_disk_count": 0
+    }
+  ]
+}`

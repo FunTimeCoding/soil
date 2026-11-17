@@ -6,11 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/salt/face"
 	"github.com/funtimecoding/soil/pkg/provision/salt/mock_client"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"path/filepath"
@@ -35,10 +33,7 @@ func New(
 	t.Cleanup(d.Close)
 	workers := d.Workers()
 	workers[len(workers)-1].Close()
-	result := model_context_server.New(
-		t,
-		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
-	)
+	result := model_context_server.Mount(t, d, r)
 
 	return result, outage_tester.Guard(
 		t,

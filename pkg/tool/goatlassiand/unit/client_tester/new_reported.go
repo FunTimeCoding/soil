@@ -5,11 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
@@ -20,13 +18,7 @@ func NewReported(
 ) (*client.Client, *memory.Memory) {
 	t.Helper()
 	o := service_tester.New(t, service_tester.WithJira(j))
-	d := o.Daemon()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(o.Reporter, mock_recorder.New(), g)
-		},
-	)
+	s := model_context_server.Mount(t, o.Daemon(), o.Reporter)
 	result := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,

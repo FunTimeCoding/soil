@@ -3,23 +3,17 @@ package base
 import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"testing"
 )
 
-func Client(
-	t *testing.T,
-	o *service_tester.Tester,
-) *client.Client {
-	t.Helper()
-	v := New(t, o.Option)
+func (s *Server) Client() *client.Client {
+	s.t.Helper()
 	result := client.New(
-		locator.New(webConstant.Localhost).Insecure().Port(v.Port),
+		locator.New(webConstant.Localhost).Insecure().Port(s.Served().Port),
 		generativeConstant.ModelContextTestToken,
 	)
-	t.Cleanup(result.Close)
+	s.t.Cleanup(result.Close)
 
 	return result
 }

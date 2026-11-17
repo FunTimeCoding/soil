@@ -44,6 +44,10 @@ func Device(d *device.Device) *server.Device {
 		result.Configuration = &d.Configuration
 	}
 
+	if len(d.LocalContext) > 0 {
+		result.LocalContext = &d.LocalContext
+	}
+
 	if len(d.CustomFields) > 0 {
 		result.CustomFields = &d.CustomFields
 	}

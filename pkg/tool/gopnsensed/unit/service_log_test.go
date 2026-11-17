@@ -9,14 +9,14 @@ import (
 
 func TestAbsentLogLimitReadsOneHundred(t *testing.T) {
 	c := limit_recorder.New(t)
-	_, e := service_tester.New(t, c).Log(0)
+	_, e := service_tester.New(t, c).Service().Log(0)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 100, c.Limit())
 }
 
 func TestGivenLogLimitIsKept(t *testing.T) {
 	c := limit_recorder.New(t)
-	_, e := service_tester.New(t, c).Log(7)
+	_, e := service_tester.New(t, c).Service().Log(7)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 7, c.Limit())
 }

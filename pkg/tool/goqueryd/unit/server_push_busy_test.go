@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/held_store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
@@ -13,7 +12,7 @@ import (
 
 func TestPushWhileAnotherWriterHoldsStoreAnswers503Reported(t *testing.T) {
 	q := service_tester.New(t)
-	c := client_tester.GeneratedClient(t, base.Serve(t, q))
+	c := client_tester.GeneratedClient(t, q.Served())
 	held_store.New(t, q.Path)
 	answer, e := c.PostDocumentWithResponse(
 		t.Context(),

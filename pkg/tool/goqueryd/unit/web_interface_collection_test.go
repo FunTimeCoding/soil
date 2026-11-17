@@ -3,7 +3,6 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/document_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
@@ -15,7 +14,7 @@ import (
 )
 
 func TestSecondPageOfCollectionLoads(t *testing.T) {
-	s := base.Serve(t, service_tester.New(t))
+	s := service_tester.New(t).Served()
 	c := client_tester.GeneratedClient(t, s)
 
 	for i := range 21 {
@@ -42,7 +41,7 @@ func TestSecondPageOfCollectionLoads(t *testing.T) {
 }
 
 func TestMissingDocumentIsNotFoundWithLinkedSuggestions(t *testing.T) {
-	s := base.Serve(t, service_tester.New(t))
+	s := service_tester.New(t).Served()
 	c := client_tester.GeneratedClient(t, s)
 	document_tester.Push(t, c, "pushed", "alfa.md", "# Alfa\n\nbody")
 	assert.Integer(

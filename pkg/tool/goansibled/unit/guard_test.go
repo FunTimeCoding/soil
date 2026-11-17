@@ -4,10 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
 	"path/filepath"
 	"testing"
@@ -23,12 +21,7 @@ func TestGuard(t *testing.T) {
 		prometheus.NewRegistry(),
 	)
 	t.Cleanup(d.Close)
-	v := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(memory.New(), mock_recorder.New(), g)
-		},
-	)
+	v := model_context_server.Mount(t, d, memory.New())
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyGuarded(t, "/api/trigger")

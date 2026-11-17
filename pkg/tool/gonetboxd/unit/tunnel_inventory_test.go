@@ -3,7 +3,6 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
@@ -80,14 +79,10 @@ func TestInventoryOffSiteWithoutTunnelKeepsPrimaryAddress(t *testing.T) {
 }
 
 func TestInventoryRouteTakesCallerSite(t *testing.T) {
-	o := service_tester.New(t)
-	service_tester.SeedTunnelHosts(o.Source)
-	d := o.Daemon()
+	s := base.New(t)
+	service_tester.SeedTunnelHosts(s.Source)
 	site := "kilo"
-	response, e := base.GeneratedClient(
-		t,
-		base.Mount(t, d, memory.New()),
-	).GetAnsibleInventoryWithResponse(
+	response, e := s.GeneratedClient().GetAnsibleInventoryWithResponse(
 		context.Background(),
 		&client.GetAnsibleInventoryParams{Site: &site},
 	)

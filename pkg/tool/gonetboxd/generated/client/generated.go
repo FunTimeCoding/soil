@@ -311,10 +311,13 @@ type Device struct {
 	Configuration *map[string]interface{} `json:"configuration,omitempty"`
 
 	// CustomFields Custom field values by field name.
-	CustomFields   *map[string]interface{} `json:"customFields,omitempty"`
-	Identifier     int32                   `json:"identifier"`
-	Labels         *[]*Label               `json:"labels,omitempty"`
-	Link           *string                 `json:"link,omitempty"`
+	CustomFields *map[string]interface{} `json:"customFields,omitempty"`
+	Identifier   int32                   `json:"identifier"`
+	Labels       *[]*Label               `json:"labels,omitempty"`
+	Link         *string                 `json:"link,omitempty"`
+
+	// LocalContext The device's own context data, merged over every configuration context.
+	LocalContext   *map[string]interface{} `json:"localContext,omitempty"`
 	Name           string                  `json:"name"`
 	PrimaryAddress *string                 `json:"primaryAddress,omitempty"`
 	Role           *string                 `json:"role,omitempty"`
@@ -493,6 +496,9 @@ type UpdateDeviceRequest struct {
 	// Description Device description.
 	Description *string `json:"description,omitempty"`
 
+	// LocalContext Local context data replacing the device's whole; an empty object clears it.
+	LocalContext *map[string]interface{} `json:"localContext,omitempty"`
+
 	// Location Location name to assign (must already exist).
 	Location *string `json:"location,omitempty"`
 
@@ -528,6 +534,9 @@ type UpdateVirtualMachineRequest struct {
 
 	// CustomFields Custom field values to set, by field name; fields not named keep their value.
 	CustomFields *map[string]interface{} `json:"customFields,omitempty"`
+
+	// LocalContext Local context data replacing the virtual machine's whole; an empty object clears it.
+	LocalContext *map[string]interface{} `json:"localContext,omitempty"`
 
 	// Memory Memory in megabytes.
 	Memory *int `json:"memory,omitempty"`
@@ -572,9 +581,12 @@ type VirtualMachine struct {
 	Configuration *map[string]interface{} `json:"configuration,omitempty"`
 
 	// CustomFields Custom field values by field name.
-	CustomFields   *map[string]interface{} `json:"customFields,omitempty"`
-	Identifier     int32                   `json:"identifier"`
-	Labels         *[]*Label               `json:"labels,omitempty"`
+	CustomFields *map[string]interface{} `json:"customFields,omitempty"`
+	Identifier   int32                   `json:"identifier"`
+	Labels       *[]*Label               `json:"labels,omitempty"`
+
+	// LocalContext The virtual machine's own context data, merged over every configuration context.
+	LocalContext   *map[string]interface{} `json:"localContext,omitempty"`
 	Name           string                  `json:"name"`
 	PrimaryAddress *string                 `json:"primaryAddress,omitempty"`
 	Role           *string                 `json:"role,omitempty"`

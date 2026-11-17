@@ -5,10 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
 	"testing"
 )
@@ -22,11 +20,10 @@ func TestGuard(t *testing.T) {
 		prometheus.NewRegistry(),
 	)
 	t.Cleanup(d.Close)
-	v := model_context_server.New(
+	v := model_context_server.Mount(
 		t,
-		func(g *guard.Mux) {
-			d.Mount(memory.New(), mock_recorder.New(), g)
-		},
+		d,
+		memory.New(),
 		model_context_server.WithSignOn(),
 	)
 	defer v.Close()

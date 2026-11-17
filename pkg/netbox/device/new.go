@@ -38,10 +38,12 @@ func New(v *netbox.DeviceWithConfigContext) *Device {
 	}
 
 	configuration, _ := v.ConfigContext.(map[string]any)
+	local, _ := v.LocalContextData.(map[string]any)
 	status := v.GetStatus()
 
 	return &Device{
 		Configuration:  configuration,
+		LocalContext:   local,
 		CustomFields:   v.CustomFields,
 		Identifier:     v.GetId(),
 		Name:           name,

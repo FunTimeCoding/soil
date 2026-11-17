@@ -4,10 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/option"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"path/filepath"
 	"testing"
 )
@@ -23,12 +21,7 @@ func New(t *testing.T) *Server {
 		Reporter: r,
 		LitePath: o.LitePath,
 		t:        t,
-		Server: model_context_server.New(
-			t,
-			func(g *guard.Mux) {
-				d.Mount(r, mock_recorder.New(), g)
-			},
-		),
+		Server:   model_context_server.Mount(t, d, r),
 	}
 	t.Cleanup(result.Close)
 

@@ -33,7 +33,7 @@ func TestSaveOverChangeOnDiskIsConflict(t *testing.T) {
 
 func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
 	path := database_tester.Write(t)
-	s := service_tester.New(t, path)
+	s := service_tester.New(t, path).Service()
 	identifier := s.Search("forge")[0].Identifier
 	system_tester.ReadOnly(t, filepath.Dir(path))
 	assert.Error(
@@ -50,7 +50,7 @@ func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
 func TestFailedBackupRefusesWrite(t *testing.T) {
 	path := database_tester.Write(t)
 	at := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
-	s := service_tester.New(t, path, service_tester.WithClock(at))
+	s := service_tester.New(t, path, service_tester.WithClock(at)).Service()
 	identifier := s.Search("forge")[0].Identifier
 	assert.FatalOnError(
 		t,
@@ -67,7 +67,7 @@ func TestFailedBackupRefusesWrite(t *testing.T) {
 		t,
 		path,
 		service_tester.WithClock(at),
-	).Reveal(
+	).Service().Reveal(
 		identifier,
 	)
 	assert.String(t, "hunter2", password)

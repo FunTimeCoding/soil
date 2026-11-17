@@ -3,8 +3,6 @@ package unit
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
@@ -14,9 +12,9 @@ import (
 
 func TestVirtualMachineCustomFieldRoundTrip(t *testing.T) {
 	x := context.Background()
-	m := mock_client.New(t)
-	m.SeedVirtualMachine("charlie")
-	c := base.GeneratedClient(t, base.New(t, m, memory.New()))
+	s := base.New(t)
+	s.Source.SeedVirtualMachine("charlie")
+	c := s.GeneratedClient()
 	set, e := c.CreateChoiceSetWithResponse(
 		x,
 		client.CreateChoiceSetRequest{
@@ -51,10 +49,10 @@ func TestVirtualMachineCustomFieldRoundTrip(t *testing.T) {
 
 func TestAnsibleInventoryGroupsByPlaybook(t *testing.T) {
 	x := context.Background()
-	m := mock_client.New(t)
-	m.SeedVirtualMachine("charlie")
-	m.SeedVirtualMachine("delta")
-	c := base.GeneratedClient(t, base.New(t, m, memory.New()))
+	s := base.New(t)
+	s.Source.SeedVirtualMachine("charlie")
+	s.Source.SeedVirtualMachine("delta")
+	c := s.GeneratedClient()
 	_, e := c.UpdateVirtualMachineWithResponse(
 		x,
 		"charlie",
@@ -87,23 +85,20 @@ func TestAnsibleInventoryGroupsByPlaybook(t *testing.T) {
 }
 
 func TestCustomFieldOnMissingChoiceSetIsNotFound(t *testing.T) {
-	r := memory.New()
-	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
-	response, e := c.CreateCustomFieldWithResponse(
+	s := base.New(t)
+	response, e := s.GeneratedClient().CreateCustomFieldWithResponse(
 		context.Background(),
 		client.CreateCustomFieldRequest{Name: "bravo", ChoiceSet: "alfa"},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, response.StatusCode())
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestSetVirtualCustomFieldTool(t *testing.T) {
-	m := mock_client.New(t)
-	m.SeedVirtualMachine("charlie")
-	o := base.New(t, m, memory.New()).Connect(t)
-	defer o.Close()
-	result := o.MustCallToolNotation(
+	s := base.New(t)
+	s.Source.SeedVirtualMachine("charlie")
+	result := s.Tools().MustCallToolNotation(
 		constant.SetVirtualCustomField,
 		map[string]any{
 			constant.VirtualMachine: "charlie",

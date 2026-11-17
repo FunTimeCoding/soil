@@ -1,18 +1,15 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/netbox/face"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	c face.NetBoxClient,
-	r *memory.Memory,
-) *model_context_server.Server {
+	o ...service_tester.Option,
+) *Server {
 	t.Helper()
 
-	return Mount(t, Daemon(t, c), r)
+	return &Server{Tester: service_tester.New(t, o...), t: t}
 }

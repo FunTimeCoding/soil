@@ -15,15 +15,15 @@ import (
 
 func TestGenerateMovesReportOutUnderItsDate(t *testing.T) {
 	p := mock_parser.New(3, nil)
-	s, output := service_tester.New(t, p)
-	v, e := s.Generate(
+	o := service_tester.New(t, p)
+	v, e := o.Service().Generate(
 		[]string{service_tester.Input(t, "alfa.zevtc")},
 		time.Date(2026, 1, 2, 20, 0, 0, 0, time.UTC),
 	)
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,
-		filepath.Join(output, "ONYX Log 2026-01-02 20-00.html"),
+		filepath.Join(o.Output, "ONYX Log 2026-01-02 20-00.html"),
 		v.Path,
 	)
 	assert.Integer(t, 3, v.TidCount)
@@ -37,7 +37,8 @@ func TestGenerateMovesReportOutUnderItsDate(t *testing.T) {
 }
 
 func TestTwoReportsMinuteApartBothSurvive(t *testing.T) {
-	s, output := service_tester.New(t, mock_parser.New(1, nil))
+	o := service_tester.New(t, mock_parser.New(1, nil))
+	s := o.Service()
 	first := time.Date(2026, 1, 2, 20, 0, 0, 0, time.UTC)
 	_, e := s.Generate(
 		[]string{service_tester.Input(t, "foxtrot.zevtc")},
@@ -52,21 +53,20 @@ func TestTwoReportsMinuteApartBothSurvive(t *testing.T) {
 	assert.True(
 		t,
 		system.FileExists(
-			filepath.Join(output, "ONYX Log 2026-01-02 20-00.html"),
+			filepath.Join(o.Output, "ONYX Log 2026-01-02 20-00.html"),
 		),
 	)
 	assert.True(
 		t,
 		system.FileExists(
-			filepath.Join(output, "ONYX Log 2026-01-02 20-01.html"),
+			filepath.Join(o.Output, "ONYX Log 2026-01-02 20-01.html"),
 		),
 	)
 }
 
 func TestGenerateAnswersMissingInput(t *testing.T) {
 	p := mock_parser.New(1, nil)
-	s, _ := service_tester.New(t, p)
-	_, e := s.Generate(
+	_, e := service_tester.New(t, p).Service().Generate(
 		[]string{filepath.Join(t.TempDir(), "absent.zevtc")},
 		time.Now(),
 	)
@@ -76,8 +76,7 @@ func TestGenerateAnswersMissingInput(t *testing.T) {
 
 func TestGenerateRefusesNoFiles(t *testing.T) {
 	p := mock_parser.New(1, nil)
-	s, _ := service_tester.New(t, p)
-	_, e := s.Generate(nil, time.Now())
+	_, e := service_tester.New(t, p).Service().Generate(nil, time.Now())
 	assert.True(t, validation.Is(e))
 	assert.String(t, "no files to parse", e.Error())
 	assert.Integer(t, 0, p.Calls())
@@ -85,8 +84,7 @@ func TestGenerateRefusesNoFiles(t *testing.T) {
 
 func TestFailedParseNamesStep(t *testing.T) {
 	failure := errors.New("bravo parse failed")
-	s, _ := service_tester.New(t, mock_parser.New(0, failure))
-	_, e := s.Generate(
+	_, e := service_tester.New(t, mock_parser.New(0, failure)).Service().Generate(
 		[]string{service_tester.Input(t, "bravo.zevtc")},
 		time.Now(),
 	)

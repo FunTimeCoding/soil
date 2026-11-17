@@ -5,13 +5,14 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"strings"
 	"testing"
 )
 
 func TestAddAndListContexts(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.AddContext("docs", "/design/", "Architecture and design decisions")
 	result := s.ListContexts()
 	assert.StringContains(t, "design", result)
@@ -19,7 +20,8 @@ func TestAddAndListContexts(t *testing.T) {
 }
 
 func TestRemoveContext(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.AddContext("docs", "/temp/", "Temporary context")
 	s.RemoveContext("docs", "/temp/")
 	result := s.ListContexts()
@@ -27,10 +29,11 @@ func TestRemoveContext(t *testing.T) {
 }
 
 func TestDeleteDocument(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.Push("notes", "doomed.md", "# Doomed\n\nWill be deleted.\n")
 	s.Delete("notes", "doomed.md")
-	result := s.MustCallToolError(
+	result := s.Tools().MustCallToolError(
 		constant.Get,
 		map[string]any{constant.Path: "notes/doomed.md"},
 	)
@@ -38,8 +41,9 @@ func TestDeleteDocument(t *testing.T) {
 }
 
 func TestDeleteDocumentNotFound(t *testing.T) {
-	s := model_context_tester.New(t)
-	result := s.MustCallToolError(
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	result := s.Tools().MustCallToolError(
 		constant.Delete,
 		map[string]any{
 			constant.Collection: "notes",
@@ -50,21 +54,27 @@ func TestDeleteDocumentNotFound(t *testing.T) {
 }
 
 func TestGetDocument(t *testing.T) {
-	s := model_context_tester.Indexed(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.IndexFixtures()
 	result := s.Get("test/alfa.md")
 	assert.StringContains(t, "Search Pipeline", result)
 	assert.StringContains(t, "hybrid search pipeline", result)
 }
 
 func TestGetDocumentVirtualPath(t *testing.T) {
-	s := model_context_tester.Indexed(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.IndexFixtures()
 	result := s.Get("qmd://test/alfa.md")
 	assert.StringContains(t, "Search Pipeline", result)
 }
 
 func TestGetDocumentNotFoundSuggestsAlternatives(t *testing.T) {
-	s := model_context_tester.Indexed(t)
-	result := s.MustCallToolError(
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.IndexFixtures()
+	result := s.Tools().MustCallToolError(
 		constant.Get,
 		map[string]any{constant.Path: "test/alfaa.md"},
 	)
@@ -72,21 +82,25 @@ func TestGetDocumentNotFoundSuggestsAlternatives(t *testing.T) {
 }
 
 func TestAddCollectionAndIndex(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.IndexFixtures()
-	result := s.MustCallTool(constant.Index, map[string]any{})
+	result := s.Tools().MustCallTool(constant.Index, map[string]any{})
 	assert.StringContains(t, "test", result)
 }
 
 func TestStatusAfterIndex(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.IndexFixtures()
-	result := s.MustCallTool(constant.Status, map[string]any{})
+	result := s.Tools().MustCallTool(constant.Status, map[string]any{})
 	assert.StringContains(t, "total_documents", result)
 }
 
 func TestListDocuments(t *testing.T) {
-	s := model_context_tester.Indexed(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.IndexFixtures()
 	result := s.ListDocuments("test")
 	assert.StringContains(t, "alfa.md", result)
 	assert.StringContains(t, "tools/charlie.md", result)
@@ -94,7 +108,8 @@ func TestListDocuments(t *testing.T) {
 }
 
 func TestListBySourceType(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"notes",
 		"summary.md",
@@ -116,7 +131,8 @@ func TestListBySourceType(t *testing.T) {
 }
 
 func TestListWithLimit(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.Push("notes", "a.md", "# A\n\nFirst.\n")
 	s.Push("notes", "b.md", "# B\n\nSecond.\n")
 	s.Push("notes", "c.md", "# C\n\nThird.\n")
@@ -125,7 +141,8 @@ func TestListWithLimit(t *testing.T) {
 }
 
 func TestPushMetadataAppearsInKeywordSearch(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"notes",
 		"flavored.md",
@@ -138,7 +155,8 @@ func TestPushMetadataAppearsInKeywordSearch(t *testing.T) {
 }
 
 func TestMetadataFilterIncludes(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"notes",
 		"apple.md",
@@ -160,7 +178,8 @@ func TestMetadataFilterIncludes(t *testing.T) {
 }
 
 func TestMetadataFilterExcludes(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"notes",
 		"only.md",
@@ -175,14 +194,15 @@ func TestMetadataFilterExcludes(t *testing.T) {
 }
 
 func TestSourceTypeViaMetadata(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"notes",
 		"typed.md",
 		"# Typed\n\nSource type set via metadata.\n",
 		map[string]string{constant.SourceType: "custom-type"},
 	)
-	result := s.MustCallTool(
+	result := s.Tools().MustCallTool(
 		constant.Search,
 		map[string]any{
 			"query":             "source type metadata",
@@ -194,7 +214,8 @@ func TestSourceTypeViaMetadata(t *testing.T) {
 }
 
 func TestDeleteCascadesMetadata(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"notes",
 		"doomed.md",
@@ -215,7 +236,8 @@ func TestDeleteCascadesMetadata(t *testing.T) {
 }
 
 func TestDeleteCollectionCascadesMetadata(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.PushWithMetadata(
 		"ephemeral",
 		"temp.md",
@@ -227,7 +249,7 @@ func TestDeleteCollectionCascadesMetadata(t *testing.T) {
 		map[string]string{"lifespan": "short"},
 	)
 	assert.StringContains(t, "Temporary", result)
-	s.MustCallTool(
+	s.Tools().MustCallTool(
 		constant.DeleteCollection,
 		map[string]any{"name": "ephemeral"},
 	)
@@ -239,14 +261,16 @@ func TestDeleteCollectionCascadesMetadata(t *testing.T) {
 }
 
 func TestPushAndSearch(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.Push("notes", "first.md", "# First Note\n\nPushed directly via MCP.\n")
 	result := s.SearchKeyword("pushed directly")
 	assert.StringContains(t, "First Note", result)
 }
 
 func TestPushAndGet(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.Push(
 		"notes",
 		"retrievable.md",
@@ -258,8 +282,9 @@ func TestPushAndGet(t *testing.T) {
 }
 
 func TestPushWithSourceType(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.Tools().MustCallTool(
 		constant.Push,
 		map[string]any{
 			constant.Collection: "memories",
@@ -268,7 +293,7 @@ func TestPushWithSourceType(t *testing.T) {
 			constant.SourceType: "memory",
 		},
 	)
-	result := s.MustCallTool(
+	result := s.Tools().MustCallTool(
 		constant.Search,
 		map[string]any{
 			"query":             "pushed memory",
@@ -280,14 +305,18 @@ func TestPushWithSourceType(t *testing.T) {
 }
 
 func TestSearchKeyword(t *testing.T) {
-	s := model_context_tester.Indexed(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.IndexFixtures()
 	result := s.SearchKeyword("hybrid search pipeline")
 	assert.StringContains(t, "Search Pipeline", result)
 }
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
-	s := model_context_tester.Indexed(t)
-	result := s.MustCallTool(
+	s := base.New(t)
+	s.SkipUnreachable(t)
+	s.IndexFixtures()
+	result := s.Tools().MustCallTool(
 		constant.Search,
 		map[string]any{
 			"query":             "chunking",
@@ -299,14 +328,16 @@ func TestSearchKeywordCollectionFilter(t *testing.T) {
 }
 
 func TestTagSetAndGet(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.SetTag("design/", "design-doc")
 	result := s.GetTag("design/")
 	assert.StringContains(t, "design-doc", result)
 }
 
 func TestTagRemove(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	s.SkipUnreachable(t)
 	s.SetTag("temp/", "scratch")
 	s.SetTag("temp/", "")
 	result := s.GetTag("temp/")

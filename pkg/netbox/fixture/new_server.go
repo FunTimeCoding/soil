@@ -44,6 +44,18 @@ func NewServer(r *Recorder) *httptest.Server {
 					respond(w, constant.FixtureVirtualInterface)
 				case path == "/api/virtualization/interfaces/":
 					respond(w, constant.FixtureVirtualInterfaceList)
+				case path == "/api/dcim/devices/3/" &&
+					q.Method == http.MethodPatch:
+					r.Patched = decodeBody(q)
+					respond(w, constant.FixtureDevice)
+				case path == "/api/dcim/devices/":
+					respond(w, constant.FixtureDeviceList)
+				case path == "/api/virtualization/virtual-machines/2/" &&
+					q.Method == http.MethodPatch:
+					r.Patched = decodeBody(q)
+					respond(w, constant.FixtureVirtualMachine)
+				case path == "/api/virtualization/virtual-machines/":
+					respond(w, constant.FixtureVirtualMachineList)
 				case path == "/api/extras/config-contexts/1/" &&
 					q.Method == http.MethodPatch:
 					r.Patched = decodeBody(q)

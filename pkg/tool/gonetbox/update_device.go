@@ -19,6 +19,7 @@ func updateDevice(
 	var serial string
 	var description string
 	var customFields func() *map[string]any
+	var localContext func() *map[string]any
 	result := &cobra.Command{
 		Use:   "update-device [name]",
 		Short: "Update device fields",
@@ -54,12 +55,14 @@ func updateDevice(
 			}
 
 			body.CustomFields = customFields()
+			body.LocalContext = localContext()
 			t.EmitValue(
 				c.UpdateDevice(context.Background(), arguments[0], body),
 			)
 		},
 	}
 	customFields = customFieldFlag(result)
+	localContext = localContextFlag(result)
 	result.Flags().StringVar(
 		&location,
 		"location",

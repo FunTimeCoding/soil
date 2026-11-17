@@ -2,16 +2,16 @@ package base
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/unit/service_tester"
 	"testing"
 )
 
-func New(
-	t *testing.T,
-	o *option.Alpine,
-) *model_context_server.Server {
+func New(t *testing.T) *Server {
 	t.Helper()
 
-	return Mount(t, o, memory.New())
+	return &Server{
+		Tester:   service_tester.New(t),
+		Reporter: memory.New(),
+		t:        t,
+	}
 }

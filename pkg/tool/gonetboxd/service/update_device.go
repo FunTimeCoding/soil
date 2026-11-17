@@ -78,6 +78,15 @@ func (s *Service) UpdateDevice(
 				}
 			}
 
+			if c.LocalContext != nil {
+				if _, e := s.client.SetDeviceLocalContext(
+					name,
+					*c.LocalContext,
+				); e != nil {
+					return nil, e
+				}
+			}
+
 			if c.Name != nil {
 				renamed, e := s.client.RenameDevice(name, *c.Name)
 

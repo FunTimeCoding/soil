@@ -7,6 +7,6 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	v := base.New(t, mock_parser.New(0, nil))
+	v := base.New(t, mock_parser.New(0, nil)).Served()
 	v.VerifyBase(t)
 }
