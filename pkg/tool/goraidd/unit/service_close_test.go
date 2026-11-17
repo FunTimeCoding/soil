@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/worker"
@@ -12,28 +11,15 @@ import (
 )
 
 func TestDaemonClosesWhatItBuilt(t *testing.T) {
-	p := service_tester.NewParser(t)
-	d := service_tester.NewDaemon(
-		t,
-		service_tester.NewOption(t, t.TempDir(), t.TempDir(), p),
-		memory.New(),
-	)
+	s := service_tester.New(t)
+	d := s.Daemon()
 	d.Close()
 	d.Close()
-	assert.Integer(t, 1, p.Closed)
+	assert.Integer(t, 1, s.Parser.Closed)
 }
 
 func TestDaemonHandsOutItsGuardWatcherAndCleanupClock(t *testing.T) {
-	workers := service_tester.NewDaemon(
-		t,
-		service_tester.NewOption(
-			t,
-			t.TempDir(),
-			t.TempDir(),
-			service_tester.NewParser(t),
-		),
-		memory.New(),
-	).Workers()
+	workers := service_tester.New(t).Daemon().Workers()
 	assert.Count(t, 3, workers)
 	_, guard := workers[0].(*peer.Guard)
 	assert.True(t, guard)
@@ -45,12 +31,7 @@ func TestDaemonHandsOutItsGuardWatcherAndCleanupClock(t *testing.T) {
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
-	p := service_tester.NewParser(t)
-	d := service_tester.NewDaemon(
-		t,
-		service_tester.NewOption(t, t.TempDir(), t.TempDir(), p),
-		memory.New(),
-	)
+	d := service_tester.New(t).Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

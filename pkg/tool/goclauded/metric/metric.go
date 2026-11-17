@@ -6,5 +6,5 @@ type Metric struct {
 	reconciled *prometheus.CounterVec
 	indexed    *prometheus.GaugeVec
 	delivered  prometheus.Histogram
-	overBudget prometheus.Counter
+	overLimit  prometheus.Counter
 }

@@ -19,7 +19,7 @@ func TestStoreRangeSpansFallBack(t *testing.T) {
 		t,
 		s.Store.CreateEvent(event.Event{Time: at, Process: "ensembled"}),
 	)
-	events, f := s.Service.Events(
+	events, f := s.Service().Events(
 		window.New(at.Add(-time.Hour), at.Add(time.Hour)),
 		100,
 	)

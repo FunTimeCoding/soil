@@ -38,7 +38,7 @@ func TestRosterCardClampsTopicAndKeepsItWhole(t *testing.T) {
 		s.Store.Store.EditSession(
 			"session-1",
 			edit_session.New().WithTopic(
-				"lead: lanes for the language, the census, the wire and the whiteboard",
+				"lead: lanes for the language, the count, the wire and the whiteboard",
 			),
 		),
 	)
@@ -46,7 +46,7 @@ func TestRosterCardClampsTopicAndKeepsItWhole(t *testing.T) {
 	markup_tester.AssertCount(t, 1, page, "p.card-subtitle.card-clamp")
 	assert.StringContains(
 		t,
-		"lead: lanes for the language, the census, the wire and the whiteboard",
+		"lead: lanes for the language, the count, the wire and the whiteboard",
 		page,
 	)
 }

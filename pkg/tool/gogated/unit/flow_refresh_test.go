@@ -1,17 +1,16 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/flow_tester"
 	"testing"
 )
 
 func TestRefreshTokenGrantsNewTokens(t *testing.T) {
-	o := tester.New(t)
-	reg := o.Register(t, []string{"http://localhost/callback"})
-	auth := o.Authorize(t, reg.ClientIdentifier, "http://localhost/callback")
-	tokens := o.ExchangeCode(t, reg.ClientIdentifier, reg.ClientSecret, auth)
+	o := flow_tester.New(t)
+	reg := o.Register([]string{"http://localhost/callback"})
+	auth := o.Authorize(reg.ClientIdentifier, "http://localhost/callback")
+	tokens := o.ExchangeCode(reg.ClientIdentifier, reg.ClientSecret, auth)
 	refreshed := o.RefreshToken(
-		t,
 		reg.ClientIdentifier,
 		reg.ClientSecret,
 		tokens.RefreshToken,

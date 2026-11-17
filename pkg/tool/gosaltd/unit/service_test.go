@@ -13,7 +13,7 @@ import (
 )
 
 func TestKeysWhileMasterIsDownAnswerUnavailable(t *testing.T) {
-	v, _ := service_tester.New(t, service_tester.NewOption(t))
+	v, _ := service_tester.New(t).Service()
 	_, e := v.Keys()
 	assert.True(t, unavailable.Is(e))
 }
@@ -21,11 +21,20 @@ func TestKeysWhileMasterIsDownAnswerUnavailable(t *testing.T) {
 func TestKeysAfterLoginAnswerMastersKeys(t *testing.T) {
 	m := salt_server.New(t, "bravo")
 	host, port := upstream_server.HostPort(t, m.URL)
-	o := service_tester.NewOption(t)
-	o.Master = func() face.SaltClient {
-		return salt.New(host, port, "alfa", "bravo", salt.WithInsecure())
-	}
-	v, r := service_tester.New(t, o)
+	v, r := service_tester.New(
+		t,
+		service_tester.WithMaster(
+			func() face.SaltClient {
+				return salt.New(
+					host,
+					port,
+					"alfa",
+					"bravo",
+					salt.WithInsecure(),
+				)
+			},
+		),
+	).Service()
 	r.Start()
 	deadline := time.Now().Add(5 * time.Second)
 
@@ -45,7 +54,7 @@ func TestKeysAfterLoginAnswerMastersKeys(t *testing.T) {
 }
 
 func TestServiceReadsRunsFromItsOwnDatabase(t *testing.T) {
-	v, _ := service_tester.New(t, service_tester.NewOption(t))
+	v, _ := service_tester.New(t).Service()
 	runs, e := v.Recent(10)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, runs)

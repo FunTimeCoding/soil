@@ -1,7 +1,6 @@
 package rechunk_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
@@ -15,12 +14,8 @@ func New(
 	position int,
 ) (*service.Service, *store.Store) {
 	t.Helper()
-	o := service_tester.NewOption(
-		t,
-		service_tester.NewEmbedder(t),
-		service_tester.NewReranker(t),
-	)
-	s := store_tester.OpenFileStore(t, o.LitePath)
+	q := service_tester.New(t)
+	s := store_tester.OpenFileStore(t, q.Path)
 	d := t.TempDir()
 	store_tester.WriteFixture(t, d, "alfa.md", "one two three\n")
 	s.AddCollection("test", d, constant.DefaultGlob)
@@ -33,5 +28,5 @@ func New(
 		"2024-01-01T00:00:00Z",
 	)
 
-	return service_tester.New(t, o, memory.New()), s
+	return q.Service(), s
 }

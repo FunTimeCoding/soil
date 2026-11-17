@@ -13,13 +13,13 @@ import (
 )
 
 func TestSyncingLogCacheRecordsEachFightOnce(t *testing.T) {
-	cache := t.TempDir()
+	o := service_tester.New(t)
 	service_tester.WriteLogCache(
-		cache,
+		o.LogCache,
 		"20261024-201500.zevtc",
 		"20261024-203000.zevtc",
 	)
-	s := service_tester.New(t, cache, t.TempDir())
+	s := o.Service()
 	s.SyncLogCache(t.Context())
 	s.SyncLogCache(t.Context())
 	assert.Count(t, 2, s.Fights())
@@ -35,7 +35,7 @@ func TestRecordedFightIsNotCountedAsNewAgain(t *testing.T) {
 }
 
 func TestServiceStartsWithoutLogCache(t *testing.T) {
-	s := service_tester.New(t, t.TempDir(), t.TempDir())
+	s := service_tester.New(t).Service()
 	assert.Count(t, 0, s.Fights())
 	failures := s.SyncLogCache(t.Context())
 	assert.Count(t, 1, failures)

@@ -6,14 +6,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"testing"
 	"time"
 )
 
 func TestRecordStartRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	s := base.New(t, service_tester.WithClock(clock_tester.Window))
 	limit := 5
-	all, e := s.AlertClient(t).GetAlertsAfter(
+	all, e := s.AlertClient().GetAlertsAfter(
 		t.Context(),
 		&client.GetAlertsAfterParams{Identifier: 0, Limit: &limit},
 	)
@@ -25,11 +26,11 @@ func TestRecordStartRunsOnServiceClock(t *testing.T) {
 }
 
 func TestResolveEndRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
-	s.MockClient.Remove("fp1")
+	s := base.New(t, service_tester.WithClock(clock_tester.Window))
+	s.Alertmanager.Remove("fp1")
 	s.Clock.Poll()
 	limit := 5
-	all, e := s.AlertClient(t).GetAlertsAfter(
+	all, e := s.AlertClient().GetAlertsAfter(
 		t.Context(),
 		&client.GetAlertsAfterParams{Identifier: 0, Limit: &limit},
 	)

@@ -1,23 +1,15 @@
 package service_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/assert"
 
-func Subscribe(
-	t *testing.T,
-	s *service.Service,
-	m *mock_client.Client,
+func (o *Tester) Subscribe(
 	root string,
 	callsign string,
 	alias string,
 ) {
-	t.Helper()
-	p, e := m.FindPost(root)
-	assert.FatalOnError(t, e)
-	_, _, f := s.Subscribe(p, callsign, alias, "")
-	assert.FatalOnError(t, f)
+	o.t.Helper()
+	p, e := o.Mattermost.FindPost(root)
+	assert.FatalOnError(o.t, e)
+	_, _, f := o.Service().Subscribe(p, callsign, alias, "")
+	assert.FatalOnError(o.t, f)
 }

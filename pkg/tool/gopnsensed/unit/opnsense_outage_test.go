@@ -4,14 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/opnsense/mock_client"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/client_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
@@ -19,10 +16,10 @@ import (
 func TestOpnsenseOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
-	s := client_tester.NewWith(t, c, r)
+	s := client_tester.New(t, c, base.WithReporter(r))
 
 	for range 2 {
 		_, e := s.ListLeases(t.Context(), "")
@@ -33,37 +30,26 @@ func TestOpnsenseOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 }
 
 func TestOpnsenseOutageFailsToolWithoutCapture(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Failure = outage_tester.RefusedDial()
-	m := memory.New()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			daemon_tester.New(t, c).Mount(m, mock_recorder.New(), g)
-		},
-	)
-	defer s.Close()
-	v := s.Connect(t)
-	defer v.Close()
+	b := base.New(t, c)
+	v := b.Tools()
 	assert.StringContains(
 		t,
 		"connection refused",
 		v.MustCallToolError(constant.ListLeases, map[string]any{}),
 	)
-	assert.Count(t, 0, m.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }
 
 func TestDaemonHandsOutOpnsenseGuard(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t, mock_client.New(t)).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestWaitAnswersOnceOpnsenseAnswers(t *testing.T) {
 	assert.FatalOnError(
 		t,
-		daemon_tester.New(t, mock_client.New()).Wait(t.Context()),
+		base.New(t, mock_client.New(t)).Daemon().Wait(t.Context()),
 	)
 }

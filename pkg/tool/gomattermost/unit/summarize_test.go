@@ -14,14 +14,12 @@ import (
 )
 
 func TestEachThreadCarriesSummaryOfItsOwnLog(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Unresolved["juliett"] = []client.Thread{
 		{Root: client.Post{Username: "lima", Message: "alfa is down"}},
 		{Root: client.Post{Username: "mike", Message: "bravo is slow"}},
 	}
-	o := ollamaMock.New()
-	defer o.Close()
+	o := ollamaMock.New(t)
 	o.Respond = func(prompt string) string {
 		if strings.Contains(prompt, "alfa is down") {
 			return "kilo"
@@ -45,11 +43,9 @@ func TestEachThreadCarriesSummaryOfItsOwnLog(t *testing.T) {
 }
 
 func TestNothingUnresolvedIsEmptyList(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Unresolved["juliett"] = []client.Thread{}
-	o := ollamaMock.New()
-	defer o.Close()
+	o := ollamaMock.New(t)
 	result, e := gomattermost.Summarize(c, o, "juliett", time.Now())
 	assert.FatalOnError(t, e)
 	assert.String(t, "[]", string(notation.Marshal(result)))
@@ -57,13 +53,11 @@ func TestNothingUnresolvedIsEmptyList(t *testing.T) {
 }
 
 func TestUnavailableModelIsReturnedAsError(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Unresolved["juliett"] = []client.Thread{
 		{Root: client.Post{Username: "lima", Message: "alfa is down"}},
 	}
-	o := ollamaMock.New()
-	defer o.Close()
+	o := ollamaMock.New(t)
 	o.Failure = errors.New("foxtrot")
 	result, e := gomattermost.Summarize(c, o, "juliett", time.Now())
 	assert.FatalNotNil(t, e)
@@ -73,11 +67,9 @@ func TestUnavailableModelIsReturnedAsError(t *testing.T) {
 }
 
 func TestFailedThreadListAsksModelNothing(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Failure = errors.New("foxtrot")
-	o := ollamaMock.New()
-	defer o.Close()
+	o := ollamaMock.New(t)
 	_, e := gomattermost.Summarize(c, o, "juliett", time.Now())
 	assert.NotNil(t, e)
 	assert.Count(t, 0, o.Prompts)

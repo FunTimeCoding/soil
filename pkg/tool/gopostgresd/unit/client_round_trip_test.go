@@ -15,8 +15,9 @@ import (
 )
 
 func TestClientReadsColumnsAndRowsThroughMount(t *testing.T) {
-	s, _, _, m := base.Serve(t, nil)
-	m.SeedResult(
+	b := base.New(t)
+	s := b.Served()
+	b.Alfa().SeedResult(
 		"SELECT a.id, b.id",
 		result.New([]string{"id", "id"}, [][]any{{1.0, 7.0}}),
 	)
@@ -38,7 +39,9 @@ func TestClientReadsColumnsAndRowsThroughMount(t *testing.T) {
 }
 
 func TestClientClassifiesRefusalThroughMount(t *testing.T) {
-	s, _, _, _ := base.Serve(t, service_tester.SyntaxRefusal())
+	b := base.New(t)
+	b.Alfa().Failure = service_tester.SyntaxRefusal()
+	s := b.Served()
 	c := gopostgresd.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
 		generativeConstant.ModelContextTestToken,

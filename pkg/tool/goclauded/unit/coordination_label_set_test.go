@@ -9,10 +9,10 @@ import (
 
 func TestClientAddsAndRemovesOneValue(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	c := s.Client(t)
+	c := s.Client()
 	assert.FatalOnError(
 		t,
 		c.SetLabel(a.UUID, constant.FixtureLabelKey, "on_call", "reconciler"),
@@ -41,7 +41,7 @@ func TestClientAddsAndRemovesOneValue(t *testing.T) {
 
 func TestLabelToolAddsBesideAndReadsCommaForm(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Label,

@@ -33,7 +33,7 @@ func TestGaugePublishesEveryKind(t *testing.T) {
 	}
 }
 
-func TestGaugeCarriesCountNotFindingTally(t *testing.T) {
+func TestGaugeCountsItemsNotFindings(t *testing.T) {
 	s := service_tester.New(t)
 
 	for i := 0; i < 3; i++ {

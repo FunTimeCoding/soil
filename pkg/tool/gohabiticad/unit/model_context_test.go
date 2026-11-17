@@ -6,23 +6,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/habitica/tag"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/base"
 	"testing"
 )
 
 func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	c := o.Client
+	s := base.New(t)
+	c := s.Tools()
 	assert.Count(t, 9, c.ListTools())
 	k := task.Stub()
 	k.Identifier = "task-1"
 	k.Text = "Deploy fleet"
 	k.Type = "daily"
-	o.MockClient.AddTask(k)
+	s.Source.AddTask(k)
 	g := tag.Stub()
 	g.Identifier = "tag-1"
 	g.Name = "deploy"
-	o.MockClient.AddTag(g)
+	s.Source.AddTag(g)
 	tasks := c.MustCallTool(constant.GetTasks, map[string]any{})
 	assert.StringContains(t, "Deploy fleet", tasks)
 	tags := c.MustCallTool(constant.GetTags, map[string]any{})

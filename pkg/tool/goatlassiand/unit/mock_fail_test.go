@@ -10,8 +10,7 @@ import (
 )
 
 func TestMockIssueFailsOnItsOwn(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	m.Found = []*client.JiraIssue{{Key: "ALFA-1"}}
 	m.Fail(m.GetIssue, unavailable.Format("goatlassiand: down"))
 	_, e := m.GetIssue(context.Background(), "ALFA-1", true)

@@ -17,22 +17,20 @@ func New(
 	peer string,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	j := service_tester.NewJira(t)
-	c := service_tester.NewConfluence(t)
+	o := service_tester.New(t, service_tester.WithReporter(r))
 
 	switch peer {
 	case constant.JiraPeer:
-		j.Failure = outage_tester.RefusedDial()
+		o.Jira.Failure = outage_tester.RefusedDial()
 	case constant.ConfluencePeer:
-		c.Failure = outage_tester.RefusedDial()
+		o.Confluence.Failure = outage_tester.RefusedDial()
 	}
 
-	d := service_tester.NewDaemon(t, service_tester.NewOption(j, c, nil), r)
+	d := o.Daemon()
 	result := model_context_server.New(
 		t,
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(t, d.Workers(), peer).Unavailable
 }

@@ -9,7 +9,7 @@ type Client interface {
 	DeleteGroupName(
 		x context.Context,
 		name string,
-	) (*client.Receipt, error)
+	) (*client.Result, error)
 	DeleteGroupNameMemberAccount(
 		x context.Context,
 		name string,
@@ -18,7 +18,7 @@ type Client interface {
 	DeleteUserAccount(
 		x context.Context,
 		account string,
-	) (*client.Receipt, error)
+	) (*client.Result, error)
 	GetGroup(x context.Context) ([]*client.Group, error)
 	GetUser(x context.Context) ([]*client.User, error)
 	GetUserAccount(
@@ -47,7 +47,7 @@ type Client interface {
 		x context.Context,
 		account string,
 		b client.PostUserAccountPasswordJSONRequestBody,
-	) (*client.Receipt, error)
+	) (*client.Result, error)
 	Reachable(x context.Context) error
 	Close()
 }

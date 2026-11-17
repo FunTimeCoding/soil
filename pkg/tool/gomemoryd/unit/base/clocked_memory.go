@@ -7,7 +7,7 @@ import (
 
 func (s *Server) ClockedMemory() int64 {
 	s.t.Helper()
-	m, e := s.MemoryClient(s.t).PostMemory(
+	m, e := s.MemoryClient().PostMemory(
 		s.t.Context(),
 		client.PostMemoryJSONRequestBody{
 			Name:        "clocked",

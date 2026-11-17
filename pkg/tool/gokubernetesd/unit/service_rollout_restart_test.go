@@ -11,7 +11,7 @@ import (
 func TestRolloutRestart(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddDeployment("default", "nginx", 1, 1)
-	e := s.Service.RolloutRestart(
+	e := s.Service().RolloutRestart(
 		context.Background(),
 		"test",
 		"deployment",
@@ -32,7 +32,7 @@ func TestRolloutRestart(t *testing.T) {
 
 func TestRolloutRestartUnsupportedType(t *testing.T) {
 	s := service_tester.New(t)
-	e := s.Service.RolloutRestart(
+	e := s.Service().RolloutRestart(
 		context.Background(),
 		"test",
 		"service",

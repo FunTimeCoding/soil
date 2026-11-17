@@ -17,7 +17,7 @@ func Refused(
 	body string,
 ) {
 	t.Helper()
-	chunks := chunk.Document(body, name, service_tester.NewReranker(t))
+	chunks := chunk.Document(body, name, service_tester.New(t).Reranker)
 	assert.Count(t, 1, chunks)
 	_, f := embed.Single(t.Context(), e, chunks[0].Text)
 	assert.True(t, validation.Is(f))

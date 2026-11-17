@@ -30,11 +30,11 @@ func TestInterruptBeforeLaunchKillsAgent(t *testing.T) {
 			return s
 		},
 	)
-	assert.FatalOnError(t, o.Service.Run("romeo"))
+	assert.FatalOnError(t, o.Service().Run("romeo"))
 	<-launching
 	o.Runner.Interrupt()
 	close(release)
-	service_tester.AwaitDone(t, o.Service)
+	service_tester.AwaitDone(t, o.Service())
 	assert.Integer(t, 1, s.Killed())
 }
 
@@ -42,10 +42,14 @@ func TestAgentAlreadyGoneIsNotReported(t *testing.T) {
 	r := memory.New()
 	stream := stubborn_stream.New(os.ErrProcessDone)
 	t.Cleanup(stream.Close)
-	o := service_tester.NewWith(t, service_tester.Fixed(stream), r)
-	assert.FatalOnError(t, o.Service.Run("sierra"))
+	o := service_tester.New(
+		t,
+		service_tester.Fixed(stream),
+		service_tester.WithReporter(r),
+	)
+	assert.FatalOnError(t, o.Service().Run("sierra"))
 	o.Runner.Interrupt()
-	service_tester.AwaitDone(t, o.Service)
+	service_tester.AwaitDone(t, o.Service())
 	assert.Count(t, 0, r.Events())
 }
 
@@ -53,9 +57,13 @@ func TestKillThatFailsIsReported(t *testing.T) {
 	r := memory.New()
 	stream := stubborn_stream.New(errors.New("operation not permitted"))
 	t.Cleanup(stream.Close)
-	o := service_tester.NewWith(t, service_tester.Fixed(stream), r)
-	assert.FatalOnError(t, o.Service.Run("tango"))
+	o := service_tester.New(
+		t,
+		service_tester.Fixed(stream),
+		service_tester.WithReporter(r),
+	)
+	assert.FatalOnError(t, o.Service().Run("tango"))
 	o.Runner.Interrupt()
-	service_tester.AwaitDone(t, o.Service)
+	service_tester.AwaitDone(t, o.Service())
 	assert.Count(t, 1, r.Events())
 }

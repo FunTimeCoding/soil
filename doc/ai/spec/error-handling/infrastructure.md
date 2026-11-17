@@ -53,7 +53,7 @@ loop running. The HTTP servers wrap their mux in the recovery middleware
 ## Peer Outages and Refusals
 
 Everything for talking to another service lives under `pkg/peer/`: the
-wait and the guard at its root, `pkg/peer/reacher/` for outage and
+wait and the guard at its root, `pkg/peer/outage_tracker/` for outage and
 refusal edges, `pkg/peer/retry/` for the bounded loops, and
 `pkg/peer/constant/` for the timings.
 
@@ -96,7 +96,7 @@ one call to it with the caller's token, through
 `go:pkg/web/reachable_probe/Reach`, so the wait and the guard prove the
 peer accepts this daemon, not only that it runs. A 401 there is the
 peer refusing the token: the wait fails with it at start-up, and later
-the reacher reports it once as a refusal.
+the outage tracker reports it once as a refusal.
 
 `route:/health` is the lifecycle server's liveness answer for the
 orchestrator, the supervisor and load balancers, open by design, and
@@ -106,7 +106,7 @@ of them.
 
 ### Outages
 
-Every failure talking to a peer goes through one `reacher.Reacher` per
+Every failure talking to a peer goes through one `outage_tracker.Tracker` per
 daemon, by `Handle`. A transport failure - refused, dropped, timed out,
 by `connection.Classify` - is an outage, and so is an `unavailable`
 returned by the call, reported as an episode: logged
@@ -114,7 +114,7 @@ when it begins, captured to Sentry once if it lasts `Lasting`, as the
 transport error wrapped in `go:pkg/peer/outage/OutageError`, logged
 again when it ends. A blip a restart explains stays two log lines.
 Sentry's connection fingerprint (kind and host) keeps every episode of
-one peer in one issue. The reacher takes the daemon's reporter and
+one peer in one issue. The outage tracker takes the daemon's reporter and
 notices time only when a call fails: a path that stops calling reports
 nothing. Anything else is a refusal, reported once per reason - to
 Sentry where it is an anomaly, to the log where it is expected.
@@ -124,8 +124,8 @@ Sentry where it is an anomaly, to the log where it is expected.
 After start-up every peer sits behind one `go:pkg/peer/Guard` over its probe,
 shared by every path that calls it. The daemon builds the guards, hands them to
 the services that call the peer, and to `Run` through `Workers()`, first.
-`Attempt` runs a call through the reacher: while the peer is down it fails at
-once with `errors/unavailable`.
+`Attempt` runs a call through the outage tracker: while the peer is down it
+fails at once with `errors/unavailable`.
 
 A peer goes down two ways, and each comes back the way it failed. A
 transport failure is a peer that does not answer, so the guard probes it
@@ -187,8 +187,8 @@ A long-lived connection - a WebSocket, an event stream - is held by
 fast, and the guard's probe cannot tell whether it reconnected. The
 connection is a `face.Connection`: `Open` dials, authenticates and
 subscribes, `Serve` reads until the connection ends and says why, `Close`
-releases it. The hold runs one loop with its own reacher - a failed `Open`
-through `Handle`, an ended `Serve` through `Fail` - and reopens on the
+releases it. The hold runs one loop with its own outage tracker - a failed
+`Open` through `Handle`, an ended `Serve` through `Fail` - and reopens on the
 guard's backoff (`ProbeMinimum` to `ProbeMaximum`, back to the minimum once
 a session ran), each session under recovery. A peer answering the dial
 with an HTTP status maps it through `refusal.New`, so its 503 is an outage

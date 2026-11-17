@@ -11,7 +11,7 @@ import (
 
 func TestClientReachesGomemoryd(t *testing.T) {
 	s := base.New(t)
-	assert.FatalOnError(t, s.MemoryClient(t).Reachable(t.Context()))
+	assert.FatalOnError(t, s.MemoryClient().Reachable(t.Context()))
 }
 
 func TestRefusedTokenIsNotReachable(t *testing.T) {

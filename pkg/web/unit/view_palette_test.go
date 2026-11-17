@@ -27,6 +27,22 @@ func TestSignedSessionAlsoGetsSignOut(t *testing.T) {
 	assert.StringContains(t, "Sign out", r.Body.String())
 }
 
+func TestPaletteListsCommandAddedAfterStart(t *testing.T) {
+	var commands []*palette.Command
+	v := view.New(
+		layout.New(identity.New("test", "test tool", "test"), "", nil).
+			WithCommands(func() []*palette.Command { return commands }),
+	)
+	before := view_tester.PaletteAnswer(t, v, true)
+	assert.StringNotContains(t, "Charlie", before.Body.String())
+	commands = append(
+		commands,
+		palette.NewCommand("Charlie", "/charlie", constant.PaletteNavigate),
+	)
+	after := view_tester.PaletteAnswer(t, v, true)
+	assert.StringContains(t, "Charlie", after.Body.String())
+}
+
 func TestLayoutWithNothingToListHasNoPalette(t *testing.T) {
 	i := identity.New("test", "test tool", "test")
 	plain := layout.New(i, "", nil)
@@ -45,7 +61,15 @@ func TestLayoutWithNothingToListHasNoPalette(t *testing.T) {
 		`id="palette"`,
 		web_tester.RenderBrand(
 			layout.New(i, "", nil).WithCommands(
-				palette.NewCommand("Bravo", "/bravo", constant.PaletteAction),
+				func() []*palette.Command {
+					return []*palette.Command{
+						palette.NewCommand(
+							"Bravo",
+							"/bravo",
+							constant.PaletteAction,
+						),
+					}
+				},
 			),
 		),
 	)

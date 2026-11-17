@@ -13,64 +13,64 @@ import (
 
 func TestQueryAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Query.Query(t.Context(), "alfa", "SELECT 1")
+	_, e := s.Query().Query(t.Context(), "alfa", "SELECT 1")
 	assert.FatalOnError(t, e)
-	_, f := s.Query.Query(t.Context(), "bravo", "SELECT 1")
+	_, f := s.Query().Query(t.Context(), "bravo", "SELECT 1")
 	assert.True(t, validation.Is(f))
 }
 
 func TestExplainAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Query.Explain(t.Context(), "alfa", "SELECT 1", false)
+	_, e := s.Query().Explain(t.Context(), "alfa", "SELECT 1", false)
 	assert.FatalOnError(t, e)
-	_, f := s.Query.Explain(t.Context(), "bravo", "SELECT 1", false)
+	_, f := s.Query().Explain(t.Context(), "bravo", "SELECT 1", false)
 	assert.True(t, validation.Is(f))
 }
 
 func TestListSchemasAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Catalog.ListSchemas(t.Context(), "alfa")
+	_, e := s.Catalog().ListSchemas(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
-	_, f := s.Catalog.ListSchemas(t.Context(), "bravo")
+	_, f := s.Catalog().ListSchemas(t.Context(), "bravo")
 	assert.True(t, unexpected.Is(f))
 }
 
 func TestListTablesAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Catalog.ListTables(t.Context(), "alfa", "")
+	_, e := s.Catalog().ListTables(t.Context(), "alfa", "")
 	assert.FatalOnError(t, e)
-	_, f := s.Catalog.ListTables(t.Context(), "bravo", "")
+	_, f := s.Catalog().ListTables(t.Context(), "bravo", "")
 	assert.True(t, unexpected.Is(f))
 }
 
 func TestDescribeTableAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Catalog.DescribeTable(t.Context(), "alfa", "", "orders")
+	_, e := s.Catalog().DescribeTable(t.Context(), "alfa", "", "orders")
 	assert.FatalOnError(t, e)
-	_, f := s.Catalog.DescribeTable(t.Context(), "bravo", "", "orders")
+	_, f := s.Catalog().DescribeTable(t.Context(), "bravo", "", "orders")
 	assert.True(t, unexpected.Is(f))
 }
 
 func TestListIndexesAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Catalog.ListIndexes(t.Context(), "alfa", "", "orders")
+	_, e := s.Catalog().ListIndexes(t.Context(), "alfa", "", "orders")
 	assert.FatalOnError(t, e)
-	_, f := s.Catalog.ListIndexes(t.Context(), "bravo", "", "orders")
+	_, f := s.Catalog().ListIndexes(t.Context(), "bravo", "", "orders")
 	assert.True(t, unexpected.Is(f))
 }
 
 func TestTableSizesAnswersFromNamedInstance(t *testing.T) {
 	s := service_tester.RefusingBravo(t)
-	_, e := s.Catalog.TableSizes(t.Context(), "alfa", "")
+	_, e := s.Catalog().TableSizes(t.Context(), "alfa", "")
 	assert.FatalOnError(t, e)
-	_, f := s.Catalog.TableSizes(t.Context(), "bravo", "")
+	_, f := s.Catalog().TableSizes(t.Context(), "bravo", "")
 	assert.True(t, unexpected.Is(f))
 }
 
 func TestCatalogueNamesTravelAsArgumentsNotText(t *testing.T) {
-	s, clients := service_tester.New(t, "alfa")
-	c := clients["alfa"]
-	_, e := s.Catalog.DescribeTable(t.Context(), "alfa", "sales", "it's")
+	s := service_tester.New(t)
+	c := s.Alfa()
+	_, e := s.Catalog().DescribeTable(t.Context(), "alfa", "sales", "it's")
 	assert.FatalOnError(t, e)
 	v := c.Statements()[0]
 	assert.False(t, strings.Contains(v.SQL, "sales"))
@@ -81,42 +81,42 @@ func TestCatalogueNamesTravelAsArgumentsNotText(t *testing.T) {
 }
 
 func TestEmptySchemaMeansPublic(t *testing.T) {
-	s, clients := service_tester.New(t, "alfa")
-	c := clients["alfa"]
-	_, e := s.Catalog.ListTables(t.Context(), "alfa", "")
+	s := service_tester.New(t)
+	c := s.Alfa()
+	_, e := s.Catalog().ListTables(t.Context(), "alfa", "")
 	assert.FatalOnError(t, e)
 	assert.Any(t, "public", c.Statements()[0].Arguments[0])
 }
 
 func TestExplainPrefixesStatement(t *testing.T) {
-	s, clients := service_tester.New(t, "alfa")
-	c := clients["alfa"]
-	_, e := s.Query.Explain(t.Context(), "alfa", "SELECT 1", false)
+	s := service_tester.New(t)
+	c := s.Alfa()
+	_, e := s.Query().Explain(t.Context(), "alfa", "SELECT 1", false)
 	assert.FatalOnError(t, e)
-	_, f := s.Query.Explain(t.Context(), "alfa", "SELECT 1", true)
+	_, f := s.Query().Explain(t.Context(), "alfa", "SELECT 1", true)
 	assert.FatalOnError(t, f)
 	assert.String(t, "EXPLAIN SELECT 1", c.Statements()[0].SQL)
 	assert.String(t, "EXPLAIN ANALYZE SELECT 1", c.Statements()[1].SQL)
 }
 
 func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
-	s, clients := service_tester.New(t, "alfa")
-	c := clients["alfa"]
+	s := service_tester.New(t)
+	c := s.Alfa()
 	c.Failure = outage_tester.RefusedDial()
-	_, e := s.Query.Query(t.Context(), "alfa", "SELECT 1")
+	_, e := s.Query().Query(t.Context(), "alfa", "SELECT 1")
 	assert.True(t, unavailable.Is(e))
 	c.Failure = nil
-	_, f := s.Query.Query(t.Context(), "alfa", "SELECT 1")
+	_, f := s.Query().Query(t.Context(), "alfa", "SELECT 1")
 	assert.True(t, unavailable.Is(f))
 	assert.StringContains(t, "postgres:alfa unreachable since", f.Error())
 	assert.Count(t, 1, c.Statements())
 }
 
 func TestOneUnreachableInstanceLeavesOthersAnswering(t *testing.T) {
-	s, clients := service_tester.New(t, "alfa", "bravo")
-	clients["alfa"].Failure = outage_tester.RefusedDial()
-	_, e := s.Query.Query(t.Context(), "alfa", "SELECT 1")
+	s := service_tester.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().Failure = outage_tester.RefusedDial()
+	_, e := s.Query().Query(t.Context(), "alfa", "SELECT 1")
 	assert.True(t, unavailable.Is(e))
-	_, f := s.Query.Query(t.Context(), "bravo", "SELECT 1")
+	_, f := s.Query().Query(t.Context(), "bravo", "SELECT 1")
 	assert.FatalOnError(t, f)
 }

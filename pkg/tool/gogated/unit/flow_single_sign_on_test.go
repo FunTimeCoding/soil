@@ -4,23 +4,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/flow_tester"
 	"net/http"
 	"net/url"
 	"testing"
 )
 
 func TestSingleSignOnSkipsLoginForm(t *testing.T) {
-	o := tester.New(t)
-	r := o.Register(t, []string{"http://localhost/callback"})
-	first := o.Authorize(t, r.ClientIdentifier, "http://localhost/callback")
+	o := flow_tester.New(t)
+	r := o.Register([]string{"http://localhost/callback"})
+	first := o.Authorize(r.ClientIdentifier, "http://localhost/callback")
 
 	if first.AuthenticationCookie == nil {
 		t.Fatal("expected authentication cookie after login")
 	}
 
 	response := o.ResumeAuthorize(
-		t,
 		r.ClientIdentifier,
 		"http://localhost/callback",
 		first.AuthenticationCookie,
@@ -45,10 +44,9 @@ func TestSingleSignOnSkipsLoginForm(t *testing.T) {
 }
 
 func TestSingleSignOnWithoutCookieRendersForm(t *testing.T) {
-	o := tester.New(t)
-	r := o.Register(t, []string{"http://localhost/callback"})
+	o := flow_tester.New(t)
+	r := o.Register([]string{"http://localhost/callback"})
 	response := o.ResumeAuthorize(
-		t,
 		r.ClientIdentifier,
 		"http://localhost/callback",
 		nil,
@@ -60,11 +58,10 @@ func TestSingleSignOnWithoutCookieRendersForm(t *testing.T) {
 }
 
 func TestPromptLoginForcesReauthentication(t *testing.T) {
-	o := tester.New(t)
-	r := o.Register(t, []string{"http://localhost/callback"})
-	first := o.Authorize(t, r.ClientIdentifier, "http://localhost/callback")
+	o := flow_tester.New(t)
+	r := o.Register([]string{"http://localhost/callback"})
+	first := o.Authorize(r.ClientIdentifier, "http://localhost/callback")
 	response := o.ResumeAuthorize(
-		t,
 		r.ClientIdentifier,
 		"http://localhost/callback",
 		first.AuthenticationCookie,

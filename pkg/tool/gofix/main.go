@@ -20,7 +20,7 @@ func Main() {
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean("diff", false, "Show diff without applying")
-	a.Boolean("survey", false, "Print identifier-segment frequency report")
+	a.Boolean("report", false, "Print identifier-segment frequency report")
 	a.Boolean("rename", false, "Variable letter rename mode")
 	a.Boolean("summary", false, "One line per modified file")
 	a.Boolean(
@@ -44,8 +44,8 @@ func Main() {
 
 	lint.Header(constant.Identity.Name(), root, lint.PatternDetail(patterns))
 
-	if a.GetBoolean("survey") {
-		runSurvey(root, patterns)
+	if a.GetBoolean("report") {
+		runReport(root, patterns)
 
 		return
 	}

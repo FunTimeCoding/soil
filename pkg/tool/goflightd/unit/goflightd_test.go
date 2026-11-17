@@ -79,21 +79,21 @@ func TestStoreRoundTrip(t *testing.T) {
 			},
 		),
 	)
-	events, e := s.Service.Events(
+	events, e := s.Service().Events(
 		window.New(now.Add(-1*time.Hour), now.Add(time.Hour)),
 		100,
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, len(events))
 	assert.String(t, "ensembled", events[0].Process)
-	snapshots, f := s.Service.Snapshots(
+	snapshots, f := s.Service().Snapshots(
 		window.New(now.Add(-1*time.Hour), now.Add(time.Hour)),
 		100,
 	)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 1, len(snapshots))
 	assert.String(t, "wireless", snapshots[0].Kind)
-	v, g := s.Service.Status()
+	v, g := s.Service().Status()
 	assert.FatalOnError(t, g)
 	assert.NotNil(t, v.LastEvent)
 }
@@ -104,13 +104,13 @@ func TestStoreMarks(t *testing.T) {
 		t,
 		s.Store.CreateMark(mark.New(time.Now().Add(-time.Minute), "broke", "")),
 	)
-	_, f := s.Service.CreateMark("recovered", "mouse cycled")
+	_, f := s.Service().CreateMark("recovered", "mouse cycled")
 	assert.FatalOnError(t, f)
-	marks, g := s.Service.Marks(10)
+	marks, g := s.Service().Marks(10)
 	assert.FatalOnError(t, g)
 	assert.Integer(t, 2, len(marks))
 	assert.String(t, "recovered", marks[0].Label)
-	v, h := s.Service.Status()
+	v, h := s.Service().Status()
 	assert.FatalOnError(t, h)
 	assert.Integer(t, 2, v.Marks)
 }

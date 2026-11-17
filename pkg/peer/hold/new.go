@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/constant"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
 )
 
 func New(
@@ -21,7 +21,7 @@ func New(
 	return &Hold{
 		name:       name,
 		connection: c,
-		reacher:    reacher.New(r),
+		outages:    outage_tracker.New(r),
 		recovery:   recovery.New(l, r),
 		edge:       func(e *edge.Edge) { l.Plain("%s", e) },
 		refusal:    func(e error) { r.CaptureException(e) },

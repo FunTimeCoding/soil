@@ -11,8 +11,7 @@ import (
 func TestSaltClientAndItsMockShareFace(t *testing.T) {
 	c := salt.New("salt.test", 1, "alfa", "bravo")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.SaltClient{c, m}
 	assert.Count(t, 2, faces)
 }

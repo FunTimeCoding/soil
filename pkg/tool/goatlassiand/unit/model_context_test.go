@@ -3,13 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/base"
 	"testing"
 )
 
 func TestCreateAndGetPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	result := c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -21,7 +21,7 @@ func TestCreateAndGetPage(t *testing.T) {
 	assert.StringContains(t, "Test Page", result)
 	assert.StringContains(t, "current", result)
 	assert.StringContains(t, "Hello world", result)
-	getResult := o.Client.MustCallTool(
+	getResult := c.MustCallTool(
 		constant.ConfluenceGetPage,
 		map[string]any{"identifier": "1"},
 	)
@@ -29,8 +29,8 @@ func TestCreateAndGetPage(t *testing.T) {
 }
 
 func TestCreateDraftPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	result := c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -45,8 +45,8 @@ func TestCreateDraftPage(t *testing.T) {
 }
 
 func TestGetDraftPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -56,7 +56,7 @@ func TestGetDraftPage(t *testing.T) {
 			"draft":             true,
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceGetPage,
 		map[string]any{"identifier": "1", "draft": true},
 	)
@@ -65,8 +65,8 @@ func TestGetDraftPage(t *testing.T) {
 }
 
 func TestPublishDraftPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -76,7 +76,7 @@ func TestPublishDraftPage(t *testing.T) {
 			"draft":             true,
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "current"},
 	)
@@ -85,8 +85,8 @@ func TestPublishDraftPage(t *testing.T) {
 }
 
 func TestDraftOverlay(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -95,16 +95,16 @@ func TestDraftOverlay(t *testing.T) {
 			"body":              "Original content",
 		},
 	)
-	o.Client.MustCallTool(
+	c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "draft"},
 	)
-	overlay := o.Client.MustCallTool(
+	overlay := c.MustCallTool(
 		constant.ConfluenceGetPageDraft,
 		map[string]any{"identifier": "1"},
 	)
 	assert.StringContains(t, "draft", overlay)
-	published := o.Client.MustCallTool(
+	published := c.MustCallTool(
 		constant.ConfluenceGetPage,
 		map[string]any{"identifier": "1"},
 	)
@@ -112,8 +112,8 @@ func TestDraftOverlay(t *testing.T) {
 }
 
 func TestPublishOverlay(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -122,11 +122,11 @@ func TestPublishOverlay(t *testing.T) {
 			"body":              "Original",
 		},
 	)
-	o.Client.MustCallTool(
+	c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "draft"},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "current"},
 	)
@@ -134,8 +134,8 @@ func TestPublishOverlay(t *testing.T) {
 }
 
 func TestDeletePublishedPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -144,7 +144,7 @@ func TestDeletePublishedPage(t *testing.T) {
 			"body":              "Temporary",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceDeletePage,
 		map[string]any{"identifier": "1"},
 	)
@@ -152,8 +152,8 @@ func TestDeletePublishedPage(t *testing.T) {
 }
 
 func TestDeleteDraftPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -163,7 +163,7 @@ func TestDeleteDraftPage(t *testing.T) {
 			"draft":             true,
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceDeletePage,
 		map[string]any{"identifier": "1", "draft": true},
 	)
@@ -171,8 +171,8 @@ func TestDeleteDraftPage(t *testing.T) {
 }
 
 func TestEditPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -181,7 +181,7 @@ func TestEditPage(t *testing.T) {
 			"body":              "Before edit",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -193,8 +193,8 @@ func TestEditPage(t *testing.T) {
 }
 
 func TestEditPageNotFound(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -203,7 +203,7 @@ func TestEditPageNotFound(t *testing.T) {
 			"body":              "Some content",
 		},
 	)
-	result := o.Client.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -215,8 +215,8 @@ func TestEditPageNotFound(t *testing.T) {
 }
 
 func TestEditPageAmbiguous(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -225,7 +225,7 @@ func TestEditPageAmbiguous(t *testing.T) {
 			"body":              "alfa and alfa again",
 		},
 	)
-	result := o.Client.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -237,8 +237,8 @@ func TestEditPageAmbiguous(t *testing.T) {
 }
 
 func TestEditWithHeadingsAndLists(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -247,7 +247,7 @@ func TestEditWithHeadingsAndLists(t *testing.T) {
 			"body":              "## Section One\n\n- Item A\n- Item B\n\n## Section Two\n\nParagraph here",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -260,8 +260,8 @@ func TestEditWithHeadingsAndLists(t *testing.T) {
 }
 
 func TestDeletePublishedWithoutDraftFlag(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -270,7 +270,7 @@ func TestDeletePublishedWithoutDraftFlag(t *testing.T) {
 			"body":              "Content",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceDeletePage,
 		map[string]any{"identifier": "1"},
 	)
@@ -278,8 +278,8 @@ func TestDeletePublishedWithoutDraftFlag(t *testing.T) {
 }
 
 func TestDeleteDraftWithoutDraftFlagFails(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -289,7 +289,7 @@ func TestDeleteDraftWithoutDraftFlagFails(t *testing.T) {
 			"draft":             true,
 		},
 	)
-	result := o.Client.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.ConfluenceDeletePage,
 		map[string]any{"identifier": "1"},
 	)
@@ -298,13 +298,13 @@ func TestDeleteDraftWithoutDraftFlagFails(t *testing.T) {
 }
 
 func TestToolCount(t *testing.T) {
-	o := model_context_tester.New(t)
-	assert.Count(t, 32, o.Client.ListTools())
+	c := base.New(t).Tools()
+	assert.Count(t, 32, c.ListTools())
 }
 
 func TestUpdatePage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -313,7 +313,7 @@ func TestUpdatePage(t *testing.T) {
 			"body":              "Original body",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceUpdatePage,
 		map[string]any{
 			"identifier": "1",
@@ -326,8 +326,8 @@ func TestUpdatePage(t *testing.T) {
 }
 
 func TestSearch(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	result := c.MustCallTool(
 		constant.ConfluenceSearch,
 		map[string]any{"query": "type=page"},
 	)
@@ -335,17 +335,14 @@ func TestSearch(t *testing.T) {
 }
 
 func TestListSpaces(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
-		constant.ConfluenceListSpaces,
-		map[string]any{},
-	)
+	c := base.New(t).Tools()
+	result := c.MustCallTool(constant.ConfluenceListSpaces, map[string]any{})
 	assert.StringContains(t, "[]", result)
 }
 
 func TestGetPageChildren(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -354,7 +351,7 @@ func TestGetPageChildren(t *testing.T) {
 			"body":              "Parent page",
 		},
 	)
-	o.Client.MustCallTool(
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -363,7 +360,7 @@ func TestGetPageChildren(t *testing.T) {
 			"body":              "Child page",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceGetPageChildren,
 		map[string]any{"identifier": "1"},
 	)
@@ -371,8 +368,8 @@ func TestGetPageChildren(t *testing.T) {
 }
 
 func TestAddComment(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -381,7 +378,7 @@ func TestAddComment(t *testing.T) {
 			"body":              "Page content",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceAddComment,
 		map[string]any{"identifier": "1", "body": "A comment"},
 	)
@@ -389,8 +386,8 @@ func TestAddComment(t *testing.T) {
 }
 
 func TestCreateDraftWithoutTitle(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	result := c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -403,8 +400,8 @@ func TestCreateDraftWithoutTitle(t *testing.T) {
 }
 
 func TestEditPageWithTitle(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -413,7 +410,7 @@ func TestEditPageWithTitle(t *testing.T) {
 			"body":              "Content here",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -427,8 +424,8 @@ func TestEditPageWithTitle(t *testing.T) {
 }
 
 func TestEditPageWithMessage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -437,7 +434,7 @@ func TestEditPageWithMessage(t *testing.T) {
 			"body":              "Before change",
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -451,8 +448,8 @@ func TestEditPageWithMessage(t *testing.T) {
 }
 
 func TestEditDraftPage(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -462,7 +459,7 @@ func TestEditDraftPage(t *testing.T) {
 			"draft":             true,
 		},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ConfluenceEditPage,
 		map[string]any{
 			"identifier": "1",
@@ -476,8 +473,8 @@ func TestEditDraftPage(t *testing.T) {
 }
 
 func TestListPages(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -486,7 +483,7 @@ func TestListPages(t *testing.T) {
 			"body":              "Content",
 		},
 	)
-	o.Client.MustCallTool(
+	c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -496,12 +493,12 @@ func TestListPages(t *testing.T) {
 			"draft":             true,
 		},
 	)
-	published := o.Client.MustCallTool(
+	published := c.MustCallTool(
 		constant.ConfluenceListPages,
 		map[string]any{"space_identifier": "1"},
 	)
 	assert.StringContains(t, "Published Page", published)
-	drafts := o.Client.MustCallTool(
+	drafts := c.MustCallTool(
 		constant.ConfluenceListPages,
 		map[string]any{"space_identifier": "1", "status": "draft"},
 	)
@@ -509,8 +506,8 @@ func TestListPages(t *testing.T) {
 }
 
 func TestFullDraftLifecycle(t *testing.T) {
-	o := model_context_tester.New(t)
-	created := o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	created := c.MustCallTool(
 		constant.ConfluenceCreatePage,
 		map[string]any{
 			"space_identifier":  "1",
@@ -521,43 +518,43 @@ func TestFullDraftLifecycle(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "draft", created)
-	read := o.Client.MustCallTool(
+	read := c.MustCallTool(
 		constant.ConfluenceGetPage,
 		map[string]any{"identifier": "1", "draft": true},
 	)
 	assert.StringContains(t, "Draft content", read)
-	published := o.Client.MustCallTool(
+	published := c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "current"},
 	)
 	assert.StringContains(t, "current", published)
-	afterPublish := o.Client.MustCallTool(
+	afterPublish := c.MustCallTool(
 		constant.ConfluenceGetPage,
 		map[string]any{"identifier": "1"},
 	)
 	assert.StringContains(t, "current", afterPublish)
 	assert.StringContains(t, "Draft content", afterPublish)
-	overlay := o.Client.MustCallTool(
+	overlay := c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "draft"},
 	)
 	assert.StringContains(t, "draft", overlay)
-	stillPublished := o.Client.MustCallTool(
+	stillPublished := c.MustCallTool(
 		constant.ConfluenceGetPage,
 		map[string]any{"identifier": "1"},
 	)
 	assert.StringContains(t, "current", stillPublished)
-	draftOverlay := o.Client.MustCallTool(
+	draftOverlay := c.MustCallTool(
 		constant.ConfluenceGetPageDraft,
 		map[string]any{"identifier": "1"},
 	)
 	assert.StringContains(t, "draft", draftOverlay)
-	republished := o.Client.MustCallTool(
+	republished := c.MustCallTool(
 		constant.ConfluenceSetPageStatus,
 		map[string]any{"identifier": "1", "status": "current"},
 	)
 	assert.StringContains(t, "current", republished)
-	deleted := o.Client.MustCallTool(
+	deleted := c.MustCallTool(
 		constant.ConfluenceDeletePage,
 		map[string]any{"identifier": "1"},
 	)

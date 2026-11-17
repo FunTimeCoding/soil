@@ -12,10 +12,10 @@ import (
 )
 
 func TestEventWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	s := base.New(t, base.WithClock(clock_tester.Window))
 	assert.FatalOnError(
 		t,
-		store.New(s.Mapper).CreateEvent(
+		store.New(s.Mapper()).CreateEvent(
 			*event.New(
 				clock_tester.Window().Add(-30*time.Minute),
 				"airportd",
@@ -25,7 +25,7 @@ func TestEventWindowRunsOnServiceClock(t *testing.T) {
 			),
 		),
 	)
-	r, e := s.Client.GetEventsWithResponse(
+	r, e := s.GeneratedClient().GetEventsWithResponse(
 		t.Context(),
 		&client.GetEventsParams{},
 	)

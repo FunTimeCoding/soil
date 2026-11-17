@@ -16,7 +16,7 @@ func TestExecRefusesIncompleteRequest(t *testing.T) {
 		{Name: "golf", Command: []string{"true"}},
 		{Name: "golf", Namespace: "default"},
 	} {
-		_, e := v.Service.ExecInPod(t.Context(), "test", q)
+		_, e := v.Service().ExecInPod(t.Context(), "test", q)
 		assert.True(t, validation.Is(e))
 	}
 }

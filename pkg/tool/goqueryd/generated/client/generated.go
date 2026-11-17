@@ -36,12 +36,12 @@ func (e GetSearchParamsMode) Valid() bool {
 
 // ChunkPreview defines model for ChunkPreview.
 type ChunkPreview struct {
-	Allowance      int              `json:"allowance"`
-	Chunks         []PreviewChunk   `json:"chunks"`
-	EmbedAllowance int              `json:"embed_allowance"`
-	Model          string           `json:"model"`
-	Sections       []PreviewSection `json:"sections"`
-	Window         int              `json:"window"`
+	Chunks          []PreviewChunk   `json:"chunks"`
+	EmbedTokenLimit int              `json:"embed_token_limit"`
+	Model           string           `json:"model"`
+	Sections        []PreviewSection `json:"sections"`
+	TokenLimit      int              `json:"token_limit"`
+	Window          int              `json:"window"`
 }
 
 // CollectionStatus defines model for CollectionStatus.
@@ -134,11 +134,11 @@ type OversizeFile struct {
 
 // OversizeReport defines model for OversizeReport.
 type OversizeReport struct {
-	Allowance      int            `json:"allowance"`
-	EmbedAllowance int            `json:"embed_allowance"`
-	Files          []OversizeFile `json:"files"`
-	Model          string         `json:"model"`
-	Window         int            `json:"window"`
+	EmbedTokenLimit int            `json:"embed_token_limit"`
+	Files           []OversizeFile `json:"files"`
+	Model           string         `json:"model"`
+	TokenLimit      int            `json:"token_limit"`
+	Window          int            `json:"window"`
 }
 
 // PreviewBlock defines model for PreviewBlock.

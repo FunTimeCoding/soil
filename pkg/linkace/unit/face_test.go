@@ -11,8 +11,7 @@ import (
 func TestLinkAceClientAndItsMockShareFace(t *testing.T) {
 	c := linkace.New("linkace.example", "alfa-token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.LinkAceClient{c, m}
 	assert.Count(t, 2, faces)
 }

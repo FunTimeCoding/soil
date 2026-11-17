@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
 )
 
@@ -22,8 +22,8 @@ type RelatedEntry struct {
 }
 
 func TestGetMemoryIncludesRelated(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "error handling",
@@ -31,7 +31,7 @@ func TestGetMemoryIncludesRelated(t *testing.T) {
 			constant.Description: "error handling description",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "deployment",
@@ -39,21 +39,21 @@ func TestGetMemoryIncludesRelated(t *testing.T) {
 			constant.Description: "deployment description",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 2,
 			constant.Add:              "deploy,no-index",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
 			constant.TargetIdentifier: 2,
 		},
 	)
-	raw := s.MustCallTool(
+	raw := c.MustCallTool(
 		constant.GetMemory,
 		map[string]any{constant.MemoryIdentifier: 1},
 	)

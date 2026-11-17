@@ -8,11 +8,10 @@ import (
 )
 
 func TestApplyPatternUnknownHole(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern/src")
-	s := service_tester.NewService(t)
-	r, apply, e := s.Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("pattern/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/pair",
 		"Compare",
 		"",

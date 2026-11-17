@@ -11,8 +11,8 @@ import (
 
 func TestSendDirectMessage(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	b.CheckLive()
@@ -35,8 +35,8 @@ func TestSendDirectMessage(t *testing.T) {
 
 func TestImmediateBroadcastSaysItWasQueued(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	answer := a.MustCallTool(
@@ -51,11 +51,11 @@ func TestImmediateBroadcastSaysItWasQueued(t *testing.T) {
 
 func TestRestReportsWhetherSendWokeAnyone(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
-	broadcast, e := a.RestClient.PostSendWithResponse(
+	broadcast, e := a.GeneratedClient.PostSendWithResponse(
 		a.Context,
 		client.SendRequest{
 			Callsign: a.Name(),
@@ -65,7 +65,7 @@ func TestRestReportsWhetherSendWokeAnyone(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.False(t, broadcast.JSON200.Immediate)
-	named, f := a.RestClient.PostSendWithResponse(
+	named, f := a.GeneratedClient.PostSendWithResponse(
 		a.Context,
 		client.SendRequest{
 			Callsign: a.Name(),
@@ -80,8 +80,8 @@ func TestRestReportsWhetherSendWokeAnyone(t *testing.T) {
 
 func TestRestSendPastImmediateLimitSaysItWasHeld(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	request := client.SendRequest{
@@ -92,20 +92,20 @@ func TestRestSendPastImmediateLimitSaysItWasHeld(t *testing.T) {
 	}
 
 	for range constant.ImmediateLimit {
-		r, e := a.RestClient.PostSendWithResponse(a.Context, request)
+		r, e := a.GeneratedClient.PostSendWithResponse(a.Context, request)
 		assert.FatalOnError(t, e)
 		assert.True(t, r.JSON200.Immediate)
 	}
 
-	r, e := a.RestClient.PostSendWithResponse(a.Context, request)
+	r, e := a.GeneratedClient.PostSendWithResponse(a.Context, request)
 	assert.FatalOnError(t, e)
 	assert.False(t, r.JSON200.Immediate)
 }
 
 func TestBroadcastReachesAnotherSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "listener")
 	b.CheckLive()

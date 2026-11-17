@@ -10,8 +10,7 @@ import (
 
 func Project(t *testing.T) *mock_client.Client {
 	t.Helper()
-	c := mock_client.New()
-	t.Cleanup(c.Close)
+	c := mock_client.New(t)
 	c.SeedBranch(gitConstant.MainBranch, constant.FixtureMainHash)
 	c.SeedPipeline(
 		1,

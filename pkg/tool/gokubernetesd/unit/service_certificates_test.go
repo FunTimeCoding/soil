@@ -24,7 +24,7 @@ func TestCertificates(t *testing.T) {
 		time.Now().Add(28*24*time.Hour),
 		true,
 	)
-	result, e := s.Service.Certificates(context.Background(), "test")
+	result, e := s.Service().Certificates(context.Background(), "test")
 	assert.Nil(t, e)
 	assert.Count(t, 2, result)
 	assert.String(t, "sentry-tls", result[0].Name)
@@ -54,7 +54,7 @@ func TestCertificatesSortedByExpiry(t *testing.T) {
 		time.Now().Add(30*24*time.Hour),
 		true,
 	)
-	result, e := s.Service.Certificates(context.Background(), "test")
+	result, e := s.Service().Certificates(context.Background(), "test")
 	assert.Nil(t, e)
 	assert.String(t, "expiring-soon", result[0].Name)
 	assert.String(t, "medium", result[1].Name)

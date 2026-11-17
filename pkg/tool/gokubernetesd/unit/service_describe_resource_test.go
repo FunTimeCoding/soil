@@ -11,7 +11,7 @@ import (
 func TestDescribeResource(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddDeployment("default", "nginx", 1, 1)
-	result, e := s.Service.DescribeResource(
+	result, e := s.Service().DescribeResource(
 		context.Background(),
 		"test",
 		request.Describe{
@@ -28,7 +28,7 @@ func TestDescribeResource(t *testing.T) {
 func TestDescribeResourceFiltered(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddDeployment("default", "nginx", 1, 1)
-	result, e := s.Service.DescribeResource(
+	result, e := s.Service().DescribeResource(
 		context.Background(),
 		"test",
 		request.Describe{

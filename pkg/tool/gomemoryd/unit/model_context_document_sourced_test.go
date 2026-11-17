@@ -4,15 +4,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
 	"time"
 )
 
 func TestDocumentSourcedMemoryRejectsUpdate(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	c := s.Tools()
 	identifier := s.DocumentSourcedMemory()
-	result := s.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: identifier,
@@ -28,9 +29,10 @@ func TestDocumentSourcedMemoryRejectsUpdate(t *testing.T) {
 }
 
 func TestDocumentSourcedMemoryRejectsForget(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	c := s.Tools()
 	identifier := s.DocumentSourcedMemory()
-	result := s.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.ForgetMemory,
 		map[string]any{constant.MemoryIdentifier: identifier},
 	)
@@ -41,9 +43,10 @@ func TestDocumentSourcedMemoryRejectsForget(t *testing.T) {
 }
 
 func TestDocumentSourcedMemoryRejectsTag(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	c := s.Tools()
 	identifier := s.DocumentSourcedMemory()
-	result := s.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: identifier,
@@ -54,7 +57,8 @@ func TestDocumentSourcedMemoryRejectsTag(t *testing.T) {
 }
 
 func TestGetMemoryGroup(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	c := s.Tools()
 	o := save_option.New()
 	o.Name = "Cluster"
 	o.Content = "parent"
@@ -71,7 +75,7 @@ func TestGetMemoryGroup(t *testing.T) {
 	child.Ordinal = 1
 	_, f := s.Store().CreateMemory(child, time.Now())
 	assert.FatalOnError(t, f)
-	result := s.MustCallTool(
+	result := c.MustCallTool(
 		constant.GetMemoryGroup,
 		map[string]any{constant.MemoryIdentifier: parent},
 	)

@@ -4,21 +4,18 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/profile_tester"
 	"strings"
 	"testing"
 )
 
 func TestGetMemoryCompactByDefault(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	identifier := s.DocumentSourcedMemory()
-	result := model_context_tester.Decode(
-		t,
-		s.MustCallTool(
-			constant.GetMemory,
-			map[string]any{constant.MemoryIdentifier: identifier},
-		),
+	result := s.Tools().MustCallToolNotation(
+		constant.GetMemory,
+		map[string]any{constant.MemoryIdentifier: identifier},
 	)
 	assert.String(t, "Retry", result[constant.MemoryName].(string))
 	assert.String(
@@ -43,17 +40,14 @@ func TestGetMemoryCompactByDefault(t *testing.T) {
 }
 
 func TestGetMemoryDetailCarriesProvenance(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	identifier := s.DocumentSourcedMemory()
-	result := model_context_tester.Decode(
-		t,
-		s.MustCallTool(
-			constant.GetMemory,
-			map[string]any{
-				constant.MemoryIdentifier: identifier,
-				constant.Detail:           true,
-			},
-		),
+	result := s.Tools().MustCallToolNotation(
+		constant.GetMemory,
+		map[string]any{
+			constant.MemoryIdentifier: identifier,
+			constant.Detail:           true,
+		},
 	)
 	assert.String(t, "canon/Example.yaml", result["provenance_file"].(string))
 	assert.String(t, "alfa", result[constant.Scope].(string))
@@ -61,9 +55,10 @@ func TestGetMemoryDetailCarriesProvenance(t *testing.T) {
 }
 
 func TestGetMemoryGroupCompactByDefault(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	c := s.Tools()
 	parent := s.EmptyContentParent()
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:       "shard",
@@ -72,12 +67,9 @@ func TestGetMemoryGroupCompactByDefault(t *testing.T) {
 			constant.ParentIdentifier: parent,
 		},
 	)
-	result := model_context_tester.Decode(
-		t,
-		s.MustCallTool(
-			constant.GetMemoryGroup,
-			map[string]any{constant.MemoryIdentifier: parent},
-		),
+	result := c.MustCallToolNotation(
+		constant.GetMemoryGroup,
+		map[string]any{constant.MemoryIdentifier: parent},
 	)
 	parentResult := result["parent"].(map[string]any)
 
@@ -100,9 +92,10 @@ func TestGetMemoryGroupCompactByDefault(t *testing.T) {
 }
 
 func TestGetMemoryGroupCarriesRelations(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
+	c := s.Tools()
 	parent := s.EmptyContentParent()
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:       "shard",
@@ -111,7 +104,7 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 			constant.ParentIdentifier: parent,
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "outside",
@@ -119,7 +112,7 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 			constant.Description: "outside description",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: parent,
@@ -127,12 +120,9 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 			constant.Type:             "deep-dive",
 		},
 	)
-	result := model_context_tester.Decode(
-		t,
-		s.MustCallTool(
-			constant.GetMemoryGroup,
-			map[string]any{constant.MemoryIdentifier: parent},
-		),
+	result := c.MustCallToolNotation(
+		constant.GetMemoryGroup,
+		map[string]any{constant.MemoryIdentifier: parent},
 	)
 	relations := result["relations"].([]any)
 	assert.Count(t, 1, relations)
@@ -142,17 +132,14 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 }
 
 func TestGetMemoryGroupDetailCarriesProvenance(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	parent := s.DocumentSourcedMemory()
-	result := model_context_tester.Decode(
-		t,
-		s.MustCallTool(
-			constant.GetMemoryGroup,
-			map[string]any{
-				constant.MemoryIdentifier: parent,
-				constant.Detail:           true,
-			},
-		),
+	result := s.Tools().MustCallToolNotation(
+		constant.GetMemoryGroup,
+		map[string]any{
+			constant.MemoryIdentifier: parent,
+			constant.Detail:           true,
+		},
 	)
 	parentResult := result["parent"].(map[string]any)
 	assert.String(
@@ -163,8 +150,8 @@ func TestGetMemoryGroupDetailCarriesProvenance(t *testing.T) {
 }
 
 func TestSearchMemoriesCompactByDefault(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "retry policy",
@@ -172,7 +159,7 @@ func TestSearchMemoriesCompactByDefault(t *testing.T) {
 			constant.Description: "retry description",
 		},
 	)
-	raw := s.MustCallTool(
+	raw := c.MustCallTool(
 		constant.SearchMemories,
 		map[string]any{constant.Query: "retry"},
 	)
@@ -189,8 +176,8 @@ func TestSearchMemoriesCompactByDefault(t *testing.T) {
 }
 
 func TestSearchMemoriesDetailCarriesType(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "retry policy",
@@ -198,7 +185,7 @@ func TestSearchMemoriesDetailCarriesType(t *testing.T) {
 			constant.Description: "retry description",
 		},
 	)
-	raw := s.MustCallTool(
+	raw := c.MustCallTool(
 		constant.SearchMemories,
 		map[string]any{constant.Query: "retry", constant.Detail: true},
 	)
@@ -209,8 +196,8 @@ func TestSearchMemoriesDetailCarriesType(t *testing.T) {
 }
 
 func TestGetMemoryManyReturnsArray(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "first",
@@ -218,7 +205,7 @@ func TestGetMemoryManyReturnsArray(t *testing.T) {
 			constant.Description: "first description",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "second",
@@ -226,7 +213,7 @@ func TestGetMemoryManyReturnsArray(t *testing.T) {
 			constant.Description: "second description",
 		},
 	)
-	raw := s.MustCallTool(
+	raw := c.MustCallTool(
 		constant.GetMemory,
 		map[string]any{constant.MemoryIdentifiers: "1, 2"},
 	)
@@ -242,8 +229,8 @@ func TestGetMemoryManyReturnsArray(t *testing.T) {
 }
 
 func TestProfileAlwaysTierCompact(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	c := base.New(t).Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "charlie",
@@ -251,7 +238,7 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 			constant.Description: "charlie description",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -259,7 +246,7 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 		},
 	)
 	always := profile_tester.Section(
-		s.MustCallTool(constant.Profile, map[string]any{}),
+		c.MustCallTool(constant.Profile, map[string]any{}),
 		constant.AlwaysSectionHeading,
 	)
 	assert.Integer(t, 1, strings.Count(always, constant.MemoryHeadingPrefix))

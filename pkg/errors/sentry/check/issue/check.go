@@ -2,7 +2,7 @@ package issue
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/age_colorer"
+	"github.com/funtimecoding/soil/pkg/console/age_scale"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
@@ -28,10 +28,10 @@ func Check(o *option.Issue) {
 		f.Tag(consoleConstant.TagCopyable)
 	}
 
-	colorer := age_colorer.Default(elements...)
+	scale := age_scale.Default(elements...)
 
 	for _, e := range elements {
-		colorer.Set(e)
+		scale.Set(e)
 		fmt.Println(e.Format(f))
 	}
 

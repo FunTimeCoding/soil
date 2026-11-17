@@ -10,7 +10,7 @@ import (
 )
 
 func TestClientRoundTripsEntry(t *testing.T) {
-	c := base.New(t).MaintenanceClient(t)
+	c := base.New(t).MaintenanceClient()
 	x := t.Context()
 	system := "worker1"
 	created, e := c.PostEntry(
@@ -40,7 +40,7 @@ func TestClientRoundTripsEntry(t *testing.T) {
 }
 
 func TestClientClassifiesRefusals(t *testing.T) {
-	c := base.New(t).MaintenanceClient(t)
+	c := base.New(t).MaintenanceClient()
 	x := t.Context()
 	assert.True(t, not_found.Is(c.DeleteEntry(x, 9999)))
 	_, e := c.UpdateEntry(

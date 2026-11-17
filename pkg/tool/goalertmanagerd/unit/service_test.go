@@ -5,8 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert_filter"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
-	prometheusMock "github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
@@ -55,37 +53,25 @@ func TestStatusAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestAlertsReadTheirRulesFromPrometheusPeer(t *testing.T) {
-	p := prometheusMock.New()
-	p.Failure = validation.New("bad rules request")
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": mock_client.New()},
-		map[string]*prometheusMock.Client{"alfa": p},
-	)
+	o := service_tester.New(t)
+	o.Alfa().Prometheus.Failure = validation.New("bad rules request")
+	s := o.Service()
 	_, _, e := s.Alerts(t.Context(), "alfa", alert_filter.New())
 	assert.True(t, validation.Is(e))
 }
 
 func TestCreateSilenceReadsItsRulesFromPrometheusPeer(t *testing.T) {
-	p := prometheusMock.New()
-	p.Failure = validation.New("bad rules request")
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": mock_client.New()},
-		map[string]*prometheusMock.Client{"alfa": p},
-	)
+	o := service_tester.New(t)
+	o.Alfa().Prometheus.Failure = validation.New("bad rules request")
+	s := o.Service()
 	_, e := s.CreateSilence(t.Context(), "alfa", "Watchdog", "", time.Hour)
 	assert.True(t, validation.Is(e))
 }
 
 func TestPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
-	p := prometheusMock.New()
-	p.Failure = outage_tester.RefusedDial()
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": mock_client.New()},
-		map[string]*prometheusMock.Client{"alfa": p},
-	)
+	o := service_tester.New(t)
+	o.Alfa().Prometheus.Failure = outage_tester.RefusedDial()
+	s := o.Service()
 	_, _, e := s.Alerts(t.Context(), "alfa", alert_filter.New())
 	assert.True(t, unavailable.Is(e))
 	assert.StringContains(t, "prometheus:alfa unreachable since", e.Error())
@@ -94,16 +80,12 @@ func TestPrometheusOutageLeavesAlertmanagerAnswering(t *testing.T) {
 }
 
 func TestUnreachableAlertmanagerFailsFastWithoutBeingAskedAgain(t *testing.T) {
-	a := mock_client.New()
-	a.Fail(outage_tester.RefusedDial())
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": a},
-		map[string]*prometheusMock.Client{"alfa": prometheusMock.New()},
-	)
+	o := service_tester.New(t)
+	o.Alfa().Alertmanager.Fail(outage_tester.RefusedDial())
+	s := o.Service()
 	_, e := s.Silences(t.Context(), "alfa", false)
 	assert.True(t, unavailable.Is(e))
-	a.Fail(nil)
+	o.Alfa().Alertmanager.Fail(nil)
 	_, f := s.Silences(t.Context(), "alfa", false)
 	assert.True(t, unavailable.Is(f))
 	assert.StringContains(t, "alertmanager:alfa unreachable since", f.Error())

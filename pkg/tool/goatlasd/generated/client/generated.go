@@ -62,7 +62,7 @@ type ListPlacementsParams struct {
 	// Place Restrict to placements on this device or virtual machine.
 	Place *string `form:"place,omitempty" json:"place,omitempty"`
 
-	// Source Restrict to placements attested by this source.
+	// Source Restrict to placements seen by this source.
 	Source *string `form:"source,omitempty" json:"source,omitempty"`
 
 	// Package Restrict to placements carrying this package.

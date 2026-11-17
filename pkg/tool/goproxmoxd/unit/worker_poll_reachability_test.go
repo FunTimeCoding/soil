@@ -12,26 +12,25 @@ import (
 )
 
 func TestRefusedHypervisorIsLeftToGuard(t *testing.T) {
-	c := worker_tester.PopulatedClient("pve")
-	defer c.Close()
-	w, y, r := worker_tester.NewPollWorker(t, "pve", c)
-	defer w.Close()
+	o := worker_tester.New(t)
+	o.Populate()
+	w := o.Worker()
 	w.Poll()
-	c.SetFailure(
+	o.Alfa().Hypervisor.SetFailure(
 		connection.New(
 			errorsConstant.Unreachable,
-			"pve",
+			"alfa",
 			"",
 			errorsConstant.Refused,
 		),
 	)
 	w.Poll()
-	c.SetFailure(nil)
+	o.Alfa().Hypervisor.SetFailure(nil)
 	w.Poll()
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, o.Reporter.Events())
 
 	if e := testutil.GatherAndCompare(
-		y,
+		o.Registry,
 		strings.NewReader(worker_tester.ScrapeSuccess("0")),
 		"proxmox_scrape_success",
 	); e != nil {
@@ -40,12 +39,11 @@ func TestRefusedHypervisorIsLeftToGuard(t *testing.T) {
 }
 
 func TestPollFailingOtherwiseIsCaptured(t *testing.T) {
-	c := worker_tester.PopulatedClient("pve")
-	defer c.Close()
-	w, _, r := worker_tester.NewPollWorker(t, "pve", c)
-	defer w.Close()
+	o := worker_tester.New(t)
+	o.Populate()
+	w := o.Worker()
 	w.Poll()
-	c.SetFailure(errors.New("token rejected"))
+	o.Alfa().Hypervisor.SetFailure(errors.New("token rejected"))
 	w.Poll()
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, o.Reporter.Events())
 }

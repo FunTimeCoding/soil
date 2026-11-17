@@ -9,11 +9,11 @@ import (
 
 func Table(
 	t *testing.T,
-	allowance int,
+	tokenLimit int,
 ) []chunk.Chunk {
 	t.Helper()
-	r := service_tester.NewReranker(t)
-	r.SetAllowance(allowance)
+	r := service_tester.New(t).Reranker
+	r.SetTokenLimit(tokenLimit)
 
 	return chunk.Document(constant.FixtureTableDocument, "results.md", r)
 }

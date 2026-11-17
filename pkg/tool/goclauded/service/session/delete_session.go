@@ -3,7 +3,7 @@ package session
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/receipt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/deletion_result"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 	"os"
 	"path/filepath"
@@ -12,7 +12,7 @@ import (
 func (s *Service) DeleteSession(
 	identifier string,
 	confirm string,
-) (*receipt.Receipt, error) {
+) (*deletion_result.Result, error) {
 	r, e := s.deleteGate(identifier, confirm)
 
 	if e != nil {

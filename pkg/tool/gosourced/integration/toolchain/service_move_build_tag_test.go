@@ -10,11 +10,10 @@ import (
 )
 
 func TestMoveBuildTagCarry(t *testing.T) {
-	d := service_tester.Prepare(t, "move-build-tag/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-build-tag/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/tagged",
 		[]string{"Flag"},
 		"",
@@ -25,18 +24,17 @@ func TestMoveBuildTagCarry(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	moved := service_tester.ReadFixtureFile(t, d, "pkg/tagged/hold/hold.go")
+	moved := o.Read("pkg/tagged/hold/hold.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.True(t, strings.HasPrefix(moved, "//go:build local\n\npackage hold"))
 	assert.StringContains(t, "func Flag", moved)
 }
 
 func TestMoveBuildTagMismatchBlocked(t *testing.T) {
-	d := service_tester.Prepare(t, "move-build-tag/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-build-tag/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/tagged",
 		[]string{"Flag"},
 		"",
@@ -50,11 +48,10 @@ func TestMoveBuildTagMismatchBlocked(t *testing.T) {
 }
 
 func TestMoveBuildTagMixedSourcesBlocked(t *testing.T) {
-	d := service_tester.Prepare(t, "move-build-tag/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-build-tag/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/tagged",
 		[]string{"Flag", "Plain"},
 		"",
@@ -68,11 +65,10 @@ func TestMoveBuildTagMixedSourcesBlocked(t *testing.T) {
 }
 
 func TestMoveBuildTagSameTagAppend(t *testing.T) {
-	d := service_tester.Prepare(t, "move-build-tag/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-build-tag/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/tagged",
 		[]string{"Flag"},
 		"",
@@ -83,7 +79,7 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	moved := service_tester.ReadFixtureFile(t, d, "pkg/home/tagged.go")
+	moved := o.Read("pkg/home/tagged.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.True(t, strings.HasPrefix(moved, "//go:build local"))
 	assert.Integer(t, 1, strings.Count(moved, "//go:build"))
@@ -92,11 +88,10 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 }
 
 func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
-	d := service_tester.Prepare(t, "move-build-tag/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-build-tag/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/tagged",
 		[]string{"Plain"},
 		"",
@@ -107,7 +102,7 @@ func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	moved := service_tester.ReadFixtureFile(t, d, "pkg/tagged/hold/hold.go")
+	moved := o.Read("pkg/tagged/hold/hold.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.False(t, strings.Contains(moved, "//go:build"))
 	assert.StringContains(t, "func Plain", moved)

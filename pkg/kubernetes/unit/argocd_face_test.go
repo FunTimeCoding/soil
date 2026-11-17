@@ -13,8 +13,7 @@ import (
 func TestArgocdClientAndItsMockShareFace(t *testing.T) {
 	c := argocd.New("argocd.test", 443, true, "token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.ArgocdClient{c, m}
 	assert.Count(t, 2, faces)
 }

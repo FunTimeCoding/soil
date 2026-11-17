@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	bandConstant "github.com/funtimecoding/soil/pkg/band/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
@@ -12,58 +11,64 @@ import (
 )
 
 func TestShutdownRecordsHostOffline(t *testing.T) {
-	v, n, _, _ := service_tester.Intent(t)
+	o := service_tester.Intent(t)
+	v := o.Service()
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
-	assert.String(t, "offline", *n.Updated["alfa"].Status)
+	assert.String(t, "offline", *o.Netbox.Updated["alfa"].Status)
 }
 
 func TestStartRecordsHostActive(t *testing.T) {
-	v, n, engine, _ := service_tester.Intent(t)
-	engine.SetPower(bandConstant.PowerOffSoft, bandConstant.PowerOn)
+	o := service_tester.Intent(t)
+	v := o.Service()
+	o.Alfa().SetPower(bandConstant.PowerOffSoft, bandConstant.PowerOn)
 	_, e := v.Power("alfa", constant.OperationStart, false)
 	assert.FatalOnError(t, e)
-	assert.String(t, "active", *n.Updated["alfa"].Status)
+	assert.String(t, "active", *o.Netbox.Updated["alfa"].Status)
 }
 
 func TestRefusedPowerRequestRecordsNothing(t *testing.T) {
-	v, n, engine, _ := service_tester.Intent(t)
-	engine.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
+	o := service_tester.Intent(t)
+	v := o.Service()
+	o.Alfa().SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.NotNil(t, e)
-	assert.Count(t, 0, n.Updated)
+	assert.Count(t, 0, o.Netbox.Updated)
 }
 
 func TestRebootRecordsNothing(t *testing.T) {
-	v, n, _, _ := service_tester.Intent(t)
+	o := service_tester.Intent(t)
+	v := o.Service()
 	_, e := v.Power("alfa", constant.OperationReboot, false)
 	assert.FatalOnError(t, e)
-	assert.Count(t, 0, n.Updated)
+	assert.Count(t, 0, o.Netbox.Updated)
 }
 
 func TestPowerActionWithoutSwitchRecordsNothing(t *testing.T) {
-	v, engines := service_tester.New(t, memory.New(), "alfa")
-	engine := engines["alfa"]
-	engine.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	o := service_tester.New(t)
+	v := o.Service()
+	o.Alfa().SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
-	assert.Integers(t, []int{12}, engine.Requested())
+	assert.Integers(t, []int{12}, o.Alfa().Requested())
 }
 
 func TestFailedRecordIsReportedAndNeverHoldsPowerBack(t *testing.T) {
-	v, n, engine, r := service_tester.Intent(t)
-	n.Failure = errors.New("netbox answered nonsense")
+	o := service_tester.Intent(t)
+	v := o.Service()
+	o.Netbox.Failure = errors.New("netbox answered nonsense")
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
-	assert.Integers(t, []int{12}, engine.Requested())
-	assert.Count(t, 1, r.Events())
+	assert.Integers(t, []int{12}, o.Alfa().Requested())
+	assert.Count(t, 1, o.Reporter.Events())
 }
 
 func TestUnreachableNetboxIsNotReported(t *testing.T) {
-	v, n, engine, r := service_tester.Intent(t)
-	n.Failure = unavailable.Format("netbox restarting")
+	o := service_tester.Intent(t)
+	v := o.Service()
+	o.Netbox.Failure = unavailable.Format("netbox restarting")
 	_, e := v.Power("alfa", constant.OperationShutdown, false)
 	assert.FatalOnError(t, e)
-	assert.Integers(t, []int{12}, engine.Requested())
-	assert.Count(t, 0, r.Events())
+	assert.Integers(t, []int{12}, o.Alfa().Requested())
+	assert.Count(t, 0, o.Reporter.Events())
 }

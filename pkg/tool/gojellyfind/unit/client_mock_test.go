@@ -14,15 +14,13 @@ import (
 
 func TestMockAnswersEveryCallAsDaemonDoes(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	client_tester.SeedServed(s.MockClient)
+	client_tester.SeedServed(s.Source)
 	c := client.New(
-		locator.New("localhost").Port(s.ContextServer.Port).Insecure(),
+		locator.New("localhost").Port(s.Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	client_tester.SeedMock(m)
 	served := client_tester.MediaAnswers(t.Context(), c)
 	assert.Count(t, 19, served)
@@ -30,8 +28,7 @@ func TestMockAnswersEveryCallAsDaemonDoes(t *testing.T) {
 }
 
 func TestMockRecordsEveryWriteItAccepts(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	client_tester.SeedMock(m)
 	client_tester.MediaAnswers(t.Context(), m)
 	assert.Count(t, 1, m.Played["session-1"])
@@ -40,8 +37,7 @@ func TestMockRecordsEveryWriteItAccepts(t *testing.T) {
 }
 
 func TestMockFailsOnlyMethodItIsToldTo(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	client_tester.SeedMock(m)
 	m.Fail(m.GetItem, errors.New("item refused"))
 	_, e := m.ListSessions(t.Context())

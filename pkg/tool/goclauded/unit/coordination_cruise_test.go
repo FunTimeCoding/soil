@@ -10,16 +10,16 @@ import (
 
 func TestCruiseRoundTripsThroughRest(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	r, e := a.RestClient.PostSessionCruiseWithResponse(
+	r, e := a.GeneratedClient.PostSessionCruiseWithResponse(
 		a.Context,
 		a.UUID,
 		client.CruiseRequest{Grace: "15"},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
-	g, f := a.RestClient.GetSessionCruiseWithResponse(a.Context, a.UUID)
+	g, f := a.GeneratedClient.GetSessionCruiseWithResponse(a.Context, a.UUID)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 15, g.JSON200.GraceMinutes)
 	assert.False(t, g.JSON200.Default)
@@ -27,10 +27,10 @@ func TestCruiseRoundTripsThroughRest(t *testing.T) {
 }
 
 func TestRestReportsDefaultCruise(t *testing.T) {
-	s := base.NewWithChannelAlways(t)
-	a := s.NewSession(t)
+	s := base.New(t, base.WithChannelAlways())
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	g, e := a.RestClient.GetSessionCruiseWithResponse(a.Context, a.UUID)
+	g, e := a.GeneratedClient.GetSessionCruiseWithResponse(a.Context, a.UUID)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 30, g.JSON200.GraceMinutes)
 	assert.True(t, g.JSON200.Default)
@@ -38,9 +38,9 @@ func TestRestReportsDefaultCruise(t *testing.T) {
 
 func TestRestRefusesGracePastLimit(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	r, e := a.RestClient.PostSessionCruiseWithResponse(
+	r, e := a.GeneratedClient.PostSessionCruiseWithResponse(
 		a.Context,
 		a.UUID,
 		client.CruiseRequest{Grace: "60"},
@@ -51,7 +51,7 @@ func TestRestRefusesGracePastLimit(t *testing.T) {
 
 func TestCruiseToolSetsAndReadsOwnSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(constant.CruiseTool, map[string]any{constant.Grace: "20"})
 	assert.String(
@@ -63,7 +63,7 @@ func TestCruiseToolSetsAndReadsOwnSession(t *testing.T) {
 
 func TestCruiseToolRefusesGracePastLimit(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	answer := a.MustCallToolError(
 		constant.CruiseTool,

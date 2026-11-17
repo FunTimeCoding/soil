@@ -25,10 +25,8 @@ func New(
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
 	d := peer_tester.New(t)
-	t.Cleanup(d.Close)
 	d.Reporter = r
-	u := mock_client.New()
-	t.Cleanup(u.Close)
+	u := mock_client.New(t)
 
 	switch peer {
 	case constant.MemoryPeer:
@@ -52,7 +50,6 @@ func New(
 			g.Mount(r, constant.ChannelHold, mock_recorder.New(), m)
 		},
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(t, g.Workers(), peer).Unavailable
 }

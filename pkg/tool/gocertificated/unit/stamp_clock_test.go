@@ -15,7 +15,13 @@ import (
 )
 
 func TestRootValidityRunsOnServiceClock(t *testing.T) {
-	_, root := service_tester.ClockedChain(t)
+	root, e := service_tester.New(
+		t,
+		service_tester.WithClock(clock_tester.Window),
+	).
+		Chain().
+		Authority(constant.RootAuthority)
+	assert.FatalOnError(t, e)
 	assert.True(
 		t,
 		root.Start.Equal(clock_tester.Window().Add(-constant.ClockSkew)),
@@ -23,7 +29,8 @@ func TestRootValidityRunsOnServiceClock(t *testing.T) {
 }
 
 func TestIntermediateValidityRunsOnServiceClock(t *testing.T) {
-	v, _ := service_tester.ClockedChain(t)
+	v := service_tester.New(t, service_tester.WithClock(clock_tester.Window)).
+		Chain()
 	f := filter.New()
 	f.Kind = string(constant.KindIntermediate)
 	intermediate, e := v.Certificates(f)
@@ -38,7 +45,8 @@ func TestIntermediateValidityRunsOnServiceClock(t *testing.T) {
 }
 
 func TestIssuedValidityRunsOnServiceClock(t *testing.T) {
-	v, _ := service_tester.ClockedChain(t)
+	v := service_tester.New(t, service_tester.WithClock(clock_tester.Window)).
+		Chain()
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureCommonName,
@@ -53,7 +61,8 @@ func TestIssuedValidityRunsOnServiceClock(t *testing.T) {
 }
 
 func TestSignedValidityRunsOnServiceClock(t *testing.T) {
-	v, _ := service_tester.ClockedChain(t)
+	v := service_tester.New(t, service_tester.WithClock(clock_tester.Window)).
+		Chain()
 	r, e := v.SignRequest(
 		&server.SigningRequestBody{
 			Authority: constant.FixtureClusterAuthority,
@@ -71,7 +80,8 @@ func TestSignedValidityRunsOnServiceClock(t *testing.T) {
 }
 
 func TestRevokeStampRunsOnServiceClock(t *testing.T) {
-	v, _ := service_tester.ClockedChain(t)
+	v := service_tester.New(t, service_tester.WithClock(clock_tester.Window)).
+		Chain()
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureCommonName,
@@ -86,7 +96,8 @@ func TestRevokeStampRunsOnServiceClock(t *testing.T) {
 }
 
 func TestRevocationListRunsOnServiceClock(t *testing.T) {
-	v, _ := service_tester.ClockedChain(t)
+	v := service_tester.New(t, service_tester.WithClock(clock_tester.Window)).
+		Chain()
 	b, e := v.RevocationList(constant.FixtureClusterAuthority)
 	assert.FatalOnError(t, e)
 	block, _ := pem.Decode(b)
@@ -96,7 +107,8 @@ func TestRevocationListRunsOnServiceClock(t *testing.T) {
 }
 
 func TestPublishStampRunsOnServiceClock(t *testing.T) {
-	v, _ := service_tester.ClockedChain(t)
+	v := service_tester.New(t, service_tester.WithClock(clock_tester.Window)).
+		Chain()
 	_, _, e := v.Publish(t.Context())
 	assert.FatalOnError(t, e)
 	published, f := v.Certificates(filter.New())

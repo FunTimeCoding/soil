@@ -30,7 +30,7 @@ func TestCostCarriesItsWindowAndFlagsUnknownModel(t *testing.T) {
 		0644,
 	)
 	days := 2
-	r, e := s.RESTClient(t).GetCostWithResponse(
+	r, e := s.RESTClient().GetCostWithResponse(
 		context.Background(),
 		&client.GetCostParams{Days: &days},
 	)
@@ -69,7 +69,7 @@ func TestSessionDetailFlagsUnknownModel(t *testing.T) {
 	)
 	s.Restart()
 	s.Tick()
-	r, e := s.RESTClient(t).GetSessionDetailWithResponse(
+	r, e := s.RESTClient().GetSessionDetailWithResponse(
 		context.Background(),
 		"echo",
 	)
@@ -90,7 +90,7 @@ func TestSessionDetailFlagsUnknownModel(t *testing.T) {
 func TestEmptyCostStillCarriesItsWindow(t *testing.T) {
 	s := base.New(t)
 	days := 3
-	r, e := s.RESTClient(t).GetCostWithResponse(
+	r, e := s.RESTClient().GetCostWithResponse(
 		context.Background(),
 		&client.GetCostParams{Days: &days},
 	)

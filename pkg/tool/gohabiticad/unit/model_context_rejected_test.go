@@ -2,38 +2,22 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/base"
 	"testing"
 )
 
 func TestInvalidStatIsAnsweredQuietlyOverModelContext(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.Failure = validation.New("%q is not a valid Stat.", "bravo")
-	d := daemon_tester.New(t, c)
-	m := memory.New()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(m, mock_recorder.New(), g)
-		},
-	)
-	defer s.Close()
-	x := s.Connect(t)
-	defer x.Close()
+	s := base.New(t)
+	s.Source.Failure = validation.New("%q is not a valid Stat.", "bravo")
 	assert.String(
 		t,
 		`"bravo" is not a valid Stat.`,
-		x.MustCallToolError(
+		s.Tools().MustCallToolError(
 			constant.AllocateStat,
 			map[string]any{constant.Stat: "bravo"},
 		),
 	)
-	assert.Count(t, 0, m.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }

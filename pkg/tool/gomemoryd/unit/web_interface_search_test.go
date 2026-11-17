@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"strings"
 	"testing"
 	"time"
@@ -22,7 +23,7 @@ func TestSearchPartialWordMatches(t *testing.T) {
 }
 
 func TestSearchOmitsHiddenMemories(t *testing.T) {
-	s := base.NewHidden(t, "private")
+	s := base.New(t, service_tester.WithHiddenTag("private"))
 	visible := save_option.New()
 	visible.Name = "scripted reads"
 	visible.Content = "scripted reads stay visible"

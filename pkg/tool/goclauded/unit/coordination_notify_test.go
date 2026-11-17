@@ -11,10 +11,10 @@ import (
 
 func TestNotifyReachesSessionViaQueue(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostNotifyWithResponse(
+	r, e := a.GeneratedClient.PostNotifyWithResponse(
 		a.Context,
 		client.NotifyRequest{
 			Callsign: a.Name(),
@@ -36,10 +36,10 @@ func TestNotifyReachesSessionViaQueue(t *testing.T) {
 
 func TestNotifyConsumedOnDrain(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostNotifyWithResponse(
+	r, e := a.GeneratedClient.PostNotifyWithResponse(
 		a.Context,
 		client.NotifyRequest{
 			Callsign: a.Name(),

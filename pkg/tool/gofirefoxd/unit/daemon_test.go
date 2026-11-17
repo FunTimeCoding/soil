@@ -21,7 +21,7 @@ func TestDaemonClosesItsClientOnce(t *testing.T) {
 	s := base.New(t)
 	s.Daemon.Close()
 	s.Daemon.Close()
-	assert.Integer(t, 1, s.MockClient.Closed)
+	assert.Integer(t, 1, s.Source.Closed)
 }
 
 func TestDaemonLeavesNothingRunningWithExtensionConnected(t *testing.T) {

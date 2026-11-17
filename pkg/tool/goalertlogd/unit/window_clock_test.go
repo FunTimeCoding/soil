@@ -9,12 +9,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"testing"
 	"time"
 )
 
 func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	s := base.New(t, service_tester.WithClock(clock_tester.Window))
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -28,7 +29,7 @@ func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
 			},
 		),
 	)
-	recent, e := s.AlertClient(t).GetRecentAlerts(
+	recent, e := s.AlertClient().GetRecentAlerts(
 		t.Context(),
 		&client.GetRecentAlertsParams{},
 	)
@@ -38,7 +39,7 @@ func TestRecentAlertWindowRunsOnServiceClock(t *testing.T) {
 }
 
 func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	s := base.New(t, service_tester.WithClock(clock_tester.Window))
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -52,7 +53,7 @@ func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
 			},
 		),
 	)
-	top, e := s.AlertClient(t).GetTopAlerts(
+	top, e := s.AlertClient().GetTopAlerts(
 		t.Context(),
 		&client.GetTopAlertsParams{},
 	)
@@ -62,7 +63,7 @@ func TestTopAlertWindowRunsOnServiceClock(t *testing.T) {
 }
 
 func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	s := base.New(t, service_tester.WithClock(clock_tester.Window))
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -77,7 +78,7 @@ func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 		),
 	)
 	end := clock_tester.Window().Add(-2 * time.Hour)
-	recent, e := s.AlertClient(t).GetRecentAlerts(
+	recent, e := s.AlertClient().GetRecentAlerts(
 		t.Context(),
 		&client.GetRecentAlertsParams{End: &end},
 	)
@@ -87,7 +88,7 @@ func TestRecentAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 }
 
 func TestTopAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	s := base.New(t, service_tester.WithClock(clock_tester.Window))
 	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	assert.FatalOnError(
@@ -102,7 +103,7 @@ func TestTopAlertWindowGivenOnlyEndReachesBackFromEnd(t *testing.T) {
 		),
 	)
 	end := clock_tester.Window().Add(-24 * time.Hour)
-	top, e := s.AlertClient(t).GetTopAlerts(
+	top, e := s.AlertClient().GetTopAlerts(
 		t.Context(),
 		&client.GetTopAlertsParams{End: &end},
 	)

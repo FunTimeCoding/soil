@@ -8,8 +8,9 @@ import (
 )
 
 func TestProjectsWithoutSearchListsEveryProject(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	c := clients[constant.FixtureInstance]
+	o := service_tester.New(t)
+	s := o.Service()
+	c := o.Alfa()
 	c.SeedProject(1, "group", "app")
 	c.SeedProject(2, "group", "web")
 	projects, e := s.Projects(t.Context(), constant.FixtureInstance, "")
@@ -18,8 +19,9 @@ func TestProjectsWithoutSearchListsEveryProject(t *testing.T) {
 }
 
 func TestProjectsWithSearchNarrows(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	c := clients[constant.FixtureInstance]
+	o := service_tester.New(t)
+	s := o.Service()
+	c := o.Alfa()
 	c.SeedProject(1, "group", "app")
 	c.SeedProject(2, "group", "web")
 	projects, e := s.Projects(t.Context(), constant.FixtureInstance, "web")

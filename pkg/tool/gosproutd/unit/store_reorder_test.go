@@ -8,7 +8,7 @@ import (
 
 func TestReorderReverses(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	seeds := s.Store.Seeds()
 	s.Store.Reorder(
 		[]uint{seeds[2].Identifier, seeds[1].Identifier, seeds[0].Identifier},

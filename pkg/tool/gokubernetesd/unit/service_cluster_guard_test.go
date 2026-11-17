@@ -16,10 +16,10 @@ func TestUnreachableClusterFailsFastWithoutBeingCalledAgain(t *testing.T) {
 	v := service_tester.New(t)
 	v.RefuseAll(outage_tester.RefusedDial())
 	list := request.List{ResourceType: "pod", Namespace: "default"}
-	_, e := v.Service.ListResources(t.Context(), "test", list)
+	_, e := v.Service().ListResources(t.Context(), "test", list)
 	assert.True(t, unavailable.Is(e))
 	calls := v.DynamicCalls()
-	_, f := v.Service.ListResources(t.Context(), "test", list)
+	_, f := v.Service().ListResources(t.Context(), "test", list)
 	assert.True(t, unavailable.Is(f))
 	assert.StringContains(t, "kubernetes:test unreachable since", f.Error())
 	assert.Integer(t, calls, v.DynamicCalls())
@@ -29,16 +29,15 @@ func TestOneUnreachableClusterLeavesOthersAnswering(t *testing.T) {
 	down := service_tester.New(t)
 	down.RefuseAll(outage_tester.RefusedDial())
 	up := service_tester.New(t)
-	s := service_tester.NewService(
+	s := service_tester.New(
 		t,
-		service_tester.NewOption(
-			t,
+		service_tester.WithClusters(
 			map[string]*cluster.Cluster{
 				"test": down.Cluster,
 				"lima": up.Cluster,
 			},
 		),
-	)
+	).Service()
 	list := request.List{ResourceType: "pod", Namespace: "default"}
 	_, e := s.ListResources(t.Context(), "test", list)
 	assert.True(t, unavailable.Is(e))

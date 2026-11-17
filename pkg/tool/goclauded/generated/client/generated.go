@@ -184,8 +184,8 @@ type CruiseResponse struct {
 	WokenAt *time.Time `json:"woken_at,omitempty"`
 }
 
-// DeleteReceiptResponse defines model for DeleteReceiptResponse.
-type DeleteReceiptResponse struct {
+// DeletionResult defines model for DeletionResult.
+type DeletionResult struct {
 	Completions   int       `json:"completions"`
 	ContextLoads  int       `json:"context_loads"`
 	EventMetadata int       `json:"event_metadata"`
@@ -5245,7 +5245,7 @@ type DeleteSessionByIdentifierResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *DeleteReceiptResponse
+	JSON200 *DeletionResult
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
@@ -5253,7 +5253,7 @@ type DeleteSessionByIdentifierResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r DeleteSessionByIdentifierResponse) GetJSON200() *DeleteReceiptResponse {
+func (r DeleteSessionByIdentifierResponse) GetJSON200() *DeletionResult {
 	return r.JSON200
 }
 
@@ -7660,7 +7660,7 @@ func ParseDeleteSessionByIdentifierResponse(rsp *http.Response) (*DeleteSessionB
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest DeleteReceiptResponse
+		var dest DeletionResult
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

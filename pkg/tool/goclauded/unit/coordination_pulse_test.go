@@ -11,10 +11,10 @@ import (
 
 func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostSessionPulseWithResponse(
+	r, e := a.GeneratedClient.PostSessionPulseWithResponse(
 		a.Context,
 		a.UUID,
 		client.PulseRequest{Body: "deploy complete"},
@@ -32,7 +32,7 @@ func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 
 func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	a.MustCallTool(
@@ -49,10 +49,10 @@ func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 
 func TestExternalPulseConsumedOnDrain(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostSessionPulseWithResponse(
+	r, e := a.GeneratedClient.PostSessionPulseWithResponse(
 		a.Context,
 		a.UUID,
 		client.PulseRequest{Body: "first pulse"},

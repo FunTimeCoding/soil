@@ -6,6 +6,6 @@ import (
 )
 
 type Tester struct {
-	Service *service.Service
 	Runner  *runner.Runner
+	service *service.Service
 }

@@ -3,11 +3,9 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/types/discovered_file"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/worker"
 	"go.uber.org/goleak"
 	"os"
@@ -17,22 +15,13 @@ import (
 )
 
 func TestDaemonClosesTwice(t *testing.T) {
-	d := daemon.New(
-		store_tester.NewOption(t, time.Now, notifier.New()),
-		logger.New(t.Context()),
-		memory.New(),
-	)
+	d := base.New(t).Daemon()
 	d.Close()
 	d.Close()
 }
 
 func TestDaemonHandsOutItsWatcher(t *testing.T) {
-	d := daemon.New(
-		store_tester.NewOption(t, time.Now, notifier.New()),
-		logger.New(t.Context()),
-		memory.New(),
-	)
-	t.Cleanup(d.Close)
+	d := base.New(t).Daemon()
 	workers := d.Workers()
 	assert.Count(t, 1, workers)
 	_, watcher := workers[0].(*worker.Watcher)
@@ -40,10 +29,9 @@ func TestDaemonHandsOutItsWatcher(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
+	s := base.New(t, base.WithSeedDirectory(t.TempDir()))
 	before := goleak.IgnoreCurrent()
-	o := store_tester.NewOption(t, time.Now, notifier.New())
-	o.SeedDirectory = t.TempDir()
-	d := daemon.New(o, logger.New(t.Context()), memory.New())
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

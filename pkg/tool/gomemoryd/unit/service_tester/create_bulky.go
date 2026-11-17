@@ -12,7 +12,7 @@ func (o *Tester) CreateBulky() {
 
 	for i := range 80 {
 		name := fmt.Sprintf("bulky %02d %s", i, strings.Repeat("filler ", 70))
-		_, e := o.Service.CreateMemory(save_tester.Scoped(name, ""))
+		_, e := o.Service().CreateMemory(save_tester.Scoped(name, ""))
 		assert.FatalOnError(o.t, e)
 	}
 }

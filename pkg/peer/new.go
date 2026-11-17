@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/constant"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"time"
 )
 
@@ -22,7 +22,7 @@ func New(
 		name:     name,
 		address:  address,
 		probe:    p,
-		reacher:  reacher.New(r),
+		outages:  outage_tracker.New(r),
 		logger:   l,
 		reporter: r,
 		minimum:  constant.ProbeMinimum,

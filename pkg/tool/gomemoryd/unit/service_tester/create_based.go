@@ -11,7 +11,7 @@ func (o *Tester) CreateBased() *record.Memory {
 	p := save_tester.Scoped("based entry", "")
 	p.Base = new("doc")
 	p.Metadata = map[string]string{"kind": "mechanism"}
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(o.t, e)
 
 	return m

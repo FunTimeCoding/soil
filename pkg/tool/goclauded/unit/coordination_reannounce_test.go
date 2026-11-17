@@ -10,7 +10,7 @@ import (
 
 func TestReannounceAfterRestart(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.CheckLive()
 	s.Restart()
@@ -24,7 +24,7 @@ func TestReannounceAfterRestart(t *testing.T) {
 
 func TestReannounceNotSetWithoutPriorBinding(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.CheckLive()
 	s.Restart()
 	r := a.CheckLive()
@@ -37,7 +37,7 @@ func TestReannounceNotSetWithoutPriorBinding(t *testing.T) {
 
 func TestAnnounceClearsReannounce(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "first topic")
 	a.CheckLive()
 	s.Restart()
@@ -52,7 +52,7 @@ func TestAnnounceClearsReannounce(t *testing.T) {
 
 func TestReannounceConsumedByCheck(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.CheckLive()
 	s.Restart()

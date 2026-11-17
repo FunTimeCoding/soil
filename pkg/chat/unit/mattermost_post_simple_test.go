@@ -9,8 +9,7 @@ import (
 )
 
 func TestMockListsAndDeletesChannelsPosts(t *testing.T) {
-	m := mock_client.New("charlie")
-	defer m.Close()
+	m := mock_client.New(t, "charlie")
 	m.AddChannelPost("alfa", "bravo")
 	m.AddChannelPost("delta", "echo")
 	posts, e := m.RecentPosts(m.MustTeamChannel("alfa"), 0)
@@ -24,8 +23,7 @@ func TestMockListsAndDeletesChannelsPosts(t *testing.T) {
 }
 
 func TestMockPostsToLookedUpChannelByIdentifier(t *testing.T) {
-	m := mock_client.New("charlie")
-	defer m.Close()
+	m := mock_client.New(t, "charlie")
 
 	for _, h := range []*model.Channel{
 		m.MustChannelByName(nil, "alfa"),

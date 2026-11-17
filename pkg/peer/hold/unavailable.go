@@ -15,7 +15,7 @@ func (h *Hold) Unavailable() error {
 		return nil
 	}
 
-	if down, x := h.reacher.Down(h.name); down {
+	if down, x := h.outages.Down(h.name); down {
 		return unavailable.New(h.name, x.Since, x.Reason)
 	}
 

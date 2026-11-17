@@ -10,11 +10,10 @@ import (
 )
 
 func TestMoveCommentTargetDrift(t *testing.T) {
-	d := service_tester.Prepare(t, "move-comment/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-comment/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		nil,
 		"pkg/target/constant.go",
@@ -25,11 +24,7 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "const Host = \"bravo\" // host trailing", moved)
 	assert.StringContains(t, "// Alfa document.", moved)
@@ -42,11 +37,10 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 }
 
 func TestMoveCommentSourceScrub(t *testing.T) {
-	d := service_tester.Prepare(t, "move-comment/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-comment/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/keeper",
 		[]string{"moved"},
 		"",
@@ -57,28 +51,23 @@ func TestMoveCommentSourceScrub(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
+	source := o.Read("pkg/keeper/constant.go")
 	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "// Kept document.", source)
 	assert.StringContains(t, "const kept = \"golf\" // kept trailing", source)
 	assert.False(t, strings.Contains(source, "// Moved document."))
 	assert.False(t, strings.Contains(source, "// moved trailing"))
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "// Moved document.", moved)
 	assert.StringContains(t, "const Moved = \"hotel\" // moved trailing", moved)
 }
 
 func TestMoveCommentGroupScrub(t *testing.T) {
-	d := service_tester.Prepare(t, "move-comment/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-comment/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/keeper",
 		[]string{"delta"},
 		"",
@@ -89,17 +78,13 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
+	source := o.Read("pkg/keeper/constant.go")
 	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "echo = \"juliet\"", source)
 	assert.StringContains(t, "// Keeper vocabulary.", source)
 	assert.False(t, strings.Contains(source, "// Delta document."))
 	assert.False(t, strings.Contains(source, "// delta trailing"))
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "// Delta document.", moved)
 	assert.StringContains(t, "const Delta = \"india\" // delta trailing", moved)
@@ -107,11 +92,10 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 }
 
 func TestMoveCommentGroupDocument(t *testing.T) {
-	d := service_tester.Prepare(t, "move-comment/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-comment/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/keeper",
 		[]string{"delta", "echo"},
 		"",
@@ -122,14 +106,10 @@ func TestMoveCommentGroupDocument(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
+	source := o.Read("pkg/keeper/constant.go")
 	rewrite_tester.Formatted(t, source)
 	assert.False(t, strings.Contains(source, "// Keeper vocabulary."))
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "// Keeper vocabulary.", moved)
 	assert.StringContains(t, "// Delta document.", moved)

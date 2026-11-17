@@ -43,7 +43,7 @@ func TestDeleteHashStaysOutOfMachineSurfaces(t *testing.T) {
 		"11111111-2222-3333-4444-555555555555",
 	).DeleteHash()
 	assert.Integer(t, 8, len(hash))
-	c := s.RESTClient(t)
+	c := s.RESTClient()
 	detail, e := c.GetSessionDetailWithResponse(
 		context.Background(),
 		"11111111-2222-3333-4444-555555555555",
@@ -56,7 +56,7 @@ func TestDeleteHashStaysOutOfMachineSurfaces(t *testing.T) {
 	)
 	assert.FatalOnError(t, f)
 	assert.StringNotContains(t, hash, string(list.Body))
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "hash containment")
 	assert.StringNotContains(
 		t,

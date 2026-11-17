@@ -11,9 +11,9 @@ import (
 
 func TestClaimTakesEmptyLabel(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	c := s.Client(t)
+	c := s.Client()
 	claimed, e := c.ClaimLabel(
 		a.UUID,
 		constant.FixtureLabelKey,
@@ -27,9 +27,9 @@ func TestClaimTakesEmptyLabel(t *testing.T) {
 
 func TestClaimLeavesDeclaredLabelAlone(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	c := s.Client(t)
+	c := s.Client()
 	assert.FatalOnError(
 		t,
 		c.SetLabel(a.UUID, constant.FixtureLabelKey, "bravo", "operator"),
@@ -47,9 +47,9 @@ func TestClaimLeavesDeclaredLabelAlone(t *testing.T) {
 
 func TestReleaseLeavesRedeclaredLabelAlone(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	c := s.Client(t)
+	c := s.Client()
 	_, e := c.ClaimLabel(
 		a.UUID,
 		constant.FixtureLabelKey,
@@ -74,9 +74,9 @@ func TestReleaseLeavesRedeclaredLabelAlone(t *testing.T) {
 
 func TestReleaseRemovesItsOwnLabel(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	c := s.Client(t)
+	c := s.Client()
 	_, e := c.ClaimLabel(
 		a.UUID,
 		constant.FixtureLabelKey,
@@ -97,11 +97,11 @@ func TestReleaseRemovesItsOwnLabel(t *testing.T) {
 
 func TestApplyMovesLabelFromIdleHolder(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	b := s.NewSession(t)
+	b := s.NewSession()
 	b.Announce(b.Name(), "working")
-	c := s.Client(t)
+	c := s.Client()
 	assert.FatalOnError(
 		t,
 		c.SetLabel(b.UUID, constant.FixtureLabelKey, "watch", "reconciler"),
@@ -124,9 +124,9 @@ func TestApplyMovesLabelFromIdleHolder(t *testing.T) {
 
 func TestApplyAdoptsBesideCompatibleValue(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
-	c := s.Client(t)
+	c := s.Client()
 	assert.FatalOnError(
 		t,
 		c.SetLabel(

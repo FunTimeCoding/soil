@@ -13,9 +13,9 @@ import (
 func TestProfileHeadingsReadBackServedTiers(t *testing.T) {
 	o := service_tester.New(t)
 	standing := o.CreateTagged("standing rule", constant.AlwaysTag)
-	retry, e := o.Service.CreateMemory(save_tester.Scoped("retry policy", ""))
+	retry, e := o.Service().CreateMemory(save_tester.Scoped("retry policy", ""))
 	assert.FatalOnError(t, e)
-	result, _, f := o.Service.Profile(constant.FixtureContent, "", true)
+	result, _, f := o.Service().Profile(constant.FixtureContent, "", true)
 	assert.FatalOnError(t, f)
 	always := profile.Headings(result.Text, constant.AlwaysSectionHeading)
 	assert.Count(t, 1, always)
@@ -30,9 +30,9 @@ func TestProfileHeadingsReadBackServedTiers(t *testing.T) {
 func TestProfileHeadingsSkipIndexTier(t *testing.T) {
 	o := service_tester.New(t)
 	o.CreateTagged("standing rule", constant.AlwaysTag)
-	_, e := o.Service.CreateMemory(save_tester.Scoped("retry policy", ""))
+	_, e := o.Service().CreateMemory(save_tester.Scoped("retry policy", ""))
 	assert.FatalOnError(t, e)
-	result, _, f := o.Service.Profile("", "", true)
+	result, _, f := o.Service().Profile("", "", true)
 	assert.FatalOnError(t, f)
 	assert.StringContains(t, "retry policy", result.Text)
 	assert.Count(

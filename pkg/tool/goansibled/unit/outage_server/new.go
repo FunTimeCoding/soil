@@ -39,7 +39,6 @@ func New(
 		t,
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(
 		t,

@@ -11,11 +11,10 @@ import (
 )
 
 func TestApplyPatternDryRun(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern/src")
-	s := service_tester.NewService(t)
-	r, apply, e := s.Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("pattern/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/pair",
 		"Compare",
 		"",
@@ -32,16 +31,15 @@ func TestApplyPatternDryRun(t *testing.T) {
 	assert.Integer(t, 2, apply.Rewritten)
 	assert.Integer(t, 1, len(apply.Refused))
 	assert.True(t, apply.Applied)
-	content := service_tester.GaugeContent(t, d)
+	content := service_tester.GaugeContent(t, o.Directory)
 	assert.True(t, !strings.Contains(content, "+ 1"))
 }
 
 func TestApplyPatternPartial(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern/src")
-	s := service_tester.NewService(t)
-	r, apply, e := s.Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("pattern/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/pair",
 		"Compare",
 		"",
@@ -55,18 +53,17 @@ func TestApplyPatternPartial(t *testing.T) {
 	assert.NotNil(t, apply)
 	assert.Integer(t, 2, apply.Rewritten)
 	assert.True(t, apply.Applied)
-	content := service_tester.GaugeContent(t, d)
+	content := service_tester.GaugeContent(t, o.Directory)
 	assert.StringContains(t, "return pair.Compare(n, n) + 1", content)
 	assert.StringContains(t, "return pair.Compare(m, n) + 1", content)
 	assert.StringContains(t, "// order is deliberate", content)
 }
 
 func TestApplyPatternAllOrNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern/src")
-	s := service_tester.NewService(t)
-	r, apply, e := s.Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("pattern/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/pair",
 		"Compare",
 		"",
@@ -82,16 +79,15 @@ func TestApplyPatternAllOrNothing(t *testing.T) {
 	assert.Integer(t, 0, apply.Rewritten)
 	assert.True(t, apply.Refusal != "")
 	assert.Integer(t, 1, len(apply.Refused))
-	content := service_tester.GaugeContent(t, d)
+	content := service_tester.GaugeContent(t, o.Directory)
 	assert.True(t, !strings.Contains(content, "+ 1"))
 }
 
 func TestApplyPatternImport(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern/src")
-	s := service_tester.NewService(t)
-	r, apply, e := s.Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("pattern/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"fmt",
 		"Println",
 		"",
@@ -104,7 +100,7 @@ func TestApplyPatternImport(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	assert.NotNil(t, apply)
 	assert.Integer(t, 2, apply.Rewritten)
-	b, f := os.ReadFile(filepath.Join(d, "pkg/monitor/run.go"))
+	b, f := os.ReadFile(filepath.Join(o.Directory, "pkg/monitor/run.go"))
 	assert.FatalOnError(t, f)
 	content := string(b)
 	assert.StringContains(t, "console.Emit(\"ready\")", content)

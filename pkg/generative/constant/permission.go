@@ -18,6 +18,8 @@ const (
 	SettingsFile            = "settings.local.json"
 	SharedSettingsFile      = "settings.json"
 	ProjectScratchDirectory = "tmp"
+	SystemTemporaryDirectory = "/tmp"
+	ScratchPrefixSeparator   = "-"
 	NullDevice              = "/dev/null"
 )
 

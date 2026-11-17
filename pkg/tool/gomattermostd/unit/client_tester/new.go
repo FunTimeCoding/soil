@@ -39,14 +39,16 @@ func New(
 		},
 		mattermost.WithTeam("tango"),
 	)
-	d := service_tester.NewDaemonWithoutSubscription(t, upstream.Client)
+	d := service_tester.New(
+		t,
+		service_tester.WithMattermost(upstream.Client),
+	).Daemon()
 	s := model_context_server.New(
 		t,
 		func(g *guard.Mux) {
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
-	t.Cleanup(s.Close)
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,

@@ -9,6 +9,6 @@ func (c *Client) DeleteSessionByIdentifier(
 	_ context.Context,
 	_ string,
 	_ *client.DeleteSessionByIdentifierParams,
-) (*client.DeleteReceiptResponse, error) {
-	return &client.DeleteReceiptResponse{}, c.Failure
+) (*client.DeletionResult, error) {
+	return &client.DeletionResult{}, c.Failure
 }

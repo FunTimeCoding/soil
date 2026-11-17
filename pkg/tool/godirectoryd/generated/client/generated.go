@@ -61,8 +61,8 @@ type ModifyUser struct {
 	Surname *string `json:"surname,omitempty"`
 }
 
-// Receipt defines model for Receipt.
-type Receipt struct {
+// Result defines model for Result.
+type Result struct {
 	Message string `json:"message"`
 }
 
@@ -1132,7 +1132,7 @@ type DeleteGroupNameResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *Receipt
+	JSON200 *Result
 	// JSON403 the response for an HTTP 403 `application/json` response
 	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
@@ -1144,7 +1144,7 @@ type DeleteGroupNameResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r DeleteGroupNameResponse) GetJSON200() *Receipt {
+func (r DeleteGroupNameResponse) GetJSON200() *Result {
 	return r.JSON200
 }
 
@@ -1484,7 +1484,7 @@ type DeleteUserAccountResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *Receipt
+	JSON200 *Result
 	// JSON403 the response for an HTTP 403 `application/json` response
 	JSON403 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
@@ -1496,7 +1496,7 @@ type DeleteUserAccountResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r DeleteUserAccountResponse) GetJSON200() *Receipt {
+func (r DeleteUserAccountResponse) GetJSON200() *Result {
 	return r.JSON200
 }
 
@@ -1698,7 +1698,7 @@ type PostUserAccountPasswordResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *Receipt
+	JSON200 *Result
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
 	// JSON403 the response for an HTTP 403 `application/json` response
@@ -1712,7 +1712,7 @@ type PostUserAccountPasswordResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r PostUserAccountPasswordResponse) GetJSON200() *Receipt {
+func (r PostUserAccountPasswordResponse) GetJSON200() *Result {
 	return r.JSON200
 }
 
@@ -2069,7 +2069,7 @@ func ParseDeleteGroupNameResponse(rsp *http.Response) (*DeleteGroupNameResponse,
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Receipt
+		var dest Result
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2346,7 +2346,7 @@ func ParseDeleteUserAccountResponse(rsp *http.Response) (*DeleteUserAccountRespo
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Receipt
+		var dest Result
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2515,7 +2515,7 @@ func ParsePostUserAccountPasswordResponse(rsp *http.Response) (*PostUserAccountP
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Receipt
+		var dest Result
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

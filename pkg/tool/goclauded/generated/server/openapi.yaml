@@ -581,7 +581,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DeleteReceiptResponse"
+                $ref: "#/components/schemas/DeletionResult"
         "409":
           description: Delete refused.
           content:
@@ -2161,7 +2161,7 @@ components:
           type: integer
         skipped:
           type: integer
-    DeleteReceiptResponse:
+    DeletionResult:
       type: object
       required:
       - identifier

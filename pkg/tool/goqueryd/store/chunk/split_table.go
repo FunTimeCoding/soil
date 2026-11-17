@@ -31,7 +31,7 @@ func splitTable(
 
 		for to < total &&
 			c.Count(renderPiece(t, header, widest, rows(from, to+1))) <=
-				c.Allowance() {
+				c.TokenLimit() {
 			to++
 		}
 

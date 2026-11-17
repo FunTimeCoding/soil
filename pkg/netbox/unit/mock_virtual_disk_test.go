@@ -9,8 +9,7 @@ import (
 )
 
 func TestMockReturnsEachMachinesOwnDisks(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	alfa := m.SeedSizedVirtualMachine("alfa", 4, 8192, "charlie")
 	bravo := m.SeedVirtualMachine("bravo")
 	m.SeedVirtualDisk(alfa, "root", 40960, map[string]any{"tier": "delta"})
@@ -29,8 +28,7 @@ func TestMockReturnsEachMachinesOwnDisks(t *testing.T) {
 }
 
 func TestSizedMachineCarriesItsCoresMemoryAndSite(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	m.SeedSizedVirtualMachine("alfa", 4, 8192, "charlie")
 	v, e := m.VirtualMachine("alfa")
 	assert.FatalOnError(t, e)
@@ -40,8 +38,7 @@ func TestSizedMachineCarriesItsCoresMemoryAndSite(t *testing.T) {
 }
 
 func TestCreatedDiskIsReturnedWithItsMachine(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	alfa := m.SeedVirtualMachine("alfa")
 	_, e := m.CreateVirtualDisk("alfa", "swap", 4096)
 	assert.FatalOnError(t, e)
@@ -54,8 +51,7 @@ func TestCreatedDiskIsReturnedWithItsMachine(t *testing.T) {
 }
 
 func TestCoresAndMemoryAreSetOnMachine(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	m.SeedSizedVirtualMachine("alfa", 2, 4096, "echo")
 	_, e := m.SetVirtualMachineCores("alfa", 8)
 	assert.FatalOnError(t, e)
@@ -70,8 +66,7 @@ func TestCoresAndMemoryAreSetOnMachine(t *testing.T) {
 }
 
 func TestDisksFailOnTheirOwn(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	alfa := m.SeedVirtualMachine("alfa")
 	m.Fail(m.VirtualMachineDisks, unavailable.Format("netbox: down"))
 	_, e := m.VirtualMachineDisks(alfa)

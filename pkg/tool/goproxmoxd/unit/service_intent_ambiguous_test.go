@@ -9,23 +9,27 @@ import (
 )
 
 func TestSameNamedGuestIsNeverReconciled(t *testing.T) {
-	c, machines := service_tester.AmbiguousFloor()
-	defer c.Close()
-	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
-	p, e := v.Reconcile(context.Background(), "test", true, true)
+	o := service_tester.New(t, service_tester.WithNetbox())
+	o.AmbiguousFloor()
+	v := o.Service()
+	p, e := v.Reconcile(context.Background(), "alfa", true, true)
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"alfa"}, p.Ambiguous)
 	assert.Count(t, 0, p.Changes)
-	assert.Count(t, 0, n.UpdatedMachines)
+	assert.Count(t, 0, o.Netbox.UpdatedMachines)
 }
 
 func TestSameNamedGuestIsNeverRecordedOnStart(t *testing.T) {
-	c, machines := service_tester.AmbiguousFloor()
-	defer c.Close()
 	m := memory.New()
-	v, n := service_tester.IntentService(t, c, m, machines...)
-	_, e := v.StartMachine("test", 101, "")
+	o := service_tester.New(
+		t,
+		service_tester.WithNetbox(),
+		service_tester.WithReporter(m),
+	)
+	o.AmbiguousFloor()
+	v := o.Service()
+	_, e := v.StartMachine("alfa", 101, "")
 	assert.FatalOnError(t, e)
-	assert.Count(t, 0, n.UpdatedMachines)
+	assert.Count(t, 0, o.Netbox.UpdatedMachines)
 	assert.Count(t, 0, m.Events())
 }

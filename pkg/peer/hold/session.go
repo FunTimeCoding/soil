@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/peer/constant"
 
 func (h *Hold) session() bool {
 	e := h.connection.Open(h.context)
-	h.reacher.Handle(h.name, e, h.edge, h.refusal)
+	h.outages.Handle(h.name, e, h.edge, h.refusal)
 
 	if e != nil {
 		return false
@@ -26,7 +26,7 @@ func (h *Hold) session() bool {
 		return true
 	}
 
-	if x := h.reacher.Fail(h.name, reason); x != nil {
+	if x := h.outages.Fail(h.name, reason); x != nil {
 		h.edge(x)
 	}
 

@@ -21,21 +21,25 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity, webConstant.ThemeSentinel, favicon).
 				WithCommands(
-					palette.NewCommand(
-						constant.CreateAuthorityTitle,
-						constant.CreateAuthorityPath,
-						webConstant.PaletteAction,
-					),
-					palette.NewCommand(
-						constant.IssueCertificateTitle,
-						constant.IssueCertificatePath,
-						webConstant.PaletteAction,
-					),
-					palette.NewCommand(
-						constant.RootTitle,
-						constant.RootPath,
-						webConstant.PaletteAction,
-					),
+					func() []*palette.Command {
+						return []*palette.Command{
+							palette.NewCommand(
+								constant.CreateAuthorityTitle,
+								constant.CreateAuthorityPath,
+								webConstant.PaletteAction,
+							),
+							palette.NewCommand(
+								constant.IssueCertificateTitle,
+								constant.IssueCertificatePath,
+								webConstant.PaletteAction,
+							),
+							palette.NewCommand(
+								constant.RootTitle,
+								constant.RootPath,
+								webConstant.PaletteAction,
+							),
+						}
+					},
 				).
 				WithItems(
 					navigation_item.New(

@@ -15,7 +15,7 @@ import (
 )
 
 func TestFailedFormKeepsItsAlertAndValuesAtForm(t *testing.T) {
-	s := base.New(t)
+	s := base.New(t).Served()
 	var location string
 
 	for range 2 {

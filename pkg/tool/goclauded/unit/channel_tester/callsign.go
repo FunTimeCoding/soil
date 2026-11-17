@@ -17,7 +17,7 @@ func Callsign(
 	t.Helper()
 	result := make(chan string, 1)
 	go func() {
-		response, e := s.RESTClient(t).GetChannelCallsignWithResponse(
+		response, e := s.RESTClient().GetChannelCallsignWithResponse(
 			x,
 			&client.GetChannelCallsignParams{
 				Session: "session-1",

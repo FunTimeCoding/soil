@@ -12,10 +12,10 @@ import (
 )
 
 func TestHeatmapWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, clock_tester.Window)
+	b := base.New(t, base.WithClock(clock_tester.Window))
 	assert.FatalOnError(
 		t,
-		s.Store.Create(
+		b.Store().Create(
 			&usage_event.Event{
 				Tool:      "clocked_tool",
 				Surface:   constant.SurfaceWebService,
@@ -26,6 +26,7 @@ func TestHeatmapWindowRunsOnServiceClock(t *testing.T) {
 			},
 		),
 	)
+	s := b.Served()
 	r, e := s.Client().Get(s.Address(constant.HeatmapPath))
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "clocked_tool", web.ReadString(r))

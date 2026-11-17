@@ -9,62 +9,55 @@ import (
 )
 
 func TestReadHistoryDefaultsCount(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	v, e := service_tester.New(t, c).ReadHistory("alfa", 0)
+	o := service_tester.New(t)
+	o.AddSession("alfa")
+	v, e := o.Service().ReadHistory("alfa", 0)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 50, v.TotalScrollback)
 }
 
 func TestSendKeysSendsEveryKeyInOrder(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
+	o := service_tester.New(t)
+	o.AddSession("alfa")
 	assert.FatalOnError(
 		t,
-		service_tester.New(t, c).SendKeys(
-			"alfa",
-			[]string{"ctrl+c", "up", "return"},
-			0,
-		),
+		o.Service().SendKeys("alfa", []string{"ctrl+c", "up", "return"}, 0),
 	)
-	assert.Strings(t, []string{"ctrl+c", "up", "return"}, c.Keys("alfa"))
+	assert.Strings(t, []string{"ctrl+c", "up", "return"}, o.Source.Keys("alfa"))
 }
 
 func TestSendKeysNamesFailingStep(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	e := service_tester.New(t, c).SendKeys("bravo", []string{"up"}, 0)
+	o := service_tester.New(t)
+	o.AddSession("alfa")
+	e := o.Service().SendKeys("bravo", []string{"up"}, 0)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "step 1: session bravo not found", e.Error())
 }
 
 func TestSendKeysRequiresKeys(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	e := service_tester.New(t, c).SendKeys("alfa", nil, 0)
+	o := service_tester.New(t)
+	o.AddSession("alfa")
+	e := o.Service().SendKeys("alfa", nil, 0)
 	assert.True(t, validation.Is(e))
 }
 
 func TestSendTextFollowsWithEnterWhenAsked(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	assert.FatalOnError(
-		t,
-		service_tester.New(t, c).SendText("alfa", "ls -la", true),
-	)
-	assert.Strings(t, []string{"enter"}, c.Keys("alfa"))
+	o := service_tester.New(t)
+	o.AddSession("alfa")
+	assert.FatalOnError(t, o.Service().SendText("alfa", "ls -la", true))
+	assert.Strings(t, []string{"enter"}, o.Source.Keys("alfa"))
 }
 
 func TestSendTextRequiresText(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	e := service_tester.New(t, c).SendText("alfa", "", false)
+	o := service_tester.New(t)
+	o.AddSession("alfa")
+	e := o.Service().SendText("alfa", "", false)
 	assert.True(t, validation.Is(e))
 }
 
 func TestSetTabTitleRequiresTitle(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	e := service_tester.New(t, c).SetTabTitle("tab-1", "")
+	o := service_tester.New(t)
+	o.AddSession("alfa")
+	e := o.Service().SetTabTitle("tab-1", "")
 	assert.True(t, validation.Is(e))
 }

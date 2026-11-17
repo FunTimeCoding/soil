@@ -4,14 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestWebService(t *testing.T) {
-	o := web_service_tester.New(t)
-	c := o.Client
+	c := base.New(t).GeneratedClient()
 	x := context.Background()
 	status, e := c.GetStatusWithResponse(x)
 	assert.FatalOnError(t, e)
@@ -44,11 +43,11 @@ func TestWebService(t *testing.T) {
 }
 
 func TestWebServiceResolve(t *testing.T) {
-	o := web_service_tester.New(t)
-	c := o.Client
+	s := base.New(t)
+	c := s.GeneratedClient()
 	x := context.Background()
-	o.MockClient.Remove("fp1")
-	o.Worker.Poll()
+	s.Alertmanager.Remove("fp1")
+	s.Clock.Poll()
 	alerts, e := c.GetAlertsWithResponse(
 		x,
 		&client.GetAlertsParams{Name: "HighMemory"},

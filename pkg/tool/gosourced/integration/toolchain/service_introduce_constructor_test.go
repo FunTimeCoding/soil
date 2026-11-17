@@ -11,10 +11,13 @@ import (
 )
 
 func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	r, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	r, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/single",
 		"Shape",
 		[]string{"Inhale", "Draw"},
@@ -28,7 +31,7 @@ func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
 	assert.String(t, "pkg/single/new.go", c.File)
 	assert.Integer(t, 3, c.Rewritten)
 	assert.Integer(t, 5, len(c.Remaining))
-	constructor := service_tester.ReadFixtureFile(t, d, "pkg/single/new.go")
+	constructor := o.Read("pkg/single/new.go")
 	assert.StringContains(
 		t,
 		"func New(\n\tdraw float64,\n\tinhale float64,\n) *Shape {",
@@ -39,7 +42,7 @@ func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
 		"return &Shape{Draw: draw, Inhale: inhale}",
 		constructor,
 	)
-	shapes := service_tester.ReadFixtureFile(t, d, "pkg/caller/shapes.go")
+	shapes := o.Read("pkg/caller/shapes.go")
 	assert.StringContains(t, "a := single.New(1, 2)", shapes)
 	assert.StringContains(t, "return single.New(1, 2)\n}", shapes)
 	assert.StringContains(t, "c := single.New(1, 2)\n\tc.Hold = 3", shapes)
@@ -59,10 +62,13 @@ func TestIntroduceConstructorRewritesExactSites(t *testing.T) {
 }
 
 func TestIntroduceConstructorReportsWhySiteStays(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	_, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/single",
 		"Shape",
 		[]string{"Draw", "Inhale"},
@@ -87,10 +93,13 @@ func TestIntroduceConstructorReportsWhySiteStays(t *testing.T) {
 }
 
 func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	_, _, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	_, _, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/single",
 		"Shape",
 		[]string{"Wait"},
@@ -99,7 +108,7 @@ func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, e)
-	constructor := service_tester.ReadFixtureFile(t, d, "pkg/single/new.go")
+	constructor := o.Read("pkg/single/new.go")
 	assert.StringContains(t, "import \"time\"", constructor)
 	assert.StringContains(
 		t,
@@ -109,10 +118,13 @@ func TestIntroduceConstructorImportsParameterTypes(t *testing.T) {
 }
 
 func TestIntroduceConstructorNamesBagConstructorsAfterType(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	_, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/bag",
 		"Payload",
 		nil,
@@ -123,21 +135,20 @@ func TestIntroduceConstructorNamesBagConstructorsAfterType(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.String(t, "NewPayload", c.Name)
 	assert.String(t, "pkg/bag/new_payload.go", c.File)
-	constructor := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/bag/new_payload.go",
-	)
+	constructor := o.Read("pkg/bag/new_payload.go")
 	assert.StringContains(t, "func NewPayload() *Payload {", constructor)
-	payloads := service_tester.ReadFixtureFile(t, d, "pkg/caller/payloads.go")
+	payloads := o.Read("pkg/caller/payloads.go")
 	assert.StringContains(t, "p := bag.NewPayload()", payloads)
 }
 
 func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	_, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/bag",
 		"Header",
 		nil,
@@ -148,7 +159,7 @@ func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"Key"}, c.Parameters)
 	assert.Integer(t, 1, c.Rewritten)
-	payloads := service_tester.ReadFixtureFile(t, d, "pkg/caller/payloads.go")
+	payloads := o.Read("pkg/caller/payloads.go")
 	assert.StringContains(t, "bag.NewHeader(\"charlie\")", payloads)
 	assert.StringContains(
 		t,
@@ -158,10 +169,13 @@ func TestIntroduceConstructorTakesParametersFromSites(t *testing.T) {
 }
 
 func TestIntroduceConstructorRefusesTaintedPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	r, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	r, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/tainted",
 		"Record",
 		nil,
@@ -179,10 +193,13 @@ func TestIntroduceConstructorRefusesTaintedPackage(t *testing.T) {
 }
 
 func TestIntroduceConstructorRefusesUnknownParameter(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	r, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	r, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/single",
 		"Shape",
 		[]string{"Missing"},
@@ -196,10 +213,13 @@ func TestIntroduceConstructorRefusesUnknownParameter(t *testing.T) {
 }
 
 func TestIntroduceConstructorDryRunWritesNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "introduce-constructor/src")
-	_, c, e := service_tester.NewService(t).Pattern.IntroduceConstructor(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("introduce-constructor/src"),
+	)
+	_, c, e := o.Pattern.IntroduceConstructor(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/single",
 		"Shape",
 		[]string{"Draw", "Inhale"},
@@ -209,8 +229,8 @@ func TestIntroduceConstructorDryRunWritesNothing(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, c.Rewritten)
-	_, f := os.Stat(filepath.Join(d, "pkg/single/new.go"))
+	_, f := os.Stat(filepath.Join(o.Directory, "pkg/single/new.go"))
 	assert.True(t, os.IsNotExist(f))
-	shapes := service_tester.ReadFixtureFile(t, d, "pkg/caller/shapes.go")
+	shapes := o.Read("pkg/caller/shapes.go")
 	assert.StringContains(t, "a := &single.Shape{Draw: 1, Inhale: 2}", shapes)
 }

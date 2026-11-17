@@ -3,10 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"testing"
@@ -17,19 +15,21 @@ func TestRefusedChunkLeavesRestOfItsDocumentEmbedded(t *testing.T) {
 	assert.Count(
 		t,
 		3,
-		chunk.Document(body, "manual.txt", service_tester.NewReranker(t)),
+		chunk.Document(body, "manual.txt", service_tester.New(t).Reranker),
 	)
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("SYNOPSIS")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(t.Context(), "manual", "manual.txt", body, nil)
 	assert.Integer(t, 2, v.MustStatus().TotalEmbeddings)
 }
 
 func TestRefusedDocumentDoesNotHoldBackPendingOnes(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("Bravo archive header")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.AddCollection("limit", fixture.Path(systemConstant.LimitPath), "**/*")
 	_, e := v.IndexCollections("limit")
 	assert.FatalOnError(t, e)
@@ -43,12 +43,10 @@ func TestRefusedDocumentDoesNotHoldBackPendingOnes(t *testing.T) {
 }
 
 func TestChunkOverEmbedderWindowNeverReachesEmbedder(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
-	c := service_tester.NewReranker(t)
-	c.SetAllowance(300)
-	o := service_tester.NewOption(t, m, service_tester.NewReranker(t))
-	o.EmbedCounter = func() face.EmbedCounter { return c }
-	v := service_tester.New(t, o, memory.New())
+	q := service_tester.New(t)
+	m := q.Embedder
+	q.Counter.SetTokenLimit(300)
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"manual",
@@ -67,9 +65,10 @@ func TestChunkOverEmbedderWindowNeverReachesEmbedder(t *testing.T) {
 }
 
 func TestRecordedRefusalIsNotRetried(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("Bravo archive header")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"dense",
@@ -85,9 +84,10 @@ func TestRecordedRefusalIsNotRetried(t *testing.T) {
 }
 
 func TestRechunkLeavesRefusedDocumentAlone(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("SYNOPSIS")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"manual",
@@ -102,9 +102,10 @@ func TestRechunkLeavesRefusedDocumentAlone(t *testing.T) {
 }
 
 func TestFailedListsRefusedChunk(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("SYNOPSIS")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"manual",
@@ -127,11 +128,7 @@ func TestFailedListsRefusedChunk(t *testing.T) {
 }
 
 func TestPruneRemovesOldVersionOfPushedDocument(t *testing.T) {
-	v := service_tester.NewService(
-		t,
-		service_tester.NewEmbedder(t),
-		service_tester.NewReranker(t),
-	)
+	v := service_tester.New(t).Service()
 	v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -156,9 +153,10 @@ func TestPruneRemovesOldVersionOfPushedDocument(t *testing.T) {
 }
 
 func TestPruneKeepsContentOfRefusedDocument(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("Bravo archive header")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"dense",
@@ -171,9 +169,10 @@ func TestPruneKeepsContentOfRefusedDocument(t *testing.T) {
 }
 
 func TestDeletingDocumentClearsItsFailures(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Refuse("SYNOPSIS")
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"manual",

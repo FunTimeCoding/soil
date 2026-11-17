@@ -15,7 +15,7 @@ require (
 	github.com/andybalholm/cascadia v1.3.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go/v2 v2.9.0
+	github.com/anthropics/anthropic-sdk-go/v2 v2.10.0
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.4
 	github.com/bwmarrin/discordgo v0.29.0
@@ -65,7 +65,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.6
 	github.com/oapi-codegen/runtime v1.9.0
 	github.com/ollama/ollama v0.40.16
-	github.com/openai/openai-go/v3 v3.99.0
+	github.com/openai/openai-go/v3 v3.100.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
@@ -77,7 +77,7 @@ require (
 	github.com/prometheus/common v0.74.0
 	github.com/refraction-networking/utls v1.8.2
 	github.com/sashabaranov/go-openai v1.43.0
-	github.com/sergi/go-diff v1.4.0
+	github.com/sergi/go-diff v1.4.4
 	github.com/shirou/gopsutil/v4 v4.26.10
 	github.com/sirupsen/logrus v1.10.2
 	github.com/slok/go-http-metrics v0.13.0
@@ -89,7 +89,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.16
-	gitlab.com/gitlab-org/api/client-go/v3 v3.50.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.51.0
 	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v4 v4.0.0
 	golang.org/x/crypto v0.59.0

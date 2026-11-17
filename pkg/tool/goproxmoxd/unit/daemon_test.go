@@ -2,30 +2,17 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
-	sshMock "github.com/funtimecoding/soil/pkg/ssh/mock_client"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonHandsOneGuardPerHypervisorOutBeforePoller(t *testing.T) {
-	alfa := mock_client.New()
-	defer alfa.Close()
-	bravo := mock_client.New()
-	defer bravo.Close()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": alfa, "bravo": bravo},
-	)
-	workers := d.Workers()
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	workers := s.Daemon().Workers()
 	assert.Count(t, 3, workers)
 	_, first := workers[0].(*peer.Guard)
 	_, second := workers[1].(*peer.Guard)
@@ -36,14 +23,8 @@ func TestDaemonHandsOneGuardPerHypervisorOutBeforePoller(t *testing.T) {
 }
 
 func TestDaemonHandsEveryGuardOutBeforeItsClocks(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
-	d := daemon_tester.NewWithNetbox(
-		t,
-		map[string]*mock_client.Client{"alfa": c},
-		netbox.New(),
-	)
-	workers := d.Workers()
+	s := base.New(t, service_tester.WithNetbox())
+	workers := s.Daemon().Workers()
 	assert.Count(t, 4, workers)
 	_, first := workers[0].(*peer.Guard)
 	_, second := workers[1].(*peer.Guard)
@@ -54,56 +35,28 @@ func TestDaemonHandsEveryGuardOutBeforeItsClocks(t *testing.T) {
 }
 
 func TestClosingDaemonClosesEveryClientItBuilt(t *testing.T) {
-	alfa := mock_client.New()
-	defer alfa.Close()
-	bravo := mock_client.New()
-	defer bravo.Close()
-	n := netbox.New()
-	defer n.Close()
-	d := daemon_tester.NewWithNetbox(
+	s := base.New(
 		t,
-		map[string]*mock_client.Client{"alfa": alfa, "bravo": bravo},
-		n,
+		service_tester.WithInstances("alfa", "bravo"),
+		service_tester.WithNetbox(),
 	)
-	d.Close()
-	assert.Integer(t, 1, alfa.Closed)
-	assert.Integer(t, 1, bravo.Closed)
-	assert.Integer(t, 1, n.Closed)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Alfa().Hypervisor.Closed)
+	assert.Integer(t, 1, s.Bravo().Hypervisor.Closed)
+	assert.Integer(t, 1, s.Netbox.Closed)
 }
 
 func TestClosingDaemonClosesShellsItDialled(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
-	h := sshMock.New()
-	defer h.Close()
-	d := daemon_tester.NewWithShells(
-		t,
-		map[string]*mock_client.Client{"alfa": c},
-		map[string]*sshMock.Client{"alfa": h},
-	)
-	v := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(memory.New(), mock_recorder.New(), g)
-		},
-	)
-	defer v.Close()
-	m := v.Connect(t)
-	defer m.Close()
-	m.MustCallTool(constant.ListSnippets, nil)
-	d.Close()
-	assert.Integer(t, 1, h.Closed)
+	s := base.New(t)
+	s.Tools().MustCallTool(constant.ListSnippets, nil)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Alfa().Shell.Closed)
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	s := base.New(t, service_tester.WithNetbox())
 	before := goleak.IgnoreCurrent()
-	d := daemon_tester.NewWithNetbox(
-		t,
-		map[string]*mock_client.Client{"alfa": c},
-		netbox.New(),
-	)
+	d := s.Daemon()
 
 	for _, w := range d.Workers() {
 		w.Start()

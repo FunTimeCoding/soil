@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -12,7 +11,7 @@ import (
 )
 
 func TestServiceKeepsUsersAndGroups(t *testing.T) {
-	v := service_tester.New(t, service_tester.NewSource(), memory.New())
+	v := service_tester.New(t).Service()
 	u, e := v.CreateUser("alfa", "Alfa", "Person", "alfa@example.test", "")
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", u.Account)
@@ -27,20 +26,19 @@ func TestServiceKeepsUsersAndGroups(t *testing.T) {
 }
 
 func TestQuietRefusalIsNotCapturedByGuard(t *testing.T) {
-	m := memory.New()
-	v := service_tester.New(t, service_tester.NewSource(), m)
+	s := service_tester.New(t)
+	v := s.Service()
 	_, e := v.User("ghost")
 	assert.True(t, not_found.Is(e))
 	f := v.DeleteUser("ghost")
 	assert.True(t, not_found.Is(f))
-	assert.Count(t, 0, m.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestOutageIsAnsweredAsUnavailableByService(t *testing.T) {
-	c := service_tester.NewSource()
-	c.Failure = outage_tester.RefusedDial()
-	m := memory.New()
-	_, e := service_tester.New(t, c, m).Users()
+	s := service_tester.New(t)
+	s.Source.Failure = outage_tester.RefusedDial()
+	_, e := s.Service().Users()
 	assert.True(t, unavailable.Is(e))
-	assert.Count(t, 0, m.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }

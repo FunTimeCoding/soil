@@ -10,10 +10,13 @@ import (
 )
 
 func TestRenameOfInterfaceMethodRenamesItsFamily(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-family/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-family/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shape",
 		"Size",
 		"Area",
@@ -25,31 +28,30 @@ func TestRenameOfInterfaceMethodRenamesItsFamily(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func (b *Box) Area() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/box/box.go"),
+		o.Read("pkg/box/box.go"),
 	)
 	assert.StringContains(
 		t,
 		"func (m *Mock) Area() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/mock/mock.go"),
+		o.Read("pkg/mock/mock.go"),
 	)
-	assert.StringContains(
-		t,
-		"Area() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/shape/measured.go"),
-	)
+	assert.StringContains(t, "Area() int", o.Read("pkg/shape/measured.go"))
 	assert.StringContains(
 		t,
 		"return s.Area() + m.Area() + b.Area()",
-		service_tester.ReadFixtureFile(t, d, "pkg/use/use.go"),
+		o.Read("pkg/use/use.go"),
 	)
 }
 
 func TestRenameOfInterfaceMethodListsFamilyBeforeWriting(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-family/src")
-	before := rewrite_tester.DirectoryTree(t, d)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-family/src"),
+	)
+	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shape",
 		"Size",
 		"Area",
@@ -67,15 +69,18 @@ func TestRenameOfInterfaceMethodListsFamilyBeforeWriting(t *testing.T) {
 		},
 		rewrite_tester.FamilyMembers(r),
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
 }
 
 func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-family/src")
-	before := rewrite_tester.DirectoryTree(t, d)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-family/src"),
+	)
+	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shape",
 		"String",
 		"Label",
@@ -88,21 +93,24 @@ func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
 		r,
 		"example/pkg/box.Box satisfies fmt.Stringer outside the workspace",
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
 }
 
 func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-family/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-family/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/mock/area.go",
 		"package mock\n\nfunc (m *Mock) Area() int {\n\treturn 3\n}\n",
 	)
-	before := rewrite_tester.DirectoryTree(t, d)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shape",
 		"Size",
 		"Area",
@@ -115,14 +123,17 @@ func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
 		r,
 		"example/pkg/mock.Mock already has Area",
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, d))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
 }
 
 func TestRenameOfEmbeddedInterfaceMethodNamesItsDeclarer(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-family/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-family/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shape",
 		"Size",
 		"Area",
@@ -138,10 +149,13 @@ func TestRenameOfEmbeddedInterfaceMethodNamesItsDeclarer(t *testing.T) {
 }
 
 func TestRenameOfImplementationPointsToItsInterface(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-family/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-family/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/box",
 		"Size",
 		"Area",
@@ -157,10 +171,13 @@ func TestRenameOfImplementationPointsToItsInterface(t *testing.T) {
 }
 
 func TestRenameOfInterfaceMethodRenamesWideStructuralFamily(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-interface-wide/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-interface-wide/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shape",
 		"Size",
 		"Area",
@@ -173,11 +190,11 @@ func TestRenameOfInterfaceMethodRenamesWideStructuralFamily(t *testing.T) {
 	assert.StringContains(
 		t,
 		"return (&Alfa{}).Area() + Bravo{}.Area() + d.Area() + Echo(4).Area()",
-		service_tester.ReadFixtureFile(t, d, "pkg/part/foxtrot.go"),
+		o.Read("pkg/part/foxtrot.go"),
 	)
 	assert.StringContains(
 		t,
 		"func (f *Foxtrot) Area() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/part/foxtrot.go"),
+		o.Read("pkg/part/foxtrot.go"),
 	)
 }

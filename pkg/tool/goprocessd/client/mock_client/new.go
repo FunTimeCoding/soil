@@ -1,5 +1,11 @@
 package mock_client
 
-func New() *Client {
-	return &Client{Logs: map[string][]string{}, Older: map[string]int{}}
+import "testing"
+
+func New(t *testing.T) *Client {
+	t.Helper()
+	result := &Client{Logs: map[string][]string{}, Older: map[string]int{}}
+	t.Cleanup(result.Close)
+
+	return result
 }

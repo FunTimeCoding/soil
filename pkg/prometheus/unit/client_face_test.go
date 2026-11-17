@@ -15,15 +15,13 @@ import (
 func TestClientAndItsMockShareFace(t *testing.T) {
 	c := prometheus.New("127.0.0.1", 0, false, "", "")
 	t.Cleanup(c.Close)
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	faces := []face.PrometheusClient{c, m}
 	assert.Count(t, 2, faces)
 }
 
 func TestMockAnswersWhatWasSeeded(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	r := query_result.New(nil, nil, nil)
 	m.SeedResult(constant.Up, r)
 	m.SeedFloat("free", 0.25)
@@ -36,8 +34,7 @@ func TestMockAnswersWhatWasSeeded(t *testing.T) {
 }
 
 func TestMockFailsEveryCallOnFailure(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	m.SeedFloat("free", 0.25)
 	m.Failure = unavailable.Format("prometheus maintenance")
 	_, e := m.QueryFloat("free", time.Now())

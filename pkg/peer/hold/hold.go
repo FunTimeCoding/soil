@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
-	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
 	"sync"
 	"time"
 )
@@ -15,7 +15,7 @@ type Hold struct {
 	serving    bool
 	name       string
 	connection face.Connection
-	reacher    *reacher.Reacher
+	outages    *outage_tracker.Tracker
 	recovery   *recovery.Recovery
 	edge       func(*edge.Edge)
 	refusal    func(error)

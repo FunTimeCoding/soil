@@ -9,10 +9,10 @@ import (
 )
 
 func TestMoveBesidePackageLevelNameAliases(t *testing.T) {
-	d := service_tester.Prepare(t, "move-scope/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-scope/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Moving",
 		"example/pkg/delta",
@@ -22,19 +22,19 @@ func TestMoveBesidePackageLevelNameAliases(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 	assert.String(
 		t,
 		"package charlie\n\nimport exampleDelta \"example/pkg/delta\"\n\nfunc Use() int {\n\treturn exampleDelta.Moving()\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/charlie/use.go"),
+		o.Read("pkg/charlie/use.go"),
 	)
 }
 
 func TestMoveUnderShadowedImportRefuses(t *testing.T) {
-	d := service_tester.Prepare(t, "move-scope/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-scope/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Shifting",
 		"example/pkg/delta",
@@ -46,5 +46,5 @@ func TestMoveUnderShadowedImportRefuses(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "delta is taken at")
 	testutil.AssertBlockedContains(t, r, "pkg/echo/use.go:11")
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }

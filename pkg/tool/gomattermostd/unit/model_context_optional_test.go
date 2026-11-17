@@ -5,20 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
 	"testing"
 )
 
 func TestSubscriptionToolsAbsentWithoutGoclauded(t *testing.T) {
-	s := base.NewWithoutSubscription(t, mattermost_server.Thread)
-	c := s.ContextServer.Connect(t)
-	t.Cleanup(
-		func() {
-			c.Close()
-			s.Close()
-		},
-	)
-	name := model_context_tester.Names(c.ListTools())
+	name := base.New(t, mattermost_server.Thread).Tools().ToolNames()
 	assert.True(t, len(name) > 0)
 
 	for _, e := range name {
@@ -29,8 +20,11 @@ func TestSubscriptionToolsAbsentWithoutGoclauded(t *testing.T) {
 }
 
 func TestSubscriptionToolsPresentWithGoclauded(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	name := model_context_tester.Names(r.Client.ListTools())
+	name := base.New(
+		t,
+		mattermost_server.Thread,
+		base.WithConnector(),
+	).Tools().ToolNames()
 	found := 0
 
 	for _, e := range name {

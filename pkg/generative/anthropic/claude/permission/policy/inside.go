@@ -12,5 +12,11 @@ func (w *Walk) inside(path string) bool {
 		}
 	}
 
+	for _, prefix := range w.prefixes {
+		if strings.HasPrefix(path, prefix) {
+			return true
+		}
+	}
+
 	return false
 }

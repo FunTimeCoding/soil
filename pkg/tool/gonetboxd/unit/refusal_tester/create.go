@@ -16,7 +16,10 @@ func Create(
 ) (int, int) {
 	t.Helper()
 	r := memory.New()
-	c := base.Rest(t, base.New(t, refusing_source.New(refusal), r))
+	c := base.GeneratedClient(
+		t,
+		base.New(t, refusing_source.New(t, refusal), r),
+	)
 	response, e := c.CreateSiteWithResponse(
 		context.Background(),
 		client.CreateSiteJSONRequestBody{Name: "alfa"},

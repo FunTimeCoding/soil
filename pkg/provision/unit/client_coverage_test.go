@@ -37,7 +37,7 @@ func TestClientCoversEveryOperation(t *testing.T) {
 
 func TestClientAndItsMockKeepFace(t *testing.T) {
 	c := client.New(webConstant.Localhost, 1, "alfa")
-	m := mock_client.New("bravo")
+	m := mock_client.New(t, "bravo")
 	clients := []face.Client{c, m}
 
 	for _, v := range clients {

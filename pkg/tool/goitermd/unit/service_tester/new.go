@@ -1,16 +1,25 @@
 package service_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/service"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	c *mock_client.Client,
-) *service.Service {
+	o ...Option,
+) *Tester {
 	t.Helper()
+	result := &Tester{
+		Source:   mock_client.New(t),
+		Reporter: memory.New(),
+		t:        t,
+	}
 
-	return NewPaced(t, c, 0)
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

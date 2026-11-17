@@ -3,12 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"go.uber.org/goleak"
@@ -17,26 +15,15 @@ import (
 )
 
 func TestDaemonClosesWhatItBuilt(t *testing.T) {
-	c := service_tester.NewAlertmanager(t)
-	d := service_tester.NewDaemon(
-		t,
-		service_tester.NewOption(service_tester.DatabasePath(t), c),
-		memory.New(),
-	)
+	s := service_tester.New(t)
+	d := s.Daemon()
 	d.Close()
 	d.Close()
-	assert.Integer(t, 1, c.Closed)
+	assert.Integer(t, 1, s.Alertmanager.Closed)
 }
 
 func TestDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
-	workers := service_tester.NewDaemon(
-		t,
-		service_tester.NewOption(
-			service_tester.DatabasePath(t),
-			service_tester.NewAlertmanager(t),
-		),
-		memory.New(),
-	).Workers()
+	workers := service_tester.New(t).Daemon().Workers()
 	assert.Count(t, 2, workers)
 	_, guard := workers[0].(*peer.Guard)
 	assert.True(t, guard)
@@ -45,12 +32,9 @@ func TestDaemonHandsOutItsGuardThenItsClock(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	o := service_tester.NewOption(
-		service_tester.DatabasePath(t),
-		service_tester.NewAlertmanager(t),
-	)
+	s := service_tester.New(t)
 	before := goleak.IgnoreCurrent()
-	d := service_tester.NewDaemon(t, o, memory.New())
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {
@@ -70,14 +54,11 @@ func TestRecordStampsLastPollAndNotifies(t *testing.T) {
 	changes := n.Subscribe()
 	defer n.Unsubscribe(changes)
 	now := time.Date(2026, time.November, 2, 6, 0, 0, 0, time.UTC)
-	v := service_tester.NewServiceWith(
+	v := service_tester.New(
 		t,
-		service_tester.DatabasePath(t),
-		service_tester.NewAlertmanager(t),
-		constant.Retention,
-		func() time.Time { return now },
-		n,
-	)
+		service_tester.WithClock(func() time.Time { return now }),
+		service_tester.WithNotifier(n),
+	).Service()
 	assert.True(t, v.LastPoll().IsZero())
 	_, e := v.Record()
 	assert.FatalOnError(t, e)
@@ -86,19 +67,12 @@ func TestRecordStampsLastPollAndNotifies(t *testing.T) {
 }
 
 func TestFailedRecordStillStampsAndNotifies(t *testing.T) {
-	c := service_tester.NewAlertmanager(t)
-	c.Fail(errors.Format("alertmanager refused", "test"))
 	n := notifier.New()
 	changes := n.Subscribe()
 	defer n.Unsubscribe(changes)
-	v := service_tester.NewServiceWith(
-		t,
-		service_tester.DatabasePath(t),
-		c,
-		constant.Retention,
-		time.Now,
-		n,
-	)
+	s := service_tester.New(t, service_tester.WithNotifier(n))
+	s.Alertmanager.Fail(errors.Format("alertmanager refused", "test"))
+	v := s.Service()
 	_, e := v.Record()
 	assert.NotNil(t, e)
 	assert.False(t, v.LastPoll().IsZero())
@@ -106,8 +80,8 @@ func TestFailedRecordStillStampsAndNotifies(t *testing.T) {
 }
 
 func TestRecordReportsWhatItChanged(t *testing.T) {
-	c := service_tester.NewAlertmanager(t)
-	c.Add(
+	s := service_tester.New(t)
+	s.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -115,7 +89,7 @@ func TestRecordReportsWhatItChanged(t *testing.T) {
 			"",
 		),
 	)
-	c.Add(
+	s.Alertmanager.Add(
 		alert.NewBasic(
 			"def456",
 			"DiskFull",
@@ -123,13 +97,13 @@ func TestRecordReportsWhatItChanged(t *testing.T) {
 			"",
 		),
 	)
-	v := service_tester.NewService(t, service_tester.DatabasePath(t), c)
+	v := s.Service()
 	o, e := v.Record()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, o.Created)
 	assert.Integer(t, 2, o.Firing)
 	assert.Integer(t, 2, o.Total)
-	c.Remove("abc123")
+	s.Alertmanager.Remove("abc123")
 	p, f := v.Record()
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 0, p.Created)
@@ -138,9 +112,8 @@ func TestRecordReportsWhatItChanged(t *testing.T) {
 }
 
 func TestFailedAlertmanagerReadIsReturned(t *testing.T) {
-	c := service_tester.NewAlertmanager(t)
-	c.Fail(errors.Format("alertmanager refused", "test"))
-	v := service_tester.NewService(t, service_tester.DatabasePath(t), c)
-	_, e := v.Record()
+	s := service_tester.New(t)
+	s.Alertmanager.Fail(errors.Format("alertmanager refused", "test"))
+	_, e := s.Service().Record()
 	assert.StringContains(t, "alertmanager refused", e.Error())
 }

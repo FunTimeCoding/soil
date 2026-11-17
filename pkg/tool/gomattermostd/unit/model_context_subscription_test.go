@@ -4,14 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/mattermost_server"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
 	"testing"
 )
 
 func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	result := r.Client.MustCallToolNotation(
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
+	result := c.MustCallToolNotation(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
@@ -21,15 +22,16 @@ func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 	)
 	assert.Any(t, "alfa", result[constant.ParameterRoot])
 	assert.Any(t, "bravo", result["channel"])
-	stored := r.Server.Store.MustByCallsign("kilo")
+	stored := s.Store.MustByCallsign("kilo")
 	assert.Integer(t, 1, len(stored))
 	assert.String(t, "papa", stored[0].Alias)
 	assert.String(t, "bravo", stored[0].ChannelIdentifier)
 }
 
 func TestSubscribeThreadAnswersLatestReply(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Replied)
-	result := r.Client.MustCallToolNotation(
+	s := base.New(t, mattermost_server.Replied, base.WithConnector())
+	c := s.Tools()
+	result := c.MustCallToolNotation(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
@@ -44,8 +46,9 @@ func TestSubscribeThreadAnswersLatestReply(t *testing.T) {
 }
 
 func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	result := r.Client.MustCallToolNotation(
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
+	result := c.MustCallToolNotation(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "reply",
@@ -53,24 +56,26 @@ func TestSubscribeThreadResolvesReplyToRoot(t *testing.T) {
 		},
 	)
 	assert.Any(t, "alfa", result[constant.ParameterRoot])
-	stored := r.Server.Store.MustByCallsign("kilo")
+	stored := s.Store.MustByCallsign("kilo")
 	assert.String(t, "alfa", stored[0].RootIdentifier)
 }
 
 func TestSubscribeThreadIsIdempotent(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
 	arguments := map[string]any{
 		constant.ParameterRoot:     "alfa",
 		constant.ParameterCallsign: "kilo",
 	}
-	r.Client.MustCallTool(constant.SubscribeThread, arguments)
-	r.Client.MustCallTool(constant.SubscribeThread, arguments)
-	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("kilo")))
+	c.MustCallTool(constant.SubscribeThread, arguments)
+	c.MustCallTool(constant.SubscribeThread, arguments)
+	assert.Integer(t, 1, len(s.Store.MustByCallsign("kilo")))
 }
 
 func TestSubscribeThreadStoresQueuedDelivery(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	r.Client.MustCallTool(
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
@@ -78,16 +83,13 @@ func TestSubscribeThreadStoresQueuedDelivery(t *testing.T) {
 			constant.ParameterDelivery: "queued",
 		},
 	)
-	assert.String(
-		t,
-		"queued",
-		r.Server.Store.MustByCallsign("kilo")[0].Delivery,
-	)
+	assert.String(t, "queued", s.Store.MustByCallsign("kilo")[0].Delivery)
 }
 
 func TestSubscribeThreadRejectsUnknownDelivery(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	r.Client.MustCallToolError(
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
+	c.MustCallToolError(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
@@ -95,15 +97,16 @@ func TestSubscribeThreadRejectsUnknownDelivery(t *testing.T) {
 			constant.ParameterDelivery: "cruise",
 		},
 	)
-	assert.Count(t, 0, r.Server.Store.MustByCallsign("kilo"))
+	assert.Count(t, 0, s.Store.MustByCallsign("kilo"))
 }
 
 func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"missing property 'callsign'",
-		r.Client.MustCallToolError(
+		c.MustCallToolError(
 			constant.SubscribeThread,
 			map[string]any{constant.ParameterRoot: "alfa"},
 		),
@@ -111,11 +114,12 @@ func TestSubscribeThreadRejectsMissingCallsign(t *testing.T) {
 }
 
 func TestSubscribeThreadRejectsEmptyCallsign(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"callsign is required",
-		r.Client.MustCallToolError(
+		c.MustCallToolError(
 			constant.SubscribeThread,
 			map[string]any{
 				constant.ParameterRoot:     "alfa",
@@ -126,43 +130,45 @@ func TestSubscribeThreadRejectsEmptyCallsign(t *testing.T) {
 }
 
 func TestUnsubscribeThreadRemovesEachSubscription(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	r.Client.MustCallTool(
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
 			constant.ParameterCallsign: "kilo",
 		},
 	)
-	r.Client.MustCallTool(
+	c.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
 			constant.ParameterCallsign: "lima",
 		},
 	)
-	r.Client.MustCallTool(
+	c.MustCallTool(
 		constant.UnsubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
 			constant.ParameterCallsign: "kilo",
 		},
 	)
-	assert.Integer(t, 0, len(r.Server.Store.MustByCallsign("kilo")))
-	assert.Integer(t, 1, len(r.Server.Store.MustByCallsign("lima")))
-	r.Client.MustCallTool(
+	assert.Integer(t, 0, len(s.Store.MustByCallsign("kilo")))
+	assert.Integer(t, 1, len(s.Store.MustByCallsign("lima")))
+	c.MustCallTool(
 		constant.UnsubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
 			constant.ParameterCallsign: "lima",
 		},
 	)
-	assert.Integer(t, 0, len(r.Server.Store.MustByCallsign("lima")))
+	assert.Integer(t, 0, len(s.Store.MustByCallsign("lima")))
 }
 
 func TestListSubscriptionsReturnsLabels(t *testing.T) {
-	r := model_context_tester.New(t, mattermost_server.Thread)
-	r.Client.MustCallTool(
+	s := base.New(t, mattermost_server.Thread, base.WithConnector())
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SubscribeThread,
 		map[string]any{
 			constant.ParameterRoot:     "alfa",
@@ -170,7 +176,7 @@ func TestListSubscriptionsReturnsLabels(t *testing.T) {
 			constant.ParameterAlias:    "papa",
 		},
 	)
-	result := r.Client.MustCallToolNotation(
+	result := c.MustCallToolNotation(
 		constant.ListSubscriptions,
 		map[string]any{constant.ParameterCallsign: "kilo"},
 	)

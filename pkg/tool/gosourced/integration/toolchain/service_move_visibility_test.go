@@ -9,10 +9,13 @@ import (
 )
 
 func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
-	d := service_tester.Prepare(t, "move-visibility/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-visibility/src"),
+	)
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		[]string{"Build", "piece"},
 		"",
@@ -23,24 +26,19 @@ func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
-	assert.StringContains(
-		t,
-		"func piece() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/piece.go"),
-	)
-	assert.StringContains(
-		t,
-		"return piece() + 1",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/build.go"),
-	)
+	rewrite_tester.Compiles(t, o.Directory)
+	assert.StringContains(t, "func piece() int", o.Read("pkg/bravo/piece.go"))
+	assert.StringContains(t, "return piece() + 1", o.Read("pkg/bravo/build.go"))
 }
 
 func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
-	d := service_tester.Prepare(t, "move-visibility/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-visibility/src"),
+	)
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		[]string{"lone"},
 		"",
@@ -51,24 +49,19 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
-	assert.StringContains(
-		t,
-		"func Lone() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/lone.go"),
-	)
-	assert.StringContains(
-		t,
-		"bravo.Lone()",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/keep.go"),
-	)
+	rewrite_tester.Compiles(t, o.Directory)
+	assert.StringContains(t, "func Lone() int", o.Read("pkg/bravo/lone.go"))
+	assert.StringContains(t, "bravo.Lone()", o.Read("pkg/alfa/keep.go"))
 }
 
 func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
-	d := service_tester.Prepare(t, "move-visibility/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-visibility/src"),
+	)
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		[]string{"probe"},
 		"",
@@ -79,10 +72,6 @@ func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
-	assert.StringContains(
-		t,
-		"func Probe() int",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/probe.go"),
-	)
+	rewrite_tester.Compiles(t, o.Directory)
+	assert.StringContains(t, "func Probe() int", o.Read("pkg/bravo/probe.go"))
 }

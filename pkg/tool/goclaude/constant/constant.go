@@ -18,7 +18,7 @@ const (
 	InsecureEnvironment  = "GOCLAUDE_INSECURE"
 	UntrustedEnvironment = "GOCLAUDE_UNTRUSTED"
 	TokenEnvironment     = "GOCLAUDE_TOKEN"
-	PeekOutputBudget     = 120
+	PeekOutputLimit      = 120
 	PeekContextLimit     = 200
 
 	EnvironmentFileEnvironment          = "CLAUDE_ENV_FILE"
@@ -33,6 +33,8 @@ const (
 
 	OapiCodegenCommand = "oapi-codegen"
 	OapiCodegenHint    = "`task generate` in the repository root regenerates every service's client and server from its openapi.yaml with this same oapi-codegen invocation; it is how this repository runs code generation, and it runs quietly"
+
+	TemporaryRedirectHint = "scratch belongs under tmp/_session/<callsign>-<date>/ in the repository, where a later session can find it; the system temp is shared with every process and wiped on reboot"
 
 	NoGuardEnvironment = "CLAUDE_NO_GUARD"
 
@@ -59,6 +61,8 @@ var (
 		`(^|[|&;(\s])pip3?\s(.*\s)?install(\s|$)`,
 	)
 )
+
+var TemporaryDirectories = []string{"/tmp/", "/private/tmp/"}
 
 const SingleReplacementReason = "a single python search-and-replace in one file is an Edit call - use the Edit tool; for several replacements in one file, use goreplace (search/replace blocks on stdin, all or none)"
 

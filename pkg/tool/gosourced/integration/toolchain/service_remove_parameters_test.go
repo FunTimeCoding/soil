@@ -13,10 +13,13 @@ import (
 )
 
 func TestRemoveParametersFollowsChainThroughBatch(t *testing.T) {
-	d := service_tester.Prepare(t, "remove-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("remove-parameters/src"),
+	)
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*removal.Parameter{
 			removal.NewParameter(
 				"example/pkg/target",
@@ -35,13 +38,13 @@ func TestRemoveParametersFollowsChainThroughBatch(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	mount := service_tester.ReadFixtureFile(t, d, "pkg/target/mount.go")
+	mount := o.Read("pkg/target/mount.go")
 	assert.StringContains(t, "\tname string,\n\tport int,\n) string {", mount)
 	rewrite_tester.Formatted(t, mount)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "func Run(\n\to *Option,\n) string {", run)
 	assert.StringContains(t, "Mount(o.Name, 1)", run)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/main.go")
+	caller := o.Read("pkg/caller/main.go")
 	assert.StringContains(t, "target.Run(o)", caller)
 	assert.StringNotContains(t, "label", caller)
 	rewrite_tester.Formatted(t, caller)
@@ -53,10 +56,13 @@ func TestRemoveParametersFollowsChainThroughBatch(t *testing.T) {
 }
 
 func TestRemoveParametersDropsEveryVariadicArgument(t *testing.T) {
-	d := service_tester.Prepare(t, "remove-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("remove-parameters/src"),
+	)
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*removal.Parameter{
 			removal.NewParameter(
 				"example/pkg/target",
@@ -69,7 +75,7 @@ func TestRemoveParametersDropsEveryVariadicArgument(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/main.go")
+	caller := o.Read("pkg/caller/main.go")
 	assert.StringContains(t, `target.Log("a")`, caller)
 	assert.StringContains(t, `target.Log("b")`, caller)
 	assert.StringContains(
@@ -81,11 +87,14 @@ func TestRemoveParametersDropsEveryVariadicArgument(t *testing.T) {
 }
 
 func TestRemoveParametersDryRunWritesNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "remove-parameters/src")
-	before := service_tester.ReadFixtureFile(t, d, "pkg/target/log.go")
-	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("remove-parameters/src"),
+	)
+	before := o.Read("pkg/target/log.go")
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*removal.Parameter{
 			removal.NewParameter(
 				"example/pkg/target",
@@ -98,11 +107,7 @@ func TestRemoveParametersDryRunWritesNothing(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		before,
-		service_tester.ReadFixtureFile(t, d, "pkg/target/log.go"),
-	)
+	assert.String(t, before, o.Read("pkg/target/log.go"))
 }
 
 func TestRemoveParametersRefusesParameterStillUsed(t *testing.T) {
@@ -142,10 +147,13 @@ func TestRemoveParametersRefusesRemovingLocalThatCalls(t *testing.T) {
 }
 
 func TestRemoveParametersRefusesMethodSatisfyingInterface(t *testing.T) {
-	d := service_tester.Prepare(t, "remove-parameters-interface/src")
-	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("remove-parameters-interface/src"),
+	)
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*removal.Parameter{
 			removal.NewParameter(
 				"example/pkg/target",
@@ -165,10 +173,13 @@ func TestRemoveParametersRefusesMethodSatisfyingInterface(t *testing.T) {
 }
 
 func TestRemoveParametersRefusesUnknownParameter(t *testing.T) {
-	d := service_tester.Prepare(t, "remove-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("remove-parameters/src"),
+	)
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*removal.Parameter{
 			removal.NewParameter(
 				"example/pkg/target",
@@ -185,17 +196,16 @@ func TestRemoveParametersRefusesUnknownParameter(t *testing.T) {
 
 func TestRemoveParametersRewritesReplacingModule(t *testing.T) {
 	for _, full := range []bool{false, true} {
-		library, user := module_tester.ReplacedLibrary(
+		library, o := module_tester.ReplacedLibrary(
 			t,
 			"remove-parameters-replacer",
 		)
-		s := module_tester.ReplacingService(t, library, user)
 
 		if full {
-			s.Workspace.UseFullLoad()
+			o.Workspace.UseFullLoad()
 		}
 
-		r, e := s.Symbol.RemoveParameters(
+		r, e := o.Symbol.RemoveParameters(
 			t.Context(),
 			library,
 			module_tester.LogValues(),
@@ -206,33 +216,26 @@ func TestRemoveParametersRewritesReplacingModule(t *testing.T) {
 		assert.String(
 			t,
 			"package lib\n\nfunc Log(\n\tprefix string,\n) string {\n\treturn prefix\n}\n",
-			service_tester.ReadFixtureFile(t, library, "lib.go"),
+			system_tester.Read(t, library, "lib.go"),
 		)
 		assert.String(
 			t,
 			"package user\n\nimport \"other.test/lib\"\n\nfunc Use() string {\n\treturn lib.Log(\"a\")\n}\n",
-			service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+			o.Read("pkg/user/user.go"),
 		)
 	}
 }
 
 func TestRemoveParametersRefusesSideEffectInReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(
-		t,
-		"remove-parameters-replacer",
-	)
+	library, o := module_tester.ReplacedLibrary(t, "remove-parameters-replacer")
 	system_tester.Write(
 		t,
-		user,
+		o.Directory,
 		"pkg/effect/effect.go",
 		"package effect\n\nimport \"other.test/lib\"\n\nfunc count() int {\n\treturn 1\n}\n\nfunc Use() string {\n\treturn lib.Log(\"a\", count())\n}\n",
 	)
-	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Symbol.RemoveParameters(
+	source := system_tester.Read(t, library, "lib.go")
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
 		library,
 		module_tester.LogValues(),
@@ -242,32 +245,21 @@ func TestRemoveParametersRefusesSideEffectInReplacingModule(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	assert.StringContains(
 		t,
-		filepath.Join(user, "pkg/effect/effect.go"),
+		filepath.Join(o.Directory, "pkg/effect/effect.go"),
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(
-		t,
-		source,
-		service_tester.ReadFixtureFile(t, library, "lib.go"),
-	)
+	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
 }
 
 func TestRemoveParametersRefusesValueUseInReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(
-		t,
-		"remove-parameters-replacer",
-	)
+	library, o := module_tester.ReplacedLibrary(t, "remove-parameters-replacer")
 	system_tester.Write(
 		t,
-		user,
+		o.Directory,
 		"pkg/value/value.go",
 		"package value\n\nimport \"other.test/lib\"\n\nvar Logger = lib.Log\n",
 	)
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Symbol.RemoveParameters(
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
 		library,
 		module_tester.LogValues(),
@@ -277,7 +269,7 @@ func TestRemoveParametersRefusesValueUseInReplacingModule(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	assert.StringContains(
 		t,
-		filepath.Join(user, "pkg/value/value.go"),
+		filepath.Join(o.Directory, "pkg/value/value.go"),
 		rewrite_tester.JoinedConcerns(r),
 	)
 }

@@ -35,7 +35,7 @@ func (s *Server) event() http.HandlerFunc {
 			layout.PushEvent(
 				w,
 				constant.CounterEvent,
-				counter_page.Table(s.service.Tallies()),
+				counter_page.Table(s.service.SessionStatistics()),
 			)
 
 			if name := q.URL.Query().Get(constant.SessionParameter); name != "" {

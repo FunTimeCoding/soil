@@ -19,7 +19,7 @@ func Run(
 	return terminal_tester.Run(
 		t,
 		func(m *terminal.Terminal) *cobra.Command {
-			return goband.New(s.BandClient(t), m)
+			return goband.New(s.BandClient(), m)
 		},
 		arguments...,
 	)

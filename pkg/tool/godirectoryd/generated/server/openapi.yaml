@@ -174,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Receipt"
+                $ref: "#/components/schemas/Result"
         "404":
           description: No such account.
           content:
@@ -220,7 +220,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Receipt"
+                $ref: "#/components/schemas/Result"
         "404":
           description: No such account.
           content:
@@ -343,7 +343,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Receipt"
+                $ref: "#/components/schemas/Result"
         "404":
           description: No such group.
           content:
@@ -538,7 +538,7 @@ components:
       properties:
         account:
           type: string
-    Receipt:
+    Result:
       type: object
       required: [message]
       properties:

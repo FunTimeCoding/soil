@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
@@ -13,14 +12,9 @@ import (
 )
 
 func TestPushWhileAnotherWriterHoldsStoreAnswers503Reported(t *testing.T) {
-	r := memory.New()
-	o := service_tester.NewOption(
-		t,
-		service_tester.NewEmbedder(t),
-		service_tester.NewReranker(t),
-	)
-	c := client_tester.Rest(t, base.Serve(t, o, r))
-	held_store.New(t, o.LitePath)
+	q := service_tester.New(t)
+	c := client_tester.GeneratedClient(t, base.Serve(t, q))
+	held_store.New(t, q.Path)
 	answer, e := c.PostDocumentWithResponse(
 		t.Context(),
 		client.PostDocumentJSONRequestBody{
@@ -33,5 +27,5 @@ func TestPushWhileAnotherWriterHoldsStoreAnswers503Reported(t *testing.T) {
 	assert.Integer(t, http.StatusServiceUnavailable, answer.StatusCode())
 	assert.FatalNotNil(t, answer.JSON503)
 	assert.StringContains(t, "store busy", answer.JSON503.Error)
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, q.Reporter.Events())
 }

@@ -15,19 +15,8 @@ func Answer(
 	path string,
 ) (*client.GetDocumentResponse, *memory.Memory) {
 	t.Helper()
-	r := memory.New()
-	c := client_tester.Rest(
-		t,
-		base.Serve(
-			t,
-			service_tester.NewOption(
-				t,
-				service_tester.NewEmbedder(t),
-				service_tester.NewReranker(t),
-			),
-			r,
-		),
-	)
+	q := service_tester.New(t)
+	c := client_tester.GeneratedClient(t, base.Serve(t, q))
 	Push(t, c, "notes", "alfa.md", "# Alfa\n\nzulu.\n")
 	answer, e := c.GetDocumentWithResponse(
 		t.Context(),
@@ -35,5 +24,5 @@ func Answer(
 	)
 	assert.FatalOnError(t, e)
 
-	return answer, r
+	return answer, q.Reporter
 }

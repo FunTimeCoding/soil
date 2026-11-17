@@ -1,18 +1,11 @@
 package base
 
-import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/assert"
 
-func Administrator(
-	t *testing.T,
-	b *Server,
-	subject string,
-) bool {
-	t.Helper()
-	result, e := b.Service.IsAdministrator(subject)
-	assert.FatalOnError(t, e)
+func (s *Server) Administrator(subject string) bool {
+	s.t.Helper()
+	result, e := s.Service().IsAdministrator(subject)
+	assert.FatalOnError(s.t, e)
 
 	return result
 }

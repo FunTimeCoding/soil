@@ -12,8 +12,7 @@ import (
 func TestClientAndItsMockShareFace(t *testing.T) {
 	c := client.New(locator.New("gobandd.test"), "token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.Client{c, m}
 	assert.Count(t, 2, faces)
 }

@@ -23,7 +23,7 @@ func New(
 	r *memory.Memory,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Fail(c.Reachable, outage_tester.RefusedDial())
 	c.Fail(c.Keys, outage_tester.RefusedDial())
 	c.Fail(c.Minions, outage_tester.RefusedDial())
@@ -39,7 +39,6 @@ func New(
 		t,
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(
 		t,

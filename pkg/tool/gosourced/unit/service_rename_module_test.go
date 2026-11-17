@@ -8,11 +8,10 @@ import (
 )
 
 func TestRenameModuleSamePath(t *testing.T) {
-	d := service_tester.Prepare(t, "module-rename/src")
-	s := service_tester.NewService(t)
-	r, e := s.Module.RenameModule(
+	o := service_tester.New(t, service_tester.WithFixture("module-rename/src"))
+	r, e := o.Module.RenameModule(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/lib/v2",
 		"example/lib/v2",
 		false,

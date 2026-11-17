@@ -1,14 +1,15 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/band/mock_client"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
+	"testing"
 )
 
 type Server struct {
-	Alfa   *mock_client.Client
-	Bravo  *mock_client.Client
-	Client *client.ClientWithResponses
-	*model_context_server.Server
+	*service_tester.Tester
+	daemon *daemon.Daemon
+	served *model_context_server.Server
+	t      *testing.T
 }

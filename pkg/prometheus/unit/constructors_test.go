@@ -42,8 +42,7 @@ func TestConstructors(t *testing.T) {
 		),
 	)
 	assert.NotNil(t, rule_parser.New(nil))
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	assert.NotNil(t, m)
 	assert.NotNil(t, client.New("", nil))
 	b := basic.New(

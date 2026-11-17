@@ -3,14 +3,15 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
 )
 
 func TestRelateMemoriesWithType(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	s.RelatedPair()
-	result := s.MustCallTool(
+	c := s.Tools()
+	result := c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
@@ -25,9 +26,10 @@ func TestRelateMemoriesWithType(t *testing.T) {
 }
 
 func TestRelateMemoriesRejectsUnknownType(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	s.RelatedPair()
-	result := s.MustCallToolError(
+	c := s.Tools()
+	result := c.MustCallToolError(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
@@ -39,9 +41,10 @@ func TestRelateMemoriesRejectsUnknownType(t *testing.T) {
 }
 
 func TestRelateMemoriesRetypesExistingEdge(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	s.RelatedPair()
-	s.MustCallTool(
+	c := s.Tools()
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
@@ -51,7 +54,7 @@ func TestRelateMemoriesRetypesExistingEdge(t *testing.T) {
 	types := s.RelatedTypes()
 	assert.Count(t, 1, types)
 	assert.String(t, "", types[0])
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
@@ -65,16 +68,17 @@ func TestRelateMemoriesRetypesExistingEdge(t *testing.T) {
 }
 
 func TestUnrelateMemoriesRemovesEdge(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	s.RelatedPair()
-	s.MustCallTool(
+	c := s.Tools()
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
 			constant.TargetIdentifier: 2,
 		},
 	)
-	result := s.MustCallTool(
+	result := c.MustCallTool(
 		constant.UnrelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
@@ -87,16 +91,17 @@ func TestUnrelateMemoriesRemovesEdge(t *testing.T) {
 }
 
 func TestUnrelateMemoriesIsDirectional(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	s.RelatedPair()
-	s.MustCallTool(
+	c := s.Tools()
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
 			constant.TargetIdentifier: 2,
 		},
 	)
-	result := s.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.UnrelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 2,
@@ -109,9 +114,10 @@ func TestUnrelateMemoriesIsDirectional(t *testing.T) {
 }
 
 func TestRelateMemoriesUntypedKeepsExistingType(t *testing.T) {
-	s := model_context_tester.New(t)
+	s := base.New(t)
 	s.RelatedPair()
-	s.MustCallTool(
+	c := s.Tools()
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,
@@ -119,7 +125,7 @@ func TestRelateMemoriesUntypedKeepsExistingType(t *testing.T) {
 			constant.Type:             "grounds",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
 			constant.SourceIdentifier: 1,

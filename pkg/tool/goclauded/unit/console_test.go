@@ -13,14 +13,14 @@ import (
 
 func TestRegisterReturnsCallsign(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	callsign := c.Register("session-1")
 	assert.True(t, callsign != "")
 }
 
 func TestRegisterSameSessionReturnsSameCallsign(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	first := c.Register("session-1")
 	second := c.Register("session-1")
 	assert.String(t, first, second)
@@ -28,7 +28,7 @@ func TestRegisterSameSessionReturnsSameCallsign(t *testing.T) {
 
 func TestCheckEmptyQueueReturnsEmpty(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-1")
 	output := c.Check("session-1")
 	assert.String(t, "", output)
@@ -36,9 +36,9 @@ func TestCheckEmptyQueueReturnsEmpty(t *testing.T) {
 
 func TestHookCheckShowsSessionActivity(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-2")
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	output := c.Check("session-2")
 	assert.StringContains(t, "Session activity", output)
@@ -47,9 +47,9 @@ func TestHookCheckShowsSessionActivity(t *testing.T) {
 
 func TestHookCheckConsumesEntries(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-2")
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	first := c.Check("session-2")
 	assert.True(t, first != "")
@@ -59,7 +59,7 @@ func TestHookCheckConsumesEntries(t *testing.T) {
 
 func TestCheckTimeout(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	callsign := c.Register("session-1")
 	s.Announce(callsign, "working")
 	c.Check("session-1")
@@ -82,7 +82,7 @@ func TestCheckTimeout(t *testing.T) {
 
 func TestCheckDirectMessage(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	receiver := c.Register("session-1")
 	sender := c.Register("session-2")
 	c.Check("session-1")
@@ -94,9 +94,9 @@ func TestCheckDirectMessage(t *testing.T) {
 
 func TestCheckCompletionActivity(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-1")
-	other := s.NewSession(t)
+	other := s.NewSession()
 	other.Announce(other.Name(), "indexing")
 	c.Check("session-1")
 	other.MustCallTool(
@@ -111,10 +111,10 @@ func TestCheckCompletionActivity(t *testing.T) {
 
 func TestCheckReannounceAfterClearBindings(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.CheckLive()
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-2")
 	c.Check("session-2")
 	s.Restart()
@@ -124,7 +124,7 @@ func TestCheckReannounceAfterClearBindings(t *testing.T) {
 
 func TestStatusLineRendersAndStores(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
 	assert.String(t, "Fable 5 18%", line)
@@ -137,7 +137,7 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 
 func TestStatusLineKeepsUnmappedModelName(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := strings.ReplaceAll(
 		fixture.Read("claude", "status-line.json"),
@@ -149,7 +149,7 @@ func TestStatusLineKeepsUnmappedModelName(t *testing.T) {
 
 func TestStatusLineRecordsFableFromModelScope(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
 	snapshot, e := s.Store.Store.LatestFableSnapshot()
@@ -167,7 +167,7 @@ func TestStatusLineRecordsFableFromModelScope(t *testing.T) {
 
 func TestStatusLineWithoutModelScopeRecordsNoFable(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := strings.ReplaceAll(
 		fixture.Read("claude", "status-line.json"),
@@ -182,7 +182,7 @@ func TestStatusLineWithoutModelScopeRecordsNoFable(t *testing.T) {
 
 func TestStatusLineLeavesMissingResetZero(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := strings.ReplaceAll(
 		fixture.Read("claude", "status-line.json"),
@@ -199,7 +199,7 @@ func TestStatusLineLeavesMissingResetZero(t *testing.T) {
 
 func TestStatusLineRecordsWeekWithoutFiveHour(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := strings.ReplaceAll(
 		fixture.Read("claude", "status-line.json"),
@@ -221,7 +221,7 @@ func TestStatusLineRecordsWeekWithoutFiveHour(t *testing.T) {
 
 func TestStatusLineSkipsSnapshotWithoutSevenDay(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := strings.ReplaceAll(
 		fixture.Read("claude", "status-line.json"),
@@ -240,7 +240,7 @@ func TestStatusLineSkipsSnapshotWithoutSevenDay(t *testing.T) {
 
 func TestStatusLineRateSnapshotDedupe(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := []byte(fixture.Read("claude", "status-line.json"))
 	c.StatusLine(body)
@@ -257,7 +257,7 @@ func TestStatusLineRateSnapshotDedupe(t *testing.T) {
 
 func TestTurnEndThroughHookCommand(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-1")
 	assert.True(t, s.Store.GetSession("session-1").LastTurnEndAt == nil)
 	c.TurnEnd("session-1")
@@ -266,7 +266,7 @@ func TestTurnEndThroughHookCommand(t *testing.T) {
 
 func TestHookCommandOrderingDecidesIdle(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-1")
 	c.Check("session-1")
 	s.Store.Advance(time.Minute)
@@ -277,7 +277,7 @@ func TestHookCommandOrderingDecidesIdle(t *testing.T) {
 
 func TestHookCommandOrderingDecidesWorking(t *testing.T) {
 	s := base.New(t)
-	c := console_tester.New(t, s.Client(t))
+	c := console_tester.New(t, s.Client())
 	c.Register("session-1")
 	c.TurnEnd("session-1")
 	s.Store.Advance(time.Minute)

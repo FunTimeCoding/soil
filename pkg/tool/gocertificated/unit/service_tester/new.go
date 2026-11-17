@@ -1,14 +1,27 @@
 package service_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
 	"testing"
 	"time"
 )
 
-func New(t *testing.T) (*service.Service, *mock_client.Client) {
+func New(
+	t *testing.T,
+	o ...Option,
+) *Tester {
 	t.Helper()
+	result := &Tester{
+		Forge:    mock_client.New(t),
+		Reporter: memory.New(),
+		Clock:    time.Now,
+		t:        t,
+	}
 
-	return NewWith(t, time.Now)
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

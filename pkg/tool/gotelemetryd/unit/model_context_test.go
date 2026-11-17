@@ -3,13 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
 	"testing"
 )
 
 func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	c := o.Client
+	o := base.New(t)
+	c := o.Tools()
 	assert.Count(t, 2, c.ListTools())
 	o.Seed("save_memory", constant.SurfaceModelContext, "Blair")
 	o.Seed("save_memory", constant.SurfaceModelContext, "Cedar")
@@ -29,8 +29,8 @@ func TestModelContext(t *testing.T) {
 }
 
 func TestModelContextSummarisesOutcomesForOneActor(t *testing.T) {
-	o := model_context_tester.New(t)
-	c := o.Client
+	o := base.New(t)
+	c := o.Tools()
 	o.SeedOutcome(
 		"deploy_check",
 		"Blair",

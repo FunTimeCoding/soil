@@ -30,5 +30,9 @@ func (p *Page) Commands() []*palette.Command {
 		)
 	}
 
-	return append(result, p.commands...)
+	if p.commands == nil {
+		return result
+	}
+
+	return append(result, p.commands()...)
 }

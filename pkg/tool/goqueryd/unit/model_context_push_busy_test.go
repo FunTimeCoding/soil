@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/held_store"
@@ -11,15 +10,10 @@ import (
 )
 
 func TestPushToolWhileAnotherWriterHoldsStoreFailsReported(t *testing.T) {
-	r := memory.New()
-	o := service_tester.NewOption(
-		t,
-		service_tester.NewEmbedder(t),
-		service_tester.NewReranker(t),
-	)
-	c := base.Serve(t, o, r).Connect(t)
+	q := service_tester.New(t)
+	c := base.Serve(t, q).Connect(t)
 	defer c.Close()
-	held_store.New(t, o.LitePath)
+	held_store.New(t, q.Path)
 	assert.StringContains(
 		t,
 		"store busy",
@@ -32,5 +26,5 @@ func TestPushToolWhileAnotherWriterHoldsStoreFailsReported(t *testing.T) {
 			},
 		),
 	)
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, q.Reporter.Events())
 }

@@ -10,8 +10,7 @@ import (
 )
 
 func TestServiceDeleteOfUnknownEntryIsNotFound(t *testing.T) {
-	s := service_tester.Service(t)
-	assert.True(t, not_found.Is(s.Delete(9999)))
+	assert.True(t, not_found.Is(service_tester.New(t).Service.Delete(9999)))
 }
 
 func TestServiceRefusesEntryWithoutAction(t *testing.T) {

@@ -5,16 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"testing"
 )
 
-func (s *Server) BandClient(t *testing.T) *client.Client {
-	t.Helper()
+func (s *Server) BandClient() *client.Client {
+	s.t.Helper()
 	result := client.New(
-		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
+		locator.New(webConstant.Localhost).Insecure().Port(s.Served().Port),
 		generativeConstant.ModelContextTestToken,
 	)
-	t.Cleanup(result.Close)
+	s.t.Cleanup(result.Close)
 
 	return result
 }

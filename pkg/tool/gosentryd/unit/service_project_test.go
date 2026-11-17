@@ -9,48 +9,43 @@ import (
 )
 
 func TestSearchIssuesResolvesProjectSlug(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.AddProject("41", "backend")
-	c.AddProject("42", "frontend")
-	c.AddIssue("100", "41", constant.UnresolvedStatus)
-	c.AddIssue("200", "42", constant.UnresolvedStatus)
-	issues, e := service_tester.Service(t, c).SearchIssues("", "backend", 0, "")
+	s := service_tester.New(t)
+	s.Source.AddProject("41", "backend")
+	s.Source.AddProject("42", "frontend")
+	s.Source.AddIssue("100", "41", constant.UnresolvedStatus)
+	s.Source.AddIssue("200", "42", constant.UnresolvedStatus)
+	issues, e := s.Service().SearchIssues("", "backend", 0, "")
 	assert.FatalOnError(t, e)
-	assert.String(t, "41", c.IssueSearchProject())
+	assert.String(t, "41", s.Source.IssueSearchProject())
 	assert.Count(t, 1, issues)
 	assert.String(t, "100", issues[0].Identifier)
 }
 
 func TestSearchIssuesWithoutProjectSearchesEveryProject(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.AddProject("41", "backend")
-	c.AddIssue("100", "41", constant.UnresolvedStatus)
-	c.AddIssue("200", "42", constant.UnresolvedStatus)
-	issues, e := service_tester.Service(t, c).SearchIssues("", "", 0, "")
+	s := service_tester.New(t)
+	s.Source.AddProject("41", "backend")
+	s.Source.AddIssue("100", "41", constant.UnresolvedStatus)
+	s.Source.AddIssue("200", "42", constant.UnresolvedStatus)
+	issues, e := s.Service().SearchIssues("", "", 0, "")
 	assert.FatalOnError(t, e)
-	assert.String(t, "", c.IssueSearchProject())
+	assert.String(t, "", s.Source.IssueSearchProject())
 	assert.Count(t, 2, issues)
 }
 
 func TestSearchEventsResolvesProjectSlug(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.AddProject("42", "frontend")
-	_, e := service_tester.Service(t, c).SearchEvents(
-		"level:error",
-		"frontend",
-		0,
-		"",
-	)
+	s := service_tester.New(t)
+	s.Source.AddProject("42", "frontend")
+	_, e := s.Service().SearchEvents("level:error", "frontend", 0, "")
 	assert.FatalOnError(t, e)
-	assert.String(t, "42", c.EventSearchProject())
+	assert.String(t, "42", s.Source.EventSearchProject())
 }
 
 func TestSearchRefusesUnknownProject(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.AddProject("41", "backend")
-	_, e := service_tester.Service(t, c).SearchEvents("", "missing", 0, "")
+	s := service_tester.New(t)
+	s.Source.AddProject("41", "backend")
+	_, e := s.Service().SearchEvents("", "missing", 0, "")
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "project not found: missing", e.Error())
-	_, f := service_tester.Service(t, c).SearchIssues("", "missing", 0, "")
+	_, f := s.Service().SearchIssues("", "missing", 0, "")
 	assert.True(t, not_found.Is(f))
 }

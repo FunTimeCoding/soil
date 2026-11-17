@@ -14,7 +14,7 @@ func TestGuard(t *testing.T) {
 	v := model_context_server.New(
 		t,
 		func(g *guard.Mux) {
-			daemon_tester.New(t, mock_client.New()).Mount(
+			daemon_tester.New(t, mock_client.New(t)).Mount(
 				memory.New(),
 				mock_recorder.New(),
 				g,

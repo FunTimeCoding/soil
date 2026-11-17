@@ -10,18 +10,21 @@ import (
 )
 
 func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*receiver_rename.Rename{receiver_rename.New("Shelf", "s")},
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
-	shelf := service_tester.ReadFixtureFile(t, d, "pkg/target/shelf.go")
+	rewrite_tester.Compiles(t, o.Directory)
+	shelf := o.Read("pkg/target/shelf.go")
 	assert.StringContains(
 		t,
 		"func (s *Shelf) Name() string {\n\treturn s.product.Name\n}",
@@ -49,7 +52,7 @@ func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
 		"func Plain(y int) int {\n\treturn y + 1\n}",
 		shelf,
 	)
-	test := service_tester.ReadFixtureFile(t, d, "pkg/target/shelf_test.go")
+	test := o.Read("pkg/target/shelf_test.go")
 	assert.StringContains(
 		t,
 		"func (s *Shelf) label() string {\n\treturn s.product.Name\n}",
@@ -58,10 +61,13 @@ func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesLocalOfName(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/local",
 		[]*receiver_rename.Rename{
 			receiver_rename.New("Clean", "s"),
@@ -72,15 +78,18 @@ func TestRenameReceiversRefusesLocalOfName(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "Busy.Value: s is taken in the method")
-	local := service_tester.ReadFixtureFile(t, d, "pkg/local/local.go")
+	local := o.Read("pkg/local/local.go")
 	assert.StringContains(t, "func (y *Clean) Value() int {", local)
 }
 
 func TestRenameReceiversRefusesParameterOfName(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/parameter",
 		[]*receiver_rename.Rename{receiver_rename.New("Busy", "s")},
 		false,
@@ -91,10 +100,13 @@ func TestRenameReceiversRefusesParameterOfName(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesOuterNameReceiverWouldShadow(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer",
 		[]*receiver_rename.Rename{receiver_rename.New("Busy", "s")},
 		false,
@@ -102,15 +114,18 @@ func TestRenameReceiversRefusesOuterNameReceiverWouldShadow(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "Busy.Plus: s is taken in the method")
-	outer := service_tester.ReadFixtureFile(t, d, "pkg/outer/outer.go")
+	outer := o.Read("pkg/outer/outer.go")
 	assert.StringContains(t, "return y.value + s.value", outer)
 }
 
 func TestRenameReceiversLeavesReceiversAlreadyNamed(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*receiver_rename.Rename{receiver_rename.New("Other", "y")},
 		false,
@@ -121,10 +136,13 @@ func TestRenameReceiversLeavesReceiversAlreadyNamed(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesBuiltInName(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*receiver_rename.Rename{receiver_rename.New("Shelf", "len")},
 		false,
@@ -135,10 +153,13 @@ func TestRenameReceiversRefusesBuiltInName(t *testing.T) {
 }
 
 func TestRenameReceiversRefusesTypeWithoutMethods(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*receiver_rename.Rename{receiver_rename.New("Product", "s")},
 		false,
@@ -149,10 +170,13 @@ func TestRenameReceiversRefusesTypeWithoutMethods(t *testing.T) {
 }
 
 func TestRenameReceiversDryRunWritesNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-receivers/src")
-	r, e := service_tester.NewService(t).Symbol.RenameReceivers(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-receivers/src"),
+	)
+	r, e := o.Symbol.RenameReceivers(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*receiver_rename.Rename{receiver_rename.New("Shelf", "s")},
 		true,
@@ -160,6 +184,6 @@ func TestRenameReceiversDryRunWritesNothing(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.Count(t, 5, r.Entries)
-	shelf := service_tester.ReadFixtureFile(t, d, "pkg/target/shelf.go")
+	shelf := o.Read("pkg/target/shelf.go")
 	assert.StringContains(t, "func (y *Shelf) Name() string {", shelf)
 }

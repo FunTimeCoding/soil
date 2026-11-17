@@ -12,7 +12,7 @@ import (
 
 func TestWriteWithoutResultPrintsNothingOnSuccess(t *testing.T) {
 	for _, arguments := range command_tester.Writes() {
-		c := mock_client.New()
+		c := mock_client.New(t)
 		var output, failure string
 		var code int
 		stray := assert.Capture(
@@ -35,7 +35,7 @@ func TestWriteWithoutResultPrintsNothingOnSuccess(t *testing.T) {
 
 func TestFailedWriteExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range command_tester.Writes() {
-		c := mock_client.New()
+		c := mock_client.New(t)
 		c.Failure = errors.New("foxtrot")
 		_, failure, code := command_tester.Run(t, c, arguments...)
 		assert.Integer(t, 1, code)
@@ -45,8 +45,7 @@ func TestFailedWriteExitsWithItsMessage(t *testing.T) {
 }
 
 func TestSearchIssuesEmitsIssues(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Found = []*client.JiraIssue{{Key: "ALFA-1"}}
 	output, _, code := command_tester.Run(t, c, "search-issues", "bravo")
 	assert.Integer(t, 0, code)

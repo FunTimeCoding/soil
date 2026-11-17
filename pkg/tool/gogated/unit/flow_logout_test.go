@@ -5,15 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/flow_tester"
 	"net/http"
 	"net/url"
 	"testing"
 )
 
 func TestDiscoveryAdvertisesEndSession(t *testing.T) {
-	o := tester.New(t)
-	d := o.Discovery(t)
+	o := flow_tester.New(t)
+	d := o.Discovery()
 
 	if d.EndSessionEndpoint == "" {
 		t.Fatal("expected end_session_endpoint in discovery")
@@ -21,12 +21,11 @@ func TestDiscoveryAdvertisesEndSession(t *testing.T) {
 }
 
 func TestLogoutRevokesSessionAcrossRelyingParties(t *testing.T) {
-	o := tester.New(t)
-	r := o.Register(t, []string{"http://localhost/callback"})
-	first := o.Authorize(t, r.ClientIdentifier, "http://localhost/callback")
-	o.Logout(t, first.AuthenticationCookie)
+	o := flow_tester.New(t)
+	r := o.Register([]string{"http://localhost/callback"})
+	first := o.Authorize(r.ClientIdentifier, "http://localhost/callback")
+	o.Logout(first.AuthenticationCookie)
 	response := o.ResumeAuthorize(
-		t,
 		r.ClientIdentifier,
 		"http://localhost/callback",
 		first.AuthenticationCookie,
@@ -38,9 +37,9 @@ func TestLogoutRevokesSessionAcrossRelyingParties(t *testing.T) {
 }
 
 func TestLogoutGetDoesNotRevoke(t *testing.T) {
-	o := tester.New(t)
-	r := o.Register(t, []string{"http://localhost/callback"})
-	first := o.Authorize(t, r.ClientIdentifier, "http://localhost/callback")
+	o := flow_tester.New(t)
+	r := o.Register([]string{"http://localhost/callback"})
+	first := o.Authorize(r.ClientIdentifier, "http://localhost/callback")
 	request, e := http.NewRequest(
 		http.MethodGet,
 		join.Empty(o.BaseLocator(), constant.LogoutPath),
@@ -53,7 +52,6 @@ func TestLogoutGetDoesNotRevoke(t *testing.T) {
 	errors.PanicClose(confirm.Body)
 	assert.Integer(t, http.StatusOK, confirm.StatusCode)
 	response := o.ResumeAuthorize(
-		t,
 		r.ClientIdentifier,
 		"http://localhost/callback",
 		first.AuthenticationCookie,

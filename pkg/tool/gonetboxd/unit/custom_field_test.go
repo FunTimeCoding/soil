@@ -4,19 +4,19 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"net/http"
 	"testing"
 )
 
 func TestVirtualMachineCustomFieldRoundTrip(t *testing.T) {
 	x := context.Background()
-	m := service_tester.NewSource(t)
+	m := mock_client.New(t)
 	m.SeedVirtualMachine("charlie")
-	c := base.Rest(t, base.New(t, m, memory.New()))
+	c := base.GeneratedClient(t, base.New(t, m, memory.New()))
 	set, e := c.CreateChoiceSetWithResponse(
 		x,
 		client.CreateChoiceSetRequest{
@@ -51,10 +51,10 @@ func TestVirtualMachineCustomFieldRoundTrip(t *testing.T) {
 
 func TestAnsibleInventoryGroupsByPlaybook(t *testing.T) {
 	x := context.Background()
-	m := service_tester.NewSource(t)
+	m := mock_client.New(t)
 	m.SeedVirtualMachine("charlie")
 	m.SeedVirtualMachine("delta")
-	c := base.Rest(t, base.New(t, m, memory.New()))
+	c := base.GeneratedClient(t, base.New(t, m, memory.New()))
 	_, e := c.UpdateVirtualMachineWithResponse(
 		x,
 		"charlie",
@@ -88,7 +88,7 @@ func TestAnsibleInventoryGroupsByPlaybook(t *testing.T) {
 
 func TestCustomFieldOnMissingChoiceSetIsNotFound(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.CreateCustomFieldWithResponse(
 		context.Background(),
 		client.CreateCustomFieldRequest{Name: "bravo", ChoiceSet: "alfa"},
@@ -99,7 +99,7 @@ func TestCustomFieldOnMissingChoiceSetIsNotFound(t *testing.T) {
 }
 
 func TestSetVirtualCustomFieldTool(t *testing.T) {
-	m := service_tester.NewSource(t)
+	m := mock_client.New(t)
 	m.SeedVirtualMachine("charlie")
 	o := base.New(t, m, memory.New()).Connect(t)
 	defer o.Close()

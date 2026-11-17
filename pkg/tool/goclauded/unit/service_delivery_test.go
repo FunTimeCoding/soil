@@ -43,7 +43,7 @@ func TestDeliveryCutsLongMessage(t *testing.T) {
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
-func TestDeliveryFillsBudgetAfterCut(t *testing.T) {
+func TestDeliveryFillsLimitAfterCut(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
@@ -103,7 +103,7 @@ func TestDeliveryTrimsMemoryActivity(t *testing.T) {
 	assert.True(t, utf8.RuneCountInString(text) <= 2000)
 }
 
-func TestDeliveryOverBudgetIsCountedNotCaptured(t *testing.T) {
+func TestDeliveryOverLimitCountedNotCaptured(t *testing.T) {
 	s := service_tester.New(t)
 	r1 := s.Check("session-1")
 
@@ -131,7 +131,7 @@ func TestDeliveryOverBudgetIsCountedNotCaptured(t *testing.T) {
 		metric_tester.Sample(
 			t,
 			s.Registry,
-			"goclauded_delivery_over_budget_total",
+			"goclauded_delivery_over_limit_total",
 			nil,
 		),
 	)

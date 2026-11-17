@@ -11,17 +11,17 @@ import (
 
 func TestRecentSessionsCarriesLabels(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	set, e := a.RestClient.PostSessionLabelWithResponse(
+	set, e := a.GeneratedClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
 		label_tester.Body("environment", "staging", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, set.StatusCode())
-	targets, f := s.Client(t).RecentSessions(25)
+	targets, f := s.Client().RecentSessions(25)
 	assert.FatalOnError(t, f)
 	assert.True(t, len(targets) > 0)
 	found := target_tester.Find(targets, a.UUID)
@@ -31,10 +31,10 @@ func TestRecentSessionsCarriesLabels(t *testing.T) {
 
 func TestRecentSessionsCarriesEveryValueOfKey(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	c := s.Client(t)
+	c := s.Client()
 	assert.FatalOnError(
 		t,
 		c.SetLabel(
@@ -58,10 +58,10 @@ func TestRecentSessionsCarriesEveryValueOfKey(t *testing.T) {
 
 func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	targets, e := s.Client(t).RecentSessions(25)
+	targets, e := s.Client().RecentSessions(25)
 	assert.FatalOnError(t, e)
 	found := target_tester.Find(targets, a.UUID)
 	assert.NotNil(t, found)
@@ -70,10 +70,10 @@ func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 
 func TestRecentSessionsKeepsUnlabelledSessions(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	targets, e := s.Client(t).RecentSessions(25)
+	targets, e := s.Client().RecentSessions(25)
 	assert.FatalOnError(t, e)
 	found := target_tester.Find(targets, a.UUID)
 	assert.NotNil(t, found)

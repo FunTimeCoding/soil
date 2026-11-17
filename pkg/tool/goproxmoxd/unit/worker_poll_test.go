@@ -10,26 +10,33 @@ import (
 )
 
 func TestPollCollectsResources(t *testing.T) {
-	c := worker_tester.PopulatedClient("pve")
-	t.Cleanup(c.Close)
-	w, y, _ := worker_tester.NewPollWorker(t, "pve", c)
-	defer w.Close()
+	o := worker_tester.New(t)
+	o.Populate()
+	w := o.Worker()
 	w.Poll()
-	assert.Integer(t, 2, testutil.CollectAndCount(y, "proxmox_guest_status"))
-	assert.Integer(t, 1, testutil.CollectAndCount(y, "proxmox_node_status"))
 	assert.Integer(
 		t,
-		1,
-		testutil.CollectAndCount(y, "proxmox_guest_backup_missing"),
+		2,
+		testutil.CollectAndCount(o.Registry, "proxmox_guest_status"),
 	)
 	assert.Integer(
 		t,
 		1,
-		testutil.CollectAndCount(y, "proxmox_node_update_pending"),
+		testutil.CollectAndCount(o.Registry, "proxmox_node_status"),
+	)
+	assert.Integer(
+		t,
+		1,
+		testutil.CollectAndCount(o.Registry, "proxmox_guest_backup_missing"),
+	)
+	assert.Integer(
+		t,
+		1,
+		testutil.CollectAndCount(o.Registry, "proxmox_node_update_pending"),
 	)
 
 	if e := testutil.GatherAndCompare(
-		y,
+		o.Registry,
 		strings.NewReader(worker_tester.ScrapeSuccess("1")),
 		"proxmox_scrape_success",
 	); e != nil {
@@ -38,18 +45,25 @@ func TestPollCollectsResources(t *testing.T) {
 }
 
 func TestPollFailureClearsResources(t *testing.T) {
-	c := worker_tester.PopulatedClient("pve")
-	defer c.Close()
-	w, y, _ := worker_tester.NewPollWorker(t, "pve", c)
-	defer w.Close()
+	o := worker_tester.New(t)
+	o.Populate()
+	w := o.Worker()
 	w.Poll()
-	c.SetFailure(errors.New("hypervisor unreachable"))
+	o.Alfa().Hypervisor.SetFailure(errors.New("hypervisor unreachable"))
 	w.Poll()
-	assert.Integer(t, 0, testutil.CollectAndCount(y, "proxmox_guest_status"))
-	assert.Integer(t, 0, testutil.CollectAndCount(y, "proxmox_node_status"))
+	assert.Integer(
+		t,
+		0,
+		testutil.CollectAndCount(o.Registry, "proxmox_guest_status"),
+	)
+	assert.Integer(
+		t,
+		0,
+		testutil.CollectAndCount(o.Registry, "proxmox_node_status"),
+	)
 
 	if e := testutil.GatherAndCompare(
-		y,
+		o.Registry,
 		strings.NewReader(worker_tester.ScrapeSuccess("0")),
 		"proxmox_scrape_success",
 	); e != nil {

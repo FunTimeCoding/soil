@@ -9,15 +9,13 @@ import (
 )
 
 func TestMockAnswersUnknownMachineAsNotFound(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	_, e := m.GetMachine(t.Context(), 999, &client.GetMachineParams{})
 	assert.True(t, not_found.Is(e))
 }
 
 func TestMockRefusesWriteToMissingMachine(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	_, e := m.StartMachine(t.Context(), 999, &client.StartMachineParams{})
 	assert.True(t, not_found.Is(e))
 	_, f := m.CreateMachineSnapshot(
@@ -30,8 +28,7 @@ func TestMockRefusesWriteToMissingMachine(t *testing.T) {
 }
 
 func TestMockStartsMachineItCreated(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	created, e := m.CreateMachine(
 		t.Context(),
 		&client.CreateMachineParams{},

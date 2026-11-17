@@ -5,17 +5,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/model_context_tester"
 	"testing"
 )
 
 func TestRestSendWithoutDeliveryWakesNamedSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
-	r, e := a.RestClient.PostSendWithResponse(
+	r, e := a.GeneratedClient.PostSendWithResponse(
 		a.Context,
 		client.SendRequest{
 			Callsign: a.Name(),
@@ -29,10 +28,10 @@ func TestRestSendWithoutDeliveryWakesNamedSession(t *testing.T) {
 
 func TestRestNotifyWithoutDeliveryStaysQueued(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostNotifyWithResponse(
+	r, e := a.GeneratedClient.PostNotifyWithResponse(
 		a.Context,
 		client.NotifyRequest{
 			Callsign: a.Name(),
@@ -46,10 +45,10 @@ func TestRestNotifyWithoutDeliveryStaysQueued(t *testing.T) {
 
 func TestRestPulseWithoutDeliveryStaysQueued(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostSessionPulseWithResponse(
+	r, e := a.GeneratedClient.PostSessionPulseWithResponse(
 		a.Context,
 		a.UUID,
 		client.PulseRequest{Body: "mike"},
@@ -60,8 +59,8 @@ func TestRestPulseWithoutDeliveryStaysQueued(t *testing.T) {
 
 func TestModelContextSendWithoutDeliveryWakesNamedSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	b.CheckLive()
@@ -72,7 +71,7 @@ func TestModelContextSendWithoutDeliveryWakesNamedSession(t *testing.T) {
 			constant.Body: "november",
 		},
 	)
-	r, e := b.RestClient.GetChannelWithResponse(
+	r, e := b.GeneratedClient.GetChannelWithResponse(
 		b.Context,
 		&client.GetChannelParams{Callsign: b.Name()},
 	)
@@ -82,8 +81,8 @@ func TestModelContextSendWithoutDeliveryWakesNamedSession(t *testing.T) {
 
 func TestModelContextBroadcastWithoutDeliverySaysItWasQueued(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	answer := a.MustCallTool(
@@ -95,8 +94,8 @@ func TestModelContextBroadcastWithoutDeliverySaysItWasQueued(t *testing.T) {
 
 func TestModelContextSendRefusesCruise(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	answer := a.MustCallToolError(
@@ -116,18 +115,18 @@ func TestModelContextSendRefusesCruise(t *testing.T) {
 
 func TestDeliveryDescriptionWithoutChannelPromise(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	assert.StringContains(
 		t,
 		"immediate (default) wakes each named recipient now; one without a channel gets it with their next prompt.",
-		model_context_tester.SendToolNotation(t, a.ListTools()),
+		a.SendToolNotation(),
 	)
 }
 
 func TestDeliveryDescriptionUnderChannelPromise(t *testing.T) {
-	s := base.NewWithChannelAlways(t)
-	a := s.NewSession(t)
-	tool := model_context_tester.SendToolNotation(t, a.ListTools())
+	s := base.New(t, base.WithChannelAlways())
+	a := s.NewSession()
+	tool := a.SendToolNotation()
 	assert.StringContains(
 		t,
 		"immediate (default) wakes each named recipient now. queued arrives",

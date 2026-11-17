@@ -30,7 +30,7 @@ func New(
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "mattermost.db")
 	o.Mattermost = func() chat.MattermostClient { return upstream.Client }
-	k := claude.Client(t)
+	k := claude.Client()
 	o.Connector = func() face.Client { return k }
 	o.DebounceWindow = window
 	o.PurgeWindow = 365 * 24 * time.Hour

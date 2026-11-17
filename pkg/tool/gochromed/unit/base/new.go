@@ -12,7 +12,7 @@ import (
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	d := daemon_tester.New(t, c)
 	r := memory.New()
 	v := model_context_server.New(

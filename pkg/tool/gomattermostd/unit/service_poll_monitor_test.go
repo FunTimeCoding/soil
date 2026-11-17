@@ -10,28 +10,32 @@ import (
 )
 
 func TestFailingFirstPollAnswersItsFault(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	s := service_tester.Monitor(t, m)
-	m.Failure = service_tester.Fault()
+	o := service_tester.New(t, service_tester.WithMonitor())
+	s := o.Service()
+	o.Mattermost.Failure = service_tester.Fault()
 	failures := s.PollMonitor()
 	assert.Count(t, 1, failures)
 	assert.True(t, classify.Reportable(failures[0]))
 }
 
 func TestMattermostOutageAtPollIsLeftToGuard(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	s := service_tester.Monitor(t, m)
-	m.Failure = unavailable.Format("mattermost maintenance")
+	o := service_tester.New(t, service_tester.WithMonitor())
+	s := o.Service()
+	o.Mattermost.Failure = unavailable.Format("mattermost maintenance")
 	failures := s.PollMonitor()
 	assert.Count(t, 1, failures)
 	assert.False(t, classify.Reportable(failures[0]))
 }
 
 func TestPollInitializesOnceMattermostAnswers(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
+	m := service_tester.New(t).Mattermost
 	c := counting_mattermost.New(m)
 	defer c.Close()
-	s := service_tester.Monitor(t, c)
+	s := service_tester.New(
+		t,
+		service_tester.WithMonitor(),
+		service_tester.WithMattermost(c),
+	).Service()
 	m.Failure = service_tester.Fault()
 	assert.Count(t, 1, s.PollMonitor())
 	m.Failure = nil

@@ -11,8 +11,7 @@ import (
 )
 
 func TestMockAnswersStatusItWasGiven(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	m.SetStatus(&client.Status{Instance: "alfa", Power: "on"})
 	s, e := m.GetStatus(
 		context.Background(),
@@ -28,8 +27,7 @@ func TestMockAnswersStatusItWasGiven(t *testing.T) {
 }
 
 func TestMockRecordsPowerRequestsUntilTold(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	m.SetStatus(&client.Status{Instance: "alfa", Power: "on"})
 	r, e := m.RequestPower(
 		context.Background(),

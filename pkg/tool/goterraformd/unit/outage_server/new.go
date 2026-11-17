@@ -25,7 +25,7 @@ func New(
 	r *memory.Memory,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	downstream := provisionMock.New("alfa.example")
+	downstream := provisionMock.New(t, "alfa.example")
 	downstream.Fail(downstream.Reachable, outage_tester.RefusedDial())
 	downstream.Fail(downstream.PostTrigger, outage_tester.RefusedDial())
 	o := option.New()
@@ -42,7 +42,6 @@ func New(
 		t,
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(
 		t,

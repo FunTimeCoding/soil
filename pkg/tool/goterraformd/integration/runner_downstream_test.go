@@ -13,8 +13,7 @@ import (
 )
 
 func TestApplySendsHostEventsDownstream(t *testing.T) {
-	d := mock_client.New("alfa:8080")
-	defer d.Close()
+	d := mock_client.New(t, "alfa:8080")
 	terraform_tester.NewServedWithDownstream(
 		t,
 		kubernetesMock.New(),
@@ -39,8 +38,7 @@ func TestApplySendsHostEventsDownstream(t *testing.T) {
 }
 
 func TestRestartingDownstreamIsHeldOffAndNotCaptured(t *testing.T) {
-	d := mock_client.New("alfa:8080")
-	defer d.Close()
+	d := mock_client.New(t, "alfa:8080")
 	d.Fail(d.PostTrigger, unavailable.Format(provisionConstant.RunnerStopped))
 	s := terraform_tester.NewServedWithDownstream(
 		t,

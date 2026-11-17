@@ -10,8 +10,7 @@ import (
 )
 
 func TestClientAndItsMockShareFace(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	faces := []face.Client{
 		client_tester.New(t, func(_ *http.ServeMux) {}).Client,
 		m,

@@ -10,7 +10,7 @@ import (
 
 func TestCompleteAmend(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
@@ -41,7 +41,7 @@ func TestCompleteAmend(t *testing.T) {
 
 func TestCompleteAmendOneEvent(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
@@ -72,7 +72,7 @@ func TestCompleteAmendOneEvent(t *testing.T) {
 
 func TestCompleteDifferentTopics(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "first task")
 	a.MustCallTool(
 		constant.Complete,

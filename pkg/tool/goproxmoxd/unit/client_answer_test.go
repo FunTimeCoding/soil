@@ -7,16 +7,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/client_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/base"
 	"testing"
 )
 
 func TestClientListsHypervisorsMachines(t *testing.T) {
-	c, s := client_tester.New(t)
-	s.MockClient.AddMachine("test", 101, "alfa")
+	s := base.New(t)
+	c := s.ProxmoxClient()
+	s.Alfa().Hypervisor.AddMachine("alfa", 101, "alfa")
 	v, e := c.ListMachines(
 		t.Context(),
-		&client.ListMachinesParams{Instance: new("test")},
+		&client.ListMachinesParams{Instance: new("alfa")},
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, v)
@@ -24,28 +25,29 @@ func TestClientListsHypervisorsMachines(t *testing.T) {
 }
 
 func TestClientAnswersUnknownMachineAsNotFound(t *testing.T) {
-	c, _ := client_tester.New(t)
+	c := base.New(t).ProxmoxClient()
 	_, e := c.GetMachine(
 		t.Context(),
 		999,
-		&client.GetMachineParams{Instance: new("test")},
+		&client.GetMachineParams{Instance: new("alfa")},
 	)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestClientAnswersUnreachableHypervisorAsUnavailable(t *testing.T) {
-	c, s := client_tester.New(t)
-	s.MockClient.SetFailure(
+	s := base.New(t)
+	c := s.ProxmoxClient()
+	s.Alfa().Hypervisor.SetFailure(
 		connection.New(
 			errorsConstant.Unreachable,
-			"test",
+			"alfa",
 			"",
 			errorsConstant.Refused,
 		),
 	)
 	_, e := c.ListNodes(
 		t.Context(),
-		&client.ListNodesParams{Instance: new("test")},
+		&client.ListNodesParams{Instance: new("alfa")},
 	)
 	assert.True(t, unavailable.Is(e))
 }

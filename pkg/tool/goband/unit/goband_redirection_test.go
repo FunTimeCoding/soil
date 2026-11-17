@@ -13,7 +13,7 @@ import (
 
 func TestRedirectionDryRunNamesPendingWrites(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetRedirection(false, 3)
+	s.Alfa().SetRedirection(false, 3)
 	output, _, code := command_tester.Run(
 		t,
 		s,
@@ -26,12 +26,12 @@ func TestRedirectionDryRunNamesPendingWrites(t *testing.T) {
 	notation.MustDecode(output, &p, false)
 	assert.String(t, "alfa", p.Instance)
 	assert.Strings(t, []string{"listener", "screen service"}, p.Pending)
-	assert.Count(t, 0, s.Alfa.Writes())
+	assert.Count(t, 0, s.Alfa().Writes())
 }
 
 func TestRedirectionWithYesEnablesWhatIsMissing(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetRedirection(false, 3)
+	s.Alfa().SetRedirection(false, 3)
 	output, _, code := command_tester.Run(
 		t,
 		s,
@@ -45,12 +45,12 @@ func TestRedirectionWithYesEnablesWhatIsMissing(t *testing.T) {
 	notation.MustDecode(output, &r, false)
 	assert.String(t, "alfa", r.Instance)
 	assert.Strings(t, []string{"listener", "screen service"}, r.Enabled)
-	assert.Strings(t, []string{"listener", "screen service"}, s.Alfa.Writes())
+	assert.Strings(t, []string{"listener", "screen service"}, s.Alfa().Writes())
 }
 
 func TestRedirectionSaysWhenNothingIsMissing(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetRedirection(true, bandConstant.ScreenServiceOffline)
+	s.Alfa().SetRedirection(true, bandConstant.ScreenServiceOffline)
 	output, _, code := command_tester.Run(
 		t,
 		s,
@@ -64,5 +64,5 @@ func TestRedirectionSaysWhenNothingIsMissing(t *testing.T) {
 	notation.MustDecode(output, &p, false)
 	assert.String(t, "alfa", p.Instance)
 	assert.Count(t, 0, p.Pending)
-	assert.Count(t, 0, s.Alfa.Writes())
+	assert.Count(t, 0, s.Alfa().Writes())
 }

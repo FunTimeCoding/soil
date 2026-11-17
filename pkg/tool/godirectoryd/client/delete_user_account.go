@@ -9,7 +9,7 @@ import (
 func (c *Client) DeleteUserAccount(
 	x context.Context,
 	account string,
-) (*client.Receipt, error) {
+) (*client.Result, error) {
 	r, e := c.client.DeleteUserAccountWithResponse(x, account)
 
 	if e != nil {

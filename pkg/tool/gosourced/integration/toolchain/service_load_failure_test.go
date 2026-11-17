@@ -14,16 +14,19 @@ import (
 )
 
 func TestBrokenCallerNamesItself(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",
 	)
-	_, e := service_tester.NewService(t).Symbol.Rename(
+	_, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -37,21 +40,28 @@ func TestBrokenCallerNamesItself(t *testing.T) {
 }
 
 func TestBrokenCallerNobodyTouchesIsSettled(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",
 	)
 	hourAgo := time.Now().Add(-time.Hour)
 	assert.FatalOnError(
 		t,
-		os.Chtimes(filepath.Join(d, "pkg/broken/broken.go"), hourAgo, hourAgo),
+		os.Chtimes(
+			filepath.Join(o.Directory, "pkg/broken/broken.go"),
+			hourAgo,
+			hourAgo,
+		),
 	)
-	_, e := service_tester.NewService(t).Symbol.Rename(
+	_, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -64,16 +74,19 @@ func TestBrokenCallerNobodyTouchesIsSettled(t *testing.T) {
 }
 
 func TestBrokenPackageOutsideReachDoesNotBlock(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -85,23 +98,25 @@ func TestBrokenPackageOutsideReachDoesNotBlock(t *testing.T) {
 	assert.StringContains(
 		t,
 		"target.IsGenerated(content)",
-		service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go"),
+		o.Read("pkg/caller/run.go"),
 	)
 }
 
 func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
-	s := service_tester.NewService(t)
-	s.Workspace.UseFullLoad()
-	r, e := s.Symbol.Rename(
+	o.Workspace.UseFullLoad()
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -113,19 +128,19 @@ func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
 	assert.StringContains(
 		t,
 		"target.IsGenerated(content)",
-		service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go"),
+		o.Read("pkg/caller/run.go"),
 	)
 }
 
 func TestBrokenPackageOutsideReachInReplacingModuleDoesNotBlock(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
 	system_tester.Write(
 		t,
-		user,
+		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
 	)
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -136,9 +151,5 @@ func TestBrokenPackageOutsideReachInReplacingModuleDoesNotBlock(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.StringContains(
-		t,
-		"lib.Write(\"a\")",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
-	)
+	assert.StringContains(t, "lib.Write(\"a\")", o.Read("pkg/user/user.go"))
 }

@@ -7,7 +7,7 @@ import (
 
 func TestGuard(t *testing.T) {
 	s := base.New(t)
-	c := s.Server
+	c := s.Served()
 	c.VerifyBase(t)
 	c.VerifyModelContext(t)
 }

@@ -2,6 +2,8 @@ package service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/face"
 	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
@@ -38,7 +40,7 @@ func NewServing(
 
 	return pooled(
 		t,
-		[]instance.Instance{i},
+		inventory.New[instance.Instance](i),
 		func(i *instance.Instance) face.AlertmanagerClient {
 			return alertmanager.New(
 				i.Alertmanager.Host,
@@ -49,7 +51,8 @@ func NewServing(
 			)
 		},
 		func(*instance.Instance) face.PrometheusClient {
-			return mock_client.New()
+			return mock_client.New(t)
 		},
+		memory.New(),
 	)
 }

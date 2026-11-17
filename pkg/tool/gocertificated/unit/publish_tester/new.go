@@ -7,7 +7,7 @@ import (
 
 func New(t *testing.T) *Tester {
 	t.Helper()
-	v, f := service_tester.New(t)
+	o := service_tester.New(t)
 
-	return &Tester{Service: v, Forge: f, t: t}
+	return &Tester{Service: o.Service(), Forge: o.Forge, t: t}
 }

@@ -10,12 +10,12 @@ import (
 func MoveMethods(
 	t *testing.T,
 	methods ...string,
-) (string, *output.Results) {
+) (*service_tester.Tester, *output.Results) {
 	t.Helper()
-	d := service_tester.Prepare(t, "move-methods/src")
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		methods,
@@ -26,5 +26,5 @@ func MoveMethods(
 	)
 	assert.FatalOnError(t, e)
 
-	return d, r
+	return o, r
 }

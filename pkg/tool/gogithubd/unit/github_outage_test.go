@@ -15,7 +15,7 @@ import (
 )
 
 func TestGitHubOutageStaysQuietAndFaultIsCapturedOnce(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Failure = errors.New("github answered nonsense")
 	r := memory.New()
 	w, okay := daemon_tester.New(
@@ -37,7 +37,7 @@ func TestGitHubOutageStaysQuietAndFaultIsCapturedOnce(t *testing.T) {
 }
 
 func TestMissingOwnerIsCaptured(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Failure = not_found.Format("Not Found")
 	r := memory.New()
 	w, okay := daemon_tester.New(
@@ -54,7 +54,7 @@ func TestMissingOwnerIsCaptured(t *testing.T) {
 func TestDaemonHandsOutGitHubGuardFirst(t *testing.T) {
 	_, okay := daemon_tester.New(
 		t,
-		mock_client.New(),
+		mock_client.New(t),
 		metric.New(),
 		memory.New(),
 	).Workers()[0].(*peer.Guard)

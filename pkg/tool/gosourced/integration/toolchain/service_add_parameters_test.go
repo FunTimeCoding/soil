@@ -3,6 +3,7 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/addition"
@@ -11,10 +12,10 @@ import (
 )
 
 func TestAddParametersPassesArgumentAtEveryCall(t *testing.T) {
-	d := service_tester.Prepare(t, "add-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.AddParameters(
+	o := service_tester.New(t, service_tester.WithFixture("add-parameters/src"))
+	r, e := o.Symbol.AddParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*addition.Parameter{
 			module_tester.ContextParameter("Answer", "", 0, "x"),
 			module_tester.ContextParameter("Grouped", "", 1, "x"),
@@ -24,7 +25,7 @@ func TestAddParametersPassesArgumentAtEveryCall(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	answer := service_tester.ReadFixtureFile(t, d, "pkg/target/answer.go")
+	answer := o.Read("pkg/target/answer.go")
 	assert.StringContains(t, "import \"context\"", answer)
 	assert.StringContains(
 		t,
@@ -32,14 +33,14 @@ func TestAddParametersPassesArgumentAtEveryCall(t *testing.T) {
 		answer,
 	)
 	rewrite_tester.Formatted(t, answer)
-	target := service_tester.ReadFixtureFile(t, d, "pkg/target/target.go")
+	target := o.Read("pkg/target/target.go")
 	assert.StringContains(
 		t,
 		"func Grouped(first int, x context.Context, second int) int {",
 		target,
 	)
 	rewrite_tester.Formatted(t, target)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go")
+	caller := o.Read("pkg/caller/caller.go")
 	assert.StringContains(t, `target.Answer(x, "a", 1)`, caller)
 	assert.StringContains(
 		t,
@@ -51,10 +52,10 @@ func TestAddParametersPassesArgumentAtEveryCall(t *testing.T) {
 }
 
 func TestAddParametersImportsPackageCallSiteLacks(t *testing.T) {
-	d := service_tester.Prepare(t, "add-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.AddParameters(
+	o := service_tester.New(t, service_tester.WithFixture("add-parameters/src"))
+	r, e := o.Symbol.AddParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*addition.Parameter{
 			module_tester.ContextParameter(
 				"Plain",
@@ -68,18 +69,18 @@ func TestAddParametersImportsPackageCallSiteLacks(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	other := service_tester.ReadFixtureFile(t, d, "pkg/other/other.go")
+	other := o.Read("pkg/other/other.go")
 	assert.StringContains(t, "\"context\"", other)
 	assert.StringContains(t, `target.Plain(context.Background(), "m")`, other)
 	rewrite_tester.Formatted(t, other)
 }
 
 func TestAddParametersDryRunWritesNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "add-parameters/src")
-	before := service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go")
-	r, e := service_tester.NewService(t).Symbol.AddParameters(
+	o := service_tester.New(t, service_tester.WithFixture("add-parameters/src"))
+	before := o.Read("pkg/caller/caller.go")
+	r, e := o.Symbol.AddParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*addition.Parameter{
 			module_tester.ContextParameter("Answer", "", 0, "x"),
 		},
@@ -89,26 +90,21 @@ func TestAddParametersDryRunWritesNothing(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.StringContains(t, "passed x", rewrite_tester.JoinedConcerns(r))
-	assert.String(
-		t,
-		before,
-		service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go"),
-	)
+	assert.String(t, before, o.Read("pkg/caller/caller.go"))
 }
 
 func TestAddParametersRewritesReplacingModule(t *testing.T) {
 	for _, full := range []bool{false, true} {
-		library, user := module_tester.ReplacedLibrary(
+		library, o := module_tester.ReplacedLibrary(
 			t,
 			"add-parameters-replacer",
 		)
-		s := module_tester.ReplacingService(t, library, user)
 
 		if full {
-			s.Workspace.UseFullLoad()
+			o.Workspace.UseFullLoad()
 		}
 
-		r, e := s.Symbol.AddParameters(
+		r, e := o.Symbol.AddParameters(
 			t.Context(),
 			library,
 			[]*addition.Parameter{
@@ -130,13 +126,9 @@ func TestAddParametersRewritesReplacingModule(t *testing.T) {
 		assert.String(
 			t,
 			"package lib\n\nimport \"context\"\n\nfunc Log(\n\tx context.Context,\n\tprefix string,\n) string {\n\treturn prefix\n}\n",
-			service_tester.ReadFixtureFile(t, library, "lib.go"),
+			system_tester.Read(t, library, "lib.go"),
 		)
-		assert.StringContains(
-			t,
-			`lib.Log(x, "a")`,
-			service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
-		)
+		assert.StringContains(t, `lib.Log(x, "a")`, o.Read("pkg/user/user.go"))
 	}
 }
 

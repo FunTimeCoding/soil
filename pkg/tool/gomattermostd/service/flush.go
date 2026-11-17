@@ -38,7 +38,7 @@ func (s *Service) flush(
 			digest.Build(v.Label(), combined),
 			v.DeliveryMode(),
 		)
-		crossed, refused := s.reacher.Note(v.Callsign, f)
+		crossed, refused := s.outages.Note(v.Callsign, f)
 
 		if crossed != nil {
 			s.logger.Plain("%s", crossed)

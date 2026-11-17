@@ -15,7 +15,7 @@ func TestChannelCallsignReturnsAfterPromptChannelMissed(t *testing.T) {
 	s := base.New(t)
 	since := s.Store.Clock()().Add(-time.Second)
 	r := s.Check("session-1")
-	response, e := s.RESTClient(t).GetChannelCallsignWithResponse(
+	response, e := s.RESTClient().GetChannelCallsignWithResponse(
 		t.Context(),
 		&client.GetChannelCallsignParams{Session: "session-1", Since: since},
 	)

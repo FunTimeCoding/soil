@@ -8,10 +8,10 @@ import (
 )
 
 func TestApplyPatternRewritesSelectorChainBeforeAnchor(t *testing.T) {
-	d := service_tester.Prepare(t, "selector/src")
-	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("selector/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Run",
 		"Alfa",
@@ -27,15 +27,15 @@ func TestApplyPatternRewritesSelectorChainBeforeAnchor(t *testing.T) {
 	assert.String(
 		t,
 		"package charlie\n\nimport \"example/pkg/bravo\"\n\nfunc Charlie(b *bravo.Bravo) int {\n\tx := b.Named.Run(1, 2)\n\n\treturn x\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/charlie/charlie.go"),
+		o.Read("pkg/charlie/charlie.go"),
 	)
 }
 
 func TestApplyPatternClaimsNoRewriteThatChangesNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "selector/src")
-	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
+	o := service_tester.New(t, service_tester.WithFixture("selector/src"))
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Run",
 		"Alfa",

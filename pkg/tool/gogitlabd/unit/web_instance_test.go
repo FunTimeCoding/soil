@@ -3,11 +3,10 @@ package unit
 import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
@@ -15,15 +14,13 @@ import (
 )
 
 func TestWebRefusesUnresolvableInstanceAsBadRequest(t *testing.T) {
-	r := memory.New()
-	d, _ := daemon_tester.New(
+	v := base.New(
 		t,
-		r,
-		constant.FixtureInstance,
-		constant.FixtureOtherInstance,
-	)
-	v := base.Mount(t, d, r)
-	defer v.Close()
+		service_tester.WithInstances(
+			constant.FixtureInstance,
+			constant.FixtureOtherInstance,
+		),
+	).Served()
 	unknown := locator.New(webConstant.Localhost).Insecure().Port(v.Port).Path(
 		constant.PipelinePath,
 	).Set(inventoryConstant.InstanceParameter, "charlie").SetInteger(

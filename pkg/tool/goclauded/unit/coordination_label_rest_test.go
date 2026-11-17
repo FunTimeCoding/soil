@@ -10,10 +10,10 @@ import (
 
 func TestRestLabelSetUpdateRemove(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	set, e := a.RestClient.PostSessionLabelWithResponse(
+	set, e := a.GeneratedClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
 		label_tester.Body("environment", "staging", "reconciler"),
@@ -21,7 +21,7 @@ func TestRestLabelSetUpdateRemove(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, set.StatusCode())
 	assert.StringContains(t, "(unset)→staging", set.JSON200.Change)
-	update, e := a.RestClient.PostSessionLabelWithResponse(
+	update, e := a.GeneratedClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
 		label_tester.Body("environment", "production", "reconciler"),
@@ -29,7 +29,7 @@ func TestRestLabelSetUpdateRemove(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, update.StatusCode())
 	assert.StringContains(t, "staging→production", update.JSON200.Change)
-	remove, e := a.RestClient.PostSessionLabelWithResponse(
+	remove, e := a.GeneratedClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
 		label_tester.Body("environment", "", "reconciler"),
@@ -41,16 +41,16 @@ func TestRestLabelSetUpdateRemove(t *testing.T) {
 
 func TestRestLabelReadsBack(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	_, e := a.RestClient.PostSessionLabelWithResponse(
+	_, e := a.GeneratedClient.PostSessionLabelWithResponse(
 		a.Context,
 		a.UUID,
 		label_tester.Body("environment", "staging", "reconciler"),
 	)
 	assert.FatalOnError(t, e)
-	read, e := a.RestClient.GetSessionLabelWithResponse(a.Context, a.UUID)
+	read, e := a.GeneratedClient.GetSessionLabelWithResponse(a.Context, a.UUID)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, read.StatusCode())
 	assert.Any(
@@ -62,8 +62,8 @@ func TestRestLabelReadsBack(t *testing.T) {
 
 func TestRestLabelReadIsEmptyForUnknownSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	read, e := a.RestClient.GetSessionLabelWithResponse(
+	a := s.NewSession()
+	read, e := a.GeneratedClient.GetSessionLabelWithResponse(
 		a.Context,
 		"nonexistent",
 	)

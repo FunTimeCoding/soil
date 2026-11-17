@@ -3,11 +3,9 @@ package outage_server
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
@@ -17,18 +15,12 @@ func New(
 	r *memory.Memory,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	c := mock_client.New()
-	c.Failure = outage_tester.RefusedDial()
-	d := daemon_tester.New(t, c)
-	result := model_context_server.New(
-		t,
-		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
-	)
-	t.Cleanup(result.Close)
+	s := base.New(t, service_tester.WithReporter(r))
+	s.Source.Failure = outage_tester.RefusedDial()
 
-	return result, outage_tester.Guard(
+	return s.Served(), outage_tester.Guard(
 		t,
-		d.Workers(),
+		s.Daemon().Workers(),
 		constant.ItermPeer,
 	).Unavailable
 }

@@ -25,8 +25,8 @@ func TestStreamRecordsEachMessage(t *testing.T) {
 			nil,
 		),
 	)
-	assert.Count(t, 0, s.Service.CaptureStream(context.Background()))
-	v, e := s.Service.Status()
+	assert.Count(t, 0, s.Service().CaptureStream(context.Background()))
+	v, e := s.Service().Status()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, v.Events)
 }
@@ -34,7 +34,7 @@ func TestStreamRecordsEachMessage(t *testing.T) {
 func TestStreamThatEndsBadlyIsError(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Serve(mock_stream.New(nil, false, errors.Format("exit", 1)))
-	assert.Count(t, 1, s.Service.CaptureStream(context.Background()))
+	assert.Count(t, 1, s.Service().CaptureStream(context.Background()))
 }
 
 func TestCancelKillsStream(t *testing.T) {
@@ -47,7 +47,7 @@ func TestCancelKillsStream(t *testing.T) {
 	s.System.Serve(m)
 	c, cancel := context.WithCancel(context.Background())
 	done := make(chan []error)
-	go func() { done <- s.Service.CaptureStream(c) }()
+	go func() { done <- s.Service().CaptureStream(c) }()
 	cancel()
 
 	select {
@@ -66,7 +66,7 @@ func TestFailingStoreStopsStream(t *testing.T) {
 	s.System.Serve(m)
 	s.CloseStore()
 	done := make(chan []error)
-	go func() { done <- s.Service.CaptureStream(context.Background()) }()
+	go func() { done <- s.Service().CaptureStream(context.Background()) }()
 
 	select {
 	case result := <-done:

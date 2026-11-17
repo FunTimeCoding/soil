@@ -13,7 +13,7 @@ func ServedView(
 	content string,
 ) *client.ClientWithResponses {
 	t.Helper()
-	result := base.Rest(t, base.New(t))
+	result := base.New(t).GeneratedClient()
 	_, e := result.CreateViewWithResponse(
 		context.Background(),
 		client.CreateViewJSONRequestBody{Title: "notes", Content: content},

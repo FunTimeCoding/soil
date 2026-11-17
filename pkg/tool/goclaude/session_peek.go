@@ -51,7 +51,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			n := peekBlockSize(lines)
 			midLimit := (peekContextDepth(lines) - 1) * 100
 
-			if total*2 <= constant.PeekOutputBudget {
+			if total*2 <= constant.PeekOutputLimit {
 				for i, entry := range p.Entries {
 					limit := midLimit
 
@@ -83,11 +83,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			}
 
 			middle := total - head - tail
-			budget := constant.PeekOutputBudget - (head+tail)*2
+			remaining := constant.PeekOutputLimit - (head+tail)*2
 			samples := 0
 
-			if budget > 0 && middle > 0 {
-				samples = budget / 2
+			if remaining > 0 && middle > 0 {
+				samples = remaining / 2
 
 				if samples > middle {
 					samples = middle

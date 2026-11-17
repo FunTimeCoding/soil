@@ -14,7 +14,7 @@ import (
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.DownloadDirectory = t.TempDir()
 	o.Client = func() face.FirefoxClient { return c }
@@ -28,11 +28,12 @@ func New(t *testing.T) *Server {
 		},
 	)
 	result := &Server{
-		MockClient: c,
-		Daemon:     d,
-		Reporter:   r,
-		Directory:  o.DownloadDirectory,
-		Server:     h,
+		Source:    c,
+		Daemon:    d,
+		Reporter:  r,
+		Directory: o.DownloadDirectory,
+		t:         t,
+		Server:    h,
 	}
 	t.Cleanup(result.Close)
 

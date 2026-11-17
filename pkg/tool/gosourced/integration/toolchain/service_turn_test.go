@@ -10,8 +10,7 @@ import (
 )
 
 func TestTwoSessionsRenameInOneModuleWithoutRefusing(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	s := service_tester.NewService(t)
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
 	results := make(chan *output.Results, 2)
 	failures := make(chan error, 2)
 
@@ -20,9 +19,9 @@ func TestTwoSessionsRenameInOneModuleWithoutRefusing(t *testing.T) {
 		{"bravo", "OldType", "NewType"},
 	} {
 		go func() {
-			r, e := s.Symbol.Rename(
+			r, e := o.Symbol.Rename(
 				turn.WithSession(t.Context(), rename[0]),
-				d,
+				o.Directory,
 				"example/pkg/alfa",
 				rename[1],
 				rename[2],
@@ -39,14 +38,6 @@ func TestTwoSessionsRenameInOneModuleWithoutRefusing(t *testing.T) {
 		testutil.AssertBlocked(t, <-results, 0)
 	}
 
-	assert.StringContains(
-		t,
-		"func NewName()",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/new_name.go"),
-	)
-	assert.StringContains(
-		t,
-		"type NewType",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/new_type.go"),
-	)
+	assert.StringContains(t, "func NewName()", o.Read("pkg/alfa/new_name.go"))
+	assert.StringContains(t, "type NewType", o.Read("pkg/alfa/new_type.go"))
 }

@@ -5,7 +5,7 @@ import (
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service/pending_digest"
@@ -21,7 +21,7 @@ type Service struct {
 	notifier   *notifier.Notifier
 	watcher    *watcher.Watcher
 	pending    *pending_digest.Pending
-	reacher    *reacher.Reacher
+	outages    *outage_tracker.Tracker
 	monitor    *monitor.Monitor
 	logger     *logger.Logger
 	reporter   soilFace.Reporter

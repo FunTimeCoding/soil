@@ -27,6 +27,7 @@ func New(
 	}
 
 	serve(t, result, w, setup)
+	t.Cleanup(result.Close)
 
 	return result
 }

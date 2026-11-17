@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/web_interface_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
 	"net/http"
 	"net/url"
-	"strings"
 	"testing"
 )
 
 func TestFilterWebInterface(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.PostForm(
+	s := base.New(t)
+	s.PostBody(
+		t,
 		constant.AddEntryPath,
 		url.Values{
 			"action":      {"restart"},
@@ -23,7 +23,8 @@ func TestFilterWebInterface(t *testing.T) {
 			"description": {"test"},
 		},
 	)
-	o.PostForm(
+	s.PostBody(
+		t,
 		constant.AddEntryPath,
 		url.Values{
 			"action":      {"backup"},
@@ -33,49 +34,53 @@ func TestFilterWebInterface(t *testing.T) {
 			"description": {"test"},
 		},
 	)
-	b := o.Get("/entries?system=worker1")
+	b := s.Body(t, "/entries?system=worker1")
 	assert.StringContains(t, "restart", b)
 	assert.StringContains(t, "worker1", b)
 	assert.StringContains(
 		t,
 		"backup",
-		o.Get(fmt.Sprintf("/entries?user=%s", "bob")),
+		s.Body(t, fmt.Sprintf("/entries?user=%s", "bob")),
 	)
 	assert.StringContains(
 		t,
 		"restart",
-		o.Get(fmt.Sprintf("/entries?user=%s", "alice")),
+		s.Body(t, fmt.Sprintf("/entries?user=%s", "alice")),
 	)
 	assert.StringContains(
 		t,
 		"No entries found",
-		o.Get("/entries?system=nonexistent"),
+		s.Body(t, "/entries?system=nonexistent"),
 	)
 }
 
 func TestDashboardIsLive(t *testing.T) {
-	o := web_interface_tester.New(t)
-	body := o.Get(constant.DashboardPath)
+	body := base.New(t).Body(t, constant.DashboardPath)
 	assert.StringContains(t, "sse-connect", body)
 	assert.StringContains(t, "summary_strip", body)
 	assert.StringContains(t, "recent", body)
 }
 
 func TestDashboardNoLongerPolls(t *testing.T) {
-	o := web_interface_tester.New(t)
-	assert.True(
+	assert.StringNotContains(
 		t,
-		!strings.Contains(o.Get(constant.DashboardPath), "every 60s"),
+		"every 60s",
+		base.New(t).Body(t, constant.DashboardPath),
 	)
 }
 
 func TestWebInterface(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.AssertStatus(http.StatusOK, constant.DashboardPath)
-	o.AssertStatus(http.StatusOK, constant.EntriesPath)
-	o.AssertStatus(http.StatusOK, constant.AddEntryPath)
-	assert.StringContains(t, "No entries found", o.Get(constant.DashboardPath))
-	addBody := o.PostForm(
+	s := base.New(t)
+	assert.Integer(t, http.StatusOK, s.Status(t, constant.DashboardPath))
+	assert.Integer(t, http.StatusOK, s.Status(t, constant.EntriesPath))
+	assert.Integer(t, http.StatusOK, s.Status(t, constant.AddEntryPath))
+	assert.StringContains(
+		t,
+		"No entries found",
+		s.Body(t, constant.DashboardPath),
+	)
+	addBody := s.PostBody(
+		t,
 		constant.AddEntryPath,
 		url.Values{
 			"action":      {"restarted web server"},
@@ -90,31 +95,32 @@ func TestWebInterface(t *testing.T) {
 	assert.StringContains(
 		t,
 		"restarted web server",
-		o.Get(constant.DashboardPath),
+		s.Body(t, constant.DashboardPath),
 	)
-	assert.StringContains(t, "jdoe", o.Get(constant.DashboardPath))
-	assert.StringContains(t, "worker1", o.Get(constant.EntriesPath))
-	detail := o.Get("/detail?id=1")
+	assert.StringContains(t, "jdoe", s.Body(t, constant.DashboardPath))
+	assert.StringContains(t, "worker1", s.Body(t, constant.EntriesPath))
+	detail := s.Body(t, "/detail?id=1")
 	assert.StringContains(t, "nginx was unresponsive, restarted", detail)
 	assert.StringContains(t, "Edit", detail)
 	assert.StringContains(t, "Delete", detail)
 	assert.StringContains(t, "Permalink", detail)
 	assert.StringContains(t, `href="/entry/1"`, detail)
-	o.AssertStatus(http.StatusOK, "/entry/1")
-	page := o.Get("/entry/1")
+	assert.Integer(t, http.StatusOK, s.Status(t, "/entry/1"))
+	page := s.Body(t, "/entry/1")
 	assert.StringContains(t, "nginx was unresponsive, restarted", page)
 	assert.StringContains(t, "worker1", page)
-	o.AssertStatus(http.StatusNotFound, "/entry/9999")
+	assert.Integer(t, http.StatusNotFound, s.Status(t, "/entry/9999"))
 	assert.StringContains(
 		t,
 		"This entry no longer exists",
-		o.Get("/entry/9999"),
+		s.Body(t, "/entry/9999"),
 	)
-	o.AssertStatus(http.StatusNotFound, "/entry/nonsense")
-	edit := o.Get("/edit?id=1")
+	assert.Integer(t, http.StatusNotFound, s.Status(t, "/entry/nonsense"))
+	edit := s.Body(t, "/edit?id=1")
 	assert.StringContains(t, "restarted web server", edit)
 	assert.StringContains(t, "Save", edit)
-	editBody := o.PostForm(
+	editBody := s.PostBody(
+		t,
 		"/edit?id=1",
 		url.Values{
 			"action":      {"cleared and documented"},
@@ -126,6 +132,10 @@ func TestWebInterface(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "cleared and documented", editBody)
-	o.PostForm("/delete?id=1", nil)
-	assert.StringContains(t, "No entries found", o.Get(constant.DashboardPath))
+	s.PostBody(t, "/delete?id=1", nil)
+	assert.StringContains(
+		t,
+		"No entries found",
+		s.Body(t, constant.DashboardPath),
+	)
 }

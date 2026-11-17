@@ -12,10 +12,10 @@ import (
 )
 
 func TestMoveMethodsRetypesReceiver(t *testing.T) {
-	d := service_tester.Prepare(t, "move-methods/src")
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		[]string{"Greet"},
@@ -29,18 +29,18 @@ func TestMoveMethodsRetypesReceiver(t *testing.T) {
 	assert.String(
 		t,
 		"package bravo\n\nimport \"strings\"\n\nfunc (s *Worker) Greet(who string) string {\n\treturn strings.ToUpper(who)\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/greet.go"),
+		o.Read("pkg/bravo/greet.go"),
 	)
-	_, f := os.Stat(filepath.Join(d, "pkg/alfa/greet.go"))
+	_, f := os.Stat(filepath.Join(o.Directory, "pkg/alfa/greet.go"))
 	assert.True(t, os.IsNotExist(f))
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestMoveMethodsQualifiesBackReference(t *testing.T) {
-	d := service_tester.Prepare(t, "move-methods/src")
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		[]string{"Label"},
@@ -55,20 +55,20 @@ func TestMoveMethodsQualifiesBackReference(t *testing.T) {
 	assert.String(
 		t,
 		"package bravo\n\nimport \"example/pkg/alfa\"\n\nfunc (s *Worker) Label() string {\n\treturn alfa.Prefix() + \"label\"\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/label.go"),
+		o.Read("pkg/bravo/label.go"),
 	)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestMoveMethodsKeepsReceiverFieldOfSameType(t *testing.T) {
-	d, r := module_tester.MoveMethods(t, "Describe")
+	o, r := module_tester.MoveMethods(t, "Describe")
 	testutil.AssertBlocked(t, r, 0)
 	assert.StringContains(
 		t,
 		"func (s *Worker) Describe() string {\n\treturn s.Name\n}",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/describe.go"),
+		o.Read("pkg/bravo/describe.go"),
 	)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestMoveMethodsRefusesMissingField(t *testing.T) {
@@ -99,15 +99,15 @@ func TestMoveMethodsRefusesUnmovedSibling(t *testing.T) {
 }
 
 func TestMoveMethodsMovesSiblingsTogether(t *testing.T) {
-	d, r := module_tester.MoveMethods(t, "Shout", "Loud")
+	o, r := module_tester.MoveMethods(t, "Shout", "Loud")
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestMoveMethodsKeepsSiblingDeclaredOnTarget(t *testing.T) {
-	d, r := module_tester.MoveMethods(t, "Repeat")
+	o, r := module_tester.MoveMethods(t, "Repeat")
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestMoveMethodsRefusesSiblingOfOtherSignature(t *testing.T) {
@@ -144,10 +144,13 @@ func TestMoveMethodsRefusesPassedReceiver(t *testing.T) {
 }
 
 func TestMoveMethodsRefusesOutsideCaller(t *testing.T) {
-	d := service_tester.Prepare(t, "move-methods-called/src")
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-methods-called/src"),
+	)
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		[]string{"Greet"},
@@ -162,6 +165,6 @@ func TestMoveMethodsRefusesOutsideCaller(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func (s *Service) Greet",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/greet.go"),
+		o.Read("pkg/alfa/greet.go"),
 	)
 }

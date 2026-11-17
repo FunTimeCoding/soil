@@ -9,8 +9,9 @@ import (
 )
 
 func TestJobViewTakesRequestedJobAndItsTrace(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	c := clients[constant.FixtureInstance]
+	o := service_tester.New(t)
+	s := o.Service()
+	c := o.Alfa()
 	c.SeedJob(1, "compile", "kilo", gitlabConstant.JobSuccess)
 	c.SeedJob(2, "verify", "lima", gitlabConstant.JobFail)
 	c.SeedTrace(1, "juliett")
@@ -22,8 +23,9 @@ func TestJobViewTakesRequestedJobAndItsTrace(t *testing.T) {
 }
 
 func TestJobViewPrefersRunningJobThenFailedOne(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	c := clients[constant.FixtureInstance]
+	o := service_tester.New(t)
+	s := o.Service()
+	c := o.Alfa()
 	c.SeedJob(1, "compile", "kilo", gitlabConstant.JobSuccess)
 	c.SeedJob(2, "verify", "lima", gitlabConstant.JobFail)
 	v, e := s.JobView(t.Context(), constant.FixtureInstance, 5, 10, 0)

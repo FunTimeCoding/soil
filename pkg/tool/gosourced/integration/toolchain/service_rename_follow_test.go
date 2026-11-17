@@ -12,10 +12,10 @@ import (
 )
 
 func TestRenameMovesFunctionsFile(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldName",
 		"NewName",
@@ -24,19 +24,18 @@ func TestRenameMovesFunctionsFile(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.False(t, system.FileExists(filepath.Join(d, "pkg/alfa/old_name.go")))
-	assert.StringContains(
+	assert.False(
 		t,
-		"func NewName()",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/new_name.go"),
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/old_name.go")),
 	)
+	assert.StringContains(t, "func NewName()", o.Read("pkg/alfa/new_name.go"))
 }
 
 func TestRenameMovesTypesFile(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldType",
 		"NewType",
@@ -45,15 +44,21 @@ func TestRenameMovesTypesFile(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.True(t, system.FileExists(filepath.Join(d, "pkg/alfa/new_type.go")))
-	assert.False(t, system.FileExists(filepath.Join(d, "pkg/alfa/old_type.go")))
+	assert.True(
+		t,
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/new_type.go")),
+	)
+	assert.False(
+		t,
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/old_type.go")),
+	)
 }
 
 func TestRenameLeavesFileWithTwoIdentities(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"PairOne",
 		"PairThree",
@@ -62,18 +67,21 @@ func TestRenameLeavesFileWithTwoIdentities(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.True(t, system.FileExists(filepath.Join(d, "pkg/alfa/pair.go")))
+	assert.True(
+		t,
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/pair.go")),
+	)
 	assert.False(
 		t,
-		system.FileExists(filepath.Join(d, "pkg/alfa/pair_three.go")),
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/pair_three.go")),
 	)
 }
 
 func TestRenameLeavesFileWhoseNameIsTaken(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Taken",
 		"Busy",
@@ -82,12 +90,11 @@ func TestRenameLeavesFileWhoseNameIsTaken(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.True(t, system.FileExists(filepath.Join(d, "pkg/alfa/taken.go")))
-	assert.StringContains(
+	assert.True(
 		t,
-		"func Unrelated()",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/busy.go"),
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/taken.go")),
 	)
+	assert.StringContains(t, "func Unrelated()", o.Read("pkg/alfa/busy.go"))
 	assert.StringContains(
 		t,
 		"taken.go was not renamed: busy.go already exists",
@@ -96,10 +103,10 @@ func TestRenameLeavesFileWhoseNameIsTaken(t *testing.T) {
 }
 
 func TestVisibilityFlipLeavesFile(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	r, e := service_tester.NewService(t).Symbol.ChangeVisibility(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"Flip",
 		"example/pkg/alfa",
 		"",
@@ -107,18 +114,14 @@ func TestVisibilityFlipLeavesFile(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.StringContains(
-		t,
-		"func flip()",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/flip.go"),
-	)
+	assert.StringContains(t, "func flip()", o.Read("pkg/alfa/flip.go"))
 }
 
 func TestRenameDryRunLeavesFile(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	_, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	_, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldName",
 		"NewName",
@@ -126,6 +129,12 @@ func TestRenameDryRunLeavesFile(t *testing.T) {
 		true,
 	)
 	assert.FatalOnError(t, e)
-	assert.True(t, system.FileExists(filepath.Join(d, "pkg/alfa/old_name.go")))
-	assert.False(t, system.FileExists(filepath.Join(d, "pkg/alfa/new_name.go")))
+	assert.True(
+		t,
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/old_name.go")),
+	)
+	assert.False(
+		t,
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/new_name.go")),
+	)
 }

@@ -9,7 +9,7 @@ import (
 func (c *Client) DeleteGroupName(
 	x context.Context,
 	name string,
-) (*client.Receipt, error) {
+) (*client.Result, error) {
 	r, e := c.client.DeleteGroupNameWithResponse(x, name)
 
 	if e != nil {

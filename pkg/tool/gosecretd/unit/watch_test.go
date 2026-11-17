@@ -20,8 +20,7 @@ import (
 
 func TestWatchReportsUnsealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	owned := watch.New(
 		service_tester.New(t, c).Status,
 		y,
@@ -36,8 +35,7 @@ func TestWatchReportsUnsealedStore(t *testing.T) {
 
 func TestWatchReportsSealedStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Seal()
 	owned := watch.New(
 		service_tester.New(t, c).Status,
@@ -52,8 +50,7 @@ func TestWatchReportsSealedStore(t *testing.T) {
 
 func TestWatchReportsUnreachableStore(t *testing.T) {
 	y := prometheus.NewRegistry()
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.FailHealth(errors.New("connection refused"))
 	owned := watch.New(
 		service_tester.New(t, c).Status,

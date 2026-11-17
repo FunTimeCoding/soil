@@ -9,10 +9,13 @@ import (
 )
 
 func TestApplyPatternRewritesCallWhereverItSits(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern-expression/src")
-	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("pattern-expression/src"),
+	)
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"New",
 		"",
@@ -26,19 +29,22 @@ func TestApplyPatternRewritesCallWhereverItSits(t *testing.T) {
 	assert.Integer(t, 4, apply.Total)
 	assert.Integer(t, 4, apply.Matched)
 	assert.Integer(t, 4, apply.Rewritten)
-	holder := service_tester.ReadFixtureFile(t, d, "pkg/bravo/holder.go")
+	holder := o.Read("pkg/bravo/holder.go")
 	assert.StringContains(t, "&Holder{Server: alfa.Named(\"bravo\")}", holder)
 	assert.StringContains(t, "describe(alfa.Named(\"charlie\"))", holder)
 	assert.StringContains(t, "\talfa.Named(\"delta\")\n", holder)
 	assert.StringContains(t, "return alfa.Named(\"echo\")", holder)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestApplyPatternRefusesNestedCalls(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern-expression/src")
-	r, apply, e := service_tester.NewService(t).Pattern.ApplyPattern(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("pattern-expression/src"),
+	)
+	r, apply, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Wrap",
 		"",
@@ -58,17 +64,20 @@ func TestApplyPatternRefusesNestedCalls(t *testing.T) {
 	}
 
 	assert.Integer(t, 2, refused)
-	holder := service_tester.ReadFixtureFile(t, d, "pkg/bravo/holder.go")
+	holder := o.Read("pkg/bravo/holder.go")
 	assert.StringContains(t, "return alfa.Keep(s)\n", holder)
 	assert.StringContains(t, "return alfa.Wrap(alfa.Wrap(s))\n", holder)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestApplyPatternCallNeedsExpressionReplacement(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern-expression/src")
-	r, _, e := service_tester.NewService(t).Pattern.ApplyPattern(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("pattern-expression/src"),
+	)
+	r, _, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"New",
 		"",

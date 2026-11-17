@@ -3,13 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
 	"testing"
 )
 
 func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	c := o.Client
+	c := base.New(t).Tools()
 	assert.Count(t, 4, c.ListTools())
 	c.MustCallTool(
 		constant.AddEntry,

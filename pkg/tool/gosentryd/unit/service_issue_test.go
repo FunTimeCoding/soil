@@ -9,9 +9,9 @@ import (
 )
 
 func TestUpdateIssueChangesStoredStatus(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.AddIssue("100", "41", constant.UnresolvedStatus)
-	s := service_tester.Service(t, c)
+	o := service_tester.New(t)
+	o.Source.AddIssue("100", "41", constant.UnresolvedStatus)
+	s := o.Service()
 	_, e := s.UpdateIssue("100", constant.ResolvedStatus, "")
 	assert.FatalOnError(t, e)
 	issue, f := s.Issue("100")
@@ -20,10 +20,10 @@ func TestUpdateIssueChangesStoredStatus(t *testing.T) {
 }
 
 func TestDeletedIssueIsNotFound(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.AddIssue("100", "41", constant.UnresolvedStatus)
-	c.AddIssue("200", "41", constant.UnresolvedStatus)
-	s := service_tester.Service(t, c)
+	o := service_tester.New(t)
+	o.Source.AddIssue("100", "41", constant.UnresolvedStatus)
+	o.Source.AddIssue("200", "41", constant.UnresolvedStatus)
+	s := o.Service()
 	assert.FatalOnError(t, s.DeleteIssue("100"))
 	_, e := s.Issue("100")
 	assert.True(t, not_found.Is(e))
@@ -34,7 +34,7 @@ func TestDeletedIssueIsNotFound(t *testing.T) {
 }
 
 func TestUpdatingMissingIssueIsNotFound(t *testing.T) {
-	_, e := service_tester.Service(t, service_tester.NewSource(t)).UpdateIssue(
+	_, e := service_tester.New(t).Service().UpdateIssue(
 		"999",
 		constant.ResolvedStatus,
 		"",

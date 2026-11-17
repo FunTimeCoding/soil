@@ -9,7 +9,7 @@ import (
 
 func TestSummarizePushesIndexer(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
@@ -28,7 +28,7 @@ func TestSummarizePushesIndexer(t *testing.T) {
 
 func TestSummarizeAmendPushesUpdatedBody(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,

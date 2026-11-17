@@ -10,8 +10,8 @@ import (
 
 func TestReleaseReachesAnotherSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "temporary work")
 	b.Announce(b.Name(), "watching")
 	b.CheckLive()
@@ -27,8 +27,8 @@ func TestReleaseReachesAnotherSession(t *testing.T) {
 
 func TestReleaseHistoryEvent(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "observer")
 	b.Announce(b.Name(), "departing")
 	b.MustCallTool(constant.Release, map[string]any{})

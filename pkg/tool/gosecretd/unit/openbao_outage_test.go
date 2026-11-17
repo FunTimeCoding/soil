@@ -15,9 +15,8 @@ func TestOpenbaoOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	s := base.New(t)
-	defer s.Close()
-	s.MockClient.Failure = outage_tester.RefusedDial()
-	c := base.Rest(t, s)
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.GeneratedClient()
 
 	for range 2 {
 		answer, e := c.ListSecretsWithResponse(
@@ -34,10 +33,8 @@ func TestOpenbaoOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 
 func TestOpenbaoOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	s.MockClient.Failure = outage_tester.RefusedDial()
-	c := s.ContextServer.Connect(t)
-	defer c.Close()
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"connection refused",
@@ -47,11 +44,10 @@ func TestOpenbaoOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestDaemonHandsOutOpenbaoGuardFirst(t *testing.T) {
-	d := base.Daemon(t)
-	_, okay := d.Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestWaitAnswersOnceOpenbaoAnswers(t *testing.T) {
-	assert.FatalOnError(t, base.Daemon(t).Wait(t.Context()))
+	assert.FatalOnError(t, base.New(t).Daemon().Wait(t.Context()))
 }

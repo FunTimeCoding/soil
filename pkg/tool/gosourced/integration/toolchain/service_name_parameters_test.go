@@ -10,10 +10,13 @@ import (
 )
 
 func TestNameParametersNamesEveryBlankContext(t *testing.T) {
-	d := service_tester.Prepare(t, "name-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.NameParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("name-parameters/src"),
+	)
+	r, e := o.Symbol.NameParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		naming.NewRequest(
 			"example/pkg/handler",
 			nil,
@@ -25,7 +28,7 @@ func TestNameParametersNamesEveryBlankContext(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go")
+	source := o.Read("pkg/handler/handler.go")
 	assert.StringContains(
 		t,
 		"func (s *Server) Get(\n\tx context.Context,\n\tidentifier string,\n) string {",
@@ -56,15 +59,18 @@ func TestNameParametersNamesEveryBlankContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func Sub(_ context.Context) {}",
-		service_tester.ReadFixtureFile(t, d, "pkg/handler/sub/sub.go"),
+		o.Read("pkg/handler/sub/sub.go"),
 	)
 }
 
 func TestNameParametersCoversSubtree(t *testing.T) {
-	d := service_tester.Prepare(t, "name-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.NameParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("name-parameters/src"),
+	)
+	r, e := o.Symbol.NameParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		naming.NewRequest(
 			"example/pkg/handler/...",
 			nil,
@@ -79,15 +85,18 @@ func TestNameParametersCoversSubtree(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func Sub(x context.Context) {}",
-		service_tester.ReadFixtureFile(t, d, "pkg/handler/sub/sub.go"),
+		o.Read("pkg/handler/sub/sub.go"),
 	)
 }
 
 func TestNameParametersNamesOnlyListedFunctions(t *testing.T) {
-	d := service_tester.Prepare(t, "name-parameters/src")
-	r, e := service_tester.NewService(t).Symbol.NameParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("name-parameters/src"),
+	)
+	r, e := o.Symbol.NameParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		naming.NewRequest(
 			"example/pkg/handler",
 			[]*naming.Function{naming.NewFunction("Get", "Server")},
@@ -99,7 +108,7 @@ func TestNameParametersNamesOnlyListedFunctions(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go")
+	source := o.Read("pkg/handler/handler.go")
 	assert.StringContains(
 		t,
 		"\tx context.Context,\n\tidentifier string,",
@@ -113,11 +122,14 @@ func TestNameParametersNamesOnlyListedFunctions(t *testing.T) {
 }
 
 func TestNameParametersDryRunWritesNothing(t *testing.T) {
-	d := service_tester.Prepare(t, "name-parameters/src")
-	before := service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go")
-	r, e := service_tester.NewService(t).Symbol.NameParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("name-parameters/src"),
+	)
+	before := o.Read("pkg/handler/handler.go")
+	r, e := o.Symbol.NameParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		naming.NewRequest(
 			"example/pkg/handler",
 			nil,
@@ -130,11 +142,7 @@ func TestNameParametersDryRunWritesNothing(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.StringContains(t, "Get: named x", rewrite_tester.JoinedConcerns(r))
-	assert.String(
-		t,
-		before,
-		service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go"),
-	)
+	assert.String(t, before, o.Read("pkg/handler/handler.go"))
 }
 
 func TestNameParametersRefusesNameBodyDeclares(t *testing.T) {

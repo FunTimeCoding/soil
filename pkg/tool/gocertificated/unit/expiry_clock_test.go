@@ -6,7 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/web_interface_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/service_tester"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -15,12 +16,14 @@ import (
 func TestExpiryHorizonRunsOnServiceClock(t *testing.T) {
 	var now atomic.Int64
 	now.Store(time.Now().UnixNano())
-	o := web_interface_tester.NewWith(
+	s := base.New(
 		t,
-		func() time.Time { return time.Unix(0, now.Load()) },
+		service_tester.WithClock(
+			func() time.Time { return time.Unix(0, now.Load()) },
+		),
 	)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
-	d := relational.Open(logger.New(t.Context()), "", o.Server.LitePath)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	d := relational.Open(logger.New(t.Context()), "", s.LitePath)
 	t.Cleanup(func() { relational.CloseMapper(d) })
 	root := record.Record{}
 	assert.FatalOnError(t, d.First(&root).Error)
@@ -28,6 +31,6 @@ func TestExpiryHorizonRunsOnServiceClock(t *testing.T) {
 	assert.StringContains(
 		t,
 		"1 expiring within a month",
-		o.Page(constant.DashboardPath),
+		s.Page(constant.DashboardPath),
 	)
 }

@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -10,13 +9,12 @@ import (
 )
 
 func TestOutageMarksGuardDownWithoutEarlyCapture(t *testing.T) {
-	c := service_tester.NewSource(t)
-	c.Failure = outage_tester.RefusedDial()
-	m := memory.New()
-	v := service_tester.Shared(t, c, m)
+	s := service_tester.New(t)
+	s.Source.Failure = outage_tester.RefusedDial()
+	v := s.Service()
 	_, e := v.UserStats()
 	assert.True(t, unavailable.Is(e))
 	_, f := v.Tags()
 	assert.True(t, unavailable.Is(f))
-	assert.Count(t, 0, m.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }

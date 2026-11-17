@@ -2,32 +2,17 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/service_tester"
 	"testing"
 )
 
 func TestModelContextAlertsNeedSelectedInstance(t *testing.T) {
-	v := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			daemon_tester.NewHealthy(t, "alfa", "bravo").Mount(
-				memory.New(),
-				mock_recorder.New(),
-				g,
-			)
-		},
-	)
-	defer v.Close()
-	c := v.Connect(t)
-	defer c.Close()
+	c := base.New(t, service_tester.WithInstances("alfa", "bravo")).Tools()
 	assert.StringContains(
 		t,
 		"no instance selected",

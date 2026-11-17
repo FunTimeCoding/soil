@@ -10,7 +10,7 @@ func chunkText(
 	pulled := map[int]bool{}
 
 	for i, t := range tables {
-		if len(t.rows) > 0 && c.Count(content[t.start:t.end]) > c.Allowance() {
+		if len(t.rows) > 0 && c.Count(content[t.start:t.end]) > c.TokenLimit() {
 			pulled[i] = true
 		}
 	}
@@ -20,7 +20,7 @@ func chunkText(
 		changed := false
 
 		for _, k := range result {
-			if k.Length != len(k.Text) || c.Count(k.Text) <= c.Allowance() {
+			if k.Length != len(k.Text) || c.Count(k.Text) <= c.TokenLimit() {
 				continue
 			}
 

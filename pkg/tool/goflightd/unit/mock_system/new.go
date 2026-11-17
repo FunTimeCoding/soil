@@ -1,8 +1,14 @@
 package mock_system
 
-func New() *System {
-	return &System{
+import "testing"
+
+func New(t *testing.T) *System {
+	t.Helper()
+	result := &System{
 		outputs:  make(map[string]string),
 		failures: make(map[string]error),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

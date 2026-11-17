@@ -9,12 +9,12 @@ import (
 func DottedModule(
 	t *testing.T,
 	fixture string,
-) string {
+) *service_tester.Tester {
 	t.Helper()
-	result := service_tester.Prepare(t, fixture)
+	result := service_tester.New(t, service_tester.WithFixture(fixture))
 	system_tester.Write(
 		t,
-		result,
+		result.Directory,
 		"go.mod",
 		"module example.org/m\n\ngo 1.26.3\n",
 	)

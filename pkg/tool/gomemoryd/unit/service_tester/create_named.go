@@ -14,7 +14,7 @@ func (o *Tester) CreateNamed(
 	o.t.Helper()
 	p := save_tester.Scoped(name, scope)
 	p.Content = content
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(o.t, e)
 
 	return m

@@ -1,13 +1,13 @@
 package session
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/receipt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/deletion_result"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 )
 
 func (s *Service) deleteLifetimeWindow(
 	r *session.Session,
-	result *receipt.Receipt,
+	result *deletion_result.Result,
 ) error {
 	if r.Callsign == nil || *r.Callsign == "" {
 		return nil

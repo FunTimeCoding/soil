@@ -12,22 +12,20 @@ import (
 )
 
 func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	declaration := service_tester.ReadFixtureFile(
+	o := service_tester.New(
 		t,
-		d,
-		"pkg/target/is_generated_header.go",
+		service_tester.WithFixture("rename-function/src"),
 	)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	s := service_tester.NewService(t)
-	s.Commit.BeforeCommit(
+	declaration := o.Read("pkg/target/is_generated_header.go")
+	caller := o.Read("pkg/caller/run.go")
+	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(t, d, "pkg/caller/run.go", caller)
+			system_tester.Write(t, o.Directory, "pkg/caller/run.go", caller)
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -41,35 +39,29 @@ func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
 		"pkg/caller/run.go: changed since it was read - nothing written, run again\npkg/caller/run.go: changed while the call ran - ran again\npkg/caller/run.go: changed while the call ran - ran again",
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(
-		t,
-		declaration,
-		service_tester.ReadFixtureFile(
-			t,
-			d,
-			"pkg/target/is_generated_header.go",
-		),
-	)
+	assert.String(t, declaration, o.Read("pkg/target/is_generated_header.go"))
 }
 
 func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
-	s := service_tester.NewService(t)
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	caller := o.Read("pkg/caller/run.go")
 	edited := false
-	s.Commit.BeforeCommit(
+	o.Commit.BeforeCommit(
 		func() {
 			if edited {
 				return
 			}
 
 			edited = true
-			system_tester.Write(t, d, "pkg/caller/run.go", caller)
+			system_tester.Write(t, o.Directory, "pkg/caller/run.go", caller)
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -86,26 +78,28 @@ func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func IsGenerated(",
-		service_tester.ReadFixtureFile(t, d, "pkg/target/is_generated.go"),
+		o.Read("pkg/target/is_generated.go"),
 	)
 }
 
 func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	s.Commit.BeforeCommit(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	o.Commit.BeforeCommit(
 		func() {
 			system_tester.Write(
 				t,
-				d,
+				o.Directory,
 				"pkg/other/other.go",
 				"package other\n\nfunc Other() {}\n",
 			)
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -122,26 +116,28 @@ func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func IsGenerated(",
-		service_tester.ReadFixtureFile(t, d, "pkg/target/is_generated.go"),
+		o.Read("pkg/target/is_generated.go"),
 	)
 }
 
 func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	s.Commit.BeforeCommit(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	o.Commit.BeforeCommit(
 		func() {
 			system_tester.Write(
 				t,
-				d,
+				o.Directory,
 				"pkg/other/other.go",
 				"package other\n\nimport \"example/pkg/target\"\n\nfunc Other() bool {\n\treturn target.IsGeneratedHeader(\"\")\n}\n",
 			)
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -158,16 +154,15 @@ func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
 }
 
 func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	consumer := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
-	s := module_tester.ReplacingService(t, library, user)
-	s.Commit.BeforeCommit(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	source := system_tester.Read(t, library, "lib.go")
+	consumer := o.Read("pkg/user/user.go")
+	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(t, user, "pkg/user/user.go", consumer)
+			system_tester.Write(t, o.Directory, "pkg/user/user.go", consumer)
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -180,35 +175,29 @@ func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	assert.StringContains(
 		t,
-		filepath.Join(user, "pkg/user/user.go: changed since it was read"),
+		filepath.Join(
+			o.Directory,
+			"pkg/user/user.go: changed since it was read",
+		),
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(
-		t,
-		source,
-		service_tester.ReadFixtureFile(t, library, "lib.go"),
-	)
-	assert.StringContains(
-		t,
-		"lib.Log(\"a\")",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
-	)
+	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
+	assert.StringContains(t, "lib.Log(\"a\")", o.Read("pkg/user/user.go"))
 }
 
 func TestRenameCommitsPastReplacingModuleChangeOutsideReach(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	s := module_tester.ReplacingService(t, library, user)
-	s.Commit.BeforeCommit(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	o.Commit.BeforeCommit(
 		func() {
 			system_tester.Write(
 				t,
-				user,
+				o.Directory,
 				"pkg/alfa/alfa.go",
 				"package alfa\n\nfunc Alfa() string {\n\treturn \"changed\"\n}\n",
 			)
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -219,25 +208,23 @@ func TestRenameCommitsPastReplacingModuleChangeOutsideReach(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.StringContains(
-		t,
-		"lib.Write(\"a\")",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
-	)
+	assert.StringContains(t, "lib.Write(\"a\")", o.Read("pkg/user/user.go"))
 }
 
 func TestRenameCommitsWhenNothingChanged(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
 	called := false
-	s := service_tester.NewService(t)
-	s.Commit.BeforeCommit(
+	o.Commit.BeforeCommit(
 		func() {
 			called = true
 		},
 	)
-	r, e := s.Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -250,6 +237,6 @@ func TestRenameCommitsWhenNothingChanged(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func IsGenerated(",
-		service_tester.ReadFixtureFile(t, d, "pkg/target/is_generated.go"),
+		o.Read("pkg/target/is_generated.go"),
 	)
 }

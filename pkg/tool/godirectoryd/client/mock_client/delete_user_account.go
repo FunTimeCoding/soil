@@ -10,7 +10,7 @@ import (
 func (c *Client) DeleteUserAccount(
 	_ context.Context,
 	account string,
-) (*client.Receipt, error) {
+) (*client.Result, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -31,7 +31,7 @@ func (c *Client) DeleteUserAccount(
 	c.UserList = slices.Delete(c.UserList, i, i+1)
 	delete(c.Passwords, account)
 
-	return &client.Receipt{
+	return &client.Result{
 		Message: fmt.Sprintf("deleted user: %s", account),
 	}, nil
 }

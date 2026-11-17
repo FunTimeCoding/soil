@@ -10,8 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/concern_line"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/move_engine"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"go/token"
 	"go/types"
@@ -56,7 +56,7 @@ func (s *Service) extractTypeThrough(
 				return nil
 			}
 
-			return relocator.TypeMembers(o)
+			return move_engine.TypeMembers(o)
 		},
 	)
 
@@ -89,7 +89,7 @@ func (s *Service) extractTypeThrough(
 		)
 	}
 
-	entries, message := relocator.TypeEntries(set, p, typeObject, targetFile)
+	entries, message := move_engine.TypeEntries(set, p, typeObject, targetFile)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
@@ -113,8 +113,8 @@ func (s *Service) extractTypeThrough(
 		references[entry] = resolve.FindAllReferences(all, entry.Object)
 	}
 
-	memberNames := relocator.TypeMemberNames(typeObject)
-	relocator.FlipReferenced(entries, references)
+	memberNames := move_engine.TypeMemberNames(typeObject)
+	move_engine.FlipReferenced(entries, references)
 
 	for _, entry := range entries {
 		if !entry.Flipped {
@@ -133,7 +133,7 @@ func (s *Service) extractTypeThrough(
 		}
 	}
 
-	fields, message := relocator.FieldFlips(
+	fields, message := move_engine.FieldFlips(
 		all,
 		entries,
 		typeObject,
@@ -164,12 +164,12 @@ func (s *Service) extractTypeThrough(
 	plan.PackagePath = packagePath
 	plan.TargetPackagePath = targetPackagePath
 
-	if message := relocator.Prepare(plan, nil); message != "" {
+	if message := move_engine.Prepare(plan, nil); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
 	if typeEntry.Flipped {
-		if capture := relocator.EmbeddedRenames(
+		if capture := move_engine.EmbeddedRenames(
 			all,
 			typeEntry.Object,
 			typeEntry.NewName,
@@ -185,7 +185,7 @@ func (s *Service) extractTypeThrough(
 		isType := entry.Object == typeObject
 
 		for _, f := range references[entry] {
-			if relocator.MovedContains(entries, f.Ident.Pos()) {
+			if move_engine.MovedContains(entries, f.Ident.Pos()) {
 				if entry.Flipped {
 					plan.Renames[f.Ident] = entry.NewName
 				}
@@ -217,7 +217,7 @@ func (s *Service) extractTypeThrough(
 		}
 	}
 
-	qualifications, blocked := relocator.Qualifications(
+	qualifications, blocked := move_engine.Qualifications(
 		set,
 		external,
 		packagePath,
@@ -244,5 +244,5 @@ func (s *Service) extractTypeThrough(
 		)
 	}
 
-	return relocator.Finish(r, plan, out)
+	return move_engine.Finish(r, plan, out)
 }

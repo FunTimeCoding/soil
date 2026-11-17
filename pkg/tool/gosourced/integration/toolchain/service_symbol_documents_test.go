@@ -9,16 +9,16 @@ import (
 )
 
 func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"Call `go:pkg/alfa.OldName` from `pkg/alfa/old_name.go`.\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldName",
 		"NewName",
@@ -30,21 +30,21 @@ func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
 	assert.String(
 		t,
 		"Call `go:pkg/alfa.NewName` from `pkg/alfa/new_name.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestRenameMethodRetargetsQualifiedName(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-method/src")
+	o := service_tester.New(t, service_tester.WithFixture("rename-method/src"))
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"Look up with `go:pkg/target.Store.FindByName()`.\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"FindByName",
 		"LookupByName",
@@ -56,16 +56,24 @@ func TestRenameMethodRetargetsQualifiedName(t *testing.T) {
 	assert.String(
 		t,
 		"Look up with `go:pkg/target.Store.LookupByName()`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestMoveRetargetsExportedSymbol(t *testing.T) {
-	d := service_tester.Prepare(t, "move-visibility/src")
-	system_tester.Write(t, d, "doc/note.md", "See `go:pkg/alfa.lone`.\n")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-visibility/src"),
+	)
+	system_tester.Write(
+		t,
+		o.Directory,
+		"doc/note.md",
+		"See `go:pkg/alfa.lone`.\n",
+	)
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		[]string{"lone"},
 		"",
@@ -76,24 +84,20 @@ func TestMoveRetargetsExportedSymbol(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		"See `go:pkg/bravo.Lone`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "See `go:pkg/bravo.Lone`.\n", o.Read("doc/note.md"))
 }
 
 func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
-	d := service_tester.Prepare(t, "move-methods/src")
+	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"See `go:pkg/alfa.Service.Greet`.\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		[]string{"Greet"},
@@ -107,16 +111,21 @@ func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
 	assert.String(
 		t,
 		"See `go:pkg/bravo.Worker.Greet`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestMoveMethodsRetargetsExportedBackReference(t *testing.T) {
-	d := service_tester.Prepare(t, "move-methods/src")
-	system_tester.Write(t, d, "doc/note.md", "Uses `go:pkg/alfa.prefix`.\n")
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
+	system_tester.Write(
+		t,
+		o.Directory,
+		"doc/note.md",
+		"Uses `go:pkg/alfa.prefix`.\n",
+	)
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		[]string{"Label"},
@@ -127,19 +136,23 @@ func TestMoveMethodsRetargetsExportedBackReference(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		"Uses `go:pkg/alfa.Prefix`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "Uses `go:pkg/alfa.Prefix`.\n", o.Read("doc/note.md"))
 }
 
 func TestMoveSymbolsRetargetsExportedBackReference(t *testing.T) {
-	d := service_tester.Prepare(t, "back-reference-unexported/src")
-	system_tester.Write(t, d, "doc/note.md", "Uses `go:pkg/source.stayer`.\n")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("back-reference-unexported/src"),
+	)
+	system_tester.Write(
+		t,
+		o.Directory,
+		"doc/note.md",
+		"Uses `go:pkg/source.stayer`.\n",
+	)
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/source",
 		[]string{"Mover"},
 		"",
@@ -150,19 +163,23 @@ func TestMoveSymbolsRetargetsExportedBackReference(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		"Uses `go:pkg/source.Stayer`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "Uses `go:pkg/source.Stayer`.\n", o.Read("doc/note.md"))
 }
 
 func TestExtractTypeRetargetsExportedBackReference(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-dependency/src")
-	system_tester.Write(t, d, "doc/note.md", "Uses `go:pkg/target.prefix`.\n")
-	r, e := service_tester.NewService(t).Symbol.ExtractType(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-dependency/src"),
+	)
+	system_tester.Write(
+		t,
+		o.Directory,
+		"doc/note.md",
+		"Uses `go:pkg/target.prefix`.\n",
+	)
+	r, e := o.Symbol.ExtractType(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Store",
 		"example/pkg/model",
@@ -172,9 +189,5 @@ func TestExtractTypeRetargetsExportedBackReference(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		"Uses `go:pkg/target.Prefix`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "Uses `go:pkg/target.Prefix`.\n", o.Read("doc/note.md"))
 }

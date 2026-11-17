@@ -11,7 +11,7 @@ import (
 
 func TestPollSavesNewAlert(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -29,7 +29,7 @@ func TestPollSavesNewAlert(t *testing.T) {
 
 func TestPollResolvesRemovedAlert(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -38,7 +38,7 @@ func TestPollResolvesRemovedAlert(t *testing.T) {
 		),
 	)
 	o.Worker.Poll()
-	o.MockClient.Remove("abc123")
+	o.Alertmanager.Remove("abc123")
 	o.Worker.Poll()
 	records := o.Alerts("HighMemory")
 	assert.Count(t, 1, records)
@@ -47,7 +47,7 @@ func TestPollResolvesRemovedAlert(t *testing.T) {
 
 func TestPollIgnoresDuplicateFiring(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -63,7 +63,7 @@ func TestPollIgnoresDuplicateFiring(t *testing.T) {
 
 func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -71,7 +71,7 @@ func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 			"",
 		),
 	)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -85,7 +85,7 @@ func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 
 func TestRestartPollKeepsFiringOpen(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -104,7 +104,7 @@ func TestRestartPollKeepsFiringOpen(t *testing.T) {
 
 func TestRestartPollResolvesGone(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -113,7 +113,7 @@ func TestRestartPollResolvesGone(t *testing.T) {
 		),
 	)
 	o.Worker.Poll()
-	o.MockClient.Remove("abc123")
+	o.Alertmanager.Remove("abc123")
 	fresh := o.Restart()
 	fresh.Worker.Poll()
 	assert.Integer(t, 0, fresh.Firing())
@@ -123,13 +123,8 @@ func TestRestartPollResolvesGone(t *testing.T) {
 }
 
 func TestPollPrunesOldRecords(t *testing.T) {
-	o := worker_tester.NewWith(
-		t,
-		service_tester.DatabasePath(t),
-		service_tester.NewAlertmanager(t),
-		0,
-	)
-	o.MockClient.Add(
+	o := worker_tester.New(t, service_tester.WithRetention(0))
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -138,7 +133,7 @@ func TestPollPrunesOldRecords(t *testing.T) {
 		),
 	)
 	o.Worker.Poll()
-	o.MockClient.Remove("abc123")
+	o.Alertmanager.Remove("abc123")
 	o.Worker.Poll()
 	assert.Count(t, 0, o.Alerts("HighMemory"))
 }
@@ -152,7 +147,7 @@ func TestPollTracksLastPollTime(t *testing.T) {
 
 func TestPollSetsGauges(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
@@ -160,7 +155,7 @@ func TestPollSetsGauges(t *testing.T) {
 			"",
 		),
 	)
-	o.MockClient.Add(
+	o.Alertmanager.Add(
 		alert.NewBasic(
 			"def456",
 			"DiskFull",

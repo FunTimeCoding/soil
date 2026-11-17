@@ -1,6 +1,7 @@
 package subscribed
 
 import (
+	mattermostMock "github.com/funtimecoding/soil/pkg/chat/mattermost/mock_client"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
@@ -8,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
 	"testing"
@@ -19,10 +19,10 @@ func New(t *testing.T) *Subscribed {
 	t.Helper()
 	r := memory.New()
 	l := logger.New(t.Context())
-	m := service_tester.NewMattermost(t, "selfuser")
+	m := mattermostMock.New(t, "selfuser")
 	s := worker_tester.NewStore(t)
 	g := worker_tester.NewGuard(t, m, r)
-	k := mock_client.New()
+	k := mock_client.New(t)
 	h := peer.New(constant.RosterPeer, k.Address(), k, l, r)
 	t.Cleanup(h.Close)
 	w := watcher.New(m, g, s, l, r)

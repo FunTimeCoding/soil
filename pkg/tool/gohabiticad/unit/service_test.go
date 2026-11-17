@@ -7,7 +7,7 @@ import (
 )
 
 func TestEquipAnswersEquippedGear(t *testing.T) {
-	v := service_tester.Service(t, service_tester.NewSource(t))
+	v := service_tester.New(t).Service()
 	g, e := v.Equip("weapon_warrior_1")
 	assert.FatalOnError(t, e)
 	assert.String(t, "weapon_warrior_1", g.Equipped["weapon"])

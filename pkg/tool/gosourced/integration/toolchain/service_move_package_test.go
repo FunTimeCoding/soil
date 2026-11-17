@@ -12,26 +12,25 @@ import (
 )
 
 func TestMovePackage(t *testing.T) {
-	d := service_tester.Prepare(t, "package-move/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.MovePackage(
+	o := service_tester.New(t, service_tester.WithFixture("package-move/src"))
+	r, e := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"example/pkg/store",
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/outer/store"))
 	assert.True(t, os.IsNotExist(e))
-	moved := service_tester.ReadFixtureFile(t, d, "pkg/store/store.go")
+	moved := o.Read("pkg/store/store.go")
 	assert.StringContains(t, "package store", moved)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/store/run.go")
+	run := o.Read("pkg/store/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "example/pkg/store/sub", run)
 	assert.False(t, strings.Contains(run, "outer"))
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "\"example/pkg/store\"", caller)
 	assert.StringContains(t, "\"example/pkg/store/sub\"", caller)
@@ -39,13 +38,12 @@ func TestMovePackage(t *testing.T) {
 }
 
 func TestMovePackageTargetExists(t *testing.T) {
-	d := service_tester.Prepare(t, "package-move/src")
-	e := os.MkdirAll(filepath.Join(d, "pkg/store"), 0755)
+	o := service_tester.New(t, service_tester.WithFixture("package-move/src"))
+	e := os.MkdirAll(filepath.Join(o.Directory, "pkg/store"), 0755)
 	assert.FatalOnError(t, e)
-	s := service_tester.NewService(t)
-	r, e := s.Packages.MovePackage(
+	r, e := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"example/pkg/store",
 		false,
@@ -56,11 +54,10 @@ func TestMovePackageTargetExists(t *testing.T) {
 }
 
 func TestMovePackageNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "package-move/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.MovePackage(
+	o := service_tester.New(t, service_tester.WithFixture("package-move/src"))
+	r, e := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/missing",
 		"example/pkg/missing",
 		false,

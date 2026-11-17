@@ -7,7 +7,7 @@ func (t *Tester) IsMuted(
 	message string,
 	cluster string,
 ) bool {
-	result, e := t.Service.IsMuted(reason, message, cluster)
+	result, e := t.Service().IsMuted(reason, message, cluster)
 	errors.PanicOnError(e)
 
 	return result

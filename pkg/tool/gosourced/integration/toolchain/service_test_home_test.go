@@ -11,50 +11,42 @@ import (
 )
 
 func TestRenamePackageTestHome(t *testing.T) {
-	d := service_tester.Prepare(t, "test-home/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.RenamePackage(
+	o := service_tester.New(t, service_tester.WithFixture("test-home/src"))
+	r, e := o.Packages.RenamePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa/unit_test",
 		constant.UnitSegment,
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	_, e = os.Stat(filepath.Join(d, "pkg/alfa/unit_test"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/alfa/unit_test"))
 	assert.True(t, os.IsNotExist(e))
-	moved := service_tester.ReadFixtureFile(t, d, "pkg/alfa/unit/parse_test.go")
+	moved := o.Read("pkg/alfa/unit/parse_test.go")
 	assert.StringContains(t, "package unit\n", moved)
 	assert.StringContains(t, "example/pkg/alfa/unit/alfa_tester", moved)
-	tester := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/alfa/unit/alfa_tester/sample.go",
-	)
+	tester := o.Read("pkg/alfa/unit/alfa_tester/sample.go")
 	assert.StringContains(t, "package alfa_tester", tester)
 }
 
 func TestMovePackageTestFacet(t *testing.T) {
-	d := service_tester.Prepare(t, "test-home/src")
-	e := os.MkdirAll(filepath.Join(d, "pkg/alfa/integration"), 0755)
+	o := service_tester.New(t, service_tester.WithFixture("test-home/src"))
+	e := os.MkdirAll(filepath.Join(o.Directory, "pkg/alfa/integration"), 0755)
 	assert.FatalOnError(t, e)
-	s := service_tester.NewService(t)
-	r, f := s.Packages.MovePackage(
+	r, f := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa/integration_test/client",
 		"example/pkg/alfa/integration/client",
 		false,
 	)
 	assert.FatalOnError(t, f)
 	testutil.AssertBlocked(t, r, 0)
-	_, f = os.Stat(filepath.Join(d, "pkg/alfa/integration_test/client"))
-	assert.True(t, os.IsNotExist(f))
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/alfa/integration/client/client_test.go",
+	_, f = os.Stat(
+		filepath.Join(o.Directory, "pkg/alfa/integration_test/client"),
 	)
+	assert.True(t, os.IsNotExist(f))
+	moved := o.Read("pkg/alfa/integration/client/client_test.go")
 	assert.StringContains(t, "package client", moved)
 }

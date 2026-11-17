@@ -3,9 +3,7 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/kubernetes/argocd/mock_client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/unit/service_tester"
@@ -16,17 +14,7 @@ import (
 )
 
 func TestClickOnBoardLabelIsCounted(t *testing.T) {
-	v := service_tester.New(
-		t,
-		service_tester.NewOption(
-			t,
-			service_tester.FixtureBoard(),
-			service_tester.NewPrometheus(t),
-			nil,
-			nil,
-		),
-		memory.New(),
-	)
+	v := service_tester.New(t).Service()
 	assert.FatalOnError(t, v.Click("Grafana"))
 	assert.True(t, validation.Is(v.Click("Invented")))
 	summaries, e := v.Summaries()
@@ -36,18 +24,13 @@ func TestClickOnBoardLabelIsCounted(t *testing.T) {
 }
 
 func TestRefreshFillsEachPanel(t *testing.T) {
-	p := service_tester.NewPrometheus(t)
-	p.SeedResult(
+	s := service_tester.New(t, service_tester.WithUsage())
+	s.Prometheus.SeedResult(
 		"count(up == 1)",
 		query_result.New(model.Vector{&model.Sample{Value: 7}}, nil, nil),
 	)
-	u := service_tester.NewUsage(t)
-	u.Set(12, 3)
-	v := service_tester.New(
-		t,
-		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
-		memory.New(),
-	)
+	s.Usage.Set(12, 3)
+	v := s.Service()
 	assert.Count(t, 0, v.Refresh())
 	values := v.Values()
 	assert.String(t, "7", values["Prometheus"][0])
@@ -58,15 +41,9 @@ func TestRefreshFillsEachPanel(t *testing.T) {
 func TestEveryRowLabelGetsValue(t *testing.T) {
 	v := service_tester.New(
 		t,
-		service_tester.NewOption(
-			t,
-			service_tester.FixtureBoard(),
-			service_tester.NewPrometheus(t),
-			mock_client.New(),
-			service_tester.NewUsage(t),
-		),
-		memory.New(),
-	)
+		service_tester.WithArgocd(),
+		service_tester.WithUsage(),
+	).Service()
 	assert.Count(t, 0, v.Refresh())
 	values := v.Values()
 
@@ -78,20 +55,22 @@ func TestEveryRowLabelGetsValue(t *testing.T) {
 }
 
 func TestFailingPanelIsReportedAndShownPending(t *testing.T) {
-	p := service_tester.NewPrometheus(t)
-	u := service_tester.NewUsage(t)
-	u.Failure = errors.New("token expired")
-	r := memory.New()
-	l := logger.New(t.Context())
-	v := service_tester.New(
-		t,
-		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
-		r,
+	s := service_tester.New(t, service_tester.WithUsage())
+	s.Usage.Failure = errors.New("token expired")
+	v := s.Service()
+	owned := worker.NewEvery(
+		v.Refresh,
+		logger.New(t.Context()),
+		s.Reporter,
+		time.Hour,
 	)
-	owned := worker.NewEvery(v.Refresh, l, r, time.Hour)
 	defer owned.Close()
 	owned.Poll()
-	assert.Count(t, 1, r.Events())
-	assert.StringContains(t, "token expired", r.Events()[0].Error.Error())
+	assert.Count(t, 1, s.Reporter.Events())
+	assert.StringContains(
+		t,
+		"token expired",
+		s.Reporter.Events()[0].Error.Error(),
+	)
 	assert.String(t, "–", v.Values()["Nextcloud"][0])
 }

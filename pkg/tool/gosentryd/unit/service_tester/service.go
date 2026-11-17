@@ -1,17 +1,29 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/mock_client"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"context"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/service"
-	"testing"
 )
 
-func Service(
-	t *testing.T,
-	c *mock_client.Client,
-) *service.Service {
-	t.Helper()
+func (o *Tester) Service() *service.Service {
+	o.t.Helper()
 
-	return Shared(t, c, memory.New())
+	if o.service != nil {
+		return o.service
+	}
+
+	g := peer.New(
+		constant.SentryPeer,
+		"sentry.test",
+		o.Source,
+		logger.New(context.Background()),
+		o.Reporter,
+	)
+	o.t.Cleanup(g.Close)
+	o.service = service.New(o.Source, g, "test")
+
+	return o.service
 }

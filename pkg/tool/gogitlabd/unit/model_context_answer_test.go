@@ -4,45 +4,29 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
 	"testing"
 )
 
 func TestModelContextAnswersClassifiedRefusalQuietly(t *testing.T) {
-	r := memory.New()
-	d, clients := daemon_tester.New(t, r, constant.FixtureInstance)
-	clients[constant.FixtureInstance].FailProjects(
-		not_found.New("group", "kilo"),
-	)
-	v := base.Mount(t, d, r)
-	defer v.Close()
-	c := v.Connect(t)
-	defer c.Close()
+	s := base.New(t)
+	s.Alfa().FailProjects(not_found.New("group", "kilo"))
 	assert.StringContains(
 		t,
 		"group not found: kilo",
-		c.MustCallToolError(constant.ListProjects, nil),
+		s.Tools().MustCallToolError(constant.ListProjects, nil),
 	)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestModelContextCapturesUnclassifiedFailure(t *testing.T) {
-	r := memory.New()
-	d, clients := daemon_tester.New(t, r, constant.FixtureInstance)
-	clients[constant.FixtureInstance].FailProjects(
-		errors.New("refused for no known reason"),
-	)
-	v := base.Mount(t, d, r)
-	defer v.Close()
-	c := v.Connect(t)
-	defer c.Close()
+	s := base.New(t)
+	s.Alfa().FailProjects(errors.New("refused for no known reason"))
 	assert.StringContains(
 		t,
 		"refused for no known reason",
-		c.MustCallToolError(constant.ListProjects, nil),
+		s.Tools().MustCallToolError(constant.ListProjects, nil),
 	)
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, s.Reporter.Events())
 }

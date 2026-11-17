@@ -2,26 +2,28 @@ package service_tester
 
 import (
 	proxmoxConstant "github.com/funtimecoding/soil/pkg/proxmox/constant"
-	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
 	gonetboxdConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 )
 
-func ReconcileFloor() (*mock_client.Client, []*client.VirtualMachine) {
-	c := mock_client.New()
-	c.AddNode("test")
-	c.AddMachine("test", 101, "alfa")
-	c.SetMachineStatus("test", 101, proxmoxConstant.RunningStatus)
-	c.AddMachine("test", 102, "bravo")
-	c.SetMachineStatus("test", 102, proxmoxConstant.StoppedStatus)
-	c.AddMachine("test", 103, "charlie")
-	c.SetMachineStatus("test", 103, proxmoxConstant.RunningStatus)
-	c.AddMachine("test", 104, "delta")
-	c.SetMachineStatus("test", 104, proxmoxConstant.RunningStatus)
+func (o *Tester) ReconcileFloor() {
+	c := o.Alfa().Hypervisor
+	c.AddMachine("alfa", 101, "alfa")
+	c.SetMachineStatus("alfa", 101, proxmoxConstant.RunningStatus)
+	c.AddMachine("alfa", 102, "bravo")
+	c.SetMachineStatus("alfa", 102, proxmoxConstant.StoppedStatus)
+	c.AddMachine("alfa", 103, "charlie")
+	c.SetMachineStatus("alfa", 103, proxmoxConstant.RunningStatus)
+	c.AddMachine("alfa", 104, "delta")
+	c.SetMachineStatus("alfa", 104, proxmoxConstant.RunningStatus)
 
-	return c, []*client.VirtualMachine{
+	if o.Netbox == nil {
+		return
+	}
+
+	o.Netbox.VirtualMachineList = append(
+		o.Netbox.VirtualMachineList,
 		netboxMachine("alfa", gonetboxdConstant.StatusOffline),
 		netboxMachine("bravo", gonetboxdConstant.StatusActive),
 		netboxMachine("charlie", gonetboxdConstant.StatusActive),
-	}
+	)
 }

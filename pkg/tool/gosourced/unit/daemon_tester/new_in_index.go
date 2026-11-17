@@ -17,7 +17,7 @@ func NewInIndex(
 	directory string,
 ) (*daemon.Daemon, *mock_client.Client) {
 	t.Helper()
-	m := mock_client.New()
+	m := mock_client.New(t)
 	o := option.New()
 	o.Inventory = i
 	o.IndexDirectory = directory

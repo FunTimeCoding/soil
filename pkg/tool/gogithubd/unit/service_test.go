@@ -9,8 +9,7 @@ import (
 )
 
 func TestLatestKeepsNewestCompletedRun(t *testing.T) {
-	s := mock_client.New()
-	defer s.Close()
+	s := mock_client.New(t)
 	s.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "failure"),
@@ -38,8 +37,7 @@ func TestLatestKeepsNewestCompletedRun(t *testing.T) {
 }
 
 func TestLatestSkipsRunInProgress(t *testing.T) {
-	s := mock_client.New()
-	defer s.Close()
+	s := mock_client.New(t)
 	s.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "success"),
@@ -59,8 +57,7 @@ func TestLatestSkipsRunInProgress(t *testing.T) {
 }
 
 func TestLatestKeepsBranchesApart(t *testing.T) {
-	s := mock_client.New()
-	defer s.Close()
+	s := mock_client.New(t)
 	s.AddRun(
 		"bravo",
 		service_tester.WorkflowRun(1, "main", "completed", "success"),

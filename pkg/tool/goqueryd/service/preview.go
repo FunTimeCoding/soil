@@ -15,8 +15,8 @@ func (s *Service) Preview(
 	result := chunk_preview.New(
 		s.reranker.Name(),
 		s.reranker.SequenceLength(),
-		s.reranker.Allowance(),
-		s.counter.Allowance(),
+		s.reranker.TokenLimit(),
+		s.counter.TokenLimit(),
 	)
 	source := strings.HasSuffix(path, soil.GoExtension)
 
@@ -33,7 +33,7 @@ func (s *Service) Preview(
 			piece,
 		)
 
-		if !source && !piece && p.Tokens > result.Allowance {
+		if !source && !piece && p.Tokens > result.TokenLimit {
 			p.SetCut(s.headingFix(path, body, c))
 		}
 

@@ -6,47 +6,44 @@ import (
 	"github.com/funtimecoding/soil/pkg/jellyfin/library"
 	"github.com/funtimecoding/soil/pkg/jellyfin/session"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/base"
 	"testing"
 )
 
 func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	assert.Count(t, 9, o.Client.ListTools())
-	o.MockClient.AddLibrary(library.New("lib-1", "Music", "music"))
+	s := base.New(t)
+	c := s.Tools()
+	assert.Count(t, 9, c.ListTools())
+	s.Source.AddLibrary(library.New("lib-1", "Music", "music"))
 	assert.StringContains(
 		t,
 		"Music",
-		o.Client.MustCallTool(constant.ListLibraries, map[string]any{}),
+		c.MustCallTool(constant.ListLibraries, map[string]any{}),
 	)
 	i := item.Stub()
 	i.Identifier = "item-1"
 	i.Name = "Dark Side of the Moon"
 	i.Type = "MusicAlbum"
-	o.MockClient.AddItem(i)
+	s.Source.AddItem(i)
 	j := item.Stub()
 	j.Identifier = "item-2"
 	j.Name = "Breathe"
 	j.Type = "Audio"
-	o.MockClient.AddItem(j)
+	s.Source.AddItem(j)
 	assert.StringContains(
 		t,
 		"Dark Side",
-		o.Client.MustCallTool(
-			constant.SearchItems,
-			map[string]any{"q": "dark"},
-		),
+		c.MustCallTool(constant.SearchItems, map[string]any{"q": "dark"}),
 	)
 	assert.StringContains(
 		t,
 		"item-1",
-		o.Client.MustCallTool(constant.GetItem, map[string]any{"id": "item-1"}),
+		c.MustCallTool(constant.GetItem, map[string]any{"id": "item-1"}),
 	)
 	assert.StringContains(
 		t,
 		"Breathe",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.GetTracks,
 			map[string]any{"album_id": "item-1"},
 		),
@@ -58,11 +55,11 @@ func TestModelContext(t *testing.T) {
 	k.SeriesName = "Breaking Bad"
 	k.SeasonNumber = 1
 	k.EpisodeNumber = 1
-	o.MockClient.AddItem(k)
+	s.Source.AddItem(k)
 	assert.StringContains(
 		t,
 		"Pilot",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.GetEpisodes,
 			map[string]any{"series_id": "series-1"},
 		),
@@ -72,16 +69,16 @@ func TestModelContext(t *testing.T) {
 	l.DeviceName = "Firefox"
 	l.Client = "Jellyfin Web"
 	l.SupportsRemote = true
-	o.MockClient.AddSession(l)
+	s.Source.AddSession(l)
 	assert.StringContains(
 		t,
 		"Firefox",
-		o.Client.MustCallTool(constant.ListSessions, map[string]any{}),
+		c.MustCallTool(constant.ListSessions, map[string]any{}),
 	)
 	assert.StringContains(
 		t,
 		"playback started",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.Play,
 			map[string]any{
 				"session_id": "sess-1",
@@ -92,7 +89,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"sent",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.PlaybackCommand,
 			map[string]any{"session_id": "sess-1", "command": "Pause"},
 		),
@@ -100,7 +97,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"volume set",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.SetVolume,
 			map[string]any{"session_id": "sess-1", "level": 50},
 		),

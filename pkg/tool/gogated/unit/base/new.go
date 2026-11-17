@@ -1,9 +1,25 @@
 package base
 
-import "testing"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"path/filepath"
+	"testing"
+)
 
-func New(t *testing.T) *Server {
+func New(
+	t *testing.T,
+	o ...Option,
+) *Server {
 	t.Helper()
+	result := &Server{
+		Reporter: memory.New(),
+		litePath: filepath.Join(t.TempDir(), "gogated.db"),
+		t:        t,
+	}
 
-	return NewWith(t, nil)
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

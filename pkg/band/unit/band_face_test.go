@@ -12,7 +12,7 @@ import (
 func TestClientAndItsMockKeepBandFace(t *testing.T) {
 	c := band.New("http://alfa.example:16992", constant.DefaultUser, "secret")
 	t.Cleanup(c.Close)
-	m := mock_client.New()
+	m := mock_client.New(t)
 	clients := []face.BandClient{c, m}
 	m.Close()
 	assert.Count(t, 2, clients)

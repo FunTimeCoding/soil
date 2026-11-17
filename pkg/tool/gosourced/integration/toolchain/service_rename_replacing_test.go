@@ -6,14 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestRenameRewritesReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -24,24 +23,24 @@ func TestRenameRewritesReplacingModule(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, library, "lib.go")
+	source := system_tester.Read(t, library, "lib.go")
 	assert.StringContains(t, "func Write(prefix string) string {", source)
 	assert.StringContains(t, "return Write(\"other\")", source)
 	assert.StringContains(
 		t,
 		"return lib.Write(\"a\")",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+		o.Read("pkg/user/user.go"),
 	)
 	assert.StringContains(
 		t,
-		filepath.Join(user, "pkg/user/user.go: Log → Write"),
+		filepath.Join(o.Directory, "pkg/user/user.go: Log → Write"),
 		rewrite_tester.JoinedConcerns(r),
 	)
 }
 
 func TestRenameFieldReachesReplacingModuleThroughAnotherPackage(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -55,14 +54,14 @@ func TestRenameFieldReachesReplacingModuleThroughAnotherPackage(t *testing.T) {
 	assert.StringContains(
 		t,
 		"return maker.Make().Size",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+		o.Read("pkg/user/user.go"),
 	)
 }
 
 func TestRenameDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	source := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	source := o.Read("pkg/user/user.go")
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -73,20 +72,20 @@ func TestRenameDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
+	assert.String(t, source, o.Read("pkg/user/user.go"))
+	assert.Integer(t, 3, len(r.Entries))
 	assert.String(
 		t,
-		source,
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+		filepath.Join(o.Directory, "pkg/user/user.go"),
+		r.Entries[2].Path,
 	)
-	assert.Integer(t, 3, len(r.Entries))
-	assert.String(t, filepath.Join(user, "pkg/user/user.go"), r.Entries[2].Path)
 	assert.True(t, r.Entries[2].Planned)
 }
 
 func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	source := system_tester.Read(t, library, "lib.go")
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -100,28 +99,24 @@ func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
 	assert.StringContains(
 		t,
 		filepath.Join(
-			user,
+			o.Directory,
 			"pkg/user/user.go: example/pkg/user.Log would lose access",
 		),
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(
-		t,
-		source,
-		service_tester.ReadFixtureFile(t, library, "lib.go"),
-	)
+	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
 }
 
 func TestRenameRefusedWhenReplacingModuleDoesNotTypeCheck(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
 	system_tester.Write(
 		t,
-		user,
+		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"other.test/lib\"\n\nfunc Broken() string {\n\treturn lib.Log(missing)\n}\n",
 	)
-	source := service_tester.ReadFixtureFile(t, library, "lib.go")
-	_, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	source := system_tester.Read(t, library, "lib.go")
+	_, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib",
@@ -131,16 +126,12 @@ func TestRenameRefusedWhenReplacingModuleDoesNotTypeCheck(t *testing.T) {
 		false,
 	)
 	assert.Error(t, e)
-	assert.String(
-		t,
-		source,
-		service_tester.ReadFixtureFile(t, library, "lib.go"),
-	)
+	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
 }
 
 func TestRenameSkipsReplacingModuleThatDoesNotReach(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "rename-replacer")
-	r, e := module_tester.ReplacingService(t, library, user).Symbol.Rename(
+	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
 		"other.test/lib/unused",
@@ -154,6 +145,6 @@ func TestRenameSkipsReplacingModuleThatDoesNotReach(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func Extra() string {",
-		service_tester.ReadFixtureFile(t, library, "unused/unused.go"),
+		system_tester.Read(t, library, "unused/unused.go"),
 	)
 }

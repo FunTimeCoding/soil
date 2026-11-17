@@ -2,31 +2,21 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
-	"path/filepath"
 	"testing"
 	"time"
 )
 
 func TestPurgeDropsStaleOnlyAndForgetsRoot(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	m.AddPost("alfa")
-	m.AddPost("charlie")
 	sink, k := worker_tester.NewSink(t)
-	path := filepath.Join(t.TempDir(), "mattermost.db")
-	s := service_tester.Reported(
-		t,
-		m,
-		k,
-		func(o *option.Mattermost) { o.LitePath = path },
-		memory.New(),
-	)
-	store := worker_tester.NewStoreOnFile(t, path)
-	service_tester.Subscribe(t, s, m, "alfa", "kilo", "papa")
-	service_tester.Subscribe(t, s, m, "charlie", "kilo", "quebec")
+	o := service_tester.New(t, service_tester.WithConnector(k))
+	o.Mattermost.AddPost("alfa")
+	o.Mattermost.AddPost("charlie")
+	s := o.Service()
+	store := worker_tester.NewStoreOnFile(t, o.Path)
+	o.Subscribe("alfa", "kilo", "papa")
+	o.Subscribe("charlie", "kilo", "quebec")
 	store.MustTouchRoot("alfa", time.Now().Add(-8*24*time.Hour))
 	assert.Count(t, 0, s.Purge())
 	remaining := store.MustAll()
@@ -43,33 +33,26 @@ func TestPurgeDropsStaleOnlyAndForgetsRoot(t *testing.T) {
 }
 
 func TestPurgeIsQuietWhenNothingIsStale(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	m.AddPost("alfa")
 	sink, k := worker_tester.NewSink(t)
-	s := service_tester.Service(t, m, k, nil)
-	service_tester.Subscribe(t, s, m, "alfa", "kilo", "papa")
+	o := service_tester.New(t, service_tester.WithConnector(k))
+	o.Mattermost.AddPost("alfa")
+	s := o.Service()
+	o.Subscribe("alfa", "kilo", "papa")
 	assert.Count(t, 0, s.Purge())
 	assert.True(t, s.Watching("alfa"))
 	assert.Count(t, 0, sink.All())
 }
 
 func TestPurgeKeepsWatchingRootLiveSubscriberHolds(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	m.AddPost("alfa")
 	sink, k := worker_tester.NewSink(t)
-	path := filepath.Join(t.TempDir(), "mattermost.db")
-	s := service_tester.Reported(
-		t,
-		m,
-		k,
-		func(o *option.Mattermost) { o.LitePath = path },
-		memory.New(),
-	)
-	store := worker_tester.NewStoreOnFile(t, path)
-	service_tester.Subscribe(t, s, m, "alfa", "kilo", "papa")
-	service_tester.Subscribe(t, s, m, "alfa", "lima", "papa")
+	o := service_tester.New(t, service_tester.WithConnector(k))
+	o.Mattermost.AddPost("alfa")
+	s := o.Service()
+	store := worker_tester.NewStoreOnFile(t, o.Path)
+	o.Subscribe("alfa", "kilo", "papa")
+	o.Subscribe("alfa", "lima", "papa")
 	store.MustTouchRoot("alfa", time.Now().Add(-8*24*time.Hour))
-	service_tester.Subscribe(t, s, m, "alfa", "mike", "sierra")
+	o.Subscribe("alfa", "mike", "sierra")
 	assert.Count(t, 0, s.Purge())
 	remaining := store.MustAll()
 	assert.Count(t, 1, remaining)

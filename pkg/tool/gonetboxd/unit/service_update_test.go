@@ -11,12 +11,13 @@ import (
 )
 
 func TestUpdateDeviceAppliesOnlyGivenFields(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
 	v := device_change.New()
 	v.Status = new(constant.StatusActive)
 	v.Serial = new("S1")
-	d, e := service_tester.Service(t, c).UpdateDevice("core", v)
+	d, e := o.Service().UpdateDevice("core", v)
 	assert.FatalOnError(t, e)
 	assert.String(t, "core", d.Name)
 	assert.Strings(
@@ -27,12 +28,13 @@ func TestUpdateDeviceAppliesOnlyGivenFields(t *testing.T) {
 }
 
 func TestUpdateDeviceRenamesLastAndReturnsRenamed(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
 	v := device_change.New()
 	v.Name = new("edge")
 	v.Status = new(constant.StatusOffline)
-	d, e := service_tester.Service(t, c).UpdateDevice("core", v)
+	d, e := o.Service().UpdateDevice("core", v)
 	assert.FatalOnError(t, e)
 	assert.String(t, "edge", d.Name)
 	assert.Strings(
@@ -45,19 +47,17 @@ func TestUpdateDeviceRenamesLastAndReturnsRenamed(t *testing.T) {
 func TestUpdateDeviceRefusesUnknownDevice(t *testing.T) {
 	v := device_change.New()
 	v.Status = new(constant.StatusActive)
-	_, e := service_tester.Service(t, service_tester.NewSource(t)).UpdateDevice(
-		"missing",
-		v,
-	)
+	_, e := service_tester.New(t).Service().UpdateDevice("missing", v)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestUpdateVirtualMachineSetsRole(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedVirtualMachine("alfa")
 	v := machine_change.New()
 	v.Role = new("bravo")
-	m, e := service_tester.Service(t, c).UpdateVirtualMachine("alfa", v)
+	m, e := o.Service().UpdateVirtualMachine("alfa", v)
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", m.Name)
 	assert.Strings(t, []string{"SetVirtualMachineRole alfa bravo"}, c.Calls())

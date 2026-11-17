@@ -5,6 +5,7 @@ import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/permission
 type Walk struct {
 	rules     []*allowlist.Rule
 	roots     []string
+	prefixes  []string
 	origin    string
 	base      string
 	moved     bool

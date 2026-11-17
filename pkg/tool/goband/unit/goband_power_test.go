@@ -8,12 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goband/unit/command_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
 func TestDryRunSaysWhenShutdownWouldBeRefused(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(
+	s.Alfa().SetPower(
 		bandConstant.PowerOn,
 		bandConstant.PowerCycle,
 		bandConstant.PowerOffSoft,
@@ -36,12 +37,12 @@ func TestDryRunSaysWhenShutdownWouldBeRefused(t *testing.T) {
 		*p.Refusal,
 	)
 	assert.String(t, "", p.Description)
-	assert.Count(t, 0, s.Alfa.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
 }
 
 func TestDryRunDescribesAcceptedShutdown(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(
+	s.Alfa().SetPower(
 		bandConstant.PowerOn,
 		bandConstant.PowerOffSoft,
 		bandConstant.PowerOffSoftGraceful,
@@ -63,12 +64,12 @@ func TestDryRunDescribesAcceptedShutdown(t *testing.T) {
 		"Would ask the operating system to shut down through LMS. Pass --yes to execute, then poll status - if the machine never goes down, the operating system is not answering and --force is the remaining option.",
 		p.Description,
 	)
-	assert.Count(t, 0, s.Alfa.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
 }
 
 func TestShutdownWithYesRequestsOffSoftGraceful(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(
+	s.Alfa().SetPower(
 		bandConstant.PowerOn,
 		bandConstant.PowerOffSoft,
 		bandConstant.PowerOffSoftGraceful,
@@ -87,12 +88,12 @@ func TestShutdownWithYesRequestsOffSoftGraceful(t *testing.T) {
 	assert.String(t, "alfa", r.Instance)
 	assert.String(t, "off soft graceful", r.Requested)
 	assert.String(t, "on", r.Power)
-	assert.Integers(t, []int{12}, s.Alfa.Requested())
+	assert.Integers(t, []int{12}, s.Alfa().Requested())
 }
 
 func TestRefusedShutdownExitsWithDaemonsMessage(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(
+	s.Alfa().SetPower(
 		bandConstant.PowerOn,
 		bandConstant.PowerCycle,
 		bandConstant.PowerOffSoft,
@@ -107,14 +108,14 @@ func TestRefusedShutdownExitsWithDaemonsMessage(t *testing.T) {
 	)
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "power: off soft graceful not offered", failure)
-	assert.Count(t, 0, s.Alfa.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
 }
 
 func TestStartWithoutInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
-	s := base.New(t)
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
 	_, failure, code := command_tester.Run(t, s, "start", "--yes")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "selection required", failure)
-	assert.Count(t, 0, s.Alfa.Requested())
-	assert.Count(t, 0, s.Bravo.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
+	assert.Count(t, 0, s.Bravo().Requested())
 }

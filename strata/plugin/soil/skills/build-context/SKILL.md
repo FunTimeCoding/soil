@@ -1,6 +1,6 @@
 ---
 name: build-context
-description: Build or refine harness context - skills, runbooks, or specs. Interview for shape, identify the right layer, study existing files for voice, draft, iterate.
+description: Build or refine harness context - skills, runbooks, or specs. Interview for shape, identify the right layer, study existing files for shape and density, draft, iterate.
 argument-hint: "[name or description]"
 ---
 
@@ -73,7 +73,11 @@ points at specs for rules. None duplicate each other.
    `ls ${CLAUDE_PLUGIN_ROOT}/skills/` for skills,
    `ls doc/ai/runbook/ doc/ai/spec/` in the repository
    and under `${CLAUDE_PLUGIN_ROOT}` for documents.
-   Read 2-3 from each layer to feel the voice and density.
+   Read 2-3 from each layer for their shape and density -
+   what they hold and how much. Take the form from them,
+   never the voice: a register that assigns authority -
+   law, ruling, verdict, an enforcer for a check - gets
+   copied by the next writer. Write plain.
 
 2. **Know the skill format** - frontmatter is optional
    YAML between `---` markers. Key fields: `name`,
@@ -99,7 +103,7 @@ Don't assume. Two or three questions, then draft.
 
 ## Draft
 
-Match the voice of the existing files in that layer.
+Match the layer's form, never another file's voice.
 Skills are direct, second person - instructions to the
 next Claude. Runbooks are operational - tool names,
 steps, tables. Specs are prescriptive - rules, patterns,

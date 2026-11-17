@@ -2,37 +2,28 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
-	prometheusMock "github.com/funtimecoding/soil/pkg/prometheus/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonHandsTwoGuardsPerInstanceToLifecycle(t *testing.T) {
-	assert.Count(t, 4, daemon_tester.NewHealthy(t, "alfa", "bravo").Workers())
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	assert.Count(t, 4, s.Daemon().Workers())
 }
 
 func TestClosingDaemonClosesBothClientsOfEveryInstance(t *testing.T) {
-	a := mock_client.New()
-	p := prometheusMock.New()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": a},
-		map[string]*prometheusMock.Client{"alfa": p},
-	)
-	d.Close()
-	assert.Integer(t, 1, a.Closed)
-	assert.Integer(t, 1, p.Closed)
+	s := base.New(t)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Alfa().Alertmanager.Closed)
+	assert.Integer(t, 1, s.Alfa().Prometheus.Closed)
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	alertmanagers := map[string]*mock_client.Client{"alfa": mock_client.New()}
-	prometheuses := map[string]*prometheusMock.Client{
-		"alfa": prometheusMock.New(),
-	}
+	s := base.New(t)
 	before := goleak.IgnoreCurrent()
-	d := daemon_tester.New(t, alertmanagers, prometheuses)
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

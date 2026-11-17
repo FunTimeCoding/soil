@@ -8,7 +8,7 @@ import (
 
 func (s *Server) Seed(count int) {
 	for i := range count {
-		s.MockClient.Add(
+		s.Alertmanager.Add(
 			alert.NewBasic(
 				fmt.Sprintf("fingerprint-%d", i),
 				"HypervisorUnreachable",

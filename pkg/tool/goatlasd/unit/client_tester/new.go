@@ -36,7 +36,6 @@ func New(
 		},
 		model_context_server.WithSignOn(),
 	)
-	t.Cleanup(s.Close)
 	result := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		token,

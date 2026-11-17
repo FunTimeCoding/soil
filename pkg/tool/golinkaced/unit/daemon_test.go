@@ -8,29 +8,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/option"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestCloseClosesLinkAceClient(t *testing.T) {
-	c := service_tester.NewSource(t)
-	daemon_tester.New(t, c, memory.New()).Close()
-	assert.Integer(t, 1, c.Closed)
+	s := base.New(t)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Source.Closed)
 }
 
 func TestWaitAnswersOnceLinkAceAnswers(t *testing.T) {
-	assert.FatalOnError(
-		t,
-		daemon_tester.New(t, service_tester.NewSource(t), memory.New()).
-			Wait(t.Context()),
-	)
+	assert.FatalOnError(t, base.New(t).Daemon().Wait(t.Context()))
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.Source = func() face.LinkAceClient { return c }
 	d := daemon.New(o, logger.New(t.Context()), memory.New())

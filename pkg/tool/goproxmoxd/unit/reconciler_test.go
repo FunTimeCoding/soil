@@ -14,37 +14,39 @@ import (
 )
 
 func TestReconcilerOnlyPromotes(t *testing.T) {
-	c, machines := service_tester.ReconcileFloor()
-	defer c.Close()
-	v, n := service_tester.IntentService(t, c, memory.New(), machines...)
+	o := service_tester.New(t, service_tester.WithNetbox())
+	o.ReconcileFloor()
 	r := reconciler.New(
-		v,
-		service_tester.Inventory(),
+		o.Service(),
+		o.Inventory(),
 		constant.ReconcileInterval,
 		logger.New(t.Context()),
 		memory.New(),
 	)
 	defer r.Close()
 	r.Reconcile()
-	assert.String(t, "active", *n.UpdatedMachines["alfa"].Status)
-	assert.Count(t, 1, n.UpdatedMachines)
+	assert.String(t, "active", *o.Netbox.UpdatedMachines["alfa"].Status)
+	assert.Count(t, 1, o.Netbox.UpdatedMachines)
 }
 
 func TestUnreachableHypervisorIsOnlyLogged(t *testing.T) {
-	c, machines := service_tester.ReconcileFloor()
-	defer c.Close()
-	c.SetFailure(
+	m := memory.New()
+	o := service_tester.New(
+		t,
+		service_tester.WithNetbox(),
+		service_tester.WithReporter(m),
+	)
+	o.ReconcileFloor()
+	o.Alfa().Hypervisor.SetFailure(
 		&net.OpError{
 			Op:  "dial",
 			Net: "tcp",
 			Err: os.NewSyscallError("connect", syscall.EHOSTUNREACH),
 		},
 	)
-	m := memory.New()
-	v, n := service_tester.IntentService(t, c, m, machines...)
 	r := reconciler.New(
-		v,
-		service_tester.Inventory(),
+		o.Service(),
+		o.Inventory(),
 		constant.ReconcileInterval,
 		logger.New(t.Context()),
 		m,
@@ -52,5 +54,5 @@ func TestUnreachableHypervisorIsOnlyLogged(t *testing.T) {
 	defer r.Close()
 	r.Reconcile()
 	assert.Count(t, 0, m.Events())
-	assert.Count(t, 0, n.UpdatedMachines)
+	assert.Count(t, 0, o.Netbox.UpdatedMachines)
 }

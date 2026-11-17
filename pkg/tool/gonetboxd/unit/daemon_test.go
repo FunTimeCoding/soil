@@ -2,41 +2,27 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/metric"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonClosesClientItBuilt(t *testing.T) {
-	c := service_tester.NewSource(t)
-	daemon.New(
-		service_tester.NewOption(t, c),
-		logger.New(t.Context()),
-		memory.New(),
-		metric.New(),
-	).Close()
-	assert.Integer(t, 1, c.Closed)
+	o := service_tester.New(t)
+	o.Daemon().Close()
+	assert.Integer(t, 1, o.Source.Closed)
 }
 
 func TestIntentClockRunsOnlyWithPowerIntent(t *testing.T) {
-	assert.Count(t, 1, base.Daemon(t, service_tester.NewSource(t)).Workers())
-	o := service_tester.NewOption(t, service_tester.NewSource(t))
-	o.PowerIntent = true
-	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())
-	t.Cleanup(d.Close)
+	assert.Count(t, 1, service_tester.New(t).Daemon().Workers())
+	d := service_tester.New(t, service_tester.WithPowerIntent()).Daemon()
 	assert.Count(t, 2, d.Workers())
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	o := service_tester.NewOption(t, service_tester.NewSource(t))
-	o.PowerIntent = true
+	o := service_tester.New(t, service_tester.WithPowerIntent())
 	before := goleak.IgnoreCurrent()
-	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())
+	d := o.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

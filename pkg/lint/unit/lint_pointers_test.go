@@ -296,7 +296,7 @@ func TestPointersAncestorPrefixResolves(t *testing.T) {
 	lint_tester.Report(t, "doc/notes/bravo/b303-echo.md", false, nil, "", l)
 }
 
-func TestPointersAncestorPrefixMissingTallies(t *testing.T) {
+func TestPointersAncestorPrefixMissingUnchecked(t *testing.T) {
 	checker, count := pointer_tester.Counting("doc/notes/alfa")
 	l := checker(
 		"doc/notes/bravo/b303-echo.md",
@@ -675,7 +675,7 @@ func TestPointersCommandPluginInRepository(t *testing.T) {
 	assert.Integer(t, 0, *count)
 }
 
-func TestPointersRouteTallies(t *testing.T) {
+func TestPointersRouteUnchecked(t *testing.T) {
 	checker, count := pointer_tester.Counting()
 	l := checker(
 		stringsConstant.UpperAlfa,
@@ -830,7 +830,7 @@ func TestPointersBareSlashDead(t *testing.T) {
 	)
 }
 
-func TestPointersSystemTallies(t *testing.T) {
+func TestPointersSystemUnchecked(t *testing.T) {
 	checker, seen := pointer_tester.Recording()
 	l := checker(
 		stringsConstant.UpperAlfa,
@@ -1055,7 +1055,7 @@ func TestPointersHostPlaceholder(t *testing.T) {
 	lint_tester.Report(t, "Alfa", false, nil, "", l)
 }
 
-func TestPointersSchemeTallies(t *testing.T) {
+func TestPointersSchemeUnchecked(t *testing.T) {
 	checker, seen := pointer_tester.Recording()
 	l := checker(
 		stringsConstant.UpperAlfa,

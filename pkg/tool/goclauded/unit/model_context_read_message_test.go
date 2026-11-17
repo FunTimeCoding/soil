@@ -12,7 +12,7 @@ func TestReadMessageTool(t *testing.T) {
 	s := base.New(t)
 	direct := s.Store.SendMessage("Ash", "Cedar", "an answer")
 	broadcast := s.Store.SendMessage("Dale", "", "deploying now")
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "reading")
 	result := a.MustCallTool(
 		constant.ReadMessage,
@@ -42,7 +42,7 @@ func TestReadMessageTool(t *testing.T) {
 
 func TestReadMessageToolNamesUnknownNumbers(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "reading")
 	result := a.MustCallTool(
 		constant.ReadMessage,
@@ -53,7 +53,7 @@ func TestReadMessageToolNamesUnknownNumbers(t *testing.T) {
 
 func TestReadMessageToolRequiresIdentifiers(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "reading")
 	message, e := a.CallToolError(
 		constant.ReadMessage,

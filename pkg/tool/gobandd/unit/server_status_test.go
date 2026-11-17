@@ -10,13 +10,13 @@ import (
 
 func TestStatusReportsPowerAndOperationsOffered(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(
+	s.Alfa().SetPower(
 		bandConstant.PowerOn,
 		bandConstant.PowerCycle,
 		bandConstant.PowerOffSoft,
 		bandConstant.PowerOffSoftGraceful,
 	)
-	r, e := s.Client.GetStatusWithResponse(
+	r, e := s.GeneratedClient().GetStatusWithResponse(
 		t.Context(),
 		&client.GetStatusParams{Instance: new("alfa")},
 	)

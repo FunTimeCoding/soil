@@ -7,7 +7,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	v, _ := base.New(t)
+	v := base.New(t).Served()
 	v.VerifyBase(t)
 	v.VerifyFavicon(t)
 	v.VerifyOpen(t, constant.DashboardPath)

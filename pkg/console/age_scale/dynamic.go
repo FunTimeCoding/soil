@@ -1,0 +1,24 @@
+package age_scale
+
+import (
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/color_assignment"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/integers"
+)
+
+func Dynamic[T face.AgeColorable](
+	startHex string,
+	endHex string,
+	v ...T,
+) *Scale {
+	count := len(v)
+	c := console.Gradient(startHex, endHex, count)
+	assignments := make([]*color_assignment.Assignment, count)
+
+	for i := 0; i < count; i++ {
+		assignments[i] = color_assignment.New(integers.ToString(i), c[i])
+	}
+
+	return New(assignments, v...)
+}

@@ -1,7 +1,7 @@
 package detail
 
 type Detail struct {
-	Budget             int `json:"budget"`
+	ByteLimit          int `json:"byte_limit"`
 	AlwaysBytes        int `json:"always_bytes"`
 	IndexBytes         int `json:"index_bytes"`
 	IndexTrimmed       int `json:"index_trimmed"`

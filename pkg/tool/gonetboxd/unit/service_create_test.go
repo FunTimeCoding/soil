@@ -9,9 +9,10 @@ import (
 )
 
 func TestCreateDeviceWithTenantAndTags(t *testing.T) {
-	c := service_tester.DeviceCatalog(t)
-	c.SeedTenant("acme")
-	d, e := service_tester.Service(t, c).CreateDevice(
+	o := service_tester.New(t)
+	service_tester.SeedDeviceCatalog(o.Source)
+	o.Source.SeedTenant("acme")
+	d, e := o.Service().CreateDevice(
 		"core",
 		"server",
 		"r640",
@@ -25,26 +26,19 @@ func TestCreateDeviceWithTenantAndTags(t *testing.T) {
 }
 
 func TestCreateDeviceWithoutTenant(t *testing.T) {
-	d, e := service_tester.Service(
-		t,
-		service_tester.DeviceCatalog(t),
-	).CreateDevice(
-		"core",
-		"server",
-		"r640",
-		"home",
-		"",
-		nil,
-	)
+	o := service_tester.New(t)
+	service_tester.SeedDeviceCatalog(o.Source)
+	d, e := o.Service().CreateDevice("core", "server", "r640", "home", "", nil)
 	assert.FatalOnError(t, e)
 	assert.String(t, "no tenant", d.Tenant)
 }
 
 func TestCreateDeviceRefusesUnknownRoleBeforeCreating(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDeviceType("r640")
 	c.SeedSite("home")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	_, e := s.CreateDevice("core", "server", "r640", "home", "", nil)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "device role not found: server", e.Error())
@@ -54,9 +48,10 @@ func TestCreateDeviceRefusesUnknownRoleBeforeCreating(t *testing.T) {
 }
 
 func TestCreateInterfaceAttachesPhysicalAddress(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	i, e := s.CreateInterface("core", "eno1", "1000base-t", "02:00:00:00:00:01")
 	assert.FatalOnError(t, e)
 	assert.String(t, "eno1", i.Name)
@@ -68,22 +63,19 @@ func TestCreateInterfaceAttachesPhysicalAddress(t *testing.T) {
 }
 
 func TestCreateInterfaceWithoutPhysicalAddress(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
-	_, e := service_tester.Service(t, c).CreateInterface(
-		"core",
-		"eno1",
-		"1000base-t",
-		"",
-	)
+	_, e := o.Service().CreateInterface("core", "eno1", "1000base-t", "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, c.Calls())
 }
 
 func TestCreateInterfaceRefusesBadPhysicalAddressBeforeCreating(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	_, e := s.CreateInterface("core", "eno1", "1000base-t", "nonsense")
 	assert.True(t, validation.Is(e))
 	interfaces, f := s.DeviceInterfaces("core")
@@ -92,30 +84,22 @@ func TestCreateInterfaceRefusesBadPhysicalAddressBeforeCreating(t *testing.T) {
 }
 
 func TestCreateCableResolvesBothEnds(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedInterface(c.SeedDevice("core"), "eno1")
 	c.SeedInterface(c.SeedDevice("edge"), "eno2")
-	created, e := service_tester.Service(t, c).CreateCable(
-		"core",
-		"eno1",
-		"edge",
-		"eno2",
-	)
+	created, e := o.Service().CreateCable("core", "eno1", "edge", "eno2")
 	assert.FatalOnError(t, e)
 	assert.NotNil(t, created)
 	assert.Strings(t, []string{"CreateCable eno1 eno2"}, c.Calls())
 }
 
 func TestCreateCableRefusesUnknownInterface(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedInterface(c.SeedDevice("core"), "eno1")
 	c.SeedDevice("edge")
-	_, e := service_tester.Service(t, c).CreateCable(
-		"core",
-		"eno1",
-		"edge",
-		"eno2",
-	)
+	_, e := o.Service().CreateCable("core", "eno1", "edge", "eno2")
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "interface eno2 not found for device edge", e.Error())
 	assert.Count(t, 0, c.Calls())

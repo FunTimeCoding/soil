@@ -10,7 +10,7 @@ import (
 
 func TestAnnounceReachesSessionActivity(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "reviewing proposals")
 	r := a.CheckLive()
 	announces := delivery_tester.ClientKindEntries(
@@ -23,7 +23,7 @@ func TestAnnounceReachesSessionActivity(t *testing.T) {
 
 func TestAnnounceReannounce(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "first topic")
 	a.CheckLive()
 	a.Announce(a.Name(), "second topic")

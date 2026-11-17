@@ -3,13 +3,14 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
 )
 
 func TestTagInputStripsNotationArray(t *testing.T) {
-	s := model_context_tester.NewTagged(t)
-	result := s.MustCallTool(
+	s := base.New(t)
+	s.SeedMemory()
+	result := s.Tools().MustCallTool(
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -25,8 +26,9 @@ func TestTagInputStripsNotationArray(t *testing.T) {
 }
 
 func TestTagInputStaysQuietWhenClean(t *testing.T) {
-	s := model_context_tester.NewTagged(t)
-	result := s.MustCallTool(
+	s := base.New(t)
+	s.SeedMemory()
+	result := s.Tools().MustCallTool(
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,

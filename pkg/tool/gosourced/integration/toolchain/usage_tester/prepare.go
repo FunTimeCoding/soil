@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func Prepare(t *testing.T) string {
+func Prepare(t *testing.T) *service_tester.Tester {
 	t.Helper()
 	gorm := t.TempDir()
 	testutil.CopyTree(
@@ -18,10 +18,12 @@ func Prepare(t *testing.T) string {
 	)
 	system_tester.Write(t, gorm, "go.mod", "module gorm.io/gorm\n\ngo 1.26.3\n")
 
-	return service_tester.Prepare(
+	return service_tester.New(
 		t,
-		"service-usage/src",
-		"require gorm.io/gorm v0.0.0",
-		fmt.Sprintf("replace gorm.io/gorm => %s", gorm),
+		service_tester.WithFixture(
+			"service-usage/src",
+			"require gorm.io/gorm v0.0.0",
+			fmt.Sprintf("replace gorm.io/gorm => %s", gorm),
+		),
 	)
 }

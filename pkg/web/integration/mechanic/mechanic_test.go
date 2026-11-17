@@ -18,9 +18,9 @@ func TestEventAfterRequestResetsForm(t *testing.T) {
 	b.Navigate(join.Empty(address, constant.NotifyPath))
 	b.WaitVisible("#note-input")
 	b.Fill("#note-input", "hello")
-	b.Click("#receipt-post")
+	b.Click("#reply-post")
 	b.WaitCondition(
-		"document.querySelector('#receipt').textContent.indexOf('received hello') >= 0",
+		"document.querySelector('#reply').textContent.indexOf('received hello') >= 0",
 	)
 	b.WaitCondition("document.querySelector('#note-input').value === ''")
 }
@@ -31,7 +31,7 @@ func TestEventOutOfBandSwap(t *testing.T) {
 	b.Navigate(join.Empty(address, constant.NotifyPath))
 	b.WaitVisible("#note-input")
 	b.Fill("#note-input", "hello")
-	b.Click("#receipt-post")
+	b.Click("#reply-post")
 	b.WaitCondition(
 		"document.querySelector('#oob-summary').textContent.indexOf('sent 1') >= 0",
 	)
@@ -48,7 +48,7 @@ func TestEventFailureRaisesNotification(t *testing.T) {
 	b.WaitCondition(
 		"document.querySelectorAll('#notifications > *').length > 0",
 	)
-	assert.String(t, "", b.Text("#receipt"))
+	assert.String(t, "", b.Text("#reply"))
 }
 
 func TestExtraSwapDelete(t *testing.T) {

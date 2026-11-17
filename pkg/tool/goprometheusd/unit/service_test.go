@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
@@ -60,27 +59,21 @@ func TestSeriesAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
-	alfa := mock_client.New()
-	alfa.Failure = outage_tester.RefusedDial()
-	s := service_tester.New(t, map[string]*mock_client.Client{"alfa": alfa})
+	o := service_tester.New(t)
+	o.Alfa().Failure = outage_tester.RefusedDial()
+	s := o.Service()
 	_, e := s.Query(t.Context(), "alfa", "up")
 	assert.True(t, unavailable.Is(e))
-	alfa.Failure = nil
+	o.Alfa().Failure = nil
 	_, f := s.Query(t.Context(), "alfa", "up")
 	assert.True(t, unavailable.Is(f))
 	assert.StringContains(t, "prometheus:alfa unreachable since", f.Error())
 }
 
 func TestOneUnreachableInstanceLeavesOthersAnswering(t *testing.T) {
-	alfa := mock_client.New()
-	alfa.Failure = outage_tester.RefusedDial()
-	s := service_tester.New(
-		t,
-		map[string]*mock_client.Client{
-			"alfa":  alfa,
-			"bravo": mock_client.New(),
-		},
-	)
+	o := service_tester.New(t, service_tester.WithInstances("alfa", "bravo"))
+	o.Alfa().Failure = outage_tester.RefusedDial()
+	s := o.Service()
 	_, e := s.Query(t.Context(), "alfa", "up")
 	assert.True(t, unavailable.Is(e))
 	_, f := s.Query(t.Context(), "bravo", "up")

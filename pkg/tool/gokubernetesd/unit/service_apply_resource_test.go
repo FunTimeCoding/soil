@@ -11,7 +11,7 @@ import (
 
 func TestApplyResource(t *testing.T) {
 	s := service_tester.New(t)
-	result, e := s.Service.ApplyResource(
+	result, e := s.Service().ApplyResource(
 		context.Background(),
 		"test",
 		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
@@ -24,13 +24,13 @@ func TestApplyResource(t *testing.T) {
 
 func TestApplyResourceAlreadyExists(t *testing.T) {
 	s := service_tester.New(t)
-	_, f := s.Service.ApplyResource(
+	_, f := s.Service().ApplyResource(
 		context.Background(),
 		"test",
 		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
 	)
 	assert.Nil(t, f)
-	_, e := s.Service.ApplyResource(
+	_, e := s.Service().ApplyResource(
 		context.Background(),
 		"test",
 		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
@@ -40,13 +40,13 @@ func TestApplyResourceAlreadyExists(t *testing.T) {
 
 func TestApplyResourceOverride(t *testing.T) {
 	s := service_tester.New(t)
-	_, f := s.Service.ApplyResource(
+	_, f := s.Service().ApplyResource(
 		context.Background(),
 		"test",
 		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
 	)
 	assert.Nil(t, f)
-	result, e := s.Service.ApplyResource(
+	result, e := s.Service().ApplyResource(
 		context.Background(),
 		"test",
 		request.Apply{
@@ -61,7 +61,7 @@ func TestApplyResourceOverride(t *testing.T) {
 
 func TestApplyResourceDryRun(t *testing.T) {
 	s := service_tester.New(t)
-	result, e := s.Service.ApplyResource(
+	result, e := s.Service().ApplyResource(
 		context.Background(),
 		"test",
 		request.Apply{

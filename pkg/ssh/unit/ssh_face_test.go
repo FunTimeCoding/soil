@@ -10,7 +10,7 @@ import (
 
 func TestClientAndItsMockKeepSSHFace(t *testing.T) {
 	c := ssh.NewWithPassword("alfa", "alfa.example", "secret", false)
-	m := mock_client.New()
+	m := mock_client.New(t)
 	clients := []face.SSHClient{c, m}
 	m.Close()
 	assert.Count(t, 2, clients)

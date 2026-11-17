@@ -3,35 +3,35 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/base"
 	"testing"
 )
 
 func TestModelContextOffersFiveTools(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	assert.Count(t, 5, o.Client.ListTools())
+	s := base.New(t)
+	c := s.Tools()
+	assert.Count(t, 5, c.ListTools())
 }
 
 func TestStatusReportsSeal(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	o.Server.MockClient.Seal()
+	s := base.New(t)
+	c := s.Tools()
+	s.Source.Seal()
 	assert.StringContains(
 		t,
 		`"sealed": true`,
-		o.Client.MustCallTool(constant.Status, map[string]any{}),
+		c.MustCallTool(constant.Status, map[string]any{}),
 	)
 }
 
 func TestShowSecretMasksValues(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	o.Server.MockClient.AddSecret(
+	s := base.New(t)
+	c := s.Tools()
+	s.Source.AddSecret(
 		"alfa/bravo",
 		map[string]string{"CHARLIE": "delta-value"},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.ShowSecret,
 		map[string]any{"path": "alfa/bravo"},
 	)
@@ -40,13 +40,13 @@ func TestShowSecretMasksValues(t *testing.T) {
 }
 
 func TestRevealSecretReturnsOneValue(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	o.Server.MockClient.AddSecret(
+	s := base.New(t)
+	c := s.Tools()
+	s.Source.AddSecret(
 		"alfa/bravo",
 		map[string]string{"CHARLIE": "delta-value", "ECHO": "foxtrot-value"},
 	)
-	result := o.Client.MustCallTool(
+	result := c.MustCallTool(
 		constant.RevealSecret,
 		map[string]any{"path": "alfa/bravo", "key": "CHARLIE"},
 	)
@@ -55,31 +55,31 @@ func TestRevealSecretReturnsOneValue(t *testing.T) {
 }
 
 func TestRevealOfMissingKeyFailsWithoutCapture(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	o.Server.MockClient.AddSecret(
+	s := base.New(t)
+	c := s.Tools()
+	s.Source.AddSecret(
 		"alfa/bravo",
 		map[string]string{"CHARLIE": "delta-value"},
 	)
 	assert.StringContains(
 		t,
 		"secret key not found: GOLF",
-		o.Client.MustCallToolError(
+		c.MustCallToolError(
 			constant.RevealSecret,
 			map[string]any{"path": "alfa/bravo", "key": "GOLF"},
 		),
 	)
-	assert.Count(t, 0, o.Server.Reporter.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestPutSecretMergesKeys(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	o.Server.MockClient.AddSecret(
+	s := base.New(t)
+	c := s.Tools()
+	s.Source.AddSecret(
 		"alfa/bravo",
 		map[string]string{"CHARLIE": "delta-value"},
 	)
-	o.Client.MustCallTool(
+	c.MustCallTool(
 		constant.PutSecret,
 		map[string]any{
 			"path":   "alfa/bravo",
@@ -89,17 +89,17 @@ func TestPutSecretMergesKeys(t *testing.T) {
 	assert.Any(
 		t,
 		map[string]string{"CHARLIE": "delta-value", "ECHO": "foxtrot-value"},
-		o.Server.MockClient.Stored("alfa/bravo"),
+		s.Source.Stored("alfa/bravo"),
 	)
 }
 
 func TestPathClimbingOutIsRefused(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
+	s := base.New(t)
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"path climbs out of the store",
-		o.Client.MustCallToolError(
+		c.MustCallToolError(
 			constant.ShowSecret,
 			map[string]any{"path": "alfa/../bravo"},
 		),
@@ -107,14 +107,11 @@ func TestPathClimbingOutIsRefused(t *testing.T) {
 }
 
 func TestListSecretsShowsFolders(t *testing.T) {
-	o := model_context_tester.New(t)
-	defer o.Close()
-	o.Server.MockClient.AddSecret("alfa/bravo", map[string]string{"A": "1"})
-	o.Server.MockClient.AddSecret(
-		"alfa/charlie/delta",
-		map[string]string{"B": "2"},
-	)
-	result := o.Client.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	s.Source.AddSecret("alfa/bravo", map[string]string{"A": "1"})
+	s.Source.AddSecret("alfa/charlie/delta", map[string]string{"B": "2"})
+	result := c.MustCallTool(
 		constant.ListSecrets,
 		map[string]any{"path": "alfa"},
 	)

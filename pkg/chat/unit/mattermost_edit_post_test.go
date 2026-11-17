@@ -56,8 +56,7 @@ func TestEditingMissingPostIsNotFound(t *testing.T) {
 }
 
 func TestMockEditsItsStoredPost(t *testing.T) {
-	m := mock_client.New("charlie")
-	defer m.Close()
+	m := mock_client.New(t, "charlie")
 	m.AddPost("alfa")
 	_, e := m.EditPost(&model.Post{Id: "alfa"}, "done: bravo")
 	assert.FatalOnError(t, e)

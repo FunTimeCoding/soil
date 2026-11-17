@@ -15,7 +15,7 @@ paths:
           type: string
       - name: source
         in: query
-        description: Restrict to placements attested by this source.
+        description: Restrict to placements seen by this source.
         schema:
           type: string
       - name: package

@@ -1,9 +1,9 @@
 package peer
 
-import "github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+import "github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
 
 func (g *Guard) handle(e error) {
-	g.reacher.Handle(
+	g.outages.Handle(
 		g.name,
 		e,
 		func(x *edge.Edge) { g.logger.Plain("%s", x) },

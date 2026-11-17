@@ -9,7 +9,7 @@ func NewOversize(r *client.OversizeReport) *Oversize {
 		s.Chunks += len(f.Chunks)
 
 		for _, c := range f.Chunks {
-			if c.EmbedTokens > r.EmbedAllowance {
+			if c.EmbedTokens > r.EmbedTokenLimit {
 				s.OverEmbedder++
 			}
 		}

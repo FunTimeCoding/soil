@@ -19,12 +19,12 @@ func printPreview(
 		client.PostChunkJSONRequestBody{Path: name, Body: body},
 	)
 	t.EmitDone(e)
-	printPreviewSections(t, p.Sections, p.Allowance)
+	printPreviewSections(t, p.Sections, p.TokenLimit)
 	t.Line("windows")
 	over := 0
 
 	for _, k := range p.Chunks {
-		over += printPreviewChunk(t, k, p.Allowance, p.EmbedAllowance)
+		over += printPreviewChunk(t, k, p.TokenLimit, p.EmbedTokenLimit)
 	}
 
 	t.Line()
@@ -33,10 +33,10 @@ func printPreview(
 			"%d chunks, %d over %d tokens (%s, window %d) or the embedder's %d",
 			len(p.Chunks),
 			over,
-			p.Allowance,
+			p.TokenLimit,
 			p.Model,
 			p.Window,
-			p.EmbedAllowance,
+			p.EmbedTokenLimit,
 		),
 	)
 

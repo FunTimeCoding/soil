@@ -10,8 +10,7 @@ import (
 )
 
 func TestPushIsEmbeddedWhileEmbedderAnswers(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := service_tester.New(t).Service()
 	assert.String(
 		t,
 		"",
@@ -27,9 +26,10 @@ func TestPushIsEmbeddedWhileEmbedderAnswers(t *testing.T) {
 }
 
 func TestPushWhileEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Fail(outage_tester.RefusedDial())
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	warning := v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -52,9 +52,10 @@ func TestPushWhileEmbedderIsDownIsStoredWithItsMetadata(t *testing.T) {
 }
 
 func TestHybridSearchFailsAtOnceWhileEmbedderIsDown(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Fail(outage_tester.RefusedDial())
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	_, e := v.Search(t.Context(), search_option.New("zulu", 10))
 	assert.True(t, unavailable.Is(e))
 	_, f := v.Search(t.Context(), search_option.New("zulu", 10))
@@ -64,9 +65,10 @@ func TestHybridSearchFailsAtOnceWhileEmbedderIsDown(t *testing.T) {
 }
 
 func TestKeywordSearchNeedsNoEmbedder(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Fail(outage_tester.RefusedDial())
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -82,9 +84,10 @@ func TestKeywordSearchNeedsNoEmbedder(t *testing.T) {
 }
 
 func TestPendingDocumentsWaitWhileEmbedderIsDown(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.Fail(outage_tester.RefusedDial())
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"notes",

@@ -9,8 +9,8 @@ import (
 
 func (s *Service) oversizeFile(
 	d *record.DocumentBody,
-	allowance int,
-	embedAllowance int,
+	tokenLimit int,
+	embedTokenLimit int,
 ) *oversize_file.File {
 	var result *oversize_file.File
 
@@ -18,7 +18,7 @@ func (s *Service) oversizeFile(
 		tokens := s.reranker.Count(c.Text)
 		embedTokens := s.counter.Count(c.Text)
 
-		if tokens <= allowance && embedTokens <= embedAllowance {
+		if tokens <= tokenLimit && embedTokens <= embedTokenLimit {
 			continue
 		}
 

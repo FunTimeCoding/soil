@@ -8,7 +8,7 @@ import (
 
 func TestRemoveMissingDeletesAbsentPaths(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	s.Store.RemoveMissing([]string{"alfa.md", "charlie.md"})
 	seeds := s.Store.Seeds()
 	assert.Count(t, 2, seeds)
@@ -18,7 +18,7 @@ func TestRemoveMissingDeletesAbsentPaths(t *testing.T) {
 
 func TestRemoveMissingEmptyListClearsAll(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	s.Store.RemoveMissing([]string{})
 	seeds := s.Store.Seeds()
 	assert.Count(t, 0, seeds)
@@ -26,7 +26,7 @@ func TestRemoveMissingEmptyListClearsAll(t *testing.T) {
 
 func TestRemoveMissingNilClearsAll(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	s.Store.RemoveMissing(nil)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 0, seeds)

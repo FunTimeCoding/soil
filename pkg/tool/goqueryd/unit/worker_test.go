@@ -18,9 +18,9 @@ import (
 )
 
 func TestWorkerIndexesWhileEmbedderIsDown(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
-	m.Fail(outage_tester.RefusedDial())
-	v := service_tester.NewService(t, m, service_tester.NewReranker(t))
+	q := service_tester.New(t)
+	q.Embedder.Fail(outage_tester.RefusedDial())
+	v := q.Service()
 	d := t.TempDir()
 	store_tester.WriteFixture(t, d, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("test", d, constant.DefaultGlob)
@@ -45,11 +45,7 @@ func TestWorkerIndexesWhileEmbedderIsDown(t *testing.T) {
 }
 
 func TestWorkerCountsWhatItPrunes(t *testing.T) {
-	v := service_tester.NewService(
-		t,
-		service_tester.NewEmbedder(t),
-		service_tester.NewReranker(t),
-	)
+	v := service_tester.New(t).Service()
 	v.MustPushDocument(
 		t.Context(),
 		"notes",

@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/move_engine"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"go/token"
 	"go/types"
@@ -42,7 +42,7 @@ func (s *Service) moveMethodsThrough(
 			loaded []*packages.Package,
 			_ *token.FileSet,
 		) []types.Object {
-			return relocator.MethodObjects(
+			return move_engine.MethodObjects(
 				loaded,
 				packagePath,
 				typeName,
@@ -64,7 +64,7 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	source := relocator.NamedType(p, typeName)
+	source := move_engine.NamedType(p, typeName)
 
 	if source == nil {
 		return commit.FailValidation(
@@ -82,7 +82,7 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	destination := relocator.NamedType(target, targetType)
+	destination := move_engine.NamedType(target, targetType)
 
 	if destination == nil {
 		return commit.FailValidation(
@@ -95,7 +95,7 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	entries, message := relocator.MethodEntries(
+	entries, message := move_engine.MethodEntries(
 		set,
 		p,
 		source,
@@ -107,13 +107,13 @@ func (s *Service) moveMethodsThrough(
 		return commit.FailValidation(r, message)
 	}
 
-	receivers, message := relocator.ReceiverIdentifiers(entries)
+	receivers, message := move_engine.ReceiverIdentifiers(entries)
 
 	if message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	if message := relocator.CheckMethodShape(
+	if message := move_engine.CheckMethodShape(
 		p,
 		entries,
 		destination,
@@ -121,7 +121,7 @@ func (s *Service) moveMethodsThrough(
 		return commit.FailValidation(r, message)
 	}
 
-	if message := relocator.CheckTargetCollision(
+	if message := move_engine.CheckTargetCollision(
 		entries,
 		destination,
 	); message != "" {
@@ -132,12 +132,12 @@ func (s *Service) moveMethodsThrough(
 		directory,
 		all,
 		entries,
-		relocator.QualifiedType(source),
+		move_engine.QualifiedType(source),
 	); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
-	holders, message := relocator.RouteCallers(
+	holders, message := move_engine.RouteCallers(
 		all,
 		set,
 		p,
@@ -160,7 +160,7 @@ func (s *Service) moveMethodsThrough(
 	plan.PackagePath = packagePath
 	plan.TargetPackagePath = targetPackagePath
 
-	if message := relocator.Prepare(plan, receivers); message != "" {
+	if message := move_engine.Prepare(plan, receivers); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
@@ -177,5 +177,5 @@ func (s *Service) moveMethodsThrough(
 		)
 	}
 
-	return relocator.Finish(r, plan, out)
+	return move_engine.Finish(r, plan, out)
 }

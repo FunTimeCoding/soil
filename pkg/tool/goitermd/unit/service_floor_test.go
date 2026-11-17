@@ -8,10 +8,15 @@ import (
 )
 
 func TestSendKeysPacesAtLeastFloor(t *testing.T) {
-	c := service_tester.SessionClient("alfa")
-	defer c.Close()
-	s := service_tester.NewPaced(t, c, 50*time.Millisecond)
+	o := service_tester.New(
+		t,
+		service_tester.WithKeyInterval(50*time.Millisecond),
+	)
+	o.AddSession("alfa")
 	start := time.Now()
-	assert.FatalOnError(t, s.SendKeys("alfa", []string{"up", "return"}, 0))
+	assert.FatalOnError(
+		t,
+		o.Service().SendKeys("alfa", []string{"up", "return"}, 0),
+	)
 	assert.True(t, time.Since(start) >= 50*time.Millisecond)
 }

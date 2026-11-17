@@ -12,10 +12,10 @@ import (
 )
 
 func TestMovePackageRetargetsDocuments(t *testing.T) {
-	d := module_tester.PackageMoveDocument(t)
-	r, e := service_tester.NewService(t).Packages.MovePackage(
+	o := module_tester.PackageMoveDocument(t)
+	r, e := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"example/pkg/store",
 		false,
@@ -25,15 +25,15 @@ func TestMovePackageRetargetsDocuments(t *testing.T) {
 	assert.String(
 		t,
 		"Store lives in `pkg/store/store.go`, built by `go:pkg/store.New`, called from `pkg/caller/run.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
-	d := module_tester.PackageMoveDocument(t)
-	r, e := service_tester.NewService(t).Packages.MovePackage(
+	o := module_tester.PackageMoveDocument(t)
+	r, e := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"example/pkg/store",
 		true,
@@ -48,21 +48,25 @@ func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 	assert.String(
 		t,
 		"Store lives in `pkg/outer/store/store.go`, built by `go:pkg/outer/store.New`, called from `pkg/caller/run.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestMovePackageKeepsDocumentEditedMeanwhile(t *testing.T) {
-	d := module_tester.PackageMoveDocument(t)
-	s := service_tester.NewService(t)
-	s.Commit.BeforeCommit(
+	o := module_tester.PackageMoveDocument(t)
+	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(t, d, "doc/note.md", "Edited meanwhile.\n")
+			system_tester.Write(
+				t,
+				o.Directory,
+				"doc/note.md",
+				"Edited meanwhile.\n",
+			)
 		},
 	)
-	r, e := s.Packages.MovePackage(
+	r, e := o.Packages.MovePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"example/pkg/store",
 		false,
@@ -74,9 +78,5 @@ func TestMovePackageKeepsDocumentEditedMeanwhile(t *testing.T) {
 		"doc/note.md: changed while the call ran - ran again",
 		strings.Join(service_tester.ConcernText(r), stringsConstant.Unix),
 	)
-	assert.String(
-		t,
-		"Edited meanwhile.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "Edited meanwhile.\n", o.Read("doc/note.md"))
 }

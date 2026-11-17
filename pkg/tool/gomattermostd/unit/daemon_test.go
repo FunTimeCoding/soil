@@ -1,27 +1,18 @@
 package unit
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"go.uber.org/goleak"
 	"testing"
-	"time"
 )
 
 func TestDaemonWithoutOptionsRunsOnlyItsGuard(t *testing.T) {
-	workers := service_tester.NewDaemonWithoutSubscription(
-		t,
-		service_tester.NewMattermost(t, "kilo"),
-	).Workers()
+	workers := service_tester.New(t).Daemon().Workers()
 	assert.Count(t, 1, workers)
 	_, guard := workers[0].(*peer.Guard)
 	assert.True(t, guard)
@@ -29,12 +20,10 @@ func TestDaemonWithoutOptionsRunsOnlyItsGuard(t *testing.T) {
 
 func TestGoclaudedAddsRosterGuardWatcherAndTwoClocks(t *testing.T) {
 	_, k := worker_tester.NewSink(t)
-	workers := service_tester.NewDaemon(
+	workers := service_tester.New(
 		t,
-		service_tester.NewMattermost(t, "kilo"),
-		k,
-		nil,
-	).Workers()
+		service_tester.WithConnector(k),
+	).Daemon().Workers()
 	assert.Count(t, 5, workers)
 
 	for n, w := range workers {
@@ -45,39 +34,34 @@ func TestGoclaudedAddsRosterGuardWatcherAndTwoClocks(t *testing.T) {
 
 func TestMonitorAddsItsClock(t *testing.T) {
 	_, k := worker_tester.NewSink(t)
-	workers := service_tester.NewDaemon(
+	workers := service_tester.New(
 		t,
-		service_tester.NewMattermost(t, "kilo"),
-		k,
-		func(o *option.Mattermost) {
-			o.Monitor.Enabled = true
-			o.Monitor.Interval = time.Hour
-		},
-	).Workers()
+		service_tester.WithConnector(k),
+		service_tester.WithMonitor(),
+	).Daemon().Workers()
 	assert.Count(t, 6, workers)
 }
 
 func TestDaemonClosesMattermostOnce(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
 	_, k := worker_tester.NewSink(t)
-	d := service_tester.NewDaemon(t, m, k, nil)
+	o := service_tester.New(t, service_tester.WithConnector(k))
+	d := o.Daemon()
 	d.Close()
 	d.Close()
-	assert.Integer(t, 1, m.Closed)
+	assert.Integer(t, 1, o.Mattermost.Closed)
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	m.Failure = connection.New(
+	_, k := worker_tester.NewSink(t)
+	o := service_tester.New(t, service_tester.WithConnector(k))
+	o.Mattermost.Failure = connection.New(
 		errorsConstant.Unreachable,
 		"alfa.test",
 		"",
 		errorsConstant.Refused,
 	)
-	_, k := worker_tester.NewSink(t)
-	o := service_tester.NewOption(t, m, k, nil)
 	before := goleak.IgnoreCurrent()
-	d := daemon.New(o, logger.New(context.Background()), memory.New())
+	d := o.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

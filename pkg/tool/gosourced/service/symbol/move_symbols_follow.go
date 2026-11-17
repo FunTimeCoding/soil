@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/decoration"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/move_engine"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"go/token"
 	"go/types"
@@ -29,7 +29,7 @@ func (s *Service) moveSymbolsFollow(
 		loaded []*packages.Package,
 		loadedSet *token.FileSet,
 	) []types.Object {
-		return relocator.MovedObjects(
+		return move_engine.MovedObjects(
 			directory,
 			loaded,
 			loadedSet,
@@ -76,7 +76,7 @@ func (s *Service) moveSymbolsFollow(
 		targetPackageName = path.Base(targetPackagePath)
 	}
 
-	qualifications, blocked := relocator.Qualifications(
+	qualifications, blocked := move_engine.Qualifications(
 		set,
 		external,
 		packagePath,
@@ -89,7 +89,7 @@ func (s *Service) moveSymbolsFollow(
 	}
 
 	decorations := decoration.NewSet()
-	e = relocator.ApplyQualifications(
+	e = move_engine.ApplyQualifications(
 		r,
 		decorations,
 		set,

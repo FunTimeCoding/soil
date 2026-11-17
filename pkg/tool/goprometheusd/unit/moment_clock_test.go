@@ -4,13 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/base"
 	"testing"
 	"time"
 )
 
 func TestQueryMomentRunsOnServiceClock(t *testing.T) {
-	c, m := daemon_tester.Clocked(t)
+	c, m := base.Clocked(t)
 	c.MustCallTool(
 		constant.Query,
 		map[string]any{generativeConstant.ParameterQuery: "up"},
@@ -25,7 +25,7 @@ func TestQueryMomentRunsOnServiceClock(t *testing.T) {
 }
 
 func TestLabelNamesStartRunsOnServiceClock(t *testing.T) {
-	c, m := daemon_tester.Clocked(t)
+	c, m := base.Clocked(t)
 	c.MustCallTool(constant.LabelNames, map[string]any{})
 	moments := m.Moments()
 	assert.Count(t, 2, moments)
@@ -37,7 +37,7 @@ func TestLabelNamesStartRunsOnServiceClock(t *testing.T) {
 }
 
 func TestLabelNamesEndRunsOnServiceClock(t *testing.T) {
-	c, m := daemon_tester.Clocked(t)
+	c, m := base.Clocked(t)
 	c.MustCallTool(constant.LabelNames, map[string]any{})
 	moments := m.Moments()
 	assert.Count(t, 2, moments)
@@ -49,7 +49,7 @@ func TestLabelNamesEndRunsOnServiceClock(t *testing.T) {
 }
 
 func TestLabelValuesStartRunsOnServiceClock(t *testing.T) {
-	c, m := daemon_tester.Clocked(t)
+	c, m := base.Clocked(t)
 	c.MustCallTool(constant.LabelValues, map[string]any{"label": "job"})
 	moments := m.Moments()
 	assert.Count(t, 2, moments)
@@ -61,7 +61,7 @@ func TestLabelValuesStartRunsOnServiceClock(t *testing.T) {
 }
 
 func TestLabelValuesEndRunsOnServiceClock(t *testing.T) {
-	c, m := daemon_tester.Clocked(t)
+	c, m := base.Clocked(t)
 	c.MustCallTool(constant.LabelValues, map[string]any{"label": "job"})
 	moments := m.Moments()
 	assert.Count(t, 2, moments)
@@ -73,7 +73,7 @@ func TestLabelValuesEndRunsOnServiceClock(t *testing.T) {
 }
 
 func TestQueryRangeRunsOnServiceClock(t *testing.T) {
-	c, m := daemon_tester.Clocked(t)
+	c, m := base.Clocked(t)
 	c.MustCallTool(
 		constant.QueryRange,
 		map[string]any{

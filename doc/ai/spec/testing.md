@@ -89,7 +89,7 @@ Mock external dependencies using hand-rolled structs
 during a test:
 
 ```go
-c := mock_client.New()
+c := mock_client.New(t)
 c.Add(&alert.Alert{Fingerprint: "fp1", Name: "HighMemory"})
 // ... exercise code ...
 c.Remove("fp1")
@@ -111,8 +111,7 @@ func New(t *testing.T) (*loan.Service, *mock_client.Client) {
     m := lite.NewMemory()
     t.Cleanup(func() { relational.CloseMapper(m) })
     migrate.AutoMigrate(m)
-    c := mock_client.New()
-    t.Cleanup(c.Close)
+    c := mock_client.New(t)
     s := catalog.New(m)
 
     return loan.New(s, member.New(member_store.New(m)), c, time.Now), c

@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"sync"
 	"time"
 )
@@ -13,7 +13,7 @@ type Guard struct {
 	name     string
 	address  string
 	probe    face.Reachable
-	reacher  *reacher.Reacher
+	outages  *outage_tracker.Tracker
 	logger   *logger.Logger
 	reporter face.Reporter
 	minimum  time.Duration

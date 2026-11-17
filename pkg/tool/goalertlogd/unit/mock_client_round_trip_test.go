@@ -15,7 +15,7 @@ func TestMockAnswersWhatServerAnswers(t *testing.T) {
 	s := base.New(t)
 
 	for i := 3; i <= 30; i++ {
-		s.MockClient.Add(
+		s.Alertmanager.Add(
 			alert.NewBasic(
 				fmt.Sprintf("fp%d", i),
 				fmt.Sprintf("Alert%d", i),
@@ -26,9 +26,9 @@ func TestMockAnswersWhatServerAnswers(t *testing.T) {
 	}
 
 	s.Clock.Poll()
-	s.MockClient.Remove("fp1")
+	s.Alertmanager.Remove("fp1")
 	s.Clock.Poll()
-	c := s.AlertClient(t)
+	c := s.AlertClient()
 	m := client_tester.Mirror(t, c)
 	defer m.Close()
 	served, e := c.GetStatus(t.Context())

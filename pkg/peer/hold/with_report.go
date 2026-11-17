@@ -1,6 +1,6 @@
 package hold
 
-import "github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+import "github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
 
 func (h *Hold) WithReport(
 	crossed func(*edge.Edge),

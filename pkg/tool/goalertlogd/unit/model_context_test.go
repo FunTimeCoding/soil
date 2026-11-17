@@ -4,13 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
 	"testing"
 )
 
 func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	c := o.Client
+	c := base.New(t).Tools()
 	assert.Count(t, 4, c.ListTools())
 	status := c.MustCallTool(constant.GetStatus, map[string]any{})
 	assert.StringContains(t, "2", status)

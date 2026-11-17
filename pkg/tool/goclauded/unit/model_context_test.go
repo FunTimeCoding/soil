@@ -12,7 +12,7 @@ import (
 
 func TestHistoryCountEmpty(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "bind identity")
 	result := a.MustCallTool(constant.HistoryCount, map[string]any{})
 	assert.StringContains(t, "1 events", result)
@@ -20,7 +20,7 @@ func TestHistoryCountEmpty(t *testing.T) {
 
 func TestHistoryCountMultiple(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "one")
 	a.Announce(a.Name(), "two")
 	a.MustCallTool(
@@ -33,7 +33,7 @@ func TestHistoryCountMultiple(t *testing.T) {
 
 func TestHistoryFormatsIDs(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "test topic")
 	history := a.MustCallTool(constant.History, map[string]any{})
 	assert.StringContains(t, "announced: test topic", history)
@@ -41,7 +41,7 @@ func TestHistoryFormatsIDs(t *testing.T) {
 
 func TestHistoryLimit(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "topic-alfa")
 	a.Announce(a.Name(), "topic-bravo")
 	a.Announce(a.Name(), "topic-charlie")
@@ -55,7 +55,7 @@ func TestHistoryLimit(t *testing.T) {
 
 func TestHistorySkip(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "topic-alfa")
 	a.Announce(a.Name(), "topic-bravo")
 	a.Announce(a.Name(), "topic-charlie")
@@ -69,7 +69,7 @@ func TestHistorySkip(t *testing.T) {
 
 func TestHistoryAllKinds(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Update,
@@ -90,7 +90,7 @@ func TestHistoryAllKinds(t *testing.T) {
 
 func TestLabelReservedKeyBlocked(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "labeling")
 
 	for _, key := range constant.ReservedLabelKeys {
@@ -108,7 +108,7 @@ func TestLabelReservedKeyBlocked(t *testing.T) {
 
 func TestLabelCustomKey(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "labeling")
 	a.MustCallTool(
 		constant.Label,
@@ -123,7 +123,7 @@ func TestLabelCustomKey(t *testing.T) {
 
 func TestEditSessionAliasSelf(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
@@ -135,8 +135,8 @@ func TestEditSessionAliasSelf(t *testing.T) {
 
 func TestEditSessionAliasOther(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "editor")
 	b.Announce(b.Name(), constant.FixtureTarget)
 	a.MustCallTool(
@@ -149,7 +149,7 @@ func TestEditSessionAliasOther(t *testing.T) {
 
 func TestEditSessionDescription(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
@@ -164,7 +164,7 @@ func TestEditSessionDescription(t *testing.T) {
 
 func TestEditSessionBoth(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
@@ -180,7 +180,7 @@ func TestEditSessionBoth(t *testing.T) {
 
 func TestSessionStatusWithTopic(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building search index")
 	result := a.MustCallTool(constant.SessionStatus, map[string]any{})
 	assert.StringContains(t, a.Name(), result)
@@ -189,7 +189,7 @@ func TestSessionStatusWithTopic(t *testing.T) {
 
 func TestSessionStatusAfterComplete(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "some work")
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	result := a.MustCallTool(constant.SessionStatus, map[string]any{})
@@ -198,21 +198,21 @@ func TestSessionStatusAfterComplete(t *testing.T) {
 
 func TestSessionStatusBeforeAnnounce(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	result := a.MustCallToolError(constant.SessionStatus, map[string]any{})
 	assert.StringContains(t, "announce first", result)
 }
 
 func TestTimelinePagination(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 
 	for i := 1; i <= 12; i++ {
 		a.Announce(a.Name(), fmt.Sprintf("topic-%02d", i))
 	}
 
 	x := context.Background()
-	first, e := a.RestClient.GetTimelineWithResponse(
+	first, e := a.GeneratedClient.GetTimelineWithResponse(
 		x,
 		&client.GetTimelineParams{Limit: new(5), Offset: new(0)},
 	)
@@ -220,7 +220,7 @@ func TestTimelinePagination(t *testing.T) {
 	assert.Count(t, 5, *first.JSON200)
 	assert.StringContains(t, "topic-12", (*first.JSON200)[0].Subject)
 	assert.StringContains(t, "topic-08", (*first.JSON200)[4].Subject)
-	second, f := a.RestClient.GetTimelineWithResponse(
+	second, f := a.GeneratedClient.GetTimelineWithResponse(
 		x,
 		&client.GetTimelineParams{Limit: new(5), Offset: new(5)},
 	)
@@ -228,7 +228,7 @@ func TestTimelinePagination(t *testing.T) {
 	assert.Count(t, 5, *second.JSON200)
 	assert.StringContains(t, "topic-07", (*second.JSON200)[0].Subject)
 	assert.StringContains(t, "topic-03", (*second.JSON200)[4].Subject)
-	third, g := a.RestClient.GetTimelineWithResponse(
+	third, g := a.GeneratedClient.GetTimelineWithResponse(
 		x,
 		&client.GetTimelineParams{Limit: new(5), Offset: new(10)},
 	)

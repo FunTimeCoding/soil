@@ -53,7 +53,7 @@ const (
 	CounterMark    = "counter"
 	RowMark        = "row"
 	EchoMark       = "echo"
-	ReceiptMark    = "receipt"
+	ReplyMark      = "reply"
 	TickMark       = "tick"
 	PulseMark      = "pulse"
 	SummaryMark    = "oob-summary"

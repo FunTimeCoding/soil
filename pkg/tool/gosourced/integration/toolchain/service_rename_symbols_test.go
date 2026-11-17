@@ -10,11 +10,13 @@ import (
 )
 
 func TestRenameSymbols(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.RenameSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.RenameSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*symbol_rename.Rename{
 			symbol_rename.New("IsGeneratedHeader", "IsGenerated", ""),
@@ -24,26 +26,24 @@ func TestRenameSymbols(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, d)
-	declaration := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/is_generated.go",
-	)
+	rewrite_tester.Compiles(t, o.Directory)
+	declaration := o.Read("pkg/target/is_generated.go")
 	assert.StringContains(t, "func IsGenerated(", declaration)
-	verify := service_tester.ReadFixtureFile(t, d, "pkg/target/verify.go")
+	verify := o.Read("pkg/target/verify.go")
 	assert.StringContains(t, "func Verify(", verify)
 	assert.StringContains(t, "return IsGenerated(content)", verify)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	assert.StringContains(t, "target.IsGenerated(content)", caller)
 }
 
 func TestRenameSymbolsRefusedItemBlocksBatch(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.RenameSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.RenameSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*symbol_rename.Rename{
 			symbol_rename.New("IsGeneratedHeader", "IsGenerated", ""),
@@ -54,20 +54,18 @@ func TestRenameSymbolsRefusedItemBlocksBatch(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
-	declaration := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/is_generated_header.go",
-	)
+	declaration := o.Read("pkg/target/is_generated_header.go")
 	assert.StringContains(t, "func IsGeneratedHeader(", declaration)
 }
 
 func TestRenameSymbolsSameTarget(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.RenameSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.RenameSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*symbol_rename.Rename{
 			symbol_rename.New("IsGeneratedHeader", "Verify", ""),
@@ -85,11 +83,13 @@ func TestRenameSymbolsSameTarget(t *testing.T) {
 }
 
 func TestRenameSymbolsListedTwice(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.RenameSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.RenameSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*symbol_rename.Rename{
 			symbol_rename.New("Check", "Verify", ""),
@@ -103,11 +103,13 @@ func TestRenameSymbolsListedTwice(t *testing.T) {
 }
 
 func TestRenameSymbolsOntoFreedName(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.RenameSymbols(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.RenameSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		[]*symbol_rename.Rename{
 			symbol_rename.New("IsGeneratedHeader", "Check", ""),

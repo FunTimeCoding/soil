@@ -22,6 +22,7 @@ func New(t *testing.T) *Server {
 	result := &Server{
 		Reporter: r,
 		LitePath: o.LitePath,
+		t:        t,
 		Server: model_context_server.New(
 			t,
 			func(g *guard.Mux) {

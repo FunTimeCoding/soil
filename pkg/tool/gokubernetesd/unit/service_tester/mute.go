@@ -7,5 +7,5 @@ func (t *Tester) Mute(
 	message string,
 	cluster string,
 ) {
-	errors.PanicOnError(t.Service.MuteEvent(reason, message, cluster))
+	errors.PanicOnError(t.Service().MuteEvent(reason, message, cluster))
 }

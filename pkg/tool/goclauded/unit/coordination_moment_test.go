@@ -9,7 +9,7 @@ import (
 
 func TestMomentReachesMemoryPeer(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Moment,

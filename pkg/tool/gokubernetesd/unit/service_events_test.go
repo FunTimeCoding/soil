@@ -11,7 +11,7 @@ import (
 func TestEvents(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddEvent("default", "Pulled", "pulled image", "Normal", "Pod", "nginx")
-	result, e := s.Service.Events(
+	result, e := s.Service().Events(
 		context.Background(),
 		"test",
 		request.Events{Namespace: "default", Limit: 50},
@@ -40,7 +40,7 @@ func TestEventsMutedFiltered(t *testing.T) {
 		"coredns",
 	)
 	s.Mute("DNSConfigForming", "", "")
-	result, e := s.Service.Events(
+	result, e := s.Service().Events(
 		context.Background(),
 		"test",
 		request.Events{Namespace: "kube-system", Limit: 50},
@@ -69,7 +69,7 @@ func TestEventsMutedIncluded(t *testing.T) {
 		"coredns",
 	)
 	s.Mute("DNSConfigForming", "", "")
-	result, e := s.Service.Events(
+	result, e := s.Service().Events(
 		context.Background(),
 		"test",
 		request.Events{

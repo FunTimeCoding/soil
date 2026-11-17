@@ -2,39 +2,23 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	usage "github.com/funtimecoding/soil/pkg/nextcloud/usage/mock_client"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonClosesWhatItBuiltOnce(t *testing.T) {
-	p := service_tester.NewPrometheus(t)
-	u := service_tester.NewUsage(t)
-	d := daemon.New(
-		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
-		logger.New(t.Context()),
-		memory.New(),
-	)
+	s := service_tester.New(t, service_tester.WithUsage())
+	d := s.Daemon()
 	d.Close()
 	d.Close()
-	assert.Integer(t, 1, p.Closed)
-	assert.Integer(t, 1, u.Closed)
+	assert.Integer(t, 1, s.Prometheus.Closed)
+	assert.Integer(t, 1, s.Usage.Closed)
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
-	p := prometheus.New()
-	u := usage.New()
-	d := daemon.New(
-		service_tester.NewOption(t, service_tester.FixtureBoard(), p, nil, u),
-		logger.New(t.Context()),
-		memory.New(),
-	)
+	d := service_tester.New(t, service_tester.WithUsage()).Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {
@@ -46,23 +30,10 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 	}
 
 	d.Close()
-	p.Close()
-	u.Close()
 	goleak.VerifyNone(t, before)
 }
 
 func TestDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
-	d := daemon.New(
-		service_tester.NewOption(
-			t,
-			service_tester.FixtureBoard(),
-			service_tester.NewPrometheus(t),
-			nil,
-			service_tester.NewUsage(t),
-		),
-		logger.New(t.Context()),
-		memory.New(),
-	)
-	t.Cleanup(d.Close)
+	d := service_tester.New(t, service_tester.WithUsage()).Daemon()
 	assert.Count(t, 3, d.Workers())
 }

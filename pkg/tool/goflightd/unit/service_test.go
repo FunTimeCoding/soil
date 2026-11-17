@@ -20,7 +20,7 @@ import (
 func TestWorkerClosesTwice(t *testing.T) {
 	s := service_tester.New(t)
 	w := worker.NewEvery(
-		s.Service.Prune,
+		s.Service().Prune,
 		logger.New(t.Context()),
 		s.Reporter,
 		time.Hour,
@@ -33,9 +33,9 @@ func TestWorkerClosesTwice(t *testing.T) {
 func TestBluetoothSampleRecordsOnlyChanges(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
-	assert.Count(t, 0, s.Service.SampleBluetooth())
-	assert.Count(t, 0, s.Service.SampleBluetooth())
-	v, e := s.Service.Status()
+	assert.Count(t, 0, s.Service().SampleBluetooth())
+	assert.Count(t, 0, s.Service().SampleBluetooth())
+	v, e := s.Service().Status()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, v.Snapshots)
 }
@@ -43,10 +43,10 @@ func TestBluetoothSampleRecordsOnlyChanges(t *testing.T) {
 func TestWirelessSampleRecordsOnlyChanges(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Answer(constant.Sudo, constant.WirelessSample)
-	assert.True(t, s.Service.WirelessAvailable())
-	assert.Count(t, 0, s.Service.SampleWireless())
-	assert.Count(t, 0, s.Service.SampleWireless())
-	v, e := s.Service.Status()
+	assert.True(t, s.Service().WirelessAvailable())
+	assert.Count(t, 0, s.Service().SampleWireless())
+	assert.Count(t, 0, s.Service().SampleWireless())
+	v, e := s.Service().Status()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 6, v.Snapshots)
 }
@@ -55,16 +55,16 @@ func TestFailedCommandIsLoggedNotReported(t *testing.T) {
 	s := service_tester.New(t)
 	s.System.Fail(constant.SystemProfiler, errors.Format("exit", 1))
 	s.System.Fail(constant.Sudo, errors.Format("exit", 1))
-	assert.False(t, s.Service.WirelessAvailable())
+	assert.False(t, s.Service().WirelessAvailable())
 	owned := worker.NewEvery(
-		s.Service.SampleBluetooth,
+		s.Service().SampleBluetooth,
 		logger.New(t.Context()),
 		s.Reporter,
 		time.Hour,
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Count(t, 0, s.Service.SampleWireless())
+	assert.Count(t, 0, s.Service().SampleWireless())
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
@@ -73,7 +73,7 @@ func TestFailingStoreIsReportedByWorker(t *testing.T) {
 	s.System.Answer(constant.SystemProfiler, constant.BluetoothSample)
 	s.CloseStore()
 	owned := worker.NewEvery(
-		s.Service.SampleBluetooth,
+		s.Service().SampleBluetooth,
 		logger.New(t.Context()),
 		s.Reporter,
 		time.Hour,
@@ -98,8 +98,8 @@ func TestPruneDropsWhatIsPastRetention(t *testing.T) {
 		t,
 		s.Store.CreateSnapshot(snapshot.Snapshot{Time: old, Kind: "wireless"}),
 	)
-	assert.Count(t, 0, s.Service.Prune())
-	v, e := s.Service.Status()
+	assert.Count(t, 0, s.Service().Prune())
+	v, e := s.Service().Status()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, v.Events)
 	assert.Integer(t, 0, v.Snapshots)
@@ -107,8 +107,8 @@ func TestPruneDropsWhatIsPastRetention(t *testing.T) {
 
 func TestFailingStoreIsAnsweredAndReported(t *testing.T) {
 	s := base.New(t)
-	assert.FatalOnError(t, s.Mapper.Migrator().DropTable(event.Stub()))
-	r, e := s.Client.GetStatusWithResponse(context.Background())
+	assert.FatalOnError(t, s.Mapper().Migrator().DropTable(event.Stub()))
+	r, e := s.GeneratedClient().GetStatusWithResponse(context.Background())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())
 	assert.NotNil(t, r.JSON500)
@@ -117,7 +117,7 @@ func TestFailingStoreIsAnsweredAndReported(t *testing.T) {
 
 func TestMarkWithoutLabelIsRefused(t *testing.T) {
 	s := base.New(t)
-	r, e := s.Client.PostMarkWithResponse(
+	r, e := s.GeneratedClient().PostMarkWithResponse(
 		context.Background(),
 		client.PostMarkJSONRequestBody{},
 	)

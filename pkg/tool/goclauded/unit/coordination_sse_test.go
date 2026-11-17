@@ -29,7 +29,7 @@ func TestSSEPushesActivityOnConnect(t *testing.T) {
 
 func TestSSEPushesAfterMutation(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	events, disconnect := event_tester.Subscribe(t, s)
 	defer disconnect()
 	event_tester.NextNamed(t, events, constant.Activity)
@@ -40,7 +40,7 @@ func TestSSEPushesAfterMutation(t *testing.T) {
 
 func TestSSEPushesEachRosterCardsState(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "carded topic")
 	events, disconnect := event_tester.Subscribe(t, s)
 	defer disconnect()
@@ -54,7 +54,7 @@ func TestSSEPushesEachRosterCardsState(t *testing.T) {
 
 func TestSSEMultiLineBody(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "setup")
 	a.MustCallTool(
 		constant.Summarize,

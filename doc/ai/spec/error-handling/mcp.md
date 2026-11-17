@@ -88,7 +88,7 @@ A single-step tool answers `answer(e)`; restating the tool's own name is
 not a context.
 
 A step a daemon must run before every answer - gosentryd records the
-reacher's outage episodes - sits in `answer` before it hands over, so a
+outage tracker's outage episodes - sits in `answer` before it hands over, so a
 site that needs the step never calls `answerMessage` directly.
 
 An inline class branch before the answer goes when the answer says the

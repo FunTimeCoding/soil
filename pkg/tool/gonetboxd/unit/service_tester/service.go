@@ -1,30 +1,35 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/netbox/face"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
-	"path/filepath"
-	"testing"
 )
 
-func Service(
-	t *testing.T,
-	c face.NetBoxClient,
-) *service.Service {
-	t.Helper()
-	l := logger.New(t.Context())
-	d := relational.Open(l, "", filepath.Join(t.TempDir(), "gonetboxd.db"))
-	migrate.AutoMigrate(d)
-	t.Cleanup(func() { relational.CloseMapper(d) })
-	g := peer.New(constant.NetBoxPeer, c.Address(), c, l, memory.New())
-	t.Cleanup(g.Close)
+func (o *Tester) Service() *service.Service {
+	o.t.Helper()
 
-	return service.New(store.New(d), c, g)
+	if o.service != nil {
+		return o.service
+	}
+
+	l := logger.New(o.t.Context())
+	d := relational.Open(l, "", o.litePath)
+	migrate.AutoMigrate(d)
+	o.t.Cleanup(func() { relational.CloseMapper(d) })
+	g := peer.New(
+		constant.NetBoxPeer,
+		o.client.Address(),
+		o.client,
+		l,
+		o.Reporter,
+	)
+	o.t.Cleanup(g.Close)
+	o.service = service.New(store.New(d), o.client, g)
+
+	return o.service
 }

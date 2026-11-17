@@ -7,8 +7,6 @@ import (
 
 func Client(t *testing.T) *mock_client.Client {
 	t.Helper()
-	result := mock_client.New()
-	t.Cleanup(result.Close)
 
-	return result
+	return mock_client.New(t)
 }

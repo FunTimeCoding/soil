@@ -1,16 +1,16 @@
 package counter_page
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/tally"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/session_statistic"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func Table(tallies []*tally.Tally) gomponents.Node {
-	rows := make([]gomponents.Node, 0, len(tallies))
+func Table(statistics []*session_statistic.Statistic) gomponents.Node {
+	rows := make([]gomponents.Node, 0, len(statistics))
 
-	for _, v := range tallies {
+	for _, v := range statistics {
 		cells := []gomponents.Node{html.Td(gomponents.Text(v.Session))}
 
 		for _, n := range []int{

@@ -3,10 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/sublime/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
@@ -16,8 +14,8 @@ func TestSublimeOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
 	s := base.New(t)
-	s.MockClient.Failure = outage_tester.RefusedDial()
-	c := base.Rest(t, s)
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.GeneratedClient()
 
 	for range 2 {
 		answer, e := c.GetViewsWithResponse(t.Context())
@@ -31,9 +29,8 @@ func TestSublimeOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 
 func TestSublimeOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.Failure = outage_tester.RefusedDial()
-	c := s.Connect(t)
-	defer c.Close()
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"connection refused",
@@ -43,15 +40,12 @@ func TestSublimeOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestDaemonHandsOutSublimeGuard(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestDaemonClosesClientItBuilt(t *testing.T) {
-	c := mock_client.New()
-	daemon_tester.New(t, c).Close()
-	assert.Integer(t, 1, c.Closed())
+	s := base.New(t)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Source.Closed())
 }

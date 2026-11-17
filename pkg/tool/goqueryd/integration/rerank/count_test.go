@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestBgeCountsTableRowAndAllowance(t *testing.T) {
+func TestBgeCountsTableRowAndTokenLimit(t *testing.T) {
 	t.Setenv(constant.RerankSequenceEnvironment, "512")
 	r, e := rerank.NewModel(constant.BgeRerankerBase)
 	assert.FatalOnError(t, e)
@@ -18,10 +18,10 @@ func TestBgeCountsTableRowAndAllowance(t *testing.T) {
 	defer errors.PanicClose(r)
 	assert.Integer(t, 0, r.Count(""))
 	assert.Integer(t, 23, r.Count(constant.FixtureTableRow))
-	assert.Integer(t, 476, r.Allowance())
+	assert.Integer(t, 476, r.TokenLimit())
 }
 
-func TestGteCountsTableRowAndAllowance(t *testing.T) {
+func TestGteCountsTableRowAndTokenLimit(t *testing.T) {
 	t.Setenv(constant.RerankSequenceEnvironment, "1024")
 	r, e := rerank.NewModel(constant.GteRerankerModernBertBase)
 	assert.FatalOnError(t, e)
@@ -29,5 +29,5 @@ func TestGteCountsTableRowAndAllowance(t *testing.T) {
 	defer errors.PanicClose(r)
 	assert.Integer(t, 0, r.Count(""))
 	assert.Integer(t, 29, r.Count(constant.FixtureTableRow))
-	assert.Integer(t, 989, r.Allowance())
+	assert.Integer(t, 989, r.TokenLimit())
 }

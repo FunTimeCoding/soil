@@ -8,11 +8,13 @@ import (
 )
 
 func TestUnexportFunction(t *testing.T) {
-	d := service_tester.Prepare(t, "unexport-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("unexport-function/src"),
+	)
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"IsGenerated",
 		"example/pkg/target",
 		"",
@@ -21,18 +23,20 @@ func TestUnexportFunction(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 2)
-	helper := service_tester.ReadFixtureFile(t, d, "pkg/target/is_generated.go")
+	helper := o.Read("pkg/target/is_generated.go")
 	assert.StringContains(t, "func isGenerated(", helper)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "isGenerated(name)", run)
 }
 
 func TestExportFunction(t *testing.T) {
-	d := service_tester.Prepare(t, "export-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("export-function/src"),
+	)
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"isGenerated",
 		"example/pkg/target",
 		"",
@@ -41,18 +45,20 @@ func TestExportFunction(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 2)
-	helper := service_tester.ReadFixtureFile(t, d, "pkg/target/is_generated.go")
+	helper := o.Read("pkg/target/is_generated.go")
 	assert.StringContains(t, "func IsGenerated(", helper)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "IsGenerated(\"test\")", run)
 }
 
 func TestUnexportMethod(t *testing.T) {
-	d := service_tester.Prepare(t, "unexport-method/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("unexport-method/src"),
+	)
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"Save",
 		"example/pkg/target",
 		"Store",
@@ -61,18 +67,17 @@ func TestUnexportMethod(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 2)
-	save := service_tester.ReadFixtureFile(t, d, "pkg/target/save.go")
+	save := o.Read("pkg/target/save.go")
 	assert.StringContains(t, "func (s *Store) save(", save)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "v.save(\"test\")", run)
 }
 
 func TestCollisionDetection(t *testing.T) {
-	d := service_tester.Prepare(t, "collision/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(t, service_tester.WithFixture("collision/src"))
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"IsGenerated",
 		"example/pkg/target",
 		"",
@@ -84,11 +89,13 @@ func TestCollisionDetection(t *testing.T) {
 }
 
 func TestSymbolNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "unexport-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("unexport-function/src"),
+	)
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"Missing",
 		"example/pkg/target",
 		"",
@@ -100,11 +107,13 @@ func TestSymbolNotFound(t *testing.T) {
 }
 
 func TestPackageNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "unexport-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("unexport-function/src"),
+	)
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"IsGenerated",
 		"example/pkg/missing",
 		"",
@@ -116,11 +125,10 @@ func TestPackageNotFound(t *testing.T) {
 }
 
 func TestUnexportBlockedByCrossPackageCaller(t *testing.T) {
-	d := service_tester.Prepare(t, "cross-package/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.ChangeVisibility(
+	o := service_tester.New(t, service_tester.WithFixture("cross-package/src"))
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"IsValid",
 		"example/pkg/target",
 		"",
@@ -129,6 +137,6 @@ func TestUnexportBlockedByCrossPackageCaller(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "would lose access")
-	helper := service_tester.ReadFixtureFile(t, d, "pkg/target/is_valid.go")
+	helper := o.Read("pkg/target/is_valid.go")
 	assert.StringContains(t, "func IsValid(", helper)
 }

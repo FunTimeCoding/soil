@@ -13,11 +13,10 @@ import (
 )
 
 func TestRenamePackageClause(t *testing.T) {
-	d := service_tester.Prepare(t, "package-rename/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.RenamePackageClause(
+	o := service_tester.New(t, service_tester.WithFixture("package-rename/src"))
+	r, e := o.Packages.RenamePackageClause(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"depot",
 		false,
@@ -35,37 +34,35 @@ func TestRenamePackageClause(t *testing.T) {
 		"pkg/outer/store/store_test.go: package store → depot",
 		reported,
 	)
-	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/outer/store"))
 	assert.FatalOnError(t, e)
-	clause := service_tester.ReadFixtureFile(t, d, "pkg/outer/store/store.go")
+	clause := o.Read("pkg/outer/store/store.go")
 	rewrite_tester.Formatted(t, clause)
 	assert.StringContains(t, "package depot", clause)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/outer/store/run.go")
+	run := o.Read("pkg/outer/store/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "package depot", run)
 	assert.StringContains(t, "example/pkg/outer/store/sub", run)
-	tests := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/outer/store/store_test.go",
-	)
+	tests := o.Read("pkg/outer/store/store_test.go")
 	assert.StringContains(t, "package depot", tests)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "\"example/pkg/outer/store\"", caller)
 	assert.StringContains(t, "v := depot.Store{}", caller)
-	aliased := service_tester.ReadFixtureFile(t, d, "pkg/aliased/run.go")
+	aliased := o.Read("pkg/aliased/run.go")
 	rewrite_tester.Formatted(t, aliased)
 	assert.StringContains(t, "st \"example/pkg/outer/store\"", aliased)
 	assert.StringContains(t, "return &st.Store{}", aliased)
 }
 
 func TestRenamePackageClauseShadowed(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-collision/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.RenamePackageClause(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-collision/src"),
+	)
+	r, e := o.Packages.RenamePackageClause(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"depot",
 		false,
@@ -76,11 +73,10 @@ func TestRenamePackageClauseShadowed(t *testing.T) {
 }
 
 func TestRenamePackageClauseSameName(t *testing.T) {
-	d := service_tester.Prepare(t, "package-rename/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.RenamePackageClause(
+	o := service_tester.New(t, service_tester.WithFixture("package-rename/src"))
+	r, e := o.Packages.RenamePackageClause(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"store",
 		false,
@@ -91,18 +87,17 @@ func TestRenamePackageClauseSameName(t *testing.T) {
 }
 
 func TestRenamePackageClauseReportsTestOnlyPackage(t *testing.T) {
-	d := t.TempDir()
-	testutil.WriteModFile(t, d, "example")
+	o := service_tester.New(t, service_tester.WithDirectory(t.TempDir()))
+	testutil.WriteModFile(t, o.Directory, "example")
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/alfa/alfa_test.go",
 		"package guard\n\nimport \"testing\"\n\nfunc TestAlfa(t *testing.T) {}\n",
 	)
-	s := service_tester.NewService(t)
-	r, e := s.Packages.RenamePackageClause(
+	r, e := o.Packages.RenamePackageClause(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		constant.UnitSegment,
 		false,
@@ -114,9 +109,5 @@ func TestRenamePackageClauseReportsTestOnlyPackage(t *testing.T) {
 		"pkg/alfa/alfa_test.go: package guard → unit",
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.StringContains(
-		t,
-		"package unit",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/alfa_test.go"),
-	)
+	assert.StringContains(t, "package unit", o.Read("pkg/alfa/alfa_test.go"))
 }

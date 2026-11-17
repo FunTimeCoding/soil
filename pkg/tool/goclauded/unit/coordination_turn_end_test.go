@@ -12,9 +12,9 @@ import (
 
 func TestTurnEndRecordsBoundary(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	assert.True(t, s.Store.GetSession(a.UUID).LastTurnEndAt == nil)
-	response, e := s.RESTClient(t).PostTurnEndWithResponse(
+	response, e := s.RESTClient().PostTurnEndWithResponse(
 		context.Background(),
 		client.PostTurnEndJSONRequestBody{Session: a.UUID},
 	)
@@ -25,10 +25,10 @@ func TestTurnEndRecordsBoundary(t *testing.T) {
 
 func TestTurnEndAfterPromptReadsIdle(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.CheckLive()
 	s.Store.Advance(time.Minute)
-	response, e := s.RESTClient(t).PostTurnEndWithResponse(
+	response, e := s.RESTClient().PostTurnEndWithResponse(
 		context.Background(),
 		client.PostTurnEndJSONRequestBody{Session: a.UUID},
 	)
@@ -40,8 +40,8 @@ func TestTurnEndAfterPromptReadsIdle(t *testing.T) {
 
 func TestPromptAfterTurnEndReadsWorking(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	response, e := s.RESTClient(t).PostTurnEndWithResponse(
+	a := s.NewSession()
+	response, e := s.RESTClient().PostTurnEndWithResponse(
 		context.Background(),
 		client.PostTurnEndJSONRequestBody{Session: a.UUID},
 	)
@@ -55,8 +55,8 @@ func TestPromptAfterTurnEndReadsWorking(t *testing.T) {
 
 func TestTurnEndForUnknownSessionSucceeds(t *testing.T) {
 	s := base.New(t)
-	s.NewSession(t)
-	response, e := s.RESTClient(t).PostTurnEndWithResponse(
+	s.NewSession()
+	response, e := s.RESTClient().PostTurnEndWithResponse(
 		context.Background(),
 		client.PostTurnEndJSONRequestBody{Session: uuid.New().String()},
 	)

@@ -3,13 +3,14 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"testing"
 )
 
 func TestCreateMemory(t *testing.T) {
-	s := model_context_tester.New(t)
-	result := s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	result := c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -24,8 +25,9 @@ func TestCreateMemory(t *testing.T) {
 }
 
 func TestCreateMemoryWithTags(t *testing.T) {
-	s := model_context_tester.New(t)
-	result := s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	result := c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -41,8 +43,9 @@ func TestCreateMemoryWithTags(t *testing.T) {
 }
 
 func TestCreateMemoryStripsTagCruft(t *testing.T) {
-	s := model_context_tester.New(t)
-	result := s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	result := c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -58,8 +61,9 @@ func TestCreateMemoryStripsTagCruft(t *testing.T) {
 }
 
 func TestUpdateMemory(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -67,7 +71,7 @@ func TestUpdateMemory(t *testing.T) {
 			constant.Description: "a test",
 		},
 	)
-	result := s.MustCallTool(
+	result := c.MustCallTool(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -83,8 +87,9 @@ func TestUpdateMemory(t *testing.T) {
 }
 
 func TestCreateMemoryWithBase(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -99,8 +104,9 @@ func TestCreateMemoryWithBase(t *testing.T) {
 }
 
 func TestUpdateMemoryKeepsBaseWhenOmitted(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -109,7 +115,7 @@ func TestUpdateMemoryKeepsBaseWhenOmitted(t *testing.T) {
 			constant.Base:        "doc/ai/runbook",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -124,8 +130,9 @@ func TestUpdateMemoryKeepsBaseWhenOmitted(t *testing.T) {
 }
 
 func TestUpdateMemoryKeepsBaseWhenEmpty(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -134,7 +141,7 @@ func TestUpdateMemoryKeepsBaseWhenEmpty(t *testing.T) {
 			constant.Base:        "doc/ai/runbook",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -148,8 +155,9 @@ func TestUpdateMemoryKeepsBaseWhenEmpty(t *testing.T) {
 }
 
 func TestUpdateMemoryClearsBaseWithClearBase(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -158,7 +166,7 @@ func TestUpdateMemoryClearsBaseWithClearBase(t *testing.T) {
 			constant.Base:        "doc/ai/runbook",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -173,8 +181,9 @@ func TestUpdateMemoryClearsBaseWithClearBase(t *testing.T) {
 }
 
 func TestUpdateMemoryWithDescriptionOnly(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -182,7 +191,7 @@ func TestUpdateMemoryWithDescriptionOnly(t *testing.T) {
 			constant.Description: "a test",
 		},
 	)
-	result := s.MustCallTool(
+	result := c.MustCallTool(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -198,8 +207,9 @@ func TestUpdateMemoryWithDescriptionOnly(t *testing.T) {
 }
 
 func TestUpdateMemoryRenameListsRewrittenCitations(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "pace",
@@ -207,7 +217,7 @@ func TestUpdateMemoryRenameListsRewrittenCitations(t *testing.T) {
 			constant.Description: "a test",
 		},
 	)
-	s.MustCallTool(
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "citing",
@@ -215,7 +225,7 @@ func TestUpdateMemoryRenameListsRewrittenCitations(t *testing.T) {
 			constant.Description: "a test",
 		},
 	)
-	result := s.MustCallTool(
+	result := c.MustCallTool(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryIdentifier: 1,
@@ -226,8 +236,9 @@ func TestUpdateMemoryRenameListsRewrittenCitations(t *testing.T) {
 }
 
 func TestUpdateMemoryRequiresIdentifier(t *testing.T) {
-	s := model_context_tester.New(t)
-	result := s.MustCallToolError(
+	s := base.New(t)
+	c := s.Tools()
+	result := c.MustCallToolError(
 		constant.UpdateMemory,
 		map[string]any{
 			constant.MemoryName:  "test",
@@ -240,8 +251,9 @@ func TestUpdateMemoryRequiresIdentifier(t *testing.T) {
 }
 
 func TestUpdateMemoryWithWrongParameterName(t *testing.T) {
-	s := model_context_tester.New(t)
-	s.MustCallTool(
+	s := base.New(t)
+	c := s.Tools()
+	c.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "test memory",
@@ -249,7 +261,7 @@ func TestUpdateMemoryWithWrongParameterName(t *testing.T) {
 			constant.Description: "a test",
 		},
 	)
-	result := s.MustCallToolError(
+	result := c.MustCallToolError(
 		constant.UpdateMemory,
 		map[string]any{
 			"id":                 1,

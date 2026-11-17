@@ -3,42 +3,55 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/web_interface_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
 	"net/http"
 	"net/url"
 	"testing"
 )
 
 func TestWebInterfaceAnswersMalformedEntryQuietly(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.AssertStatus(http.StatusBadRequest, "/detail?id=nonsense")
-	o.AssertStatus(http.StatusBadRequest, "/edit?id=0")
-	o.AssertPostStatus(http.StatusBadRequest, "/delete?id=nonsense", nil)
-	assert.Integer(t, 0, o.Captured())
+	s := base.New(t)
+	assert.Integer(t, http.StatusBadRequest, s.Status(t, "/detail?id=nonsense"))
+	assert.Integer(t, http.StatusBadRequest, s.Status(t, "/edit?id=0"))
+	assert.Integer(
+		t,
+		http.StatusBadRequest,
+		s.PostStatus(t, "/delete?id=nonsense", nil),
+	)
+	assert.Integer(t, 0, s.Captured())
 }
 
 func TestWebInterfaceAnswersUnknownEntryQuietly(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.AssertStatus(http.StatusNotFound, "/detail?id=9999")
-	o.AssertStatus(http.StatusNotFound, "/edit?id=9999")
-	o.AssertPostStatus(
+	s := base.New(t)
+	assert.Integer(t, http.StatusNotFound, s.Status(t, "/detail?id=9999"))
+	assert.Integer(t, http.StatusNotFound, s.Status(t, "/edit?id=9999"))
+	assert.Integer(
+		t,
 		http.StatusNotFound,
-		"/edit?id=9999",
-		url.Values{constant.Action: {"x"}, constant.User: {"y"}},
+		s.PostStatus(
+			t,
+			"/edit?id=9999",
+			url.Values{constant.Action: {"x"}, constant.User: {"y"}},
+		),
 	)
-	o.AssertPostStatus(http.StatusNotFound, "/delete?id=9999", nil)
-	assert.Integer(t, 0, o.Captured())
+	assert.Integer(
+		t,
+		http.StatusNotFound,
+		s.PostStatus(t, "/delete?id=9999", nil),
+	)
+	assert.Integer(t, 0, s.Captured())
 }
 
 func TestWebInterfaceRefusesEntryWithoutUser(t *testing.T) {
-	o := web_interface_tester.New(t)
+	s := base.New(t)
 	assert.StringContains(
 		t,
 		"user is required",
-		o.PostForm(
+		s.PostBody(
+			t,
 			constant.AddEntryPath,
 			url.Values{constant.Action: {"restart"}},
 		),
 	)
-	assert.Integer(t, 0, o.Captured())
+	assert.Integer(t, 0, s.Captured())
 }

@@ -5,16 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"testing"
 )
 
-func (s *Server) MemoryClient(t *testing.T) *client.Client {
-	t.Helper()
+func (s *Server) MemoryClient() *client.Client {
+	s.t.Helper()
 	result := client.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port),
 		generativeConstant.ModelContextTestToken,
 	)
-	t.Cleanup(result.Close)
+	s.t.Cleanup(result.Close)
 
 	return result
 }

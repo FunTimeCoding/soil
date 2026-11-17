@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
@@ -180,6 +181,49 @@ func TestPermissionsMergeEverySettingsFile(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, r.Cleared)
 	assert.Count(t, 0, r.Rows)
+}
+
+func TestPermissionsScratchCoversAdditionalDirectoriesAndOwnPrefix(t *testing.T) {
+	t.Setenv(soil.HomeEnvironment, t.TempDir())
+	x := service_tester.New(t)
+	project := t.TempDir()
+	other := t.TempDir()
+	assert.FatalOnError(t, os.MkdirAll(filepath.Join(other, "tmp"), 0o755))
+	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.AdditionalDirectories(t, project, "settings.json", other)
+	s := session.New("session-a")
+	s.WorkDirectory = project
+	x.Client.AddSession(s)
+	x.Store.AddSession("session-a", "Alfa", "Alfa", "2026-09-01 10:00:00+00:00")
+
+	for _, command := range []string{
+		fmt.Sprintf("ls doc > %s", filepath.Join(other, "tmp", "list.txt")),
+		"ls doc > /tmp/alfa-list.txt",
+		"ls doc > /tmp/bravo-list.txt",
+	} {
+		x.Client.AddToolCall(
+			"session-a",
+			permission_tester.Call(
+				"Bash",
+				command,
+				"user_temporary",
+				"bashMiss:too-complex",
+				time.Hour,
+			),
+		)
+	}
+
+	x.Store.AdvanceTo(permission_tester.Now())
+	r, e := x.Transcript.Permissions(7)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 2, r.Cleared)
+	assert.Count(t, 1, r.Rows)
+	assert.String(t, "(redirect outside scratch)", r.Rows[0].Blocker)
+	assert.Strings(
+		t,
+		[]string{"ls doc > /tmp/bravo-list.txt"},
+		r.Rows[0].Commands,
+	)
 }
 
 func TestPermissionsRowNamesItsNewestDistinctCommands(t *testing.T) {

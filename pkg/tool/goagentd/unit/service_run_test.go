@@ -29,11 +29,11 @@ func TestRunReturnsAgentOutput(t *testing.T) {
 			return mock_stream.New([]string{"alfa", "bravo"}, false, nil)
 		},
 	)
-	assert.FatalOnError(t, o.Service.Run("charlie"))
+	assert.FatalOnError(t, o.Service().Run("charlie"))
 	assert.String(
 		t,
 		"alfa\nbravo",
-		service_tester.AwaitDone(t, o.Service).Result,
+		service_tester.AwaitDone(t, o.Service()).Result,
 	)
 	assert.Strings(t, []string{"claude", "--print", "charlie"}, arguments)
 }
@@ -42,18 +42,18 @@ func TestEmptyIntentIsRefused(t *testing.T) {
 	stream := mock_stream.New(nil, false, nil)
 	t.Cleanup(stream.Close)
 	o := service_tester.New(t, service_tester.Fixed(stream))
-	assert.True(t, validation.Is(o.Service.Run(" \n")))
-	assert.String(t, "idle", string(o.Service.Status().State))
+	assert.True(t, validation.Is(o.Service().Run(" \n")))
+	assert.String(t, "idle", string(o.Service().Status().State))
 }
 
 func TestSecondRunWhileRunningConflicts(t *testing.T) {
 	s := mock_stream.New(nil, true, nil)
 	defer s.Close()
 	o := service_tester.New(t, service_tester.Fixed(s))
-	assert.FatalOnError(t, o.Service.Run("delta"))
-	assert.True(t, conflict.Is(o.Service.Run("echo")))
+	assert.FatalOnError(t, o.Service().Run("delta"))
+	assert.True(t, conflict.Is(o.Service().Run("echo")))
 	o.Runner.Interrupt()
-	service_tester.AwaitDone(t, o.Service)
+	service_tester.AwaitDone(t, o.Service())
 }
 
 func TestFailedRunCarriesAgentError(t *testing.T) {
@@ -74,11 +74,11 @@ func TestFailedRunCarriesAgentError(t *testing.T) {
 			)
 		},
 	)
-	assert.FatalOnError(t, o.Service.Run("golf"))
+	assert.FatalOnError(t, o.Service().Run("golf"))
 	assert.String(
 		t,
 		"foxtrot\n\nerror: exit status 1\ntoken expired",
-		service_tester.AwaitDone(t, o.Service).Result,
+		service_tester.AwaitDone(t, o.Service()).Result,
 	)
 }
 
@@ -87,9 +87,9 @@ func TestShutdownWaitsForRunThenInterrupts(t *testing.T) {
 	defer s.Close()
 	o := service_tester.New(t, service_tester.Fixed(s))
 	d := o.Runner
-	assert.FatalOnError(t, o.Service.Run("hotel"))
+	assert.FatalOnError(t, o.Service().Run("hotel"))
 	o.Runner.Close()
-	assert.True(t, unavailable.Is(o.Service.Run("india")))
+	assert.True(t, unavailable.Is(o.Service().Run("india")))
 
 	select {
 	case <-d.Finished():
@@ -106,7 +106,7 @@ func TestShutdownWaitsForRunThenInterrupts(t *testing.T) {
 	}
 
 	assert.Integer(t, 1, s.Killed())
-	assert.String(t, "done", string(o.Service.Status().State))
+	assert.String(t, "done", string(o.Service().Status().State))
 }
 
 func TestIdleRunnerFinishesOnClose(t *testing.T) {
@@ -124,7 +124,7 @@ func TestIdleRunnerFinishesOnClose(t *testing.T) {
 
 func TestLaunchThatPanicsEndsRun(t *testing.T) {
 	r := memory.New()
-	o := service_tester.NewWith(
+	o := service_tester.New(
 		t,
 		func(
 			string,
@@ -133,13 +133,13 @@ func TestLaunchThatPanicsEndsRun(t *testing.T) {
 		) face.Stream {
 			panic("juliett")
 		},
-		r,
+		service_tester.WithReporter(r),
 	)
-	assert.FatalOnError(t, o.Service.Run("kilo"))
+	assert.FatalOnError(t, o.Service().Run("kilo"))
 	assert.String(
 		t,
 		"error: agent stopped before it finished",
-		service_tester.AwaitDone(t, o.Service).Result,
+		service_tester.AwaitDone(t, o.Service()).Result,
 	)
 	deadline := time.Now().Add(5 * time.Second)
 

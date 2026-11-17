@@ -12,11 +12,10 @@ import (
 )
 
 func TestMoveConstant(t *testing.T) {
-	d := service_tester.Prepare(t, "move-constant/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-constant/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"itemFields",
 		"example/pkg/target/constant",
@@ -26,28 +25,26 @@ func TestMoveConstant(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	_, e = os.Stat(filepath.Join(d, "pkg/target/constant.go"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/constant.go"))
 	assert.True(t, os.IsNotExist(e))
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "ItemFields = \"alfa\"", moved)
 	assert.StringContains(t, "Host = \"bravo\"", moved)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "return constant.ItemFields", run)
 	assert.StringContains(t, "example/pkg/target/constant", run)
 }
 
 func TestMoveIntoReferenced(t *testing.T) {
-	d := service_tester.Prepare(t, "move-into-referenced/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-into-referenced/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Table",
 		"example/pkg/target/constant",
@@ -57,26 +54,24 @@ func TestMoveIntoReferenced(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "Address: \"primary\"", moved)
 	assert.StringNotContains(t, "example/pkg/target/constant", moved)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "return constant.Table", run)
 	assert.StringContains(t, "example/pkg/target/constant", run)
 }
 
 func TestMoveCrossPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "move-cross-package/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-cross-package/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Mode",
 		"example/pkg/target/constant",
@@ -86,10 +81,10 @@ func TestMoveCrossPackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "return constant.Mode", run)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "return targetConstant.Mode", caller)
 	assert.StringContains(t, "example/pkg/target/constant", caller)
@@ -97,11 +92,10 @@ func TestMoveCrossPackage(t *testing.T) {
 }
 
 func TestMoveAlias(t *testing.T) {
-	d := service_tester.Prepare(t, "move-alias/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-alias/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Mode",
 		"example/pkg/target/constant",
@@ -111,7 +105,7 @@ func TestMoveAlias(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "targetConstant.Mode", caller)
 	assert.StringContains(
@@ -123,11 +117,10 @@ func TestMoveAlias(t *testing.T) {
 }
 
 func TestMoveCreateRefused(t *testing.T) {
-	d := service_tester.Prepare(t, "move-create/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-create/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"itemFields",
 		"example/pkg/target/constant",
@@ -141,11 +134,10 @@ func TestMoveCreateRefused(t *testing.T) {
 }
 
 func TestMoveCreate(t *testing.T) {
-	d := service_tester.Prepare(t, "move-create/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-create/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"itemFields",
 		"example/pkg/target/constant",
@@ -155,25 +147,20 @@ func TestMoveCreate(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "package constant", moved)
 	assert.StringContains(t, "ItemFields = \"alfa\"", moved)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "return constant.ItemFields", run)
 }
 
 func TestMoveCollision(t *testing.T) {
-	d := service_tester.Prepare(t, "move-collision/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-collision/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"itemFields",
 		"example/pkg/target/constant",
@@ -187,11 +174,10 @@ func TestMoveCollision(t *testing.T) {
 }
 
 func TestMoveCycle(t *testing.T) {
-	d := service_tester.Prepare(t, "move-cycle/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-cycle/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target/constant",
 		"Mode",
 		"example/pkg/other",
@@ -205,10 +191,13 @@ func TestMoveCycle(t *testing.T) {
 }
 
 func TestMoveIntoImporterOnlyOfMovedSymbol(t *testing.T) {
-	d := service_tester.Prepare(t, "move-into-importer/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-into-importer/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target/constant",
 		"Mode",
 		"example/pkg/other",
@@ -221,15 +210,18 @@ func TestMoveIntoImporterOnlyOfMovedSymbol(t *testing.T) {
 	assert.String(
 		t,
 		"package other\n\nfunc Run() string {\n\treturn Mode\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/other/run.go"),
+		o.Read("pkg/other/run.go"),
 	)
 }
 
 func TestMoveIntoImporterOfSourceWithoutCycle(t *testing.T) {
-	d := service_tester.Prepare(t, "move-beside-source/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-beside-source/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa/constant",
 		"Mode",
 		"example/pkg/bravo/constant",
@@ -242,20 +234,23 @@ func TestMoveIntoImporterOfSourceWithoutCycle(t *testing.T) {
 	assert.String(
 		t,
 		"package constant\n\nconst Kind = \"kind\"\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/constant/constant.go"),
+		o.Read("pkg/alfa/constant/constant.go"),
 	)
 	assert.StringContains(
 		t,
 		"const Mode = \"alfa\"",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/constant/constant.go"),
+		o.Read("pkg/bravo/constant/constant.go"),
 	)
 }
 
 func TestMoveCycleThroughImporterLosingSource(t *testing.T) {
-	d := service_tester.Prepare(t, "move-cycle-through-importer/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-cycle-through-importer/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/source",
 		"Mode",
 		"example/pkg/target",
@@ -269,10 +264,13 @@ func TestMoveCycleThroughImporterLosingSource(t *testing.T) {
 }
 
 func TestMoveCycleThroughCarriedImport(t *testing.T) {
-	d := service_tester.Prepare(t, "move-cycle-through-carried/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-cycle-through-carried/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/source",
 		"Mode",
 		"example/pkg/target",
@@ -290,11 +288,13 @@ func TestMoveCycleThroughCarriedImport(t *testing.T) {
 }
 
 func TestMoveSymbolQualifiesSibling(t *testing.T) {
-	d := service_tester.Prepare(t, "move-dependency/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-dependency/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"composed",
 		"example/pkg/target/constant",
@@ -308,22 +308,21 @@ func TestMoveSymbolQualifiesSibling(t *testing.T) {
 	assert.StringContains(
 		t,
 		"const composed = target.Prefix + \"bravo\"",
-		service_tester.ReadFixtureFile(t, d, "pkg/target/constant/constant.go"),
+		o.Read("pkg/target/constant/constant.go"),
 	)
 	assert.StringContains(
 		t,
 		"const Prefix = \"alfa\"",
-		service_tester.ReadFixtureFile(t, d, "pkg/target/constant.go"),
+		o.Read("pkg/target/constant.go"),
 	)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }
 
 func TestMoveGroup(t *testing.T) {
-	d := service_tester.Prepare(t, "move-group/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-group/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"First",
 		"example/pkg/target/constant",
@@ -333,28 +332,23 @@ func TestMoveGroup(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/constant.go")
+	source := o.Read("pkg/target/constant.go")
 	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "Second = \"bravo\"", source)
 	assert.False(t, strings.Contains(source, "First"))
-	moved := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	moved := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "First = \"alfa\"", moved)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "constant.First + Second", run)
 }
 
 func TestMoveFunction(t *testing.T) {
-	d := service_tester.Prepare(t, "move-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-function/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsValid",
 		"example/pkg/check",
@@ -364,13 +358,13 @@ func TestMoveFunction(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	_, e = os.Stat(filepath.Join(d, "pkg/target/is_valid.go"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/is_valid.go"))
 	assert.True(t, os.IsNotExist(e))
-	moved := service_tester.ReadFixtureFile(t, d, "pkg/check/is_valid.go")
+	moved := o.Read("pkg/check/is_valid.go")
 	rewrite_tester.Formatted(t, moved)
 	assert.StringContains(t, "package check", moved)
 	assert.StringContains(t, "func IsValid(", moved)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	rewrite_tester.Formatted(t, caller)
 	assert.StringContains(t, "check.IsValid(\"alfa\")", caller)
 	assert.StringContains(t, "example/pkg/check", caller)

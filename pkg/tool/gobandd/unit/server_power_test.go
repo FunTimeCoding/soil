@@ -11,8 +11,8 @@ import (
 
 func TestRefusedPowerRequestSendsNothingToEngine(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
-	r, e := s.Client.RequestPowerWithResponse(
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
+	r, e := s.GeneratedClient().RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
 			Instance:  new("alfa"),
@@ -22,13 +22,13 @@ func TestRefusedPowerRequestSendsNothingToEngine(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 409, r.StatusCode())
 	assert.StringContains(t, "off soft graceful not offered", r.JSON409.Error)
-	assert.Count(t, 0, s.Alfa.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
 }
 
 func TestGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
-	r, e := s.Client.RequestPowerWithResponse(
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	r, e := s.GeneratedClient().RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
 			Instance:  new("alfa"),
@@ -39,13 +39,13 @@ func TestGracefulShutdownRequestsOffSoftGraceful(t *testing.T) {
 	assert.Integer(t, 200, r.StatusCode())
 	assert.String(t, "off soft graceful", r.JSON200.Requested)
 	assert.String(t, "on", r.JSON200.Power)
-	assert.Integers(t, []int{12}, s.Alfa.Requested())
+	assert.Integers(t, []int{12}, s.Alfa().Requested())
 }
 
 func TestForcedRebootRequestsPowerCycle(t *testing.T) {
-	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
-	r, e := s.Client.RequestPowerWithResponse(
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	r, e := s.GeneratedClient().RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
 			Instance:  new("alfa"),
@@ -55,15 +55,15 @@ func TestForcedRebootRequestsPowerCycle(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 200, r.StatusCode())
-	assert.Integers(t, []int{5}, s.Alfa.Requested())
-	assert.Count(t, 0, s.Bravo.Requested())
+	assert.Integers(t, []int{5}, s.Alfa().Requested())
+	assert.Count(t, 0, s.Bravo().Requested())
 }
 
 func TestPowerWithoutInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
-	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
-	s.Bravo.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
-	r, e := s.Client.RequestPowerWithResponse(
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	s.Bravo().SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	r, e := s.GeneratedClient().RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
 			Operation: client.PowerRequestOperationReboot,
@@ -71,6 +71,6 @@ func TestPowerWithoutInstanceIsRefusedWhileTwoAreConfigured(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 400, r.StatusCode())
-	assert.Count(t, 0, s.Alfa.Requested())
-	assert.Count(t, 0, s.Bravo.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
+	assert.Count(t, 0, s.Bravo().Requested())
 }

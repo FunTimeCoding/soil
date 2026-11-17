@@ -8,11 +8,10 @@ import (
 )
 
 func TestRenamePackageInvalidName(t *testing.T) {
-	d := service_tester.Prepare(t, "package-rename/src")
-	s := service_tester.NewService(t)
-	r, e := s.Packages.RenamePackage(
+	o := service_tester.New(t, service_tester.WithFixture("package-rename/src"))
+	r, e := o.Packages.RenamePackage(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/outer/store",
 		"9depot",
 		false,

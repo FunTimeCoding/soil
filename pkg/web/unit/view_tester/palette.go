@@ -14,7 +14,15 @@ func Palette() *view.View {
 		layout.New(identity.New("test", "test tool", "test"), "", nil).
 			WithItems(navigation_item.New("/alfa", "Alfa")).
 			WithCommands(
-				palette.NewCommand("Bravo", "/bravo", constant.PaletteAction),
+				func() []*palette.Command {
+					return []*palette.Command{
+						palette.NewCommand(
+							"Bravo",
+							"/bravo",
+							constant.PaletteAction,
+						),
+					}
+				},
 			),
 	)
 }

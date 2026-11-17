@@ -19,17 +19,16 @@ func SameRewrite(
 	var trees []string
 
 	for _, full := range []bool{false, true} {
-		directory := service_tester.Prepare(t, "indexed/src")
-		s := service_tester.NewService(t)
+		o := service_tester.New(t, service_tester.WithFixture("indexed/src"))
 
 		if full {
-			s.Workspace.UseFullLoad()
+			o.Workspace.UseFullLoad()
 		}
 
-		r, e := run(s, directory)
+		r, e := run(o.Services, o.Directory)
 		assert.FatalOnError(t, e)
 		testutil.AssertBlocked(t, r, 0)
-		trees = append(trees, DirectoryTree(t, directory))
+		trees = append(trees, DirectoryTree(t, o.Directory))
 	}
 
 	assert.String(t, trees[1], trees[0])

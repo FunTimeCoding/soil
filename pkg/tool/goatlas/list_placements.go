@@ -17,7 +17,7 @@ func listPlacements(
 	var packageName string
 	result := &cobra.Command{
 		Use:   "list-placements",
-		Short: "List placements, newest attestation per line",
+		Short: "List placements, each line as last seen",
 		Args:  cobra.NoArgs,
 		Run: func(
 			_ *cobra.Command,

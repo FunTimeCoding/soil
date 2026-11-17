@@ -6,28 +6,28 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/tag"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/client_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
 	"testing"
 )
 
 func TestClientReadsTasksAndTags(t *testing.T) {
-	m := service_tester.NewSource(t)
+	s := base.New(t)
 	daily := task.Stub()
 	daily.Identifier = "task-1"
 	daily.Text = "Deploy fleet"
 	daily.Type = "dailys"
-	m.AddTask(daily)
+	s.Source.AddTask(daily)
 	habit := task.Stub()
 	habit.Identifier = "task-2"
 	habit.Text = "Stretch"
 	habit.Type = "habit"
-	m.AddTask(habit)
+	s.Source.AddTask(habit)
 	g := tag.Stub()
 	g.Identifier = "tag-1"
 	g.Name = "deploy"
-	m.AddTag(g)
-	c := client_tester.New(t, m, generativeConstant.ModelContextTestToken)
+	s.Source.AddTag(g)
+	c := client_tester.New(t, s, generativeConstant.ModelContextTestToken)
 	all, e := c.GetTasks(t.Context(), "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, all)
@@ -44,7 +44,7 @@ func TestClientReadsTasksAndTags(t *testing.T) {
 func TestClientCreatesTask(t *testing.T) {
 	c := client_tester.New(
 		t,
-		service_tester.NewSource(t),
+		base.New(t),
 		generativeConstant.ModelContextTestToken,
 	)
 	v, e := c.CreateTask(t.Context(), "todo", "Ship loop C", "")
@@ -53,9 +53,9 @@ func TestClientCreatesTask(t *testing.T) {
 }
 
 func TestClientAnswersRefusedStatAsValidation(t *testing.T) {
-	m := service_tester.NewSource(t)
-	m.Failure = validation.New("%q is not a valid Stat.", "per")
-	c := client_tester.New(t, m, generativeConstant.ModelContextTestToken)
+	s := base.New(t)
+	s.Source.Failure = validation.New("%q is not a valid Stat.", "per")
+	c := client_tester.New(t, s, generativeConstant.ModelContextTestToken)
 	_, e := c.AllocateStat(t.Context(), "per")
 	assert.True(t, validation.Is(e))
 }
@@ -63,14 +63,14 @@ func TestClientAnswersRefusedStatAsValidation(t *testing.T) {
 func TestClientReachesDaemon(t *testing.T) {
 	c := client_tester.New(
 		t,
-		service_tester.NewSource(t),
+		base.New(t),
 		generativeConstant.ModelContextTestToken,
 	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 }
 
 func TestClientRefusesWrongToken(t *testing.T) {
-	c := client_tester.New(t, service_tester.NewSource(t), "wrong")
+	c := client_tester.New(t, base.New(t), "wrong")
 	assert.Error(t, c.Reachable(t.Context()))
 	_, e := c.GetTags(t.Context())
 	assert.Error(t, e)

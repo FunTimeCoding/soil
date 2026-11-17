@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer/hold"
 	"github.com/funtimecoding/soil/pkg/peer/hold/adapter"
-	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
 	"github.com/funtimecoding/soil/pkg/peer/unit/held_peer"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"sync"

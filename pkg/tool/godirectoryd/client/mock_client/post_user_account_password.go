@@ -10,7 +10,7 @@ func (c *Client) PostUserAccountPassword(
 	_ context.Context,
 	account string,
 	b client.PostUserAccountPasswordJSONRequestBody,
-) (*client.Receipt, error) {
+) (*client.Result, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -28,7 +28,7 @@ func (c *Client) PostUserAccountPassword(
 
 	c.Passwords[account] = b.Password
 
-	return &client.Receipt{
+	return &client.Result{
 		Message: fmt.Sprintf("password set: %s", account),
 	}, nil
 }

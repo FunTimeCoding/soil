@@ -32,6 +32,9 @@ is the procedure.
   while its call sites move new-beside-old
 - A behaviour change follows the move: tests pin today's behaviour, the
   moves land under them, then each behaviour step flips its own pins
+- Splitting a model into embedded parts moves fields, not columns: pin the
+  table's column names in a test first, and probe it both ways - a field
+  moved between embedded structs survives, a column renamed by tag is killed
 - A full face over a large client is generated: a program reading the
   client's AST writes the face and trivial mock files as new files,
   refusing to overwrite stateful ones. Must twins copy the client's body;
@@ -69,6 +72,10 @@ is the procedure.
   client, mock and callers, so only the test names the method. A face
   test's break removes a mock method no other mock file calls. A round
   trip turns a renamed method into a build failure first
+- Parts wired to their container are proven one break per wire, the copy's
+  included. An unwired copy reads the original's state and fails as a wrong
+  value, not a panic, so the test asserts a value only the copy's own state
+  decides
 - A mock with one failure for every method fails a sequence at its first
   step; fail one method by its method value (`c.Fail(c.DeviceTypes, e)`),
   which a rename follows

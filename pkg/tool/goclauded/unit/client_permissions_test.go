@@ -30,7 +30,7 @@ func TestClientReadsPermissionReport(t *testing.T) {
 	c.PermissionSource = "user_temporary"
 	c.PermissionReason = "bashMiss:no-rule-match"
 	s.Peers.Client.AddToolCall("session-a", c)
-	r, f := s.Client(t).GetPermissions(
+	r, f := s.Client().GetPermissions(
 		t.Context(),
 		&client.GetPermissionsParams{},
 	)

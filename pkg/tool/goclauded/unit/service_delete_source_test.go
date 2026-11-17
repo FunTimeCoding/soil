@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestDeleteReceiptReportsRemovedSources(t *testing.T) {
+func TestDeletionResultListsRemovedSources(t *testing.T) {
 	s := service_tester.New(t)
 	identifier := "11111111-2222-3333-4444-555555555555"
 	transcript := filepath.Join(

@@ -44,8 +44,7 @@ func TestClientCoversEveryOperation(t *testing.T) {
 func TestClientAndMockHoldFace(t *testing.T) {
 	c := client.New(locator.New("godirectoryd.test"), "token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 
 	for _, f := range []face.Client{c, m} {
 		assert.NotNil(t, f)
@@ -53,8 +52,7 @@ func TestClientAndMockHoldFace(t *testing.T) {
 }
 
 func TestClientRoundTripsThroughDaemon(t *testing.T) {
-	s := base.New(t)
-	defer s.Close()
+	s := base.New(t).Served()
 	c := client.New(
 		locator.New("localhost").Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,

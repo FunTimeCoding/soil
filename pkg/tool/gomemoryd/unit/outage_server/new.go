@@ -21,8 +21,7 @@ func New(
 	r *memory.Memory,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	q := mock_client.New()
-	t.Cleanup(q.Close)
+	q := mock_client.New(t)
 	q.Failure = outage_tester.RefusedDial()
 	o := option.New()
 	o.LitePath = filepath.Join(t.TempDir(), "memory.db")
@@ -34,7 +33,6 @@ func New(
 		t,
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(
 		t,

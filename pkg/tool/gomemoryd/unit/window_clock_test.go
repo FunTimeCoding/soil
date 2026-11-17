@@ -4,13 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/window_tester"
 	"testing"
 	"time"
 )
 
 func TestImpressionWindowRunsOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, window_tester.Now)
+	s := base.New(t, service_tester.WithClock(window_tester.Now))
 	_, e := s.Store().CreateImpression(
 		"clocked impression",
 		"tester",
@@ -25,7 +26,7 @@ func TestImpressionWindowRunsOnServiceClock(t *testing.T) {
 }
 
 func TestDashboardImpressionsRunOnServiceClock(t *testing.T) {
-	s := base.NewWith(t, window_tester.Now)
+	s := base.New(t, service_tester.WithClock(window_tester.Now))
 	_, e := s.Store().CreateImpression(
 		"clocked impression",
 		"tester",

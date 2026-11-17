@@ -12,8 +12,7 @@ import (
 )
 
 func TestProfileEmitsProfileAndPassesTopicAndDetail(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Profile = &client.ProfileResponse{Text: "alfa"}
 	output, _, code := command_tester.Run(
 		t,
@@ -35,8 +34,7 @@ func TestProfileEmitsProfileAndPassesTopicAndDetail(t *testing.T) {
 }
 
 func TestProfileWithoutFlagsSendsNoTopicOrDetail(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	_, _, code := command_tester.Run(t, c, "profile")
 	assert.Integer(t, 0, code)
 	assert.Count(t, 1, c.ProfileCalls)
@@ -45,8 +43,7 @@ func TestProfileWithoutFlagsSendsNoTopicOrDetail(t *testing.T) {
 }
 
 func TestProfilePrintsRenderedDocument(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Profile = &client.ProfileResponse{Text: "# always\n\nalfa\n"}
 	output, failure, code := command_tester.Run(
 		t,
@@ -61,8 +58,7 @@ func TestProfilePrintsRenderedDocument(t *testing.T) {
 }
 
 func TestFailedProfileExitsWithItsMessage(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Failure = errors.New("foxtrot")
 	output, failure, code := command_tester.Run(t, c, "profile")
 	assert.Integer(t, 1, code)
@@ -71,8 +67,7 @@ func TestFailedProfileExitsWithItsMessage(t *testing.T) {
 }
 
 func TestStatisticEmitsSummaryForScope(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Tokens = &client.TokenSummary{Withheld: 3, Memories: 5}
 	output, _, code := command_tester.Run(t, c, "statistic", "--scope", "kilo")
 	assert.Integer(t, 0, code)
@@ -86,8 +81,7 @@ func TestStatisticEmitsSummaryForScope(t *testing.T) {
 }
 
 func TestRelationsEmitsEdges(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Edges = []client.Relation{{SourceName: "alfa", TargetName: "bravo"}}
 	output, _, code := command_tester.Run(
 		t,
@@ -114,8 +108,7 @@ func TestRelationsEmitsEdges(t *testing.T) {
 }
 
 func TestRelationsUntypedAsksForUntypedFilter(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	_, _, code := command_tester.Run(t, c, "relations", "--untyped")
 	assert.Integer(t, 0, code)
 	assert.Count(t, 1, c.RelationCalls)
@@ -124,8 +117,7 @@ func TestRelationsUntypedAsksForUntypedFilter(t *testing.T) {
 }
 
 func TestFailedCallExitsWithItsMessage(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Failure = errors.New("foxtrot")
 	_, failure, code := command_tester.Run(t, c, "statistic")
 	assert.Integer(t, 1, code)

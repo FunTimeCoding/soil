@@ -11,7 +11,7 @@ import (
 
 func TestClientReachesGoalertlogd(t *testing.T) {
 	s := base.New(t)
-	assert.FatalOnError(t, s.AlertClient(t).Reachable(t.Context()))
+	assert.FatalOnError(t, s.AlertClient().Reachable(t.Context()))
 }
 
 func TestRefusedTokenIsNotReachable(t *testing.T) {

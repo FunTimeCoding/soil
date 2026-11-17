@@ -14,11 +14,14 @@ func NamingRefused(
 	function string,
 ) {
 	t.Helper()
-	d := service_tester.Prepare(t, "name-parameters-refused/src")
-	before := service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go")
-	r, e := service_tester.NewService(t).Symbol.NameParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("name-parameters-refused/src"),
+	)
+	before := o.Read("pkg/handler/handler.go")
+	r, e := o.Symbol.NameParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		naming.NewRequest(
 			"example/pkg/handler",
 			[]*naming.Function{naming.NewFunction(function, "")},
@@ -30,9 +33,5 @@ func NamingRefused(
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, expect)
-	assert.String(
-		t,
-		before,
-		service_tester.ReadFixtureFile(t, d, "pkg/handler/handler.go"),
-	)
+	assert.String(t, before, o.Read("pkg/handler/handler.go"))
 }

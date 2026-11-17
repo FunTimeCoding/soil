@@ -12,9 +12,9 @@ const (
 	DeliveryUnknown   = "delivery must be immediate or queued"
 )
 const (
-	DeliveryBudget     = 2000
-	DeliveryCutFloor   = 300
-	DeliveryEntryLimit = 500
+	DeliveryCharacterLimit = 2000
+	DeliveryCutFloor       = 300
+	DeliveryEntryLimit     = 500
 )
 
 const (
@@ -43,8 +43,8 @@ const (
 )
 
 const (
-	DeliveryOverBudget = "hook delivery over budget"
+	DeliveryOverLimit  = "hook delivery over its character limit"
 	DeliveryCharacters = "characters"
-	DeliveryBudgetKey  = "budget"
+	DeliveryLimitKey   = "limit"
 	DeliveryRefused    = "%s is %d characters; summarize it to %d or fewer"
 )

@@ -48,7 +48,6 @@ func Serve(
 			d.Mount(r, mock_recorder.New(), g)
 		},
 	)
-	t.Cleanup(s.Close)
 	result, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Client()),

@@ -37,5 +37,5 @@ func TestClientCoversEveryOperation(t *testing.T) {
 }
 
 func TestClientAndItsMockHoldFace(t *testing.T) {
-	assert.Count(t, 2, []face.Client{&client.Client{}, mock_client.New()})
+	assert.Count(t, 2, []face.Client{&client.Client{}, mock_client.New(t)})
 }

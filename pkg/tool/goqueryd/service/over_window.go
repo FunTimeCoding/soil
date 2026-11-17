@@ -8,14 +8,14 @@ import (
 
 func (s *Service) overWindow(chunks []chunk.Chunk) []error {
 	result := make([]error, len(chunks))
-	allowance := s.counter.Allowance()
+	tokenLimit := s.counter.TokenLimit()
 
 	for i, c := range chunks {
-		if tokens := s.counter.Count(s.asDocument(c.Text)); tokens > allowance {
+		if tokens := s.counter.Count(s.asDocument(c.Text)); tokens > tokenLimit {
 			result[i] = validation.New(
 				constant.EmbedOverWindow,
 				tokens,
-				allowance,
+				tokenLimit,
 			)
 		}
 	}

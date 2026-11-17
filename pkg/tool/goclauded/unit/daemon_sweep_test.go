@@ -13,7 +13,7 @@ import (
 )
 
 func TestSessionPastItsWindowIsNotSweptWhenDaemonStarts(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
+	o := peer_tester.New(t).DaemonOption()
 	s := store_tester.NewOnFile(t, o.LitePath)
 	r := s.EnsureSession("session-1")
 	s.Announce(r.Callsign, "working through an outage", "")

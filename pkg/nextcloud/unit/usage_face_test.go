@@ -13,8 +13,7 @@ import (
 func TestUsageClientAndItsMockShareFace(t *testing.T) {
 	c := client.New("nextcloud.test", 443, true, "token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.UsageClient{c, m}
 	assert.Count(t, 2, faces)
 }

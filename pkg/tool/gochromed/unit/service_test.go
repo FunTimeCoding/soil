@@ -12,8 +12,7 @@ import (
 )
 
 func TestCloseTabResolvesByTitle(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.AddTab("alfa", "Alfa Portal", "https://alfa.example")
 	c.AddTab("bravo", "Bravo Wiki", "https://bravo.example")
 	result, e := service_tester.New(t, c).CloseTab(
@@ -27,16 +26,14 @@ func TestCloseTabResolvesByTitle(t *testing.T) {
 }
 
 func TestCloseTabAnswersUnknownTab(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.AddTab("alfa", "Alfa Portal", "https://alfa.example")
 	_, e := service_tester.New(t, c).CloseTab(selector.New("charlie", "", ""))
 	assert.True(t, not_found.Is(e))
 }
 
 func TestClickBeforeSnapshotAnswersNotFound(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.AddTab("alfa", "Alfa Portal", "https://alfa.example")
 	_, e := service_tester.New(t, c).Click(
 		selector.New("", "", ""),
@@ -47,8 +44,7 @@ func TestClickBeforeSnapshotAnswersNotFound(t *testing.T) {
 }
 
 func TestFillRequiresValue(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	_, e := service_tester.New(t, c).Fill(
 		fill.New(selector.New("", "", ""), "e5", ""),
 	)
@@ -56,8 +52,7 @@ func TestFillRequiresValue(t *testing.T) {
 }
 
 func TestScreenshotSavesToDownloadDirectory(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.AddTab("alfa", "Alfa Portal", "https://alfa.example")
 	result, e := service_tester.New(t, c).Screenshot(selector.New("", "", ""))
 	assert.FatalOnError(t, e)

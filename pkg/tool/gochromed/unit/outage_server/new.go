@@ -17,14 +17,13 @@ func New(
 	r *memory.Memory,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Failure = outage_tester.RefusedDial()
 	d := daemon_tester.New(t, c)
 	result := model_context_server.New(
 		t,
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(
 		t,

@@ -12,14 +12,12 @@ import (
 func TestHubClientsSatisfyFace(t *testing.T) {
 	var c face.DockerHubClient = hub.New()
 	defer c.Close()
-	var m face.DockerHubClient = mock_client.New()
-	defer m.Close()
+	var m face.DockerHubClient = mock_client.New(t)
 	assert.NotNil(t, m)
 }
 
 func TestMockAnswersSeededTagsAndMissesLikeClient(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	m.SeedTags("library/foxtrot", "1.0-alpine")
 	tags, e := m.Tags("library/foxtrot")
 	assert.FatalOnError(t, e)

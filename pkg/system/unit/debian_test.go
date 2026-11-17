@@ -29,13 +29,12 @@ func TestAptlyClientSatisfiesRepositoryFace(t *testing.T) {
 }
 
 func TestAptlyMockSatisfiesRepositoryFace(t *testing.T) {
-	var v face.Repository = mock_client.New()
+	var v face.Repository = mock_client.New(t)
 	assert.NotNil(t, v)
 }
 
 func TestAptlyMockServesSeededVersions(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.SeedVersions("stable", "foxtrot", "1.2.5", "1.2.3", "1.2.0")
 	v, e := c.Versions("stable", "foxtrot")
 	assert.Nil(t, e)
@@ -44,8 +43,7 @@ func TestAptlyMockServesSeededVersions(t *testing.T) {
 }
 
 func TestAptlyMockLatestVersionTakesFirst(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.SeedVersions("stable", "foxtrot", "1.2.5", "1.2.3")
 	v, e := c.LatestVersion("stable", "foxtrot")
 	assert.Nil(t, e)
@@ -53,16 +51,14 @@ func TestAptlyMockLatestVersionTakesFirst(t *testing.T) {
 }
 
 func TestAptlyMockReportsAbsentPackage(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	v, e := c.LatestVersion("stable", "absent")
 	assert.Nil(t, e)
 	assert.String(t, "", v)
 }
 
 func TestAptlyMockPropagatesFailure(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Fail(errors.New("repository unreachable"))
 	_, e := c.Versions("stable", "foxtrot")
 	assert.NotNil(t, e)

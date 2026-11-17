@@ -6,11 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"testing"
 )
 
-func (s *Server) RESTClient(t *testing.T) *client.ClientWithResponses {
-	t.Helper()
+func (s *Server) RESTClient() *client.ClientWithResponses {
+	s.t.Helper()
 	c, e := client.NewClientWithResponses(
 		s.Address(webConstant.RootPath),
 		client.WithHTTPClient(s.Server.Client()),
@@ -18,7 +17,7 @@ func (s *Server) RESTClient(t *testing.T) *client.ClientWithResponses {
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(s.t, e)
 
 	return c
 }

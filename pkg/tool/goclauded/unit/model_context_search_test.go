@@ -12,7 +12,7 @@ func TestSearchConversationsTool(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
 	s.Tick()
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "searching")
 	result := a.MustCallTool(
 		constant.SearchConversations,
@@ -30,7 +30,7 @@ func TestSearchConversationsToolKinds(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
 	s.Tick()
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "searching")
 	result := a.MustCallTool(
 		constant.SearchConversations,
@@ -50,7 +50,7 @@ func TestReadConversationTool(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
 	s.Tick()
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "reading")
 	result := a.MustCallTool(
 		constant.ReadConversation,
@@ -73,7 +73,7 @@ func TestReadConversationToolUnknownBlock(t *testing.T) {
 	s := base.New(t)
 	s.WriteSearchTranscript("bravo")
 	s.Tick()
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "reading")
 	message, e := a.CallToolError(
 		constant.ReadConversation,

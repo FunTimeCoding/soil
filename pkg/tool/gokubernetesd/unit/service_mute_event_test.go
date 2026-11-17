@@ -8,7 +8,7 @@ import (
 
 func TestMuteEvent(t *testing.T) {
 	s := service_tester.New(t)
-	e := s.Service.MuteEvent("DNSConfigForming", "", "")
+	e := s.Service().MuteEvent("DNSConfigForming", "", "")
 	assert.Nil(t, e)
 	rules := s.MuteRules()
 	assert.Count(t, 1, rules)
@@ -27,7 +27,7 @@ func TestUnmuteEvent(t *testing.T) {
 	s := service_tester.New(t)
 	s.Mute("DNSConfigForming", "", "")
 	rules := s.MuteRules()
-	e := s.Service.UnmuteEvent(rules[0].Identifier)
+	e := s.Service().UnmuteEvent(rules[0].Identifier)
 	assert.Nil(t, e)
 	assert.Count(t, 0, s.MuteRules())
 }

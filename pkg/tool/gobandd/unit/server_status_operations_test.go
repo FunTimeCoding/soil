@@ -11,8 +11,8 @@ import (
 
 func TestStatusSaysWhyGracefulShutdownWouldBeRefused(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
-	r, e := s.Client.GetStatusWithResponse(
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
+	r, e := s.GeneratedClient().GetStatusWithResponse(
 		t.Context(),
 		&client.GetStatusParams{Instance: new("alfa")},
 	)
@@ -32,8 +32,8 @@ func TestStatusSaysWhyGracefulShutdownWouldBeRefused(t *testing.T) {
 
 func TestStatusLeavesAcceptedForcedShutdownWithoutRefusal(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
-	r, e := s.Client.GetStatusWithResponse(
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
+	r, e := s.GeneratedClient().GetStatusWithResponse(
 		t.Context(),
 		&client.GetStatusParams{Instance: new("alfa")},
 	)

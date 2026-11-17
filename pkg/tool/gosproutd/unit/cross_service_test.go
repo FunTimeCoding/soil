@@ -12,7 +12,7 @@ import (
 
 func TestSettledAnswerOfLiveSessionIsSent(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	a.CheckLive()
 	s.AnswerOne(stringsConstant.LowerAlfa)
@@ -31,7 +31,7 @@ func TestSettledAnswerOfLiveSessionIsSent(t *testing.T) {
 
 func TestPollingClearsBacklogSoNothingFires(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	a.CheckLive()
 	s.Goclauded.Store.Advance(time.Minute)
@@ -53,7 +53,7 @@ func TestPollingClearsBacklogSoNothingFires(t *testing.T) {
 
 func TestCoordinatorReportsWorkingAfterPrompt(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	a.CheckLive()
 	target := s.Target(a.UUID)
@@ -63,7 +63,7 @@ func TestCoordinatorReportsWorkingAfterPrompt(t *testing.T) {
 
 func TestCoordinatorReportsIdleAfterTurnEnd(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	a.CheckLive()
 	s.Goclauded.Store.Advance(time.Minute)
@@ -75,7 +75,7 @@ func TestCoordinatorReportsIdleAfterTurnEnd(t *testing.T) {
 
 func TestSessionWithoutHookReportsUnknown(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	a.CheckLive()
 	assert.True(t, s.Target(a.UUID).LastTurnEndAt == nil)
@@ -83,7 +83,7 @@ func TestSessionWithoutHookReportsUnknown(t *testing.T) {
 
 func TestSproutReachesCoordinator(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	targets, e := s.Coordinator.RecentSessions(10)
 	assert.FatalOnError(t, e)
@@ -94,7 +94,7 @@ func TestCoordinatorSeesOnlyItsOwnSessions(t *testing.T) {
 	s := cross_service_tester.New(t)
 	before, e := s.Coordinator.RecentSessions(10)
 	assert.FatalOnError(t, e)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	after, f := s.Coordinator.RecentSessions(10)
 	assert.FatalOnError(t, f)
@@ -103,7 +103,7 @@ func TestCoordinatorSeesOnlyItsOwnSessions(t *testing.T) {
 
 func TestQueueAndCoordinatorKeepSeparateClocks(t *testing.T) {
 	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
+	a := s.Goclauded.NewSession()
 	defer a.Close()
 	d, e := s.Service.PushDecision(
 		stringsConstant.LowerAlfa,

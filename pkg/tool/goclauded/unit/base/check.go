@@ -7,7 +7,7 @@ import (
 
 func (s *Server) Check(sessionIdentifier string) *client.CheckResponse {
 	s.t.Helper()
-	result, e := s.Client(s.t).GetCheck(
+	result, e := s.Client().GetCheck(
 		s.t.Context(),
 		&client.GetCheckParams{Session: sessionIdentifier},
 	)

@@ -54,16 +54,25 @@ func (s *Service) planFamily(
 		)
 	}
 
+	w := s.workspace.Workspace(directory)
+	outside, dropped := familyOutside(
+		face.FromWorkspace(w, all),
+		w,
+		all,
+		members,
+	)
 	refusals = slices.Concat(
 		refusals,
-		familyOutside(
-			face.FromWorkspace(s.workspace.Workspace(directory), all),
-			all,
-			members,
-		),
+		outside,
 		familyCollisions(all, members, n.NewName),
 		familyGenerated(set, members),
 	)
+
+	for _, note := range dropped {
+		r.AddConcern(
+			concern.NewFile(constant.ConcernDroppedSatisfaction, note, "", true),
+		)
+	}
 
 	for _, refusal := range refusals {
 		r.AddConcern(

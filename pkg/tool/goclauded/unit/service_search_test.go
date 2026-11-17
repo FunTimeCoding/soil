@@ -61,7 +61,7 @@ func TestReadConversationTruncatesLongBlocks(t *testing.T) {
 	)
 }
 
-func TestDeleteSessionReceiptCountsSearchEntries(t *testing.T) {
+func TestDeletionResultCountsSearchEntries(t *testing.T) {
 	s := service_tester.New(t)
 	s.WriteSessionFile("doomed", "doomed-slug")
 	s.Transcript.PopulateCache()

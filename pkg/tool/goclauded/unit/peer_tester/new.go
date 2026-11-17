@@ -17,9 +17,9 @@ func New(t *testing.T) *Peers {
 	return &Peers{
 		t:          t,
 		Client:     c,
-		Query:      queryMock.New(),
+		Query:      queryMock.New(t),
 		Notifier:   mock_notifier.New(),
-		MemoryPeer: memoryMock.New(),
+		MemoryPeer: memoryMock.New(t),
 		Reporter:   memory.New(),
 		Harbor:     c.Harbor,
 		Source:     t.TempDir(),

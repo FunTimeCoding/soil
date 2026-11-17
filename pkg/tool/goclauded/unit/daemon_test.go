@@ -24,23 +24,21 @@ import (
 )
 
 func TestDaemonClosesBothPeerClientsOnce(t *testing.T) {
-	o, m, q := peer_tester.NewOption(t)
-	defer m.Close()
-	defer q.Close()
+	p := peer_tester.New(t)
 	d := daemon.New(
-		o,
+		p.DaemonOption(),
 		logger.New(t.Context()),
 		memory.New(),
 		prometheus.NewRegistry(),
 	)
 	d.Close()
 	d.Close()
-	assert.Integer(t, 1, m.Closed)
-	assert.Integer(t, 1, q.Closed)
+	assert.Integer(t, 1, p.MemoryPeer.Closed)
+	assert.Integer(t, 1, p.Query.Closed)
 }
 
 func TestDaemonMigratesFreshDatabase(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
+	o := peer_tester.New(t).DaemonOption()
 	daemon.New(
 		o,
 		logger.New(t.Context()),
@@ -64,8 +62,8 @@ func TestDaemonMigratesFreshDatabase(t *testing.T) {
 }
 
 func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
-	u := mock_client.New()
+	o := peer_tester.New(t).DaemonOption()
+	u := mock_client.New(t)
 	o.UtilizationFallback = true
 	o.Utilization = func() face.AnthropicClient { return u }
 	d := daemon.New(
@@ -88,8 +86,8 @@ func TestUtilizationFallbackGuardsItsPeer(t *testing.T) {
 }
 
 func TestUtilizationClockReadsOptionsCredential(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
-	u := mock_client.New()
+	o := peer_tester.New(t).DaemonOption()
+	u := mock_client.New(t)
 	u.Result = utilization.Parse(
 		[]byte(fixture.Read("claude", "utilization.json")),
 	)
@@ -120,7 +118,7 @@ func TestUtilizationClockReadsOptionsCredential(t *testing.T) {
 }
 
 func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
+	o := peer_tester.New(t).DaemonOption()
 	d := daemon.New(
 		o,
 		logger.New(t.Context()),
@@ -138,7 +136,7 @@ func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 }
 
 func TestDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
+	o := peer_tester.New(t).DaemonOption()
 	s := store_tester.NewOnFile(t, o.LitePath)
 	r := s.EnsureSession("session-1")
 	s.BindModelContextSession(r.Callsign, "mcp-session-abc")
@@ -153,7 +151,7 @@ func TestDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	o, _, _ := peer_tester.NewOption(t)
+	o := peer_tester.New(t).DaemonOption()
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(
 		o,

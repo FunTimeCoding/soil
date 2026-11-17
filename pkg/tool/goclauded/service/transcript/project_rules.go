@@ -1,11 +1,6 @@
 package transcript
 
-import (
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/permission/allowlist"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/system"
-	"path/filepath"
-)
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/permission/allowlist"
 
 func projectRules(
 	cache map[string][]*allowlist.Rule,
@@ -15,23 +10,7 @@ func projectRules(
 		return rules, nil
 	}
 
-	rules, e := allowlist.ReadAll(
-		filepath.Join(
-			project,
-			generativeConstant.SettingsDirectory,
-			generativeConstant.SettingsFile,
-		),
-		filepath.Join(
-			project,
-			generativeConstant.SettingsDirectory,
-			generativeConstant.SharedSettingsFile,
-		),
-		filepath.Join(
-			system.Home(),
-			generativeConstant.SettingsDirectory,
-			generativeConstant.SharedSettingsFile,
-		),
-	)
+	rules, e := allowlist.ReadAll(settingsPaths(project)...)
 
 	if e != nil {
 		return nil, e

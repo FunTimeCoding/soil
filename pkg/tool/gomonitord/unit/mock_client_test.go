@@ -13,8 +13,7 @@ import (
 )
 
 func TestMockClaimsReleasesAndStreams(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	x := t.Context()
 	_, e := m.PutClaim(x, "jira-ABC-1", "alfa@host.example")
 	assert.FatalOnError(t, e)
@@ -39,8 +38,7 @@ func TestMockClaimsReleasesAndStreams(t *testing.T) {
 }
 
 func TestMockFailsEveryOperation(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	m.Failure = errors.New("alfa")
 	x := t.Context()
 	assert.NotNil(t, m.Reachable(x))

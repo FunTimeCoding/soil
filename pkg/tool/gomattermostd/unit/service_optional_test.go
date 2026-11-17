@@ -9,11 +9,11 @@ import (
 )
 
 func TestSubscriptionsNeedGoclauded(t *testing.T) {
-	m := service_tester.NewMattermost(t, "kilo")
-	m.AddPost("alfa")
-	s := service_tester.Service(t, m, nil, nil)
+	o := service_tester.New(t)
+	o.Mattermost.AddPost("alfa")
+	s := o.Service()
 	assert.False(t, s.Subscribing())
-	p, e := m.FindPost("alfa")
+	p, e := o.Mattermost.FindPost("alfa")
 	assert.FatalOnError(t, e)
 	_, _, f := s.Subscribe(p, "kilo", "", "")
 	assert.True(t, not_configured.Is(f))
@@ -25,22 +25,12 @@ func TestSubscriptionsNeedGoclauded(t *testing.T) {
 
 func TestGoclaudedTurnsSubscriptionsOn(t *testing.T) {
 	_, k := worker_tester.NewSink(t)
-	s := service_tester.Service(
-		t,
-		service_tester.NewMattermost(t, "kilo"),
-		k,
-		nil,
-	)
+	s := service_tester.New(t, service_tester.WithConnector(k)).Service()
 	assert.True(t, s.Subscribing())
 }
 
 func TestMonitorNeedsItsConfiguration(t *testing.T) {
-	s := service_tester.Service(
-		t,
-		service_tester.NewMattermost(t, "kilo"),
-		nil,
-		nil,
-	)
+	s := service_tester.New(t).Service()
 	assert.False(t, s.Monitoring())
 	assert.True(t, not_configured.Is(s.RunMonitor()))
 }

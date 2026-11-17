@@ -140,7 +140,7 @@ func TestDigestBuildCollapsesAboveEnumerateLimit(t *testing.T) {
 	)
 }
 
-func TestDigestBuildCollapsesWhenOverBudget(t *testing.T) {
+func TestDigestBuildCollapsesWhenOverLimit(t *testing.T) {
 	long := strings.Repeat("a", constant.ExcerptLength)
 	var events []*event.Event
 

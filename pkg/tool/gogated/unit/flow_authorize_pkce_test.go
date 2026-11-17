@@ -2,15 +2,14 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/flow_tester"
 	"testing"
 )
 
 func TestFullAuthorizationCodeFlow(t *testing.T) {
-	o := tester.New(t)
-	r := o.Register(t, []string{"http://localhost/callback"})
+	o := flow_tester.New(t)
+	r := o.Register([]string{"http://localhost/callback"})
 	authorization := o.Authorize(
-		t,
 		r.ClientIdentifier,
 		"http://localhost/callback",
 	)
@@ -19,12 +18,7 @@ func TestFullAuthorizationCodeFlow(t *testing.T) {
 		t.Fatal("expected authorization code")
 	}
 
-	tokens := o.ExchangeCode(
-		t,
-		r.ClientIdentifier,
-		r.ClientSecret,
-		authorization,
-	)
+	tokens := o.ExchangeCode(r.ClientIdentifier, r.ClientSecret, authorization)
 
 	if tokens.AccessToken == "" {
 		t.Fatal("expected access token")

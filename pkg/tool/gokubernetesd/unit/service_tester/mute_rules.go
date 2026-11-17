@@ -6,7 +6,7 @@ import (
 )
 
 func (t *Tester) MuteRules() []mute_rule.MuteRule {
-	result, e := t.Service.MuteRules()
+	result, e := t.Service().MuteRules()
 	errors.PanicOnError(e)
 
 	return result

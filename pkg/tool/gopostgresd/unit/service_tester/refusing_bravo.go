@@ -7,8 +7,8 @@ import (
 
 func RefusingBravo(t *testing.T) *Tester {
 	t.Helper()
-	s, clients := New(t, "alfa", "bravo")
-	clients["bravo"].Failure = validation.New("bad statement")
+	result := New(t, WithInstances("alfa", "bravo"))
+	result.Bravo().Failure = validation.New("bad statement")
 
-	return s
+	return result
 }

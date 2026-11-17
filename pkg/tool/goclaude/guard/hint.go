@@ -8,8 +8,16 @@ import (
 func Hint(command string) string {
 	s := shell_script.Parse(command)
 
-	if !s.Unparsed() && s.Any(oapiCodegenCall) {
+	if s.Unparsed() {
+		return ""
+	}
+
+	if s.Any(oapiCodegenCall) {
 		return constant.OapiCodegenHint
+	}
+
+	if s.Any(temporaryRedirectCall) {
+		return constant.TemporaryRedirectHint
 	}
 
 	return ""

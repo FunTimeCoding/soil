@@ -7,11 +7,11 @@ import (
 
 func IndexedAndFull(
 	t *testing.T,
-) (string, *service_tester.Services, *service_tester.Services) {
+) (*service_tester.Tester, *service_tester.Services) {
 	t.Helper()
-	directory := service_tester.Prepare(t, "indexed/src")
-	full := service_tester.NewService(t)
+	o := service_tester.New(t, service_tester.WithFixture("indexed/src"))
+	full := service_tester.New(t).Services
 	full.Workspace.UseFullLoad()
 
-	return directory, service_tester.NewService(t), full
+	return o, full
 }

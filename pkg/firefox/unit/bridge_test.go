@@ -19,8 +19,7 @@ import (
 func TestClientAndItsMockShareFace(t *testing.T) {
 	c := firefox.New()
 	t.Cleanup(c.Close)
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	faces := []face.FirefoxClient{c, m}
 	assert.Count(t, 2, faces)
 }

@@ -23,7 +23,6 @@ func connect(
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
-	t.Cleanup(s.Close)
 	result := client.New(
 		locator.New("localhost").Port(s.Port).Insecure(),
 		token,

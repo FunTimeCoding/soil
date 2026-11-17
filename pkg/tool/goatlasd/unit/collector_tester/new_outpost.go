@@ -12,8 +12,7 @@ func NewOutpost(
 	hardwareAddresses []string,
 ) *mock_client.Client {
 	t.Helper()
-	result := mock_client.New()
-	t.Cleanup(result.Close)
+	result := mock_client.New(t)
 	result.HostValue = &client.Host{
 		Hostname:          hostname,
 		Platform:          "linux",

@@ -11,8 +11,7 @@ import (
 
 func TestShowOfMissingSecretIsNotFound(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	r, e := base.Rest(t, s).ShowSecretWithResponse(
+	r, e := s.GeneratedClient().ShowSecretWithResponse(
 		context.Background(),
 		&client.ShowSecretParams{Path: "alfa/missing"},
 	)
@@ -23,8 +22,7 @@ func TestShowOfMissingSecretIsNotFound(t *testing.T) {
 
 func TestPutAndRevealOverInterface(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	c := base.Rest(t, s)
+	c := s.GeneratedClient()
 	p, e := c.PutSecretWithResponse(
 		context.Background(),
 		&client.PutSecretParams{Path: "alfa/bravo"},
@@ -44,8 +42,7 @@ func TestPutAndRevealOverInterface(t *testing.T) {
 
 func TestPutWithoutValuesIsRefused(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	r, e := base.Rest(t, s).PutSecretWithResponse(
+	r, e := s.GeneratedClient().PutSecretWithResponse(
 		context.Background(),
 		&client.PutSecretParams{Path: "alfa/bravo"},
 		client.PutSecretJSONRequestBody{Values: map[string]string{}},

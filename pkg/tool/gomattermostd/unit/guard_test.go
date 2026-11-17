@@ -10,10 +10,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	d := service_tester.NewDaemonWithoutSubscription(
-		t,
-		service_tester.NewMattermost(t, "guard"),
-	)
+	d := service_tester.New(t).Daemon()
 	v := model_context_server.New(
 		t,
 		func(g *guard.Mux) {

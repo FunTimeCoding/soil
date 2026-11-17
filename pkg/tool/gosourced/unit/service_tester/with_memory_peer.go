@@ -1,20 +1,9 @@
 package service_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/source/inventory"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/face"
 
-func WithMemoryPeer(
-	t *testing.T,
-	c face.Client,
-) (*Services, *memory.Memory) {
-	t.Helper()
-	r := memory.New()
-	result := fromParts(t, inventory.New(), c, r)
-	result.Workspace.UseIndex(IndexDirectory())
-
-	return result, r
+func WithMemoryPeer(c face.Client) Option {
+	return func(s *setup) {
+		s.memoryPeer = c
+	}
 }

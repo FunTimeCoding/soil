@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/markup_tester"
 	"net/url"
 	"strings"
@@ -111,7 +112,7 @@ func TestDocumentSourcedMemoryOpensReadOnly(t *testing.T) {
 }
 
 func TestHiddenMemoryRefusesWebEdit(t *testing.T) {
-	s := base.NewHidden(t, "private")
+	s := base.New(t, service_tester.WithHiddenTag("private"))
 	o := save_option.New()
 	o.Name = "zulu"
 	o.Content = "zulu content"

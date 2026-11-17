@@ -11,8 +11,7 @@ import (
 )
 
 func TestMockReactionsFailOnTheirOwn(t *testing.T) {
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	m.Reactions["alfa"] = []string{"bravo"}
 	m.Posts["charlie"] = []*client.Post{{Identifier: "alfa"}}
 	m.Fail(m.GetPostReactions, unavailable.Format("gomattermostd: down"))

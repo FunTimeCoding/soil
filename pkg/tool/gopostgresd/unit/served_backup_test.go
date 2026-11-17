@@ -12,7 +12,8 @@ import (
 )
 
 func TestRestDeleteOfAbsentBackupIsNotFound(t *testing.T) {
-	_, c, r, _ := base.Serve(t, nil)
+	b := base.New(t)
+	c := b.GeneratedClient()
 	v, e := c.DeleteBackupWithResponse(
 		t.Context(),
 		"2030-01-02T03-04-05",
@@ -20,11 +21,12 @@ func TestRestDeleteOfAbsentBackupIsNotFound(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, v.StatusCode())
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }
 
 func TestRestBackupNameOutsidePatternIsRefused(t *testing.T) {
-	_, c, r, _ := base.Serve(t, nil)
+	b := base.New(t)
+	c := b.GeneratedClient()
 	v, e := c.RestoreBackupWithResponse(
 		t.Context(),
 		"../alfa",
@@ -32,18 +34,19 @@ func TestRestBackupNameOutsidePatternIsRefused(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusBadRequest, v.StatusCode())
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }
 
 func TestRestRestoreInPlaceWhileOthersAreConnectedIsConflict(t *testing.T) {
-	_, c, r, postgres := base.Serve(t, nil)
+	b := base.New(t)
+	c := b.GeneratedClient()
 	created, e := c.CreateBackupWithResponse(
 		t.Context(),
 		client.CreateBackupJSONRequestBody{Instance: new("alfa")},
 	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, created.StatusCode())
-	postgres.SeedResult(
+	b.Alfa().SeedResult(
 		constant.ConnectedSessionsQuery,
 		result.New(
 			nil,
@@ -61,13 +64,12 @@ func TestRestRestoreInPlaceWhileOthersAreConnectedIsConflict(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.Integer(t, http.StatusConflict, v.StatusCode())
 	assert.StringContains(t, "bravo (alfa@10.0.0.5", v.JSON409.Error)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }
 
 func TestModelContextBackupIsCreatedListedAndDeleted(t *testing.T) {
-	s, _, r, _ := base.Serve(t, nil)
-	m := s.Connect(t)
-	defer m.Close()
+	b := base.New(t)
+	m := b.Tools()
 	var created client.Backup
 	notation.MustDecodeBytes(
 		[]byte(m.MustCallTool(constant.CreateBackup, nil)),
@@ -93,16 +95,15 @@ func TestModelContextBackupIsCreatedListedAndDeleted(t *testing.T) {
 		false,
 	)
 	assert.Count(t, 0, listed.Backups)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }
 
 func TestModelContextRestoreOfAbsentBackupIsQuiet(t *testing.T) {
-	s, _, r, _ := base.Serve(t, nil)
-	m := s.Connect(t)
-	defer m.Close()
+	b := base.New(t)
+	m := b.Tools()
 	m.MustCallToolError(
 		constant.RestoreBackup,
 		map[string]any{"backup": "2030-01-02T03-04-05"},
 	)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }

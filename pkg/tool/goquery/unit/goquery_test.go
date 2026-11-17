@@ -113,8 +113,8 @@ func TestFailedRechunkEmbedsNothing(t *testing.T) {
 func TestOversizeEmitsReportWithItsSummary(t *testing.T) {
 	c := command_tester.Mock(t)
 	c.OversizeReport = &client.OversizeReport{
-		Allowance:      512,
-		EmbedAllowance: 2048,
+		TokenLimit:      512,
+		EmbedTokenLimit: 2048,
 		Files: []client.OversizeFile{
 			{
 				Collection: "alfa",
@@ -169,10 +169,10 @@ func TestStatusEmitsStatus(t *testing.T) {
 func TestChunkPrintsPreviewAsDocument(t *testing.T) {
 	c := command_tester.Mock(t)
 	c.Preview = &client.ChunkPreview{
-		Allowance:      512,
-		EmbedAllowance: 2048,
-		Model:          "kilo",
-		Window:         512,
+		TokenLimit:      512,
+		EmbedTokenLimit: 2048,
+		Model:           "kilo",
+		Window:          512,
 		Chunks: []client.PreviewChunk{
 			{
 				Index:       1,

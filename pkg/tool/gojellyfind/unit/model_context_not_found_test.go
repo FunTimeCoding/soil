@@ -9,9 +9,7 @@ import (
 
 func TestUnknownItemIsAnsweredQuietlyOverModelContext(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	c := s.ContextServer.Connect(t)
-	defer c.Close()
+	c := s.Tools()
 	assert.String(
 		t,
 		"item not found: charlie",

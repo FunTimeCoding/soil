@@ -41,7 +41,7 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity, webConstant.ThemeSentinel, favicon).
 				WithStyle(constant.InlineStyle).
-				WithCommands(links...).
+				WithCommands(func() []*palette.Command { return links }).
 				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(

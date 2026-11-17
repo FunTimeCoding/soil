@@ -24,7 +24,7 @@ func TestRerankTextKeywordHitTakesChunkHoldingItsLine(t *testing.T) {
 		store.RerankText(
 			store_tester.Halves(),
 			result.NewSearch("halves.md", "", constant.NoChunkPosition, 1),
-			service_tester.NewReranker(t),
+			service_tester.New(t).Reranker,
 		),
 	)
 	assert.StringContains(
@@ -33,7 +33,7 @@ func TestRerankTextKeywordHitTakesChunkHoldingItsLine(t *testing.T) {
 		store.RerankText(
 			store_tester.Halves(),
 			result.NewSearch("halves.md", "", constant.NoChunkPosition, 1200),
-			service_tester.NewReranker(t),
+			service_tester.New(t).Reranker,
 		),
 	)
 }
@@ -45,7 +45,7 @@ func TestRerankTextVectorChunkWinsOverSnippetLine(t *testing.T) {
 		store.RerankText(
 			store_tester.Halves(),
 			result.NewSearch("halves.md", "", 0, 1200),
-			service_tester.NewReranker(t),
+			service_tester.New(t).Reranker,
 		),
 	)
 }
@@ -62,7 +62,7 @@ func TestRerankTextWithoutBodyUsesSnippet(t *testing.T) {
 				constant.NoChunkPosition,
 				0,
 			),
-			service_tester.NewReranker(t),
+			service_tester.New(t).Reranker,
 		),
 	)
 }

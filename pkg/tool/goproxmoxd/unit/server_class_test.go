@@ -14,10 +14,10 @@ import (
 
 func TestRefusedPermissionAnswersForbidden(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.SetFailure(
+	s.Alfa().Hypervisor.SetFailure(
 		forbidden.Format("Permission check failed (/, Sys.Audit)"),
 	)
-	r, e := base.Rest(t, s).ListNodesWithResponse(
+	r, e := s.GeneratedClient().ListNodesWithResponse(
 		t.Context(),
 		&client.ListNodesParams{},
 	)
@@ -28,8 +28,8 @@ func TestRefusedPermissionAnswersForbidden(t *testing.T) {
 
 func TestLockedGuestAnswersConflict(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.SetFailure(conflict.Format("VM is locked (backup)"))
-	r, e := base.Rest(t, s).StartMachineWithResponse(
+	s.Alfa().Hypervisor.SetFailure(conflict.Format("VM is locked (backup)"))
+	r, e := s.GeneratedClient().StartMachineWithResponse(
 		t.Context(),
 		101,
 		&client.StartMachineParams{},
@@ -40,15 +40,15 @@ func TestLockedGuestAnswersConflict(t *testing.T) {
 
 func TestUnreachableHypervisorAnswersUnavailable(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.SetFailure(
+	s.Alfa().Hypervisor.SetFailure(
 		connection.New(
 			errorsConstant.Unreachable,
-			"test",
+			"alfa",
 			"",
 			errorsConstant.Refused,
 		),
 	)
-	r, e := base.Rest(t, s).ListNodesWithResponse(
+	r, e := s.GeneratedClient().ListNodesWithResponse(
 		t.Context(),
 		&client.ListNodesParams{},
 	)
@@ -58,8 +58,8 @@ func TestUnreachableHypervisorAnswersUnavailable(t *testing.T) {
 
 func TestUnexpectedFailureIsCapturedWithItsEvent(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.SetFailure(errors.New("cfs lock timeout"))
-	r, e := base.Rest(t, s).ListNodesWithResponse(
+	s.Alfa().Hypervisor.SetFailure(errors.New("cfs lock timeout"))
+	r, e := s.GeneratedClient().ListNodesWithResponse(
 		t.Context(),
 		&client.ListNodesParams{},
 	)

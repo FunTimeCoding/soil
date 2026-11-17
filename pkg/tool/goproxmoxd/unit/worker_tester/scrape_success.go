@@ -10,7 +10,7 @@ func ScrapeSuccess(value string) string {
 		[]string{
 			"# HELP proxmox_scrape_success Whether the last poll of the hypervisor succeeded",
 			"# TYPE proxmox_scrape_success gauge",
-			fmt.Sprintf("proxmox_scrape_success{hypervisor=\"pve\"} %s", value),
+			fmt.Sprintf("proxmox_scrape_success{hypervisor=\"alfa\"} %s", value),
 			"",
 		},
 		"\n",

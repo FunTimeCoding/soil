@@ -9,8 +9,8 @@ import (
 )
 
 func TestDeletingSessionWithTranscriptNeedsConfirmation(t *testing.T) {
-	s := base.NewWithSessionFile(t, "doomed", "some-slug")
-	r, e := s.RESTClient(t).DeleteSessionByIdentifierWithResponse(
+	s := base.New(t, base.WithSessionFile("doomed", "some-slug"))
+	r, e := s.RESTClient().DeleteSessionByIdentifierWithResponse(
 		t.Context(),
 		"doomed",
 		&client.DeleteSessionByIdentifierParams{},

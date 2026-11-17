@@ -3,14 +3,14 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
 	"testing"
 )
 
 func TestModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	assert.Count(t, 7, o.Client.ListTools())
-	created := o.Client.MustCallTool(
+	c := base.New(t).Tools()
+	assert.Count(t, 7, c.ListTools())
+	created := c.MustCallTool(
 		constant.CreateView,
 		map[string]any{
 			"title":   "test",
@@ -23,17 +23,17 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"test",
-		o.Client.MustCallTool(constant.ListViews, map[string]any{}),
+		c.MustCallTool(constant.ListViews, map[string]any{}),
 	)
 	assert.StringContains(
 		t,
 		"hello world",
-		o.Client.MustCallTool(constant.ReadView, map[string]any{"view_id": 1}),
+		c.MustCallTool(constant.ReadView, map[string]any{"view_id": 1}),
 	)
 	assert.StringContains(
 		t,
 		"goodbye world",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.EditView,
 			map[string]any{
 				"view_id":    1,
@@ -45,7 +45,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"/tmp/test.go",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.OpenFile,
 			map[string]any{"file_path": "/tmp/test.go"},
 		),
@@ -53,7 +53,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"saved",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.SaveView,
 			map[string]any{"view_id": 1, "file_path": "/tmp/saved.go"},
 		),
@@ -61,6 +61,6 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"closed",
-		o.Client.MustCallTool(constant.CloseView, map[string]any{"view_id": 2}),
+		c.MustCallTool(constant.CloseView, map[string]any{"view_id": 2}),
 	)
 }

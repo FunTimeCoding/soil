@@ -28,7 +28,6 @@ func New(
 			d.Mount(memory.New(), mock_recorder.New(), m)
 		},
 	)
-	t.Cleanup(result.Close)
 
 	return result
 }

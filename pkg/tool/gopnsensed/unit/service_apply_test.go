@@ -11,7 +11,7 @@ import (
 )
 
 func TestAppliedWriteReconfiguresDnsmasq(t *testing.T) {
-	c := counting_source.New(mock_client.New())
+	c := counting_source.New(mock_client.New(t))
 	defer c.Close()
 	s := service_tester.New(t, c)
 	_, e := s.AddHost(request.New(), true)
@@ -22,7 +22,7 @@ func TestAppliedWriteReconfiguresDnsmasq(t *testing.T) {
 }
 
 func TestDeferredWriteLeavesDnsmasqAlone(t *testing.T) {
-	c := counting_source.New(mock_client.New())
+	c := counting_source.New(mock_client.New(t))
 	defer c.Close()
 	s := service_tester.New(t, c)
 	_, e := s.AddHost(request.New(), false)
@@ -33,7 +33,7 @@ func TestDeferredWriteLeavesDnsmasqAlone(t *testing.T) {
 }
 
 func TestRejectedWriteLeavesDnsmasqAlone(t *testing.T) {
-	c := counting_source.New(rejecting_host.New())
+	c := counting_source.New(rejecting_host.New(t))
 	defer c.Close()
 	_, e := service_tester.New(t, c).AddHost(request.New(), true)
 	assert.Error(t, e)

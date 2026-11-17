@@ -12,9 +12,9 @@ import (
 
 func TestSearchHitResolvesToItsMemory(t *testing.T) {
 	o := service_tester.New(t)
-	m, e := o.Service.CreateMemory(save_tester.Scoped("retry policy", ""))
+	m, e := o.Service().CreateMemory(save_tester.Scoped("retry policy", ""))
 	assert.FatalOnError(t, e)
-	found, f := o.Service.SearchRelevant(constant.FixtureContent, 10, nil)
+	found, f := o.Service().SearchRelevant(constant.FixtureContent, 10, nil)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, found)
 	assert.Integer(t, int(m.Identifier), int(found[0].Identifier))
@@ -32,7 +32,7 @@ func TestSearchHitWithoutMemoryIsDropped(t *testing.T) {
 		},
 	)
 	assert.FatalOnError(t, e)
-	found, f := o.Service.SearchRelevant(constant.FixtureContent, 10, nil)
+	found, f := o.Service().SearchRelevant(constant.FixtureContent, 10, nil)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 0, found)
 }
@@ -40,7 +40,7 @@ func TestSearchHitWithoutMemoryIsDropped(t *testing.T) {
 func TestSearchGoquerydRefusesKeepsItsClass(t *testing.T) {
 	o := service_tester.New(t)
 	o.Indexer.Failure = unavailable.Format("embedder unreachable")
-	_, e := o.Service.SearchRelevant("retry", 10, nil)
+	_, e := o.Service().SearchRelevant("retry", 10, nil)
 	assert.True(t, unavailable.Is(e))
 }
 
@@ -50,7 +50,7 @@ func TestCompletionsKeepLatestPerSession(t *testing.T) {
 	o.PostCompletion("alfa/1", "2026-11-09T10:00:00+01:00")
 	o.PostCompletion("bravo/1", "2026-11-09T10:30:00Z")
 	o.PostCompletion("alfa/3", "2026-11-09T09:00:00+01:00")
-	found, e := o.Service.ListCompletions()
+	found, e := o.Service().ListCompletions()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, found)
 	assert.String(t, "alfa/2", found[0].Path)
@@ -62,7 +62,7 @@ func TestCompletionsOrderByCreationAcrossOffsets(t *testing.T) {
 	o := service_tester.New(t)
 	o.PostCompletion("alfa/1", "2026-11-09T11:00:00+01:00")
 	o.PostCompletion("bravo/1", "2026-11-09T10:30:00Z")
-	found, e := o.Service.ListCompletions()
+	found, e := o.Service().ListCompletions()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, found)
 	assert.String(t, "bravo/1", found[0].Path)
@@ -76,7 +76,7 @@ func TestCompletionsStopAtFiveSessions(t *testing.T) {
 	o.PostCompletion("delta/1", "2026-11-09T13:00:00+01:00")
 	o.PostCompletion("echo/1", "2026-11-09T14:00:00+01:00")
 	o.PostCompletion("foxtrot/1", "2026-11-09T15:00:00+01:00")
-	found, e := o.Service.ListCompletions()
+	found, e := o.Service().ListCompletions()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 5, found)
 	assert.String(t, "foxtrot/1", found[0].Path)
@@ -87,7 +87,7 @@ func TestCompletionWithoutTimestampSortsLast(t *testing.T) {
 	o := service_tester.New(t)
 	o.PostCompletion("alfa/1", "")
 	o.PostCompletion("bravo/1", "2026-11-09T10:00:00+01:00")
-	found, e := o.Service.ListCompletions()
+	found, e := o.Service().ListCompletions()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, found)
 	assert.String(t, "alfa/1", found[1].Path)

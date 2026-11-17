@@ -2,28 +2,24 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/service_tester"
 	"testing"
 )
 
 func TestModelContextWorksOnSelectedInstance(t *testing.T) {
-	r := memory.New()
-	d, clients := daemon_tester.New(
+	s := base.New(
 		t,
-		r,
-		constant.FixtureInstance,
-		constant.FixtureOtherInstance,
+		service_tester.WithInstances(
+			constant.FixtureInstance,
+			constant.FixtureOtherInstance,
+		),
 	)
-	clients[constant.FixtureInstance].SeedProject(1, "group", "app")
-	clients[constant.FixtureOtherInstance].SeedProject(2, "group", "web")
-	v := base.Mount(t, d, r)
-	defer v.Close()
-	c := v.Connect(t)
-	defer c.Close()
+	s.Alfa().SeedProject(1, "group", "app")
+	s.Bravo().SeedProject(2, "group", "web")
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"no instance selected",

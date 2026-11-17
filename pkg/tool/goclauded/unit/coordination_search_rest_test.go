@@ -15,7 +15,7 @@ func TestRestSearchConversations(t *testing.T) {
 	s.WriteSessionFile("alfa", "alfa-slug")
 	s.Restart()
 	s.Tick()
-	r, e := s.RESTClient(t).GetSessionsSearchWithResponse(
+	r, e := s.RESTClient().GetSessionsSearchWithResponse(
 		context.Background(),
 		&client.GetSessionsSearchParams{Query: "login bug"},
 	)
@@ -44,7 +44,7 @@ func TestRestSessionWindow(t *testing.T) {
 		0644,
 	)
 	s.Tick()
-	c := s.RESTClient(t)
+	c := s.RESTClient()
 	r, e := c.GetSessionWindowWithResponse(
 		context.Background(),
 		"charlie",
@@ -71,7 +71,7 @@ func TestRestSessionWindow(t *testing.T) {
 
 func TestRestSearchEmptyIsArray(t *testing.T) {
 	s := base.New(t)
-	r, e := s.RESTClient(t).GetSessionsSearchWithResponse(
+	r, e := s.RESTClient().GetSessionsSearchWithResponse(
 		context.Background(),
 		&client.GetSessionsSearchParams{Query: "nothing indexed"},
 	)

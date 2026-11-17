@@ -11,11 +11,11 @@ import (
 
 func TestRestSendRefusesUnknownDelivery(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
-	r, e := a.RestClient.PostSendWithResponse(
+	r, e := a.GeneratedClient.PostSendWithResponse(
 		a.Context,
 		client.SendRequest{
 			Callsign: a.Name(),
@@ -38,10 +38,10 @@ func TestRestSendRefusesUnknownDelivery(t *testing.T) {
 
 func TestRestNotifyRefusesUnknownDelivery(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostNotifyWithResponse(
+	r, e := a.GeneratedClient.PostNotifyWithResponse(
 		a.Context,
 		client.NotifyRequest{
 			Callsign: a.Name(),
@@ -64,10 +64,10 @@ func TestRestNotifyRefusesUnknownDelivery(t *testing.T) {
 
 func TestRestPulseRefusesUnknownDelivery(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostSessionPulseWithResponse(
+	r, e := a.GeneratedClient.PostSessionPulseWithResponse(
 		a.Context,
 		a.UUID,
 		client.PulseRequest{

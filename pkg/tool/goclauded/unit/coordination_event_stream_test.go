@@ -11,7 +11,7 @@ import (
 
 func TestEventStreamReplaysFromZero(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "first topic")
 	events, disconnect := event_tester.SubscribeStream(
 		t,
@@ -28,7 +28,7 @@ func TestEventStreamReplaysFromZero(t *testing.T) {
 
 func TestEventStreamFiltersKinds(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "announced topic")
 	a.MustCallTool(
 		constant.Label,
@@ -48,7 +48,7 @@ func TestEventStreamFiltersKinds(t *testing.T) {
 
 func TestEventStreamResumesFromStoredPosition(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "earlier topic")
 	first, disconnect := event_tester.SubscribeStream(
 		t,

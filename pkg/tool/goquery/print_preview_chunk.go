@@ -11,8 +11,8 @@ import (
 func printPreviewChunk(
 	t *terminal.Terminal,
 	k client.PreviewChunk,
-	allowance int,
-	embedAllowance int,
+	tokenLimit int,
+	embedTokenLimit int,
 ) int {
 	line := fmt.Sprintf(
 		"  chunk %d  lines %d-%d  %d B  %d tokens  embed %d",
@@ -28,11 +28,14 @@ func printPreviewChunk(
 		line = join.Empty(line, "  table piece")
 	}
 
-	over := k.Tokens > allowance
-	embedOver := k.EmbedTokens > embedAllowance
+	over := k.Tokens > tokenLimit
+	embedOver := k.EmbedTokens > embedTokenLimit
 
 	if over {
-		line = join.Empty(line, fmt.Sprintf("  OVER by %d", k.Tokens-allowance))
+		line = join.Empty(
+			line,
+			fmt.Sprintf("  OVER by %d", k.Tokens-tokenLimit),
+		)
 	}
 
 	t.Line(line)
@@ -45,8 +48,8 @@ func printPreviewChunk(
 		t.Line(
 			fmt.Sprintf(
 				"      embedder: over its %d tokens by %d, refused when embedded",
-				embedAllowance,
-				k.EmbedTokens-embedAllowance,
+				embedTokenLimit,
+				k.EmbedTokens-embedTokenLimit,
 			),
 		)
 	}

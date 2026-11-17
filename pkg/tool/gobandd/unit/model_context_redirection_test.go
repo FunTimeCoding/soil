@@ -5,14 +5,14 @@ import (
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
 func TestEnableRedirectionToolNamesWhatItSwitchedOn(t *testing.T) {
-	s := base.New(t)
-	s.Alfa.SetRedirection(false, 3)
-	c := s.Connect(t)
-	defer c.Close()
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().SetRedirection(false, 3)
+	c := s.Tools()
 	c.MustCallTool(
 		inventoryConstant.UseInstance,
 		map[string]any{inventoryConstant.InstanceParameter: "alfa"},

@@ -33,6 +33,39 @@ func TestTaskHintForDirectCodegen(t *testing.T) {
 	)
 }
 
+func TestScratchHintForTemporaryRedirect(t *testing.T) {
+	assert.String(
+		t,
+		"scratch belongs under tmp/_session/<callsign>-<date>/ in the repository, where a later session can find it; the system temp is shared with every process and wiped on reboot",
+		guard.Hint("go test ./... > /tmp/alfa.txt 2>&1"),
+	)
+	assert.StringContains(
+		t,
+		"tmp/_session",
+		guard.Hint(
+			"cd pkg && grep -rn bravo . >> /private/tmp/bravo-report.txt",
+		),
+	)
+	assert.StringContains(
+		t,
+		"tmp/_session",
+		guard.Hint(
+			`for r in alfa bravo; do ls "$r" > "/tmp/charlie-$r.txt"; done`,
+		),
+	)
+}
+
+func TestHintEmptyForScratchAndDeviceRedirects(t *testing.T) {
+	assert.String(
+		t,
+		"",
+		guard.Hint("go test ./... > tmp/_session/alfa/test.txt"),
+	)
+	assert.String(t, "", guard.Hint("go vet ./... 2> /dev/null"))
+	assert.String(t, "", guard.Hint("cat /tmp/alfa.txt"))
+	assert.String(t, "", guard.Hint("wc -l < /tmp/alfa.txt"))
+}
+
 func TestHintEmptyWithoutCodegen(t *testing.T) {
 	assert.String(t, "", guard.Hint("task generate"))
 	assert.String(t, "", guard.Hint("grep -n oapi-codegen taskfile.yaml"))

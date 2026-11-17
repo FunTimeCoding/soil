@@ -9,7 +9,7 @@ import (
 
 func TestResolveCallerDatabaseError(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	s.CloseDaemon()
 	result := a.MustCallToolError(constant.SessionStatus, nil)

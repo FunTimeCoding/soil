@@ -10,8 +10,10 @@ import (
 )
 
 func TestClientReachesGomaintlogd(t *testing.T) {
-	s := base.New(t)
-	assert.FatalOnError(t, s.MaintenanceClient(t).Reachable(t.Context()))
+	assert.FatalOnError(
+		t,
+		base.New(t).MaintenanceClient().Reachable(t.Context()),
+	)
 }
 
 func TestRefusedTokenIsNotReachable(t *testing.T) {

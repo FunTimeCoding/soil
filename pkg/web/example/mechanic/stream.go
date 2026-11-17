@@ -32,10 +32,10 @@ func (s *Server) stream(
 		html.Button(
 			html.ID("pulse-post"),
 			extended.Post(constant.SubscribePath),
-			extended.Target(selector(constant.ReceiptMark)),
+			extended.Target(selector(constant.ReplyMark)),
 			extended.Swap(constant.SwapInner),
 			gomponents.Text("Pulse"),
 		),
-		html.Div(html.ID(constant.ReceiptMark)),
+		html.Div(html.ID(constant.ReplyMark)),
 	)
 }

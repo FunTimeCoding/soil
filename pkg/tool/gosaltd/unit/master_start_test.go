@@ -11,11 +11,12 @@ import (
 )
 
 func TestStartUpRunWaitsForMasterAndHappensOnce(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Fail(c.Reachable, outage_tester.RefusedDial())
-	o := service_tester.NewOption(t)
-	o.Master = func() face.SaltClient { return c }
-	_, r := service_tester.New(t, o)
+	_, r := service_tester.New(
+		t,
+		service_tester.WithMaster(func() face.SaltClient { return c }),
+	).Service()
 	r.Start()
 	time.Sleep(2500 * time.Millisecond)
 	assert.Integer(t, 0, c.Highstates())
@@ -31,11 +32,12 @@ func TestStartUpRunWaitsForMasterAndHappensOnce(t *testing.T) {
 }
 
 func TestShutdownDuringOutageWritesNoStartUpRun(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	c.Fail(c.Reachable, outage_tester.RefusedDial())
-	o := service_tester.NewOption(t)
-	o.Master = func() face.SaltClient { return c }
-	v, r := service_tester.New(t, o)
+	v, r := service_tester.New(
+		t,
+		service_tester.WithMaster(func() face.SaltClient { return c }),
+	).Service()
 	r.Start()
 	time.Sleep(1500 * time.Millisecond)
 	r.Close()

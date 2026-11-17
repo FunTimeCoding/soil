@@ -11,8 +11,9 @@ import (
 )
 
 func TestModelContextAnswersColumnsAndRows(t *testing.T) {
-	s, _, _, m := base.Serve(t, nil)
-	m.SeedResult(
+	b := base.New(t)
+	s := b.Served()
+	b.Alfa().SeedResult(
 		"SELECT a.id, b.id",
 		result.New([]string{"id", "id"}, [][]any{{1, 7}}),
 	)

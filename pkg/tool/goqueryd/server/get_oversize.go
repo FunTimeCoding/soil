@@ -28,10 +28,10 @@ func (s *Server) GetOversize(
 	}
 
 	return server.GetOversize200JSONResponse{
-		Model:          report.Model,
-		Window:         report.Window,
-		Allowance:      report.Allowance,
-		EmbedAllowance: report.EmbedAllowance,
-		Files:          files,
+		Model:           report.Model,
+		Window:          report.Window,
+		TokenLimit:      report.TokenLimit,
+		EmbedTokenLimit: report.EmbedTokenLimit,
+		Files:           files,
 	}, nil
 }

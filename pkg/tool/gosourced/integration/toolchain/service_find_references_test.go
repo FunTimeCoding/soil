@@ -8,10 +8,12 @@ import (
 )
 
 func TestFindReferences(t *testing.T) {
-	d := service_tester.Prepare(t, "find-references/src")
-	s := service_tester.NewService(t)
-	r, references, e := s.Reference.FindReferences(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("find-references/src"),
+	)
+	r, references, e := o.Reference.FindReferences(
+		o.Directory,
 		"example/pkg/target/constant",
 		"Used",
 		"",
@@ -28,10 +30,12 @@ func TestFindReferences(t *testing.T) {
 }
 
 func TestFindReferencesMethod(t *testing.T) {
-	d := service_tester.Prepare(t, "find-references/src")
-	s := service_tester.NewService(t)
-	r, references, e := s.Reference.FindReferences(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("find-references/src"),
+	)
+	r, references, e := o.Reference.FindReferences(
+		o.Directory,
 		"example/pkg/target",
 		"Ping",
 		"Thing",
@@ -44,10 +48,12 @@ func TestFindReferencesMethod(t *testing.T) {
 }
 
 func TestFindReferencesUnknownSymbol(t *testing.T) {
-	d := service_tester.Prepare(t, "find-references/src")
-	s := service_tester.NewService(t)
-	r, references, e := s.Reference.FindReferences(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("find-references/src"),
+	)
+	r, references, e := o.Reference.FindReferences(
+		o.Directory,
 		"example/pkg/target/constant",
 		"Missing",
 		"",
@@ -58,10 +64,12 @@ func TestFindReferencesUnknownSymbol(t *testing.T) {
 }
 
 func TestFileReferences(t *testing.T) {
-	d := service_tester.Prepare(t, "find-references/src")
-	s := service_tester.NewService(t)
-	r, references, e := s.Reference.FileReferences(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("find-references/src"),
+	)
+	r, references, e := o.Reference.FileReferences(
+		o.Directory,
 		"example/pkg/target/constant",
 		"pkg/target/constant/constant.go",
 	)
@@ -77,10 +85,12 @@ func TestFileReferences(t *testing.T) {
 }
 
 func TestFileReferencesMethods(t *testing.T) {
-	d := service_tester.Prepare(t, "find-references/src")
-	s := service_tester.NewService(t)
-	r, references, e := s.Reference.FileReferences(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("find-references/src"),
+	)
+	r, references, e := o.Reference.FileReferences(
+		o.Directory,
 		"example/pkg/target",
 		"pkg/target/thing.go",
 	)
@@ -95,10 +105,12 @@ func TestFileReferencesMethods(t *testing.T) {
 }
 
 func TestFileReferencesUnknownFile(t *testing.T) {
-	d := service_tester.Prepare(t, "find-references/src")
-	s := service_tester.NewService(t)
-	r, references, e := s.Reference.FileReferences(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("find-references/src"),
+	)
+	r, references, e := o.Reference.FileReferences(
+		o.Directory,
 		"example/pkg/target",
 		"pkg/target/missing.go",
 	)

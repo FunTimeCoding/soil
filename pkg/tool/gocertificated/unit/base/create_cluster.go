@@ -1,0 +1,25 @@
+package base
+
+import (
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
+)
+
+func (s *Server) CreateCluster() string {
+	s.t.Helper()
+
+	return s.Tools().MustCallTool(
+		constant.CreateAuthority,
+		map[string]any{
+			generativeConstant.ParameterName: constant.FixtureClusterAuthority,
+			constant.KindParameter:           string(constant.KindIntermediate),
+			constant.CommonNameParameter:     constant.FixtureIssuingCommonName,
+			constant.DomainParameter: []any{
+				constant.FixtureDomain,
+				constant.FixtureInternalDomain,
+				constant.FixtureLocalDomain,
+			},
+			constant.AddressParameter: []any{constant.FixtureAddress},
+		},
+	)
+}

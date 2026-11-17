@@ -8,10 +8,10 @@ import (
 )
 
 func TestRenameField(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"api",
 		"requester",
@@ -20,20 +20,20 @@ func TestRenameField(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	store := service_tester.ReadFixtureFile(t, d, "pkg/target/store.go")
+	store := o.Read("pkg/target/store.go")
 	assert.StringContains(t, "requester string", store)
-	constructor := service_tester.ReadFixtureFile(t, d, "pkg/target/new.go")
+	constructor := o.Read("pkg/target/new.go")
 	assert.StringContains(t, "func New(api string)", constructor)
 	assert.StringContains(t, "&Store{requester: api}", constructor)
-	describe := service_tester.ReadFixtureFile(t, d, "pkg/target/describe.go")
+	describe := o.Read("pkg/target/describe.go")
 	assert.StringContains(t, "s.requester + s.Name", describe)
 }
 
 func TestRenameExportedFieldAcrossPackages(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Name",
 		"Title",
@@ -42,18 +42,18 @@ func TestRenameExportedFieldAcrossPackages(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	describe := service_tester.ReadFixtureFile(t, d, "pkg/target/describe.go")
+	describe := o.Read("pkg/target/describe.go")
 	assert.StringContains(t, "s.api + s.Title", describe)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	caller := o.Read("pkg/caller/run.go")
 	assert.StringContains(t, "&target.Store{Title: \"alfa\"}", caller)
 	assert.StringContains(t, "return s.Title", caller)
 }
 
 func TestRenameFieldCollidesWithField(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"api",
 		"Name",
@@ -66,10 +66,10 @@ func TestRenameFieldCollidesWithField(t *testing.T) {
 }
 
 func TestRenameFieldCollidesWithMethod(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"api",
 		"Describe",
@@ -82,10 +82,10 @@ func TestRenameFieldCollidesWithMethod(t *testing.T) {
 }
 
 func TestRenameEmbeddedFieldRefused(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Base",
 		"Root",
@@ -95,15 +95,15 @@ func TestRenameEmbeddedFieldRefused(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "embedded field")
-	store := service_tester.ReadFixtureFile(t, d, "pkg/target/store.go")
+	store := o.Read("pkg/target/store.go")
 	assert.StringContains(t, "\tBase\n", store)
 }
 
 func TestRenameFieldToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Name",
 		"name",
@@ -115,9 +115,9 @@ func TestRenameFieldToUnexportedBlockedByCrossPackage(t *testing.T) {
 }
 
 func TestFindReferencesField(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, references, e := service_tester.NewService(t).Reference.FindReferences(
-		d,
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, references, e := o.Reference.FindReferences(
+		o.Directory,
 		"example/pkg/target",
 		"api",
 		"Store",
@@ -130,10 +130,10 @@ func TestFindReferencesField(t *testing.T) {
 }
 
 func TestChangeVisibilityField(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-field/src")
-	r, e := service_tester.NewService(t).Symbol.ChangeVisibility(
+	o := service_tester.New(t, service_tester.WithFixture("rename-field/src"))
+	r, e := o.Symbol.ChangeVisibility(
 		t.Context(),
-		d,
+		o.Directory,
 		"api",
 		"example/pkg/target",
 		"Store",
@@ -141,6 +141,6 @@ func TestChangeVisibilityField(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	constructor := service_tester.ReadFixtureFile(t, d, "pkg/target/new.go")
+	constructor := o.Read("pkg/target/new.go")
 	assert.StringContains(t, "&Store{Api: api}", constructor)
 }

@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -10,8 +9,9 @@ import (
 )
 
 func TestUnreachableHostFailsFastWithoutBeingAskedAgain(t *testing.T) {
-	v, engines := service_tester.New(t, memory.New(), "alfa", "bravo")
-	alfa := engines["alfa"]
+	o := service_tester.New(t, service_tester.WithInstances("alfa", "bravo"))
+	v := o.Service()
+	alfa := o.Alfa()
 	alfa.Fail(outage_tester.RefusedDial())
 	_, e := v.Status("alfa")
 	assert.True(t, unavailable.Is(e))

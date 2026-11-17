@@ -2,42 +2,28 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/prometheus/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonHandsOneGuardPerInstanceToLifecycle(t *testing.T) {
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{
-			"alfa":  mock_client.New(),
-			"bravo": mock_client.New(),
-		},
-	)
-	assert.Count(t, 2, d.Workers())
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	assert.Count(t, 2, s.Daemon().Workers())
 }
 
 func TestClosingDaemonClosesEveryInstanceClient(t *testing.T) {
-	alfa := mock_client.New()
-	bravo := mock_client.New()
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": alfa, "bravo": bravo},
-	)
-	d.Close()
-	assert.Integer(t, 1, alfa.Closed)
-	assert.Integer(t, 1, bravo.Closed)
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Alfa().Closed)
+	assert.Integer(t, 1, s.Bravo().Closed)
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	clients := map[string]*mock_client.Client{
-		"alfa":  mock_client.New(),
-		"bravo": mock_client.New(),
-	}
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
 	before := goleak.IgnoreCurrent()
-	d := daemon_tester.New(t, clients)
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

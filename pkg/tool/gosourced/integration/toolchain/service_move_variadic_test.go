@@ -9,11 +9,10 @@ import (
 )
 
 func TestMoveKeepsVariadicSpread(t *testing.T) {
-	d := service_tester.Prepare(t, "move-variadic/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.MoveSymbols(
+	o := service_tester.New(t, service_tester.WithFixture("move-variadic/src"))
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/source",
 		[]string{"AdditionalEntriesForTheVariadicSpread"},
 		"",
@@ -24,7 +23,7 @@ func TestMoveKeepsVariadicSpread(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	user := service_tester.ReadFixtureFile(t, d, "pkg/user/use.go")
+	user := o.Read("pkg/user/use.go")
 	rewrite_tester.Formatted(t, user)
 	assert.StringContains(
 		t,

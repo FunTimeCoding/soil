@@ -22,7 +22,7 @@ type Page struct {
 	summary      []string
 	liveEndpoint string
 	liveParams   string
-	commands     []*palette.Command
+	commands     func() []*palette.Command
 	extended     string
 	serverSide   string
 	fullWindow   bool

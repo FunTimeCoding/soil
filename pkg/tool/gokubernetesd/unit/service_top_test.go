@@ -13,7 +13,7 @@ func TestTopNodes(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddNode(stringsConstant.UpperAlfa, 2, 8)
 	s.AddNodeMetrics(stringsConstant.UpperAlfa, "500m", "4Gi")
-	result, e := s.Service.TopNodes(context.Background(), "test")
+	result, e := s.Service().TopNodes(context.Background(), "test")
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
 	assert.String(t, "Alfa", result[0].Name)
@@ -36,7 +36,7 @@ func TestTopPods(t *testing.T) {
 			{"name": "redis", "cpu": "200m", "memory": "128Mi"},
 		},
 	)
-	result, e := s.Service.TopPods(
+	result, e := s.Service().TopPods(
 		context.Background(),
 		"test",
 		request.Top{Namespace: "default"},
@@ -57,7 +57,7 @@ func TestTopPodContainers(t *testing.T) {
 			{"name": "sidecar", "cpu": "50m", "memory": "32Mi"},
 		},
 	)
-	result, e := s.Service.TopPodContainers(
+	result, e := s.Service().TopPodContainers(
 		context.Background(),
 		"test",
 		request.Top{Namespace: "default"},

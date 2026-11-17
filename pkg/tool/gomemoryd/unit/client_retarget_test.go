@@ -9,7 +9,7 @@ import (
 )
 
 func TestRetargetWithoutReferenceRootSaysSo(t *testing.T) {
-	c := base.New(t).MemoryClient(t)
+	c := base.New(t).MemoryClient()
 	_, e := c.PostReferencesRetarget(
 		t.Context(),
 		move_set.New(

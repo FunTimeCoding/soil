@@ -11,8 +11,8 @@ import (
 
 func TestBusyEngineAnswersUnavailable(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.Fail(unavailable.Format("band power: fault the service is busy"))
-	r, e := s.Client.GetStatusWithResponse(
+	s.Alfa().Fail(unavailable.Format("band power: fault the service is busy"))
+	r, e := s.GeneratedClient().GetStatusWithResponse(
 		t.Context(),
 		&client.GetStatusParams{Instance: new("alfa")},
 	)
@@ -23,8 +23,8 @@ func TestBusyEngineAnswersUnavailable(t *testing.T) {
 
 func TestEngineRefusingAccountAnswersForbidden(t *testing.T) {
 	s := base.New(t)
-	s.Alfa.Fail(forbidden.Format("band power: fault access denied"))
-	r, e := s.Client.RequestPowerWithResponse(
+	s.Alfa().Fail(forbidden.Format("band power: fault access denied"))
+	r, e := s.GeneratedClient().RequestPowerWithResponse(
 		t.Context(),
 		client.RequestPowerJSONRequestBody{
 			Instance:  new("alfa"),

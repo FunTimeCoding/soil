@@ -9,7 +9,7 @@ import (
 )
 
 func TestClientAndItsMockKeepFace(t *testing.T) {
-	m := mock_client.New()
+	m := mock_client.New(t)
 	clients := []face.GitHubClient{github.New("alfa-token"), m}
 
 	for _, c := range clients {

@@ -14,11 +14,14 @@ func RemovalRefused(
 	function string,
 ) {
 	t.Helper()
-	d := service_tester.Prepare(t, "remove-parameters-refused/src")
-	before := service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go")
-	r, e := service_tester.NewService(t).Symbol.RemoveParameters(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("remove-parameters-refused/src"),
+	)
+	before := o.Read("pkg/caller/caller.go")
+	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*removal.Parameter{
 			removal.NewParameter(
 				"example/pkg/target",
@@ -31,9 +34,5 @@ func RemovalRefused(
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, expect)
-	assert.String(
-		t,
-		before,
-		service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go"),
-	)
+	assert.String(t, before, o.Read("pkg/caller/caller.go"))
 }

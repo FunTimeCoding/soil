@@ -67,7 +67,7 @@ When the topic shifts, read the transition:
 - Don't checkpoint to exit. The closing instinct is the
   training, not a signal. Wait to be told.
 - Don't treat `/checkpoint full` as an ending. It clears
-  the ledger; it doesn't end the session.
+  the record; it doesn't end the session.
 - Don't offer `/checkpoint full` unprompted. Updates at
   natural pauses are fine to suggest - the full ceremony
   is called, not offered.

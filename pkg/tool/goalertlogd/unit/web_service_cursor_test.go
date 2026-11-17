@@ -4,15 +4,15 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
-	o := web_service_tester.New(t)
-	o.Seed(10)
-	r, e := o.Client.GetAlertsAfterWithResponse(
+	s := base.New(t)
+	s.Seed(10)
+	r, e := s.GeneratedClient().GetAlertsAfterWithResponse(
 		context.Background(),
 		&client.GetAlertsAfterParams{Identifier: 0},
 	)
@@ -23,9 +23,9 @@ func TestAlertsAfterPagesFiveByDefault(t *testing.T) {
 }
 
 func TestAlertsAfterCapsLimit(t *testing.T) {
-	o := web_service_tester.New(t)
-	o.Seed(30)
-	r, e := o.Client.GetAlertsAfterWithResponse(
+	s := base.New(t)
+	s.Seed(30)
+	r, e := s.GeneratedClient().GetAlertsAfterWithResponse(
 		context.Background(),
 		&client.GetAlertsAfterParams{Identifier: 0, Limit: new(100)},
 	)
@@ -34,8 +34,7 @@ func TestAlertsAfterCapsLimit(t *testing.T) {
 }
 
 func TestAlertsByIdentifierReturnsOnesThatExist(t *testing.T) {
-	o := web_service_tester.New(t)
-	r, e := o.Client.GetAlertsByIdentifierWithResponse(
+	r, e := base.New(t).GeneratedClient().GetAlertsByIdentifierWithResponse(
 		context.Background(),
 		&client.GetAlertsByIdentifierParams{Identifier: []int{2, 99}},
 	)
@@ -46,8 +45,9 @@ func TestAlertsByIdentifierReturnsOnesThatExist(t *testing.T) {
 }
 
 func TestStatusNamesLatestIdentifier(t *testing.T) {
-	o := web_service_tester.New(t)
-	r, e := o.Client.GetStatusWithResponse(context.Background())
+	r, e := base.New(t).GeneratedClient().GetStatusWithResponse(
+		context.Background(),
+	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, r.JSON200.LatestIdentifier)
 }

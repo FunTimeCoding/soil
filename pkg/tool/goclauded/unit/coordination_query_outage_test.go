@@ -13,7 +13,7 @@ import (
 
 func TestCompletionAnswersWhileGoquerydIsAway(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
@@ -30,7 +30,7 @@ func TestCompletionAnswersWhileGoquerydIsAway(t *testing.T) {
 
 func TestQueryGuardHoldsCallsOffAfterOutage(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
@@ -51,7 +51,7 @@ func TestQueryGuardHoldsCallsOffAfterOutage(t *testing.T) {
 
 func TestReconcileCatchesUpCompletionWriteMissed(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,

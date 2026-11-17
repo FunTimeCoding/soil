@@ -8,14 +8,13 @@ import (
 )
 
 func TestPollGuestLabelSet(t *testing.T) {
-	c := worker_tester.PopulatedClient("pve")
-	t.Cleanup(c.Close)
-	w, y, _ := worker_tester.NewPollWorker(t, "pve", c)
-	defer w.Close()
+	o := worker_tester.New(t)
+	o.Populate()
+	w := o.Worker()
 	w.Poll()
 
 	if e := testutil.GatherAndCompare(
-		y,
+		o.Registry,
 		strings.NewReader(worker_tester.GuestStatusExposition()),
 		"proxmox_guest_status",
 	); e != nil {

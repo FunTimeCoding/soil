@@ -10,22 +10,22 @@ import (
 )
 
 func TestRenameTestRetargetsBareCitation(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/shop/unit/shop_test.go",
 		"package unit\n\nimport \"testing\"\n\nfunc TestShelfHoldsStock(t *testing.T) {}\n",
 	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"Pinned by `TestShelfHoldsStock`.\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shop/unit",
 		"TestShelfHoldsStock",
 		"TestShelfKeepsStock",
@@ -37,12 +37,12 @@ func TestRenameTestRetargetsBareCitation(t *testing.T) {
 	assert.String(
 		t,
 		"Pinned by `TestShelfKeepsStock`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestRenameRepeatedTestLeavesCitationForHand(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
 
 	for _, p := range []string{
 		"pkg/shop/unit/shop_test.go",
@@ -50,16 +50,21 @@ func TestRenameRepeatedTestLeavesCitationForHand(t *testing.T) {
 	} {
 		system_tester.Write(
 			t,
-			d,
+			o.Directory,
 			p,
 			"package unit\n\nimport \"testing\"\n\nfunc TestGuard(t *testing.T) {}\n",
 		)
 	}
 
-	system_tester.Write(t, d, "doc/note.md", "Pinned by `TestGuard`.\n")
-	r, e := service_tester.NewService(t).Symbol.Rename(
+	system_tester.Write(
+		t,
+		o.Directory,
+		"doc/note.md",
+		"Pinned by `TestGuard`.\n",
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/shop/unit",
 		"TestGuard",
 		"TestShopGuard",
@@ -67,11 +72,7 @@ func TestRenameRepeatedTestLeavesCitationForHand(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, e)
-	assert.String(
-		t,
-		"Pinned by `TestGuard`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "Pinned by `TestGuard`.\n", o.Read("doc/note.md"))
 	reported := false
 
 	for _, c := range r.Entries {

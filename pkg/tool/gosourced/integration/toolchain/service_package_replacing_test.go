@@ -7,19 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestMovePackageRetargetsReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Packages.MovePackage(
+	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	r, e := o.Packages.MovePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -35,32 +30,28 @@ func TestMovePackageRetargetsReplacingModule(t *testing.T) {
 	assert.String(
 		t,
 		"package user\n\nimport \"other.test/lib/geometry/shape\"\n\nfunc Width() int {\n\treturn shape.New().Width\n}\n",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+		o.Read("pkg/user/user.go"),
 	)
 	assert.StringContains(
 		t,
 		"\"other.test/lib/geometry/shape\"",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user_test.go"),
+		o.Read("pkg/user/user_test.go"),
 	)
 	assert.StringContains(
 		t,
 		"import \"other.test/lib/geometry/shape/sub\"",
-		service_tester.ReadFixtureFile(t, user, "pkg/deep/deep.go"),
+		o.Read("pkg/deep/deep.go"),
 	)
 	assert.StringContains(
 		t,
 		"import figure \"other.test/lib/geometry/shape\"",
-		service_tester.ReadFixtureFile(t, user, "pkg/aliased/aliased.go"),
+		o.Read("pkg/aliased/aliased.go"),
 	)
 }
 
 func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Packages.RenamePackage(
+	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	r, e := o.Packages.RenamePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -72,30 +63,26 @@ func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
 	assert.String(
 		t,
 		"package user\n\nimport \"other.test/lib/form\"\n\nfunc Width() int {\n\treturn form.New().Width\n}\n",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+		o.Read("pkg/user/user.go"),
 	)
 	assert.StringContains(
 		t,
 		"if Width() != form.New().Width {",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user_test.go"),
+		o.Read("pkg/user/user_test.go"),
 	)
 	assert.StringContains(
 		t,
 		"import \"other.test/lib/form/sub\"",
-		service_tester.ReadFixtureFile(t, user, "pkg/deep/deep.go"),
+		o.Read("pkg/deep/deep.go"),
 	)
-	aliased := service_tester.ReadFixtureFile(t, user, "pkg/aliased/aliased.go")
+	aliased := o.Read("pkg/aliased/aliased.go")
 	assert.StringContains(t, "import figure \"other.test/lib/form\"", aliased)
 	assert.StringContains(t, "return figure.New()", aliased)
 }
 
 func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Packages.RenamePackageClause(
+	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	r, e := o.Packages.RenamePackageClause(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -104,30 +91,26 @@ func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, user, "pkg/user/user.go")
+	source := o.Read("pkg/user/user.go")
 	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "\"other.test/lib/shape\"", source)
 	assert.StringContains(t, "return form.New().Width", source)
 	assert.StringContains(
 		t,
 		"return figure.New()",
-		service_tester.ReadFixtureFile(t, user, "pkg/aliased/aliased.go"),
+		o.Read("pkg/aliased/aliased.go"),
 	)
 }
 
 func TestRenamePackageRefusedWhenNameIsTakenInReplacingModule(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
+	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
 	system_tester.Write(
 		t,
-		user,
+		o.Directory,
 		"pkg/clash/clash.go",
 		"package clash\n\nimport \"other.test/lib/shape\"\n\nfunc form() int {\n\treturn shape.New().Width\n}\n",
 	)
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Packages.RenamePackage(
+	r, e := o.Packages.RenamePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -141,19 +124,18 @@ func TestRenamePackageRefusedWhenNameIsTakenInReplacingModule(t *testing.T) {
 	assert.StringContains(
 		t,
 		"import \"other.test/lib/shape\"",
-		service_tester.ReadFixtureFile(t, user, "pkg/user/user.go"),
+		o.Read("pkg/user/user.go"),
 	)
 }
 
 func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/user")))
-	assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "pkg/aliased")))
-	r, e := module_tester.ReplacingService(
+	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	assert.FatalOnError(t, os.RemoveAll(filepath.Join(o.Directory, "pkg/user")))
+	assert.FatalOnError(
 		t,
-		library,
-		user,
-	).Packages.MovePackage(
+		os.RemoveAll(filepath.Join(o.Directory, "pkg/aliased")),
+	)
+	r, e := o.Packages.MovePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -165,18 +147,14 @@ func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
 	assert.StringContains(
 		t,
 		"import \"other.test/lib/geometry/shape/sub\"",
-		service_tester.ReadFixtureFile(t, user, "pkg/deep/deep.go"),
+		o.Read("pkg/deep/deep.go"),
 	)
 }
 
 func TestMovePackageDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, user := module_tester.ReplacedLibrary(t, "package-replacer")
-	before := rewrite_tester.DirectoryTree(t, user)
-	r, e := module_tester.ReplacingService(
-		t,
-		library,
-		user,
-	).Packages.MovePackage(
+	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	r, e := o.Packages.MovePackage(
 		t.Context(),
 		library,
 		"other.test/lib/shape",
@@ -185,11 +163,11 @@ func TestMovePackageDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, user))
+	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
 	assert.True(t, system.FileExists(filepath.Join(library, "shape/shape.go")))
 	assert.StringContains(
 		t,
-		filepath.Join(user, "pkg/deep/deep.go"),
+		filepath.Join(o.Directory, "pkg/deep/deep.go"),
 		rewrite_tester.JoinedConcerns(r),
 	)
 }

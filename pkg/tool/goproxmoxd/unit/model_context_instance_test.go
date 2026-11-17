@@ -2,39 +2,20 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/proxmox/mock_client"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/service_tester"
 	"testing"
 )
 
 func TestModelContextNodesFollowSelectedInstance(t *testing.T) {
-	a := mock_client.New()
-	defer a.Close()
-	a.AddNode("alfa-node")
-	b := mock_client.New()
-	defer b.Close()
-	b.AddNode("bravo-node")
-	d := daemon_tester.New(
-		t,
-		map[string]*mock_client.Client{"alfa": a, "bravo": b},
-	)
-	v := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(memory.New(), mock_recorder.New(), g)
-		},
-	)
-	defer v.Close()
-	c := v.Connect(t)
-	defer c.Close()
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().Hypervisor.AddNode("alfa-node")
+	s.Bravo().Hypervisor.AddNode("bravo-node")
+	c := s.Tools()
 	assert.StringContains(t, "use_instance", c.InitializeResult().Instructions)
 	assert.StringContains(
 		t,

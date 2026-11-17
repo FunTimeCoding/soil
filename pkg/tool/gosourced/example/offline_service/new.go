@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/inventory"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
 	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/example/offline_memory"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/workspace"
 )
@@ -16,7 +16,7 @@ import (
 func New() (*workspace.Service, *commit.Service, func()) {
 	l := logger.New(context.Background())
 	r := memory.New()
-	m := mock_client.New()
+	m := offline_memory.New()
 	g := peer.New(gomemorydConstant.Identity.Name(), m.Address(), m, l, r)
 	w := workspace.New(index.DefaultDirectory())
 

@@ -2,28 +2,28 @@ package service_tester
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/habitica/mock_client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/service"
-	"testing"
 )
 
-func Service(
-	t *testing.T,
-	c *mock_client.Client,
-) *service.Service {
-	t.Helper()
+func (o *Tester) Service() *service.Service {
+	o.t.Helper()
+
+	if o.service != nil {
+		return o.service
+	}
+
 	g := peer.New(
 		constant.HabiticaPeer,
 		"habitica.test",
-		c,
+		o.Source,
 		logger.New(context.Background()),
-		memory.New(),
+		o.Reporter,
 	)
-	t.Cleanup(g.Close)
+	o.t.Cleanup(g.Close)
+	o.service = service.New(o.Source, g)
 
-	return service.New(c, g)
+	return o.service
 }

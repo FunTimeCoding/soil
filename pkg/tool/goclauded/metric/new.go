@@ -28,14 +28,14 @@ func New(r *prometheus.Registry) *Metric {
 				Buckets: []float64{500, 1000, 1500, 2000, 2500, 3000, 4000},
 			},
 		),
-		overBudget: prometheus.NewCounter(
+		overLimit: prometheus.NewCounter(
 			prometheus.CounterOpts{
-				Name: "goclauded_delivery_over_budget_total",
-				Help: "Hook delivery contexts rendered over the delivery budget",
+				Name: "goclauded_delivery_over_limit_total",
+				Help: "Hook delivery contexts rendered over the delivery character limit",
 			},
 		),
 	}
-	r.MustRegister(m.reconciled, m.indexed, m.delivered, m.overBudget)
+	r.MustRegister(m.reconciled, m.indexed, m.delivered, m.overLimit)
 
 	return m
 }

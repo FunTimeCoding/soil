@@ -9,7 +9,7 @@ import (
 
 func TestClientWalksCursorFromHead(t *testing.T) {
 	s := base.New(t)
-	c := s.AlertClient(t)
+	c := s.AlertClient()
 	status, e := c.GetStatus(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, status.LatestIdentifier)
@@ -35,8 +35,8 @@ func TestClientWalksCursorFromHead(t *testing.T) {
 
 func TestClientSeesResolutionByIdentifier(t *testing.T) {
 	s := base.New(t)
-	c := s.AlertClient(t)
-	s.MockClient.Remove("fp1")
+	c := s.AlertClient()
+	s.Alertmanager.Remove("fp1")
 	s.Clock.Poll()
 	result, e := c.GetAlertsByIdentifier(
 		t.Context(),

@@ -4,15 +4,16 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestStoreFaultCarriesItsOwnText(t *testing.T) {
-	o := web_service_tester.New(t)
-	o.Daemon().Close()
-	r, e := o.Client.GetAlertsWithResponse(
+	s := base.New(t)
+	c := s.GeneratedClient()
+	s.Daemon.Close()
+	r, e := c.GetAlertsWithResponse(
 		context.Background(),
 		&client.GetAlertsParams{Name: "HighMemory"},
 	)

@@ -11,8 +11,7 @@ import (
 func TestSentryClientAndItsMockShareFace(t *testing.T) {
 	c := sentry.New("sentry.example", "alfa-token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.SentryClient{c, m}
 	assert.Count(t, 2, faces)
 }

@@ -10,7 +10,7 @@ func (c *Client) DeleteSessionByIdentifier(
 	x context.Context,
 	identifier string,
 	params *client.DeleteSessionByIdentifierParams,
-) (*client.DeleteReceiptResponse, error) {
+) (*client.DeletionResult, error) {
 	r, e := c.generated.DeleteSessionByIdentifierWithResponse(
 		x,
 		identifier,

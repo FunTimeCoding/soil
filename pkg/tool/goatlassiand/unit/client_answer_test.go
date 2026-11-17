@@ -7,13 +7,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/client_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"testing"
 )
 
 func TestClientSeesUnknownIssueAsNotFound(t *testing.T) {
-	j := service_tester.NewJira(t)
+	j := mock_client.New(t)
 	j.Fail(j.Issue, not_found.Format("Issue does not exist"))
 	_, e := client_tester.New(t, j).GetIssue(
 		context.Background(),
@@ -25,7 +24,7 @@ func TestClientSeesUnknownIssueAsNotFound(t *testing.T) {
 }
 
 func TestClientSeesRejectedQueryAsValidation(t *testing.T) {
-	j := service_tester.NewJira(t)
+	j := mock_client.New(t)
 	j.Fail(j.Search, validation.New("Error in the JQL Query"))
 	_, e := client_tester.New(t, j).SearchIssues(
 		context.Background(),
@@ -37,7 +36,7 @@ func TestClientSeesRejectedQueryAsValidation(t *testing.T) {
 }
 
 func TestClientSeesOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
-	j := service_tester.NewJira(t)
+	j := mock_client.New(t)
 	j.Fail(j.Search, detail_error.New("Service unavailable", "503"))
 	result, e := client_tester.New(t, j).SearchIssues(
 		context.Background(),
@@ -50,6 +49,6 @@ func TestClientSeesOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
 }
 
 func TestClientReachesGoatlassiand(t *testing.T) {
-	c := client_tester.New(t, mock_client.New())
+	c := client_tester.New(t, mock_client.New(t))
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }

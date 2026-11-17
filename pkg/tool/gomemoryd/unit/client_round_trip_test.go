@@ -12,7 +12,7 @@ import (
 )
 
 func TestClientRoundTripsMemory(t *testing.T) {
-	c := base.New(t).MemoryClient(t)
+	c := base.New(t).MemoryClient()
 	x := t.Context()
 	scope := "alfa"
 	file := "alfa.md"
@@ -55,7 +55,7 @@ func TestClientRoundTripsMemory(t *testing.T) {
 }
 
 func TestClientRoundTripsRelation(t *testing.T) {
-	c := base.New(t).MemoryClient(t)
+	c := base.New(t).MemoryClient()
 	x := t.Context()
 	first, e := c.PostMemory(
 		x,
@@ -105,7 +105,7 @@ func TestClientRoundTripsRelation(t *testing.T) {
 }
 
 func TestClientReadsProfileTokensAndStatistics(t *testing.T) {
-	c := base.New(t).MemoryClient(t)
+	c := base.New(t).MemoryClient()
 	x := t.Context()
 	_, e := c.PostMemory(
 		x,
@@ -131,7 +131,7 @@ func TestClientReadsProfileTokensAndStatistics(t *testing.T) {
 }
 
 func TestClientClassifiesRefusals(t *testing.T) {
-	c := base.New(t).MemoryClient(t)
+	c := base.New(t).MemoryClient()
 	x := t.Context()
 	_, e := c.DeleteMemory(x, 9999, &client.DeleteMemoryParams{})
 	assert.True(t, not_found.Is(e))

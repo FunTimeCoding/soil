@@ -10,7 +10,7 @@ func (c *Client) PostUserAccountPassword(
 	x context.Context,
 	account string,
 	b client.PostUserAccountPasswordJSONRequestBody,
-) (*client.Receipt, error) {
+) (*client.Result, error) {
 	r, e := c.client.PostUserAccountPasswordWithResponse(x, account, b)
 
 	if e != nil {

@@ -16,7 +16,7 @@ func Deliver(
 	t.Helper()
 	result := make(chan []client.QueueEntry, 1)
 	go func() {
-		response, e := s.RESTClient(t).GetChannelWithResponse(
+		response, e := s.RESTClient().GetChannelWithResponse(
 			x,
 			&client.GetChannelParams{Callsign: callsign},
 		)

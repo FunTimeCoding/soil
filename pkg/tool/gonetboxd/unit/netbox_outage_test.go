@@ -4,11 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/metric"
+	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -17,10 +15,10 @@ import (
 )
 
 func TestNetBoxOutageIsAnsweredUnavailableWithoutCaptureOverRest(t *testing.T) {
-	c := service_tester.NewSource(t)
+	c := mock_client.New(t)
 	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
-	s := base.Rest(t, base.New(t, c, r))
+	s := base.GeneratedClient(t, base.New(t, c, r))
 
 	for range 2 {
 		answer, e := s.ListDevicesWithResponse(t.Context(), nil)
@@ -33,7 +31,7 @@ func TestNetBoxOutageIsAnsweredUnavailableWithoutCaptureOverRest(t *testing.T) {
 }
 
 func TestNetBoxOutageFailsToolWithoutCapture(t *testing.T) {
-	c := service_tester.NewSource(t)
+	c := mock_client.New(t)
 	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
 	m := base.New(t, c, r).Connect(t)
@@ -47,7 +45,7 @@ func TestNetBoxOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestNetBoxOutageAnswersBookmarkPageUnavailable(t *testing.T) {
-	c := service_tester.NewSource(t)
+	c := mock_client.New(t)
 	c.Failure = outage_tester.RefusedDial()
 	r := memory.New()
 	s := base.New(t, c, r)
@@ -59,17 +57,11 @@ func TestNetBoxOutageAnswersBookmarkPageUnavailable(t *testing.T) {
 }
 
 func TestDaemonHandsOutNetBoxGuardFirst(t *testing.T) {
-	o := service_tester.NewOption(t, service_tester.NewSource(t))
-	o.PowerIntent = true
-	d := daemon.New(o, logger.New(t.Context()), memory.New(), metric.New())
-	t.Cleanup(d.Close)
+	d := service_tester.New(t, service_tester.WithPowerIntent()).Daemon()
 	_, okay := d.Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestWaitAnswersOnceNetBoxAnswers(t *testing.T) {
-	assert.FatalOnError(
-		t,
-		base.Daemon(t, service_tester.NewSource(t)).Wait(t.Context()),
-	)
+	assert.FatalOnError(t, service_tester.New(t).Daemon().Wait(t.Context()))
 }

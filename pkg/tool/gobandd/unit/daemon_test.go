@@ -5,21 +5,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestClosingDaemonClosesEveryEngine(t *testing.T) {
-	d, engines := daemon_tester.New(t, "alfa", "bravo")
-	d.Close()
-	assert.Integer(t, 1, engines["alfa"].Closed)
-	assert.Integer(t, 1, engines["bravo"].Closed)
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Alfa().Closed)
+	assert.Integer(t, 1, s.Bravo().Closed)
 }
 
 func TestDaemonHandsOneGuardPerHostWithoutNetbox(t *testing.T) {
-	d, _ := daemon_tester.New(t, "alfa", "bravo")
-	assert.Count(t, 2, d.Workers())
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	assert.Count(t, 2, s.Daemon().Workers())
 }
 
 func TestHostWithoutPasswordIsRefusedNotFatal(t *testing.T) {
@@ -29,8 +30,9 @@ func TestHostWithoutPasswordIsRefusedNotFatal(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
 	before := goleak.IgnoreCurrent()
-	d, _ := daemon_tester.New(t, "alfa", "bravo")
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

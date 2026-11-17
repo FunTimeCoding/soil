@@ -13,7 +13,7 @@ import (
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.Source = func() face.OpenbaoClient { return c }
 	before := goleak.IgnoreCurrent()

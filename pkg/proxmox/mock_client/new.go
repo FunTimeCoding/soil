@@ -3,11 +3,13 @@ package mock_client
 import (
 	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 	"github.com/luthermonson/go-proxmox"
+	"testing"
 )
 
-func New() *Client {
-	return &Client{
-		nodes:              make(map[string]*proxmox.Node),
+func New(t *testing.T) *Client {
+	t.Helper()
+	result := &Client{
+		nodes:             make(map[string]*proxmox.Node),
 		nodeStatuses:       make(map[string]*node_status.Status),
 		machines:           make(map[string]map[int]*proxmox.VirtualMachine),
 		containers:         make(map[string]map[int]*proxmox.Container),
@@ -20,4 +22,7 @@ func New() *Client {
 		version:            &proxmox.Version{},
 		nextIdentifier:     100,
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

@@ -89,8 +89,8 @@ type ProfileCompletion struct {
 type ProfileDetail struct {
 	AlwaysBytes int `json:"always_bytes"`
 
-	// Budget The byte limit on the profile text the model receives.
-	Budget             int `json:"budget"`
+	// ByteLimit The byte limit on the profile text the model receives.
+	ByteLimit          int `json:"byte_limit"`
 	CompletionBytes    int `json:"completion_bytes"`
 	CompletionsTrimmed int `json:"completions_trimmed"`
 

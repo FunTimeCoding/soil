@@ -12,7 +12,7 @@ const (
 	PlaceArgument   = "place"
 	PlaceUsage      = "Restrict to one device or virtual machine"
 	SourceArgument  = "source"
-	SourceUsage     = "Restrict to one attesting source"
+	SourceUsage     = "Restrict to placements seen by this source"
 	PackageArgument = "package"
 	PackageUsage    = "Restrict to placements carrying this package"
 

@@ -9,11 +9,13 @@ import (
 )
 
 func TestRenameFunction(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -23,24 +25,22 @@ func TestRenameFunction(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 3)
-	declaration := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/is_generated.go",
-	)
+	declaration := o.Read("pkg/target/is_generated.go")
 	assert.StringContains(t, "func IsGenerated(", declaration)
-	samePackage := service_tester.ReadFixtureFile(t, d, "pkg/target/check.go")
+	samePackage := o.Read("pkg/target/check.go")
 	assert.StringContains(t, "IsGenerated(content)", samePackage)
-	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	crossPackage := o.Read("pkg/caller/run.go")
 	assert.StringContains(t, "target.IsGenerated(content)", crossPackage)
 }
 
 func TestRenameFunctionSamePackage(t *testing.T) {
-	d := service_tester.Prepare(t, "unexport-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("unexport-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGenerated",
 		"WasGenerated",
@@ -49,22 +49,17 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	declaration := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/was_generated.go",
-	)
+	declaration := o.Read("pkg/target/was_generated.go")
 	assert.StringContains(t, "func WasGenerated(", declaration)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "WasGenerated(name)", run)
 }
 
 func TestRenameMethod(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-method/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-method/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"FindByName",
 		"LookupByName",
@@ -74,24 +69,22 @@ func TestRenameMethod(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 3)
-	method := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/lookup_by_name.go",
-	)
+	method := o.Read("pkg/target/lookup_by_name.go")
 	assert.StringContains(t, "func (s *Store) LookupByName(", method)
-	samePackage := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	samePackage := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "v.LookupByName(\"test\")", samePackage)
-	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	crossPackage := o.Read("pkg/caller/run.go")
 	assert.StringContains(t, "s.LookupByName(\"test\")", crossPackage)
 }
 
 func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-unexport/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-unexport/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Validate",
 		"check",
@@ -101,16 +94,18 @@ func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "would lose access")
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/validate.go")
+	source := o.Read("pkg/target/validate.go")
 	assert.StringContains(t, "func Validate(", source)
 }
 
 func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "unexport-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("unexport-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGenerated",
 		"wasGenerated",
@@ -119,20 +114,18 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	declaration := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/was_generated.go",
-	)
+	declaration := o.Read("pkg/target/was_generated.go")
 	assert.StringContains(t, "func wasGenerated(", declaration)
 }
 
 func TestRenameCollision(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"Check",
@@ -145,11 +138,13 @@ func TestRenameCollision(t *testing.T) {
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Missing",
 		"Something",
@@ -162,11 +157,13 @@ func TestRenameSymbolNotFound(t *testing.T) {
 }
 
 func TestRenamePackageNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/missing",
 		"IsGeneratedHeader",
 		"IsGenerated",
@@ -179,11 +176,10 @@ func TestRenamePackageNotFound(t *testing.T) {
 }
 
 func TestRenameReceiverNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-method/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-method/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"FindByName",
 		"LookupByName",
@@ -196,11 +192,10 @@ func TestRenameReceiverNotFound(t *testing.T) {
 }
 
 func TestRenameMethodNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-method/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-method/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Missing",
 		"Something",
@@ -213,11 +208,13 @@ func TestRenameMethodNotFound(t *testing.T) {
 }
 
 func TestRenameMethodCollision(t *testing.T) {
-	d := service_tester.Prepare(t, "method-collision/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("method-collision/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Save",
 		"Load",
@@ -230,11 +227,13 @@ func TestRenameMethodCollision(t *testing.T) {
 }
 
 func TestRenameSameName(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-function/src"),
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"IsGeneratedHeader",
 		"IsGeneratedHeader",
@@ -247,11 +246,10 @@ func TestRenameSameName(t *testing.T) {
 }
 
 func TestRenameLongerKeepsComments(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-longer/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-longer/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target/constant",
 		"Legend",
 		"TargetLegendExtended",
@@ -260,17 +258,13 @@ func TestRenameLongerKeepsComments(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/constant/constant.go",
-	)
+	source := o.Read("pkg/target/constant/constant.go")
 	rewrite_tester.Formatted(t, source)
 	assert.StringContains(t, "TargetLegendExtended = \"--legend\"", source)
 	assert.StringContains(t, "// alfa trailing", source)
 	assert.StringContains(t, "// bold trailing", source)
 	assert.StringContains(t, "// wide trailing", source)
-	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
+	run := o.Read("pkg/target/run.go")
 	rewrite_tester.Formatted(t, run)
 	assert.StringContains(t, "TargetLegendExtended", run)
 }

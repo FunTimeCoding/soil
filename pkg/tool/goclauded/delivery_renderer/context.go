@@ -14,12 +14,12 @@ func (r *Renderer) Context(entries []queue.Entry) string {
 		lines,
 		memoryLines(
 			groups,
-			constant.DeliveryBudget-size(lines)-r.messageMinimum(candidates),
+			constant.DeliveryCharacterLimit-size(lines)-r.messageMinimum(candidates),
 		)...,
 	)
 	lines = append(
 		lines,
-		r.messageLines(candidates, constant.DeliveryBudget-size(lines))...,
+		r.messageLines(candidates, constant.DeliveryCharacterLimit-size(lines))...,
 	)
 
 	return join.NewLine(lines)

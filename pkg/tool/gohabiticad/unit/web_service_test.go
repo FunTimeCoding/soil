@@ -6,24 +6,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/habitica/tag"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestWebService(t *testing.T) {
-	o := web_service_tester.New(t)
-	c := o.Client
+	s := base.New(t)
+	c := s.GeneratedClient()
 	x := context.Background()
 	k := task.Stub()
 	k.Identifier = "task-1"
 	k.Text = "Deploy fleet"
 	k.Type = "daily"
-	o.MockClient.AddTask(k)
+	s.Source.AddTask(k)
 	g := tag.Stub()
 	g.Identifier = "tag-1"
 	g.Name = "deploy"
-	o.MockClient.AddTag(g)
+	s.Source.AddTag(g)
 	tasks, e := c.GetTasksWithResponse(x, &client.GetTasksParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, tasks.StatusCode())

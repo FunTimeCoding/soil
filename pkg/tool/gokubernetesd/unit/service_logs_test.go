@@ -14,7 +14,7 @@ import (
 func TestLogsDirectPod(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddPod(pod.New("default", "nginx-abc123", "Running"))
-	_, e := s.Service.Logs(
+	_, e := s.Service().Logs(
 		context.Background(),
 		"test",
 		request.Logs{Name: "nginx-abc123", Namespace: "default"},
@@ -28,7 +28,7 @@ func TestLogsAmbiguousPods(t *testing.T) {
 	s.AddDeployment("default", "nginx", 2, 2)
 	s.AddPod(pod.New("default", "nginx-abc", "Running").WithLabels(labels))
 	s.AddPod(pod.New("default", "nginx-def", "Running").WithLabels(labels))
-	_, e := s.Service.Logs(
+	_, e := s.Service().Logs(
 		context.Background(),
 		"test",
 		request.Logs{Name: "deployment/nginx", Namespace: "default"},
@@ -44,7 +44,7 @@ func TestLogsSinglePodDeployment(t *testing.T) {
 	labels := map[string]string{"app": "redis"}
 	s.AddDeployment("default", "redis", 1, 1)
 	s.AddPod(pod.New("default", "redis-xyz", "Running").WithLabels(labels))
-	_, e := s.Service.Logs(
+	_, e := s.Service().Logs(
 		context.Background(),
 		"test",
 		request.Logs{Name: "deployment/redis", Namespace: "default"},

@@ -14,14 +14,14 @@ import (
 
 func TestStatusReportsNothingWhenSound(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "status surface")
 	assert.StringContains(
 		t,
 		"Nothing inconsistent.",
 		a.MustCallTool(constant.Status, map[string]any{}),
 	)
-	c := s.RESTClient(t)
+	c := s.RESTClient()
 	response, e := c.GetStatusWithResponse(context.Background())
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, response.JSON200.Findings)
@@ -38,12 +38,12 @@ func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 			"orphaned",
 		),
 	)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "status surface")
 	result := a.MustCallTool(constant.Status, map[string]any{})
 	assert.StringContains(t, "unowned_queue", result)
 	assert.StringContains(t, "Nobody", result)
-	c := s.RESTClient(t)
+	c := s.RESTClient()
 	response, e := c.GetStatusWithResponse(context.Background())
 	assert.FatalOnError(t, e)
 	var unowned []client.FindingEntry
@@ -67,9 +67,9 @@ func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 }
 
 func TestStatusFindsNoMissingTranscriptForSessionWithOne(t *testing.T) {
-	s := base.NewWithSessionFile(t, "doomed", "some-slug")
+	s := base.New(t, base.WithSessionFile("doomed", "some-slug"))
 	s.Store.Advance(constant.CompleteTimeoutWindow + time.Minute)
-	response, e := s.RESTClient(t).GetStatusWithResponse(t.Context())
+	response, e := s.RESTClient().GetStatusWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	var missing []client.FindingEntry
 

@@ -34,11 +34,11 @@ func (s *Server) PostChunk(
 	}
 
 	return server.PostChunk200JSONResponse{
-		Model:          p.Model,
-		Window:         p.Window,
-		Allowance:      p.Allowance,
-		EmbedAllowance: p.EmbedAllowance,
-		Chunks:         chunks,
-		Sections:       sections,
+		Model:           p.Model,
+		Window:          p.Window,
+		TokenLimit:      p.TokenLimit,
+		EmbedTokenLimit: p.EmbedTokenLimit,
+		Chunks:          chunks,
+		Sections:        sections,
 	}, nil
 }

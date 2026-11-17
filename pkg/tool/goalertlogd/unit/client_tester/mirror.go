@@ -15,7 +15,7 @@ func Mirror(
 	c face.Client,
 ) *mock_client.Client {
 	t.Helper()
-	result := mock_client.New()
+	result := mock_client.New(t)
 	limit := constant.PageMaximum
 	cursor := 0
 

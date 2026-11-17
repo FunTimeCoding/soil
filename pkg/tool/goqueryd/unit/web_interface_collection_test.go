@@ -3,7 +3,6 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/document_tester"
@@ -16,16 +15,8 @@ import (
 )
 
 func TestSecondPageOfCollectionLoads(t *testing.T) {
-	s := base.Serve(
-		t,
-		service_tester.NewOption(
-			t,
-			service_tester.NewEmbedder(t),
-			service_tester.NewReranker(t),
-		),
-		memory.New(),
-	)
-	c := client_tester.Rest(t, s)
+	s := base.Serve(t, service_tester.New(t))
+	c := client_tester.GeneratedClient(t, s)
 
 	for i := range 21 {
 		document_tester.Push(
@@ -51,16 +42,8 @@ func TestSecondPageOfCollectionLoads(t *testing.T) {
 }
 
 func TestMissingDocumentIsNotFoundWithLinkedSuggestions(t *testing.T) {
-	s := base.Serve(
-		t,
-		service_tester.NewOption(
-			t,
-			service_tester.NewEmbedder(t),
-			service_tester.NewReranker(t),
-		),
-		memory.New(),
-	)
-	c := client_tester.Rest(t, s)
+	s := base.Serve(t, service_tester.New(t))
+	c := client_tester.GeneratedClient(t, s)
 	document_tester.Push(t, c, "pushed", "alfa.md", "# Alfa\n\nbody")
 	assert.Integer(
 		t,

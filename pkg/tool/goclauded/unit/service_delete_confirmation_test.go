@@ -57,7 +57,7 @@ func TestDeleteRejectsForeignConfirmation(t *testing.T) {
 	assert.True(t, s.Store.GetSession("doomed") != nil)
 }
 
-func TestDeleteReceiptReportsWhatWentAway(t *testing.T) {
+func TestDeletionResultCountsWhatWentAway(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Store.EnsureSession("rich")
 	assert.FatalOnError(

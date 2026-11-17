@@ -19,7 +19,7 @@ func TestServiceCreateMemory(t *testing.T) {
 	p.Content = "Retry failed requests with exponential backoff."
 	p.Description = "retry with backoff"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	assert.String(t, "retry policy", m.Name)
 	assert.String(t, "feedback", m.Type)
@@ -36,7 +36,7 @@ func TestServiceCreateMemoryWithExplicitType(t *testing.T) {
 	p.Description = "blue-green deploy pattern"
 	p.Type = "user"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	assert.String(t, "user", m.Type)
 }
@@ -49,29 +49,32 @@ func TestServiceForgetMemory(t *testing.T) {
 	p.Description = "desc"
 	p.Type = "feedback"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
-	assert.FatalOnError(t, o.Service.ForgetMemory(m.Identifier, "test"))
+	assert.FatalOnError(t, o.Service().ForgetMemory(m.Identifier, "test"))
 	assert.Count(t, 1, o.Indexer.Deleted)
 	assert.String(t, "memory/1", o.Indexer.Deleted[0].Path)
 	assert.String(t, "memories", o.Indexer.Deleted[0].Collection)
-	active, e := o.Service.ListMemories("", "", "", true)
+	active, e := o.Service().ListMemories("", "", "", true)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, active)
 }
 
 func TestHiddenTagLeavesIndex(t *testing.T) {
-	o := service_tester.NewHidden(t, "private")
+	o := service_tester.New(t, service_tester.WithHiddenTag("private"))
 	p := save_option.New()
 	p.Name = "delta"
 	p.Content = "quiet content"
 	p.Description = "quiet description"
 	p.Type = "project"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, o.Indexer.Pushed)
-	assert.FatalOnError(t, o.Service.AddTags(m.Identifier, []string{"private"}))
+	assert.FatalOnError(
+		t,
+		o.Service().AddTags(m.Identifier, []string{"private"}),
+	)
 	assert.Count(t, 1, o.Indexer.Pushed)
 	assert.Count(t, 1, o.Indexer.Deleted)
 	q := save_option.New()
@@ -79,16 +82,16 @@ func TestHiddenTagLeavesIndex(t *testing.T) {
 	q.Content = "updated quiet content"
 	q.Description = "quiet description"
 	q.Source = "test"
-	_, _, e = o.Service.UpdateMemory(m.Identifier, q)
+	_, _, e = o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, o.Indexer.Pushed)
 	assert.Count(t, 2, o.Indexer.Deleted)
 	assert.FatalOnError(
 		t,
-		o.Service.RemoveTags(m.Identifier, []string{"private"}),
+		o.Service().RemoveTags(m.Identifier, []string{"private"}),
 	)
 	assert.Count(t, 2, o.Indexer.Pushed)
-	hidden, e := o.Service.HiddenIdentifiers()
+	hidden, e := o.Service().HiddenIdentifiers()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, hidden)
 }
@@ -100,13 +103,13 @@ func TestRetiredMemoryStaysOutOfIndexOnTagEdit(t *testing.T) {
 	p.Content = "first"
 	p.Description = "a test"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
-	assert.FatalOnError(t, o.Service.ForgetMemory(m.Identifier, "test"))
+	assert.FatalOnError(t, o.Service().ForgetMemory(m.Identifier, "test"))
 	pushed := len(o.Indexer.Pushed)
 	assert.FatalOnError(
 		t,
-		o.Service.ReplaceTags(m.Identifier, []string{"build"}),
+		o.Service().ReplaceTags(m.Identifier, []string{"build"}),
 	)
 	assert.Integer(t, pushed, len(o.Indexer.Pushed))
 	assert.String(
@@ -123,12 +126,12 @@ func TestActiveMemoryIsIndexedOnTagEdit(t *testing.T) {
 	p.Content = "second"
 	p.Description = "a test"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	pushed := len(o.Indexer.Pushed)
 	assert.FatalOnError(
 		t,
-		o.Service.ReplaceTags(m.Identifier, []string{"build"}),
+		o.Service().ReplaceTags(m.Identifier, []string{"build"}),
 	)
 	assert.Integer(t, pushed+1, len(o.Indexer.Pushed))
 }
@@ -140,23 +143,25 @@ func TestServiceCreateMemoryRejectsReservedScope(t *testing.T) {
 		constant.AllScope,
 		constant.DefaultScope,
 	} {
-		_, e := o.Service.CreateMemory(save_tester.Scoped("reserved", reserved))
+		_, e := o.Service().CreateMemory(
+			save_tester.Scoped("reserved", reserved),
+		)
 		assert.True(t, validation.Is(e))
 	}
 }
 
 func TestServiceProfileRejectsReservedScope(t *testing.T) {
 	o := service_tester.New(t)
-	_, _, e := o.Service.Profile("", constant.AllScope, false)
+	_, _, e := o.Service().Profile("", constant.AllScope, false)
 	assert.True(t, validation.Is(e))
 }
 
 func TestServiceCreateRoutesCollectionByScope(t *testing.T) {
 	o := service_tester.New(t)
-	_, e := o.Service.CreateMemory(save_tester.Scoped("default entry", ""))
+	_, e := o.Service().CreateMemory(save_tester.Scoped("default entry", ""))
 	assert.FatalOnError(t, e)
 	assert.String(t, "memories", o.Indexer.Pushed[0].Collection)
-	_, f := o.Service.CreateMemory(save_tester.Scoped("scoped entry", "alfa"))
+	_, f := o.Service().CreateMemory(save_tester.Scoped("scoped entry", "alfa"))
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, o.Indexer.Pushed)
 	assert.String(t, "alfa", o.Indexer.Pushed[1].Collection)
@@ -170,14 +175,14 @@ func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {
 	p := save_tester.Scoped("scoped entry", "alfa")
 	p.Metadata = map[string]string{"kind": "mechanism"}
 	p.Ordinal = 2
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	q := save_option.New()
 	q.Name = "scoped entry"
 	q.Content = "updated"
 	q.Description = "scoped entry"
 	q.Source = "test"
-	updated, _, f := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, f := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, f)
 	assert.String(t, "mechanism", updated.Metadata["kind"])
 	assert.Integer(t, 2, updated.Ordinal)
@@ -188,7 +193,7 @@ func TestServiceCreateMemoryWithBase(t *testing.T) {
 	o := service_tester.New(t)
 	p := save_tester.Scoped("error capture", "")
 	p.Base = new("../soil/doc/ai/spec/error-handling")
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,
@@ -200,7 +205,10 @@ func TestServiceCreateMemoryWithBase(t *testing.T) {
 func TestServiceUpdateKeepsBaseWhenOmitted(t *testing.T) {
 	o := service_tester.New(t)
 	m := o.CreateBased()
-	updated, _, e := o.Service.UpdateMemory(m.Identifier, save_tester.Update())
+	updated, _, e := o.Service().UpdateMemory(
+		m.Identifier,
+		save_tester.Update(),
+	)
 	assert.FatalOnError(t, e)
 	assert.String(t, "doc", updated.Metadata[constant.BaseKey])
 	assert.String(t, "mechanism", updated.Metadata["kind"])
@@ -211,7 +219,7 @@ func TestServiceUpdateClearsBaseWhenEmpty(t *testing.T) {
 	m := o.CreateBased()
 	q := save_tester.Update()
 	q.Base = new("")
-	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	_, found := updated.Metadata[constant.BaseKey]
 	assert.Boolean(t, false, found)
@@ -223,7 +231,7 @@ func TestServiceUpdateReplacesBase(t *testing.T) {
 	m := o.CreateBased()
 	q := save_tester.Update()
 	q.Base = new("pkg")
-	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.String(t, "pkg", updated.Metadata[constant.BaseKey])
 	assert.String(t, "mechanism", updated.Metadata["kind"])
@@ -231,23 +239,23 @@ func TestServiceUpdateReplacesBase(t *testing.T) {
 
 func TestServiceProfileScoped(t *testing.T) {
 	o := service_tester.New(t)
-	_, e := o.Service.CreateMemory(save_tester.Scoped("default entry", ""))
+	_, e := o.Service().CreateMemory(save_tester.Scoped("default entry", ""))
 	assert.FatalOnError(t, e)
-	_, f := o.Service.CreateMemory(save_tester.Scoped("scoped entry", "alfa"))
+	_, f := o.Service().CreateMemory(save_tester.Scoped("scoped entry", "alfa"))
 	assert.FatalOnError(t, f)
-	parent, g := o.Service.GetMemory(2)
+	parent, g := o.Service().GetMemory(2)
 	assert.FatalOnError(t, g)
 	second := save_tester.Scoped("second shard", "alfa")
 	second.ParentIdentifier = &parent.Identifier
 	second.Ordinal = 2
-	_, h := o.Service.CreateMemory(second)
+	_, h := o.Service().CreateMemory(second)
 	assert.FatalOnError(t, h)
 	first := save_tester.Scoped("first shard", "alfa")
 	first.ParentIdentifier = &parent.Identifier
 	first.Ordinal = 1
-	_, i := o.Service.CreateMemory(first)
+	_, i := o.Service().CreateMemory(first)
 	assert.FatalOnError(t, i)
-	result, _, g := o.Service.Profile("", "alfa", false)
+	result, _, g := o.Service().Profile("", "alfa", false)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, result.Index)
 	assert.String(t, "scoped entry", result.Index[0].Name)
@@ -256,7 +264,7 @@ func TestServiceProfileScoped(t *testing.T) {
 	assert.String(t, "second shard", result.Index[0].Children[1])
 	assert.Count(t, 0, result.Completions)
 	assert.Count(t, 0, result.Impressions)
-	defaultResult, _, h := o.Service.Profile("", "", false)
+	defaultResult, _, h := o.Service().Profile("", "", false)
 	assert.FatalOnError(t, h)
 	assert.Count(t, 1, defaultResult.Index)
 	assert.String(t, "default entry", defaultResult.Index[0].Name)
@@ -270,18 +278,18 @@ func TestServiceUpdateMemoryPreservesTags(t *testing.T) {
 	p.Description = "original desc"
 	p.Type = "feedback"
 	p.Source = "test"
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(
 		t,
-		o.Service.AddTags(m.Identifier, []string{"always", "go-conventions"}),
+		o.Service().AddTags(m.Identifier, []string{"always", "go-conventions"}),
 	)
 	q := save_option.New()
 	q.Name = "pace"
 	q.Content = "updated content"
 	q.Description = "updated desc"
 	q.Source = "test"
-	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.String(t, "updated content", updated.Content)
 	assert.Count(t, 2, updated.Tags)
@@ -295,7 +303,7 @@ func TestServiceUpdateMemoryNonexistentFails(t *testing.T) {
 	p.Content = constant.FixtureContent
 	p.Description = "desc"
 	p.Source = "test"
-	_, _, e := o.Service.UpdateMemory(999, p)
+	_, _, e := o.Service().UpdateMemory(999, p)
 	assert.Error(t, e)
 }
 
@@ -304,7 +312,7 @@ func TestServiceUpdateWritesGivenEmptyContent(t *testing.T) {
 	m := o.CreateNamed("pace", "", "Original body.")
 	q := save_tester.Rename(m, "pace")
 	q.Content = ""
-	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.String(t, "", updated.Content)
 	assert.String(t, "pace", updated.Description)
@@ -315,11 +323,11 @@ func TestServiceRenameRewritesCitations(t *testing.T) {
 	m := o.CreateNamed("pace", "", "Original body.")
 	citing := o.CreateNamed("citing", "", "See `memory://default/pace` first.")
 	q := save_tester.Rename(m, "tempo")
-	_, rewritten, e := o.Service.UpdateMemory(m.Identifier, q)
+	_, rewritten, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, rewritten)
 	assert.String(t, "citing", rewritten[0].Name)
-	reloaded, f := o.Service.GetMemory(citing.Identifier)
+	reloaded, f := o.Service().GetMemory(citing.Identifier)
 	assert.FatalOnError(t, f)
 	assert.String(t, "See `memory://default/tempo` first.", reloaded.Content)
 }
@@ -333,10 +341,10 @@ func TestServiceRenameLeavesSimilarNames(t *testing.T) {
 		"See `memory://default/pace of work` first.",
 	)
 	q := save_tester.Rename(m, "tempo")
-	_, rewritten, e := o.Service.UpdateMemory(m.Identifier, q)
+	_, rewritten, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, rewritten)
-	reloaded, f := o.Service.GetMemory(citing.Identifier)
+	reloaded, f := o.Service().GetMemory(citing.Identifier)
 	assert.FatalOnError(t, f)
 	assert.String(
 		t,
@@ -354,9 +362,9 @@ func TestServiceRenameFollowsScope(t *testing.T) {
 		"See `memory://alfa/pace` and `memory://default/pace`.",
 	)
 	q := save_tester.Rename(m, "tempo")
-	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	_, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
-	reloaded, f := o.Service.GetMemory(citing.Identifier)
+	reloaded, f := o.Service().GetMemory(citing.Identifier)
 	assert.FatalOnError(t, f)
 	assert.String(
 		t,
@@ -367,9 +375,9 @@ func TestServiceRenameFollowsScope(t *testing.T) {
 
 func TestServiceMissingMemoryIsNotFound(t *testing.T) {
 	o := service_tester.New(t)
-	_, e := o.Service.GetMemory(999)
+	_, e := o.Service().GetMemory(999)
 	assert.String(t, "memory not found: 999", e.Error())
-	assert.True(t, not_found.Is(o.Service.ForgetMemory(999, "")))
+	assert.True(t, not_found.Is(o.Service().ForgetMemory(999, "")))
 }
 
 func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
@@ -377,9 +385,9 @@ func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
 	m := o.CreateNamed("pace", "", "Original body.")
 	o.CreateNamed("tempo", "", "Another body.")
 	q := save_tester.Rename(m, "tempo")
-	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	_, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.True(t, conflict.Is(e))
-	reloaded, f := o.Service.GetMemory(m.Identifier)
+	reloaded, f := o.Service().GetMemory(m.Identifier)
 	assert.FatalOnError(t, f)
 	assert.String(t, "pace", reloaded.Name)
 }
@@ -389,9 +397,9 @@ func TestServiceRenameVersionsRewrittenMemory(t *testing.T) {
 	m := o.CreateNamed("pace", "", "Original body.")
 	citing := o.CreateNamed("citing", "", "See `memory://default/pace`.")
 	q := save_tester.Rename(m, "tempo")
-	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	_, _, e := o.Service().UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
-	history, f := o.Service.GetMemoryHistory(citing.Identifier)
+	history, f := o.Service().GetMemoryHistory(citing.Identifier)
 	assert.FatalOnError(t, f)
 	last := history[len(history)-1]
 	assert.String(t, "rewritten", last.ChangeType)

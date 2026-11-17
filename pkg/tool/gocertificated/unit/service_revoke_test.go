@@ -5,12 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/server_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/store_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/service_tester"
 	"testing"
 )
 
 func TestRevokingTwiceFindsNothingSecondTime(t *testing.T) {
-	v := store_tester.NewChain(t)
+	v := service_tester.New(t).Chain()
 	r, _, e := v.IssueCertificate(
 		server_tester.LeafBody(
 			constant.FixtureCommonName,

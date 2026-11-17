@@ -9,8 +9,7 @@ import (
 
 func Mock(t *testing.T) *mock_client.Client {
 	t.Helper()
-	result := mock_client.New()
-	t.Cleanup(result.Close)
+	result := mock_client.New(t)
 	_, e := result.PostDocument(
 		t.Context(),
 		client.PostDocumentJSONRequestBody{

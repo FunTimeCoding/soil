@@ -5,23 +5,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/load_failure"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/usage_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestUsageSkipsBrokenCallerPackage(t *testing.T) {
-	d := usage_tester.Prepare(t)
+	o := usage_tester.Prepare(t)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/worker/broken.go",
 		"package worker\n\nfunc broken() {\n\tundefinedCall()\n}\n",
 	)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, c.Unloaded)
 	assert.String(t, "example/pkg/worker", c.Unloaded[0].Package)
@@ -42,18 +37,14 @@ func TestUsageSkipsBrokenCallerPackage(t *testing.T) {
 }
 
 func TestUsageSkipsBrokenStorePackage(t *testing.T) {
-	d := usage_tester.Prepare(t)
+	o := usage_tester.Prepare(t)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/store/broken.go",
 		"package store\n\nfunc broken() {\n\tundefinedCall()\n}\n",
 	)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, c.Unloaded)
 	assert.String(t, "example/pkg/store", c.Unloaded[0].Package)
@@ -62,18 +53,14 @@ func TestUsageSkipsBrokenStorePackage(t *testing.T) {
 }
 
 func TestUsageSkipsBrokenModelPackage(t *testing.T) {
-	d := usage_tester.Prepare(t)
+	o := usage_tester.Prepare(t)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/model/receipt/broken.go",
 		"package receipt\n\nfunc broken() {\n\tundefinedCall()\n}\n",
 	)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, c.Unloaded)
 	assert.String(t, "example/pkg/model/receipt", c.Unloaded[0].Package)
@@ -81,36 +68,28 @@ func TestUsageSkipsBrokenModelPackage(t *testing.T) {
 }
 
 func TestUsageFailsOnBrokenTypePackage(t *testing.T) {
-	d := usage_tester.Prepare(t)
+	o := usage_tester.Prepare(t)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/service/broken.go",
 		"package service\n\nfunc broken() {\n\tundefinedCall()\n}\n",
 	)
-	_, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	_, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	failure, okay := load_failure.As(e)
 	assert.True(t, okay)
 	assert.String(t, "example/pkg/service", failure.Package)
 }
 
 func TestUsageSkipsBrokenTestOfTypePackage(t *testing.T) {
-	d := usage_tester.Prepare(t)
+	o := usage_tester.Prepare(t)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"pkg/service/broken_test.go",
 		"package service\n\nimport \"testing\"\n\nfunc TestBroken(t *testing.T) {\n\tundefinedCall()\n}\n",
 	)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, c.Unloaded)
 	assert.String(

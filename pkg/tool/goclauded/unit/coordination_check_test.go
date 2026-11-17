@@ -13,14 +13,14 @@ import (
 
 func TestCheckCreatesSession(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	assert.True(t, a.Name() != "")
 }
 
 func TestCheckPreviewNoSession(t *testing.T) {
 	s := base.New(t)
-	s.NewSession(t)
-	restClient := s.RESTClient(t)
+	s.NewSession()
+	restClient := s.RESTClient()
 	response, e := restClient.GetCheckWithResponse(
 		context.Background(),
 		&client.GetCheckParams{
@@ -35,8 +35,8 @@ func TestCheckPreviewNoSession(t *testing.T) {
 
 func TestCheckRecentActivity(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "build search index")
 	b.CheckLive()
 	a.MustCallTool(
@@ -62,8 +62,8 @@ func TestCheckRecentActivity(t *testing.T) {
 
 func TestCheckRecentActivityLive(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "search index")
 	b.Check()
 	a.MustCallTool(
@@ -81,8 +81,8 @@ func TestCheckRecentActivityLive(t *testing.T) {
 
 func TestCheckRecentActivityUpdate(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "initial")
 	b.CheckLive()
 	a.MustCallTool(

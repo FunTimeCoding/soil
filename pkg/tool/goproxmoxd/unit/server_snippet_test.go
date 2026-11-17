@@ -2,24 +2,13 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/base"
-	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
 
 func TestSnippetRoutesAnswerMissingSnippetNotFound(t *testing.T) {
-	s := base.New(t)
-	c, e := client.NewClientWithResponses(
-		s.Address(webConstant.RootPath),
-		client.WithHTTPClient(s.Client()),
-		client.WithRequestEditorFn(
-			web.BearerEditor(generativeConstant.ModelContextTestToken),
-		),
-	)
-	assert.FatalOnError(t, e)
+	c := base.New(t).GeneratedClient()
 	got, e := c.GetSnippetWithResponse(
 		t.Context(),
 		"alfa.yaml",

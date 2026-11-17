@@ -15,7 +15,7 @@ import (
 )
 
 func TestCounterAllowsWindowLessSpecials(t *testing.T) {
-	assert.Integer(t, 2046, embedder_tester.NewCounter(t).Allowance())
+	assert.Integer(t, 2046, embedder_tester.NewCounter(t).TokenLimit())
 }
 
 func TestCounterSeesDenseChunkOverWindow(t *testing.T) {
@@ -48,7 +48,7 @@ func TestCounterFitsEveryManualChunk(t *testing.T) {
 	for _, k := range chunk.Document(
 		fixture.Read(systemConstant.LimitPath, "manual.txt"),
 		"manual.txt",
-		service_tester.NewReranker(t),
+		service_tester.New(t).Reranker,
 	) {
 		assert.LessEqual(t, 2046, c.Count(k.Text))
 	}

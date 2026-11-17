@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestPointersTalliesMissingTestName(t *testing.T) {
+func TestPointersMissingTestNameUnchecked(t *testing.T) {
 	checker, seen := pointer_tester.Symbols(
 		nil,
 		nil,
@@ -25,7 +25,7 @@ func TestPointersTalliesMissingTestName(t *testing.T) {
 	assert.Strings(t, []string{"Alfa:1 test_name TestShelfLostStock()"}, *seen)
 }
 
-func TestPointersTalliesUndeclaredMember(t *testing.T) {
+func TestPointersUndeclaredMemberUnchecked(t *testing.T) {
 	checker, seen := pointer_tester.Symbols(
 		[]string{
 			"pkg/shop/store.Store",
@@ -52,7 +52,7 @@ func TestPointersTalliesUndeclaredMember(t *testing.T) {
 	)
 }
 
-func TestPointersTalliesBareSymbol(t *testing.T) {
+func TestPointersBareSymbolUnchecked(t *testing.T) {
 	checker, seen := pointer_tester.Symbols(nil, nil, nil)
 	l := checker(
 		stringsConstant.UpperAlfa,

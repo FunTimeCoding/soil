@@ -4,10 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
@@ -15,12 +12,10 @@ import (
 )
 
 func TestInventoryDialsHostsOffSiteAtTunnelAddress(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	service_tester.SeedTunnelHosts(c)
-	i, e := service_tester.Service(t, c).AnsibleInventory(
-		constant.AnsibleField,
-		"kilo",
-	)
+	i, e := o.Service().AnsibleInventory(constant.AnsibleField, "kilo")
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,
@@ -40,12 +35,10 @@ func TestInventoryDialsHostsOffSiteAtTunnelAddress(t *testing.T) {
 }
 
 func TestInventoryWithoutSiteKeepsPrimaryAddresses(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	service_tester.SeedTunnelHosts(c)
-	i, e := service_tester.Service(t, c).AnsibleInventory(
-		constant.AnsibleField,
-		"",
-	)
+	i, e := o.Service().AnsibleInventory(constant.AnsibleField, "")
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,
@@ -64,16 +57,14 @@ func TestInventoryWithoutSiteKeepsPrimaryAddresses(t *testing.T) {
 }
 
 func TestInventoryOffSiteWithoutTunnelKeepsPrimaryAddress(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	delta := c.SeedAddressedDevice("delta", "203.0.113.7/32")
 	delta.Site = "lima"
 	delta.CustomFields = map[string]any{constant.AnsibleField: []string{"echo"}}
 	c.SeedHostAddress("delta", "198.51.100.2/24", "dcim.interface", 9)
 	c.SeedTunnelTermination("dcim.interface", 10)
-	i, e := service_tester.Service(t, c).AnsibleInventory(
-		constant.AnsibleField,
-		"kilo",
-	)
+	i, e := o.Service().AnsibleInventory(constant.AnsibleField, "kilo")
 	assert.FatalOnError(t, e)
 	assert.String(
 		t,
@@ -89,17 +80,11 @@ func TestInventoryOffSiteWithoutTunnelKeepsPrimaryAddress(t *testing.T) {
 }
 
 func TestInventoryRouteTakesCallerSite(t *testing.T) {
-	c := service_tester.NewSource(t)
-	service_tester.SeedTunnelHosts(c)
-	d := daemon.New(
-		service_tester.NewOption(t, c),
-		logger.New(t.Context()),
-		memory.New(),
-		metric.New(),
-	)
-	t.Cleanup(d.Close)
+	o := service_tester.New(t)
+	service_tester.SeedTunnelHosts(o.Source)
+	d := o.Daemon()
 	site := "kilo"
-	response, e := base.Rest(
+	response, e := base.GeneratedClient(
 		t,
 		base.Mount(t, d, memory.New()),
 	).GetAnsibleInventoryWithResponse(

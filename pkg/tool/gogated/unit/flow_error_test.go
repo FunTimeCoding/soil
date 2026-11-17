@@ -2,14 +2,14 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/unit/flow_tester"
 	"net/url"
 	"testing"
 )
 
 func TestInvalidCodeFails(t *testing.T) {
-	o := tester.New(t)
-	reg := o.Register(t, []string{"http://localhost/callback"})
+	o := flow_tester.New(t)
+	reg := o.Register([]string{"http://localhost/callback"})
 	form := url.Values{
 		"grant_type":    {"authorization_code"},
 		"code":          {"invalid-code"},
@@ -18,7 +18,7 @@ func TestInvalidCodeFails(t *testing.T) {
 		"client_secret": {reg.ClientSecret},
 		"code_verifier": {"anything"},
 	}
-	status := o.ExchangeCodeRaw(t, form)
+	status := o.ExchangeCodeRaw(form)
 
 	if status == 200 {
 		t.Fatal("expected token exchange to fail with invalid code")
@@ -26,10 +26,10 @@ func TestInvalidCodeFails(t *testing.T) {
 }
 
 func TestReplayedCodeFails(t *testing.T) {
-	o := tester.New(t)
-	reg := o.Register(t, []string{"http://localhost/callback"})
-	auth := o.Authorize(t, reg.ClientIdentifier, "http://localhost/callback")
-	_ = o.ExchangeCode(t, reg.ClientIdentifier, reg.ClientSecret, auth)
+	o := flow_tester.New(t)
+	reg := o.Register([]string{"http://localhost/callback"})
+	auth := o.Authorize(reg.ClientIdentifier, "http://localhost/callback")
+	_ = o.ExchangeCode(reg.ClientIdentifier, reg.ClientSecret, auth)
 	form := url.Values{
 		"grant_type":    {"authorization_code"},
 		"code":          {auth.Code},
@@ -38,7 +38,7 @@ func TestReplayedCodeFails(t *testing.T) {
 		"client_secret": {reg.ClientSecret},
 		"code_verifier": {auth.CodeVerifier},
 	}
-	status := o.ExchangeCodeRaw(t, form)
+	status := o.ExchangeCodeRaw(form)
 
 	if status == 200 {
 		t.Fatal("expected replayed code to fail")
@@ -46,9 +46,8 @@ func TestReplayedCodeFails(t *testing.T) {
 }
 
 func TestRegistrationRequiresRedirectURIs(t *testing.T) {
-	o := tester.New(t)
+	o := flow_tester.New(t)
 	status := o.RegisterRaw(
-		t,
 		map[string]any{
 			"grant_types":    []string{"authorization_code"},
 			"response_types": []string{"code"},

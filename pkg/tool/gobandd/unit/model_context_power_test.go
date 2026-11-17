@@ -11,10 +11,9 @@ import (
 )
 
 func TestShutdownToolRefusesWithoutSendingAnything(t *testing.T) {
-	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
-	c := s.Connect(t)
-	defer c.Close()
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.HardStates()...)
+	c := s.Tools()
 	c.MustCallTool(
 		inventoryConstant.UseInstance,
 		map[string]any{inventoryConstant.InstanceParameter: "alfa"},
@@ -24,14 +23,13 @@ func TestShutdownToolRefusesWithoutSendingAnything(t *testing.T) {
 		"off soft graceful not offered",
 		c.MustCallToolError(constant.Shutdown, nil),
 	)
-	assert.Count(t, 0, s.Alfa.Requested())
+	assert.Count(t, 0, s.Alfa().Requested())
 }
 
 func TestShutdownToolWithForceCutsPower(t *testing.T) {
-	s := base.New(t)
-	s.Alfa.SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
-	c := s.Connect(t)
-	defer c.Close()
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Alfa().SetPower(bandConstant.PowerOn, service_tester.RunningStates()...)
+	c := s.Tools()
 	c.MustCallTool(
 		inventoryConstant.UseInstance,
 		map[string]any{inventoryConstant.InstanceParameter: "alfa"},
@@ -44,5 +42,5 @@ func TestShutdownToolWithForceCutsPower(t *testing.T) {
 			map[string]any{constant.ForceParameter: true},
 		),
 	)
-	assert.Integers(t, []int{8}, s.Alfa.Requested())
+	assert.Integers(t, []int{8}, s.Alfa().Requested())
 }

@@ -1,28 +1,29 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/openbao/face"
-	"github.com/funtimecoding/soil/pkg/openbao/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
 	"github.com/prometheus/client_golang/prometheus"
-	"testing"
 )
 
-func Daemon(t *testing.T) *daemon.Daemon {
-	t.Helper()
-	c := mock_client.New()
+func (s *Server) Daemon() *daemon.Daemon {
+	s.t.Helper()
+
+	if s.daemon != nil {
+		return s.daemon
+	}
+
 	o := option.New()
-	o.Source = func() face.OpenbaoClient { return c }
-	result := daemon.New(
+	o.Source = func() face.OpenbaoClient { return s.Source }
+	s.daemon = daemon.New(
 		o,
-		logger.New(t.Context()),
-		memory.New(),
+		logger.New(s.t.Context()),
+		s.Reporter,
 		prometheus.NewRegistry(),
 	)
-	t.Cleanup(result.Close)
+	s.t.Cleanup(s.daemon.Close)
 
-	return result
+	return s.daemon
 }

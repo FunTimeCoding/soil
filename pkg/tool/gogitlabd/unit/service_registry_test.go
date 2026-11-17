@@ -9,8 +9,9 @@ import (
 )
 
 func TestDeleteRegistryPathRemovesPathAndItsCache(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	c := clients[constant.FixtureInstance]
+	o := service_tester.New(t)
+	s := o.Service()
+	c := o.Alfa()
 	c.SeedRegistryRepository(7, 1, "group/app")
 	c.SeedRegistryRepository(7, 2, "group/app/cache")
 	c.SeedRegistryRepository(7, 3, "group/other")
@@ -34,8 +35,9 @@ func TestDeleteRegistryPathRemovesPathAndItsCache(t *testing.T) {
 }
 
 func TestDeleteRegistryPathWithoutCacheDeletesWhatExists(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	clients[constant.FixtureInstance].SeedRegistryRepository(7, 1, "group/app")
+	o := service_tester.New(t)
+	s := o.Service()
+	o.Alfa().SeedRegistryRepository(7, 1, "group/app")
 	deleted, e := s.DeleteRegistryPath(
 		t.Context(),
 		constant.FixtureInstance,
@@ -47,8 +49,9 @@ func TestDeleteRegistryPathWithoutCacheDeletesWhatExists(t *testing.T) {
 }
 
 func TestDeleteRegistryPathRefusesWhenNothingMatches(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	clients[constant.FixtureInstance].SeedRegistryRepository(7, 1, "group/app")
+	o := service_tester.New(t)
+	s := o.Service()
+	o.Alfa().SeedRegistryRepository(7, 1, "group/app")
 	_, e := s.DeleteRegistryPath(
 		t.Context(),
 		constant.FixtureInstance,
@@ -68,8 +71,9 @@ func TestDeleteRegistryPathRefusesWhenNothingMatches(t *testing.T) {
 }
 
 func TestDeleteRegistryPathStaysInsideItsProject(t *testing.T) {
-	s, clients := service_tester.New(t, constant.FixtureInstance)
-	c := clients[constant.FixtureInstance]
+	o := service_tester.New(t)
+	s := o.Service()
+	c := o.Alfa()
 	c.SeedRegistryRepository(7, 1, "group/app")
 	c.SeedRegistryRepository(8, 2, "group/app")
 	_, e := s.DeleteRegistryPath(

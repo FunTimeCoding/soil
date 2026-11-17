@@ -12,7 +12,7 @@ import (
 func TestPatchResource(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddDeployment("default", "nginx", 1, 1)
-	e := s.Service.PatchResource(
+	e := s.Service().PatchResource(
 		context.Background(),
 		"test",
 		request.Patch{
@@ -24,7 +24,7 @@ func TestPatchResource(t *testing.T) {
 		},
 	)
 	assert.Nil(t, e)
-	result, f := s.Service.GetResource(
+	result, f := s.Service().GetResource(
 		context.Background(),
 		"test",
 		request.Get{

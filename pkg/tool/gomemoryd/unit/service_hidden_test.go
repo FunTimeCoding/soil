@@ -8,19 +8,19 @@ import (
 )
 
 func TestDashboardViewCountsOnlyVisibleMemories(t *testing.T) {
-	o := service_tester.NewHidden(t, "private")
+	o := service_tester.New(t, service_tester.WithHiddenTag("private"))
 	alfa := o.CreateTagged("alfa", "shared")
 	bravo := o.CreateTagged("bravo", "shared", "private")
 	charlie := o.CreateTagged("charlie")
 	assert.FatalOnError(
 		t,
-		o.Service.CreateRelation(alfa.Identifier, bravo.Identifier, ""),
+		o.Service().CreateRelation(alfa.Identifier, bravo.Identifier, ""),
 	)
 	assert.FatalOnError(
 		t,
-		o.Service.CreateRelation(alfa.Identifier, charlie.Identifier, ""),
+		o.Service().CreateRelation(alfa.Identifier, charlie.Identifier, ""),
 	)
-	v, e := o.Service.DashboardView()
+	v, e := o.Service().DashboardView()
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 2, v.Active)
 	assert.Integer(t, 2, v.Types["feedback"])
@@ -37,10 +37,10 @@ func TestDashboardViewCountsOnlyVisibleMemories(t *testing.T) {
 }
 
 func TestMemoryListLeavesHiddenMemoriesOut(t *testing.T) {
-	o := service_tester.NewHidden(t, "private")
+	o := service_tester.New(t, service_tester.WithHiddenTag("private"))
 	o.CreateTagged("alfa")
 	o.CreateTagged("bravo", "private")
-	l, e := o.Service.MemoryList("", "", "", 1)
+	l, e := o.Service().MemoryList("", "", "", 1)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 1, l.Total)
 	assert.Count(t, 1, l.Memories)
@@ -48,45 +48,45 @@ func TestMemoryListLeavesHiddenMemoriesOut(t *testing.T) {
 }
 
 func TestHiddenMemoryViewReadsAsNotFound(t *testing.T) {
-	o := service_tester.NewHidden(t, "private")
+	o := service_tester.New(t, service_tester.WithHiddenTag("private"))
 	bravo := o.CreateTagged("bravo", "private")
-	_, e := o.Service.MemoryView(bravo.Identifier)
+	_, e := o.Service().MemoryView(bravo.Identifier)
 	assert.True(t, not_found.Is(e))
 }
 
 func TestMemoryViewLeavesHiddenRelatedOut(t *testing.T) {
-	o := service_tester.NewHidden(t, "private")
+	o := service_tester.New(t, service_tester.WithHiddenTag("private"))
 	alfa := o.CreateTagged("alfa")
 	bravo := o.CreateTagged("bravo", "private")
 	charlie := o.CreateTagged("charlie")
 	assert.FatalOnError(
 		t,
-		o.Service.CreateRelation(alfa.Identifier, bravo.Identifier, ""),
+		o.Service().CreateRelation(alfa.Identifier, bravo.Identifier, ""),
 	)
 	assert.FatalOnError(
 		t,
-		o.Service.CreateRelation(alfa.Identifier, charlie.Identifier, ""),
+		o.Service().CreateRelation(alfa.Identifier, charlie.Identifier, ""),
 	)
-	v, e := o.Service.MemoryView(alfa.Identifier)
+	v, e := o.Service().MemoryView(alfa.Identifier)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, v.Related)
 	assert.String(t, "charlie", v.Related[0].Name)
 }
 
 func TestVisibleRelationsLeaveHiddenEndpointsOut(t *testing.T) {
-	o := service_tester.NewHidden(t, "private")
+	o := service_tester.New(t, service_tester.WithHiddenTag("private"))
 	alfa := o.CreateTagged("alfa")
 	bravo := o.CreateTagged("bravo", "private")
 	charlie := o.CreateTagged("charlie")
 	assert.FatalOnError(
 		t,
-		o.Service.CreateRelation(bravo.Identifier, alfa.Identifier, ""),
+		o.Service().CreateRelation(bravo.Identifier, alfa.Identifier, ""),
 	)
 	assert.FatalOnError(
 		t,
-		o.Service.CreateRelation(alfa.Identifier, charlie.Identifier, ""),
+		o.Service().CreateRelation(alfa.Identifier, charlie.Identifier, ""),
 	)
-	relations, e := o.Service.VisibleRelations()
+	relations, e := o.Service().VisibleRelations()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, relations)
 	assert.String(t, "charlie", relations[0].TargetName)

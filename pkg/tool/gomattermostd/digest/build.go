@@ -27,7 +27,7 @@ func Build(
 	if len(events) <= constant.EnumerateLimit {
 		result := enumerated(alias, events)
 
-		if len([]rune(result)) <= constant.DigestBudget {
+		if len([]rune(result)) <= constant.DigestLimit {
 			return result
 		}
 	}

@@ -14,15 +14,12 @@ import (
 )
 
 func TestMockAnswersUnknownSecretAsDaemonDoes(t *testing.T) {
-	s := base.New(t)
-	defer s.Close()
 	c := client.New(
-		locator.New("localhost").Port(s.ContextServer.Port).Insecure(),
+		locator.New("localhost").Port(base.New(t).Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	x := t.Context()
 
 	for _, f := range []face.Client{c, m} {

@@ -13,7 +13,7 @@ func TestListResources(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddPod(pod.New("default", "nginx", "Running"))
 	s.AddPod(pod.New("default", "redis", "Running").WithRestarts(5))
-	result, e := s.Service.ListResources(
+	result, e := s.Service().ListResources(
 		context.Background(),
 		"test",
 		request.List{ResourceType: "pods", Namespace: "default"},
@@ -29,7 +29,7 @@ func TestListResources(t *testing.T) {
 func TestListResourcesWithRestarts(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddPod(pod.New("default", "flaky", "Running").WithRestarts(47))
-	result, e := s.Service.ListResources(
+	result, e := s.Service().ListResources(
 		context.Background(),
 		"test",
 		request.List{ResourceType: "pods", Namespace: "default"},
@@ -42,7 +42,7 @@ func TestListResourcesWithRestarts(t *testing.T) {
 
 func TestListResourcesEmpty(t *testing.T) {
 	s := service_tester.New(t)
-	result, e := s.Service.ListResources(
+	result, e := s.Service().ListResources(
 		context.Background(),
 		"test",
 		request.List{ResourceType: "pods", Namespace: "default"},
@@ -53,7 +53,7 @@ func TestListResourcesEmpty(t *testing.T) {
 
 func TestListResourcesUnknownCluster(t *testing.T) {
 	s := service_tester.New(t)
-	_, e := s.Service.ListResources(
+	_, e := s.Service().ListResources(
 		context.Background(),
 		"nonexistent",
 		request.List{ResourceType: "pods", Namespace: "default"},

@@ -28,7 +28,7 @@ func TestCostWindowRunsOnServiceClock(t *testing.T) {
 		0644,
 	)
 	days := 1
-	r, e := s.RESTClient(t).GetCostWithResponse(
+	r, e := s.RESTClient().GetCostWithResponse(
 		context.Background(),
 		&client.GetCostParams{Days: &days},
 	)
@@ -58,7 +58,7 @@ func TestPermissionWindowRunsOnServiceClock(t *testing.T) {
 	c.PermissionSource = "user_temporary"
 	c.PermissionReason = "bashMiss:no-rule-match"
 	s.Peers.Client.AddToolCall("session-a", c)
-	r, f := s.Client(t).GetPermissions(
+	r, f := s.Client().GetPermissions(
 		t.Context(),
 		&client.GetPermissionsParams{},
 	)

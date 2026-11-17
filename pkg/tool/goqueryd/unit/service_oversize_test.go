@@ -7,10 +7,10 @@ import (
 	"testing"
 )
 
-func TestOversizeListsFilesOverAllowanceWorstFirst(t *testing.T) {
+func TestOversizeListsFilesOverTokenLimitWorstFirst(t *testing.T) {
 	r := oversize_tester.Report(t, "")
 	assert.String(t, "mock", r.Model)
-	assert.Integer(t, 5, r.Allowance)
+	assert.Integer(t, 5, r.TokenLimit)
 	assert.Count(t, 2, r.Files)
 	assert.String(t, "bravo.md", r.Files[0].Path)
 	assert.Integer(t, 10, r.Files[0].Worst)
@@ -29,7 +29,7 @@ func TestOversizeChunkCarriesLinesBytesAndTokens(t *testing.T) {
 
 func TestOversizeListsChunkOverEmbedderAlone(t *testing.T) {
 	r := oversize_tester.ReportWithin(t, "", math.MaxInt, 8)
-	assert.Integer(t, 8, r.EmbedAllowance)
+	assert.Integer(t, 8, r.EmbedTokenLimit)
 	assert.Count(t, 1, r.Files)
 	assert.String(t, "bravo.md", r.Files[0].Path)
 	assert.Integer(t, 10, r.Files[0].Chunks[0].EmbedTokens)

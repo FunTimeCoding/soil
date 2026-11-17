@@ -22,7 +22,6 @@ func Mount(
 			provision.Mount(n, r, mock_recorder.New(), g)
 		},
 	)
-	t.Cleanup(result.Close)
 
 	return result
 }

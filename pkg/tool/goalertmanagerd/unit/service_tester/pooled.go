@@ -2,7 +2,6 @@ package service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
@@ -17,15 +16,15 @@ import (
 
 func pooled(
 	t *testing.T,
-	instances []instance.Instance,
+	i *instance.Inventory,
 	alertmanager func(*instance.Instance) face.AlertmanagerClient,
 	prometheus func(*instance.Instance) face.PrometheusClient,
+	r *memory.Memory,
 ) *service.Service {
 	t.Helper()
 	l := logger.New(t.Context())
-	r := memory.New()
 	p := pool.New(
-		inventory.New[instance.Instance](instances...),
+		i,
 		func(i *instance.Instance) (*peered.Peered, error) {
 			a := alertmanager(i)
 			b := prometheus(i)

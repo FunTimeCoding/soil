@@ -10,11 +10,10 @@ import (
 )
 
 func TestAddImportToGrouped(t *testing.T) {
-	d := service_tester.Prepare(t, "import-grouped/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.AddImport(
+	o := service_tester.New(t, service_tester.WithFixture("import-grouped/src"))
+	r, e := o.File.AddImport(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/example.go",
 		"os",
 		"",
@@ -22,7 +21,7 @@ func TestAddImportToGrouped(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
+	source := o.Read("pkg/target/example.go")
 	assert.StringContains(t, "\"os\"", source)
 	assert.StringContains(t, "\"fmt\"", source)
 	assert.StringContains(t, "// Example formats a trimmed value.", source)
@@ -35,11 +34,10 @@ func TestAddImportToGrouped(t *testing.T) {
 }
 
 func TestAddImportToEmpty(t *testing.T) {
-	d := service_tester.Prepare(t, "import-empty/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.AddImport(
+	o := service_tester.New(t, service_tester.WithFixture("import-empty/src"))
+	r, e := o.File.AddImport(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/example.go",
 		"fmt",
 		"",
@@ -47,16 +45,15 @@ func TestAddImportToEmpty(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
+	source := o.Read("pkg/target/example.go")
 	assert.StringContains(t, "\"fmt\"", source)
 }
 
 func TestAddImportWithAlias(t *testing.T) {
-	d := service_tester.Prepare(t, "import-grouped/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.AddImport(
+	o := service_tester.New(t, service_tester.WithFixture("import-grouped/src"))
+	r, e := o.File.AddImport(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/example.go",
 		"path/filepath",
 		"fp",
@@ -64,34 +61,32 @@ func TestAddImportWithAlias(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
+	source := o.Read("pkg/target/example.go")
 	assert.StringContains(t, "fp \"path/filepath\"", source)
 }
 
 func TestRemoveImport(t *testing.T) {
-	d := service_tester.Prepare(t, "import-grouped/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.RemoveImport(
+	o := service_tester.New(t, service_tester.WithFixture("import-grouped/src"))
+	r, e := o.File.RemoveImport(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/example.go",
 		"strings",
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
+	source := o.Read("pkg/target/example.go")
 	assert.True(t, !strings.Contains(source, "\"strings\""))
 	assert.StringContains(t, "strings.TrimSpace", source)
 	assert.StringContains(t, "\"fmt\"", source)
 }
 
 func TestRemoveImportNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "import-grouped/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.RemoveImport(
+	o := service_tester.New(t, service_tester.WithFixture("import-grouped/src"))
+	r, e := o.File.RemoveImport(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/example.go",
 		"os",
 		false,
@@ -102,13 +97,16 @@ func TestRemoveImportNotFound(t *testing.T) {
 }
 
 func TestAddImportRefusesFileOutsideModule(t *testing.T) {
-	d := service_tester.Prepare(t, "import-grouped/src")
-	other := service_tester.Prepare(t, "import-grouped/src")
-	source := service_tester.ReadFixtureFile(t, other, "pkg/target/example.go")
-	r, e := service_tester.NewService(t).File.AddImport(
+	o := service_tester.New(t, service_tester.WithFixture("import-grouped/src"))
+	other := service_tester.New(
+		t,
+		service_tester.WithFixture("import-grouped/src"),
+	)
+	source := other.Read("pkg/target/example.go")
+	r, e := o.File.AddImport(
 		t.Context(),
-		d,
-		filepath.Join(other, "pkg/target/example.go"),
+		o.Directory,
+		filepath.Join(other.Directory, "pkg/target/example.go"),
 		"os",
 		"",
 		false,
@@ -116,9 +114,5 @@ func TestAddImportRefusesFileOutsideModule(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "outside the active module")
-	assert.String(
-		t,
-		source,
-		service_tester.ReadFixtureFile(t, other, "pkg/target/example.go"),
-	)
+	assert.String(t, source, other.Read("pkg/target/example.go"))
 }

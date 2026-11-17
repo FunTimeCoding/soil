@@ -22,6 +22,6 @@ func (s *Server) deliver(
 		request.To = &[]string{to}
 	}
 
-	_, e := s.Client(s.t).PostSend(s.t.Context(), request)
+	_, e := s.Client().PostSend(s.t.Context(), request)
 	assert.FatalOnError(s.t, e)
 }

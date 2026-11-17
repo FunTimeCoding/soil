@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func CrossService(t *testing.T) *service_tester.Services {
+func CrossService(t *testing.T) *service_tester.Tester {
 	t.Helper()
 	l := repository_tester.New(t)
 	l.Write("go.mod", "module example.org/lib\n")
@@ -59,5 +59,5 @@ func CrossService(t *testing.T) *service_tester.Services {
 		{Name: "lib", Directory: l.Clone},
 	}
 
-	return service_tester.InventoryServices(t, i)
+	return service_tester.New(t, service_tester.WithInventory(i))
 }

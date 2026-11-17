@@ -8,13 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/opnsense/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/option"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonClosesClientItBuilt(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.Source = func() face.OpnsenseClient { return c }
 	daemon.New(o, logger.New(t.Context()), memory.New()).Close()
@@ -22,8 +22,8 @@ func TestDaemonClosesClientItBuilt(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	before := goleak.IgnoreCurrent()
-	daemon_tester.New(t, c).Close()
+	base.New(t, c).Daemon().Close()
 	goleak.VerifyNone(t, before)
 }

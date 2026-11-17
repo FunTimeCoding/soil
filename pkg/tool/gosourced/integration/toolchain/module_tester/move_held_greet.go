@@ -9,12 +9,12 @@ import (
 
 func MoveHeldGreet(
 	t *testing.T,
-	d string,
+	o *service_tester.Tester,
 ) *output.Results {
 	t.Helper()
-	r, e := service_tester.NewService(t).Symbol.MoveMethods(
+	r, e := o.Symbol.MoveMethods(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Service",
 		[]string{"Greet"},

@@ -34,7 +34,7 @@ func (s *Service) headingFix(
 				s.reranker,
 			)[0]
 
-			if s.reranker.Count(first.Text) <= s.reranker.Allowance() {
+			if s.reranker.Count(first.Text) <= s.reranker.TokenLimit() {
 				lines = append(
 					lines,
 					strings.Count(body[:offset], stringsConstant.Unix)+1,

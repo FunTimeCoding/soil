@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestTableOverAllowanceSplitsBetweenRows(t *testing.T) {
+func TestTableOverTokenLimitSplitsBetweenRows(t *testing.T) {
 	chunks := chunk_tester.Table(t, 40)
 	assert.Count(t, 5, chunks)
 	assert.String(
@@ -48,7 +48,7 @@ func TestTableThatTipsItsWindowOverLeavesText(t *testing.T) {
 	assert.StringContains(t, "(part 2 of 2, rows 5–6 of 6)", chunks[2].Text)
 }
 
-func TestTableWithinAllowanceStaysInText(t *testing.T) {
+func TestTableWithinTokenLimitStaysInText(t *testing.T) {
 	chunks := chunk_tester.Table(t, 100)
 	assert.Count(t, 1, chunks)
 	assert.String(

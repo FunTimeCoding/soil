@@ -14,21 +14,21 @@ import (
 )
 
 func TestClientReadsDaemon(t *testing.T) {
-	c := client_tester.New(t, mock_client.New())
+	c := client_tester.New(t, mock_client.New(t))
 	_, e := c.ListLeases(context.Background(), "")
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }
 
 func TestClientAnswersRejectedHostAsValidation(t *testing.T) {
-	c := client_tester.New(t, rejecting_host.New())
+	c := client_tester.New(t, rejecting_host.New(t))
 	_, e := c.AddHost(context.Background(), client.HostRequest{}, true)
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "host rejected: ip: invalid address", e.Error())
 }
 
 func TestClientAnswersUnknownHostAsNotFound(t *testing.T) {
-	m := missing_host.New()
+	m := missing_host.New(t)
 	c := client_tester.New(t, m)
 	assert.True(
 		t,
@@ -38,7 +38,7 @@ func TestClientAnswersUnknownHostAsNotFound(t *testing.T) {
 }
 
 func TestClientAcceptsNoContentWrite(t *testing.T) {
-	c := client_tester.New(t, mock_client.New())
+	c := client_tester.New(t, mock_client.New(t))
 	assert.FatalOnError(
 		t,
 		c.SetHost(context.Background(), "alfa", client.HostRequest{}, false),

@@ -6,7 +6,7 @@ import (
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/format"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/budget"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/byte_limit"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile/completion"
@@ -105,14 +105,14 @@ func (s *Service) Profile(
 		}
 	}
 
-	b := budget.New(constant.ProfileByteBudget)
+	b := byte_limit.New(constant.ProfileByteLimit)
 
 	if notice != "" {
 		b.Open("")
-		b.Charge(notice)
+		b.Add(notice)
 	}
 
-	mark := b.Spent()
+	mark := b.Used()
 	b.Open(profile.Opening(constant.AlwaysSectionHeading))
 
 	for i := range always {
@@ -120,11 +120,11 @@ func (s *Service) Profile(
 			always[i].Children = children
 		}
 
-		b.Charge(format.AlwaysMemory(&always[i]))
+		b.Add(format.AlwaysMemory(&always[i]))
 	}
 
-	alwaysBytes := b.Spent() - mark
-	mark = b.Spent()
+	alwaysBytes := b.Used() - mark
+	mark = b.Used()
 	b.Open(profile.Opening(constant.IndexSectionHeading))
 	indexTrimmed := 0
 	var index []record.MemorySummary
@@ -155,8 +155,8 @@ func (s *Service) Profile(
 		index = append(index, m)
 	}
 
-	indexBytes := b.Spent() - mark
-	mark = b.Spent()
+	indexBytes := b.Used() - mark
+	mark = b.Used()
 	b.Open(profile.Opening(constant.CompletionSectionHeading))
 	completionsTrimmed := 0
 	var completions []*completion.Completion
@@ -183,8 +183,8 @@ func (s *Service) Profile(
 		completions = append(completions, completion.New(name, body))
 	}
 
-	completionBytes := b.Spent() - mark
-	mark = b.Spent()
+	completionBytes := b.Used() - mark
+	mark = b.Used()
 	b.Open(profile.Opening(constant.ImpressionSectionHeading))
 	impressionsTrimmed := 0
 	var impressions []record.Impression
@@ -205,8 +205,8 @@ func (s *Service) Profile(
 		}
 	}
 
-	impressionBytes := b.Spent() - mark
-	mark = b.Spent()
+	impressionBytes := b.Used() - mark
+	mark = b.Used()
 	b.Open(profile.Opening(constant.RelevantSectionHeading))
 	relevantTrimmed := 0
 	var relevant []record.SearchResult
@@ -221,7 +221,7 @@ func (s *Service) Profile(
 		relevant = append(relevant, matched[i])
 	}
 
-	relevantBytes := b.Spent() - mark
+	relevantBytes := b.Used() - mark
 	result := profile.NewResult(
 		always,
 		index,
@@ -235,7 +235,7 @@ func (s *Service) Profile(
 	}
 
 	d := detail.New()
-	d.Budget = constant.ProfileByteBudget
+	d.ByteLimit = constant.ProfileByteLimit
 	d.AlwaysBytes = alwaysBytes
 	d.IndexBytes = indexBytes
 	d.IndexTrimmed = indexTrimmed
@@ -245,7 +245,7 @@ func (s *Service) Profile(
 	d.ImpressionsTrimmed = impressionsTrimmed
 	d.RelevantBytes = relevantBytes
 	d.RelevantTrimmed = relevantTrimmed
-	d.TotalBytes = b.Spent()
+	d.TotalBytes = b.Used()
 
 	return result, d, nil
 }

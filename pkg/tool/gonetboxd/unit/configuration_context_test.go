@@ -4,10 +4,10 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"net/http"
 	"testing"
 )
@@ -15,7 +15,7 @@ import (
 func TestConfigurationContextRoundTrip(t *testing.T) {
 	x := context.Background()
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	created, e := c.CreateConfigurationContextWithResponse(
 		x,
 		client.CreateConfigurationContextRequest{
@@ -54,7 +54,7 @@ func TestConfigurationContextRoundTrip(t *testing.T) {
 
 func TestUnknownConfigurationContextIsNotFoundWithoutSentry(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.UpdateConfigurationContextWithResponse(
 		context.Background(),
 		"alfa",
@@ -67,7 +67,7 @@ func TestUnknownConfigurationContextIsNotFoundWithoutSentry(t *testing.T) {
 }
 
 func TestConfigurationContextToolsKeepAssignmentOnPayloadUpdate(t *testing.T) {
-	m := base.New(t, service_tester.NewSource(t), memory.New()).Connect(t)
+	m := base.New(t, mock_client.New(t), memory.New()).Connect(t)
 	defer m.Close()
 	m.MustCallToolNotation(
 		constant.CreateConfigurationContext,
@@ -97,7 +97,7 @@ func TestConfigurationContextToolsKeepAssignmentOnPayloadUpdate(t *testing.T) {
 }
 
 func TestConfigurationContextToolRefusesMissingPayload(t *testing.T) {
-	m := base.New(t, service_tester.NewSource(t), memory.New()).Connect(t)
+	m := base.New(t, mock_client.New(t), memory.New()).Connect(t)
 	defer m.Close()
 	text, e := m.CallToolError(
 		constant.CreateConfigurationContext,

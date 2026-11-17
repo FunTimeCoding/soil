@@ -8,15 +8,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.Organization = "test"
 	o.Host = "sentry.test"
@@ -37,14 +36,11 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 }
 
 func TestCloseClosesSentryClient(t *testing.T) {
-	c := service_tester.NewSource(t)
-	daemon_tester.New(t, c).Close()
-	assert.Integer(t, 1, c.Closed)
+	s := base.New(t)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Source.Closed)
 }
 
 func TestWaitAnswersOnceSentryAnswers(t *testing.T) {
-	assert.FatalOnError(
-		t,
-		daemon_tester.New(t, service_tester.NewSource(t)).Wait(t.Context()),
-	)
+	assert.FatalOnError(t, base.New(t).Daemon().Wait(t.Context()))
 }

@@ -1,22 +1,12 @@
 package allowlist
 
-import (
-	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/permission/allowlist/setting"
-	"os"
-)
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/permission/allowlist/setting"
 
 func Read(path string) ([]*Rule, error) {
-	b, e := os.ReadFile(path)
+	f, e := setting.Read(path)
 
 	if e != nil {
 		return nil, e
-	}
-
-	var f setting.File
-
-	if g := json.Unmarshal(b, &f); g != nil {
-		return nil, g
 	}
 
 	if f.Permissions == nil {

@@ -10,12 +10,15 @@ import (
 )
 
 func TestUnreachableInstanceFailsFastWithoutBeingAskedAgain(t *testing.T) {
-	s, clients := service_tester.New(
+	o := service_tester.New(
 		t,
-		constant.FixtureInstance,
-		constant.FixtureOtherInstance,
+		service_tester.WithInstances(
+			constant.FixtureInstance,
+			constant.FixtureOtherInstance,
+		),
 	)
-	alfa := clients[constant.FixtureInstance]
+	s := o.Service()
+	alfa := o.Alfa()
 	alfa.FailProjects(outage_tester.RefusedDial())
 	_, e := s.Projects(t.Context(), constant.FixtureInstance, "")
 	assert.True(t, unavailable.Is(e))

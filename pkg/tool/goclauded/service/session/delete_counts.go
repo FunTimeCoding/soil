@@ -1,13 +1,13 @@
 package session
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/receipt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/deletion_result"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/deletion"
 )
 
-func (s *Service) deleteCounts(r *session.Session) (*receipt.Receipt, error) {
-	result := receipt.New(r.Identifier, r.Name)
+func (s *Service) deleteCounts(r *session.Session) (*deletion_result.Result, error) {
+	result := deletion_result.New(r.Identifier, r.Name)
 
 	for _, c := range []deletion.CountTarget{
 		{Read: s.store.CountSessionEvents, Target: &result.Events},

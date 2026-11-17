@@ -12,13 +12,10 @@ import (
 )
 
 func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
-	r := service_tester.NewReranker(t)
-	r.SetAllowance(40)
-	p := service_tester.NewService(t, service_tester.NewEmbedder(t), r).Preview(
-		"results.md",
-		constant.FixtureTableDocument,
-	)
-	assert.Integer(t, 40, p.Allowance)
+	q := service_tester.New(t)
+	q.Reranker.SetTokenLimit(40)
+	p := q.Service().Preview("results.md", constant.FixtureTableDocument)
+	assert.Integer(t, 40, p.TokenLimit)
 	assert.Count(t, 5, p.Chunks)
 	assert.False(t, p.Chunks[0].Piece)
 	assert.True(t, p.Chunks[2].Piece)
@@ -27,14 +24,11 @@ func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
 }
 
 func TestPreviewCountsEachWindowForEmbedder(t *testing.T) {
-	r := service_tester.NewReranker(t)
-	r.SetAllowance(40)
-	p := service_tester.NewService(t, service_tester.NewEmbedder(t), r).Preview(
-		"alfa.md",
-		"# Alfa\n\none two three four\n",
-	)
-	assert.Integer(t, 40, p.Allowance)
-	assert.Integer(t, math.MaxInt, p.EmbedAllowance)
+	q := service_tester.New(t)
+	q.Reranker.SetTokenLimit(40)
+	p := q.Service().Preview("alfa.md", "# Alfa\n\none two three four\n")
+	assert.Integer(t, 40, p.TokenLimit)
+	assert.Integer(t, math.MaxInt, p.EmbedTokenLimit)
 	assert.Count(t, 1, p.Chunks)
 	assert.Integer(t, 6, p.Chunks[0].EmbedTokens)
 }

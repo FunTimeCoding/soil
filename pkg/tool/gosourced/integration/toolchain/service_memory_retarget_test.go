@@ -14,11 +14,10 @@ import (
 )
 
 func TestRenameSendsItsMovesToMemories(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	s, m := service_tester.WithMemory(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldName",
 		"NewName",
@@ -27,12 +26,12 @@ func TestRenameSendsItsMovesToMemories(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.Count(t, 1, m.Retargets)
-	moves := m.Retargets[0]
+	assert.Count(t, 1, o.Memory.Retargets)
+	moves := o.Memory.Retargets[0]
 	assert.Count(t, 1, moves.Paths)
 	assert.String(
 		t,
-		filepath.Join(d, "pkg/alfa/new_name.go"),
+		filepath.Join(o.Directory, "pkg/alfa/new_name.go"),
 		moves.Paths[0].New,
 	)
 	assert.Count(t, 1, moves.Symbols)
@@ -40,12 +39,15 @@ func TestRenameSendsItsMovesToMemories(t *testing.T) {
 }
 
 func TestMemoryFailurePeerCapturedIsNotCapturedAgain(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
 	p := base.New(t)
-	s, r := service_tester.WithMemoryPeer(t, p.MemoryClient(t))
-	result, e := s.Symbol.Rename(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-follow/src"),
+		service_tester.WithMemoryPeer(p.MemoryClient()),
+	)
+	result, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldName",
 		"NewName",
@@ -54,7 +56,7 @@ func TestMemoryFailurePeerCapturedIsNotCapturedAgain(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, p.Reporter.Events())
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, o.Reporter.Events())
 	assert.StringContains(
 		t,
 		"memories not retargeted",
@@ -63,12 +65,15 @@ func TestMemoryFailurePeerCapturedIsNotCapturedAgain(t *testing.T) {
 }
 
 func TestRenameCommitsWhileMemoriesAreDown(t *testing.T) {
-	d := service_tester.Prepare(t, "rename-follow/src")
-	s, m := service_tester.WithMemory(t)
-	m.Failure = unavailable.New("gomemoryd", time.Now(), "connection refused")
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
+	o.Memory.Failure = unavailable.New(
+		"gomemoryd",
+		time.Now(),
+		"connection refused",
+	)
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"OldName",
 		"NewName",
@@ -77,7 +82,10 @@ func TestRenameCommitsWhileMemoriesAreDown(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.True(t, system.FileExists(filepath.Join(d, "pkg/alfa/new_name.go")))
+	assert.True(
+		t,
+		system.FileExists(filepath.Join(o.Directory, "pkg/alfa/new_name.go")),
+	)
 	assert.StringContains(
 		t,
 		"memories not retargeted",

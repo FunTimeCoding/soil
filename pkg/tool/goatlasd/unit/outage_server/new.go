@@ -73,7 +73,6 @@ func New(
 		func(g *guard.Mux) { d.Mount(r, mock_recorder.New(), g) },
 		model_context_server.WithSignOn(),
 	)
-	t.Cleanup(result.Close)
 
 	return result, outage_tester.Guard(t, d.Workers(), peer).Unavailable
 }

@@ -14,7 +14,7 @@ import (
 func TestClientReadsUsage(t *testing.T) {
 	c := base.Module(
 		t,
-		usage_tester.Prepare(t),
+		usage_tester.Prepare(t).Directory,
 		generativeConstant.ModelContextTestToken,
 	)
 	r, e := c.GetUsage(
@@ -37,7 +37,7 @@ func TestClientReadsUsage(t *testing.T) {
 func TestClientAnswersUnknownModuleAsNotFound(t *testing.T) {
 	c := base.Module(
 		t,
-		usage_tester.Prepare(t),
+		usage_tester.Prepare(t).Directory,
 		generativeConstant.ModelContextTestToken,
 	)
 	_, e := c.GetUsage(
@@ -54,7 +54,7 @@ func TestClientAnswersUnknownModuleAsNotFound(t *testing.T) {
 func TestClientAnswersUnknownTypeAsRefused(t *testing.T) {
 	c := base.Module(
 		t,
-		usage_tester.Prepare(t),
+		usage_tester.Prepare(t).Directory,
 		generativeConstant.ModelContextTestToken,
 	)
 	_, e := c.GetUsage(

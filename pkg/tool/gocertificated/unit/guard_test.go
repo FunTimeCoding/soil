@@ -6,8 +6,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	s := base.New(t)
-	c := s.Server
+	c := base.New(t).Served()
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, "/api/certificates")
 	c.VerifyFavicon(t)

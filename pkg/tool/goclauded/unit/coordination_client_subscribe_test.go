@@ -17,9 +17,9 @@ import (
 
 func TestClientSubscribeDeliversParsedEvents(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "client topic")
-	events, stop := s.Client(t).Subscribe(
+	events, stop := s.Client().Subscribe(
 		"consumer",
 		[]string{constant.Announce},
 		logger.New(context.Background()),
@@ -34,13 +34,13 @@ func TestClientSubscribeDeliversParsedEvents(t *testing.T) {
 
 func TestClientSubscribeFiltersKinds(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "ignored topic")
 	a.MustCallTool(
 		constant.Label,
 		map[string]any{constant.Key: "colour", constant.Value: "green"},
 	)
-	events, stop := s.Client(t).Subscribe(
+	events, stop := s.Client().Subscribe(
 		"consumer",
 		[]string{constant.Label},
 		logger.New(context.Background()),
@@ -54,9 +54,9 @@ func TestClientSubscribeFiltersKinds(t *testing.T) {
 
 func TestClientSubscribeResumesAfterStop(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "earlier topic")
-	first, stop := s.Client(t).Subscribe(
+	first, stop := s.Client().Subscribe(
 		"consumer",
 		[]string{constant.Announce},
 		logger.New(context.Background()),
@@ -65,7 +65,7 @@ func TestClientSubscribeResumesAfterStop(t *testing.T) {
 	event_tester.NextStream(t, first)
 	stop()
 	a.Announce(a.Name(), "later topic")
-	second, halt := s.Client(t).Subscribe(
+	second, halt := s.Client().Subscribe(
 		"consumer",
 		[]string{constant.Announce},
 		logger.New(context.Background()),
@@ -78,7 +78,7 @@ func TestClientSubscribeResumesAfterStop(t *testing.T) {
 
 func TestClientSubscribeClosesItsChannelOnStop(t *testing.T) {
 	s := base.New(t)
-	events, stop := s.Client(t).Subscribe(
+	events, stop := s.Client().Subscribe(
 		"consumer",
 		[]string{constant.Announce},
 		logger.New(context.Background()),

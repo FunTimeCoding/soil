@@ -40,7 +40,7 @@ func TestConflictWithoutConflictAnswerIsCaptured(t *testing.T) {
 
 func TestRejectedCreateIsQuietToolFailure(t *testing.T) {
 	r := memory.New()
-	s := base.New(t, refusing_source.New(validation.New("slug: exists")), r)
+	s := base.New(t, refusing_source.New(t, validation.New("slug: exists")), r)
 	c := s.Connect(t)
 	defer c.Close()
 	assert.StringContains(

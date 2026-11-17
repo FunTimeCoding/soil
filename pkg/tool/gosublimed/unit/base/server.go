@@ -4,10 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/sublime/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/daemon"
+	"testing"
 )
 
 type Server struct {
-	MockClient *mock_client.Client
-	Reporter   *memory.Memory
-	*model_context_server.Server
+	Source   *mock_client.Client
+	Reporter *memory.Memory
+	daemon   *daemon.Daemon
+	served   *model_context_server.Server
+	t        *testing.T
 }

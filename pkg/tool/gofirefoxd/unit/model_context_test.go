@@ -3,27 +3,29 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/base"
 	"testing"
 )
 
 func TestModelContextTabs(t *testing.T) {
-	o := model_context_tester.NewTabbed(t)
-	assert.Count(t, 16, o.Client.ListTools())
+	s := base.New(t)
+	s.SeedTab()
+	c := s.Tools()
+	assert.Count(t, 16, c.ListTools())
 	assert.StringContains(
 		t,
 		"Example",
-		o.Client.MustCallTool(constant.ListTabs, map[string]any{}),
+		c.MustCallTool(constant.ListTabs, map[string]any{}),
 	)
 	assert.StringContains(
 		t,
 		"example.com",
-		o.Client.MustCallTool(constant.ReadTab, map[string]any{"tab_id": 100}),
+		c.MustCallTool(constant.ReadTab, map[string]any{"tab_id": 100}),
 	)
 	assert.StringContains(
 		t,
 		"tab_id",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.CreateTab,
 			map[string]any{"url": "https://test.com"},
 		),
@@ -31,16 +33,18 @@ func TestModelContextTabs(t *testing.T) {
 	assert.StringContains(
 		t,
 		"closed",
-		o.Client.MustCallTool(constant.CloseTab, map[string]any{"tab_id": 100}),
+		c.MustCallTool(constant.CloseTab, map[string]any{"tab_id": 100}),
 	)
 }
 
 func TestModelContextNavigation(t *testing.T) {
-	o := model_context_tester.NewTabbed(t)
+	s := base.New(t)
+	s.SeedTab()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"navigated to",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.Navigate,
 			map[string]any{"tab_id": 100, "url": "https://other.com"},
 		),
@@ -48,15 +52,12 @@ func TestModelContextNavigation(t *testing.T) {
 	assert.StringContains(
 		t,
 		"navigated back",
-		o.Client.MustCallTool(
-			constant.NavigateBack,
-			map[string]any{"tab_id": 100},
-		),
+		c.MustCallTool(constant.NavigateBack, map[string]any{"tab_id": 100}),
 	)
 	assert.StringContains(
 		t,
 		"tab_id",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.WaitFor,
 			map[string]any{"tab_id": 100, "selector": "#results"},
 		),
@@ -64,11 +65,13 @@ func TestModelContextNavigation(t *testing.T) {
 }
 
 func TestModelContextGroups(t *testing.T) {
-	o := model_context_tester.NewTabbed(t)
+	s := base.New(t)
+	s.SeedTab()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"grouped into group",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.GroupTabs,
 			map[string]any{
 				"tab_ids": []int{100},
@@ -80,7 +83,7 @@ func TestModelContextGroups(t *testing.T) {
 	assert.StringContains(
 		t,
 		"group updated",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.UpdateGroup,
 			map[string]any{"group_id": 1, "title": "deploy"},
 		),
@@ -88,19 +91,18 @@ func TestModelContextGroups(t *testing.T) {
 	assert.StringContains(
 		t,
 		"ungrouped",
-		o.Client.MustCallTool(
-			constant.UngroupTab,
-			map[string]any{"tab_id": 100},
-		),
+		c.MustCallTool(constant.UngroupTab, map[string]any{"tab_id": 100}),
 	)
 }
 
 func TestModelContextPage(t *testing.T) {
-	o := model_context_tester.NewTabbed(t)
+	s := base.New(t)
+	s.SeedTab()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"document.title",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.Evaluate,
 			map[string]any{"tab_id": 100, "expression": "document.title"},
 		),
@@ -108,7 +110,7 @@ func TestModelContextPage(t *testing.T) {
 	assert.StringContains(
 		t,
 		"#submit",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.Click,
 			map[string]any{"tab_id": 100, "selector": "#submit"},
 		),
@@ -116,7 +118,7 @@ func TestModelContextPage(t *testing.T) {
 	assert.StringContains(
 		t,
 		"operator",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.Fill,
 			map[string]any{
 				"tab_id":   100,
@@ -128,19 +130,18 @@ func TestModelContextPage(t *testing.T) {
 	assert.StringContains(
 		t,
 		"firefox_100.png",
-		o.Client.MustCallTool(
-			constant.Screenshot,
-			map[string]any{"tab_id": 100},
-		),
+		c.MustCallTool(constant.Screenshot, map[string]any{"tab_id": 100}),
 	)
 }
 
 func TestModelContextDownloads(t *testing.T) {
-	o := model_context_tester.NewTabbed(t)
+	s := base.New(t)
+	s.SeedTab()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"download_id",
-		o.Client.MustCallTool(
+		c.MustCallTool(
 			constant.DownloadFile,
 			map[string]any{"url": "https://example.com/paper.pdf"},
 		),
@@ -148,6 +149,6 @@ func TestModelContextDownloads(t *testing.T) {
 	assert.StringContains(
 		t,
 		"in_progress",
-		o.Client.MustCallTool(constant.DownloadStatus, map[string]any{}),
+		c.MustCallTool(constant.DownloadStatus, map[string]any{}),
 	)
 }

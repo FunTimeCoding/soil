@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -21,17 +20,11 @@ import (
 )
 
 func TestRefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.FailEmbedding(errors.New("embedder exploded"))
-	r := memory.New()
-	c := client_tester.Rest(
-		t,
-		base.Serve(
-			t,
-			service_tester.NewOption(t, m, service_tester.NewReranker(t)),
-			r,
-		),
-	)
+	r := q.Reporter
+	c := client_tester.GeneratedClient(t, base.Serve(t, q))
 	answer, e := c.GetSearchWithResponse(
 		t.Context(),
 		&client.GetSearchParams{Query: "zulu"},
@@ -42,15 +35,12 @@ func TestRefusedSearchEmbeddingIsReportedOnceBySurface(t *testing.T) {
 }
 
 func TestWorkerReportsUnexpectedEmbeddingFailure(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.FailEmbedding(errors.New("embedder exploded"))
-	r := memory.New()
+	r := q.Reporter
 	l := logger.New(context.Background())
-	v := service_tester.New(
-		t,
-		service_tester.NewOption(t, m, service_tester.NewReranker(t)),
-		r,
-	)
+	v := q.Service()
 	v.MustPushDocument(
 		t.Context(),
 		"notes",
@@ -73,15 +63,12 @@ func TestWorkerReportsUnexpectedEmbeddingFailure(t *testing.T) {
 }
 
 func TestWorkerLeavesQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
-	m := service_tester.NewEmbedder(t)
+	q := service_tester.New(t)
+	m := q.Embedder
 	m.FailEmbedding(validation.New("input too long"))
-	r := memory.New()
+	r := q.Reporter
 	l := logger.New(context.Background())
-	v := service_tester.New(
-		t,
-		service_tester.NewOption(t, m, service_tester.NewReranker(t)),
-		r,
-	)
+	v := q.Service()
 	directory := t.TempDir()
 	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("notes", directory, constant.DefaultGlob)

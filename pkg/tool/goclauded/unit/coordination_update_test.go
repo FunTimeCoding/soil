@@ -10,7 +10,7 @@ import (
 
 func TestUpdateToolReachesSessionActivity(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "first topic")
 	a.CheckLive()
 	a.MustCallTool(
@@ -31,7 +31,7 @@ func TestUpdateToolReachesSessionActivity(t *testing.T) {
 
 func TestUpdateMultiple(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "step one")
 	a.CheckLive()
 	a.MustCallTool(
@@ -58,7 +58,7 @@ func TestUpdateMultiple(t *testing.T) {
 
 func TestUpdateHistoryEvents(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "initial")
 	a.MustCallTool(
 		constant.Update,
@@ -73,7 +73,7 @@ func TestUpdateHistoryEvents(t *testing.T) {
 
 func TestUpdateBeforeAnnounce(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	assert.StringContains(
 		t,
 		"announce first",

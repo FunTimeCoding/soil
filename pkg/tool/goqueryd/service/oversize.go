@@ -15,15 +15,15 @@ func (s *Service) Oversize(collection string) (*oversize.Report, error) {
 	result := oversize.New(
 		s.reranker.Name(),
 		s.reranker.SequenceLength(),
-		s.reranker.Allowance(),
-		s.counter.Allowance(),
+		s.reranker.TokenLimit(),
+		s.counter.TokenLimit(),
 	)
 
 	for _, d := range documents {
 		if f := s.oversizeFile(
 			d,
-			result.Allowance,
-			result.EmbedAllowance,
+			result.TokenLimit,
+			result.EmbedTokenLimit,
 		); f != nil {
 			result.Files = append(result.Files, f)
 		}

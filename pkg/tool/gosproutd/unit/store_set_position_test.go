@@ -8,7 +8,7 @@ import (
 
 func TestSetPositionMoveToTop(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	seeds := s.Store.Seeds()
 	s.Store.SetPosition(seeds[2].Identifier, 1)
 	after := s.Store.Seeds()
@@ -19,7 +19,7 @@ func TestSetPositionMoveToTop(t *testing.T) {
 
 func TestSetPositionMoveToBottom(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	seeds := s.Store.Seeds()
 	s.Store.SetPosition(seeds[0].Identifier, 3)
 	after := s.Store.Seeds()
@@ -30,7 +30,7 @@ func TestSetPositionMoveToBottom(t *testing.T) {
 
 func TestSetPositionMoveToMiddle(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	seeds := s.Store.Seeds()
 	s.Store.SetPosition(seeds[2].Identifier, 2)
 	after := s.Store.Seeds()
@@ -41,7 +41,7 @@ func TestSetPositionMoveToMiddle(t *testing.T) {
 
 func TestSetPositionSamePositionIsNoOp(t *testing.T) {
 	s := store_tester.New(t)
-	store_tester.ThreeSeeds(s)
+	s.ThreeSeeds()
 	seeds := s.Store.Seeds()
 	s.Store.SetPosition(seeds[1].Identifier, 2)
 	after := s.Store.Seeds()

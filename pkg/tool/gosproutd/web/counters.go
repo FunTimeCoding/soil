@@ -21,7 +21,7 @@ func (s *Server) counters(
 		counter_page.Note(),
 		html.Div(
 			extended.StreamSwap(constant.CounterEvent),
-			counter_page.Table(s.service.Tallies()),
+			counter_page.Table(s.service.SessionStatistics()),
 		),
 	)
 }

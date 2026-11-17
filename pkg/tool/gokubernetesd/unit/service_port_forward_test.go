@@ -28,17 +28,17 @@ func TestPortForwardRefusesIncompleteRequest(t *testing.T) {
 			TargetPort:   80,
 		},
 	} {
-		_, e := v.Service.PortForward(t.Context(), "test", q)
+		_, e := v.Service().PortForward(t.Context(), "test", q)
 		assert.True(t, validation.Is(e))
 	}
 
-	assert.Count(t, 0, v.Service.PortForwards())
+	assert.Count(t, 0, v.Service().PortForwards())
 }
 
 func TestStoppingUnknownPortForwardIsNotFound(t *testing.T) {
 	assert.True(
 		t,
-		not_found.Is(service_tester.New(t).Service.StopPortForward("bravo")),
+		not_found.Is(service_tester.New(t).Service().StopPortForward("bravo")),
 	)
 }
 

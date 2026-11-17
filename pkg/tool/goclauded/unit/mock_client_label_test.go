@@ -9,8 +9,7 @@ import (
 )
 
 func TestMockLeavesHeldLabelAloneAsClientDoes(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.Join("alfa", 3, time.Now())
 	claimed, e := c.ClaimLabel(
 		"alfa",

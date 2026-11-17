@@ -2,13 +2,13 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_interface_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestWebInterface(t *testing.T) {
-	o := web_interface_tester.New(t)
+	o := base.New(t)
 	o.AssertStatus(http.StatusOK, constant.HeatmapPath)
 	o.AssertStatus(http.StatusOK, constant.EventsPath)
 }

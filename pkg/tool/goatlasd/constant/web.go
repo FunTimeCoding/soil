@@ -35,7 +35,7 @@ const (
 	CarriesHeading   = "Runs here"
 	NetworkHeading   = "Seen on the network"
 	UnclaimedHeading = "Unclaimed"
-	NothingCarried   = "Nothing attests this machine."
+	NothingCarried   = "No source has seen anything running here."
 	NothingSeen      = "No lease carries this machine."
 	PlaceUnknown     = "No such place in the atlas."
 	NothingUnclaimed = "Every host on the network is in the inventory."

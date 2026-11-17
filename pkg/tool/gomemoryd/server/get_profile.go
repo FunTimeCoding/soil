@@ -143,7 +143,7 @@ func (s *Server) GetProfile(
 
 	if d != nil {
 		response.Detail = &server.ProfileDetail{
-			Budget:             d.Budget,
+			ByteLimit:          d.ByteLimit,
 			AlwaysBytes:        d.AlwaysBytes,
 			IndexBytes:         d.IndexBytes,
 			IndexTrimmed:       d.IndexTrimmed,

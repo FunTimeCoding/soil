@@ -6,9 +6,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	s := base.New(t)
-	defer s.Close()
-	c := s.ContextServer
+	c := base.New(t).Served()
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, "/api/status")
 	c.VerifyGuarded(t, "/api/secrets")

@@ -69,7 +69,7 @@ type ListPlacementsParams struct {
 	// Place Restrict to placements on this device or virtual machine.
 	Place *string `form:"place,omitempty" json:"place,omitempty"`
 
-	// Source Restrict to placements attested by this source.
+	// Source Restrict to placements seen by this source.
 	Source *string `form:"source,omitempty" json:"source,omitempty"`
 
 	// Package Restrict to placements carrying this package.
@@ -600,12 +600,12 @@ var swaggerSpec = []string{
 	"R0ugYNG9TkfroyOkpScB6aPl2s4rjo5esKKMIQihF06lyDwqgs+H3mDgYQLfnSSCALSEXdMpYg3K/UGi",
 	"hsh4Xq+iq+4OsEGWolvrZpgCWq7j3RwV1ypEq6435MfRZDSJANGDU97KUp6nozgxXCWexsrbsd8MYzqa",
 	"QxrKSL5ii+7CyFJ+t4Evt8+iB1INMFCQ5c2TNBA0Wc858hXEEmgWjGLrXKATXNkgDCytBoEklpZ4oWrR",
-	"KF1ZByMZU5OlfFgArTb9WmYuY0WSRPdW+kgIihkCgxHTVcaSSRkK3FH29shaEa2sm+ewrWQNJtwq2qHA",
-	"t6lZ0opKvJ1NJnkZOG51VXlfW51IHN+FrBdbf5ahSYb/E8xkKf8bb/fhuF2G461Or7tGVERqlftwP/Nt",
-	"gxQCyQDlOqciCK7AiaSN+TNmOopeP52I+xDc/cXdA/FnBVtSRGAkEBoXtREOWUxBECgzipbrYmc4jhiM",
-	"dnjfg4+judjpOr/DTYOBRY3KgBEzS4H/BR5Cu5oOU3HdvTpBouJuCoIrxYIgYL2EeOpQWBf/ypBWIovv",
-	"0LgunK6VbbJqPx/Ybq8clooMIsdPMoHPxfLNIvkuitH9QhzRpF9TznHP5d0AwgE/It0P6cfmL+LvNOym",
-	"BQ/363r9OwAA//8=",
+	"KF1ZByMZU5OlfFgArTb9WmYuY0WSRPdW+kgIsaZiuso4MiFDQTu63h5VK6KVdfMctpWrwWRbNTsU+DY1",
+	"SlpPibOzySQvAsetpirva6sTgeO7kLVi688yNMnwf4KZLOV/4+0uHLeLcLzV6HXXhIpIrXIP7me+bY5C",
+	"IBkgMLHOqQiCK3Ai6WL+jJmOotdPJ+I+BHd/afdA/FnBlhQRGAmExkVthEMWUxAEyoyi5brYGYwjhqId",
+	"3Pfg42gudrrO73DTYGBRozJgxMxS4H+Bh9CupcNUXHevTpCnuJeC4EqxIAhYLyGeOhTWxT8ypJXIwjs0",
+	"rguna2WbrNjPB7bbKYelIoPI8ZNM4HOhfLNAvotidL8PRzTp15Rz0uO0F0A44Eek+yH92PxB/J2G3bTg",
+	"4X5dr38HAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -33,8 +33,11 @@ run says so in one line on stderr when that code changed since, and
 `--fix`, and gocheck printing one diff of what golint and gofix would change.
 goanalyze checks the code as it would be after those fixes, with its lines
 translated back to the files on disk. A green check means `task lint` has
-nothing to change. Use it to look; fix with `task lint`. `REACH=own` narrows it
-to what the current session changed, `REACH=<session>` to what a named one did:
+nothing to change. Use it to look; fix with `task lint`.
+`task lint-check REACH=own` narrows it to what the current session changed, and
+`REACH=<session>` to what a named one did - an argument after the task name,
+never a variable set in front of it, which the permission policy reads as too
+complex to allow:
 `goreach` reads the session's transcript - the files its edit tools wrote and
 the ones gosourced reports - keeps those git still sees changed, and prints the
 directories they reach, each changed package and every package importing it,

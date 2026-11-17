@@ -8,9 +8,10 @@ import (
 )
 
 func TestDeviceCarriesItsLabels(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	_, e := s.SetDeviceLabel("core", "rack", "a1")
 	assert.FatalOnError(t, e)
 	d, labels, f := s.Device("core")
@@ -22,10 +23,11 @@ func TestDeviceCarriesItsLabels(t *testing.T) {
 }
 
 func TestDevicesGroupLabelsByDevice(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	core := c.SeedDevice("core")
 	edge := c.SeedDevice("edge")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	_, e := s.SetDeviceLabel("edge", "rack", "b2")
 	assert.FatalOnError(t, e)
 	devices, grouped, f := s.Devices("")
@@ -37,19 +39,21 @@ func TestDevicesGroupLabelsByDevice(t *testing.T) {
 }
 
 func TestDevicesQueryNarrows(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
 	c.SeedDevice("edge")
-	devices, _, e := service_tester.Service(t, c).Devices("ed")
+	devices, _, e := o.Service().Devices("ed")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, devices)
 	assert.String(t, "edge", devices[0].Name)
 }
 
 func TestRemoveDeviceLabel(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("core")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	_, e := s.SetDeviceLabel("core", "rack", "a1")
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(t, s.RemoveDeviceLabel("core", "rack"))
@@ -59,10 +63,7 @@ func TestRemoveDeviceLabel(t *testing.T) {
 }
 
 func TestDeviceLabelRefusesUnknownDevice(t *testing.T) {
-	_, e := service_tester.Service(
-		t,
-		service_tester.NewSource(t),
-	).SetDeviceLabel(
+	_, e := service_tester.New(t).Service().SetDeviceLabel(
 		"missing",
 		"rack",
 		"a1",
@@ -72,9 +73,10 @@ func TestDeviceLabelRefusesUnknownDevice(t *testing.T) {
 }
 
 func TestVirtualMachineCarriesItsLabels(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedVirtualMachine("alfa")
-	s := service_tester.Service(t, c)
+	s := o.Service()
 	_, e := s.SetVirtualLabel("alfa", "owner", "ops")
 	assert.FatalOnError(t, e)
 	m, labels, f := s.VirtualMachine("alfa")

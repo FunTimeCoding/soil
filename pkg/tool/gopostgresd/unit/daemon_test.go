@@ -2,21 +2,23 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/unit/service_tester"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestClosingDaemonClosesEveryInstanceClient(t *testing.T) {
-	d, clients := daemon_tester.New(t, "alfa", "bravo")
-	d.Close()
-	assert.Integer(t, 1, clients["alfa"].Closed)
-	assert.Integer(t, 1, clients["bravo"].Closed)
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Alfa().Closed)
+	assert.Integer(t, 1, s.Bravo().Closed)
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
 	before := goleak.IgnoreCurrent()
-	d, _ := daemon_tester.New(t, "alfa", "bravo")
+	d := s.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {
@@ -32,6 +34,6 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 }
 
 func TestDaemonHandsOneGuardPerInstanceToLifecycle(t *testing.T) {
-	d, _ := daemon_tester.New(t, "alfa", "bravo")
-	assert.Count(t, 2, d.Workers())
+	s := base.New(t, service_tester.WithInstances("alfa", "bravo"))
+	assert.Count(t, 2, s.Daemon().Workers())
 }

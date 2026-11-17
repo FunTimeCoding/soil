@@ -2,34 +2,41 @@ package service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_embedder"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
+	"path/filepath"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	o *option.Query,
-	r face.Reporter,
-) *service.Service {
+	o ...Option,
+) *Tester {
 	t.Helper()
-	l := logger.New(t.Context())
-	d := connection.New(l, o.LitePath)
-	t.Cleanup(func() { errors.PanicClose(d) })
-	m := o.Embedder()
+	m := mock_embedder.New()
 	t.Cleanup(m.Close)
-	g := peer.New(constant.EmbedderPeer, o.EmbedTarget, m, l, r)
-	t.Cleanup(g.Close)
-	a := o.Reranker()
-	t.Cleanup(func() { errors.LogClose(a) })
-	c := o.EmbedCounter()
-	t.Cleanup(func() { errors.LogClose(c) })
+	a := mock_reranker.New()
+	t.Cleanup(func() { errors.PanicClose(a) })
+	c := mock_reranker.New()
+	t.Cleanup(func() { errors.PanicClose(c) })
+	result := &Tester{
+		Embedder:   m,
+		Reranker:   a,
+		Counter:    c,
+		Reporter:   memory.New(),
+		Path:       filepath.Join(t.TempDir(), "goqueryd.db"),
+		EmbedModel: constant.NomicEmbedText.Name,
+		embedder:   m,
+		reranker:   a,
+		counter:    c,
+		t:          t,
+	}
 
-	return service.New(o.EmbedModel, store.New(d, o.EmbedModel), m, g, a, c)
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

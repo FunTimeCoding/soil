@@ -17,13 +17,14 @@ import (
 )
 
 func TestWorkerExportsEachObjectsStatus(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.SeedDevice("alfa").Status = "active"
 	c.SeedDevice("bravo").Status = "offline"
 	c.SeedVirtualMachine("charlie").Status = "offline"
 	y := prometheus.NewRegistry()
 	w := worker.New(
-		service_tester.Service(t, c).Intents,
+		o.Service().Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		y,
@@ -50,12 +51,13 @@ netbox_status{kind="virtual_machine",name="charlie",status="offline"} 1
 }
 
 func TestChangedStatusLeavesNoStaleSeries(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	d := c.SeedDevice("alfa")
 	d.Status = "offline"
 	y := prometheus.NewRegistry()
 	w := worker.New(
-		service_tester.Service(t, c).Intents,
+		o.Service().Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		y,
@@ -82,11 +84,12 @@ netbox_status{kind="device",name="alfa",status="active"} 1
 }
 
 func TestUnavailableNetboxIsOnlyLogged(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.Failure = errors.New("netbox answered nonsense")
 	r := memory.New()
 	w := worker.New(
-		service_tester.Service(t, c).Intents,
+		o.Service().Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		prometheus.NewRegistry(),
@@ -101,11 +104,12 @@ func TestUnavailableNetboxIsOnlyLogged(t *testing.T) {
 }
 
 func TestQuietFailureIsOnlyLogged(t *testing.T) {
-	c := service_tester.NewSource(t)
+	o := service_tester.New(t)
+	c := o.Source
 	c.Failure = not_found.Format("no devices endpoint")
 	r := memory.New()
 	w := worker.New(
-		service_tester.Service(t, c).Intents,
+		o.Service().Intents,
 		constant.IntentInterval,
 		logger.New(t.Context()),
 		prometheus.NewRegistry(),

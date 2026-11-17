@@ -6,17 +6,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/types/path_move"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/module_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/rewrite_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestRetargetReferencesFollowsHandMove(t *testing.T) {
-	d := module_tester.HandMoved(t)
-	s, m := service_tester.WithMemory(t)
-	r, e := s.Reference.RetargetReferences(
+	o := module_tester.HandMoved(t)
+	r, e := o.Reference.RetargetReferences(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*path_move.Move{
 			path_move.New("pkg/alfa/old_name.go", "pkg/alfa/renamed.go"),
 		},
@@ -24,24 +22,20 @@ func TestRetargetReferencesFollowsHandMove(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
+	assert.String(t, "See `pkg/alfa/renamed.go`.\n", o.Read("doc/note.md"))
+	assert.Count(t, 1, o.Memory.Retargets)
 	assert.String(
 		t,
-		"See `pkg/alfa/renamed.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
-	assert.Count(t, 1, m.Retargets)
-	assert.String(
-		t,
-		filepath.Join(d, "pkg/alfa/renamed.go"),
-		m.Retargets[0].Paths[0].New,
+		filepath.Join(o.Directory, "pkg/alfa/renamed.go"),
+		o.Memory.Retargets[0].Paths[0].New,
 	)
 }
 
 func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
-	d := module_tester.HandMoved(t)
-	r, e := service_tester.NewService(t).Reference.RetargetReferences(
+	o := module_tester.HandMoved(t)
+	r, e := o.Reference.RetargetReferences(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*path_move.Move{
 			path_move.New("pkg/alfa/old_name.go", "pkg/alfa/renamed.go"),
 		},
@@ -49,18 +43,14 @@ func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		"See `pkg/alfa/old_name.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "See `pkg/alfa/old_name.go`.\n", o.Read("doc/note.md"))
 }
 
 func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
-	d := module_tester.HandMoved(t)
-	r, e := service_tester.NewService(t).Reference.RetargetReferences(
+	o := module_tester.HandMoved(t)
+	r, e := o.Reference.RetargetReferences(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*path_move.Move{path_move.New("../elsewhere.md", "doc/here.md")},
 		false,
 	)
@@ -74,10 +64,10 @@ func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
 }
 
 func TestRetargetReferencesSaysWhenNothingCitesMove(t *testing.T) {
-	d := module_tester.HandMoved(t)
-	r, e := service_tester.NewService(t).Reference.RetargetReferences(
+	o := module_tester.HandMoved(t)
+	r, e := o.Reference.RetargetReferences(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*path_move.Move{
 			path_move.New("pkg/alfa/pair.go", "pkg/alfa/couple.go"),
 		},

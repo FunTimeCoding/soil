@@ -11,7 +11,10 @@ import (
 
 func TestDiffSymbolsComparesHeadWithIndex(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	v := service_tester.InventoryServices(t, service_tester.Inventory(r.Clone))
+	v := service_tester.New(
+		t,
+		service_tester.WithInventory(service_tester.Inventory(r.Clone)),
+	)
 	result, e := v.Diff.DiffSymbols("echo", "", "")
 	assert.FatalOnError(t, e)
 	assert.Strings(
@@ -26,7 +29,10 @@ func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
 	r.Commit("bravo")
 	r.Write("alfa.go", "package alfa\n\nfunc Charlie() int {\n\treturn 3\n}\n")
 	r.Commit("charlie")
-	v := service_tester.InventoryServices(t, service_tester.Inventory(r.Clone))
+	v := service_tester.New(
+		t,
+		service_tester.WithInventory(service_tester.Inventory(r.Clone)),
+	)
 	result, e := v.Diff.DiffSymbols("echo", "HEAD~2", "HEAD")
 	assert.FatalOnError(t, e)
 	assert.Strings(
@@ -38,7 +44,10 @@ func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
 
 func TestDiffSymbolsRefusesUnknownModuleOrRevision(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	v := service_tester.InventoryServices(t, service_tester.Inventory(r.Clone))
+	v := service_tester.New(
+		t,
+		service_tester.WithInventory(service_tester.Inventory(r.Clone)),
+	)
 	_, e := v.Diff.DiffSymbols("foxtrot", "", "")
 	assert.True(t, not_found.Is(e))
 	_, f := v.Diff.DiffSymbols("echo", "nowhere", "")

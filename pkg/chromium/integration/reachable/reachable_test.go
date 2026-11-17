@@ -17,7 +17,7 @@ func TestBrowserAndMockHoldChromiumSource(t *testing.T) {
 
 	for _, f := range []face.ChromiumSource{
 		browser.New(s.Client),
-		mock_client.New(),
+		mock_client.New(t),
 	} {
 		assert.NotNil(t, f)
 	}

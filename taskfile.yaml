@@ -13,7 +13,7 @@ tasks:
       exit $status
     silent: true
   lint-check:
-    desc: 'task lint without writing; REACH=own or REACH=<session> narrows it to what a session changed'
+    desc: 'task lint without writing; task lint-check REACH=own, or REACH=<session>, narrows it to what a session changed'
     cmds:
     - |
       status=0

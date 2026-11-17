@@ -12,7 +12,6 @@ func TestClientAndItsMockShareFace(t *testing.T) {
 	c, e := postgres.New("postgres://alfa:bravo@127.0.0.1:1/charlie")
 	assert.FatalOnError(t, e)
 	t.Cleanup(c.Close)
-	m := mock_client.New()
-	t.Cleanup(m.Close)
+	m := mock_client.New(t)
 	assert.Count(t, 2, []face.PostgresClient{c, m})
 }

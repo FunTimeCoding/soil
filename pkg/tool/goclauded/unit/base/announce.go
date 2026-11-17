@@ -12,7 +12,7 @@ func (s *Server) Announce(
 	s.t.Helper()
 	assert.FatalOnError(
 		s.t,
-		s.Client(s.t).PostAnnounce(
+		s.Client().PostAnnounce(
 			s.t.Context(),
 			client.PostAnnounceJSONRequestBody{Callsign: name, Topic: topic},
 		),

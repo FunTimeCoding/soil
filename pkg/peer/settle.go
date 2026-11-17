@@ -2,14 +2,14 @@ package peer
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
 )
 
 func (g *Guard) settle(
 	trial bool,
 	e error,
 ) (*edge.Edge, error) {
-	crossed, refused := g.reacher.Triage(g.name, e)
+	crossed, refused := g.outages.Triage(g.name, e)
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 
@@ -20,7 +20,7 @@ func (g *Guard) settle(
 	switch {
 	case refused != nil:
 		if trial {
-			crossed = g.reacher.Succeed(g.name)
+			crossed = g.outages.Succeed(g.name)
 			g.served = false
 		}
 	case unavailable.Is(e):

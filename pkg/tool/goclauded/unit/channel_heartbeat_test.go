@@ -12,9 +12,9 @@ import (
 )
 
 func TestQuietChannelNeverStalls(t *testing.T) {
-	s := base.NewWithHold(t, constant.FixtureChannelHold)
+	s := base.New(t, base.WithHold(constant.FixtureChannelHold))
 	r := s.Check("session-1")
-	c := s.Client(t)
+	c := s.Client()
 	server, k := channel_tester.Sink()
 	failures := 0
 
@@ -28,10 +28,10 @@ func TestQuietChannelNeverStalls(t *testing.T) {
 }
 
 func TestQuietChannelStillDeliversAfterHolds(t *testing.T) {
-	s := base.NewWithHold(t, constant.FixtureChannelHold)
+	s := base.New(t, base.WithHold(constant.FixtureChannelHold))
 	r1 := s.Check("session-1")
 	r2 := s.Store.EnsureSession("session-2")
-	c := s.Client(t)
+	c := s.Client()
 	server, k := channel_tester.Sink()
 	failures := 0
 
@@ -52,11 +52,11 @@ func TestQuietChannelStillDeliversAfterHolds(t *testing.T) {
 }
 
 func TestCallsignWaitOutlastsReleasedHolds(t *testing.T) {
-	s := base.NewWithHold(t, constant.FixtureChannelHold)
+	s := base.New(t, base.WithHold(constant.FixtureChannelHold))
 	r := s.Check("session-1")
 	s.Store.Advance(time.Minute)
 	since := s.Store.Clock()()
-	c := s.Client(t)
+	c := s.Client()
 	result := make(chan string, 1)
 	go func() {
 		result <- goclaude.AwaitCallsign(

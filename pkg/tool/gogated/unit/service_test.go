@@ -15,60 +15,57 @@ import (
 
 func TestOnlySuperUserIsAdministrator(t *testing.T) {
 	b := base.New(t)
-	row, e := b.Store.UserByMail(constant.FixtureMail)
+	row, e := b.Store().UserByMail(constant.FixtureMail)
 	assert.FatalOnError(t, e)
-	assert.True(t, base.Administrator(t, b, row.Identifier))
-	other, f := b.Store.CreateDirectoryUser(
+	assert.True(t, b.Administrator(row.Identifier))
+	other, f := b.Store().CreateDirectoryUser(
 		"unique-9",
 		"other",
 		"other@example.test",
 		"Other",
 	)
 	assert.FatalOnError(t, f)
-	assert.False(t, base.Administrator(t, b, other.Identifier))
-	assert.False(t, base.Administrator(t, b, "missing"))
-	assert.False(t, base.Administrator(t, b, ""))
+	assert.False(t, b.Administrator(other.Identifier))
+	assert.False(t, b.Administrator("missing"))
+	assert.False(t, b.Administrator(""))
 }
 
 func TestFailingStoreIsNotAnswerAboutAdministrator(t *testing.T) {
 	b := base.New(t)
-	relational.CloseMapper(b.Database)
-	_, e := b.Service.IsAdministrator("anyone")
+	v := b.Service()
+	relational.CloseMapper(b.Database())
+	_, e := v.IsAdministrator("anyone")
 	assert.Error(t, e)
 }
 
 func TestCleanDropsOnlyExpiredLoginSessions(t *testing.T) {
 	b := base.New(t)
-	stale, e := b.Service.CreateLoginSession("stale")
+	stale, e := b.Service().CreateLoginSession("stale")
 	assert.FatalOnError(t, e)
-	fresh, f := b.Service.CreateLoginSession("fresh")
+	fresh, f := b.Service().CreateLoginSession("fresh")
 	assert.FatalOnError(t, f)
 	assert.FatalOnError(
 		t,
-		b.Database.Model(login_session.Stub()).
+		b.Database().Model(login_session.Stub()).
 			Where("identifier = ?", stale).
 			Update(
 				"created_at",
 				time.Now().Add(-2*constant.LoginSessionTimeToLive),
 			).Error,
 	)
-	assert.Count(t, 0, b.Service.Clean())
+	assert.Count(t, 0, b.Service().Clean())
 	var rows []login_session.LoginSession
-	assert.FatalOnError(t, b.Database.Find(&rows).Error)
+	assert.FatalOnError(t, b.Database().Find(&rows).Error)
 	assert.Count(t, 1, rows)
 	assert.String(t, fresh, rows[0].Identifier)
 }
 
 func TestCleanTickReportsEachFailure(t *testing.T) {
 	b := base.New(t)
-	relational.CloseMapper(b.Database)
+	v := b.Service()
+	relational.CloseMapper(b.Database())
 	r := memory.New()
-	owned := worker.NewEvery(
-		b.Service.Clean,
-		logger.New(t.Context()),
-		r,
-		time.Hour,
-	)
+	owned := worker.NewEvery(v.Clean, logger.New(t.Context()), r, time.Hour)
 	defer owned.Close()
 	owned.Poll()
 	assert.Count(t, 2, r.Events())

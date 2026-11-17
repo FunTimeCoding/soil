@@ -35,7 +35,7 @@ func TestApplyWithChangesTriggersDownstream(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	s := runner_tester.NewDownstream(t, c)
+	s := runner_tester.New(t, runner_tester.WithDownstream(c))
 	response := make(chan *trigger.Result, 1)
 	s.Trigger(trigger.Request{Response: response})
 	<-response
@@ -55,10 +55,9 @@ func TestApplyWithChangesTriggersDownstream(t *testing.T) {
 }
 
 func TestDownstreamWithRunQueuedIsNotCaptured(t *testing.T) {
-	c := mock_client.New("alfa")
-	defer c.Close()
+	c := mock_client.New(t, "alfa")
 	c.Fail(c.PostTrigger, conflict.Format("run already queued"))
-	s := runner_tester.NewDownstream(t, c)
+	s := runner_tester.New(t, runner_tester.WithDownstream(c))
 	response := make(chan *trigger.Result, 1)
 	s.Trigger(trigger.Request{Response: response})
 	<-response
@@ -77,7 +76,7 @@ func TestRefusedDownstreamIsCaptured(t *testing.T) {
 	defer v.Close()
 	c := client.New(webConstant.Localhost, v.Port, "bravo")
 	defer c.Close()
-	s := runner_tester.NewDownstream(t, c)
+	s := runner_tester.New(t, runner_tester.WithDownstream(c))
 	response := make(chan *trigger.Result, 1)
 	s.Trigger(trigger.Request{Response: response})
 	<-response

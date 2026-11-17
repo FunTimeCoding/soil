@@ -20,7 +20,7 @@ func Embedded(
 	for _, c := range chunk.Document(
 		body,
 		name,
-		service_tester.NewReranker(t),
+		service_tester.New(t).Reranker,
 	) {
 		_, f := embed.Single(t.Context(), e, c.Text)
 		assert.FatalOnError(t, f)

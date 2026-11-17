@@ -28,13 +28,13 @@ func TestToolsOnChromiumOutage(t *testing.T) {
 func TestDaemonHandsOutChromiumGuard(t *testing.T) {
 	_, okay := daemon_tester.New(
 		t,
-		mock_client.New(),
+		mock_client.New(t),
 	).Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestDaemonClosesClientItBuilt(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	daemon_tester.New(t, c).Close()
 	assert.Integer(t, 1, c.Closed())
 }

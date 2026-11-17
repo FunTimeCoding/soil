@@ -9,28 +9,29 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_service_tester"
 	"net/http"
+	"path/filepath"
 	"testing"
 	"time"
 )
 
 func TestDaemonClosesItsDatabaseOnce(t *testing.T) {
-	d := daemon.New(base.NewOption(t), logger.New(t.Context()), memory.New())
+	d := base.New(t).Daemon()
 	d.Close()
 	d.Close()
 }
 
 func TestServiceRecordsItsOwnUse(t *testing.T) {
-	o := base.NewOption(t)
-	m := lite.New(logger.New(t.Context()), o.LitePath)
+	m := lite.New(
+		logger.New(t.Context()),
+		filepath.Join(t.TempDir(), "gotelemetryd.db"),
+	)
 	defer relational.CloseMapper(m)
 	migrate.AutoMigrate(m)
 	v := service.New(store.New(m), time.Now, memory.New())
@@ -50,9 +51,10 @@ func TestServiceRecordsItsOwnUse(t *testing.T) {
 }
 
 func TestFailingStoreIsAnsweredAndReported(t *testing.T) {
-	o := web_service_tester.New(t)
-	o.Daemon.Close()
-	r, e := o.Client.GetSummaryWithResponse(
+	o := base.New(t)
+	c := o.GeneratedClient()
+	o.Daemon().Close()
+	r, e := c.GetSummaryWithResponse(
 		context.Background(),
 		&client.GetSummaryParams{},
 	)

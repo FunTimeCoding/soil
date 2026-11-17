@@ -1,40 +1,15 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/service_tester"
 	"testing"
 )
 
-func New(t *testing.T) *Server {
+func New(
+	t *testing.T,
+	option ...service_tester.Option,
+) *Server {
 	t.Helper()
-	d, engines := daemon_tester.New(t, "alfa", "bravo")
-	alfa := engines["alfa"]
-	bravo := engines["bravo"]
-	v := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			d.Mount(memory.New(), mock_recorder.New(), g)
-		},
-	)
-	c, e := client.NewClientWithResponses(
-		v.Address(webConstant.RootPath),
-		client.WithHTTPClient(v.Client()),
-		client.WithRequestEditorFn(
-			web.BearerEditor(generativeConstant.ModelContextTestToken),
-		),
-	)
-	assert.FatalOnError(t, e)
-	result := &Server{Alfa: alfa, Bravo: bravo, Client: c, Server: v}
-	t.Cleanup(result.Close)
 
-	return result
+	return &Server{Tester: service_tester.New(t, option...), t: t}
 }

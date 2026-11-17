@@ -2,31 +2,15 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/unit/rejecting_host"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
 func TestRejectedHostIsAnsweredQuietlyOverModelContext(t *testing.T) {
-	m := memory.New()
-	s := model_context_server.New(
-		t,
-		func(g *guard.Mux) {
-			daemon_tester.New(t, rejecting_host.New()).Mount(
-				m,
-				mock_recorder.New(),
-				g,
-			)
-		},
-	)
-	defer s.Close()
-	c := s.Connect(t)
-	defer c.Close()
+	b := base.New(t, rejecting_host.New(t))
+	c := b.Tools()
 	assert.String(
 		t,
 		"host rejected: ip: invalid address",
@@ -35,5 +19,5 @@ func TestRejectedHostIsAnsweredQuietlyOverModelContext(t *testing.T) {
 			map[string]any{constant.ParameterHost: "alfa"},
 		),
 	)
-	assert.Count(t, 0, m.Events())
+	assert.Count(t, 0, b.Reporter.Events())
 }

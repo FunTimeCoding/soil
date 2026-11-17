@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service/pending_digest"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
@@ -26,7 +26,7 @@ func New(
 		mattermost: m,
 		guard:      g,
 		pending:    pending_digest.New(debounce, constant.PendingRetryLimit),
-		reacher:    reacher.New(r),
+		outages:    outage_tracker.New(r),
 		logger:     l,
 		reporter:   r,
 		debounce:   debounce,

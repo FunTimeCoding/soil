@@ -4,11 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"testing"
 )
 
 func TestTokenSummaryCountsWithheldMemories(t *testing.T) {
-	c := base.NewHidden(t, "private").MemoryClient(t)
+	c := base.New(t, service_tester.WithHiddenTag("private")).MemoryClient()
 	x := t.Context()
 	_, e := c.PostMemory(
 		x,

@@ -4,16 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/model_context_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/server_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/web_interface_tester"
 	"net/http"
 	"testing"
 )
 
 func TestMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	r, e := base.Rest(t, s).GetAuthorityWithResponse(
+	r, e := s.GeneratedClient().GetAuthorityWithResponse(
 		t.Context(),
 		constant.FixtureClusterAuthority,
 	)
@@ -26,7 +24,7 @@ func TestMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 
 func TestRootBeforeCreationAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	r, e := base.Rest(t, s).GetRootWithResponse(t.Context())
+	r, e := s.GeneratedClient().GetRootWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
 	assert.NotNil(t, r.JSON404)
@@ -35,8 +33,9 @@ func TestRootBeforeCreationAnswersNotFoundQuietly(t *testing.T) {
 
 func TestRootFaultIsCapturedAsServerError(t *testing.T) {
 	s := base.New(t)
-	s.Daemon.Close()
-	r, e := base.Rest(t, s).GetRootWithResponse(t.Context())
+	c := s.GeneratedClient()
+	s.Daemon().Close()
+	r, e := c.GetRootWithResponse(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusInternalServerError, r.StatusCode())
 	assert.Count(t, 1, s.Reporter.Events())
@@ -44,7 +43,7 @@ func TestRootFaultIsCapturedAsServerError(t *testing.T) {
 
 func TestSecondRootAnswersConflictQuietly(t *testing.T) {
 	s := base.New(t)
-	c := base.Rest(t, s)
+	c := s.GeneratedClient()
 	server_tester.PostAuthority(t, c, server_tester.RootBody())
 	r := server_tester.PostAuthority(t, c, server_tester.RootBody())
 	assert.Integer(t, http.StatusConflict, r.StatusCode())
@@ -55,7 +54,7 @@ func TestSecondRootAnswersConflictQuietly(t *testing.T) {
 
 func TestUnusableAddressAnswersBadRequestQuietly(t *testing.T) {
 	s := base.New(t)
-	c := base.Rest(t, s)
+	c := s.GeneratedClient()
 	server_tester.PostAuthority(t, c, server_tester.RootBody())
 	b := server_tester.ClusterBody()
 	b.PermittedAddress = &[]string{"nowhere"}
@@ -68,7 +67,7 @@ func TestUnusableAddressAnswersBadRequestQuietly(t *testing.T) {
 
 func TestIssuingFromMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	r := server_tester.PostCertificate(t, base.Rest(t, s))
+	r := server_tester.PostCertificate(t, s.GeneratedClient())
 	assert.Integer(t, http.StatusNotFound, r.StatusCode())
 	assert.NotNil(t, r.JSON404)
 	assert.Count(t, 0, s.Reporter.Events())
@@ -76,7 +75,7 @@ func TestIssuingFromMissingAuthorityAnswersNotFoundQuietly(t *testing.T) {
 
 func TestRevokingTwiceAnswersNotFoundQuietly(t *testing.T) {
 	s := base.New(t)
-	c := base.Rest(t, s)
+	c := s.GeneratedClient()
 	server_tester.PostAuthority(t, c, server_tester.RootBody())
 	server_tester.PostAuthority(t, c, server_tester.ClusterBody())
 	issued := server_tester.PostCertificate(t, c)
@@ -91,45 +90,44 @@ func TestRevokingTwiceAnswersNotFoundQuietly(t *testing.T) {
 }
 
 func TestMissingCertificateRefusesThroughToolsQuietly(t *testing.T) {
-	o := model_context_tester.New(t)
+	s := base.New(t)
 	assert.StringContains(
 		t,
 		"not found",
-		o.Client.MustCallToolError(
+		s.Tools().MustCallToolError(
 			constant.GetCertificate,
 			map[string]any{constant.SerialParameter: "absent"},
 		),
 	)
-	assert.Count(t, 0, o.Server.Reporter.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestToolFaultIsCaptured(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Server.Daemon.Close()
-	o.Client.MustCallToolError(constant.RootCertificate, map[string]any{})
-	assert.Count(t, 1, o.Server.Reporter.Events())
+	s := base.New(t)
+	c := s.Tools()
+	s.Daemon().Close()
+	c.MustCallToolError(constant.RootCertificate, map[string]any{})
+	assert.Count(t, 1, s.Reporter.Events())
 }
 
 func TestRootPathAnswersMissingRootWithNotFound(t *testing.T) {
 	s := base.New(t)
-	s.VerifyStatus(t, constant.RootPath, http.StatusNotFound)
+	s.Served().VerifyStatus(t, constant.RootPath, http.StatusNotFound)
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestFormRejectionIsNotCaptured(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
-	assert.Count(t, 0, o.Server.Reporter.Events())
+	s := base.New(t)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestFormFaultIsCapturedNotInlined(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Server.Daemon.Close()
-	page := o.Submit(
-		constant.CreateAuthorityPath,
-		web_interface_tester.RootValues(),
-	)
-	assert.Count(t, 1, o.Server.Reporter.Events())
+	s := base.New(t)
+	s.Served()
+	s.Daemon().Close()
+	page := s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	assert.Count(t, 1, s.Reporter.Events())
 	assert.StringNotContains(t, "Example Root CA", page)
 }

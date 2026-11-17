@@ -8,11 +8,10 @@ import (
 )
 
 func TestRenameTestFunctionInTestOnlyPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "test-symbols/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("test-symbols/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/flow",
 		"TestFlowStart",
 		"TestFlowBegin",
@@ -21,16 +20,15 @@ func TestRenameTestFunctionInTestOnlyPackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	renamed := service_tester.ReadFixtureFile(t, d, "pkg/flow/flow_test.go")
+	renamed := o.Read("pkg/flow/flow_test.go")
 	assert.StringContains(t, "func TestFlowBegin(", renamed)
 }
 
 func TestRenameTestFunctionBesideProduction(t *testing.T) {
-	d := service_tester.Prepare(t, "test-symbols/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("test-symbols/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"TestCompute",
 		"TestComputeValue",
@@ -39,18 +37,17 @@ func TestRenameTestFunctionBesideProduction(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	renamed := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/compute_test.go",
-	)
+	renamed := o.Read("pkg/target/compute_test.go")
 	assert.StringContains(t, "func TestComputeValue(", renamed)
 }
 
 func TestListCallsCountsTestVariantPackageOnce(t *testing.T) {
-	d := service_tester.Prepare(t, "test-symbols/src")
-	s := service_tester.NewService(t)
-	r, inventory, e := s.Reference.ListCalls(d, "example/pkg/measure", 0)
+	o := service_tester.New(t, service_tester.WithFixture("test-symbols/src"))
+	r, inventory, e := o.Reference.ListCalls(
+		o.Directory,
+		"example/pkg/measure",
+		0,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	count := 0
@@ -65,11 +62,10 @@ func TestListCallsCountsTestVariantPackageOnce(t *testing.T) {
 }
 
 func TestRenameProductionSymbolRewritesTestFile(t *testing.T) {
-	d := service_tester.Prepare(t, "test-symbols/src")
-	s := service_tester.NewService(t)
-	r, e := s.Symbol.Rename(
+	o := service_tester.New(t, service_tester.WithFixture("test-symbols/src"))
+	r, e := o.Symbol.Rename(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Compute",
 		"Calculate",
@@ -78,18 +74,10 @@ func TestRenameProductionSymbolRewritesTestFile(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	declaration := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/calculate.go",
-	)
+	declaration := o.Read("pkg/target/calculate.go")
 	assert.StringContains(t, "func Calculate(", declaration)
-	testFile := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/compute_test.go",
-	)
+	testFile := o.Read("pkg/target/compute_test.go")
 	assert.StringContains(t, "Calculate()", testFile)
-	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
+	crossPackage := o.Read("pkg/caller/run.go")
 	assert.StringContains(t, "target.Calculate()", crossPackage)
 }

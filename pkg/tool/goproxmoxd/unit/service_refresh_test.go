@@ -3,14 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/worker_tester"
 	"testing"
 )
 
 func TestRefreshFillsFloor(t *testing.T) {
-	c := worker_tester.PopulatedClient("test")
-	defer c.Close()
-	s := service_tester.ContainerService(t, c)
+	o := service_tester.New(t)
+	o.Populate()
+	s := o.Service()
 	samples := s.Refresh()
 	assert.Count(t, 1, samples)
 	assert.FatalOnError(t, samples[0].Failure)
@@ -24,9 +23,9 @@ func TestRefreshFillsFloor(t *testing.T) {
 }
 
 func TestRefreshNotifiesOnlyWhenFloorChanges(t *testing.T) {
-	c := worker_tester.PopulatedClient("test")
-	defer c.Close()
-	s := service_tester.ContainerService(t, c)
+	o := service_tester.New(t)
+	o.Populate()
+	s := o.Service()
 	n := s.Notifier().Subscribe()
 	defer s.Notifier().Unsubscribe(n)
 	s.Refresh()
@@ -34,7 +33,7 @@ func TestRefreshNotifiesOnlyWhenFloorChanges(t *testing.T) {
 	<-n
 	s.Refresh()
 	assert.Count(t, 0, n)
-	c.AddMachine("test", 102, "third")
+	o.Alfa().Hypervisor.AddMachine("alfa", 102, "third")
 	s.Refresh()
 	assert.Count(t, 1, n)
 }

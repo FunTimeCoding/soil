@@ -3,41 +3,45 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/unit/base"
 	"testing"
 )
 
 func TestInstructionsOmitInstancesWithOne(t *testing.T) {
-	o := model_context_tester.New(t)
+	o := base.New(t)
+	c := o.Tools()
 	assert.StringNotContains(
 		t,
 		"use_instance",
-		o.Client.InitializeResult().Instructions,
+		c.InitializeResult().Instructions,
 	)
 }
 
 func TestListNodes(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(constant.ListNodes, nil)
-	assert.StringContains(t, "test", result)
+	o := base.New(t)
+	c := o.Tools()
+	result := c.MustCallTool(constant.ListNodes, nil)
+	assert.StringContains(t, "alfa", result)
 }
 
 func TestListMachines(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "web-server")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "web-server")
+	result := c.MustCallTool(
 		constant.ListMachines,
-		map[string]any{"node": "test"},
+		map[string]any{"node": "alfa"},
 	)
 	assert.StringContains(t, "web-server", result)
 }
 
 func TestCreateMachineCloudInit(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	result := c.MustCallTool(
 		constant.CreateMachine,
 		map[string]any{
-			"node":    "test",
+			"node":    "alfa",
 			"name":    "ci-test",
 			"ci_user": "admin",
 		},
@@ -46,11 +50,12 @@ func TestCreateMachineCloudInit(t *testing.T) {
 }
 
 func TestCreateMachineWithDiskImport(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	result := c.MustCallTool(
 		constant.CreateMachine,
 		map[string]any{
-			"node":        "test",
+			"node":        "alfa",
 			"name":        "import-test",
 			"disk_import": "local:import/debian-13.qcow2",
 			"disk_size":   64,
@@ -61,11 +66,12 @@ func TestCreateMachineWithDiskImport(t *testing.T) {
 }
 
 func TestCreateMachineCDROM(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	result := c.MustCallTool(
 		constant.CreateMachine,
 		map[string]any{
-			"node":  "test",
+			"node":  "alfa",
 			"name":  "iso-test",
 			"cdrom": "local:iso/debian.iso",
 		},
@@ -74,11 +80,12 @@ func TestCreateMachineCDROM(t *testing.T) {
 }
 
 func TestCreateMachineCDROMAndCloudInitError(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallToolError(
+	o := base.New(t)
+	c := o.Tools()
+	result := c.MustCallToolError(
 		constant.CreateMachine,
 		map[string]any{
-			"node":    "test",
+			"node":    "alfa",
 			"name":    "conflict",
 			"cdrom":   "local:iso/debian.iso",
 			"ci_user": "admin",
@@ -88,13 +95,14 @@ func TestCreateMachineCDROMAndCloudInitError(t *testing.T) {
 }
 
 func TestUpdateMachine(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "original")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "original")
+	result := c.MustCallTool(
 		constant.UpdateMachine,
 		map[string]any{
 			"identifier":  100,
-			"node":        "test",
+			"node":        "alfa",
 			"tags":        "web;prod",
 			"description": "production web server",
 		},
@@ -103,13 +111,14 @@ func TestUpdateMachine(t *testing.T) {
 }
 
 func TestUpdateMachineDelete(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "tagged-vm")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "tagged-vm")
+	result := c.MustCallTool(
 		constant.UpdateMachine,
 		map[string]any{
 			"identifier": 100,
-			"node":       "test",
+			"node":       "alfa",
 			"delete":     "tags,description",
 		},
 	)
@@ -117,13 +126,14 @@ func TestUpdateMachineDelete(t *testing.T) {
 }
 
 func TestUpdateMachineSetAndDeleteConflict(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "conflict-vm")
-	result := o.Client.MustCallToolError(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "conflict-vm")
+	result := c.MustCallToolError(
 		constant.UpdateMachine,
 		map[string]any{
 			"identifier": 100,
-			"node":       "test",
+			"node":       "alfa",
 			"tags":       "web",
 			"delete":     "tags",
 		},
@@ -132,154 +142,164 @@ func TestUpdateMachineSetAndDeleteConflict(t *testing.T) {
 }
 
 func TestUpdateMachineNoChanges(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "original")
-	result := o.Client.MustCallToolError(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "original")
+	result := c.MustCallToolError(
 		constant.UpdateMachine,
-		map[string]any{"identifier": 100, "node": "test"},
+		map[string]any{"identifier": 100, "node": "alfa"},
 	)
 	assert.StringContains(t, "no changes", result)
 }
 
 func TestCloneMachine(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "template")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "template")
+	result := c.MustCallTool(
 		constant.CloneMachine,
 		map[string]any{
 			"identifier": 100,
 			"name":       "clone-of-template",
-			"node":       "test",
+			"node":       "alfa",
 		},
 	)
 	assert.StringContains(t, "cloned", result)
 }
 
 func TestSnippetCRUD(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	c.MustCallTool(
 		constant.CreateSnippet,
 		map[string]any{
 			"name":    "test.yml",
 			"content": "#cloud-config\npackages:\n  - vim\n",
 		},
 	)
-	list := o.Client.MustCallTool(constant.ListSnippets, nil)
+	list := c.MustCallTool(constant.ListSnippets, nil)
 	assert.StringContains(t, "test.yml", list)
-	get := o.Client.MustCallTool(
+	get := c.MustCallTool(
 		constant.GetSnippet,
 		map[string]any{"name": "test.yml"},
 	)
 	assert.StringContains(t, "cloud-config", get)
-	o.Client.MustCallTool(
-		constant.DeleteSnippet,
-		map[string]any{"name": "test.yml"},
-	)
-	listAfter := o.Client.MustCallTool(constant.ListSnippets, nil)
+	c.MustCallTool(constant.DeleteSnippet, map[string]any{"name": "test.yml"})
+	listAfter := c.MustCallTool(constant.ListSnippets, nil)
 	assert.StringNotContains(t, "test.yml", listAfter)
 }
 
 func TestListStorages(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddStorage("test", "local", "dir", "iso,snippets")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddStorage("alfa", "local", "dir", "iso,snippets")
+	result := c.MustCallTool(
 		constant.ListStorages,
-		map[string]any{"node": "test"},
+		map[string]any{"node": "alfa"},
 	)
 	assert.StringContains(t, "local", result)
 }
 
 func TestGetMachine(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "web-server")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "web-server")
+	result := c.MustCallTool(
 		constant.GetMachine,
-		map[string]any{"identifier": 100, "node": "test"},
+		map[string]any{"identifier": 100, "node": "alfa"},
 	)
 	assert.StringContains(t, "web-server", result)
 }
 
 func TestDeleteMachine(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "disposable")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "disposable")
+	result := c.MustCallTool(
 		constant.DeleteMachine,
-		map[string]any{"identifier": 100, "node": "test"},
+		map[string]any{"identifier": 100, "node": "alfa"},
 	)
 	assert.StringContains(t, "deleted", result)
 }
 
 func TestDeleteMachineRunning(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "running-vm")
-	o.MockClient.SetMachineStatus("test", 100, "running")
-	result := o.Client.MustCallToolError(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "running-vm")
+	o.Alfa().Hypervisor.SetMachineStatus("alfa", 100, "running")
+	result := c.MustCallToolError(
 		constant.DeleteMachine,
-		map[string]any{"identifier": 100, "node": "test"},
+		map[string]any{"identifier": 100, "node": "alfa"},
 	)
 	assert.StringContains(t, "running", result)
 }
 
 func TestStartMachine(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "stopped-vm")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "stopped-vm")
+	result := c.MustCallTool(
 		constant.StartMachine,
-		map[string]any{"identifier": 100, "node": "test"},
+		map[string]any{"identifier": 100, "node": "alfa"},
 	)
 	assert.StringContains(t, "task_id", result)
 }
 
 func TestCreateMachineSnapshot(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddMachine("test", 100, "snapshot-target")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddMachine("alfa", 100, "snapshot-target")
+	result := c.MustCallTool(
 		constant.CreateMachineSnapshot,
 		map[string]any{
 			"identifier": 100,
 			"name":       "before-upgrade",
-			"node":       "test",
+			"node":       "alfa",
 		},
 	)
 	assert.StringContains(t, "task_id", result)
 }
 
 func TestMachineNotFound(t *testing.T) {
-	o := model_context_tester.New(t)
-	result := o.Client.MustCallToolError(
+	o := base.New(t)
+	c := o.Tools()
+	result := c.MustCallToolError(
 		constant.GetMachine,
-		map[string]any{"identifier": 999, "node": "test"},
+		map[string]any{"identifier": 999, "node": "alfa"},
 	)
 	assert.StringContains(t, "machine not found: 999", result)
 	assert.StringNotContains(t, "event_identifier", result)
 }
 
 func TestStartContainer(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddContainer("test", 101, "stopped-container")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddContainer("alfa", 101, "stopped-container")
+	result := c.MustCallTool(
 		constant.StartContainer,
-		map[string]any{"identifier": 101, "node": "test"},
+		map[string]any{"identifier": 101, "node": "alfa"},
 	)
 	assert.StringContains(t, "task_id", result)
 }
 
 func TestStopContainer(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddContainer("test", 101, "running-container")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddContainer("alfa", 101, "running-container")
+	result := c.MustCallTool(
 		constant.StopContainer,
-		map[string]any{"identifier": 101, "node": "test"},
+		map[string]any{"identifier": 101, "node": "alfa"},
 	)
 	assert.StringContains(t, "task_id", result)
 }
 
 func TestShutdownContainer(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.MockClient.AddContainer("test", 101, "running-container")
-	result := o.Client.MustCallTool(
+	o := base.New(t)
+	c := o.Tools()
+	o.Alfa().Hypervisor.AddContainer("alfa", 101, "running-container")
+	result := c.MustCallTool(
 		constant.ShutdownContainer,
-		map[string]any{"identifier": 101, "node": "test"},
+		map[string]any{"identifier": 101, "node": "alfa"},
 	)
 	assert.StringContains(t, "task_id", result)
 }

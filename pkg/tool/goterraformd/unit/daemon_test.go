@@ -24,8 +24,8 @@ func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
 	o.DownstreamClients = func() []provisionFace.Client {
 		return []provisionFace.Client{
-			mock_client.New("alfa:8080"),
-			mock_client.New("bravo:8080"),
+			mock_client.New(t, "alfa:8080"),
+			mock_client.New(t, "bravo:8080"),
 		}
 	}
 	d := daemon.New(
@@ -60,7 +60,7 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
 	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
 	o.DownstreamClients = func() []provisionFace.Client {
-		return []provisionFace.Client{mock_client.New("alfa:8080")}
+		return []provisionFace.Client{mock_client.New(t, "alfa:8080")}
 	}
 	before := goleak.IgnoreCurrent()
 	d := daemon.New(

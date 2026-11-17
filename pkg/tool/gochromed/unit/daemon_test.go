@@ -8,7 +8,7 @@ import (
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	before := goleak.IgnoreCurrent()
 	daemon_tester.New(t, c).Close()
 	goleak.VerifyNone(t, before)

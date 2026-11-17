@@ -8,10 +8,13 @@ import (
 )
 
 func TestMoveRenamesShadowingLocal(t *testing.T) {
-	d := service_tester.Prepare(t, "move-shadowing-local/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-shadowing-local/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa/bravo",
 		"Limit",
 		"example/pkg/alfa/echo",
@@ -24,25 +27,28 @@ func TestMoveRenamesShadowingLocal(t *testing.T) {
 	assert.String(
 		t,
 		"package delta\n\nimport \"example/pkg/alfa/echo\"\n\nfunc Run() int {\n\te := echo.Limit()\n\n\treturn e * 2\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/delta/run.go"),
+		o.Read("pkg/alfa/delta/run.go"),
 	)
 	assert.String(
 		t,
 		"package golf\n\nimport \"example/pkg/alfa/echo\"\n\nfunc Run(e int) int {\n\tc := echo.Limit()\n\n\treturn c * e\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/golf/run.go"),
+		o.Read("pkg/alfa/golf/run.go"),
 	)
 	assert.String(
 		t,
 		"package india\n\nimport \"example/pkg/alfa/echo\"\n\nfunc Run() int {\n\tc := echo.Limit()\n\n\tfor e := range 2 {\n\t\tc += e\n\t}\n\n\treturn c\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/india/run.go"),
+		o.Read("pkg/alfa/india/run.go"),
 	)
 }
 
 func TestMoveRefusesShadowingLocalWithoutFreeLetter(t *testing.T) {
-	d := service_tester.Prepare(t, "move-shadowing-local-refused/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-shadowing-local-refused/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa/bravo",
 		"Limit",
 		"example/pkg/alfa/echo",
@@ -55,6 +61,6 @@ func TestMoveRefusesShadowingLocalWithoutFreeLetter(t *testing.T) {
 	assert.String(
 		t,
 		"package hotel\n\nimport \"example/pkg/alfa/bravo\"\n\nfunc Run(\n\te int,\n\tc int,\n\th int,\n\to int,\n) int {\n\techo := bravo.Limit()\n\n\treturn echo * e * c * h * o\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/alfa/hotel/run.go"),
+		o.Read("pkg/alfa/hotel/run.go"),
 	)
 }

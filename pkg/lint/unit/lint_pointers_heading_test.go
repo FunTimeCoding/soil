@@ -183,7 +183,7 @@ func TestPointersHeadingOnDeadFileReportsPath(t *testing.T) {
 	)
 }
 
-func TestPointersHeadingUnreadableIsTallied(t *testing.T) {
+func TestPointersHeadingUnreadableUnchecked(t *testing.T) {
 	l, seen := pointer_tester.Recording("doc/guide/other.md")
 	lint_tester.Report(
 		t,

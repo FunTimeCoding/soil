@@ -2,11 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/base"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"net/http/httptest"
@@ -14,8 +12,9 @@ import (
 )
 
 func TestMalformedNumberIsNotReported(t *testing.T) {
-	r := memory.New()
-	d, _ := daemon_tester.New(t, r, constant.FixtureInstance)
+	s := base.New(t)
+	r := s.Reporter
+	d := s.Daemon()
 	m := http.NewServeMux()
 	d.Mount(
 		r,

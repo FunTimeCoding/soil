@@ -3,17 +3,27 @@ package symbol
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/face"
+	"github.com/funtimecoding/soil/pkg/source/index"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
 
 func familyOutside(
 	interfaces *face.Set,
+	w *index.Workspace,
 	all []*packages.Package,
 	members []*types.Func,
-) []string {
+) ([]string, []string) {
 	modules := workspaceModules(all)
-	var result []string
+	wanted := map[*types.Named]bool{}
+
+	for _, f := range members {
+		wanted[receiverNamed(f).Origin()] = true
+	}
+
+	holders := holderPackages(all, modules, wanted)
+	var refusals []string
+	var notes []string
 
 	for _, f := range members {
 		if isInterfaceMethod(f) {
@@ -26,17 +36,36 @@ func familyOutside(
 				continue
 			}
 
-			result = append(
-				result,
+			name := types.TypeString(receiverNamed(f), nil)
+
+			if holder, reaching := reachingHolder(w, holders, c.Package); reaching {
+				refusals = append(
+					refusals,
+					fmt.Sprintf(
+						"%s satisfies %s.%s outside the workspace, and %s reaches %s - it can't be renamed with the family",
+						name,
+						c.Package,
+						c.Name,
+						holder,
+						c.Package,
+					),
+				)
+
+				continue
+			}
+
+			notes = append(
+				notes,
 				fmt.Sprintf(
-					"%s satisfies %s.%s outside the workspace - it can't be renamed with the family",
-					types.TypeString(receiverNamed(f), nil),
+					"%s satisfies %s.%s outside the workspace by shape only - no package holding it reaches %s, so the rename drops that satisfaction",
+					name,
 					c.Package,
 					c.Name,
+					c.Package,
 				),
 			)
 		}
 	}
 
-	return result
+	return refusals, notes
 }

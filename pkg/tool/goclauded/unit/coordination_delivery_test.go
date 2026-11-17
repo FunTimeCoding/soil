@@ -12,8 +12,8 @@ import (
 
 func TestCheckContextCutsLongMessage(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	b.CheckLive()
@@ -32,8 +32,8 @@ func TestCheckContextCutsLongMessage(t *testing.T) {
 
 func TestCheckPreviewRendersWithoutConsuming(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	b.CheckLive()
@@ -44,7 +44,7 @@ func TestCheckPreviewRendersWithoutConsuming(t *testing.T) {
 			constant.Body: "look at this",
 		},
 	)
-	preview, e := b.RestClient.GetCheckWithResponse(
+	preview, e := b.GeneratedClient.GetCheckWithResponse(
 		b.Context,
 		&client.GetCheckParams{Session: b.UUID, Preview: new(true)},
 	)
@@ -56,7 +56,7 @@ func TestCheckPreviewRendersWithoutConsuming(t *testing.T) {
 func TestRestReadMessages(t *testing.T) {
 	s := base.New(t)
 	m := s.Store.SendMessage("Ash", "Cedar", "an answer")
-	r, e := s.RESTClient(t).GetMessagesWithResponse(
+	r, e := s.RESTClient().GetMessagesWithResponse(
 		t.Context(),
 		&client.GetMessagesParams{Identifier: []int{int(m.Identifier), 999}},
 	)
@@ -72,10 +72,10 @@ func TestRestReadMessages(t *testing.T) {
 
 func TestRestNotifyOverLimitIsRefused(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostNotifyWithResponse(
+	r, e := a.GeneratedClient.PostNotifyWithResponse(
 		a.Context,
 		client.NotifyRequest{
 			Callsign: a.Name(),
@@ -94,10 +94,10 @@ func TestRestNotifyOverLimitIsRefused(t *testing.T) {
 
 func TestRestPulseOverLimitIsRefused(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
-	r, e := a.RestClient.PostSessionPulseWithResponse(
+	r, e := a.GeneratedClient.PostSessionPulseWithResponse(
 		a.Context,
 		a.UUID,
 		client.PulseRequest{Body: strings.Repeat("c", 501)},

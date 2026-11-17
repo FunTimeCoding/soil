@@ -8,13 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonClosesClientItBuilt(t *testing.T) {
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.Source = func() face.ItermClient { return c }
 	daemon.New(o, logger.New(t.Context()), memory.New()).Close()
@@ -22,8 +22,8 @@ func TestDaemonClosesClientItBuilt(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New()
+	s := base.New(t)
 	before := goleak.IgnoreCurrent()
-	daemon_tester.New(t, c).Close()
+	s.Daemon().Close()
 	goleak.VerifyNone(t, before)
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/move_engine"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -23,7 +23,7 @@ func (s *Service) moveMethodsFollow(
 		loaded []*packages.Package,
 		_ *token.FileSet,
 	) []types.Object {
-		return relocator.MethodObjects(loaded, packagePath, typeName, methods)
+		return move_engine.MethodObjects(loaded, packagePath, typeName, methods)
 	}
 	all, set, e := s.workspace.ReferenceLoad(
 		directory,

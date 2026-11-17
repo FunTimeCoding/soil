@@ -14,10 +14,10 @@ func TestDirectoryOutageHoldsNextLoginOff(t *testing.T) {
 	d := counted_directory.New()
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
 	d.Failure = directory_tester.Down()
-	b := base.NewWith(t, d)
+	b := base.New(t, base.WithDirectory(d))
 
 	for range 2 {
-		_, e := b.Service.AuthenticateUser(
+		_, e := b.Service().AuthenticateUser(
 			"member",
 			"secret",
 			constant.SourceDirectory,

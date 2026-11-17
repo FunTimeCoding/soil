@@ -7,13 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
 	"testing"
 )
 
 func TestClientRoundTripsRetarget(t *testing.T) {
 	root := t.TempDir()
 	system_tester.Write(t, root, "pkg/bravo/run.go", "package bravo\n")
-	c := base.NewRooted(t, root).MemoryClient(t)
+	c := base.New(t, service_tester.WithReferenceRoot(root)).MemoryClient()
 	_, e := c.PostMemory(
 		t.Context(),
 		client.PostMemoryJSONRequestBody{

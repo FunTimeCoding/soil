@@ -45,7 +45,7 @@ const (
 	LatestReplyError  = "latest_error"
 
 	ExcerptLength    = 200
-	DigestBudget     = goclaudedConstant.DeliveryEntryLimit
+	DigestLimit      = goclaudedConstant.DeliveryEntryLimit
 	EnumerateLimit   = 4
 	TruncationMarker = "…+more"
 	DigestIndent     = "    "

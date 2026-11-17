@@ -10,7 +10,7 @@ import (
 )
 
 func TestViewLifecycle(t *testing.T) {
-	c := base.Rest(t, base.New(t))
+	c := base.New(t).GeneratedClient()
 	created, e := c.CreateViewWithResponse(
 		context.Background(),
 		client.CreateViewJSONRequestBody{Title: "notes", Content: "alfa"},

@@ -29,7 +29,7 @@ func (s *Service) Check(sessionIdentifier string) (*check_result.Result, error) 
 		return nil, e
 	}
 
-	s.watchBudget(result.Context)
+	s.watchLimit(result.Context)
 	s.notify()
 
 	return result, nil

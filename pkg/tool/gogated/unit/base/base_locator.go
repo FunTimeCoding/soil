@@ -6,5 +6,8 @@ import (
 )
 
 func (s *Server) BaseLocator() string {
-	return locator.New(webConstant.Localhost).Port(s.Web.Port).Insecure().String()
+	return locator.New(webConstant.Localhost).
+		Port(s.Served().Port).
+		Insecure().
+		String()
 }

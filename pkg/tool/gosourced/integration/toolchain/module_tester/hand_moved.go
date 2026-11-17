@@ -9,20 +9,23 @@ import (
 	"testing"
 )
 
-func HandMoved(t *testing.T) string {
+func HandMoved(t *testing.T) *service_tester.Tester {
 	t.Helper()
-	result := service_tester.Prepare(t, "rename-follow/src")
+	result := service_tester.New(
+		t,
+		service_tester.WithFixture("rename-follow/src"),
+	)
 	system_tester.Write(
 		t,
-		result,
+		result.Directory,
 		"doc/note.md",
 		"See `pkg/alfa/old_name.go`.\n",
 	)
 	assert.FatalOnError(
 		t,
 		os.Rename(
-			filepath.Join(result, "pkg/alfa/old_name.go"),
-			filepath.Join(result, "pkg/alfa/renamed.go"),
+			filepath.Join(result.Directory, "pkg/alfa/old_name.go"),
+			filepath.Join(result.Directory, "pkg/alfa/renamed.go"),
 		),
 	)
 

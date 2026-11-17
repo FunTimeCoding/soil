@@ -31,8 +31,7 @@ func serve(
 	o.Connector = func() face.Client { return k }
 	d := daemon.New(o, logger.New(t.Context()), r)
 	t.Cleanup(d.Close)
-
-	return &Server{
+	result := &Server{
 		Upstream: upstream,
 		Store:    worker_tester.NewStoreOnFile(t, o.LitePath),
 		Reporter: r,
@@ -42,5 +41,9 @@ func serve(
 				d.Mount(r, mock_recorder.New(), g)
 			},
 		),
+		t: t,
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

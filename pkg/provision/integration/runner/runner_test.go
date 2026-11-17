@@ -122,7 +122,7 @@ func TestCloneFilemodeOff(t *testing.T) {
 }
 
 func TestForcedCloneWithCopyModesKeepsObjectModes(t *testing.T) {
-	s := runner_tester.NewWithCopyModes(t)
+	s := runner_tester.New(t, runner_tester.WithCopyModes())
 	s.ForceClone()
 
 	for _, m := range s.ObjectModes() {

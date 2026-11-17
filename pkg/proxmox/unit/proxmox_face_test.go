@@ -11,7 +11,7 @@ import (
 func TestClientAndItsMockKeepProxmoxFace(t *testing.T) {
 	c := proxmox.New("alfa.example", proxmox.WithToken("alfa", "secret"))
 	t.Cleanup(c.Close)
-	l := mock_client.New()
+	l := mock_client.New(t)
 	clients := []face.ProxmoxClient{c, l}
 	l.Close()
 	assert.Count(t, 2, clients)

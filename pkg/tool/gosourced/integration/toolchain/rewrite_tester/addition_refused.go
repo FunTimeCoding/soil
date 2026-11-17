@@ -14,26 +14,18 @@ func AdditionRefused(
 	a *addition.Parameter,
 ) {
 	t.Helper()
-	d := service_tester.Prepare(t, "add-parameters/src")
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go")
-	target := service_tester.ReadFixtureFile(t, d, "pkg/target/target.go")
-	r, e := service_tester.NewService(t).Symbol.AddParameters(
+	o := service_tester.New(t, service_tester.WithFixture("add-parameters/src"))
+	caller := o.Read("pkg/caller/caller.go")
+	target := o.Read("pkg/target/target.go")
+	r, e := o.Symbol.AddParameters(
 		t.Context(),
-		d,
+		o.Directory,
 		[]*addition.Parameter{a},
 		nil,
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, expect)
-	assert.String(
-		t,
-		caller,
-		service_tester.ReadFixtureFile(t, d, "pkg/caller/caller.go"),
-	)
-	assert.String(
-		t,
-		target,
-		service_tester.ReadFixtureFile(t, d, "pkg/target/target.go"),
-	)
+	assert.String(t, caller, o.Read("pkg/caller/caller.go"))
+	assert.String(t, target, o.Read("pkg/target/target.go"))
 }

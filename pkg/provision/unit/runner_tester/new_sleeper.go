@@ -11,14 +11,14 @@ import (
 func NewSleeper(t *testing.T) *Tester {
 	t.Helper()
 	r := reaper.New(memory.New(), prometheus.NewRegistry())
-	result := build(
+	result := New(
 		t,
-		func() {
-			run.New().NoPanic().WithRegistry(r).Start("sleep", "30")
-		},
-		r,
-		nil,
-		false,
+		withHold(
+			func() {
+				run.New().NoPanic().WithRegistry(r).Start("sleep", "30")
+			},
+		),
+		withRegistry(r),
 	)
 	t.Cleanup(r.Interrupt)
 

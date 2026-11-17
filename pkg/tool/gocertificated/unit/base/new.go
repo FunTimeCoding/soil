@@ -1,12 +1,23 @@
 package base
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/service_tester"
+	"path/filepath"
 	"testing"
-	"time"
 )
 
-func New(t *testing.T) *Server {
+func New(
+	t *testing.T,
+	option ...service_tester.Option,
+) *Server {
 	t.Helper()
+	o := service_tester.New(t, option...)
 
-	return NewWith(t, time.Now)
+	return &Server{
+		Forge:    o.Forge,
+		Reporter: o.Reporter,
+		LitePath: filepath.Join(t.TempDir(), "gocertificated.db"),
+		clock:    o.Clock,
+		t:        t,
+	}
 }

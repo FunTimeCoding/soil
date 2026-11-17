@@ -10,11 +10,13 @@ import (
 )
 
 func TestExtractFunctionNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-function/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-function/src"),
+	)
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"Missing",
 		false,
@@ -25,11 +27,13 @@ func TestExtractFunctionNotFound(t *testing.T) {
 }
 
 func TestExtractFunctionFileNotFound(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-function/src")
-	s := service_tester.NewService(t)
-	_, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-function/src"),
+	)
+	_, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/missing.go",
 		"Something",
 		false,
@@ -38,14 +42,16 @@ func TestExtractFunctionFileNotFound(t *testing.T) {
 }
 
 func TestExtractFunctionTargetExists(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-function/src")
-	target := filepath.Join(d, "pkg/target/format_name.go")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-function/src"),
+	)
+	target := filepath.Join(o.Directory, "pkg/target/format_name.go")
 	e := os.WriteFile(target, []byte("package target\n"), 0644)
 	assert.FatalOnError(t, e)
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"FormatName",
 		false,
@@ -56,55 +62,57 @@ func TestExtractFunctionTargetExists(t *testing.T) {
 }
 
 func TestExtractFunctionRenamesSourceToType(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-type-pair/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-type-pair/src"),
+	)
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"NewWidget",
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	extracted := service_tester.ReadFixtureFile(
-		t,
-		d,
-		"pkg/target/new_widget.go",
-	)
+	extracted := o.Read("pkg/target/new_widget.go")
 	assert.StringContains(t, "func NewWidget(", extracted)
-	renamed := service_tester.ReadFixtureFile(t, d, "pkg/target/widget.go")
+	renamed := o.Read("pkg/target/widget.go")
 	assert.StringContains(t, "type Widget struct", renamed)
-	_, e = os.Stat(filepath.Join(d, "pkg/target/combined.go"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/combined.go"))
 	assert.True(t, os.IsNotExist(e))
 }
 
 func TestExtractTypeRenamesSourceToFunction(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-type-pair/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-type-pair/src"),
+	)
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"Widget",
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	extracted := service_tester.ReadFixtureFile(t, d, "pkg/target/widget.go")
+	extracted := o.Read("pkg/target/widget.go")
 	assert.StringContains(t, "type Widget struct", extracted)
-	renamed := service_tester.ReadFixtureFile(t, d, "pkg/target/new_widget.go")
+	renamed := o.Read("pkg/target/new_widget.go")
 	assert.StringContains(t, "func NewWidget(", renamed)
-	_, e = os.Stat(filepath.Join(d, "pkg/target/combined.go"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/combined.go"))
 	assert.True(t, os.IsNotExist(e))
 }
 
 func TestExtractGroupedTypeRefuses(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-type-group/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-type-group/src"),
+	)
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"Alfa",
 		false,
@@ -112,16 +120,18 @@ func TestExtractGroupedTypeRefuses(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "type group")
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/combined.go")
+	source := o.Read("pkg/target/combined.go")
 	assert.StringContains(t, "Alfa  struct{}", source)
 }
 
 func TestExtractTypeRefusesEmptyFile(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-type-single/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-type-single/src"),
+	)
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/only.go",
 		"Only",
 		false,
@@ -132,32 +142,33 @@ func TestExtractTypeRefusesEmptyFile(t *testing.T) {
 }
 
 func TestExtractLeavesVariableBehind(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-var-companion/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-var-companion/src"),
+	)
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"Register",
 		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	extracted := service_tester.ReadFixtureFile(t, d, "pkg/target/register.go")
+	extracted := o.Read("pkg/target/register.go")
 	assert.StringContains(t, "func Register(", extracted)
-	renamed := service_tester.ReadFixtureFile(t, d, "pkg/target/count.go")
+	renamed := o.Read("pkg/target/count.go")
 	assert.StringContains(t, "var registry", renamed)
 	assert.StringContains(t, "func Count(", renamed)
-	_, e = os.Stat(filepath.Join(d, "pkg/target/combined.go"))
+	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/combined.go"))
 	assert.True(t, os.IsNotExist(e))
 }
 
 func TestExtractRefusesEmptyFile(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-single/src")
-	s := service_tester.NewService(t)
-	r, e := s.File.ExtractToFile(
+	o := service_tester.New(t, service_tester.WithFixture("extract-single/src"))
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/only.go",
 		"OnlyFunction",
 		false,
@@ -165,6 +176,6 @@ func TestExtractRefusesEmptyFile(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "empty file")
-	source := service_tester.ReadFixtureFile(t, d, "pkg/target/only.go")
+	source := o.Read("pkg/target/only.go")
 	assert.StringContains(t, "func OnlyFunction(", source)
 }

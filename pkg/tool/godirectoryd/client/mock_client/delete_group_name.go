@@ -10,7 +10,7 @@ import (
 func (c *Client) DeleteGroupName(
 	_ context.Context,
 	name string,
-) (*client.Receipt, error) {
+) (*client.Result, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -30,5 +30,5 @@ func (c *Client) DeleteGroupName(
 
 	c.GroupList = slices.Delete(c.GroupList, i, i+1)
 
-	return &client.Receipt{Message: fmt.Sprintf("deleted group: %s", name)}, nil
+	return &client.Result{Message: fmt.Sprintf("deleted group: %s", name)}, nil
 }

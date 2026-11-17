@@ -4,9 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/publish_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/web_interface_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret"
 	"net/url"
 	"path/filepath"
@@ -14,32 +13,32 @@ import (
 )
 
 func TestEveryToolIsRegistered(t *testing.T) {
-	o := model_context_tester.New(t)
-	assert.Count(t, 12, o.Client.ListTools())
+	assert.Count(t, 12, base.New(t).Tools().ListTools())
 }
 
 func TestChainIsBuiltThroughTools(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.CreateRoot()
-	assert.StringContains(t, "Example Issuing CA", o.CreateCluster())
+	s := base.New(t)
+	s.CreateRoot()
+	assert.StringContains(t, "Example Issuing CA", s.CreateCluster())
 	assert.StringContains(
 		t,
 		"Example",
-		o.Client.MustCallTool(constant.ListAuthorities, map[string]any{}),
+		s.Tools().MustCallTool(constant.ListAuthorities, map[string]any{}),
 	)
 }
 
 func TestSecondRootIsRefusedThroughTools(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.CreateRoot()
-	assert.StringContains(t, "already live", o.CreateRootRefusal())
+	s := base.New(t)
+	s.CreateRoot()
+	assert.StringContains(t, "already live", s.CreateRootRefusal())
 }
 
 func TestIssuedCertificateReturnsItsKeyOnce(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.CreateRoot()
-	o.CreateCluster()
-	issued := o.Client.MustCallTool(
+	s := base.New(t)
+	s.CreateRoot()
+	s.CreateCluster()
+	c := s.Tools()
+	issued := c.MustCallTool(
 		constant.IssueCertificate,
 		map[string]any{
 			constant.AuthorityParameter:  constant.FixtureClusterAuthority,
@@ -52,31 +51,32 @@ func TestIssuedCertificateReturnsItsKeyOnce(t *testing.T) {
 	assert.StringNotContains(
 		t,
 		"PRIVATE KEY",
-		o.Client.MustCallTool(constant.ListCertificates, map[string]any{}),
+		c.MustCallTool(constant.ListCertificates, map[string]any{}),
 	)
 }
 
 func TestRootCertificateToolServesAnchor(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.CreateRoot()
+	s := base.New(t)
+	s.CreateRoot()
 	assert.StringContains(
 		t,
 		"BEGIN CERTIFICATE",
-		o.Client.MustCallTool(constant.RootCertificate, map[string]any{}),
+		s.Tools().MustCallTool(constant.RootCertificate, map[string]any{}),
 	)
 }
 
 func TestPublishThroughToolsCommitsChain(t *testing.T) {
-	o := model_context_tester.New(t)
-	o.CreateRoot()
-	o.CreateCluster()
-	o.Client.MustCallTool(constant.Publish, map[string]any{})
-	assert.Integer(t, 1, len(o.Server.Forge.Commits()))
-	assert.Integer(t, 6, len(o.Server.Forge.Commits()[0].Actions))
+	s := base.New(t)
+	s.CreateRoot()
+	s.CreateCluster()
+	c := s.Tools()
+	c.MustCallTool(constant.Publish, map[string]any{})
+	assert.Integer(t, 1, len(s.Forge.Commits()))
+	assert.Integer(t, 6, len(s.Forge.Commits()[0].Actions))
 	assert.StringContains(
 		t,
 		"Nothing to publish",
-		o.Client.MustCallTool(constant.Publish, map[string]any{}),
+		c.MustCallTool(constant.Publish, map[string]any{}),
 	)
 }
 
@@ -227,82 +227,75 @@ func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 }
 
 func TestEmptyDashboardInvitesRoot(t *testing.T) {
-	o := web_interface_tester.New(t)
 	assert.StringContains(
 		t,
 		"Create the root to begin the chain",
-		o.Page(constant.DashboardPath),
+		base.New(t).Page(constant.DashboardPath),
 	)
 }
 
 func TestEveryPageRenders(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Page(constant.DashboardPath)
-	o.Page(constant.AuthoritiesPath)
-	o.Page(constant.CertificatesPath)
-	o.Page(constant.CreateAuthorityPath)
-	o.Page(constant.IssueCertificatePath)
+	s := base.New(t)
+	s.Page(constant.DashboardPath)
+	s.Page(constant.AuthoritiesPath)
+	s.Page(constant.CertificatesPath)
+	s.Page(constant.CreateAuthorityPath)
+	s.Page(constant.IssueCertificatePath)
 }
 
 func TestRootIsCreatedThroughForm(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
+	s := base.New(t)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
 	assert.StringContains(
 		t,
 		"Example Root CA",
-		o.Page(constant.AuthoritiesPath),
+		s.Page(constant.AuthoritiesPath),
 	)
 }
 
 func TestFormRejectionKeepsValues(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
-	page := o.Submit(
-		constant.CreateAuthorityPath,
-		web_interface_tester.RootValues(),
-	)
+	s := base.New(t)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	page := s.Submit(constant.CreateAuthorityPath, base.RootValues())
 	assert.StringContains(t, "already live", page)
 	assert.StringContains(t, "Example Root CA", page)
 }
 
 func TestIssuedKeyIsShownOnceThenNeverAgain(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.ClusterValues())
+	s := base.New(t)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	s.Submit(constant.CreateAuthorityPath, base.ClusterValues())
 	assert.StringContains(
 		t,
 		"PRIVATE KEY",
-		o.Submit(
-			constant.IssueCertificatePath,
-			web_interface_tester.LeafValues(),
-		),
+		s.Submit(constant.IssueCertificatePath, base.LeafValues()),
 	)
 	assert.StringNotContains(
 		t,
 		"PRIVATE KEY",
-		o.Page(constant.CertificatesPath),
+		s.Page(constant.CertificatesPath),
 	)
 }
 
 func TestPublishButtonCommitsChain(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
+	s := base.New(t)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
 	assert.StringContains(
 		t,
 		"certificate/root/certificate.pem",
-		o.Page(constant.DashboardPath),
+		s.Page(constant.DashboardPath),
 	)
-	o.Submit(constant.PublishPath, url.Values{})
-	assert.Integer(t, 1, len(o.Server.Forge.Commits()))
+	s.Submit(constant.PublishPath, url.Values{})
+	assert.Integer(t, 1, len(s.Forge.Commits()))
 	assert.StringContains(
 		t,
 		"Everything is published",
-		o.Page(constant.DashboardPath),
+		s.Page(constant.DashboardPath),
 	)
 }
 
 func TestRootPathServesAnchorAsText(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.Submit(constant.CreateAuthorityPath, web_interface_tester.RootValues())
-	assert.StringContains(t, "BEGIN CERTIFICATE", o.Page(constant.RootPath))
+	s := base.New(t)
+	s.Submit(constant.CreateAuthorityPath, base.RootValues())
+	assert.StringContains(t, "BEGIN CERTIFICATE", s.Page(constant.RootPath))
 }

@@ -8,7 +8,7 @@ import (
 
 func (o *Tester) EndTurn(identifier string) {
 	o.t.Helper()
-	response, e := o.Goclauded.RESTClient(o.t).PostTurnEndWithResponse(
+	response, e := o.Goclauded.RESTClient().PostTurnEndWithResponse(
 		context.Background(),
 		client.PostTurnEndJSONRequestBody{Session: identifier},
 	)

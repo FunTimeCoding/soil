@@ -1,26 +1,17 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/web/guard"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	o := service_tester.NewOption(t, map[string]*cluster.Cluster{})
-	r := memory.New()
-	d := service_tester.NewDaemon(t, o, r)
-	v := model_context_server.New(
+	v := base.New(
 		t,
-		func(g *guard.Mux) {
-			d.Mount(r, mock_recorder.New(), g)
-		},
-	)
-	defer v.Close()
+		service_tester.WithClusters(map[string]*cluster.Cluster{}),
+	).Served()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
 }

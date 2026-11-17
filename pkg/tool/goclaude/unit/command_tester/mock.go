@@ -7,9 +7,8 @@ import (
 
 func Mock(t *testing.T) *mock_client.Client {
 	t.Helper()
-	result := mock_client.New()
+	result := mock_client.New(t)
 	result.Resolved = map[string]string{"alfa": "alfa-identifier"}
-	t.Cleanup(result.Close)
 
 	return result
 }

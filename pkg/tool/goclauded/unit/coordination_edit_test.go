@@ -10,7 +10,7 @@ import (
 
 func TestEdit(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "some work")
 	a.MustCallTool(
 		constant.Complete,
@@ -34,7 +34,7 @@ func TestEdit(t *testing.T) {
 
 func TestEditNegativeIdentifier(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "bind identity")
 	assert.StringContains(
 		t,

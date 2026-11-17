@@ -14,10 +14,10 @@ import (
 
 func TestCompactionThroughClientReachesWatcher(t *testing.T) {
 	s := base.New(t)
-	watcher := s.NewSession(t)
+	watcher := s.NewSession()
 	watcher.Announce(watcher.Name(), "leading")
 	watcher.CheckLive()
-	_, e := watcher.RestClient.PostSessionLabelWithResponse(
+	_, e := watcher.GeneratedClient.PostSessionLabelWithResponse(
 		watcher.Context,
 		watcher.UUID,
 		label_tester.Body(
@@ -27,12 +27,12 @@ func TestCompactionThroughClientReachesWatcher(t *testing.T) {
 		),
 	)
 	assert.FatalOnError(t, e)
-	compacting := s.NewSession(t)
+	compacting := s.NewSession()
 	compacting.Announce(compacting.Name(), "building")
 	compacting.CheckLive()
 	assert.FatalOnError(
 		t,
-		s.Client(t).PostCompaction(
+		s.Client().PostCompaction(
 			compacting.Context,
 			client.PostCompactionJSONRequestBody{
 				Session: compacting.UUID,
@@ -58,9 +58,9 @@ func TestCompactionThroughClientReachesWatcher(t *testing.T) {
 
 func TestCompactionThroughClientRefusesUnknownPhase(t *testing.T) {
 	s := base.New(t)
-	compacting := s.NewSession(t)
+	compacting := s.NewSession()
 	compacting.CheckLive()
-	e := s.Client(t).PostCompaction(
+	e := s.Client().PostCompaction(
 		compacting.Context,
 		client.PostCompactionJSONRequestBody{
 			Session: compacting.UUID,

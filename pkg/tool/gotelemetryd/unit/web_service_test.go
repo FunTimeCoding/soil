@@ -6,14 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestWebService(t *testing.T) {
-	o := web_service_tester.New(t)
-	c := o.Client
+	o := base.New(t)
+	c := o.GeneratedClient()
 	x := context.Background()
 	post, e := c.PostEventWithResponse(
 		x,
@@ -54,9 +54,10 @@ func TestWebService(t *testing.T) {
 }
 
 func TestIngestOperationNotRecorded(t *testing.T) {
-	o := web_service_tester.New(t)
+	o := base.New(t)
+	c := o.GeneratedClient()
 	x := context.Background()
-	_, e := o.Client.PostEventWithResponse(
+	_, e := c.PostEventWithResponse(
 		x,
 		client.PostEventJSONRequestBody{
 			Tool:    "save_memory",
@@ -66,17 +67,17 @@ func TestIngestOperationNotRecorded(t *testing.T) {
 		},
 	)
 	assert.FatalOnError(t, e)
-	summary, e := o.Client.GetSummaryWithResponse(x, &client.GetSummaryParams{})
+	summary, e := c.GetSummaryWithResponse(x, &client.GetSummaryParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, summary.StatusCode())
 	ingest := query_option.New()
 	ingest.Tool = constant.IngestOperation
-	ingested, f := o.Store.Recent(ingest)
+	ingested, f := o.Store().Recent(ingest)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 0, ingested)
 	summaries := query_option.New()
 	summaries.Tool = "GetSummary"
-	recorded, g := o.Store.Recent(summaries)
+	recorded, g := o.Store().Recent(summaries)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, recorded)
 }

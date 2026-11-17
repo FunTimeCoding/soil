@@ -9,7 +9,7 @@ import (
 
 func TestFailureAnsweringCallerCarriesCallersTrace(t *testing.T) {
 	s := base.New(t)
-	c := s.MemoryClient(t)
+	c := s.MemoryClient()
 	s.Execute("ALTER TABLE memory RENAME TO memory_gone")
 	_, e := c.GetStatistics(trace_tester.Context(t, nil))
 	assert.Error(t, e)

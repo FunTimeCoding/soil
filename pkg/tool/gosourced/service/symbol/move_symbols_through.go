@@ -8,8 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/lookup"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/move_engine"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocation"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/symbol/relocator"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/sink"
 	"go/token"
 	"go/types"
@@ -52,7 +52,7 @@ func (s *Service) moveSymbolsThrough(
 			loaded []*packages.Package,
 			loadedSet *token.FileSet,
 		) []types.Object {
-			return relocator.MovedObjects(
+			return move_engine.MovedObjects(
 				directory,
 				loaded,
 				loadedSet,
@@ -92,7 +92,7 @@ func (s *Service) moveSymbolsThrough(
 			)
 		}
 
-		symbols, e = relocator.FileSymbols(file)
+		symbols, e = move_engine.FileSymbols(file)
 
 		if e != nil {
 			return commit.FailValidation(r, e.Error())
@@ -112,7 +112,7 @@ func (s *Service) moveSymbolsThrough(
 		unique[name] = true
 	}
 
-	entries, message := relocator.SymbolEntries(
+	entries, message := move_engine.SymbolEntries(
 		all,
 		p,
 		packagePath,
@@ -124,7 +124,7 @@ func (s *Service) moveSymbolsThrough(
 		return commit.FailValidation(r, message)
 	}
 
-	if message := relocator.CheckMethodSet(entries); message != "" {
+	if message := move_engine.CheckMethodSet(entries); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
@@ -134,7 +134,7 @@ func (s *Service) moveSymbolsThrough(
 		references[entry] = resolve.FindAllReferences(all, entry.Object)
 	}
 
-	relocator.FlipReferenced(entries, references)
+	move_engine.FlipReferenced(entries, references)
 	target := lookup.FindPackage(all, targetPackagePath)
 
 	if target == nil && !create {
@@ -183,7 +183,7 @@ func (s *Service) moveSymbolsThrough(
 	plan.PackagePath = packagePath
 	plan.TargetPackagePath = targetPackagePath
 
-	if message := relocator.Prepare(plan, nil); message != "" {
+	if message := move_engine.Prepare(plan, nil); message != "" {
 		return commit.FailValidation(r, message)
 	}
 
@@ -194,7 +194,7 @@ func (s *Service) moveSymbolsThrough(
 			continue
 		}
 
-		if capture := relocator.EmbeddedRenames(
+		if capture := move_engine.EmbeddedRenames(
 			all,
 			entry.Object,
 			entry.NewName,
@@ -206,7 +206,7 @@ func (s *Service) moveSymbolsThrough(
 
 	for _, entry := range entries {
 		for _, f := range references[entry] {
-			if relocator.MovedContains(entries, f.Ident.Pos()) {
+			if move_engine.MovedContains(entries, f.Ident.Pos()) {
 				if entry.Flipped {
 					plan.Renames[f.Ident] = entry.NewName
 				}
@@ -224,7 +224,7 @@ func (s *Service) moveSymbolsThrough(
 		}
 	}
 
-	qualifications, blocked := relocator.Qualifications(
+	qualifications, blocked := move_engine.Qualifications(
 		set,
 		external,
 		packagePath,
@@ -238,5 +238,5 @@ func (s *Service) moveSymbolsThrough(
 
 	plan.Qualifications = qualifications
 
-	return relocator.Finish(r, plan, out)
+	return move_engine.Finish(r, plan, out)
 }

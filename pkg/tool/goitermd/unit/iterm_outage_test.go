@@ -2,20 +2,17 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/iterm/mock_client"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/goitermd/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
 
 func TestItermOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
-	s.MockClient.Failure = outage_tester.RefusedDial()
-	c := s.Connect(t)
-	defer c.Close()
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.Tools()
 
 	for range 2 {
 		assert.StringContains(
@@ -29,9 +26,6 @@ func TestItermOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestDaemonHandsOutItermGuard(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }

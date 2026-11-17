@@ -33,7 +33,7 @@ type Client interface {
 		x context.Context,
 		identifier string,
 		params *client.DeleteSessionByIdentifierParams,
-	) (*client.DeleteReceiptResponse, error)
+	) (*client.DeletionResult, error)
 	GetChannel(
 		x context.Context,
 		params *client.GetChannelParams,

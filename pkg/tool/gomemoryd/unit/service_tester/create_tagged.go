@@ -14,7 +14,7 @@ func (o *Tester) CreateTagged(
 	p := save_tester.Scoped(name, "")
 	p.Type = "feedback"
 	p.Tags = tags
-	m, e := o.Service.CreateMemory(p)
+	m, e := o.Service().CreateMemory(p)
 	assert.FatalOnError(o.t, e)
 
 	return m

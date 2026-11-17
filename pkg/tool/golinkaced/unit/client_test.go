@@ -3,7 +3,6 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/client"
@@ -11,8 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/unit/base"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"reflect"
 	"slices"
@@ -46,8 +44,7 @@ func TestClientCoversEveryOperation(t *testing.T) {
 func TestClientAndMockHoldFace(t *testing.T) {
 	c := client.New(locator.New("golinkaced.test"), "token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 
 	for _, f := range []face.Client{c, m} {
 		assert.NotNil(t, f)
@@ -55,11 +52,9 @@ func TestClientAndMockHoldFace(t *testing.T) {
 }
 
 func TestClientRoundTripsThroughDaemon(t *testing.T) {
-	source := service_tester.NewSource(t)
+	s := base.New(t)
 	c := client.New(
-		locator.New("localhost").Port(
-			daemon_tester.ServedPort(t, source, memory.New()),
-		).Insecure(),
+		locator.New("localhost").Port(s.Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -67,19 +62,13 @@ func TestClientRoundTripsThroughDaemon(t *testing.T) {
 	assert.FatalOnError(t, c.Reachable(x))
 	_, e := c.GetLists(x, &generated.GetListsParams{})
 	assert.FatalOnError(t, e)
-	source.Failure = not_found.Format("resource not found: links/%d", 12)
+	s.Source.Failure = not_found.Format("resource not found: links/%d", 12)
 	assert.True(t, not_found.Is(c.DeleteLink(x, 12)))
 }
 
 func TestClientReadsEveryDeleteAnsweredAsDone(t *testing.T) {
 	c := client.New(
-		locator.New("localhost").Port(
-			daemon_tester.ServedPort(
-				t,
-				service_tester.NewSource(t),
-				memory.New(),
-			),
-		).Insecure(),
+		locator.New("localhost").Port(base.New(t).Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()

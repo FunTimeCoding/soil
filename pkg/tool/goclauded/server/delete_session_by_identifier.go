@@ -32,6 +32,6 @@ func (s *Server) DeleteSessionByIdentifier(
 	}
 
 	return server.DeleteSessionByIdentifier200JSONResponse(
-		*deleteReceipt(result),
+		*deletionResponse(result),
 	), nil
 }

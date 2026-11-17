@@ -87,7 +87,7 @@ const (
 	WebSource   = "web"
 	RowPrefix   = "memory-"
 
-	ProfileByteBudget = 50000
+	ProfileByteLimit = 50000
 
 	DefaultCollection = "memories"
 	MemoryTable       = "memory"

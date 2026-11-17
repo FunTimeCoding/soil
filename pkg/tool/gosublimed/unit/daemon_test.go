@@ -1,15 +1,14 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/sublime/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New()
+	s := base.New(t)
 	before := goleak.IgnoreCurrent()
-	daemon_tester.New(t, c).Close()
+	s.Daemon().Close()
 	goleak.VerifyNone(t, before)
 }

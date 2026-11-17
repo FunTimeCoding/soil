@@ -20,7 +20,7 @@ func TestOverrideWhoseUpdateIsRefusedAnswersRefusal(t *testing.T) {
 			errors.New("rbac denied"),
 		),
 	)
-	_, e := v.Service.ApplyResource(
+	_, e := v.Service().ApplyResource(
 		t.Context(),
 		"test",
 		request.Apply{
@@ -34,7 +34,7 @@ func TestOverrideWhoseUpdateIsRefusedAnswersRefusal(t *testing.T) {
 
 func TestOverrideOfMissingResourceCreatesIt(t *testing.T) {
 	v := service_tester.New(t)
-	_, e := v.Service.ApplyResource(
+	_, e := v.Service().ApplyResource(
 		t.Context(),
 		"test",
 		request.Apply{

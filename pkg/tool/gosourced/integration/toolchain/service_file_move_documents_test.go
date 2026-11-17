@@ -9,16 +9,19 @@ import (
 )
 
 func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
-	d := service_tester.Prepare(t, "move-visibility/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-visibility/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"Keep `pkg/alfa/keep.go`, move `pkg/alfa/lone.go`.\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		[]string{"lone"},
 		"",
@@ -32,21 +35,24 @@ func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
 	assert.String(
 		t,
 		"Keep `pkg/alfa/keep.go`, move `pkg/bravo/lone.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }
 
 func TestMoveSymbolsRetargetsSplitFileToPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "move-split-file/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-split-file/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"Helpers live in `pkg/alfa/helpers.go`.\n",
 	)
-	r, e := service_tester.NewService(t).Symbol.MoveSymbols(
+	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		[]string{"Clamp", "Limit"},
 		"",
@@ -57,24 +63,23 @@ func TestMoveSymbolsRetargetsSplitFileToPackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(
-		t,
-		"Helpers live in `pkg/bravo`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
-	)
+	assert.String(t, "Helpers live in `pkg/bravo`.\n", o.Read("doc/note.md"))
 }
 
 func TestExtractToFileRetargetsRenamedResidual(t *testing.T) {
-	d := service_tester.Prepare(t, "extract-last-pair/src")
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("extract-last-pair/src"),
+	)
 	system_tester.Write(
 		t,
-		d,
+		o.Directory,
 		"doc/note.md",
 		"Names live in `pkg/target/combined.go`.\n",
 	)
-	r, e := service_tester.NewService(t).File.ExtractToFile(
+	r, e := o.File.ExtractToFile(
 		t.Context(),
-		d,
+		o.Directory,
 		"pkg/target/combined.go",
 		"FormatName",
 		false,
@@ -84,6 +89,6 @@ func TestExtractToFileRetargetsRenamedResidual(t *testing.T) {
 	assert.String(
 		t,
 		"Names live in `pkg/target/summarize_name.go`.\n",
-		service_tester.ReadFixtureFile(t, d, "doc/note.md"),
+		o.Read("doc/note.md"),
 	)
 }

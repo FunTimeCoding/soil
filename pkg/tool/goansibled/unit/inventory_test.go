@@ -66,7 +66,7 @@ func TestApplyRunsAgainstStaticAndNetboxInventory(t *testing.T) {
 }
 
 func TestApplyAsksInventoryForItsSite(t *testing.T) {
-	o := ansible_tester.NewWithSite(
+	o := ansible_tester.New(
 		t,
 		http.HandlerFunc(
 			func(
@@ -83,7 +83,7 @@ func TestApplyAsksInventoryForItsSite(t *testing.T) {
 				errors.PanicOnError(e)
 			},
 		),
-		"kilo",
+		ansible_tester.WithSite("kilo"),
 	)
 	assert.String(t, "success", o.WaitForRun().Status)
 }

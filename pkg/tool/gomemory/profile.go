@@ -44,7 +44,7 @@ func profile(x *Context) *cobra.Command {
 		"",
 		"session topic for relevance matching",
 	)
-	c.Flags().BoolVar(&detail, "detail", false, "include token budget details")
+	c.Flags().BoolVar(&detail, "detail", false, "include byte limit details")
 
 	return c
 }

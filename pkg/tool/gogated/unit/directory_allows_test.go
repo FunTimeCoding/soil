@@ -11,62 +11,62 @@ import (
 )
 
 func TestAllowsWithoutDirectory(t *testing.T) {
-	assert.True(t, base.Allows(t, base.New(t), "anything"))
+	assert.True(t, base.New(t).Allows("anything"))
 }
 
 func TestAllowsLocalUser(t *testing.T) {
 	d := mock_client.New("")
-	b := base.NewWith(t, d)
-	row, e := b.Store.UserByMail(constant.FixtureMail)
+	b := base.New(t, base.WithDirectory(d))
+	row, e := b.Store().UserByMail(constant.FixtureMail)
 	assert.FatalOnError(t, e)
-	assert.True(t, base.Allows(t, b, row.Identifier))
+	assert.True(t, b.Allows(row.Identifier))
 }
 
 func TestAllowsDirectoryMember(t *testing.T) {
 	d := mock_client.New("")
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
-	b := base.NewWith(t, d)
-	row, e := b.Service.AuthenticateUser(
+	b := base.New(t, base.WithDirectory(d))
+	row, e := b.Service().AuthenticateUser(
 		"member@example.test",
 		"secret",
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
-	assert.True(t, base.Allows(t, b, row.Identifier))
+	assert.True(t, b.Allows(row.Identifier))
 }
 
 func TestRevokesAfterGroupRemoval(t *testing.T) {
 	d := mock_client.New("")
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
-	b := base.NewWith(t, d)
-	row, e := b.Service.AuthenticateUser(
+	b := base.New(t, base.WithDirectory(d))
+	row, e := b.Service().AuthenticateUser(
 		"member@example.test",
 		"secret",
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
 	d.SetMember("member", false)
-	assert.False(t, base.Allows(t, b, row.Identifier))
+	assert.False(t, b.Allows(row.Identifier))
 }
 
 func TestUnreachableDirectoryCannotConfirmMembership(t *testing.T) {
 	d := mock_client.New("")
 	d.AddEntry("unique-1", "member", "member@example.test", "secret", true)
-	b := base.NewWith(t, d)
-	row, e := b.Service.AuthenticateUser(
+	b := base.New(t, base.WithDirectory(d))
+	row, e := b.Service().AuthenticateUser(
 		"member@example.test",
 		"secret",
 		constant.SourceDirectory,
 	)
 	assert.FatalOnError(t, e)
 	d.Failure = directory_tester.Down()
-	allowed, f := b.Service.DirectoryAllows(row.Identifier)
+	allowed, f := b.Service().DirectoryAllows(row.Identifier)
 	assert.False(t, allowed)
 	assert.True(t, unavailable.Is(f))
 }
 
 func TestAllowsUnknownIdentifierRefused(t *testing.T) {
 	d := mock_client.New("")
-	b := base.NewWith(t, d)
-	assert.False(t, base.Allows(t, b, "missing"))
+	b := base.New(t, base.WithDirectory(d))
+	assert.False(t, b.Allows("missing"))
 }

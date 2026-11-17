@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
 	kubernetesErrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -11,8 +12,8 @@ import (
 )
 
 func TestGettingMissingPodAnswersWithoutReport(t *testing.T) {
-	c, r := service_tester.New(t).Mounted(false)
-	text, e := c.CallToolError(
+	s := base.New(t)
+	text, e := s.Tools().CallToolError(
 		constant.Get,
 		map[string]any{
 			"resourceType": "pod",
@@ -22,20 +23,19 @@ func TestGettingMissingPodAnswersWithoutReport(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "hotel", text)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestForbiddenDeleteAnswersWithoutReport(t *testing.T) {
-	v := service_tester.New(t)
-	v.RefuseAll(
+	s := base.New(t, service_tester.WithArmed())
+	s.RefuseAll(
 		kubernetesErrors.NewForbidden(
 			schema.GroupResource{Resource: "pods"},
 			"india",
 			errors.New("rbac denied"),
 		),
 	)
-	c, r := v.Mounted(true)
-	text, e := c.CallToolError(
+	text, e := s.Tools().CallToolError(
 		constant.Delete,
 		map[string]any{
 			"resourceType": "pod",
@@ -45,14 +45,13 @@ func TestForbiddenDeleteAnswersWithoutReport(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "forbidden", text)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestInvalidPatchAnswersWithoutReport(t *testing.T) {
-	v := service_tester.New(t)
-	v.RefuseAll(kubernetesErrors.NewBadRequest("the patch is not valid"))
-	c, r := v.Mounted(true)
-	text, e := c.CallToolError(
+	s := base.New(t, service_tester.WithArmed())
+	s.RefuseAll(kubernetesErrors.NewBadRequest("the patch is not valid"))
+	text, e := s.Tools().CallToolError(
 		constant.Patch,
 		map[string]any{
 			"resourceType": "pod",
@@ -64,18 +63,17 @@ func TestInvalidPatchAnswersWithoutReport(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "not valid", text)
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestUnexpectedClusterFailureIsReported(t *testing.T) {
-	v := service_tester.New(t)
-	v.RefuseAll(errors.New("etcd exploded"))
-	c, r := v.Mounted(false)
-	text, e := c.CallToolError(
+	s := base.New(t)
+	s.RefuseAll(errors.New("etcd exploded"))
+	text, e := s.Tools().CallToolError(
 		constant.Get,
 		map[string]any{"resourceType": "pod", "namespace": "default"},
 	)
 	assert.FatalOnError(t, e)
 	assert.StringContains(t, "etcd exploded", text)
-	assert.Count(t, 1, r.Events())
+	assert.Count(t, 1, s.Reporter.Events())
 }

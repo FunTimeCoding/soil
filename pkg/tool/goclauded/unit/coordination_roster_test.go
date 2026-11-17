@@ -10,8 +10,8 @@ import (
 
 func TestRosterTwoSessions(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "search index")
 	b.Announce(b.Name(), "schema migration")
 	roster := a.MustCallTool(constant.Roster, map[string]any{})
@@ -21,8 +21,8 @@ func TestRosterTwoSessions(t *testing.T) {
 
 func TestRosterAfterRelease(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
-	b := s.NewSession(t)
+	a := s.NewSession()
+	b := s.NewSession()
 	a.Announce(a.Name(), "staying")
 	b.Announce(b.Name(), "leaving")
 	b.MustCallTool(constant.Release, map[string]any{})
@@ -33,7 +33,7 @@ func TestRosterAfterRelease(t *testing.T) {
 
 func TestRosterAfterComplete(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "some task")
 	a.CheckLive()
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})

@@ -23,7 +23,7 @@ func TestChunkGoSourceSplitsAtDeclarations(t *testing.T) {
 	chunks := chunk.Document(
 		source,
 		soil.MainFile,
-		service_tester.NewReranker(t),
+		service_tester.New(t).Reranker,
 	)
 	assert.Greater(t, 1, len(chunks))
 	assert.StringContains(t, "package main", chunks[0].Text)
@@ -48,22 +48,22 @@ func TestChunkGoSourceFallsBackOnParseError(t *testing.T) {
 	chunks := chunk.Document(
 		invalid,
 		"broken.go",
-		service_tester.NewReranker(t),
+		service_tester.New(t).Reranker,
 	)
 	assert.Greater(t, 0, len(chunks))
 }
 
 func TestChunkGoSourceShortFile(t *testing.T) {
 	source := "package store\n\nfunc Hello() {}\n"
-	chunks := chunk.Document(source, "hello.go", service_tester.NewReranker(t))
+	chunks := chunk.Document(source, "hello.go", service_tester.New(t).Reranker)
 	assert.Count(t, 1, chunks)
 	assert.String(t, source, chunks[0].Text)
 }
 
-func TestChunkGoSourceSplitsShortFileOverAllowance(t *testing.T) {
+func TestChunkGoSourceSplitsShortFileOverTokenLimit(t *testing.T) {
 	r := mock_reranker.New()
 	defer errors.PanicClose(r)
-	r.SetAllowance(10)
+	r.SetTokenLimit(10)
 	chunks := chunk.Document(
 		"package store\n\nfunc Alfa() {\n\treturn\n}\n\nfunc Bravo() {\n\treturn\n}\n\nfunc Charlie() {\n\treturn\n}\n",
 		"short.go",
@@ -76,11 +76,11 @@ func TestChunkGoSourceSplitsShortFileOverAllowance(t *testing.T) {
 	assert.String(t, "func Charlie() {\n\treturn\n}\n", chunks[3].Text)
 }
 
-func TestChunkGoSourceKeepsShortFileAtAllowance(t *testing.T) {
+func TestChunkGoSourceKeepsShortFileAtTokenLimit(t *testing.T) {
 	source := "package store\n\nfunc Alfa() {\n\treturn\n}\n\nfunc Bravo() {\n\treturn\n}\n\nfunc Charlie() {\n\treturn\n}\n"
 	r := mock_reranker.New()
 	defer errors.PanicClose(r)
-	r.SetAllowance(17)
+	r.SetTokenLimit(17)
 	chunks := chunk.Document(source, "short.go", r)
 	assert.Count(t, 1, chunks)
 	assert.String(t, source, chunks[0].Text)

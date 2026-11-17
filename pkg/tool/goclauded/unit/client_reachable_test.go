@@ -11,7 +11,7 @@ import (
 
 func TestClientReachesServer(t *testing.T) {
 	s := base.New(t)
-	assert.FatalOnError(t, s.Client(t).Reachable(context.Background()))
+	assert.FatalOnError(t, s.Client().Reachable(context.Background()))
 }
 
 func TestClientReachableRefusesWrongToken(t *testing.T) {
@@ -23,5 +23,5 @@ func TestClientReachableRefusesWrongToken(t *testing.T) {
 
 func TestClientAddressNamesHostAndPort(t *testing.T) {
 	s := base.New(t)
-	assert.String(t, fmt.Sprintf("localhost:%d", s.Port), s.Client(t).Address())
+	assert.String(t, fmt.Sprintf("localhost:%d", s.Port), s.Client().Address())
 }

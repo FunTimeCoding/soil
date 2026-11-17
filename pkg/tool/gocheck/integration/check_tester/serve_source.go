@@ -25,7 +25,6 @@ func ServeSource(
 			d.Mount(memory.New(), mock_recorder.New(), g)
 		},
 	)
-	t.Cleanup(s.Close)
 	t.Setenv(gosourcedConstant.HostEnvironment, "localhost")
 	t.Setenv(gosourcedConstant.PortEnvironment, strconv.Itoa(s.Port))
 	t.Setenv(gosourcedConstant.InsecureEnvironment, "true")

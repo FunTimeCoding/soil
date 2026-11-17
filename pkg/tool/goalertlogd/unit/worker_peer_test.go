@@ -11,7 +11,7 @@ import (
 
 func TestAlertmanagerOutageIsLeftToGuard(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Fail(outage_tester.RefusedDial())
+	o.Alertmanager.Fail(outage_tester.RefusedDial())
 	o.Worker.Poll()
 	o.Worker.Poll()
 	assert.Count(t, 0, o.Reporter.Events())
@@ -21,7 +21,7 @@ func TestAlertmanagerOutageIsLeftToGuard(t *testing.T) {
 
 func TestAlertmanagerFaultIsCapturedOnce(t *testing.T) {
 	o := worker_tester.New(t)
-	o.MockClient.Fail(errors.Format("alertmanager answered", "garbage"))
+	o.Alertmanager.Fail(errors.Format("alertmanager answered", "garbage"))
 	o.Worker.Poll()
 	assert.Count(t, 1, o.Reporter.Events())
 }

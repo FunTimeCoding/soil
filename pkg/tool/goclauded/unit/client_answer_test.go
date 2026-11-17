@@ -12,7 +12,7 @@ import (
 func TestClientAnswersFailedUsageReadAsFailure(t *testing.T) {
 	s := base.New(t)
 	s.CloseDaemon()
-	_, found, e := s.Client(t).GetUsage(t.Context())
+	_, found, e := s.Client().GetUsage(t.Context())
 	assert.NotNil(t, e)
 	assert.False(t, found)
 	assert.Count(t, 1, s.Reporter.Events())
@@ -20,7 +20,7 @@ func TestClientAnswersFailedUsageReadAsFailure(t *testing.T) {
 
 func TestClientAnswersNoUsageAsAbsent(t *testing.T) {
 	s := base.New(t)
-	r, found, e := s.Client(t).GetUsage(t.Context())
+	r, found, e := s.Client().GetUsage(t.Context())
 	assert.FatalOnError(t, e)
 	assert.False(t, found)
 	assert.True(t, r == nil)
@@ -30,17 +30,17 @@ func TestClientReadsRecordedUsage(t *testing.T) {
 	s := base.New(t)
 	now := s.Store.Clock()()
 	s.Store.Store.SaveRateSnapshot(0, 20, time.Time{}, now.Add(24*time.Hour))
-	r, found, e := s.Client(t).GetUsage(t.Context())
+	r, found, e := s.Client().GetUsage(t.Context())
 	assert.FatalOnError(t, e)
 	assert.True(t, found)
 	assert.Integer(t, 20, r.SevenDayPercent)
 }
 
 func TestClientAnswersReleasedCallsignHoldAsAbsent(t *testing.T) {
-	s := base.NewWithHold(t, constant.FixtureChannelHold)
+	s := base.New(t, base.WithHold(constant.FixtureChannelHold))
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)
-	r, found, e := s.Client(t).GetChannelCallsign(
+	r, found, e := s.Client().GetChannelCallsign(
 		t.Context(),
 		&client.GetChannelCallsignParams{
 			Session: "session-1",
@@ -56,7 +56,7 @@ func TestClientReturnsMatchesOfAmbiguousQuery(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("abc-1111")
 	s.Store.EnsureSession("abc-2222")
-	r, matches, e := s.Client(t).GetResolve(
+	r, matches, e := s.Client().GetResolve(
 		t.Context(),
 		&client.GetResolveParams{Query: "abc"},
 	)
@@ -68,7 +68,7 @@ func TestClientReturnsMatchesOfAmbiguousQuery(t *testing.T) {
 func TestClientResolvesUniqueQuery(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("abc-1111")
-	r, matches, e := s.Client(t).GetResolve(
+	r, matches, e := s.Client().GetResolve(
 		t.Context(),
 		&client.GetResolveParams{Query: "abc"},
 	)

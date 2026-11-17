@@ -43,8 +43,7 @@ func TestClientCoversEveryOperation(t *testing.T) {
 func TestClientAndMockHoldFace(t *testing.T) {
 	c := client.New(locator.New("gotelemetryd.test"), "token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 
 	for _, f := range []face.Client{c, m} {
 		assert.NotNil(t, f)
@@ -52,8 +51,7 @@ func TestClientAndMockHoldFace(t *testing.T) {
 }
 
 func TestClientRoundTripsThroughDaemon(t *testing.T) {
-	s := base.New(t)
-	l := locator.New("localhost").Port(s.Port).Insecure()
+	l := locator.New("localhost").Port(base.New(t).Served().Port).Insecure()
 	c := client.New(l, generativeConstant.ModelContextTestToken)
 	defer c.Close()
 	x := t.Context()

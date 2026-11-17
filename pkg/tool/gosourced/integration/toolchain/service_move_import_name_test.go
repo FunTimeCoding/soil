@@ -9,10 +9,10 @@ import (
 )
 
 func TestMoveIntoOwnConstantDropsOrphan(t *testing.T) {
-	d := service_tester.Prepare(t, "move-orphan/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(t, service_tester.WithFixture("move-orphan/src"))
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa/constant",
 		"Mode",
 		"example/pkg/bravo/constant",
@@ -25,15 +25,18 @@ func TestMoveIntoOwnConstantDropsOrphan(t *testing.T) {
 	assert.String(
 		t,
 		"package bravo\n\nimport \"example/pkg/bravo/constant\"\n\nfunc Run() string {\n\treturn constant.Mode\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/bravo/run.go"),
+		o.Read("pkg/bravo/run.go"),
 	)
 }
 
 func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
-	d := service_tester.Prepare(t, "move-foreign-constant/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-foreign-constant/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/target",
 		"Mode",
 		"example/pkg/delta/constant",
@@ -43,7 +46,7 @@ func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	caller := service_tester.ReadFixtureFile(t, d, "pkg/charlie/run.go")
+	caller := o.Read("pkg/charlie/run.go")
 	assert.StringContains(
 		t,
 		"deltaConstant \"example/pkg/delta/constant\"",
@@ -53,10 +56,13 @@ func TestMoveIntoForeignConstantCarriesItsDomain(t *testing.T) {
 }
 
 func TestMoveIntoNewFileNamesCarriedConstants(t *testing.T) {
-	d := service_tester.Prepare(t, "move-two-constants/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-two-constants/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/xray/bravo",
 		"Clamp",
 		"example/pkg/xray/charlie",
@@ -69,15 +75,18 @@ func TestMoveIntoNewFileNamesCarriedConstants(t *testing.T) {
 	assert.String(
 		t,
 		"package charlie\n\nimport (\n\talfaConstant \"example/pkg/alfa/constant\"\n\t\"example/pkg/xray/constant\"\n)\n\nfunc Clamp(name string) int {\n\tif name == alfaConstant.Prefix {\n\t\treturn constant.Limit\n\t}\n\n\treturn 0\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/xray/charlie/clamp.go"),
+		o.Read("pkg/xray/charlie/clamp.go"),
 	)
 }
 
 func TestMoveIntoExistingFileNamesCarriedConstants(t *testing.T) {
-	d := service_tester.Prepare(t, "move-two-constants/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("move-two-constants/src"),
+	)
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/xray/bravo",
 		"Clamp",
 		"example/pkg/xray/charlie",
@@ -90,15 +99,15 @@ func TestMoveIntoExistingFileNamesCarriedConstants(t *testing.T) {
 	assert.String(
 		t,
 		"package charlie\n\nimport (\n\talfaConstant \"example/pkg/alfa/constant\"\n\t\"example/pkg/xray/constant\"\n)\n\nfunc Size() int {\n\treturn constant.Limit * 2\n}\n\nfunc Clamp(name string) int {\n\tif name == alfaConstant.Prefix {\n\t\treturn constant.Limit\n\t}\n\n\treturn 0\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/xray/charlie/size.go"),
+		o.Read("pkg/xray/charlie/size.go"),
 	)
 }
 
 func TestMoveKeepsOneImportBlock(t *testing.T) {
-	d := module_tester.DottedModule(t, "move-dotted/src")
-	r, e := service_tester.NewService(t).Symbol.MoveSymbol(
+	o := module_tester.DottedModule(t, "move-dotted/src")
+	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
-		d,
+		o.Directory,
 		"example.org/m/pkg/target",
 		"Mode",
 		"example.org/m/pkg/delta/constant",
@@ -111,6 +120,6 @@ func TestMoveKeepsOneImportBlock(t *testing.T) {
 	assert.String(
 		t,
 		"package charlie\n\nimport (\n\tdeltaConstant \"example.org/m/pkg/delta/constant\"\n\t\"fmt\"\n)\n\nfunc Run() string {\n\treturn fmt.Sprint(deltaConstant.Mode)\n}\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/charlie/run.go"),
+		o.Read("pkg/charlie/run.go"),
 	)
 }

@@ -15,8 +15,7 @@ import (
 func TestHabiticaClientAndItsMockShareFace(t *testing.T) {
 	c := habitica.New("habitica.example", "alfa-user", "bravo-token")
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	faces := []face.HabiticaClient{c, m}
 	assert.Count(t, 2, faces)
 }

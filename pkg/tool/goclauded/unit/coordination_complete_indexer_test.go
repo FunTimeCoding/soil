@@ -9,7 +9,7 @@ import (
 
 func TestCompletePushesIndexer(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
@@ -28,7 +28,7 @@ func TestCompletePushesIndexer(t *testing.T) {
 
 func TestCompleteWithoutSlugSkipsPush(t *testing.T) {
 	s := base.New(t)
-	a := s.NewSession(t)
+	a := s.NewSession()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Complete,

@@ -12,7 +12,7 @@ import (
 
 func TestRemovalPrintsNothingOnSuccess(t *testing.T) {
 	for _, arguments := range command_tester.Removals() {
-		c := mock_client.New()
+		c := mock_client.New(t)
 		var output, failure string
 		var code int
 		stray := assert.Capture(
@@ -35,7 +35,7 @@ func TestRemovalPrintsNothingOnSuccess(t *testing.T) {
 
 func TestFailedRemovalExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range command_tester.Removals() {
-		c := mock_client.New()
+		c := mock_client.New(t)
 		c.Failure = errors.New("foxtrot")
 		_, failure, code := command_tester.Run(t, c, arguments...)
 		assert.Integer(t, 1, code)
@@ -45,8 +45,7 @@ func TestFailedRemovalExitsWithItsMessage(t *testing.T) {
 }
 
 func TestListDevicesEmitsDevices(t *testing.T) {
-	c := mock_client.New()
-	defer c.Close()
+	c := mock_client.New(t)
 	c.DeviceList = []*client.Device{{Identifier: 7, Name: "alfa"}}
 	output, _, code := command_tester.Run(t, c, "list-devices")
 	assert.Integer(t, 0, code)

@@ -11,6 +11,6 @@ import (
 
 func TestClientAndItsMockShareFace(t *testing.T) {
 	r := mattermost_client_tester.New(t, func(_ *http.ServeMux) {})
-	faces := []face.MattermostClient{r.Client, mock_client.New("me")}
+	faces := []face.MattermostClient{r.Client, mock_client.New(t, "me")}
 	assert.Count(t, 2, faces)
 }

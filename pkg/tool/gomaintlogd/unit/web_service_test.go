@@ -4,14 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
 	"net/http"
 	"testing"
 )
 
 func TestWebService(t *testing.T) {
-	o := web_service_tester.New(t)
-	c := o.Client
+	c := base.New(t).GeneratedClient()
 	x := context.Background()
 	system := "worker1"
 	service := "nginx"

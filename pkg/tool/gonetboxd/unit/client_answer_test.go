@@ -7,14 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/client_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/refusing_source"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
 
 func TestClientReadsDaemon(t *testing.T) {
-	m := service_tester.NewSource(t)
+	m := mock_client.New(t)
 	m.SeedDevice("alfa")
 	c := client_tester.New(t, m)
 	v, e := c.GetDevice(context.Background(), "alfa")
@@ -24,7 +24,7 @@ func TestClientReadsDaemon(t *testing.T) {
 }
 
 func TestClientAnswersUnknownDeviceAsNotFound(t *testing.T) {
-	_, e := client_tester.New(t, service_tester.NewSource(t)).GetDevice(
+	_, e := client_tester.New(t, mock_client.New(t)).GetDevice(
 		context.Background(),
 		"alfa",
 	)
@@ -34,7 +34,7 @@ func TestClientAnswersUnknownDeviceAsNotFound(t *testing.T) {
 func TestClientAnswersRejectedCreateAsValidation(t *testing.T) {
 	_, e := client_tester.New(
 		t,
-		refusing_source.New(validation.New("slug: exists")),
+		refusing_source.New(t, validation.New("slug: exists")),
 	).CreateSite(context.Background(), "alfa")
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "slug: exists", e.Error())
@@ -44,6 +44,7 @@ func TestClientAnswersRefusedTokenAsReported(t *testing.T) {
 	_, e := client_tester.New(
 		t,
 		refusing_source.New(
+			t,
 			unexpected.Format("netbox status 403: no permission"),
 		),
 	).CreateSite(context.Background(), "alfa")

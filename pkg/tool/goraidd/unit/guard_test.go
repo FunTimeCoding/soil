@@ -6,7 +6,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	v := base.Reports(t, t.TempDir())
+	v := base.New(t).Served()
 	v.VerifyBase(t)
 	v.VerifyFavicon(t)
 	v.VerifySignIn(t)

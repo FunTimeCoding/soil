@@ -1,18 +1,11 @@
 package base
 
-import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/assert"
 
-func Allows(
-	t *testing.T,
-	b *Server,
-	identifier string,
-) bool {
-	t.Helper()
-	result, e := b.Service.DirectoryAllows(identifier)
-	assert.FatalOnError(t, e)
+func (s *Server) Allows(identifier string) bool {
+	s.t.Helper()
+	result, e := s.Service().DirectoryAllows(identifier)
+	assert.FatalOnError(s.t, e)
 
 	return result
 }

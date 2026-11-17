@@ -10,11 +10,11 @@ import (
 )
 
 type Tester struct {
-	Service    *service.Service
-	Worker     *worker.Worker
-	MockClient *mock_client.Client
-	Reporter   *memory.Memory
-	Registry   *prometheus.Registry
-	Path       string
-	t          *testing.T
+	Service      *service.Service
+	Worker       *worker.Worker
+	Alertmanager *mock_client.Client
+	Reporter     *memory.Memory
+	Registry     *prometheus.Registry
+	Path         string
+	t            *testing.T
 }

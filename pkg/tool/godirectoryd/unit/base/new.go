@@ -6,8 +6,20 @@ import (
 	"testing"
 )
 
-func New(t *testing.T) *Server {
+func New(
+	t *testing.T,
+	o ...Option,
+) *Server {
 	t.Helper()
+	result := &Server{
+		Source:   service_tester.New(t).Source,
+		Reporter: memory.New(),
+		t:        t,
+	}
 
-	return NewWith(t, service_tester.NewSource(), memory.New())
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

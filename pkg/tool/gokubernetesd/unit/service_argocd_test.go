@@ -11,7 +11,7 @@ func TestArgocdApplications(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddArgoApp("sentry", "sentry", "Synced", "Healthy")
 	s.AddArgoApp("bot", "bot", "OutOfSync", "Degraded")
-	result, e := s.Service.ArgocdApplications(context.Background(), "test")
+	result, e := s.Service().ArgocdApplications(context.Background(), "test")
 	assert.Nil(t, e)
 	assert.Count(t, 2, result)
 	assert.String(t, "bot", result[0].Name)
@@ -24,7 +24,7 @@ func TestArgocdApplications(t *testing.T) {
 func TestArgocdApplicationDetail(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddArgoApp("model-context", "model-context", "Synced", "Healthy")
-	result, e := s.Service.ArgocdApplication(
+	result, e := s.Service().ArgocdApplication(
 		context.Background(),
 		"test",
 		"model-context",

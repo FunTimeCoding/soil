@@ -8,19 +8,12 @@ import (
 
 func Window(
 	t *testing.T,
-	allowance int,
+	tokenLimit int,
 	body string,
 ) *preview_chunk.Chunk {
 	t.Helper()
-	r := service_tester.NewReranker(t)
-	r.SetAllowance(allowance)
+	q := service_tester.New(t)
+	q.Reranker.SetTokenLimit(tokenLimit)
 
-	return service_tester.NewService(
-		t,
-		service_tester.NewEmbedder(t),
-		r,
-	).Preview(
-		"lines.md",
-		body,
-	).Chunks[0]
+	return q.Service().Preview("lines.md", body).Chunks[0]
 }

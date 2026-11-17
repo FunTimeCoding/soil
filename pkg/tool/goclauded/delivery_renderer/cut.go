@@ -8,11 +8,11 @@ import (
 func (r *Renderer) Cut(e queue.Entry) string {
 	m := r.lookup(e)
 
-	if m == nil || length(e.Body) <= constant.DeliveryBudget {
+	if m == nil || length(e.Body) <= constant.DeliveryCharacterLimit {
 		return e.Body
 	}
 
-	if f := fragment(e.Body, m, constant.DeliveryBudget); f != "" {
+	if f := fragment(e.Body, m, constant.DeliveryCharacterLimit); f != "" {
 		return f
 	}
 

@@ -9,9 +9,12 @@ import (
 )
 
 func TestMatchPatternComparesQualifiersByPackage(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern-aliased/src")
-	r, match, e := service_tester.NewService(t).Pattern.MatchPattern(
-		d,
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("pattern-aliased/src"),
+	)
+	r, match, e := o.Pattern.MatchPattern(
+		o.Directory,
 		"example/pkg/alfa",
 		"Advance",
 		"",
@@ -26,10 +29,13 @@ func TestMatchPatternComparesQualifiersByPackage(t *testing.T) {
 }
 
 func TestApplyPatternKeepsSiteAliases(t *testing.T) {
-	d := service_tester.Prepare(t, "pattern-aliased/src")
-	r, _, e := service_tester.NewService(t).Pattern.ApplyPattern(
+	o := service_tester.New(
+		t,
+		service_tester.WithFixture("pattern-aliased/src"),
+	)
+	r, _, e := o.Pattern.ApplyPattern(
 		t.Context(),
-		d,
+		o.Directory,
 		"example/pkg/alfa",
 		"Advance",
 		"",
@@ -43,12 +49,12 @@ func TestApplyPatternKeepsSiteAliases(t *testing.T) {
 	assert.StringContains(
 		t,
 		"return stepper.Advance(n, stepConstant.Step) * 2",
-		service_tester.ReadFixtureFile(t, d, "pkg/charlie/run.go"),
+		o.Read("pkg/charlie/run.go"),
 	)
 	assert.StringContains(
 		t,
 		"return alfa.Advance(n, deltaConstant.Step)\n",
-		service_tester.ReadFixtureFile(t, d, "pkg/foxtrot/run.go"),
+		o.Read("pkg/foxtrot/run.go"),
 	)
-	rewrite_tester.Compiles(t, d)
+	rewrite_tester.Compiles(t, o.Directory)
 }

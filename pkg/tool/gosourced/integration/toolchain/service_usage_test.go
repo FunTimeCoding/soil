@@ -4,17 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration/toolchain/usage_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestUsageListsEveryMethodOfType(t *testing.T) {
-	d := usage_tester.Prepare(t)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	o := usage_tester.Prepare(t)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"store", "clock"}, c.Fields)
 	var names []string
@@ -35,12 +30,8 @@ func TestUsageListsEveryMethodOfType(t *testing.T) {
 }
 
 func TestUsageCountsCallersByKind(t *testing.T) {
-	d := usage_tester.Prepare(t)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	o := usage_tester.Prepare(t)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	place := usage_tester.Method(t, c, "Place").Callers
 	assert.Count(t, 3, place)
@@ -76,12 +67,8 @@ func TestUsageCountsCallersByKind(t *testing.T) {
 }
 
 func TestUsageReadsReceiverThroughFreeFunctions(t *testing.T) {
-	d := usage_tester.Prepare(t)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	o := usage_tester.Prepare(t)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	place := usage_tester.Method(t, c, "Place")
 	assert.Strings(t, []string{"store"}, place.Fields)
@@ -95,12 +82,8 @@ func TestUsageReadsReceiverThroughFreeFunctions(t *testing.T) {
 }
 
 func TestUsageDerivesTablesFromGormCalls(t *testing.T) {
-	d := usage_tester.Prepare(t)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	o := usage_tester.Prepare(t)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	place := usage_tester.Method(t, c, "Place")
 	assert.Strings(t, []string{"orders"}, place.Tables.Read)
@@ -119,12 +102,8 @@ func TestUsageDerivesTablesFromGormCalls(t *testing.T) {
 }
 
 func TestUsageMarksTransaction(t *testing.T) {
-	d := usage_tester.Prepare(t)
-	c, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Service",
-	)
+	o := usage_tester.Prepare(t)
+	c, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Service")
 	assert.FatalOnError(t, e)
 	settle := usage_tester.Method(t, c, "Settle")
 	assert.True(t, settle.Atomically)
@@ -138,12 +117,8 @@ func TestUsageMarksTransaction(t *testing.T) {
 }
 
 func TestUsageFailsOnTypeOtherThanStruct(t *testing.T) {
-	d := usage_tester.Prepare(t)
-	_, e := service_tester.NewService(t).Usage.Usage(
-		d,
-		"example/pkg/service",
-		"Nothing",
-	)
+	o := usage_tester.Prepare(t)
+	_, e := o.Usage.Usage(o.Directory, "example/pkg/service", "Nothing")
 	assert.True(t, validation.Is(e))
 	assert.String(t, "no struct type Nothing in example/pkg/service", e.Error())
 }

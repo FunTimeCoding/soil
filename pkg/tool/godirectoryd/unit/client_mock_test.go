@@ -14,23 +14,20 @@ import (
 )
 
 func TestMockAnswersDirectoryAsDaemonDoes(t *testing.T) {
-	s := base.New(t)
-	defer s.Close()
+	s := base.New(t).Served()
 	c := client.New(
 		locator.New("localhost").Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	served := client_tester.DirectoryAnswers(t.Context(), c)
 	assert.Count(t, 25, served)
 	assert.Strings(t, served, client_tester.DirectoryAnswers(t.Context(), m))
 }
 
 func TestMockKeepsPasswordItWasGiven(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	client_tester.DirectoryAnswers(t.Context(), m)
 	assert.Count(t, 0, m.Passwords)
 	_, e := m.PostUser(
@@ -45,8 +42,7 @@ func TestMockKeepsPasswordItWasGiven(t *testing.T) {
 }
 
 func TestMockFailsOnlyMethodItIsToldTo(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	m.Fail(m.GetUserAccount, errors.New("account refused"))
 	_, e := m.GetUser(t.Context())
 	assert.FatalOnError(t, e)

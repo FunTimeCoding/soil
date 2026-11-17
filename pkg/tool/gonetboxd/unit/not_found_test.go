@@ -4,17 +4,17 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/netbox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"net/http"
 	"testing"
 )
 
 func TestListedRoleCarriesVirtualMachineFlag(t *testing.T) {
-	m := service_tester.NewSource(t)
+	m := mock_client.New(t)
 	m.SeedVirtualMachineRole("golf")
-	c := base.Rest(t, base.New(t, m, memory.New()))
+	c := base.GeneratedClient(t, base.New(t, m, memory.New()))
 	response, e := c.ListDeviceRolesWithResponse(context.Background())
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, *response.JSON200)
@@ -23,7 +23,7 @@ func TestListedRoleCarriesVirtualMachineFlag(t *testing.T) {
 
 func TestMissingDeviceIsNotFoundWithoutSentry(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.GetDeviceWithResponse(context.Background(), "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, response.StatusCode())
@@ -32,7 +32,7 @@ func TestMissingDeviceIsNotFoundWithoutSentry(t *testing.T) {
 
 func TestMissingVirtualMachineIsNotFoundWithoutSentry(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.GetVirtualMachineWithResponse(context.Background(), "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, response.StatusCode())
@@ -41,7 +41,7 @@ func TestMissingVirtualMachineIsNotFoundWithoutSentry(t *testing.T) {
 
 func TestUpdateMissingVirtualMachineIsNotFound(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.UpdateVirtualMachineWithResponse(
 		context.Background(),
 		"alfa",
@@ -54,7 +54,7 @@ func TestUpdateMissingVirtualMachineIsNotFound(t *testing.T) {
 
 func TestInterfacesOfMissingDeviceAreNotFound(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.ListInterfacesWithResponse(context.Background(), "alfa")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusNotFound, response.StatusCode())
@@ -63,7 +63,7 @@ func TestInterfacesOfMissingDeviceAreNotFound(t *testing.T) {
 
 func TestTunnelTerminationOnMissingDeviceIsNotFound(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.CreateDeviceTunnelTerminationWithResponse(
 		context.Background(),
 		"alfa",
@@ -80,7 +80,7 @@ func TestTunnelTerminationOnMissingDeviceIsNotFound(t *testing.T) {
 
 func TestLabelOfMissingDeviceIsNotFound(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.RemoveDeviceLabelWithResponse(
 		context.Background(),
 		"alfa",
@@ -93,7 +93,7 @@ func TestLabelOfMissingDeviceIsNotFound(t *testing.T) {
 
 func TestVirtualMachineTagOnMissingMachineIsNotFound(t *testing.T) {
 	r := memory.New()
-	c := base.Rest(t, base.New(t, service_tester.NewSource(t), r))
+	c := base.GeneratedClient(t, base.New(t, mock_client.New(t), r))
 	response, e := c.AddVirtualTagWithResponse(
 		context.Background(),
 		"alfa",

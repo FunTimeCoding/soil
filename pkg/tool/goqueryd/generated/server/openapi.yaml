@@ -147,7 +147,7 @@ paths:
           type: string
       responses:
         "200":
-          description: Chunks whose token count exceeds the reranker allowance, grouped by file.
+          description: Chunks whose token count exceeds the reranker's token limit, grouped by file.
           content:
             application/json:
               schema:
@@ -695,15 +695,15 @@ components:
           type: integer
     OversizeReport:
       type: object
-      required: [model, window, allowance, embed_allowance, files]
+      required: [model, window, token_limit, embed_token_limit, files]
       properties:
         model:
           type: string
         window:
           type: integer
-        allowance:
+        token_limit:
           type: integer
-        embed_allowance:
+        embed_token_limit:
           type: integer
         files:
           type: array
@@ -767,15 +767,15 @@ components:
           type: string
     ChunkPreview:
       type: object
-      required: [model, window, allowance, embed_allowance, chunks, sections]
+      required: [model, window, token_limit, embed_token_limit, chunks, sections]
       properties:
         model:
           type: string
         window:
           type: integer
-        allowance:
+        token_limit:
           type: integer
-        embed_allowance:
+        embed_token_limit:
           type: integer
         chunks:
           type: array

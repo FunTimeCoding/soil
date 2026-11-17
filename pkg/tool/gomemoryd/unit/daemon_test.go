@@ -2,38 +2,23 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/worker"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonClosesQueryClientOnce(t *testing.T) {
-	q := mock_client.New()
-	t.Cleanup(q.Close)
-	d := daemon.New(
-		service_tester.NewOption(t, q),
-		logger.New(t.Context()),
-		memory.New(),
-	)
+	o := service_tester.New(t)
+	d := o.Daemon()
 	d.Close()
 	d.Close()
-	assert.Integer(t, 1, q.Closed)
+	assert.Integer(t, 1, o.Indexer.Closed)
 }
 
 func TestDaemonHandsItsGuardThenItsReconcileClockToLifecycle(t *testing.T) {
-	d := daemon.New(
-		service_tester.NewOption(t, mock_client.New()),
-		logger.New(t.Context()),
-		memory.New(),
-	)
-	t.Cleanup(d.Close)
-	workers := d.Workers()
+	workers := service_tester.New(t).Daemon().Workers()
 	assert.Count(t, 2, workers)
 	_, guard := workers[0].(*peer.Guard)
 	assert.True(t, guard)
@@ -42,12 +27,9 @@ func TestDaemonHandsItsGuardThenItsReconcileClockToLifecycle(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
+	o := service_tester.New(t)
 	before := goleak.IgnoreCurrent()
-	d := daemon.New(
-		service_tester.NewOption(t, mock_client.New()),
-		logger.New(t.Context()),
-		memory.New(),
-	)
+	d := o.Daemon()
 	workers := d.Workers()
 
 	for _, w := range workers {

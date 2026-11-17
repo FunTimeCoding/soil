@@ -3,13 +3,13 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
 	"testing"
 )
 
 func TestUnknownEntryIsAnsweredQuietlyOverModelContext(t *testing.T) {
-	o := model_context_tester.New(t)
-	c := o.Client
+	s := base.New(t)
+	c := s.Tools()
 	assert.String(
 		t,
 		"entry not found: 9999",
@@ -29,5 +29,5 @@ func TestUnknownEntryIsAnsweredQuietlyOverModelContext(t *testing.T) {
 			},
 		),
 	)
-	assert.Integer(t, 0, o.Captured())
+	assert.Integer(t, 0, s.Captured())
 }

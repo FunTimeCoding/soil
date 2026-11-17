@@ -10,8 +10,7 @@ import (
 )
 
 func TestMockFailsOneMethodByItsValue(t *testing.T) {
-	m := mock_client.New()
-	defer m.Close()
+	m := mock_client.New(t)
 	m.SeedAlert("DiskFull", nil, time.Now())
 	m.Fail(m.GetAlertsAfter, unexpected.Format("page refused"))
 	_, e := m.GetAlertsAfter(t.Context(), &client.GetAlertsAfterParams{})

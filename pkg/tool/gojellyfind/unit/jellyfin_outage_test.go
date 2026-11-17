@@ -2,12 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/jellyfin/mock_client"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/base"
-	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/unit/daemon_tester"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"net/http"
 	"testing"
@@ -16,27 +13,24 @@ import (
 func TestJellyfinOutageIsAnsweredUnavailableWithoutCaptureOverRest(
 	t *testing.T,
 ) {
-	c := mock_client.New()
-	c.Failure = outage_tester.RefusedDial()
-	r := memory.New()
-	s := base.Rest(t, c, r)
+	s := base.New(t)
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.GeneratedClient()
 
 	for range 2 {
-		answer, e := s.ListLibrariesWithResponse(t.Context())
+		answer, e := c.ListLibrariesWithResponse(t.Context())
 		assert.FatalOnError(t, e)
 		assert.Integer(t, http.StatusServiceUnavailable, answer.StatusCode())
 		assert.FatalNotNil(t, answer.JSON503)
 	}
 
-	assert.Count(t, 0, r.Events())
+	assert.Count(t, 0, s.Reporter.Events())
 }
 
 func TestJellyfinOutageFailsToolWithoutCapture(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	s.MockClient.Failure = outage_tester.RefusedDial()
-	c := s.ContextServer.Connect(t)
-	defer c.Close()
+	s.Source.Failure = outage_tester.RefusedDial()
+	c := s.Tools()
 	assert.StringContains(
 		t,
 		"connection refused",
@@ -46,16 +40,10 @@ func TestJellyfinOutageFailsToolWithoutCapture(t *testing.T) {
 }
 
 func TestDaemonHandsOutJellyfinGuard(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestWaitAnswersOnceJellyfinAnswers(t *testing.T) {
-	assert.FatalOnError(
-		t,
-		daemon_tester.New(t, mock_client.New()).Wait(t.Context()),
-	)
+	assert.FatalOnError(t, base.New(t).Daemon().Wait(t.Context()))
 }

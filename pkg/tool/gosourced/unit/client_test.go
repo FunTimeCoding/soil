@@ -11,7 +11,7 @@ import (
 
 func TestClientAndItsMockKeepFace(t *testing.T) {
 	r := client.New(locator.New("localhost").Insecure(), "india")
-	m := mock_client.New()
+	m := mock_client.New(t)
 	clients := []face.Client{r, m}
 
 	for _, c := range clients {

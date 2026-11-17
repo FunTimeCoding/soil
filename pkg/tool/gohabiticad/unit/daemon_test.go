@@ -8,15 +8,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/option"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/daemon_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
 	before := goleak.IgnoreCurrent()
-	c := mock_client.New()
+	c := mock_client.New(t)
 	o := option.New()
 	o.Host = "habitica.test"
 	o.Source = func() face.HabiticaClient { return c }
@@ -36,14 +35,11 @@ func TestDaemonLeavesNothingRunning(t *testing.T) {
 }
 
 func TestCloseClosesHabiticaClient(t *testing.T) {
-	c := service_tester.NewSource(t)
-	daemon_tester.New(t, c).Close()
-	assert.Integer(t, 1, c.Closed)
+	s := base.New(t)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Source.Closed)
 }
 
 func TestWaitAnswersOnceHabiticaAnswers(t *testing.T) {
-	assert.FatalOnError(
-		t,
-		daemon_tester.New(t, service_tester.NewSource(t)).Wait(t.Context()),
-	)
+	assert.FatalOnError(t, base.New(t).Daemon().Wait(t.Context()))
 }

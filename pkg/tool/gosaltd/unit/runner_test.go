@@ -27,12 +27,21 @@ func TestCloseWaitsForKeySyncInFlight(t *testing.T) {
 	m := salt_server.New(t, "bravo")
 	m.HoldKeys()
 	host, port := upstream_server.HostPort(t, m.URL)
-	o := service_tester.NewOption(t)
-	o.KeySyncInterval = 10 * time.Millisecond
-	o.Master = func() saltFace.SaltClient {
-		return salt.New(host, port, "alfa", "bravo", salt.WithInsecure())
-	}
-	_, r := service_tester.New(t, o)
+	_, r := service_tester.New(
+		t,
+		service_tester.WithKeySyncInterval(10*time.Millisecond),
+		service_tester.WithMaster(
+			func() saltFace.SaltClient {
+				return salt.New(
+					host,
+					port,
+					"alfa",
+					"bravo",
+					salt.WithInsecure(),
+				)
+			},
+		),
+	).Service()
 	r.Start()
 
 	select {

@@ -3,7 +3,7 @@ package peer
 import "github.com/funtimecoding/soil/pkg/errors/unavailable"
 
 func (g *Guard) Unavailable() error {
-	down, h := g.reacher.Down(g.name)
+	down, h := g.outages.Down(g.name)
 
 	if !down {
 		return nil

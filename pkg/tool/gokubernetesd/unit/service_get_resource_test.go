@@ -12,7 +12,7 @@ import (
 func TestGetResource(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddPod(pod.New("default", "nginx", "Running"))
-	result, e := s.Service.GetResource(
+	result, e := s.Service().GetResource(
 		context.Background(),
 		"test",
 		request.Get{
@@ -28,7 +28,7 @@ func TestGetResource(t *testing.T) {
 func TestGetResourceFiltered(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddPod(pod.New("default", "nginx", "Running"))
-	result, e := s.Service.GetResource(
+	result, e := s.Service().GetResource(
 		context.Background(),
 		"test",
 		request.Get{
@@ -46,7 +46,7 @@ func TestGetResourceFiltered(t *testing.T) {
 func TestGetResourceUnfiltered(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddPod(pod.New("default", "nginx", "Running"))
-	result, e := s.Service.GetResource(
+	result, e := s.Service().GetResource(
 		context.Background(),
 		"test",
 		request.Get{
@@ -63,7 +63,7 @@ func TestGetResourceUnfiltered(t *testing.T) {
 
 func TestGetResourceNotFound(t *testing.T) {
 	s := service_tester.New(t)
-	_, e := s.Service.GetResource(
+	_, e := s.Service().GetResource(
 		context.Background(),
 		"test",
 		request.Get{

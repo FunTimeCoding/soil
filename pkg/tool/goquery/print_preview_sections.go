@@ -11,7 +11,7 @@ import (
 func printPreviewSections(
 	t *terminal.Terminal,
 	sections []client.PreviewSection,
-	allowance int,
+	tokenLimit int,
 ) {
 	if len(sections) == 0 {
 		return
@@ -30,14 +30,14 @@ func printPreviewSections(
 			x.Tokens,
 		)
 
-		if x.Tokens <= allowance {
+		if x.Tokens <= tokenLimit {
 			t.Line(line)
 
 			continue
 		}
 
 		t.Line(
-			join.Empty(line, fmt.Sprintf("  OVER by %d", x.Tokens-allowance)),
+			join.Empty(line, fmt.Sprintf("  OVER by %d", x.Tokens-tokenLimit)),
 		)
 
 		for _, b := range x.Blocks {
