@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -22,20 +23,5 @@ func (s *Server) ListDeviceTypes(
 		), nil
 	}
 
-	result := make([]*server.DeviceType, 0, len(types))
-
-	for _, t := range types {
-		entry := &server.DeviceType{
-			Identifier: t.Identifier,
-			Model:      t.Model,
-		}
-
-		if t.Raw.Manufacturer.Name != "" {
-			entry.Manufacturer = &t.Raw.Manufacturer.Name
-		}
-
-		result = append(result, entry)
-	}
-
-	return server.ListDeviceTypes200JSONResponse(result), nil
+	return server.ListDeviceTypes200JSONResponse(convert.DeviceTypes(types)), nil
 }

@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -22,14 +23,7 @@ func (s *Server) ListManufacturers(
 		), nil
 	}
 
-	result := make([]*server.Manufacturer, 0, len(manufacturers))
-
-	for _, m := range manufacturers {
-		result = append(
-			result,
-			&server.Manufacturer{Identifier: m.Identifier, Name: m.Name},
-		)
-	}
-
-	return server.ListManufacturers200JSONResponse(result), nil
+	return server.ListManufacturers200JSONResponse(
+		convert.Manufacturers(manufacturers),
+	), nil
 }
