@@ -52,6 +52,10 @@ func NewServer(r *Recorder) *httptest.Server {
 					respond(w, constant.FixtureDeviceList)
 				case path == "/api/dcim/device-types/":
 					respond(w, constant.FixtureDeviceTypeList)
+				case path == "/api/dcim/device-roles/10/" &&
+					q.Method == http.MethodPatch:
+					r.Patched = decodeBody(q)
+					respond(w, constant.FixtureDeviceRole)
 				case path == "/api/dcim/device-roles/":
 					respond(w, constant.FixtureDeviceRoleList)
 				case path == "/api/dcim/sites/":

@@ -41,6 +41,24 @@ func TestDeviceRolePatchCarriesRoleIdentifier(t *testing.T) {
 	assert.MapValue(t, 10.0, r.Patched, "role")
 }
 
+func TestDeviceRoleRenameCarriesDerivedSlug(t *testing.T) {
+	r := fixture.NewRecorder()
+	s := fixture.NewServer(r)
+	defer s.Close()
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
+	defer c.Close()
+	result, e := c.RenameDeviceRole("oscar", "Quebec Romeo")
+	assert.FatalOnError(t, e)
+	assert.Count(t, 0, r.Unmatched)
+	assert.MapValue(t, "Quebec Romeo", r.Patched, constant.NameField)
+	assert.MapValue(t, "quebec-romeo", r.Patched, "slug")
+	assert.String(t, "Quebec Romeo", result.Name)
+}
+
 func TestDeviceSitePatchCarriesSiteIdentifier(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)

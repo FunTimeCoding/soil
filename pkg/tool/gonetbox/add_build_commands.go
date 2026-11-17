@@ -21,6 +21,7 @@ func addBuildCommands(
 	o.AddCommand(createSite(c, t))
 	o.AddCommand(createTenant(c, t))
 	o.AddCommand(createDeviceRole(c, t))
+	o.AddCommand(updateDeviceRole(c, t))
 	o.AddCommand(createManufacturer(c, t))
 	o.AddCommand(createDeviceType(c, t))
 	o.AddCommand(createDevice(c, t))

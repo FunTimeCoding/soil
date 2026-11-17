@@ -83,6 +83,7 @@ const (
 	UpdateJournalEntry             = "update_journal_entry"
 
 	UpdateDevice                       = "update_device"
+	UpdateDeviceRole                   = "update_device_role"
 	UpdateVirtualMachine               = "update_virtual_machine"
 	GetVirtualMachine                  = "get_virtual_machine"
 	ListVirtualInterfaces              = "list_virtual_interfaces"

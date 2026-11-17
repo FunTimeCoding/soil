@@ -377,6 +377,15 @@ const FixtureDeviceRoleList = `{
   ]
 }`
 
+const FixtureDeviceRole = `{
+  "id": 10,
+  "url": "http://example/api/dcim/device-roles/10/",
+  "display": "Quebec Romeo",
+  "name": "Quebec Romeo",
+  "slug": "quebec-romeo",
+  "_depth": 0
+}`
+
 const FixtureSiteList = `{
   "count": 1,
   "results": [

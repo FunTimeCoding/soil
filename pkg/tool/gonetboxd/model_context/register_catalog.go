@@ -86,6 +86,24 @@ func (s *Server) registerCatalog() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.UpdateDeviceRole,
+			mcp.WithDescription(
+				"Update a NetBox device role; a new name brings its slug along",
+			),
+			mcp.WithString(
+				constant.Role,
+				mcp.Required(),
+				mcp.Description("Device role name"),
+			),
+			mcp.WithString(
+				generativeConstant.ParameterName,
+				mcp.Description("New device role name"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.UpdateDeviceRole),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.CreateManufacturer,
 			mcp.WithDescription("Create a NetBox manufacturer"),
 			mcp.WithString(

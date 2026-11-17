@@ -13,7 +13,7 @@ func createPowerOutlet(
 ) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-power-outlet [device] [name]",
-		Short: "Create a power outlet on a device, such as a UPS or a power strip",
+		Short: "Create a power outlet on a device, such as a battery or a power strip",
 		Args:  cobra.ExactArgs(2),
 		Run: func(
 			_ *cobra.Command,

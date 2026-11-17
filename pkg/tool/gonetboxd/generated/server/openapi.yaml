@@ -420,6 +420,53 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/device-roles/{name}:
+    patch:
+      operationId: updateDeviceRole
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device role name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDeviceRoleRequest"
+      responses:
+        "200":
+          description: Updated device role.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceRole"
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No device role by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to update device role.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/manufacturers:
     get:
       operationId: listManufacturers
@@ -4303,7 +4350,7 @@ components:
       properties:
         outletDevice:
           type: string
-          description: Device carrying the power outlet, such as a UPS or a power strip.
+          description: Device carrying the power outlet, such as a battery or a power strip.
         outlet:
           type: string
           description: Power outlet name.
@@ -4433,6 +4480,12 @@ components:
           type: array
           items:
             type: string
+    UpdateDeviceRoleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New device role name; the slug follows it.
     UpdateChoiceSetRequest:
       type: object
       required:

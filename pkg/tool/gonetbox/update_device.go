@@ -12,6 +12,8 @@ func updateDevice(
 	c face.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
+	var name string
+	var primaryAddress string
 	var location string
 	var platform string
 	var deviceType string
@@ -24,7 +26,7 @@ func updateDevice(
 	var customFields func() *map[string]any
 	var localContext func() *map[string]any
 	result := &cobra.Command{
-		Use:   "update-device [name]",
+		Use:   "update-device [device]",
 		Short: "Update device fields",
 		Args:  cobra.ExactArgs(1),
 		Run: func(
@@ -32,6 +34,14 @@ func updateDevice(
 			arguments []string,
 		) {
 			body := client.UpdateDeviceRequest{}
+
+			if name != "" {
+				body.Name = &name
+			}
+
+			if primaryAddress != "" {
+				body.PrimaryAddress = &primaryAddress
+			}
 
 			if location != "" {
 				body.Location = &location
@@ -78,6 +88,13 @@ func updateDevice(
 	}
 	customFields = customFieldFlag(result)
 	localContext = localContextFlag(result)
+	result.Flags().StringVar(&name, "name", "", "new device name")
+	result.Flags().StringVar(
+		&primaryAddress,
+		"primary-address",
+		"",
+		"address to set as primary (must be assigned to the device)",
+	)
 	result.Flags().StringVar(
 		&location,
 		"location",

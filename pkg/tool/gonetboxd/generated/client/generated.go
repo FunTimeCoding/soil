@@ -240,7 +240,7 @@ type CreatePowerCableRequest struct {
 	// Outlet Power outlet name.
 	Outlet string `json:"outlet"`
 
-	// OutletDevice Device carrying the power outlet, such as a UPS or a power strip.
+	// OutletDevice Device carrying the power outlet, such as a battery or a power strip.
 	OutletDevice string `json:"outletDevice"`
 
 	// Port Power port name.
@@ -594,6 +594,12 @@ type UpdateDeviceRequest struct {
 	Type *string `json:"type,omitempty"`
 }
 
+// UpdateDeviceRoleRequest defines model for UpdateDeviceRoleRequest.
+type UpdateDeviceRoleRequest struct {
+	// Name New device role name; the slug follows it.
+	Name *string `json:"name,omitempty"`
+}
+
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
 type UpdateJournalEntryRequest struct {
 	Comments *string `json:"comments,omitempty"`
@@ -736,6 +742,9 @@ type CreateCustomFieldJSONRequestBody = CreateCustomFieldRequest
 
 // CreateDeviceRoleJSONRequestBody defines body for CreateDeviceRole for application/json ContentType.
 type CreateDeviceRoleJSONRequestBody = CreateDeviceRoleRequest
+
+// UpdateDeviceRoleJSONRequestBody defines body for UpdateDeviceRole for application/json ContentType.
+type UpdateDeviceRoleJSONRequestBody = UpdateDeviceRoleRequest
 
 // CreateDeviceTypeJSONRequestBody defines body for CreateDeviceType for application/json ContentType.
 type CreateDeviceTypeJSONRequestBody = CreateDeviceTypeRequest
@@ -1034,6 +1043,14 @@ type ClientInterface interface {
 	// CreateDeviceRole performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateDeviceRole(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateDeviceRoleWithBody performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateDeviceRoleWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateDeviceRole performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateDeviceRole(ctx context.Context, name string, body UpdateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListDeviceTypes performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 	ListDeviceTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1873,6 +1890,34 @@ func (c *Client) CreateDeviceRoleWithBody(ctx context.Context, contentType strin
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateDeviceRole(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceRoleRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateDeviceRoleWithBody performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateDeviceRoleWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateDeviceRoleRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateDeviceRole performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateDeviceRole(ctx context.Context, name string, body UpdateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateDeviceRoleRequest(c.Server, name, body)
 	if err != nil {
 		return nil, err
 	}
@@ -4134,6 +4179,53 @@ func NewCreateDeviceRoleRequestWithBody(server string, contentType string, body 
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewUpdateDeviceRoleRequest calls the generic UpdateDeviceRole builder with application/json body
+func NewUpdateDeviceRoleRequest(server string, name string, body UpdateDeviceRoleJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateDeviceRoleRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewUpdateDeviceRoleRequestWithBody constructs an http.Request for the UpdateDeviceRole method, with any body, and a specified content type
+func NewUpdateDeviceRoleRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/device-roles/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -7148,6 +7240,16 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateDeviceRoleWithResponse(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceRoleResponse, error)
 
+	// UpdateDeviceRoleWithBodyWithResponse performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateDeviceRoleWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDeviceRoleResponse, error)
+
+	// UpdateDeviceRoleWithResponse performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateDeviceRoleWithResponse(ctx context.Context, name string, body UpdateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDeviceRoleResponse, error)
+
 	// ListDeviceTypesWithResponse performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -9203,6 +9305,75 @@ func (r CreateDeviceRoleResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateDeviceRoleResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateDeviceRoleResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeviceRole
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateDeviceRoleResponse) GetJSON200() *DeviceRole {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r UpdateDeviceRoleResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateDeviceRoleResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateDeviceRoleResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r UpdateDeviceRoleResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateDeviceRoleResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateDeviceRoleResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateDeviceRoleResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateDeviceRoleResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -13942,6 +14113,28 @@ func (c *ClientWithResponses) CreateDeviceRoleWithResponse(ctx context.Context, 
 	return ParseCreateDeviceRoleResponse(rsp)
 }
 
+// UpdateDeviceRoleWithBodyWithResponse performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateDeviceRoleWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDeviceRoleResponse, error) {
+	rsp, err := c.UpdateDeviceRoleWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateDeviceRoleResponse(rsp)
+}
+
+// UpdateDeviceRoleWithResponse performs a PATCH /api/device-roles/{name} (the `UpdateDeviceRole` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateDeviceRoleWithResponse(ctx context.Context, name string, body UpdateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDeviceRoleResponse, error) {
+	rsp, err := c.UpdateDeviceRole(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateDeviceRoleResponse(rsp)
+}
+
 // ListDeviceTypesWithResponse performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -16234,6 +16427,60 @@ func ParseCreateDeviceRoleResponse(rsp *http.Response) (*CreateDeviceRoleRespons
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateDeviceRoleResponse parses an HTTP response from a UpdateDeviceRoleWithResponse call
+func ParseUpdateDeviceRoleResponse(rsp *http.Response) (*UpdateDeviceRoleResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateDeviceRoleResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeviceRole
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

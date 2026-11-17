@@ -19,6 +19,7 @@ type OrganizationClient interface {
 		name string,
 		virtualMachine bool,
 	) (*device_role.Role, error)
+	RenameDeviceRole(name string, newName string) (*device_role.Role, error)
 	CreateDeviceType(
 		model string,
 		m *manufacturer.Manufacturer,

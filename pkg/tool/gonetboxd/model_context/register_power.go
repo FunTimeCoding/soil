@@ -11,7 +11,7 @@ func (s *Server) registerPower() {
 		mcp.NewTool(
 			constant.CreatePowerOutlet,
 			mcp.WithDescription(
-				"Create a power outlet on a device, such as a UPS or a power strip",
+				"Create a power outlet on a device, such as a battery or a power strip",
 			),
 			mcp.WithString(
 				constant.Device,

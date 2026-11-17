@@ -20,10 +20,6 @@ func addDeviceCommands(
 	o.AddCommand(listVirtualAddresses(c, t))
 	o.AddCommand(listVirtualDisks(c, t))
 	o.AddCommand(createVirtualDisk(c, t))
-	o.AddCommand(renameDevice(c, t))
-	o.AddCommand(renameVirtualMachine(c, t))
-	o.AddCommand(setDevicePrimaryAddress(c, t))
-	o.AddCommand(setVirtualPrimaryAddress(c, t))
 	o.AddCommand(updateDevice(c, t))
 	o.AddCommand(updateVirtualMachine(c, t))
 }

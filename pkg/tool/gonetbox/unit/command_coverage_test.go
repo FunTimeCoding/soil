@@ -2,46 +2,35 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/terminal/terminal_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gonetbox"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
-	"regexp"
+	"github.com/funtimecoding/soil/pkg/tool/gonetbox/unit/command_tester"
 	"slices"
-	"strings"
 	"testing"
 )
 
 func TestCommandCoversEveryOperation(t *testing.T) {
-	c := mock_client.New(t)
-	defer c.Close()
-	var commands []string
-
-	for _, o := range gonetbox.New(c, terminal_tester.New().Terminal).Commands() {
-		commands = append(commands, o.Name())
-	}
-
-	s, e := server.GetSpec()
-	assert.FatalOnError(t, e)
-	word := regexp.MustCompile(`([a-z0-9])([A-Z])`)
+	commands := command_tester.CommandNames(t)
 	var missing []string
 
-	for _, p := range s.Paths.Map() {
-		for _, o := range p.Operations() {
-			name := strings.ToLower(
-				word.ReplaceAllString(o.OperationID, "$1-$2"),
-			)
-
-			if name == "get-ansible-inventory" {
-				name = "ansible-inventory"
-			}
-
-			if !slices.Contains(commands, name) {
-				missing = append(missing, name)
-			}
+	for _, name := range command_tester.OperationCommands(t) {
+		if !slices.Contains(commands, name) {
+			missing = append(missing, name)
 		}
 	}
 
 	slices.Sort(missing)
 	assert.Strings(t, nil, missing)
+}
+
+func TestEveryCommandHasOperation(t *testing.T) {
+	operations := command_tester.OperationCommands(t)
+	var extra []string
+
+	for _, name := range command_tester.CommandNames(t) {
+		if !slices.Contains(operations, name) {
+			extra = append(extra, name)
+		}
+	}
+
+	slices.Sort(extra)
+	assert.Strings(t, nil, extra)
 }

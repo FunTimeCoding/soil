@@ -12,4 +12,5 @@ type Client struct {
 	Closed              int
 	Updated             map[string]client.UpdateDeviceRequest
 	UpdatedMachines     map[string]client.UpdateVirtualMachineRequest
+	UpdatedRoles        map[string]client.UpdateDeviceRoleRequest
 }

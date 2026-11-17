@@ -31,6 +31,11 @@ type DeviceClient interface {
 		name string,
 		virtualMachine bool,
 	) (client.DeviceRole, error)
+	UpdateDeviceRole(
+		x context.Context,
+		name string,
+		body client.UpdateDeviceRoleRequest,
+	) (client.DeviceRole, error)
 	CreateDeviceType(
 		x context.Context,
 		model string,
