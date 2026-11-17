@@ -12,7 +12,7 @@ func (s *Server) registerVirtualMachines() {
 			constant.ListVirtualMachines,
 			mcp.WithDescription("List all NetBox virtual machines"),
 		),
-		s.listVirtualMachines,
+		s.ListVirtualMachines,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -31,7 +31,7 @@ func (s *Server) registerVirtualMachines() {
 				mcp.Description("Cluster name"),
 			),
 		),
-		s.createVirtualMachine,
+		s.CreateVirtualMachine,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -50,7 +50,7 @@ func (s *Server) registerVirtualMachines() {
 				mcp.Description("Interface name (e.g. ens3)"),
 			),
 		),
-		s.createVirtualInterface,
+		s.CreateVirtualInterface,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -80,6 +80,6 @@ func (s *Server) registerVirtualMachines() {
 				),
 			),
 		),
-		s.createVirtualAddress,
+		s.CreateVirtualAddress,
 	)
 }

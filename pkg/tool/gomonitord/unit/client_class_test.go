@@ -14,7 +14,7 @@ import (
 func TestClientReachesDaemon(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
-		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		locator.New(webConstant.Localhost).Port(s.Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -24,7 +24,7 @@ func TestClientReachesDaemon(t *testing.T) {
 func TestProbeRefusesUnknownToken(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
-		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		locator.New(webConstant.Localhost).Port(s.Served().Port).Insecure(),
 		"bogus",
 	)
 	defer c.Close()
@@ -34,7 +34,7 @@ func TestProbeRefusesUnknownToken(t *testing.T) {
 func TestClaimWithoutOwnerIsValidation(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
-		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		locator.New(webConstant.Localhost).Port(s.Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()

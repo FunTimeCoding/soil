@@ -14,6 +14,9 @@ func updateDevice(
 ) *cobra.Command {
 	var location string
 	var platform string
+	var deviceType string
+	var role string
+	var site string
 	var tenant string
 	var status string
 	var serial string
@@ -36,6 +39,18 @@ func updateDevice(
 
 			if platform != "" {
 				body.Platform = &platform
+			}
+
+			if deviceType != "" {
+				body.Type = &deviceType
+			}
+
+			if role != "" {
+				body.Role = &role
+			}
+
+			if site != "" {
+				body.Site = &site
 			}
 
 			if tenant != "" {
@@ -74,6 +89,24 @@ func updateDevice(
 		"platform",
 		"",
 		"platform name to assign (must already exist)",
+	)
+	result.Flags().StringVar(
+		&deviceType,
+		"type",
+		"",
+		"device type model to assign (must already exist); components stay as they are",
+	)
+	result.Flags().StringVar(
+		&role,
+		"role",
+		"",
+		"device role name to assign (must already exist)",
+	)
+	result.Flags().StringVar(
+		&site,
+		"site",
+		"",
+		"site name to assign (must already exist)",
 	)
 	result.Flags().StringVar(
 		&tenant,

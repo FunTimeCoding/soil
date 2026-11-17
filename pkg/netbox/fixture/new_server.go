@@ -50,6 +50,12 @@ func NewServer(r *Recorder) *httptest.Server {
 					respond(w, constant.FixtureDevice)
 				case path == "/api/dcim/devices/":
 					respond(w, constant.FixtureDeviceList)
+				case path == "/api/dcim/device-types/":
+					respond(w, constant.FixtureDeviceTypeList)
+				case path == "/api/dcim/device-roles/":
+					respond(w, constant.FixtureDeviceRoleList)
+				case path == "/api/dcim/sites/":
+					respond(w, constant.FixtureSiteList)
 				case path == "/api/dcim/power-outlets/" &&
 					q.Method == http.MethodPost:
 					r.Created = decodeBody(q)
@@ -60,6 +66,16 @@ func NewServer(r *Recorder) *httptest.Server {
 					q.Method == http.MethodPost:
 					r.Created = decodeBody(q)
 					respond(w, constant.FixturePowerPort)
+				case path == "/api/dcim/interfaces/8/" &&
+					q.Method == http.MethodPatch:
+					r.Patched = decodeBody(q)
+					respond(w, constant.FixtureInterface)
+				case path == "/api/dcim/interfaces/":
+					respond(w, constant.FixtureInterfaceList)
+				case strings.HasPrefix(path, "/api/dcim/cables/") &&
+					q.Method == http.MethodDelete:
+					r.Deleted = append(r.Deleted, path)
+					w.WriteHeader(http.StatusNoContent)
 				case path == "/api/dcim/cables/" && q.Method == http.MethodPost:
 					r.Created = decodeBody(q)
 					respond(w, constant.FixtureCable)

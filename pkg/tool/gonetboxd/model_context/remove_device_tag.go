@@ -8,7 +8,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) removeDeviceTag(
+func (s *Server) RemoveDeviceTag(
 	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {

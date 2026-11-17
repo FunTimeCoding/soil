@@ -8,7 +8,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) createClusterType(
+func (s *Server) CreateClusterType(
 	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {

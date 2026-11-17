@@ -9,7 +9,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) createTunnel(
+func (s *Server) CreateTunnel(
 	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {

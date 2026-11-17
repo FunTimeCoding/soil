@@ -49,4 +49,11 @@ type AddressClient interface {
 		name string,
 		address string,
 	) (client.PhysicalAddress, error)
+	SetInterfaceEthernetPower(
+		x context.Context,
+		device string,
+		name string,
+		mode string,
+		kind string,
+	) (client.Interface, error)
 }

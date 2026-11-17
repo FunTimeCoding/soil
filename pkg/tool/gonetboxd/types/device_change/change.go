@@ -5,6 +5,9 @@ type Change struct {
 	PrimaryAddress *string
 	Location       *string
 	Platform       *string
+	Type           *string
+	Role           *string
+	Site           *string
 	Tenant         *string
 	Status         *string
 	Serial         *string

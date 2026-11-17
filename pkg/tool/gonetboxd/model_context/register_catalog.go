@@ -12,35 +12,35 @@ func (s *Server) registerCatalog() {
 			constant.ListSites,
 			mcp.WithDescription("List all NetBox sites"),
 		),
-		s.listSites,
+		s.ListSites,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListTenants,
 			mcp.WithDescription("List all NetBox tenants"),
 		),
-		s.listTenants,
+		s.ListTenants,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListDeviceRoles,
 			mcp.WithDescription("List all NetBox device roles"),
 		),
-		s.listDeviceRoles,
+		s.ListDeviceRoles,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListManufacturers,
 			mcp.WithDescription("List all NetBox manufacturers"),
 		),
-		s.listManufacturers,
+		s.ListManufacturers,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListDeviceTypes,
 			mcp.WithDescription("List all NetBox device types"),
 		),
-		s.listDeviceTypes,
+		s.ListDeviceTypes,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -52,7 +52,7 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Site name"),
 			),
 		),
-		s.createSite,
+		s.CreateSite,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -64,7 +64,7 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Tenant name"),
 			),
 		),
-		s.createTenant,
+		s.CreateTenant,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -82,7 +82,7 @@ func (s *Server) registerCatalog() {
 				),
 			),
 		),
-		s.createDeviceRole,
+		s.CreateDeviceRole,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -94,7 +94,7 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Manufacturer name"),
 			),
 		),
-		s.createManufacturer,
+		s.CreateManufacturer,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -111,6 +111,6 @@ func (s *Server) registerCatalog() {
 				mcp.Description("Manufacturer name (must exist)"),
 			),
 		),
-		s.createDeviceType,
+		s.CreateDeviceType,
 	)
 }

@@ -12,14 +12,14 @@ func (s *Server) registerTunnels() {
 			constant.ListTunnelGroups,
 			mcp.WithDescription("List all VPN tunnel groups"),
 		),
-		s.listTunnelGroups,
+		s.ListTunnelGroups,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListTunnels,
 			mcp.WithDescription("List all VPN tunnels"),
 		),
-		s.listTunnels,
+		s.ListTunnels,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -31,7 +31,7 @@ func (s *Server) registerTunnels() {
 				mcp.Description("Tunnel group name"),
 			),
 		),
-		s.createTunnelGroup,
+		s.CreateTunnelGroup,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -55,6 +55,6 @@ func (s *Server) registerTunnels() {
 				mcp.Description("Tunnel group name"),
 			),
 		),
-		s.createTunnel,
+		s.CreateTunnel,
 	)
 }

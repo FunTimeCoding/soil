@@ -18,7 +18,7 @@ func (s *Server) registerDevices() {
 				mcp.Description("Filter by name (case-insensitive contains)"),
 			),
 		),
-		s.listDevices,
+		s.ListDevices,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -30,7 +30,7 @@ func (s *Server) registerDevices() {
 				mcp.Description("Device name"),
 			),
 		),
-		s.getDevice,
+		s.GetDevice,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -68,6 +68,6 @@ func (s *Server) registerDevices() {
 				mcp.Description("Tag names to apply (optional)"),
 			),
 		),
-		s.createDevice,
+		s.CreateDevice,
 	)
 }

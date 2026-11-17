@@ -37,6 +37,8 @@ func New(i *netbox.Interface) *Interface {
 		Name:             name,
 		Description:      i.GetDescription(),
 		Type:             t,
+		EthernetPowerMode: string(i.PoeMode.GetValue()),
+		EthernetPowerType: string(i.PoeType.GetValue()),
 		PhysicalAddress:  h,
 		Contexts:         i.GetVdcs(),
 		VirtualNetworks:  i.GetTaggedVlans(),

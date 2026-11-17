@@ -12,9 +12,9 @@ import (
 
 func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	s := base.New(t)
-	r := stream_tester.Open(t, s.Server)
+	r := stream_tester.Open(t, s.Served())
 	assert.String(t, "[]", stream_tester.ReadEvent(t, r))
-	c := base.GeneratedClient(t, s.Server)
+	c := s.GeneratedClient()
 	claimed, e := c.PutClaimWithResponse(
 		context.Background(),
 		client.PutClaimJSONRequestBody{
@@ -43,7 +43,7 @@ func TestStreamFollowsEveryClaimChange(t *testing.T) {
 
 func TestClaimWithoutOwnerIsRejected(t *testing.T) {
 	s := base.New(t)
-	r, e := base.GeneratedClient(t, s.Server).PutClaimWithResponse(
+	r, e := s.GeneratedClient().PutClaimWithResponse(
 		context.Background(),
 		client.PutClaimJSONRequestBody{Item: "jira-ABC-1"},
 	)

@@ -20,6 +20,12 @@ type InterfaceClient interface {
 		description string,
 		i *network.Interface,
 	) (*physical_address.Address, error)
+	SetInterfaceEthernetPower(
+		d *device.Device,
+		name string,
+		mode string,
+		kind string,
+	) (*network.Interface, error)
 	UpdateInterface(
 		d *device.Device,
 		name string,

@@ -15,6 +15,7 @@ type CablingClient interface {
 		a *network.Interface,
 		b *network.Interface,
 	) (*cable.Cable, error)
+	DeleteCable(identifier int32) error
 	ConsolePorts() ([]*console_port.Port, error)
 	ConsoleServerPorts() ([]*console_server_port.Port, error)
 	DeviceCables(device string) ([]*cable.Cable, error)

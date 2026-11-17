@@ -1,15 +1,14 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	c := mock_client.New(t)
+	s := base.New(t)
 	before := goleak.IgnoreCurrent()
-	daemon_tester.New(t, c).Close()
+	s.Daemon().Close()
 	goleak.VerifyNone(t, before)
 }

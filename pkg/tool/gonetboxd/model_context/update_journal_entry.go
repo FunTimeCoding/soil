@@ -8,7 +8,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) updateJournalEntry(
+func (s *Server) UpdateJournalEntry(
 	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {

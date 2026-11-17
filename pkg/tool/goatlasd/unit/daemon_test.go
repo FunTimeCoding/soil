@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"go.uber.org/goleak"
@@ -13,14 +14,7 @@ import (
 )
 
 func TestDaemonHandsOutItsGuardsThenItsClock(t *testing.T) {
-	d := daemon.New(
-		service_tester.New(t).Option,
-		logger.New(context.Background()),
-		memory.New(),
-		prometheus.NewRegistry(),
-	)
-	t.Cleanup(d.Close)
-	assert.Count(t, 5, d.Workers())
+	assert.Count(t, 5, base.New(t).Daemon().Workers())
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {

@@ -1,23 +1,20 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/service_tester"
 	"testing"
 )
 
-func New(t *testing.T) *Server {
+func New(
+	t *testing.T,
+	o ...Option,
+) *Server {
 	t.Helper()
-	c := mock_client.New(t)
-	r := memory.New()
-	result := &Server{
-		MockClient: c,
-		Reporter:   r,
-		Server:     model_context_server.Mount(t, daemon_tester.New(t, c), r),
+	result := &Server{Tester: service_tester.New(t), t: t}
+
+	for _, f := range o {
+		f(result)
 	}
-	t.Cleanup(result.Close)
 
 	return result
 }

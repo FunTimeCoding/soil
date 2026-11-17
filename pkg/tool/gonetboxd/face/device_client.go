@@ -43,6 +43,10 @@ type DeviceClient interface {
 		interfaceType string,
 		physicalAddress string,
 	) (client.Interface, error)
+	DeleteCable(
+		x context.Context,
+		identifier int32,
+	) error
 	CreatePowerCable(
 		x context.Context,
 		outletDevice string,

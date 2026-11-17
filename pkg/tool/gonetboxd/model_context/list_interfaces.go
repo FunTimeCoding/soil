@@ -8,7 +8,7 @@ import (
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
-func (s *Server) listInterfaces(
+func (s *Server) ListInterfaces(
 	x context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {

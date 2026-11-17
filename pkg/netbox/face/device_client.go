@@ -36,6 +36,18 @@ type DeviceClient interface {
 		name string,
 		platformName string,
 	) (*device.Device, error)
+	SetDeviceRole(
+		name string,
+		roleName string,
+	) (*device.Device, error)
+	SetDeviceSite(
+		name string,
+		siteName string,
+	) (*device.Device, error)
+	SetDeviceType(
+		name string,
+		model string,
+	) (*device.Device, error)
 	SetDevicePrimaryAddress(
 		name string,
 		address string,

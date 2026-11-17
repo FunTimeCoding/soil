@@ -15,4 +15,10 @@ func (s *Server) register() {
 	s.registerTunnelTerminations()
 	s.registerConfigurationContexts()
 	s.registerCustomFields()
+	s.registerUpdates()
+	s.registerVirtualMachineReads()
+	s.registerCabling()
+	s.registerPower()
+	s.registerInterfaceDetails()
+	s.registerRecords()
 }

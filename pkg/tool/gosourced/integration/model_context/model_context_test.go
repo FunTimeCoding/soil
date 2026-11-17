@@ -11,15 +11,21 @@ import (
 )
 
 func TestListModules(t *testing.T) {
-	s := base.New(t, "../../service/testdata/unexport-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/unexport-function/src"),
+	)
+	c := s.Served().Connect(t)
 	result := c.MustCallTool(constant.ListModules, map[string]any{})
 	assert.StringContains(t, "test", result)
 }
 
 func TestUseModule(t *testing.T) {
-	s := base.New(t, "../../service/testdata/unexport-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/unexport-function/src"),
+	)
+	c := s.Served().Connect(t)
 	result := c.MustCallTool(
 		constant.UseModule,
 		map[string]any{"module": "test"},
@@ -28,15 +34,21 @@ func TestUseModule(t *testing.T) {
 }
 
 func TestUseModuleUnknown(t *testing.T) {
-	s := base.New(t, "../../service/testdata/unexport-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/unexport-function/src"),
+	)
+	c := s.Served().Connect(t)
 	_, e := c.CallTool(constant.UseModule, map[string]any{"module": "missing"})
 	assert.StringContains(t, "unknown module", e.Error())
 }
 
 func TestChangeVisibilityExport(t *testing.T) {
-	s := base.New(t, "../../service/testdata/export-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/export-function/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.ChangeVisibility,
@@ -54,8 +66,11 @@ func TestChangeVisibilityExport(t *testing.T) {
 }
 
 func TestChangeVisibilityNoModule(t *testing.T) {
-	s := base.New(t, "../../service/testdata/unexport-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/unexport-function/src"),
+	)
+	c := s.Served().Connect(t)
 	_, e := c.CallTool(
 		constant.ChangeVisibility,
 		map[string]any{
@@ -67,8 +82,11 @@ func TestChangeVisibilityNoModule(t *testing.T) {
 }
 
 func TestChangeVisibilityCrossPackageBlocked(t *testing.T) {
-	s := base.New(t, "../../service/testdata/cross-package/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/cross-package/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := c.CallTool(
 		constant.ChangeVisibility,
@@ -81,8 +99,11 @@ func TestChangeVisibilityCrossPackageBlocked(t *testing.T) {
 }
 
 func TestRenameSymbol(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-function/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.RenameSymbol,
@@ -101,8 +122,11 @@ func TestRenameSymbol(t *testing.T) {
 }
 
 func TestRenameSymbolNamesPackageThatDoesNotLoad(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-function/src"),
+	)
+	c := s.Served().Connect(t)
 	system_tester.Write(
 		t,
 		s.Directory,
@@ -126,8 +150,11 @@ func TestRenameSymbolNamesPackageThatDoesNotLoad(t *testing.T) {
 }
 
 func TestRenameSymbolToUnexportedBlocked(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-unexport/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-unexport/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := c.CallTool(
 		constant.RenameSymbol,
@@ -141,8 +168,11 @@ func TestRenameSymbolToUnexportedBlocked(t *testing.T) {
 }
 
 func TestRenameSymbolSameName(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-function/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := c.CallTool(
 		constant.RenameSymbol,
@@ -156,8 +186,11 @@ func TestRenameSymbolSameName(t *testing.T) {
 }
 
 func TestRenameSymbolNoModule(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-function/src"),
+	)
+	c := s.Served().Connect(t)
 	_, e := c.CallTool(
 		constant.RenameSymbol,
 		map[string]any{
@@ -170,8 +203,11 @@ func TestRenameSymbolNoModule(t *testing.T) {
 }
 
 func TestRenameSymbolMissingParams(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-function/src"),
+	)
+	c := s.Served().Connect(t)
 	_, e := c.CallTool(
 		constant.RenameSymbol,
 		map[string]any{
@@ -184,8 +220,11 @@ func TestRenameSymbolMissingParams(t *testing.T) {
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-function/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := c.CallTool(
 		constant.RenameSymbol,
@@ -199,8 +238,11 @@ func TestRenameSymbolNotFound(t *testing.T) {
 }
 
 func TestExtractToFile(t *testing.T) {
-	s := base.New(t, "../../service/testdata/extract-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/extract-function/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.ExtractToFile,
@@ -213,8 +255,11 @@ func TestExtractToFile(t *testing.T) {
 }
 
 func TestExtractToFileNotFound(t *testing.T) {
-	s := base.New(t, "../../service/testdata/extract-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/extract-function/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := c.CallTool(
 		constant.ExtractToFile,
@@ -224,8 +269,11 @@ func TestExtractToFileNotFound(t *testing.T) {
 }
 
 func TestExtractToFileNoModule(t *testing.T) {
-	s := base.New(t, "../../service/testdata/extract-function/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/extract-function/src"),
+	)
+	c := s.Served().Connect(t)
 	_, e := c.CallTool(
 		constant.ExtractToFile,
 		map[string]any{
@@ -237,8 +285,11 @@ func TestExtractToFileNoModule(t *testing.T) {
 }
 
 func TestExtractToFileRenamesSource(t *testing.T) {
-	s := base.New(t, "../../service/testdata/extract-last-pair/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/extract-last-pair/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.ExtractToFile,
@@ -254,8 +305,11 @@ func TestExtractToFileRenamesSource(t *testing.T) {
 }
 
 func TestAddImport(t *testing.T) {
-	s := base.New(t, "../../service/testdata/import-empty/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/import-empty/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.AddImport,
@@ -268,8 +322,11 @@ func TestAddImport(t *testing.T) {
 }
 
 func TestRemoveImport(t *testing.T) {
-	s := base.New(t, "../../service/testdata/import-grouped/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/import-grouped/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.RemoveImport,

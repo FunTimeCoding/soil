@@ -7,7 +7,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	c := base.New(t).Server
+	c := base.New(t).Served()
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, constant.ClaimsPath)
 	c.VerifyGuarded(t, constant.StreamPath)

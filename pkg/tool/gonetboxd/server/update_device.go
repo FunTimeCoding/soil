@@ -19,6 +19,9 @@ func (s *Server) UpdateDevice(
 	c.PrimaryAddress = r.Body.PrimaryAddress
 	c.Location = r.Body.Location
 	c.Platform = r.Body.Platform
+	c.Type = r.Body.Type
+	c.Role = r.Body.Role
+	c.Site = r.Body.Site
 	c.Tenant = r.Body.Tenant
 	c.Status = r.Body.Status
 	c.Serial = r.Body.Serial

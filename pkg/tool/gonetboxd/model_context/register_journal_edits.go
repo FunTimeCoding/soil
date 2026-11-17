@@ -27,7 +27,7 @@ func (s *Server) registerJournalEdits() {
 				),
 			),
 		),
-		s.updateJournalEntry,
+		s.UpdateJournalEntry,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -39,6 +39,6 @@ func (s *Server) registerJournalEdits() {
 				mcp.Description("Journal entry identifier"),
 			),
 		),
-		s.deleteJournalEntry,
+		s.DeleteJournalEntry,
 	)
 }

@@ -5,16 +5,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/terraform_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/service_tester"
 	"testing"
 	"time"
 )
 
 func TestLockFromGonePodIsCleared(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
+		service_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
 	)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -41,9 +41,9 @@ func TestLockFromGonePodIsCleared(t *testing.T) {
 
 func TestLockFromLivePodIsKept(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
+		service_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
 	).WithPod(constant.FixtureGonePod)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -59,12 +59,12 @@ func TestLockFromLivePodIsKept(t *testing.T) {
 
 func TestLockFromOutsideClusterIsKept(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(
+		service_tester.HeldLease(
 			constant.FixtureLaptop,
 			time.Now().Add(-time.Hour),
 		),
 	)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -80,9 +80,9 @@ func TestLockFromOutsideClusterIsKept(t *testing.T) {
 
 func TestLockFromAnotherDeploymentIsKept(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(constant.FixtureOtherHolder, time.Now()),
+		service_tester.HeldLease(constant.FixtureOtherHolder, time.Now()),
 	)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -98,12 +98,12 @@ func TestLockFromAnotherDeploymentIsKept(t *testing.T) {
 
 func TestOwnLockFromBeforeStartIsCleared(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(
+		service_tester.HeldLease(
 			constant.FixtureOwnHolder,
 			time.Now().Add(-time.Hour),
 		),
 	)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -120,12 +120,12 @@ func TestOwnLockFromBeforeStartIsCleared(t *testing.T) {
 
 func TestOwnLockFromAfterStartIsKept(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(
+		service_tester.HeldLease(
 			constant.FixtureOwnHolder,
 			time.Now().Add(time.Hour),
 		),
 	)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -141,9 +141,9 @@ func TestOwnLockFromAfterStartIsKept(t *testing.T) {
 
 func TestUnknownHolderIsReportedAndKept(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
+		service_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
 	).WithPodError(fmt.Errorf("pods is forbidden"))
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{
@@ -160,9 +160,13 @@ func TestUnknownHolderIsReportedAndKept(t *testing.T) {
 func TestTruncatedHolderIsKept(t *testing.T) {
 	assert.Integer(t, 63, len(constant.FixtureLongOther))
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(constant.FixtureLongOtherHolder, time.Now()),
+		service_tester.HeldLease(constant.FixtureLongOtherHolder, time.Now()),
 	)
-	o := terraform_tester.NewAs(t, c, constant.FixtureLongOwn)
+	o := service_tester.New(
+		t,
+		c,
+		service_tester.WithHostname(constant.FixtureLongOwn),
+	)
 	assert.Strings(
 		t,
 		[]string{
@@ -177,7 +181,7 @@ func TestTruncatedHolderIsKept(t *testing.T) {
 }
 
 func TestFreeLockSkipsUnlock(t *testing.T) {
-	o := terraform_tester.New(t, mock_client.New())
+	o := service_tester.New(t, mock_client.New())
 	assert.Strings(
 		t,
 		[]string{
@@ -193,9 +197,9 @@ func TestFreeLockSkipsUnlock(t *testing.T) {
 
 func TestFailedUnlockIsReported(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
+		service_tester.HeldLease(constant.FixtureGoneHolder, time.Now()),
 	)
-	o := terraform_tester.NewFailingUnlock(t, c)
+	o := service_tester.New(t, c, service_tester.WithFailingUnlock())
 	assert.Strings(
 		t,
 		[]string{
@@ -218,9 +222,9 @@ func TestFailedUnlockIsReported(t *testing.T) {
 
 func TestReleasedLeaseSkipsUnlock(t *testing.T) {
 	c := mock_client.New().WithLease(
-		terraform_tester.ReleasedLease(constant.FixtureGoneHolder, time.Now()),
+		service_tester.ReleasedLease(constant.FixtureGoneHolder, time.Now()),
 	)
-	o := terraform_tester.New(t, c)
+	o := service_tester.New(t, c)
 	assert.Strings(
 		t,
 		[]string{

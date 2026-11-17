@@ -32,7 +32,7 @@ func (o *Tester) Service() (*service.Service, *runner.Runner) {
 	l := logger.New(o.t.Context())
 	g := peer.New(constant.SaltPeer, c.Address(), c, l, o.Reporter)
 	o.t.Cleanup(g.Close)
-	o.runner = runner.New(o.daemonOption(), s, l, o.Reporter, p, c, g)
+	o.runner = runner.New(o.DaemonOption(), s, l, o.Reporter, p, c, g)
 	o.t.Cleanup(
 		func() {
 			o.runner.Close()

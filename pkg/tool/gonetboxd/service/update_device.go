@@ -42,6 +42,24 @@ func (s *Service) UpdateDevice(
 				}
 			}
 
+			if c.Type != nil {
+				if _, e := s.client.SetDeviceType(name, *c.Type); e != nil {
+					return nil, e
+				}
+			}
+
+			if c.Role != nil {
+				if _, e := s.client.SetDeviceRole(name, *c.Role); e != nil {
+					return nil, e
+				}
+			}
+
+			if c.Site != nil {
+				if _, e := s.client.SetDeviceSite(name, *c.Site); e != nil {
+					return nil, e
+				}
+			}
+
 			if c.Tenant != nil {
 				if _, e := s.client.SetDeviceTenant(name, *c.Tenant); e != nil {
 					return nil, e

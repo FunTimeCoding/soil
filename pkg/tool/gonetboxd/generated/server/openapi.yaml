@@ -771,6 +771,59 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/devices/{name}/interfaces/{interface}/ethernet-power:
+    post:
+      operationId: setInterfaceEthernetPower
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      - name: interface
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Interface name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EthernetPowerRequest"
+      responses:
+        "200":
+          description: The interface with its ethernet power set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Interface"
+        "400":
+          description: NetBox refused the request, or a mode or type it does not know.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to set the ethernet power.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/physical-addresses:
     get:
       operationId: listPhysicalAddresses
@@ -2577,6 +2630,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/cables/{identifier}:
+    delete:
+      operationId: deleteCable
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Cable identifier, as list-cables shows it.
+      responses:
+        "204":
+          description: Cable deleted.
+        "400":
+          description: NetBox refused the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No cable has this identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: NetBox refused because dependent objects exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete cable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/power-cables:
     post:
       operationId: createPowerCable
@@ -3499,6 +3596,16 @@ components:
       properties:
         address:
           type: string
+    EthernetPowerRequest:
+      type: object
+      required: [mode]
+      properties:
+        mode:
+          type: string
+          description: pse or pd; empty clears mode and type.
+        type:
+          type: string
+          description: The standard, such as type2-ieee802.3at; empty leaves it unset.
     PhysicalAddress:
       type: object
       required: [identifier, address]
@@ -3527,6 +3634,12 @@ components:
           type: string
         physicalAddress:
           type: string
+        ethernetPowerMode:
+          type: string
+          description: pse when the port supplies power over its cable, pd when it is powered through it.
+        ethernetPowerType:
+          type: string
+          description: The standard, such as type1-ieee802.3af or passive-24v-2pair.
     Address:
       type: object
       required:
@@ -3802,6 +3915,15 @@ components:
         platform:
           type: string
           description: Platform name to assign (must already exist).
+        type:
+          type: string
+          description: Device type model to assign (must already exist); components stay as they are.
+        role:
+          type: string
+          description: Device role name to assign (must already exist).
+        site:
+          type: string
+          description: Site name to assign (must already exist).
         tenant:
           type: string
           description: Tenant name to assign (must already exist).

@@ -11,6 +11,8 @@ type Interface struct {
 	Description      string
 	PhysicalAddress  net.HardwareAddr
 	Type             netbox.InterfaceTypeValue
+	EthernetPowerMode string
+	EthernetPowerType string
 	Contexts         []netbox.VirtualDeviceContext
 	VirtualNetworks  []netbox.VLAN
 	WirelessNetworks []netbox.WirelessLAN

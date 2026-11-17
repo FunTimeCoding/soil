@@ -8,18 +8,21 @@ import (
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/terraform_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/service_tester"
 	"testing"
 )
 
 func TestApplySendsHostEventsDownstream(t *testing.T) {
 	d := mock_client.New(t, "alfa:8080")
-	terraform_tester.NewServedWithDownstream(
+	s := base.New(
 		t,
 		kubernetesMock.New(),
-		constant.FixturePlan,
-		d,
+		service_tester.WithPlan(constant.FixturePlan),
+		service_tester.WithDownstream(d),
 	)
+	s.Start()
+	s.WaitForRuns(1)
 	assert.Eventually(t, func() bool { return d.Calls() >= 1 })
 	triggered := d.Triggered()
 	assert.Any(
@@ -40,12 +43,14 @@ func TestApplySendsHostEventsDownstream(t *testing.T) {
 func TestRestartingDownstreamIsHeldOffAndNotCaptured(t *testing.T) {
 	d := mock_client.New(t, "alfa:8080")
 	d.Fail(d.PostTrigger, unavailable.Format(provisionConstant.RunnerStopped))
-	s := terraform_tester.NewServedWithDownstream(
+	s := base.New(
 		t,
 		kubernetesMock.New(),
-		constant.FixturePlan,
-		d,
+		service_tester.WithPlan(constant.FixturePlan),
+		service_tester.WithDownstream(d),
 	)
+	s.Start()
+	s.WaitForRuns(1)
 	assert.Eventually(t, func() bool { return d.Calls() >= 1 })
 	s.TriggerServed()
 	s.WaitForRuns(2)

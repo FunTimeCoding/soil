@@ -7,6 +7,7 @@ type Client struct {
 	VirtualMachineList  []*client.VirtualMachine
 	PhysicalAddressList []client.PhysicalAddressOwner
 	PowerOutletList     []*client.PowerOutlet
+	EthernetPower       *client.EthernetPowerRequest
 	Failure             error
 	Closed              int
 	Updated             map[string]client.UpdateDeviceRequest

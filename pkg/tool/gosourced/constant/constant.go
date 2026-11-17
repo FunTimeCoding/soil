@@ -212,3 +212,5 @@ const (
 	OperationMakeDirectory = "make_directory"
 	OperationRename        = "rename"
 )
+
+const FixtureModule = "test"

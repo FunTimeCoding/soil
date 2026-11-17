@@ -3,13 +3,13 @@ package toolchain
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
-	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/integration/check_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/option"
 	gosourcedConstant "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/base"
 	"path/filepath"
 	"strconv"
 	"testing"
@@ -17,9 +17,7 @@ import (
 
 func TestDelegatedCheckMatchesLocalRun(t *testing.T) {
 	root := check_tester.StackModule(t)
-	i := inventory.New()
-	i.Add("example", root)
-	check_tester.ServeSource(t, i)
+	check_tester.ServeSource(t, base.WithModule("example", root))
 	local := option.New()
 	local.Root = root
 	local.Index = t.TempDir()
@@ -37,9 +35,7 @@ func TestDelegatedCheckMatchesLocalRun(t *testing.T) {
 
 func TestDelegatedFixCommitsThroughDaemon(t *testing.T) {
 	root := check_tester.StackModule(t)
-	i := inventory.New()
-	i.Add("example", root)
-	check_tester.ServeSource(t, i)
+	check_tester.ServeSource(t, base.WithModule("example", root))
 	o := option.New()
 	o.Root = root
 	o.Fix = true
@@ -56,9 +52,7 @@ func TestDelegatedFixCommitsThroughDaemon(t *testing.T) {
 
 func TestDelegatedCheckSeesChangeBetweenChecks(t *testing.T) {
 	root := check_tester.StackModule(t)
-	i := inventory.New()
-	i.Add("example", root)
-	check_tester.ServeSource(t, i)
+	check_tester.ServeSource(t, base.WithModule("example", root))
 	first := option.New()
 	first.Root = root
 	before, _, e := gocheck.Delegate(first)
@@ -78,7 +72,7 @@ func TestDelegatedCheckSeesChangeBetweenChecks(t *testing.T) {
 }
 
 func TestDelegateDeclinesRootOutsideInventory(t *testing.T) {
-	check_tester.ServeSource(t, inventory.New())
+	check_tester.ServeSource(t)
 	o := option.New()
 	o.Root = check_tester.StackModule(t)
 	_, delegated, e := gocheck.Delegate(o)

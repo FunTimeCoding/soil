@@ -10,8 +10,11 @@ import (
 )
 
 func TestRenameReceiversThroughTool(t *testing.T) {
-	s := base.New(t, "../../service/testdata/rename-receivers/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/rename-receivers/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.RenameReceivers,

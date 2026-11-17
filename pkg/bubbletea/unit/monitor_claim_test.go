@@ -20,7 +20,7 @@ import (
 
 func TestWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	s := base.New(t)
-	monitor_tester.Connect(t, s.Port)
+	monitor_tester.Connect(t, s.Served().Port)
 	m := monitor.New(true, memory.New())
 	defer m.Close()
 	owner := fmt.Sprintf(

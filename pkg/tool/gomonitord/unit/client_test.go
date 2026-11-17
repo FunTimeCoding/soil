@@ -19,7 +19,7 @@ import (
 func TestClientClaimsReleasesAndStreams(t *testing.T) {
 	s := base.New(t)
 	c := gomonitord.New(
-		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		locator.New(webConstant.Localhost).Port(s.Served().Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -64,7 +64,7 @@ func TestListenReportsUnreachableDaemon(t *testing.T) {
 func TestListenRefusesUnknownToken(t *testing.T) {
 	s := base.New(t)
 	c := gomonitord.New(
-		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		locator.New(webConstant.Localhost).Port(s.Served().Port).Insecure(),
 		"bogus",
 	)
 	defer c.Close()

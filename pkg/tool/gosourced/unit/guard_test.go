@@ -7,9 +7,10 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	s := base.New(t, service_tester.ServiceTestdata("cross-package/src"))
-	defer s.Close()
-	c := s.Server
+	c := base.New(
+		t,
+		base.WithFixture(service_tester.ServiceTestdata("cross-package/src")),
+	).Served()
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, "/api/diff")
 	c.VerifyGuarded(t, "/api/usage")

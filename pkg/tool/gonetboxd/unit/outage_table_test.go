@@ -39,6 +39,14 @@ func TestToolsOnNetBoxOutage(t *testing.T) {
 		},
 		webConstant.OutageReaches,
 		nil,
-		map[string]map[string]any{"update_journal_entry": {"comments": "alfa"}},
+		map[string]map[string]any{
+			"update_journal_entry": {"comments": "alfa"},
+			"set_interface_physical_address": {
+				"address": "00:00:5e:00:53:01",
+			},
+			"set_virtual_interface_physical_address": {
+				"address": "00:00:5e:00:53:01",
+			},
+		},
 	)
 }

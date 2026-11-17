@@ -6,12 +6,12 @@ import (
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/ansible_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/service_tester"
 	"testing"
 )
 
 func TestHostEventsLimitPlaybooksToLiveHosts(t *testing.T) {
-	o := ansible_tester.New(t, nil)
+	o := service_tester.New(t, nil)
 	o.WaitForRun()
 	runs := o.TriggerHosts(
 		[]*host_event.Event{
@@ -28,7 +28,7 @@ func TestHostEventsLimitPlaybooksToLiveHosts(t *testing.T) {
 }
 
 func TestHostEventsReachingNoLiveHostSkipRun(t *testing.T) {
-	o := ansible_tester.New(t, nil)
+	o := service_tester.New(t, nil)
 	o.WaitForRun()
 	runs := o.TriggerHosts(
 		[]*host_event.Event{

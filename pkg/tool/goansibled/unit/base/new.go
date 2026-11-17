@@ -1,7 +1,7 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/ansible_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/service_tester"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ func New(
 	o ...Option,
 ) *Server {
 	t.Helper()
-	result := &Server{Tester: ansible_tester.NewFixture(t, nil), t: t}
+	result := &Server{Tester: service_tester.NewFixture(t, nil), t: t}
 
 	for _, f := range o {
 		f(result)

@@ -1,13 +1,14 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/base"
 	"go.uber.org/goleak"
 	"testing"
 )
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
+	s := base.New(t)
 	before := goleak.IgnoreCurrent()
-	daemon_tester.New(t).Close()
+	s.Daemon().Close()
 	goleak.VerifyNone(t, before)
 }

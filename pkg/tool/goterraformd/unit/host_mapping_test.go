@@ -6,12 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/host_mapping"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/plan"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/terraform_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/service_tester"
 	"testing"
 )
 
 func TestHostEventsFromPlan(t *testing.T) {
-	p := terraform_tester.Plan()
+	p := service_tester.Plan()
 	assert.Any(
 		t,
 		[]*host_event.Event{
@@ -39,7 +39,7 @@ func TestPlanAddressesSkipReadsAndNoOps(t *testing.T) {
 			"module.compute.example_disk.kilo",
 			"module.compute.proxmox_virtual_environment_vm.foxtrot",
 		},
-		host_mapping.Addresses(terraform_tester.Plan()),
+		host_mapping.Addresses(service_tester.Plan()),
 	)
 }
 

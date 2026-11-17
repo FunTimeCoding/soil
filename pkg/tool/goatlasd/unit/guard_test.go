@@ -1,31 +1,12 @@
 package unit
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/service_tester"
-	"github.com/prometheus/client_golang/prometheus"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/base"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	s := service_tester.New(t)
-	d := daemon.New(
-		s.Option,
-		logger.New(context.Background()),
-		memory.New(),
-		prometheus.NewRegistry(),
-	)
-	t.Cleanup(d.Close)
-	v := model_context_server.Mount(
-		t,
-		d,
-		memory.New(),
-		model_context_server.WithSignOn(),
-	)
+	v := base.New(t).Served()
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyGuarded(t, "/api/placements")

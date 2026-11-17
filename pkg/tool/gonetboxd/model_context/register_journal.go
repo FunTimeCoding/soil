@@ -28,7 +28,7 @@ func (s *Server) registerJournal() {
 				mcp.Description("Entry kind: info, success, warning, or danger"),
 			),
 		),
-		s.addDeviceJournalEntry,
+		s.AddDeviceJournalEntry,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -50,7 +50,7 @@ func (s *Server) registerJournal() {
 				mcp.Description("Entries to skip"),
 			),
 		),
-		s.listDeviceJournalEntries,
+		s.ListDeviceJournalEntries,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -73,7 +73,7 @@ func (s *Server) registerJournal() {
 				mcp.Description("Entry kind: info, success, warning, or danger"),
 			),
 		),
-		s.addVirtualJournalEntry,
+		s.AddVirtualJournalEntry,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -95,6 +95,6 @@ func (s *Server) registerJournal() {
 				mcp.Description("Entries to skip"),
 			),
 		),
-		s.listVirtualJournalEntries,
+		s.ListVirtualJournalEntries,
 	)
 }

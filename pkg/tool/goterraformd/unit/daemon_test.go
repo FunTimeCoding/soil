@@ -12,6 +12,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/base"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/service_tester"
 	"github.com/prometheus/client_golang/prometheus"
 	"go.uber.org/goleak"
 	"path/filepath"
@@ -19,23 +21,14 @@ import (
 )
 
 func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
-	o := option.New()
-	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
-	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
-	o.DownstreamClients = func() []provisionFace.Client {
-		return []provisionFace.Client{
+	workers := base.New(
+		t,
+		kubernetesMock.New(),
+		service_tester.WithDownstream(
 			mock_client.New(t, "alfa:8080"),
 			mock_client.New(t, "bravo:8080"),
-		}
-	}
-	d := daemon.New(
-		o,
-		logger.New(t.Context()),
-		memory.New(),
-		prometheus.NewRegistry(),
-	)
-	t.Cleanup(d.Close)
-	workers := d.Workers()
+		),
+	).Daemon().Workers()
 	assert.Count(t, 4, workers)
 
 	for n, w := range workers {
@@ -45,14 +38,9 @@ func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 }
 
 func TestDaemonCountsReapsOnItsRegistry(t *testing.T) {
-	o := option.New()
-	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
-	o.Cluster = func() face.KubernetesClient { return kubernetesMock.New() }
-	o.DownstreamClients = func() []provisionFace.Client { return nil }
-	y := prometheus.NewRegistry()
-	d := daemon.New(o, logger.New(t.Context()), memory.New(), y)
-	t.Cleanup(d.Close)
-	assert.True(t, reaper.CountsOn(y))
+	s := base.New(t, kubernetesMock.New())
+	s.Daemon()
+	assert.True(t, reaper.CountsOn(s.Registry))
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {

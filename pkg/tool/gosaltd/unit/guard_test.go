@@ -1,18 +1,12 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/unit/base"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	v := model_context_server.Mount(
-		t,
-		service_tester.New(t).Daemon(),
-		memory.New(),
-	)
+	v := base.New(t).Served()
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyGuarded(t, "/api/trigger")

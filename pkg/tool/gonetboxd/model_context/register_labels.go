@@ -28,7 +28,7 @@ func (s *Server) registerLabels() {
 				mcp.Description("Label value"),
 			),
 		),
-		s.setDeviceLabel,
+		s.SetDeviceLabel,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -45,7 +45,7 @@ func (s *Server) registerLabels() {
 				mcp.Description("Label key"),
 			),
 		),
-		s.removeDeviceLabel,
+		s.RemoveDeviceLabel,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -57,7 +57,7 @@ func (s *Server) registerLabels() {
 				mcp.Description("Device name"),
 			),
 		),
-		s.listDeviceLabels,
+		s.ListDeviceLabels,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -81,7 +81,7 @@ func (s *Server) registerLabels() {
 				mcp.Description("Label value"),
 			),
 		),
-		s.setVirtualLabel,
+		s.SetVirtualLabel,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -98,7 +98,7 @@ func (s *Server) registerLabels() {
 				mcp.Description("Label key"),
 			),
 		),
-		s.removeVirtualLabel,
+		s.RemoveVirtualLabel,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -112,6 +112,6 @@ func (s *Server) registerLabels() {
 				mcp.Description("VM name"),
 			),
 		),
-		s.listVirtualLabels,
+		s.ListVirtualLabels,
 	)
 }

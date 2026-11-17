@@ -29,7 +29,7 @@ func (s *Server) registerFieldValues() {
 			field,
 			values,
 		),
-		s.setDeviceCustomField,
+		s.SetDeviceCustomField,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -45,6 +45,6 @@ func (s *Server) registerFieldValues() {
 			field,
 			values,
 		),
-		s.setVirtualCustomField,
+		s.SetVirtualCustomField,
 	)
 }

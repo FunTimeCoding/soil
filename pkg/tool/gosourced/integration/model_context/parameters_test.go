@@ -10,8 +10,11 @@ import (
 )
 
 func TestAddParametersThroughTool(t *testing.T) {
-	s := base.New(t, "../../service/testdata/add-parameters/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/add-parameters/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.AddParameters,
@@ -35,8 +38,11 @@ func TestAddParametersThroughTool(t *testing.T) {
 }
 
 func TestNameParametersThroughTool(t *testing.T) {
-	s := base.New(t, "../../service/testdata/name-parameters/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/name-parameters/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := c.MustCallTool(
 		constant.NameParameters,
@@ -58,8 +64,11 @@ func TestNameParametersThroughTool(t *testing.T) {
 }
 
 func TestAddParametersToolRefusesWithoutArgument(t *testing.T) {
-	s := base.New(t, "../../service/testdata/add-parameters/src")
-	c := s.Connect(t)
+	s := base.New(
+		t,
+		base.WithFixture("../../service/testdata/add-parameters/src"),
+	)
+	c := s.Served().Connect(t)
 	c.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := c.CallTool(
 		constant.AddParameters,

@@ -4,14 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/lock_detail"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/terraform_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/service_tester"
 	"testing"
 	"time"
 )
 
 func TestLockDetailParsesAnnotation(t *testing.T) {
 	d := lock_detail.New(
-		terraform_tester.Annotated(
+		service_tester.Annotated(
 			map[string]string{
 				constant.LockAnnotation: constant.FixtureLockDetail,
 			},
@@ -35,7 +35,7 @@ func TestLockDetailMissingLease(t *testing.T) {
 func TestLockDetailUnlocked(t *testing.T) {
 	assert.Nil(
 		t,
-		lock_detail.New(terraform_tester.Annotated(map[string]string{})),
+		lock_detail.New(service_tester.Annotated(map[string]string{})),
 	)
 }
 
@@ -43,7 +43,7 @@ func TestLockDetailUnreadableAnnotation(t *testing.T) {
 	assert.Nil(
 		t,
 		lock_detail.New(
-			terraform_tester.Annotated(
+			service_tester.Annotated(
 				map[string]string{constant.LockAnnotation: "{"},
 			),
 		),

@@ -25,6 +25,6 @@ func (s *Server) registerInventory() {
 				),
 			),
 		),
-		s.ansibleInventory,
+		s.AnsibleInventory,
 	)
 }

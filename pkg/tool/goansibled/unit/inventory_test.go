@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/ansible_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/service_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"os"
@@ -14,7 +14,7 @@ import (
 )
 
 func TestApplyRunsAgainstStaticAndNetboxInventory(t *testing.T) {
-	o := ansible_tester.New(
+	o := service_tester.New(
 		t,
 		http.HandlerFunc(
 			func(
@@ -66,7 +66,7 @@ func TestApplyRunsAgainstStaticAndNetboxInventory(t *testing.T) {
 }
 
 func TestApplyAsksInventoryForItsSite(t *testing.T) {
-	o := ansible_tester.New(
+	o := service_tester.New(
 		t,
 		http.HandlerFunc(
 			func(
@@ -83,13 +83,13 @@ func TestApplyAsksInventoryForItsSite(t *testing.T) {
 				errors.PanicOnError(e)
 			},
 		),
-		ansible_tester.WithSite("kilo"),
+		service_tester.WithSite("kilo"),
 	)
 	assert.String(t, "success", o.WaitForRun().Status)
 }
 
 func TestApplyFailsWhenNetboxInventoryFails(t *testing.T) {
-	o := ansible_tester.New(
+	o := service_tester.New(
 		t,
 		http.HandlerFunc(
 			func(
@@ -114,7 +114,7 @@ func TestApplyFailsWhenNetboxInventoryFails(t *testing.T) {
 }
 
 func TestApplyWithoutNetboxUsesDefaultInventory(t *testing.T) {
-	o := ansible_tester.New(t, nil)
+	o := service_tester.New(t, nil)
 	r := o.WaitForRun()
 	assert.String(t, "success", r.Status)
 	arguments, okay := o.Captured(constant.FixtureArguments)

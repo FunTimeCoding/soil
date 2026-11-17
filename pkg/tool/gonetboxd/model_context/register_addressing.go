@@ -17,7 +17,7 @@ func (s *Server) registerAddressing() {
 				mcp.Description("Device name"),
 			),
 		),
-		s.listAddresses,
+		s.ListAddresses,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -47,14 +47,14 @@ func (s *Server) registerAddressing() {
 				),
 			),
 		),
-		s.createAddress,
+		s.CreateAddress,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListPrefixes,
 			mcp.WithDescription("List all IP prefixes"),
 		),
-		s.listPrefixes,
+		s.ListPrefixes,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -74,6 +74,6 @@ func (s *Server) registerAddressing() {
 				mcp.Description("Description (optional)"),
 			),
 		),
-		s.createPrefix,
+		s.CreatePrefix,
 	)
 }

@@ -21,7 +21,7 @@ func TestWindowReceivesClaimsThroughHold(t *testing.T) {
 	s := base.New(t)
 	g := monitor_tester.ClaimMessage(
 		t,
-		s.Port,
+		s.Served().Port,
 		generativeConstant.ModelContextTestToken,
 		memory.New(),
 	)
@@ -31,7 +31,7 @@ func TestWindowReceivesClaimsThroughHold(t *testing.T) {
 func TestClosingWindowReleasesNoticeNobodyReads(t *testing.T) {
 	s := base.New(t)
 	m := client.New(
-		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		locator.New(webConstant.Localhost).Port(s.Served().Port).Insecure(),
 		"bogus",
 	)
 	defer m.Close()
@@ -61,7 +61,7 @@ func TestClosingWindowReleasesNoticeNobodyReads(t *testing.T) {
 func TestWindowShowsRefusedClaimStream(t *testing.T) {
 	s := base.New(t)
 	r := memory.New()
-	g := monitor_tester.ClaimMessage(t, s.Port, "bogus", r)
+	g := monitor_tester.ClaimMessage(t, s.Served().Port, "bogus", r)
 	assert.StringContains(t, "stream status: 401", g.Error.Error())
 	assert.Count(t, 0, r.Events())
 }

@@ -28,6 +28,7 @@ const (
 	ObjectLinkField  = "url"
 	DeviceField      = "device"
 	NameField        = "name"
+	SiteField        = "site"
 	InterfaceSegment = "/api/"
 
 	DeviceAddress           = "dcim.device"

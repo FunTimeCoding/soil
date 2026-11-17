@@ -13,7 +13,9 @@ import (
 
 func TestClientReadsDiff(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	c := base.Module(t, r.Clone, generativeConstant.ModelContextTestToken)
+	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
+		generativeConstant.ModelContextTestToken,
+	)
 	assert.FatalOnError(t, c.Reachable(t.Context()))
 	d, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "echo"})
 	assert.FatalOnError(t, e)
@@ -29,7 +31,9 @@ func TestClientReadsDiff(t *testing.T) {
 
 func TestClientReadsTextOfChange(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	c := base.Module(t, r.Clone, generativeConstant.ModelContextTestToken)
+	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
+		generativeConstant.ModelContextTestToken,
+	)
 	d, e := c.GetDiff(
 		t.Context(),
 		&client.GetDiffParams{Module: "echo", Text: new(true)},
@@ -45,14 +49,16 @@ func TestClientReadsTextOfChange(t *testing.T) {
 
 func TestClientHearsUnknownModule(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	c := base.Module(t, r.Clone, generativeConstant.ModelContextTestToken)
+	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
+		generativeConstant.ModelContextTestToken,
+	)
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "golf"})
 	assert.True(t, not_found.Is(e))
 }
 
 func TestRefusedTokenIsError(t *testing.T) {
 	r := revision_tester.DiffRepository(t)
-	c := base.Module(t, r.Clone, "hotel-wrong")
+	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient("hotel-wrong")
 	_, e := c.GetDiff(t.Context(), &client.GetDiffParams{Module: "echo"})
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "diff status: 401", e.Error())

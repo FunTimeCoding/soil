@@ -2,6 +2,7 @@ package toolchain
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/base"
 	"os"
 	"path/filepath"
@@ -14,7 +15,9 @@ func TestClientPrunesStaleIndexGeneration(t *testing.T) {
 		t,
 		os.MkdirAll(filepath.Join(directory, "go1.0-0123456789ab"), 0755),
 	)
-	removed, e := base.Index(t, directory).PostIndexPrune(t.Context())
+	removed, e := base.New(t, base.WithIndexDirectory(directory)).
+		DaemonClient(generativeConstant.ModelContextTestToken).
+		PostIndexPrune(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"go1.0-0123456789ab"}, removed)
 	_, f := os.Stat(filepath.Join(directory, "go1.0-0123456789ab"))

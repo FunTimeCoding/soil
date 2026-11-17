@@ -383,13 +383,28 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// EthernetPowerRequest defines model for EthernetPowerRequest.
+type EthernetPowerRequest struct {
+	// Mode pse or pd; empty clears mode and type.
+	Mode string `json:"mode"`
+
+	// Type The standard, such as type2-ieee802.3at; empty leaves it unset.
+	Type *string `json:"type,omitempty"`
+}
+
 // Interface defines model for Interface.
 type Interface struct {
-	Description     *string `json:"description,omitempty"`
-	Identifier      int32   `json:"identifier"`
-	Name            string  `json:"name"`
-	PhysicalAddress *string `json:"physicalAddress,omitempty"`
-	Type            *string `json:"type,omitempty"`
+	Description *string `json:"description,omitempty"`
+
+	// EthernetPowerMode pse when the port supplies power over its cable, pd when it is powered through it.
+	EthernetPowerMode *string `json:"ethernetPowerMode,omitempty"`
+
+	// EthernetPowerType The standard, such as type1-ieee802.3af or passive-24v-2pair.
+	EthernetPowerType *string `json:"ethernetPowerType,omitempty"`
+	Identifier        int32   `json:"identifier"`
+	Name              string  `json:"name"`
+	PhysicalAddress   *string `json:"physicalAddress,omitempty"`
+	Type              *string `json:"type,omitempty"`
 }
 
 // JournalEntry defines model for JournalEntry.
@@ -560,14 +575,23 @@ type UpdateDeviceRequest struct {
 	// PrimaryAddress Address to set as primary (must be assigned to the device).
 	PrimaryAddress *string `json:"primaryAddress,omitempty"`
 
+	// Role Device role name to assign (must already exist).
+	Role *string `json:"role,omitempty"`
+
 	// Serial Serial number.
 	Serial *string `json:"serial,omitempty"`
+
+	// Site Site name to assign (must already exist).
+	Site *string `json:"site,omitempty"`
 
 	// Status Status (active, offline, planned, staged, failed, inventory, decommissioning).
 	Status *string `json:"status,omitempty"`
 
 	// Tenant Tenant name to assign (must already exist).
 	Tenant *string `json:"tenant,omitempty"`
+
+	// Type Device type model to assign (must already exist); components stay as they are.
+	Type *string `json:"type,omitempty"`
 }
 
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
@@ -727,6 +751,9 @@ type CreateAddressJSONRequestBody = CreateAddressRequest
 
 // CreateInterfaceJSONRequestBody defines body for CreateInterface for application/json ContentType.
 type CreateInterfaceJSONRequestBody = CreateInterfaceRequest
+
+// SetInterfaceEthernetPowerJSONRequestBody defines body for SetInterfaceEthernetPower for application/json ContentType.
+type SetInterfaceEthernetPowerJSONRequestBody = EthernetPowerRequest
 
 // SetInterfacePhysicalAddressJSONRequestBody defines body for SetInterfacePhysicalAddress for application/json ContentType.
 type SetInterfacePhysicalAddressJSONRequestBody = PhysicalAddressRequest
@@ -908,6 +935,9 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// DeleteCable performs a DELETE /api/cables/{identifier} (the `DeleteCable` operationId) request.
+	DeleteCable(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListChoiceSets performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
 	ListChoiceSets(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -1059,6 +1089,14 @@ type ClientInterface interface {
 	// CreateInterface performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateInterface(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetInterfaceEthernetPowerWithBody performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request,
+	// with any type of body and a specified content type.
+	SetInterfaceEthernetPowerWithBody(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetInterfaceEthernetPower performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request.
+	// Takes a body of the `application/json` content type.
+	SetInterfaceEthernetPower(ctx context.Context, name string, pInterface string, body SetInterfaceEthernetPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// SetInterfacePhysicalAddressWithBody performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
 	// with any type of body and a specified content type.
@@ -1455,6 +1493,19 @@ func (c *Client) CreateCableWithBody(ctx context.Context, contentType string, bo
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCableRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteCable performs a DELETE /api/cables/{identifier} (the `DeleteCable` operationId) request.
+func (c *Client) DeleteCable(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteCableRequest(c.Server, identifier)
 	if err != nil {
 		return nil, err
 	}
@@ -2027,6 +2078,34 @@ func (c *Client) CreateInterfaceWithBody(ctx context.Context, name string, conte
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateInterface(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateInterfaceRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetInterfaceEthernetPowerWithBody performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) SetInterfaceEthernetPowerWithBody(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetInterfaceEthernetPowerRequestWithBody(c.Server, name, pInterface, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetInterfaceEthernetPower performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) SetInterfaceEthernetPower(ctx context.Context, name string, pInterface string, body SetInterfaceEthernetPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetInterfaceEthernetPowerRequest(c.Server, name, pInterface, body)
 	if err != nil {
 		return nil, err
 	}
@@ -3364,6 +3443,40 @@ func NewCreateCableRequestWithBody(server string, contentType string, body io.Re
 	return req, nil
 }
 
+// NewDeleteCableRequest constructs an http.Request for the DeleteCable method
+func NewDeleteCableRequest(server string, identifier int32) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int32"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/cables/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListChoiceSetsRequest constructs an http.Request for the ListChoiceSets method
 func NewListChoiceSetsRequest(server string) (*http.Request, error) {
 	var err error
@@ -4415,6 +4528,60 @@ func NewCreateInterfaceRequestWithBody(server string, name string, contentType s
 	}
 
 	operationPath := fmt.Sprintf("/api/devices/%s/interfaces/create", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewSetInterfaceEthernetPowerRequest calls the generic SetInterfaceEthernetPower builder with application/json body
+func NewSetInterfaceEthernetPowerRequest(server string, name string, pInterface string, body SetInterfaceEthernetPowerJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetInterfaceEthernetPowerRequestWithBody(server, name, pInterface, "application/json", bodyReader)
+}
+
+// NewSetInterfaceEthernetPowerRequestWithBody constructs an http.Request for the SetInterfaceEthernetPower method, with any body, and a specified content type
+func NewSetInterfaceEthernetPowerRequestWithBody(server string, name string, pInterface string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "interface", pInterface, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/devices/%s/interfaces/%s/ethernet-power", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -6841,6 +7008,11 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateCableWithResponse(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCableResponse, error)
 
+	// DeleteCableWithResponse performs a DELETE /api/cables/{identifier} (the `DeleteCable` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteCableWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteCableResponse, error)
+
 	// ListChoiceSetsWithResponse performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -7050,6 +7222,16 @@ type ClientWithResponsesInterface interface {
 	// CreateInterfaceWithResponse performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateInterfaceWithResponse(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInterfaceResponse, error)
+
+	// SetInterfaceEthernetPowerWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	SetInterfaceEthernetPowerWithBodyWithResponse(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetInterfaceEthernetPowerResponse, error)
+
+	// SetInterfaceEthernetPowerWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	SetInterfaceEthernetPowerWithResponse(ctx context.Context, name string, pInterface string, body SetInterfaceEthernetPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*SetInterfaceEthernetPowerResponse, error)
 
 	// SetInterfacePhysicalAddressWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
 	// with any type of body and a specified content type.
@@ -7767,6 +7949,75 @@ func (r CreateCableResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateCableResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteCableResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeleteCableResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteCableResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r DeleteCableResponse) GetJSON409() *Error {
+	return r.JSON409
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteCableResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r DeleteCableResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteCableResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteCableResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteCableResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteCableResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -9579,6 +9830,75 @@ func (r CreateInterfaceResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateInterfaceResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type SetInterfaceEthernetPowerResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Interface
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r SetInterfaceEthernetPowerResponse) GetJSON200() *Interface {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r SetInterfaceEthernetPowerResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r SetInterfaceEthernetPowerResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r SetInterfaceEthernetPowerResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r SetInterfaceEthernetPowerResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r SetInterfaceEthernetPowerResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r SetInterfaceEthernetPowerResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetInterfaceEthernetPowerResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetInterfaceEthernetPowerResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -13314,6 +13634,17 @@ func (c *ClientWithResponses) CreateCableWithResponse(ctx context.Context, body 
 	return ParseCreateCableResponse(rsp)
 }
 
+// DeleteCableWithResponse performs a DELETE /api/cables/{identifier} (the `DeleteCable` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteCableWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteCableResponse, error) {
+	rsp, err := c.DeleteCable(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteCableResponse(rsp)
+}
+
 // ListChoiceSetsWithResponse performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -13774,6 +14105,28 @@ func (c *ClientWithResponses) CreateInterfaceWithResponse(ctx context.Context, n
 		return nil, err
 	}
 	return ParseCreateInterfaceResponse(rsp)
+}
+
+// SetInterfaceEthernetPowerWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetInterfaceEthernetPowerWithBodyWithResponse(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetInterfaceEthernetPowerResponse, error) {
+	rsp, err := c.SetInterfaceEthernetPowerWithBody(ctx, name, pInterface, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetInterfaceEthernetPowerResponse(rsp)
+}
+
+// SetInterfaceEthernetPowerWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/ethernet-power (the `SetInterfaceEthernetPower` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetInterfaceEthernetPowerWithResponse(ctx context.Context, name string, pInterface string, body SetInterfaceEthernetPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*SetInterfaceEthernetPowerResponse, error) {
+	rsp, err := c.SetInterfaceEthernetPower(ctx, name, pInterface, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetInterfaceEthernetPowerResponse(rsp)
 }
 
 // SetInterfacePhysicalAddressWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
@@ -14915,6 +15268,63 @@ func ParseCreateCableResponse(rsp *http.Response) (*CreateCableResponse, error) 
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteCableResponse parses an HTTP response from a DeleteCableWithResponse call
+func ParseDeleteCableResponse(rsp *http.Response) (*DeleteCableResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteCableResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -16287,6 +16697,60 @@ func ParseCreateInterfaceResponse(rsp *http.Response) (*CreateInterfaceResponse,
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSetInterfaceEthernetPowerResponse parses an HTTP response from a SetInterfaceEthernetPowerWithResponse call
+func ParseSetInterfaceEthernetPowerResponse(rsp *http.Response) (*SetInterfaceEthernetPowerResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetInterfaceEthernetPowerResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Interface
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		var dest Error

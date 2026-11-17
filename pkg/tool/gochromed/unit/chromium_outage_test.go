@@ -5,8 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/daemon_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/unit/outage_server"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -26,15 +25,12 @@ func TestToolsOnChromiumOutage(t *testing.T) {
 }
 
 func TestDaemonHandsOutChromiumGuard(t *testing.T) {
-	_, okay := daemon_tester.New(
-		t,
-		mock_client.New(t),
-	).Workers()[0].(*peer.Guard)
+	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
 
 func TestDaemonClosesClientItBuilt(t *testing.T) {
-	c := mock_client.New(t)
-	daemon_tester.New(t, c).Close()
-	assert.Integer(t, 1, c.Closed())
+	s := base.New(t)
+	s.Daemon().Close()
+	assert.Integer(t, 1, s.Source.Closed())
 }

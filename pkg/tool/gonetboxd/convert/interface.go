@@ -20,5 +20,13 @@ func Interface(i *network.Interface) *server.Interface {
 		result.PhysicalAddress = new(i.PhysicalAddress.String())
 	}
 
+	if i.EthernetPowerMode != "" {
+		result.EthernetPowerMode = &i.EthernetPowerMode
+	}
+
+	if i.EthernetPowerType != "" {
+		result.EthernetPowerType = &i.EthernetPowerType
+	}
+
 	return result
 }

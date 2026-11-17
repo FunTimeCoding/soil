@@ -1,30 +1,13 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/mock_client"
-	"github.com/funtimecoding/soil/pkg/kubernetes/face"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/daemon"
-	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
-	"github.com/prometheus/client_golang/prometheus"
-	"path/filepath"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/unit/base"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	o := option.New()
-	o.LitePath = filepath.Join(t.TempDir(), "goterraformd.db")
-	o.Cluster = func() face.KubernetesClient { return mock_client.New() }
-	d := daemon.New(
-		o,
-		logger.New(t.Context()),
-		memory.New(),
-		prometheus.NewRegistry(),
-	)
-	t.Cleanup(d.Close)
-	v := model_context_server.Mount(t, d, memory.New())
+	v := base.New(t, mock_client.New()).Served()
 	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyGuarded(t, "/api/trigger")
