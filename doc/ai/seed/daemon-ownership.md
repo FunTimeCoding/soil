@@ -25,9 +25,9 @@ open work in a seed of its own. An item leaves this seed when it is done.
    `Equip`, gomemoryd's profile reads, gosentryd's `DeleteIssue`, gosourced's
    memory retarget and goclauded's document pushes from `complete` and
    `summarize`. The work no caller starts keeps its own: godashboardd's
-   refresh, gogithubd's worker, goterraformd's run targets, gomattermostd's
-   monitor, notifier and watcher, gosaltd's runner, goalertlogd's recording
-   tick and goclauded's reconcile and sweep
+   refresh, gobatteryd's poll, gogithubd's worker, goterraformd's run
+   targets, gomattermostd's monitor, notifier and watcher, gosaltd's runner,
+   goalertlogd's recording tick and goclauded's reconcile and sweep
 3. The daemon as owner in goanalyze: `unclosed_resource` was taught on a
    service owning what it built, so a test seam holding a daemon built from
    finished clients is not flagged. Nor does it see a release the

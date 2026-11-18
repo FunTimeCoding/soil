@@ -1,0 +1,3 @@
+FROM alpine:3.24.4
+COPY tmp/gobatteryd/linux-amd64/gobatteryd /usr/local/bin
+ENTRYPOINT ["gobatteryd"]
