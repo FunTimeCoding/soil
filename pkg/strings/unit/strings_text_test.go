@@ -13,6 +13,17 @@ func TestIndent(t *testing.T) {
 	assert.String(t, "    A\n    B", strings.Indent("A\n\nB", 4, true))
 }
 
+func TestLastLine(t *testing.T) {
+	assert.String(
+		t,
+		"ERROR: gone",
+		strings.LastLine("frame 1\nERROR: gone\n\n  \n"),
+	)
+	assert.String(t, "only", strings.LastLine("only"))
+	assert.String(t, "", strings.LastLine("\n \n"))
+	assert.String(t, "", strings.LastLine(""))
+}
+
 func TestReduceSpace(t *testing.T) {
 	assert.String(t, " ", strings.ReduceSpace(constant.DoubleSpace))
 	assert.String(t, "a b", strings.ReduceSpace("a  b"))
