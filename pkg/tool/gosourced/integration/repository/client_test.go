@@ -12,7 +12,7 @@ import (
 )
 
 func TestClientReadsDiff(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
 		generativeConstant.ModelContextTestToken,
 	)
@@ -30,7 +30,7 @@ func TestClientReadsDiff(t *testing.T) {
 }
 
 func TestClientReadsTextOfChange(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
 		generativeConstant.ModelContextTestToken,
 	)
@@ -48,7 +48,7 @@ func TestClientReadsTextOfChange(t *testing.T) {
 }
 
 func TestClientHearsUnknownModule(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
 		generativeConstant.ModelContextTestToken,
 	)
@@ -57,7 +57,7 @@ func TestClientHearsUnknownModule(t *testing.T) {
 }
 
 func TestRefusedTokenIsError(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	c := base.New(t, base.WithModule("echo", r.Clone)).DaemonClient(
 		"hotel-wrong",
 	)

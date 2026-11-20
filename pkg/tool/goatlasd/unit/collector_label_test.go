@@ -8,14 +8,15 @@ import (
 )
 
 func TestLabelPlacesOnObjectCarryingIt(t *testing.T) {
-	f := collector_tester.NewNetbox(t)
+	c := collector_tester.New(t)
+	f := c.NetboxClient()
 	collector_tester.AddDevice(
 		f,
 		72,
 		"kilo",
 		collector_tester.Labels("service.lighting", "mesh"),
 	)
-	v := collector_tester.CollectLabels(t, f)
+	v := c.CollectLabels(f)
 	assert.Count(t, 1, v)
 	assert.String(t, "lighting", v[0].Name)
 	assert.String(t, "kilo", v[0].PlaceName)
@@ -24,21 +25,23 @@ func TestLabelPlacesOnObjectCarryingIt(t *testing.T) {
 }
 
 func TestLabelPlacesVirtualMachinesToo(t *testing.T) {
-	f := collector_tester.NewNetbox(t)
+	c := collector_tester.New(t)
+	f := c.NetboxClient()
 	collector_tester.AddMachine(
 		f,
 		2,
 		constant.FixtureVirtualMachineNode,
 		collector_tester.Labels("service.ingress", "front ingress"),
 	)
-	v := collector_tester.CollectLabels(t, f)
+	v := c.CollectLabels(f)
 	assert.Count(t, 1, v)
 	assert.String(t, "ingress", v[0].Name)
 	assert.String(t, "virtualization.virtualmachine", v[0].PlaceKind)
 }
 
 func TestLabelTakesOneRowPerResponsibility(t *testing.T) {
-	f := collector_tester.NewNetbox(t)
+	c := collector_tester.New(t)
+	f := c.NetboxClient()
 	collector_tester.AddDevice(
 		f,
 		72,
@@ -52,12 +55,13 @@ func TestLabelTakesOneRowPerResponsibility(t *testing.T) {
 			"admin",
 		),
 	)
-	v := collector_tester.CollectLabels(t, f)
+	v := c.CollectLabels(f)
 	assert.Count(t, 2, v)
 }
 
 func TestLabelSkipsObjectsWithoutServiceLabels(t *testing.T) {
-	f := collector_tester.NewNetbox(t)
+	c := collector_tester.New(t)
+	f := c.NetboxClient()
 	collector_tester.AddDevice(
 		f,
 		41,
@@ -65,5 +69,5 @@ func TestLabelSkipsObjectsWithoutServiceLabels(t *testing.T) {
 		collector_tester.Labels("owner", "admin"),
 	)
 	collector_tester.AddDevice(f, 70, "lima", nil)
-	assert.Count(t, 0, collector_tester.CollectLabels(t, f))
+	assert.Count(t, 0, c.CollectLabels(f))
 }

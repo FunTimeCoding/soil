@@ -12,7 +12,10 @@ import (
 )
 
 func TestSingleValueIndexIsDroppedOnStart(t *testing.T) {
-	s := store_tester.NewOnFile(t, filepath.Join(t.TempDir(), "label.sqlite"))
+	s := store_tester.New(
+		t,
+		store_tester.WithFile(filepath.Join(t.TempDir(), "label.sqlite")),
+	)
 	s.EnsureSession("session-1")
 	assert.FatalOnError(
 		t,

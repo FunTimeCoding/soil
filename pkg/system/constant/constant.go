@@ -46,6 +46,7 @@ const (
 	NotationPath                = "notation"
 	SearchPath                  = "search"
 	StoragePath                 = ".local/share"
+	VulnerabilityPath           = "vulnerability"
 	WikiPath                    = "wiki"
 	QuerySocketPath             = ".osquery/shell.em"
 

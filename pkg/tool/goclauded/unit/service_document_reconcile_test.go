@@ -20,8 +20,7 @@ func TestReconcileCountsPushedSummary(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(
-			t,
+		metric_tester.New(t).Sample(
 			s.Registry,
 			"goclauded_reconciled_total",
 			map[string]string{
@@ -33,8 +32,7 @@ func TestReconcileCountsPushedSummary(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(
-			t,
+		metric_tester.New(t).Sample(
 			s.Registry,
 			"goclauded_indexed_documents",
 			map[string]string{constant.Collection: constant.SummaryCollection},
@@ -76,8 +74,7 @@ func TestReconcileLeavesCurrentSummaryAlone(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(
-			t,
+		metric_tester.New(t).Sample(
 			s.Registry,
 			"goclauded_reconciled_total",
 			map[string]string{
@@ -89,8 +86,7 @@ func TestReconcileLeavesCurrentSummaryAlone(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(
-			t,
+		metric_tester.New(t).Sample(
 			s.Registry,
 			"goclauded_indexed_documents",
 			map[string]string{constant.Collection: constant.SummaryCollection},

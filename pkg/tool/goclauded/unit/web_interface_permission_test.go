@@ -19,7 +19,11 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	e := session.New("session-a")
 	e.WorkDirectory = project
 	s.Peers.Client.AddSession(e)
@@ -34,17 +38,15 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 	c.PermissionReason = "bashMiss:no-rule-match"
 	s.Peers.Client.AddToolCall("session-a", c)
 	page := s.Body(t, constant.PermissionsPath)
-	markup_tester.AssertCount(t, 1, page, "tbody tr.opening-row")
-	markup_tester.AssertText(
-		t,
+	markup_tester.New(t).AssertCount(1, page, "tbody tr.opening-row")
+	markup_tester.New(t).AssertText(
 		"no-rule-match",
 		page,
 		"tbody tr.opening-row td:nth-child(4)",
 	)
-	markup_tester.AssertCount(t, 0, page, "pre")
+	markup_tester.New(t).AssertCount(0, page, "pre")
 	assert.StringContains(t, "1 prompts", page)
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertAttribute(
 		"/permissions/open?blocker=sort",
 		page,
 		"tr.opening-row",
@@ -52,18 +54,16 @@ func TestPermissionsPageRanksBlockerWithItsCommands(t *testing.T) {
 	)
 	opened := s.Body(t, "/permissions/open?blocker=sort")
 	assert.StringContains(t, `class="opening-detail"><td colspan="5">`, opened)
-	markup_tester.AssertText(t, "sort x", opened, "pre")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertText("sort x", opened, "pre")
+	markup_tester.New(t).AssertAttribute(
 		"/permissions/close?blocker=sort",
 		opened,
 		"template tr.opening-row",
 		"hx-get",
 	)
 	closed := s.Body(t, "/permissions/close?blocker=sort")
-	markup_tester.AssertCount(t, 0, closed, "pre")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertCount(0, closed, "pre")
+	markup_tester.New(t).AssertAttribute(
 		"/permissions/open?blocker=sort",
 		closed,
 		"template tr.opening-row",
@@ -75,8 +75,7 @@ func TestPermissionsRowGoneFromReportLeavesPage(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	gone := s.Body(t, "/permissions/open?blocker=sort")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertAttribute(
 		"delete",
 		gone,
 		"template tr",
@@ -89,7 +88,11 @@ func TestPermissionsPageCutsLongCommand(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	e := session.New("session-a")
 	e.WorkDirectory = project
 	s.Peers.Client.AddSession(e)
@@ -101,8 +104,7 @@ func TestPermissionsPageCutsLongCommand(t *testing.T) {
 	c.Detail = join.Empty("sort ", strings.Repeat("a", 500))
 	c.PermissionSource = "user_temporary"
 	s.Peers.Client.AddToolCall("session-a", c)
-	markup_tester.AssertText(
-		t,
+	markup_tester.New(t).AssertText(
 		join.Empty("sort ", strings.Repeat("a", 395), "…"),
 		s.Body(t, "/permissions/open?blocker=sort"),
 		"pre",
@@ -114,5 +116,5 @@ func TestPermissionsPageSaysWhenNothingPrompted(t *testing.T) {
 	s := base.New(t)
 	page := s.Body(t, constant.PermissionsPath)
 	assert.StringContains(t, "No permission prompts in this window.", page)
-	markup_tester.AssertCount(t, 0, page, "tr.opening-row")
+	markup_tester.New(t).AssertCount(0, page, "tr.opening-row")
 }

@@ -16,8 +16,7 @@ func TestToolsOnClusterOutage(t *testing.T) {
 	pods := map[string]any{"resourceType": "pods", "name": "alfa"}
 	local, l := system.ClaimPort()
 	errors.PanicClose(l)
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r)
 		},

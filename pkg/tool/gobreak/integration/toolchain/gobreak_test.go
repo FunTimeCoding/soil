@@ -82,8 +82,7 @@ func TestRunFailsOnUnknownExpect(t *testing.T) {
 
 func TestRunFailsOnFailingBaseline(t *testing.T) {
 	path := break_tester.Fixture(t, constant.FixtureBreaks)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		filepath.Dir(filepath.Dir(path)),
 		"shape/failing_test.go",
 		constant.FixtureFailingTest,

@@ -10,18 +10,17 @@ import (
 
 func TestModuleRoot(t *testing.T) {
 	outer := t.TempDir()
-	system_tester.Write(t, outer, "go.mod", "module outer\n")
+	system_tester.New(t).Write(outer, "go.mod", "module outer\n")
 	root := filepath.Join(outer, "repository")
-	system_tester.Write(t, root, "go.mod", "module alfa\n")
-	system_tester.Write(t, root, "pkg/alfa/alfa.go", "package alfa\n")
-	system_tester.Write(t, root, "graft/bravo/go.mod", "module bravo\n")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(root, "go.mod", "module alfa\n")
+	system_tester.New(t).Write(root, "pkg/alfa/alfa.go", "package alfa\n")
+	system_tester.New(t).Write(root, "graft/bravo/go.mod", "module bravo\n")
+	system_tester.New(t).Write(
 		root,
 		"graft/bravo/pkg/bravo/bravo.go",
 		"package bravo\n",
 	)
-	system_tester.Write(t, root, "doc/a.md", "# A\n")
+	system_tester.New(t).Write(root, "doc/a.md", "# A\n")
 	nested := filepath.Join(root, "graft", "bravo")
 	assert.String(t, root, system.ModuleRoot(root, root))
 	assert.String(
@@ -44,9 +43,9 @@ func TestModuleRoot(t *testing.T) {
 
 func TestModuleRootWithoutModule(t *testing.T) {
 	outer := t.TempDir()
-	system_tester.Write(t, outer, "go.mod", "module outer\n")
+	system_tester.New(t).Write(outer, "go.mod", "module outer\n")
 	root := filepath.Join(outer, "repository")
-	system_tester.Write(t, root, "notes/a.md", "# A\n")
+	system_tester.New(t).Write(root, "notes/a.md", "# A\n")
 	assert.String(
 		t,
 		root,

@@ -7,23 +7,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
-	"testing"
 )
 
-func Sibling(t *testing.T) (*repository.Repository, string) {
-	t.Helper()
-	parent := t.TempDir()
+func (o *Tester) Sibling() (*repository.Repository, string) {
+	o.t.Helper()
+	parent := o.t.TempDir()
 	root := filepath.Join(parent, "alfa")
 	sibling := filepath.Join(parent, "bravo")
-	system_tester.Write(
-		t,
+	system_tester.New(o.t).Write(
 		root,
 		"go.mod",
 		"module example.org/alfa\n\nrequire example.org/bravo v1.0.0\n",
 	)
-	system_tester.Write(t, root, "doc/a.md", "# A\n")
-	system_tester.Write(
-		t,
+	system_tester.New(o.t).Write(root, "doc/a.md", "# A\n")
+	system_tester.New(o.t).Write(
 		sibling,
 		"pkg/charlie/charlie.go",
 		"package charlie\n\nconst Charlie = \"delta echo\"\n",

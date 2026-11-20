@@ -31,7 +31,7 @@ func TestClientRunsAndReadsAgent(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.String(t, "running", running.State)
 	b.Daemon().Workers()[0].(soilFace.Drainer).Interrupt()
-	done := service_tester.AwaitServedDone(t, c)
+	done := b.AwaitDone(c)
 	assert.String(t, "done", done.State)
 	assert.String(t, "lima", *done.Result)
 }

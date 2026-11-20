@@ -11,7 +11,7 @@ import (
 )
 
 func TestRenameRewritesReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
@@ -23,7 +23,7 @@ func TestRenameRewritesReplacingModule(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := system_tester.Read(t, library, "lib.go")
+	source := system_tester.New(t).Read(library, "lib.go")
 	assert.StringContains(t, "func Write(prefix string) string {", source)
 	assert.StringContains(t, "return Write(\"other\")", source)
 	assert.StringContains(
@@ -39,7 +39,7 @@ func TestRenameRewritesReplacingModule(t *testing.T) {
 }
 
 func TestRenameFieldReachesReplacingModuleThroughAnotherPackage(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
@@ -59,7 +59,7 @@ func TestRenameFieldReachesReplacingModuleThroughAnotherPackage(t *testing.T) {
 }
 
 func TestRenameDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
 	source := o.Read("pkg/user/user.go")
 	r, e := o.Symbol.Rename(
 		t.Context(),
@@ -83,8 +83,8 @@ func TestRenameDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 }
 
 func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
-	source := system_tester.Read(t, library, "lib.go")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
+	source := system_tester.New(t).Read(library, "lib.go")
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
@@ -104,18 +104,17 @@ func TestRenameRefusesUnexportingWhatReplacingModuleUses(t *testing.T) {
 		),
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
+	assert.String(t, source, system_tester.New(t).Read(library, "lib.go"))
 }
 
 func TestRenameRefusedWhenReplacingModuleDoesNotTypeCheck(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
-	system_tester.Write(
-		t,
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"other.test/lib\"\n\nfunc Broken() string {\n\treturn lib.Log(missing)\n}\n",
 	)
-	source := system_tester.Read(t, library, "lib.go")
+	source := system_tester.New(t).Read(library, "lib.go")
 	_, e := o.Symbol.Rename(
 		t.Context(),
 		library,
@@ -126,11 +125,11 @@ func TestRenameRefusedWhenReplacingModuleDoesNotTypeCheck(t *testing.T) {
 		false,
 	)
 	assert.Error(t, e)
-	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
+	assert.String(t, source, system_tester.New(t).Read(library, "lib.go"))
 }
 
 func TestRenameSkipsReplacingModuleThatDoesNotReach(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
@@ -145,6 +144,6 @@ func TestRenameSkipsReplacingModuleThatDoesNotReach(t *testing.T) {
 	assert.StringContains(
 		t,
 		"func Extra() string {",
-		system_tester.Read(t, library, "unused/unused.go"),
+		system_tester.New(t).Read(library, "unused/unused.go"),
 	)
 }

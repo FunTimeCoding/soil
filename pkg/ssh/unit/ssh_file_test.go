@@ -45,7 +45,7 @@ func TestMissingFileIsNotFound(t *testing.T) {
 func TestRefusedWriteIsForbidden(t *testing.T) {
 	c := server_tester.New(t).Dial()
 	directory := t.TempDir()
-	system_tester.ReadOnly(t, directory)
+	system_tester.New(t).ReadOnly(directory)
 	e := c.WriteFile(filepath.Join(directory, "alfa.yaml"), []byte("bravo"))
 	assert.True(t, forbidden.Is(e))
 }

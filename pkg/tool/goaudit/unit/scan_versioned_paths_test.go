@@ -20,7 +20,7 @@ func TestVersionedPathFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.VersionedPathKey, s[0])
+	scan_tester.New(t).Concern(constant.VersionedPathKey, s[0])
 }
 
 func TestVersionedPathClean(t *testing.T) {
@@ -33,5 +33,5 @@ func TestVersionedPathClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.VersionedPathKey, s[0])
+	scan_tester.New(t).NoConcern(constant.VersionedPathKey, s[0])
 }

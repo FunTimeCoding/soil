@@ -16,7 +16,11 @@ func TestPermissionsHoldReportUntilRefresh(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	s := session.New("session-a")
 	s.WorkDirectory = project
 	x.Client.AddSession(s)

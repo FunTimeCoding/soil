@@ -7,28 +7,25 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"path/filepath"
-	"testing"
 )
 
-func ReplacedLibrary(
-	t *testing.T,
+func (o *Tester) ReplacedLibrary(
 	fixture string,
 ) (string, *service_tester.Tester) {
-	t.Helper()
-	library := t.TempDir()
+	o.t.Helper()
+	library := o.t.TempDir()
 	testutil.CopyTree(
-		t,
+		o.t,
 		service_tester.ServiceTestdata(filepath.Join(fixture, "lib")),
 		library,
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(o.t).Write(
 		library,
 		"go.mod",
 		"module other.test/lib\n\ngo 1.26.3\n",
 	)
 	user := testutil.PrepareTestPackage(
-		t,
+		o.t,
 		service_tester.ServiceTestdata(filepath.Join(fixture, "user", "src")),
 		"require other.test/lib v0.0.0",
 		fmt.Sprintf("replace other.test/lib => %s", library),
@@ -37,7 +34,7 @@ func ReplacedLibrary(
 	i.Add("lib", library)
 	i.Add("user", user)
 	result := service_tester.New(
-		t,
+		o.t,
 		service_tester.WithDirectory(user),
 		service_tester.WithInventory(i),
 	)

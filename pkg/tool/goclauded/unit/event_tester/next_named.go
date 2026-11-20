@@ -1,16 +1,13 @@
 package event_tester
 
-import "testing"
-
-func NextNamed(
-	t *testing.T,
+func (o *Tester) NextNamed(
 	events <-chan Event,
 	name string,
 ) *Event {
-	t.Helper()
+	o.t.Helper()
 
 	for {
-		if e := Next(t, events); e.Name == name {
+		if e := o.Next(events); e.Name == name {
 			return e
 		}
 	}

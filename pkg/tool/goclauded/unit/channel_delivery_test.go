@@ -14,7 +14,7 @@ func TestChannelDeliveryHoldsWhileNothingIsPending(t *testing.T) {
 	r := s.Check("session-1")
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Deliver(t, s, x, r.Callsign)
+	result := channel_tester.New(t).Deliver(s, x, r.Callsign)
 
 	select {
 	case <-result:
@@ -29,7 +29,7 @@ func TestChannelDeliveryReturnsWhenImmediateEntryArrives(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Deliver(t, s, x, r1.Callsign)
+	result := channel_tester.New(t).Deliver(s, x, r1.Callsign)
 	s.AwaitSubscribers(1)
 	s.SendImmediate(r2.Callsign, r1.Callsign, "immediate message")
 
@@ -48,7 +48,7 @@ func TestChannelDeliveryIgnoresDeferredEntry(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Deliver(t, s, x, r1.Callsign)
+	result := channel_tester.New(t).Deliver(s, x, r1.Callsign)
 	s.AwaitSubscribers(1)
 	s.Send(r2.Callsign, r1.Callsign, "deferred message")
 

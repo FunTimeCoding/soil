@@ -1,21 +1,17 @@
 package scope_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 
-func Options(
-	t *testing.T,
+func (o *Tester) Options(
 	root string,
 	full bool,
 	patterns ...string,
 ) *option.Analyze {
-	t.Helper()
+	o.t.Helper()
 	result := option.New()
 	result.Root = root
 	result.Full = full
-	result.Index = t.TempDir()
+	result.Index = o.t.TempDir()
 	result.Patterns = patterns
 
 	return result

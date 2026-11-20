@@ -39,7 +39,7 @@ func TestHeldConnectionWaitsOutOutage(t *testing.T) {
 	p.Refuse(
 		outage_tester.RefusedDial(),
 		outage_tester.RefusedDial(),
-		outage_tester.Unavailable(t),
+		outage_tester.New(t).Unavailable(),
 	)
 	r := memory.New()
 	h := hold.New("mike", p, logger.New(context.Background()), r).WithBackoff(

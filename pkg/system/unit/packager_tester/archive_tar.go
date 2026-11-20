@@ -8,17 +8,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
 	"io"
-	"testing"
 )
 
-func ArchiveTar(
-	t *testing.T,
+func (o *Tester) ArchiveTar(
 	declaredHash string,
 	archivePath string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	archiveSum := sha256.Sum256(system.ReadBytesUnsafe(archivePath))
-	assert.String(t, declaredHash, hex.EncodeToString(archiveSum[:]))
+	assert.String(o.t,declaredHash, hex.EncodeToString(archiveSum[:]))
 	archiveFile := system.Open(archivePath)
 	defer errors.PanicClose(archiveFile)
 	gzr := system.GnuZipReader(archiveFile)
@@ -40,7 +38,7 @@ func ArchiveTar(
 			foundBinary = true
 
 			if !h.FileInfo().Mode().IsRegular() {
-				t.Errorf("binary is not a regular file")
+				o.t.Errorf("binary is not a regular file")
 			}
 
 			if _, okay := h.PAXRecords["APK-TOOLS.checksum.SHA1"]; okay {
@@ -50,10 +48,10 @@ func ArchiveTar(
 	}
 
 	if !foundBinary {
-		t.Errorf("data.tar.gz missing usr/bin/hello")
+		o.t.Errorf("data.tar.gz missing usr/bin/hello")
 	}
 
 	if !foundPAXHeader {
-		t.Errorf("data.tar.gz missing PAX header with SHA1 checksum")
+		o.t.Errorf("data.tar.gz missing PAX header with SHA1 checksum")
 	}
 }

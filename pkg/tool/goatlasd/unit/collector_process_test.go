@@ -12,7 +12,7 @@ import (
 )
 
 func TestProcessPlacesOnlyRunningEntries(t *testing.T) {
-	f := collector_tester.NewProcess(t)
+	f := collector_tester.New(t).ProcessClient()
 	collector_tester.AddProcess(f, "gosublimed", true)
 	collector_tester.AddProcess(f, "goflightd", false)
 	collector_tester.AddProcess(f, "goqueryd", true)
@@ -27,7 +27,7 @@ func TestProcessPlacesOnlyRunningEntries(t *testing.T) {
 }
 
 func TestProcessPlacesOnConfiguredMachine(t *testing.T) {
-	f := collector_tester.NewProcess(t)
+	f := collector_tester.New(t).ProcessClient()
 	collector_tester.AddProcess(f, "gosublimed", true)
 	v, e := process.New(
 		f,
@@ -41,7 +41,7 @@ func TestProcessPlacesOnConfiguredMachine(t *testing.T) {
 }
 
 func TestProcessRefusesUnknownMachine(t *testing.T) {
-	f := collector_tester.NewProcess(t)
+	f := collector_tester.New(t).ProcessClient()
 	collector_tester.AddProcess(f, "gosublimed", true)
 	_, e := process.New(f, peer_tester.NewGuard(t, f), "nowhere").Collect(
 		context.Background(),
@@ -51,7 +51,7 @@ func TestProcessRefusesUnknownMachine(t *testing.T) {
 }
 
 func TestProcessCarriesNoScope(t *testing.T) {
-	f := collector_tester.NewProcess(t)
+	f := collector_tester.New(t).ProcessClient()
 	collector_tester.AddProcess(f, "gosublimed", true)
 	v, e := process.New(f, peer_tester.NewGuard(t, f), "delta").Collect(
 		context.Background(),

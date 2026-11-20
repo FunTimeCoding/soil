@@ -1,13 +1,10 @@
 package revision_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/git/repository_tester"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/git/repository_tester"
 
-func DiffRepository(t *testing.T) *repository_tester.Tester {
-	t.Helper()
-	r := repository_tester.New(t)
+func (o *Tester) DiffRepository() *repository_tester.Tester {
+	o.t.Helper()
+	r := repository_tester.New(o.t)
 	r.Write("go.mod", "module example.org/root\n")
 	r.Write(
 		"alfa.go",

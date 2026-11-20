@@ -3,11 +3,10 @@ package outage_tester
 import (
 	"net/http"
 	"net/http/httptest"
-	"testing"
 )
 
-func RefusedAddress(t *testing.T) string {
-	t.Helper()
+func (o *Tester) RefusedAddress() string {
+	o.t.Helper()
 	s := httptest.NewServer(http.NotFoundHandler())
 	s.Close()
 

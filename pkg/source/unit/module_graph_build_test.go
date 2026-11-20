@@ -15,9 +15,8 @@ import (
 func TestBuildStopsAtNestedModule(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/alfa")
-	system_tester.Write(t, root, "bravo/bravo.go", "package bravo\n")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(root, "bravo/bravo.go", "package bravo\n")
+	system_tester.New(t).Write(
 		root,
 		"graft/charlie/charlie.go",
 		"package charlie\n",
@@ -37,13 +36,12 @@ func TestBuildStopsAtNestedModule(t *testing.T) {
 func TestBuildForestReadsTreeNotDisk(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/alfa")
-	system_tester.Write(t, root, "bravo/bravo.go", "package bravo\n")
-	system_tester.Write(t, root, "charlie/charlie.go", "package charlie\n")
+	system_tester.New(t).Write(root, "bravo/bravo.go", "package bravo\n")
+	system_tester.New(t).Write(root, "charlie/charlie.go", "package charlie\n")
 	f := warm_forest.New()
 	_, e := f.Tree(root).Read("bravo/bravo.go")
 	assert.FatalOnError(t, e)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"bravo/bravo.go",
 		"package bravo\n\nimport _ \"example.org/alfa/charlie\"\n",

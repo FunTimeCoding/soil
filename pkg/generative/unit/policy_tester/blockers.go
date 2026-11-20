@@ -1,15 +1,8 @@
 package policy_tester
 
-import "testing"
-
-func Blockers(
-	t *testing.T,
-	root string,
-	scratchpad string,
-	command string,
-) []string {
-	t.Helper()
-	w := newWalk(t, root, scratchpad)
+func (o *Tester) Blockers(command string) []string {
+	o.t.Helper()
+	w := o.walk()
 	w.Allows(command)
 
 	return w.Blockers()

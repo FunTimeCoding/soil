@@ -20,12 +20,12 @@ func TestReportTextKeepsSourceAsWritten(t *testing.T) {
 	assert.String(
 		t,
 		"Charlie = Bravo",
-		revision_tester.Symbol(t, r, ". alfa Charlie").Text,
+		revision_tester.New(t).Symbol(r, ". alfa Charlie").Text,
 	)
 	assert.String(
 		t,
 		"func Delta() int {\n\t// echo\n\treturn Charlie\n}",
-		revision_tester.Symbol(t, r, ". alfa Delta").Text,
+		revision_tester.New(t).Symbol(r, ". alfa Delta").Text,
 	)
 }
 

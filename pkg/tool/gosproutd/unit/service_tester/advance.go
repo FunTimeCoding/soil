@@ -3,5 +3,5 @@ package service_tester
 import "time"
 
 func (o *Tester) Advance(d time.Duration) {
-	o.clock.Advance(d)
+	o.store.Advance(d)
 }

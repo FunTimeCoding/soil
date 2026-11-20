@@ -15,7 +15,7 @@ func New(
 	t.Helper()
 
 	return &Server{
-		Tester:   service_tester.NewFixture(t, c, o...),
+		Tester:   service_tester.New(t, c, o...),
 		Registry: prometheus.NewRegistry(),
 		t:        t,
 	}

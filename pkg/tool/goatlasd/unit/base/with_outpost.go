@@ -8,8 +8,7 @@ import (
 
 func WithOutpost() Option {
 	return func(s *Server) {
-		s.Outpost = collector_tester.NewOutpost(
-			s.t,
+		s.Outpost = collector_tester.New(s.t).OutpostClient(
 			constant.FixtureVirtualMachineNode,
 			nil,
 		)

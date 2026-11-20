@@ -13,20 +13,19 @@ import (
 )
 
 func TestLayerReadsThroughParentToDisk(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	base := layer.New(nil, root)
 	base.Write(filepath.Join(root, "alfa/alfa.go"), []byte("package alfa\n\n"))
 	child := layer.New(base)
 	assert.String(
 		t,
 		"package alfa\n\n",
-		layer_tester.Content(t, child, filepath.Join(root, "alfa/alfa.go")),
+		layer_tester.New(t).Content(child, filepath.Join(root, "alfa/alfa.go")),
 	)
 	assert.String(
 		t,
 		"package charlie\n",
-		layer_tester.Content(
-			t,
+		layer_tester.New(t).Content(
 			child,
 			filepath.Join(root, "charlie/charlie.go"),
 		),
@@ -35,7 +34,7 @@ func TestLayerReadsThroughParentToDisk(t *testing.T) {
 }
 
 func TestLayerMoveShowsFileOnlyAtTarget(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	from := filepath.Join(root, "alfa/bravo.go")
 	to := filepath.Join(root, "alfa/foxtrot.go")
@@ -43,13 +42,13 @@ func TestLayerMoveShowsFileOnlyAtTarget(t *testing.T) {
 	assert.String(
 		t,
 		"package alfa\n\nfunc Bravo() {}\n",
-		layer_tester.Content(t, l, to),
+		layer_tester.New(t).Content(l, to),
 	)
 	assert.False(t, l.Exists(from))
 }
 
 func TestLayerOverlayStubsRemovedGoFile(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	l.Move(
 		filepath.Join(root, "alfa/bravo.go"),
@@ -69,7 +68,7 @@ func TestLayerOverlayStubsRemovedGoFile(t *testing.T) {
 }
 
 func TestLayerChangesListMoveOnceWithDestination(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	from := filepath.Join(root, "alfa/bravo.go")
 	to := filepath.Join(root, "alfa/foxtrot.go")
@@ -81,7 +80,7 @@ func TestLayerChangesListMoveOnceWithDestination(t *testing.T) {
 }
 
 func TestLayerCommitWritesAndRemoves(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	from := filepath.Join(root, "alfa/bravo.go")
 	to := filepath.Join(root, "alfa/foxtrot.go")
@@ -94,7 +93,7 @@ func TestLayerCommitWritesAndRemoves(t *testing.T) {
 }
 
 func TestLayerCommitRefusesConcurrentWriteWithoutGraph(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	l.Write(filepath.Join(root, "alfa/alfa.go"), []byte("package alfa\n\n"))
 	charlie := filepath.Join(root, "charlie/charlie.go")
@@ -117,7 +116,7 @@ func TestLayerCommitRefusesConcurrentWriteWithoutGraph(t *testing.T) {
 }
 
 func TestLayerCommitPassesWriteOutsideReach(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	l.Write(filepath.Join(root, "alfa/alfa.go"), []byte("package alfa\n\n"))
 	l.BeforeCommit(
@@ -143,7 +142,7 @@ func TestLayerCommitPassesWriteOutsideReach(t *testing.T) {
 }
 
 func TestLayerCommitRefusesWriteInImporter(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	l.Write(filepath.Join(root, "alfa/alfa.go"), []byte("package alfa\n\n"))
 	delta := filepath.Join(root, "delta/delta.go")
@@ -161,7 +160,7 @@ func TestLayerCommitRefusesWriteInImporter(t *testing.T) {
 }
 
 func TestLayerCommitRefusesStaleDocument(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	l := layer.New(nil, root)
 	echo := filepath.Join(root, "doc/echo.md")
 	l.Rewrite(echo, []byte("echo\n"), []byte("echo golf\n"))

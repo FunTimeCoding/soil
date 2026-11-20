@@ -37,7 +37,7 @@ func TestCaptureOutsideRequestHasNoTrace(t *testing.T) {
 }
 
 func TestReporterSendsOnItsOwnHubOutsideRequest(t *testing.T) {
-	r := reporter_tester.Sending(t, "http://key@localhost:1/1", io.Discard)
+	r := reporter_tester.New(t).Sending("http://key@localhost:1/1", io.Discard)
 	m := &sentry.MockTransport{}
 	c, e := sentry.NewClient(
 		sentry.ClientOptions{Dsn: "http://key@localhost:1/1", Transport: m},
@@ -50,7 +50,7 @@ func TestReporterSendsOnItsOwnHubOutsideRequest(t *testing.T) {
 }
 
 func TestReporterSendsOnHubOfItsContext(t *testing.T) {
-	r := reporter_tester.Sending(t, "http://key@localhost:1/1", io.Discard)
+	r := reporter_tester.New(t).Sending("http://key@localhost:1/1", io.Discard)
 	m := &sentry.MockTransport{}
 	c, e := sentry.NewClient(
 		sentry.ClientOptions{Dsn: "http://key@localhost:1/1", Transport: m},

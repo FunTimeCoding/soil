@@ -71,7 +71,8 @@ func TestClientCloseWithoutAcquireKeepsTabOpen(t *testing.T) {
 func TestDetachCarriesSessionOnly(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
-	detached := lifetime_tester.WatchKind(t, s, constant.EventKindDetached)
+	w := lifetime_tester.New(t)
+	detached := w.WatchKind(s, constant.EventKindDetached)
 	x, cancel := chromedp.NewContext(
 		s.Client.Context(),
 		chromedp.WithTargetID(target.ID(identifier)),
@@ -79,7 +80,7 @@ func TestDetachCarriesSessionOnly(t *testing.T) {
 	_, f := chromedp.Run(x, chromedp.OuterHTML(constant.BodySelector))
 	assert.FatalOnError(t, f)
 	cancel()
-	e := lifetime_tester.AwaitEvent(t, detached)
+	e := w.AwaitEvent(detached)
 	assert.String(t, "", e.TargetIdentifier)
 	assert.True(t, e.SessionIdentifier != "")
 }
@@ -87,10 +88,11 @@ func TestDetachCarriesSessionOnly(t *testing.T) {
 func TestWatchRecordsTargetDestroyedByAnotherClient(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
-	destroyed := lifetime_tester.WatchKind(t, s, constant.EventKindDestroyed)
+	w := lifetime_tester.New(t)
+	destroyed := w.WatchKind(s, constant.EventKindDestroyed)
 	other := chromium.New("localhost", s.Port)
 	assert.FatalOnError(t, other.CloseTab(identifier))
-	lifetime_tester.AwaitTarget(t, destroyed, identifier)
+	w.AwaitTarget(destroyed, identifier)
 	other.Close()
 }
 
@@ -109,7 +111,7 @@ func TestProtocolAbsentTabLeavesClientUsable(t *testing.T) {
 	assert.String(
 		t,
 		"tab not found",
-		lifetime_tester.ProtocolAbsent(t, s.Client),
+		lifetime_tester.New(t).ProtocolAbsent(s.Client),
 	)
 	assert.Integer(t, 0, s.Client.TargetCount())
 	assert.NotNil(t, s.Client.MustHostTab(constant.FixtureQuietRoute))
@@ -118,12 +120,13 @@ func TestProtocolAbsentTabLeavesClientUsable(t *testing.T) {
 
 func TestPruneReleasesTargetGoroutines(t *testing.T) {
 	s := base.New(t)
-	lifetime_tester.Cycle(t, s)
+	w := lifetime_tester.New(t)
+	w.Cycle(s)
 	time.Sleep(constant.FixtureCloseSettlePeriod)
 	before := runtime.NumGoroutine()
 
 	for i := 0; i < constant.FixtureSharedCycleCount; i++ {
-		lifetime_tester.Cycle(t, s)
+		w.Cycle(s)
 	}
 
 	time.Sleep(constant.FixtureCloseSettlePeriod)
@@ -195,9 +198,10 @@ func TestCancelAcquiredTargetContextTakesTab(t *testing.T) {
 func TestWatchRecordsTargetDestroyed(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
-	destroyed := lifetime_tester.WatchKind(t, s, constant.EventKindDestroyed)
+	w := lifetime_tester.New(t)
+	destroyed := w.WatchKind(s, constant.EventKindDestroyed)
 	assert.FatalOnError(t, s.Client.CloseTab(identifier))
-	lifetime_tester.AwaitTarget(t, destroyed, identifier)
+	w.AwaitTarget(destroyed, identifier)
 }
 
 func TestTargetCachePrunesOnDestroy(t *testing.T) {

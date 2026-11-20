@@ -5,12 +5,11 @@ import (
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
-	"testing"
 )
 
-func IndexedTestStore(t *testing.T) *store.Store {
-	t.Helper()
-	s := OpenTestStore(t)
+func (o *Tester) IndexedTestStore() *store.Store {
+	o.t.Helper()
+	s := o.OpenTestStore()
 	s.AddCollection(
 		"test",
 		fixture.Path(systemConstant.SearchPath),

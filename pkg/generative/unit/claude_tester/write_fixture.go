@@ -6,15 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"path/filepath"
-	"testing"
 )
 
-func WriteFixture(
-	t *testing.T,
-	lines []string,
-) *claude.Client {
-	t.Helper()
-	base := t.TempDir()
+func (o *Tester) WriteFixture(lines []string) *claude.Client {
+	o.t.Helper()
+	base := o.t.TempDir()
 	f := system.Create(filepath.Join(base, "fixture.jsonl"))
 
 	for _, line := range lines {

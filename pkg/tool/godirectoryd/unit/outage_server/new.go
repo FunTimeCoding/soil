@@ -17,8 +17,7 @@ func New(
 	s := base.New(t, base.WithReporter(r))
 	s.Source.Failure = outage_tester.RefusedDial()
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		constant.DirectoryPeer,
 	).Unavailable

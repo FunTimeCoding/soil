@@ -15,14 +15,14 @@ import (
 )
 
 func TestCounterAllowsWindowLessSpecials(t *testing.T) {
-	assert.Integer(t, 2046, embedder_tester.NewCounter(t).TokenLimit())
+	assert.Integer(t, 2046, embedder_tester.New(t).Counter().TokenLimit())
 }
 
 func TestCounterSeesDenseChunkOverWindow(t *testing.T) {
 	assert.Greater(
 		t,
 		2046,
-		embedder_tester.NewCounter(t).Count(
+		embedder_tester.New(t).Counter().Count(
 			fixture.Read(systemConstant.LimitPath, "dense.md"),
 		),
 	)
@@ -32,7 +32,7 @@ func TestCounterSeesGoDeclarationOverWindow(t *testing.T) {
 	assert.Greater(
 		t,
 		2046,
-		embedder_tester.NewCounter(t).Count(
+		embedder_tester.New(t).Counter().Count(
 			join.Empty(
 				"package alfa\n\nvar table = []int{\n",
 				strings.Repeat("\t1, 2, 3, 4, 5, 6, 7, 8, 9, 0,\n", 110),
@@ -43,7 +43,7 @@ func TestCounterSeesGoDeclarationOverWindow(t *testing.T) {
 }
 
 func TestCounterFitsEveryManualChunk(t *testing.T) {
-	c := embedder_tester.NewCounter(t)
+	c := embedder_tester.New(t).Counter()
 
 	for _, k := range chunk.Document(
 		fixture.Read(systemConstant.LimitPath, "manual.txt"),

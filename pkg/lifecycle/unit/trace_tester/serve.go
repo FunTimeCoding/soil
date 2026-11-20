@@ -11,22 +11,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/option"
-	"testing"
 )
 
-func Serve(
-	t *testing.T,
-	setup func(*guard.Mux),
-) int {
-	t.Helper()
+func (o *Tester) Serve(setup func(*guard.Mux)) int {
+	o.t.Helper()
 	p, n := system.ClaimPort()
 	l := lifecycle.New(logger.New(context.Background())).WithServer(
 		server.New(identity.Example(), option.New(""), memory.New(), setup).
 			WithListener(n),
 	)
 	l.Run()
-	t.Cleanup(l.Close)
-	assert.Listen(t, p)
+	o.t.Cleanup(l.Close)
+	assert.Listen(o.t, p)
 
 	return p
 }

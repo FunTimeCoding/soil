@@ -15,7 +15,7 @@ func TestFixtureDirectiveExemptsStrayConstant(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	lint_tester.Report(t, path, false, nil, "", l)
+	lint_tester.New(t).Report(path, false, nil, "", l)
 }
 
 func TestFixtureDirectiveValidInTestdata(t *testing.T) {
@@ -24,7 +24,7 @@ func TestFixtureDirectiveValidInTestdata(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	lint_tester.Report(t, path, false, nil, "", l)
+	lint_tester.New(t).Report(path, false, nil, "", l)
 }
 
 func TestFixtureDirectiveOutsideTestdata(t *testing.T) {
@@ -33,8 +33,7 @@ func TestFixtureDirectiveOutsideTestdata(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		path,
 		true,
 		[]*concern.Concern{
@@ -58,8 +57,7 @@ func TestFixtureDirectiveOutsideTestdataExemptsNothing(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureExemptedSample),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		path,
 		true,
 		[]*concern.Concern{
@@ -85,8 +83,7 @@ func TestFixtureDirectiveUnknownRule(t *testing.T) {
 			"// golint:fixture unknown_rule\n\npackage example\n",
 		),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		path,
 		true,
 		[]*concern.Concern{
@@ -110,8 +107,7 @@ func TestFixtureDirectiveMisplaced(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureMisplacedSample),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		path,
 		true,
 		[]*concern.Concern{
@@ -135,8 +131,7 @@ func TestFixtureDirectiveDangling(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureDanglingSample),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		path,
 		true,
 		[]*concern.Concern{
@@ -160,8 +155,7 @@ func TestMisplacedFixtureDirectiveExemptsNothing(t *testing.T) {
 		path,
 		strings.NewReader(constant.FixtureMisplacedSample),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		path,
 		true,
 		[]*concern.Concern{

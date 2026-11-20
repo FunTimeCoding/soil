@@ -6,17 +6,17 @@ import (
 )
 
 func TestReachIncreaseIntegerShortByOne(t *testing.T) {
-	math_tester.AssertReachIncreaseInteger(t, false, 48, 49, 50)
+	math_tester.New(t).AssertReachIncreaseInteger(false, 48, 49, 50)
 }
 
 func TestReachIncreaseIntegerReachedExactly(t *testing.T) {
-	math_tester.AssertReachIncreaseInteger(t, true, 49, 50, 50)
+	math_tester.New(t).AssertReachIncreaseInteger(true, 49, 50, 50)
 }
 
 func TestReachIncreaseIntegerExceedByOne(t *testing.T) {
-	math_tester.AssertReachIncreaseInteger(t, true, 49, 51, 50)
+	math_tester.New(t).AssertReachIncreaseInteger(true, 49, 51, 50)
 }
 
 func TestReachIncreaseIntegerDipBelow(t *testing.T) {
-	math_tester.AssertReachIncreaseInteger(t, false, 51, 49, 50)
+	math_tester.New(t).AssertReachIncreaseInteger(false, 51, 49, 50)
 }

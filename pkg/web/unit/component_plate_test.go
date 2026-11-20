@@ -13,8 +13,7 @@ func TestPlateStacksNameHeadlineCaptionAndRows(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate"><div class="plate-name">alfa</div><div class="plate-headline">12 kg</div><div class="plate-caption">bravo</div><div class="plate-row"><span class="plate-label">charlie</span><div class="plate-value">delta</div></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			plate.New().
 				Name("alfa").
 				Headline("12 kg").
@@ -29,7 +28,7 @@ func TestPlateLeavesOutEmptyLines(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate"><div class="plate-row"><span class="plate-label">charlie</span><div class="plate-value">delta</div></div></div>`,
-		web_tester.Render(t, plate.New().Row("charlie", "delta").Node()),
+		web_tester.New(t).Render(plate.New().Row("charlie", "delta").Node()),
 	)
 }
 
@@ -37,8 +36,7 @@ func TestPlateRowNodeCarriesAttributesToValue(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate"><div class="plate-row"><span class="plate-label">charlie</span><div class="plate-value" style="--alfa: 1"><b>delta</b></div></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			plate.New().
 				RowNode(
 					"charlie",
@@ -56,8 +54,7 @@ func TestPlateGroupWrapsPlates(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="plate-group"><div class="plate"><div class="plate-headline">1 kg</div></div><div class="plate"><div class="plate-headline">2 kg</div></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			plate.Group(
 				plate.New().Headline("1 kg").Node(),
 				plate.New().Headline("2 kg").Node(),

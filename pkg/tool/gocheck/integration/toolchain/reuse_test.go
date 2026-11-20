@@ -20,8 +20,7 @@ func TestAnalysisOverCleanFixLoadMatchesFreshAnalysis(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/response/types.go",
 		"package response\n\ntype LinkResponse struct {\n\tName string\n}\n\ntype Note struct {\n\tBody string\n}\n",
@@ -60,8 +59,7 @@ func TestFixThatRewritesLeavesNoLoadToReuse(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/format/format.go",
 		"package format\n\nimport \"fmt\"\n\nfunc Alfa() {\n\tfmt.Println(\"bravo charlie delta echo foxtrot\", \"golf hotel india juliett\", \"kilo\")\n}\n",

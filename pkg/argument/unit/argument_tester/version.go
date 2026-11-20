@@ -6,15 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/spf13/cobra"
-	"testing"
 )
 
-func Version(
-	t *testing.T,
-	arguments ...string,
-) string {
-	t.Helper()
-	o := &cobra.Command{
+func (o *Tester) Version(arguments ...string) string {
+	o.t.Helper()
+	c := &cobra.Command{
 		Use: "gotest",
 		Run: func(
 			*cobra.Command,
@@ -22,11 +18,11 @@ func Version(
 		) {
 		},
 	}
-	argument.CobraStamp(o, identity.New("gotest", "test tool", "gotest"))
+	argument.CobraStamp(c, identity.New("gotest", "test tool", "gotest"))
 	var b bytes.Buffer
-	o.SetOut(&b)
-	o.SetArgs(arguments)
-	assert.FatalOnError(t, o.Execute())
+	c.SetOut(&b)
+	c.SetArgs(arguments)
+	assert.FatalOnError(o.t, c.Execute())
 
 	return b.String()
 }

@@ -1,18 +1,14 @@
 package lint_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/lint/concern"
 
-func Concern(
-	t *testing.T,
+func (o *Tester) Concern(
 	fixed bool,
 	path string,
 	text string,
 	entries []*concern.Concern,
 ) {
-	t.Helper()
+	o.t.Helper()
 
 	for _, c := range entries {
 		if c.Path == path && c.Text == text && c.Fixed == fixed {
@@ -20,7 +16,7 @@ func Concern(
 		}
 	}
 
-	t.Errorf(
+	o.t.Errorf(
 		"expected concern {path: %q, text: %q, fixed: %t} not found",
 		path,
 		text,

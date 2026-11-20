@@ -11,20 +11,17 @@ func TestRequiringFindsPinnedConsumer(t *testing.T) {
 	library := t.TempDir()
 	user := t.TempDir()
 	other := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		library,
 		"go.mod",
 		"module other.test/lib\n\ngo 1.26.3\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		user,
 		"go.mod",
 		"module other.test/user\n\ngo 1.26.3\n\nrequire other.test/lib v0.1.0\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		other,
 		"go.mod",
 		"module other.test/other\n\ngo 1.26.3\n",

@@ -1,15 +1,9 @@
 package markup_tester
 
-import (
-	"github.com/PuerkitoBio/goquery"
-	"testing"
-)
+import "github.com/PuerkitoBio/goquery"
 
-func AssertUniqueIdentifiers(
-	t *testing.T,
-	body string,
-) {
-	t.Helper()
+func (o *Tester) AssertUniqueIdentifiers(body string) {
+	o.t.Helper()
 	seen := map[string]int{}
 	document(body).Find("[id]").Each(
 		func(
@@ -23,7 +17,7 @@ func AssertUniqueIdentifiers(
 
 	for identifier, count := range seen {
 		if count > 1 {
-			t.Errorf("id %q appears %d times", identifier, count)
+			o.t.Errorf("id %q appears %d times", identifier, count)
 		}
 	}
 }

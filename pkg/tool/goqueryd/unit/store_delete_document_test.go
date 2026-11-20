@@ -11,7 +11,7 @@ import (
 )
 
 func TestDeletingAbsentDocumentIsNoError(t *testing.T) {
-	deleted, e := store_tester.OpenTestStore(t).DeleteDocument(
+	deleted, e := store_tester.New(t).OpenTestStore().DeleteDocument(
 		"notes",
 		"alfa.md",
 	)

@@ -111,7 +111,7 @@ func TestUtilizationClockReadsOptionsCredential(t *testing.T) {
 	}
 
 	assert.Integer(t, 1, u.Reads)
-	r, e := store_tester.NewOnFile(t, o.LitePath).Store.LatestRateSnapshot()
+	r, e := store_tester.New(t, store_tester.WithFile(o.LitePath)).Store.LatestRateSnapshot()
 	assert.FatalOnError(t, e)
 	assert.FatalNotNil(t, r)
 	assert.Integer(t, 22, r.SevenDayPercent)
@@ -137,7 +137,7 @@ func TestDaemonHandsOutItsGuardsFirst(t *testing.T) {
 
 func TestDaemonClearsStaleBindingsBeforeItServes(t *testing.T) {
 	o := peer_tester.New(t).DaemonOption()
-	s := store_tester.NewOnFile(t, o.LitePath)
+	s := store_tester.New(t, store_tester.WithFile(o.LitePath))
 	r := s.EnsureSession("session-1")
 	s.BindModelContextSession(r.Callsign, "mcp-session-abc")
 	d := daemon.New(

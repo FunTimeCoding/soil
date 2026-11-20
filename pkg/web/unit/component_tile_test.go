@@ -13,8 +13,7 @@ func TestTileCarriesItsSearchText(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="tile foxtrot" data-search="golf hotel">india</div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			tile.New(gomponents.Text("india")).
 				Terms("golf hotel").
 				Class("foxtrot").
@@ -27,8 +26,7 @@ func TestGridWithoutSearchIsOnlyGrid(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="tile-grid"><div class="tile">india</div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			tile_grid.New(
 				[]gomponents.Node{tile.New(gomponents.Text("india")).Node()},
 			).Node(),
@@ -37,7 +35,9 @@ func TestGridWithoutSearchIsOnlyGrid(t *testing.T) {
 }
 
 func TestSearchableGridFiltersGridBelowIt(t *testing.T) {
-	page := web_tester.Render(t, tile_grid.New(nil).Search("Filter…").Node())
+	page := web_tester.New(t).Render(
+		tile_grid.New(nil).Search("Filter…").Node(),
+	)
 	assert.StringContains(
 		t,
 		`<input type="search" placeholder="Filter…" oninput="filterTiles(this)"><div class="tile-grid"></div><script>`,

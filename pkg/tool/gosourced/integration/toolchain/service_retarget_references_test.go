@@ -11,7 +11,7 @@ import (
 )
 
 func TestRetargetReferencesFollowsHandMove(t *testing.T) {
-	o := module_tester.HandMoved(t)
+	o := module_tester.New(t).HandMoved()
 	r, e := o.Reference.RetargetReferences(
 		t.Context(),
 		o.Directory,
@@ -32,7 +32,7 @@ func TestRetargetReferencesFollowsHandMove(t *testing.T) {
 }
 
 func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
-	o := module_tester.HandMoved(t)
+	o := module_tester.New(t).HandMoved()
 	r, e := o.Reference.RetargetReferences(
 		t.Context(),
 		o.Directory,
@@ -47,7 +47,7 @@ func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 }
 
 func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
-	o := module_tester.HandMoved(t)
+	o := module_tester.New(t).HandMoved()
 	r, e := o.Reference.RetargetReferences(
 		t.Context(),
 		o.Directory,
@@ -64,7 +64,7 @@ func TestRetargetReferencesRefusesPathOutsideModule(t *testing.T) {
 }
 
 func TestRetargetReferencesSaysWhenNothingCitesMove(t *testing.T) {
-	o := module_tester.HandMoved(t)
+	o := module_tester.New(t).HandMoved()
 	r, e := o.Reference.RetargetReferences(
 		t.Context(),
 		o.Directory,

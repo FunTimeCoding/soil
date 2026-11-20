@@ -25,15 +25,15 @@ func TestClientAndItsMockShareFace(t *testing.T) {
 }
 
 func TestWithoutExtensionEveryCallIsUnavailable(t *testing.T) {
-	c, _ := firefox_tester.Bridge(t)
+	c, _ := firefox_tester.New(t).Bridge()
 	_, e := c.Tabs()
 	assert.True(t, unavailable.Is(e))
 	assert.False(t, classify.Reportable(e))
 }
 
 func TestCreatedTabComesBack(t *testing.T) {
-	c, s := firefox_tester.Bridge(t)
-	x := firefox_tester.Connected(t, c, s.URL)
+	c, s := firefox_tester.New(t).Bridge()
+	x := firefox_tester.New(t).Connected(c, s.URL)
 	x.Answer(
 		"create_tab",
 		map[string]any{"tab_id": 7, "url": "https://example.com"},
@@ -44,8 +44,8 @@ func TestCreatedTabComesBack(t *testing.T) {
 }
 
 func TestExtensionRefusalsCarryClasses(t *testing.T) {
-	c, s := firefox_tester.Bridge(t)
-	x := firefox_tester.Connected(t, c, s.URL)
+	c, s := firefox_tester.New(t).Bridge()
+	x := firefox_tester.New(t).Connected(c, s.URL)
 	x.Refuse("click", "selector matched nothing: #missing")
 	_, e := c.Click(1, "#missing")
 	assert.True(t, not_found.Is(e))
@@ -67,8 +67,8 @@ func TestExtensionRefusalsCarryClasses(t *testing.T) {
 }
 
 func TestClosedBridgeRefusesExtension(t *testing.T) {
-	c, s := firefox_tester.Bridge(t)
-	firefox_tester.Connected(t, c, s.URL)
+	c, s := firefox_tester.New(t).Bridge()
+	firefox_tester.New(t).Connected(c, s.URL)
 	c.Close()
 	c.Close()
 	_, e := c.Tabs()
@@ -80,8 +80,8 @@ func TestClosedBridgeRefusesExtension(t *testing.T) {
 }
 
 func TestNewConnectionSurvivesOldOneEnding(t *testing.T) {
-	c, s := firefox_tester.Bridge(t)
-	first := firefox_tester.Connected(t, c, s.URL)
+	c, s := firefox_tester.New(t).Bridge()
+	first := firefox_tester.New(t).Connected(c, s.URL)
 	second := extension_peer.Connect(t, s.URL)
 	second.Answer("list_tabs", []any{})
 	time.Sleep(50 * time.Millisecond)

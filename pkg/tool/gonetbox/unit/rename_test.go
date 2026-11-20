@@ -11,8 +11,7 @@ import (
 func TestUpdateDeviceNameFlags(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-device",
 		"alfa",
@@ -29,8 +28,7 @@ func TestUpdateDeviceNameFlags(t *testing.T) {
 func TestUpdateVirtualMachineNameFlags(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-virtual-machine",
 		"alfa",
@@ -47,8 +45,7 @@ func TestUpdateVirtualMachineNameFlags(t *testing.T) {
 func TestUpdateDeviceRoleNameFlag(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-device-role",
 		"alfa",
@@ -66,7 +63,7 @@ func TestUpdateDeviceRoleNameFlag(t *testing.T) {
 func TestUpdateDeviceRoleWithoutNameSendsNone(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(t, c, "update-device-role", "alfa")
+	_, _, code := command_tester.New(t).Run(c, "update-device-role", "alfa")
 	assert.Integer(t, 0, code)
 	assert.Any(t, client.UpdateDeviceRoleRequest{}, c.UpdatedRoles["alfa"])
 }

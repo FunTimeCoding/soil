@@ -7,8 +7,7 @@ import (
 )
 
 func TestToolCallsCarryPermissionDecision(t *testing.T) {
-	c := claude_tester.WriteFixture(
-		t,
+	c := claude_tester.New(t).WriteFixture(
 		[]string{
 			claude_tester.ToolUseLine("toolu_a", "cmp a b", "/repo"),
 			claude_tester.RequestBlobLine("toolu_a"),
@@ -28,8 +27,7 @@ func TestToolCallsCarryPermissionDecision(t *testing.T) {
 }
 
 func TestToolCallsFallBackToReasonType(t *testing.T) {
-	c := claude_tester.WriteFixture(
-		t,
+	c := claude_tester.New(t).WriteFixture(
 		[]string{
 			claude_tester.ToolUseLine("toolu_a", "ls", "/repo"),
 			claude_tester.ToolResultLine(
@@ -44,8 +42,7 @@ func TestToolCallsFallBackToReasonType(t *testing.T) {
 }
 
 func TestToolCallsKeepFirstDecisionForCall(t *testing.T) {
-	c := claude_tester.WriteFixture(
-		t,
+	c := claude_tester.New(t).WriteFixture(
 		[]string{
 			claude_tester.ToolUseLine("toolu_a", "rm x", "/repo"),
 			claude_tester.ToolUseLine("toolu_b", "ls", "/repo"),

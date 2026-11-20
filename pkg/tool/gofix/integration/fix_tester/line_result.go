@@ -1,18 +1,14 @@
 package fix_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/lint/concern"
 
-func LineResult(
-	t *testing.T,
+func (o *Tester) LineResult(
 	entries []*concern.Concern,
 	path string,
 	line int,
 	message string,
 ) {
-	t.Helper()
+	o.t.Helper()
 
 	for _, c := range entries {
 		if c.Path == path && c.Line == line && c.Text == message {
@@ -20,7 +16,7 @@ func LineResult(
 		}
 	}
 
-	t.Errorf(
+	o.t.Errorf(
 		"expected concern {path: %q, line: %d, text: %q} not found",
 		path,
 		line,

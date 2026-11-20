@@ -15,8 +15,7 @@ func TestStrayConstantFlagged(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{
@@ -41,8 +40,7 @@ func TestStrayConstantBlockFlagged(t *testing.T) {
 			"package example\n\nconst (\n\tFoo = 1\n\tBar = 2\n)\n",
 		),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Bravo",
 		true,
 		[]*concern.Concern{
@@ -65,8 +63,7 @@ func TestStrayConstantFlaggedInBareConstantFile(t *testing.T) {
 		"constant.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"constant.go",
 		true,
 		[]*concern.Concern{
@@ -89,8 +86,7 @@ func TestStrayConstantFlaggedInConstantTestFile(t *testing.T) {
 		"constant_test.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"constant_test.go",
 		true,
 		[]*concern.Concern{
@@ -113,7 +109,7 @@ func TestStrayConstantExemptByPackage(t *testing.T) {
 		stringsConstant.UpperCharlie,
 		strings.NewReader("package constant\n\nconst Foo = 1\n"),
 	)
-	lint_tester.Report(t, "Charlie", false, nil, "", l)
+	lint_tester.New(t).Report("Charlie", false, nil, "", l)
 }
 
 func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
@@ -121,8 +117,7 @@ func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
 		"pkg/tool/example/constant/color/item.go",
 		strings.NewReader("package color\n\nconst Foo = 1\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"pkg/tool/example/constant/color/item.go",
 		false,
 		nil,
@@ -136,8 +131,7 @@ func TestStrayConstantDirectoryMatchesExactly(t *testing.T) {
 		"pkg/example/constants/foo.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"pkg/example/constants/foo.go",
 		true,
 		[]*concern.Concern{
@@ -162,5 +156,5 @@ func TestStrayConstantInsideFunctionNotFlagged(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tconst x = 1\n\t_ = x\n}\n",
 		),
 	)
-	lint_tester.Report(t, "Delta", false, nil, "", l)
+	lint_tester.New(t).Report("Delta", false, nil, "", l)
 }

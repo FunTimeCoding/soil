@@ -15,7 +15,7 @@ import (
 func TestForgeOutageAnswersUnavailableQuietly(t *testing.T) {
 	s := base.New(t)
 	c := s.GeneratedClient()
-	server_tester.PostAuthority(t, c, server_tester.RootBody())
+	server_tester.New(t).PostAuthority(c, server_tester.RootBody())
 	s.Forge.Fail(outage_tester.RefusedDial())
 	r, e := c.PostPublicationWithResponse(t.Context())
 	assert.FatalOnError(t, e)
@@ -26,19 +26,19 @@ func TestForgeOutageAnswersUnavailableQuietly(t *testing.T) {
 func TestForgeOutageLeavesIssuingServing(t *testing.T) {
 	s := base.New(t)
 	c := s.GeneratedClient()
-	server_tester.PostAuthority(t, c, server_tester.RootBody())
-	server_tester.PostAuthority(t, c, server_tester.ClusterBody())
+	server_tester.New(t).PostAuthority(c, server_tester.RootBody())
+	server_tester.New(t).PostAuthority(c, server_tester.ClusterBody())
 	s.Forge.Fail(outage_tester.RefusedDial())
 	_, e := c.PostPublicationWithResponse(t.Context())
 	assert.FatalOnError(t, e)
-	r := server_tester.PostCertificate(t, c)
+	r := server_tester.New(t).PostCertificate(c)
 	assert.Integer(t, http.StatusOK, r.StatusCode())
 }
 
 func TestForgeFaultIsCaptured(t *testing.T) {
 	s := base.New(t)
 	c := s.GeneratedClient()
-	server_tester.PostAuthority(t, c, server_tester.RootBody())
+	server_tester.New(t).PostAuthority(c, server_tester.RootBody())
 	s.Forge.Fail(errors.Format("commit rejected", constant.PublishBranch))
 	r, e := c.PostPublicationWithResponse(t.Context())
 	assert.FatalOnError(t, e)

@@ -23,9 +23,8 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 	identifier, e := s.Store().CreateMemory(o, time.Now())
 	assert.FatalOnError(t, e)
 	page := s.Body(t, constant.MemoriesPath)
-	markup_tester.AssertCount(t, 1, page, "tbody tr.opening-row")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertCount(1, page, "tbody tr.opening-row")
+	markup_tester.New(t).AssertAttribute(
 		"/memories/1/open",
 		page,
 		"tr.opening-row",
@@ -33,17 +32,15 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 	)
 	opened := s.ExtendedBody(t, "/memories/1/open")
 	assert.StringContains(t, `class="opening-detail"><td colspan="3">`, opened)
-	markup_tester.AssertText(t, "alfa content", opened, "pre")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertText("alfa content", opened, "pre")
+	markup_tester.New(t).AssertAttribute(
 		"/memories/1/edit",
 		opened,
 		".action-row a[hx-get]",
 		"href",
 	)
 	editor := s.ExtendedBody(t, "/memories/1/edit")
-	markup_tester.AssertText(
-		t,
+	markup_tester.New(t).AssertText(
 		"alfa content",
 		editor,
 		"textarea[name=content]",
@@ -58,7 +55,7 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "description must be one line", refused)
-	markup_tester.AssertText(t, "typed", refused, "textarea[name=content]")
+	markup_tester.New(t).AssertText("typed", refused, "textarea[name=content]")
 	saved := s.PostBody(
 		t,
 		"/memories/1/edit",
@@ -69,15 +66,14 @@ func TestMemoryRowOpensEditsAndSavesInPlace(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "Saved", saved)
-	markup_tester.AssertText(t, "alfa edited", saved, "pre")
-	markup_tester.AssertText(t, "rewritten", saved, "td.clamp-cell span")
+	markup_tester.New(t).AssertText("alfa edited", saved, "pre")
+	markup_tester.New(t).AssertText("rewritten", saved, "td.clamp-cell span")
 	history, f := s.Store().GetMemoryHistory(identifier)
 	assert.FatalOnError(t, f)
 	assert.String(t, "web", history[len(history)-1].Source)
 	closed := s.ExtendedBody(t, "/memories/1/close")
 	assert.True(t, !strings.Contains(closed, "alfa edited"))
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertAttribute(
 		"/memories/1/open",
 		closed,
 		"template tr.opening-row",
@@ -96,7 +92,7 @@ func TestDocumentSourcedMemoryOpensReadOnly(t *testing.T) {
 	assert.FatalOnError(t, e)
 	opened := s.ExtendedBody(t, "/memories/1/open")
 	assert.StringContains(t, "loaded from doc/lore.md", opened)
-	markup_tester.AssertCount(t, 0, opened, `a[href="/memories/1/edit"]`)
+	markup_tester.New(t).AssertCount(0, opened, `a[href="/memories/1/edit"]`)
 	refused := s.PostBody(
 		t,
 		"/memories/1/edit",

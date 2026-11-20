@@ -12,13 +12,10 @@ import (
 )
 
 func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
-	directory := module_tester.CollisionKinds(t)
+	m := module_tester.New(t)
+	directory := m.CollisionKinds()
 	r := output.NewResultsWithDirectory(directory)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
-		r,
-	)
+	m.RunDefault(m.Options(directory, false, false, "./..."), r)
 	t.Run(
 		"RootPackageTakesModulePlusName",
 		func(t *testing.T) {
@@ -30,8 +27,7 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 					filepath.Join(directory, "pkg/echo/fail.go"),
 				),
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				fix_tester.Applied(r.Entries),
 				"pkg/echo/fail.go",
 				"re-aliased library → testmoduleErrors (testmodule/pkg/errors)",
@@ -62,8 +58,7 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 					filepath.Join(directory, "pkg/alfa/pod.go"),
 				),
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				fix_tester.Applied(r.Entries),
 				"pkg/alfa/pod.go",
 				"re-aliased v1 → core (testmodule/pkg/core/v1)",
@@ -81,8 +76,7 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 					filepath.Join(directory, "pkg/bravo/lower/lower.go"),
 				),
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				fix_tester.Applied(r.Entries),
 				"pkg/bravo/lower/lower.go",
 				"de-aliased chain1 → chain (testmodule/pkg/bravo/chain)",
@@ -92,13 +86,13 @@ func TestDefaultRewritesDecidedCollisionKinds(t *testing.T) {
 	t.Run(
 		"ModuleStillBuilds",
 		func(t *testing.T) {
-			fix_tester.Builds(t, directory)
+			fix_tester.New(t).Builds(directory)
 		},
 	)
 }
 
 func TestLoserWithoutNameHoldsItsGroup(t *testing.T) {
-	directory := module_tester.CollisionKinds(t)
+	directory := module_tester.New(t).CollisionKinds()
 	gofix.RunConstantAliasFix(
 		[]string{"./..."},
 		directory,

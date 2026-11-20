@@ -25,7 +25,7 @@ func TestMoveBuildTagCarry(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/tagged/hold/hold.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.True(t, strings.HasPrefix(moved, "//go:build local\n\npackage hold"))
 	assert.StringContains(t, "func Flag", moved)
 }
@@ -80,7 +80,7 @@ func TestMoveBuildTagSameTagAppend(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/home/tagged.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.True(t, strings.HasPrefix(moved, "//go:build local"))
 	assert.Integer(t, 1, strings.Count(moved, "//go:build"))
 	assert.StringContains(t, "func Flag", moved)
@@ -103,7 +103,7 @@ func TestMoveBuildTagAbsentUnchanged(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/tagged/hold/hold.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.False(t, strings.Contains(moved, "//go:build"))
 	assert.StringContains(t, "func Plain", moved)
 }

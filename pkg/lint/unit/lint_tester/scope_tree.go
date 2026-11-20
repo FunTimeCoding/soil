@@ -1,15 +1,12 @@
 package lint_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/system/system_tester"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/system/system_tester"
 
-func ScopeTree(t *testing.T) string {
-	t.Helper()
-	root := t.TempDir()
-	system_tester.Write(t, root, "doc/ai/spec/naming.md", "# Naming\n")
-	system_tester.Write(t, root, "pkg/lint/lint.go", "package lint\n")
+func (o *Tester) ScopeTree() string {
+	o.t.Helper()
+	root := o.t.TempDir()
+	system_tester.New(o.t).Write(root, "doc/ai/spec/naming.md", "# Naming\n")
+	system_tester.New(o.t).Write(root, "pkg/lint/lint.go", "package lint\n")
 
 	return root
 }

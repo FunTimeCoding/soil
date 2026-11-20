@@ -1,16 +1,12 @@
 package usage_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/tool/gosourced/types/result"
 
-func Method(
-	t *testing.T,
+func (o *Tester) Method(
 	c *result.Usage,
 	name string,
 ) *result.UsageMethod {
-	t.Helper()
+	o.t.Helper()
 
 	for _, m := range c.Methods {
 		if m.Name == name {
@@ -18,7 +14,7 @@ func Method(
 		}
 	}
 
-	t.Fatalf("usage has no method %s", name)
+	o.t.Fatalf("usage has no method %s", name)
 
 	return nil
 }

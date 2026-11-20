@@ -17,8 +17,7 @@ func TestPermissionsRankBlockersOfLastWeek(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(
-		t,
+	permission_tester.New(t).Settings(
 		project,
 		"settings.local.json",
 		"Bash(ls:*)",
@@ -147,12 +146,16 @@ func TestPermissionsRankBlockersOfLastWeek(t *testing.T) {
 
 func TestPermissionsMergeEverySettingsFile(t *testing.T) {
 	home := t.TempDir()
-	permission_tester.Settings(t, home, "settings.json", "Bash(sort:*)")
+	permission_tester.New(t).Settings(home, "settings.json", "Bash(sort:*)")
 	t.Setenv(soil.HomeEnvironment, home)
 	x := service_tester.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(jq:*)")
-	permission_tester.Settings(t, project, "settings.json", "Bash(awk:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(jq:*)",
+	)
+	permission_tester.New(t).Settings(project, "settings.json", "Bash(awk:*)")
 	s := session.New("session-a")
 	s.WorkDirectory = project
 	x.Client.AddSession(s)
@@ -189,8 +192,16 @@ func TestPermissionsScratchCoversAdditionalDirectoriesAndOwnPrefix(t *testing.T)
 	project := t.TempDir()
 	other := t.TempDir()
 	assert.FatalOnError(t, os.MkdirAll(filepath.Join(other, "tmp"), 0o755))
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
-	permission_tester.AdditionalDirectories(t, project, "settings.json", other)
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
+	permission_tester.New(t).AdditionalDirectories(
+		project,
+		"settings.json",
+		other,
+	)
 	s := session.New("session-a")
 	s.WorkDirectory = project
 	x.Client.AddSession(s)
@@ -230,7 +241,11 @@ func TestPermissionsRowNamesItsNewestDistinctCommands(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	s := session.New("session-a")
 	s.WorkDirectory = project
 	x.Client.AddSession(s)
@@ -277,7 +292,11 @@ func TestPermissionsRefuseUnreadableSettingsFile(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	assert.FatalOnError(
 		t,
 		os.WriteFile(
@@ -308,7 +327,11 @@ func TestPermissionsBreakReasonTieAlphabetically(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	x := service_tester.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	s := session.New("session-a")
 	s.WorkDirectory = project
 	x.Client.AddSession(s)

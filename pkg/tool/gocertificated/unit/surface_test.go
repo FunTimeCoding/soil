@@ -206,14 +206,12 @@ func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 	action := o.Forge.Commits()[0].Actions
 	directory := t.TempDir()
 	manifest := filepath.Join(directory, "authority-secret.yaml")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"authority-secret.yaml",
 		publish_tester.Content(action, constant.FixtureSecretPath),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		gosecret.GetDecodedPath("authority-secret.yaml"),
 		publish_tester.Content(

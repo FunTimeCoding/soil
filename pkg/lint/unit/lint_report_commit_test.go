@@ -12,18 +12,15 @@ import (
 
 func TestReportFixRefusedWhenFixedFileChanges(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() int {\n\tcharlie := 1\n\treturn charlie\n}\n",
 	)
-	r := lint_tester.FixingReport(
-		t,
+	r := lint_tester.New(t).FixingReport(
 		root,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				root,
 				"pkg/alfa/alfa.go",
 				"package alfa\n\nfunc Bravo() int {\n\treturn 2\n}\n",
@@ -51,24 +48,20 @@ func TestReportFixRefusedWhenFixedFileChanges(t *testing.T) {
 
 func TestReportFixCommitsPastChangeToOtherFile(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() int {\n\tcharlie := 1\n\treturn charlie\n}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/delta/delta.go",
 		"package delta\n\nfunc Echo() int {\n\treturn 1\n}\n",
 	)
-	lint_tester.FixingReport(
-		t,
+	lint_tester.New(t).FixingReport(
 		root,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				root,
 				"pkg/delta/delta.go",
 				"package delta\n",
@@ -84,13 +77,16 @@ func TestReportFixCommitsPastChangeToOtherFile(t *testing.T) {
 
 func TestReportFixKeepsEmptyFileFilledBeforeCommit(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "pkg/alfa/alfa.go", "package alfa\n")
-	system_tester.Write(t, root, "pkg/alfa/empty.go", "")
-	lint_tester.FixingReport(
-		t,
+	system_tester.New(t).Write(root, "pkg/alfa/alfa.go", "package alfa\n")
+	system_tester.New(t).Write(root, "pkg/alfa/empty.go", "")
+	lint_tester.New(t).FixingReport(
 		root,
 		func() {
-			system_tester.Write(t, root, "pkg/alfa/empty.go", "package alfa\n")
+			system_tester.New(t).Write(
+				root,
+				"pkg/alfa/empty.go",
+				"package alfa\n",
+			)
 		},
 	)
 	assert.True(t, system.FileExists(filepath.Join(root, "pkg/alfa/empty.go")))
@@ -98,8 +94,8 @@ func TestReportFixKeepsEmptyFileFilledBeforeCommit(t *testing.T) {
 
 func TestReportFixRemovesEmptyFile(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "pkg/alfa/alfa.go", "package alfa\n")
-	system_tester.Write(t, root, "pkg/alfa/empty.go", "")
-	lint_tester.FixingReport(t, root, nil)
+	system_tester.New(t).Write(root, "pkg/alfa/alfa.go", "package alfa\n")
+	system_tester.New(t).Write(root, "pkg/alfa/empty.go", "")
+	lint_tester.New(t).FixingReport(root, nil)
 	assert.False(t, system.FileExists(filepath.Join(root, "pkg/alfa/empty.go")))
 }

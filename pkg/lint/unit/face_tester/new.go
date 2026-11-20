@@ -13,7 +13,7 @@ import (
 
 func New(t *testing.T) *Tester {
 	t.Helper()
-	directory := kind_tester.ImporterModule(t)
+	directory := kind_tester.New(t).ImporterModule()
 	result, _, e := resolve.LoadPackages(directory, goModConstant.AllPackages)
 	errors.PanicOnError(e)
 	loaded := resolve.PreferTestVariants(result)

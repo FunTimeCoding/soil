@@ -15,9 +15,9 @@ import (
 )
 
 func TestNotifierNotify(t *testing.T) {
-	sink, c := worker_tester.NewSink(t)
+	sink, c := worker_tester.New(t).Sink()
 	r := memory.New()
-	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
+	n := notifier.New(c, "mattermost", worker_tester.New(t).RosterGuard(c, r))
 	assert.FatalOnError(
 		t,
 		n.Notify("kilo", "first message", goclaudedConstant.DeliveryImmediate),
@@ -36,7 +36,7 @@ func TestNotifierNotifySkipsEmptyCallsign(t *testing.T) {
 	c := client.New(s.URL, false, "")
 	t.Cleanup(c.Close)
 	r := memory.New()
-	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
+	n := notifier.New(c, "mattermost", worker_tester.New(t).RosterGuard(c, r))
 	assert.Nil(
 		t,
 		n.Notify("", "first message", goclaudedConstant.DeliveryImmediate),
@@ -52,7 +52,7 @@ func TestNotifierAnswersFailureForItsCallerToReport(t *testing.T) {
 	c := client.New(s.URL, false, "")
 	t.Cleanup(c.Close)
 	r := memory.New()
-	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
+	n := notifier.New(c, "mattermost", worker_tester.New(t).RosterGuard(c, r))
 	e := n.Notify("kilo", "first message", goclaudedConstant.DeliveryImmediate)
 	assert.True(t, classify.Reportable(e))
 	assert.Integer(t, 0, len(r.Events()))
@@ -66,7 +66,7 @@ func TestGoclaudedOutageHoldsNextDigestOff(t *testing.T) {
 	c := client.New(s.URL, false, "")
 	t.Cleanup(c.Close)
 	r := memory.New()
-	n := notifier.New(c, "mattermost", worker_tester.NewRosterGuard(t, c, r))
+	n := notifier.New(c, "mattermost", worker_tester.New(t).RosterGuard(c, r))
 	assert.True(
 		t,
 		unavailable.Is(

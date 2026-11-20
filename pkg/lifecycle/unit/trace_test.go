@@ -16,8 +16,7 @@ import (
 )
 
 func TestIncomingTraceIsOnRequestHub(t *testing.T) {
-	p := trace_tester.Serve(
-		t,
+	p := trace_tester.New(t).Serve(
 		func(g *guard.Mux) {
 			g.Open(
 				"GET /trace",
@@ -33,13 +32,12 @@ func TestIncomingTraceIsOnRequestHub(t *testing.T) {
 		},
 	)
 	locator := fmt.Sprintf("http://localhost:%d/trace", p)
-	continued := trace_tester.Get(
-		t,
+	continued := trace_tester.New(t).Get(
 		locator,
 		"0123456789abcdef0123456789abcdef-0123456789abcdef-1",
 	)
 	assert.Prefix(t, "0123456789abcdef0123456789abcdef-", continued)
-	fresh := trace_tester.Get(t, locator, "")
+	fresh := trace_tester.New(t).Get(locator, "")
 	assert.True(t, fresh != "")
 	assert.StringNotContains(t, "0123456789abcdef0123456789abcdef", fresh)
 }
@@ -59,8 +57,7 @@ func TestOutgoingRequestCarriesIncomingTrace(t *testing.T) {
 	defer d.Close()
 	o := stall_client.New().Traced().Build()
 	defer o.Close()
-	p := trace_tester.Serve(
-		t,
+	p := trace_tester.New(t).Serve(
 		func(g *guard.Mux) {
 			g.Open(
 				"GET /call",
@@ -77,8 +74,7 @@ func TestOutgoingRequestCarriesIncomingTrace(t *testing.T) {
 			)
 		},
 	)
-	trace_tester.Get(
-		t,
+	trace_tester.New(t).Get(
 		fmt.Sprintf("http://localhost:%d/call", p),
 		"0123456789abcdef0123456789abcdef-0123456789abcdef-1",
 	)

@@ -34,5 +34,5 @@ func New(
 	d := o.Daemon()
 	result := model_context_server.Mount(t, d, r)
 
-	return result, outage_tester.Guard(t, d.Workers(), peer).Unavailable
+	return result, outage_tester.New(t).Guard(d.Workers(), peer).Unavailable
 }

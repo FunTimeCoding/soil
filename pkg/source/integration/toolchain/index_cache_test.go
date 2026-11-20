@@ -9,7 +9,7 @@ import (
 )
 
 func TestWorkspaceReferencesAreSafeInParallel(t *testing.T) {
-	w := index.New(t.TempDir(), kind_tester.Module(t))
+	w := index.New(t.TempDir(), kind_tester.New(t).Module())
 	var group sync.WaitGroup
 	results := make([]any, 8)
 

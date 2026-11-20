@@ -32,7 +32,7 @@ func Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.StrictMiddlewareKey, s[0])
+	scan_tester.New(t).Concern(constant.StrictMiddlewareKey, s[0])
 }
 
 func TestRecordingMiddlewareDaemonMountFlagged(t *testing.T) {
@@ -57,7 +57,7 @@ func (d *Daemon) Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.StrictMiddlewareKey, s[0])
+	scan_tester.New(t).Concern(constant.StrictMiddlewareKey, s[0])
 }
 
 func TestRecordingMiddlewareInlineFlagged(t *testing.T) {
@@ -92,7 +92,7 @@ func Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.StrictMiddlewareKey, s[0])
+	scan_tester.New(t).Concern(constant.StrictMiddlewareKey, s[0])
 }
 
 func TestRecordingMiddlewareClean(t *testing.T) {
@@ -122,5 +122,5 @@ func Mount(g *guard.Mux) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.StrictMiddlewareKey, s[0])
+	scan_tester.New(t).NoConcern(constant.StrictMiddlewareKey, s[0])
 }

@@ -38,7 +38,7 @@ func (r *Requester) Send(q *request.Request) (*http.Response, error) {
 			return nil, transportFailure(h, e)
 		}
 
-		if succeeded(response.StatusCode) {
+		if succeeded(response.StatusCode) || q.Unchanged(response.StatusCode) {
 			return response, nil
 		}
 

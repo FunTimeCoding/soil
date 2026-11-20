@@ -1,26 +1,22 @@
 package markup_tester
 
-import (
-	"strings"
-	"testing"
-)
+import "strings"
 
-func AssertText(
-	t *testing.T,
+func (o *Tester) AssertText(
 	expected string,
 	body string,
 	selector string,
 ) {
-	t.Helper()
-	s := document(body).FindMatcher(matcher(t, selector)).First()
+	o.t.Helper()
+	s := document(body).FindMatcher(o.matcher(selector)).First()
 
 	if s.Length() == 0 {
-		t.Errorf("%s: no match", selector)
+		o.t.Errorf("%s: no match", selector)
 
 		return
 	}
 
 	if actual := strings.TrimSpace(s.Text()); actual != expected {
-		t.Errorf("%s: expected text %q, got %q", selector, expected, actual)
+		o.t.Errorf("%s: expected text %q, got %q", selector, expected, actual)
 	}
 }

@@ -4,18 +4,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/prometheus/client_golang/prometheus"
 	"maps"
-	"testing"
 )
 
-func Sample(
-	t *testing.T,
+func (o *Tester) Sample(
 	r *prometheus.Registry,
 	name string,
 	labels map[string]string,
 ) float64 {
-	t.Helper()
+	o.t.Helper()
 	families, e := r.Gather()
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	for _, f := range families {
 		if f.GetName() != name {

@@ -12,13 +12,11 @@ import (
 func TestReadAccumulatesUsage(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":1000,"cache_read_input_tokens":5000,"cache_creation":{"ephemeral_5m_input_tokens":200,"ephemeral_1h_input_tokens":800}}`
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m1", "r1", "claude-fable-5", fable),
 	)
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m1", "r1", "claude-fable-5", fable),
 	)
@@ -33,14 +31,12 @@ func TestReadAccumulatesUsage(t *testing.T) {
 	assert.Integer(t, 200, tokens.Cache5Minute)
 	assert.Integer(t, 800, tokens.Cache1Hour)
 	assert.Integer(t, 5000, tokens.CacheRead)
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m1", "r1", "claude-fable-5", fable),
 	)
 	opus := `{"input_tokens":7,"output_tokens":30,"cache_creation_input_tokens":400,"cache_read_input_tokens":900}`
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m2", "r2", "claude-opus-4-8", opus),
 	)
@@ -60,22 +56,19 @@ func TestReadAccumulatesUsage(t *testing.T) {
 func TestReadTakesSlugArrivingAfterFirstRead(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}`
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m1", "r1", "claude-fable-5", fable),
 	)
 	s := tracker.New()
 	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	assert.String(t, "", s.Slug)
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		`{"type":"system","subtype":"compact_boundary","slug":"quiet-folding-heron"}
 `,
 	)
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		`{"type":"system","subtype":"turn_duration","slug":"loud-folding-heron"}
 `,
@@ -87,13 +80,11 @@ func TestReadTakesSlugArrivingAfterFirstRead(t *testing.T) {
 func TestReadResetsOnShrink(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}`
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m1", "r1", "claude-fable-5", fable),
 	)
-	claude_tester.AppendFile(
-		t,
+	claude_tester.New(t).AppendFile(
 		path,
 		claude_tester.AssistantUsageLine("m2", "r2", "claude-fable-5", fable),
 	)

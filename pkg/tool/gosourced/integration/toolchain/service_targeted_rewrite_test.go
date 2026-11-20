@@ -10,8 +10,7 @@ import (
 )
 
 func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
-	tree := rewrite_tester.SameRewrite(
-		t,
+	tree := rewrite_tester.New(t).SameRewrite(
 		func(
 			s *service_tester.Services,
 			d string,
@@ -31,8 +30,7 @@ func TestTargetedRenameFunctionMatchesFullLoad(t *testing.T) {
 }
 
 func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
-	tree := rewrite_tester.SameRewrite(
-		t,
+	tree := rewrite_tester.New(t).SameRewrite(
 		func(
 			s *service_tester.Services,
 			d string,
@@ -52,8 +50,7 @@ func TestTargetedRenameFieldMatchesFullLoad(t *testing.T) {
 }
 
 func TestTargetedMovePackageMatchesFullLoad(t *testing.T) {
-	tree := rewrite_tester.SameRewrite(
-		t,
+	tree := rewrite_tester.New(t).SameRewrite(
 		func(
 			s *service_tester.Services,
 			d string,

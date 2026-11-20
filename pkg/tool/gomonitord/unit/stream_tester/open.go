@@ -9,20 +9,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
-	"testing"
 )
 
-func Open(
-	t *testing.T,
-	s *model_context_server.Server,
-) *bufio.Reader {
-	t.Helper()
+func (o *Tester) Open(s *model_context_server.Server) *bufio.Reader {
+	o.t.Helper()
 	q := web.NewGet(s.Address(constant.StreamPath))
 	web.Bearer(q, generativeConstant.ModelContextTestToken)
 	r, e := s.Client().Do(q)
-	assert.FatalOnError(t, e)
-	t.Cleanup(func() { errors.PanicClose(r.Body) })
-	assert.Integer(t, http.StatusOK, r.StatusCode)
+	assert.FatalOnError(o.t, e)
+	o.t.Cleanup(func() { errors.PanicClose(r.Body) })
+	assert.Integer(o.t, http.StatusOK, r.StatusCode)
 
 	return bufio.NewReader(r.Body)
 }

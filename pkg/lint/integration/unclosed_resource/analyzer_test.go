@@ -7,7 +7,7 @@ import (
 )
 
 func TestFlagged(t *testing.T) {
-	results := lint_tester.UnclosedResource(t, "testdata/src/flagged")
+	results := lint_tester.New(t).UnclosedResource("testdata/src/flagged")
 	testutil.AssertBlocked(t, results, 17)
 	testutil.AssertBlockedContains(t, results, "PanicClose(r.Body)")
 	testutil.AssertBlockedContains(t, results, "local is never closed")
@@ -32,7 +32,7 @@ func TestFlagged(t *testing.T) {
 func TestClean(t *testing.T) {
 	testutil.AssertBlocked(
 		t,
-		lint_tester.UnclosedResource(t, "testdata/src/clean"),
+		lint_tester.New(t).UnclosedResource("testdata/src/clean"),
 		0,
 	)
 }
@@ -40,7 +40,7 @@ func TestClean(t *testing.T) {
 func TestArrangedInSeparateLoad(t *testing.T) {
 	testutil.AssertBlocked(
 		t,
-		lint_tester.UnclosedResource(t, "testdata/src/elsewhere"),
+		lint_tester.New(t).UnclosedResource("testdata/src/elsewhere"),
 		0,
 	)
 }
@@ -48,13 +48,13 @@ func TestArrangedInSeparateLoad(t *testing.T) {
 func TestArrangedByConstructor(t *testing.T) {
 	testutil.AssertBlocked(
 		t,
-		lint_tester.UnclosedResource(t, "testdata/src/arranged"),
+		lint_tester.New(t).UnclosedResource("testdata/src/arranged"),
 		0,
 	)
 }
 
 func TestTransferredWithoutRelease(t *testing.T) {
-	results := lint_tester.UnclosedResource(t, "testdata/src/transferred")
+	results := lint_tester.New(t).UnclosedResource("testdata/src/transferred")
 	testutil.AssertBlocked(t, results, 13)
 	testutil.AssertBlockedContains(
 		t,
@@ -101,13 +101,13 @@ func TestTransferredWithoutRelease(t *testing.T) {
 func TestTransferredAndReleased(t *testing.T) {
 	testutil.AssertBlocked(
 		t,
-		lint_tester.UnclosedResource(t, "testdata/src/released"),
+		lint_tester.New(t).UnclosedResource("testdata/src/released"),
 		0,
 	)
 }
 
 func TestTransferredAcrossPackages(t *testing.T) {
-	results := lint_tester.UnclosedResource(t, "testdata/src/handed")
+	results := lint_tester.New(t).UnclosedResource("testdata/src/handed")
 	testutil.AssertBlocked(t, results, 1)
 	testutil.AssertBlockedContains(
 		t,

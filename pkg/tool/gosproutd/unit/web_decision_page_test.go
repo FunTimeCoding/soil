@@ -23,8 +23,7 @@ func TestGridPreservesEveryCard(t *testing.T) {
 		nil,
 	)
 	assert.FatalOnError(t, e)
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		session_page.Grid(s.Service.Decisions(stringsConstant.LowerAlfa)),
 	)
 	assert.StringContains(
@@ -35,7 +34,7 @@ func TestGridPreservesEveryCard(t *testing.T) {
 	assert.True(
 		t,
 		!strings.Contains(
-			web_tester.Render(t, decision_page.Card(d)),
+			web_tester.New(t).Render(decision_page.Card(d)),
 			"hx-preserve",
 		),
 	)
@@ -51,8 +50,8 @@ func TestOpenedCardKeepsItsFormsOutsideLiveRegions(t *testing.T) {
 		nil,
 	)
 	assert.FatalOnError(t, e)
-	page := web_tester.Render(t, decision_page.Hero(d, "", ""))
-	markup_tester.AssertCount(t, 2, page, `input[type="text"]`)
-	markup_tester.AssertCount(t, 0, page, `[sse-swap] input[type="text"]`)
-	markup_tester.AssertCount(t, 4, page, "[sse-swap]")
+	page := web_tester.New(t).Render(decision_page.Hero(d, "", ""))
+	markup_tester.New(t).AssertCount(2, page, `input[type="text"]`)
+	markup_tester.New(t).AssertCount(0, page, `[sse-swap] input[type="text"]`)
+	markup_tester.New(t).AssertCount(4, page, "[sse-swap]")
 }

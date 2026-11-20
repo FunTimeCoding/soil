@@ -25,7 +25,7 @@ func TestNestedCommandIsRecordedByItsFullPath(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"begin gotest character list", "record gotest character list"},
-		argument_tester.Instrumented(t, root, "character", soil.List).Entries,
+		argument_tester.New(t).Instrumented(root, "character", soil.List).Entries,
 	)
 }
 
@@ -50,6 +50,6 @@ func TestRootsOwnPreRunStillRuns(t *testing.T) {
 			},
 		},
 	)
-	argument_tester.Instrumented(t, root, soil.List)
+	argument_tester.New(t).Instrumented(root, soil.List)
 	assert.True(t, ran)
 }

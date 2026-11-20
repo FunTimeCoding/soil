@@ -14,7 +14,7 @@ import (
 )
 
 func TestIndexStoresEverythingUnderOneGeneration(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)
@@ -26,7 +26,7 @@ func TestIndexStoresEverythingUnderOneGeneration(t *testing.T) {
 }
 
 func TestIndexKeepsEachBuildApartInsideItsGeneration(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)
@@ -62,7 +62,7 @@ func TestIndexKeepsEachBuildApartInsideItsGeneration(t *testing.T) {
 }
 
 func TestIndexLeavesForeignFileInItsRoot(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)
@@ -77,7 +77,7 @@ func TestIndexLeavesForeignFileInItsRoot(t *testing.T) {
 }
 
 func TestIndexRemovesFlatLayoutPastRetention(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)
@@ -91,7 +91,7 @@ func TestIndexRemovesFlatLayoutPastRetention(t *testing.T) {
 }
 
 func TestIndexPruneLeavesOnlyCurrentGeneration(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)

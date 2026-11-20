@@ -61,13 +61,17 @@ func TestAnyAnswerMakesUtilizationHostReachable(t *testing.T) {
 }
 
 func TestGoneUtilizationHostIsUnreachable(t *testing.T) {
-	c := utilization.New(locator.NewOrigin(outage_tester.RefusedAddress(t)))
+	c := utilization.New(
+		locator.NewOrigin(outage_tester.New(t).RefusedAddress()),
+	)
 	defer c.Close()
 	assert.True(t, unreachable.Is(c.Reachable(t.Context())))
 }
 
 func TestUtilizationClientAndMockHoldFace(t *testing.T) {
-	c := utilization.New(locator.NewOrigin(outage_tester.RefusedAddress(t)))
+	c := utilization.New(
+		locator.NewOrigin(outage_tester.New(t).RefusedAddress()),
+	)
 	defer c.Close()
 	m := mock_client.New(t)
 	assert.Count(t, 2, []face.AnthropicClient{c, m})

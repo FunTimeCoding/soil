@@ -44,7 +44,11 @@ func TestPermissionWindowRunsOnServiceClock(t *testing.T) {
 	s := base.New(t)
 	s.Store.Advance(-30 * 24 * time.Hour)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	e := session.New("session-a")
 	e.WorkDirectory = project
 	s.Peers.Client.AddSession(e)

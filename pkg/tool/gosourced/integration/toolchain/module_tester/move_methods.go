@@ -4,18 +4,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
-	"testing"
 )
 
-func MoveMethods(
-	t *testing.T,
+func (o *Tester) MoveMethods(
 	methods ...string,
 ) (*service_tester.Tester, *output.Results) {
-	t.Helper()
-	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
-	r, e := o.Symbol.MoveMethods(
-		t.Context(),
-		o.Directory,
+	o.t.Helper()
+	s := service_tester.New(o.t, service_tester.WithFixture("move-methods/src"))
+	r, e := s.Symbol.MoveMethods(
+		o.t.Context(),
+		s.Directory,
 		"example/pkg/alfa",
 		"Service",
 		methods,
@@ -24,7 +22,7 @@ func MoveMethods(
 		"",
 		false,
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
-	return o, r
+	return s, r
 }

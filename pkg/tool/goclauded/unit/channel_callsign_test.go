@@ -30,7 +30,7 @@ func TestChannelCallsignHoldsWhenOnlyPromptPredatesChannel(t *testing.T) {
 	s.Store.Advance(time.Minute)
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Callsign(t, s, x, s.Store.Clock()())
+	result := channel_tester.New(t).Callsign(s, x, s.Store.Clock()())
 
 	select {
 	case <-result:
@@ -45,7 +45,7 @@ func TestChannelCallsignReleasesOnNextPrompt(t *testing.T) {
 	s.Store.Advance(time.Minute)
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Callsign(t, s, x, s.Store.Clock()())
+	result := channel_tester.New(t).Callsign(s, x, s.Store.Clock()())
 
 	select {
 	case <-result:
@@ -68,7 +68,7 @@ func TestChannelCallsignReleasesWhenDaemonCloses(t *testing.T) {
 	s := base.New(t)
 	s.Check("session-1")
 	s.Store.Advance(time.Minute)
-	result := channel_tester.Callsign(t, s, t.Context(), s.Store.Clock()())
+	result := channel_tester.New(t).Callsign(s, t.Context(), s.Store.Clock()())
 	s.AwaitSubscribers(1)
 	s.CloseDaemon()
 

@@ -30,13 +30,13 @@ func TestBatchFile(t *testing.T) {
 	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/constant.go"))
 	assert.True(t, os.IsNotExist(e))
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.Integer(t, 1, strings.Count(moved, "const ("))
 	assert.StringContains(t, "First  = \"alfa\"", moved)
 	assert.StringContains(t, "Second = \"bravo\"", moved)
 	assert.StringContains(t, "Third  = \"charlie\"", moved)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(
 		t,
 		"constant.First + constant.Second + constant.Third",
@@ -60,16 +60,16 @@ func TestBatchEnum(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "type Mode int", moved)
 	assert.StringContains(t, "Off Mode = iota", moved)
 	assert.False(t, strings.Contains(moved, "constant.Mode"))
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "func Run() constant.Mode", run)
 	assert.StringContains(t, "return constant.On", run)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "func Run() targetConstant.Mode", caller)
 	assert.StringContains(t, "targetConstant.Off == 0", caller)
 	assert.False(t, strings.Contains(caller, "target."))
@@ -91,11 +91,11 @@ func TestBatchSubset(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := o.Read("pkg/target/constant.go")
-	rewrite_tester.Formatted(t, source)
+	rewrite_tester.New(t).Formatted(source)
 	assert.StringContains(t, "third = \"charlie\"", source)
 	assert.False(t, strings.Contains(source, "first"))
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "First  = \"alfa\"", moved)
 	assert.StringContains(t, "Second = \"bravo\"", moved)
 	run := o.Read("pkg/target/run.go")
@@ -142,7 +142,7 @@ func TestBatchDependencyTogether(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "composed = prefix + \"bravo\"", moved)
 }
 
@@ -165,7 +165,7 @@ func TestBatchMultiName(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "Alfa, Bravo = \"a\", \"b\"", moved)
 	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "constant.Alfa + constant.Bravo", run)
@@ -249,11 +249,11 @@ func TestBackReferenceQualified(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/target/mover.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "example/pkg/source", moved)
 	assert.StringContains(t, "source.Stayer()", moved)
 	source := o.Read("pkg/source/source.go")
-	rewrite_tester.Formatted(t, source)
+	rewrite_tester.New(t).Formatted(source)
 	assert.StringContains(t, "func Stayer()", source)
 	assert.False(t, strings.Contains(source, "func Mover"))
 }
@@ -294,9 +294,8 @@ func TestBackReferenceUnexportedIsExported(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.FixedContains(t, "stayer → Stayer", r)
-	rewrite_tester.FixedContains(
-		t,
+	rewrite_tester.New(t).FixedContains("stayer → Stayer", r)
+	rewrite_tester.New(t).FixedContains(
 		"stayer → source.Stayer (back reference)",
 		r,
 	)
@@ -310,7 +309,7 @@ func TestBackReferenceUnexportedIsExported(t *testing.T) {
 		"return source.Stayer() + \" moved\"",
 		o.Read("pkg/target/mover.go"),
 	)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestBackReferenceExportCollisionRefused(t *testing.T) {

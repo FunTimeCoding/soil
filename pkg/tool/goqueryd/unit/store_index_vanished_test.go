@@ -11,9 +11,9 @@ import (
 )
 
 func TestIndexSkipsListedFileThatIsGone(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	directory := t.TempDir()
-	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nStays.\n")
+	store_tester.New(t).WriteFixture(directory, "alfa.md", "# Alfa\n\nStays.\n")
 	errors.PanicOnError(
 		os.Symlink("charlie.md", filepath.Join(directory, "bravo.md")),
 	)

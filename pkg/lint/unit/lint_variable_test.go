@@ -17,8 +17,7 @@ func TestVariableErrorAssignment(t *testing.T) {
 			"package example\n\nfunc Example() {\n\terr := foo()\n}\n",
 		),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{
@@ -43,8 +42,7 @@ func TestVariableErrorMultiReturn(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tx, err := foo()\n}\n",
 		),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Bravo",
 		true,
 		[]*concern.Concern{
@@ -69,7 +67,7 @@ func TestVariableErrorComparison(t *testing.T) {
 			"package example\n\nfunc Example() bool {\n\treturn err == nil\n}\n",
 		),
 	)
-	lint_tester.Report(t, "Charlie", false, nil, "", l)
+	lint_tester.New(t).Report("Charlie", false, nil, "", l)
 }
 
 func TestVariableEOkay(t *testing.T) {
@@ -79,7 +77,7 @@ func TestVariableEOkay(t *testing.T) {
 			"package example\n\nfunc Example() {\n\te := foo()\n}\n",
 		),
 	)
-	lint_tester.Report(t, "Delta", false, nil, "", l)
+	lint_tester.New(t).Report("Delta", false, nil, "", l)
 }
 
 func TestVariableErrorInString(t *testing.T) {
@@ -89,7 +87,7 @@ func TestVariableErrorInString(t *testing.T) {
 			"package example\n\nfunc Example() {\n\ts := \"err := foo()\"\n\t_ = s\n}\n",
 		),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }
 
 func TestVariableErrorComment(t *testing.T) {
@@ -97,5 +95,5 @@ func TestVariableErrorComment(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("package example\n\n// err := foo()\n"),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }

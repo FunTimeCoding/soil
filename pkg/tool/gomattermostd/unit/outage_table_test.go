@@ -17,8 +17,7 @@ import (
 func TestOperationsOnMattermostOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.MattermostPeer)
 		},
@@ -35,8 +34,7 @@ func TestOperationsOnMattermostOutage(t *testing.T) {
 func TestOperationsOnRosterOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.RosterPeer)
 		},
@@ -51,8 +49,7 @@ func TestOperationsOnRosterOutage(t *testing.T) {
 func TestToolsOnMattermostOutage(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "alfa.txt")
 	system.SaveFile(path, "alfa")
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.MattermostPeer)
 		},
@@ -71,8 +68,7 @@ func TestToolsOnMattermostOutage(t *testing.T) {
 }
 
 func TestToolsOnRosterOutage(t *testing.T) {
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.RosterPeer)
 		},

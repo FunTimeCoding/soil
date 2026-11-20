@@ -8,7 +8,7 @@ import (
 )
 
 func TestDiffSymbolsFollowsMoveIntoRequiredModule(t *testing.T) {
-	v := revision_tester.CrossService(t)
+	v := revision_tester.New(t).CrossService()
 	r, e := v.Diff.DiffSymbols("user", "HEAD~1", "HEAD")
 	assert.FatalOnError(t, e)
 	assert.Strings(

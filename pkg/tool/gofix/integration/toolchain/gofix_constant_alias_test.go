@@ -12,20 +12,18 @@ import (
 )
 
 func TestConstantAliasSuggestion(t *testing.T) {
-	directory := module_tester.ConstantAlias(t)
+	directory := module_tester.New(t).ConstantAlias()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunImportAliasFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"OwnIsPlainForeignCarriesItsDomain",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/alfa/own.go",
 				"suggest de-alias own → constant (testmodule/pkg/alfa/constant)",
 			)
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/alfa/own.go",
 				"suggest alias constant → bravoConstant (testmodule/pkg/bravo/constant)",
@@ -35,8 +33,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"ForeignCarriesItsDomainEvenAlone",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/charlie/lone.go",
 				"suggest alias constant → bravoConstant (testmodule/pkg/bravo/constant)",
@@ -46,8 +43,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"LayoutRootCarriesTheModuleName",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/delta/root.go",
 				"suggest alias constant → testmodule (testmodule/pkg/constant)",
@@ -57,14 +53,12 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"DeeperOwnIsPlain",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/system/linux/debian/deeper.go",
 				"suggest de-alias linux → constant (testmodule/pkg/system/linux/constant)",
 			)
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/system/linux/debian/deeper.go",
 				"suggest alias constant → systemConstant (testmodule/pkg/system/constant)",
@@ -74,8 +68,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"RefusesALocalName",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/juliet/local.go",
 				"cannot de-alias own → constant (local collision with \"constant\")",
@@ -85,8 +78,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 	t.Run(
 		"RefusesANameAnotherImportHolds",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/kilo/held.go",
 				"cannot alias constant → bravoConstant (import collision with testmodule/pkg/kilo/vocabulary)",
@@ -119,7 +111,7 @@ func TestConstantAliasSuggestion(t *testing.T) {
 }
 
 func TestConstantAliasFix(t *testing.T) {
-	directory := module_tester.ConstantAlias(t)
+	directory := module_tester.New(t).ConstantAlias()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunConstantAliasFix([]string{"./..."}, directory, false, r)
 	t.Run(
@@ -206,7 +198,7 @@ func TestConstantAliasFix(t *testing.T) {
 	t.Run(
 		"ModuleStillBuilds",
 		func(t *testing.T) {
-			fix_tester.Builds(t, directory)
+			fix_tester.New(t).Builds(directory)
 		},
 	)
 }

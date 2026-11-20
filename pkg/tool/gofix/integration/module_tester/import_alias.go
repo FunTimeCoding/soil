@@ -2,13 +2,13 @@ package module_tester
 
 import (
 	soil "github.com/funtimecoding/soil/pkg/constant"
-	"testing"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 )
 
-func ImportAlias(t *testing.T) string {
-	t.Helper()
+func (o *Tester) ImportAlias() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"pkg/helper/helper.go",
 			"package helper\n\nfunc Value() string { return \"hello\" }\n",

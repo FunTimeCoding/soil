@@ -28,7 +28,7 @@ func Main() {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.WebArgumentKey, s[0])
+	scan_tester.New(t).Concern(constant.WebArgumentKey, s[0])
 }
 
 func TestWebArgumentMetricPortFlagged(t *testing.T) {
@@ -50,7 +50,7 @@ func Main() {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.WebArgumentKey, s[0])
+	scan_tester.New(t).Concern(constant.WebArgumentKey, s[0])
 }
 
 func TestWebArgumentClean(t *testing.T) {
@@ -73,5 +73,5 @@ func Main() {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.WebArgumentKey, s[0])
+	scan_tester.New(t).NoConcern(constant.WebArgumentKey, s[0])
 }

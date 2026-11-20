@@ -12,19 +12,18 @@ import (
 func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
-	system_tester.Write(t, root, "alfa.go", "package alfa\n")
-	system_tester.Write(t, root, "bravo.go", "package alfa\n")
-	system_tester.Write(t, root, "charlie.go", "package alfa\n")
+	system_tester.New(t).Write(root, "alfa.go", "package alfa\n")
+	system_tester.New(t).Write(root, "bravo.go", "package alfa\n")
+	system_tester.New(t).Write(root, "charlie.go", "package alfa\n")
 	repository_tester.Identified(root, "init", "-q")
 	repository_tester.Identified(root, "add", "--all")
 	repository_tester.Identified(root, "commit", "--quiet", "--message=alfa")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"bravo.go",
 		"package alfa\n\nfunc Bravo() {}\n",
 	)
-	system_tester.Write(t, root, "delta.go", "package alfa\n")
+	system_tester.New(t).Write(root, "delta.go", "package alfa\n")
 	repository_tester.Identified(root, "mv", "charlie.go", "echo.go")
 	changed, f := reach.ChangedEdits(
 		root,
@@ -54,16 +53,15 @@ func TestOnlyEditsGitStillSeesChangedAreInReach(t *testing.T) {
 func TestGlobReachesChangedFilesItMatches(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
-	system_tester.Write(t, root, "alfa.md", "alfa\n")
-	system_tester.Write(t, root, "bravo.md", "bravo\n")
-	system_tester.Write(t, root, "charlie.go", "package charlie\n")
+	system_tester.New(t).Write(root, "alfa.md", "alfa\n")
+	system_tester.New(t).Write(root, "bravo.md", "bravo\n")
+	system_tester.New(t).Write(root, "charlie.go", "package charlie\n")
 	repository_tester.Identified(root, "init", "-q")
 	repository_tester.Identified(root, "add", "--all")
 	repository_tester.Identified(root, "commit", "--quiet", "--message=alfa")
-	system_tester.Write(t, root, "bravo.md", "bravo changed\n")
-	system_tester.Write(t, root, "delta.md", "delta\n")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(root, "bravo.md", "bravo changed\n")
+	system_tester.New(t).Write(root, "delta.md", "delta\n")
+	system_tester.New(t).Write(
 		root,
 		"charlie.go",
 		"package charlie\n\nfunc C() {}\n",

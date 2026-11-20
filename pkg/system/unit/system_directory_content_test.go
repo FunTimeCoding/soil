@@ -25,6 +25,7 @@ func TestDirectoryContent(t *testing.T) {
 			"memory",
 			"notation",
 			"search",
+			"vulnerability",
 			"wiki",
 		},
 		system.DirectoryContent(

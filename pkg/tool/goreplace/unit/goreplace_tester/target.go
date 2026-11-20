@@ -12,7 +12,7 @@ func Target(
 ) string {
 	t.Helper()
 	directory := t.TempDir()
-	system_tester.Write(t, directory, "target.md", content)
+	system_tester.New(t).Write(directory, "target.md", content)
 
 	return filepath.Join(directory, "target.md")
 }

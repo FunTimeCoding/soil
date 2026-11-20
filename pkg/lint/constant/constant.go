@@ -111,6 +111,8 @@ const (
 	AssertTestingType  = "*testing.T"
 	TesterSuffix       = "_tester"
 
+	TesterFunctionMinimum = 2
+
 	ExpectedParameterPrefix = "expect"
 )
 

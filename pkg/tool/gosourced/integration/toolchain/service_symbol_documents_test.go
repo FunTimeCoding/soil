@@ -10,8 +10,7 @@ import (
 
 func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
 	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Call `go:pkg/alfa.OldName` from `pkg/alfa/old_name.go`.\n",
@@ -36,8 +35,7 @@ func TestRenameRetargetsSymbolAndItsFile(t *testing.T) {
 
 func TestRenameMethodRetargetsQualifiedName(t *testing.T) {
 	o := service_tester.New(t, service_tester.WithFixture("rename-method/src"))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Look up with `go:pkg/target.Store.FindByName()`.\n",
@@ -65,8 +63,7 @@ func TestMoveRetargetsExportedSymbol(t *testing.T) {
 		t,
 		service_tester.WithFixture("move-visibility/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"See `go:pkg/alfa.lone`.\n",
@@ -89,8 +86,7 @@ func TestMoveRetargetsExportedSymbol(t *testing.T) {
 
 func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
 	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"See `go:pkg/alfa.Service.Greet`.\n",
@@ -117,8 +113,7 @@ func TestMoveMethodsRetargetsMethodSpan(t *testing.T) {
 
 func TestMoveMethodsRetargetsExportedBackReference(t *testing.T) {
 	o := service_tester.New(t, service_tester.WithFixture("move-methods/src"))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Uses `go:pkg/alfa.prefix`.\n",
@@ -144,8 +139,7 @@ func TestMoveSymbolsRetargetsExportedBackReference(t *testing.T) {
 		t,
 		service_tester.WithFixture("back-reference-unexported/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Uses `go:pkg/source.stayer`.\n",
@@ -171,8 +165,7 @@ func TestExtractTypeRetargetsExportedBackReference(t *testing.T) {
 		t,
 		service_tester.WithFixture("extract-dependency/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Uses `go:pkg/target.prefix`.\n",

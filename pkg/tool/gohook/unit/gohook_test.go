@@ -17,8 +17,7 @@ import (
 
 func TestLoadToolPath(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		constant.ToolFile,
 		"pre-push:\n  - paths: ['**/*.go']\n    run: task lint\n  - run: task always\n",
@@ -34,14 +33,12 @@ func TestLoadToolPath(t *testing.T) {
 
 func TestLoadRootBeatsTool(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		constant.RootFile,
 		"pre-push:\n  - run: root\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		constant.ToolFile,
 		"pre-push:\n  - run: tool\n",
@@ -58,14 +55,17 @@ func TestLoadMissingPanics(t *testing.T) {
 
 func TestLoadUnknownHookPanics(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, constant.RootFile, "pre-psuh:\n  - run: x\n")
+	system_tester.New(t).Write(
+		root,
+		constant.RootFile,
+		"pre-psuh:\n  - run: x\n",
+	)
 	assert.Panic(t, func() { configuration.Load(root) })
 }
 
 func TestLoadMissingRunPanics(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		constant.RootFile,
 		"pre-push:\n  - paths: [a/]\n",
@@ -75,8 +75,7 @@ func TestLoadMissingRunPanics(t *testing.T) {
 
 func TestHookNamesSorted(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		constant.RootFile,
 		"pre-push:\n  - run: a\npre-commit:\n  - run: b\n",

@@ -9,13 +9,12 @@ import (
 	"github.com/tobischo/gokeepasslib/v3"
 	"github.com/tobischo/gokeepasslib/v3/wrappers"
 	"path/filepath"
-	"testing"
 	"time"
 )
 
-func Write(t *testing.T) string {
-	t.Helper()
-	path := filepath.Join(t.TempDir(), "test.kdbx")
+func (o *Tester) Write() string {
+	o.t.Helper()
+	path := filepath.Join(o.t.TempDir(), "test.kdbx")
 	database := gokeepasslib.NewDatabase(
 		gokeepasslib.WithDatabaseKDBXVersion40(),
 	)

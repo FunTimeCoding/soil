@@ -28,29 +28,25 @@ func TestConversationsSearchAddressRestoresSearch(t *testing.T) {
 		t,
 		"/conversations/search?query=legacy+pin&kind=message&kind=call",
 	)
-	markup_tester.AssertCount(t, 1, page, "body.full-window")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertCount(1, page, "body.full-window")
+	markup_tester.New(t).AssertAttribute(
 		"legacy pin",
 		page,
 		".search-form input[name=query]",
 		constant.Value,
 	)
-	markup_tester.AssertCount(
-		t,
+	markup_tester.New(t).AssertCount(
 		2,
 		page,
 		".search-form input[name=kind][checked]",
 	)
-	markup_tester.AssertCount(
-		t,
+	markup_tester.New(t).AssertCount(
 		0,
 		page,
 		`.search-form input[name=kind][value=edit][checked]`,
 	)
-	markup_tester.AssertCount(t, 1, page, "#sidebar-entries .search-result")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertCount(1, page, "#sidebar-entries .search-result")
+	markup_tester.New(t).AssertAttribute(
 		"true",
 		page,
 		".search-form",
@@ -75,10 +71,9 @@ func TestConversationsHitAddressRestoresSearchAndHits(t *testing.T) {
 		t,
 		"/conversations/delta/hits?query=pin&kind=message&around=a1",
 	)
-	markup_tester.AssertCount(t, 1, page, "#sidebar-entries .search-result")
-	markup_tester.AssertCount(t, 1, page, "#panel #block-a1.search-current")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertCount(1, page, "#sidebar-entries .search-result")
+	markup_tester.New(t).AssertCount(1, page, "#panel #block-a1.search-current")
+	markup_tester.New(t).AssertAttribute(
 		"true",
 		page,
 		"a.search-snippet",
@@ -91,8 +86,8 @@ func TestConversationsSearchEmptyQueryListsSessions(t *testing.T) {
 	s.WriteSessionFile("echo", "echo-slug")
 	s.Restart()
 	page := s.Body(t, "/conversations/search?query=")
-	markup_tester.AssertCount(t, 1, page, "#sidebar-entries .sidebar-entry")
-	markup_tester.AssertCount(t, 0, page, "#sidebar-entries .search-result")
+	markup_tester.New(t).AssertCount(1, page, "#sidebar-entries .sidebar-entry")
+	markup_tester.New(t).AssertCount(0, page, "#sidebar-entries .search-result")
 }
 
 func TestConversationsHitsPanel(t *testing.T) {

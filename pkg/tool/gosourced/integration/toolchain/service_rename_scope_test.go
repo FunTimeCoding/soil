@@ -23,7 +23,7 @@ func TestRenameOntoImportedNameRefuses(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "bravo is taken at")
 	testutil.AssertBlockedContains(t, r, "pkg/alfa/show.go:3")
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestRenameOntoLocalAtCallSiteRefuses(t *testing.T) {
@@ -41,7 +41,7 @@ func TestRenameOntoLocalAtCallSiteRefuses(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "size is taken at")
 	testutil.AssertBlockedContains(t, r, "pkg/alfa/total.go:6")
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestRenameOntoUsedBuiltinRefuses(t *testing.T) {
@@ -58,7 +58,7 @@ func TestRenameOntoUsedBuiltinRefuses(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "len is a built-in name")
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestRenameBesideUnrelatedLocalBuilds(t *testing.T) {
@@ -74,5 +74,5 @@ func TestRenameBesideUnrelatedLocalBuilds(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }

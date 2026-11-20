@@ -95,14 +95,14 @@ A helper package is named for the role it plays in a test:
 - `<behaviour>_<role>` is an in-process stand-in whose point is one
   behaviour (`failing_writer`, `refusing_source`, `held_peer`)
 - `base` builds the daemon stack
-- `command_tester` fronts a command-line tool's tests: `Run(t, client,
+- `command_tester` fronts a command-line tool's tests: `New(t).Run(client,
   arguments...)` over `go:pkg/terminal/terminal_tester.Run`, holding the
   home's argument lists and seeded mock
 
 `fake_` tells a reader nothing the role does not: a fake peer is a server,
 a stand-in is named for its behaviour. An accessor names what the test
 wants and fails the test when it is absent - `s.Last()`,
-`outage_tester.Guard(t, workers, name)` - never an index into a slice.
+`outage_tester.New(t).Guard(workers, name)` - never an index into a slice.
 
 Every helper lives in a named package, even one with a single caller, and
 never in a `_test.go`. A helper that needs `t` and its own package's tester

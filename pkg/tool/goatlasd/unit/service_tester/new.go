@@ -30,10 +30,11 @@ import (
 
 func New(t *testing.T) *Tester {
 	t.Helper()
-	n := collector_tester.NewNetbox(t)
+	c := collector_tester.New(t)
+	n := c.NetboxClient()
 	k := mock_client.New()
-	p := collector_tester.NewProcess(t)
-	d := collector_tester.NewLease(t)
+	p := c.ProcessClient()
+	d := c.LeaseClient()
 	r := memory.New()
 	l := logger.New(context.Background())
 	o := option.New()

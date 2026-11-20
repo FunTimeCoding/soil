@@ -9,7 +9,7 @@ import (
 )
 
 func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	build := s.MustSearchKeyword(
 		"quasar",
 		10,
@@ -29,7 +29,7 @@ func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
 }
 
 func TestAbsentValueMatchesNothing(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	assert.Count(
 		t,
 		0,
@@ -44,7 +44,7 @@ func TestAbsentValueMatchesNothing(t *testing.T) {
 }
 
 func TestTwoFiltersNarrowTogether(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	results := s.MustSearchKeyword(
 		"quasar",
 		10,
@@ -60,7 +60,7 @@ func TestTwoFiltersNarrowTogether(t *testing.T) {
 }
 
 func TestReplaceRemovesDroppedValues(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	assert.FatalOnError(
 		t,
 		s.SetMetadata(
@@ -85,7 +85,7 @@ func TestReplaceRemovesDroppedValues(t *testing.T) {
 }
 
 func TestScalarKeyStaysScalar(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	filter := map[string]string{constant.FixtureAuthorKey: "one"}
 	results := s.EnrichResults(
 		s.MustSearchKeyword("quasar", 10, "", false, filter),
@@ -96,7 +96,7 @@ func TestScalarKeyStaysScalar(t *testing.T) {
 }
 
 func TestResultCarriesEveryValue(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	two := map[string]string{constant.FixtureAuthorKey: "two"}
 	results := s.EnrichResults(
 		s.MustSearchKeyword("quasar", 10, "", false, two),
@@ -113,7 +113,7 @@ func TestResultCarriesEveryValue(t *testing.T) {
 }
 
 func TestCollectionFacetsCountEachValue(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	facets := s.CollectionFacets("test", nil, 20, constant.FixtureTagKey)
 	tag := store_tester.FindFacet(facets, constant.FixtureTagKey)
 	assert.NotNil(t, tag)
@@ -123,7 +123,7 @@ func TestCollectionFacetsCountEachValue(t *testing.T) {
 }
 
 func TestPanelQueryShape(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	filter := store_tester.TagFilter(constant.FixtureBuildValue)
 	found := s.MustSearchKeyword("quasar", 10, "", false, filter)
 	unread := s.EnrichResults(
@@ -136,7 +136,7 @@ func TestPanelQueryShape(t *testing.T) {
 }
 
 func TestRepeatedValueStoresOnce(t *testing.T) {
-	s := store_tester.TaggedStore(t)
+	s := store_tester.New(t).TaggedStore()
 	assert.FatalOnError(
 		t,
 		s.SetMetadata(

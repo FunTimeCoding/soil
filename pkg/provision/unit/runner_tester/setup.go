@@ -10,4 +10,6 @@ type setup struct {
 	registry   soilFace.ProcessRegistry
 	downstream face.Downstream
 	copyModes  bool
+	gate       chan struct{}
+	sleeper    bool
 }

@@ -19,8 +19,7 @@ func New(
 	s := base.New(t, service_tester.WithReporter(r))
 	s.Alfa().Failure = outage_tester.RefusedDial()
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		join.Colon(constant.InstancePeer, "alfa"),
 	).Unavailable

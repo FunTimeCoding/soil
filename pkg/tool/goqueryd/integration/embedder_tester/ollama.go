@@ -1,0 +1,26 @@
+package embedder_tester
+
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"strings"
+)
+
+func (o *Tester) Ollama() face.ReachableEmbedder {
+	o.t.Helper()
+	target := environment.Optional(generativeConstant.EmbedTargetEnvironment)
+
+	if !strings.HasPrefix(
+		target,
+		join.Empty(generativeConstant.OllamaScheme, ":"),
+	) {
+		o.t.Skipf(
+			"the claim is the ollama client's truncate flag; target is %q",
+			target,
+		)
+	}
+
+	return o.Environment()
+}

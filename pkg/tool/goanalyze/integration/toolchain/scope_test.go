@@ -9,40 +9,44 @@ import (
 )
 
 func TestScopedRunSeesHelperOutsidePatterns(t *testing.T) {
+	s := scope_tester.New(t)
+
 	for _, full := range []bool{false, true} {
 		directory := t.TempDir()
-		scope_tester.HelperModule(t, directory, "example")
-		scope_tester.Caller(t, directory, "example")
+		s.HelperModule(directory, "example")
+		s.Caller(directory, "example")
 		testutil.AssertNotBlockedContains(
 			t,
-			goanalyze.Analyze(
-				scope_tester.Options(t, directory, full, "./caller/..."),
-			),
+			goanalyze.Analyze(s.Options(directory, full, "./caller/...")),
 			"never closed",
 		)
 	}
 }
 
 func TestFullRunReportsHelperLeak(t *testing.T) {
+	s := scope_tester.New(t)
+
 	for _, full := range []bool{false, true} {
 		directory := t.TempDir()
-		scope_tester.HelperModule(t, directory, "example")
-		scope_tester.Caller(t, directory, "example")
+		s.HelperModule(directory, "example")
+		s.Caller(directory, "example")
 		testutil.AssertBlockedContains(
 			t,
-			goanalyze.Analyze(scope_tester.Options(t, directory, full)),
+			goanalyze.Analyze(s.Options(directory, full)),
 			"r is never closed",
 		)
 	}
 }
 
 func TestReplacedModuleHelperIsIndexed(t *testing.T) {
+	s := scope_tester.New(t)
+
 	for _, full := range []bool{false, true} {
 		root := t.TempDir()
 		helper := filepath.Join(root, "helper_module")
 		application := filepath.Join(root, "application")
-		scope_tester.HelperModule(t, helper, "helper.example")
-		scope_tester.Caller(t, application, "helper.example")
+		s.HelperModule(helper, "helper.example")
+		s.Caller(application, "helper.example")
 		testutil.WriteModFile(
 			t,
 			application,
@@ -52,23 +56,22 @@ func TestReplacedModuleHelperIsIndexed(t *testing.T) {
 		)
 		testutil.AssertNotBlockedContains(
 			t,
-			goanalyze.Analyze(
-				scope_tester.Options(t, application, full, "./caller/..."),
-			),
+			goanalyze.Analyze(s.Options(application, full, "./caller/...")),
 			"never closed",
 		)
 	}
 }
 
 func TestCachedFactsFollowHelperBody(t *testing.T) {
+	s := scope_tester.New(t)
 	directory := t.TempDir()
-	scope_tester.HelperModule(t, directory, "example")
-	scope_tester.Caller(t, directory, "example")
-	o := scope_tester.Options(t, directory, false, "./caller/...")
+	s.HelperModule(directory, "example")
+	s.Caller(directory, "example")
+	o := s.Options(directory, false, "./caller/...")
 	testutil.AssertNotBlockedContains(t, goanalyze.Analyze(o), "never closed")
 	testutil.AssertNotBlockedContains(t, goanalyze.Analyze(o), "never closed")
-	scope_tester.HelperWithoutCleanup(t, directory)
+	s.HelperWithoutCleanup(directory)
 	testutil.AssertBlockedContains(t, goanalyze.Analyze(o), "s is never closed")
-	scope_tester.HelperModule(t, directory, "example")
+	s.HelperModule(directory, "example")
 	testutil.AssertNotBlockedContains(t, goanalyze.Analyze(o), "never closed")
 }

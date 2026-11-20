@@ -10,8 +10,7 @@ import (
 func TestUpdateDeviceTypeRoleAndSiteFlagsSent(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-device",
 		"alfa",

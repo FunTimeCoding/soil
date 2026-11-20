@@ -12,7 +12,7 @@ func TestLoadIsRealLink(t *testing.T) {
 	assert.String(
 		t,
 		`<a href="/alfa">Bravo</a>`,
-		web_tester.Render(t, load.New("/alfa", "Bravo").Node()),
+		web_tester.New(t).Render(load.New("/alfa", "Bravo").Node()),
 	)
 }
 
@@ -20,8 +20,7 @@ func TestSwappedLoadGetsItsPathIntoTarget(t *testing.T) {
 	assert.String(
 		t,
 		`<a href="/alfa" role="button" class="outline" hx-get="/alfa" hx-target="#charlie" hx-swap="outerHTML">Bravo</a>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			load.New("/alfa", "Bravo").
 				Swap("#charlie", constant.SwapOuter).
 				Button().

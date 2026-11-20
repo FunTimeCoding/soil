@@ -140,11 +140,11 @@ open work in a seed of its own. An item leaves this seed when it is done.
 
 ## Untested
 
-- Tests still pick a guard as `Workers()[i].(*peer.Guard)`, by index and
-  without a checked assertion - soil's service and peer tests; a table expecting
+- Tests still pick a guard as `Workers()[i].(*peer.Guard)`, by index and without
+  a checked assertion - soil's service and peer tests; a table expecting
   `OutageElsewhere` passes with the wrong index, since a healthy guard never
-  opens. Each moves to `go:pkg/web/outage_tester.Guard`, which looks the guard
-  up by peer name. What is left in a repository:
+  opens. Each moves to `go:pkg/web/outage_tester.Tester.Guard`, which looks the
+  guard up by peer name. What is left in a repository:
   `grep -rln 'Workers()\[' --include=*.go pkg/tool/*/unit`
 - goterraformd's downstream guards and goansibled's inventory guard: nothing
   proves the probe loop brings a peer back after a hold-off. Both build

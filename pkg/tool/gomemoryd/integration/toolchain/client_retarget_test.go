@@ -13,7 +13,7 @@ import (
 
 func TestClientRoundTripsRetarget(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "pkg/bravo/run.go", "package bravo\n")
+	system_tester.New(t).Write(root, "pkg/bravo/run.go", "package bravo\n")
 	c := base.New(t, service_tester.WithReferenceRoot(root)).MemoryClient()
 	_, e := c.PostMemory(
 		t.Context(),

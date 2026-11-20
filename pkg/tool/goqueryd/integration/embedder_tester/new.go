@@ -1,17 +1,9 @@
 package embedder_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/generative/embed"
-	"testing"
-)
+import "testing"
 
-func New(t *testing.T) face.ReachableEmbedder {
+func New(t *testing.T) *Tester {
 	t.Helper()
-	result := embed.NewEnvironment()
-	t.Cleanup(result.Close)
-	assert.SkipOnOutage(t, result.Reachable(t.Context()))
 
-	return result
+	return &Tester{t: t}
 }

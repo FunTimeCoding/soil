@@ -12,7 +12,7 @@ import (
 )
 
 func TestListAndSearch(t *testing.T) {
-	s := service_tester.New(t, database_tester.Write(t)).Service()
+	s := service_tester.New(t, database_tester.New(t).Write()).Service()
 	assert.Count(t, 3, s.List())
 	found := s.Search("forge")
 	assert.Count(t, 1, found)
@@ -21,7 +21,7 @@ func TestListAndSearch(t *testing.T) {
 }
 
 func TestGetMasksPassword(t *testing.T) {
-	s := service_tester.New(t, database_tester.Write(t)).Service()
+	s := service_tester.New(t, database_tester.New(t).Write()).Service()
 	entry := s.Get(s.Search("forge")[0].Identifier)
 	assert.NotNil(t, entry)
 	assert.String(t, "•••", entry.Fields[constant.PasswordKey])
@@ -32,7 +32,7 @@ func TestGetMasksPassword(t *testing.T) {
 }
 
 func TestRevealedFieldList(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(
 		t,
 		path,
@@ -45,14 +45,14 @@ func TestRevealedFieldList(t *testing.T) {
 }
 
 func TestRevealPassword(t *testing.T) {
-	s := service_tester.New(t, database_tester.Write(t)).Service()
+	s := service_tester.New(t, database_tester.New(t).Write()).Service()
 	password, found := s.Reveal(s.Search("forge")[0].Identifier)
 	assert.True(t, found)
 	assert.String(t, "hunter2", password)
 }
 
 func TestUpdatePersistsAcrossReopen(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(t, path).Service()
 	identifier := s.Search("forge")[0].Identifier
 	assert.FatalOnError(
@@ -72,7 +72,7 @@ func TestUpdatePersistsAcrossReopen(t *testing.T) {
 }
 
 func TestCreateAndDelete(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(t, path).Service()
 	identifier, e := s.Create(
 		"Root",
@@ -89,7 +89,7 @@ func TestCreateAndDelete(t *testing.T) {
 }
 
 func TestMove(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(t, path).Service()
 	identifier := s.Search("forge")[0].Identifier
 	assert.FatalOnError(t, s.Move(identifier, "Root/Environment"))
@@ -97,14 +97,14 @@ func TestMove(t *testing.T) {
 }
 
 func TestAudit(t *testing.T) {
-	s := service_tester.New(t, database_tester.Write(t)).Service()
+	s := service_tester.New(t, database_tester.New(t).Write()).Service()
 	report := s.Audit(3)
 	assert.Count(t, 1, report.Stale)
 	assert.String(t, "Ancient", report.Stale[0].Title)
 }
 
 func TestLoadGroup(t *testing.T) {
-	s := service_tester.New(t, database_tester.Write(t)).Service()
+	s := service_tester.New(t, database_tester.New(t).Write()).Service()
 	group := s.LoadGroup("example")
 	assert.NotNil(t, group)
 	assert.String(t, "example.test", group["EXAMPLE_HOST"])

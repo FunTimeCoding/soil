@@ -6,23 +6,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
-	"testing"
 )
 
-func Embedded(
-	t *testing.T,
+func (o *Tester) Embedded(
 	e face.Embedder,
 	name string,
 	body string,
 ) {
-	t.Helper()
+	o.t.Helper()
 
 	for _, c := range chunk.Document(
 		body,
 		name,
-		service_tester.New(t).Reranker,
+		service_tester.New(o.t).Reranker,
 	) {
-		_, f := embed.Single(t.Context(), e, c.Text)
-		assert.FatalOnError(t, f)
+		_, f := embed.Single(o.t.Context(), e, c.Text)
+		assert.FatalOnError(o.t, f)
 	}
 }

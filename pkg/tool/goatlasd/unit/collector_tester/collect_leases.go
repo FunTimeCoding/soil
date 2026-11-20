@@ -8,19 +8,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/gazetteer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client/mock_client"
-	"testing"
 )
 
-func CollectLeases(
-	t *testing.T,
-	f *mock_client.Client,
-) []*sighting.Sighting {
-	t.Helper()
-	result, e := lease.New(f, peer_tester.NewGuard(t, f)).Collect(
+func (o *Tester) CollectLeases(f *mock_client.Client) []*sighting.Sighting {
+	o.t.Helper()
+	result, e := lease.New(f, peer_tester.NewGuard(o.t, f)).Collect(
 		context.Background(),
 		gazetteer_tester.NewGazetteer(),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return result
 }

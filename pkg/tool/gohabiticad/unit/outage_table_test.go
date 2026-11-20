@@ -14,8 +14,7 @@ import (
 func TestOperationsOnHabiticaOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r)
 		},
@@ -28,8 +27,7 @@ func TestOperationsOnHabiticaOutage(t *testing.T) {
 }
 
 func TestToolsOnHabiticaOutage(t *testing.T) {
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r)
 		},

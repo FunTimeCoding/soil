@@ -7,18 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unclosed_resource"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"testing"
 )
 
-func UnclosedResource(
-	t *testing.T,
-	source string,
-) *output.Results {
-	t.Helper()
-	directory := testutil.PrepareTestPackage(t, source)
-	p, results := testutil.LoadDirectory(t, directory)
+func (o *Tester) UnclosedResource(source string) *output.Results {
+	o.t.Helper()
+	directory := testutil.PrepareTestPackage(o.t, source)
+	p, results := testutil.LoadDirectory(o.t, directory)
 	all, _, e := resolve.LoadPackages(directory, goModConstant.AllPackages)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	unclosed_resource.Check(p, results, unclosed_resource.NewSummaries(all))
 
 	return results

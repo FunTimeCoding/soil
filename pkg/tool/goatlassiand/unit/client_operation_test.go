@@ -10,7 +10,7 @@ import (
 )
 
 func TestClientReadsBody(t *testing.T) {
-	spaces, e := client_tester.New(t, mock_client.New(t)).ListSpaces(
+	spaces, e := client_tester.New(t).Client(mock_client.New(t)).ListSpaces(
 		context.Background(),
 	)
 	assert.FatalOnError(t, e)
@@ -20,7 +20,7 @@ func TestClientReadsBody(t *testing.T) {
 func TestClientAcceptsNoContent(t *testing.T) {
 	assert.FatalOnError(
 		t,
-		client_tester.New(t, mock_client.New(t)).TransitionIssue(
+		client_tester.New(t).Client(mock_client.New(t)).TransitionIssue(
 			context.Background(),
 			"ALFA-1",
 			"bravo",
@@ -31,7 +31,7 @@ func TestClientAcceptsNoContent(t *testing.T) {
 func TestClientRefusesFailedWrite(t *testing.T) {
 	j := mock_client.New(t)
 	j.Fail(j.Transition, detail_error.New("Transition is not valid", "400"))
-	e := client_tester.New(t, j).TransitionIssue(
+	e := client_tester.New(t).Client(j).TransitionIssue(
 		context.Background(),
 		"ALFA-1",
 		"bravo",

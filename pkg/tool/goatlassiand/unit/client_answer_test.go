@@ -14,7 +14,7 @@ import (
 func TestClientSeesUnknownIssueAsNotFound(t *testing.T) {
 	j := mock_client.New(t)
 	j.Fail(j.Issue, not_found.Format("Issue does not exist"))
-	_, e := client_tester.New(t, j).GetIssue(
+	_, e := client_tester.New(t).Client(j).GetIssue(
 		context.Background(),
 		"ALFA-1",
 		false,
@@ -26,7 +26,7 @@ func TestClientSeesUnknownIssueAsNotFound(t *testing.T) {
 func TestClientSeesRejectedQueryAsValidation(t *testing.T) {
 	j := mock_client.New(t)
 	j.Fail(j.Search, validation.New("Error in the JQL Query"))
-	_, e := client_tester.New(t, j).SearchIssues(
+	_, e := client_tester.New(t).Client(j).SearchIssues(
 		context.Background(),
 		"bravo =",
 		nil,
@@ -38,7 +38,7 @@ func TestClientSeesRejectedQueryAsValidation(t *testing.T) {
 func TestClientSeesOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
 	j := mock_client.New(t)
 	j.Fail(j.Search, detail_error.New("Service unavailable", "503"))
-	result, e := client_tester.New(t, j).SearchIssues(
+	result, e := client_tester.New(t).Client(j).SearchIssues(
 		context.Background(),
 		"project = CHARLIE",
 		nil,
@@ -49,6 +49,6 @@ func TestClientSeesOutageAsNeitherNotFoundNorEmpty(t *testing.T) {
 }
 
 func TestClientReachesGoatlassiand(t *testing.T) {
-	c := client_tester.New(t, mock_client.New(t))
+	c := client_tester.New(t).Client(mock_client.New(t))
 	assert.FatalOnError(t, c.Reachable(context.Background()))
 }

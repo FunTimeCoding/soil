@@ -10,7 +10,7 @@ func New(
 	o ...Option,
 ) *Server {
 	t.Helper()
-	result := &Server{Tester: service_tester.NewFixture(t, nil), t: t}
+	result := &Server{Tester: service_tester.New(t, nil), t: t}
 
 	for _, f := range o {
 		f(result)

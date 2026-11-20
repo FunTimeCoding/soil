@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func SingleParameter(t *testing.T) string {
-	t.Helper()
+func (o *Tester) SingleParameter() string {
+	o.t.Helper()
 
-	return New(t, "example").
+	return module.New(o.t,"example").
 		File(
 			"method.go",
 			"package example\n\nimport \"context\"\n\ntype Client struct{}\n\nfunc (c *Client) Snapshot(\n\tx context.Context,\n) (string, error) {\n\treturn \"\", nil\n}\n",

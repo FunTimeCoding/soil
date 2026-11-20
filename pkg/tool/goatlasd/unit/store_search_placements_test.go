@@ -9,12 +9,12 @@ import (
 )
 
 func TestSearchPlacementsMatchesPartOfName(t *testing.T) {
-	s := store_tester.NewStore(t)
+	o := store_tester.New(t)
 	now := time.Now()
-	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab-runner", now)
-	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab", now)
-	store_tester.Save(t, s, constant.SourceProcess, "goqueryd", now)
-	v, e := s.SearchPlacements("gitlab")
+	o.Save(constant.SourceKubernetes, "gitlab-runner", now)
+	o.Save(constant.SourceKubernetes, "gitlab", now)
+	o.Save(constant.SourceProcess, "goqueryd", now)
+	v, e := o.Store.SearchPlacements("gitlab")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, v)
 	assert.String(t, "gitlab", v[0].Name)
@@ -22,19 +22,19 @@ func TestSearchPlacementsMatchesPartOfName(t *testing.T) {
 }
 
 func TestSearchPlacementsWithoutNameCarriesEverything(t *testing.T) {
-	s := store_tester.NewStore(t)
+	o := store_tester.New(t)
 	now := time.Now()
-	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab", now)
-	store_tester.Save(t, s, constant.SourceProcess, "goqueryd", now)
-	v, e := s.SearchPlacements("")
+	o.Save(constant.SourceKubernetes, "gitlab", now)
+	o.Save(constant.SourceProcess, "goqueryd", now)
+	v, e := o.Store.SearchPlacements("")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, v)
 }
 
 func TestSearchPlacementsRefusesAbsentName(t *testing.T) {
-	s := store_tester.NewStore(t)
-	store_tester.Save(t, s, constant.SourceKubernetes, "gitlab", time.Now())
-	v, e := s.SearchPlacements("nowhere")
+	o := store_tester.New(t)
+	o.Save(constant.SourceKubernetes, "gitlab", time.Now())
+	v, e := o.Store.SearchPlacements("nowhere")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, v)
 }

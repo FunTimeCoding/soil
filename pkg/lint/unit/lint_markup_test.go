@@ -15,7 +15,7 @@ func TestMarkupClean(t *testing.T) {
 		stringsConstant.UpperBravo,
 		strings.NewReader("---\nmyKey: myValue\n"),
 	)
-	lint_tester.Report(t, "Bravo", false, nil, "", l)
+	lint_tester.New(t).Report("Bravo", false, nil, "", l)
 }
 
 func TestMarkup(t *testing.T) {
@@ -23,8 +23,7 @@ func TestMarkup(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("myKey: myValue\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{

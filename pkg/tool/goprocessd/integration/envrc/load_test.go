@@ -25,8 +25,7 @@ func TestLoadRemovesVanishedExport(t *testing.T) {
 			"GHOST=stale",
 		},
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		".envrc",
 		"export GHOST=stale\nexport FRESH=1\n",
@@ -37,7 +36,7 @@ func TestLoadRemovesVanishedExport(t *testing.T) {
 		t.Fatal("expected GHOST before removal")
 	}
 
-	system_tester.Write(t, directory, ".envrc", "export FRESH=1\n")
+	system_tester.New(t).Write(directory, ".envrc", "export FRESH=1\n")
 	assert.FatalOnError(t, e.Load(path))
 	built := e.Build()
 
@@ -63,16 +62,16 @@ func TestLoadRestoresReturnedExport(t *testing.T) {
 			"GHOST=stale",
 		},
 	)
-	system_tester.Write(t, directory, ".envrc", "export GHOST=stale\n")
+	system_tester.New(t).Write(directory, ".envrc", "export GHOST=stale\n")
 	assert.FatalOnError(t, e.Load(path))
-	system_tester.Write(t, directory, ".envrc", "export OTHER=1\n")
+	system_tester.New(t).Write(directory, ".envrc", "export OTHER=1\n")
 	assert.FatalOnError(t, e.Load(path))
 
 	if slices.Contains(e.Build(), "GHOST=stale") {
 		t.Fatal("expected GHOST removed")
 	}
 
-	system_tester.Write(t, directory, ".envrc", "export GHOST=returned\n")
+	system_tester.New(t).Write(directory, ".envrc", "export GHOST=returned\n")
 	assert.FatalOnError(t, e.Load(path))
 
 	if !slices.Contains(e.Build(), "GHOST=returned") {
@@ -93,9 +92,9 @@ func TestLoadKeepsUnrelatedBase(t *testing.T) {
 			"UNRELATED=keep",
 		},
 	)
-	system_tester.Write(t, directory, ".envrc", "export SOMETHING=1\n")
+	system_tester.New(t).Write(directory, ".envrc", "export SOMETHING=1\n")
 	assert.FatalOnError(t, e.Load(path))
-	system_tester.Write(t, directory, ".envrc", "export SOMETHING=2\n")
+	system_tester.New(t).Write(directory, ".envrc", "export SOMETHING=2\n")
 	assert.FatalOnError(t, e.Load(path))
 
 	if !slices.Contains(e.Build(), "UNRELATED=keep") {

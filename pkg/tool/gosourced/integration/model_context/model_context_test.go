@@ -127,8 +127,7 @@ func TestRenameSymbolNamesPackageThatDoesNotLoad(t *testing.T) {
 		base.WithFixture("../../service/testdata/rename-function/src"),
 	)
 	c := s.Served().Connect(t)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		s.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",

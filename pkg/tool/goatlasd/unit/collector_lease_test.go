@@ -8,7 +8,8 @@ import (
 )
 
 func TestLeaseResolvesByAddress(t *testing.T) {
-	f := collector_tester.NewLease(t)
+	c := collector_tester.New(t)
+	f := c.LeaseClient()
 	collector_tester.AddLease(
 		f,
 		"delta",
@@ -16,14 +17,15 @@ func TestLeaseResolvesByAddress(t *testing.T) {
 		"02:aa:bb:cc:dd:08",
 		true,
 	)
-	v := collector_tester.CollectLeases(t, f)
+	v := c.CollectLeases(f)
 	assert.Count(t, 1, v)
 	assert.String(t, "delta", v[0].PlaceName)
 	assert.String(t, "dcim.device", v[0].PlaceKind)
 }
 
 func TestLeaseResolvesByHardwareAddressWhenAddressIsUnknown(t *testing.T) {
-	f := collector_tester.NewLease(t)
+	c := collector_tester.New(t)
+	f := c.LeaseClient()
 	collector_tester.AddLease(
 		f,
 		constant.FixtureVirtualMachineNode,
@@ -31,13 +33,14 @@ func TestLeaseResolvesByHardwareAddressWhenAddressIsUnknown(t *testing.T) {
 		"02:aa:bb:cc:dd:04",
 		true,
 	)
-	v := collector_tester.CollectLeases(t, f)
+	v := c.CollectLeases(f)
 	assert.String(t, "echo", v[0].PlaceName)
 	assert.String(t, "virtualization.virtualmachine", v[0].PlaceKind)
 }
 
 func TestLeaseNeverResolvesByHostname(t *testing.T) {
-	f := collector_tester.NewLease(t)
+	c := collector_tester.New(t)
+	f := c.LeaseClient()
 	collector_tester.AddLease(
 		f,
 		"delta",
@@ -45,13 +48,14 @@ func TestLeaseNeverResolvesByHostname(t *testing.T) {
 		"aa:bb:cc:dd:ee:ff",
 		false,
 	)
-	v := collector_tester.CollectLeases(t, f)
+	v := c.CollectLeases(f)
 	assert.String(t, "", v[0].PlaceKind)
 	assert.String(t, "delta", v[0].Hostname)
 }
 
 func TestLeaseKeepsUnclaimedHosts(t *testing.T) {
-	f := collector_tester.NewLease(t)
+	c := collector_tester.New(t)
+	f := c.LeaseClient()
 	collector_tester.AddLease(
 		f,
 		"juliet",
@@ -59,7 +63,7 @@ func TestLeaseKeepsUnclaimedHosts(t *testing.T) {
 		"02:aa:bb:cc:dd:33",
 		false,
 	)
-	v := collector_tester.CollectLeases(t, f)
+	v := c.CollectLeases(f)
 	assert.Count(t, 1, v)
 	assert.String(t, "", v[0].PlaceKind)
 	assert.String(t, "02:aa:bb:cc:dd:33", v[0].HardwareAddress)
@@ -67,7 +71,8 @@ func TestLeaseKeepsUnclaimedHosts(t *testing.T) {
 }
 
 func TestLeaseCarriesReservationFlag(t *testing.T) {
-	f := collector_tester.NewLease(t)
+	c := collector_tester.New(t)
+	f := c.LeaseClient()
 	collector_tester.AddLease(
 		f,
 		"delta",
@@ -75,7 +80,7 @@ func TestLeaseCarriesReservationFlag(t *testing.T) {
 		"02:aa:bb:cc:dd:08",
 		true,
 	)
-	v := collector_tester.CollectLeases(t, f)
+	v := c.CollectLeases(f)
 	assert.True(t, v[0].Reserved)
 	assert.String(t, "gopnsensed", v[0].Source)
 }

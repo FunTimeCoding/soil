@@ -4,15 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/math/in_range"
 	"github.com/funtimecoding/soil/pkg/math/ranges"
-	"testing"
 )
 
-func AssertOpen(
-	t *testing.T,
+func (o *Tester) AssertOpen(
 	expected bool,
 	value float64,
 	r ranges.Range,
 ) {
-	t.Helper()
-	assert.Boolean(t, expected, in_range.Open(value, r))
+	o.t.Helper()
+	assert.Boolean(o.t, expected, in_range.Open(value, r))
 }

@@ -128,8 +128,7 @@ func TestDeliveryOverLimitCountedNotCaptured(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(
-			t,
+		metric_tester.New(t).Sample(
 			s.Registry,
 			"goclauded_delivery_over_limit_total",
 			nil,
@@ -139,8 +138,7 @@ func TestDeliveryOverLimitCountedNotCaptured(t *testing.T) {
 		t,
 		2,
 		int(
-			metric_tester.HistogramCount(
-				t,
+			metric_tester.New(t).HistogramCount(
 				s.Registry,
 				"goclauded_delivery_characters",
 			),

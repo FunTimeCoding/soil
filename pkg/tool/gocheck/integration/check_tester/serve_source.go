@@ -5,19 +5,15 @@ import (
 	gosourcedConstant "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/base"
 	"strconv"
-	"testing"
 )
 
-func ServeSource(
-	t *testing.T,
-	o ...base.Option,
-) {
-	t.Helper()
-	s := base.New(t, o...).Served()
-	t.Setenv(gosourcedConstant.HostEnvironment, "localhost")
-	t.Setenv(gosourcedConstant.PortEnvironment, strconv.Itoa(s.Port))
-	t.Setenv(gosourcedConstant.InsecureEnvironment, "true")
-	t.Setenv(
+func (o *Tester) ServeSource(p ...base.Option) {
+	o.t.Helper()
+	s := base.New(o.t, p...).Served()
+	o.t.Setenv(gosourcedConstant.HostEnvironment, "localhost")
+	o.t.Setenv(gosourcedConstant.PortEnvironment, strconv.Itoa(s.Port))
+	o.t.Setenv(gosourcedConstant.InsecureEnvironment, "true")
+	o.t.Setenv(
 		gosourcedConstant.TokenEnvironment,
 		generativeConstant.ModelContextTestToken,
 	)

@@ -21,7 +21,11 @@ func TestListPowerOutletsEmitsConnections(t *testing.T) {
 			ConnectedPort:   new("delta"),
 		},
 	}
-	output, _, code := command_tester.Run(t, c, "list-power-outlets", "bravo")
+	output, _, code := command_tester.New(t).Run(
+		c,
+		"list-power-outlets",
+		"bravo",
+	)
 	assert.Integer(t, 0, code)
 	var o []client.PowerOutlet
 	notation.MustDecode(output, &o, false)

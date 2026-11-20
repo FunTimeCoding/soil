@@ -13,8 +13,7 @@ func TestMoveSymbolsRetargetsEmptiedFile(t *testing.T) {
 		t,
 		service_tester.WithFixture("move-visibility/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Keep `pkg/alfa/keep.go`, move `pkg/alfa/lone.go`.\n",
@@ -44,8 +43,7 @@ func TestMoveSymbolsRetargetsSplitFileToPackage(t *testing.T) {
 		t,
 		service_tester.WithFixture("move-split-file/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Helpers live in `pkg/alfa/helpers.go`.\n",
@@ -71,8 +69,7 @@ func TestExtractToFileRetargetsRenamedResidual(t *testing.T) {
 		t,
 		service_tester.WithFixture("extract-last-pair/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Names live in `pkg/target/combined.go`.\n",

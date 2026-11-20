@@ -1,16 +1,12 @@
 package scan_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 
-func Concern(
-	t *testing.T,
+func (o *Tester) Concern(
 	key string,
 	s *scan.Service,
 ) {
-	t.Helper()
+	o.t.Helper()
 
 	for _, c := range s.Concerns {
 		if c.Key == key {
@@ -18,5 +14,5 @@ func Concern(
 		}
 	}
 
-	t.Errorf("expected concern with key %q not found", key)
+	o.t.Errorf("expected concern with key %q not found", key)
 }

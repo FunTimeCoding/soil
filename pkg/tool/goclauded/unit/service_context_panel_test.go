@@ -9,7 +9,7 @@ import (
 )
 
 func TestContextPanelScopeLineCountsLoadedAgainstCorpus(t *testing.T) {
-	s := service_tester.NewPanel(t, "scope-session")
+	s := service_tester.New(t).Panel("scope-session")
 	s.MemoryPeer.Stats = &client.Statistics{
 		Scopes: []client.NamedCount{{Count: 500}, {Name: "alfa", Count: 40}},
 	}
@@ -21,7 +21,7 @@ func TestContextPanelScopeLineCountsLoadedAgainstCorpus(t *testing.T) {
 }
 
 func TestContextPanelTagLineCountsLoadedMembers(t *testing.T) {
-	s := service_tester.NewPanel(t, "tag-session")
+	s := service_tester.New(t).Panel("tag-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Stats.Tags = []client.NamedCount{
 		{Name: "bravo", Count: 4, Identifiers: new([]int64{102, 103, 901})},
@@ -35,7 +35,7 @@ func TestContextPanelTagLineCountsLoadedMembers(t *testing.T) {
 }
 
 func TestContextPanelOmitsTagLineWithoutMembership(t *testing.T) {
-	s := service_tester.NewPanel(t, "bare-tag-session")
+	s := service_tester.New(t).Panel("bare-tag-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Stats.Tags = []client.NamedCount{{Name: "charlie", Count: 7}}
 	assert.String(
@@ -46,7 +46,7 @@ func TestContextPanelOmitsTagLineWithoutMembership(t *testing.T) {
 }
 
 func TestContextPanelDoorsReachUnloadedNeighbors(t *testing.T) {
-	s := service_tester.NewPanel(t, "door-session")
+	s := service_tester.New(t).Panel("door-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Edges = []client.Relation{
 		context_panel_tester.Edge(109, "kilo", 301, "november"),
@@ -59,7 +59,7 @@ func TestContextPanelDoorsReachUnloadedNeighbors(t *testing.T) {
 }
 
 func TestContextPanelDoorsNeedExactlyOneLoadedEnd(t *testing.T) {
-	s := service_tester.NewPanel(t, "closed-session")
+	s := service_tester.New(t).Panel("closed-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Edges = []client.Relation{
 		context_panel_tester.Edge(109, "kilo", 110, "lima"),
@@ -73,7 +73,7 @@ func TestContextPanelDoorsNeedExactlyOneLoadedEnd(t *testing.T) {
 }
 
 func TestContextPanelLabelsRelationsWithoutType(t *testing.T) {
-	s := service_tester.NewPanel(t, "untyped-session")
+	s := service_tester.New(t).Panel("untyped-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Edges = []client.Relation{
 		{
@@ -91,7 +91,7 @@ func TestContextPanelLabelsRelationsWithoutType(t *testing.T) {
 }
 
 func TestContextPanelKeepsFirstDoorToRepeatedNeighbor(t *testing.T) {
-	s := service_tester.NewPanel(t, "repeat-session")
+	s := service_tester.New(t).Panel("repeat-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Edges = []client.Relation{
 		context_panel_tester.Edge(109, "kilo", 301, "november"),
@@ -105,7 +105,7 @@ func TestContextPanelKeepsFirstDoorToRepeatedNeighbor(t *testing.T) {
 }
 
 func TestContextPanelSortsDoorsByIdentifier(t *testing.T) {
-	s := service_tester.NewPanel(t, "sorted-session")
+	s := service_tester.New(t).Panel("sorted-session")
 	s.MemoryPeer.Stats = context_panel_tester.Corpus()
 	s.MemoryPeer.Edges = []client.Relation{
 		context_panel_tester.Edge(109, "kilo", 302, "oscar"),
@@ -119,6 +119,6 @@ func TestContextPanelSortsDoorsByIdentifier(t *testing.T) {
 }
 
 func TestContextPanelEmptyWithoutStatistics(t *testing.T) {
-	s := service_tester.NewPanel(t, "statless-session")
+	s := service_tester.New(t).Panel("statless-session")
 	assert.String(t, "", s.Memory.ContextPanel(t.Context(), "statless-session"))
 }

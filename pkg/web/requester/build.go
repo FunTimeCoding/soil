@@ -39,6 +39,13 @@ func (r *Requester) build(q *request.Request) (*http.Request, error) {
 		result.Header.Set(constant.ContentType, q.ContentType)
 	}
 
+	if !q.Since.IsZero() {
+		result.Header.Set(
+			constant.IfModifiedSince,
+			q.Since.UTC().Format(http.TimeFormat),
+		)
+	}
+
 	if r.userAgent != "" {
 		result.Header.Set(constant.UserAgent, r.userAgent)
 	}

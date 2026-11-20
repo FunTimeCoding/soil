@@ -11,13 +11,11 @@ import (
 )
 
 func TestUpdateFollowsBodyEdit(t *testing.T) {
-	_, user := module_graph_tester.Replaced(t)
-	module_graph_tester.Updated(
-		t,
+	_, user := module_graph_tester.New(t).Replaced()
+	module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"user/user.go",
 				"package user\n\nimport \"other.test/lib\"\n\nfunc Use() string {\n\treturn lib.Name() + \"!\"\n}\n",
@@ -27,19 +25,16 @@ func TestUpdateFollowsBodyEdit(t *testing.T) {
 }
 
 func TestUpdateFollowsNewPackageAndImport(t *testing.T) {
-	_, user := module_graph_tester.Replaced(t)
-	g := module_graph_tester.Updated(
-		t,
+	_, user := module_graph_tester.New(t).Replaced()
+	g := module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"extra/extra.go",
 				"package extra\n\nfunc Extra() string {\n\treturn \"extra\"\n}\n",
 			)
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"user/user.go",
 				"package user\n\nimport (\n\t\"example/extra\"\n\t\"other.test/lib\"\n)\n\nfunc Use() string {\n\treturn lib.Name() + extra.Extra()\n}\n",
@@ -50,9 +45,8 @@ func TestUpdateFollowsNewPackageAndImport(t *testing.T) {
 }
 
 func TestUpdateFollowsDeletedPackage(t *testing.T) {
-	_, user := module_graph_tester.Replaced(t)
-	g := module_graph_tester.Updated(
-		t,
+	_, user := module_graph_tester.New(t).Replaced()
+	g := module_graph_tester.New(t).Updated(
 		user,
 		func() {
 			assert.FatalOnError(t, os.RemoveAll(filepath.Join(user, "user")))
@@ -63,13 +57,11 @@ func TestUpdateFollowsDeletedPackage(t *testing.T) {
 }
 
 func TestUpdateFollowsTestOnlyDirectory(t *testing.T) {
-	_, user := module_graph_tester.Replaced(t)
-	module_graph_tester.Updated(
-		t,
+	_, user := module_graph_tester.New(t).Replaced()
+	module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"charlie/unit/only_test.go",
 				"package unit\n\nimport (\n\t\"example/user\"\n\t\"testing\"\n)\n\nfunc TestOnly(t *testing.T) {\n\t_ = user.Use()\n}\n",
@@ -79,18 +71,16 @@ func TestUpdateFollowsTestOnlyDirectory(t *testing.T) {
 }
 
 func TestUpdateRebuildsWhenTagsChange(t *testing.T) {
-	_, user := module_graph_tester.Replaced(t)
+	_, user := module_graph_tester.New(t).Replaced()
 	tagged := "//go:build custom\n\npackage user\n\nfunc Tagged() string {\n\treturn \"tagged\"\n}\n"
-	g := module_graph_tester.Updated(
-		t,
+	g := module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(t, user, "user/tagged.go", tagged)
+			system_tester.New(t).Write(user, "user/tagged.go", tagged)
 		},
 	)
 	assert.Strings(t, []string{"custom"}, g.Tags)
-	module_graph_tester.Updated(
-		t,
+	module_graph_tester.New(t).Updated(
 		user,
 		func() {
 			assert.FatalOnError(
@@ -102,19 +92,16 @@ func TestUpdateRebuildsWhenTagsChange(t *testing.T) {
 }
 
 func TestUpdateFollowsReplacedModule(t *testing.T) {
-	library, user := module_graph_tester.Replaced(t)
-	system_tester.Write(
-		t,
+	library, user := module_graph_tester.New(t).Replaced()
+	system_tester.New(t).Write(
 		library,
 		"q/q.go",
 		"package q\n\nfunc Q() string {\n\treturn \"q\"\n}\n",
 	)
-	g := module_graph_tester.Updated(
-		t,
+	g := module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				library,
 				"lib.go",
 				"package lib\n\nimport \"other.test/lib/q\"\n\nfunc Name() string {\n\treturn q.Q()\n}\n",
@@ -122,12 +109,10 @@ func TestUpdateFollowsReplacedModule(t *testing.T) {
 		},
 	)
 	assert.NotNil(t, g.Nodes["other.test/lib/q"])
-	g = module_graph_tester.Updated(
-		t,
+	g = module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				library,
 				"lib.go",
 				"package lib\n\nfunc Name() string {\n\treturn \"lib\"\n}\n",
@@ -138,25 +123,21 @@ func TestUpdateFollowsReplacedModule(t *testing.T) {
 }
 
 func TestUpdateKeepsWhatUnchangedReplacedPackageReaches(t *testing.T) {
-	library, user := module_graph_tester.Replaced(t)
-	system_tester.Write(
-		t,
+	library, user := module_graph_tester.New(t).Replaced()
+	system_tester.New(t).Write(
 		library,
 		"q/q.go",
 		"package q\n\nfunc Q() string {\n\treturn \"q\"\n}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		library,
 		"lib.go",
 		"package lib\n\nimport \"other.test/lib/q\"\n\nfunc Name() string {\n\treturn q.Q()\n}\n",
 	)
-	g := module_graph_tester.Updated(
-		t,
+	g := module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"user/more.go",
 				"package user\n\nfunc More() string {\n\treturn \"more\"\n}\n",
@@ -167,13 +148,11 @@ func TestUpdateKeepsWhatUnchangedReplacedPackageReaches(t *testing.T) {
 }
 
 func TestUpdateRebuildsWhenGoModChanges(t *testing.T) {
-	library, user := module_graph_tester.Replaced(t)
-	module_graph_tester.Updated(
-		t,
+	library, user := module_graph_tester.New(t).Replaced()
+	module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"go.mod",
 				fmt.Sprintf(
@@ -186,13 +165,11 @@ func TestUpdateRebuildsWhenGoModChanges(t *testing.T) {
 }
 
 func TestUpdateIgnoresWhatModuleDoesNotBuild(t *testing.T) {
-	_, user := module_graph_tester.Replaced(t)
-	module_graph_tester.Updated(
-		t,
+	_, user := module_graph_tester.New(t).Replaced()
+	module_graph_tester.New(t).Updated(
 		user,
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				user,
 				"user/testdata/fixture.go",
 				"package fixture\n",

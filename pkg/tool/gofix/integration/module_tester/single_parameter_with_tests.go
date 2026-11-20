@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func SingleParameterWithTests(t *testing.T) string {
-	t.Helper()
+func (o *Tester) SingleParameterWithTests() string {
+	o.t.Helper()
 
-	return New(t, "example").
+	return module.New(o.t,"example").
 		File(
 			"find.go",
 			"package tested\n\nfunc FindLatest(\n\tv []string,\n) *string {\n\treturn nil\n}\n",

@@ -39,11 +39,11 @@ func TestHistoryEditRowRoundTrips(t *testing.T) {
 	)
 	assert.Count(t, 1, events)
 	edit := s.Body(t, history_page.EventPath(events[0].Identifier, true))
-	markup_tester.AssertCount(t, 1, edit, "textarea")
+	markup_tester.New(t).AssertCount(1, edit, "textarea")
 	assert.StringContains(t, "figured out the root cause", edit)
 	assert.StringContains(t, "Cancel", edit)
 	row := s.Body(t, history_page.EventPath(events[0].Identifier, false))
-	markup_tester.AssertCount(t, 0, row, "textarea")
+	markup_tester.New(t).AssertCount(0, row, "textarea")
 	assert.StringContains(t, "figured out the root cause", row)
 	assert.Integer(
 		t,

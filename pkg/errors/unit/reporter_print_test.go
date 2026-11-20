@@ -19,8 +19,7 @@ import (
 func TestPrintingReporterStillSendsToSentry(t *testing.T) {
 	s := upstream_server.New(t, upstream_server.WithAnswer("{}"))
 	var b bytes.Buffer
-	r := reporter_tester.Sending(
-		t,
+	r := reporter_tester.New(t).Sending(
 		join.Empty("http://key@", strings.TrimPrefix(s.URL, "http://"), "/1"),
 		&b,
 	)
@@ -33,7 +32,7 @@ func TestPrintingReporterStillSendsToSentry(t *testing.T) {
 
 func TestPrintingReporterPrintsCapturedException(t *testing.T) {
 	var b bytes.Buffer
-	r := reporter_tester.Printing(t, &b)
+	r := reporter_tester.New(t).Printing(&b)
 	r.CaptureException(fmt.Errorf("embed refused"))
 	assert.String(
 		t,
@@ -56,7 +55,7 @@ func TestPrintingReporterPrintsCapturedException(t *testing.T) {
 
 func TestPrintingReporterPrintsCaptureContext(t *testing.T) {
 	var b bytes.Buffer
-	r := reporter_tester.Printing(t, &b)
+	r := reporter_tester.New(t).Printing(&b)
 	r.CaptureWithContext(
 		fmt.Errorf("embed refused"),
 		"request",
@@ -68,7 +67,7 @@ func TestPrintingReporterPrintsCaptureContext(t *testing.T) {
 
 func TestPrintingReporterPrintsRecoveredPanic(t *testing.T) {
 	var b bytes.Buffer
-	r := reporter_tester.Printing(t, &b)
+	r := reporter_tester.New(t).Printing(&b)
 	r.Recover("charlie broke")
 	assert.StringContains(t, "alfa: charlie broke", b.String())
 	assert.StringContains(

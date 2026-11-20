@@ -13,7 +13,7 @@ import (
 )
 
 func TestEncodeSecret(t *testing.T) {
-	path := secret_tester.Manifest(t)
+	path := secret_tester.New(t).Manifest()
 	decodedPath := gosecret.GetDecodedPath(path)
 	errors.PanicOnError(
 		os.WriteFile(
@@ -45,13 +45,13 @@ func TestEncodeSecret(t *testing.T) {
 }
 
 func TestEncodeSecretWithoutDecoded(t *testing.T) {
-	s, e := gosecret.EncodeSecret(secret_tester.Manifest(t))
+	s, e := gosecret.EncodeSecret(secret_tester.New(t).Manifest())
 	errors.PanicOnError(e)
 	assert.True(t, s == nil)
 }
 
 func TestCheckSyncAfterDecode(t *testing.T) {
-	path := secret_tester.Manifest(t)
+	path := secret_tester.New(t).Manifest()
 	s, e := gosecret.ProcessSecret(path, false)
 	errors.PanicOnError(e)
 	assert.True(t, s.InSync)

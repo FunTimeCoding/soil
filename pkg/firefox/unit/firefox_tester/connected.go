@@ -5,18 +5,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/firefox"
 	"github.com/funtimecoding/soil/pkg/firefox/unit/extension_peer"
-	"testing"
 )
 
-func Connected(
-	t *testing.T,
+func (o *Tester) Connected(
 	c *firefox.Client,
 	address string,
 ) *extension_peer.Extension {
-	t.Helper()
-	result := extension_peer.Connect(t, address)
+	o.t.Helper()
+	result := extension_peer.Connect(o.t, address)
 	assert.Eventually(
-		t,
+		o.t,
 		func() bool {
 			_, e := c.Tabs()
 

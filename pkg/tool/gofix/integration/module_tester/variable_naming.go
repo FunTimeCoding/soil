@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func VariableNaming(t *testing.T) string {
-	t.Helper()
+func (o *Tester) VariableNaming() string {
+	o.t.Helper()
 
-	return New(t, "example").
+	return module.New(o.t,"example").
 		File(
 			"wrong_single.go",
 			"package example\n\nimport \"fmt\"\n\nfunc WrongSingle() {\n\tx := fmt.Errorf(\"test\")\n\t_ = x\n}\n",

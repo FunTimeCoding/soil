@@ -3,18 +3,16 @@ package turn_tester
 import (
 	"github.com/funtimecoding/soil/pkg/time/wait_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
-	"testing"
 	"time"
 )
 
-func Wait(
-	t *testing.T,
+func (o *Tester) Wait(
 	s *turn.Scheduler,
 	count int,
 ) {
-	t.Helper()
+	o.t.Helper()
 	wait_tester.Until(
-		t,
+		o.t,
 		func() bool { return s.Waiting() >= count },
 		5*time.Second,
 	)

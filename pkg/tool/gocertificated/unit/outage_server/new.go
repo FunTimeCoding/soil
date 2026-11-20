@@ -29,8 +29,7 @@ func New(
 	)
 	assert.FatalOnError(t, e)
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		constant.ForgePeer,
 	).Unavailable

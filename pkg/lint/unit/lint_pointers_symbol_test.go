@@ -20,7 +20,7 @@ func TestPointersSymbolDeclared(t *testing.T) {
 			"Wraps `go:pkg/provision/salt.Client` and `go:pkg/system/run/New()`.\n",
 		),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }
 
 func TestPointersSymbolUndeclared(t *testing.T) {
@@ -32,8 +32,7 @@ func TestPointersSymbolUndeclared(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		pointer_tester.Undeclared("Alfa", line),
@@ -50,5 +49,5 @@ func TestPointersSymbolMemberChecksItsHead(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("Runs `go:pkg/provision/salt.Client.Run()` once.\n"),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }

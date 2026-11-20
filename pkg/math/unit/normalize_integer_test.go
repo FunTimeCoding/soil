@@ -6,21 +6,21 @@ import (
 )
 
 func TestNormalizeIntegerMeetMinimum(t *testing.T) {
-	math_tester.AssertNormalizeInteger(t, 0, 0, 0, 100)
+	math_tester.New(t).AssertNormalizeInteger(0, 0, 0, 100)
 }
 
 func TestNormalizeIntegerBelowMinimum(t *testing.T) {
-	math_tester.AssertNormalizeInteger(t, 0, -1, 0, 100)
+	math_tester.New(t).AssertNormalizeInteger(0, -1, 0, 100)
 }
 
 func TestNormalizeIntegerMeetMaximum(t *testing.T) {
-	math_tester.AssertNormalizeInteger(t, 100, 100, 0, 100)
+	math_tester.New(t).AssertNormalizeInteger(100, 100, 0, 100)
 }
 
 func TestNormalizeIntegerAboveMaximum(t *testing.T) {
-	math_tester.AssertNormalizeInteger(t, 100, 101, 0, 100)
+	math_tester.New(t).AssertNormalizeInteger(100, 101, 0, 100)
 }
 
 func TestNormalizeIntegerNoMaximum(t *testing.T) {
-	math_tester.AssertNormalizeInteger(t, 101, 101, 0, 0)
+	math_tester.New(t).AssertNormalizeInteger(101, 101, 0, 0)
 }

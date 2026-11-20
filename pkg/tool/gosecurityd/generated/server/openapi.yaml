@@ -1,0 +1,608 @@
+---
+openapi: "3.0.0"
+info:
+  title: gosecurityd
+  version: 1.0.0
+paths:
+  /api/vulnerability/{identifier}:
+    get:
+      operationId: getVulnerability
+      parameters:
+      - $ref: "#/components/parameters/Identifier"
+      responses:
+        "200":
+          description: The vulnerability as the National Vulnerability Database describes it.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vulnerability"
+        "400":
+          description: The identifier is not a CVE identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The database does not know the identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the vulnerability.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/vulnerability/{identifier}/debian:
+    get:
+      operationId: getDebianStatus
+      parameters:
+      - $ref: "#/components/parameters/Identifier"
+      - name: release
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Debian's fix status per source package and release.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DebianStatus"
+        "400":
+          description: The identifier is not a CVE identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The tracker lists neither the identifier nor the release.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The tracker is not loaded yet.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/flags:
+    get:
+      operationId: listFlags
+      parameters:
+      - name: include_mitigated
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: Flagged vulnerabilities, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Flag"
+        "500":
+          description: Failed to list flags.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: flagVulnerability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FlagRequest"
+      responses:
+        "201":
+          description: The flag, open.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Flag"
+        "400":
+          description: The identifier is not a CVE identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The vulnerability is already flagged and open.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "503":
+          description: The database is unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to flag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/flags/{identifier}/mitigation:
+    post:
+      operationId: mitigateFlag
+      parameters:
+      - $ref: "#/components/parameters/Identifier"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MitigationRequest"
+      responses:
+        "200":
+          description: The flag, mitigated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Flag"
+        "400":
+          description: The identifier is not a CVE identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: The vulnerability is not flagged.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The flag is already mitigated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to mitigate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/systems:
+    get:
+      operationId: listSystems
+      responses:
+        "200":
+          description: Systems with their tracker coverage and finding counts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/SystemSummary"
+        "500":
+          description: Failed to list systems.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/systems/{name}:
+    put:
+      operationId: putSystem
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SystemSnapshot"
+      responses:
+        "204":
+          description: The snapshot replaced the system's previous one.
+        "400":
+          description: The snapshot is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to store the snapshot.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteSystem
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      responses:
+        "204":
+          description: The system and its packages are removed.
+        "404":
+          description: No such system.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete the system.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/systems/{name}/findings:
+    get:
+      operationId: getSystemFindings
+      parameters:
+      - $ref: "#/components/parameters/Name"
+      responses:
+        "200":
+          description: The system's tracker coverage and its findings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SystemDetail"
+        "404":
+          description: No such system.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the findings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/findings:
+    get:
+      operationId: listFindings
+      responses:
+        "200":
+          description: Findings grouped by vulnerability, most systems first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/FindingGroup"
+        "500":
+          description: Failed to list findings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  parameters:
+    Name:
+      name: name
+      in: path
+      required: true
+      schema:
+        type: string
+    Identifier:
+      name: identifier
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Vulnerability:
+      type: object
+      required:
+      - identifier
+      - published
+      - modified
+      - status
+      - description
+      - score
+      - severity
+      - vector
+      - references
+      properties:
+        identifier:
+          type: string
+        published:
+          type: string
+        modified:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+        score:
+          type: number
+          format: double
+        severity:
+          type: string
+        vector:
+          type: string
+        references:
+          type: array
+          items:
+            type: string
+    Status:
+      type: object
+      required:
+      - package
+      - release
+      - status
+      - never_affected
+      - urgency
+      - repositories
+      properties:
+        package:
+          type: string
+        release:
+          type: string
+        status:
+          type: string
+        fixed_version:
+          type: string
+        never_affected:
+          type: boolean
+        urgency:
+          type: string
+        repositories:
+          type: object
+          additionalProperties:
+            type: string
+    DebianStatus:
+      type: object
+      required:
+      - identifier
+      - statuses
+      properties:
+        identifier:
+          type: string
+        tracker_modified:
+          type: string
+          format: date-time
+        statuses:
+          type: array
+          items:
+            nullable: true
+            allOf:
+            - $ref: "#/components/schemas/Status"
+    Flag:
+      type: object
+      required:
+      - identifier
+      - mitigated
+      - flagged
+      - updated
+      properties:
+        identifier:
+          type: string
+        note:
+          type: string
+        severity:
+          type: string
+        score:
+          type: number
+          format: double
+        mitigated:
+          type: boolean
+        mitigation:
+          type: string
+        flagged:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+    FlagRequest:
+      type: object
+      required:
+      - identifier
+      properties:
+        identifier:
+          type: string
+        note:
+          type: string
+    MitigationRequest:
+      type: object
+      properties:
+        mitigation:
+          type: string
+    InstalledPackage:
+      type: object
+      required:
+      - name
+      - version
+      - source
+      - source_version
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        source:
+          type: string
+        source_version:
+          type: string
+        candidate:
+          type: string
+    SystemSnapshot:
+      type: object
+      required:
+      - release
+      - packages
+      properties:
+        release:
+          type: string
+        kernel:
+          type: string
+        priority:
+          type: integer
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        packages:
+          type: array
+          items:
+            nullable: true
+            allOf:
+            - $ref: "#/components/schemas/InstalledPackage"
+    SystemSummary:
+      type: object
+      required:
+      - name
+      - release
+      - priority
+      - coverage
+      - checked
+      - clean
+      - findings
+      - no_fix
+      - paid_only
+      - upgradable
+      - updated
+      - stale
+      - tracker_stale
+      properties:
+        name:
+          type: string
+        release:
+          type: string
+        kernel:
+          type: string
+        priority:
+          type: integer
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        coverage:
+          type: string
+          description: Whether a tracker covers the system's release - supported, unsupported tracked, or unsupported untracked.
+        checked:
+          type: boolean
+        clean:
+          type: boolean
+        findings:
+          type: integer
+        no_fix:
+          type: integer
+        paid_only:
+          type: integer
+        upgradable:
+          type: integer
+        updated:
+          type: string
+          format: date-time
+        stale:
+          type: boolean
+          description: The last snapshot is older than the stale threshold; the system does not read clean.
+        tracker_stale:
+          type: boolean
+          description: The tracker was last verified longer ago than its threshold; the system does not read clean.
+        tracker_verified:
+          type: string
+          format: date-time
+          description: When the tracker matching this system last answered; absent when no tracker is loaded.
+    SystemFinding:
+      type: object
+      required:
+      - vulnerability
+      - package
+      - source
+      - installed
+      - fix
+      - urgency
+      - upgradable
+      properties:
+        vulnerability:
+          type: string
+        package:
+          type: string
+        source:
+          type: string
+        installed:
+          type: string
+        fixed:
+          type: string
+        fix:
+          type: string
+        urgency:
+          type: string
+        upgradable:
+          type: boolean
+    SystemDetail:
+      type: object
+      required:
+      - summary
+      - findings
+      properties:
+        summary:
+          $ref: "#/components/schemas/SystemSummary"
+        findings:
+          type: array
+          items:
+            nullable: true
+            allOf:
+            - $ref: "#/components/schemas/SystemFinding"
+    FindingGroup:
+      type: object
+      required:
+      - vulnerability
+      - systems
+      - no_fix
+      - paid_only
+      - upgradable
+      properties:
+        vulnerability:
+          type: string
+        systems:
+          type: array
+          items:
+            type: string
+        no_fix:
+          type: integer
+        paid_only:
+          type: integer
+        upgradable:
+          type: integer
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

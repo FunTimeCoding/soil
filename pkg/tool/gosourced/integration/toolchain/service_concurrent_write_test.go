@@ -20,7 +20,7 @@ func TestRenameRefusedWhenFileKeepsChangingBeforeCommit(t *testing.T) {
 	caller := o.Read("pkg/caller/run.go")
 	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(t, o.Directory, "pkg/caller/run.go", caller)
+			system_tester.New(t).Write(o.Directory, "pkg/caller/run.go", caller)
 		},
 	)
 	r, e := o.Symbol.Rename(
@@ -56,7 +56,7 @@ func TestRenameRunsAgainAfterFileChangedOnce(t *testing.T) {
 			}
 
 			edited = true
-			system_tester.Write(t, o.Directory, "pkg/caller/run.go", caller)
+			system_tester.New(t).Write(o.Directory, "pkg/caller/run.go", caller)
 		},
 	)
 	r, e := o.Symbol.Rename(
@@ -89,8 +89,7 @@ func TestRenameCommitsPastChangeOutsideReach(t *testing.T) {
 	)
 	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				o.Directory,
 				"pkg/other/other.go",
 				"package other\n\nfunc Other() {}\n",
@@ -127,8 +126,7 @@ func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
 	)
 	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				o.Directory,
 				"pkg/other/other.go",
 				"package other\n\nimport \"example/pkg/target\"\n\nfunc Other() bool {\n\treturn target.IsGeneratedHeader(\"\")\n}\n",
@@ -154,12 +152,16 @@ func TestRenameRefusedWhenPackageStartsImportingTarget(t *testing.T) {
 }
 
 func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
-	source := system_tester.Read(t, library, "lib.go")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
+	source := system_tester.New(t).Read(library, "lib.go")
 	consumer := o.Read("pkg/user/user.go")
 	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(t, o.Directory, "pkg/user/user.go", consumer)
+			system_tester.New(t).Write(
+				o.Directory,
+				"pkg/user/user.go",
+				consumer,
+			)
 		},
 	)
 	r, e := o.Symbol.Rename(
@@ -181,16 +183,15 @@ func TestRenameRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
 		),
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
+	assert.String(t, source, system_tester.New(t).Read(library, "lib.go"))
 	assert.StringContains(t, "lib.Log(\"a\")", o.Read("pkg/user/user.go"))
 }
 
 func TestRenameCommitsPastReplacingModuleChangeOutsideReach(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
 	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				o.Directory,
 				"pkg/alfa/alfa.go",
 				"package alfa\n\nfunc Alfa() string {\n\treturn \"changed\"\n}\n",

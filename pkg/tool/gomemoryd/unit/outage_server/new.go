@@ -29,8 +29,7 @@ func New(
 	t.Cleanup(d.Close)
 	result := model_context_server.Mount(t, d, r)
 
-	return result, outage_tester.Guard(
-		t,
+	return result, outage_tester.New(t).Guard(
 		d.Workers(),
 		goquerydConstant.Identity.Name(),
 	).Unavailable

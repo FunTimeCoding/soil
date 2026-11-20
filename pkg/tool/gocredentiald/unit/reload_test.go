@@ -14,9 +14,9 @@ import (
 )
 
 func TestUnreadableChangeIsAnsweredFromCopyLoadedBefore(t *testing.T) {
-	s := base.New(t, database_tester.Write(t))
+	s := base.New(t, database_tester.New(t).Write())
 	c := s.Tools()
-	database_tester.Corrupt(t, s.Path, time.Now().Add(time.Hour))
+	database_tester.New(t).Corrupt(s.Path, time.Now().Add(time.Hour))
 	assert.StringContains(
 		t,
 		"Forge",
@@ -34,39 +34,39 @@ func TestUnreadableChangeIsAnsweredFromCopyLoadedBefore(t *testing.T) {
 }
 
 func TestEachUnreadableChangeIsReportedOnce(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	o := service_tester.New(t, path)
 	s := o.Service()
-	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
+	database_tester.New(t).Corrupt(path, time.Now().Add(time.Hour))
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 1, o.Reporter.Events())
-	database_tester.Corrupt(t, path, time.Now().Add(2*time.Hour))
+	database_tester.New(t).Corrupt(path, time.Now().Add(2*time.Hour))
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 2, o.Reporter.Events())
 }
 
 func TestReadableChangeAfterUnreadableOneIsLoaded(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(t, path).Service()
-	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
+	database_tester.New(t).Corrupt(path, time.Now().Add(time.Hour))
 	assert.Count(t, 3, s.List())
-	replacement := database_tester.Write(t)
+	replacement := database_tester.New(t).Write()
 	_, e := service_tester.New(t, replacement).Service().Create(
 		"Root",
 		"Fresh",
 		map[string]string{},
 	)
 	assert.FatalOnError(t, e)
-	database_tester.Copy(t, replacement, path, time.Now().Add(2*time.Hour))
+	database_tester.New(t).Copy(replacement, path, time.Now().Add(2*time.Hour))
 	assert.Count(t, 4, s.List())
 }
 
 func TestWriteOnUnreadableChangeIsConflict(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(t, path).Service()
 	identifier := s.Search("forge")[0].Identifier
-	database_tester.Corrupt(t, path, time.Now().Add(time.Hour))
+	database_tester.New(t).Corrupt(path, time.Now().Add(time.Hour))
 	e := s.Update(
 		identifier,
 		map[string]string{constant.PasswordKey: "changed"},
@@ -77,9 +77,9 @@ func TestWriteOnUnreadableChangeIsConflict(t *testing.T) {
 }
 
 func TestConflictIsAnsweredWithoutEvent(t *testing.T) {
-	s := base.New(t, database_tester.Write(t))
+	s := base.New(t, database_tester.New(t).Write())
 	c := s.Tools()
-	database_tester.Corrupt(t, s.Path, time.Now().Add(time.Hour))
+	database_tester.New(t).Corrupt(s.Path, time.Now().Add(time.Hour))
 	assert.StringContains(
 		t,
 		"refusing to write",
@@ -92,14 +92,14 @@ func TestConflictIsAnsweredWithoutEvent(t *testing.T) {
 }
 
 func TestMissingFileIsReportedEachTimeItGoes(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	kept := join.Empty(path, ".kept")
 	o := service_tester.New(t, path)
 	s := o.Service()
 	assert.FatalOnError(t, os.Rename(path, kept))
 	assert.Count(t, 3, s.List())
 	assert.Count(t, 1, o.Reporter.Events())
-	database_tester.Copy(t, kept, path, time.Now().Add(time.Hour))
+	database_tester.New(t).Copy(kept, path, time.Now().Add(time.Hour))
 	assert.Count(t, 3, s.List())
 	assert.FatalOnError(t, os.Remove(path))
 	assert.Count(t, 3, s.List())

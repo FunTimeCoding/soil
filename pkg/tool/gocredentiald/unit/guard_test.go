@@ -7,7 +7,7 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	v := base.New(t, database_tester.Write(t)).Served()
+	v := base.New(t, database_tester.New(t).Write()).Served()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
 }

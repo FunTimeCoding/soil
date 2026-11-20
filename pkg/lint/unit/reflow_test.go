@@ -15,8 +15,7 @@ func TestOverrunningParagraphRewraps(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine ten\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight nine ten\n",
 		),
 	)
@@ -24,48 +23,46 @@ func TestOverrunningParagraphRewraps(t *testing.T) {
 
 func TestParagraphInsideWidthIsUntouched(t *testing.T) {
 	content := "one two\nthree four\n\nfive six\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestRewrappingTwiceChangesNothingSecondTime(t *testing.T) {
-	once := lint_tester.Rewrapped(
-		t,
+	once := lint_tester.New(t).Rewrapped(
 		"one two three four five six seven eight nine ten\n",
 	)
-	assert.String(t, once, lint_tester.Rewrapped(t, once))
+	assert.String(t, once, lint_tester.New(t).Rewrapped(once))
 }
 
 func TestFencedBlockKeepsItsLongLines(t *testing.T) {
 	content := "```\none two three four five six seven eight nine\n```\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestTildeFenceKeepsItsLongLines(t *testing.T) {
 	content := "~~~\none two three four five six seven eight nine\n~~~\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestTableIsLeftAlone(t *testing.T) {
 	content := "| one | two three four five six seven eight |\n|---|---|\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestPipeLineIsLeftAloneWithoutDelimiterRow(t *testing.T) {
 	content := "| one | two three four five six seven eight |\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestBlockquoteIsLeftAlone(t *testing.T) {
 	content := "> one two three four five six seven eight nine ten\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestListItemRewrapsToItsOwnIndent(t *testing.T) {
 	assert.String(
 		t,
 		"- one two three four five six seven\n  eight nine ten\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"- one two three four five six seven eight nine ten\n",
 		),
 	)
@@ -75,8 +72,7 @@ func TestOrderedListItemRewrapsToItsOwnIndent(t *testing.T) {
 	assert.String(
 		t,
 		"1. one two three four five six seven\n   eight nine ten\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"1. one two three four five six seven eight nine ten\n",
 		),
 	)
@@ -86,8 +82,7 @@ func TestNestedListItemRewrapsToItsDeeperIndent(t *testing.T) {
 	assert.String(
 		t,
 		"- outer\n  - inner one two three four five six\n    seven eight\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"- outer\n  - inner one two three four five six seven eight\n",
 		),
 	)
@@ -97,8 +92,7 @@ func TestNeighbouringItemsStayApartWhenOneRewraps(t *testing.T) {
 	assert.String(
 		t,
 		"- **One:** short\n- **Two:** one two three four five six\n  seven eight\n- **Three:** short\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"- **One:** short\n- **Two:** one two three four five six seven eight\n- **Three:** short\n",
 		),
 	)
@@ -108,8 +102,7 @@ func TestSecondParagraphInsideListItemKeepsItsIndent(t *testing.T) {
 	assert.String(
 		t,
 		"- one two\n\n  second paragraph one two three four\n  five six\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"- one two\n\n  second paragraph one two three four five six\n",
 		),
 	)
@@ -117,25 +110,24 @@ func TestSecondParagraphInsideListItemKeepsItsIndent(t *testing.T) {
 
 func TestFrontMatterIsLeftAlone(t *testing.T) {
 	content := "---\nbase: pkg/example and a long trailing phrase here\n---\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestIndentedBlockIsLeftAlone(t *testing.T) {
 	content := "    one two three four five six seven eight nine\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestHeadingIsLeftAlone(t *testing.T) {
 	content := "# one two three four five six seven eight nine ten\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestWordLongerThanWidthIsNotBroken(t *testing.T) {
 	assert.String(
 		t,
 		"short\ndoc/ai/design/example/a-path-longer-than-the-width.md\nafter\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"short doc/ai/design/example/a-path-longer-than-the-width.md after\n",
 		),
 	)
@@ -145,8 +137,7 @@ func TestParagraphJoinsBeforeItWraps(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine ten eleven\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one\ntwo three four five six seven eight nine ten eleven\n",
 		),
 	)
@@ -156,8 +147,7 @@ func TestBlankLinesSeparateParagraphs(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine\n\nten eleven\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight nine\n\nten eleven\n",
 		),
 	)
@@ -167,23 +157,21 @@ func TestFileWithoutTrailingNewlineKeepsItThatWay(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\nnine",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight nine",
 		),
 	)
 }
 
 func TestEmptyFileIsUntouched(t *testing.T) {
-	assert.String(t, "", lint_tester.Rewrapped(t, ""))
+	assert.String(t, "", lint_tester.New(t).Rewrapped(""))
 }
 
 func TestParagraphOpeningInBoldRewraps(t *testing.T) {
 	assert.String(
 		t,
 		"**one** two three four five six seven\neight nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"**one** two three four five six seven eight nine\n",
 		),
 	)
@@ -193,8 +181,7 @@ func TestAsteriskBulletRewrapsToItsOwnIndent(t *testing.T) {
 	assert.String(
 		t,
 		"* one two three four five six seven\n  eight nine ten\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"* one two three four five six seven eight nine ten\n",
 		),
 	)
@@ -202,15 +189,14 @@ func TestAsteriskBulletRewrapsToItsOwnIndent(t *testing.T) {
 
 func TestThematicBreakIsNotBullet(t *testing.T) {
 	content := "---\n\none two three four five six seven\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestOpeningDelimiterWithNoCloseIsNotFrontMatter(t *testing.T) {
 	assert.String(
 		t,
 		"---\none two three four five six seven eight\nnine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"---\none two three four five six seven eight nine\n",
 		),
 	)
@@ -220,8 +206,7 @@ func TestWhitespaceInsideCodeSpanSurvives(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four `a  b` five six seven\neight\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four `a  b` five six seven eight\n",
 		),
 	)
@@ -231,8 +216,7 @@ func TestCodeSpanIsNeverSplitAcrossLines(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n`go run main.go` seven\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six `go run main.go` seven\n",
 		),
 	)
@@ -242,8 +226,7 @@ func TestLinkIsNeverSplitAcrossLines(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n[seven eight](https://e.x/a) nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six [seven eight](https://e.x/a) nine\n",
 		),
 	)
@@ -253,8 +236,7 @@ func TestLinkLongerThanWidthStandsAlone(t *testing.T) {
 	assert.String(
 		t,
 		"short\n[a link text](https://example.net/a/path/longer/than/forty)\nafter\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"short [a link text](https://example.net/a/path/longer/than/forty) after\n",
 		),
 	)
@@ -264,8 +246,7 @@ func TestLinkAlreadySplitIsRejoined(t *testing.T) {
 	assert.String(
 		t,
 		"one [seven eight](https://e.x/a) two\nthree four five six seven eight nine ten\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one [seven\neight](https://e.x/a) two three four five six seven eight nine ten\n",
 		),
 	)
@@ -275,8 +256,7 @@ func TestLinkWithTitleIsOneUnit(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n[seven](https://e.x/a \"t u\") nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six [seven](https://e.x/a \"t u\") nine\n",
 		),
 	)
@@ -286,8 +266,7 @@ func TestImageIsNeverSplitAcrossLines(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six\n![seven eight](https://e.x/a) nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six ![seven eight](https://e.x/a) nine\n",
 		),
 	)
@@ -297,8 +276,7 @@ func TestCodeSpanAlreadySplitIsRejoined(t *testing.T) {
 	assert.String(
 		t,
 		"one `go run main.go` two three four five\nsix seven eight nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one `go run\nmain.go` two three four five six seven eight nine\n",
 		),
 	)
@@ -306,15 +284,14 @@ func TestCodeSpanAlreadySplitIsRejoined(t *testing.T) {
 
 func TestWidthCountsCharactersNotBytes(t *testing.T) {
 	content := "→ → → → → → → → → → → → → → → → → → → →\n"
-	assert.String(t, content, lint_tester.Rewrapped(t, content))
+	assert.String(t, content, lint_tester.New(t).Rewrapped(content))
 }
 
 func TestDashTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight - nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight - nine\n",
 		),
 	)
@@ -324,8 +301,7 @@ func TestOrderedMarkerTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight 1. nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight 1. nine\n",
 		),
 	)
@@ -335,8 +311,7 @@ func TestHashTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight ## nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight ## nine\n",
 		),
 	)
@@ -346,8 +321,7 @@ func TestQuoteMarkTravelsWithWordBeforeIt(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven\neight >nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight >nine\n",
 		),
 	)
@@ -357,8 +331,7 @@ func TestDecimalAtLineStartStaysProse(t *testing.T) {
 	assert.String(
 		t,
 		"one two three four five six seven eight\n2.5 nine\n",
-		lint_tester.Rewrapped(
-			t,
+		lint_tester.New(t).Rewrapped(
 			"one two three four five six seven eight 2.5 nine\n",
 		),
 	)
@@ -400,6 +373,6 @@ func TestEveryWordSurvivesReflow(t *testing.T) {
 	assert.Strings(
 		t,
 		strings.Fields(content),
-		strings.Fields(lint_tester.Rewrapped(t, content)),
+		strings.Fields(lint_tester.New(t).Rewrapped(content)),
 	)
 }

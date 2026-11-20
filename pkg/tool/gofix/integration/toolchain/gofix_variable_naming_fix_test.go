@@ -12,7 +12,7 @@ import (
 )
 
 func TestVariableNamingFix(t *testing.T) {
-	directory := module_tester.VariableNaming(t)
+	directory := module_tester.New(t).VariableNaming()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunVariableNamingFix([]string{"./..."}, directory, false, r)
 	t.Run(
@@ -68,21 +68,22 @@ func TestVariableNamingFix(t *testing.T) {
 		"ResultEntries",
 		func(t *testing.T) {
 			applied := fix_tester.Applied(r.Entries)
-			fix_tester.Result(t, applied, "wrong_single.go", "renamed x → e")
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
+				applied,
+				"wrong_single.go",
+				"renamed x → e",
+			)
+			fix_tester.New(t).Result(
 				applied,
 				"error_renamed.go",
 				"renamed err → e",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"error_chain_renamed.go",
 				"renamed err → e",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"error_chain_renamed.go",
 				"renamed err2 → f",

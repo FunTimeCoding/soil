@@ -32,7 +32,10 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	directory := t.TempDir()
 	l := logger.New(t.Context())
-	s := store_tester.NewOnFile(t, filepath.Join(directory, "goclauded.sqlite"))
+	s := store_tester.New(
+		t,
+		store_tester.WithFile(filepath.Join(directory, "goclauded.sqlite")),
+	)
 	d := peer_tester.New(t)
 	x := connection.New(l, filepath.Join(directory, constant.SearchIndexFile))
 	result := &Tester{

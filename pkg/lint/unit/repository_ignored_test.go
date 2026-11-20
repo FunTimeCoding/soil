@@ -12,15 +12,13 @@ import (
 
 func TestRepositoryIgnoredReadsEachCheckoutRules(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"go.mod",
 		"module alfa\n\nrequire example.org/bravo v1.0.0\n",
 	)
-	system_tester.Write(t, root, ".gitignore", "/scratch\n")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(root, ".gitignore", "/scratch\n")
+	system_tester.New(t).Write(
 		filepath.Join(root, soil.ParentDirectory, "bravo"),
 		".gitignore",
 		"/tmp\n",

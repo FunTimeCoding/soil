@@ -4,20 +4,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
-	"testing"
 )
 
-func TaggedStore(t *testing.T) *store.Store {
-	t.Helper()
-	s := OpenTestStore(t)
-	directory := t.TempDir()
-	WriteFixture(t, directory, "alfa.md", "# Alfa\n\nKeyword quasar.\n")
-	WriteFixture(t, directory, "bravo.md", "# Bravo\n\nKeyword quasar.\n")
-	WriteFixture(t, directory, "charlie.md", "# Charlie\n\nKeyword quasar.\n")
+func (o *Tester) TaggedStore() *store.Store {
+	o.t.Helper()
+	s := o.OpenTestStore()
+	directory := o.t.TempDir()
+	o.WriteFixture(directory, "alfa.md", "# Alfa\n\nKeyword quasar.\n")
+	o.WriteFixture(directory, "bravo.md", "# Bravo\n\nKeyword quasar.\n")
+	o.WriteFixture(directory, "charlie.md", "# Charlie\n\nKeyword quasar.\n")
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
 	assert.FatalOnError(
-		t,
+		o.t,
 		s.SetMetadata(
 			"test",
 			"alfa.md",
@@ -28,7 +27,7 @@ func TaggedStore(t *testing.T) *store.Store {
 		),
 	)
 	assert.FatalOnError(
-		t,
+		o.t,
 		s.SetMetadata(
 			"test",
 			"bravo.md",
@@ -39,7 +38,7 @@ func TaggedStore(t *testing.T) *store.Store {
 		),
 	)
 	assert.FatalOnError(
-		t,
+		o.t,
 		s.SetMetadata(
 			"test",
 			"charlie.md",

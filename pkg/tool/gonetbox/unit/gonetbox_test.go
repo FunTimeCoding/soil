@@ -18,8 +18,7 @@ func TestRemovalPrintsNothingOnSuccess(t *testing.T) {
 		stray := assert.Capture(
 			t,
 			func() {
-				output, failure, code = command_tester.Run(
-					t,
+				output, failure, code = command_tester.New(t).Run(
 					c,
 					arguments...,
 				)
@@ -37,7 +36,7 @@ func TestFailedRemovalExitsWithItsMessage(t *testing.T) {
 	for _, arguments := range command_tester.Removals() {
 		c := mock_client.New(t)
 		c.Failure = errors.New("foxtrot")
-		_, failure, code := command_tester.Run(t, c, arguments...)
+		_, failure, code := command_tester.New(t).Run(c, arguments...)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "foxtrot", failure)
 		c.Close()
@@ -47,7 +46,7 @@ func TestFailedRemovalExitsWithItsMessage(t *testing.T) {
 func TestListDevicesEmitsDevices(t *testing.T) {
 	c := mock_client.New(t)
 	c.DeviceList = []*client.Device{{Identifier: 7, Name: "alfa"}}
-	output, _, code := command_tester.Run(t, c, "list-devices")
+	output, _, code := command_tester.New(t).Run(c, "list-devices")
 	assert.Integer(t, 0, code)
 	var d []client.Device
 	notation.MustDecode(output, &d, false)

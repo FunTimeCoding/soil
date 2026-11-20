@@ -7,10 +7,11 @@ import (
 )
 
 func TestRightOpen(t *testing.T) {
+	m := math_tester.New(t)
 	zeroToOne := ranges.Range{L: 0, R: 1}
-	math_tester.AssertRightOpen(t, true, 0, zeroToOne)
-	math_tester.AssertRightOpen(t, true, 0.01, zeroToOne)
-	math_tester.AssertRightOpen(t, true, 0.99, zeroToOne)
-	math_tester.AssertRightOpen(t, false, 1, zeroToOne)
-	math_tester.AssertRightOpen(t, false, 1.01, zeroToOne)
+	m.AssertRightOpen(true, 0, zeroToOne)
+	m.AssertRightOpen(true, 0.01, zeroToOne)
+	m.AssertRightOpen(true, 0.99, zeroToOne)
+	m.AssertRightOpen(false, 1, zeroToOne)
+	m.AssertRightOpen(false, 1.01, zeroToOne)
 }

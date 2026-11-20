@@ -19,11 +19,12 @@ import (
 )
 
 func TestRunPrintsNothing(t *testing.T) {
-	root := check_tester.StackModule(t)
+	c := check_tester.New(t)
+	root := c.StackModule()
 	o := option.New()
 	o.Root = root
 	o.Index = t.TempDir()
-	printed := testutil.CaptureStdout(func() { check_tester.Run(t, o) })
+	printed := testutil.CaptureStdout(func() { c.Run(o) })
 	assert.String(t, "", printed)
 }
 
@@ -37,8 +38,7 @@ func TestFixReturnsLoadFailureInsteadOfExiting(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Delta() int {\n\treturn echo\n}\n",

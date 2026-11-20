@@ -31,7 +31,7 @@ func New(r face.Reporter) *Server {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.RawModelContextServerKey, s[0])
+	scan_tester.New(t).Concern(constant.RawModelContextServerKey, s[0])
 }
 
 func TestRawModelContextServerClean(t *testing.T) {
@@ -58,5 +58,5 @@ func New(
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.RawModelContextServerKey, s[0])
+	scan_tester.New(t).NoConcern(constant.RawModelContextServerKey, s[0])
 }

@@ -20,8 +20,7 @@ func New(
 	d := q.Daemon()
 	result := model_context_server.Mount(t, d, r)
 
-	return result, outage_tester.Guard(
-		t,
+	return result, outage_tester.New(t).Guard(
 		d.Workers(),
 		constant.EmbedderPeer,
 	).Unavailable

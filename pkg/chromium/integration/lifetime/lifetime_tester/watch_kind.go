@@ -7,18 +7,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/event"
 	"github.com/funtimecoding/soil/pkg/chromium/integration/base"
-	"testing"
 )
 
-func WatchKind(
-	t *testing.T,
+func (o *Tester) WatchKind(
 	s *base.Stack,
 	kind constant.EventKind,
 ) chan *event.Event {
-	t.Helper()
+	o.t.Helper()
 	result := make(chan *event.Event, constant.FixtureWatchBuffer)
 	assert.FatalOnError(
-		t,
+		o.t,
 		s.Client.Watch(
 			func(e *event.Event) {
 				if e.Kind != kind {

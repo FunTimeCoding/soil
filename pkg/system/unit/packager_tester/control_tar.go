@@ -8,14 +8,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"io"
 	"strings"
-	"testing"
 )
 
-func ControlTar(
-	t *testing.T,
-	controlTarPath string,
-) string {
-	t.Helper()
+func (o *Tester) ControlTar(controlTarPath string) string {
+	o.t.Helper()
 	controlFile := system.Open(controlTarPath)
 	defer errors.PanicClose(controlFile)
 	gzr := system.GnuZipReader(controlFile)
@@ -36,10 +32,10 @@ func ControlTar(
 		if h.Name == constant.AlpineMetadataFile {
 			foundPackageInformation = true
 			content := string(system.ReadAll(tr))
-			assert.StringContains(t, "pkgname = hello", content)
-			assert.StringContains(t, "pkgver = 1.0.0-r1", content)
-			assert.StringContains(t, "size = ", content)
-			assert.StringContains(t, "datahash =", content)
+			assert.StringContains(o.t,"pkgname = hello", content)
+			assert.StringContains(o.t,"pkgver = 1.0.0-r1", content)
+			assert.StringContains(o.t,"size = ", content)
+			assert.StringContains(o.t,"datahash =", content)
 
 			for _, line := range strings.Split(content, "\n") {
 				if value, found := strings.CutPrefix(
@@ -53,7 +49,7 @@ func ControlTar(
 	}
 
 	if !foundPackageInformation {
-		t.Errorf("control.tar.gz missing .PKGINFO")
+		o.t.Errorf("control.tar.gz missing .PKGINFO")
 	}
 
 	return declaredHash

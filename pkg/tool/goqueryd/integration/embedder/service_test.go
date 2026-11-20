@@ -11,7 +11,7 @@ import (
 )
 
 func TestGoquerydEmbedsWholeManual(t *testing.T) {
-	v := embedder_tester.NewService(t)
+	v := embedder_tester.New(t).Service()
 	assert.String(
 		t,
 		"",
@@ -27,7 +27,7 @@ func TestGoquerydEmbedsWholeManual(t *testing.T) {
 }
 
 func TestGoquerydRefusesDenseChunkItself(t *testing.T) {
-	v := embedder_tester.NewService(t)
+	v := embedder_tester.New(t).Service()
 	v.MustPushDocument(
 		t.Context(),
 		"dense",

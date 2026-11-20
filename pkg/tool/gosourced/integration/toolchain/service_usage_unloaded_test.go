@@ -9,9 +9,8 @@ import (
 )
 
 func TestUsageSkipsBrokenCallerPackage(t *testing.T) {
-	o := usage_tester.Prepare(t)
-	system_tester.Write(
-		t,
+	o := usage_tester.New(t).Prepare()
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/worker/broken.go",
 		"package worker\n\nfunc broken() {\n\tundefinedCall()\n}\n",
@@ -22,7 +21,7 @@ func TestUsageSkipsBrokenCallerPackage(t *testing.T) {
 	assert.String(t, "example/pkg/worker", c.Unloaded[0].Package)
 	assert.String(t, "callers", c.Unloaded[0].Lost)
 	assert.StringContains(t, "undefinedCall", c.Unloaded[0].Cause)
-	place := usage_tester.Method(t, c, "Place").Callers
+	place := usage_tester.New(t).Method(c, "Place").Callers
 	assert.Count(t, 2, place)
 	assert.String(
 		t,
@@ -37,9 +36,8 @@ func TestUsageSkipsBrokenCallerPackage(t *testing.T) {
 }
 
 func TestUsageSkipsBrokenStorePackage(t *testing.T) {
-	o := usage_tester.Prepare(t)
-	system_tester.Write(
-		t,
+	o := usage_tester.New(t).Prepare()
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/store/broken.go",
 		"package store\n\nfunc broken() {\n\tundefinedCall()\n}\n",
@@ -49,13 +47,12 @@ func TestUsageSkipsBrokenStorePackage(t *testing.T) {
 	assert.Count(t, 1, c.Unloaded)
 	assert.String(t, "example/pkg/store", c.Unloaded[0].Package)
 	assert.String(t, "tables", c.Unloaded[0].Lost)
-	assert.Count(t, 3, usage_tester.Method(t, c, "Place").Callers)
+	assert.Count(t, 3, usage_tester.New(t).Method(c, "Place").Callers)
 }
 
 func TestUsageSkipsBrokenModelPackage(t *testing.T) {
-	o := usage_tester.Prepare(t)
-	system_tester.Write(
-		t,
+	o := usage_tester.New(t).Prepare()
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/model/receipt/broken.go",
 		"package receipt\n\nfunc broken() {\n\tundefinedCall()\n}\n",
@@ -68,9 +65,8 @@ func TestUsageSkipsBrokenModelPackage(t *testing.T) {
 }
 
 func TestUsageFailsOnBrokenTypePackage(t *testing.T) {
-	o := usage_tester.Prepare(t)
-	system_tester.Write(
-		t,
+	o := usage_tester.New(t).Prepare()
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/service/broken.go",
 		"package service\n\nfunc broken() {\n\tundefinedCall()\n}\n",
@@ -82,9 +78,8 @@ func TestUsageFailsOnBrokenTypePackage(t *testing.T) {
 }
 
 func TestUsageSkipsBrokenTestOfTypePackage(t *testing.T) {
-	o := usage_tester.Prepare(t)
-	system_tester.Write(
-		t,
+	o := usage_tester.New(t).Prepare()
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/service/broken_test.go",
 		"package service\n\nimport \"testing\"\n\nfunc TestBroken(t *testing.T) {\n\tundefinedCall()\n}\n",

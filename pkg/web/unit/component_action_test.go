@@ -12,16 +12,14 @@ func TestActionIsFormThatWorksWithoutScript(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="action" method="post" action="/alfa"><input type="hidden" name="bravo" value="1"><button type="submit">Go</button></form>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			action.New("/alfa", "Go").Hidden("bravo", "1").Node(),
 		),
 	)
 }
 
 func TestSwappedActionIsUpgradedByHtmx(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		action.New("/alfa", "Go").Swap("#charlie", constant.SwapOuter).Confirm(
 			"Sure?",
 		).
@@ -36,8 +34,7 @@ func TestSwappedActionIsUpgradedByHtmx(t *testing.T) {
 }
 
 func TestPlainActionConfirmsBeforeSubmitting(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		action.New("/alfa", "Go").Confirm("Sure?").Node(),
 	)
 	assert.StringContains(t, `onsubmit="return confirm(&#34;Sure?&#34;)"`, page)
@@ -45,8 +42,7 @@ func TestPlainActionConfirmsBeforeSubmitting(t *testing.T) {
 }
 
 func TestSmallTitledActionNeedsNoLabel(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		action.New("/alfa", "").Small().Title("2 × 3").Node(),
 	)
 	assert.StringContains(t, `<form class="action small"`, page)
@@ -58,8 +54,7 @@ func TestSmallTitledActionNeedsNoLabel(t *testing.T) {
 }
 
 func TestActionCarriesItsClassesAndCanBeDisabled(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		action.New("/alfa", "Go").
 			Class("delta").
 			ButtonClass("outline").

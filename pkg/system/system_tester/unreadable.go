@@ -4,21 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
-	"testing"
 )
 
-func Unreadable(
-	t *testing.T,
-	directory string,
-) {
-	t.Helper()
+func (o *Tester) Unreadable(directory string) {
+	o.t.Helper()
 	aside := join.Empty(directory, ".aside")
-	assert.FatalOnError(t, os.Rename(directory, aside))
-	assert.FatalOnError(t, os.WriteFile(directory, nil, 0o644))
-	t.Cleanup(
+	assert.FatalOnError(o.t, os.Rename(directory, aside))
+	assert.FatalOnError(o.t, os.WriteFile(directory, nil, 0o644))
+	o.t.Cleanup(
 		func() {
-			assert.FatalOnError(t, os.Remove(directory))
-			assert.FatalOnError(t, os.Rename(aside, directory))
+			assert.FatalOnError(o.t, os.Remove(directory))
+			assert.FatalOnError(o.t, os.Rename(aside, directory))
 		},
 	)
 }

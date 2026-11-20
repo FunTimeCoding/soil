@@ -11,18 +11,17 @@ import (
 )
 
 func TestCacheReusesUnchangedWorkspace(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	c := cache.New(t.TempDir())
 	first := c.Workspace(directory)
 	assert.True(t, first == c.Workspace(directory))
 }
 
 func TestCacheRebuildsAfterEdit(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	c := cache.New(t.TempDir())
 	first := c.Workspace(directory)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"two/more.go",
 		"package two\n\nfunc More() string {\n\treturn \"more\"\n}\n",
@@ -31,12 +30,11 @@ func TestCacheRebuildsAfterEdit(t *testing.T) {
 }
 
 func TestCacheRebuildsAfterEditInReplacedModule(t *testing.T) {
-	library, user := module_graph_tester.Replaced(t)
+	library, user := module_graph_tester.New(t).Replaced()
 	c := cache.New(t.TempDir())
 	first := c.Workspace(user)
 	assert.True(t, first == c.Workspace(user))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		library,
 		"extra.go",
 		"package lib\n\nfunc Extra() string {\n\treturn \"extra\"\n}\n",
@@ -45,9 +43,9 @@ func TestCacheRebuildsAfterEditInReplacedModule(t *testing.T) {
 }
 
 func TestSnapshotSame(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	before := snapshot.Take(directory)
 	assert.True(t, before.Same(snapshot.Take(directory)))
-	system_tester.Write(t, directory, "one/one.go", "package one\n")
+	system_tester.New(t).Write(directory, "one/one.go", "package one\n")
 	assert.False(t, before.Same(snapshot.Take(directory)))
 }

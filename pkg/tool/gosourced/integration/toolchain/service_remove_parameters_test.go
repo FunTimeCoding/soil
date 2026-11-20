@@ -40,14 +40,14 @@ func TestRemoveParametersFollowsChainThroughBatch(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	mount := o.Read("pkg/target/mount.go")
 	assert.StringContains(t, "\tname string,\n\tport int,\n) string {", mount)
-	rewrite_tester.Formatted(t, mount)
+	rewrite_tester.New(t).Formatted(mount)
 	run := o.Read("pkg/target/run.go")
 	assert.StringContains(t, "func Run(\n\to *Option,\n) string {", run)
 	assert.StringContains(t, "Mount(o.Name, 1)", run)
 	caller := o.Read("pkg/caller/main.go")
 	assert.StringContains(t, "target.Run(o)", caller)
 	assert.StringNotContains(t, "label", caller)
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(
 		t,
 		"field Version is now only written",
@@ -83,7 +83,7 @@ func TestRemoveParametersDropsEveryVariadicArgument(t *testing.T) {
 		"parameter values is no longer used",
 		rewrite_tester.JoinedConcerns(r),
 	)
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 }
 
 func TestRemoveParametersDryRunWritesNothing(t *testing.T) {
@@ -111,36 +111,32 @@ func TestRemoveParametersDryRunWritesNothing(t *testing.T) {
 }
 
 func TestRemoveParametersRefusesParameterStillUsed(t *testing.T) {
-	rewrite_tester.RemovalRefused(
-		t,
+	rewrite_tester.New(t).RemovalRefused(
 		"parameter version of Used is still used",
 		"Used",
 	)
 }
 
 func TestRemoveParametersRefusesPassingOnOutsideBatch(t *testing.T) {
-	rewrite_tester.RemovalRefused(
-		t,
+	rewrite_tester.New(t).RemovalRefused(
 		"parameter version of Forward is still used",
 		"Forward",
 	)
 }
 
 func TestRemoveParametersRefusesFunctionUsedAsValue(t *testing.T) {
-	rewrite_tester.RemovalRefused(t, "Valued is used as a value", "Valued")
+	rewrite_tester.New(t).RemovalRefused("Valued is used as a value", "Valued")
 }
 
 func TestRemoveParametersRefusesDroppingCall(t *testing.T) {
-	rewrite_tester.RemovalRefused(
-		t,
+	rewrite_tester.New(t).RemovalRefused(
 		"dropping the argument current() would remove a call",
 		"Called",
 	)
 }
 
 func TestRemoveParametersRefusesRemovingLocalThatCalls(t *testing.T) {
-	rewrite_tester.RemovalRefused(
-		t,
+	rewrite_tester.New(t).RemovalRefused(
 		"removing the unused local version would remove a call",
 		"Local",
 	)
@@ -196,8 +192,7 @@ func TestRemoveParametersRefusesUnknownParameter(t *testing.T) {
 
 func TestRemoveParametersRewritesReplacingModule(t *testing.T) {
 	for _, full := range []bool{false, true} {
-		library, o := module_tester.ReplacedLibrary(
-			t,
+		library, o := module_tester.New(t).ReplacedLibrary(
 			"remove-parameters-replacer",
 		)
 
@@ -216,7 +211,7 @@ func TestRemoveParametersRewritesReplacingModule(t *testing.T) {
 		assert.String(
 			t,
 			"package lib\n\nfunc Log(\n\tprefix string,\n) string {\n\treturn prefix\n}\n",
-			system_tester.Read(t, library, "lib.go"),
+			system_tester.New(t).Read(library, "lib.go"),
 		)
 		assert.String(
 			t,
@@ -227,14 +222,15 @@ func TestRemoveParametersRewritesReplacingModule(t *testing.T) {
 }
 
 func TestRemoveParametersRefusesSideEffectInReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "remove-parameters-replacer")
-	system_tester.Write(
-		t,
+	library, o := module_tester.New(t).ReplacedLibrary(
+		"remove-parameters-replacer",
+	)
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/effect/effect.go",
 		"package effect\n\nimport \"other.test/lib\"\n\nfunc count() int {\n\treturn 1\n}\n\nfunc Use() string {\n\treturn lib.Log(\"a\", count())\n}\n",
 	)
-	source := system_tester.Read(t, library, "lib.go")
+	source := system_tester.New(t).Read(library, "lib.go")
 	r, e := o.Symbol.RemoveParameters(
 		t.Context(),
 		library,
@@ -248,13 +244,14 @@ func TestRemoveParametersRefusesSideEffectInReplacingModule(t *testing.T) {
 		filepath.Join(o.Directory, "pkg/effect/effect.go"),
 		rewrite_tester.JoinedConcerns(r),
 	)
-	assert.String(t, source, system_tester.Read(t, library, "lib.go"))
+	assert.String(t, source, system_tester.New(t).Read(library, "lib.go"))
 }
 
 func TestRemoveParametersRefusesValueUseInReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "remove-parameters-replacer")
-	system_tester.Write(
-		t,
+	library, o := module_tester.New(t).ReplacedLibrary(
+		"remove-parameters-replacer",
+	)
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/value/value.go",
 		"package value\n\nimport \"other.test/lib\"\n\nvar Logger = lib.Log\n",

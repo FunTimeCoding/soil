@@ -3,14 +3,10 @@ package reporter_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"io"
-	"testing"
 )
 
-func Printing(
-	t *testing.T,
-	w io.Writer,
-) *reporter.Reporter {
-	t.Helper()
+func (o *Tester) Printing(w io.Writer) *reporter.Reporter {
+	o.t.Helper()
 
-	return Sending(t, "http://key@localhost:9/1", w)
+	return o.Sending("http://key@localhost:9/1", w)
 }

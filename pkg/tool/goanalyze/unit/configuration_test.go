@@ -14,12 +14,16 @@ func TestConfigurationAbsentLeavesCommentOff(t *testing.T) {
 
 func TestConfigurationTurnsCommentOn(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, constant.ConfigurationPath, "comment: true\n")
+	system_tester.New(t).Write(
+		root,
+		constant.ConfigurationPath,
+		"comment: true\n",
+	)
 	assert.True(t, configuration.Load(root).Comment)
 }
 
 func TestConfigurationMalformedPanics(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, constant.ConfigurationPath, "comment: [\n")
+	system_tester.New(t).Write(root, constant.ConfigurationPath, "comment: [\n")
 	assert.Panic(t, func() { configuration.Load(root) })
 }

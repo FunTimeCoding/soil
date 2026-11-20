@@ -8,18 +8,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"strings"
-	"testing"
 )
 
-func Subscribe(
-	t *testing.T,
-	s *base.Server,
-) (<-chan Event, func()) {
-	t.Helper()
+func (o *Tester) Subscribe(s *base.Server) (<-chan Event, func()) {
+	o.t.Helper()
 	r, e := s.Server.Client().Get(
 		s.Address("/event?subscribe=roster,activity,summary"),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	events := make(chan Event, 10)
 	go func() {
 		scanner := bufio.NewScanner(r.Body)

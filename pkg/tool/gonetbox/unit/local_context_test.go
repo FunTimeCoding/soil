@@ -10,8 +10,7 @@ import (
 func TestUpdateDeviceLocalContextFlagDecoded(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-device",
 		"alfa",
@@ -29,8 +28,7 @@ func TestUpdateDeviceLocalContextFlagDecoded(t *testing.T) {
 func TestUpdateDeviceWithoutLocalContextFlagSendsNone(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-device",
 		"alfa",
@@ -46,8 +44,7 @@ func TestUpdateVirtualMachineEmptyLocalContextFlagSendsEmptyObject(
 ) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"update-virtual-machine",
 		"alfa",
@@ -65,8 +62,7 @@ func TestMalformedLocalContextFlagPanicsBeforeRequest(t *testing.T) {
 		t,
 		"invalid character",
 		func() {
-			command_tester.Run(
-				t,
+			command_tester.New(t).Run(
 				c,
 				"update-device",
 				"alfa",

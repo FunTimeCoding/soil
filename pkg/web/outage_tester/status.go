@@ -12,38 +12,41 @@ import (
 	"io"
 	"net/http"
 	"strings"
-	"testing"
 )
 
-func status(
-	t *testing.T,
+func (o *Tester) status(
 	s *model_context_server.Server,
 	path string,
 	method string,
-	o *openapi3.Operation,
+	operation *openapi3.Operation,
 	parameters map[string]string,
 	bodies map[string]string,
 ) (int, error) {
-	t.Helper()
+	o.t.Helper()
 	var content io.Reader
 
 	if method != http.MethodGet && method != http.MethodDelete {
-		v, okay := bodies[o.OperationID]
+		v, okay := bodies[operation.OperationID]
 
 		if !okay {
-			v = body(o)
+			v = body(operation)
 		}
 
 		content = strings.NewReader(v)
 	}
 
 	q, e := http.NewRequestWithContext(
-		t.Context(),
+		o.t.Context(),
 		method,
-		s.Address(join.Empty(fillPath(path, parameters), query(o, parameters))),
+		s.Address(
+			join.Empty(
+				fillPath(path, parameters),
+				query(operation, parameters),
+			),
+		),
 		content,
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	web.Bearer(q, generativeConstant.ModelContextTestToken)
 	q.Header.Set(constant.ContentType, constant.Object)
 	r, f := s.Client().Do(q)

@@ -22,7 +22,7 @@ func TestRenameModule(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "\"example/lib/v3\"", caller)
 	assert.False(t, strings.Contains(caller, "example/lib/v2"))
 	assert.StringContains(t, "lib.Make(\"alfa\")", caller)
@@ -96,7 +96,7 @@ func TestRenameModuleReadsInternalTypeThroughPublicAlias(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	caller := o.Read("pkg/caller/run.go")
 	assert.StringContains(t, "\"example/lib/v3\"", caller)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestRenameModuleReportsInternalTypeWithoutAlias(t *testing.T) {

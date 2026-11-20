@@ -18,8 +18,7 @@ func TestSecondPageOfCollectionLoads(t *testing.T) {
 	c := client_tester.GeneratedClient(t, s)
 
 	for i := range 21 {
-		document_tester.Push(
-			t,
+		document_tester.New(t).Push(
 			c,
 			"pushed",
 			fmt.Sprintf("note-%02d.md", i),
@@ -43,7 +42,7 @@ func TestSecondPageOfCollectionLoads(t *testing.T) {
 func TestMissingDocumentIsNotFoundWithLinkedSuggestions(t *testing.T) {
 	s := service_tester.New(t).Served()
 	c := client_tester.GeneratedClient(t, s)
-	document_tester.Push(t, c, "pushed", "alfa.md", "# Alfa\n\nbody")
+	document_tester.New(t).Push(c,"pushed", "alfa.md", "# Alfa\n\nbody")
 	assert.Integer(
 		t,
 		http.StatusNotFound,

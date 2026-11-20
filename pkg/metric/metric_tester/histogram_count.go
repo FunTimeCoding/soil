@@ -3,17 +3,15 @@ package metric_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/prometheus/client_golang/prometheus"
-	"testing"
 )
 
-func HistogramCount(
-	t *testing.T,
+func (o *Tester) HistogramCount(
 	r *prometheus.Registry,
 	name string,
 ) uint64 {
-	t.Helper()
+	o.t.Helper()
 	families, e := r.Gather()
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	for _, f := range families {
 		if f.GetName() != name {

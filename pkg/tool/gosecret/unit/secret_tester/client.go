@@ -1,12 +1,9 @@
 package secret_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/gosecretd/client/mock_client"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/tool/gosecretd/client/mock_client"
 
-func Client(t *testing.T) *mock_client.Client {
-	t.Helper()
+func (o *Tester) Client() *mock_client.Client {
+	o.t.Helper()
 
-	return mock_client.New(t)
+	return mock_client.New(o.t)
 }

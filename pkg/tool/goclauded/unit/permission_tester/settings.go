@@ -6,24 +6,22 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func Settings(
-	t *testing.T,
+func (o *Tester) Settings(
 	root string,
 	file string,
 	allow ...string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	directory := filepath.Join(root, generativeConstant.SettingsDirectory)
-	assert.FatalOnError(t, os.MkdirAll(directory, 0o755))
+	assert.FatalOnError(o.t, os.MkdirAll(directory, 0o755))
 	b, e := json.Marshal(
 		map[string]any{"permissions": map[string]any{"allow": allow}},
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	assert.FatalOnError(
-		t,
+		o.t,
 		os.WriteFile(filepath.Join(directory, file), b, 0o644),
 	)
 }

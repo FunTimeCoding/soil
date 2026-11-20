@@ -13,7 +13,7 @@ import (
 )
 
 func TestImportAliasFix(t *testing.T) {
-	directory := module_tester.ImportAlias(t)
+	directory := module_tester.New(t).ImportAlias()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunImportAliasFix([]string{"./..."}, directory, false, r)
 	t.Run(
@@ -149,39 +149,33 @@ func TestImportAliasFix(t *testing.T) {
 			applied := fix_tester.Applied(r.Entries)
 			blocked := fix_tester.Blocked(r.Entries)
 			assert.Integer(t, 4, len(applied))
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"superfluous.go",
 				"de-aliased helper (redundant)",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"unnecessary_rename.go",
 				"de-aliased h → helper",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"different_name.go",
 				"de-aliased u → util",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"struct_field.go",
 				"de-aliased h → helper",
 			)
 			assert.Integer(t, 2, len(blocked))
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				blocked,
 				"collision.go",
 				"cannot de-alias h → helper (local collision with \"helper\")",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				blocked,
 				"builtin_collision.go",
 				"cannot de-alias model → string (builtin collision)",

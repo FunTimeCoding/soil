@@ -14,8 +14,7 @@ import (
 
 func TestRetargetReferencesRewritesAfterMove(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/bravo/service/run.go",
 		"package service\n",
@@ -60,7 +59,7 @@ func TestRetargetReferencesRewritesAfterMove(t *testing.T) {
 
 func TestRetargetReferencesDryRunWritesNothing(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "pkg/bravo/run.go", "package bravo\n")
+	system_tester.New(t).Write(root, "pkg/bravo/run.go", "package bravo\n")
 	o := service_tester.New(t, service_tester.WithReferenceRoot(root))
 	m, e := o.Service().CreateMemory(
 		save_tester.Content("plain", "Read `pkg/alfa/run.go` first."),

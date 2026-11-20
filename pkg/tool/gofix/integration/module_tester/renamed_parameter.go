@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func RenamedParameter(t *testing.T) string {
-	t.Helper()
+func (o *Tester) RenamedParameter() string {
+	o.t.Helper()
 
-	return New(t, "example").
+	return module.New(o.t,"example").
 		File(
 			"join.go",
 			"package example\n\nfunc Join(\n\tmsg string,\n) string {\n\treturn msg\n}\n",

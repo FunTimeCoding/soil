@@ -44,7 +44,7 @@ func TestRenameEmbeddedTypeRenamesItsField(t *testing.T) {
 		"package charlie\n\nimport \"example/pkg/alfa\"\n\ntype Reserve = alfa.Budget\n\ntype Keeper struct {\n\tReserve\n}\n\nfunc Make() Keeper {\n\treturn Keeper{Reserve: Reserve{Amount: 2}}\n}\n",
 		o.Read("pkg/charlie/keeper.go"),
 	)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestRenameEmbeddedTypeRefusesCapture(t *testing.T) {
@@ -91,7 +91,7 @@ func TestMoveExportingEmbeddedTypeRenamesItsField(t *testing.T) {
 		source,
 	)
 	assert.StringContains(t, "h.Reserve.Amount", source)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestExtractTypeExportingEmbeddedTypeRenamesItsField(t *testing.T) {
@@ -117,7 +117,7 @@ func TestExtractTypeExportingEmbeddedTypeRenamesItsField(t *testing.T) {
 		"Holder{Reserve: bravo.Reserve{Amount: 1}}",
 		source,
 	)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestBackReferenceExportingEmbeddedTypeRenamesItsField(t *testing.T) {
@@ -140,5 +140,5 @@ func TestBackReferenceExportingEmbeddedTypeRenamesItsField(t *testing.T) {
 	source := o.Read("pkg/alfa/reserve.go")
 	assert.StringContains(t, "Holder{Reserve: Reserve{Amount: 1}}", source)
 	assert.StringContains(t, "h.Reserve.Amount", source)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }

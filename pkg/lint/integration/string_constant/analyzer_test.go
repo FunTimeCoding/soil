@@ -27,14 +27,12 @@ func TestFlagged(t *testing.T) {
 func TestFlaggedFromOwnConstantFile(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "alfa")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"constant.go",
 		"package alfa\n\nconst Bravo = \"charlie delta\"\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"echo.go",
 		"package alfa\n\nfunc Echo() {\n\tprintln(\"charlie delta\")\n}\n",
@@ -52,14 +50,12 @@ func TestFlaggedFromOwnConstantFile(t *testing.T) {
 func TestFlaggedFromParentConstantDirectory(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "alfa")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"pkg/constant/constant.go",
 		"package constant\n\nconst Bravo = \"charlie delta\"\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"pkg/echo/echo.go",
 		"package echo\n\nfunc Echo() {\n\tprintln(\"charlie delta\")\n}\n",

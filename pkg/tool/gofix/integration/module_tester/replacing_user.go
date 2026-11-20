@@ -2,17 +2,16 @@ package module_tester
 
 import (
 	"fmt"
-	"testing"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 )
 
-func ReplacingUser(
-	t *testing.T,
+func (o *Tester) ReplacingUser(
 	library string,
 	source string,
 ) string {
-	t.Helper()
+	o.t.Helper()
 
-	return New(t, "example").
+	return module.New(o.t,"example").
 		File(
 			"go.mod",
 			fmt.Sprintf(

@@ -56,5 +56,5 @@ func TestApplyPatternKeepsSiteAliases(t *testing.T) {
 		"return alfa.Advance(n, deltaConstant.Step)\n",
 		o.Read("pkg/foxtrot/run.go"),
 	)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }

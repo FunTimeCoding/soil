@@ -1,25 +1,22 @@
 package markup_tester
 
-import "testing"
-
-func AssertAttribute(
-	t *testing.T,
+func (o *Tester) AssertAttribute(
 	expected string,
 	body string,
 	selector string,
 	name string,
 ) {
-	t.Helper()
-	s := document(body).FindMatcher(matcher(t, selector)).First()
+	o.t.Helper()
+	s := document(body).FindMatcher(o.matcher(selector)).First()
 
 	if s.Length() == 0 {
-		t.Errorf("%s: no match", selector)
+		o.t.Errorf("%s: no match", selector)
 
 		return
 	}
 
 	if actual, okay := s.Attr(name); !okay || actual != expected {
-		t.Errorf(
+		o.t.Errorf(
 			"%s [%s]: expected %q, got %q (present %t)",
 			selector,
 			name,

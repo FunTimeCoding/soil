@@ -9,12 +9,12 @@ import (
 )
 
 func TestPurgeDropsStaleOnlyAndForgetsRoot(t *testing.T) {
-	sink, k := worker_tester.NewSink(t)
+	sink, k := worker_tester.New(t).Sink()
 	o := service_tester.New(t, service_tester.WithConnector(k))
 	o.Mattermost.AddPost("alfa")
 	o.Mattermost.AddPost("charlie")
 	s := o.Service()
-	store := worker_tester.NewStoreOnFile(t, o.Path)
+	store := worker_tester.New(t).StoreOnFile(o.Path)
 	o.Subscribe("alfa", "kilo", "papa")
 	o.Subscribe("charlie", "kilo", "quebec")
 	store.MustTouchRoot("alfa", time.Now().Add(-8*24*time.Hour))
@@ -33,7 +33,7 @@ func TestPurgeDropsStaleOnlyAndForgetsRoot(t *testing.T) {
 }
 
 func TestPurgeIsQuietWhenNothingIsStale(t *testing.T) {
-	sink, k := worker_tester.NewSink(t)
+	sink, k := worker_tester.New(t).Sink()
 	o := service_tester.New(t, service_tester.WithConnector(k))
 	o.Mattermost.AddPost("alfa")
 	s := o.Service()
@@ -44,11 +44,11 @@ func TestPurgeIsQuietWhenNothingIsStale(t *testing.T) {
 }
 
 func TestPurgeKeepsWatchingRootLiveSubscriberHolds(t *testing.T) {
-	sink, k := worker_tester.NewSink(t)
+	sink, k := worker_tester.New(t).Sink()
 	o := service_tester.New(t, service_tester.WithConnector(k))
 	o.Mattermost.AddPost("alfa")
 	s := o.Service()
-	store := worker_tester.NewStoreOnFile(t, o.Path)
+	store := worker_tester.New(t).StoreOnFile(o.Path)
 	o.Subscribe("alfa", "kilo", "papa")
 	o.Subscribe("alfa", "lima", "papa")
 	store.MustTouchRoot("alfa", time.Now().Add(-8*24*time.Hour))

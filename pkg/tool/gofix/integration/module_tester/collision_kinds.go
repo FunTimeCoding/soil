@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func CollisionKinds(t *testing.T) string {
-	t.Helper()
+func (o *Tester) CollisionKinds() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"pkg/core/v1/v1.go",
 			"package v1\n\ntype Pod struct{}\n",

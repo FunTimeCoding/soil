@@ -15,10 +15,10 @@ import (
 func TestRetargetTreeRewritesOnlyWhatMentionsMove(t *testing.T) {
 	d := t.TempDir()
 	note := "See `pkg/alfa/run.go` and `pkg/bravo/stay.go`.\n"
-	system_tester.Write(t, d, "doc/note.md", note)
-	system_tester.Write(t, d, "doc/other.md", "Nothing to move here.\n")
-	system_tester.Write(t, d, "pkg/alfa/run.go", "package alfa\n")
-	system_tester.Write(t, d, "pkg/bravo/stay.go", "package bravo\n")
+	system_tester.New(t).Write(d, "doc/note.md", note)
+	system_tester.New(t).Write(d, "doc/other.md", "Nothing to move here.\n")
+	system_tester.New(t).Write(d, "pkg/alfa/run.go", "package alfa\n")
+	system_tester.New(t).Write(d, "pkg/bravo/stay.go", "package bravo\n")
 	documents := lint.RetargetTree(
 		d,
 		move_set.New(
@@ -40,9 +40,9 @@ func TestRetargetTreeRewritesOnlyWhatMentionsMove(t *testing.T) {
 func TestRetargetFilesSkipsDocumentDeletedAfterWalk(t *testing.T) {
 	d := t.TempDir()
 	note := "See `pkg/alfa/run.go`.\n"
-	system_tester.Write(t, d, "doc/gone.md", note)
-	system_tester.Write(t, d, "doc/note.md", note)
-	system_tester.Write(t, d, "pkg/alfa/run.go", "package alfa\n")
+	system_tester.New(t).Write(d, "doc/gone.md", note)
+	system_tester.New(t).Write(d, "doc/note.md", note)
+	system_tester.New(t).Write(d, "pkg/alfa/run.go", "package alfa\n")
 	o := option.New("", false)
 	o.Metadata = true
 	repository, _ := lint.Walk(d, o)

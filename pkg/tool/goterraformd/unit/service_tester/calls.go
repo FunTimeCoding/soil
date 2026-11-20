@@ -9,6 +9,7 @@ import (
 
 func (o *Tester) Calls() []string {
 	o.t.Helper()
+	o.Service()
 	b, e := os.ReadFile(o.log)
 
 	if e != nil {

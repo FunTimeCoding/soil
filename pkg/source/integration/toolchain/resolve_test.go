@@ -11,14 +11,12 @@ import (
 func TestLoadPackagesDiscoversBuildTags(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "testmodule")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"pkg/example/example.go",
 		"package example\n\nfunc Hello() string { return \"hello\" }\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"pkg/example/example_test.go",
 		"//go:build ci\n\npackage example\n\nimport \"testing\"\n\nfunc TestHello(t *testing.T) { Hello() }\n",
@@ -43,8 +41,7 @@ func TestLoadPackagesDiscoversBuildTags(t *testing.T) {
 func TestLoadPackagesTagOnlyTestPackage(t *testing.T) {
 	directory := t.TempDir()
 	testutil.WriteModFile(t, directory, "testmodule")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"pkg/tagged/tagged_test.go",
 		"//go:build ci\n\npackage tagged\n\nimport \"testing\"\n\nfunc TestTagged(t *testing.T) {}\n",

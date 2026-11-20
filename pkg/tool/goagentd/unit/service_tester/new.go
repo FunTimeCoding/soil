@@ -28,5 +28,5 @@ func New(
 	n := runner.New(t.TempDir(), stream, logger.New(t.Context()), p.reporter)
 	t.Cleanup(n.Close)
 
-	return &Tester{Runner: n}
+	return &Tester{Runner: n, t: t}
 }

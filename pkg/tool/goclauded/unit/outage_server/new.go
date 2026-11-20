@@ -38,7 +38,7 @@ func New(
 	}
 
 	path := filepath.Join(t.TempDir(), "goclauded.sqlite")
-	s := store_tester.NewOnFile(t, path)
+	s := store_tester.New(t, store_tester.WithFile(path))
 	o := d.Option(path, s.Clock())
 	o.UtilizationFallback = true
 	o.Utilization = func() face.AnthropicClient { return u }
@@ -51,5 +51,5 @@ func New(
 		},
 	)
 
-	return result, outage_tester.Guard(t, g.Workers(), peer).Unavailable
+	return result, outage_tester.New(t).Guard(g.Workers(), peer).Unavailable
 }

@@ -17,8 +17,7 @@ func New(
 	s := base.New(t, base.WithReporter(r))
 	s.Memory.Failure = outage_tester.RefusedDial()
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		gomemorydConstant.Identity.Name(),
 	).Unavailable

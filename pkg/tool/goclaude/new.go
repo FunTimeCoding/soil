@@ -25,7 +25,7 @@ func New(
 	result.AddCommand(status(c))
 	result.AddCommand(check(c))
 	result.AddCommand(statusLine(c))
-	result.AddCommand(guard.New(c.Terminal()))
+	result.AddCommand(guard.New(c))
 	result.AddCommand(serveChannel(c, r))
 	result.AddCommand(usage(c))
 	result.AddCommand(cost(c))

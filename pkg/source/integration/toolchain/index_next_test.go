@@ -12,14 +12,13 @@ import (
 )
 
 func TestNextAnswersLikeFreshWorkspace(t *testing.T) {
-	directory := reference_tester.Module(t)
+	directory := reference_tester.New(t).Module()
 	store := t.TempDir()
-	start := reference_tester.Target(t, directory, "Server", "Start")
+	start := reference_tester.New(t).Target(directory, "Server", "Start")
 	previous := index.New(store, directory)
 	before := previous.References().Locations(start)
 	taken := snapshot.Take(directory)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"bravo/use.go",
 		"package bravo\n\nimport \"example/alfa\"\n\nfunc Use() int {\n\ts := alfa.NewServer()\n\ts.Start()\n\ts.Start()\n\tb := &alfa.Box[int]{}\n\n\treturn s.Port + b.Get()\n}\n",
@@ -37,7 +36,7 @@ func TestNextAnswersLikeFreshWorkspace(t *testing.T) {
 }
 
 func TestNextCarriesFactsOfUnchangedPackages(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)
@@ -46,8 +45,7 @@ func TestNextCarriesFactsOfUnchangedPackages(t *testing.T) {
 	assert.Integer(t, 2, extracted)
 	assert.FatalOnError(t, os.RemoveAll(store))
 	taken := snapshot.Take(directory)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"two/two.go",
 		"package two\n\nimport \"example/one\"\n\nfunc Two() string {\n\treturn one.One() + \"!\"\n}\n",

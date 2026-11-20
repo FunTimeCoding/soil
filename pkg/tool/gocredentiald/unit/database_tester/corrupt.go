@@ -1,15 +1,11 @@
 package database_tester
 
-import (
-	"testing"
-	"time"
-)
+import "time"
 
-func Corrupt(
-	t *testing.T,
+func (o *Tester) Corrupt(
 	path string,
 	at time.Time,
 ) {
-	t.Helper()
-	replace(t, path, []byte("corrupt"), at)
+	o.t.Helper()
+	o.replace(path, []byte("corrupt"), at)
 }

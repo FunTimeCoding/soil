@@ -10,7 +10,7 @@ import (
 
 func TestLegacyCruiseColumnsAreDropped(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "goclauded.db")
-	s := store_tester.NewOnFile(t, path)
+	s := store_tester.New(t, store_tester.WithFile(path))
 	assert.FatalOnError(
 		t,
 		s.Store.Database().Exec("DROP TABLE cruise_setting").Error,
@@ -29,7 +29,7 @@ func TestLegacyCruiseColumnsAreDropped(t *testing.T) {
 			)`,
 		).Error,
 	)
-	reopened := store_tester.NewOnFile(t, path)
+	reopened := store_tester.New(t, store_tester.WithFile(path))
 	assert.FatalOnError(
 		t,
 		reopened.Store.SetCruise("session-1", new(10*time.Minute)),

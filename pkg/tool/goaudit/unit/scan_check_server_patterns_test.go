@@ -28,7 +28,7 @@ func TestNilNilReturnFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.NilNilReturnKey, s[0])
+	scan_tester.New(t).Concern(constant.NilNilReturnKey, s[0])
 }
 
 func TestNilNilReturnClean(t *testing.T) {
@@ -49,7 +49,7 @@ func TestNilNilReturnClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.NilNilReturnKey, s[0])
+	scan_tester.New(t).NoConcern(constant.NilNilReturnKey, s[0])
 }
 
 func TestHttpErrorFlagged(t *testing.T) {
@@ -70,7 +70,7 @@ func TestHttpErrorFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.HttpErrorInStrictKey, s[0])
+	scan_tester.New(t).Concern(constant.HttpErrorInStrictKey, s[0])
 }
 
 func TestHttpErrorClean(t *testing.T) {
@@ -91,7 +91,7 @@ func TestHttpErrorClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.HttpErrorInStrictKey, s[0])
+	scan_tester.New(t).NoConcern(constant.HttpErrorInStrictKey, s[0])
 }
 
 func TestMissingServerCaptureFailFlagged(t *testing.T) {
@@ -112,7 +112,7 @@ func TestMissingServerCaptureFailFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.MissingServerCaptureFailKey, s[0])
+	scan_tester.New(t).Concern(constant.MissingServerCaptureFailKey, s[0])
 }
 
 func TestMissingServerCaptureFailSkipsRecoveryOnly(t *testing.T) {
@@ -133,7 +133,7 @@ func TestMissingServerCaptureFailSkipsRecoveryOnly(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.MissingServerCaptureFailKey, s[0])
+	scan_tester.New(t).NoConcern(constant.MissingServerCaptureFailKey, s[0])
 }
 
 func TestMissingCaptureDetailFlagged(t *testing.T) {
@@ -154,7 +154,7 @@ func TestMissingCaptureDetailFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.MissingCaptureDetailKey, s[0])
+	scan_tester.New(t).Concern(constant.MissingCaptureDetailKey, s[0])
 }
 
 func TestMissingCaptureDetailClean(t *testing.T) {
@@ -179,7 +179,7 @@ func TestMissingCaptureDetailClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.MissingCaptureDetailKey, s[0])
+	scan_tester.New(t).NoConcern(constant.MissingCaptureDetailKey, s[0])
 }
 
 func TestMissingCaptureDetailNotWrapping(t *testing.T) {
@@ -200,5 +200,5 @@ func TestMissingCaptureDetailNotWrapping(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.MissingCaptureDetailKey, s[0])
+	scan_tester.New(t).NoConcern(constant.MissingCaptureDetailKey, s[0])
 }

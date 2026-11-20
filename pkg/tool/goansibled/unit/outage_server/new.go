@@ -21,8 +21,7 @@ func New(
 	workers := s.Daemon().Workers()
 	workers[len(workers)-1].Close()
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		workers,
 		join.Colon(
 			constant.InventoryPeer,

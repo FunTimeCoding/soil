@@ -19,7 +19,7 @@ func TestDaemonWithoutOptionsRunsOnlyItsGuard(t *testing.T) {
 }
 
 func TestGoclaudedAddsRosterGuardWatcherAndTwoClocks(t *testing.T) {
-	_, k := worker_tester.NewSink(t)
+	_, k := worker_tester.New(t).Sink()
 	workers := service_tester.New(
 		t,
 		service_tester.WithConnector(k),
@@ -33,7 +33,7 @@ func TestGoclaudedAddsRosterGuardWatcherAndTwoClocks(t *testing.T) {
 }
 
 func TestMonitorAddsItsClock(t *testing.T) {
-	_, k := worker_tester.NewSink(t)
+	_, k := worker_tester.New(t).Sink()
 	workers := service_tester.New(
 		t,
 		service_tester.WithConnector(k),
@@ -43,7 +43,7 @@ func TestMonitorAddsItsClock(t *testing.T) {
 }
 
 func TestDaemonClosesMattermostOnce(t *testing.T) {
-	_, k := worker_tester.NewSink(t)
+	_, k := worker_tester.New(t).Sink()
 	o := service_tester.New(t, service_tester.WithConnector(k))
 	d := o.Daemon()
 	d.Close()
@@ -52,7 +52,7 @@ func TestDaemonClosesMattermostOnce(t *testing.T) {
 }
 
 func TestDaemonLeavesNothingRunning(t *testing.T) {
-	_, k := worker_tester.NewSink(t)
+	_, k := worker_tester.New(t).Sink()
 	o := service_tester.New(t, service_tester.WithConnector(k))
 	o.Mattermost.Failure = connection.New(
 		errorsConstant.Unreachable,

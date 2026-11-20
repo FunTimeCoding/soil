@@ -37,20 +37,20 @@ func TestRenamePackageClause(t *testing.T) {
 	_, e = os.Stat(filepath.Join(o.Directory, "pkg/outer/store"))
 	assert.FatalOnError(t, e)
 	clause := o.Read("pkg/outer/store/store.go")
-	rewrite_tester.Formatted(t, clause)
+	rewrite_tester.New(t).Formatted(clause)
 	assert.StringContains(t, "package depot", clause)
 	run := o.Read("pkg/outer/store/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "package depot", run)
 	assert.StringContains(t, "example/pkg/outer/store/sub", run)
 	tests := o.Read("pkg/outer/store/store_test.go")
 	assert.StringContains(t, "package depot", tests)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "\"example/pkg/outer/store\"", caller)
 	assert.StringContains(t, "v := depot.Store{}", caller)
 	aliased := o.Read("pkg/aliased/run.go")
-	rewrite_tester.Formatted(t, aliased)
+	rewrite_tester.New(t).Formatted(aliased)
 	assert.StringContains(t, "st \"example/pkg/outer/store\"", aliased)
 	assert.StringContains(t, "return &st.Store{}", aliased)
 }
@@ -89,8 +89,7 @@ func TestRenamePackageClauseSameName(t *testing.T) {
 func TestRenamePackageClauseReportsTestOnlyPackage(t *testing.T) {
 	o := service_tester.New(t, service_tester.WithDirectory(t.TempDir()))
 	testutil.WriteModFile(t, o.Directory, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/alfa/alfa_test.go",
 		"package guard\n\nimport \"testing\"\n\nfunc TestAlfa(t *testing.T) {}\n",

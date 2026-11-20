@@ -9,7 +9,7 @@ import (
 )
 
 func TestLayerChangesSpanStack(t *testing.T) {
-	root := layer_tester.Module(t)
+	root := layer_tester.New(t).Module()
 	base := layer.New(nil, root)
 	alfa := filepath.Join(root, "alfa/alfa.go")
 	base.Write(alfa, []byte("package alfa\n\n"))

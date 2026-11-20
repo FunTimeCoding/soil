@@ -7,28 +7,26 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/getsentry/sentry-go"
 	"io"
-	"testing"
 )
 
-func Get(
-	t *testing.T,
+func (o *Tester) Get(
 	locator string,
 	trace string,
 ) string {
-	t.Helper()
-	o := stall_client.New().Build()
-	defer o.Close()
+	o.t.Helper()
+	c := stall_client.New().Build()
+	defer c.Close()
 	q := web.NewGet(locator)
 
 	if trace != "" {
 		q.Header.Set(sentry.SentryTraceHeader, trace)
 	}
 
-	r, e := o.Client().Do(q)
-	assert.FatalOnError(t, e)
+	r, e := c.Client().Do(q)
+	assert.FatalOnError(o.t, e)
 	defer errors.PanicClose(r.Body)
 	b, f := io.ReadAll(r.Body)
-	assert.FatalOnError(t, f)
+	assert.FatalOnError(o.t, f)
 
 	return string(b)
 }

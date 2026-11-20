@@ -14,8 +14,7 @@ func TestPanelIsTitledArticle(t *testing.T) {
 	assert.String(
 		t,
 		`<article id="alfa"><header><strong>Bravo</strong></header><p>charlie</p></article>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			panel.New("Bravo").
 				Identifier("alfa").
 				Content(html.P(gomponents.Text("charlie"))).
@@ -28,8 +27,7 @@ func TestPanelFramesItsHeaderAndFooter(t *testing.T) {
 	assert.String(
 		t,
 		`<article><header>delta</header><p>charlie</p><footer>echo</footer></article>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			panel.New("").
 				Header(gomponents.Text("delta")).
 				Content(html.P(gomponents.Text("charlie"))).
@@ -43,8 +41,7 @@ func TestPanelTitleSharesBandWithHeaderInRow(t *testing.T) {
 	assert.String(
 		t,
 		`<article><header class="heading-row"><strong>Bravo</strong>delta</header><p>charlie</p></article>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			panel.New("Bravo").
 				Header(gomponents.Text("delta")).
 				Content(html.P(gomponents.Text("charlie"))).

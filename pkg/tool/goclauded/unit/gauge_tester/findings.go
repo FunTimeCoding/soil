@@ -14,8 +14,7 @@ func Findings(
 ) float64 {
 	t.Helper()
 
-	return metric_tester.Sample(
-		t,
+	return metric_tester.New(t).Sample(
 		r,
 		"goclauded_findings",
 		map[string]string{constant.Kind: kind},

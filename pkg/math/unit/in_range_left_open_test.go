@@ -7,10 +7,11 @@ import (
 )
 
 func TestLeftOpen(t *testing.T) {
+	m := math_tester.New(t)
 	zeroToOne := ranges.Range{L: 0, R: 1}
-	math_tester.AssertLeftOpen(t, false, 0, zeroToOne)
-	math_tester.AssertLeftOpen(t, true, 0.01, zeroToOne)
-	math_tester.AssertLeftOpen(t, true, 0.99, zeroToOne)
-	math_tester.AssertLeftOpen(t, true, 1, zeroToOne)
-	math_tester.AssertLeftOpen(t, false, 1.01, zeroToOne)
+	m.AssertLeftOpen(false, 0, zeroToOne)
+	m.AssertLeftOpen(true, 0.01, zeroToOne)
+	m.AssertLeftOpen(true, 0.99, zeroToOne)
+	m.AssertLeftOpen(true, 1, zeroToOne)
+	m.AssertLeftOpen(false, 1.01, zeroToOne)
 }

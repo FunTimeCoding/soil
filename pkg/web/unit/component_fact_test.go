@@ -14,7 +14,7 @@ func TestFactTableLabelsEachRow(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="facts"><tbody><tr><th scope="row">Alfa</th><td>bravo</td></tr></tbody></table>`,
-		web_tester.Render(t, fact.New().Row("Alfa", "bravo").Node()),
+		web_tester.New(t).Render(fact.New().Row("Alfa", "bravo").Node()),
 	)
 }
 
@@ -22,8 +22,7 @@ func TestSectionSpansBothColumns(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="facts"><tbody><tr class="section"><th colspan="2">Charlie</th></tr><tr><th scope="row">Alfa</th><td>bravo</td></tr></tbody></table>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			fact.New().Section("Charlie").Row("Alfa", "bravo").Node(),
 		),
 	)
@@ -33,8 +32,7 @@ func TestFactTooltipLandsOnLastValue(t *testing.T) {
 	assert.String(
 		t,
 		`<table class="facts"><tbody><tr><th scope="row">Alfa</th><td>bravo</td></tr><tr><th scope="row">Charlie</th><td><span data-tooltip="echo">delta</span></td></tr></tbody></table>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			fact.New().
 				Row("Alfa", "bravo").
 				Row("Charlie", "delta").
@@ -48,8 +46,7 @@ func TestGlanceSetsLabelOverValue(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="glance"><div><div class="glance-label">Alfa</div><div class="glance-value">bravo</div></div><div><div class="glance-label">Charlie</div><div class="glance-value" data-tooltip="echo">delta</div></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			fact.New().
 				Row("Alfa", "bravo").
 				Row("Charlie", "delta").
@@ -64,8 +61,7 @@ func TestGlanceColumnsCarryCount(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="glance glance-columns" style="--glance-columns: 3"><div><div class="glance-label">Alfa</div><div class="glance-value">bravo</div></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			fact.New().Row("Alfa", "bravo").Columns(3).Glance().Node(),
 		),
 	)
@@ -75,8 +71,7 @@ func TestGlanceSectionsBecomeGroups(t *testing.T) {
 	assert.String(
 		t,
 		`<div><div class="glance-group"><div class="glance"><div><div class="glance-label">Alfa</div><div class="glance-value">bravo</div></div></div></div><div class="glance-group"><h5>Charlie</h5><div class="glance"><div><div class="glance-label">Delta</div><div class="glance-value">echo</div></div></div></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			fact.New().
 				Row("Alfa", "bravo").
 				Section("Charlie").
@@ -91,8 +86,7 @@ func TestFactValueCanBeMarkup(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<tr><th scope="row">Alfa</th><td><a href="/delta">delta</a></td></tr>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			fact.New().RowNode(
 				"Alfa",
 				html.A(html.Href("/delta"), gomponents.Text("delta")),

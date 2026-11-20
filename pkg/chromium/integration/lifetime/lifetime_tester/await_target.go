@@ -5,16 +5,14 @@ package lifetime_tester
 import (
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/event"
-	"testing"
 	"time"
 )
 
-func AwaitTarget(
-	t *testing.T,
+func (o *Tester) AwaitTarget(
 	events chan *event.Event,
 	identifier string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	deadline := time.After(constant.FixtureEventTimeout)
 
 	for {
@@ -24,7 +22,7 @@ func AwaitTarget(
 				return
 			}
 		case <-deadline:
-			t.Fatalf("no event for target %s", identifier)
+			o.t.Fatalf("no event for target %s", identifier)
 		}
 	}
 }

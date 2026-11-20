@@ -5,19 +5,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument/unit/command_recorder"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/spf13/cobra"
-	"testing"
 )
 
-func Instrumented(
-	t *testing.T,
+func (o *Tester) Instrumented(
 	root *cobra.Command,
 	arguments ...string,
 ) *command_recorder.Recorder {
-	t.Helper()
+	o.t.Helper()
 	result := command_recorder.New()
 	argument.CobraInstrument(root, result)
 	root.SetArgs(arguments)
-	assert.FatalOnError(t, root.Execute())
+	assert.FatalOnError(o.t, root.Execute())
 
 	return result
 }

@@ -13,9 +13,8 @@ import (
 
 func TestSecureDialNegotiatesKeyTypeKnownHostsHolds(t *testing.T) {
 	s := server_tester.New(t)
-	system_tester.Write(
-		t,
-		system_tester.Home(t),
+	system_tester.New(t).Write(
+		system_tester.New(t).Home(),
 		".ssh/known_hosts",
 		knownhosts.Line(
 			[]string{
@@ -34,7 +33,11 @@ func TestSecureDialNegotiatesKeyTypeKnownHostsHolds(t *testing.T) {
 
 func TestSecureDialRefusesUnknownHost(t *testing.T) {
 	s := server_tester.New(t)
-	system_tester.Write(t, system_tester.Home(t), ".ssh/known_hosts", "")
+	system_tester.New(t).Write(
+		system_tester.New(t).Home(),
+		".ssh/known_hosts",
+		"",
+	)
 	c := ssh.NewWithPassword("alfa", "127.0.0.1", s.Password, true).
 		WithPort(s.Port)
 	defer c.Close()

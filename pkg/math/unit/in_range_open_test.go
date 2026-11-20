@@ -7,10 +7,11 @@ import (
 )
 
 func TestOpen(t *testing.T) {
+	m := math_tester.New(t)
 	zeroToOne := ranges.Range{L: 0, R: 1}
-	math_tester.AssertOpen(t, false, 0, zeroToOne)
-	math_tester.AssertOpen(t, true, 0.01, zeroToOne)
-	math_tester.AssertOpen(t, true, 0.99, zeroToOne)
-	math_tester.AssertOpen(t, false, 1, zeroToOne)
-	math_tester.AssertOpen(t, false, 1.01, zeroToOne)
+	m.AssertOpen(false, 0, zeroToOne)
+	m.AssertOpen(true, 0.01, zeroToOne)
+	m.AssertOpen(true, 0.99, zeroToOne)
+	m.AssertOpen(false, 1, zeroToOne)
+	m.AssertOpen(false, 1.01, zeroToOne)
 }

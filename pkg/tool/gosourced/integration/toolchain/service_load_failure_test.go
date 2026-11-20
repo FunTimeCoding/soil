@@ -18,8 +18,7 @@ func TestBrokenCallerNamesItself(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-function/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",
@@ -44,8 +43,7 @@ func TestBrokenCallerNobodyTouchesIsSettled(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-function/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nimport \"example/pkg/target\"\n\nfunc Broken() bool {\n\treturn target.IsGeneratedHeader(missing)\n}\n",
@@ -78,8 +76,7 @@ func TestBrokenPackageOutsideReachDoesNotBlock(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-function/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
@@ -107,8 +104,7 @@ func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-function/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",
@@ -133,9 +129,8 @@ func TestBrokenPackageOutsideReachDoesNotBlockWholeLoad(t *testing.T) {
 }
 
 func TestBrokenPackageOutsideReachInReplacingModuleDoesNotBlock(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
-	system_tester.Write(
-		t,
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Broken() int {\n\treturn missing\n}\n",

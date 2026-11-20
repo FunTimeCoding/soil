@@ -12,7 +12,7 @@ import (
 )
 
 func TestImportAliasFixIgnoresMethodNamesake(t *testing.T) {
-	directory := module_tester.MethodNamesake(t)
+	directory := module_tester.New(t).MethodNamesake()
 	gofix.RunImportAliasFix(
 		[]string{"./..."},
 		directory,
@@ -24,5 +24,5 @@ func TestImportAliasFixIgnoresMethodNamesake(t *testing.T) {
 		"package example\n\nimport \"testmodule/pkg/helper\"\n\ntype Holder struct{}\n\nfunc (o *Holder) helper() string {\n\treturn helper.Value()\n}\n",
 		testutil.ReadFile(t, filepath.Join(directory, "holder.go")),
 	)
-	fix_tester.Builds(t, directory)
+	fix_tester.New(t).Builds(directory)
 }

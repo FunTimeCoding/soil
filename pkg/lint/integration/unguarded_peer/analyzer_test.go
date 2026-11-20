@@ -10,7 +10,7 @@ import (
 func TestUnguardedPeerFlagsCallsOutsideGuard(t *testing.T) {
 	results := testutil.Analyze(
 		t,
-		lint_tester.StubbedSoil(t),
+		lint_tester.New(t).StubbedSoil(),
 		unguarded_peer.Check,
 	)
 	testutil.AssertBlocked(t, results, 6)

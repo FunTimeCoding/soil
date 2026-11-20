@@ -25,7 +25,7 @@ func TestMoveWithCgoConsumerStaysInsideModule(t *testing.T) {
 		true,
 	)
 	assert.FatalOnError(t, e)
-	rewrite_tester.ModuleEntries(t, r)
+	rewrite_tester.New(t).ModuleEntries(r)
 }
 
 func TestMovePackageWithTestVariantsStaysInsideModule(t *testing.T) {
@@ -40,5 +40,5 @@ func TestMovePackageWithTestVariantsStaysInsideModule(t *testing.T) {
 		false,
 	)
 	assert.FatalOnError(t, f)
-	rewrite_tester.ModuleEntries(t, r)
+	rewrite_tester.New(t).ModuleEntries(r)
 }

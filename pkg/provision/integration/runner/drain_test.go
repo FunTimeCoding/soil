@@ -13,7 +13,7 @@ import (
 )
 
 func TestStopWaitsForApplyInFlight(t *testing.T) {
-	s := runner_tester.NewHeld(t)
+	s := runner_tester.New(t, runner_tester.WithHeld())
 	s.WaitForApply(1)
 	s.Stop()
 	s.ExpectRunning()
@@ -24,7 +24,7 @@ func TestStopWaitsForApplyInFlight(t *testing.T) {
 
 func TestStopAnswersTriggerQueuedDuringApply(t *testing.T) {
 	for range 10 {
-		s := runner_tester.NewHeld(t)
+		s := runner_tester.New(t, runner_tester.WithHeld())
 		s.WaitForApply(1)
 		response := make(chan *trigger.Result, 1)
 		s.Trigger(trigger.Request{Response: response})
@@ -37,7 +37,7 @@ func TestStopAnswersTriggerQueuedDuringApply(t *testing.T) {
 }
 
 func TestInterruptStopsApplyProcess(t *testing.T) {
-	s := runner_tester.NewSleeper(t)
+	s := runner_tester.New(t, runner_tester.WithSleeper())
 	s.WaitForApply(1)
 	s.Stop()
 	s.ExpectRunning()
@@ -54,7 +54,7 @@ func TestStopTwice(t *testing.T) {
 }
 
 func TestLifecycleWaitsForApplyWithinGrace(t *testing.T) {
-	s := runner_tester.NewHeld(t)
+	s := runner_tester.New(t, runner_tester.WithHeld())
 	s.WaitForApply(1)
 	l := lifecycle.New(logger.New(context.Background())).WithWorker(s.Runner)
 	start := time.Now()
@@ -66,7 +66,7 @@ func TestLifecycleWaitsForApplyWithinGrace(t *testing.T) {
 }
 
 func TestLifecycleInterruptsApplyAtGrace(t *testing.T) {
-	s := runner_tester.NewSleeper(t)
+	s := runner_tester.New(t, runner_tester.WithSleeper())
 	s.WaitForApply(1)
 	l := lifecycle.New(logger.New(context.Background())).WithGrace(
 		lifecycleConstant.InterruptMargin + 200*time.Millisecond,

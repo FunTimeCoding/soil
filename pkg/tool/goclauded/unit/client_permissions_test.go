@@ -16,7 +16,11 @@ func TestClientReadsPermissionReport(t *testing.T) {
 	t.Setenv(soil.HomeEnvironment, t.TempDir())
 	s := base.New(t)
 	project := t.TempDir()
-	permission_tester.Settings(t, project, "settings.local.json", "Bash(ls:*)")
+	permission_tester.New(t).Settings(
+		project,
+		"settings.local.json",
+		"Bash(ls:*)",
+	)
 	e := session.New("session-a")
 	e.WorkDirectory = project
 	s.Peers.Client.AddSession(e)

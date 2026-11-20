@@ -8,10 +8,10 @@ import (
 )
 
 func TestCommandCoversEveryOperation(t *testing.T) {
-	commands := command_tester.CommandNames(t)
+	commands := command_tester.New(t).CommandNames()
 	var missing []string
 
-	for _, name := range command_tester.OperationCommands(t) {
+	for _, name := range command_tester.New(t).OperationCommands() {
 		if !slices.Contains(commands, name) {
 			missing = append(missing, name)
 		}
@@ -22,10 +22,10 @@ func TestCommandCoversEveryOperation(t *testing.T) {
 }
 
 func TestEveryCommandHasOperation(t *testing.T) {
-	operations := command_tester.OperationCommands(t)
+	operations := command_tester.New(t).OperationCommands()
 	var extra []string
 
-	for _, name := range command_tester.CommandNames(t) {
+	for _, name := range command_tester.New(t).CommandNames() {
 		if !slices.Contains(operations, name) {
 			extra = append(extra, name)
 		}

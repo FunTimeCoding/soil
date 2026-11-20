@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
@@ -20,7 +21,8 @@ func register(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			session := readHookInput().SessionIdentifier
+			input := readHookInput()
+			session := input.SessionIdentifier
 
 			if session == "" {
 				return
@@ -58,15 +60,20 @@ func register(c *command_context.Context) *cobra.Command {
 				}
 			}
 
+			lines := []string{fmt.Sprintf("[goclauded] Called %s today.", name)}
+			warning := labelWarning(input.WorkingDirectory)
+
+			if warning != "" {
+				lines = append(lines, warning)
+			}
+
 			errors.PanicOnError(
 				json.NewEncoder(os.Stdout).Encode(
 					HookOutput{
+						SystemMessage: warning,
 						HookSpecificOutput: HookSpecificOutput{
-							HookEventName: "SessionStart",
-							AdditionalContext: fmt.Sprintf(
-								"[goclauded] Called %s today.",
-								name,
-							),
+							HookEventName:     "SessionStart",
+							AdditionalContext: join.NewLine(lines),
 						},
 					},
 				),

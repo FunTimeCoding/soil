@@ -13,8 +13,7 @@ func TestFieldRowShowsItsLabelValueAndActions(t *testing.T) {
 	assert.String(
 		t,
 		`<div id="field-alfa" class="field-row"><span class="field-label"><span data-tooltip="Bravo help">Bravo</span></span><span class="field-value">charlie</span><span class="field-actions"><button>delta</button></span></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			field_row.New("Bravo").
 				Identifier("field-alfa").
 				Tooltip("Bravo help").
@@ -29,7 +28,7 @@ func TestEmptyFieldRowReadsNotSet(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row field-unset"><span class="field-label">Echo</span><span class="field-value"><span class="absent">not set</span></span></div>`,
-		web_tester.Render(t, field_row.New("Echo").Value("").Node()),
+		web_tester.New(t).Render(field_row.New("Echo").Value("").Node()),
 	)
 }
 
@@ -37,8 +36,7 @@ func TestNoteIsMutedWithoutMarkingRowUnset(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row"><span class="field-label">Foxtrot</span><span class="field-value"><small class="field-note">text · required</small></span></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			field_row.New("Foxtrot").Note("text · required").Node(),
 		),
 	)
@@ -48,8 +46,7 @@ func TestUnlabelledRowCarriesItsContent(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="field-row"><span class="field-value"><a href="/golf">Golf</a></span></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			field_row.New("").
 				ValueNode(html.A(html.Href("/golf"), gomponents.Text("Golf"))).
 				Node(),

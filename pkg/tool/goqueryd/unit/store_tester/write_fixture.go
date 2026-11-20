@@ -4,16 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func WriteFixture(
-	t *testing.T,
+func (o *Tester) WriteFixture(
 	directory string,
 	name string,
 	content string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	path := filepath.Join(directory, name)
 	errors.PanicOnError(os.MkdirAll(filepath.Dir(path), 0o755))
 	errors.PanicOnError(os.WriteFile(path, []byte(content), 0o644))

@@ -38,8 +38,7 @@ func New(
 		s.Lease.Failure = outage_tester.RefusedDial()
 	}
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		peer,
 	).Unavailable

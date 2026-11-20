@@ -6,8 +6,9 @@ import (
 )
 
 func TestGoAboveFloat(t *testing.T) {
-	math_tester.AssertGoAboveFloat(t, false, 52, 51, 50)
-	math_tester.AssertGoAboveFloat(t, false, 51, 50, 50)
-	math_tester.AssertGoAboveFloat(t, false, 51, 49, 50)
-	math_tester.AssertGoAboveFloat(t, true, 49, 51, 50)
+	m := math_tester.New(t)
+	m.AssertGoAboveFloat(false, 52, 51, 50)
+	m.AssertGoAboveFloat(false, 51, 50, 50)
+	m.AssertGoAboveFloat(false, 51, 49, 50)
+	m.AssertGoAboveFloat(true, 49, 51, 50)
 }

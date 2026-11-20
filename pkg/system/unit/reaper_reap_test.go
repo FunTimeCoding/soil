@@ -27,7 +27,7 @@ func TestReapedChildMovesCounterAndCapturesNothing(t *testing.T) {
 	deadline := time.Now().Add(5 * time.Second)
 	labels := map[string]string{constant.ReapedCommand: "true"}
 
-	for metric_tester.Sample(t, y, "reaper_reaped_total", labels) < 1 &&
+	for metric_tester.New(t).Sample(y, "reaper_reaped_total", labels) < 1 &&
 		time.Now().Before(deadline) {
 		r.Reap()
 		time.Sleep(10 * time.Millisecond)
@@ -36,7 +36,7 @@ func TestReapedChildMovesCounterAndCapturesNothing(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(t, y, "reaper_reaped_total", labels),
+		metric_tester.New(t).Sample(y, "reaper_reaped_total", labels),
 	)
 	assert.Count(t, 0, m.Events())
 }

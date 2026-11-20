@@ -9,15 +9,15 @@ import (
 )
 
 func TestDefaultFormatsAfterDealiasing(t *testing.T) {
-	directory := module_tester.AliasedCall(t)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
+	m := module_tester.New(t)
+	directory := m.AliasedCall()
+	m.RunDefault(
+		m.Options(directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)
 	assert.String(
 		t,
 		"package example\n\nimport \"testmodule/pkg/helper\"\n\nfunc Use() string {\n\treturn helper.Join(\"first-literal-value\", \"second-literal-value\", \"third\")\n}\n",
-		fix_tester.GoFiles(t, directory)["use.go"],
+		fix_tester.New(t).GoFiles(directory)["use.go"],
 	)
 }

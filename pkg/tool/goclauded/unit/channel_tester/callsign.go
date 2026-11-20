@@ -4,17 +4,15 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"testing"
 	"time"
 )
 
-func Callsign(
-	t *testing.T,
+func (o *Tester) Callsign(
 	s *base.Server,
 	x context.Context,
 	since time.Time,
 ) chan string {
-	t.Helper()
+	o.t.Helper()
 	result := make(chan string, 1)
 	go func() {
 		response, e := s.RESTClient().GetChannelCallsignWithResponse(

@@ -12,9 +12,9 @@ import (
 type Tester struct {
 	t          *testing.T
 	Option     *option.Terraform
-	Service    *service.Service
 	Cluster    *mock_client.Client
 	Reporter   *memory.Memory
+	service    *service.Service
 	hostname   string
 	unlockExit int
 	plan       string

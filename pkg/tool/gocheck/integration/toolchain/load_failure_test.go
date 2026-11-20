@@ -15,26 +15,22 @@ func TestPackageThatDoesNotLoadIsFindingNotExit(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/tool/charlie/charlie.go",
 		"package charlie\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"cmd/charlie/main.go",
 		"package main\n\nfunc main() {}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/spacing/spacing.go",
 		"package spacing\n\nfunc Alfa() int {\n\tbravo := 1\n\treturn bravo\n}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/broken/broken.go",
 		"package broken\n\nfunc Delta() int {\n\treturn echo\n}\n",
@@ -44,7 +40,7 @@ func TestPackageThatDoesNotLoadIsFindingNotExit(t *testing.T) {
 	o.Index = t.TempDir()
 	blocked := false
 	printed := testutil.CaptureStdout(
-		func() { blocked = gocheck.Print(check_tester.Run(t, o)) },
+		func() { blocked = gocheck.Print(check_tester.New(t).Run(o)) },
 	)
 	assert.True(t, blocked)
 	assert.StringContains(

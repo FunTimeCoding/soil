@@ -15,7 +15,7 @@ func (s *Server) Daemon() *daemon.Daemon {
 	}
 
 	directory := s.t.TempDir()
-	system_tester.Write(s.t, directory, "Procfile", s.procfile)
+	system_tester.New(s.t).Write(directory, "Procfile", s.procfile)
 	o := option.New()
 	o.ProcfilePath = filepath.Join(directory, "Procfile")
 	o.EnvrcPath = filepath.Join(directory, ".envrc")

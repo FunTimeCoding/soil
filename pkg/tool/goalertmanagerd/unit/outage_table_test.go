@@ -11,8 +11,7 @@ import (
 )
 
 func TestToolsOnAlertmanagerOutage(t *testing.T) {
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.AlertmanagerPeer)
 		},
@@ -23,8 +22,7 @@ func TestToolsOnAlertmanagerOutage(t *testing.T) {
 }
 
 func TestToolsOnPrometheusOutage(t *testing.T) {
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.PrometheusPeer)
 		},

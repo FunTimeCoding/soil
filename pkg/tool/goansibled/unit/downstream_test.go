@@ -12,6 +12,7 @@ import (
 
 func TestHostEventsLimitPlaybooksToLiveHosts(t *testing.T) {
 	o := service_tester.New(t, nil)
+	o.Service()
 	o.WaitForRun()
 	runs := o.TriggerHosts(
 		[]*host_event.Event{
@@ -29,6 +30,7 @@ func TestHostEventsLimitPlaybooksToLiveHosts(t *testing.T) {
 
 func TestHostEventsReachingNoLiveHostSkipRun(t *testing.T) {
 	o := service_tester.New(t, nil)
+	o.Service()
 	o.WaitForRun()
 	runs := o.TriggerHosts(
 		[]*host_event.Event{
@@ -36,7 +38,7 @@ func TestHostEventsReachingNoLiveHostSkipRun(t *testing.T) {
 		},
 	)
 	assert.Count(t, 0, runs)
-	recent, e := o.Service.Recent(10)
+	recent, e := o.Service().Recent(10)
 	errors.PanicOnError(e)
 	assert.Count(t, 1, recent)
 }

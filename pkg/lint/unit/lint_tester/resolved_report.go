@@ -6,20 +6,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/pointer_cache"
 	"github.com/funtimecoding/soil/pkg/source/warm_forest"
-	"testing"
 )
 
-func ResolvedReport(
-	t *testing.T,
+func (o *Tester) ResolvedReport(
 	root string,
 	f *warm_forest.Forest,
 	c *pointer_cache.Cache,
 ) *output.Results {
-	t.Helper()
+	o.t.Helper()
 	c.Begin(f.Refresh())
-	o := option.New("", false)
-	o.Trees = f
-	o.Resolved = c
+	p := option.New("", false)
+	p.Trees = f
+	p.Resolved = c
 
-	return lint.Report("golint", root, o)
+	return lint.Report("golint", root, p)
 }

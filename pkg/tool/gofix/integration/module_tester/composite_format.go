@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func CompositeFormat(t *testing.T) string {
-	t.Helper()
+func (o *Tester) CompositeFormat() string {
+	o.t.Helper()
 
-	return New(t, "example").
+	return module.New(o.t,"example").
 		File(
 			"shared_line.go",
 			"package example\n\nfunc SharedLine() []int {\n\treturn []int{\n\t\t1, 2,\n\t\t3,\n\t}\n}\n",

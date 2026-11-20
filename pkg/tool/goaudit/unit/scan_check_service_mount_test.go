@@ -20,7 +20,7 @@ func TestServiceMountMissingFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.MissingServiceMountKey, s[0])
+	scan_tester.New(t).Concern(constant.MissingServiceMountKey, s[0])
 }
 
 func TestServiceMountPresentClean(t *testing.T) {
@@ -34,5 +34,5 @@ func TestServiceMountPresentClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/mount.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.MissingServiceMountKey, s[0])
+	scan_tester.New(t).NoConcern(constant.MissingServiceMountKey, s[0])
 }

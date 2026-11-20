@@ -6,21 +6,21 @@ import (
 )
 
 func TestNormalizeFloatMeetMinimum(t *testing.T) {
-	math_tester.AssertNormalizeFloat(t, 0, 0, 0, 100)
+	math_tester.New(t).AssertNormalizeFloat(0, 0, 0, 100)
 }
 
 func TestNormalizeFloatBelowMinimum(t *testing.T) {
-	math_tester.AssertNormalizeFloat(t, 0, -1, 0, 100)
+	math_tester.New(t).AssertNormalizeFloat(0, -1, 0, 100)
 }
 
 func TestNormalizeFloatMeetMaximum(t *testing.T) {
-	math_tester.AssertNormalizeFloat(t, 100, 100, 0, 100)
+	math_tester.New(t).AssertNormalizeFloat(100, 100, 0, 100)
 }
 
 func TestNormalizeFloatAboveMaximum(t *testing.T) {
-	math_tester.AssertNormalizeFloat(t, 100, 101, 0, 100)
+	math_tester.New(t).AssertNormalizeFloat(100, 101, 0, 100)
 }
 
 func TestNormalizeFloatNoMaximum(t *testing.T) {
-	math_tester.AssertNormalizeFloat(t, 101, 101, 0, 0)
+	math_tester.New(t).AssertNormalizeFloat(101, 101, 0, 0)
 }

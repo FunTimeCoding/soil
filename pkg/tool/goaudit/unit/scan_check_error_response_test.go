@@ -10,19 +10,17 @@ import (
 func TestErrorResponseOnCaptured503IsClean(t *testing.T) {
 	v := virtual_file_system.New()
 	scan_tester.WriteServedSpec(v, scan_tester.ErrorResponseSpec("503"))
-	scan_tester.NoConcern(
-		t,
+	scan_tester.New(t).NoConcern(
 		constant.ErrorResponseOnNon500Key,
-		scan_tester.One(t, v, false),
+		scan_tester.New(t).One(v, false),
 	)
 }
 
 func TestErrorResponseOnA404IsFlagged(t *testing.T) {
 	v := virtual_file_system.New()
 	scan_tester.WriteServedSpec(v, scan_tester.ErrorResponseSpec("404"))
-	scan_tester.Concern(
-		t,
+	scan_tester.New(t).Concern(
 		constant.ErrorResponseOnNon500Key,
-		scan_tester.One(t, v, false),
+		scan_tester.New(t).One(v, false),
 	)
 }

@@ -15,9 +15,9 @@ func New(
 ) (*service.Service, *store.Store) {
 	t.Helper()
 	q := service_tester.New(t)
-	s := store_tester.OpenFileStore(t, q.Path)
+	s := store_tester.New(t).OpenFileStore(q.Path)
 	d := t.TempDir()
-	store_tester.WriteFixture(t, d, "alfa.md", "one two three\n")
+	store_tester.New(t).WriteFixture(d, "alfa.md", "one two three\n")
 	s.AddCollection("test", d, constant.DefaultGlob)
 	s.Index("test")
 	s.InsertEmbedding(

@@ -104,7 +104,7 @@ func TestMoveIntoExistingFileNamesCarriedConstants(t *testing.T) {
 }
 
 func TestMoveKeepsOneImportBlock(t *testing.T) {
-	o := module_tester.DottedModule(t, "move-dotted/src")
+	o := module_tester.New(t).DottedModule("move-dotted/src")
 	r, e := o.Symbol.MoveSymbol(
 		t.Context(),
 		o.Directory,

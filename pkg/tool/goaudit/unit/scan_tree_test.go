@@ -39,7 +39,7 @@ func TestTreeSkipsTemporaryDirectories(t *testing.T) {
 func TestTreeStopsAtNestedModule(t *testing.T) {
 	base := t.TempDir()
 	scan_tester.WriteSource(base, "pkg/alfa/alfa_test.go")
-	system_tester.Write(t, base, "graft/bravo/go.mod", "module bravo\n")
+	system_tester.New(t).Write(base, "graft/bravo/go.mod", "module bravo\n")
 	scan_tester.WriteSource(base, "graft/bravo/bravo_test.go")
 	assert.Strings(
 		t,

@@ -7,17 +7,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 	"strconv"
-	"testing"
 )
 
-func Psql(
-	t *testing.T,
+func (o *Tester) Psql(
 	container string,
 	i *instance.Instance,
 	database string,
 	sql string,
 ) string {
-	t.Helper()
+	o.t.Helper()
 	r := run.New().NoPanic()
 	result := r.Start(
 		"podman",
@@ -39,7 +37,7 @@ func Psql(
 		"--command",
 		sql,
 	)
-	assert.FatalOnError(t, r.Error)
+	assert.FatalOnError(o.t, r.Error)
 
 	return result
 }

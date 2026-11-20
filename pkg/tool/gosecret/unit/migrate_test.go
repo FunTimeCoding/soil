@@ -14,10 +14,10 @@ import (
 )
 
 func TestMigrateStoresManifestValues(t *testing.T) {
-	s := secret_tester.Client(t)
+	s := secret_tester.New(t).Client()
 	r, e := gosecret.Migrate(
 		s,
-		secret_tester.Manifest(t),
+		secret_tester.New(t).Manifest(),
 		"alfa",
 		constant.DefaultStore,
 	)
@@ -31,9 +31,9 @@ func TestMigrateStoresManifestValues(t *testing.T) {
 }
 
 func TestMigrateTurnsManifestIntoExternalSecret(t *testing.T) {
-	path := secret_tester.Manifest(t)
+	path := secret_tester.New(t).Manifest()
 	_, e := gosecret.Migrate(
-		secret_tester.Client(t),
+		secret_tester.New(t).Client(),
 		path,
 		"alfa",
 		constant.DefaultStore,
@@ -60,9 +60,9 @@ func TestMigrateTakesNamespaceFromDirectory(t *testing.T) {
 	directory := filepath.Join(t.TempDir(), "bravo")
 	errors.PanicOnError(os.Mkdir(directory, 0o755))
 	path := filepath.Join(directory, "example-secret.yaml")
-	errors.PanicOnError(os.Rename(secret_tester.Manifest(t), path))
+	errors.PanicOnError(os.Rename(secret_tester.New(t).Manifest(), path))
 	r, e := gosecret.Migrate(
-		secret_tester.Client(t),
+		secret_tester.New(t).Client(),
 		path,
 		"",
 		constant.DefaultStore,
@@ -72,11 +72,11 @@ func TestMigrateTakesNamespaceFromDirectory(t *testing.T) {
 }
 
 func TestMigrateRemovesDecodedFile(t *testing.T) {
-	path := secret_tester.Manifest(t)
+	path := secret_tester.New(t).Manifest()
 	decoded := gosecret.GetDecodedPath(path)
 	system.SaveFile(decoded, "=== ALFA ===\none\n=== CHARLIE ===\nthree\n")
 	r, e := gosecret.Migrate(
-		secret_tester.Client(t),
+		secret_tester.New(t).Client(),
 		path,
 		"alfa",
 		constant.DefaultStore,
@@ -87,20 +87,20 @@ func TestMigrateRemovesDecodedFile(t *testing.T) {
 }
 
 func TestMigrateRefusesDecodedFileThatDiffers(t *testing.T) {
-	path := secret_tester.Manifest(t)
+	path := secret_tester.New(t).Manifest()
 	system.SaveFile(
 		gosecret.GetDecodedPath(path),
 		"=== ALFA ===\nedited\n=== CHARLIE ===\nthree\n",
 	)
-	s := secret_tester.Client(t)
+	s := secret_tester.New(t).Client()
 	_, e := gosecret.Migrate(s, path, "alfa", constant.DefaultStore)
 	assert.True(t, validation.Is(e))
 	assert.Count(t, 0, s.Secrets["alfa/example-secret"])
 }
 
 func TestMigrateLeavesManifestWhenStoreDisagrees(t *testing.T) {
-	path := secret_tester.Manifest(t)
-	s := secret_tester.Client(t)
+	path := secret_tester.New(t).Manifest()
+	s := secret_tester.New(t).Client()
 	s.Tamper = "ALFA"
 	_, e := gosecret.Migrate(s, path, "alfa", constant.DefaultStore)
 	assert.StringContains(t, "stored value differs", e.Error())
@@ -112,11 +112,11 @@ func TestMigrateLeavesManifestWhenStoreDisagrees(t *testing.T) {
 }
 
 func TestMigrateReportsKeysAlreadyInStore(t *testing.T) {
-	s := secret_tester.Client(t)
+	s := secret_tester.New(t).Client()
 	s.Secrets["alfa/example-secret"] = map[string]string{"DELTA": "four"}
 	r, e := gosecret.Migrate(
 		s,
-		secret_tester.Manifest(t),
+		secret_tester.New(t).Manifest(),
 		"alfa",
 		constant.DefaultStore,
 	)

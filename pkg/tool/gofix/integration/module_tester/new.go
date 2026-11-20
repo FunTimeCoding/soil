@@ -1,23 +1,9 @@
 package module_tester
 
-import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/system/system_tester"
-	"testing"
-)
+import "testing"
 
-func New(
-	t *testing.T,
-	name string,
-) *Module {
+func New(t *testing.T) *Tester {
 	t.Helper()
-	directory := t.TempDir()
-	system_tester.Write(
-		t,
-		directory,
-		"go.mod",
-		fmt.Sprintf("module %s\n\ngo 1.22\n", name),
-	)
 
-	return &Module{t: t, directory: directory}
+	return &Tester{t: t}
 }

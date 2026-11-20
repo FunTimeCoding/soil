@@ -6,16 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func GoFiles(
-	t *testing.T,
-	directory string,
-) map[string]string {
-	t.Helper()
+func (o *Tester) GoFiles(directory string) map[string]string {
+	o.t.Helper()
 	entries, e := os.ReadDir(directory)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	result := make(map[string]string)
 
 	for _, entry := range entries {
@@ -24,7 +20,7 @@ func GoFiles(
 		}
 
 		result[entry.Name()] = testutil.ReadFile(
-			t,
+			o.t,
 			filepath.Join(directory, entry.Name()),
 		)
 	}

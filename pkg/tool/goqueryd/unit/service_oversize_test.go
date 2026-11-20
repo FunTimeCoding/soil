@@ -8,7 +8,7 @@ import (
 )
 
 func TestOversizeListsFilesOverTokenLimitWorstFirst(t *testing.T) {
-	r := oversize_tester.Report(t, "")
+	r := oversize_tester.New(t).Report("")
 	assert.String(t, "mock", r.Model)
 	assert.Integer(t, 5, r.TokenLimit)
 	assert.Count(t, 2, r.Files)
@@ -19,7 +19,7 @@ func TestOversizeListsFilesOverTokenLimitWorstFirst(t *testing.T) {
 }
 
 func TestOversizeChunkCarriesLinesBytesAndTokens(t *testing.T) {
-	c := oversize_tester.Report(t, "").Files[0].Chunks[0]
+	c := oversize_tester.New(t).Report("").Files[0].Chunks[0]
 	assert.Integer(t, 0, c.Index)
 	assert.Integer(t, 1, c.FirstLine)
 	assert.Integer(t, 4, c.LastLine)
@@ -28,7 +28,7 @@ func TestOversizeChunkCarriesLinesBytesAndTokens(t *testing.T) {
 }
 
 func TestOversizeListsChunkOverEmbedderAlone(t *testing.T) {
-	r := oversize_tester.ReportWithin(t, "", math.MaxInt, 8)
+	r := oversize_tester.New(t).ReportWithin("", math.MaxInt, 8)
 	assert.Integer(t, 8, r.EmbedTokenLimit)
 	assert.Count(t, 1, r.Files)
 	assert.String(t, "bravo.md", r.Files[0].Path)
@@ -36,5 +36,5 @@ func TestOversizeListsChunkOverEmbedderAlone(t *testing.T) {
 }
 
 func TestOversizeCollectionFilterExcludesOtherCollections(t *testing.T) {
-	assert.Count(t, 0, oversize_tester.Report(t, "other").Files)
+	assert.Count(t, 0, oversize_tester.New(t).Report("other").Files)
 }

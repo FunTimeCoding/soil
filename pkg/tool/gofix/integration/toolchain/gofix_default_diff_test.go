@@ -11,20 +11,20 @@ import (
 )
 
 func TestDefaultDiffShowsCombinedRun(t *testing.T) {
-	directory := module_tester.Interacting(t)
+	m := module_tester.New(t)
+	directory := m.Interacting()
 	path := filepath.Join(directory, "interact.go")
-	before := fix_tester.GoFiles(t, directory)
+	before := fix_tester.New(t).GoFiles(directory)
 	printed := assert.Capture(
 		t,
 		func() {
-			module_tester.RunDefault(
-				t,
-				module_tester.Options(t, directory, true, false, "./..."),
+			m.RunDefault(
+				m.Options(directory, true, false, "./..."),
 				output.NewResultsWithDirectory(directory),
 			)
 		},
 	)
-	assert.Any(t, before, fix_tester.GoFiles(t, directory))
+	assert.Any(t, before, fix_tester.New(t).GoFiles(directory))
 	assert.String(
 		t,
 		fmt.Sprintf(
@@ -33,14 +33,13 @@ func TestDefaultDiffShowsCombinedRun(t *testing.T) {
 		),
 		printed,
 	)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
+	m.RunDefault(
+		m.Options(directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)
 	assert.String(
 		t,
 		"package example\n\nfunc Interact(directoryName string, directoryPath string) string {\n\treturn join(\n\t\tdirectoryName,\n\t\tdirectoryPath,\n\t\t\"some-moderately-long-literal-value-here\",\n\t)\n}\n\nfunc join(a, b, c string) string { return a + b + c }\n",
-		fix_tester.GoFiles(t, directory)["interact.go"],
+		fix_tester.New(t).GoFiles(directory)["interact.go"],
 	)
 }

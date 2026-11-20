@@ -24,7 +24,7 @@ func TestMoveKeepsVariadicSpread(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	user := o.Read("pkg/user/use.go")
-	rewrite_tester.Formatted(t, user)
+	rewrite_tester.New(t).Formatted(user)
 	assert.StringContains(
 		t,
 		"destination.AdditionalEntriesForTheVariadicSpread...)",

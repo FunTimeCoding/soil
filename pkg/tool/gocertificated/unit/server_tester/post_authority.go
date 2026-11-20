@@ -7,21 +7,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"testing"
 )
 
-func PostAuthority(
-	t *testing.T,
+func (o *Tester) PostAuthority(
 	c *client.ClientWithResponses,
 	b *server.AuthorityBody,
 ) *client.PostAuthorityResponse {
-	t.Helper()
+	o.t.Helper()
 	result, e := c.PostAuthorityWithBodyWithResponse(
-		t.Context(),
+		o.t.Context(),
 		webConstant.Object,
 		bytes.NewReader(notation.Marshal(b)),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return result
 }

@@ -3,6 +3,7 @@ package request
 import (
 	"context"
 	"net/url"
+	"time"
 )
 
 type Request struct {
@@ -19,4 +20,5 @@ type Request struct {
 		[]byte,
 	) error
 	Statuses map[int]string
+	Since    time.Time
 }

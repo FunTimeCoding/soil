@@ -69,8 +69,7 @@ func TestInterruptingListIsConcernThatIsNotFixed(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("one two\n- three four\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{

@@ -13,7 +13,7 @@ import (
 )
 
 func TestMovePackageRetargetsReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("package-replacer")
 	r, e := o.Packages.MovePackage(
 		t.Context(),
 		library,
@@ -50,7 +50,7 @@ func TestMovePackageRetargetsReplacingModule(t *testing.T) {
 }
 
 func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("package-replacer")
 	r, e := o.Packages.RenamePackage(
 		t.Context(),
 		library,
@@ -81,7 +81,7 @@ func TestRenamePackageRenamesQualifiersInReplacingModule(t *testing.T) {
 }
 
 func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("package-replacer")
 	r, e := o.Packages.RenamePackageClause(
 		t.Context(),
 		library,
@@ -92,7 +92,7 @@ func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := o.Read("pkg/user/user.go")
-	rewrite_tester.Formatted(t, source)
+	rewrite_tester.New(t).Formatted(source)
 	assert.StringContains(t, "\"other.test/lib/shape\"", source)
 	assert.StringContains(t, "return form.New().Width", source)
 	assert.StringContains(
@@ -103,9 +103,8 @@ func TestRenamePackageClauseRenamesQualifiersInReplacingModule(t *testing.T) {
 }
 
 func TestRenamePackageRefusedWhenNameIsTakenInReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
-	system_tester.Write(
-		t,
+	library, o := module_tester.New(t).ReplacedLibrary("package-replacer")
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/clash/clash.go",
 		"package clash\n\nimport \"other.test/lib/shape\"\n\nfunc form() int {\n\treturn shape.New().Width\n}\n",
@@ -129,7 +128,7 @@ func TestRenamePackageRefusedWhenNameIsTakenInReplacingModule(t *testing.T) {
 }
 
 func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("package-replacer")
 	assert.FatalOnError(t, os.RemoveAll(filepath.Join(o.Directory, "pkg/user")))
 	assert.FatalOnError(
 		t,
@@ -152,8 +151,8 @@ func TestMovePackageReachesReplacingModuleThroughSubpackage(t *testing.T) {
 }
 
 func TestMovePackageDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "package-replacer")
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	library, o := module_tester.New(t).ReplacedLibrary("package-replacer")
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Packages.MovePackage(
 		t.Context(),
 		library,
@@ -163,7 +162,7 @@ func TestMovePackageDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 	assert.True(t, system.FileExists(filepath.Join(library, "shape/shape.go")))
 	assert.StringContains(
 		t,

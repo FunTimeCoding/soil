@@ -12,7 +12,7 @@ import (
 )
 
 func TestAlertsAnswerFromNamedInstance(t *testing.T) {
-	s := service_tester.NewRefusingBravo(t)
+	s := service_tester.New(t, service_tester.WithRefusingBravo()).Service()
 	_, _, e := s.Alerts(t.Context(), "alfa", alert_filter.New())
 	assert.FatalOnError(t, e)
 	_, _, f := s.Alerts(t.Context(), "bravo", alert_filter.New())
@@ -20,7 +20,7 @@ func TestAlertsAnswerFromNamedInstance(t *testing.T) {
 }
 
 func TestSilencesAnswerFromNamedInstance(t *testing.T) {
-	s := service_tester.NewRefusingBravo(t)
+	s := service_tester.New(t, service_tester.WithRefusingBravo()).Service()
 	_, e := s.Silences(t.Context(), "alfa", false)
 	assert.FatalOnError(t, e)
 	_, f := s.Silences(t.Context(), "bravo", false)
@@ -28,7 +28,7 @@ func TestSilencesAnswerFromNamedInstance(t *testing.T) {
 }
 
 func TestCreateSilenceAnswersFromNamedInstance(t *testing.T) {
-	s := service_tester.NewRefusingBravo(t)
+	s := service_tester.New(t, service_tester.WithRefusingBravo()).Service()
 	_, e := s.CreateSilence(t.Context(), "alfa", "Watchdog", "", time.Hour)
 	assert.FatalOnError(t, e)
 	_, f := s.CreateSilence(t.Context(), "bravo", "Watchdog", "", time.Hour)
@@ -36,7 +36,7 @@ func TestCreateSilenceAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestDeleteSilenceAnswersFromNamedInstance(t *testing.T) {
-	s := service_tester.NewRefusingBravo(t)
+	s := service_tester.New(t, service_tester.WithRefusingBravo()).Service()
 	assert.FatalOnError(t, s.DeleteSilence(t.Context(), "alfa", "silence-1"))
 	assert.True(
 		t,
@@ -45,7 +45,7 @@ func TestDeleteSilenceAnswersFromNamedInstance(t *testing.T) {
 }
 
 func TestStatusAnswersFromNamedInstance(t *testing.T) {
-	s := service_tester.NewRefusingBravo(t)
+	s := service_tester.New(t, service_tester.WithRefusingBravo()).Service()
 	_, e := s.Status(t.Context(), "alfa")
 	assert.FatalOnError(t, e)
 	_, f := s.Status(t.Context(), "bravo")

@@ -26,7 +26,10 @@ func TestCheckImportFix(t *testing.T) {
 	assert.String(
 		t,
 		"package foo\n\nimport \"fmt\"\n\nfunc Foo() {\n\tfmt.Println(\"hello\")\n}\n",
-		layer_tester.Content(t, fixes, filepath.Join(root, "pkg/foo/foo.go")),
+		layer_tester.New(t).Content(
+			fixes,
+			filepath.Join(root, "pkg/foo/foo.go"),
+		),
 	)
 }
 
@@ -177,8 +180,7 @@ func TestCheckResultImportCollapsed(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
-	lint_tester.Concern(
-		t,
+	lint_tester.New(t).Concern(
 		true,
 		"pkg/foo/foo.go",
 		constant.SingleMultiImportText,
@@ -194,8 +196,7 @@ func TestCheckReportsFixableConcernWithoutFix(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), option.New("", false), &r)
-	lint_tester.Concern(
-		t,
+	lint_tester.New(t).Concern(
 		false,
 		"pkg/foo/foo.go",
 		constant.SingleMultiImportText,
@@ -211,8 +212,7 @@ func TestCheckResultBlankLineRemoved(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
-	lint_tester.Concern(
-		t,
+	lint_tester.New(t).Concern(
 		true,
 		"pkg/foo/foo.go",
 		constant.BlankInsideFunctionText,
@@ -228,8 +228,7 @@ func TestCheckResultBlankLineInserted(t *testing.T) {
 	)
 	var r output.Results
 	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
-	lint_tester.Concern(
-		t,
+	lint_tester.New(t).Concern(
 		true,
 		"pkg/foo/foo.go",
 		constant.MissingBlankBeforeControlText,

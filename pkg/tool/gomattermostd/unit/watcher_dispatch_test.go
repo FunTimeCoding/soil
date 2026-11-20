@@ -12,7 +12,7 @@ import (
 )
 
 func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("foxtrot", "Foxtrot")
 	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
@@ -36,7 +36,7 @@ func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
 }
 
 func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddUser("foxtrot", "Foxtrot")
 	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	o.Watcher.Dispatch(
@@ -53,7 +53,7 @@ func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {
 }
 
 func TestWatcherDispatchIgnoresOwnPost(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	o.Watcher.Index("alfa")
@@ -71,7 +71,7 @@ func TestWatcherDispatchIgnoresOwnPost(t *testing.T) {
 }
 
 func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Client.AddReply("alfa", "reply")
 	o.Client.AddUser("golf", "Golf")
@@ -95,7 +95,7 @@ func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
 }
 
 func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("golf", "Golf")
 	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
@@ -114,7 +114,7 @@ func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
 }
 
 func TestWatcherForgetStopsMatching(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("foxtrot", "Foxtrot")
 	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
@@ -134,7 +134,7 @@ func TestWatcherForgetStopsMatching(t *testing.T) {
 }
 
 func TestWatcherDueHoldsRootInsideItsWindow(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("foxtrot", "Foxtrot")
 	o.Watcher.Index("alfa")
@@ -161,7 +161,7 @@ func TestWatcherDueHoldsRootInsideItsWindow(t *testing.T) {
 }
 
 func TestWatcherDueCoalescesRootsEvents(t *testing.T) {
-	o := worker_tester.NewDispatchWatcher(t)
+	o := worker_tester.New(t).DispatchWatcher()
 	o.Client.AddPost("alfa")
 	o.Client.AddUser("foxtrot", "Foxtrot")
 	o.Watcher.Index("alfa")

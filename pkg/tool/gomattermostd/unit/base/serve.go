@@ -31,7 +31,7 @@ func serve(
 	t.Cleanup(d.Close)
 	result := &Server{
 		Upstream:      upstream,
-		Store:         worker_tester.NewStoreOnFile(t, o.LitePath),
+		Store:         worker_tester.New(t).StoreOnFile(o.LitePath),
 		Reporter:      r,
 		ContextServer: model_context_server.Mount(t, d, r),
 		t:             t,

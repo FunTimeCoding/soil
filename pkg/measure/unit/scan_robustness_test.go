@@ -10,13 +10,13 @@ import (
 
 func TestScanHonorsIgnore(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, ".gitignore", "build/\n*.log\n")
-	system_tester.Write(t, root, "keep.go", "package keep\n")
-	system_tester.Write(t, root, "build/out.go", "package out\n")
-	system_tester.Write(t, root, "notes.log", "line\n")
-	system_tester.Write(t, root, "nested/.gitignore", "secret.go\n")
-	system_tester.Write(t, root, "nested/secret.go", "package secret\n")
-	system_tester.Write(t, root, "nested/open.go", "package open\n")
+	system_tester.New(t).Write(root, ".gitignore", "build/\n*.log\n")
+	system_tester.New(t).Write(root, "keep.go", "package keep\n")
+	system_tester.New(t).Write(root, "build/out.go", "package out\n")
+	system_tester.New(t).Write(root, "notes.log", "line\n")
+	system_tester.New(t).Write(root, "nested/.gitignore", "secret.go\n")
+	system_tester.New(t).Write(root, "nested/secret.go", "package secret\n")
+	system_tester.New(t).Write(root, "nested/open.go", "package open\n")
 	r := measure_tester.Scan(root)
 	assert.Count(t, 4, r.Files)
 	assert.Count(t, 0, r.Unplaced)
@@ -29,8 +29,8 @@ func TestScanHonorsIgnore(t *testing.T) {
 
 func TestScanSkipsBinary(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "blob.go", "package main\x00\x01\x02")
-	system_tester.Write(t, root, "text.go", "package main\n")
+	system_tester.New(t).Write(root, "blob.go", "package main\x00\x01\x02")
+	system_tester.New(t).Write(root, "text.go", "package main\n")
 	r := measure_tester.Scan(root)
 	assert.Count(t, 1, r.Files)
 	assert.Strings(t, []string{filepath.Join(root, "blob.go")}, r.Skipped)
@@ -38,8 +38,8 @@ func TestScanSkipsBinary(t *testing.T) {
 
 func TestScanSkipsUnreadable(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "text.go", "package main\n")
-	system_tester.Write(t, root, "locked.go", "package main\n")
+	system_tester.New(t).Write(root, "text.go", "package main\n")
+	system_tester.New(t).Write(root, "locked.go", "package main\n")
 	measure_tester.Unreadable(t, filepath.Join(root, "locked.go"))
 	r := measure_tester.Scan(root)
 	assert.Count(t, 1, r.Files)

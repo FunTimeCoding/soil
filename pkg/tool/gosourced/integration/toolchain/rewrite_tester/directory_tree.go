@@ -7,14 +7,10 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"testing"
 )
 
-func DirectoryTree(
-	t *testing.T,
-	directory string,
-) string {
-	t.Helper()
+func (o *Tester) DirectoryTree(directory string) string {
+	o.t.Helper()
 	var result strings.Builder
 	e := filepath.WalkDir(
 		directory,
@@ -44,7 +40,7 @@ func DirectoryTree(
 			return nil
 		},
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return result.String()
 }

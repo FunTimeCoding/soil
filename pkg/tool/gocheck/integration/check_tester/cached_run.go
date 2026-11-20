@@ -5,24 +5,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocheck"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/option"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/types/check_result"
-	"testing"
 )
 
-func CachedRun(
-	t *testing.T,
+func (o *Tester) CachedRun(
 	root string,
 	index string,
 	fresh bool,
 ) (*check_result.Result, string) {
-	t.Helper()
-	o := option.New()
-	o.Root = root
-	o.Index = index
-	o.Fresh = fresh
+	o.t.Helper()
+	p := option.New()
+	p.Root = root
+	p.Index = index
+	p.Fresh = fresh
 	var result *check_result.Result
 	printed := testutil.CaptureStdout(
 		func() {
-			result = Run(t, o)
+			result = o.Run(p)
 			gocheck.Print(result)
 		},
 	)

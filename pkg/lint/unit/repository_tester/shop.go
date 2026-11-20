@@ -6,12 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func Shop(t *testing.T) *repository.Repository {
-	t.Helper()
-	directory := t.TempDir()
+func (o *Tester) Shop() *repository.Repository {
+	o.t.Helper()
+	directory := o.t.TempDir()
 	v := virtual_file_system.New()
 
 	for path, content := range map[string]string{
@@ -20,8 +19,8 @@ func Shop(t *testing.T) *repository.Repository {
 		"pkg/stock/unit/stock_test.go": "package unit\n\nimport \"testing\"\n\nfunc TestShopKeepsStock(t *testing.T) {}\n\nfunc TestStockCounts(t *testing.T) {}\n",
 	} {
 		full := filepath.Join(directory, path)
-		assert.FatalOnError(t, os.MkdirAll(filepath.Dir(full), 0o755))
-		assert.FatalOnError(t, os.WriteFile(full, []byte(content), 0o644))
+		assert.FatalOnError(o.t, os.MkdirAll(filepath.Dir(full), 0o755))
+		assert.FatalOnError(o.t, os.WriteFile(full, []byte(content), 0o644))
 		v.WriteString(path, content)
 	}
 

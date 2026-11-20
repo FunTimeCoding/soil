@@ -8,21 +8,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/client/mock_client"
 	"github.com/spf13/cobra"
-	"testing"
 )
 
-func Run(
-	t *testing.T,
+func (o *Tester) Run(
 	c *mock_client.Client,
 	arguments ...string,
 ) (string, string, int) {
-	t.Helper()
+	o.t.Helper()
 
 	return terminal_tester.Run(
-		t,
+		o.t,
 		func(m *terminal.Terminal) *cobra.Command {
 			x := command_context.New(m, c, c)
-			t.Cleanup(x.Close)
+			o.t.Cleanup(x.Close)
 
 			return goclaude.New(x, memory.New())
 		},

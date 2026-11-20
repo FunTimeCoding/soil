@@ -12,16 +12,17 @@ import (
 )
 
 func TestExportedRenameReachesReplacingModule(t *testing.T) {
+	m := module_tester.New(t)
+
 	for _, full := range []bool{false, true} {
-		library := module_tester.ReplacedLibrary(t)
-		user := module_tester.ReplacingUser(
-			t,
+		library := m.ReplacedLibrary()
+		user := m.ReplacingUser(
 			library,
 			"package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMsg()\n}\n",
 		)
-		o := module_tester.Options(t, library, false, full, "./alfa/...")
+		o := m.Options(library, false, full, "./alfa/...")
 		o.Replacing = []string{user}
-		module_tester.RunDefault(t, o, output.NewResultsWithDirectory(library))
+		m.RunDefault(o, output.NewResultsWithDirectory(library))
 		assert.String(
 			t,
 			"package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMessage()\n}\n",
@@ -36,19 +37,16 @@ func TestExportedRenameReachesReplacingModule(t *testing.T) {
 }
 
 func TestExportedRenameDiffLeavesReplacingModule(t *testing.T) {
-	library := module_tester.ReplacedLibrary(t)
+	m := module_tester.New(t)
+	library := m.ReplacedLibrary()
 	source := "package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMsg()\n}\n"
-	user := module_tester.ReplacingUser(t, library, source)
-	o := module_tester.Options(t, library, true, false, "./alfa/...")
+	user := m.ReplacingUser(library, source)
+	o := m.Options(library, true, false, "./alfa/...")
 	o.Replacing = []string{user}
 	printed := assert.Capture(
 		t,
 		func() {
-			module_tester.RunDefault(
-				t,
-				o,
-				output.NewResultsWithDirectory(library),
-			)
+			m.RunDefault(o, output.NewResultsWithDirectory(library))
 		},
 	)
 	assert.String(
@@ -67,16 +65,16 @@ func TestExportedRenameDiffLeavesReplacingModule(t *testing.T) {
 }
 
 func TestExportedRenameRefusedWhenReplacingModuleFailsToLoad(t *testing.T) {
-	library := module_tester.ReplacedLibrary(t)
-	user := module_tester.ReplacingUser(
-		t,
+	m := module_tester.New(t)
+	library := m.ReplacedLibrary()
+	user := m.ReplacingUser(
 		library,
 		"package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMsg() + missing\n}\n",
 	)
-	o := module_tester.Options(t, library, false, false, "./alfa/...")
+	o := m.Options(library, false, false, "./alfa/...")
 	o.Replacing = []string{user}
 	r := output.NewResultsWithDirectory(library)
-	module_tester.RunDefault(t, o, r)
+	m.RunDefault(o, r)
 	assert.String(
 		t,
 		"package alfa\n\nfunc SendMsg() string {\n\treturn \"x\"\n}\n",

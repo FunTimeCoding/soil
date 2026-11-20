@@ -13,9 +13,9 @@ import (
 )
 
 func TestFormatDiffShowsFullRun(t *testing.T) {
-	directory := module_tester.FormatDiff(t)
+	directory := module_tester.New(t).FormatDiff()
 	path := filepath.Join(directory, "exploded_nested.go")
-	before := fix_tester.GoFiles(t, directory)
+	before := fix_tester.New(t).GoFiles(directory)
 	printed := assert.Capture(
 		t,
 		func() {
@@ -27,7 +27,7 @@ func TestFormatDiffShowsFullRun(t *testing.T) {
 			)
 		},
 	)
-	assert.Any(t, before, fix_tester.GoFiles(t, directory))
+	assert.Any(t, before, fix_tester.New(t).GoFiles(directory))
 	assert.String(
 		t,
 		fmt.Sprintf(

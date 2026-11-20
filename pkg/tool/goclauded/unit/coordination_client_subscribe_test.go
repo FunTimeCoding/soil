@@ -26,7 +26,7 @@ func TestClientSubscribeDeliversParsedEvents(t *testing.T) {
 		memory.New(),
 	)
 	defer stop()
-	e := event_tester.NextStream(t, events)
+	e := event_tester.New(t).NextStream(events)
 	assert.String(t, "announce", e.Kind)
 	assert.String(t, "client topic", e.Metadata[constant.Topic])
 	assert.True(t, e.Identifier > 0)
@@ -47,13 +47,14 @@ func TestClientSubscribeFiltersKinds(t *testing.T) {
 		memory.New(),
 	)
 	defer stop()
-	e := event_tester.NextStream(t, events)
+	e := event_tester.New(t).NextStream(events)
 	assert.String(t, "label", e.Kind)
 	assert.String(t, "green", e.Metadata[constant.Now])
 }
 
 func TestClientSubscribeResumesAfterStop(t *testing.T) {
 	s := base.New(t)
+	v := event_tester.New(t)
 	a := s.NewSession()
 	a.Announce(a.Name(), "earlier topic")
 	first, stop := s.Client().Subscribe(
@@ -62,7 +63,7 @@ func TestClientSubscribeResumesAfterStop(t *testing.T) {
 		logger.New(context.Background()),
 		memory.New(),
 	)
-	event_tester.NextStream(t, first)
+	v.NextStream(first)
 	stop()
 	a.Announce(a.Name(), "later topic")
 	second, halt := s.Client().Subscribe(
@@ -72,7 +73,7 @@ func TestClientSubscribeResumesAfterStop(t *testing.T) {
 		memory.New(),
 	)
 	defer halt()
-	e := event_tester.NextStream(t, second)
+	e := v.NextStream(second)
 	assert.String(t, "later topic", e.Metadata[constant.Topic])
 }
 
@@ -85,7 +86,7 @@ func TestClientSubscribeClosesItsChannelOnStop(t *testing.T) {
 		memory.New(),
 	)
 	stop()
-	event_tester.Drain(t, events)
+	event_tester.New(t).Drain(events)
 }
 
 func TestClientSubscribeReportsRefusedTokenOnce(t *testing.T) {

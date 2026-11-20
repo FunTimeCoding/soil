@@ -8,7 +8,10 @@ import (
 )
 
 func TestSummarySessionMigrationKeepsNewestRow(t *testing.T) {
-	s := store_tester.NewOnFile(t, legacy_store.DuplicateSummaries(t))
+	s := store_tester.New(
+		t,
+		store_tester.WithFile(legacy_store.DuplicateSummaries(t)),
+	)
 	summaries := s.ListSummaries()
 	assert.Count(t, 1, summaries)
 	assert.String(t, "rewrite", summaries[0].Body)

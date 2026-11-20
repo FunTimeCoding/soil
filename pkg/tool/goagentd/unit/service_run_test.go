@@ -30,11 +30,7 @@ func TestRunReturnsAgentOutput(t *testing.T) {
 		},
 	)
 	assert.FatalOnError(t, o.Service().Run("charlie"))
-	assert.String(
-		t,
-		"alfa\nbravo",
-		service_tester.AwaitDone(t, o.Service()).Result,
-	)
+	assert.String(t, "alfa\nbravo", o.AwaitDone().Result)
 	assert.Strings(t, []string{"claude", "--print", "charlie"}, arguments)
 }
 
@@ -53,7 +49,7 @@ func TestSecondRunWhileRunningConflicts(t *testing.T) {
 	assert.FatalOnError(t, o.Service().Run("delta"))
 	assert.True(t, conflict.Is(o.Service().Run("echo")))
 	o.Runner.Interrupt()
-	service_tester.AwaitDone(t, o.Service())
+	o.AwaitDone()
 }
 
 func TestFailedRunCarriesAgentError(t *testing.T) {
@@ -78,7 +74,7 @@ func TestFailedRunCarriesAgentError(t *testing.T) {
 	assert.String(
 		t,
 		"foxtrot\n\nerror: exit status 1\ntoken expired",
-		service_tester.AwaitDone(t, o.Service()).Result,
+		o.AwaitDone().Result,
 	)
 }
 
@@ -139,7 +135,7 @@ func TestLaunchThatPanicsEndsRun(t *testing.T) {
 	assert.String(
 		t,
 		"error: agent stopped before it finished",
-		service_tester.AwaitDone(t, o.Service()).Result,
+		o.AwaitDone().Result,
 	)
 	deadline := time.Now().Add(5 * time.Second)
 

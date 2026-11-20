@@ -15,8 +15,7 @@ func TestFunctionEmptyBody(t *testing.T) {
 		stringsConstant.UpperBravo,
 		strings.NewReader("package main\n\nfunc main() {\n}\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Bravo",
 		true,
 		[]*concern.Concern{
@@ -42,5 +41,5 @@ func TestFunctionClean(t *testing.T) {
 			"package example\n\nfunc Example() {\n\tfmt.Println(\"hello\")\n}\n",
 		),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }

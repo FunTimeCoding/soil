@@ -6,6 +6,7 @@ import (
 )
 
 func TestDistribution(t *testing.T) {
-	math_tester.AssertDistribution(t, 100, 100, 10)
-	math_tester.AssertDistribution(t, 1000000, 1000000, 10)
+	m := math_tester.New(t)
+	m.AssertDistribution(100, 100, 10)
+	m.AssertDistribution(1000000, 1000000, 10)
 }

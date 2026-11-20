@@ -7,18 +7,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/face"
 	"github.com/spf13/cobra"
-	"testing"
 )
 
-func Run(
-	t *testing.T,
+func (o *Tester) Run(
 	c *mock_client.Client,
 	arguments ...string,
 ) (string, string, int) {
-	t.Helper()
+	o.t.Helper()
 
 	return terminal_tester.Run(
-		t,
+		o.t,
 		func(m *terminal.Terminal) *cobra.Command {
 			return goprocess.New(func(string) face.Client { return c }, m)
 		},

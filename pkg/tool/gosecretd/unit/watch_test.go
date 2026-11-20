@@ -27,8 +27,16 @@ func TestWatchReportsUnsealedStore(t *testing.T) {
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Float(t, 0, metric_tester.Sample(t, y, constant.SealedGauge, nil))
-	assert.Float(t, 1, metric_tester.Sample(t, y, constant.ReachableGauge, nil))
+	assert.Float(
+		t,
+		0,
+		metric_tester.New(t).Sample(y, constant.SealedGauge, nil),
+	)
+	assert.Float(
+		t,
+		1,
+		metric_tester.New(t).Sample(y, constant.ReachableGauge, nil),
+	)
 }
 
 func TestWatchReportsSealedStore(t *testing.T) {
@@ -43,7 +51,11 @@ func TestWatchReportsSealedStore(t *testing.T) {
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Float(t, 1, metric_tester.Sample(t, y, constant.SealedGauge, nil))
+	assert.Float(
+		t,
+		1,
+		metric_tester.New(t).Sample(y, constant.SealedGauge, nil),
+	)
 }
 
 func TestWatchReportsUnreachableStore(t *testing.T) {
@@ -58,7 +70,11 @@ func TestWatchReportsUnreachableStore(t *testing.T) {
 	)
 	defer owned.Close()
 	owned.Poll()
-	assert.Float(t, 0, metric_tester.Sample(t, y, constant.ReachableGauge, nil))
+	assert.Float(
+		t,
+		0,
+		metric_tester.New(t).Sample(y, constant.ReachableGauge, nil),
+	)
 }
 
 func TestWatchCloseWaitsForTickInFlight(t *testing.T) {

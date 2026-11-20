@@ -12,7 +12,7 @@ import (
 )
 
 func TestCollisionAliasFixAppliesEveryFirstPartyCollision(t *testing.T) {
-	directory := module_tester.CollisionKinds(t)
+	directory := module_tester.New(t).CollisionKinds()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunCollisionAliasFix([]string{"./..."}, directory, nil, false, r)
 	t.Run(
@@ -60,7 +60,7 @@ func TestCollisionAliasFixAppliesEveryFirstPartyCollision(t *testing.T) {
 	t.Run(
 		"ModuleStillBuilds",
 		func(t *testing.T) {
-			fix_tester.Builds(t, directory)
+			fix_tester.New(t).Builds(directory)
 		},
 	)
 }

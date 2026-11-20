@@ -4,19 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/index/kind"
-	"testing"
 )
 
-func Keys(
-	t *testing.T,
+func (o *Tester) Keys(
 	w *index.Workspace,
 	k *kind.Kind,
 ) (string, string) {
-	t.Helper()
+	o.t.Helper()
 	unit, okay := w.UnitKey("example/alfa")
-	assert.True(t, okay)
+	assert.True(o.t, okay)
 	closure, okay := w.ClosureKey("example/alfa", k)
-	assert.True(t, okay)
+	assert.True(o.t, okay)
 
 	return unit, closure
 }

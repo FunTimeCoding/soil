@@ -13,15 +13,14 @@ import (
 
 func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 	directory := t.TempDir()
-	container, i := postgres_tester.Start(t, directory)
-	postgres_tester.Psql(
-		t,
+	container, i := postgres_tester.New(t).Start(directory)
+	postgres_tester.New(t).Psql(
 		container,
 		i,
 		"alfa",
 		"CREATE TABLE item (name text); INSERT INTO item VALUES ('alfa'), ('bravo'), ('charlie')",
 	)
-	c, r := postgres_tester.Serve(t, container, i, directory)
+	c, r := postgres_tester.New(t).Serve(container, i, directory)
 	created, e := c.CreateBackupWithResponse(
 		t.Context(),
 		client.CreateBackupJSONRequestBody{},
@@ -47,15 +46,14 @@ func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 	assert.String(
 		t,
 		"3",
-		postgres_tester.Psql(
-			t,
+		postgres_tester.New(t).Psql(
 			container,
 			i,
 			beside.JSON200.Database,
 			"SELECT count(*) FROM item",
 		),
 	)
-	postgres_tester.Psql(t, container, i, "alfa", "DELETE FROM item")
+	postgres_tester.New(t).Psql(container, i, "alfa", "DELETE FROM item")
 	place, h := c.RestoreBackupWithResponse(
 		t.Context(),
 		name,
@@ -66,8 +64,7 @@ func TestBackupRestoresBesideAndInPlace(t *testing.T) {
 	assert.String(
 		t,
 		"3",
-		postgres_tester.Psql(
-			t,
+		postgres_tester.New(t).Psql(
 			container,
 			i,
 			"alfa",

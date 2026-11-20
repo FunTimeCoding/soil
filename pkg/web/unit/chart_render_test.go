@@ -15,8 +15,7 @@ func TestChartStepPath(t *testing.T) {
 	weekly := series.New("Weekly", "chart-series-a").
 		Add(start.Add(24*time.Hour), 10).
 		Add(start.Add(48*time.Hour), 20)
-	markup := web_tester.Render(
-		t,
+	markup := web_tester.New(t).Render(
 		chart.New(start, end).
 			WithNow(start.Add(72*time.Hour)).
 			WithSeries(weekly).
@@ -39,8 +38,7 @@ func TestChartProjectionCapped(t *testing.T) {
 	end := start.AddDate(0, 0, 7)
 	weekly := series.New("Weekly", "chart-series-a").
 		Add(start.Add(24*time.Hour), 80)
-	markup := web_tester.Render(
-		t,
+	markup := web_tester.New(t).Render(
 		chart.New(start, end).
 			WithNow(start.Add(24*time.Hour)).
 			WithSeries(weekly).

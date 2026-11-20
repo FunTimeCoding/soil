@@ -19,7 +19,7 @@ func TestGetV2PathSendsBasicAuth(t *testing.T) {
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		atlassian_tester.Confluence(t, s.URL).GetV2Path(
+		atlassian_tester.New(t).Confluence(s.URL).GetV2Path(
 			constant.ConfluenceLabel,
 			&out,
 		),
@@ -38,7 +38,7 @@ func TestGetPathUsesOldBase(t *testing.T) {
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		atlassian_tester.Confluence(t, s.URL).GetPath(
+		atlassian_tester.New(t).Confluence(s.URL).GetPath(
 			constant.ConfluenceUser,
 			&out,
 		),
@@ -48,7 +48,7 @@ func TestGetPathUsesOldBase(t *testing.T) {
 
 func TestNextFollowsCursorWithCredentials(t *testing.T) {
 	s := upstream_server.New(t, upstream_server.WithAnswer(`{"results":[]}`))
-	c := atlassian_tester.Confluence(t, s.URL)
+	c := atlassian_tester.New(t).Confluence(s.URL)
 	defer c.Close()
 	var out map[string]any
 	assert.FatalOnError(
@@ -67,7 +67,7 @@ func TestPostV2PathSendsBody(t *testing.T) {
 	var out map[string]string
 	assert.FatalOnError(
 		t,
-		atlassian_tester.Confluence(t, s.URL).PostV2Path(
+		atlassian_tester.New(t).Confluence(s.URL).PostV2Path(
 			constant.ConfluencePage,
 			`{"title":"delta"}`,
 			&out,
@@ -87,7 +87,7 @@ func TestPutV2PathUsesItsVerb(t *testing.T) {
 	var out map[string]string
 	assert.FatalOnError(
 		t,
-		atlassian_tester.Confluence(t, s.URL).PutV2Path(
+		atlassian_tester.New(t).Confluence(s.URL).PutV2Path(
 			"/pages/7",
 			`{"title":"echo"}`,
 			&out,
@@ -100,7 +100,7 @@ func TestPostOldPathAcceptsEmptyAnswer(t *testing.T) {
 	s := upstream_server.New(t)
 	assert.FatalOnError(
 		t,
-		atlassian_tester.Confluence(t, s.URL).PostOldPath(
+		atlassian_tester.New(t).Confluence(s.URL).PostOldPath(
 			"/content",
 			`{"type":"comment"}`,
 		),
@@ -113,7 +113,7 @@ func TestDeleteAcceptsNoContent(t *testing.T) {
 		t,
 		upstream_server.WithStatus(http.StatusNoContent),
 	)
-	c := atlassian_tester.Confluence(t, s.URL)
+	c := atlassian_tester.New(t).Confluence(s.URL)
 	defer c.Close()
 	assert.FatalOnError(t, c.Delete(c.Base().Copy().Path("/pages/7").String()))
 	r := s.Last()
@@ -124,7 +124,7 @@ func TestDeleteAcceptsNoContent(t *testing.T) {
 func TestMissingPageIsNotFound(t *testing.T) {
 	s := upstream_server.New(t, upstream_server.WithStatus(http.StatusNotFound))
 	var out map[string]any
-	e := atlassian_tester.Confluence(t, s.URL).GetV2Path("/pages/99", &out)
+	e := atlassian_tester.New(t).Confluence(s.URL).GetV2Path("/pages/99", &out)
 	assert.True(t, not_found.Is(e))
 }
 
@@ -137,7 +137,7 @@ func TestRefusalCarriesVersionTwoTitle(t *testing.T) {
 		),
 	)
 	var out map[string]any
-	e := atlassian_tester.Confluence(t, s.URL).GetV2Path(
+	e := atlassian_tester.New(t).Confluence(s.URL).GetV2Path(
 		constant.ConfluenceSpace,
 		&out,
 	)
@@ -154,7 +154,7 @@ func TestRefusalCarriesOldMessage(t *testing.T) {
 		),
 	)
 	var out map[string]any
-	e := atlassian_tester.Confluence(t, s.URL).GetPath(
+	e := atlassian_tester.New(t).Confluence(s.URL).GetPath(
 		constant.ConfluenceUser,
 		&out,
 	)

@@ -7,14 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/protocol"
-	"testing"
 )
 
-func ProtocolAbsent(
-	t *testing.T,
-	c *chromium.Client,
-) (result string) {
-	t.Helper()
+func (o *Tester) ProtocolAbsent(c *chromium.Client) (result string) {
+	o.t.Helper()
 
 	defer func() {
 		result = fmt.Sprint(recover())

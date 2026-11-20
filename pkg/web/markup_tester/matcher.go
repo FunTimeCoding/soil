@@ -1,19 +1,13 @@
 package markup_tester
 
-import (
-	"github.com/andybalholm/cascadia"
-	"testing"
-)
+import "github.com/andybalholm/cascadia"
 
-func matcher(
-	t *testing.T,
-	selector string,
-) cascadia.Selector {
-	t.Helper()
+func (o *Tester) matcher(selector string) cascadia.Selector {
+	o.t.Helper()
 	m, e := cascadia.Compile(selector)
 
 	if e != nil {
-		t.Fatalf("selector %q does not compile: %v", selector, e)
+		o.t.Fatalf("selector %q does not compile: %v", selector, e)
 	}
 
 	return m

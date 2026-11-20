@@ -10,9 +10,9 @@ import (
 )
 
 func TestIndexWithGraphAnswersOverGivenGraph(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	g := module_graph.Build(directory)
-	system_tester.Write(t, directory, "three/three.go", "package three\n")
+	system_tester.New(t).Write(directory, "three/three.go", "package three\n")
 	w := index.NewWithGraph(t.TempDir(), directory, g)
 	assert.True(t, w.Reaches("example/two"))
 	assert.False(t, w.Reaches("example/three"))

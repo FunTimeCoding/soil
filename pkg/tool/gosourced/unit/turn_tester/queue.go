@@ -3,17 +3,15 @@ package turn_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/turn"
-	"testing"
 )
 
-func Queue(
-	t *testing.T,
+func (o *Tester) Queue(
 	s *turn.Scheduler,
 	session string,
 	name string,
 	granted chan<- string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	queued := s.Waiting()
 	go func() {
 		g, e := s.Take(context.Background(), session)
@@ -27,5 +25,5 @@ func Queue(
 		granted <- name
 		g.Release()
 	}()
-	Wait(t, s, queued+1)
+	o.Wait(s, queued+1)
 }

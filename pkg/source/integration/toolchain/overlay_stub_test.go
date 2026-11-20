@@ -14,21 +14,18 @@ func TestIgnoreStubOverlayHidesMovedFile(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() {}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/charlie.go",
 		"package alfa\n\nfunc Charlie() {}\n",
 	)
-	system_tester.Write(t, root, "delta/delta.go", "package delta\n")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(root, "delta/delta.go", "package delta\n")
+	system_tester.New(t).Write(
 		root,
 		"echo/echo.go",
 		"package echo\n\nimport \"example/alfa\"\n\nfunc Foxtrot() { alfa.Charlie() }\n",
@@ -67,13 +64,12 @@ func TestIgnoreStubOverlayOnWholePackage(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Bravo() {}\n",
 	)
-	system_tester.Write(t, root, "delta/delta.go", "package delta\n")
+	system_tester.New(t).Write(root, "delta/delta.go", "package delta\n")
 	overlay := map[string][]byte{
 		filepath.Join(root, "alfa/alfa.go"): []byte(
 			"//go:build ignore\n\npackage alfa\n",

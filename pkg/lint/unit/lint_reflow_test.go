@@ -13,14 +13,13 @@ import (
 
 func TestReflowClean(t *testing.T) {
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader("one two\n"))
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }
 
 func TestReflowRewrapsOverrunningParagraph(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end\n")
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{
@@ -42,8 +41,7 @@ func TestReflowRewrapsOverrunningParagraph(t *testing.T) {
 func TestReflowRefusesHardLineBreak(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end  \nnext\n")
 	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{

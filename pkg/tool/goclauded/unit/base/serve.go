@@ -21,7 +21,7 @@ func serve(
 ) *Server {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "goclauded.sqlite")
-	s := store_tester.NewOnFile(t, path)
+	s := store_tester.New(t, store_tester.WithFile(path))
 	o := d.Option(path, s.Clock())
 	g := daemon.New(
 		o,

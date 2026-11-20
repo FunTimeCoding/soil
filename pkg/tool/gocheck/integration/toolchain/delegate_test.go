@@ -16,8 +16,9 @@ import (
 )
 
 func TestDelegatedCheckMatchesLocalRun(t *testing.T) {
-	root := check_tester.StackModule(t)
-	check_tester.ServeSource(t, base.WithModule("example", root))
+	c := check_tester.New(t)
+	root := c.StackModule()
+	c.ServeSource(base.WithModule("example", root))
 	local := option.New()
 	local.Root = root
 	local.Index = t.TempDir()
@@ -34,8 +35,9 @@ func TestDelegatedCheckMatchesLocalRun(t *testing.T) {
 }
 
 func TestDelegatedFixCommitsThroughDaemon(t *testing.T) {
-	root := check_tester.StackModule(t)
-	check_tester.ServeSource(t, base.WithModule("example", root))
+	c := check_tester.New(t)
+	root := c.StackModule()
+	c.ServeSource(base.WithModule("example", root))
 	o := option.New()
 	o.Root = root
 	o.Fix = true
@@ -51,15 +53,15 @@ func TestDelegatedFixCommitsThroughDaemon(t *testing.T) {
 }
 
 func TestDelegatedCheckSeesChangeBetweenChecks(t *testing.T) {
-	root := check_tester.StackModule(t)
-	check_tester.ServeSource(t, base.WithModule("example", root))
+	c := check_tester.New(t)
+	root := c.StackModule()
+	c.ServeSource(base.WithModule("example", root))
 	first := option.New()
 	first.Root = root
 	before, _, e := gocheck.Delegate(first)
 	assert.FatalOnError(t, e)
 	assert.True(t, check_tester.Changes(before, "pkg/spacing/alfa.go"))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/spacing/alfa.go",
 		"package spacing\n\nfunc Alfa() int {\n\tbravo := 1\n\n\treturn bravo\n}\n",
@@ -72,9 +74,10 @@ func TestDelegatedCheckSeesChangeBetweenChecks(t *testing.T) {
 }
 
 func TestDelegateDeclinesRootOutsideInventory(t *testing.T) {
-	check_tester.ServeSource(t)
+	c := check_tester.New(t)
+	c.ServeSource()
 	o := option.New()
-	o.Root = check_tester.StackModule(t)
+	o.Root = c.StackModule()
 	_, delegated, e := gocheck.Delegate(o)
 	assert.FatalOnError(t, e)
 	assert.False(t, delegated)

@@ -18,7 +18,7 @@ func TestChannelDeliveryCutsLongMessage(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Deliver(t, s, x, r1.Callsign)
+	result := channel_tester.New(t).Deliver(s, x, r1.Callsign)
 	s.AwaitSubscribers(1)
 	s.SendImmediate(r2.Callsign, r1.Callsign, strings.Repeat("a", 5000))
 
@@ -39,7 +39,7 @@ func TestChannelDeliveryKeepsShortMessageWhole(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	x, cancel := context.WithCancel(t.Context())
 	defer cancel()
-	result := channel_tester.Deliver(t, s, x, r1.Callsign)
+	result := channel_tester.New(t).Deliver(s, x, r1.Callsign)
 	s.AwaitSubscribers(1)
 	s.SendImmediate(r2.Callsign, r1.Callsign, "short")
 

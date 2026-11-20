@@ -4,37 +4,35 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/index/xref"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/types"
-	"testing"
 )
 
-func Target(
-	t *testing.T,
+func (o *Tester) Target(
 	directory string,
 	typeName string,
 	member string,
 ) string {
-	t.Helper()
+	o.t.Helper()
 	loaded, e := resolve.LoadBase(directory, "./alfa")
 
 	if e != nil || len(loaded) == 0 {
-		t.Fatalf("load alfa: %v", e)
+		o.t.Fatalf("load alfa: %v", e)
 	}
 
-	o := loaded[0].Types.Scope().Lookup(typeName)
+	object := loaded[0].Types.Scope().Lookup(typeName)
 
 	if member != "" {
-		o, _, _ = types.LookupFieldOrMethod(
-			types.NewPointer(o.Type()),
+		object, _, _ = types.LookupFieldOrMethod(
+			types.NewPointer(object.Type()),
 			true,
 			loaded[0].Types,
 			member,
 		)
 	}
 
-	result, okay := xref.Target(o)
+	result, okay := xref.Target(object)
 
 	if !okay {
-		t.Fatalf("no target for %s.%s", typeName, member)
+		o.t.Fatalf("no target for %s.%s", typeName, member)
 	}
 
 	return result

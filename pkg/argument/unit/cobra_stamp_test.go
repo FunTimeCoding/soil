@@ -14,7 +14,7 @@ func TestCobraToolPrintsSameVersionBlockAsEveryTool(t *testing.T) {
 	assert.String(
 		t,
 		stamp.New().Text(),
-		argument_tester.Version(t, "--version"),
+		argument_tester.New(t).Version("--version"),
 	)
 }
 
@@ -25,6 +25,6 @@ func TestCobraToolPrintsVersionAsNotation(t *testing.T) {
 			string(notation.MarshalIndent(report.New("gotest", stamp.New()))),
 			"\n",
 		),
-		argument_tester.Version(t, "--version", "--notation"),
+		argument_tester.New(t).Version("--version", "--notation"),
 	)
 }

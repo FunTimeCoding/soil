@@ -7,14 +7,10 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"testing"
 )
 
-func Complexity(
-	t *testing.T,
-	body string,
-) int {
-	t.Helper()
+func (o *Tester) Complexity(body string) int {
+	o.t.Helper()
 	file, e := parser.ParseFile(
 		token.NewFileSet(),
 		"f.go",

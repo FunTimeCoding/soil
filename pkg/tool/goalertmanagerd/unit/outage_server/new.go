@@ -26,8 +26,7 @@ func New(
 		s.Alfa().Prometheus.Failure = outage_tester.RefusedDial()
 	}
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		join.Colon(peer, "alfa"),
 	).Unavailable

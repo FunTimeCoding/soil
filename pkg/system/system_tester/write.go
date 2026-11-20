@@ -4,17 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func Write(
-	t *testing.T,
+func (o *Tester) Write(
 	base string,
 	path string,
 	content string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	full := filepath.Join(base, path)
-	assert.FatalOnError(t, os.MkdirAll(filepath.Dir(full), 0755))
-	assert.FatalOnError(t, os.WriteFile(full, []byte(content), 0644))
+	assert.FatalOnError(o.t, os.MkdirAll(filepath.Dir(full), 0755))
+	assert.FatalOnError(o.t, os.WriteFile(full, []byte(content), 0644))
 }

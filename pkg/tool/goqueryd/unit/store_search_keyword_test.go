@@ -8,31 +8,29 @@ import (
 )
 
 func TestSearchKeywordFindsDocument(t *testing.T) {
-	s := store_tester.IndexedTestStore(t)
+	s := store_tester.New(t).IndexedTestStore()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.Count(t, 1, results)
 	assert.String(t, "Search Pipeline", results[0].Title)
 }
 
 func TestSearchKeywordRanking(t *testing.T) {
-	s := store_tester.IndexedTestStore(t)
+	s := store_tester.New(t).IndexedTestStore()
 	results := s.MustSearchKeyword("documents", 10, "", false, nil)
 	assert.Greater(t, 0, results[0].Score)
 	assert.Greater(t, 1, len(results))
 }
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	first := t.TempDir()
 	second := t.TempDir()
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		first,
 		"one.md",
 		"# One\n\nUnique keyword aardvark.\n",
 	)
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		second,
 		"two.md",
 		"# Two\n\nUnique keyword aardvark.\n",
@@ -49,29 +47,27 @@ func TestSearchKeywordCollectionFilter(t *testing.T) {
 }
 
 func TestSearchKeywordVirtualPath(t *testing.T) {
-	s := store_tester.IndexedTestStore(t)
+	s := store_tester.New(t).IndexedTestStore()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.String(t, "qmd://test/alfa.md", results[0].VirtualPath)
 }
 
 func TestSearchKeywordNegation(t *testing.T) {
-	s := store_tester.IndexedTestStore(t)
+	s := store_tester.New(t).IndexedTestStore()
 	all := s.MustSearchKeyword("search documents", 10, "", false, nil)
 	negated := s.MustSearchKeyword("search -pipeline", 10, "", false, nil)
 	assert.Greater(t, len(negated), len(all))
 }
 
 func TestSearchKeywordQuotedPhrase(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	directory := t.TempDir()
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"exact.md",
 		"# Exact\n\nThe quick brown fox jumps over the lazy dog.\n",
 	)
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"partial.md",
 		"# Partial\n\nThe quick fox is brown and lazy.\n",
@@ -84,16 +80,14 @@ func TestSearchKeywordQuotedPhrase(t *testing.T) {
 }
 
 func TestSearchKeywordMetadataFilter(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	directory := t.TempDir()
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"plain.md",
 		"# Plain\n\nKeyword quasar.\n",
 	)
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"scoped.md",
 		"# Scoped\n\nKeyword quasar.\n",
@@ -122,16 +116,14 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 }
 
 func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	directory := t.TempDir()
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"noise.md",
 		"# Noise\n\nquasar quasar quasar quasar quasar.\n",
 	)
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"target.md",
 		"# Target\n\nOne quasar only.\n",
@@ -161,16 +153,14 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 }
 
 func TestSearchKeywordSourceTypeFilterDeferred(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	directory := t.TempDir()
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"one.md",
 		"# One\n\nKeyword quasar.\n",
 	)
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
 		directory,
 		"two.md",
 		"# Two\n\nKeyword quasar.\n",

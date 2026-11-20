@@ -10,7 +10,7 @@ import (
 )
 
 func TestDiffSymbolsComparesHeadWithIndex(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	v := service_tester.New(
 		t,
 		service_tester.WithInventory(service_tester.Inventory(r.Clone)),
@@ -25,7 +25,7 @@ func TestDiffSymbolsComparesHeadWithIndex(t *testing.T) {
 }
 
 func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	r.Commit("bravo")
 	r.Write("alfa.go", "package alfa\n\nfunc Charlie() int {\n\treturn 3\n}\n")
 	r.Commit("charlie")
@@ -43,7 +43,7 @@ func TestDiffSymbolsComparesTwoCommits(t *testing.T) {
 }
 
 func TestDiffSymbolsRefusesUnknownModuleOrRevision(t *testing.T) {
-	r := revision_tester.DiffRepository(t)
+	r := revision_tester.New(t).DiffRepository()
 	v := service_tester.New(
 		t,
 		service_tester.WithInventory(service_tester.Inventory(r.Clone)),

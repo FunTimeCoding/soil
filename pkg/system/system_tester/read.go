@@ -4,17 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func Read(
-	t *testing.T,
+func (o *Tester) Read(
 	base string,
 	path string,
 ) string {
-	t.Helper()
+	o.t.Helper()
 	b, e := os.ReadFile(filepath.Join(base, path))
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return string(b)
 }

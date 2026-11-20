@@ -3,15 +3,13 @@ package rewrite_tester
 import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"strings"
-	"testing"
 )
 
-func FixedContains(
-	t *testing.T,
+func (o *Tester) FixedContains(
 	substring string,
 	results *output.Results,
 ) {
-	t.Helper()
+	o.t.Helper()
 
 	for _, c := range results.Entries {
 		if c.Fixed && strings.Contains(c.Text, substring) {
@@ -19,9 +17,9 @@ func FixedContains(
 		}
 	}
 
-	t.Errorf("no fixed result containing %q", substring)
+	o.t.Errorf("no fixed result containing %q", substring)
 
 	for _, c := range results.Entries {
-		t.Logf("  %s: %s", c.Path, c.Text)
+		o.t.Logf("  %s: %s", c.Path, c.Text)
 	}
 }

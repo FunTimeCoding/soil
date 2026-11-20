@@ -5,16 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocheck"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/option"
 	"github.com/funtimecoding/soil/pkg/tool/gocheck/types/check_result"
-	"testing"
 )
 
-func Run(
-	t *testing.T,
-	o *option.Check,
-) *check_result.Result {
-	t.Helper()
-	result, e := gocheck.Run(o)
-	assert.FatalOnError(t, e)
+func (o *Tester) Run(p *option.Check) *check_result.Result {
+	o.t.Helper()
+	result, e := gocheck.Run(p)
+	assert.FatalOnError(o.t, e)
 
 	return result
 }

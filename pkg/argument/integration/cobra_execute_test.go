@@ -18,7 +18,7 @@ func TestUnknownCobraFlagPrintsCommandUsageAndExitsTwo(t *testing.T) {
 		return
 	}
 
-	r := argument_tester.Child(t, "bravo --delta")
+	r := argument_tester.New(t).Child("bravo --delta")
 	assert.Integer(t, 2, r.Exit)
 	assert.StringContains(t, "unknown flag: --delta", r.ErrorString)
 	assert.StringContains(t, "Usage:\n  alfa bravo", r.ErrorString)
@@ -38,6 +38,6 @@ func TestCobraCommandFailureStillPanics(t *testing.T) {
 		return
 	}
 
-	r := argument_tester.Child(t, "bravo")
+	r := argument_tester.New(t).Child("bravo")
 	assert.StringContains(t, "panic: echo failed", r.ErrorString)
 }

@@ -5,14 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	"strings"
-	"testing"
 )
 
-func ReadEvent(
-	t *testing.T,
-	r *bufio.Reader,
-) string {
-	t.Helper()
+func (o *Tester) ReadEvent(r *bufio.Reader) string {
+	o.t.Helper()
 	result := make(chan string, 1)
 	go func() {
 		for {
@@ -35,5 +31,5 @@ func ReadEvent(
 		}
 	}()
 
-	return assert.Signalled(t, result)
+	return assert.Signalled(o.t, result)
 }

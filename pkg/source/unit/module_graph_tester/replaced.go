@@ -3,27 +3,23 @@ package module_graph_tester
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
-	"testing"
 )
 
-func Replaced(t *testing.T) (string, string) {
-	t.Helper()
-	library := t.TempDir()
-	system_tester.Write(
-		t,
+func (o *Tester) Replaced() (string, string) {
+	o.t.Helper()
+	library := o.t.TempDir()
+	system_tester.New(o.t).Write(
 		library,
 		"go.mod",
 		"module other.test/lib\n\ngo 1.22\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(o.t).Write(
 		library,
 		"lib.go",
 		"package lib\n\nfunc Name() string {\n\treturn \"lib\"\n}\n",
 	)
-	user := t.TempDir()
-	system_tester.Write(
-		t,
+	user := o.t.TempDir()
+	system_tester.New(o.t).Write(
 		user,
 		"go.mod",
 		fmt.Sprintf(
@@ -31,8 +27,7 @@ func Replaced(t *testing.T) (string, string) {
 			library,
 		),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(o.t).Write(
 		user,
 		"user/user.go",
 		"package user\n\nimport \"other.test/lib\"\n\nfunc Use() string {\n\treturn lib.Name()\n}\n",

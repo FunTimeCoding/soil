@@ -54,8 +54,7 @@ func TestBaselineRoundTrip(t *testing.T) {
 	previous := crap_tester.Build(
 		map[string]float64{"m/a.go:1": 100, "m/b.go:1": 0},
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"baseline.json",
 		notation.MarshalIndent(previous),
@@ -157,7 +156,7 @@ func TestComplexityStraightLine(t *testing.T) {
 	assert.Integer(
 		t,
 		1,
-		crap_tester.Complexity(t, `func f() { a := 1; _ = a }`),
+		crap_tester.New(t).Complexity(`func f() { a := 1; _ = a }`),
 	)
 }
 
@@ -165,8 +164,7 @@ func TestComplexityBranches(t *testing.T) {
 	assert.Integer(
 		t,
 		4,
-		crap_tester.Complexity(
-			t,
+		crap_tester.New(t).Complexity(
 			`func f(a, b bool) {
 	if a { }
 	for i := 0; i < 2; i++ { }
@@ -180,8 +178,7 @@ func TestComplexitySwitchAndSelect(t *testing.T) {
 	assert.Integer(
 		t,
 		4,
-		crap_tester.Complexity(
-			t,
+		crap_tester.New(t).Complexity(
 			`func f(a int, c chan int) {
 	switch a {
 	case 1:
@@ -201,8 +198,7 @@ func TestComplexityBooleanOperators(t *testing.T) {
 	assert.Integer(
 		t,
 		3,
-		crap_tester.Complexity(
-			t,
+		crap_tester.New(t).Complexity(
 			`func f(a, b, c bool) bool { return a && b || c }`,
 		),
 	)
@@ -227,7 +223,7 @@ func TestParseEmpty(t *testing.T) {
 }
 
 func TestMutationLoadAndByFile(t *testing.T) {
-	m := crap_tester.Gremlins(t)
+	m := crap_tester.New(t).Gremlins()
 	assert.String(t, "example.test/m", m.Module)
 	byFile := m.ByFile()
 	assert.Count(t, 2, byFile)
@@ -277,7 +273,7 @@ func TestAnnotateRescoresSurvivors(t *testing.T) {
 		},
 		constant.Pessimistic,
 	)
-	crap.Annotate(r, crap_tester.Gremlins(t))
+	crap.Annotate(r, crap_tester.New(t).Gremlins())
 	byName := map[string]float64{}
 	untrusted := map[string]bool{}
 

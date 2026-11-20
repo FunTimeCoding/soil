@@ -6,8 +6,9 @@ import (
 )
 
 func TestGoAboveInteger(t *testing.T) {
-	math_tester.AssertGoAboveInteger(t, false, 52, 51, 50)
-	math_tester.AssertGoAboveInteger(t, false, 51, 50, 50)
-	math_tester.AssertGoAboveInteger(t, false, 51, 49, 50)
-	math_tester.AssertGoAboveInteger(t, true, 49, 51, 50)
+	m := math_tester.New(t)
+	m.AssertGoAboveInteger(false, 52, 51, 50)
+	m.AssertGoAboveInteger(false, 51, 50, 50)
+	m.AssertGoAboveInteger(false, 51, 49, 50)
+	m.AssertGoAboveInteger(true, 49, 51, 50)
 }

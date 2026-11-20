@@ -3,16 +3,14 @@ package math_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/math/above_below"
-	"testing"
 )
 
-func AssertAboveBelowFloat(
-	t *testing.T,
+func (o *Tester) AssertAboveBelowFloat(
 	expected AboveBelow,
 	f float64,
 	magnitude float64,
 ) {
-	t.Helper()
+	o.t.Helper()
 	var actual AboveBelow
 	above_below.Call(
 		f,
@@ -24,5 +22,5 @@ func AssertAboveBelowFloat(
 			actual.Below = true
 		},
 	)
-	assert.Any(t, expected, actual)
+	assert.Any(o.t, expected, actual)
 }

@@ -3,14 +3,10 @@ package oversize_tester
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/oversize"
 	"math"
-	"testing"
 )
 
-func Report(
-	t *testing.T,
-	collection string,
-) *oversize.Report {
-	t.Helper()
+func (o *Tester) Report(collection string) *oversize.Report {
+	o.t.Helper()
 
-	return ReportWithin(t, collection, 5, math.MaxInt)
+	return o.ReportWithin(collection, 5, math.MaxInt)
 }

@@ -6,38 +6,31 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/oversize"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
-	"testing"
 )
 
-func ReportWithin(
-	t *testing.T,
+func (o *Tester) ReportWithin(
 	collection string,
 	tokenLimit int,
 	embedTokenLimit int,
 ) *oversize.Report {
-	t.Helper()
-	q := service_tester.New(t)
+	o.t.Helper()
+	q := service_tester.New(o.t)
 	q.Reranker.SetTokenLimit(tokenLimit)
 	q.Counter.SetTokenLimit(embedTokenLimit)
-	s := store_tester.OpenFileStore(t, q.Path)
-	d := t.TempDir()
-	store_tester.WriteFixture(t, d, "alfa.md", "one two three\n")
-	store_tester.WriteFixture(
-		t,
+	w := store_tester.New(o.t)
+	s := w.OpenFileStore(q.Path)
+	d := o.t.TempDir()
+	w.WriteFixture(d, "alfa.md", "one two three\n")
+	w.WriteFixture(
 		d,
 		"bravo.md",
 		"one two\nthree four\nfive six\nseven eight nine ten\n",
 	)
-	store_tester.WriteFixture(
-		t,
-		d,
-		"charlie.md",
-		"one two three four\nfive six seven\n",
-	)
+	w.WriteFixture(d, "charlie.md", "one two three four\nfive six seven\n")
 	s.AddCollection("test", d, constant.DefaultGlob)
 	s.Index("test")
 	result, e := q.Service().Oversize(collection)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return result
 }

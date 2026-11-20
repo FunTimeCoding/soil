@@ -15,7 +15,7 @@ func TestRenameRefusesMethodSatisfyingInterface(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-interface/src"),
 	)
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		o.Directory,
@@ -32,7 +32,7 @@ func TestRenameRefusesMethodSatisfyingInterface(t *testing.T) {
 		r,
 		"Size satisfies example/pkg/shape.Sizer - renaming it breaks that interface",
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 }
 
 func TestRenameRefusesMethodSatisfyingStandardInterface(t *testing.T) {
@@ -97,20 +97,18 @@ func TestRenameAllowsMethodNoInterfaceNames(t *testing.T) {
 }
 
 func TestRenameRefusesMethodSatisfyingReplacingModuleInterface(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "rename-replacer")
-	system_tester.Write(
-		t,
+	library, o := module_tester.New(t).ReplacedLibrary("rename-replacer")
+	system_tester.New(t).Write(
 		library,
 		"meter/meter.go",
 		"package meter\n\ntype Meter struct{}\n\nfunc (m *Meter) Read() int {\n\treturn 1\n}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/reader/reader.go",
 		"package reader\n\nimport \"other.test/lib/meter\"\n\ntype Reader interface {\n\tRead() int\n}\n\nvar Default Reader = &meter.Meter{}\n",
 	)
-	source := system_tester.Read(t, library, "meter/meter.go")
+	source := system_tester.New(t).Read(library, "meter/meter.go")
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		library,
@@ -127,5 +125,9 @@ func TestRenameRefusesMethodSatisfyingReplacingModuleInterface(t *testing.T) {
 		r,
 		"Read satisfies example/pkg/reader.Reader",
 	)
-	assert.String(t, source, system_tester.Read(t, library, "meter/meter.go"))
+	assert.String(
+		t,
+		source,
+		system_tester.New(t).Read(library, "meter/meter.go"),
+	)
 }

@@ -4,21 +4,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"testing"
 )
 
-func Mock(t *testing.T) *mock_client.Client {
-	t.Helper()
-	result := mock_client.New(t)
+func (o *Tester) Mock() *mock_client.Client {
+	o.t.Helper()
+	result := mock_client.New(o.t)
 	_, e := result.PostDocument(
-		t.Context(),
+		o.t.Context(),
 		client.PostDocumentJSONRequestBody{
 			Collection: "alfa",
 			Path:       "kilo.md",
 			Body:       "lima",
 		},
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	result.ContextsAdded = append(
 		result.ContextsAdded,
 		client.PostContextJSONRequestBody{

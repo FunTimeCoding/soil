@@ -11,7 +11,7 @@ func (o *Tester) TriggerHosts(events []*host_event.Event) []*run.Run {
 	o.t.Helper()
 	response := make(chan *trigger.Result, 1)
 
-	if e := o.Service.Trigger(
+	if e := o.Service().Trigger(
 		trigger.Request{
 			Parameters: map[string]any{
 				provisionConstant.DownstreamHosts: events,

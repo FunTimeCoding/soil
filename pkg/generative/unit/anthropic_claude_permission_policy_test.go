@@ -11,762 +11,409 @@ import (
 )
 
 func TestPolicyAllowsLoopOfAllowlistedCommands(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.True(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
+		p.Allows(
 			`for p in 7 8 9; do app run --rm alpha /alpha/render.py "/input/x.txt" "part:$p" /out/p$p.txt 2>&1 | head -1; done`,
 		),
 	)
 }
 
 func TestPolicyAllowsRemovingInsideScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`rm -f "tmp/work/x clean.md"`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`rm -f "tmp/work/x clean.md"`))
 }
 
 func TestPolicyAllowsGlobInsideScratchDirectory(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `rm -f tmp/work/*.md`),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`rm -f tmp/work/*.md`))
 }
 
 func TestPolicyAllowsVariableNamingScratchpad(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.True(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			fmt.Sprintf(`S=%s/work; mkdir -p "$S" && rm -rf "$S"`, scratchpad),
+		p.Allows(
+			fmt.Sprintf(`S=%s/work; mkdir -p "$S" && rm -rf "$S"`, p.Scratchpad),
 		),
 	)
 }
 
 func TestPolicyAllowsRedirectingIntoScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.True(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`grep -c x doc/guide/a.md > tmp/work/count.txt 2>/dev/null`,
-		),
+		p.Allows(`grep -c x doc/guide/a.md > tmp/work/count.txt 2>/dev/null`),
 	)
 }
 
 func TestPolicyAllowsAllowlistedSubstitution(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`echo "$(wc -l < doc/guide/a.md)"`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`echo "$(wc -l < doc/guide/a.md)"`))
 }
 
 func TestPolicyAllowsCopyingIntoScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`cp doc/guide/a.md tmp/work/`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`cp doc/guide/a.md tmp/work/`))
 }
 
 func TestPolicyFollowsChangeDirectory(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `cd tmp/work && rm -f x.md`),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`cd tmp/work && rm -f x.md`))
 }
 
 func TestPolicyAllowsShellBuiltinsInsideLoop(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.True(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
+		p.Allows(
 			"set -e\nls doc/guide | while IFS= read -r f; do [ \"$f\" = README.md ] && continue; printf '%s\\n' \"$f\"; done",
 		),
 	)
 }
 
 func TestPolicyRefusesShellBuiltinAllowlistLacks(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `ls doc; shift`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`ls doc; shift`))
 }
 
 func TestPolicyAllowsTimeoutAroundAllowlistedCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.True(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`timeout -k 5 900 app run --rm alpha /alpha/count.py /input`,
-		),
+		p.Allows(`timeout -k 5 900 app run --rm alpha /alpha/count.py /input`),
 	)
 }
 
 func TestPolicyRefusesTimeoutAroundUnlistedCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `timeout 900 python3 x.py`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`timeout 900 python3 x.py`))
 }
 
 func TestPolicyRefusesFieldSeparatorChangeThatOutlivesOneCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `IFS=/; ls doc`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`IFS=/; ls doc`))
 }
 
 func TestPolicyForgetsVariableThatReadOverwrites(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`S=tmp/work/a; echo doc | read S; rm -rf "$S"`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`S=tmp/work/a; echo doc | read S; rm -rf "$S"`))
 }
 
 func TestPolicyRefusesRemovingOutsideScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `rm doc/guide/a.md`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`rm doc/guide/a.md`))
 }
 
 func TestPolicyRefusesPathClimbingOutOfScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `rm tmp/../doc/guide/a.md`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`rm tmp/../doc/guide/a.md`))
 }
 
 func TestPolicyRefusesScratchRootItself(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `rm -rf tmp`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`rm -rf tmp`))
 }
 
 func TestPolicyRefusesGlobOverScratchRoot(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `rm -rf tmp/*`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`rm -rf tmp/*`))
 }
 
 func TestPolicyRefusesDotGlob(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `rm -rf tmp/work/.*`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`rm -rf tmp/work/.*`))
 }
 
 func TestPolicyRefusesSymlinkOutOfScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.FatalOnError(
 		t,
 		os.Symlink(
-			filepath.Join(root, "doc"),
+			filepath.Join(p.Root, "doc"),
 			filepath.Join(
-				root,
+				p.Root,
 				constant.FixtureScratchDirectory,
 				"work",
 				"link",
 			),
 		),
 	)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `rm -rf tmp/work/link/guide`),
-	)
+	assert.False(t, p.Allows(`rm -rf tmp/work/link/guide`))
 }
 
 func TestPolicyRefusesUnlistedCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			"python3 - <<'EOF'\nprint(1)\nEOF",
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows("python3 - <<'EOF'\nprint(1)\nEOF"))
 }
 
 func TestPolicyRefusesUnlistedCommandInsideLoop(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`for f in a b; do python3 x.py "$f"; done`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`for f in a b; do python3 x.py "$f"; done`))
 }
 
 func TestPolicyRefusesUnlistedSubstitution(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`echo "$(python3 -c 'print(1)')"`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`echo "$(python3 -c 'print(1)')"`))
 }
 
 func TestPolicyRefusesRedirectingOutsideScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `echo x > doc/guide/a.md`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`echo x > doc/guide/a.md`))
 }
 
 func TestPolicyRefusesUnknownVariable(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `rm -rf "$HOME/x"`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`rm -rf "$HOME/x"`))
 }
 
 func TestPolicyForgetsVariableSetInsideLoop(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.False(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`S=tmp/work/a; for d in doc; do S=$d; done; rm -rf "$S"`,
-		),
+		p.Allows(`S=tmp/work/a; for d in doc; do S=$d; done; rm -rf "$S"`),
 	)
 }
 
 func TestPolicyKeepsSubshellChangeDirectoryInside(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`(cd tmp/work) && rm -f x.md`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`(cd tmp/work) && rm -f x.md`))
 }
 
 func TestPolicyRefusesFunctionShadowingAllowlistedName(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`grep() { rm -rf doc; }; grep x a.md`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`grep() { rm -rf doc; }; grep x a.md`))
 }
 
 func TestPolicyRefusesPathOverride(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `PATH=/tmp/evil grep x a.md`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`PATH=/tmp/evil grep x a.md`))
 }
 
 func TestPolicyRefusesFindExec(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`find . -name x -exec rm {} \;`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`find . -name x -exec rm {} \;`))
 }
 
 func TestPolicyAllowsSedInPlaceLikeAllowlist(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`gsed -i 's/a/b/' doc/guide/a.md`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`gsed -i 's/a/b/' doc/guide/a.md`))
 }
 
 func TestPolicyRefusesUnknownLeadingAssignment(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`FOO=bar app run --rm alpha x`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`FOO=bar app run --rm alpha x`))
 }
 
 func TestPolicyAllowsLocaleBeforeCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`LC_ALL=C grep -c x doc/guide/a.md`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`LC_ALL=C grep -c x doc/guide/a.md`))
 }
 
 func TestPolicyRefusesFieldSeparatorBeforeAnythingButRead(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `IFS=/ ls doc`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`IFS=/ ls doc`))
 }
 
 func TestPolicyRefusesUnquotedGlobOnWriteCapableCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `find doc -name *.md`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`find doc -name *.md`))
 }
 
 func TestPolicyAllowsQuotedGlobOnWriteCapableCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `find doc -name '*.md'`),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`find doc -name '*.md'`))
 }
 
 func TestPolicyRefusesGitAfterChangingDirectory(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `cd tmp/work && git diff`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`cd tmp/work && git diff`))
 }
 
 func TestPolicyAllowsGitAfterChangeDirectoryThatStays(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			fmt.Sprintf(`cd %s && git diff`, root),
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(fmt.Sprintf(`cd %s && git diff`, p.Root)))
 }
 
 func TestPolicyUnwrapsBareXargs(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`ls doc/guide | xargs grep -c x`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`ls doc/guide | xargs grep -c x`))
 }
 
 func TestPolicyRefusesXargsWithFlags(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`ls doc/guide | xargs -n1 grep -c x`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`ls doc/guide | xargs -n1 grep -c x`))
 }
 
 func TestPolicyRefusesCommandLookup(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(t, root, scratchpad, `command -v python3`),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`command -v python3`))
 }
 
 func TestPolicyAllowsReadOnlyCommandOutsideAllowlist(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.True(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`diff doc/guide/a.md tmp/work/a.md; stat doc`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.True(t, p.Allows(`diff doc/guide/a.md tmp/work/a.md; stat doc`))
 }
 
 func TestPolicyRefusesUnparseableCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `for x in; do`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`for x in; do`))
 }
 
 func TestPolicyRefusesBackgroundJob(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(t, policy_tester.Allows(t, root, scratchpad, `grep x a.md &`))
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`grep x a.md &`))
 }
 
 func TestPolicyRefusesMovingOutOfScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`mv doc/guide/a.md tmp/work/`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`mv doc/guide/a.md tmp/work/`))
 }
 
 func TestPolicyRefusesCopyingOutOfScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.False(
-		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
-			`cp tmp/work/a.md doc/guide/`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.False(t, p.Allows(`cp tmp/work/a.md doc/guide/`))
 }
 
 func TestPolicyNamesNoBlockerForAllowedCommand(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.Strings(
-		t,
-		nil,
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`ls doc && rm -f tmp/work/x.md`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.Strings(t, nil, p.Blockers(`ls doc && rm -f tmp/work/x.md`))
 }
 
 func TestPolicyNamesEveryBlockerNotOnlyFirst(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.Strings(
 		t,
 		[]string{"python3", "rm", "md5"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
+		p.Blockers(
 			`python3 -c 'print(1)' && rm doc/guide/a.md; python3 -V | md5`,
 		),
 	)
 }
 
 func TestPolicyNamesBlockerInsideLoopsAndSubstitutions(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.Strings(
 		t,
 		[]string{"cmp"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`for f in a b; do cmp "$f" x; done`,
-		),
+		p.Blockers(`for f in a b; do cmp "$f" x; done`),
 	)
 	assert.Strings(
 		t,
 		[]string{"md5"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`echo "$(md5 doc/guide/a.md)"`,
-		),
+		p.Blockers(`echo "$(md5 doc/guide/a.md)"`),
 	)
 	assert.Strings(
 		t,
 		[]string{"shasum"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`if ls doc; then shasum doc/guide/a.md; fi`,
-		),
+		p.Blockers(`if ls doc; then shasum doc/guide/a.md; fi`),
 	)
 }
 
 func TestPolicyWalksOnPastRefusal(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	both := []string{"cmp", "shasum"}
+	assert.Strings(t, both, p.Blockers(`if cmp a b; then shasum x; fi`))
+	assert.Strings(t, both, p.Blockers(`while cmp a b; do shasum x; done`))
+	assert.Strings(t, both, p.Blockers(`cmp a b || shasum x`))
+	assert.Strings(t, both, p.Blockers(`echo "$(cmp a b)$(shasum x)"`))
 	assert.Strings(
 		t,
 		both,
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`if cmp a b; then shasum x; fi`,
-		),
+		p.Blockers(`for f in $(cmp a b); do shasum x; done`),
 	)
-	assert.Strings(
-		t,
-		both,
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`while cmp a b; do shasum x; done`,
-		),
-	)
-	assert.Strings(
-		t,
-		both,
-		policy_tester.Blockers(t, root, scratchpad, `cmp a b || shasum x`),
-	)
-	assert.Strings(
-		t,
-		both,
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`echo "$(cmp a b)$(shasum x)"`,
-		),
-	)
-	assert.Strings(
-		t,
-		both,
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`for f in $(cmp a b); do shasum x; done`,
-		),
-	)
-	assert.Strings(
-		t,
-		both,
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`case $(cmp a b) in a) shasum x;; esac`,
-		),
-	)
+	assert.Strings(t, both, p.Blockers(`case $(cmp a b) in a) shasum x;; esac`))
 	assert.Strings(
 		t,
 		[]string{"(assignment before a command)", "cmp"},
-		policy_tester.Blockers(t, root, scratchpad, `X=1 cmp a b`),
+		p.Blockers(`X=1 cmp a b`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(assignment to PATH)", "cmp"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`export PATH=/opt HOME=$(cmp a b)`,
-		),
+		p.Blockers(`export PATH=/opt HOME=$(cmp a b)`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(background job)", "cmp"},
-		policy_tester.Blockers(t, root, scratchpad, `cmp a b &`),
+		p.Blockers(`cmp a b &`),
 	)
 	assert.Strings(
 		t,
 		[]string{"cmp", "(redirect outside scratch)"},
-		policy_tester.Blockers(t, root, scratchpad, `ls > "$(cmp a b)"`),
+		p.Blockers(`ls > "$(cmp a b)"`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(redirect outside scratch)", "cmp"},
-		policy_tester.Blockers(t, root, scratchpad, `cmp a b > doc/list.txt`),
+		p.Blockers(`cmp a b > doc/list.txt`),
 	)
 }
 
 func TestPolicyNamesSubcommandWhereRulesScopeOne(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.Strings(
-		t,
-		[]string{"git status"},
-		policy_tester.Blockers(t, root, scratchpad, `git status --short`),
-	)
-	assert.Strings(
-		t,
-		[]string{"app ps"},
-		policy_tester.Blockers(t, root, scratchpad, `app ps`),
-	)
-	assert.Strings(
-		t,
-		[]string{"cmp"},
-		policy_tester.Blockers(t, root, scratchpad, `cmp a b`),
-	)
+	p := policy_tester.New(t)
+	assert.Strings(t, []string{"git status"}, p.Blockers(`git status --short`))
+	assert.Strings(t, []string{"app ps"}, p.Blockers(`app ps`))
+	assert.Strings(t, []string{"cmp"}, p.Blockers(`cmp a b`))
 }
 
 func TestPolicyNamesGitAfterChangeDirectory(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	assert.Strings(
 		t,
 		[]string{"(git after cd)"},
-		policy_tester.Blockers(t, root, scratchpad, `cd doc && git diff`),
+		p.Blockers(`cd doc && git diff`),
 	)
 }
 
 func TestPolicyNamesWriteOutsideScratch(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.Strings(
-		t,
-		[]string{"rm"},
-		policy_tester.Blockers(t, root, scratchpad, `rm doc/guide/a.md`),
-	)
-	assert.Strings(
-		t,
-		[]string{"cp"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`cp tmp/work/a.md doc/guide/`,
-		),
-	)
+	p := policy_tester.New(t)
+	assert.Strings(t, []string{"rm"}, p.Blockers(`rm doc/guide/a.md`))
+	assert.Strings(t, []string{"cp"}, p.Blockers(`cp tmp/work/a.md doc/guide/`))
 	assert.Strings(
 		t,
 		[]string{"(redirect outside scratch)"},
-		policy_tester.Blockers(t, root, scratchpad, `ls doc > doc/list.txt`),
+		p.Blockers(`ls doc > doc/list.txt`),
 	)
 }
 
 func TestPolicyNamesStructuralBlocks(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.Strings(
-		t,
-		[]string{"(background job)"},
-		policy_tester.Blockers(t, root, scratchpad, `ls doc &`),
-	)
+	p := policy_tester.New(t)
+	assert.Strings(t, []string{"(background job)"}, p.Blockers(`ls doc &`))
 	assert.Strings(
 		t,
 		[]string{"(assignment before a command)"},
-		policy_tester.Blockers(t, root, scratchpad, `X=1 ls doc`),
+		p.Blockers(`X=1 ls doc`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(assignment to PATH)"},
-		policy_tester.Blockers(
-			t,
-			root,
-			scratchpad,
-			`export PATH=/opt/bin; ls doc`,
-		),
+		p.Blockers(`export PATH=/opt/bin; ls doc`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(array assignment)"},
-		policy_tester.Blockers(t, root, scratchpad, `a=(1 2); ls doc`),
+		p.Blockers(`a=(1 2); ls doc`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(command from an expansion)"},
-		policy_tester.Blockers(t, root, scratchpad, `$tool doc`),
+		p.Blockers(`$tool doc`),
 	)
 	assert.Strings(
 		t,
 		[]string{"(unsupported construct)"},
-		policy_tester.Blockers(t, root, scratchpad, `f() { ls doc; }`),
+		p.Blockers(`f() { ls doc; }`),
 	)
-	assert.Strings(
-		t,
-		[]string{"(unparsed)"},
-		policy_tester.Blockers(t, root, scratchpad, `ls doc (`),
-	)
-	assert.Strings(
-		t,
-		[]string{"(no command)"},
-		policy_tester.Blockers(t, root, scratchpad, `x=1`),
-	)
-	assert.Strings(
-		t,
-		[]string{"find"},
-		policy_tester.Blockers(t, root, scratchpad, `find doc -delete`),
-	)
+	assert.Strings(t, []string{"(unparsed)"}, p.Blockers(`ls doc (`))
+	assert.Strings(t, []string{"(no command)"}, p.Blockers(`x=1`))
+	assert.Strings(t, []string{"find"}, p.Blockers(`find doc -delete`))
 }
 
 func TestPolicyNamesWrapperItCannotStrip(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
-	assert.Strings(
-		t,
-		[]string{"xargs"},
-		policy_tester.Blockers(t, root, scratchpad, `ls doc | xargs -n1 cat`),
-	)
-	assert.Strings(
-		t,
-		[]string{"timeout"},
-		policy_tester.Blockers(t, root, scratchpad, `timeout 5`),
-	)
-	assert.Strings(
-		t,
-		[]string{"cmp"},
-		policy_tester.Blockers(t, root, scratchpad, `timeout 5 cmp a b`),
-	)
+	p := policy_tester.New(t)
+	assert.Strings(t, []string{"xargs"}, p.Blockers(`ls doc | xargs -n1 cat`))
+	assert.Strings(t, []string{"timeout"}, p.Blockers(`timeout 5`))
+	assert.Strings(t, []string{"cmp"}, p.Blockers(`timeout 5 cmp a b`))
 }

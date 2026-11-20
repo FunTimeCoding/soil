@@ -28,11 +28,11 @@ func TestMoveConstant(t *testing.T) {
 	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/constant.go"))
 	assert.True(t, os.IsNotExist(e))
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "ItemFields = \"alfa\"", moved)
 	assert.StringContains(t, "Host = \"bravo\"", moved)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "return constant.ItemFields", run)
 	assert.StringContains(t, "example/pkg/target/constant", run)
 }
@@ -55,11 +55,11 @@ func TestMoveIntoReferenced(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "Address: \"primary\"", moved)
 	assert.StringNotContains(t, "example/pkg/target/constant", moved)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "return constant.Table", run)
 	assert.StringContains(t, "example/pkg/target/constant", run)
 }
@@ -82,10 +82,10 @@ func TestMoveCrossPackage(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "return constant.Mode", run)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "return targetConstant.Mode", caller)
 	assert.StringContains(t, "example/pkg/target/constant", caller)
 	assert.False(t, strings.Contains(caller, "target.Mode"))
@@ -106,7 +106,7 @@ func TestMoveAlias(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "targetConstant.Mode", caller)
 	assert.StringContains(
 		t,
@@ -148,11 +148,11 @@ func TestMoveCreate(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "package constant", moved)
 	assert.StringContains(t, "ItemFields = \"alfa\"", moved)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "return constant.ItemFields", run)
 }
 
@@ -304,7 +304,7 @@ func TestMoveSymbolQualifiesSibling(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.FixedContains(t, "prefix → Prefix", r)
+	rewrite_tester.New(t).FixedContains("prefix → Prefix", r)
 	assert.StringContains(
 		t,
 		"const composed = target.Prefix + \"bravo\"",
@@ -315,7 +315,7 @@ func TestMoveSymbolQualifiesSibling(t *testing.T) {
 		"const Prefix = \"alfa\"",
 		o.Read("pkg/target/constant.go"),
 	)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestMoveGroup(t *testing.T) {
@@ -333,14 +333,14 @@ func TestMoveGroup(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := o.Read("pkg/target/constant.go")
-	rewrite_tester.Formatted(t, source)
+	rewrite_tester.New(t).Formatted(source)
 	assert.StringContains(t, "Second = \"bravo\"", source)
 	assert.False(t, strings.Contains(source, "First"))
 	moved := o.Read("pkg/target/constant/constant.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "First = \"alfa\"", moved)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "constant.First + Second", run)
 }
 
@@ -361,11 +361,11 @@ func TestMoveFunction(t *testing.T) {
 	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/is_valid.go"))
 	assert.True(t, os.IsNotExist(e))
 	moved := o.Read("pkg/check/is_valid.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "package check", moved)
 	assert.StringContains(t, "func IsValid(", moved)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "check.IsValid(\"alfa\")", caller)
 	assert.StringContains(t, "example/pkg/check", caller)
 }

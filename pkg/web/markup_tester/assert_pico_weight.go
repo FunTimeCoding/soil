@@ -1,15 +1,9 @@
 package markup_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/web/style_sheet"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/web/style_sheet"
 
-func AssertPicoWeight(
-	t *testing.T,
-	body string,
-) {
-	t.Helper()
+func (o *Tester) AssertPicoWeight(body string) {
+	o.t.Helper()
 	d := document(body)
 	reported := map[string]bool{}
 
@@ -19,7 +13,7 @@ func AssertPicoWeight(
 		}
 
 		for _, s := range r.Selectors {
-			assertSelectorWeight(t, d, s, reported)
+			o.assertSelectorWeight(d, s, reported)
 		}
 	}
 }

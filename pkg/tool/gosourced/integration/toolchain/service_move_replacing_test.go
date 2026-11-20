@@ -9,7 +9,7 @@ import (
 )
 
 func TestMoveSymbolsRequalifiesReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "move-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("move-replacer")
 	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
 		library,
@@ -29,18 +29,18 @@ func TestMoveSymbolsRequalifiesReplacingModule(t *testing.T) {
 		o.Read("pkg/user/user.go"),
 	)
 	both := o.Read("pkg/both/both.go")
-	rewrite_tester.Formatted(t, both)
+	rewrite_tester.New(t).Formatted(both)
 	assert.StringContains(t, "\"other.test/lib/source\"", both)
 	assert.StringContains(t, "\"other.test/lib/target\"", both)
 	assert.StringContains(t, "return target.Helper() + source.Keep()", both)
 	clash := o.Read("pkg/clash/clash.go")
-	rewrite_tester.Formatted(t, clash)
+	rewrite_tester.New(t).Formatted(clash)
 	assert.StringContains(t, "lib \"other.test/lib/target\"", clash)
 	assert.StringContains(t, "return target.Local() + lib.Helper()", clash)
 }
 
 func TestMoveSymbolsToNewPackageRequalifiesReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "move-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("move-replacer")
 	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
 		library,
@@ -62,7 +62,7 @@ func TestMoveSymbolsToNewPackageRequalifiesReplacingModule(t *testing.T) {
 }
 
 func TestMoveSymbolsByFileRequalifiesReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "move-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("move-replacer")
 	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
 		library,
@@ -82,13 +82,13 @@ func TestMoveSymbolsByFileRequalifiesReplacingModule(t *testing.T) {
 		o.Read("pkg/both/both.go"),
 	)
 	widget := o.Read("pkg/widget/widget.go")
-	rewrite_tester.Formatted(t, widget)
+	rewrite_tester.New(t).Formatted(widget)
 	assert.StringContains(t, "return w.Run() + target.Limit", widget)
 	assert.StringContains(t, "\tsource.Widget\n", widget)
 }
 
 func TestExtractTypeRequalifiesReplacingModule(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "move-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("move-replacer")
 	r, e := o.Symbol.ExtractType(
 		t.Context(),
 		library,
@@ -102,14 +102,14 @@ func TestExtractTypeRequalifiesReplacingModule(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	widget := o.Read("pkg/widget/widget.go")
-	rewrite_tester.Formatted(t, widget)
+	rewrite_tester.New(t).Formatted(widget)
 	assert.StringContains(t, "\ttarget.Widget\n", widget)
 	assert.StringContains(t, "w := &target.Widget{Size: 1}", widget)
 	assert.StringContains(t, "return w.Run() + source.Limit", widget)
 }
 
 func TestMoveSymbolsRequalifiesReplacingModuleOnWholeLoad(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "move-replacer")
+	library, o := module_tester.New(t).ReplacedLibrary("move-replacer")
 	o.Workspace.UseFullLoad()
 	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
@@ -132,8 +132,8 @@ func TestMoveSymbolsRequalifiesReplacingModuleOnWholeLoad(t *testing.T) {
 }
 
 func TestMoveSymbolsDryRunLeavesReplacingModuleUntouched(t *testing.T) {
-	library, o := module_tester.ReplacedLibrary(t, "move-replacer")
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	library, o := module_tester.New(t).ReplacedLibrary("move-replacer")
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Symbol.MoveSymbols(
 		t.Context(),
 		library,
@@ -147,7 +147,7 @@ func TestMoveSymbolsDryRunLeavesReplacingModuleUntouched(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 	assert.StringContains(
 		t,
 		"pkg/user/user.go: Helper → target.Helper",

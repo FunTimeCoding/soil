@@ -10,11 +10,14 @@ import (
 )
 
 func TestSearchHybridFusesKeywordAndVectorResults(t *testing.T) {
-	s := store_tester.OpenTestStore(t)
+	s := store_tester.New(t).OpenTestStore()
 	d := t.TempDir()
-	store_tester.WriteFixture(t, d, "alfa.md", "# Alfa\n\nzulu appears here.\n")
-	store_tester.WriteFixture(
-		t,
+	store_tester.New(t).WriteFixture(
+		d,
+		"alfa.md",
+		"# Alfa\n\nzulu appears here.\n",
+	)
+	store_tester.New(t).WriteFixture(
 		d,
 		"bravo.md",
 		"# Bravo\n\nnothing to match.\n",

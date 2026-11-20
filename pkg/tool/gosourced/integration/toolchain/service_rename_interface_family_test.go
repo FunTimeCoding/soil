@@ -48,7 +48,7 @@ func TestRenameOfInterfaceMethodListsFamilyBeforeWriting(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-interface-family/src"),
 	)
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		o.Directory,
@@ -69,7 +69,7 @@ func TestRenameOfInterfaceMethodListsFamilyBeforeWriting(t *testing.T) {
 		},
 		rewrite_tester.FamilyMembers(r),
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 }
 
 func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
@@ -77,7 +77,7 @@ func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-interface-family/src"),
 	)
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		o.Directory,
@@ -93,7 +93,7 @@ func TestRenameOfInterfaceMethodRefusesStandardLibraryFamily(t *testing.T) {
 		r,
 		"example/pkg/box.Box satisfies fmt.Stringer outside the workspace",
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 }
 
 func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
@@ -101,13 +101,12 @@ func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
 		t,
 		service_tester.WithFixture("rename-interface-family/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/mock/area.go",
 		"package mock\n\nfunc (m *Mock) Area() int {\n\treturn 3\n}\n",
 	)
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		o.Directory,
@@ -123,7 +122,7 @@ func TestRenameOfInterfaceMethodRefusesCollisionAnywhereInFamily(t *testing.T) {
 		r,
 		"example/pkg/mock.Mock already has Area",
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 }
 
 func TestRenameOfEmbeddedInterfaceMethodNamesItsDeclarer(t *testing.T) {

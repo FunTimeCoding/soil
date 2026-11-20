@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func RenamedIdentityTaken(t *testing.T) string {
-	t.Helper()
+func (o *Tester) RenamedIdentityTaken() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"alfa/send_msg.go",
 			"package alfa\n\nfunc SendMsg() string {\n\treturn \"x\"\n}\n",

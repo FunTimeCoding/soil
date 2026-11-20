@@ -24,7 +24,7 @@ func TestSubscriptionsNeedGoclauded(t *testing.T) {
 }
 
 func TestGoclaudedTurnsSubscriptionsOn(t *testing.T) {
-	_, k := worker_tester.NewSink(t)
+	_, k := worker_tester.New(t).Sink()
 	s := service_tester.New(t, service_tester.WithConnector(k)).Service()
 	assert.True(t, s.Subscribing())
 }

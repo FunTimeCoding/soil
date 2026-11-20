@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func ImportAliasSuggestion(t *testing.T) string {
-	t.Helper()
+func (o *Tester) ImportAliasSuggestion() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"pkg/time/time.go",
 			"package time\n\nfunc Stamp() string { return \"stamp\" }\n",

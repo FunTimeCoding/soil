@@ -11,7 +11,7 @@ import (
 )
 
 func TestIndexComputesKindOnlyWhenRequested(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var alfaExtracted, alfaExternal, bravoExtracted, bravoExternal int
 	alfa := kind_tester.Counting("alfa", &alfaExtracted, &alfaExternal)
@@ -34,7 +34,7 @@ func TestIndexComputesKindOnlyWhenRequested(t *testing.T) {
 }
 
 func TestIndexKeepsExternalsPerKind(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)
@@ -52,7 +52,7 @@ func TestIndexKeepsExternalsPerKind(t *testing.T) {
 }
 
 func TestIndexKeepsExternalWholeBehindItsImporter(t *testing.T) {
-	directory := kind_tester.ImporterModule(t)
+	directory := kind_tester.New(t).ImporterModule()
 	names := kind_tester.ScopeNames("names")
 	var encoding []string
 
@@ -69,13 +69,13 @@ func TestIndexKeepsExternalWholeBehindItsImporter(t *testing.T) {
 }
 
 func TestIndexReferencesNeedNoKind(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	r := index.New(t.TempDir(), directory).References()
 	assert.True(t, r.Has("example/two"))
 }
 
 func TestIndexExtractsSyntaxExternalsTransitively(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var external int
 	alfa := kind_tester.CountingSyntax("alfa", &external)
@@ -102,7 +102,7 @@ func TestIndexExtractsSyntaxExternalsTransitively(t *testing.T) {
 }
 
 func TestIndexRecomputesFactsForAnotherBuild(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	var extracted, external int
 	alfa := kind_tester.Counting("alfa", &extracted, &external)

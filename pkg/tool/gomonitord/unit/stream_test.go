@@ -12,8 +12,8 @@ import (
 
 func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	s := base.New(t)
-	r := stream_tester.Open(t, s.Served())
-	assert.String(t, "[]", stream_tester.ReadEvent(t, r))
+	r := stream_tester.New(t).Open(s.Served())
+	assert.String(t, "[]", stream_tester.New(t).ReadEvent(r))
 	c := s.GeneratedClient()
 	claimed, e := c.PutClaimWithResponse(
 		context.Background(),
@@ -27,7 +27,7 @@ func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	assert.StringContains(
 		t,
 		`"item":"jira-ABC-1","owner":"alfa@host.example"`,
-		stream_tester.ReadEvent(t, r),
+		stream_tester.New(t).ReadEvent(r),
 	)
 	released, f := c.DeleteClaimWithResponse(
 		context.Background(),
@@ -38,7 +38,7 @@ func TestStreamFollowsEveryClaimChange(t *testing.T) {
 	)
 	assert.FatalOnError(t, f)
 	assert.Integer(t, http.StatusNoContent, released.StatusCode())
-	assert.String(t, "[]", stream_tester.ReadEvent(t, r))
+	assert.String(t, "[]", stream_tester.New(t).ReadEvent(r))
 }
 
 func TestClaimWithoutOwnerIsRejected(t *testing.T) {

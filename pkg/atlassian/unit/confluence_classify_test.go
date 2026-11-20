@@ -20,7 +20,7 @@ func TestUnavailableConfluenceIsUnavailable(t *testing.T) {
 		),
 	)
 	var out map[string]any
-	e := atlassian_tester.Confluence(t, s.URL).GetPath(
+	e := atlassian_tester.New(t).Confluence(s.URL).GetPath(
 		constant.ConfluenceUser,
 		&out,
 	)
@@ -37,7 +37,7 @@ func TestRejectedConfluenceTokenStaysFault(t *testing.T) {
 		),
 	)
 	var out map[string]any
-	e := atlassian_tester.Confluence(t, s.URL).GetPath(
+	e := atlassian_tester.New(t).Confluence(s.URL).GetPath(
 		constant.ConfluenceUser,
 		&out,
 	)

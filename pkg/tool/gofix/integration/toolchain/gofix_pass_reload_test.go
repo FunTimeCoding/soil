@@ -10,10 +10,10 @@ import (
 )
 
 func TestPassAfterRenameSeesRenamedSource(t *testing.T) {
-	directory := module_tester.RenamedParameter(t)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
+	m := module_tester.New(t)
+	directory := m.RenamedParameter()
+	m.RunDefault(
+		m.Options(directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)
 	assert.String(

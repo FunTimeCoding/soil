@@ -6,23 +6,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
-func HandMoved(t *testing.T) *service_tester.Tester {
-	t.Helper()
+func (o *Tester) HandMoved() *service_tester.Tester {
+	o.t.Helper()
 	result := service_tester.New(
-		t,
+		o.t,
 		service_tester.WithFixture("rename-follow/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(o.t).Write(
 		result.Directory,
 		"doc/note.md",
 		"See `pkg/alfa/old_name.go`.\n",
 	)
 	assert.FatalOnError(
-		t,
+		o.t,
 		os.Rename(
 			filepath.Join(result.Directory, "pkg/alfa/old_name.go"),
 			filepath.Join(result.Directory, "pkg/alfa/renamed.go"),

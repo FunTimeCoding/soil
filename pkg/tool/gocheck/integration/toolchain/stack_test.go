@@ -12,14 +12,14 @@ import (
 )
 
 func TestFixRefusalWithholdsEveryStagesWrites(t *testing.T) {
-	root := check_tester.StackModule(t)
+	c := check_tester.New(t)
+	root := c.StackModule()
 	o := option.New()
 	o.Root = root
 	o.Fix = true
 	o.Index = t.TempDir()
 	o.BeforeCommit = func() {
-		system_tester.Write(
-			t,
+		system_tester.New(t).Write(
 			root,
 			"pkg/spacing/alfa.go",
 			"package spacing\n\nfunc Alfa() int {\n\treturn 2\n}\n",
@@ -27,7 +27,7 @@ func TestFixRefusalWithholdsEveryStagesWrites(t *testing.T) {
 	}
 	blocked := false
 	printed := testutil.CaptureStdout(
-		func() { blocked = gocheck.Print(check_tester.Run(t, o)) },
+		func() { blocked = gocheck.Print(c.Run(o)) },
 	)
 	assert.True(t, blocked)
 	assert.String(
@@ -43,9 +43,9 @@ func TestFixRefusalWithholdsEveryStagesWrites(t *testing.T) {
 }
 
 func TestFixCommitsEveryStageTogetherThroughEachOther(t *testing.T) {
-	root := check_tester.StackModule(t)
-	system_tester.Write(
-		t,
+	c := check_tester.New(t)
+	root := c.StackModule()
+	system_tester.New(t).Write(
 		root,
 		"pkg/both/golf.go",
 		"package both\n\nimport \"fmt\"\n\nfunc Golf() int {\n\thotel := 1\n\treturn hotel\n}\n\nfunc India() {\n\tjulietMsg := \"x\"\n\tfmt.Println(\"echo foxtrot golf hotel india\", \"juliett kilo lima mike november oscar\", julietMsg)\n}\n",
@@ -61,7 +61,7 @@ func TestFixCommitsEveryStageTogetherThroughEachOther(t *testing.T) {
 			testutil.ReadFile(t, filepath.Join(root, "pkg/spacing/alfa.go")),
 		)
 	}
-	testutil.CaptureStdout(func() { gocheck.Print(check_tester.Run(t, o)) })
+	testutil.CaptureStdout(func() { gocheck.Print(c.Run(o)) })
 	assert.String(
 		t,
 		"package both\n\nimport \"fmt\"\n\nfunc Golf() int {\n\thotel := 1\n\n\treturn hotel\n}\n\nfunc India() {\n\tjulietMessage := \"x\"\n\tfmt.Println(\n\t\t\"echo foxtrot golf hotel india\",\n\t\t\"juliett kilo lima mike november oscar\",\n\t\tjulietMessage,\n\t)\n}\n",
@@ -75,13 +75,12 @@ func TestFixCommitsEveryStageTogetherThroughEachOther(t *testing.T) {
 }
 
 func TestReportModeShowsOneDiffForEveryStage(t *testing.T) {
-	root := check_tester.StackModule(t)
+	c := check_tester.New(t)
+	root := c.StackModule()
 	o := option.New()
 	o.Root = root
 	o.Index = t.TempDir()
-	printed := testutil.CaptureStdout(
-		func() { gocheck.Print(check_tester.Run(t, o)) },
-	)
+	printed := testutil.CaptureStdout(func() { gocheck.Print(c.Run(o)) })
 	assert.StringContains(
 		t,
 		filepath.Join(root, "pkg/spacing/alfa.go"),

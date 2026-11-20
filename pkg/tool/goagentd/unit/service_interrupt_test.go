@@ -34,7 +34,7 @@ func TestInterruptBeforeLaunchKillsAgent(t *testing.T) {
 	<-launching
 	o.Runner.Interrupt()
 	close(release)
-	service_tester.AwaitDone(t, o.Service())
+	o.AwaitDone()
 	assert.Integer(t, 1, s.Killed())
 }
 
@@ -49,7 +49,7 @@ func TestAgentAlreadyGoneIsNotReported(t *testing.T) {
 	)
 	assert.FatalOnError(t, o.Service().Run("sierra"))
 	o.Runner.Interrupt()
-	service_tester.AwaitDone(t, o.Service())
+	o.AwaitDone()
 	assert.Count(t, 0, r.Events())
 }
 
@@ -64,6 +64,6 @@ func TestKillThatFailsIsReported(t *testing.T) {
 	)
 	assert.FatalOnError(t, o.Service().Run("tango"))
 	o.Runner.Interrupt()
-	service_tester.AwaitDone(t, o.Service())
+	o.AwaitDone()
 	assert.Count(t, 1, r.Events())
 }

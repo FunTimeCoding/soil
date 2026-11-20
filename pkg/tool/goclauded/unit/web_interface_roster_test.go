@@ -42,14 +42,13 @@ func TestRosterCruiseSitsInFooterOutsideLink(t *testing.T) {
 	s.Store.EnsureSession("session-1")
 	page := s.Body(t, constant.DashboardPath)
 	action := session_page.ActionPath("session-1", constant.CruiseAction)
-	markup_tester.AssertCount(
-		t,
+	markup_tester.New(t).AssertCount(
 		1,
 		page,
 		join.Empty(`article[hx-preserve] footer form[action="`, action, `"]`),
 	)
-	markup_tester.AssertCount(t, 0, page, "a form")
-	markup_tester.AssertCount(t, 0, page, `[sse-swap^="roster-"] form`)
+	markup_tester.New(t).AssertCount(0, page, "a form")
+	markup_tester.New(t).AssertCount(0, page, `[sse-swap^="roster-"] form`)
 }
 
 func TestRefusedGraceAnswersCardsFormWithItsAlert(t *testing.T) {
@@ -63,8 +62,7 @@ func TestRefusedGraceAnswersCardsFormWithItsAlert(t *testing.T) {
 		},
 		true,
 	)
-	markup_tester.AssertCount(
-		t,
+	markup_tester.New(t).AssertCount(
 		1,
 		answer,
 		join.Empty(

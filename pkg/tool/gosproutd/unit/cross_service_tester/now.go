@@ -3,5 +3,5 @@ package cross_service_tester
 import "time"
 
 func (o *Tester) Now() time.Time {
-	return o.clock.Now()
+	return o.store.Clock()()
 }

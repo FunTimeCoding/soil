@@ -29,5 +29,5 @@ func New(
 		s.Alfa().Hypervisor.SetFailure(outage_tester.RefusedDial())
 	}
 
-	return s.Served(), outage_tester.Guard(t, s.Daemon().Workers(), peer).Unavailable
+	return s.Served(), outage_tester.New(t).Guard(s.Daemon().Workers(), peer).Unavailable
 }

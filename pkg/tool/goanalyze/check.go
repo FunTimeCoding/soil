@@ -27,6 +27,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/struct_literal"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stub_constructor"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/test_article"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/tester_function"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/tester_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/type_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unchecked_print_write"
@@ -63,6 +64,7 @@ func check(
 	file_identity.Check(p, results)
 	type_receiver.Check(p, results)
 	tester_receiver.Check(p, results)
+	tester_function.Check(p, results)
 	test_article.Check(p, results)
 	stub_constructor.Check(p, results)
 	unchecked_print_write.Check(p, results)

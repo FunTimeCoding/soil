@@ -14,15 +14,11 @@ import (
 )
 
 func TestRenameMovesFileNamedForIdentity(t *testing.T) {
-	directory := module_tester.RenamedIdentity(t)
+	m := module_tester.New(t)
+	directory := m.RenamedIdentity()
 	r := output.NewResultsWithDirectory(directory)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
-		r,
-	)
-	fix_tester.Result(
-		t,
+	m.RunDefault(m.Options(directory, false, false, "./..."), r)
+	fix_tester.New(t).Result(
 		fix_tester.Applied(r.Entries),
 		"alfa/send_msg.go",
 		"moved send_msg.go → send_message.go",
@@ -39,14 +35,14 @@ func TestRenameMovesFileNamedForIdentity(t *testing.T) {
 			filepath.Join(directory, "alfa", "send_message.go"),
 		),
 	)
-	fix_tester.Builds(t, directory)
+	fix_tester.New(t).Builds(directory)
 }
 
 func TestRenameRealignsDeclarationBlock(t *testing.T) {
-	directory := module_tester.RenamedIdentity(t)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
+	m := module_tester.New(t)
+	directory := m.RenamedIdentity()
+	m.RunDefault(
+		m.Options(directory, false, false, "./..."),
 		output.NewResultsWithDirectory(directory),
 	)
 	assert.String(
@@ -57,15 +53,11 @@ func TestRenameRealignsDeclarationBlock(t *testing.T) {
 }
 
 func TestRenameKeepsFileWhoseNameIsTaken(t *testing.T) {
-	directory := module_tester.RenamedIdentityTaken(t)
+	m := module_tester.New(t)
+	directory := m.RenamedIdentityTaken()
 	r := output.NewResultsWithDirectory(directory)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
-		r,
-	)
-	fix_tester.Result(
-		t,
+	m.RunDefault(m.Options(directory, false, false, "./..."), r)
+	fix_tester.New(t).Result(
 		fix_tester.Blocked(r.Entries),
 		"alfa/send_msg.go",
 		"send_message.go is taken; send_msg.go keeps its name",
@@ -86,14 +78,14 @@ func TestRenameKeepsFileWhoseNameIsTaken(t *testing.T) {
 }
 
 func TestRenameDiffShowsMoveWithoutWriting(t *testing.T) {
-	directory := module_tester.RenamedIdentity(t)
-	before := fix_tester.GoFiles(t, filepath.Join(directory, "alfa"))
+	m := module_tester.New(t)
+	directory := m.RenamedIdentity()
+	before := fix_tester.New(t).GoFiles(filepath.Join(directory, "alfa"))
 	printed := assert.Capture(
 		t,
 		func() {
-			module_tester.RunDefault(
-				t,
-				module_tester.Options(t, directory, true, false, "./..."),
+			m.RunDefault(
+				m.Options(directory, true, false, "./..."),
 				output.NewResultsWithDirectory(directory),
 			)
 		},
@@ -101,7 +93,7 @@ func TestRenameDiffShowsMoveWithoutWriting(t *testing.T) {
 	assert.Any(
 		t,
 		before,
-		fix_tester.GoFiles(t, filepath.Join(directory, "alfa")),
+		fix_tester.New(t).GoFiles(filepath.Join(directory, "alfa")),
 	)
 	assert.True(
 		t,

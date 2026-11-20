@@ -2,15 +2,11 @@ package event_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/stream_event"
-	"testing"
 	"time"
 )
 
-func Drain(
-	t *testing.T,
-	events <-chan *stream_event.Event,
-) {
-	t.Helper()
+func (o *Tester) Drain(events <-chan *stream_event.Event) {
+	o.t.Helper()
 	deadline := time.After(5 * time.Second)
 
 	for {
@@ -20,7 +16,7 @@ func Drain(
 				return
 			}
 		case <-deadline:
-			t.Fatal("timed out waiting for the stream to close")
+			o.t.Fatal("timed out waiting for the stream to close")
 
 			return
 		}

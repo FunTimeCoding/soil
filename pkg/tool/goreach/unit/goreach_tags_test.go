@@ -9,20 +9,17 @@ import (
 
 func TestTagsJoinsDiscoveredCustomTags(t *testing.T) {
 	d := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		d,
 		"alfa/alfa.go",
 		"//go:build local\n\npackage alfa\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		d,
 		"alfa/bravo.go",
 		"//go:build ci\n\npackage alfa\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		d,
 		"alfa/charlie.go",
 		"//go:build linux\n\npackage alfa\n",

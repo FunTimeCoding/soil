@@ -17,7 +17,7 @@ func TestImportClean(t *testing.T) {
 			"package example\n\nimport \"fmt\"\n\nfunc Example() {\n\tfmt.Println(\"Hello.\")\n}\n",
 		),
 	)
-	lint_tester.Report(t, "Bravo", false, nil, "", l)
+	lint_tester.New(t).Report("Bravo", false, nil, "", l)
 }
 
 func TestImportBlank(t *testing.T) {
@@ -27,8 +27,7 @@ func TestImportBlank(t *testing.T) {
 			"package example\n\nimport (\n\t\"fmt\"\n\n\t\"log\"\n)\n\nfunc Example() {\n\tfmt.Printf(\"test\")\n\tlog.Printf(\"test\")\n}\n",
 		),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Charlie",
 		true,
 		[]*concern.Concern{
@@ -54,8 +53,7 @@ func TestGo(t *testing.T) {
 			"package example\n\nimport (\n\t\"example.org/example/fmt\"\n)\n\nfunc Example() {\n\tfmt.Println(\"Hello friend.\")\n}\n",
 		),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{

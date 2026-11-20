@@ -53,13 +53,12 @@ func TestRenameOfInterfaceMethodBlockedWhereHolderReachesInterface(t *testing.T)
 		t,
 		service_tester.WithFixture("rename-interface-shape/src"),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/use/drain.go",
 		"package use\n\nimport \"example/pkg/stream\"\n\nvar _ = stream.Drain\n",
 	)
-	before := rewrite_tester.DirectoryTree(t, o.Directory)
+	before := rewrite_tester.New(t).DirectoryTree(o.Directory)
 	r, e := o.Symbol.Rename(
 		t.Context(),
 		o.Directory,
@@ -75,5 +74,5 @@ func TestRenameOfInterfaceMethodBlockedWhereHolderReachesInterface(t *testing.T)
 		r,
 		"example/pkg/door.Door satisfies io.Closer outside the workspace, and example/pkg/use reaches io",
 	)
-	assert.String(t, before, rewrite_tester.DirectoryTree(t, o.Directory))
+	assert.String(t, before, rewrite_tester.New(t).DirectoryTree(o.Directory))
 }

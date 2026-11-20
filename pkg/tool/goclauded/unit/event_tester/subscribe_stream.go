@@ -11,16 +11,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/web"
 	"strings"
-	"testing"
 )
 
-func SubscribeStream(
-	t *testing.T,
+func (o *Tester) SubscribeStream(
 	s *base.Server,
 	name string,
 	kinds string,
 ) (<-chan Event, func()) {
-	t.Helper()
+	o.t.Helper()
 	r := web.NewGet(
 		s.Address(
 			fmt.Sprintf("/event-stream?subscriber=%s&kinds=%s", name, kinds),
@@ -28,7 +26,7 @@ func SubscribeStream(
 	)
 	web.Bearer(r, generativeConstant.ModelContextTestToken)
 	response, e := s.Server.Client().Do(r)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	events := make(chan Event, 50)
 	go func() {
 		scanner := bufio.NewScanner(response.Body)

@@ -4,12 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
-	"testing"
 )
 
-func Indexed(t *testing.T) (*store.Store, *ollama.Client) {
-	t.Helper()
-	o := client(t)
+func (o *Tester) Indexed() (*store.Store, *ollama.Client) {
+	o.t.Helper()
+	c := o.client()
 
-	return store_tester.IndexedTestStore(t), o
+	return store_tester.New(o.t).IndexedTestStore(), c
 }

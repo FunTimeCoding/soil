@@ -5,15 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"net/http/httptest"
-	"testing"
 )
 
-func Request(
-	t *testing.T,
+func (o *Tester) Request(
 	m *http.ServeMux,
 	bearer string,
 ) int {
-	t.Helper()
+	o.t.Helper()
 	q := httptest.NewRequest(http.MethodGet, "/target", nil)
 
 	if bearer != "" {

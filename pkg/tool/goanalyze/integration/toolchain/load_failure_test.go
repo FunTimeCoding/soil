@@ -17,12 +17,14 @@ func TestBrokenAnalyzedPackageAnswersThatItDoesNotLoad(t *testing.T) {
 		return
 	}
 
+	s := scope_tester.New(t)
+
 	for _, full := range []bool{false, true} {
 		directory := t.TempDir()
-		scope_tester.HelperModule(t, directory, "example")
-		scope_tester.Caller(t, directory, "example")
-		scope_tester.BrokenPackage(t, directory, "caller")
-		r := scope_tester.Child(t, directory, full)
+		s.HelperModule(directory, "example")
+		s.Caller(directory, "example")
+		s.BrokenPackage(directory, "caller")
+		r := s.Child(directory, full)
 		assert.Integer(t, 1, r.Exit)
 		assert.StringContains(
 			t,
@@ -34,12 +36,13 @@ func TestBrokenAnalyzedPackageAnswersThatItDoesNotLoad(t *testing.T) {
 }
 
 func TestBrokenReachedPackageIsSkippedWithNotice(t *testing.T) {
+	s := scope_tester.New(t)
 	root := t.TempDir()
 	helper := filepath.Join(root, "helper_module")
 	application := filepath.Join(root, "application")
-	scope_tester.HelperModule(t, helper, "helper.example")
-	scope_tester.BrokenPackage(t, helper, "helper")
-	scope_tester.Caller(t, application, "helper.example")
+	s.HelperModule(helper, "helper.example")
+	s.BrokenPackage(helper, "helper")
+	s.Caller(application, "helper.example")
 	testutil.WriteModFile(
 		t,
 		application,
@@ -48,7 +51,7 @@ func TestBrokenReachedPackageIsSkippedWithNotice(t *testing.T) {
 		"replace helper.example => ../helper_module",
 	)
 	var notice bytes.Buffer
-	o := scope_tester.Options(t, application, true, "./caller/...")
+	o := s.Options(application, true, "./caller/...")
 	o.Notice = &notice
 	testutil.AssertBlockedContains(t, goanalyze.Analyze(o), "s is never closed")
 	assert.String(

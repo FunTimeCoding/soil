@@ -7,19 +7,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/mock_client"
-	"testing"
 )
 
-func CollectLabels(
-	t *testing.T,
-	f *mock_client.Client,
-) []*placement.Placement {
-	t.Helper()
-	result, e := label.New(f, peer_tester.NewGuard(t, f)).Collect(
+func (o *Tester) CollectLabels(f *mock_client.Client) []*placement.Placement {
+	o.t.Helper()
+	result, e := label.New(f, peer_tester.NewGuard(o.t, f)).Collect(
 		context.Background(),
 		nil,
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return result
 }

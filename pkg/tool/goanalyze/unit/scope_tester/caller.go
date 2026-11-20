@@ -3,17 +3,14 @@ package scope_tester
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
-	"testing"
 )
 
-func Caller(
-	t *testing.T,
+func (o *Tester) Caller(
 	directory string,
 	helperModule string,
 ) {
-	t.Helper()
-	system_tester.Write(
-		t,
+	o.t.Helper()
+	system_tester.New(o.t).Write(
 		directory,
 		"caller/caller.go",
 		fmt.Sprintf(

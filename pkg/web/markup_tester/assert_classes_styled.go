@@ -5,14 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"regexp"
 	"strings"
-	"testing"
 )
 
-func AssertClassesStyled(
-	t *testing.T,
-	body string,
-) {
-	t.Helper()
+func (o *Tester) AssertClassesStyled(body string) {
+	o.t.Helper()
 	d := document(body)
 	styled := map[string]bool{}
 	classSelector := regexp.MustCompile(`\.([a-zA-Z_][\w-]*)`)
@@ -38,7 +34,7 @@ func AssertClassesStyled(
 			for _, c := range strings.Fields(value) {
 				if !styled[c] && !reported[c] {
 					reported[c] = true
-					t.Errorf("class %q has no rule and is not Pico's", c)
+					o.t.Errorf("class %q has no rule and is not Pico's", c)
 				}
 			}
 		},

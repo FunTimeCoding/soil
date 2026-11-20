@@ -11,8 +11,7 @@ import (
 func TestSetInterfaceEthernetPowerCarriesType(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"set-interface-ethernet-power",
 		"alfa",
@@ -34,8 +33,7 @@ func TestSetInterfaceEthernetPowerCarriesType(t *testing.T) {
 func TestSetInterfaceEthernetPowerWithoutTypeSendsNone(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"set-interface-ethernet-power",
 		"alfa",
@@ -53,8 +51,7 @@ func TestSetInterfaceEthernetPowerWithoutTypeSendsNone(t *testing.T) {
 func TestSetInterfaceEthernetPowerWithoutModeClears(t *testing.T) {
 	c := mock_client.New(t)
 	defer c.Close()
-	_, _, code := command_tester.Run(
-		t,
+	_, _, code := command_tester.New(t).Run(
 		c,
 		"set-interface-ethernet-power",
 		"alfa",

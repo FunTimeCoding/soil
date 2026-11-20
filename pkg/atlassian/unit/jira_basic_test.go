@@ -14,7 +14,7 @@ import (
 
 func TestGetSendsBasicAuthToLocator(t *testing.T) {
 	s := upstream_server.New(t, upstream_server.WithAnswer(`{"total":3}`))
-	c := atlassian_tester.Jira(t, s.URL)
+	c := atlassian_tester.New(t).Jira(s.URL)
 	defer c.Close()
 	var out map[string]int
 	assert.FatalOnError(
@@ -46,7 +46,10 @@ func TestGetPathJoinsHost(t *testing.T) {
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		atlassian_tester.Jira(t, s.URL).GetPath(constant.JiraLinkTypes, &out),
+		atlassian_tester.New(t).Jira(s.URL).GetPath(
+			constant.JiraLinkTypes,
+			&out,
+		),
 	)
 	assert.String(t, "/rest/api/2/issueLinkType", s.Last().URL.Path)
 }
@@ -59,7 +62,7 @@ func TestRefusalIsNotReadAsAnswer(t *testing.T) {
 			`{"errorMessages":["You are not authenticated."],"errors":{}}`,
 		),
 	)
-	c := atlassian_tester.Jira(t, s.URL)
+	c := atlassian_tester.New(t).Jira(s.URL)
 	defer c.Close()
 	var out map[string]any
 	e := c.Get(c.Base().Copy().Path("rest/api/2/issue/ALFA-1").String(), &out)
@@ -80,7 +83,7 @@ func TestMissingIssueIsNotFound(t *testing.T) {
 			`{"errorMessages":["Issue does not exist"],"errors":{}}`,
 		),
 	)
-	c := atlassian_tester.Jira(t, s.URL)
+	c := atlassian_tester.New(t).Jira(s.URL)
 	defer c.Close()
 	_, e := c.Bytes(c.Base().Copy().Path("rest/api/3/issue/ALFA-99").String())
 	assert.True(t, not_found.Is(e))
@@ -88,7 +91,7 @@ func TestMissingIssueIsNotFound(t *testing.T) {
 
 func TestBytesReturnsRawAnswer(t *testing.T) {
 	s := upstream_server.New(t, upstream_server.WithAnswer(`{"key":"ALFA-1"}`))
-	c := atlassian_tester.Jira(t, s.URL)
+	c := atlassian_tester.New(t).Jira(s.URL)
 	defer c.Close()
 	b, e := c.Bytes(c.Base().Copy().Path("rest/api/3/issue/ALFA-1").String())
 	assert.FatalOnError(t, e)

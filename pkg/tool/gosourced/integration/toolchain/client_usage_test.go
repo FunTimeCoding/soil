@@ -14,7 +14,7 @@ import (
 func TestClientReadsUsage(t *testing.T) {
 	c := base.New(
 		t,
-		base.WithModule("echo", usage_tester.Prepare(t).Directory),
+		base.WithModule("echo", usage_tester.New(t).Prepare().Directory),
 	).DaemonClient(generativeConstant.ModelContextTestToken)
 	r, e := c.GetUsage(
 		t.Context(),
@@ -36,7 +36,7 @@ func TestClientReadsUsage(t *testing.T) {
 func TestClientAnswersUnknownModuleAsNotFound(t *testing.T) {
 	c := base.New(
 		t,
-		base.WithModule("echo", usage_tester.Prepare(t).Directory),
+		base.WithModule("echo", usage_tester.New(t).Prepare().Directory),
 	).DaemonClient(generativeConstant.ModelContextTestToken)
 	_, e := c.GetUsage(
 		t.Context(),
@@ -52,7 +52,7 @@ func TestClientAnswersUnknownModuleAsNotFound(t *testing.T) {
 func TestClientAnswersUnknownTypeAsRefused(t *testing.T) {
 	c := base.New(
 		t,
-		base.WithModule("echo", usage_tester.Prepare(t).Directory),
+		base.WithModule("echo", usage_tester.New(t).Prepare().Directory),
 	).DaemonClient(generativeConstant.ModelContextTestToken)
 	_, e := c.GetUsage(
 		t.Context(),

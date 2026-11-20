@@ -9,8 +9,7 @@ import (
 )
 
 func TestAlertsListSuppressedAndUnratedAlerts(t *testing.T) {
-	s := service_tester.NewServing(
-		t,
+	s := service_tester.New(t).Serving(
 		prometheusConstant.FixtureSuppressedAndUnratedAlerts,
 	)
 	v, _, e := s.Alerts(t.Context(), "alfa", alert_filter.New())

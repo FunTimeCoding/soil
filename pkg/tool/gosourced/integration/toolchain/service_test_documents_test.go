@@ -11,14 +11,12 @@ import (
 
 func TestRenameTestRetargetsBareCitation(t *testing.T) {
 	o := service_tester.New(t, service_tester.WithFixture("rename-follow/src"))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"pkg/shop/unit/shop_test.go",
 		"package unit\n\nimport \"testing\"\n\nfunc TestShelfHoldsStock(t *testing.T) {}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Pinned by `TestShelfHoldsStock`.\n",
@@ -48,16 +46,14 @@ func TestRenameRepeatedTestLeavesCitationForHand(t *testing.T) {
 		"pkg/shop/unit/shop_test.go",
 		"pkg/stock/unit/stock_test.go",
 	} {
-		system_tester.Write(
-			t,
+		system_tester.New(t).Write(
 			o.Directory,
 			p,
 			"package unit\n\nimport \"testing\"\n\nfunc TestGuard(t *testing.T) {}\n",
 		)
 	}
 
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		o.Directory,
 		"doc/note.md",
 		"Pinned by `TestGuard`.\n",

@@ -8,8 +8,7 @@ import (
 )
 
 func TestPeekPairsReplyWithItsUserMessage(t *testing.T) {
-	c := claude_tester.WriteFixture(
-		t,
+	c := claude_tester.New(t).WriteFixture(
 		[]string{
 			claude_tester.UserLine(
 				"this is the first user message of the session",
@@ -38,8 +37,7 @@ func TestPeekPairsReplyWithItsUserMessage(t *testing.T) {
 }
 
 func TestPeekWithoutTrailingReply(t *testing.T) {
-	c := claude_tester.WriteFixture(
-		t,
+	c := claude_tester.New(t).WriteFixture(
 		[]string{
 			claude_tester.UserLine(
 				"this is the first user message of the session",

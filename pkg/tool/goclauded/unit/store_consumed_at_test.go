@@ -38,7 +38,7 @@ func TestPeekLeavesDeliveryStampUnset(t *testing.T) {
 }
 
 func TestDeliveryStampIsUniversal(t *testing.T) {
-	s := store_tester.NewInZone(t, time.FixedZone("", 2*60*60))
+	s := store_tester.New(t, store_tester.WithZone(time.FixedZone("", 2*60*60)))
 	assert.FatalOnError(
 		t,
 		s.Store.PushQueue("holder", "Jade", constant.QueueMessage, "delivered"),

@@ -34,7 +34,7 @@ func TestApplyPatternRewritesCallWhereverItSits(t *testing.T) {
 	assert.StringContains(t, "describe(alfa.Named(\"charlie\"))", holder)
 	assert.StringContains(t, "\talfa.Named(\"delta\")\n", holder)
 	assert.StringContains(t, "return alfa.Named(\"echo\")", holder)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestApplyPatternRefusesNestedCalls(t *testing.T) {
@@ -67,7 +67,7 @@ func TestApplyPatternRefusesNestedCalls(t *testing.T) {
 	holder := o.Read("pkg/bravo/holder.go")
 	assert.StringContains(t, "return alfa.Keep(s)\n", holder)
 	assert.StringContains(t, "return alfa.Wrap(alfa.Wrap(s))\n", holder)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestApplyPatternCallNeedsExpressionReplacement(t *testing.T) {

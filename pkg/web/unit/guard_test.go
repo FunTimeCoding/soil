@@ -12,7 +12,7 @@ import (
 func TestTokenRejectsMissingBearer(t *testing.T) {
 	m := http.NewServeMux()
 	guard.New(m, []string{"alfa"}).Token("GET /target", web_tester.Serve)
-	assert.Integer(t, http.StatusUnauthorized, web_tester.Request(t, m, ""))
+	assert.Integer(t, http.StatusUnauthorized, web_tester.New(t).Request(m, ""))
 }
 
 func TestTokenRejectsWrongBearer(t *testing.T) {
@@ -21,28 +21,28 @@ func TestTokenRejectsWrongBearer(t *testing.T) {
 	assert.Integer(
 		t,
 		http.StatusUnauthorized,
-		web_tester.Request(t, m, "bravo"),
+		web_tester.New(t).Request(m, "bravo"),
 	)
 }
 
 func TestTokenAcceptsBearer(t *testing.T) {
 	m := http.NewServeMux()
 	guard.New(m, []string{"alfa"}).Token("GET /target", web_tester.Serve)
-	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, "alfa"))
+	assert.Integer(t, http.StatusOK, web_tester.New(t).Request(m, "alfa"))
 }
 
 func TestTokenAcceptsRotationSibling(t *testing.T) {
 	m := http.NewServeMux()
 	g := guard.New(m, []string{"alfa", "bravo"})
 	g.Token("GET /target", web_tester.Serve)
-	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, "alfa"))
-	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, "bravo"))
+	assert.Integer(t, http.StatusOK, web_tester.New(t).Request(m, "alfa"))
+	assert.Integer(t, http.StatusOK, web_tester.New(t).Request(m, "bravo"))
 }
 
 func TestOpenPassesWithoutBearer(t *testing.T) {
 	m := http.NewServeMux()
 	guard.New(m, []string{"alfa"}).Open("GET /target", web_tester.Serve)
-	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, ""))
+	assert.Integer(t, http.StatusOK, web_tester.New(t).Request(m, ""))
 }
 
 func TestSessionUsesMiddleware(t *testing.T) {
@@ -59,7 +59,7 @@ func TestSessionUsesMiddleware(t *testing.T) {
 			}
 		},
 	).Session("GET /target", web_tester.Serve)
-	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, ""))
+	assert.Integer(t, http.StatusOK, web_tester.New(t).Request(m, ""))
 	assert.True(t, called)
 }
 
@@ -69,8 +69,8 @@ func TestSessionAcceptsServiceBearerWithoutSigningIn(t *testing.T) {
 		"GET /target",
 		web_tester.Serve,
 	)
-	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, "alfa"))
-	assert.Integer(t, http.StatusFound, web_tester.Request(t, m, ""))
+	assert.Integer(t, http.StatusOK, web_tester.New(t).Request(m, "alfa"))
+	assert.Integer(t, http.StatusFound, web_tester.New(t).Request(m, ""))
 }
 
 func TestSessionWithWrongBearerStillNeedsSignIn(t *testing.T) {
@@ -79,7 +79,7 @@ func TestSessionWithWrongBearerStillNeedsSignIn(t *testing.T) {
 		"GET /target",
 		web_tester.Serve,
 	)
-	assert.Integer(t, http.StatusFound, web_tester.Request(t, m, "bravo"))
+	assert.Integer(t, http.StatusFound, web_tester.New(t).Request(m, "bravo"))
 }
 
 func TestSessionWithoutMiddlewarePanics(t *testing.T) {

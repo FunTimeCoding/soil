@@ -1,17 +1,13 @@
 package fix_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/lint/concern"
 
-func Planned(
-	t *testing.T,
+func (o *Tester) Planned(
 	entries []*concern.Concern,
 	path string,
 	message string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	var found []string
 
 	for _, c := range entries {
@@ -26,13 +22,13 @@ func Planned(
 		}
 
 		if !c.Planned || c.Fixed {
-			t.Errorf("concern %q is not a plain suggestion", message)
+			o.t.Errorf("concern %q is not a plain suggestion", message)
 		}
 
 		return
 	}
 
-	t.Errorf(
+	o.t.Errorf(
 		"expected suggestion {path: %q, text: %q} not found, found: %q",
 		path,
 		message,

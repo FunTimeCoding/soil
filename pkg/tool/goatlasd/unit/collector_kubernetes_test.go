@@ -24,7 +24,7 @@ func TestKubernetesPlacesOneRowPerNode(t *testing.T) {
 		constant.FixtureVirtualMachineNode,
 		map[string]string{"app": "alloy"},
 	)
-	v := collector_tester.CollectPods(t, f)
+	v := collector_tester.New(t).CollectPods(f)
 	assert.Count(t, 2, v)
 	assert.String(t, "alloy", v[0].Name)
 	assert.String(t, "delta", v[0].PlaceName)
@@ -48,7 +48,7 @@ func TestKubernetesCollapsesReplicasOnOneNode(t *testing.T) {
 		"delta",
 		labels,
 	)
-	v := collector_tester.CollectPods(t, f)
+	v := collector_tester.New(t).CollectPods(f)
 	assert.Count(t, 1, v)
 	assert.String(t, "relay", v[0].Name)
 }
@@ -69,7 +69,7 @@ func TestKubernetesSeparatesEqualNamesByNamespace(t *testing.T) {
 		"delta",
 		map[string]string{"app": "redis"},
 	)
-	v := collector_tester.CollectPods(t, f)
+	v := collector_tester.New(t).CollectPods(f)
 	assert.Count(t, 2, v)
 }
 
@@ -82,7 +82,7 @@ func TestKubernetesLeavesUnknownNodeUnplaced(t *testing.T) {
 		"hotel",
 		map[string]string{"app": "stray"},
 	)
-	v := collector_tester.CollectPods(t, f)
+	v := collector_tester.New(t).CollectPods(f)
 	assert.Count(t, 1, v)
 	assert.String(t, "", v[0].PlaceKind)
 	assert.String(t, "", v[0].PlaceName)
@@ -97,7 +97,7 @@ func TestKubernetesCarriesSourceAndKind(t *testing.T) {
 		"delta",
 		map[string]string{"app": constant.FixtureService},
 	)
-	v := collector_tester.CollectPods(t, f)
+	v := collector_tester.New(t).CollectPods(f)
 	assert.String(t, "kubernetes", v[0].Source)
 	assert.String(t, "service", v[0].Kind)
 	assert.String(t, "relay", v[0].Scope)

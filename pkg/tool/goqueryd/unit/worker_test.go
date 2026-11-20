@@ -22,7 +22,7 @@ func TestWorkerIndexesWhileEmbedderIsDown(t *testing.T) {
 	q.Embedder.Fail(outage_tester.RefusedDial())
 	v := q.Service()
 	d := t.TempDir()
-	store_tester.WriteFixture(t, d, "alfa.md", "# Alfa\n\nzulu.\n")
+	store_tester.New(t).WriteFixture(d, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("test", d, constant.DefaultGlob)
 	r := memory.New()
 	w := worker.New(
@@ -73,14 +73,14 @@ func TestWorkerCountsWhatItPrunes(t *testing.T) {
 	deadline := time.Now().Add(time.Second)
 
 	for time.Now().Before(deadline) &&
-		metric_tester.Sample(t, g, "goqueryd_pruned_contents_total", nil) < 1 {
+		metric_tester.New(t).Sample(g, "goqueryd_pruned_contents_total", nil) < 1 {
 		time.Sleep(time.Millisecond)
 	}
 
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(t, g, "goqueryd_pruned_contents_total", nil),
+		metric_tester.New(t).Sample(g, "goqueryd_pruned_contents_total", nil),
 	)
 }
 

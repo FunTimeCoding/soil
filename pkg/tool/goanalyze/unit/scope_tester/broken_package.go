@@ -4,17 +4,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/system_tester"
 	"path/filepath"
-	"testing"
 )
 
-func BrokenPackage(
-	t *testing.T,
+func (o *Tester) BrokenPackage(
 	directory string,
 	name string,
 ) {
-	t.Helper()
-	system_tester.Write(
-		t,
+	o.t.Helper()
+	system_tester.New(o.t).Write(
 		directory,
 		filepath.Join(name, "broken.go"),
 		fmt.Sprintf(

@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func MethodNamesake(t *testing.T) string {
-	t.Helper()
+func (o *Tester) MethodNamesake() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"pkg/helper/helper.go",
 			"package helper\n\nfunc Value() string { return \"hello\" }\n",

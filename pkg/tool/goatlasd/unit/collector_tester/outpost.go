@@ -8,13 +8,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/target"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/unit/peer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/client/mock_client"
-	"testing"
 )
 
-func Outpost(
-	t *testing.T,
-	clients ...*mock_client.Client,
-) *outpost.Collector {
+func (o *Tester) Outpost(clients ...*mock_client.Client) *outpost.Collector {
+	o.t.Helper()
 	var targets []*target.Target
 
 	for i, c := range clients {
@@ -23,7 +20,7 @@ func Outpost(
 			target.New(
 				constant.FixtureOutpostNames[i],
 				c,
-				peer_tester.NewGuard(t, c),
+				peer_tester.NewGuard(o.t, c),
 			),
 		)
 	}

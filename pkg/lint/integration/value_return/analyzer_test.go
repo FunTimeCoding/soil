@@ -7,13 +7,13 @@ import (
 )
 
 func TestBlocked(t *testing.T) {
-	testutil.AssertBlocked(t, lint_tester.ValueReturn(t), 5)
+	testutil.AssertBlocked(t, lint_tester.New(t).ValueReturn(), 5)
 }
 
 func TestMarkedTypeIsNotFlagged(t *testing.T) {
 	testutil.AssertNotBlockedContains(
 		t,
-		lint_tester.ValueReturn(t),
+		lint_tester.New(t).ValueReturn(),
 		"MarkedByValue",
 	)
 }
@@ -21,7 +21,7 @@ func TestMarkedTypeIsNotFlagged(t *testing.T) {
 func TestDirectiveWithoutReasonIsStillFlagged(t *testing.T) {
 	testutil.AssertBlockedContains(
 		t,
-		lint_tester.ValueReturn(t),
+		lint_tester.New(t).ValueReturn(),
 		"BareDirectiveByValue",
 	)
 }
@@ -29,7 +29,7 @@ func TestDirectiveWithoutReasonIsStillFlagged(t *testing.T) {
 func TestTypeDeclaredBesideMarkedOneIsStillFlagged(t *testing.T) {
 	testutil.AssertBlockedContains(
 		t,
-		lint_tester.ValueReturn(t),
+		lint_tester.New(t).ValueReturn(),
 		"UnmarkedByValue",
 	)
 }

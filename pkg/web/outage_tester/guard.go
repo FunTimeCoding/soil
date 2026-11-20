@@ -3,15 +3,13 @@ package outage_tester
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"testing"
 )
 
-func Guard(
-	t *testing.T,
+func (o *Tester) Guard(
 	workers []face.Worker,
 	name string,
 ) *peer.Guard {
-	t.Helper()
+	o.t.Helper()
 
 	for _, w := range workers {
 		if g, okay := w.(*peer.Guard); okay && g != nil && g.Name() == name {
@@ -19,7 +17,7 @@ func Guard(
 		}
 	}
 
-	t.Fatalf("no guard for peer %s", name)
+	o.t.Fatalf("no guard for peer %s", name)
 
 	return nil
 }

@@ -66,8 +66,7 @@ func TestDocumentCacheDropsWhatRotationLeftUnused(t *testing.T) {
 
 func TestReportWithSharedDocumentsSeesEditedFile(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Alfa() int {\n\tbravo := 1\n\treturn bravo\n}\n",
@@ -82,8 +81,7 @@ func TestReportWithSharedDocumentsSeesEditedFile(t *testing.T) {
 		len(before.Entries),
 		len(lint.Report("golint", root, again).Entries),
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Alfa() int {\n\tbravo := 1\n\n\treturn bravo\n}\n",
@@ -95,15 +93,14 @@ func TestReportWithSharedDocumentsSeesEditedFile(t *testing.T) {
 
 func TestReportWithSharedDocumentsResolvesPointersAgain(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"doc/alfa.md",
 		"# Alfa\n\nSee `doc/bravo.md`.\n",
 	)
 	first := option.New("", false)
 	assert.Count(t, 1, lint.Report("golint", root, first).Entries)
-	system_tester.Write(t, root, "doc/bravo.md", "# Bravo\n")
+	system_tester.New(t).Write(root, "doc/bravo.md", "# Bravo\n")
 	after := option.New("", false)
 	after.Documents = first.Documents
 	assert.Count(t, 0, lint.Report("golint", root, after).Entries)

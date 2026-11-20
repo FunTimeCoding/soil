@@ -30,7 +30,7 @@ func TestUpstreamUnavailableMarksGuardDown(t *testing.T) {
 	call := func(context.Context) error {
 		calls++
 
-		return outage_tester.Unavailable(t)
+		return outage_tester.New(t).Unavailable()
 	}
 	e := g.Attempt(t.Context(), call)
 	assert.True(t, unavailable.Is(e))
@@ -57,7 +57,7 @@ func TestProbeDoesNotBringUnavailablePeerBack(t *testing.T) {
 			g.Attempt(
 				t.Context(),
 				func(context.Context) error {
-					return outage_tester.Unavailable(t)
+					return outage_tester.New(t).Unavailable()
 				},
 			),
 		),
@@ -85,7 +85,7 @@ func TestNextSuccessfulCallBringsUnavailablePeerBack(t *testing.T) {
 		calls++
 
 		if failing {
-			return outage_tester.Unavailable(t)
+			return outage_tester.New(t).Unavailable()
 		}
 
 		return nil
@@ -124,7 +124,7 @@ func TestPanickingTrialLeavesNextTrialAdmitted(t *testing.T) {
 			g.Attempt(
 				t.Context(),
 				func(context.Context) error {
-					return outage_tester.Unavailable(t)
+					return outage_tester.New(t).Unavailable()
 				},
 			),
 		),
@@ -158,7 +158,7 @@ func TestLastingUnavailablePeerIsCapturedOnce(t *testing.T) {
 		r,
 	).WithBackoff(time.Second, time.Minute).WithClock(c.Now)
 	defer g.Close()
-	call := func(context.Context) error { return outage_tester.Unavailable(t) }
+	call := func(context.Context) error { return outage_tester.New(t).Unavailable() }
 
 	for range 20 {
 		assert.True(t, unavailable.Is(g.Attempt(t.Context(), call)))
@@ -185,7 +185,7 @@ func TestOnlyOneTrialReachesUnavailablePeer(t *testing.T) {
 			g.Attempt(
 				t.Context(),
 				func(context.Context) error {
-					return outage_tester.Unavailable(t)
+					return outage_tester.New(t).Unavailable()
 				},
 			),
 		),

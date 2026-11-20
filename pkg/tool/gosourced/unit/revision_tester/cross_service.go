@@ -6,12 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/source/inventory/module"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
-	"testing"
 )
 
-func CrossService(t *testing.T) *service_tester.Tester {
-	t.Helper()
-	l := repository_tester.New(t)
+func (o *Tester) CrossService() *service_tester.Tester {
+	o.t.Helper()
+	l := repository_tester.New(o.t)
 	l.Write("go.mod", "module example.org/lib\n")
 	l.Write(
 		"charlie/charlie.go",
@@ -29,7 +28,7 @@ func CrossService(t *testing.T) *service_tester.Tester {
 	)
 	l.Commit("bravo")
 	repository_tester.Command(l.Clone, gitConstant.Tag, "v0.2.0")
-	u := repository_tester.New(t)
+	u := repository_tester.New(o.t)
 	u.Write(
 		"go.mod",
 		"module example.org/user\n\nrequire example.org/lib v0.1.0\n",
@@ -59,5 +58,5 @@ func CrossService(t *testing.T) *service_tester.Tester {
 		{Name: "lib", Directory: l.Clone},
 	}
 
-	return service_tester.New(t, service_tester.WithInventory(i))
+	return service_tester.New(o.t, service_tester.WithInventory(i))
 }

@@ -35,6 +35,7 @@ func TestApplyRunsAgainstStaticAndNetboxInventory(t *testing.T) {
 			},
 		),
 	)
+	o.Service()
 	r := o.WaitForRun()
 	assert.String(t, "success", r.Status)
 	assert.String(t, "bravo.yaml", r.Scope)
@@ -85,6 +86,7 @@ func TestApplyAsksInventoryForItsSite(t *testing.T) {
 		),
 		service_tester.WithSite("kilo"),
 	)
+	o.Service()
 	assert.String(t, "success", o.WaitForRun().Status)
 }
 
@@ -100,6 +102,7 @@ func TestApplyFailsWhenNetboxInventoryFails(t *testing.T) {
 			},
 		),
 	)
+	o.Service()
 	r := o.WaitForRun()
 	assert.String(t, "error", r.Status)
 	assert.String(t, "inventory", r.Scope)
@@ -115,6 +118,7 @@ func TestApplyFailsWhenNetboxInventoryFails(t *testing.T) {
 
 func TestApplyWithoutNetboxUsesDefaultInventory(t *testing.T) {
 	o := service_tester.New(t, nil)
+	o.Service()
 	r := o.WaitForRun()
 	assert.String(t, "success", r.Status)
 	arguments, okay := o.Captured(constant.FixtureArguments)

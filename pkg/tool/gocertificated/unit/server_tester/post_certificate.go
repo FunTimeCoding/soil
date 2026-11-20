@@ -7,16 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"testing"
 )
 
-func PostCertificate(
-	t *testing.T,
+func (o *Tester) PostCertificate(
 	c *client.ClientWithResponses,
 ) *client.PostCertificateResponse {
-	t.Helper()
+	o.t.Helper()
 	result, e := c.PostCertificateWithBodyWithResponse(
-		t.Context(),
+		o.t.Context(),
 		webConstant.Object,
 		bytes.NewReader(
 			notation.Marshal(
@@ -27,7 +25,7 @@ func PostCertificate(
 			),
 		),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return result
 }

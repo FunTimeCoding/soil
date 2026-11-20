@@ -90,7 +90,7 @@ func TestUnauthorizedTokenIsOursToLookAt(t *testing.T) {
 }
 
 func TestRefusedDialIsConnectionFailure(t *testing.T) {
-	_, e := client_tester.Connect(t, outage_tester.RefusedAddress(t)).Project(
+	_, e := client_tester.Connect(t, outage_tester.New(t).RefusedAddress()).Project(
 		t.Context(),
 		7,
 	)

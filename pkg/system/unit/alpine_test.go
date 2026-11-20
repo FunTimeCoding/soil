@@ -169,7 +169,7 @@ echo "Hello from Alpine package!"
 	assert.FileExists(t, apkPath)
 	controlTarPath := filepath.Join(p.WorkDirectory, constant.AlpineControlFile)
 	archivePath := filepath.Join(p.WorkDirectory, constant.AlpineArchiveFile)
-	declaredHash := packager_tester.ControlTar(t, controlTarPath)
-	packager_tester.ArchiveTar(t, declaredHash, archivePath)
-	packager_tester.Concatenated(t, apkPath, controlTarPath, archivePath)
+	declaredHash := packager_tester.New(t).ControlTar(controlTarPath)
+	packager_tester.New(t).ArchiveTar(declaredHash, archivePath)
+	packager_tester.New(t).Concatenated(apkPath, controlTarPath, archivePath)
 }

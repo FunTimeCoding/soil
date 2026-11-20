@@ -10,17 +10,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"testing"
 	"time"
 )
 
-func ClaimMessage(
-	t *testing.T,
+func (o *Tester) ClaimMessage(
 	port int,
 	token string,
 	r *memory.Memory,
 ) *message.Message {
-	t.Helper()
+	o.t.Helper()
 	m := client.New(
 		locator.New(webConstant.Localhost).Port(port).Insecure(),
 		token,
@@ -41,7 +39,7 @@ func ClaimMessage(
 	case g := <-updates:
 		return &g
 	case <-time.After(2 * time.Second):
-		t.Fatal("no claim message")
+		o.t.Fatal("no claim message")
 
 		return nil
 	}

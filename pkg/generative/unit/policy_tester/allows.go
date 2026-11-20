@@ -1,14 +1,7 @@
 package policy_tester
 
-import "testing"
+func (o *Tester) Allows(command string) bool {
+	o.t.Helper()
 
-func Allows(
-	t *testing.T,
-	root string,
-	scratchpad string,
-	command string,
-) bool {
-	t.Helper()
-
-	return newWalk(t, root, scratchpad).Allows(command)
+	return o.walk().Allows(command)
 }

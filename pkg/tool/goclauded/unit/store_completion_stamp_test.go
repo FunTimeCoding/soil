@@ -38,7 +38,7 @@ func TestRecompletionMovesCompletionTime(t *testing.T) {
 
 func TestCompletionWithoutStampTakesCreationTime(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "goclauded.db")
-	s := store_tester.NewOnFile(t, path)
+	s := store_tester.New(t, store_tester.WithFile(path))
 	s.AddSession("session-1", "Ash", "Ash", "2026-09-01 10:00:00+00:00")
 	assert.FatalOnError(
 		t,
@@ -49,7 +49,9 @@ func TestCompletionWithoutStampTakesCreationTime(t *testing.T) {
 			'2026-09-02 10:00:00+00:00')`,
 		).Error,
 	)
-	stored := store_tester.NewOnFile(t, path).SessionCompletions("session-1")
+	stored := store_tester.New(t, store_tester.WithFile(path)).SessionCompletions(
+		"session-1",
+	)
 	assert.Count(t, 1, stored)
 	assert.True(t, stored[0].CompletedAt.Equal(stored[0].CreatedAt))
 	assert.False(t, stored[0].CompletedAt.IsZero())

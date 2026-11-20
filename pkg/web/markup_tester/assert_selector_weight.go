@@ -7,16 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"slices"
 	"strings"
-	"testing"
 )
 
-func assertSelectorWeight(
-	t *testing.T,
+func (o *Tester) assertSelectorWeight(
 	d *goquery.Document,
 	s string,
 	reported map[string]bool,
 ) {
-	t.Helper()
+	o.t.Helper()
 	weight := Specificity(s)
 
 	if strings.Contains(s, "::") || weight != [3]int{} {
@@ -27,7 +25,7 @@ func assertSelectorWeight(
 		m, e := cascadia.Compile(a)
 
 		if e != nil {
-			t.Errorf("rule %q: alternative %q does not compile: %v", s, a, e)
+			o.t.Errorf("rule %q: alternative %q does not compile: %v", s, a, e)
 
 			continue
 		}
@@ -45,7 +43,7 @@ func assertSelectorWeight(
 					tag,
 				) && !reported[key] {
 					reported[key] = true
-					t.Errorf(
+					o.t.Errorf(
 						"rule %q weighs %v on <%s>, which Pico styles",
 						s,
 						weight,

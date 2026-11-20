@@ -8,26 +8,24 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"slices"
 	"strings"
-	"testing"
 )
 
-func Tools(
-	t *testing.T,
+func (o *Tester) Tools(
 	serve func(*memory.Memory) (*model_context_server.Server, func() error),
 	usual constant.OutageReach,
 	exceptions map[string]constant.OutageReach,
 	overrides map[string]map[string]any,
 ) {
-	t.Helper()
+	o.t.Helper()
 	r := memory.New()
 	listed, _ := serve(r)
-	listing := listed.Connect(t)
+	listing := listed.Connect(o.t)
 	tools := listing.ListTools()
 	listing.Close()
 	listed.Close()
 
 	if len(tools) == 0 {
-		t.Fatal("the server lists no tools")
+		o.t.Fatal("the server lists no tools")
 	}
 
 	var served []string
@@ -43,7 +41,7 @@ func Tools(
 
 		before := len(r.Events())
 		s, unavailable := serve(r)
-		c := s.Connect(t)
+		c := s.Connect(o.t)
 		answer, e := c.CallToolRaw(
 			tool.Name,
 			arguments(tool, overrides[tool.Name]),
@@ -78,5 +76,5 @@ func Tools(
 
 	problems = append(problems, declared(served, exceptions, overrides)...)
 	slices.Sort(problems)
-	assert.String(t, "", strings.Join(problems, ", "))
+	assert.String(o.t, "", strings.Join(problems, ", "))
 }

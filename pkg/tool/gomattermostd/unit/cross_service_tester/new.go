@@ -43,7 +43,7 @@ func New(
 	return &Tester{
 		t:         t,
 		Upstream:  upstream,
-		Store:     worker_tester.NewStoreOnFile(t, o.LitePath),
+		Store:     worker_tester.New(t).StoreOnFile(o.LitePath),
 		Daemon:    d,
 		Goclauded: claude,
 		Reporter:  r,

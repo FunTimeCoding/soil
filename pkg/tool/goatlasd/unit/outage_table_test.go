@@ -20,8 +20,7 @@ import (
 func TestOperationsOnNetboxOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, gonetboxdConstant.Identity.Name())
 		},
@@ -36,8 +35,7 @@ func TestOperationsOnNetboxOutage(t *testing.T) {
 func TestOperationsOnKubernetesOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, constant.SourceKubernetes)
 		},
@@ -52,8 +50,7 @@ func TestOperationsOnKubernetesOutage(t *testing.T) {
 func TestOperationsOnProcessOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, goprocessdConstant.Identity.Name())
 		},
@@ -68,8 +65,7 @@ func TestOperationsOnProcessOutage(t *testing.T) {
 func TestOperationsOnOutpostOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(
 				t,
@@ -91,8 +87,7 @@ func TestOperationsOnOutpostOutage(t *testing.T) {
 func TestOperationsOnLeaseOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r, gopnsensedConstant.Identity.Name())
 		},

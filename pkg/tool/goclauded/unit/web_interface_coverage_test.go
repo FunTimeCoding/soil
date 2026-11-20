@@ -23,10 +23,9 @@ func TestCoverageRowOpensItsToolsInPlace(t *testing.T) {
 		),
 	)
 	page := s.Body(t, constant.CoveragePath)
-	markup_tester.AssertCount(t, 1, page, "tbody tr.opening-row")
-	markup_tester.AssertCount(t, 0, page, "table table")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertCount(1, page, "tbody tr.opening-row")
+	markup_tester.New(t).AssertCount(0, page, "table table")
+	markup_tester.New(t).AssertAttribute(
 		"/coverage/open?server=alfa",
 		page,
 		"tr.opening-row",
@@ -34,9 +33,8 @@ func TestCoverageRowOpensItsToolsInPlace(t *testing.T) {
 	)
 	opened := s.Body(t, "/coverage/open?server=alfa")
 	assert.StringContains(t, `class="opening-detail"><td colspan="6">`, opened)
-	markup_tester.AssertText(t, "status", opened, "table td:first-child")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertText("status", opened, "table td:first-child")
+	markup_tester.New(t).AssertAttribute(
 		"/coverage/close?server=alfa",
 		opened,
 		"template tr.opening-row",
@@ -44,16 +42,14 @@ func TestCoverageRowOpensItsToolsInPlace(t *testing.T) {
 	)
 	closed := s.Body(t, "/coverage/close?server=alfa")
 	assert.StringContains(t, `hidden="hidden"></tr>`, closed)
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertAttribute(
 		"/coverage/open?server=alfa",
 		closed,
 		"template tr.opening-row",
 		"hx-get",
 	)
 	gone := s.Body(t, "/coverage/open?server=gone")
-	markup_tester.AssertAttribute(
-		t,
+	markup_tester.New(t).AssertAttribute(
 		"delete",
 		gone,
 		"template tr",

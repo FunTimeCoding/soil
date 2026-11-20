@@ -11,20 +11,16 @@ import (
 )
 
 func TestDefaultRewritesConstantImport(t *testing.T) {
-	directory := module_tester.ConstantAlias(t)
+	m := module_tester.New(t)
+	directory := m.ConstantAlias()
 	r := output.NewResultsWithDirectory(directory)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./..."),
-		r,
-	)
+	m.RunDefault(m.Options(directory, false, false, "./..."), r)
 	assert.String(
 		t,
 		"package charlie\n\nimport bravoConstant \"testmodule/pkg/bravo/constant\"\n\nfunc Lone() string {\n\treturn bravoConstant.Bravo\n}\n",
 		testutil.ReadFile(t, filepath.Join(directory, "pkg/charlie/lone.go")),
 	)
-	fix_tester.Result(
-		t,
+	fix_tester.New(t).Result(
 		fix_tester.Applied(r.Entries),
 		"pkg/charlie/lone.go",
 		"re-aliased constant → bravoConstant (testmodule/pkg/bravo/constant)",

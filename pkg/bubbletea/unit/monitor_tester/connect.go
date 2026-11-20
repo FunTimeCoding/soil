@@ -5,18 +5,14 @@ import (
 	gomonitordConstant "github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"strconv"
-	"testing"
 )
 
-func Connect(
-	t *testing.T,
-	port int,
-) {
-	t.Helper()
-	t.Setenv(gomonitordConstant.HostEnvironment, webConstant.Localhost)
-	t.Setenv(gomonitordConstant.PortEnvironment, strconv.Itoa(port))
-	t.Setenv(gomonitordConstant.InsecureEnvironment, "true")
-	t.Setenv(
+func (o *Tester) Connect(port int) {
+	o.t.Helper()
+	o.t.Setenv(gomonitordConstant.HostEnvironment, webConstant.Localhost)
+	o.t.Setenv(gomonitordConstant.PortEnvironment, strconv.Itoa(port))
+	o.t.Setenv(gomonitordConstant.InsecureEnvironment, "true")
+	o.t.Setenv(
 		gomonitordConstant.TokenEnvironment,
 		generativeConstant.ModelContextTestToken,
 	)

@@ -10,22 +10,19 @@ import (
 )
 
 func TestUnitKeysHoldWhenUnrelatedPackageChanges(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, closure := index_tester.Keys(
-		t,
+	unit, closure := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"delta/delta.go",
 		"package delta\n\nfunc Delta() int {\n\treturn 5\n}\n\nfunc Hotel() {}\n",
 	)
-	after, afterClosure := index_tester.Keys(
-		t,
+	after, afterClosure := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
@@ -34,22 +31,19 @@ func TestUnitKeysHoldWhenUnrelatedPackageChanges(t *testing.T) {
 }
 
 func TestUnitKeyMovesWithTestFile(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, _ := index_tester.Keys(
-		t,
+	unit, _ := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"alfa/alfa_test.go",
 		"package alfa\n\nimport \"testing\"\n\nfunc TestAlfa(t *testing.T) {\n\tAlfa()\n}\n",
 	)
-	after, _ := index_tester.Keys(
-		t,
+	after, _ := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
@@ -57,22 +51,19 @@ func TestUnitKeyMovesWithTestFile(t *testing.T) {
 }
 
 func TestUnitKeyMovesWithImportedAPI(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, _ := index_tester.Keys(
-		t,
+	unit, _ := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example/charlie\"\n\nfunc Bravo() int {\n\treturn charlie.Charlie()\n}\n\nfunc Echo() {}\n",
 	)
-	after, _ := index_tester.Keys(
-		t,
+	after, _ := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
@@ -80,22 +71,19 @@ func TestUnitKeyMovesWithImportedAPI(t *testing.T) {
 }
 
 func TestKeysHoldWhenBodyDeepInClosureChanges(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, closure := index_tester.Keys(
-		t,
+	unit, closure := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"charlie/charlie.go",
 		"package charlie\n\nfunc Charlie() int {\n\treturn 2\n}\n",
 	)
-	after, afterClosure := index_tester.Keys(
-		t,
+	after, afterClosure := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
@@ -104,22 +92,19 @@ func TestKeysHoldWhenBodyDeepInClosureChanges(t *testing.T) {
 }
 
 func TestOnlyClosureKeyMovesWithFactDeepInClosure(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	unit, closure := index_tester.Keys(
-		t,
+	unit, closure := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		directory,
 		"charlie/charlie.go",
 		"package charlie\n\nfunc Charlie() int {\n\treturn 1\n}\n\nfunc Echo() {}\n",
 	)
-	after, afterClosure := index_tester.Keys(
-		t,
+	after, afterClosure := index_tester.New(t).Keys(
 		index.New(store, directory, declared),
 		declared,
 	)
@@ -128,16 +113,14 @@ func TestOnlyClosureKeyMovesWithFactDeepInClosure(t *testing.T) {
 }
 
 func TestClosureKeySameWhetherFactsFreshOrStored(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	listed := kind_tester.Listed("golf")
-	_, fresh := index_tester.Keys(
-		t,
+	_, fresh := index_tester.New(t).Keys(
 		index.New(store, directory, listed),
 		listed,
 	)
-	_, stored := index_tester.Keys(
-		t,
+	_, stored := index_tester.New(t).Keys(
 		index.New(store, directory, listed),
 		listed,
 	)
@@ -145,16 +128,14 @@ func TestClosureKeySameWhetherFactsFreshOrStored(t *testing.T) {
 }
 
 func TestUnitKeyMovesWithExtractingBuild(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
+	directory := index_tester.New(t).KeyedModule()
 	store := t.TempDir()
 	declared := kind_tester.Declared("golf")
-	first, _ := index_tester.Keys(
-		t,
+	first, _ := index_tester.New(t).Keys(
 		index.New(store, directory, declared).WithFingerprint("first"),
 		declared,
 	)
-	second, _ := index_tester.Keys(
-		t,
+	second, _ := index_tester.New(t).Keys(
 		index.New(store, directory, declared).WithFingerprint("second"),
 		declared,
 	)
@@ -162,9 +143,8 @@ func TestUnitKeyMovesWithExtractingBuild(t *testing.T) {
 }
 
 func TestNoUnitKeysWhenImportDoesNotLoad(t *testing.T) {
-	directory := index_tester.KeyedModule(t)
-	system_tester.Write(
-		t,
+	directory := index_tester.New(t).KeyedModule()
+	system_tester.New(t).Write(
 		directory,
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example/charlie\"\n\nfunc Bravo() int {\n\treturn charlie.Charlie(\n}\n",

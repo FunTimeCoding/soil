@@ -25,7 +25,7 @@ func TestRedactionFailsClosedWhileMemoryIsDown(t *testing.T) {
 }
 
 func TestContextPanelSaysWhenMemoryIsDown(t *testing.T) {
-	s := service_tester.NewPanel(t, "panel-session")
+	s := service_tester.New(t).Panel("panel-session")
 	s.MemoryPeer.Failure = outage_tester.RefusedDial()
 	assert.StringContains(
 		t,

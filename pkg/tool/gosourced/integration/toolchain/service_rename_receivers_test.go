@@ -23,7 +23,7 @@ func TestRenameReceiversRenamesEveryMethodOfType(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 	shelf := o.Read("pkg/target/shelf.go")
 	assert.StringContains(
 		t,

@@ -11,24 +11,18 @@ import (
 )
 
 func TestPolicyRedirectUnderScratchPrefixAllowed(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	prefix := filepath.Join(t.TempDir(), "alfa-")
 	assert.True(
 		t,
-		policy_tester.AllowsWithPrefix(
-			t,
-			root,
-			scratchpad,
+		p.AllowsWithPrefix(
 			prefix,
 			fmt.Sprintf("grep -c x doc/guide/a.md > %sreport.txt", prefix),
 		),
 	)
 	assert.True(
 		t,
-		policy_tester.AllowsWithPrefix(
-			t,
-			root,
-			scratchpad,
+		p.AllowsWithPrefix(
 			prefix,
 			fmt.Sprintf("grep -c x doc/guide/a.md > %swork/count.txt", prefix),
 		),
@@ -36,7 +30,7 @@ func TestPolicyRedirectUnderScratchPrefixAllowed(t *testing.T) {
 }
 
 func TestPolicyRedirectBesideScratchPrefixBlocked(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	directory := t.TempDir()
 	prefix := filepath.Join(directory, "alfa-")
 
@@ -53,10 +47,7 @@ func TestPolicyRedirectBesideScratchPrefixBlocked(t *testing.T) {
 	} {
 		assert.False(
 			t,
-			policy_tester.AllowsWithPrefix(
-				t,
-				root,
-				scratchpad,
+			p.AllowsWithPrefix(
 				prefix,
 				fmt.Sprintf("grep -c x doc/guide/a.md > %s", target),
 			),
@@ -65,14 +56,11 @@ func TestPolicyRedirectBesideScratchPrefixBlocked(t *testing.T) {
 }
 
 func TestPolicyRedirectUnderPrefixBlockedWithoutIt(t *testing.T) {
-	root, scratchpad := policy_tester.Project(t)
+	p := policy_tester.New(t)
 	prefix := filepath.Join(t.TempDir(), "alfa-")
 	assert.False(
 		t,
-		policy_tester.Allows(
-			t,
-			root,
-			scratchpad,
+		p.Allows(
 			fmt.Sprintf("grep -c x doc/guide/a.md > %sreport.txt", prefix),
 		),
 	)

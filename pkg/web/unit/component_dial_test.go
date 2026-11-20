@@ -13,8 +13,7 @@ func TestDialIsTrackWithCenter(t *testing.T) {
 	assert.String(
 		t,
 		`<div class="dial" style="--dial-background: #111"><div class="dial-center"><strong>alfa</strong></div></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			dial.New("#111").
 				Center(html.Strong(gomponents.Text("alfa"))).
 				Node(),
@@ -26,17 +25,17 @@ func TestFillCoversTrackUpToItsShare(t *testing.T) {
 	assert.StringContains(
 		t,
 		`style="--dial-background: conic-gradient(#222 0deg 90.0deg, #111 90.0deg 360deg)"`,
-		web_tester.Render(t, dial.New("#111").Fill("#222", 0.25).Node()),
+		web_tester.New(t).Render(dial.New("#111").Fill("#222", 0.25).Node()),
 	)
 	assert.StringContains(
 		t,
 		`style="--dial-background: #222"`,
-		web_tester.Render(t, dial.New("#111").Fill("#222", 1).Node()),
+		web_tester.New(t).Render(dial.New("#111").Fill("#222", 1).Node()),
 	)
 	assert.StringContains(
 		t,
 		`style="--dial-background: #111"`,
-		web_tester.Render(t, dial.New("#111").Fill("#222", 0).Node()),
+		web_tester.New(t).Render(dial.New("#111").Fill("#222", 0).Node()),
 	)
 }
 
@@ -44,13 +43,12 @@ func TestArcsLayerOverTrack(t *testing.T) {
 	assert.StringContains(
 		t,
 		`style="--dial-background: conic-gradient(transparent 0deg 36.0deg, #333 36.0deg 72.0deg, transparent 72.0deg 360deg), #111"`,
-		web_tester.Render(t, dial.New("#111").Arc("#333", 0.1, 0.2).Node()),
+		web_tester.New(t).Render(dial.New("#111").Arc("#333", 0.1, 0.2).Node()),
 	)
 }
 
 func TestMarkersTurnFromTop(t *testing.T) {
-	ring := web_tester.Render(
-		t,
+	ring := web_tester.New(t).Render(
 		dial.New("#111").
 			Point(0.25, "#444", "bravo").
 			Tick(1.5, "#555", "charlie").

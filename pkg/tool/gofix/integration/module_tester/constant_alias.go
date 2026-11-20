@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func ConstantAlias(t *testing.T) string {
-	t.Helper()
+func (o *Tester) ConstantAlias() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"pkg/alfa/constant/constant.go",
 			"package constant\n\nconst Alfa = \"alfa\"\n",

@@ -10,28 +10,24 @@ import (
 )
 
 func TestHybridSearchReturnsResults(t *testing.T) {
-	s, o := store_tester.Indexed(t)
+	w := store_tester.New(t)
+	s, o := w.Indexed()
 	e := store_tester.EmbedPending(s, o)
 	assert.FatalOnError(t, e)
 	option := search_option.New("search pipeline", 10)
-	results, e := s.SearchHybrid(
-		option,
-		store_tester.QueryVector(t, o, option.Query),
-	)
+	results, e := s.SearchHybrid(option, w.QueryVector(o, option.Query))
 	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, len(results))
 }
 
 func TestHybridSearchDiffersFromKeyword(t *testing.T) {
-	s, o := store_tester.Indexed(t)
+	w := store_tester.New(t)
+	s, o := w.Indexed()
 	e := store_tester.EmbedPending(s, o)
 	assert.FatalOnError(t, e)
 	keyword := s.MustSearchKeyword("context resolution", 5, "", false, nil)
 	option := search_option.New("context resolution", 5)
-	hybrid, e := s.SearchHybrid(
-		option,
-		store_tester.QueryVector(t, o, option.Query),
-	)
+	hybrid, e := s.SearchHybrid(option, w.QueryVector(o, option.Query))
 	assert.FatalOnError(t, e)
 
 	if len(keyword) > 1 && len(hybrid) > 1 {
@@ -47,7 +43,8 @@ func TestHybridSearchDiffersFromKeyword(t *testing.T) {
 }
 
 func TestHybridSearchMetadataFilter(t *testing.T) {
-	s, o := store_tester.Indexed(t)
+	w := store_tester.New(t)
+	s, o := w.Indexed()
 	e := store_tester.EmbedPending(s, o)
 	assert.FatalOnError(t, e)
 	assert.FatalOnError(
@@ -60,10 +57,7 @@ func TestHybridSearchMetadataFilter(t *testing.T) {
 	)
 	option := search_option.New("search pipeline", 10)
 	option.Metadata = map[string]string{"scope": "alfa"}
-	results, f := s.SearchHybrid(
-		option,
-		store_tester.QueryVector(t, o, option.Query),
-	)
+	results, f := s.SearchHybrid(option, w.QueryVector(o, option.Query))
 	assert.FatalOnError(t, f)
 	assert.Greater(t, 0, len(results))
 

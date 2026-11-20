@@ -5,23 +5,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/place"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
-	"testing"
 	"time"
 )
 
-func SavePackage(
-	t *testing.T,
-	s *store.Store,
+func (o *Tester) SavePackage(
 	name string,
 	packageName string,
 	version string,
 	seenAt time.Time,
 ) {
-	t.Helper()
+	o.t.Helper()
 	assert.FatalOnError(
-		t,
-		s.SavePlacement(
+		o.t,
+		o.Store.SavePlacement(
 			placement.NewPackage(
 				constant.SourceOutpost,
 				constant.KindService,

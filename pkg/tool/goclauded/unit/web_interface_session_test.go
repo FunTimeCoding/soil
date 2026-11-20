@@ -14,13 +14,12 @@ func TestPulseFormSitsOutsideLiveRegion(t *testing.T) {
 	s := base.New(t)
 	s.Store.EnsureSession("session-1")
 	page := s.Body(t, session_page.Path("session-1"))
-	markup_tester.AssertCount(
-		t,
+	markup_tester.New(t).AssertCount(
 		1,
 		page,
 		`form[action="/sessions/session-1/pulse"]`,
 	)
-	markup_tester.AssertCount(t, 0, page, "[sse-swap] form")
+	markup_tester.New(t).AssertCount(0, page, "[sse-swap] form")
 }
 
 func TestDashboardActivityIsReadOnly(t *testing.T) {
@@ -29,7 +28,7 @@ func TestDashboardActivityIsReadOnly(t *testing.T) {
 	s.Moment("session-1", r.Callsign, "figured out the root cause")
 	page := s.Body(t, constant.DashboardPath)
 	assert.StringContains(t, "figured out the root cause", page)
-	markup_tester.AssertCount(t, 0, page, `a[href$="/edit"]`)
+	markup_tester.New(t).AssertCount(0, page, `a[href$="/edit"]`)
 }
 
 func TestUnknownSessionIsNotFound(t *testing.T) {

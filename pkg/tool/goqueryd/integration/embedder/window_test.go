@@ -12,27 +12,27 @@ import (
 )
 
 func TestEveryManualChunkFitsEmbedder(t *testing.T) {
-	embedder_tester.Embedded(
-		t,
-		embedder_tester.New(t),
+	e := embedder_tester.New(t)
+	e.Embedded(
+		e.Environment(),
 		"manual.txt",
 		fixture.Read(systemConstant.LimitPath, "manual.txt"),
 	)
 }
 
 func TestOllamaClientRefusesDenseChunk(t *testing.T) {
-	embedder_tester.Refused(
-		t,
-		embedder_tester.NewOllama(t),
+	e := embedder_tester.New(t)
+	e.Refused(
+		e.Ollama(),
 		"dense.md",
 		fixture.Read(systemConstant.LimitPath, "dense.md"),
 	)
 }
 
 func TestOllamaClientRefusesGoDeclaration(t *testing.T) {
-	embedder_tester.Refused(
-		t,
-		embedder_tester.NewOllama(t),
+	e := embedder_tester.New(t)
+	e.Refused(
+		e.Ollama(),
 		"table.go",
 		join.Empty(
 			"package alfa\n\nvar table = []int{\n",

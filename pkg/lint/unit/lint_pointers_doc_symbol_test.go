@@ -21,7 +21,7 @@ func TestPointersMissingTestNameUnchecked(t *testing.T) {
 			"Pinned by `TestShelfHoldsStock` and `TestShelfLostStock()`, shaped like `TestXxx`.\n",
 		),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 	assert.Strings(t, []string{"Alfa:1 test_name TestShelfLostStock()"}, *seen)
 }
 
@@ -44,7 +44,7 @@ func TestPointersUndeclaredMemberUnchecked(t *testing.T) {
 			"Opens `go:pkg/shop/store.Store.Open()`, closes `go:pkg/shop/store.Store.Close()`, names `go:pkg/shop/store.Default.Name` and locks `go:pkg/shop/store.Shelf.Lock()`.\n",
 		),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 	assert.Strings(
 		t,
 		[]string{"Alfa:1 member go:pkg/shop/store.Store.Close()"},
@@ -60,7 +60,7 @@ func TestPointersBareSymbolUnchecked(t *testing.T) {
 			"Calls `store.Open`, `Store.Close()` and `store.Store.Open`, beside `main.go`, `README.md`, `Notes.md` and `h.example.org`.\n",
 		),
 	)
-	lint_tester.Report(t, "Alfa", false, nil, "", l)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 	assert.Strings(
 		t,
 		[]string{

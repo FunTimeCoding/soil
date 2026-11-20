@@ -5,23 +5,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/naming"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
-	"testing"
 )
 
-func NamingRefused(
-	t *testing.T,
+func (o *Tester) NamingRefused(
 	expect string,
 	function string,
 ) {
-	t.Helper()
-	o := service_tester.New(
-		t,
+	o.t.Helper()
+	s := service_tester.New(
+		o.t,
 		service_tester.WithFixture("name-parameters-refused/src"),
 	)
-	before := o.Read("pkg/handler/handler.go")
-	r, e := o.Symbol.NameParameters(
-		t.Context(),
-		o.Directory,
+	before := s.Read("pkg/handler/handler.go")
+	r, e := s.Symbol.NameParameters(
+		o.t.Context(),
+		s.Directory,
 		naming.NewRequest(
 			"example/pkg/handler",
 			[]*naming.Function{naming.NewFunction(function, "")},
@@ -31,7 +29,7 @@ func NamingRefused(
 		),
 		false,
 	)
-	assert.FatalOnError(t, e)
-	testutil.AssertBlockedContains(t, r, expect)
-	assert.String(t, before, o.Read("pkg/handler/handler.go"))
+	assert.FatalOnError(o.t, e)
+	testutil.AssertBlockedContains(o.t, r, expect)
+	assert.String(o.t, before, s.Read("pkg/handler/handler.go"))
 }

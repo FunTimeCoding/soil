@@ -12,7 +12,7 @@ import (
 )
 
 func TestMovePackageRetargetsDocuments(t *testing.T) {
-	o := module_tester.PackageMoveDocument(t)
+	o := module_tester.New(t).PackageMoveDocument()
 	r, e := o.Packages.MovePackage(
 		t.Context(),
 		o.Directory,
@@ -30,7 +30,7 @@ func TestMovePackageRetargetsDocuments(t *testing.T) {
 }
 
 func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
-	o := module_tester.PackageMoveDocument(t)
+	o := module_tester.New(t).PackageMoveDocument()
 	r, e := o.Packages.MovePackage(
 		t.Context(),
 		o.Directory,
@@ -53,11 +53,10 @@ func TestMovePackageDryRunLeavesDocuments(t *testing.T) {
 }
 
 func TestMovePackageKeepsDocumentEditedMeanwhile(t *testing.T) {
-	o := module_tester.PackageMoveDocument(t)
+	o := module_tester.New(t).PackageMoveDocument()
 	o.Commit.BeforeCommit(
 		func() {
-			system_tester.Write(
-				t,
+			system_tester.New(t).Write(
 				o.Directory,
 				"doc/note.md",
 				"Edited meanwhile.\n",

@@ -18,8 +18,7 @@ func New(
 	s := base.New(t, service_tester.WithReporter(r))
 	s.Alertmanager.Fail(outage_tester.RefusedDial())
 
-	return s.Served(), outage_tester.Guard(
-		t,
+	return s.Served(), outage_tester.New(t).Guard(
 		s.Daemon().Workers(),
 		constant.AlertmanagerPeer,
 	).Unavailable

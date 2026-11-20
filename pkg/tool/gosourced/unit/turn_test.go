@@ -22,9 +22,9 @@ func TestTurnsRotateBetweenSessions(t *testing.T) {
 	holder, e := s.Take(t.Context(), "charlie")
 	assert.FatalOnError(t, e)
 	granted := make(chan string, 3)
-	turn_tester.Queue(t, s, "alfa", "alfa one", granted)
-	turn_tester.Queue(t, s, "alfa", "alfa two", granted)
-	turn_tester.Queue(t, s, "bravo", "bravo one", granted)
+	turn_tester.New(t).Queue(s, "alfa", "alfa one", granted)
+	turn_tester.New(t).Queue(s, "alfa", "alfa two", granted)
+	turn_tester.New(t).Queue(s, "bravo", "bravo one", granted)
 	holder.Release()
 	var order []string
 
@@ -55,7 +55,7 @@ func TestCancelledWaiterLeavesQueue(t *testing.T) {
 		_, f := s.Take(x, "bravo")
 		done <- f
 	}()
-	turn_tester.Wait(t, s, 1)
+	turn_tester.New(t).Wait(s, 1)
 	cancel()
 	assert.String(t, "context canceled", (<-done).Error())
 	assert.Integer(t, 0, s.Waiting())

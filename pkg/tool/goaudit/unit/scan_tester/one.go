@@ -5,19 +5,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
-	"testing"
 )
 
-func One(
-	t *testing.T,
+func (o *Tester) One(
 	v *virtual_file_system.System,
 	daemon bool,
 ) *scan.Service {
-	t.Helper()
+	o.t.Helper()
 	c := audit_configuration.New()
 	c.Daemon = daemon
 	result := scan.Services(v, "test", c)
-	assert.Integer(t, 1, len(result))
+	assert.Integer(o.t, 1, len(result))
 
 	return result[0]
 }

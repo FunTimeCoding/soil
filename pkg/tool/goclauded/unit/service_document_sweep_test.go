@@ -24,8 +24,7 @@ func TestReconcileSweepsCompletionUnderFormerName(t *testing.T) {
 	assert.Float(
 		t,
 		1,
-		metric_tester.Sample(
-			t,
+		metric_tester.New(t).Sample(
 			s.Registry,
 			"goclauded_reconciled_total",
 			map[string]string{

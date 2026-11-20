@@ -5,33 +5,31 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
-	"testing"
 )
 
-func SameRewrite(
-	t *testing.T,
+func (o *Tester) SameRewrite(
 	run func(
 		s *service_tester.Services,
 		directory string,
 	) (*output.Results, error),
 ) string {
-	t.Helper()
+	o.t.Helper()
 	var trees []string
 
 	for _, full := range []bool{false, true} {
-		o := service_tester.New(t, service_tester.WithFixture("indexed/src"))
+		s := service_tester.New(o.t, service_tester.WithFixture("indexed/src"))
 
 		if full {
-			o.Workspace.UseFullLoad()
+			s.Workspace.UseFullLoad()
 		}
 
-		r, e := run(o.Services, o.Directory)
-		assert.FatalOnError(t, e)
-		testutil.AssertBlocked(t, r, 0)
-		trees = append(trees, DirectoryTree(t, o.Directory))
+		r, e := run(s.Services, s.Directory)
+		assert.FatalOnError(o.t, e)
+		testutil.AssertBlocked(o.t, r, 0)
+		trees = append(trees, o.DirectoryTree(s.Directory))
 	}
 
-	assert.String(t, trees[1], trees[0])
+	assert.String(o.t, trees[1], trees[0])
 
 	return trees[0]
 }

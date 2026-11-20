@@ -6,23 +6,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"io"
 	"strings"
-	"testing"
 )
 
-func Concatenated(
-	t *testing.T,
+func (o *Tester) Concatenated(
 	apkPath string,
 	controlTarPath string,
 	archivePath string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	apkStat := system.Stat(apkPath)
 	controlStat := system.Stat(controlTarPath)
 	archiveStat := system.Stat(archivePath)
 	expectedSize := controlStat.Size() + archiveStat.Size()
 
 	if apkStat.Size() != expectedSize {
-		t.Errorf(
+		o.t.Errorf(
 			"APK size mismatch: got %d, expected %d (control %d + data %d)",
 			apkStat.Size(),
 			expectedSize,
@@ -56,18 +54,18 @@ func Concatenated(
 			content := string(system.ReadAll(archive))
 
 			if !strings.Contains(content, "#!/bin/sh") {
-				t.Errorf("binary missing shebang")
+				o.t.Errorf("binary missing shebang")
 			}
 
 			if !strings.Contains(
 				content,
 				"Hello from Alpine package!",
 			) {
-				t.Errorf("binary missing expected message")
+				o.t.Errorf("binary missing expected message")
 			}
 
 			if _, okay := h.PAXRecords["APK-TOOLS.checksum.SHA1"]; !okay {
-				t.Errorf("missing SHA1 checksum in PAX headers")
+				o.t.Errorf("missing SHA1 checksum in PAX headers")
 			}
 		}
 	}

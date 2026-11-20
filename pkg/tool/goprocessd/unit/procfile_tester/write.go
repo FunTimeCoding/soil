@@ -12,7 +12,7 @@ func Write(
 ) string {
 	t.Helper()
 	directory := t.TempDir()
-	system_tester.Write(t, directory, "Procfile", content)
+	system_tester.New(t).Write(directory, "Procfile", content)
 
 	return filepath.Join(directory, "Procfile")
 }

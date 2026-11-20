@@ -9,7 +9,7 @@ import (
 )
 
 func TestDeleteDocument(t *testing.T) {
-	s, o := store_tester.Open(t)
+	s, o := store_tester.New(t).Open()
 	assert.FatalOnError(
 		t,
 		store_tester.Push(
@@ -29,14 +29,14 @@ func TestDeleteDocument(t *testing.T) {
 }
 
 func TestDeleteDocumentNotFound(t *testing.T) {
-	s, _ := store_tester.Open(t)
+	s, _ := store_tester.New(t).Open()
 	deleted, e := s.DeleteDocument("notes", "nonexistent.md")
 	assert.FatalOnError(t, e)
 	assert.False(t, deleted)
 }
 
 func TestDeleteDocumentCleansOrphanedContent(t *testing.T) {
-	s, o := store_tester.Open(t)
+	s, o := store_tester.New(t).Open()
 	assert.FatalOnError(
 		t,
 		store_tester.Push(
@@ -54,7 +54,7 @@ func TestDeleteDocumentCleansOrphanedContent(t *testing.T) {
 }
 
 func TestDeleteDocumentPreservesSharedContent(t *testing.T) {
-	s, o := store_tester.Open(t)
+	s, o := store_tester.New(t).Open()
 	body := "# Shared\n\nTwo documents share this body.\n"
 	assert.FatalOnError(
 		t,
@@ -72,7 +72,7 @@ func TestDeleteDocumentPreservesSharedContent(t *testing.T) {
 }
 
 func TestDeleteDocumentRemovesFromSearch(t *testing.T) {
-	s, o := store_tester.Open(t)
+	s, o := store_tester.New(t).Open()
 	assert.FatalOnError(
 		t,
 		store_tester.Push(

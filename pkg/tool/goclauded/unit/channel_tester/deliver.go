@@ -4,16 +4,14 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"testing"
 )
 
-func Deliver(
-	t *testing.T,
+func (o *Tester) Deliver(
 	s *base.Server,
 	x context.Context,
 	callsign string,
 ) chan []client.QueueEntry {
-	t.Helper()
+	o.t.Helper()
 	result := make(chan []client.QueueEntry, 1)
 	go func() {
 		response, e := s.RESTClient().GetChannelWithResponse(

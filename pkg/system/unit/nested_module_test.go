@@ -10,9 +10,9 @@ import (
 
 func TestNestedModule(t *testing.T) {
 	root := t.TempDir()
-	system_tester.Write(t, root, "go.mod", "module alfa\n")
-	system_tester.Write(t, root, "graft/bravo/go.mod", "module bravo\n")
-	system_tester.Write(t, root, "pkg/alfa/alfa.go", "package alfa\n")
+	system_tester.New(t).Write(root, "go.mod", "module alfa\n")
+	system_tester.New(t).Write(root, "graft/bravo/go.mod", "module bravo\n")
+	system_tester.New(t).Write(root, "pkg/alfa/alfa.go", "package alfa\n")
 	nested := filepath.Join(root, "graft", "bravo")
 	assert.Boolean(t, false, system.NestedModule(root, root))
 	assert.True(t, system.NestedModule(root, nested))

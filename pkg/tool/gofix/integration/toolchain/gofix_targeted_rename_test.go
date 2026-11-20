@@ -10,11 +10,12 @@ import (
 )
 
 func TestScopedExportedRenameLeavesNamesake(t *testing.T) {
+	m := module_tester.New(t)
+
 	for _, full := range []bool{false, true} {
-		directory := module_tester.NamesakeExported(t)
-		module_tester.RunDefault(
-			t,
-			module_tester.Options(t, directory, false, full, "./alfa/..."),
+		directory := m.NamesakeExported()
+		m.RunDefault(
+			m.Options(directory, false, full, "./alfa/..."),
 			output.NewResultsWithDirectory(directory),
 		)
 		assert.String(

@@ -19,7 +19,10 @@ func TestOllamaThatAnswersItsHeartbeatIsReachable(t *testing.T) {
 }
 
 func TestStoppedOllamaIsConnectionFailure(t *testing.T) {
-	host, port := upstream_server.HostPort(t, outage_tester.RefusedAddress(t))
+	host, port := upstream_server.HostPort(
+		t,
+		outage_tester.New(t).RefusedAddress(),
+	)
 	c := ollama.New(ollama.WithHost(host), ollama.WithPort(port))
 	defer c.Close()
 	assert.NotNil(t, connection.Classify(c.Reachable(t.Context())))

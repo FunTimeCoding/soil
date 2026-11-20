@@ -8,7 +8,7 @@ import (
 )
 
 func TestUnsubscribeForgetsRootOnlyWhenItsLastSubscriberLeaves(t *testing.T) {
-	_, k := worker_tester.NewSink(t)
+	_, k := worker_tester.New(t).Sink()
 	o := service_tester.New(t, service_tester.WithConnector(k))
 	o.Mattermost.AddPost("alfa")
 	s := o.Service()

@@ -22,7 +22,7 @@ func TestMoveBesidePackageLevelNameAliases(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 	assert.String(
 		t,
 		"package charlie\n\nimport exampleDelta \"example/pkg/delta\"\n\nfunc Use() int {\n\treturn exampleDelta.Moving()\n}\n",
@@ -46,5 +46,5 @@ func TestMoveUnderShadowedImportRefuses(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "delta is taken at")
 	testutil.AssertBlockedContains(t, r, "pkg/echo/use.go:11")
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }

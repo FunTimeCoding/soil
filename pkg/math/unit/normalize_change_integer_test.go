@@ -6,18 +6,20 @@ import (
 )
 
 func TestNormalizeChangeInteger(t *testing.T) {
-	math_tester.AssertNormalizeChangeInteger(t, 1, 0, 1, 0, 100)
-	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -2, 0, 100)
-	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -3, 0, 100)
-	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -100, 0, 100)
-	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -150, 0, 100)
-	math_tester.AssertNormalizeChangeInteger(t, 5, 95, 20, 0, 100)
+	m := math_tester.New(t)
+	m.AssertNormalizeChangeInteger(1, 0, 1, 0, 100)
+	m.AssertNormalizeChangeInteger(-1, 1, -2, 0, 100)
+	m.AssertNormalizeChangeInteger(-1, 1, -3, 0, 100)
+	m.AssertNormalizeChangeInteger(-100, 100, -100, 0, 100)
+	m.AssertNormalizeChangeInteger(-100, 100, -150, 0, 100)
+	m.AssertNormalizeChangeInteger(5, 95, 20, 0, 100)
 }
 
 func TestIntegerNoMaximum(t *testing.T) {
-	math_tester.AssertNormalizeChangeInteger(t, 1, 0, 1, 0, 0)
-	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -2, 0, 0)
-	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -3, 0, 0)
-	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -100, 0, 0)
-	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -150, 0, 0)
+	m := math_tester.New(t)
+	m.AssertNormalizeChangeInteger(1, 0, 1, 0, 0)
+	m.AssertNormalizeChangeInteger(-1, 1, -2, 0, 0)
+	m.AssertNormalizeChangeInteger(-1, 1, -3, 0, 0)
+	m.AssertNormalizeChangeInteger(-100, 100, -100, 0, 0)
+	m.AssertNormalizeChangeInteger(-100, 100, -150, 0, 0)
 }

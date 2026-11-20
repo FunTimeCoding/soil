@@ -11,9 +11,9 @@ import (
 type Tester struct {
 	t        *testing.T
 	Option   *option.Ansible
-	Service  *service.Service
 	Reporter *memory.Memory
 	Registry *prometheus.Registry
+	service  *service.Service
 	capture  string
 	litePath string
 }

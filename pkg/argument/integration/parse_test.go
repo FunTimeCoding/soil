@@ -23,7 +23,7 @@ func TestUnknownFlagPrintsUsageAndExitsTwo(t *testing.T) {
 		return
 	}
 
-	r := argument_tester.Child(t, "alfa --charlie delta")
+	r := argument_tester.New(t).Child("alfa --charlie delta")
 	assert.Integer(t, 2, r.Exit)
 	assert.StringContains(t, "unknown flag: --charlie", r.ErrorString)
 	assert.StringContains(t, "Usage:\n  alfa [flags]", r.ErrorString)
@@ -40,7 +40,7 @@ func TestSimpleInstanceRefusesUnknownFlagWithExitTwo(t *testing.T) {
 		return
 	}
 
-	r := argument_tester.Child(t, "alfa --charlie")
+	r := argument_tester.New(t).Child("alfa --charlie")
 	assert.Integer(t, 2, r.Exit)
 	assert.StringContains(t, "unknown flag: --charlie", r.ErrorString)
 	assert.StringContains(t, "--bravo", r.ErrorString)
@@ -56,7 +56,7 @@ func TestSimpleInstanceAnswersHelpWithExitZero(t *testing.T) {
 		return
 	}
 
-	r := argument_tester.Child(t, "alfa --help")
+	r := argument_tester.New(t).Child("alfa --help")
 	assert.Integer(t, 0, r.Exit)
 	assert.StringContains(t, "--bravo", r.ErrorString)
 }

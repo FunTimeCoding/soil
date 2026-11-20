@@ -3,21 +3,19 @@ package math_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/math"
-	"testing"
 )
 
-func AssertDistribution(
-	t *testing.T,
+func (o *Tester) AssertDistribution(
 	expected float64,
 	all float64,
 	steps int,
 ) {
-	t.Helper()
+	o.t.Helper()
 	var sum float64
 
 	for _, e := range math.Distribution(all, steps) {
 		sum += e
 	}
 
-	assert.Float(t, expected, sum)
+	assert.Float(o.t, expected, sum)
 }

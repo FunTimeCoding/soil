@@ -1,11 +1,11 @@
 package module_tester
 
-import "testing"
+import "github.com/funtimecoding/soil/pkg/tool/gofix/integration/module_tester/module"
 
-func Fix(t *testing.T) string {
-	t.Helper()
+func (o *Tester) Fix() string {
+	o.t.Helper()
 
-	return New(t, "testmodule").
+	return module.New(o.t,"testmodule").
 		File(
 			"pkg/types/directory_path.go",
 			"package types\n\nfunc DirPath() string { return dirName }\n",

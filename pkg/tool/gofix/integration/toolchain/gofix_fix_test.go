@@ -15,7 +15,7 @@ import (
 )
 
 func TestFix(t *testing.T) {
-	directory := module_tester.Fix(t)
+	directory := module_tester.New(t).Fix()
 	r := output.NewResultsWithDirectory(directory)
 	all, fileSet := gofix.Load(directory, []string{"./..."})
 	reported, e := resolve.ListPackages(directory, "./...")
@@ -240,32 +240,27 @@ func TestFix(t *testing.T) {
 		"ResultEntries",
 		func(t *testing.T) {
 			applied := fix_tester.Applied(r.Entries)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"pkg/types/directory_path.go",
 				"renamed DirPath → DirectoryPath (2 references)",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"pkg/types/directory_name.go",
 				"renamed dirName → directoryName (2 references)",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"pkg/types/stray_const.go",
 				"renamed StrayConst → StrayConstant (2 references)",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"pkg/sentinel/sentinel.go",
 				"renamed ErrQuit → ErrorQuit (2 references)",
 			)
-			fix_tester.Result(
-				t,
+			fix_tester.New(t).Result(
 				applied,
 				"pkg/tagged/tagged.go",
 				"renamed ErrQuit → ErrorQuit (unloaded)",

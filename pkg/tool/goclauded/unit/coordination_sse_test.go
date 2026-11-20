@@ -11,30 +11,33 @@ import (
 
 func TestSSEPushesRosterOnConnect(t *testing.T) {
 	s := base.New(t)
-	events, disconnect := event_tester.Subscribe(t, s)
+	v := event_tester.New(t)
+	events, disconnect := v.Subscribe(s)
 	defer disconnect()
-	e := event_tester.Next(t, events)
+	e := v.Next(events)
 	assert.String(t, "roster", e.Name)
 	assert.True(t, e.Payload != "")
 }
 
 func TestSSEPushesActivityOnConnect(t *testing.T) {
 	s := base.New(t)
-	events, disconnect := event_tester.Subscribe(t, s)
+	v := event_tester.New(t)
+	events, disconnect := v.Subscribe(s)
 	defer disconnect()
-	event_tester.Next(t, events)
-	e := event_tester.Next(t, events)
+	v.Next(events)
+	e := v.Next(events)
 	assert.String(t, "activity", e.Name)
 }
 
 func TestSSEPushesAfterMutation(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession()
-	events, disconnect := event_tester.Subscribe(t, s)
+	v := event_tester.New(t)
+	events, disconnect := v.Subscribe(s)
 	defer disconnect()
-	event_tester.NextNamed(t, events, constant.Activity)
+	v.NextNamed(events, constant.Activity)
 	a.Announce(a.Name(), "trigger notification")
-	e := event_tester.NextNamed(t, events, constant.Roster)
+	e := v.NextNamed(events, constant.Roster)
 	assert.StringContains(t, "trigger notification", e.Payload)
 }
 
@@ -42,10 +45,10 @@ func TestSSEPushesEachRosterCardsState(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession()
 	a.Announce(a.Name(), "carded topic")
-	events, disconnect := event_tester.Subscribe(t, s)
+	v := event_tester.New(t)
+	events, disconnect := v.Subscribe(s)
 	defer disconnect()
-	e := event_tester.NextNamed(
-		t,
+	e := v.NextNamed(
 		events,
 		session_page.Event(a.UUID, constant.RosterStatePart),
 	)
@@ -60,9 +63,10 @@ func TestSSEMultiLineBody(t *testing.T) {
 		constant.Summarize,
 		map[string]any{constant.Body: "line one\nline two\nline three"},
 	)
-	events, disconnect := event_tester.Subscribe(t, s)
+	v := event_tester.New(t)
+	events, disconnect := v.Subscribe(s)
 	defer disconnect()
-	activity := event_tester.NextNamed(t, events, constant.Activity)
+	activity := v.NextNamed(events, constant.Activity)
 	assert.StringContains(t, "line one", activity.Payload)
 	assert.StringContains(t, "line two", activity.Payload)
 }

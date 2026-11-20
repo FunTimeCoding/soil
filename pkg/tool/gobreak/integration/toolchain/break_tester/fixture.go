@@ -17,15 +17,14 @@ func Fixture(
 	t.Setenv("GOFLAGS", "-buildvcs=false")
 	root := t.TempDir()
 	system.MakeDirectory(filepath.Join(root, gitConstant.Directory))
-	system_tester.Write(t, root, "go.mod", constant.FixtureModule)
-	system_tester.Write(t, root, "shape/shape.go", constant.FixtureShape)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(root, "go.mod", constant.FixtureModule)
+	system_tester.New(t).Write(root, "shape/shape.go", constant.FixtureShape)
+	system_tester.New(t).Write(
 		root,
 		"shape/shape_test.go",
 		constant.FixtureShapeTest,
 	)
-	system_tester.Write(t, root, "probe/breaks.yaml", breaks)
+	system_tester.New(t).Write(root, "probe/breaks.yaml", breaks)
 
 	return filepath.Join(root, "probe", "breaks.yaml")
 }

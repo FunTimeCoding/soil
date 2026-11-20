@@ -13,14 +13,10 @@ func TestEventStreamReplaysFromZero(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession()
 	a.Announce(a.Name(), "first topic")
-	events, disconnect := event_tester.SubscribeStream(
-		t,
-		s,
-		"consumer",
-		constant.Announce,
-	)
+	v := event_tester.New(t)
+	events, disconnect := v.SubscribeStream(s, "consumer", constant.Announce)
 	defer disconnect()
-	e := event_tester.Next(t, events)
+	e := v.Next(events)
 	assert.String(t, "entry", e.Name)
 	assert.StringContains(t, "first topic", e.Payload)
 	assert.True(t, e.Identifier != "")
@@ -34,14 +30,10 @@ func TestEventStreamFiltersKinds(t *testing.T) {
 		constant.Label,
 		map[string]any{constant.Key: "colour", constant.Value: "green"},
 	)
-	events, disconnect := event_tester.SubscribeStream(
-		t,
-		s,
-		"consumer",
-		constant.Label,
-	)
+	v := event_tester.New(t)
+	events, disconnect := v.SubscribeStream(s, "consumer", constant.Label)
 	defer disconnect()
-	e := event_tester.Next(t, events)
+	e := v.Next(events)
 	assert.StringContains(t, "green", e.Payload)
 	assert.StringNotContains(t, "announced topic", e.Payload)
 }
@@ -50,23 +42,14 @@ func TestEventStreamResumesFromStoredPosition(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession()
 	a.Announce(a.Name(), "earlier topic")
-	first, disconnect := event_tester.SubscribeStream(
-		t,
-		s,
-		"consumer",
-		constant.Announce,
-	)
-	event_tester.Next(t, first)
+	v := event_tester.New(t)
+	first, disconnect := v.SubscribeStream(s, "consumer", constant.Announce)
+	v.Next(first)
 	disconnect()
 	a.Announce(a.Name(), "later topic")
-	second, stop := event_tester.SubscribeStream(
-		t,
-		s,
-		"consumer",
-		constant.Announce,
-	)
+	second, stop := v.SubscribeStream(s, "consumer", constant.Announce)
 	defer stop()
-	e := event_tester.Next(t, second)
+	e := v.Next(second)
 	assert.StringContains(t, "later topic", e.Payload)
 	assert.StringNotContains(t, "earlier topic", e.Payload)
 }
@@ -76,6 +59,6 @@ func TestEventStreamRejectsMissingToken(t *testing.T) {
 	assert.Integer(
 		t,
 		http.StatusUnauthorized,
-		event_tester.StatusWithoutToken(t, s),
+		event_tester.New(t).StatusWithoutToken(s),
 	)
 }

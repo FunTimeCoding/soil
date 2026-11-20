@@ -16,8 +16,7 @@ func TestEntryIsLabelledFormThatWorksWithoutScript(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry" method="post" action="/alfa"><input type="hidden" name="bravo" value="1"><label><span class="entry-label">Charlie</span><input type="text" name="charlie" value="delta" placeholder="echo" required></label><button type="submit">Go</button></form>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Hidden("bravo", "1").
 				Text("charlie", "Charlie", "delta").
@@ -32,16 +31,14 @@ func TestFileFieldMakesEntryMultipartForm(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry" method="post" action="/alfa" enctype="multipart/form-data"><label><span class="entry-label">Bravo</span><input type="file" name="bravo" accept="image/*"></label><button type="submit">Go</button></form>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").File("bravo", "Bravo", "image/*").Node(),
 		),
 	)
 }
 
 func TestSwappedInlineEntryCarriesItsAlertAndIdentifier(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Swap("#foxtrot", constant.SwapOuter).
 			Identifier("foxtrot").
@@ -60,8 +57,7 @@ func TestQueryEntryReadsWithGetAndSwapsByGet(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<form class="entry inline" method="get" action="/alfa" hx-get="/alfa" hx-target="#foxtrot" hx-swap="innerHTML">`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Filter").
 				Query().
 				Swap("#foxtrot", constant.SwapInner).
@@ -75,8 +71,7 @@ func TestLiveQueryEntryFollowsTypingAndPushesAddress(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry" method="get" action="/alfa" hx-get="/alfa" hx-target="#foxtrot" hx-swap="innerHTML" hx-trigger="input delay:200ms, submit" hx-sync="this:replace" hx-push-url="true"><label><span class="entry-label">Bravo</span><input type="search" name="bravo" value="charlie"></label></form>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Filter").
 				Query().
 				Swap("#foxtrot", constant.SwapInner).
@@ -91,8 +86,7 @@ func TestPasswordNeverCarriesValueBesideMail(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<input type="email" name="bravo" value="charlie@delta.test"></label><label><span class="entry-label">Golf</span><input type="password" name="golf"></label>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Mail("bravo", "Bravo", "charlie@delta.test").
 				Password("golf", "Golf").
@@ -105,8 +99,7 @@ func TestSearchFieldCanTakeFocus(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<input type="search" name="bravo" value="charlie" autofocus>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Query().
 				Search("bravo", "Bravo", "charlie").
@@ -120,16 +113,14 @@ func TestHeadingSitsInsideFormAboveItsAlert(t *testing.T) {
 	assert.StringContains(
 		t,
 		`action="/alfa"><h5>Sierra</h5><p role="alert" class="form-alert">Tango</p>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").Heading("Sierra").Alert("Tango").Node(),
 		),
 	)
 }
 
 func TestGroupsGatherFieldsThatFollowThem(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Text("uniform", "Uniform", "").
 			Group("Victor").
@@ -153,8 +144,7 @@ func TestEndingGroupReturnsToFormItself(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<fieldset><legend>Victor</legend><label><span class="entry-label">Uniform</span><input type="text" name="uniform"></label></fieldset><p>xray</p><button`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Group("Victor").
 				Text("uniform", "Uniform", "").
@@ -169,16 +159,14 @@ func TestPreviewPostsChangesElsewhereWhileSubmitStaysReal(t *testing.T) {
 	assert.StringContains(
 		t,
 		`method="post" action="/alfa" hx-post="/alfa/preview" hx-trigger="change delay:300ms" hx-target="#card" hx-swap="outerHTML"`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").Preview("/alfa/preview", "#card").Node(),
 		),
 	)
 }
 
 func TestButtonAndFieldCarryTheirOwnClasses(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			ButtonClass("outline").
 			Text("bravo", "Bravo", "").
@@ -201,8 +189,7 @@ func TestSidewaysEntryKeepsItsButtonsSideBySide(t *testing.T) {
 	assert.String(
 		t,
 		`<form class="entry sideways" method="post" action="/alfa"><label><span class="entry-label">Bravo</span><input type="text" name="bravo"></label><div class="entry-buttons"><button type="submit">Go</button><a href="/charlie">Cancel</a></div></form>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Sideways().
 				Text("bravo", "Bravo", "").
@@ -218,8 +205,7 @@ func TestRevealingFieldFetchesNextFieldsWhenItChanges(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<select name="delta" required hx-get="/echo" hx-trigger="input changed delay:300ms" hx-target="#foxtrot" hx-swap="innerHTML" hx-include="closest form">`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Select("delta", "Delta", nil, "").
 				Required().
@@ -233,8 +219,7 @@ func TestAlternativePostsSameFieldsElsewhereAfterPrimary(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<div class="entry-buttons"><button type="submit">Go</button><button type="submit" class="entry-alternative" formaction="/skip" formnovalidate>Skip</button></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Text("bravo", "Bravo", "").
 				Required().
@@ -248,8 +233,7 @@ func TestConfirmAsksBeforePrimaryAndSparesAlternatives(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<div class="entry-buttons"><button type="submit" onclick="return confirm(&#34;Sure?&#34;)">Go</button><button type="submit" class="entry-alternative" formaction="/skip" formnovalidate>Skip</button></div>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Confirm("Sure?").
 				Alternative("/skip", "Skip").
@@ -263,8 +247,7 @@ func TestSuggestionsOfferListBesideField(t *testing.T) {
 	assert.StringContains(
 		t,
 		`<label><span class="entry-label">Bravo</span><input type="text" name="bravo" list="bravo-suggestions"><datalist id="bravo-suggestions"><option value="charlie"></option><option value="delta"></option></datalist></label>`,
-		web_tester.Render(
-			t,
+		web_tester.New(t).Render(
 			entry.New("/alfa", "Go").
 				Text("bravo", "Bravo", "").
 				Suggestions([]string{"charlie", "delta"}).
@@ -278,18 +261,17 @@ func TestFieldBuiltElsewhereJoinsEntryAndRendersAlone(t *testing.T) {
 	assert.String(
 		t,
 		`<label><span class="entry-label">Golf</span><input type="number" name="golf" value="3"></label>`,
-		web_tester.Render(t, f.Node()),
+		web_tester.New(t).Render(f.Node()),
 	)
 	assert.StringContains(
 		t,
 		`action="/alfa"><label><span class="entry-label">Golf</span>`,
-		web_tester.Render(t, entry.New("/alfa", "Go").Field(f).Node()),
+		web_tester.New(t).Render(entry.New("/alfa", "Go").Field(f).Node()),
 	)
 }
 
 func TestFieldChainedAloneMatchesEntryModifiers(t *testing.T) {
-	chained := web_tester.Render(
-		t,
+	chained := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Field(
 				field.New(constant.EntryNumberKind, "hotel", "Hotel", "2").
@@ -302,8 +284,7 @@ func TestFieldChainedAloneMatchesEntryModifiers(t *testing.T) {
 			).
 			Node(),
 	)
-	modified := web_tester.Render(
-		t,
+	modified := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Number("hotel", "Hotel", "2").
 			Required().
@@ -323,8 +304,7 @@ func TestFieldChainedAloneMatchesEntryModifiers(t *testing.T) {
 }
 
 func TestRequiredSelectPromptsWithDisabledEmptyOption(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Select(
 				"golf",
@@ -347,8 +327,7 @@ func TestRequiredSelectPromptsWithDisabledEmptyOption(t *testing.T) {
 }
 
 func TestOptionalSelectLeavesItsPromptSelectable(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Select("golf", "Golf", nil, "").
 			Prompt("- unknown -").
@@ -362,8 +341,7 @@ func TestOptionalSelectLeavesItsPromptSelectable(t *testing.T) {
 }
 
 func TestAppendingEntryResetsAfterItsRequest(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Add").
 			Swap("#lima", constant.SwapAppend).
 			ResetAfter().
@@ -395,8 +373,7 @@ func TestAppendingEntryResetsAfterItsRequest(t *testing.T) {
 }
 
 func TestNumbersCarryTheirBoundsAndCheckboxesTheirState(t *testing.T) {
-	page := web_tester.Render(
-		t,
+	page := web_tester.New(t).Render(
 		entry.New("/alfa", "Go").
 			Number("juliett", "Juliett", "2").
 			Min("1").

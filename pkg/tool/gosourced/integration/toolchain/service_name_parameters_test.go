@@ -55,7 +55,7 @@ func TestNameParametersNamesEveryBlankContext(t *testing.T) {
 		"func Literal() func(context.Context) string {",
 		source,
 	)
-	rewrite_tester.Formatted(t, source)
+	rewrite_tester.New(t).Formatted(source)
 	assert.StringContains(
 		t,
 		"func Sub(_ context.Context) {}",
@@ -146,17 +146,17 @@ func TestNameParametersDryRunWritesNothing(t *testing.T) {
 }
 
 func TestNameParametersRefusesNameBodyDeclares(t *testing.T) {
-	rewrite_tester.NamingRefused(t, "already uses x", "Declared")
+	rewrite_tester.New(t).NamingRefused("already uses x", "Declared")
 }
 
 func TestNameParametersRefusesShadowingPackageName(t *testing.T) {
-	rewrite_tester.NamingRefused(t, "already uses x", "Outer")
+	rewrite_tester.New(t).NamingRefused("already uses x", "Outer")
 }
 
 func TestNameParametersRefusesResultOfThatName(t *testing.T) {
-	rewrite_tester.NamingRefused(t, "already uses x", "Result")
+	rewrite_tester.New(t).NamingRefused("already uses x", "Result")
 }
 
 func TestNameParametersRefusesAmbiguousSignature(t *testing.T) {
-	rewrite_tester.NamingRefused(t, "ambiguous", "Twice")
+	rewrite_tester.New(t).NamingRefused("ambiguous", "Twice")
 }

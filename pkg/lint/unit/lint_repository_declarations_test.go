@@ -10,7 +10,7 @@ import (
 )
 
 func TestRepositoryDeclaresPromotedMembers(t *testing.T) {
-	r := repository_tester.Shop(t)
+	r := repository_tester.New(t).Shop()
 	assert.True(t, r.Declares("pkg/shop", "Item.Price"))
 	assert.True(t, r.Declares("pkg/shop", "Item.Base"))
 	assert.True(t, r.Declares("pkg/shop", "Item.Label"))
@@ -33,20 +33,20 @@ func TestRepositoryDeclaresPromotedMembers(t *testing.T) {
 }
 
 func TestRepositoryDeclaresTypesApartFromValues(t *testing.T) {
-	r := repository_tester.Shop(t)
+	r := repository_tester.New(t).Shop()
 	assert.True(t, r.DeclaresType("pkg/shop", "Item"))
 	assert.True(t, r.Declares("pkg/shop", "Default"))
 	assert.False(t, r.DeclaresType("pkg/shop", "Default"))
 }
 
 func TestRepositoryKnowsTestNames(t *testing.T) {
-	r := repository_tester.Shop(t)
+	r := repository_tester.New(t).Shop()
 	assert.True(t, r.Tests("TestShopKeepsStock"))
 	assert.False(t, r.Tests("TestShopLosesStock"))
 }
 
 func TestRepositoryKnowsWhereTestNameRepeats(t *testing.T) {
-	r := repository_tester.Shop(t)
+	r := repository_tester.New(t).Shop()
 	assert.True(t, r.TestElsewhere("TestShopKeepsStock", "pkg/shop/unit"))
 	assert.False(t, r.TestElsewhere("TestStockCounts", "pkg/stock/unit"))
 }

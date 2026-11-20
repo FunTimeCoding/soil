@@ -15,8 +15,7 @@ func TestPackageNameBlacklisted(t *testing.T) {
 		stringsConstant.UpperAlfa,
 		strings.NewReader("package api\n"),
 	)
-	lint_tester.Report(
-		t,
+	lint_tester.New(t).Report(
 		"Alfa",
 		true,
 		[]*concern.Concern{
@@ -39,5 +38,5 @@ func TestPackageNameAllowed(t *testing.T) {
 		stringsConstant.UpperBravo,
 		strings.NewReader("package server\n"),
 	)
-	lint_tester.Report(t, "Bravo", false, nil, "", l)
+	lint_tester.New(t).Report("Bravo", false, nil, "", l)
 }

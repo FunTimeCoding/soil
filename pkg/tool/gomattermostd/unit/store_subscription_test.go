@@ -9,7 +9,7 @@ import (
 )
 
 func TestStoreSubscriptionRoundTrip(t *testing.T) {
-	s := worker_tester.NewStore(t)
+	s := worker_tester.New(t).Store()
 	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	s.MustCreate(subscription.New("lima", "charlie", "bravo", ""))
 	own := s.MustByCallsign("kilo")
@@ -24,7 +24,7 @@ func TestStoreSubscriptionRoundTrip(t *testing.T) {
 }
 
 func TestStoreSubscriptionDelete(t *testing.T) {
-	s := worker_tester.NewStore(t)
+	s := worker_tester.New(t).Store()
 	s.MustCreate(subscription.New("kilo", "alfa", "bravo", ""))
 	s.MustCreate(subscription.New("lima", "alfa", "bravo", ""))
 	assert.Integer(t, 1, s.MustDelete("kilo", "alfa"))
@@ -35,7 +35,7 @@ func TestStoreSubscriptionDelete(t *testing.T) {
 }
 
 func TestStoreSubscriptionTouchRoot(t *testing.T) {
-	s := worker_tester.NewStore(t)
+	s := worker_tester.New(t).Store()
 	s.MustCreate(subscription.New("kilo", "alfa", "bravo", ""))
 	s.MustCreate(subscription.New("lima", "alfa", "bravo", ""))
 	s.MustCreate(subscription.New("kilo", "charlie", "bravo", ""))
@@ -55,7 +55,7 @@ func TestStoreSubscriptionTouchRoot(t *testing.T) {
 }
 
 func TestStoreSubscriptionPrune(t *testing.T) {
-	s := worker_tester.NewStore(t)
+	s := worker_tester.New(t).Store()
 	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "romeo"))
 	s.MustCreate(subscription.New("kilo", "charlie", "bravo", "quebec"))
 	s.MustTouchRoot("alfa", time.Now().Add(-8*24*time.Hour))
@@ -70,7 +70,7 @@ func TestStoreSubscriptionPrune(t *testing.T) {
 }
 
 func TestStoreSubscriptionPruneEmpty(t *testing.T) {
-	s := worker_tester.NewStore(t)
+	s := worker_tester.New(t).Store()
 	s.MustCreate(subscription.New("kilo", "alfa", "bravo", ""))
 	assert.Integer(t, 0, len(s.MustPrune(time.Now().Add(-7*24*time.Hour))))
 	assert.Integer(t, 1, len(s.MustAll()))

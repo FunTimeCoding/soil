@@ -14,7 +14,10 @@ import (
 )
 
 func TestRefusedTelemetryDaemonCostsCommandNothing(t *testing.T) {
-	host, port := upstream_server.HostPort(t, outage_tester.RefusedAddress(t))
+	host, port := upstream_server.HostPort(
+		t,
+		outage_tester.New(t).RefusedAddress(),
+	)
 	c := telemetry.New(host, port, true).WithTimeout(
 		constant.CommandLineTimeout,
 	)

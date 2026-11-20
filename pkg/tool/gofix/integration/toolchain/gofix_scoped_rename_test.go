@@ -11,15 +11,11 @@ import (
 )
 
 func TestScopedExportedRenameReachesCallerTyped(t *testing.T) {
-	directory := module_tester.ExportedCaller(t)
+	m := module_tester.New(t)
+	directory := m.ExportedCaller()
 	r := output.NewResultsWithDirectory(directory)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./alfa/..."),
-		r,
-	)
-	fix_tester.Result(
-		t,
+	m.RunDefault(m.Options(directory, false, false, "./alfa/..."), r)
+	fix_tester.New(t).Result(
 		fix_tester.Applied(r.Entries),
 		"alfa/send.go",
 		"renamed SendMsg → SendMessage (2 references)",
@@ -32,10 +28,10 @@ func TestScopedExportedRenameReachesCallerTyped(t *testing.T) {
 }
 
 func TestScopedUnexportedRenameReachesOwnTest(t *testing.T) {
-	directory := module_tester.UnexportedWithTests(t)
-	module_tester.RunDefault(
-		t,
-		module_tester.Options(t, directory, false, false, "./alfa/..."),
+	m := module_tester.New(t)
+	directory := m.UnexportedWithTests()
+	m.RunDefault(
+		m.Options(directory, false, false, "./alfa/..."),
 		output.NewResultsWithDirectory(directory),
 	)
 	assert.String(

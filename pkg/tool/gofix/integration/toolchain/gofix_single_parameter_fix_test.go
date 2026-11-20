@@ -12,7 +12,7 @@ import (
 )
 
 func TestSingleParameterFix(t *testing.T) {
-	directory := module_tester.SingleParameter(t)
+	directory := module_tester.New(t).SingleParameter()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunSingleParameterFix([]string{"./..."}, directory, false, r)
 	t.Run(
@@ -122,29 +122,25 @@ func TestSingleParameterFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := fix_tester.Applied(r.Entries)
 			assert.Integer(t, 4, len(applied))
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"method.go",
 				7,
 				"collapsed single parameter",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"function.go",
 				3,
 				"collapsed single parameter",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"expanded_function_type.go",
 				3,
 				"collapsed single parameter",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"half_expanded_function_type.go",
 				3,
@@ -155,7 +151,7 @@ func TestSingleParameterFix(t *testing.T) {
 }
 
 func TestSingleParameterFixSettles(t *testing.T) {
-	directory := module_tester.SingleParameter(t)
+	directory := module_tester.New(t).SingleParameter()
 	gofix.RunSingleParameterFix(
 		[]string{"./..."},
 		directory,
@@ -168,7 +164,7 @@ func TestSingleParameterFixSettles(t *testing.T) {
 }
 
 func TestSingleParameterFixWithTestFiles(t *testing.T) {
-	directory := module_tester.SingleParameterWithTests(t)
+	directory := module_tester.New(t).SingleParameterWithTests()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunSingleParameterFix([]string{"./..."}, directory, false, r)
 	t.Run(

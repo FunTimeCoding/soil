@@ -16,15 +16,15 @@ import (
 )
 
 func TestFailedSaveLeavesEntriesReadable(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	c := keepass.MustNew(path, "secret")
-	system_tester.ReadOnly(t, filepath.Dir(path))
+	system_tester.New(t).ReadOnly(filepath.Dir(path))
 	assert.Error(t, c.Save())
 	assert.String(t, "hunter2", c.ByTitle("Forge").GetPassword())
 }
 
 func TestSaveOverChangeOnDiskIsConflict(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	c := keepass.MustNew(path, "secret")
 	at := time.Now().Add(time.Hour)
 	assert.FatalOnError(t, os.Chtimes(path, at, at))
@@ -32,10 +32,10 @@ func TestSaveOverChangeOnDiskIsConflict(t *testing.T) {
 }
 
 func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	s := service_tester.New(t, path).Service()
 	identifier := s.Search("forge")[0].Identifier
-	system_tester.ReadOnly(t, filepath.Dir(path))
+	system_tester.New(t).ReadOnly(filepath.Dir(path))
 	assert.Error(
 		t,
 		s.Update(
@@ -48,7 +48,7 @@ func TestFailedWriteIsNotKeptInMemory(t *testing.T) {
 }
 
 func TestFailedBackupRefusesWrite(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	at := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
 	s := service_tester.New(t, path, service_tester.WithClock(at)).Service()
 	identifier := s.Search("forge")[0].Identifier
@@ -74,7 +74,7 @@ func TestFailedBackupRefusesWrite(t *testing.T) {
 }
 
 func TestFailedSaveLeavesNoTemporaryFile(t *testing.T) {
-	path := database_tester.Write(t)
+	path := database_tester.New(t).Write()
 	c := keepass.MustNew(path, "secret")
 	i, e := os.Stat(path)
 	assert.FatalOnError(t, e)

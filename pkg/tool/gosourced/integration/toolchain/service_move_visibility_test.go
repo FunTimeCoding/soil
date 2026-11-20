@@ -26,7 +26,7 @@ func TestMoveKeepsHelperOnlyBatchCallsPrivate(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 	assert.StringContains(t, "func piece() int", o.Read("pkg/bravo/piece.go"))
 	assert.StringContains(t, "return piece() + 1", o.Read("pkg/bravo/build.go"))
 }
@@ -49,7 +49,7 @@ func TestMoveExportsWhatStaysBehindCalls(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 	assert.StringContains(t, "func Lone() int", o.Read("pkg/bravo/lone.go"))
 	assert.StringContains(t, "bravo.Lone()", o.Read("pkg/alfa/keep.go"))
 }
@@ -72,6 +72,6 @@ func TestMoveExportsWhatInPackageTestCalls(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 	assert.StringContains(t, "func Probe() int", o.Read("pkg/bravo/probe.go"))
 }

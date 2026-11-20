@@ -10,7 +10,7 @@ import (
 )
 
 func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
-	o, full := rewrite_tester.IndexedAndFull(t)
+	o, full := rewrite_tester.New(t).IndexedAndFull()
 	symbols := [][2]string{
 		{"NewServer", ""},
 		{"Start", "Server"},
@@ -19,8 +19,7 @@ func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
 	}
 
 	for _, s := range symbols {
-		rewrite_tester.SameResult(
-			t,
+		rewrite_tester.New(t).SameResult(
 			func(x *service_tester.Services) (any, any, error) {
 				return x.Reference.FindReferences(
 					o.Directory,
@@ -49,7 +48,7 @@ func TestIndexedFindReferencesMatchesFullLoad(t *testing.T) {
 }
 
 func TestFieldReferencesCrossTestVariant(t *testing.T) {
-	o, full := rewrite_tester.IndexedAndFull(t)
+	o, full := rewrite_tester.New(t).IndexedAndFull()
 
 	for _, s := range []*service_tester.Services{o.Services, full} {
 		_, references, e := s.Reference.FindReferences(
@@ -68,9 +67,8 @@ func TestFieldReferencesCrossTestVariant(t *testing.T) {
 }
 
 func TestIndexedFileReferencesMatchesFullLoad(t *testing.T) {
-	o, full := rewrite_tester.IndexedAndFull(t)
-	rewrite_tester.SameResult(
-		t,
+	o, full := rewrite_tester.New(t).IndexedAndFull()
+	rewrite_tester.New(t).SameResult(
 		func(x *service_tester.Services) (any, any, error) {
 			return x.Reference.FileReferences(
 				o.Directory,
@@ -84,9 +82,8 @@ func TestIndexedFileReferencesMatchesFullLoad(t *testing.T) {
 }
 
 func TestIndexedLiteralsReachElisionThroughThirdPackage(t *testing.T) {
-	o, full := rewrite_tester.IndexedAndFull(t)
-	result := rewrite_tester.SameResult(
-		t,
+	o, full := rewrite_tester.New(t).IndexedAndFull()
+	result := rewrite_tester.New(t).SameResult(
 		func(x *service_tester.Services) (any, any, error) {
 			return x.Pattern.FindLiterals(o.Directory, "example/alfa", "Server")
 		},
@@ -98,9 +95,8 @@ func TestIndexedLiteralsReachElisionThroughThirdPackage(t *testing.T) {
 }
 
 func TestIndexedListCallsMatchesFullLoad(t *testing.T) {
-	o, full := rewrite_tester.IndexedAndFull(t)
-	rewrite_tester.SameResult(
-		t,
+	o, full := rewrite_tester.New(t).IndexedAndFull()
+	rewrite_tester.New(t).SameResult(
 		func(x *service_tester.Services) (any, any, error) {
 			return x.Reference.ListCalls(o.Directory, "example/bravo", 20)
 		},

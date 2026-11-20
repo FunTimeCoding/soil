@@ -12,14 +12,13 @@ import (
 )
 
 func TestImportAliasSuggestion(t *testing.T) {
-	directory := module_tester.ImportAliasSuggestion(t)
+	directory := module_tester.New(t).ImportAliasSuggestion()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunImportAliasFix([]string{"./..."}, directory, false, r)
 	t.Run(
 		"StandardLibraryKeepsThePlainName",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/delta/clock.go",
 				"suggest alias library → testmoduleTime (testmodule/pkg/time; time keeps the name: stdlib)",
@@ -29,14 +28,12 @@ func TestImportAliasSuggestion(t *testing.T) {
 	t.Run(
 		"OwnKeepsThePlainName",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/echo/service/service.go",
 				"suggest de-alias echoFace → face (own: testmodule/pkg/echo/face)",
 			)
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/echo/service/service.go",
 				"suggest alias face → foxtrot (testmodule/pkg/foxtrot/face; testmodule/pkg/echo/face keeps the name: own)",
@@ -46,8 +43,7 @@ func TestImportAliasSuggestion(t *testing.T) {
 	t.Run(
 		"KeeperRefusesABuiltinName",
 		func(t *testing.T) {
-			fix_tester.Planned(
-				t,
+			fix_tester.New(t).Planned(
 				r.Entries,
 				"pkg/hotel/builtin.go",
 				"cannot de-alias own → string (builtin collision)",
@@ -57,7 +53,7 @@ func TestImportAliasSuggestion(t *testing.T) {
 }
 
 func TestOtherCollisionsStayUntouchedAndSilentByDefault(t *testing.T) {
-	directory := module_tester.ImportAliasSuggestion(t)
+	directory := module_tester.New(t).ImportAliasSuggestion()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunConstantAliasFix([]string{"./..."}, directory, false, r)
 	assert.String(

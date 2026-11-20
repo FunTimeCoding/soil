@@ -20,7 +20,7 @@ func TestGuardTestMissingFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.MissingGuardTestKey, s[0])
+	scan_tester.New(t).Concern(constant.MissingGuardTestKey, s[0])
 }
 
 func TestGuardTestInIntegrationFlagged(t *testing.T) {
@@ -37,7 +37,7 @@ func TestGuardTestInIntegrationFlagged(t *testing.T) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.Concern(t, constant.MissingGuardTestKey, s[0])
+	scan_tester.New(t).Concern(constant.MissingGuardTestKey, s[0])
 }
 
 func TestGuardTestInUnitClean(t *testing.T) {
@@ -51,7 +51,7 @@ func TestGuardTestInUnitClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/unit/guard_test.go", "package unit\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.MissingGuardTestKey, s[0])
+	scan_tester.New(t).NoConcern(constant.MissingGuardTestKey, s[0])
 }
 
 func TestGuardTestUnguardedSkipped(t *testing.T) {
@@ -61,5 +61,5 @@ func TestGuardTestUnguardedSkipped(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	scan_tester.NoConcern(t, constant.MissingGuardTestKey, s[0])
+	scan_tester.New(t).NoConcern(constant.MissingGuardTestKey, s[0])
 }

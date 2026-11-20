@@ -69,7 +69,7 @@ func TestWorkerLeavesQuietEmbeddingRefusalOutOfSentry(t *testing.T) {
 	l := logger.New(context.Background())
 	v := q.Service()
 	directory := t.TempDir()
-	store_tester.WriteFixture(t, directory, "alfa.md", "# Alfa\n\nzulu.\n")
+	store_tester.New(t).WriteFixture(directory, "alfa.md", "# Alfa\n\nzulu.\n")
 	v.AddCollection("notes", directory, constant.DefaultGlob)
 	w := worker.New(
 		v.Maintain,

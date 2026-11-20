@@ -15,8 +15,7 @@ func TestOperationsOnNetBoxOutage(t *testing.T) {
 	spec, e := server.GetSpec()
 	assert.FatalOnError(t, e)
 	address := `{"address":"00:00:5e:00:53:01"}`
-	outage_tester.Operations(
-		t,
+	outage_tester.New(t).Operations(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r)
 		},
@@ -32,8 +31,7 @@ func TestOperationsOnNetBoxOutage(t *testing.T) {
 }
 
 func TestToolsOnNetBoxOutage(t *testing.T) {
-	outage_tester.Tools(
-		t,
+	outage_tester.New(t).Tools(
 		func(r *memory.Memory) (*model_context_server.Server, func() error) {
 			return outage_server.New(t, r)
 		},

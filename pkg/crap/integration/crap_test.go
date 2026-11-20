@@ -17,9 +17,8 @@ import (
 )
 
 func TestAttributeEndToEnd(t *testing.T) {
-	root := crap_tester.Module(t)
-	system_tester.Write(
-		t,
+	root := crap_tester.New(t).Module()
+	system_tester.New(t).Write(
 		root,
 		"pkg/a/unit/b_test.go",
 		`package unit
@@ -68,7 +67,7 @@ func TestNothing(t *testing.T) {}
 }
 
 func TestCompileAndListTests(t *testing.T) {
-	root := crap_tester.Module(t)
+	root := crap_tester.New(t).Module()
 	binary := coverage.Compile(
 		root,
 		t.TempDir(),
@@ -83,7 +82,7 @@ func TestCompileAndListTests(t *testing.T) {
 }
 
 func TestCoverageEndToEnd(t *testing.T) {
-	root := crap_tester.Module(t)
+	root := crap_tester.New(t).Module()
 	profile := coverage.Run(root, "", constant.AllPackages)
 	assert.True(t, system.FileExists(profile))
 	r := crap.Build(
@@ -108,7 +107,7 @@ func TestCoverageEndToEnd(t *testing.T) {
 }
 
 func TestIndexLoad(t *testing.T) {
-	root := crap_tester.Module(t)
+	root := crap_tester.New(t).Module()
 	i := index.Load(root, constant.AllPackages)
 	assert.Count(t, 3, i.Functions)
 	half := i.ByKey(function.NewKey("example.test/m/pkg/a", "half.go", 3))
@@ -135,14 +134,13 @@ func TestParallelTestsAbsent(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		index.ParallelTests(crap_tester.Module(t), constant.AllPackages),
+		index.ParallelTests(crap_tester.New(t).Module(), constant.AllPackages),
 	)
 }
 
 func TestParallelTestsDetected(t *testing.T) {
-	root := crap_tester.Module(t)
-	system_tester.Write(
-		t,
+	root := crap_tester.New(t).Module()
+	system_tester.New(t).Write(
 		root,
 		"pkg/a/unit/parallel_test.go",
 		`package unit
@@ -163,7 +161,7 @@ func TestParallel(t *testing.T) {
 
 func TestRunAttributeRefusesUnscoped(t *testing.T) {
 	o := option.NewAttribute()
-	o.Root = crap_tester.Module(t)
+	o.Root = crap_tester.New(t).Module()
 	o.Patterns = []string{constant.AllPackages}
 	out := assert.Capture(
 		t,
@@ -174,14 +172,14 @@ func TestRunAttributeRefusesUnscoped(t *testing.T) {
 
 func TestRunAttributeScopedPasses(t *testing.T) {
 	o := option.NewAttribute()
-	o.Root = crap_tester.Module(t)
+	o.Root = crap_tester.New(t).Module()
 	o.Patterns = []string{"./pkg/a/..."}
 	o.Notation = true
 	assert.Capture(t, func() { assert.Integer(t, 0, crap.RunAttribute(o)) })
 }
 
 func TestRunFailAboveThreshold(t *testing.T) {
-	root := crap_tester.Module(t)
+	root := crap_tester.New(t).Module()
 	o := crap_tester.Option(root)
 	o.FailAbove = true
 	o.Threshold = 100
@@ -191,18 +189,17 @@ func TestRunFailAboveThreshold(t *testing.T) {
 }
 
 func TestRunFailRegression(t *testing.T) {
-	root := crap_tester.Module(t)
+	root := crap_tester.New(t).Module()
 	o := crap_tester.Option(root)
 	o.Notation = true
 	o.Profile = ""
 	r := assert.Capture(t, func() { crap.Run(o) })
-	system_tester.Write(t, root, "baseline.json", r)
+	system_tester.New(t).Write(root, "baseline.json", r)
 	o.Notation = false
 	o.Baseline = filepath.Join(root, "baseline.json")
 	o.FailRegression = true
 	assert.Integer(t, 0, crap.Run(o))
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/a/covered.go",
 		`package a
@@ -226,9 +223,8 @@ func Covered(a bool) int {
 }
 
 func TestRunAttributeRefusesParallel(t *testing.T) {
-	root := crap_tester.Module(t)
-	system_tester.Write(
-		t,
+	root := crap_tester.New(t).Module()
+	system_tester.New(t).Write(
 		root,
 		"pkg/a/unit/parallel_test.go",
 		"package unit\n\nimport \"testing\"\n\nfunc TestParallel(t *testing.T) { t.Parallel() }\n",
@@ -244,7 +240,7 @@ func TestRunAttributeRefusesParallel(t *testing.T) {
 }
 
 func TestRunAttributeNotation(t *testing.T) {
-	root := crap_tester.Module(t)
+	root := crap_tester.New(t).Module()
 	o := option.NewAttribute()
 	o.Root = root
 	o.Patterns = []string{"./pkg/a/..."}

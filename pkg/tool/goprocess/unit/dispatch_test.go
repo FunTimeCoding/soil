@@ -14,18 +14,16 @@ import (
 )
 
 func TestSilentCommandPrintsNothing(t *testing.T) {
+	g := command_tester.New(t)
+
 	for _, arguments := range command_tester.SilentCommands() {
-		c := command_tester.Mock(t)
+		c := g.Mock()
 		var output, failure string
 		var code int
 		stray := assert.Capture(
 			t,
 			func() {
-				output, failure, code = command_tester.Run(
-					t,
-					c,
-					arguments...,
-				)
+				output, failure, code = g.Run(c, arguments...)
 			},
 		)
 		assert.Integer(t, 0, code)
@@ -36,6 +34,8 @@ func TestSilentCommandPrintsNothing(t *testing.T) {
 }
 
 func TestFailedCommandExitsWithItsMessage(t *testing.T) {
+	g := command_tester.New(t)
+
 	for _, arguments := range append(
 		command_tester.SilentCommands(),
 		[]string{"run", "restart-all"},
@@ -43,28 +43,25 @@ func TestFailedCommandExitsWithItsMessage(t *testing.T) {
 		[]string{"run", soil.List},
 		[]string{"run", "status"},
 	) {
-		c := command_tester.Mock(t)
+		c := g.Mock()
 		c.Failure = errors.New("foxtrot")
-		_, failure, code := command_tester.Run(t, c, arguments...)
+		_, failure, code := g.Run(c, arguments...)
 		assert.Integer(t, 1, code)
 		assert.StringContains(t, "foxtrot", failure)
 	}
 }
 
 func TestStopReachesProcess(t *testing.T) {
-	c := command_tester.Mock(t)
-	_, _, code := command_tester.Run(t, c, "run", "stop", "alfa")
+	g := command_tester.New(t)
+	c := g.Mock()
+	_, _, code := g.Run(c, "run", "stop", "alfa")
 	assert.Integer(t, 0, code)
 	assert.False(t, c.ProcessList[0].Running)
 }
 
 func TestRestartAllEmitsCount(t *testing.T) {
-	output, _, code := command_tester.Run(
-		t,
-		command_tester.Mock(t),
-		"run",
-		"restart-all",
-	)
+	g := command_tester.New(t)
+	output, _, code := g.Run(g.Mock(), "run", "restart-all")
 	assert.Integer(t, 0, code)
 	var r result.Restart
 	notation.MustDecode(output, &r, false)
@@ -72,12 +69,8 @@ func TestRestartAllEmitsCount(t *testing.T) {
 }
 
 func TestListEmitsNames(t *testing.T) {
-	output, _, code := command_tester.Run(
-		t,
-		command_tester.Mock(t),
-		"run",
-		soil.List,
-	)
+	g := command_tester.New(t)
+	output, _, code := g.Run(g.Mock(), "run", soil.List)
 	assert.Integer(t, 0, code)
 	var names []string
 	notation.MustDecode(output, &names, false)
@@ -85,12 +78,8 @@ func TestListEmitsNames(t *testing.T) {
 }
 
 func TestStatusEmitsProcesses(t *testing.T) {
-	output, _, code := command_tester.Run(
-		t,
-		command_tester.Mock(t),
-		"run",
-		"status",
-	)
+	g := command_tester.New(t)
+	output, _, code := g.Run(g.Mock(), "run", "status")
 	assert.Integer(t, 0, code)
 	var processes []client.Process
 	notation.MustDecode(output, &processes, false)
@@ -100,65 +89,46 @@ func TestStatusEmitsProcesses(t *testing.T) {
 }
 
 func TestLogPrintsLinesAndOlderHintApart(t *testing.T) {
-	c := command_tester.Mock(t)
+	g := command_tester.New(t)
+	c := g.Mock()
 	c.Logs["alfa"] = []string{"kilo", "lima"}
 	c.Older["alfa"] = 3
-	output, failure, code := command_tester.Run(t, c, "run", "log", "alfa")
+	output, failure, code := g.Run(c, "run", "log", "alfa")
 	assert.Integer(t, 0, code)
 	assert.String(t, "kilo\nlima\n", output)
 	assert.String(t, "(3 older lines, use: log alfa all)\n", failure)
 }
 
 func TestLogAllAsksForEverythingAndPrintsNoHint(t *testing.T) {
-	c := command_tester.Mock(t)
+	g := command_tester.New(t)
+	c := g.Mock()
 	c.Logs["alfa"] = []string{"kilo", "lima"}
 	c.Older["alfa"] = 3
-	output, failure, code := command_tester.Run(
-		t,
-		c,
-		"run",
-		"log",
-		"alfa",
-		"all",
-	)
+	output, failure, code := g.Run(c, "run", "log", "alfa", "all")
 	assert.Integer(t, 0, code)
 	assert.String(t, "kilo\nlima\n", output)
 	assert.String(t, "", failure)
 }
 
 func TestUnknownProcessIsNotFound(t *testing.T) {
-	_, failure, code := command_tester.Run(
-		t,
-		command_tester.Mock(t),
-		"run",
-		"restart",
-		"charlie",
-	)
+	g := command_tester.New(t)
+	_, failure, code := g.Run(g.Mock(), "run", "restart", "charlie")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "charlie", failure)
 }
 
 func TestUnknownCommandIsRefused(t *testing.T) {
-	_, failure, code := command_tester.Run(
-		t,
-		command_tester.Mock(t),
-		"run",
-		"wipe",
-	)
+	g := command_tester.New(t)
+	_, failure, code := g.Run(g.Mock(), "run", "wipe")
 	assert.Integer(t, 1, code)
 	assert.StringContains(t, "unknown command wipe", failure)
 }
 
 func TestCheckEmitsSortedEntryNames(t *testing.T) {
+	g := command_tester.New(t)
 	path := join.Join(t.TempDir(), "Procfile")
 	system.SaveFile(path, "bravo: sleep 1\nalfa: sleep 1\n")
-	output, _, code := command_tester.Run(
-		t,
-		command_tester.Mock(t),
-		"--file",
-		path,
-		"check",
-	)
+	output, _, code := g.Run(g.Mock(), "--file", path, "check")
 	assert.Integer(t, 0, code)
 	var names []string
 	notation.MustDecode(output, &names, false)

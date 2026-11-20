@@ -6,17 +6,8 @@ import (
 )
 
 func TestAboveBelowInteger(t *testing.T) {
-	math_tester.AssertAboveBelowInteger(
-		t,
-		math_tester.AboveBelow{Above: true},
-		1,
-		0,
-	)
-	math_tester.AssertAboveBelowInteger(
-		t,
-		math_tester.AboveBelow{Below: true},
-		-1,
-		0,
-	)
-	math_tester.AssertAboveBelowInteger(t, math_tester.AboveBelow{}, 0, 0)
+	m := math_tester.New(t)
+	m.AssertAboveBelowInteger(math_tester.AboveBelow{Above: true}, 1, 0)
+	m.AssertAboveBelowInteger(math_tester.AboveBelow{Below: true}, -1, 0)
+	m.AssertAboveBelowInteger(math_tester.AboveBelow{}, 0, 0)
 }

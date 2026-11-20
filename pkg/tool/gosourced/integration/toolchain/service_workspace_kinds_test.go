@@ -11,7 +11,7 @@ import (
 )
 
 func TestWorkspaceHandleCarriesSummaryKind(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	w := workspace.New(t.TempDir()).Workspace(directory)
 	assert.Integer(
 		t,

@@ -12,7 +12,7 @@ import (
 )
 
 func TestCallFormatFix(t *testing.T) {
-	directory := module_tester.CallFormat(t)
+	directory := module_tester.New(t).CallFormat()
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunCallFormatFix([]string{"./..."}, directory, r)
 	t.Run(
@@ -251,106 +251,91 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := fix_tester.Applied(r.Entries)
 			assert.Integer(t, 15, len(applied))
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"long_single_line.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"shared_line.go",
 				8,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"shared_line.go",
 				9,
 				"formatted composite literal",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"first_arg_on_paren_line.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"first_arg_on_paren_line.go",
 				5,
 				"formatted composite literal",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"nested_indent.go",
 				6,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"compliant.go",
 				5,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"multiple_violations.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"deep_method.go",
 				14,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"collapse_single_arg.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"boundary_at_80.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"collapse_multi_line.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"nested_long_line.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"exploded_nested.go",
 				4,
 				"formatted call",
 			)
-			fix_tester.LineResult(
-				t,
+			fix_tester.New(t).LineResult(
 				applied,
 				"exploded_nested.go",
 				5,
@@ -361,7 +346,7 @@ func TestCallFormatFix(t *testing.T) {
 	t.Run(
 		"SecondRunChangesNothing",
 		func(t *testing.T) {
-			fix_tester.SecondRunQuiet(t, directory)
+			fix_tester.New(t).SecondRunQuiet(directory)
 		},
 	)
 }

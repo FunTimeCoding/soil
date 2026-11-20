@@ -12,13 +12,18 @@ import (
 )
 
 func TestFixRefusedWhenReachedPackageChangesBeforeCommit(t *testing.T) {
-	directory := module_tester.NamesakeExported(t)
-	o := module_tester.Options(t, directory, false, false, "./alfa/...")
+	m := module_tester.New(t)
+	directory := m.NamesakeExported()
+	o := m.Options(directory, false, false, "./alfa/...")
 	o.BeforeCommit = func() {
-		system_tester.Write(t, directory, "bravo/extra.go", "package bravo\n")
+		system_tester.New(t).Write(
+			directory,
+			"bravo/extra.go",
+			"package bravo\n",
+		)
 	}
 	r := output.NewResultsWithDirectory(directory)
-	module_tester.RunDefault(t, o, r)
+	m.RunDefault(o, r)
 	assert.String(
 		t,
 		"package alfa\n\nfunc SendMsg() string {\n\treturn \"x\"\n}\n",
@@ -35,17 +40,17 @@ func TestFixRefusedWhenReachedPackageChangesBeforeCommit(t *testing.T) {
 }
 
 func TestFixCommitsPastChangeOutsideReach(t *testing.T) {
-	directory := module_tester.NamesakeExported(t)
-	o := module_tester.Options(t, directory, false, false, "./alfa/...")
+	m := module_tester.New(t)
+	directory := m.NamesakeExported()
+	o := m.Options(directory, false, false, "./alfa/...")
 	o.BeforeCommit = func() {
-		system_tester.Write(
-			t,
+		system_tester.New(t).Write(
 			directory,
 			"delta/other.go",
 			"package delta\n\nfunc Other() string {\n\treturn \"changed\"\n}\n",
 		)
 	}
-	module_tester.RunDefault(t, o, output.NewResultsWithDirectory(directory))
+	m.RunDefault(o, output.NewResultsWithDirectory(directory))
 	assert.String(
 		t,
 		"package alfa\n\nfunc SendMessage() string {\n\treturn \"x\"\n}\n",
@@ -54,18 +59,18 @@ func TestFixCommitsPastChangeOutsideReach(t *testing.T) {
 }
 
 func TestFixRefusedWhenReplacingModuleChangesBeforeCommit(t *testing.T) {
-	library := module_tester.ReplacedLibrary(t)
-	user := module_tester.ReplacingUser(
-		t,
+	m := module_tester.New(t)
+	library := m.ReplacedLibrary()
+	user := m.ReplacingUser(
 		library,
 		"package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMsg()\n}\n",
 	)
-	o := module_tester.Options(t, library, false, false, "./alfa/...")
+	o := m.Options(library, false, false, "./alfa/...")
 	o.Replacing = []string{user}
 	o.BeforeCommit = func() {
-		system_tester.Write(t, user, "user/extra.go", "package user\n")
+		system_tester.New(t).Write(user, "user/extra.go", "package user\n")
 	}
-	module_tester.RunDefault(t, o, output.NewResultsWithDirectory(library))
+	m.RunDefault(o, output.NewResultsWithDirectory(library))
 	assert.String(
 		t,
 		"package user\n\nimport \"other.test/lib/alfa\"\n\nfunc Use() string {\n\treturn alfa.SendMsg()\n}\n",

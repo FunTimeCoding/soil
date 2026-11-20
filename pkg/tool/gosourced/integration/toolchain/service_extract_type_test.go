@@ -30,19 +30,19 @@ func TestExtractType(t *testing.T) {
 	_, e = os.Stat(filepath.Join(o.Directory, "pkg/target/save.go"))
 	assert.True(t, os.IsNotExist(e))
 	store := o.Read("pkg/model/store.go")
-	rewrite_tester.Formatted(t, store)
+	rewrite_tester.New(t).Formatted(store)
 	assert.StringContains(t, "package model", store)
 	assert.StringContains(t, "Name string", store)
 	save := o.Read("pkg/model/save.go")
-	rewrite_tester.Formatted(t, save)
+	rewrite_tester.New(t).Formatted(save)
 	assert.StringContains(t, "func (s *Store) Save() string", save)
 	assert.StringContains(t, "return s.Name", save)
 	run := o.Read("pkg/target/run.go")
-	rewrite_tester.Formatted(t, run)
+	rewrite_tester.New(t).Formatted(run)
 	assert.StringContains(t, "v := model.Store{Name: \"alfa\"}", run)
 	assert.StringContains(t, "return v.Save()", run)
 	caller := o.Read("pkg/caller/run.go")
-	rewrite_tester.Formatted(t, caller)
+	rewrite_tester.New(t).Formatted(caller)
 	assert.StringContains(t, "func Run() *model.Store", caller)
 	assert.StringContains(t, "return &model.Store{}", caller)
 	assert.False(t, strings.Contains(caller, "target"))
@@ -68,7 +68,7 @@ func TestExtractTypeIntoNamesakePackageImportsPlain(t *testing.T) {
 	queue := o.Read("pkg/alfa/queue.go")
 	assert.StringContains(t, "import \"example/pkg/alfa/waiter\"\n", queue)
 	assert.StringContains(t, "[]*waiter.Waiter", queue)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestExtractTypeInternalStaysUnexported(t *testing.T) {
@@ -89,7 +89,7 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	helper := o.Read("pkg/model/helper.go")
-	rewrite_tester.Formatted(t, helper)
+	rewrite_tester.New(t).Formatted(helper)
 	assert.StringContains(t, "func (s *Store) helper() string", helper)
 	describe := o.Read("pkg/model/describe.go")
 	assert.StringContains(t, "return s.helper()", describe)
@@ -134,9 +134,8 @@ func TestExtractTypeQualifiesBackReference(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	rewrite_tester.FixedContains(t, "prefix → Prefix", r)
-	rewrite_tester.FixedContains(
-		t,
+	rewrite_tester.New(t).FixedContains("prefix → Prefix", r)
+	rewrite_tester.New(t).FixedContains(
 		"prefix → target.Prefix (back reference)",
 		r,
 	)
@@ -150,7 +149,7 @@ func TestExtractTypeQualifiesBackReference(t *testing.T) {
 		"func Prefix() string",
 		o.Read("pkg/target/prefix.go"),
 	)
-	rewrite_tester.Compiles(t, o.Directory)
+	rewrite_tester.New(t).Compiles(o.Directory)
 }
 
 func TestExtractTypeBackReferenceCycleRefused(t *testing.T) {
@@ -215,10 +214,10 @@ func TestExtractTypeUnexported(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/model/store.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "type Store struct{}", moved)
 	factory := o.Read("pkg/target/new.go")
-	rewrite_tester.Formatted(t, factory)
+	rewrite_tester.New(t).Formatted(factory)
 	assert.StringContains(t, "func New() *model.Store", factory)
 	assert.StringContains(t, "return &model.Store{}", factory)
 }
@@ -241,7 +240,7 @@ func TestExtractTypeTargetFile(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	moved := o.Read("pkg/model/store.go")
-	rewrite_tester.Formatted(t, moved)
+	rewrite_tester.New(t).Formatted(moved)
 	assert.StringContains(t, "type Store struct{}", moved)
 	assert.StringContains(t, "func (s *Store) helper() string", moved)
 	assert.StringContains(t, "func (s *Store) Describe() string", moved)

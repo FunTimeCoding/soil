@@ -10,11 +10,9 @@ import (
 	"net/http"
 	"slices"
 	"strings"
-	"testing"
 )
 
-func Operations(
-	t *testing.T,
+func (o *Tester) Operations(
 	serve func(*memory.Memory) (*model_context_server.Server, func() error),
 	spec *openapi3.T,
 	usual constant.OutageReach,
@@ -22,15 +20,15 @@ func Operations(
 	parameters map[string]string,
 	bodies map[string]string,
 ) {
-	t.Helper()
+	o.t.Helper()
 	r := memory.New()
 	var served []string
 	var problems []string
 
 	for path, item := range spec.Paths.Map() {
-		for method, o := range item.Operations() {
-			served = append(served, o.OperationID)
-			want, okay := exceptions[o.OperationID]
+		for method, operation := range item.Operations() {
+			served = append(served, operation.OperationID)
+			want, okay := exceptions[operation.OperationID]
 
 			if !okay {
 				want = usual
@@ -38,14 +36,21 @@ func Operations(
 
 			before := len(r.Events())
 			s, unavailable := serve(r)
-			answered, e := status(t, s, path, method, o, parameters, bodies)
+			answered, e := o.status(
+				s,
+				path,
+				method,
+				operation,
+				parameters,
+				bodies,
+			)
 			reached := unavailable() != nil
 			s.Close()
 
 			if e != nil {
 				problems = append(
 					problems,
-					fmt.Sprintf("%s: no answer: %v", o.OperationID, e),
+					fmt.Sprintf("%s: no answer: %v", operation.OperationID, e),
 				)
 
 				continue
@@ -54,7 +59,7 @@ func Operations(
 			problems = append(
 				problems,
 				operationProblems(
-					o.OperationID,
+					operation.OperationID,
 					want,
 					answered == http.StatusServiceUnavailable,
 					answered == http.StatusServiceUnavailable,
@@ -67,10 +72,10 @@ func Operations(
 	}
 
 	if len(served) == 0 {
-		t.Fatal("the specification lists no operations")
+		o.t.Fatal("the specification lists no operations")
 	}
 
 	problems = append(problems, declared(served, exceptions, bodies)...)
 	slices.Sort(problems)
-	assert.String(t, "", strings.Join(problems, ", "))
+	assert.String(o.t, "", strings.Join(problems, ", "))
 }

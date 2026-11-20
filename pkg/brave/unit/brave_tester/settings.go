@@ -14,15 +14,15 @@ func Settings(
 ) {
 	t.Helper()
 	profile := filepath.Join(
-		system_tester.Home(t),
+		system_tester.New(t).Home(),
 		constant.BraveSettings,
 		constant.DefaultProfile,
 	)
-	system_tester.Write(t, profile, constant.PreferencesFile, preferences)
+	system_tester.New(t).Write(profile, constant.PreferencesFile, preferences)
 
 	if bookmarks == "" {
 		return
 	}
 
-	system_tester.Write(t, profile, constant.BookmarksFile, bookmarks)
+	system_tester.New(t).Write(profile, constant.BookmarksFile, bookmarks)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func TestMarkedAfterMarkForSameNameAndBuild(t *testing.T) {
-	directory := kind_tester.Module(t)
+	directory := kind_tester.New(t).Module()
 	store := t.TempDir()
 	first := index.New(store, directory).WithFingerprint("alfa")
 	assert.False(t, first.Marked("bravo", "charlie"))

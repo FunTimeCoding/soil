@@ -6,6 +6,7 @@ import (
 )
 
 func TestSeriesSum(t *testing.T) {
-	math_tester.AssertSeriesSum(t, 1, 1)
-	math_tester.AssertSeriesSum(t, 45, 9)
+	m := math_tester.New(t)
+	m.AssertSeriesSum(1, 1)
+	m.AssertSeriesSum(45, 9)
 }

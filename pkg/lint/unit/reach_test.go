@@ -125,20 +125,22 @@ func TestReachResolvesAndCountsBashWritesFromLineDirectory(t *testing.T) {
 func TestReachTakesImportersAndKeepsDocumentsApart(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Alfa() {}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example.org/reach/alfa\"\n\nfunc Bravo() { alfa.Alfa() }\n",
 	)
-	system_tester.Write(t, root, "charlie/charlie.go", "package charlie\n")
-	system_tester.Write(t, root, "alfa/testdata/delta.go", "package delta\n")
+	system_tester.New(t).Write(root, "charlie/charlie.go", "package charlie\n")
+	system_tester.New(t).Write(
+		root,
+		"alfa/testdata/delta.go",
+		"package delta\n",
+	)
 	r := reach.Directories(
 		warm_forest.New(),
 		root,
@@ -155,8 +157,7 @@ func TestReachTakesImportersAndKeepsDocumentsApart(t *testing.T) {
 func TestReachKeepsImportersOfDeletedPackageAndDropsIt(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"bravo/bravo.go",
 		"package bravo\n\nimport \"example.org/reach/alfa\"\n\nfunc Bravo() { alfa.Alfa() }\n",
@@ -172,8 +173,7 @@ func TestReachKeepsImportersOfDeletedPackageAndDropsIt(t *testing.T) {
 func TestReachCarriesGraphItWidenedThrough(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteModFile(t, root, "example.org/reach")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"alfa/alfa.go",
 		"package alfa\n\nfunc Alfa() {}\n",

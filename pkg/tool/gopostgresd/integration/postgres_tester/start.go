@@ -7,17 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 	"strconv"
-	"testing"
 	"time"
 )
 
-func Start(
-	t *testing.T,
-	directory string,
-) (string, *instance.Instance) {
-	t.Helper()
+func (o *Tester) Start(directory string) (string, *instance.Instance) {
+	o.t.Helper()
 	port, l := system.ClaimPort()
-	assert.FatalOnError(t, l.Close())
+	assert.FatalOnError(o.t, l.Close())
 	container := fmt.Sprintf("gopostgresd-backup-%d", port)
 	i := instance.Instance{
 		Name:     "alfa",
@@ -49,8 +45,8 @@ func Start(
 		"-p",
 		strconv.Itoa(port),
 	)
-	assert.FatalOnError(t, r.Error)
-	t.Cleanup(
+	assert.FatalOnError(o.t, r.Error)
+	o.t.Cleanup(
 		func() {
 			run.New().NoPanic().Start("podman", "rm", "--force", container)
 		},
@@ -75,7 +71,7 @@ func Start(
 		}
 
 		if time.Now().After(deadline) {
-			t.Fatalf("postgres not ready: %v", ready.Error)
+			o.t.Fatalf("postgres not ready: %v", ready.Error)
 		}
 
 		time.Sleep(200 * time.Millisecond)

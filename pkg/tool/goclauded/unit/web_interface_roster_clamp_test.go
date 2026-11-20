@@ -22,7 +22,7 @@ func TestRosterCardClampsDescriptionAndKeepsItWhole(t *testing.T) {
 		),
 	)
 	page := s.Body(t, constant.DashboardPath)
-	markup_tester.AssertCount(t, 1, page, "p.card-meta.card-clamp")
+	markup_tester.New(t).AssertCount(1, page, "p.card-meta.card-clamp")
 	assert.StringContains(
 		t,
 		"Charted the session from start to end, every turn read and every file named",
@@ -43,7 +43,7 @@ func TestRosterCardClampsTopicAndKeepsItWhole(t *testing.T) {
 		),
 	)
 	page := s.Body(t, constant.DashboardPath)
-	markup_tester.AssertCount(t, 1, page, "p.card-subtitle.card-clamp")
+	markup_tester.New(t).AssertCount(1, page, "p.card-subtitle.card-clamp")
 	assert.StringContains(
 		t,
 		"lead: lanes for the language, the count, the wire and the whiteboard",

@@ -19,14 +19,12 @@ func TestScopedLoadHandedToFixServesScopedAnalysis(t *testing.T) {
 	root, e := filepath.EvalSymlinks(t.TempDir())
 	assert.FatalOnError(t, e)
 	testutil.WriteModFile(t, root, "example")
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/response/types.go",
 		"package response\n\ntype LinkResponse struct {\n\tName string\n}\n\ntype Note struct {\n\tBody string\n}\n",
 	)
-	system_tester.Write(
-		t,
+	system_tester.New(t).Write(
 		root,
 		"pkg/other/other.go",
 		"package other\n\ntype FoxtrotOther struct {\n\tName string\n}\n\ntype Golf struct {\n\tBody string\n}\n",
