@@ -98,7 +98,7 @@ require (
 	golang.org/x/oauth2 v0.38.0
 	golang.org/x/sys v0.50.0
 	golang.org/x/time v0.16.0
-	golang.org/x/tools v0.52.0
+	golang.org/x/tools v0.53.0
 	gonum.org/v1/gonum v0.17.0
 	google.golang.org/api v0.315.0
 	google.golang.org/protobuf v1.36.12
