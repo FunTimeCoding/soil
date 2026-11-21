@@ -38,7 +38,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.9.2
 	github.com/go-git/go-git/v5 v5.19.3
 	github.com/go-ldap/ldap/v3 v3.4.15
-	github.com/go-openapi/runtime v0.33.4
+	github.com/go-openapi/runtime v0.33.5
 	github.com/go-openapi/strfmt v0.27.4
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/go-test/deep v1.1.2
