@@ -12,7 +12,7 @@ func Tiles(o *overview_result.Result) gomponents.Node {
 			count(o.Open, "Open"),
 			count(o.Critical, "Critical, 9.0 or more"),
 			count(o.DebianFix, "Debian fix available"),
-			count(o.OwnWork, "Need our own work"),
+			count(o.LocalAction, "Fix needs local action"),
 		},
 	).Node()
 }

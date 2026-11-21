@@ -16,7 +16,7 @@ func (s *Store) Create(v *flag.Flag) error {
 	}
 
 	if r.RowsAffected == 0 {
-		return conflict.Exists(constant.FlagKind, v.Vulnerability)
+		return conflict.Exists(constant.FlagKind, v.Subject)
 	}
 
 	return nil

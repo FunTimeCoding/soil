@@ -16,5 +16,9 @@ type Client struct {
 	updated         map[string]time.Time
 	details         map[string]*client.SystemDetail
 	groups          []*client.FindingGroup
+	upgrades        []client.UpgradeGroup
+	remediation     []client.RemediationItem
+	affected        map[string]*client.AffectedSystems
+	scoreStatus     client.ScoreStatus
 	mutex           sync.Mutex
 }

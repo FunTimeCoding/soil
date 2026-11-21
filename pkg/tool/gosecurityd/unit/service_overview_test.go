@@ -10,7 +10,7 @@ import (
 func TestOverviewCountsAndClassifiesOpenFlags(t *testing.T) {
 	o := security_tester.New(t)
 	o.NationalDatabase.SeedVulnerability(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CRITICAL",
 		10.0,
 	)
@@ -27,7 +27,7 @@ func TestOverviewCountsAndClassifiesOpenFlags(t *testing.T) {
 	f := o.Flag()
 
 	for _, name := range []string{
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CVE-2099-22222",
 		"CVE-2099-33333",
 	} {
@@ -40,21 +40,21 @@ func TestOverviewCountsAndClassifiesOpenFlags(t *testing.T) {
 	assert.Integer(t, 3, r.Open)
 	assert.Integer(t, 1, r.Critical)
 	assert.Integer(t, 1, r.DebianFix)
-	assert.Integer(t, 1, r.OwnWork)
+	assert.Integer(t, 1, r.LocalAction)
 	assert.Count(t, 3, r.Rows)
-	assert.String(t, "CVE-2024-3094", r.Rows[0].Flag.Vulnerability)
+	assert.String(t, "CVE-2099-00001", r.Rows[0].Flag.Subject)
 	assert.String(t, "debian fix", r.Rows[0].Fix)
-	assert.String(t, "CVE-2099-22222", r.Rows[1].Flag.Vulnerability)
-	assert.String(t, "own work", r.Rows[1].Fix)
+	assert.String(t, "CVE-2099-22222", r.Rows[1].Flag.Subject)
+	assert.String(t, "local action", r.Rows[1].Fix)
 	assert.String(t, "no tracker data", r.Rows[2].Fix)
 }
 
 func TestOverviewCountsOnlyOpenFlags(t *testing.T) {
 	o := security_tester.New(t)
 	f := o.Flag()
-	_, e := f.Flag(t.Context(), vulnerabilityConstant.KnownIdentifier, "")
+	_, e := f.Flag(t.Context(), vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, e)
-	_, g := f.Mitigate(vulnerabilityConstant.KnownIdentifier, "")
+	_, g := f.Mitigate(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, g)
 	r, h := o.Overview().Overview("all")
 	assert.FatalOnError(t, h)

@@ -12,11 +12,18 @@ func (s *Server) systems(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	filter := r.URL.Query().Get(constant.ShowField)
-	b, e := s.system.Board(filter)
+	selected, e := selection(r)
 
 	if e != nil {
 		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
+	b, f := s.system.Board(selected)
+
+	if f != nil {
+		s.view.Answer(w, r, s.reporter, f)
 
 		return
 	}
@@ -27,7 +34,8 @@ func (s *Server) systems(
 		constant.SystemsPath,
 		html.H1(gomponents.Text(constant.SystemsTitle)),
 		system_page.Tiles(b),
-		system_page.Filter(filter),
+		system_page.Filter(selected, b),
 		system_page.Table(b.Rows),
+		system_page.ScoreLine(s.score.Status()),
 	)
 }

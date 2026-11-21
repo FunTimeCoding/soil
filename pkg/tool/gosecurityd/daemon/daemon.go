@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/debian"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/flag"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/remediation"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/score"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/vulnerability"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/web"
@@ -25,7 +27,10 @@ type Daemon struct {
 	debian           *debian.Service
 	flag             *flag.Service
 	system           *system.Service
+	score            *score.Service
+	remediation      *remediation.Service
 	web              *web.Server
 	clock            *worker.Worker
+	scoreClock       *worker.Worker
 	closeOnce        sync.Once
 }

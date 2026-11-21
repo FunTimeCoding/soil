@@ -11,6 +11,7 @@ func (o *Tester) System() *system.Service {
 	return system.New(
 		o.Store(),
 		o.Debian(),
+		o.Score(),
 		o.now,
 		constant.StaleAfter,
 		constant.TrackerStaleAfter,

@@ -12,13 +12,13 @@ import (
 func TestCreatingFlaggedVulnerabilityAgainIsConflict(t *testing.T) {
 	s := security_tester.New(t).Store()
 	first := flag.Stub()
-	first.Vulnerability = vulnerabilityConstant.KnownIdentifier
+	first.Subject = vulnerabilityConstant.FixtureIdentifier
 	assert.FatalOnError(t, s.Create(first))
 	second := flag.Stub()
-	second.Vulnerability = vulnerabilityConstant.KnownIdentifier
+	second.Subject = vulnerabilityConstant.FixtureIdentifier
 	e := s.Create(second)
 	assert.True(t, conflict.Is(e))
-	assert.String(t, "flag already exists: CVE-2024-3094", e.Error())
+	assert.String(t, "flag already exists: CVE-2099-00001", e.Error())
 }
 
 func TestFlagRacingAnotherSubmitIsConflict(t *testing.T) {
@@ -26,13 +26,13 @@ func TestFlagRacingAnotherSubmitIsConflict(t *testing.T) {
 	o.NationalDatabase.During(
 		func() {
 			competing := flag.Stub()
-			competing.Vulnerability = vulnerabilityConstant.KnownIdentifier
+			competing.Subject = vulnerabilityConstant.FixtureIdentifier
 			assert.FatalOnError(t, o.Store().Create(competing))
 		},
 	)
 	_, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.True(t, conflict.Is(e))

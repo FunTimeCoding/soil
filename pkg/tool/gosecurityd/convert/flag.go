@@ -7,7 +7,7 @@ import (
 
 func Flag(v *flag.Flag) *server.Flag {
 	result := &server.Flag{
-		Identifier: v.Vulnerability,
+		Identifier: v.Subject,
 		Note:       optional(v.Note),
 		Severity:   optional(v.Severity),
 		Mitigated:  v.Mitigated,

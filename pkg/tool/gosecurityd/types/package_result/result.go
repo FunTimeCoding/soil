@@ -7,6 +7,8 @@ import (
 
 type Result struct {
 	Summary *system_result.Summary
+	Kernel  []*package_group.Group
+	Reboot  []*package_group.Group
 	Upgrade []*package_group.Group
 	Pending []*package_group.Group
 	Paid    []*package_group.Group

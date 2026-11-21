@@ -81,6 +81,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/vulnerability/{identifier}/systems:
+    get:
+      operationId: getAffectedSystems
+      parameters:
+      - $ref: "#/components/parameters/Identifier"
+      responses:
+        "200":
+          description: The systems the vulnerability hits, with where each one's fix is.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AffectedSystems"
+        "400":
+          description: The identifier is not a CVE identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the systems.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/flags:
     get:
       operationId: listFlags
@@ -123,13 +147,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Flag"
         "400":
-          description: The identifier is not a CVE identifier.
+          description: The identifier is neither a CVE identifier nor a remediation item subject.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "409":
-          description: The vulnerability is already flagged and open.
+          description: The subject is already flagged and open.
           content:
             application/json:
               schema:
@@ -191,6 +215,8 @@ paths:
   /api/systems:
     get:
       operationId: listSystems
+      parameters:
+      - $ref: "#/components/parameters/Score"
       responses:
         "200":
           description: Systems with their tracker coverage and finding counts.
@@ -202,6 +228,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/SystemSummary"
+        "400":
+          description: The score is outside 0 to 10.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list systems.
           content:
@@ -280,9 +312,11 @@ paths:
   /api/findings:
     get:
       operationId: listFindings
+      parameters:
+      - $ref: "#/components/parameters/Score"
       responses:
         "200":
-          description: Findings grouped by vulnerability, most systems first.
+          description: Findings grouped by vulnerability, the highest score first, then the most systems.
           content:
             application/json:
               schema:
@@ -291,8 +325,109 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/FindingGroup"
+        "400":
+          description: The score is outside 0 to 10.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list findings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/remediation:
+    get:
+      operationId: listRemediation
+      parameters:
+      - name: score
+        in: query
+        required: false
+        description: The lowest score a finding needs to count; empty means 9.0 (critical).
+        schema:
+          type: number
+          format: double
+      responses:
+        "200":
+          description: The remediation list - upgrades, vulnerabilities without an upgrade, release upgrades and reboots - open items first, the most hosts times vulnerabilities first.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RemediationList"
+        "400":
+          description: The score is outside 0 to 10.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to build the remediation list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/scores:
+    get:
+      operationId: getScoreStatus
+      responses:
+        "200":
+          description: How far the score mirror of the National Vulnerability Database has come.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScoreStatus"
+  /api/upgrades:
+    get:
+      operationId: listUpgrades
+      parameters:
+      - name: show
+        in: query
+        required: false
+        description: A release codename to narrow to, or kernel for the kernel packages; empty lists every release without the kernel.
+        schema:
+          type: string
+      - $ref: "#/components/parameters/Score"
+      responses:
+        "200":
+          description: Package upgrades by release and source package, the most hosts times vulnerabilities first.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpgradeList"
+        "400":
+          description: The filter names no known release, or the score is outside 0 to 10.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to list upgrades.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/upgrades/{release}/{source}:
+    get:
+      operationId: getUpgrade
+      parameters:
+      - $ref: "#/components/parameters/Release"
+      - $ref: "#/components/parameters/Source"
+      responses:
+        "200":
+          description: One package upgrade with its hosts and the binary packages each host upgrades.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpgradeGroup"
+        "404":
+          description: No upgrade fixes anything for that source package on that release.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the upgrade.
           content:
             application/json:
               schema:
@@ -311,6 +446,26 @@ components:
       required: true
       schema:
         type: string
+    Release:
+      name: release
+      in: path
+      required: true
+      schema:
+        type: string
+    Source:
+      name: source
+      in: path
+      required: true
+      schema:
+        type: string
+    Score:
+      name: score
+      in: query
+      required: false
+      description: The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+      schema:
+        type: number
+        format: double
   schemas:
     Vulnerability:
       type: object
@@ -399,6 +554,7 @@ components:
       properties:
         identifier:
           type: string
+          description: A CVE identifier, or a remediation item subject - upgrade:<release>:<source>, release:<host> or reboot:<host>.
         note:
           type: string
         severity:
@@ -470,6 +626,34 @@ components:
             nullable: true
             allOf:
             - $ref: "#/components/schemas/InstalledPackage"
+        lists_updated:
+          type: string
+          format: date-time
+          description: The date of the newest package index the host holds (its newest Release or InRelease file).
+        kernel_offers:
+          type: array
+          description: The versions the host's sources offer for its kernel metapackage, as apt-cache policy lists them.
+          items:
+            $ref: "#/components/schemas/KernelOffer"
+        kernel_metapackage_installed:
+          type: boolean
+          description: Whether the kernel metapackage is installed, from apt-cache policy's Installed line; absent when not reported. Without it apt never offers a kernel upgrade.
+    KernelOffer:
+      type: object
+      required:
+      - version
+      - priority
+      - origins
+      properties:
+        version:
+          type: string
+        priority:
+          type: integer
+        origins:
+          type: array
+          description: Where apt finds this version, e.g. "http://deb.debian.org/debian bookworm-backports/main", or /var/lib/dpkg/status for the installed one.
+          items:
+            type: string
     SystemSummary:
       type: object
       required:
@@ -486,6 +670,12 @@ components:
       - updated
       - stale
       - tracker_stale
+      - reboot
+      - kernel_state
+      - kernel_findings
+      - kernel_with_fix
+      - critical
+      - top_score
       properties:
         name:
           type: string
@@ -508,12 +698,52 @@ components:
           type: boolean
         findings:
           type: integer
+          description: Package findings, the kernel left out.
         no_fix:
           type: integer
+          description: Package findings without a fix.
         paid_only:
           type: integer
+          description: Package findings with a fix only in paid support.
         upgradable:
           type: integer
+          description: Package findings an upgrade fixes.
+        reboot:
+          type: integer
+          description: Kernel findings a reboot into an already installed newer kernel fixes.
+        kernel_state:
+          type: string
+          description: The kernel's state - up to date, reboot fixes it, upgrade and reboot, no upgrade path, paid support only, or no kernel data.
+        kernel_reason:
+          type: string
+          description: Why some of Debian's kernel fixes are out of the host's reach, from its sources and package lists; set whenever any are, not only when the kernel has no upgrade path.
+        kernel_findings:
+          type: integer
+          description: Kernel findings, with and without a fix.
+        kernel_with_fix:
+          type: integer
+          description: Kernel findings with a fix in Debian or paid support.
+        critical:
+          type: integer
+          description: Vulnerabilities scored 9.0 or higher (critical), the kernel included, each counted once.
+        top_score:
+          type: number
+          format: double
+          description: The highest score among the system's vulnerabilities; 0 when none is scored.
+        lists_updated:
+          type: string
+          format: date-time
+          description: The date of the newest package index the host holds.
+        kernel_offers:
+          type: array
+          items:
+            $ref: "#/components/schemas/KernelOffer"
+        running_kernel:
+          type: string
+          description: The running kernel image's version.
+        newest_kernel:
+          type: string
+          description: The newest installed kernel image's version, without a backports suffix.
         updated:
           type: string
           format: date-time
@@ -537,6 +767,8 @@ components:
       - fix
       - urgency
       - upgradable
+      - reboot
+      - kernel
       properties:
         vulnerability:
           type: string
@@ -554,6 +786,18 @@ components:
           type: string
         upgradable:
           type: boolean
+        reboot:
+          type: boolean
+          description: A newer installed kernel image already has the fix; a reboot into it fixes this.
+        kernel:
+          type: boolean
+          description: The finding is on the running kernel, matched by its image version.
+        score:
+          type: number
+          format: double
+          description: The vulnerability's base score from the score mirror; absent while the National Vulnerability Database has not scored it or the mirror has not reached it.
+        severity:
+          type: string
     SystemDetail:
       type: object
       required:
@@ -573,22 +817,288 @@ components:
       required:
       - vulnerability
       - systems
-      - no_fix
-      - paid_only
-      - upgradable
+      - count
+      - unimportant
       properties:
         vulnerability:
+          type: string
+        unimportant:
+          type: boolean
+          description: Debian marks it unimportant on every system it hits; it never enters the remediation list.
+        score:
+          type: number
+          format: double
+          description: The vulnerability's score from the score mirror; absent when the National Vulnerability Database has not scored it.
+        severity:
           type: string
         systems:
           type: array
           items:
             type: string
-        no_fix:
+        count:
+          $ref: "#/components/schemas/AffectedCount"
+    RemediationList:
+      type: object
+      required:
+      - items
+      - open
+      - addressed
+      - unimportant
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/RemediationItem"
+        open:
           type: integer
-        paid_only:
+        addressed:
           type: integer
-        upgradable:
+          description: Items a decision covers with a mitigation or accepted risk.
+        unimportant:
           type: integer
+          description: Vulnerabilities left out because Debian marks them unimportant.
+    RemediationItem:
+      type: object
+      required:
+      - subject
+      - kind
+      - hosts
+      - vulnerabilities
+      - top_score
+      - unknown
+      - addressed
+      properties:
+        subject:
+          type: string
+          description: What a decision is keyed by - upgrade:<release>:<source>, a CVE identifier, release:<host> or reboot:<host>.
+        kind:
+          type: string
+          description: upgrade, vulnerability (no upgrade on these hosts), release (the host's release is unsupported or untracked), reboot (a newer kernel is installed) or kernel (Debian has kernel fixes the host's sources do not reach).
+        release:
+          type: string
+        source:
+          type: string
+        reason:
+          type: string
+          description: For a kernel item, why the fixes are out of reach - no backports source, package lists N days old, or what the sources offer.
+        hosts:
+          type: array
+          items:
+            type: string
+        vulnerabilities:
+          type: array
+          items:
+            type: string
+        top_score:
+          type: number
+          format: double
+        unknown:
+          type: boolean
+          description: The host's release has no tracker, so its vulnerabilities are unknown.
+        count:
+          $ref: "#/components/schemas/AffectedCount"
+        addressed:
+          type: boolean
+        decision:
+          $ref: "#/components/schemas/Flag"
+    ScoreStatus:
+      type: object
+      required:
+      - filled
+      - mirrored
+      - start
+      - total
+      properties:
+        filled:
+          type: boolean
+          description: The first fill is complete; after it, only changes are fetched.
+        mirrored:
+          type: integer
+          description: Vulnerabilities with a stored score row.
+        start:
+          type: integer
+          description: How far the first fill has paged through the National Vulnerability Database's catalogue.
+        total:
+          type: integer
+          description: The catalogue's size at the last page.
+        synced:
+          type: string
+          format: date-time
+          description: When the mirror last caught up with the National Vulnerability Database's changes.
+    AffectedCount:
+      type: object
+      required:
+      - systems
+      - reboot
+      - upgrade
+      - pending
+      - paid
+      - open
+      properties:
+        systems:
+          type: integer
+        reboot:
+          type: integer
+          description: Systems where a reboot into an installed newer kernel fixes it.
+        upgrade:
+          type: integer
+          description: Systems where an upgrade from their package lists fixes it.
+        pending:
+          type: integer
+          description: Systems where Debian has a fix that is not in their upgrade candidate yet.
+        paid:
+          type: integer
+          description: Systems where the fix is only in paid support.
+        open:
+          type: integer
+          description: Systems with no fix yet.
+    AffectedSystem:
+      type: object
+      required:
+      - system
+      - coverage
+      - priority
+      - source
+      - installed
+      - fixed
+      - candidate
+      - kind
+      properties:
+        system:
+          type: string
+        coverage:
+          type: string
+        priority:
+          type: integer
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        source:
+          type: string
+        installed:
+          type: string
+        fixed:
+          type: string
+        candidate:
+          type: string
+        kind:
+          type: string
+          description: upgrade fixes it, debian fix not in candidate, paid support only, or no fix yet.
+    AffectedSystems:
+      type: object
+      required:
+      - identifier
+      - count
+      - systems
+      properties:
+        score:
+          type: number
+          format: double
+          description: The vulnerability's base score from the score mirror.
+        severity:
+          type: string
+        identifier:
+          type: string
+        count:
+          $ref: "#/components/schemas/AffectedCount"
+        systems:
+          type: array
+          items:
+            $ref: "#/components/schemas/AffectedSystem"
+    UpgradeHost:
+      type: object
+      required:
+      - name
+      - priority
+      - installed
+      - candidate
+      properties:
+        name:
+          type: string
+        priority:
+          type: integer
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        installed:
+          type: string
+          description: The installed source package version.
+        candidate:
+          type: string
+          description: The upgrade candidate from the host's package lists.
+        binaries:
+          type: array
+          description: The host's binary packages from this source with an upgrade candidate; only on a single upgrade.
+          items:
+            type: string
+    UpgradeGroup:
+      type: object
+      required:
+      - release
+      - source
+      - kernel
+      - hosts
+      - vulnerabilities
+      - fixed
+      - installed_lowest
+      - installed_highest
+      - candidate
+      - top_score
+      properties:
+        top_score:
+          type: number
+          format: double
+          description: The highest score among the vulnerabilities the upgrade fixes; 0 when none is scored.
+        release:
+          type: string
+        source:
+          type: string
+        kernel:
+          type: boolean
+        hosts:
+          type: array
+          items:
+            $ref: "#/components/schemas/UpgradeHost"
+        vulnerabilities:
+          type: array
+          description: The vulnerabilities the upgrade fixes, by CVE identifier.
+          items:
+            type: string
+        fixed:
+          type: string
+          description: The highest fixed version among those vulnerabilities.
+        installed_lowest:
+          type: string
+        installed_highest:
+          type: string
+        candidate:
+          type: string
+          description: The highest upgrade candidate among the hosts.
+    UpgradeList:
+      type: object
+      required:
+      - groups
+      - hosts
+      - vulnerabilities
+      - releases
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/UpgradeGroup"
+        hosts:
+          type: integer
+          description: Distinct hosts with at least one listed upgrade.
+        vulnerabilities:
+          type: integer
+          description: Distinct vulnerabilities the listed upgrades fix.
+        releases:
+          type: array
+          description: Releases with any upgrade, for filtering.
+          items:
+            type: string
     Error:
       type: object
       required:

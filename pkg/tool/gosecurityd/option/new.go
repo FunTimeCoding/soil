@@ -5,7 +5,7 @@ import (
 	vulnerabilityConstant "github.com/funtimecoding/soil/pkg/vulnerability/constant"
 	"github.com/funtimecoding/soil/pkg/vulnerability/debian"
 	"github.com/funtimecoding/soil/pkg/vulnerability/face"
-	"github.com/funtimecoding/soil/pkg/vulnerability/nvd"
+	"github.com/funtimecoding/soil/pkg/vulnerability/national_database"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"time"
 )
@@ -17,7 +17,7 @@ func New() *Security {
 		TrackerStaleAfter: constant.TrackerStaleAfter,
 		Clock:             time.Now,
 		NationalDatabase: func() face.NationalDatabase {
-			return nvd.NewEnvironment()
+			return national_database.NewEnvironment()
 		},
 		SecurityTracker: func() face.SecurityTracker {
 			return debian.New()

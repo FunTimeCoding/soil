@@ -6,6 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/debian"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/flag"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/remediation"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/score"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/vulnerability"
 )
@@ -15,6 +17,8 @@ func New(
 	d *debian.Service,
 	f *flag.Service,
 	y *system.Service,
+	c *score.Service,
+	w *remediation.Service,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
@@ -24,6 +28,8 @@ func New(
 		debian:        d,
 		flag:          f,
 		system:        y,
+		score:         c,
+		remediation:   w,
 		reporter:      r,
 	}
 	result.register()

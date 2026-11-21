@@ -33,7 +33,10 @@ type Client interface {
 		name string,
 		b client.SystemSnapshot,
 	) error
-	ListSystems(x context.Context) ([]*client.SystemSummary, error)
+	ListSystems(
+		x context.Context,
+		p *client.ListSystemsParams,
+	) ([]*client.SystemSummary, error)
 	GetSystemFindings(
 		x context.Context,
 		name string,
@@ -42,7 +45,28 @@ type Client interface {
 		x context.Context,
 		name string,
 	) error
-	ListFindings(x context.Context) ([]*client.FindingGroup, error)
+	ListFindings(
+		x context.Context,
+		p *client.ListFindingsParams,
+	) ([]*client.FindingGroup, error)
+	GetScoreStatus(x context.Context) (*client.ScoreStatus, error)
+	GetAffectedSystems(
+		x context.Context,
+		identifier string,
+	) (*client.AffectedSystems, error)
+	ListUpgrades(
+		x context.Context,
+		p *client.ListUpgradesParams,
+	) (*client.UpgradeList, error)
+	GetUpgrade(
+		x context.Context,
+		release string,
+		source string,
+	) (*client.UpgradeGroup, error)
+	ListRemediation(
+		x context.Context,
+		p *client.ListRemediationParams,
+	) (*client.RemediationList, error)
 	Reachable(x context.Context) error
 	Address() string
 	Close()

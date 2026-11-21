@@ -31,9 +31,12 @@ func Table(rows []*system_result.Summary) gomponents.Node {
 				),
 				html.Td(gomponents.Text(v.Release)),
 				html.Td(CoverageBadge(v.Coverage)),
+				kernelCell(v),
+				criticalCell(v),
 				html.Td(gomponents.Text(strconv.Itoa(v.Upgradable))),
 				html.Td(gomponents.Text(strconv.Itoa(v.PaidOnly))),
-				html.Td(gomponents.Text(strconv.Itoa(v.NoFix))),
+				html.Td(html.Small(gomponents.Text(strconv.Itoa(v.NoFix)))),
+				layout.OptionalTimeCell(v.ListsUpdated, "not reported"),
 				reported,
 			),
 		)
@@ -43,12 +46,15 @@ func Table(rows []*system_result.Summary) gomponents.Node {
 		"System",
 		"Release",
 		"Coverage",
-		"Upgrade fixes",
+		"Kernel",
+		"9.0 or higher",
+		"Package upgrade fixes",
 		"Paid only",
 		"No fix",
+		"Package lists",
 		"Reported",
 	).
-		Numeric(3, 4, 5).
+		Numeric(4, 5, 6, 7).
 		Rows(nodes).
 		Empty("No systems have reported.").
 		Node()

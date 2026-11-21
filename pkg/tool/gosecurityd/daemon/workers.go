@@ -8,5 +8,6 @@ func (d *Daemon) Workers() []face.Worker {
 		d.trackerGuard,
 		d.extendedGuard,
 		d.clock,
+		d.scoreClock,
 	}
 }

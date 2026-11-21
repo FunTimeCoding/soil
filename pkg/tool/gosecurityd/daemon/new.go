@@ -11,6 +11,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/debian"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/flag"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/overview"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/remediation"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/score"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/vulnerability"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store"
@@ -31,7 +33,7 @@ func New(
 	n := o.NationalDatabase()
 	ng := peer.New(
 		constant.NationalDatabasePeer,
-		vulnerabilityConstant.NVDHost,
+		vulnerabilityConstant.NationalDatabaseHost,
 		n,
 		l,
 		r,
@@ -73,7 +75,9 @@ func New(
 	)
 	st := store.New(m)
 	f := flag.New(st, v)
-	y := system.New(st, d, o.Clock, o.StaleAfter, o.TrackerStaleAfter)
+	c := score.New(st, n, ng, o.Clock)
+	y := system.New(st, d, c, o.Clock, o.StaleAfter, o.TrackerStaleAfter)
+	w := remediation.New(y, f)
 
 	return &Daemon{
 		database:         m,
@@ -87,7 +91,10 @@ func New(
 		debian:           d,
 		flag:             f,
 		system:           y,
-		web:              web.New(v, d, f, overview.New(f, d), y, r),
+		score:            c,
+		remediation:      w,
+		web:              web.New(v, d, f, overview.New(f, d), y, c, w, r),
 		clock:            worker.New(d.Refresh, l, r, constant.RefreshInterval),
+		scoreClock:       worker.New(c.Sync, l, r, constant.ScoreInterval),
 	}
 }

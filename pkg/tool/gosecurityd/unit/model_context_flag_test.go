@@ -11,7 +11,7 @@ import (
 func TestFlagToolsRoundTrip(t *testing.T) {
 	s := base.New(t)
 	s.NationalDatabase.SeedVulnerability(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CRITICAL",
 		10.0,
 	)
@@ -19,11 +19,11 @@ func TestFlagToolsRoundTrip(t *testing.T) {
 	f := c.MustCallToolNotation(
 		constant.FlagVulnerability,
 		map[string]any{
-			"identifier":       vulnerabilityConstant.KnownIdentifier,
+			"identifier":       vulnerabilityConstant.FixtureIdentifier,
 			constant.NoteField: "golf",
 		},
 	)
-	assert.MapValue(t, "CVE-2024-3094", f, "identifier")
+	assert.MapValue(t, "CVE-2099-00001", f, "identifier")
 	assert.MapValue(t, "CRITICAL", f, "severity")
 	assert.MapValue(t, false, f, "mitigated")
 	open := c.MustCallToolNotation(constant.ListFlags, map[string]any{})
@@ -31,7 +31,7 @@ func TestFlagToolsRoundTrip(t *testing.T) {
 	m := c.MustCallToolNotation(
 		constant.MitigateFlag,
 		map[string]any{
-			"identifier":           vulnerabilityConstant.KnownIdentifier,
+			"identifier": vulnerabilityConstant.FixtureIdentifier,
 			"mitigation": "hotel",
 		},
 	)
@@ -51,14 +51,16 @@ func TestFlaggingTwiceIsAnsweredQuietly(t *testing.T) {
 	c := s.Tools()
 	c.MustCallToolNotation(
 		constant.FlagVulnerability,
-		map[string]any{"identifier": vulnerabilityConstant.KnownIdentifier},
+		map[string]any{"identifier": vulnerabilityConstant.FixtureIdentifier},
 	)
 	assert.String(
 		t,
-		"flag already exists: CVE-2024-3094",
+		"flag already exists: CVE-2099-00001",
 		c.MustCallToolError(
 			constant.FlagVulnerability,
-			map[string]any{"identifier": vulnerabilityConstant.KnownIdentifier},
+			map[string]any{
+				"identifier": vulnerabilityConstant.FixtureIdentifier,
+			},
 		),
 	)
 	assert.Count(t, 0, s.Reporter.Events())

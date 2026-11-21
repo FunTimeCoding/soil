@@ -11,16 +11,16 @@ import (
 func TestClientReadsVulnerability(t *testing.T) {
 	s := base.New(t)
 	s.NationalDatabase.SeedVulnerability(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CRITICAL",
 		10.0,
 	)
 	v, e := s.SecurityClient().GetVulnerability(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 	)
 	assert.FatalOnError(t, e)
-	assert.String(t, "CVE-2024-3094", v.Identifier)
+	assert.String(t, "CVE-2099-00001", v.Identifier)
 	assert.String(t, "CRITICAL", v.Severity)
 	assert.Float(t, 10.0, v.Score)
 }
@@ -38,7 +38,7 @@ func TestClientReadsDebianStatus(t *testing.T) {
 			var e error
 			r, e = c.GetDebianStatus(
 				t.Context(),
-				vulnerabilityConstant.KnownIdentifier,
+				vulnerabilityConstant.FixtureIdentifier,
 				&client.GetDebianStatusParams{Release: &release},
 			)
 
@@ -47,13 +47,13 @@ func TestClientReadsDebianStatus(t *testing.T) {
 	)
 	assert.Count(t, 1, r.Statuses)
 	assert.String(t, "trixie", r.Statuses[0].Release)
-	assert.String(t, "5.6.1-1", *r.Statuses[0].FixedVersion)
+	assert.String(t, "8.6.1-1", *r.Statuses[0].FixedVersion)
 }
 
 func TestClientRoundTripsFlag(t *testing.T) {
 	s := base.New(t)
 	s.NationalDatabase.SeedVulnerability(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CRITICAL",
 		10.0,
 	)
@@ -63,12 +63,12 @@ func TestClientRoundTripsFlag(t *testing.T) {
 	f, e := c.FlagVulnerability(
 		x,
 		client.FlagRequest{
-			Identifier: vulnerabilityConstant.KnownIdentifier,
+			Identifier: vulnerabilityConstant.FixtureIdentifier,
 			Note:       &note,
 		},
 	)
 	assert.FatalOnError(t, e)
-	assert.String(t, "CVE-2024-3094", f.Identifier)
+	assert.String(t, "CVE-2099-00001", f.Identifier)
 	assert.String(t, "CRITICAL", *f.Severity)
 	assert.String(t, "lima", *f.Note)
 	open, g := c.ListFlags(x, &client.ListFlagsParams{})
@@ -77,7 +77,7 @@ func TestClientRoundTripsFlag(t *testing.T) {
 	how := "mike"
 	m, h := c.MitigateFlag(
 		x,
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		client.MitigationRequest{Mitigation: &how},
 	)
 	assert.FatalOnError(t, h)

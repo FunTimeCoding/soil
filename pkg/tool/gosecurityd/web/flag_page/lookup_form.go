@@ -10,7 +10,7 @@ import (
 func LookupForm(name string) gomponents.Node {
 	return entry.New(constant.LookupPath, "Look up").
 		Query().
-		Text(generativeConstant.ParameterIdentifier, "CVE", name).
+		Text(generativeConstant.ParameterIdentifier, "CVE identifier", name).
 		Required().
 		Placeholder("e.g. CVE-2024-3094").
 		Inline().

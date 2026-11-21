@@ -7,12 +7,14 @@ import (
 
 func NewSummary(v *system.System) *Summary {
 	return &Summary{
-		Name:     v.Name,
-		Release:  v.Release,
-		Kernel:   v.Kernel,
-		Priority: v.Priority,
-		Labels:   v.Labels,
-		Coverage: constant.CoverageUntracked,
-		Updated:  v.UpdatedAt,
+		Name:         v.Name,
+		Release:      v.Release,
+		Kernel:       v.Kernel,
+		Priority:     v.Priority,
+		Labels:       v.Labels,
+		Coverage:     constant.CoverageUntracked,
+		Updated:      v.UpdatedAt,
+		ListsUpdated: v.ListsUpdated,
+		KernelOffers: v.KernelOffers,
 	}
 }

@@ -18,8 +18,8 @@ func (c *Client) detail(name string) *client.SystemDetail {
 
 	return &client.SystemDetail{
 		Summary: client.SystemSummary{
-			Name:    name,
-			Release: s.Release,
+			Name:     name,
+			Release:  s.Release,
 			Coverage: constant.CoverageUntracked,
 			Updated:  c.updated[name],
 		},

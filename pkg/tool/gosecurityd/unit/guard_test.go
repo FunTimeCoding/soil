@@ -15,6 +15,9 @@ func TestGuard(t *testing.T) {
 	v.VerifyOpen(t, constant.LookupPath)
 	v.VerifyOpen(t, constant.SystemsPath)
 	v.VerifyOpen(t, constant.SystemPath)
+	v.VerifyOpen(t, constant.UpgradesPath)
+	v.VerifyOpen(t, constant.UpgradeOpenPath)
+	v.VerifyOpen(t, constant.UpgradeShutPath)
 	v.VerifyOpenPost(t, constant.FlagPath)
 	v.VerifyOpenPost(t, constant.MitigatePath)
 }

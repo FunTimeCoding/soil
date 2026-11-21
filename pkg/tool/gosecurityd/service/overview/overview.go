@@ -29,8 +29,8 @@ func (s *Service) Overview(show string) (*overview_result.Result, error) {
 			switch r.Fix {
 			case constant.FixDebian:
 				result.DebianFix++
-			case constant.FixOwn:
-				result.OwnWork++
+			case constant.FixLocal:
+				result.LocalAction++
 			}
 		}
 

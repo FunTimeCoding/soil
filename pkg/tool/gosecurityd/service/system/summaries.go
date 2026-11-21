@@ -2,12 +2,17 @@ package system
 
 import (
 	"cmp"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/minimum"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_result"
 	"slices"
 )
 
-func (s *Service) Summaries() ([]*system_result.Summary, error) {
-	details, e := s.details()
+func (s *Service) Summaries(m float64) ([]*system_result.Summary, error) {
+	if e := minimum.Check(m); e != nil {
+		return nil, e
+	}
+
+	details, e := s.Details()
 
 	if e != nil {
 		return nil, e
@@ -16,7 +21,9 @@ func (s *Service) Summaries() ([]*system_result.Summary, error) {
 	result := make([]*system_result.Summary, 0, len(details))
 
 	for _, d := range details {
-		result = append(result, d.Summary)
+		if d.Summary.TopScore >= m {
+			result = append(result, d.Summary)
+		}
 	}
 
 	slices.SortFunc(

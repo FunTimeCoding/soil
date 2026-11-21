@@ -6,7 +6,7 @@ import (
 )
 
 func SystemFinding(v *system_result.Finding) *server.SystemFinding {
-	return &server.SystemFinding{
+	result := &server.SystemFinding{
 		Vulnerability: v.Vulnerability,
 		Package:       v.Package,
 		Source:        v.Source,
@@ -15,5 +15,14 @@ func SystemFinding(v *system_result.Finding) *server.SystemFinding {
 		Fix:           v.Fix,
 		Urgency:       v.Urgency,
 		Upgradable:    v.Upgradable,
+		Reboot:        v.Reboot,
+		Kernel:        v.Kernel,
+		Severity:      optional(v.Severity),
 	}
+
+	if v.Severity != "" {
+		result.Score = &v.Score
+	}
+
+	return result
 }

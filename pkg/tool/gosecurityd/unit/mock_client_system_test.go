@@ -62,7 +62,7 @@ func TestMockStoresSnapshotsLikeDaemon(t *testing.T) {
 	stored, okay := m.Snapshot("papa")
 	assert.True(t, okay)
 	assert.String(t, "trixie", stored.Release)
-	systems, e := m.ListSystems(x)
+	systems, e := m.ListSystems(x, nil)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, systems)
 	assert.False(t, systems[0].Clean)
@@ -83,7 +83,7 @@ func TestMockAnswersSeededDetailAndGroups(t *testing.T) {
 	d, e := m.GetSystemFindings(t.Context(), "quebec")
 	assert.FatalOnError(t, e)
 	assert.True(t, d.Summary.Clean)
-	groups, f := m.ListFindings(t.Context())
+	groups, f := m.ListFindings(t.Context(), nil)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, groups)
 }

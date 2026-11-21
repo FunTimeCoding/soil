@@ -45,12 +45,12 @@ func TestFlagRowOpensAndCloses(t *testing.T) {
 		t,
 		constant.FlagPath,
 		url.Values{
-			"identifier":       {vulnerabilityConstant.KnownIdentifier},
+			"identifier":       {vulnerabilityConstant.FixtureIdentifier},
 			constant.NoteField: {"quebec"},
 		},
 	)
 	query := url.Values{
-		"identifier": {vulnerabilityConstant.KnownIdentifier},
+		"identifier": {vulnerabilityConstant.FixtureIdentifier},
 	}.Encode()
 	opened := v.Body(t, join.Empty(constant.FlagOpenPath, "?", query))
 	assert.StringContains(t, "Note: ", opened)
@@ -59,5 +59,5 @@ func TestFlagRowOpensAndCloses(t *testing.T) {
 	assert.StringContains(t, `action="/mitigate"`, opened)
 	closed := v.Body(t, join.Empty(constant.FlagShutPath, "?", query))
 	assert.False(t, strings.Contains(closed, "Full lookup"))
-	assert.StringContains(t, "CVE-2024-3094", closed)
+	assert.StringContains(t, "CVE-2099-00001", closed)
 }

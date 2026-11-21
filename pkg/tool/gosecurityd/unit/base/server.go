@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/daemon"
 	debianMock "github.com/funtimecoding/soil/pkg/vulnerability/debian/mock_client"
-	nvdMock "github.com/funtimecoding/soil/pkg/vulnerability/nvd/mock_client"
+	nvdMock "github.com/funtimecoding/soil/pkg/vulnerability/national_database/mock_client"
 	"testing"
 )
 

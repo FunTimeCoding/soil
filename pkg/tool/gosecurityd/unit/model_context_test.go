@@ -12,17 +12,17 @@ import (
 func TestGetVulnerabilityAnswersSlimRecord(t *testing.T) {
 	s := base.New(t)
 	s.NationalDatabase.SeedVulnerability(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CRITICAL",
 		10.0,
 	)
 	r := s.Tools().MustCallToolNotation(
 		constant.GetVulnerability,
-		map[string]any{"identifier": vulnerabilityConstant.KnownIdentifier},
+		map[string]any{"identifier": vulnerabilityConstant.FixtureIdentifier},
 	)
-	assert.MapValue(t, "CVE-2024-3094", r, "identifier")
+	assert.MapValue(t, "CVE-2099-00001", r, "identifier")
 	assert.MapValue(t, "CRITICAL", r, "severity")
-	assert.MapValue(t, 10.0, r, "score")
+	assert.MapValue(t, 10.0, r, constant.ScoreField)
 	assert.MapNotHasKey(t, r, "Raw")
 }
 
@@ -42,7 +42,7 @@ func TestGetDebianStatusAnswersPerRelease(t *testing.T) {
 			r, e = c.CallToolNotation(
 				constant.GetDebianStatus,
 				map[string]any{
-					"identifier": vulnerabilityConstant.KnownIdentifier,
+					"identifier": vulnerabilityConstant.FixtureIdentifier,
 				},
 			)
 
@@ -53,11 +53,11 @@ func TestGetDebianStatusAnswersPerRelease(t *testing.T) {
 	statuses := r["statuses"].([]any)
 	assert.Count(t, 2, statuses)
 	bookworm := statuses[0].(map[string]any)
-	assert.MapValue(t, "bookworm", bookworm, "release")
+	assert.MapValue(t, "bookworm", bookworm, constant.ReleaseParameter)
 	assert.MapValue(t, true, bookworm, "never_affected")
 	assert.MapNotHasKey(t, bookworm, "fixed_version")
 	trixie := statuses[1].(map[string]any)
-	assert.MapValue(t, "5.6.1-1", trixie, "fixed_version")
+	assert.MapValue(t, "8.6.1-1", trixie, "fixed_version")
 	assert.MapValue(t, false, trixie, "never_affected")
 }
 
@@ -74,7 +74,7 @@ func TestUnknownModificationTimeIsLeftOut(t *testing.T) {
 			r, e = c.CallToolNotation(
 				constant.GetDebianStatus,
 				map[string]any{
-					"identifier": vulnerabilityConstant.KnownIdentifier,
+					"identifier": vulnerabilityConstant.FixtureIdentifier,
 				},
 			)
 
@@ -105,7 +105,9 @@ func TestTrackerNotLoadedIsAnsweredQuietly(t *testing.T) {
 		"not loaded yet",
 		s.Tools().MustCallToolError(
 			constant.GetDebianStatus,
-			map[string]any{"identifier": vulnerabilityConstant.KnownIdentifier},
+			map[string]any{
+				"identifier": vulnerabilityConstant.FixtureIdentifier,
+			},
 		),
 	)
 	assert.Count(t, 0, s.Reporter.Events())

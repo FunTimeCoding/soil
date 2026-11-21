@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/flag"
-	"github.com/funtimecoding/soil/pkg/vulnerability/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/subject"
 )
 
 func (s *Service) Flag(
@@ -14,11 +14,11 @@ func (s *Service) Flag(
 	name string,
 	note string,
 ) (*flag.Flag, error) {
-	if e := identifier.Check(name); e != nil {
+	if e := subject.Check(name); e != nil {
 		return nil, e
 	}
 
-	result, f := s.store.ByVulnerability(name)
+	result, f := s.store.BySubject(name)
 
 	if f != nil && !not_found.Is(f) {
 		return nil, f
@@ -30,18 +30,20 @@ func (s *Service) Flag(
 
 	if f != nil {
 		result = flag.Stub()
-		result.Vulnerability = name
+		result.Subject = name
 	}
 
-	v, g := s.vulnerability.Vulnerability(x, name)
+	if subject.Kind(name) == constant.RemediationVulnerability {
+		v, g := s.vulnerability.Vulnerability(x, name)
 
-	if g != nil && !not_found.Is(g) {
-		return nil, g
-	}
+		if g != nil && !not_found.Is(g) {
+			return nil, g
+		}
 
-	if g == nil {
-		result.Severity = v.Severity
-		result.Score = v.Score
+		if g == nil {
+			result.Severity = v.Severity
+			result.Score = v.Score
+		}
 	}
 
 	result.Note = note

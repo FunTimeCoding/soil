@@ -15,13 +15,13 @@ func TestMockAnswersVulnerabilityLikeDaemon(t *testing.T) {
 	m := mock_client.New(t)
 	m.SeedVulnerability(
 		&client.Vulnerability{
-			Identifier: vulnerabilityConstant.KnownIdentifier,
+			Identifier: vulnerabilityConstant.FixtureIdentifier,
 			Severity:   "CRITICAL",
 		},
 	)
 	v, e := m.GetVulnerability(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 	)
 	assert.FatalOnError(t, e)
 	assert.String(t, "CRITICAL", v.Severity)
@@ -35,7 +35,7 @@ func TestMockNarrowsDebianStatusByRelease(t *testing.T) {
 	m := mock_client.New(t)
 	m.SeedDebianStatus(
 		&client.DebianStatus{
-			Identifier: vulnerabilityConstant.KnownIdentifier,
+			Identifier: vulnerabilityConstant.FixtureIdentifier,
 			Statuses: []*client.Status{
 				{Package: "papa", Release: "bookworm"},
 				{Package: "papa", Release: "trixie"},
@@ -45,14 +45,14 @@ func TestMockNarrowsDebianStatusByRelease(t *testing.T) {
 	release := "trixie"
 	r, e := m.GetDebianStatus(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		&client.GetDebianStatusParams{Release: &release},
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, r.Statuses)
 	all, f := m.GetDebianStatus(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		nil,
 	)
 	assert.FatalOnError(t, f)
@@ -62,7 +62,7 @@ func TestMockNarrowsDebianStatusByRelease(t *testing.T) {
 func TestMockFlagsLikeDaemon(t *testing.T) {
 	m := mock_client.New(t)
 	x := t.Context()
-	b := client.FlagRequest{Identifier: vulnerabilityConstant.KnownIdentifier}
+	b := client.FlagRequest{Identifier: vulnerabilityConstant.FixtureIdentifier}
 	_, e := m.FlagVulnerability(x, b)
 	assert.FatalOnError(t, e)
 	_, f := m.FlagVulnerability(x, b)
@@ -71,13 +71,13 @@ func TestMockFlagsLikeDaemon(t *testing.T) {
 	assert.True(t, not_found.Is(g))
 	_, h := m.MitigateFlag(
 		x,
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		client.MitigationRequest{},
 	)
 	assert.FatalOnError(t, h)
 	_, i := m.MitigateFlag(
 		x,
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		client.MitigationRequest{},
 	)
 	assert.True(t, conflict.Is(i))

@@ -16,7 +16,7 @@ func TestClientRoundTripsSystemSnapshot(t *testing.T) {
 	s.Started()
 	c := s.SecurityClient()
 	x := t.Context()
-	candidate := "5.6.1-1"
+	candidate := "8.6.1-1"
 	priority := 1
 	assert.FatalOnError(
 		t,
@@ -29,10 +29,10 @@ func TestClientRoundTripsSystemSnapshot(t *testing.T) {
 				Labels:   &map[string]string{"exposure": "internet"},
 				Packages: []*client.InstalledPackage{
 					{
-						Name:          "liblzma5",
-						Version:       "5.4.0-1",
-						Source:        "xz-utils",
-						SourceVersion: "5.4.0-1",
+						Name:          "libtango5",
+						Version:       "8.4.0-1",
+						Source:        "tango-utils",
+						SourceVersion: "8.4.0-1",
 						Candidate:     &candidate,
 					},
 				},
@@ -58,11 +58,11 @@ func TestClientRoundTripsSystemSnapshot(t *testing.T) {
 	assert.String(t, "debian", d.Findings[0].Fix)
 	assert.True(t, d.Findings[0].Upgradable)
 	assert.String(t, "internet", (*d.Summary.Labels)["exposure"])
-	systems, f := c.ListSystems(x)
+	systems, f := c.ListSystems(x, nil)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, systems)
 	assert.Integer(t, 1, systems[0].Findings)
-	groups, g := c.ListFindings(x)
+	groups, g := c.ListFindings(x, nil)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, groups)
 	assert.Strings(t, []string{"kilo"}, groups[0].Systems)
@@ -87,7 +87,7 @@ func TestUntrackedSystemOverRestIsNotClean(t *testing.T) {
 		c.PutSystem(
 			t.Context(),
 			"mike",
-			client.SystemSnapshot{Release: "wheezy"},
+			client.SystemSnapshot{Release: "lima"},
 		),
 	)
 	d, e := c.GetSystemFindings(t.Context(), "mike")
@@ -109,10 +109,10 @@ func TestSystemToolsAnswer(t *testing.T) {
 				Release: "bullseye",
 				Packages: []*client.InstalledPackage{
 					{
-						Name:          "liblzma5",
-						Version:       "5.2.5-2.1~deb11u1",
-						Source:        "xz-utils",
-						SourceVersion: "5.2.5-2.1~deb11u1",
+						Name:          "libtango5",
+						Version:       "8.2.5-2.1~deb11u1",
+						Source:        "tango-utils",
+						SourceVersion: "8.2.5-2.1~deb11u1",
 					},
 				},
 			},

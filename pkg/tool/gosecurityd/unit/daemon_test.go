@@ -43,15 +43,17 @@ func TestCloseStopsStartedWorkers(t *testing.T) {
 
 func TestWorkersHandGuardsBeforeClock(t *testing.T) {
 	workers := base.New(t).Daemon().Workers()
-	assert.Count(t, 4, workers)
+	assert.Count(t, 5, workers)
 
 	for _, w := range workers[:3] {
 		_, guard := w.(*peer.Guard)
 		assert.True(t, guard)
 	}
 
-	_, last := workers[3].(*worker.Worker)
-	assert.True(t, last)
+	for _, w := range workers[3:] {
+		_, clock := w.(*worker.Worker)
+		assert.True(t, clock)
+	}
 }
 
 func TestCloseClosesEveryClient(t *testing.T) {

@@ -20,11 +20,11 @@ func FlagForm(
 		Alert(alert).
 		Text(
 			generativeConstant.ParameterIdentifier,
-			"CVE (required)",
+			"CVE identifier or remediation item (required)",
 			values.Get(generativeConstant.ParameterIdentifier),
 		).
 		Required().
-		Placeholder("e.g. CVE-2024-3094").
+		Placeholder("e.g. CVE-2024-3094 or upgrade:bookworm:openssl").
 		Text(constant.NoteField, "Note", values.Get(constant.NoteField)).
 		Placeholder("e.g. runs on the web hosts").
 		Node()

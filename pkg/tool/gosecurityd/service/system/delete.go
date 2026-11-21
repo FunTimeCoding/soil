@@ -7,5 +7,11 @@ func (s *Service) Delete(name string) error {
 		return e
 	}
 
-	return s.store.DeleteSystem(v)
+	if f := s.store.DeleteSystem(v); f != nil {
+		return f
+	}
+
+	s.forget(name)
+
+	return nil
 }

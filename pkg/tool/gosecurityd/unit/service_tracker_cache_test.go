@@ -26,7 +26,7 @@ func TestRestartAnswersFromCacheWithoutDownload(t *testing.T) {
 	)
 	assert.Count(t, 0, second.Debian().Refresh(t.Context()))
 	assert.Integer(t, 0, second.SecurityTracker.Downloads())
-	r, e := second.Debian().Status(vulnerabilityConstant.KnownIdentifier, "")
+	r, e := second.Debian().Status(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, r.Statuses)
 }
@@ -96,7 +96,7 @@ func TestChangedTrackerIsDownloadedAgain(t *testing.T) {
 	)
 	assert.Count(t, 0, o.Debian().Refresh(t.Context()))
 	assert.Integer(t, 2, o.SecurityTracker.Downloads())
-	r, e := o.Debian().Status(vulnerabilityConstant.KnownIdentifier, "")
+	r, e := o.Debian().Status(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, r.Statuses)
 }
@@ -114,7 +114,7 @@ func TestDamagedCacheIsReplaced(t *testing.T) {
 	)
 	assert.Count(t, 0, o.Debian().Refresh(t.Context()))
 	assert.Integer(t, 1, o.SecurityTracker.Downloads())
-	_, e := o.Debian().Status(vulnerabilityConstant.KnownIdentifier, "")
+	_, e := o.Debian().Status(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, e)
 }
 
@@ -122,40 +122,40 @@ func TestExtendedTrackerAnswersUnsupportedReleases(t *testing.T) {
 	o := security_tester.New(t)
 	o.SecurityTracker.SeedKnown()
 	o.SecurityTracker.SeedStatus(
-		vulnerabilityConstant.KnownIdentifier,
-		"xz-utils",
+		vulnerabilityConstant.FixtureIdentifier,
+		"tango-utils",
 		"bullseye",
 		vulnerabilityConstant.DebianOpen,
 		"",
 	)
 	o.ExtendedTracker.SeedStatus(
-		vulnerabilityConstant.KnownIdentifier,
-		"xz-utils",
+		vulnerabilityConstant.FixtureIdentifier,
+		"tango-utils",
 		"bullseye",
 		vulnerabilityConstant.DebianResolved,
-		"5.2.5-2.1~deb11u9",
+		"8.2.5-2.1~deb11u9",
 	)
 	o.ExtendedTracker.SeedStatus(
-		vulnerabilityConstant.KnownIdentifier,
-		"xz-utils",
+		vulnerabilityConstant.FixtureIdentifier,
+		"tango-utils",
 		"trixie",
 		vulnerabilityConstant.DebianOpen,
 		"",
 	)
 	assert.Count(t, 0, o.Debian().Refresh(t.Context()))
-	r, e := o.Debian().Status(vulnerabilityConstant.KnownIdentifier, "")
+	r, e := o.Debian().Status(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 3, r.Statuses)
 	bullseye, f := o.Debian().Status(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"bullseye",
 	)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, bullseye.Statuses)
 	assert.String(t, "resolved", bullseye.Statuses[0].Status)
-	assert.String(t, "5.2.5-2.1~deb11u9", bullseye.Statuses[0].Fixed)
+	assert.String(t, "8.2.5-2.1~deb11u9", bullseye.Statuses[0].Fixed)
 	trixie, g := o.Debian().Status(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"trixie",
 	)
 	assert.FatalOnError(t, g)

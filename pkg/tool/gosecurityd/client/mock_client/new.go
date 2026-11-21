@@ -14,6 +14,7 @@ func New(t *testing.T) *Client {
 		snapshots:       map[string]client.SystemSnapshot{},
 		updated:         map[string]time.Time{},
 		details:         map[string]*client.SystemDetail{},
+		affected:        map[string]*client.AffectedSystems{},
 	}
 	t.Cleanup(result.Close)
 

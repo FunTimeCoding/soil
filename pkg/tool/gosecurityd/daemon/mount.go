@@ -20,7 +20,15 @@ func (d *Daemon) Mount(
 		webConstant.InterfacePath,
 		server.HandlerFromMux(
 			server.NewStrictHandler(
-				gosecurityd.New(d.vulnerability, d.debian, d.flag, d.system, r),
+				gosecurityd.New(
+					d.vulnerability,
+					d.debian,
+					d.flag,
+					d.system,
+					d.score,
+					d.remediation,
+					r,
+				),
 				[]server.StrictMiddlewareFunc{
 					web.RecordingMiddleware[server.StrictHandlerFunc](t),
 				},
@@ -28,8 +36,15 @@ func (d *Daemon) Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(d.vulnerability, d.debian, d.flag, d.system, r, t).Mount(
-		g,
-	)
+	model_context.New(
+		d.vulnerability,
+		d.debian,
+		d.flag,
+		d.system,
+		d.score,
+		d.remediation,
+		r,
+		t,
+	).Mount(g)
 	d.web.Mount(g)
 }

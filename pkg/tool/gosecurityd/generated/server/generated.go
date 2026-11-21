@@ -23,6 +23,51 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// AffectedCount defines model for AffectedCount.
+type AffectedCount struct {
+	// Open Systems with no fix yet.
+	Open int `json:"open"`
+
+	// Paid Systems where the fix is only in paid support.
+	Paid int `json:"paid"`
+
+	// Pending Systems where Debian has a fix that is not in their upgrade candidate yet.
+	Pending int `json:"pending"`
+
+	// Reboot Systems where a reboot into an installed newer kernel fixes it.
+	Reboot  int `json:"reboot"`
+	Systems int `json:"systems"`
+
+	// Upgrade Systems where an upgrade from their package lists fixes it.
+	Upgrade int `json:"upgrade"`
+}
+
+// AffectedSystem defines model for AffectedSystem.
+type AffectedSystem struct {
+	Candidate string `json:"candidate"`
+	Coverage  string `json:"coverage"`
+	Fixed     string `json:"fixed"`
+	Installed string `json:"installed"`
+
+	// Kind upgrade fixes it, debian fix not in candidate, paid support only, or no fix yet.
+	Kind     string             `json:"kind"`
+	Labels   *map[string]string `json:"labels,omitempty"`
+	Priority int                `json:"priority"`
+	Source   string             `json:"source"`
+	System   string             `json:"system"`
+}
+
+// AffectedSystems defines model for AffectedSystems.
+type AffectedSystems struct {
+	Count      AffectedCount `json:"count"`
+	Identifier string        `json:"identifier"`
+
+	// Score The vulnerability's base score from the score mirror.
+	Score    *float64         `json:"score,omitempty"`
+	Severity *string          `json:"severity,omitempty"`
+	Systems  []AffectedSystem `json:"systems"`
+}
+
 // DebianStatus defines model for DebianStatus.
 type DebianStatus struct {
 	Identifier      string     `json:"identifier"`
@@ -43,16 +88,23 @@ type ErrorResponse struct {
 
 // FindingGroup defines model for FindingGroup.
 type FindingGroup struct {
-	NoFix         int      `json:"no_fix"`
-	PaidOnly      int      `json:"paid_only"`
-	Systems       []string `json:"systems"`
-	Upgradable    int      `json:"upgradable"`
-	Vulnerability string   `json:"vulnerability"`
+	Count AffectedCount `json:"count"`
+
+	// Score The vulnerability's score from the score mirror; absent when the National Vulnerability Database has not scored it.
+	Score    *float64 `json:"score,omitempty"`
+	Severity *string  `json:"severity,omitempty"`
+	Systems  []string `json:"systems"`
+
+	// Unimportant Debian marks it unimportant on every system it hits; it never enters the remediation list.
+	Unimportant   bool   `json:"unimportant"`
+	Vulnerability string `json:"vulnerability"`
 }
 
 // Flag defines model for Flag.
 type Flag struct {
-	Flagged    time.Time `json:"flagged"`
+	Flagged time.Time `json:"flagged"`
+
+	// Identifier A CVE identifier, or a remediation item subject - upgrade:<release>:<source>, release:<host> or reboot:<host>.
 	Identifier string    `json:"identifier"`
 	Mitigated  bool      `json:"mitigated"`
 	Mitigation *string   `json:"mitigation,omitempty"`
@@ -77,9 +129,70 @@ type InstalledPackage struct {
 	Version       string  `json:"version"`
 }
 
+// KernelOffer defines model for KernelOffer.
+type KernelOffer struct {
+	// Origins Where apt finds this version, e.g. "http://deb.debian.org/debian bookworm-backports/main", or /var/lib/dpkg/status for the installed one.
+	Origins  []string `json:"origins"`
+	Priority int      `json:"priority"`
+	Version  string   `json:"version"`
+}
+
 // MitigationRequest defines model for MitigationRequest.
 type MitigationRequest struct {
 	Mitigation *string `json:"mitigation,omitempty"`
+}
+
+// RemediationItem defines model for RemediationItem.
+type RemediationItem struct {
+	Addressed bool           `json:"addressed"`
+	Count     *AffectedCount `json:"count,omitempty"`
+	Decision  *Flag          `json:"decision,omitempty"`
+	Hosts     []string       `json:"hosts"`
+
+	// Kind upgrade, vulnerability (no upgrade on these hosts), release (the host's release is unsupported or untracked), reboot (a newer kernel is installed) or kernel (Debian has kernel fixes the host's sources do not reach).
+	Kind string `json:"kind"`
+
+	// Reason For a kernel item, why the fixes are out of reach - no backports source, package lists N days old, or what the sources offer.
+	Reason  *string `json:"reason,omitempty"`
+	Release *string `json:"release,omitempty"`
+	Source  *string `json:"source,omitempty"`
+
+	// Subject What a decision is keyed by - upgrade:<release>:<source>, a CVE identifier, release:<host> or reboot:<host>.
+	Subject  string  `json:"subject"`
+	TopScore float64 `json:"top_score"`
+
+	// Unknown The host's release has no tracker, so its vulnerabilities are unknown.
+	Unknown         bool     `json:"unknown"`
+	Vulnerabilities []string `json:"vulnerabilities"`
+}
+
+// RemediationList defines model for RemediationList.
+type RemediationList struct {
+	// Addressed Items a decision covers with a mitigation or accepted risk.
+	Addressed int               `json:"addressed"`
+	Items     []RemediationItem `json:"items"`
+	Open      int               `json:"open"`
+
+	// Unimportant Vulnerabilities left out because Debian marks them unimportant.
+	Unimportant int `json:"unimportant"`
+}
+
+// ScoreStatus defines model for ScoreStatus.
+type ScoreStatus struct {
+	// Filled The first fill is complete; after it, only changes are fetched.
+	Filled bool `json:"filled"`
+
+	// Mirrored Vulnerabilities with a stored score row.
+	Mirrored int `json:"mirrored"`
+
+	// Start How far the first fill has paged through the National Vulnerability Database's catalogue.
+	Start int `json:"start"`
+
+	// Synced When the mirror last caught up with the National Vulnerability Database's changes.
+	Synced *time.Time `json:"synced,omitempty"`
+
+	// Total The catalogue's size at the last page.
+	Total int `json:"total"`
 }
 
 // Status defines model for Status.
@@ -101,23 +214,42 @@ type SystemDetail struct {
 
 // SystemFinding defines model for SystemFinding.
 type SystemFinding struct {
-	Fix           string  `json:"fix"`
-	Fixed         *string `json:"fixed,omitempty"`
-	Installed     string  `json:"installed"`
-	Package       string  `json:"package"`
-	Source        string  `json:"source"`
-	Upgradable    bool    `json:"upgradable"`
-	Urgency       string  `json:"urgency"`
-	Vulnerability string  `json:"vulnerability"`
+	Fix       string  `json:"fix"`
+	Fixed     *string `json:"fixed,omitempty"`
+	Installed string  `json:"installed"`
+
+	// Kernel The finding is on the running kernel, matched by its image version.
+	Kernel  bool   `json:"kernel"`
+	Package string `json:"package"`
+
+	// Reboot A newer installed kernel image already has the fix; a reboot into it fixes this.
+	Reboot bool `json:"reboot"`
+
+	// Score The vulnerability's base score from the score mirror; absent while the National Vulnerability Database has not scored it or the mirror has not reached it.
+	Score         *float64 `json:"score,omitempty"`
+	Severity      *string  `json:"severity,omitempty"`
+	Source        string   `json:"source"`
+	Upgradable    bool     `json:"upgradable"`
+	Urgency       string   `json:"urgency"`
+	Vulnerability string   `json:"vulnerability"`
 }
 
 // SystemSnapshot defines model for SystemSnapshot.
 type SystemSnapshot struct {
-	Kernel   *string             `json:"kernel,omitempty"`
-	Labels   *map[string]string  `json:"labels,omitempty"`
-	Packages []*InstalledPackage `json:"packages"`
-	Priority *int                `json:"priority,omitempty"`
-	Release  string              `json:"release"`
+	Kernel *string `json:"kernel,omitempty"`
+
+	// KernelMetapackageInstalled Whether the kernel metapackage is installed, from apt-cache policy's Installed line; absent when not reported. Without it apt never offers a kernel upgrade.
+	KernelMetapackageInstalled *bool `json:"kernel_metapackage_installed,omitempty"`
+
+	// KernelOffers The versions the host's sources offer for its kernel metapackage, as apt-cache policy lists them.
+	KernelOffers *[]KernelOffer     `json:"kernel_offers,omitempty"`
+	Labels       *map[string]string `json:"labels,omitempty"`
+
+	// ListsUpdated The date of the newest package index the host holds (its newest Release or InRelease file).
+	ListsUpdated *time.Time          `json:"lists_updated,omitempty"`
+	Packages     []*InstalledPackage `json:"packages"`
+	Priority     *int                `json:"priority,omitempty"`
+	Release      string              `json:"release"`
 }
 
 // SystemSummary defines model for SystemSummary.
@@ -126,18 +258,55 @@ type SystemSummary struct {
 	Clean   bool `json:"clean"`
 
 	// Coverage Whether a tracker covers the system's release - supported, unsupported tracked, or unsupported untracked.
-	Coverage string             `json:"coverage"`
-	Findings int                `json:"findings"`
-	Kernel   *string            `json:"kernel,omitempty"`
-	Labels   *map[string]string `json:"labels,omitempty"`
-	Name     string             `json:"name"`
-	NoFix    int                `json:"no_fix"`
-	PaidOnly int                `json:"paid_only"`
-	Priority int                `json:"priority"`
-	Release  string             `json:"release"`
+	Coverage string `json:"coverage"`
+
+	// Critical Vulnerabilities scored 9.0 or higher (critical), the kernel included, each counted once.
+	Critical int `json:"critical"`
+
+	// Findings Package findings, the kernel left out.
+	Findings int     `json:"findings"`
+	Kernel   *string `json:"kernel,omitempty"`
+
+	// KernelFindings Kernel findings, with and without a fix.
+	KernelFindings int            `json:"kernel_findings"`
+	KernelOffers   *[]KernelOffer `json:"kernel_offers,omitempty"`
+
+	// KernelReason Why some of Debian's kernel fixes are out of the host's reach, from its sources and package lists; set whenever any are, not only when the kernel has no upgrade path.
+	KernelReason *string `json:"kernel_reason,omitempty"`
+
+	// KernelState The kernel's state - up to date, reboot fixes it, upgrade and reboot, no upgrade path, paid support only, or no kernel data.
+	KernelState string `json:"kernel_state"`
+
+	// KernelWithFix Kernel findings with a fix in Debian or paid support.
+	KernelWithFix int                `json:"kernel_with_fix"`
+	Labels        *map[string]string `json:"labels,omitempty"`
+
+	// ListsUpdated The date of the newest package index the host holds.
+	ListsUpdated *time.Time `json:"lists_updated,omitempty"`
+	Name         string     `json:"name"`
+
+	// NewestKernel The newest installed kernel image's version, without a backports suffix.
+	NewestKernel *string `json:"newest_kernel,omitempty"`
+
+	// NoFix Package findings without a fix.
+	NoFix int `json:"no_fix"`
+
+	// PaidOnly Package findings with a fix only in paid support.
+	PaidOnly int `json:"paid_only"`
+	Priority int `json:"priority"`
+
+	// Reboot Kernel findings a reboot into an already installed newer kernel fixes.
+	Reboot  int    `json:"reboot"`
+	Release string `json:"release"`
+
+	// RunningKernel The running kernel image's version.
+	RunningKernel *string `json:"running_kernel,omitempty"`
 
 	// Stale The last snapshot is older than the stale threshold; the system does not read clean.
 	Stale bool `json:"stale"`
+
+	// TopScore The highest score among the system's vulnerabilities; 0 when none is scored.
+	TopScore float64 `json:"top_score"`
 
 	// TrackerStale The tracker was last verified longer ago than its threshold; the system does not read clean.
 	TrackerStale bool `json:"tracker_stale"`
@@ -145,7 +314,59 @@ type SystemSummary struct {
 	// TrackerVerified When the tracker matching this system last answered; absent when no tracker is loaded.
 	TrackerVerified *time.Time `json:"tracker_verified,omitempty"`
 	Updated         time.Time  `json:"updated"`
-	Upgradable      int        `json:"upgradable"`
+
+	// Upgradable Package findings an upgrade fixes.
+	Upgradable int `json:"upgradable"`
+}
+
+// UpgradeGroup defines model for UpgradeGroup.
+type UpgradeGroup struct {
+	// Candidate The highest upgrade candidate among the hosts.
+	Candidate string `json:"candidate"`
+
+	// Fixed The highest fixed version among those vulnerabilities.
+	Fixed            string        `json:"fixed"`
+	Hosts            []UpgradeHost `json:"hosts"`
+	InstalledHighest string        `json:"installed_highest"`
+	InstalledLowest  string        `json:"installed_lowest"`
+	Kernel           bool          `json:"kernel"`
+	Release          string        `json:"release"`
+	Source           string        `json:"source"`
+
+	// TopScore The highest score among the vulnerabilities the upgrade fixes; 0 when none is scored.
+	TopScore float64 `json:"top_score"`
+
+	// Vulnerabilities The vulnerabilities the upgrade fixes, by CVE identifier.
+	Vulnerabilities []string `json:"vulnerabilities"`
+}
+
+// UpgradeHost defines model for UpgradeHost.
+type UpgradeHost struct {
+	// Binaries The host's binary packages from this source with an upgrade candidate; only on a single upgrade.
+	Binaries *[]string `json:"binaries,omitempty"`
+
+	// Candidate The upgrade candidate from the host's package lists.
+	Candidate string `json:"candidate"`
+
+	// Installed The installed source package version.
+	Installed string             `json:"installed"`
+	Labels    *map[string]string `json:"labels,omitempty"`
+	Name      string             `json:"name"`
+	Priority  int                `json:"priority"`
+}
+
+// UpgradeList defines model for UpgradeList.
+type UpgradeList struct {
+	Groups []UpgradeGroup `json:"groups"`
+
+	// Hosts Distinct hosts with at least one listed upgrade.
+	Hosts int `json:"hosts"`
+
+	// Releases Releases with any upgrade, for filtering.
+	Releases []string `json:"releases"`
+
+	// Vulnerabilities Distinct vulnerabilities the listed upgrades fix.
+	Vulnerabilities int `json:"vulnerabilities"`
 }
 
 // Vulnerability defines model for Vulnerability.
@@ -167,9 +388,45 @@ type Identifier = string
 // Name defines model for Name.
 type Name = string
 
+// Release defines model for Release.
+type Release = string
+
+// Score defines model for Score.
+type Score = float64
+
+// Source defines model for Source.
+type Source = string
+
+// ListFindingsParams defines parameters for ListFindings.
+type ListFindingsParams struct {
+	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+	Score *Score `form:"score,omitempty" json:"score,omitempty"`
+}
+
 // ListFlagsParams defines parameters for ListFlags.
 type ListFlagsParams struct {
 	IncludeMitigated *bool `form:"include_mitigated,omitempty" json:"include_mitigated,omitempty"`
+}
+
+// ListRemediationParams defines parameters for ListRemediation.
+type ListRemediationParams struct {
+	// Score The lowest score a finding needs to count; empty means 9.0 (critical).
+	Score *float64 `form:"score,omitempty" json:"score,omitempty"`
+}
+
+// ListSystemsParams defines parameters for ListSystems.
+type ListSystemsParams struct {
+	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+	Score *Score `form:"score,omitempty" json:"score,omitempty"`
+}
+
+// ListUpgradesParams defines parameters for ListUpgrades.
+type ListUpgradesParams struct {
+	// Show A release codename to narrow to, or kernel for the kernel packages; empty lists every release without the kernel.
+	Show *string `form:"show,omitempty" json:"show,omitempty"`
+
+	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+	Score *Score `form:"score,omitempty" json:"score,omitempty"`
 }
 
 // GetDebianStatusParams defines parameters for GetDebianStatus.
@@ -190,7 +447,7 @@ type PutSystemJSONRequestBody = SystemSnapshot
 type ServerInterface interface {
 
 	// (GET /api/findings)
-	ListFindings(w http.ResponseWriter, r *http.Request)
+	ListFindings(w http.ResponseWriter, r *http.Request, params ListFindingsParams)
 
 	// (GET /api/flags)
 	ListFlags(w http.ResponseWriter, r *http.Request, params ListFlagsParams)
@@ -201,8 +458,14 @@ type ServerInterface interface {
 	// (POST /api/flags/{identifier}/mitigation)
 	MitigateFlag(w http.ResponseWriter, r *http.Request, identifier Identifier)
 
+	// (GET /api/remediation)
+	ListRemediation(w http.ResponseWriter, r *http.Request, params ListRemediationParams)
+
+	// (GET /api/scores)
+	GetScoreStatus(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/systems)
-	ListSystems(w http.ResponseWriter, r *http.Request)
+	ListSystems(w http.ResponseWriter, r *http.Request, params ListSystemsParams)
 
 	// (DELETE /api/systems/{name})
 	DeleteSystem(w http.ResponseWriter, r *http.Request, name Name)
@@ -213,11 +476,20 @@ type ServerInterface interface {
 	// (GET /api/systems/{name}/findings)
 	GetSystemFindings(w http.ResponseWriter, r *http.Request, name Name)
 
+	// (GET /api/upgrades)
+	ListUpgrades(w http.ResponseWriter, r *http.Request, params ListUpgradesParams)
+
+	// (GET /api/upgrades/{release}/{source})
+	GetUpgrade(w http.ResponseWriter, r *http.Request, release Release, source Source)
+
 	// (GET /api/vulnerability/{identifier})
 	GetVulnerability(w http.ResponseWriter, r *http.Request, identifier Identifier)
 
 	// (GET /api/vulnerability/{identifier}/debian)
 	GetDebianStatus(w http.ResponseWriter, r *http.Request, identifier Identifier, params GetDebianStatusParams)
+
+	// (GET /api/vulnerability/{identifier}/systems)
+	GetAffectedSystems(w http.ResponseWriter, r *http.Request, identifier Identifier)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -232,8 +504,27 @@ type MiddlewareFunc func(http.Handler) http.Handler
 // ListFindings operation middleware
 func (siw *ServerInterfaceWrapper) ListFindings(w http.ResponseWriter, r *http.Request) {
 
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListFindingsParams
+
+	// ------------- Optional query parameter "score" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "score", r.URL.Query(), &params.Score, runtime.BindQueryParameterOptions{Type: "number", Format: "double"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "score"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "score", Err: err})
+		}
+		return
+	}
+
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ListFindings(w, r)
+		siw.Handler.ListFindings(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -316,11 +607,77 @@ func (siw *ServerInterfaceWrapper) MitigateFlag(w http.ResponseWriter, r *http.R
 	handler.ServeHTTP(w, r)
 }
 
+// ListRemediation operation middleware
+func (siw *ServerInterfaceWrapper) ListRemediation(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListRemediationParams
+
+	// ------------- Optional query parameter "score" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "score", r.URL.Query(), &params.Score, runtime.BindQueryParameterOptions{Type: "number", Format: "double"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "score"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "score", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListRemediation(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetScoreStatus operation middleware
+func (siw *ServerInterfaceWrapper) GetScoreStatus(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetScoreStatus(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListSystems operation middleware
 func (siw *ServerInterfaceWrapper) ListSystems(w http.ResponseWriter, r *http.Request) {
 
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListSystemsParams
+
+	// ------------- Optional query parameter "score" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "score", r.URL.Query(), &params.Score, runtime.BindQueryParameterOptions{Type: "number", Format: "double"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "score"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "score", Err: err})
+		}
+		return
+	}
+
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.ListSystems(w, r)
+		siw.Handler.ListSystems(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -408,6 +765,87 @@ func (siw *ServerInterfaceWrapper) GetSystemFindings(w http.ResponseWriter, r *h
 	handler.ServeHTTP(w, r)
 }
 
+// ListUpgrades operation middleware
+func (siw *ServerInterfaceWrapper) ListUpgrades(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListUpgradesParams
+
+	// ------------- Optional query parameter "show" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "show", r.URL.Query(), &params.Show, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "show"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "show", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "score" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "score", r.URL.Query(), &params.Score, runtime.BindQueryParameterOptions{Type: "number", Format: "double"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "score"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "score", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListUpgrades(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetUpgrade operation middleware
+func (siw *ServerInterfaceWrapper) GetUpgrade(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "release" -------------
+	var release Release
+
+	err = runtime.BindStyledParameterWithOptions("simple", "release", r.PathValue("release"), &release, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "release", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "source" -------------
+	var source Source
+
+	err = runtime.BindStyledParameterWithOptions("simple", "source", r.PathValue("source"), &source, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "source", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetUpgrade(w, r, release, source)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // GetVulnerability operation middleware
 func (siw *ServerInterfaceWrapper) GetVulnerability(w http.ResponseWriter, r *http.Request) {
 
@@ -467,6 +905,32 @@ func (siw *ServerInterfaceWrapper) GetDebianStatus(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetDebianStatus(w, r, identifier, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetAffectedSystems operation middleware
+func (siw *ServerInterfaceWrapper) GetAffectedSystems(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier Identifier
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAffectedSystems(w, r, identifier)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -598,6 +1062,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/vulnerability/{identifier}", wrapper.GetVulnerability)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/vulnerability/{identifier}/debian", wrapper.GetDebianStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/vulnerability/{identifier}/systems", wrapper.GetAffectedSystems)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/flags", wrapper.ListFlags)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/flags", wrapper.FlagVulnerability)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/flags/{identifier}/mitigation", wrapper.MitigateFlag)
@@ -606,11 +1071,16 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/systems/{name}", wrapper.PutSystem)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/systems/{name}/findings", wrapper.GetSystemFindings)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/findings", wrapper.ListFindings)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/remediation", wrapper.ListRemediation)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/scores", wrapper.GetScoreStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/upgrades", wrapper.ListUpgrades)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/upgrades/{release}/{source}", wrapper.GetUpgrade)
 
 	return m
 }
 
 type ListFindingsRequestObject struct {
+	Params ListFindingsParams
 }
 
 type ListFindingsResponseObject interface {
@@ -627,6 +1097,20 @@ func (response ListFindings200JSONResponse) VisitListFindingsResponse(w http.Res
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListFindings400JSONResponse Error
+
+func (response ListFindings400JSONResponse) VisitListFindingsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -838,7 +1322,79 @@ func (response MitigateFlag500JSONResponse) VisitMitigateFlagResponse(w http.Res
 	return err
 }
 
+type ListRemediationRequestObject struct {
+	Params ListRemediationParams
+}
+
+type ListRemediationResponseObject interface {
+	VisitListRemediationResponse(w http.ResponseWriter) error
+}
+
+type ListRemediation200JSONResponse RemediationList
+
+func (response ListRemediation200JSONResponse) VisitListRemediationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListRemediation400JSONResponse Error
+
+func (response ListRemediation400JSONResponse) VisitListRemediationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListRemediation500JSONResponse ErrorResponse
+
+func (response ListRemediation500JSONResponse) VisitListRemediationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetScoreStatusRequestObject struct {
+}
+
+type GetScoreStatusResponseObject interface {
+	VisitGetScoreStatusResponse(w http.ResponseWriter) error
+}
+
+type GetScoreStatus200JSONResponse ScoreStatus
+
+func (response GetScoreStatus200JSONResponse) VisitGetScoreStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListSystemsRequestObject struct {
+	Params ListSystemsParams
 }
 
 type ListSystemsResponseObject interface {
@@ -855,6 +1411,20 @@ func (response ListSystems200JSONResponse) VisitListSystemsResponse(w http.Respo
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListSystems400JSONResponse Error
+
+func (response ListSystems400JSONResponse) VisitListSystemsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -1001,6 +1571,107 @@ func (response GetSystemFindings404JSONResponse) VisitGetSystemFindingsResponse(
 type GetSystemFindings500JSONResponse ErrorResponse
 
 func (response GetSystemFindings500JSONResponse) VisitGetSystemFindingsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListUpgradesRequestObject struct {
+	Params ListUpgradesParams
+}
+
+type ListUpgradesResponseObject interface {
+	VisitListUpgradesResponse(w http.ResponseWriter) error
+}
+
+type ListUpgrades200JSONResponse UpgradeList
+
+func (response ListUpgrades200JSONResponse) VisitListUpgradesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListUpgrades400JSONResponse Error
+
+func (response ListUpgrades400JSONResponse) VisitListUpgradesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListUpgrades500JSONResponse ErrorResponse
+
+func (response ListUpgrades500JSONResponse) VisitListUpgradesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUpgradeRequestObject struct {
+	Release Release `json:"release"`
+	Source  Source  `json:"source"`
+}
+
+type GetUpgradeResponseObject interface {
+	VisitGetUpgradeResponse(w http.ResponseWriter) error
+}
+
+type GetUpgrade200JSONResponse UpgradeGroup
+
+func (response GetUpgrade200JSONResponse) VisitGetUpgradeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUpgrade404JSONResponse Error
+
+func (response GetUpgrade404JSONResponse) VisitGetUpgradeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetUpgrade500JSONResponse ErrorResponse
+
+func (response GetUpgrade500JSONResponse) VisitGetUpgradeResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -1169,6 +1840,56 @@ func (response GetDebianStatus503JSONResponse) VisitGetDebianStatusResponse(w ht
 	return err
 }
 
+type GetAffectedSystemsRequestObject struct {
+	Identifier Identifier `json:"identifier"`
+}
+
+type GetAffectedSystemsResponseObject interface {
+	VisitGetAffectedSystemsResponse(w http.ResponseWriter) error
+}
+
+type GetAffectedSystems200JSONResponse AffectedSystems
+
+func (response GetAffectedSystems200JSONResponse) VisitGetAffectedSystemsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAffectedSystems400JSONResponse Error
+
+func (response GetAffectedSystems400JSONResponse) VisitGetAffectedSystemsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAffectedSystems500JSONResponse ErrorResponse
+
+func (response GetAffectedSystems500JSONResponse) VisitGetAffectedSystemsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -1184,6 +1905,12 @@ type StrictServerInterface interface {
 	// (POST /api/flags/{identifier}/mitigation)
 	MitigateFlag(ctx context.Context, request MitigateFlagRequestObject) (MitigateFlagResponseObject, error)
 
+	// (GET /api/remediation)
+	ListRemediation(ctx context.Context, request ListRemediationRequestObject) (ListRemediationResponseObject, error)
+
+	// (GET /api/scores)
+	GetScoreStatus(ctx context.Context, request GetScoreStatusRequestObject) (GetScoreStatusResponseObject, error)
+
 	// (GET /api/systems)
 	ListSystems(ctx context.Context, request ListSystemsRequestObject) (ListSystemsResponseObject, error)
 
@@ -1196,11 +1923,20 @@ type StrictServerInterface interface {
 	// (GET /api/systems/{name}/findings)
 	GetSystemFindings(ctx context.Context, request GetSystemFindingsRequestObject) (GetSystemFindingsResponseObject, error)
 
+	// (GET /api/upgrades)
+	ListUpgrades(ctx context.Context, request ListUpgradesRequestObject) (ListUpgradesResponseObject, error)
+
+	// (GET /api/upgrades/{release}/{source})
+	GetUpgrade(ctx context.Context, request GetUpgradeRequestObject) (GetUpgradeResponseObject, error)
+
 	// (GET /api/vulnerability/{identifier})
 	GetVulnerability(ctx context.Context, request GetVulnerabilityRequestObject) (GetVulnerabilityResponseObject, error)
 
 	// (GET /api/vulnerability/{identifier}/debian)
 	GetDebianStatus(ctx context.Context, request GetDebianStatusRequestObject) (GetDebianStatusResponseObject, error)
+
+	// (GET /api/vulnerability/{identifier}/systems)
+	GetAffectedSystems(ctx context.Context, request GetAffectedSystemsRequestObject) (GetAffectedSystemsResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -1243,8 +1979,10 @@ type strictHandler struct {
 }
 
 // ListFindings operation middleware
-func (sh *strictHandler) ListFindings(w http.ResponseWriter, r *http.Request) {
+func (sh *strictHandler) ListFindings(w http.ResponseWriter, r *http.Request, params ListFindingsParams) {
 	var request ListFindingsRequestObject
+
+	request.Params = params
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
 		return sh.ssi.ListFindings(ctx, request.(ListFindingsRequestObject))
@@ -1356,9 +2094,61 @@ func (sh *strictHandler) MitigateFlag(w http.ResponseWriter, r *http.Request, id
 	}
 }
 
+// ListRemediation operation middleware
+func (sh *strictHandler) ListRemediation(w http.ResponseWriter, r *http.Request, params ListRemediationParams) {
+	var request ListRemediationRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListRemediation(ctx, request.(ListRemediationRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListRemediation")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListRemediationResponseObject); ok {
+		if err := validResponse.VisitListRemediationResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetScoreStatus operation middleware
+func (sh *strictHandler) GetScoreStatus(w http.ResponseWriter, r *http.Request) {
+	var request GetScoreStatusRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetScoreStatus(ctx, request.(GetScoreStatusRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetScoreStatus")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetScoreStatusResponseObject); ok {
+		if err := validResponse.VisitGetScoreStatusResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListSystems operation middleware
-func (sh *strictHandler) ListSystems(w http.ResponseWriter, r *http.Request) {
+func (sh *strictHandler) ListSystems(w http.ResponseWriter, r *http.Request, params ListSystemsParams) {
 	var request ListSystemsRequestObject
+
+	request.Params = params
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
 		return sh.ssi.ListSystems(ctx, request.(ListSystemsRequestObject))
@@ -1465,6 +2255,59 @@ func (sh *strictHandler) GetSystemFindings(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+// ListUpgrades operation middleware
+func (sh *strictHandler) ListUpgrades(w http.ResponseWriter, r *http.Request, params ListUpgradesParams) {
+	var request ListUpgradesRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListUpgrades(ctx, request.(ListUpgradesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListUpgrades")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListUpgradesResponseObject); ok {
+		if err := validResponse.VisitListUpgradesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetUpgrade operation middleware
+func (sh *strictHandler) GetUpgrade(w http.ResponseWriter, r *http.Request, release Release, source Source) {
+	var request GetUpgradeRequestObject
+
+	request.Release = release
+	request.Source = source
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetUpgrade(ctx, request.(GetUpgradeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetUpgrade")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetUpgradeResponseObject); ok {
+		if err := validResponse.VisitGetUpgradeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetVulnerability operation middleware
 func (sh *strictHandler) GetVulnerability(w http.ResponseWriter, r *http.Request, identifier Identifier) {
 	var request GetVulnerabilityRequestObject
@@ -1518,43 +2361,111 @@ func (sh *strictHandler) GetDebianStatus(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// GetAffectedSystems operation middleware
+func (sh *strictHandler) GetAffectedSystems(w http.ResponseWriter, r *http.Request, identifier Identifier) {
+	var request GetAffectedSystemsRequestObject
+
+	request.Identifier = identifier
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetAffectedSystems(ctx, request.(GetAffectedSystemsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetAffectedSystems")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetAffectedSystemsResponseObject); ok {
+		if err := validResponse.VisitGetAffectedSystemsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"AAD//w==",
+	"7Fxbc9w2lv4rKO5W2a6i1com+zDSU3ZyGdfsJqk4cR4mLhWaPN3EiA0wACil19X/fQsHFwIkyO6WZdlb",
+	"nidbTRI4OJfvXHCAd0Uldp3gwLUqrt4VHZV0Bxok/vWqBq7ZhoE0fzFeXBUd1U1RFpzuoLgq2PBCWUj4",
+	"o2cS6uJKyx7KQlUN7Kj5Uu8787bSkvFtcTiUxQ/4fXZM/Oe80X6GFqiaG1C6p+eN+boSEkesQVWSdZoJ",
+	"M/QvDZBW3IPSRJk3iBakZUpfE06lFPfK/HDfUE0qKiUDRSi561sOkq5Zy/TeflYTqokhSxPdMHVBvt11",
+	"ek+EJJc4nCJwB3KvG8a3F0Vpl/VHD3I/rAsHKuJVbITcUV1cFbXo16155tbF+90apF2X6GU1xyplH57D",
+	"qYN/iBrz9WYDlYb6r6LnGhVKig6kZoCPRQd8ytPXe6Vhp8g90w3hgmzYn2QP+mKgn3ENW7OAsugoqxeG",
+	"aMDIpAEchCkieLsnjBPzGVF91wk5NzDw2izpyNjfwJpRThpqJGsm0UbYTBEutJlIN8Ak6butpDWQivKa",
+	"1VTD/IIkrIXQx6alxL5HGNeCUE4YV5q2LdSEwz1IcguSQ2soAkXYzFzKjhnJMXroaD5KCQ+r20ixcwvu",
+	"aHVLt+CUd4mKQ6xd/wgkBUYMhAwycWIvrQK9DYOK9T+h0oZ4r3iW1qnmBUFkdLgsKnEHkm7zD81i6uyT",
+	"IIPs01vGM5oaeOdYVJLaapTRJadDgdgy0VtU5tKARNZIhplbuoYWl03rmpmJaftTwo7JJxOGdpIJyfQ+",
+	"rysqoMhkJBUkMAXVqeCLiPnRpOUARQOTvSjKSJqOzcdVQmV0woPUv0vYFFfFv60GZ7hyoLZKEc0IPXGK",
+	"0+XP+43EDzxTZE0VOC/iLcn9uWNSCmlkexTSy0IZV5FKaiwNXC7z/zlluc6OBs2gUtL9RIhJAGD5OcyZ",
+	"E4qFz9ea6j4jkWO8xc8gXQ1t2x83xdU/ltflZjy8LQvety01vETfNllhWWhJq1uQNztRG1rq1LVSDS81",
+	"28HU8JZ4E0jPMeVbI+0pN8D/vDyPfW123J9BdYLb6Oi08csC7oDrm0VpZInIfJmj6zuGsP69FH33WGZ5",
+	"ht0tmNw1oWsFXBtfh76c/EAtfpI3SRT3DdUU7dcEAga2XVhnfd6HsNo5yA5q23O2M26C8kw04cKWHZW3",
+	"xuuQ6GUiuI02iZ3WPG6YVtfmP9w8IcBNSoD8kLCDmiFT0NlHDmgtRAuUG1oSlh/XnvT1MgoKPKbEi8uq",
+	"VEu3U1XatHS7Pd2Ax+CesvBr8tc335LhDfTENGGIERZRPVJFXvo46er3/vLyy8rlIfiH/816OftTSdwb",
+	"7lkjlLZPzEQ2Opo8yvr/HdNsS3USl0TCcY9xVRm94mImSgom9r7q3Xe1p+59cXVYahmkPUwwpyk/wx89",
+	"KH22A5phzTyBOQJe+YDmJxsznxuscpc7T+WzEJTho5s7kGpO7PPPRstzCbp/PwrVRrPkFv93TFN+3Gwg",
+	"4/CEZFvG1dT0frOZR6fJhvFaYc5M3DQlgYvtBfm9aLTurlarGtYXNqS+EHK7ctH1WojbeyF3L9e0ujVA",
+	"olY7yvjvBVrx6o7KVcvWq7q73a6sryYbIRHxhkxLcLS30yF5OYg+meMDq6MA2TMrx+X/CRY+q+mLIJBL",
+	"CH4ecO5VNsWidS1BqTnUeZhbr6FinklLHyL+H8rCIOOZfnMxTytH1ZvnXIT0V2CEYGIAM+mLgN/kuVEb",
+	"8+MzFX5jivTcJXJGlSTpuQ00a/wSk/vnNM3mmRq074X5xv3+PKpCJIl/NLE1RkVqgfGJBFo1L7LuQgJV",
+	"IlOX+Q79mydFw64k983eV1dAESqBiF4TsbHDk5cmMw0W5kgoR8WBH0hN94qItkbbw2IZxmGOYGHAYYbQ",
+	"UOc7C/ysQ87BCtWEEq9jht23sIearPcP8N50Eh88lj/Xors5x/n2/JaLe56Phkd6aeNX4nKekihBmFaJ",
+	"1jMnajfs8YiPwVkmOC4MOHE5y/Q2PZ0iZsyw6DICorfLOPbfLIeMCY6l/HuFdbBIY7B24SqXlAyYiqFh",
+	"VUFnbF0ydZuvx7GzcvMxAmewzBdYM9W9pezgzUjaLWw0WvYaKtqrUPW06YNuYBcnECdU+ZgL55G+WELH",
+	"I3ssxM8VDDbMl9+mir5hUpmAoUUcNfxsQcM1oRsNEitvWByuGsq3TsM3oKsG6ryG2wwxN9uYfU4dlMaU",
+	"0OaXUtzP1GQ1lRmR/E3ckw2VDm3DSoy5dnQLNdGNFP22OSVJfaZIRTVtxbaHucIwr3Ir+82nwXbxpKVK",
+	"k4r220aTvrMLPZEAy+Y0O15KxbTQtM1LNizGuDn2v0CcB0HqDHdO0EinOZFYvSj81FllnNXDP6FeDK8x",
+	"kb6hLr7Jh0jdkBCc5fskdEIxLeSAYA+s+qqwvmnSJrfAqxOSeb+KMtp5c+NO2DAMO1pFlvlYFfgGNGVt",
+	"TgRYVHpQcRAHdlWp02qEqt/tqNwfg2w78mv38tTT2d/Lgfj5dXvycrr3uPsWGPDNYSoSYXfWbD2o59z8",
+	"Yr8qyY4ihJoQysQRbGcCP2cYeVxd1vr85tjXLk4ecjMfpuJ8tJVA6z2ipQtXr0dbaEyHkJmpPGGPWMqP",
+	"6oqshYcVFonLRx0U++cYeT9e5XE+jLbxsLWKHHrNA8R71wMHSJnbFkqQJKI02lZ0ej1vYa857VQjMiHh",
+	"YBIz1nKzA00dlTeJeU38qW7AytFpbPRlku+VVpNop19WRsKkEy2rjLKFAhJpGYe0ZG01wiaZF+Q3phsT",
+	"xjGNxRNbzMX8Sg2Znctz8jbglme/mbEFa9zZ5BO/w0qKAYPpiktC1WSJLk80YWZSblkC2riulIHrx9gR",
+	"RapuotrllBW40y82yAkDUBiOONHyGv4MLCKNaGtFnhuuuBddE4ux8lfc/7FhLbw4PWZykz3EB06qkie5",
+	"weUC13zMMrL3IVAIK1gw08H1jsqmDVS3s+Un/M9MZWrY/c+bK/X5sU/4EN+RmiiVfklCfadMij2uzlPa",
+	"qs/we6gAZbP+SjLNqlwMPM43nIv4y8WlmaFhW0Pzc//9izKGG8artq8NMVixwaocljarmdQgjqtSMpym",
+	"+KBAJfP4FDI/6HFAnZ/2777g5We16Rav8T8G7rAxZ2niCM8eA13coHN1tN+aPVFih8hgE+lno7JdVEhL",
+	"Soe0apwbYHoAVbPUpKR2TRRY/EeAp3xvRizRGWCOG3Yz3ayu6OMLmR3VTVYF3cJM9D4TCNk3DOKbd7Bq",
+	"RrQgtnnFxVtDq4uf0KzAPizHdCy0vDjia6rpErVGC25cULyoOT5Px1Yx7mscQp7QLPZp+pPTHcXsHpKd",
+	"5WYpB3CE5EPvZ9G+zGCOUUm436S2GW+u5aU2hplTzNxI8MbozonDOS04o1vwiOPLpy1jBZx09fnEZam7",
+	"b66NcKE+YHO0RammedxYmFmBGRLnWmSp0kS5eBqzxbbGsJdaHMJPiW4kKKO515FDJbWAkNnUBP12PjZN",
+	"yuKZQrfxg6FPl+4E36Z+e1RPviaXPobmGIpbt3piVuWbhhaY4mOIe6osg0wetmEmjhd8a4B7KyyLGIa/",
+	"78ccR4+fY6G25+nC1J0hl8zq7YRIKOXqHiTU41wjfMoUaQWtx9xagqAzmwDG+ecRo467VOeMJr+vHcWi",
+	"w2Zr1KPoo0wfUkYRUsCwGIBG6ahftjefseZMElbnfaeB0dThRTFjbB25UPpXy5y5Fqy4AWHesqZdzoOV",
+	"4aZNFjZCXWp+YHzFY08YVCgY22x2guke8FJs5zjxN6F0LrYLSHzjiFuuqN3YwwFHCmtTc33g1uYDIXC8",
+	"u2d+S8zl/bAwsxe4XELL0lCS9X60pXpO98VsihlKSE4eSxuMvuF4It+cYqR9ySfZH2rdxPzWjFM5yziX",
+	"HeBLex8PKl93ZD5P8GnR1EqvbZxjLIsoxrctxDWg0xsnjqDEFB1CadQtIUlisqa8UEr7JWnNcWv2Iy6F",
+	"LY8Ru8/Gz0txYd7fRF4mrmkOzF1Qn/wG9taA+tkAaF1BRswBTkcdpUxpxittkd5pmz/UZFDDSBXqTHlx",
+	"GrVmhncVMD8w35PQkbMRkmxYq0H601Enq+xRZAqrysFTuiI1l36M5OzEsQQzgQ05Wb8Z185TaSf0vzvW",
+	"0jrtFY2a3Kfa3K9bppqZpxI2IIFXcGbD1aP1kS7sVt5BpU9pnk+aSYflRnyJNi9jVpfD+TtPYpg1Yc1U",
+	"pAcEto1A6pg28WyxFQqq3gxTR72VV8UXF5cXl76zg3asuCq+xJ9KPLqHi1/Rjq3ietkWtDttJ223SF1c",
+	"FQYrvhtix/ik50xpeHhlZU9DHt6aldnjBDjRf1xe2o59rsH2ldCua1mFs67+6aphw+HBM2vSyTmBE+rR",
+	"h0M5bmHz+QAaod2WTDaXbM0yjZOw3QIfuN4HYR7ZlvQLI4uvzlz20hrt2Y8M6b+ELUSTPvdasRrIJdGC",
+	"fHGJVPznY1MRTorkGEmZcbPutGvIsy7Mu4fSqWBLj+kfvjFRvtzpVlenvokbvCenUEMA/eSaie2mD9JI",
+	"26Q+9i+lL6uh8n18+RpBXdgXOxejpuI063gz2qaVttn4v0S9fzTK43b9Q4rejuMjuX/xqFPPWaZhUEkM",
+	"KD8tIgz+Cs8cA3P7U2meRPji0RRH8l+eCMTceRimQnnTndTAfYDAw4+k74YWN/+XT8OQ2rd4YE84vaMM",
+	"IWSKpat3g0gPq7RjP2+VrvEfUHXPdfLRdQ8WTx/fmqcHE06y6csntOngcD6qYQs9MWpHz1dPQ0967MGR",
+	"5Oz2afHDTBqDRyqgj4QanojEaCO8XQyDokbuqZEeuW+Ehh48DlDjdSO4h39NAK8Q2QHlClsBhgaAx7xB",
+	"5O0HNM5xa/6MQoyPoA5nNVQ5ydvDZiEfCgi+YSMk8sN+tCIv0SOhv1RRKmCzAFvr0GwH0yMSQ+T2WecH",
+	"65619cxR4chWkPT5bOF70HHj/wdUuniazMLiPvy4o9Nvy5/SxlmJXQoU0fnuWZB4Hc5A/39I1UeNzg/J",
+	"jJJrgOytMknXFTb28jrgH8LevxJyC4FDeWKiZat3Bu4PtlbYgi3Xp/r2Df7+2t/Icp7C4V1eGX37Kl+z",
+	"d/vKRpJMq2H/gkpEDHEX4osniHR+EET1VeOI+phStKKJtvp99t1n8OGnXr+/sB4/uh+1UZ8U2s9pie8d",
+	"kdC1tII6bd3oJNwx0St7JPtJESBqatnR1gRMHzcSxVNmljuOtAUQOF4mNo43Pm+iHg0PLh9Zz9xBoDk5",
+	"eVXJ+hCGl5SFGuZnhzbYPaSHAz2p4/Bx8WJ88qt/6UgG83UItytRg9FCQ4C9LZFoUUbH2v2NC+5P7xp8",
+	"ahNdjBjG9OH98NlsstOI+2LxzsenCq1O2IydS398n1PIXNYDK4xep9vgn27iYrdviRENdiLj0W2/ktKf",
+	"dPpkoy3P/qzVrN65dRxW76w8Dkto++tw2+FZMOsvPT1Fb23Hy1Morturm3LwRz50Z/jOEIz0DRRb7TQK",
+	"bMQ+7mzBgwrY5Rzx/ekgO72xkXJ7K6sDK6rHrSd4LpJqr8yfBMqHHoxIXZMCX1JpXtLWN5OTee9VYf5A",
+	"yphSeVKF050UPZbO22HW7nbTz7lAHHYxQkuyAXF7Y1JK0sfW/kTQn95Wz7whusurluwxuU/zfcyxzG/D",
+	"R22Ts4HTh7TkZH0ZJofzVBv2J3EXd3Ugx6BsC7wDIH+2VuuzIRtL+/3j1Ghx99gWcD8dF2Zl+7TWG51u",
+	"MJKzJxzsrcun2e+xOu/3oMe3FH+qLnVM52Laraa4i1eKurOa9iJxDOsEB2e8TH2SlvnR9T4u7B4O/xcA",
+	"AP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

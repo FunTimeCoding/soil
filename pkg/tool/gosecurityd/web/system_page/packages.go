@@ -3,6 +3,7 @@ package system_page
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/package_group"
 	"github.com/funtimecoding/soil/pkg/web/component/table"
 	"maragu.dev/gomponents"
@@ -23,6 +24,7 @@ func Packages(
 			rows,
 			html.Tr(
 				html.Td(gomponents.Text(g.Source)),
+				html.Td(ScoreBadge(g.TopScore)),
 				html.Td(gomponents.Text(g.Installed)),
 				html.Td(gomponents.Text(g.Fixed)),
 				html.Td(gomponents.Text(g.Candidate)),
@@ -30,7 +32,10 @@ func Packages(
 					html.Details(
 						html.Summary(
 							gomponents.Text(
-								fmt.Sprintf("%d CVEs", len(g.Vulnerabilities)),
+								fmt.Sprintf(
+									"%d vulnerabilities",
+									len(g.Vulnerabilities),
+								),
 							),
 						),
 						html.Small(
@@ -48,7 +53,7 @@ func Packages(
 			html.Strong(
 				gomponents.Text(
 					fmt.Sprintf(
-						"%s: %d packages, %d CVEs",
+						"%s: %d packages, %d vulnerabilities",
 						title,
 						len(groups),
 						vulnerabilities,
@@ -56,7 +61,14 @@ func Packages(
 				),
 			),
 		),
-		table.New("Package", "Installed", "Fixed in", "Candidate", "CVEs").
+		table.New(
+			"Package",
+			"Top score",
+			"Installed",
+			"Fixed in",
+			"Candidate",
+			constant.VulnerabilitiesHeader,
+		).
 			Rows(rows).
 			Empty("None.").
 			Node(),

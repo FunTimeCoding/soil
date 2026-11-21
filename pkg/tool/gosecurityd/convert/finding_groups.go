@@ -11,10 +11,14 @@ func FindingGroups(v []*finding_group.Group) []*server.FindingGroup {
 	for i, g := range v {
 		result[i] = &server.FindingGroup{
 			Vulnerability: g.Vulnerability,
+			Severity:      optional(g.Severity),
+			Unimportant:   g.Unimportant,
 			Systems:       g.Systems,
-			NoFix:         g.NoFix,
-			PaidOnly:      g.PaidOnly,
-			Upgradable:    g.Upgradable,
+			Count:         AffectedCount(g.Count),
+		}
+
+		if g.Severity != "" {
+			result[i].Score = &g.Score
 		}
 	}
 

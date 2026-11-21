@@ -17,6 +17,51 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// AffectedCount defines model for AffectedCount.
+type AffectedCount struct {
+	// Open Systems with no fix yet.
+	Open int `json:"open"`
+
+	// Paid Systems where the fix is only in paid support.
+	Paid int `json:"paid"`
+
+	// Pending Systems where Debian has a fix that is not in their upgrade candidate yet.
+	Pending int `json:"pending"`
+
+	// Reboot Systems where a reboot into an installed newer kernel fixes it.
+	Reboot  int `json:"reboot"`
+	Systems int `json:"systems"`
+
+	// Upgrade Systems where an upgrade from their package lists fixes it.
+	Upgrade int `json:"upgrade"`
+}
+
+// AffectedSystem defines model for AffectedSystem.
+type AffectedSystem struct {
+	Candidate string `json:"candidate"`
+	Coverage  string `json:"coverage"`
+	Fixed     string `json:"fixed"`
+	Installed string `json:"installed"`
+
+	// Kind upgrade fixes it, debian fix not in candidate, paid support only, or no fix yet.
+	Kind     string             `json:"kind"`
+	Labels   *map[string]string `json:"labels,omitempty"`
+	Priority int                `json:"priority"`
+	Source   string             `json:"source"`
+	System   string             `json:"system"`
+}
+
+// AffectedSystems defines model for AffectedSystems.
+type AffectedSystems struct {
+	Count      AffectedCount `json:"count"`
+	Identifier string        `json:"identifier"`
+
+	// Score The vulnerability's base score from the score mirror.
+	Score    *float64         `json:"score,omitempty"`
+	Severity *string          `json:"severity,omitempty"`
+	Systems  []AffectedSystem `json:"systems"`
+}
+
 // DebianStatus defines model for DebianStatus.
 type DebianStatus struct {
 	Identifier      string     `json:"identifier"`
@@ -37,16 +82,23 @@ type ErrorResponse struct {
 
 // FindingGroup defines model for FindingGroup.
 type FindingGroup struct {
-	NoFix         int      `json:"no_fix"`
-	PaidOnly      int      `json:"paid_only"`
-	Systems       []string `json:"systems"`
-	Upgradable    int      `json:"upgradable"`
-	Vulnerability string   `json:"vulnerability"`
+	Count AffectedCount `json:"count"`
+
+	// Score The vulnerability's score from the score mirror; absent when the National Vulnerability Database has not scored it.
+	Score    *float64 `json:"score,omitempty"`
+	Severity *string  `json:"severity,omitempty"`
+	Systems  []string `json:"systems"`
+
+	// Unimportant Debian marks it unimportant on every system it hits; it never enters the remediation list.
+	Unimportant   bool   `json:"unimportant"`
+	Vulnerability string `json:"vulnerability"`
 }
 
 // Flag defines model for Flag.
 type Flag struct {
-	Flagged    time.Time `json:"flagged"`
+	Flagged time.Time `json:"flagged"`
+
+	// Identifier A CVE identifier, or a remediation item subject - upgrade:<release>:<source>, release:<host> or reboot:<host>.
 	Identifier string    `json:"identifier"`
 	Mitigated  bool      `json:"mitigated"`
 	Mitigation *string   `json:"mitigation,omitempty"`
@@ -71,9 +123,70 @@ type InstalledPackage struct {
 	Version       string  `json:"version"`
 }
 
+// KernelOffer defines model for KernelOffer.
+type KernelOffer struct {
+	// Origins Where apt finds this version, e.g. "http://deb.debian.org/debian bookworm-backports/main", or /var/lib/dpkg/status for the installed one.
+	Origins  []string `json:"origins"`
+	Priority int      `json:"priority"`
+	Version  string   `json:"version"`
+}
+
 // MitigationRequest defines model for MitigationRequest.
 type MitigationRequest struct {
 	Mitigation *string `json:"mitigation,omitempty"`
+}
+
+// RemediationItem defines model for RemediationItem.
+type RemediationItem struct {
+	Addressed bool           `json:"addressed"`
+	Count     *AffectedCount `json:"count,omitempty"`
+	Decision  *Flag          `json:"decision,omitempty"`
+	Hosts     []string       `json:"hosts"`
+
+	// Kind upgrade, vulnerability (no upgrade on these hosts), release (the host's release is unsupported or untracked), reboot (a newer kernel is installed) or kernel (Debian has kernel fixes the host's sources do not reach).
+	Kind string `json:"kind"`
+
+	// Reason For a kernel item, why the fixes are out of reach - no backports source, package lists N days old, or what the sources offer.
+	Reason  *string `json:"reason,omitempty"`
+	Release *string `json:"release,omitempty"`
+	Source  *string `json:"source,omitempty"`
+
+	// Subject What a decision is keyed by - upgrade:<release>:<source>, a CVE identifier, release:<host> or reboot:<host>.
+	Subject  string  `json:"subject"`
+	TopScore float64 `json:"top_score"`
+
+	// Unknown The host's release has no tracker, so its vulnerabilities are unknown.
+	Unknown         bool     `json:"unknown"`
+	Vulnerabilities []string `json:"vulnerabilities"`
+}
+
+// RemediationList defines model for RemediationList.
+type RemediationList struct {
+	// Addressed Items a decision covers with a mitigation or accepted risk.
+	Addressed int               `json:"addressed"`
+	Items     []RemediationItem `json:"items"`
+	Open      int               `json:"open"`
+
+	// Unimportant Vulnerabilities left out because Debian marks them unimportant.
+	Unimportant int `json:"unimportant"`
+}
+
+// ScoreStatus defines model for ScoreStatus.
+type ScoreStatus struct {
+	// Filled The first fill is complete; after it, only changes are fetched.
+	Filled bool `json:"filled"`
+
+	// Mirrored Vulnerabilities with a stored score row.
+	Mirrored int `json:"mirrored"`
+
+	// Start How far the first fill has paged through the National Vulnerability Database's catalogue.
+	Start int `json:"start"`
+
+	// Synced When the mirror last caught up with the National Vulnerability Database's changes.
+	Synced *time.Time `json:"synced,omitempty"`
+
+	// Total The catalogue's size at the last page.
+	Total int `json:"total"`
 }
 
 // Status defines model for Status.
@@ -95,23 +208,42 @@ type SystemDetail struct {
 
 // SystemFinding defines model for SystemFinding.
 type SystemFinding struct {
-	Fix           string  `json:"fix"`
-	Fixed         *string `json:"fixed,omitempty"`
-	Installed     string  `json:"installed"`
-	Package       string  `json:"package"`
-	Source        string  `json:"source"`
-	Upgradable    bool    `json:"upgradable"`
-	Urgency       string  `json:"urgency"`
-	Vulnerability string  `json:"vulnerability"`
+	Fix       string  `json:"fix"`
+	Fixed     *string `json:"fixed,omitempty"`
+	Installed string  `json:"installed"`
+
+	// Kernel The finding is on the running kernel, matched by its image version.
+	Kernel  bool   `json:"kernel"`
+	Package string `json:"package"`
+
+	// Reboot A newer installed kernel image already has the fix; a reboot into it fixes this.
+	Reboot bool `json:"reboot"`
+
+	// Score The vulnerability's base score from the score mirror; absent while the National Vulnerability Database has not scored it or the mirror has not reached it.
+	Score         *float64 `json:"score,omitempty"`
+	Severity      *string  `json:"severity,omitempty"`
+	Source        string   `json:"source"`
+	Upgradable    bool     `json:"upgradable"`
+	Urgency       string   `json:"urgency"`
+	Vulnerability string   `json:"vulnerability"`
 }
 
 // SystemSnapshot defines model for SystemSnapshot.
 type SystemSnapshot struct {
-	Kernel   *string             `json:"kernel,omitempty"`
-	Labels   *map[string]string  `json:"labels,omitempty"`
-	Packages []*InstalledPackage `json:"packages"`
-	Priority *int                `json:"priority,omitempty"`
-	Release  string              `json:"release"`
+	Kernel *string `json:"kernel,omitempty"`
+
+	// KernelMetapackageInstalled Whether the kernel metapackage is installed, from apt-cache policy's Installed line; absent when not reported. Without it apt never offers a kernel upgrade.
+	KernelMetapackageInstalled *bool `json:"kernel_metapackage_installed,omitempty"`
+
+	// KernelOffers The versions the host's sources offer for its kernel metapackage, as apt-cache policy lists them.
+	KernelOffers *[]KernelOffer     `json:"kernel_offers,omitempty"`
+	Labels       *map[string]string `json:"labels,omitempty"`
+
+	// ListsUpdated The date of the newest package index the host holds (its newest Release or InRelease file).
+	ListsUpdated *time.Time          `json:"lists_updated,omitempty"`
+	Packages     []*InstalledPackage `json:"packages"`
+	Priority     *int                `json:"priority,omitempty"`
+	Release      string              `json:"release"`
 }
 
 // SystemSummary defines model for SystemSummary.
@@ -120,18 +252,55 @@ type SystemSummary struct {
 	Clean   bool `json:"clean"`
 
 	// Coverage Whether a tracker covers the system's release - supported, unsupported tracked, or unsupported untracked.
-	Coverage string             `json:"coverage"`
-	Findings int                `json:"findings"`
-	Kernel   *string            `json:"kernel,omitempty"`
-	Labels   *map[string]string `json:"labels,omitempty"`
-	Name     string             `json:"name"`
-	NoFix    int                `json:"no_fix"`
-	PaidOnly int                `json:"paid_only"`
-	Priority int                `json:"priority"`
-	Release  string             `json:"release"`
+	Coverage string `json:"coverage"`
+
+	// Critical Vulnerabilities scored 9.0 or higher (critical), the kernel included, each counted once.
+	Critical int `json:"critical"`
+
+	// Findings Package findings, the kernel left out.
+	Findings int     `json:"findings"`
+	Kernel   *string `json:"kernel,omitempty"`
+
+	// KernelFindings Kernel findings, with and without a fix.
+	KernelFindings int            `json:"kernel_findings"`
+	KernelOffers   *[]KernelOffer `json:"kernel_offers,omitempty"`
+
+	// KernelReason Why some of Debian's kernel fixes are out of the host's reach, from its sources and package lists; set whenever any are, not only when the kernel has no upgrade path.
+	KernelReason *string `json:"kernel_reason,omitempty"`
+
+	// KernelState The kernel's state - up to date, reboot fixes it, upgrade and reboot, no upgrade path, paid support only, or no kernel data.
+	KernelState string `json:"kernel_state"`
+
+	// KernelWithFix Kernel findings with a fix in Debian or paid support.
+	KernelWithFix int                `json:"kernel_with_fix"`
+	Labels        *map[string]string `json:"labels,omitempty"`
+
+	// ListsUpdated The date of the newest package index the host holds.
+	ListsUpdated *time.Time `json:"lists_updated,omitempty"`
+	Name         string     `json:"name"`
+
+	// NewestKernel The newest installed kernel image's version, without a backports suffix.
+	NewestKernel *string `json:"newest_kernel,omitempty"`
+
+	// NoFix Package findings without a fix.
+	NoFix int `json:"no_fix"`
+
+	// PaidOnly Package findings with a fix only in paid support.
+	PaidOnly int `json:"paid_only"`
+	Priority int `json:"priority"`
+
+	// Reboot Kernel findings a reboot into an already installed newer kernel fixes.
+	Reboot  int    `json:"reboot"`
+	Release string `json:"release"`
+
+	// RunningKernel The running kernel image's version.
+	RunningKernel *string `json:"running_kernel,omitempty"`
 
 	// Stale The last snapshot is older than the stale threshold; the system does not read clean.
 	Stale bool `json:"stale"`
+
+	// TopScore The highest score among the system's vulnerabilities; 0 when none is scored.
+	TopScore float64 `json:"top_score"`
 
 	// TrackerStale The tracker was last verified longer ago than its threshold; the system does not read clean.
 	TrackerStale bool `json:"tracker_stale"`
@@ -139,7 +308,59 @@ type SystemSummary struct {
 	// TrackerVerified When the tracker matching this system last answered; absent when no tracker is loaded.
 	TrackerVerified *time.Time `json:"tracker_verified,omitempty"`
 	Updated         time.Time  `json:"updated"`
-	Upgradable      int        `json:"upgradable"`
+
+	// Upgradable Package findings an upgrade fixes.
+	Upgradable int `json:"upgradable"`
+}
+
+// UpgradeGroup defines model for UpgradeGroup.
+type UpgradeGroup struct {
+	// Candidate The highest upgrade candidate among the hosts.
+	Candidate string `json:"candidate"`
+
+	// Fixed The highest fixed version among those vulnerabilities.
+	Fixed            string        `json:"fixed"`
+	Hosts            []UpgradeHost `json:"hosts"`
+	InstalledHighest string        `json:"installed_highest"`
+	InstalledLowest  string        `json:"installed_lowest"`
+	Kernel           bool          `json:"kernel"`
+	Release          string        `json:"release"`
+	Source           string        `json:"source"`
+
+	// TopScore The highest score among the vulnerabilities the upgrade fixes; 0 when none is scored.
+	TopScore float64 `json:"top_score"`
+
+	// Vulnerabilities The vulnerabilities the upgrade fixes, by CVE identifier.
+	Vulnerabilities []string `json:"vulnerabilities"`
+}
+
+// UpgradeHost defines model for UpgradeHost.
+type UpgradeHost struct {
+	// Binaries The host's binary packages from this source with an upgrade candidate; only on a single upgrade.
+	Binaries *[]string `json:"binaries,omitempty"`
+
+	// Candidate The upgrade candidate from the host's package lists.
+	Candidate string `json:"candidate"`
+
+	// Installed The installed source package version.
+	Installed string             `json:"installed"`
+	Labels    *map[string]string `json:"labels,omitempty"`
+	Name      string             `json:"name"`
+	Priority  int                `json:"priority"`
+}
+
+// UpgradeList defines model for UpgradeList.
+type UpgradeList struct {
+	Groups []UpgradeGroup `json:"groups"`
+
+	// Hosts Distinct hosts with at least one listed upgrade.
+	Hosts int `json:"hosts"`
+
+	// Releases Releases with any upgrade, for filtering.
+	Releases []string `json:"releases"`
+
+	// Vulnerabilities Distinct vulnerabilities the listed upgrades fix.
+	Vulnerabilities int `json:"vulnerabilities"`
 }
 
 // Vulnerability defines model for Vulnerability.
@@ -161,9 +382,45 @@ type Identifier = string
 // Name defines model for Name.
 type Name = string
 
+// Release defines model for Release.
+type Release = string
+
+// Score defines model for Score.
+type Score = float64
+
+// Source defines model for Source.
+type Source = string
+
+// ListFindingsParams defines parameters for ListFindings.
+type ListFindingsParams struct {
+	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+	Score *Score `form:"score,omitempty" json:"score,omitempty"`
+}
+
 // ListFlagsParams defines parameters for ListFlags.
 type ListFlagsParams struct {
 	IncludeMitigated *bool `form:"include_mitigated,omitempty" json:"include_mitigated,omitempty"`
+}
+
+// ListRemediationParams defines parameters for ListRemediation.
+type ListRemediationParams struct {
+	// Score The lowest score a finding needs to count; empty means 9.0 (critical).
+	Score *float64 `form:"score,omitempty" json:"score,omitempty"`
+}
+
+// ListSystemsParams defines parameters for ListSystems.
+type ListSystemsParams struct {
+	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+	Score *Score `form:"score,omitempty" json:"score,omitempty"`
+}
+
+// ListUpgradesParams defines parameters for ListUpgrades.
+type ListUpgradesParams struct {
+	// Show A release codename to narrow to, or kernel for the kernel packages; empty lists every release without the kernel.
+	Show *string `form:"show,omitempty" json:"show,omitempty"`
+
+	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
+	Score *Score `form:"score,omitempty" json:"score,omitempty"`
 }
 
 // GetDebianStatusParams defines parameters for GetDebianStatus.
@@ -255,7 +512,7 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 type ClientInterface interface {
 
 	// ListFindings performs a GET /api/findings (the `ListFindings` operationId) request.
-	ListFindings(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	ListFindings(ctx context.Context, params *ListFindingsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListFlags performs a GET /api/flags (the `ListFlags` operationId) request.
 	ListFlags(ctx context.Context, params *ListFlagsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -276,8 +533,14 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	MitigateFlag(ctx context.Context, identifier Identifier, body MitigateFlagJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListRemediation performs a GET /api/remediation (the `ListRemediation` operationId) request.
+	ListRemediation(ctx context.Context, params *ListRemediationParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetScoreStatus performs a GET /api/scores (the `GetScoreStatus` operationId) request.
+	GetScoreStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListSystems performs a GET /api/systems (the `ListSystems` operationId) request.
-	ListSystems(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	ListSystems(ctx context.Context, params *ListSystemsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteSystem performs a DELETE /api/systems/{name} (the `DeleteSystem` operationId) request.
 	DeleteSystem(ctx context.Context, name Name, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -293,16 +556,25 @@ type ClientInterface interface {
 	// GetSystemFindings performs a GET /api/systems/{name}/findings (the `GetSystemFindings` operationId) request.
 	GetSystemFindings(ctx context.Context, name Name, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListUpgrades performs a GET /api/upgrades (the `ListUpgrades` operationId) request.
+	ListUpgrades(ctx context.Context, params *ListUpgradesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetUpgrade performs a GET /api/upgrades/{release}/{source} (the `GetUpgrade` operationId) request.
+	GetUpgrade(ctx context.Context, release Release, source Source, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetVulnerability performs a GET /api/vulnerability/{identifier} (the `GetVulnerability` operationId) request.
 	GetVulnerability(ctx context.Context, identifier Identifier, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetDebianStatus performs a GET /api/vulnerability/{identifier}/debian (the `GetDebianStatus` operationId) request.
 	GetDebianStatus(ctx context.Context, identifier Identifier, params *GetDebianStatusParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetAffectedSystems performs a GET /api/vulnerability/{identifier}/systems (the `GetAffectedSystems` operationId) request.
+	GetAffectedSystems(ctx context.Context, identifier Identifier, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 // ListFindings performs a GET /api/findings (the `ListFindings` operationId) request.
-func (c *Client) ListFindings(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewListFindingsRequest(c.Server)
+func (c *Client) ListFindings(ctx context.Context, params *ListFindingsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListFindingsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -382,9 +654,35 @@ func (c *Client) MitigateFlag(ctx context.Context, identifier Identifier, body M
 	return c.Client.Do(req)
 }
 
+// ListRemediation performs a GET /api/remediation (the `ListRemediation` operationId) request.
+func (c *Client) ListRemediation(ctx context.Context, params *ListRemediationParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListRemediationRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetScoreStatus performs a GET /api/scores (the `GetScoreStatus` operationId) request.
+func (c *Client) GetScoreStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetScoreStatusRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListSystems performs a GET /api/systems (the `ListSystems` operationId) request.
-func (c *Client) ListSystems(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewListSystemsRequest(c.Server)
+func (c *Client) ListSystems(ctx context.Context, params *ListSystemsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListSystemsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -449,6 +747,32 @@ func (c *Client) GetSystemFindings(ctx context.Context, name Name, reqEditors ..
 	return c.Client.Do(req)
 }
 
+// ListUpgrades performs a GET /api/upgrades (the `ListUpgrades` operationId) request.
+func (c *Client) ListUpgrades(ctx context.Context, params *ListUpgradesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListUpgradesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetUpgrade performs a GET /api/upgrades/{release}/{source} (the `GetUpgrade` operationId) request.
+func (c *Client) GetUpgrade(ctx context.Context, release Release, source Source, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUpgradeRequest(c.Server, release, source)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetVulnerability performs a GET /api/vulnerability/{identifier} (the `GetVulnerability` operationId) request.
 func (c *Client) GetVulnerability(ctx context.Context, identifier Identifier, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetVulnerabilityRequest(c.Server, identifier)
@@ -475,8 +799,21 @@ func (c *Client) GetDebianStatus(ctx context.Context, identifier Identifier, par
 	return c.Client.Do(req)
 }
 
+// GetAffectedSystems performs a GET /api/vulnerability/{identifier}/systems (the `GetAffectedSystems` operationId) request.
+func (c *Client) GetAffectedSystems(ctx context.Context, identifier Identifier, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetAffectedSystemsRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // NewListFindingsRequest constructs an http.Request for the ListFindings method
-func NewListFindingsRequest(server string) (*http.Request, error) {
+func NewListFindingsRequest(server string, params *ListFindingsParams) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -492,6 +829,33 @@ func NewListFindingsRequest(server string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Score != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "score", *params.Score, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "number", Format: "double"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -643,8 +1007,89 @@ func NewMitigateFlagRequestWithBody(server string, identifier Identifier, conten
 	return req, nil
 }
 
+// NewListRemediationRequest constructs an http.Request for the ListRemediation method
+func NewListRemediationRequest(server string, params *ListRemediationParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/remediation")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Score != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "score", *params.Score, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "number", Format: "double"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetScoreStatusRequest constructs an http.Request for the GetScoreStatus method
+func NewGetScoreStatusRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/scores")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListSystemsRequest constructs an http.Request for the ListSystems method
-func NewListSystemsRequest(server string) (*http.Request, error) {
+func NewListSystemsRequest(server string, params *ListSystemsParams) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -660,6 +1105,33 @@ func NewListSystemsRequest(server string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Score != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "score", *params.Score, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "number", Format: "double"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -785,6 +1257,113 @@ func NewGetSystemFindingsRequest(server string, name Name) (*http.Request, error
 	return req, nil
 }
 
+// NewListUpgradesRequest constructs an http.Request for the ListUpgrades method
+func NewListUpgradesRequest(server string, params *ListUpgradesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/upgrades")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Show != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "show", *params.Show, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Score != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "score", *params.Score, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "number", Format: "double"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetUpgradeRequest constructs an http.Request for the GetUpgrade method
+func NewGetUpgradeRequest(server string, release Release, source Source) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "release", release, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "source", source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/upgrades/%s/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetVulnerabilityRequest constructs an http.Request for the GetVulnerability method
 func NewGetVulnerabilityRequest(server string, identifier Identifier) (*http.Request, error) {
 	var err error
@@ -880,6 +1459,40 @@ func NewGetDebianStatusRequest(server string, identifier Identifier, params *Get
 	return req, nil
 }
 
+// NewGetAffectedSystemsRequest constructs an http.Request for the GetAffectedSystems method
+func NewGetAffectedSystemsRequest(server string, identifier Identifier) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/vulnerability/%s/systems", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -927,7 +1540,7 @@ type ClientWithResponsesInterface interface {
 	// ListFindingsWithResponse performs a GET /api/findings (the `ListFindings` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
-	ListFindingsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListFindingsResponse, error)
+	ListFindingsWithResponse(ctx context.Context, params *ListFindingsParams, reqEditors ...RequestEditorFn) (*ListFindingsResponse, error)
 
 	// ListFlagsWithResponse performs a GET /api/flags (the `ListFlags` operationId) request.
 	//
@@ -954,10 +1567,20 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	MitigateFlagWithResponse(ctx context.Context, identifier Identifier, body MitigateFlagJSONRequestBody, reqEditors ...RequestEditorFn) (*MitigateFlagResponse, error)
 
+	// ListRemediationWithResponse performs a GET /api/remediation (the `ListRemediation` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListRemediationWithResponse(ctx context.Context, params *ListRemediationParams, reqEditors ...RequestEditorFn) (*ListRemediationResponse, error)
+
+	// GetScoreStatusWithResponse performs a GET /api/scores (the `GetScoreStatus` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetScoreStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetScoreStatusResponse, error)
+
 	// ListSystemsWithResponse performs a GET /api/systems (the `ListSystems` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
-	ListSystemsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSystemsResponse, error)
+	ListSystemsWithResponse(ctx context.Context, params *ListSystemsParams, reqEditors ...RequestEditorFn) (*ListSystemsResponse, error)
 
 	// DeleteSystemWithResponse performs a DELETE /api/systems/{name} (the `DeleteSystem` operationId) request.
 	//
@@ -979,6 +1602,16 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetSystemFindingsWithResponse(ctx context.Context, name Name, reqEditors ...RequestEditorFn) (*GetSystemFindingsResponse, error)
 
+	// ListUpgradesWithResponse performs a GET /api/upgrades (the `ListUpgrades` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListUpgradesWithResponse(ctx context.Context, params *ListUpgradesParams, reqEditors ...RequestEditorFn) (*ListUpgradesResponse, error)
+
+	// GetUpgradeWithResponse performs a GET /api/upgrades/{release}/{source} (the `GetUpgrade` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetUpgradeWithResponse(ctx context.Context, release Release, source Source, reqEditors ...RequestEditorFn) (*GetUpgradeResponse, error)
+
 	// GetVulnerabilityWithResponse performs a GET /api/vulnerability/{identifier} (the `GetVulnerability` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -988,6 +1621,11 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetDebianStatusWithResponse(ctx context.Context, identifier Identifier, params *GetDebianStatusParams, reqEditors ...RequestEditorFn) (*GetDebianStatusResponse, error)
+
+	// GetAffectedSystemsWithResponse performs a GET /api/vulnerability/{identifier}/systems (the `GetAffectedSystems` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetAffectedSystemsWithResponse(ctx context.Context, identifier Identifier, reqEditors ...RequestEditorFn) (*GetAffectedSystemsResponse, error)
 }
 
 type ListFindingsResponse struct {
@@ -995,6 +1633,8 @@ type ListFindingsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*FindingGroup
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1002,6 +1642,11 @@ type ListFindingsResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListFindingsResponse) GetJSON200() *[]*FindingGroup {
 	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListFindingsResponse) GetJSON400() *Error {
+	return r.JSON400
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1224,11 +1869,109 @@ func (r MitigateFlagResponse) ContentType() string {
 	return ""
 }
 
+type ListRemediationResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *RemediationList
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListRemediationResponse) GetJSON200() *RemediationList {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListRemediationResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListRemediationResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListRemediationResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListRemediationResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListRemediationResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListRemediationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetScoreStatusResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ScoreStatus
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetScoreStatusResponse) GetJSON200() *ScoreStatus {
+	return r.JSON200
+}
+
+// GetBody returns the raw response body bytes
+func (r GetScoreStatusResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetScoreStatusResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetScoreStatusResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetScoreStatusResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListSystemsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*SystemSummary
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1236,6 +1979,11 @@ type ListSystemsResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListSystemsResponse) GetJSON200() *[]*SystemSummary {
 	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListSystemsResponse) GetJSON400() *Error {
+	return r.JSON400
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1423,6 +2171,116 @@ func (r GetSystemFindingsResponse) ContentType() string {
 	return ""
 }
 
+type ListUpgradesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *UpgradeList
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListUpgradesResponse) GetJSON200() *UpgradeList {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListUpgradesResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListUpgradesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListUpgradesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListUpgradesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListUpgradesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListUpgradesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetUpgradeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *UpgradeGroup
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetUpgradeResponse) GetJSON200() *UpgradeGroup {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetUpgradeResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetUpgradeResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetUpgradeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUpgradeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUpgradeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetUpgradeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetVulnerabilityResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1561,11 +2419,66 @@ func (r GetDebianStatusResponse) ContentType() string {
 	return ""
 }
 
+type GetAffectedSystemsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *AffectedSystems
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetAffectedSystemsResponse) GetJSON200() *AffectedSystems {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetAffectedSystemsResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetAffectedSystemsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetAffectedSystemsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetAffectedSystemsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetAffectedSystemsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetAffectedSystemsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 // ListFindingsWithResponse performs a GET /api/findings (the `ListFindings` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) ListFindingsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListFindingsResponse, error) {
-	rsp, err := c.ListFindings(ctx, reqEditors...)
+func (c *ClientWithResponses) ListFindingsWithResponse(ctx context.Context, params *ListFindingsParams, reqEditors ...RequestEditorFn) (*ListFindingsResponse, error) {
+	rsp, err := c.ListFindings(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -1627,11 +2540,33 @@ func (c *ClientWithResponses) MitigateFlagWithResponse(ctx context.Context, iden
 	return ParseMitigateFlagResponse(rsp)
 }
 
+// ListRemediationWithResponse performs a GET /api/remediation (the `ListRemediation` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListRemediationWithResponse(ctx context.Context, params *ListRemediationParams, reqEditors ...RequestEditorFn) (*ListRemediationResponse, error) {
+	rsp, err := c.ListRemediation(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListRemediationResponse(rsp)
+}
+
+// GetScoreStatusWithResponse performs a GET /api/scores (the `GetScoreStatus` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetScoreStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetScoreStatusResponse, error) {
+	rsp, err := c.GetScoreStatus(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetScoreStatusResponse(rsp)
+}
+
 // ListSystemsWithResponse performs a GET /api/systems (the `ListSystems` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) ListSystemsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSystemsResponse, error) {
-	rsp, err := c.ListSystems(ctx, reqEditors...)
+func (c *ClientWithResponses) ListSystemsWithResponse(ctx context.Context, params *ListSystemsParams, reqEditors ...RequestEditorFn) (*ListSystemsResponse, error) {
+	rsp, err := c.ListSystems(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -1682,6 +2617,28 @@ func (c *ClientWithResponses) GetSystemFindingsWithResponse(ctx context.Context,
 	return ParseGetSystemFindingsResponse(rsp)
 }
 
+// ListUpgradesWithResponse performs a GET /api/upgrades (the `ListUpgrades` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListUpgradesWithResponse(ctx context.Context, params *ListUpgradesParams, reqEditors ...RequestEditorFn) (*ListUpgradesResponse, error) {
+	rsp, err := c.ListUpgrades(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListUpgradesResponse(rsp)
+}
+
+// GetUpgradeWithResponse performs a GET /api/upgrades/{release}/{source} (the `GetUpgrade` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetUpgradeWithResponse(ctx context.Context, release Release, source Source, reqEditors ...RequestEditorFn) (*GetUpgradeResponse, error) {
+	rsp, err := c.GetUpgrade(ctx, release, source, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUpgradeResponse(rsp)
+}
+
 // GetVulnerabilityWithResponse performs a GET /api/vulnerability/{identifier} (the `GetVulnerability` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1704,6 +2661,17 @@ func (c *ClientWithResponses) GetDebianStatusWithResponse(ctx context.Context, i
 	return ParseGetDebianStatusResponse(rsp)
 }
 
+// GetAffectedSystemsWithResponse performs a GET /api/vulnerability/{identifier}/systems (the `GetAffectedSystems` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetAffectedSystemsWithResponse(ctx context.Context, identifier Identifier, reqEditors ...RequestEditorFn) (*GetAffectedSystemsResponse, error) {
+	rsp, err := c.GetAffectedSystems(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetAffectedSystemsResponse(rsp)
+}
+
 // ParseListFindingsResponse parses an HTTP response from a ListFindingsWithResponse call
 func ParseListFindingsResponse(rsp *http.Response) (*ListFindingsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -1724,6 +2692,13 @@ func ParseListFindingsResponse(rsp *http.Response) (*ListFindingsResponse, error
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -1878,6 +2853,72 @@ func ParseMitigateFlagResponse(rsp *http.Response) (*MitigateFlagResponse, error
 	return response, nil
 }
 
+// ParseListRemediationResponse parses an HTTP response from a ListRemediationWithResponse call
+func ParseListRemediationResponse(rsp *http.Response) (*ListRemediationResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListRemediationResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest RemediationList
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetScoreStatusResponse parses an HTTP response from a GetScoreStatusWithResponse call
+func ParseGetScoreStatusResponse(rsp *http.Response) (*GetScoreStatusResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetScoreStatusResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ScoreStatus
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListSystemsResponse parses an HTTP response from a ListSystemsWithResponse call
 func ParseListSystemsResponse(rsp *http.Response) (*ListSystemsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -1898,6 +2939,13 @@ func ParseListSystemsResponse(rsp *http.Response) (*ListSystemsResponse, error) 
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -1999,6 +3047,86 @@ func ParseGetSystemFindingsResponse(rsp *http.Response) (*GetSystemFindingsRespo
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest SystemDetail
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListUpgradesResponse parses an HTTP response from a ListUpgradesWithResponse call
+func ParseListUpgradesResponse(rsp *http.Response) (*ListUpgradesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListUpgradesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UpgradeList
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetUpgradeResponse parses an HTTP response from a GetUpgradeWithResponse call
+func ParseGetUpgradeResponse(rsp *http.Response) (*GetUpgradeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUpgradeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UpgradeGroup
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2125,6 +3253,46 @@ func ParseGetDebianStatusResponse(rsp *http.Response) (*GetDebianStatusResponse,
 			return nil, err
 		}
 		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetAffectedSystemsResponse parses an HTTP response from a GetAffectedSystemsWithResponse call
+func ParseGetAffectedSystemsResponse(rsp *http.Response) (*GetAffectedSystemsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetAffectedSystemsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest AffectedSystems
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
 
 	}
 

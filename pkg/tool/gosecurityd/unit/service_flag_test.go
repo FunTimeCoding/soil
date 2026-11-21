@@ -14,13 +14,13 @@ import (
 func TestFlagKeepsDatabaseSnapshot(t *testing.T) {
 	o := security_tester.New(t)
 	o.NationalDatabase.SeedVulnerability(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"CRITICAL",
 		10.0,
 	)
 	f, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"alfa",
 	)
 	assert.FatalOnError(t, e)
@@ -30,7 +30,7 @@ func TestFlagKeepsDatabaseSnapshot(t *testing.T) {
 	flags, g := o.Flag().Flags(false)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, flags)
-	assert.String(t, "CVE-2024-3094", flags[0].Vulnerability)
+	assert.String(t, "CVE-2099-00001", flags[0].Subject)
 }
 
 func TestFlagWithoutDatabaseRecordStillFlags(t *testing.T) {
@@ -45,7 +45,7 @@ func TestFlagRefusesWhenDatabaseFails(t *testing.T) {
 	o.NationalDatabase.Fail(errors.New("bravo"))
 	_, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.Error(t, e)
@@ -54,17 +54,30 @@ func TestFlagRefusesWhenDatabaseFails(t *testing.T) {
 	assert.Count(t, 0, flags)
 }
 
+func TestFlagRemediationItemWithoutDatabase(t *testing.T) {
+	o := security_tester.New(t)
+	o.NationalDatabase.Fail(errors.New("bravo"))
+	f, e := o.Flag().Flag(t.Context(), "upgrade:bookworm:victor", "hold")
+	assert.FatalOnError(t, e)
+	assert.String(t, "", f.Severity)
+	m, g := o.Flag().Mitigate("upgrade:bookworm:victor", "rolled out")
+	assert.FatalOnError(t, g)
+	assert.True(t, m.Mitigated)
+	_, h := o.Flag().Flag(t.Context(), "upgrade:bookworm", "")
+	assert.True(t, validation.Is(h))
+}
+
 func TestFlaggingOpenFlagAgainIsConflict(t *testing.T) {
 	o := security_tester.New(t)
 	_, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.FatalOnError(t, e)
 	_, f := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.True(t, conflict.Is(f))
@@ -74,11 +87,14 @@ func TestMitigatedFlagLeavesOpenList(t *testing.T) {
 	o := security_tester.New(t)
 	_, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.FatalOnError(t, e)
-	m, f := o.Flag().Mitigate(vulnerabilityConstant.KnownIdentifier, "charlie")
+	m, f := o.Flag().Mitigate(
+		vulnerabilityConstant.FixtureIdentifier,
+		"charlie",
+	)
 	assert.FatalOnError(t, f)
 	assert.True(t, m.Mitigated)
 	assert.String(t, "charlie", m.Mitigation)
@@ -94,19 +110,19 @@ func TestMitigatingTwiceIsConflict(t *testing.T) {
 	o := security_tester.New(t)
 	_, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.FatalOnError(t, e)
-	_, f := o.Flag().Mitigate(vulnerabilityConstant.KnownIdentifier, "")
+	_, f := o.Flag().Mitigate(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.FatalOnError(t, f)
-	_, g := o.Flag().Mitigate(vulnerabilityConstant.KnownIdentifier, "")
+	_, g := o.Flag().Mitigate(vulnerabilityConstant.FixtureIdentifier, "")
 	assert.True(t, conflict.Is(g))
 }
 
 func TestMitigatingUnflaggedIsNotFound(t *testing.T) {
 	_, e := security_tester.New(t).Flag().Mitigate(
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.True(t, not_found.Is(e))
@@ -116,15 +132,15 @@ func TestFlaggingMitigatedReopens(t *testing.T) {
 	o := security_tester.New(t)
 	_, e := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"",
 	)
 	assert.FatalOnError(t, e)
-	_, f := o.Flag().Mitigate(vulnerabilityConstant.KnownIdentifier, "delta")
+	_, f := o.Flag().Mitigate(vulnerabilityConstant.FixtureIdentifier, "delta")
 	assert.FatalOnError(t, f)
 	r, g := o.Flag().Flag(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		"echo",
 	)
 	assert.FatalOnError(t, g)

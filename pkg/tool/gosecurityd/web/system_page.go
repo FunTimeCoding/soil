@@ -7,18 +7,26 @@ import (
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
+	"net/url"
 )
 
 func (s *Server) systemPage(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	p, e := s.system.Packages(
-		r.URL.Query().Get(generativeConstant.ParameterName),
-	)
+	name := r.URL.Query().Get(generativeConstant.ParameterName)
+	m, e := minimum(r, 0)
 
 	if e != nil {
 		s.view.Answer(w, r, s.reporter, e)
+
+		return
+	}
+
+	p, f := s.system.Packages(name, m)
+
+	if f != nil {
+		s.view.Answer(w, r, s.reporter, f)
 
 		return
 	}
@@ -29,6 +37,13 @@ func (s *Server) systemPage(
 		constant.SystemsPath,
 		html.H1(gomponents.Text(p.Summary.Name)),
 		system_page.Facts(p.Summary),
+		system_page.ScoreFilter(
+			constant.SystemPath,
+			url.Values{generativeConstant.ParameterName: {name}},
+			m,
+			constant.CriticalChips,
+		),
+		system_page.Kernel(p.Kernel),
 		system_page.Packages("Upgrade fixes it", p.Upgrade, true),
 		system_page.Packages(
 			"Debian has a fix, not yet in the host's candidate",

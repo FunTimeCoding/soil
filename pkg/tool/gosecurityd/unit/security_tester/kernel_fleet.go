@@ -1,0 +1,164 @@
+package security_tester
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/installed"
+	vulnerabilityConstant "github.com/funtimecoding/soil/pkg/vulnerability/constant"
+	"time"
+)
+
+func (o *Tester) KernelFleet() *Tester {
+	o.t.Helper()
+
+	for _, v := range [][4]string{
+		{
+			"CVE-2099-60001",
+			"bookworm",
+			vulnerabilityConstant.DebianResolved,
+			"9.1.140-1",
+		},
+		{
+			"CVE-2099-60001",
+			"trixie",
+			vulnerabilityConstant.DebianResolved,
+			"9.12.48-1",
+		},
+		{"CVE-2099-60002", "trixie", vulnerabilityConstant.DebianOpen, ""},
+		{
+			"CVE-2099-60003",
+			"bookworm",
+			vulnerabilityConstant.DebianResolved,
+			"9.1.150-1",
+		},
+	} {
+		o.SecurityTracker.SeedStatus(
+			v[0],
+			constant.KernelSource,
+			v[1],
+			v[2],
+			v[3],
+		)
+	}
+
+	o.SecurityTracker.Modify(
+		time.Date(2026, time.November, 20, 8, 0, 0, 0, time.UTC),
+	)
+	o.ExtendedTracker.SeedStatus(
+		"CVE-2099-60003",
+		constant.KernelSource,
+		"bullseye",
+		vulnerabilityConstant.DebianResolved,
+		"8.10.250-1",
+	)
+	assert.Count(o.t, 0, o.Debian().Refresh(o.t.Context()))
+	o.putKernel(
+		"kilo",
+		"bookworm",
+		"9.1.0-35-amd64",
+		*installed.New(
+			"linux-image-9.1.0-35-amd64",
+			"9.1.137-1",
+			"linux-signed-amd64",
+			"9.1.137+1",
+			"",
+		),
+		*installed.New(
+			"linux-image-9.1.0-37-amd64",
+			"9.1.140-1",
+			"linux-signed-amd64",
+			"9.1.140+1",
+			"",
+		),
+		*installed.New(
+			"linux-image-amd64",
+			"9.1.140-1",
+			"linux-signed-amd64",
+			"9.1.140+1",
+			"9.1.150-1",
+		),
+		*installed.New(
+			"linux-libc-dev",
+			"9.1.100-1",
+			constant.KernelSource,
+			"9.1.100-1",
+			"",
+		),
+	)
+	o.putKernel(
+		"lima",
+		"bookworm",
+		"9.12.38+deb12-amd64",
+		*installed.New(
+			"linux-image-9.12.38+deb12-amd64",
+			"9.12.38-1~bpo12+1",
+			"linux-signed-amd64",
+			"9.12.38+1~bpo12+1",
+			"",
+		),
+		*installed.New(
+			"linux-image-amd64",
+			"9.12.38-1~bpo12+1",
+			"linux-signed-amd64",
+			"9.12.38+1~bpo12+1",
+			"9.12.95-1~bpo12+1",
+		),
+	)
+	o.putKernel(
+		"mike",
+		"bookworm",
+		"9.1.0-40-amd64",
+		*installed.New(
+			"linux-image-9.1.0-40-amd64",
+			"9.1.150-1",
+			"linux-signed-amd64",
+			"9.1.150+1",
+			"",
+		),
+		*installed.New(
+			"linux-libc-dev",
+			"9.1.100-1",
+			constant.KernelSource,
+			"9.1.100-1",
+			"",
+		),
+	)
+	o.putKernel(
+		"november",
+		"bookworm",
+		"9.12.48+deb12-amd64",
+		*installed.New(
+			"linux-image-9.12.48+deb12-amd64",
+			"9.12.48-1~bpo12+1",
+			"linux-signed-amd64",
+			"9.12.48+1~bpo12+1",
+			"",
+		),
+	)
+	o.putKernel(
+		"oscar",
+		"bullseye",
+		"9.1.0-0.deb11.21-amd64",
+		*installed.New(
+			"linux-image-9.1.0-0.deb11.21-amd64",
+			"9.1.90-1~bpo11+1",
+			"linux-signed-amd64",
+			"9.1.90+1~bpo11+1",
+			"",
+		),
+	)
+	o.putKernel(
+		"papa",
+		"bookworm",
+		"9.1.0-99-amd64",
+		*installed.New(
+			"linux-image-9.1.0-35-amd64",
+			"9.1.137-1",
+			"linux-signed-amd64",
+			"9.1.137+1",
+			"",
+		),
+	)
+
+	return o
+}

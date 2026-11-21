@@ -27,6 +27,7 @@ func (s *Server) lookup(
 			flag_page.VulnerabilityCard(name, v, e),
 			html.H2(gomponents.Text("Debian")),
 			s.debianCell(name),
+			s.affectedCell(name),
 			html.Div(
 				html.ID(constant.FlagsMark),
 				flag_page.FlagForm(

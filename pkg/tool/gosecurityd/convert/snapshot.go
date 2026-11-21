@@ -3,6 +3,7 @@ package convert
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/installed"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/kernel_offer"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/system"
 )
 
@@ -24,6 +25,18 @@ func Snapshot(
 
 	if v.Labels != nil {
 		result.Labels = *v.Labels
+	}
+
+	result.ListsUpdated = v.ListsUpdated
+	result.KernelMetapackageInstalled = v.KernelMetapackageInstalled
+
+	if v.KernelOffers != nil {
+		for _, o := range *v.KernelOffers {
+			result.KernelOffers = append(
+				result.KernelOffers,
+				kernel_offer.New(o.Version, o.Priority, o.Origins),
+			)
+		}
 	}
 
 	packages := make([]installed.Installed, 0, len(v.Packages))

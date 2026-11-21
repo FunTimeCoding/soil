@@ -20,5 +20,13 @@ func (s *Server) flagShut(
 		return
 	}
 
-	s.view.RenderFragment(w, flag_page.Closed(row))
+	c, f := s.flagHits(row)
+
+	if f != nil {
+		s.view.Answer(w, r, s.reporter, f)
+
+		return
+	}
+
+	s.view.RenderFragment(w, flag_page.Closed(row, c))
 }

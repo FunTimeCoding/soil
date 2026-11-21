@@ -11,12 +11,14 @@ func (s *Server) registerFlags() {
 		mcp.NewTool(
 			constant.FlagVulnerability,
 			mcp.WithDescription(
-				"Flag a CVE as a concern to mitigate. Stores the NVD severity and score as they are now; a CVE NVD has not published yet is flagged without them. Flagging a mitigated CVE again reopens it.",
+				"Record a decision: flag a vulnerability or a remediation item as a concern, with a note. Flagging a mitigated one reopens it. Decisions: gosecurityd://guide/remediation.",
 			),
 			mcp.WithString(
 				generativeConstant.ParameterIdentifier,
 				mcp.Required(),
-				mcp.Description("CVE identifier, e.g. CVE-2024-3094"),
+				mcp.Description(
+					"CVE identifier, e.g. CVE-2024-3094, or a remediation item subject from list_remediation, e.g. upgrade:bookworm:openssl",
+				),
 			),
 			mcp.WithString(
 				constant.NoteField,
@@ -29,7 +31,7 @@ func (s *Server) registerFlags() {
 		mcp.NewTool(
 			constant.ListFlags,
 			mcp.WithDescription(
-				"List flagged CVEs, newest first. Open concerns only unless include_mitigated is set.",
+				"List decisions, newest first; open ones unless include_mitigated is set.",
 			),
 			mcp.WithBoolean(
 				"include_mitigated",
@@ -42,17 +44,19 @@ func (s *Server) registerFlags() {
 		mcp.NewTool(
 			constant.MitigateFlag,
 			mcp.WithDescription(
-				"Mark a flagged CVE as mitigated, with how it was mitigated",
+				"Close a decision with how: a mitigation or an accepted risk with its reason. A mitigated remediation item counts as addressed.",
 			),
 			mcp.WithString(
 				generativeConstant.ParameterIdentifier,
 				mcp.Required(),
-				mcp.Description("CVE identifier, e.g. CVE-2024-3094"),
+				mcp.Description(
+					"CVE identifier or remediation item subject, as flagged",
+				),
 			),
 			mcp.WithString(
 				"mitigation",
 				mcp.Description(
-					"How it was mitigated, e.g. upgraded to 5.6.1-1",
+					"How, e.g. upgraded to 5.6.1-1, or accepted risk: retires in the first quarter",
 				),
 			),
 		),

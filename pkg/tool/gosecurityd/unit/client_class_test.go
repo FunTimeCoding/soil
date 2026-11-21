@@ -38,7 +38,7 @@ func TestUnknownVulnerabilityReachesClientAsNotFound(t *testing.T) {
 func TestUnloadedTrackerReachesClientAsUnavailable(t *testing.T) {
 	_, e := base.New(t).SecurityClient().GetDebianStatus(
 		t.Context(),
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		nil,
 	)
 	assert.True(t, unavailable.Is(e))
@@ -50,24 +50,24 @@ func TestFlagRefusalsReachClientByClass(t *testing.T) {
 	x := t.Context()
 	_, e := c.MitigateFlag(
 		x,
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		client.MitigationRequest{},
 	)
 	assert.True(t, not_found.Is(e))
-	b := client.FlagRequest{Identifier: vulnerabilityConstant.KnownIdentifier}
+	b := client.FlagRequest{Identifier: vulnerabilityConstant.FixtureIdentifier}
 	_, f := c.FlagVulnerability(x, b)
 	assert.FatalOnError(t, f)
 	_, g := c.FlagVulnerability(x, b)
 	assert.True(t, conflict.Is(g))
 	_, h := c.MitigateFlag(
 		x,
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		client.MitigationRequest{},
 	)
 	assert.FatalOnError(t, h)
 	_, i := c.MitigateFlag(
 		x,
-		vulnerabilityConstant.KnownIdentifier,
+		vulnerabilityConstant.FixtureIdentifier,
 		client.MitigationRequest{},
 	)
 	assert.True(t, conflict.Is(i))

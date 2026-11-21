@@ -3,18 +3,18 @@ package flag
 import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/flag"
-	"github.com/funtimecoding/soil/pkg/vulnerability/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/subject"
 )
 
 func (s *Service) Mitigate(
 	name string,
 	mitigation string,
 ) (*flag.Flag, error) {
-	if e := identifier.Check(name); e != nil {
+	if e := subject.Check(name); e != nil {
 		return nil, e
 	}
 
-	result, f := s.store.ByVulnerability(name)
+	result, f := s.store.BySubject(name)
 
 	if f != nil {
 		return nil, f

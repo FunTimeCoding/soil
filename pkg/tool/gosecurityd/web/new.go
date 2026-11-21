@@ -6,6 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/debian"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/flag"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/overview"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/remediation"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/score"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/vulnerability"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -20,6 +22,8 @@ func New(
 	f *flag.Service,
 	o *overview.Service,
 	y *system.Service,
+	c *score.Service,
+	w *remediation.Service,
 	r face.Reporter,
 ) *Server {
 	return &Server{
@@ -28,13 +32,27 @@ func New(
 		flag:          f,
 		overview:      o,
 		system:        y,
+		score:         c,
+		remediation:   w,
 		reporter:      r,
 		view: view.New(
 			layout.New(constant.Identity, webConstant.ThemeSentinel, favicon).
 				WithItems(
 					navigation_item.New(
+						constant.RemediationPath,
+						constant.RemediationTitle,
+					),
+					navigation_item.New(
 						constant.SystemsPath,
 						constant.SystemsTitle,
+					),
+					navigation_item.New(
+						constant.UpgradesPath,
+						constant.UpgradesTitle,
+					),
+					navigation_item.New(
+						constant.VulnerabilitiesPath,
+						constant.VulnerabilitiesTitle,
 					),
 					navigation_item.New(
 						constant.LookupPath,

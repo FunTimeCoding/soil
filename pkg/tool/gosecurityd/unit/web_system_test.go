@@ -16,7 +16,7 @@ func TestSystemsPageListsAndFiltersSystems(t *testing.T) {
 	s.SecurityTracker.SeedKnown()
 	s.Started()
 	c := s.SecurityClient()
-	candidate := "5.6.1-1"
+	candidate := "8.6.1-1"
 	assert.FatalOnError(
 		t,
 		c.PutSystem(
@@ -26,10 +26,10 @@ func TestSystemsPageListsAndFiltersSystems(t *testing.T) {
 				Release: "trixie",
 				Packages: []*client.InstalledPackage{
 					{
-						Name:          "liblzma5",
-						Version:       "5.4.0-1",
-						Source:        "xz-utils",
-						SourceVersion: "5.4.0-1",
+						Name:          "libtango5",
+						Version:       "8.4.0-1",
+						Source:        "tango-utils",
+						SourceVersion: "8.4.0-1",
 						Candidate:     &candidate,
 					},
 				},
@@ -41,7 +41,7 @@ func TestSystemsPageListsAndFiltersSystems(t *testing.T) {
 		c.PutSystem(
 			t.Context(),
 			"zulu",
-			client.SystemSnapshot{Release: "wheezy"},
+			client.SystemSnapshot{Release: "lima"},
 		),
 	)
 	assert.Eventually(
@@ -56,7 +56,8 @@ func TestSystemsPageListsAndFiltersSystems(t *testing.T) {
 	all := v.Body(t, constant.SystemsPath)
 	assert.StringContains(t, "yankee", all)
 	assert.StringContains(t, "zulu", all)
-	assert.StringContains(t, "An upgrade fixes something", all)
+	assert.StringContains(t, "A package upgrade fixes something", all)
+	assert.StringContains(t, "Kernel: no upgrade path", all)
 	untracked := v.Body(
 		t,
 		join.Empty(
@@ -68,7 +69,11 @@ func TestSystemsPageListsAndFiltersSystems(t *testing.T) {
 	assert.StringContains(t, "zulu", untracked)
 	assert.False(t, strings.Contains(untracked, "/system?name=yankee"))
 	detail := v.Body(t, "/system?name=yankee")
-	assert.StringContains(t, "Upgrade fixes it: 1 packages, 1 CVEs", detail)
-	assert.StringContains(t, "xz-utils", detail)
-	assert.StringContains(t, "CVE-2024-3094", detail)
+	assert.StringContains(
+		t,
+		"Upgrade fixes it: 1 packages, 1 vulnerabilities",
+		detail,
+	)
+	assert.StringContains(t, "tango-utils", detail)
+	assert.StringContains(t, "CVE-2099-00001", detail)
 }

@@ -6,8 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *Client) ListSystems(x context.Context) ([]*client.SystemSummary, error) {
-	r, e := c.client.ListSystemsWithResponse(x)
+func (c *Client) ListSystems(
+	x context.Context,
+	p *client.ListSystemsParams,
+) ([]*client.SystemSummary, error) {
+	r, e := c.client.ListSystemsWithResponse(x, p)
 
 	if e != nil {
 		return nil, e

@@ -9,11 +9,5 @@ func (s *Service) Detail(name string) (*system_result.Detail, error) {
 		return nil, e
 	}
 
-	packages, f := s.store.Packages(v.Identifier)
-
-	if f != nil {
-		return nil, f
-	}
-
-	return s.assess(v, packages), nil
+	return s.assess(v)
 }

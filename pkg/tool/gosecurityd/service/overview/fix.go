@@ -16,7 +16,7 @@ func fix(
 
 	for _, s := range d.Statuses {
 		if s.Status != vulnerabilityConstant.DebianResolved {
-			return constant.FixOwn
+			return constant.FixLocal
 		}
 	}
 

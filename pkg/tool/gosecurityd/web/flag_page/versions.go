@@ -12,7 +12,7 @@ import (
 
 func versions(r *overview_result.Row) gomponents.Node {
 	if r.Unread != nil {
-		return html.P(gomponents.Text(r.Unread.Error()))
+		return gomponents.Group(nil)
 	}
 
 	items := make([]gomponents.Node, 0, len(r.Debian.Statuses))
@@ -43,5 +43,8 @@ func versions(r *overview_result.Row) gomponents.Node {
 		)
 	}
 
-	return html.Ul(items...)
+	return html.Details(
+		html.Summary(gomponents.Text("Versions")),
+		html.Ul(items...),
+	)
 }

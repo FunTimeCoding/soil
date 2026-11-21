@@ -11,7 +11,11 @@ func (s *Server) registerSystems() {
 		mcp.NewTool(
 			constant.ListSystems,
 			mcp.WithDescription(
-				"List systems with their tracker coverage and finding counts, by priority. A system is clean only on a supported release with a loaded tracker, a fresh snapshot, a recently verified tracker and no finding; on any other coverage an empty finding list means unchecked, not clean. stale marks a snapshot past its age threshold, tracker_stale a tracker that has not answered within its threshold.",
+				"List systems by priority: coverage, clean, package finding counts, critical (vulnerabilities at 9.0 or higher), top score and kernel state. Coverage, clean and kernel states: gosecurityd://guide/matching.",
+			),
+			mcp.WithNumber(
+				constant.ScoreField,
+				mcp.Description(constant.ScoreDescription),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ListSystems),
@@ -20,7 +24,7 @@ func (s *Server) registerSystems() {
 		mcp.NewTool(
 			constant.GetSystemFindings,
 			mcp.WithDescription(
-				"Get one system's tracker coverage and findings: per CVE the source package, installed and fixed version, where the fix is (debian, paid support only, no fix) and whether the upgrade candidate already has it",
+				"Get one system's coverage and findings: per vulnerability the source package, installed and fixed version, where the fix is, whether the upgrade candidate has it, and the score.",
 			),
 			mcp.WithString(
 				generativeConstant.ParameterName,
@@ -34,9 +38,27 @@ func (s *Server) registerSystems() {
 		mcp.NewTool(
 			constant.ListFindings,
 			mcp.WithDescription(
-				"List findings grouped by CVE with the systems each one hits, most systems first",
+				"List vulnerabilities across systems with their score and how many systems each fix kind covers, the highest score first; unimportant marks one Debian will not fix.",
+			),
+			mcp.WithNumber(
+				constant.ScoreField,
+				mcp.Description(constant.ScoreDescription),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ListFindings),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.GetAffectedSystems,
+			mcp.WithDescription(
+				"Get the systems one vulnerability hits, each with its source package, versions, upgrade candidate and fix kind.",
+			),
+			mcp.WithString(
+				generativeConstant.ParameterIdentifier,
+				mcp.Required(),
+				mcp.Description("CVE identifier, e.g. CVE-2024-3094"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.GetAffectedSystems),
 	)
 }

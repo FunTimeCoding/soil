@@ -1,53 +1,75 @@
 package system
 
 import (
-	"cmp"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/installed"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_result"
 	"slices"
 )
 
-func (s *Service) assess(
-	v *system.System,
-	packages []installed.Installed,
-) *system_result.Detail {
+func (s *Service) assess(v *system.System) (*system_result.Detail, error) {
+	m, e := s.findings(v)
+
+	if e != nil {
+		return nil, e
+	}
+
+	findings := m.Findings
 	now := s.clock()
 	summary := system_result.NewSummary(v)
 	summary.Stale = now.Sub(v.UpdatedAt) > s.staleAfter
-	source := s.debian.Covering(v.Release)
-	var findings []*system_result.Finding
+	summary.RunningKernel = m.RunningKernel
+	summary.NewestKernel = m.NewestKernel
+	summary.KernelState = kernelState(m)
 
-	if source != nil {
+	if slices.ContainsFunc(
+		findings,
+		(*system_result.Finding).UnreachableKernel,
+	) {
+		summary.KernelReason = kernelReason(v, m.RunningKernel, now)
+	}
+
+	if source := s.debian.Covering(v.Release); source != nil {
 		summary.Coverage = constant.CoverageTracked
 
 		if source.Supported() {
 			summary.Coverage = constant.CoverageSupported
 		}
 
-		if t := source.Tracker(); t != nil {
+		if source.Tracker() != nil {
 			summary.Checked = true
 			summary.TrackerVerified = source.Verified()
 			summary.TrackerStale = now.Sub(
 				summary.TrackerVerified,
 			) > s.trackerStaleAfter
-			seen := map[[2]string]bool{}
-
-			for _, p := range packages {
-				for _, f := range match(t, v.Release, &p, source.Supported()) {
-					k := [2]string{f.Vulnerability, f.Source}
-
-					if !seen[k] {
-						seen[k] = true
-						findings = append(findings, f)
-					}
-				}
-			}
 		}
 	}
 
+	critical := map[string]bool{}
+
 	for _, f := range findings {
+		summary.TopScore = max(summary.TopScore, f.Score)
+
+		if f.Score >= constant.CriticalScore {
+			critical[f.Vulnerability] = true
+		}
+
+		if f.Kernel {
+			summary.KernelFindings++
+
+			if f.Fix != constant.FindingNone {
+				summary.KernelWithFix++
+			}
+
+			if f.Reboot {
+				summary.Reboot++
+			}
+
+			continue
+		}
+
+		summary.Findings++
+
 		switch f.Fix {
 		case constant.FindingNone:
 			summary.NoFix++
@@ -60,21 +82,12 @@ func (s *Service) assess(
 		}
 	}
 
-	summary.Findings = len(findings)
+	summary.Critical = len(critical)
 	summary.Clean = summary.Coverage == constant.CoverageSupported &&
 		summary.Checked &&
 		!summary.Stale &&
 		!summary.TrackerStale &&
 		len(findings) == 0
-	slices.SortFunc(
-		findings,
-		func(a *system_result.Finding, b *system_result.Finding) int {
-			return cmp.Or(
-				cmp.Compare(a.Source, b.Source),
-				cmp.Compare(a.Vulnerability, b.Vulnerability),
-			)
-		},
-	)
 
-	return system_result.NewDetail(summary, findings)
+	return system_result.NewDetail(summary, findings), nil
 }
