@@ -20,7 +20,7 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.10.4
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/chromedp/cdproto v0.160.4
-	github.com/chromedp/chromedp v0.23.1
+	github.com/chromedp/chromedp v0.24.0
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
 	github.com/coreos/go-semver v0.3.1
