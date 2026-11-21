@@ -65,7 +65,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.6
 	github.com/oapi-codegen/runtime v1.9.0
 	github.com/ollama/ollama v0.40.16
-	github.com/openai/openai-go/v3 v3.100.0
+	github.com/openai/openai-go/v3 v3.103.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
