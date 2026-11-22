@@ -146,6 +146,16 @@ single function, so one shape reads across homes
   (`go:pkg/tool/goproxmoxd/unit/service_tester`).
 - Fixtures filling a tester's parts are its methods; one the subject reads
   as it starts is an option.
+- Any `_tester` package hands out its object the same way: `New(t)`, and every
+  helper taking `t` is a method on it (`tester_function`). A fixture
+  constructor drops its `New` prefix and is named for what it prepares -
+  `NewStore(t)` became `New(t).Store()`.
+- A test calls a tester inline, `markup_tester.New(t).AssertCount(…)`; a
+  function using one more than once holds it in a local named for the
+  package's noun (`markup := markup_tester.New(t)`), stepping through the
+  noun's letters when the noun shadows an import or is taken (`naming.md`,
+  Single-character collision fallback). A local built from a test's `t` stays
+  out of its `t.Run` subtests, which build their own from theirs.
 
 ## The line
 
