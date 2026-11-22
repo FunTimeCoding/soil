@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/generated/server"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"reflect"
 	"strings"
 	"testing"
@@ -36,7 +37,10 @@ func TestClientCoversEveryOperation(t *testing.T) {
 }
 
 func TestClientAndItsMockKeepFace(t *testing.T) {
-	c := client.New(webConstant.Localhost, 1, "alfa")
+	c := client.New(
+		locator.New(webConstant.Localhost).Port(1).Insecure(),
+		"alfa",
+	)
 	m := mock_client.New(t, "bravo")
 	clients := []face.Client{c, m}
 

@@ -6,9 +6,10 @@ func New(
 	variables map[string]string,
 ) *Reading {
 	return &Reading{
-		Server:    server,
-		Battery:   battery,
-		Attached:  true,
-		Variables: variables,
+		Server:          server,
+		Battery:         battery,
+		Attached:        true,
+		DriverConnected: true,
+		Variables:       variables,
 	}
 }

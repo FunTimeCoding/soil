@@ -37,3 +37,18 @@ const (
 	InventoryPeer    = "inventory"
 	LimitFlag        = "--limit"
 )
+
+const (
+	HostCommand          = "host_command"
+	HostCommandParameter = "command"
+	HostCommandHost      = "host"
+	HostCommandKind      = "host command"
+	HostCommandFile      = "host-command.yaml"
+	HostCommandProgram   = "ansible"
+	HostCommandPattern   = "%s:&%s"
+	HostCommandOutside   = "host %s is not in group %s"
+	ListHostsFailed      = "list hosts: %w: %s"
+	ListHostsFlag        = "--list-hosts"
+	ModuleFlag           = "-m"
+	ArgumentFlag         = "-a"
+)

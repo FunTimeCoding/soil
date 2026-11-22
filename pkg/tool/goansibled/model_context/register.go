@@ -91,4 +91,25 @@ func (s *Server) register() {
 		),
 		s.getRun,
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.HostCommand,
+			mcp.WithDescription(
+				"Run a named host command from host-command.yaml on one host of its group and wait for the result. The run is recorded like a playbook run, its scope the command's name.",
+			),
+			mcp.WithString(
+				constant.HostCommandParameter,
+				mcp.Required(),
+				mcp.Description("Host command name."),
+			),
+			mcp.WithString(
+				constant.HostCommandHost,
+				mcp.Required(),
+				mcp.Description(
+					"Host to run it on, a member of the command's group.",
+				),
+			),
+		),
+		s.hostCommand,
+	)
 }

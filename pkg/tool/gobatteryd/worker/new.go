@@ -47,6 +47,13 @@ func New(
 			},
 			battery,
 		),
+		driver: prometheus.NewGaugeVec(
+			prometheus.GaugeOpts{
+				Name: constant.DriverMetric,
+				Help: constant.DriverHelp,
+			},
+			battery,
+		),
 		reachable: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Name: constant.ReachableMetric,
@@ -68,6 +75,7 @@ func New(
 		result.status,
 		result.information,
 		result.attached,
+		result.driver,
 		result.reachable,
 	)
 	result.clock = worker.NewEvery(result.tick, l, r, interval)

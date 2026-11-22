@@ -10,14 +10,12 @@ import (
 )
 
 func New(
-	host string,
-	port int,
+	l *locator.Locator,
 	token string,
 ) *Client {
 	p := stall_client.New().Build()
-	base := locator.New(host).Port(port).Insecure()
 	c, e := client.NewClientWithResponses(
-		base.String(),
+		l.String(),
 		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
@@ -27,7 +25,7 @@ func New(
 		context: context.Background(),
 		client:  c,
 		pool:    p,
-		base:    base,
+		base:    l,
 		token:   token,
 	}
 }

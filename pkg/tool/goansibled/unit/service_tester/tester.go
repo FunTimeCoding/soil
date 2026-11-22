@@ -3,6 +3,7 @@ package service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/runner"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/service"
 	"github.com/prometheus/client_golang/prometheus"
 	"testing"
@@ -14,6 +15,7 @@ type Tester struct {
 	Reporter *memory.Memory
 	Registry *prometheus.Registry
 	service  *service.Service
+	runner   *runner.Runner
 	capture  string
 	litePath string
 }

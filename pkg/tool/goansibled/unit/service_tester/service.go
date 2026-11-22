@@ -43,6 +43,7 @@ func (o *Tester) Service() *service.Service {
 			<-r.Finished()
 		},
 	)
+	o.runner = r
 	o.service = service.New(s, r)
 
 	return o.service

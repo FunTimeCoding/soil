@@ -33,6 +33,7 @@ func New(
 			CopyModes:       o.CopyModes,
 			ToolPath:        o.AnsibleDirectory,
 			ApplyFunction:   result.apply,
+			HostCommandFunction: result.hostCommandRun,
 			CleanupFunction: s.Cleanup,
 			Registry:        registry,
 		},

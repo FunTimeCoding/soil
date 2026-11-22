@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	nutConstant "github.com/funtimecoding/soil/pkg/nut/constant"
 	"github.com/funtimecoding/soil/pkg/nut/detached"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gobatteryd/types/reading"
@@ -25,7 +26,14 @@ func readTarget(t *target.Target) ([]*reading.Reading, error) {
 				v, f := t.Client.Variables(x, b)
 
 				if detached.Is(f) {
-					result = append(result, reading.NewDetached(t.Server, b))
+					result = append(
+						result,
+						reading.NewDetached(
+							t.Server,
+							b,
+							detached.Code(f) != nutConstant.DriverNotConnected,
+						),
+					)
 
 					continue
 				}

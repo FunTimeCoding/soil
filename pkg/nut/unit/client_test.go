@@ -49,6 +49,7 @@ func TestStaleBatteryDetached(t *testing.T) {
 	defer s.Close()
 	_, e := nut.New(s.Host(), s.Port()).Variables(t.Context(), "alfa")
 	assert.True(t, detached.Is(e))
+	assert.String(t, "DATA-STALE", detached.Code(e))
 }
 
 func TestDriverlessBatteryDetached(t *testing.T) {
@@ -58,6 +59,7 @@ func TestDriverlessBatteryDetached(t *testing.T) {
 	defer s.Close()
 	_, e := nut.New(s.Host(), s.Port()).Variables(t.Context(), "alfa")
 	assert.True(t, detached.Is(e))
+	assert.String(t, "DRIVER-NOT-CONNECTED", detached.Code(e))
 }
 
 func TestClosedServerUnreachable(t *testing.T) {

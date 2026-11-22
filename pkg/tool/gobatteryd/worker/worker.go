@@ -12,6 +12,7 @@ type Worker struct {
 	status      *prometheus.GaugeVec
 	information *prometheus.GaugeVec
 	attached    *prometheus.GaugeVec
+	driver      *prometheus.GaugeVec
 	reachable   *prometheus.GaugeVec
 	clock       *worker.Worker
 }

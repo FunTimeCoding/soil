@@ -8,6 +8,14 @@ import (
 )
 
 func (w *Worker) record(r *reading.Reading) {
+	driver := 0.0
+
+	if r.DriverConnected {
+		driver = 1
+	}
+
+	w.driver.WithLabelValues(r.Server, r.Battery).Set(driver)
+
 	if !r.Attached {
 		w.attached.WithLabelValues(r.Server, r.Battery).Set(0)
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
 )
 
@@ -20,6 +21,11 @@ type Option struct {
 	SetupFunction   func(context.Context) bool
 	CleanupFunction func()
 	ChangeFunction  func(value any) *change.Change
+	HostCommandFunction func(
+		command string,
+		host string,
+		source string,
+	) (*run.Run, error)
 	Downstream      []face.Downstream
 	Registry        soilFace.ProcessRegistry
 }

@@ -8,6 +8,7 @@ import (
 	provisionClient "github.com/funtimecoding/soil/pkg/provision/client"
 	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New() *Terraform {
@@ -24,8 +25,10 @@ func New() *Terraform {
 			host, port := network.SplitHostPort(address)
 			clients = append(
 				clients,
-				provisionClient.New(host, port, result.DownstreamToken),
-			)
+				provisionClient.New(
+					locator.New(host).Port(port).Insecure(),
+					result.DownstreamToken,
+				))
 		}
 
 		return clients

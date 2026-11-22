@@ -17,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -30,8 +31,7 @@ func TestApplyWithChangesTriggersDownstream(t *testing.T) {
 	)
 	defer v.Close()
 	c := client.New(
-		webConstant.Localhost,
-		v.Port,
+		locator.New(webConstant.Localhost).Port(v.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -74,7 +74,10 @@ func TestRefusedDownstreamIsCaptured(t *testing.T) {
 		},
 	)
 	defer v.Close()
-	c := client.New(webConstant.Localhost, v.Port, "bravo")
+	c := client.New(
+		locator.New(webConstant.Localhost).Port(v.Port).Insecure(),
+		"bravo",
+	)
 	defer c.Close()
 	s := runner_tester.New(t, runner_tester.WithDownstream(c))
 	response := make(chan *trigger.Result, 1)

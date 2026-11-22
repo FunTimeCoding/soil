@@ -31,6 +31,8 @@ const (
 	InformationHelp   = "A battery's model, manufacturer and serial, always 1"
 	AttachedMetric    = "battery_attached"
 	AttachedHelp      = "Whether the battery's driver serves its data, 1 or 0"
+	DriverMetric      = "battery_driver_connected"
+	DriverHelp        = "Whether the battery's driver is connected to upsd, stale or not, 1 or 0"
 	ReachableMetric   = "battery_server_reachable"
 	ReachableHelp     = "Whether an inventory server answered the last poll, 1 or 0"
 )

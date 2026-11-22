@@ -55,6 +55,23 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// HostCommandRequest defines model for HostCommandRequest.
+type HostCommandRequest struct {
+	Command string `json:"command"`
+	Host    string `json:"host"`
+
+	// Source The caller, recorded as the run's trigger source.
+	Source string `json:"source"`
+}
+
+// HostCommandRun defines model for HostCommandRun.
+type HostCommandRun struct {
+	ErrorOutput string `json:"error_output"`
+	Identifier  int    `json:"identifier"`
+	Output      string `json:"output"`
+	Status      string `json:"status"`
+}
+
 // HostEvent defines model for HostEvent.
 type HostEvent struct {
 	Action HostEventAction `json:"action"`
@@ -73,11 +90,17 @@ type TriggerRequest struct {
 	Update bool         `json:"update"`
 }
 
+// PostHostCommandJSONRequestBody defines body for PostHostCommand for application/json ContentType.
+type PostHostCommandJSONRequestBody = HostCommandRequest
+
 // PostTriggerJSONRequestBody defines body for PostTrigger for application/json ContentType.
 type PostTriggerJSONRequestBody = TriggerRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (POST /api/host-command)
+	PostHostCommand(w http.ResponseWriter, r *http.Request)
 
 	// (POST /api/trigger)
 	PostTrigger(w http.ResponseWriter, r *http.Request)
@@ -91,6 +114,20 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// PostHostCommand operation middleware
+func (siw *ServerInterfaceWrapper) PostHostCommand(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostHostCommand(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // PostTrigger operation middleware
 func (siw *ServerInterfaceWrapper) PostTrigger(w http.ResponseWriter, r *http.Request) {
@@ -227,8 +264,87 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/trigger", wrapper.PostTrigger)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/host-command", wrapper.PostHostCommand)
 
 	return m
+}
+
+type PostHostCommandRequestObject struct {
+	Body *PostHostCommandJSONRequestBody
+}
+
+type PostHostCommandResponseObject interface {
+	VisitPostHostCommandResponse(w http.ResponseWriter) error
+}
+
+type PostHostCommand200JSONResponse HostCommandRun
+
+func (response PostHostCommand200JSONResponse) VisitPostHostCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostHostCommand400JSONResponse Error
+
+func (response PostHostCommand400JSONResponse) VisitPostHostCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostHostCommand404JSONResponse Error
+
+func (response PostHostCommand404JSONResponse) VisitPostHostCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostHostCommand500JSONResponse ErrorResponse
+
+func (response PostHostCommand500JSONResponse) VisitPostHostCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostHostCommand503JSONResponse Error
+
+func (response PostHostCommand503JSONResponse) VisitPostHostCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(503)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type PostTriggerRequestObject struct {
@@ -292,6 +408,9 @@ func (response PostTrigger503JSONResponse) VisitPostTriggerResponse(w http.Respo
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (POST /api/host-command)
+	PostHostCommand(ctx context.Context, request PostHostCommandRequestObject) (PostHostCommandResponseObject, error)
+
 	// (POST /api/trigger)
 	PostTrigger(ctx context.Context, request PostTriggerRequestObject) (PostTriggerResponseObject, error)
 }
@@ -335,6 +454,37 @@ type strictHandler struct {
 	options     StrictHTTPServerOptions
 }
 
+// PostHostCommand operation middleware
+func (sh *strictHandler) PostHostCommand(w http.ResponseWriter, r *http.Request) {
+	var request PostHostCommandRequestObject
+
+	var body PostHostCommandJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostHostCommand(ctx, request.(PostHostCommandRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostHostCommand")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostHostCommandResponseObject); ok {
+		if err := validResponse.VisitPostHostCommandResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // PostTrigger operation middleware
 func (sh *strictHandler) PostTrigger(w http.ResponseWriter, r *http.Request) {
 	var request PostTriggerRequestObject
@@ -371,15 +521,18 @@ func (sh *strictHandler) PostTrigger(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"tJRBa9w8EIb/itD3Hc3aTdpD3VMKgfZWQqCHUopWerNW8I6U0XjLEva/F8neONs1JIfUp2E0mnnmnbEe",
-	"tQ3bGAgkSbePOtkOW1PMa+bA2YgcIlg8ihtHt+wjdKuTsKeNPhwqzXgYPMPp9scU9rM6hoX1PazoQzXm",
-	"vUGKgRJen7/S2IHkl3cg8Xcer4ZYuLnE9SUkuc6B50zGig9U6GjY5syWYQS60kN0o8GIvbHZcugheFZj",
-	"bqELSV7GLlHVseoS6y37zQZ8g4cBaQHYdoY2o+kF27So5+QwzGZ/hCuRDsmyj2PP+ntnRHUmRhCckqBg",
-	"bKdysJIOaiqlOLtX6mqdQKJ+d6BynEAOrKwhCqIEff9JYRtlP4ecZFAUSu6Vrmb0/xl3utX/1fOy1tOm",
-	"1vPYFlqapjN3vw6hh6EzyZ/GeFTuXPV8xdNdKNm89Pksctj5lHWq9A6cRsXerZpVk8uHCDLR61ZfFlel",
-	"o5GutFSb6GsZx1jmN21GnqLJyn91utXfQpJp1noERpLPwe3LkAPJtK4mxt7bcq++T+OqjgK9JN9fm3Q4",
-	"FUZ4QHGMf2shv2guzpfkZiD1MGCAW+XG3zcf34xwfIcK2GnNK8UDKZ+U6RnG7Z8DfGiatwV4erAWQG47",
-	"FBQbht6pvOdrnMJc/ns1JggCq84klSTEWOqX708AAAD//w==",
+	"xFVLTyM5EP4rlnclLr1JFtjDhhMzQpq5jEYIaQ6jEXLaRdqou2zKZVCE8t9HfuRFNyQHwtwsP8rfy+Vn",
+	"WdvOWQRkL6fP0tcNdCoNr4gsxYEj64DYQJqG1TQvHMip9EwG53K5rCTBQzAEWk5/lm2/qtU2O7uHmuWy",
+	"ynWvwTuLHg6vX0l4BORbowHZ3Bk4GMTAySFcX6znz7brFOpreAjguQ+uzuuD8BqbT/QWvA1UJ6YafE3G",
+	"sbEop/KmAVGrtgWqBEFtSYMWygtuQFDAEy+YzHwOJHKFkaz28F3BK2DWV++jG/AVH25tYBeGaQ0aYZBh",
+	"DhTX3zjqWXHw+/3bumJ9aF242oX4Gser6H2fnqqzC88SMHRJPALFICsZnM4DAteqOo40tMDbOu61/QWT",
+	"4ke5dQjrTfb69eg1Cud5aBg6PyhsmVBEarEC5/vJ+9EoFo1yDhC0YCtA1Y2Im1P4ylWC4vRIXM48IIun",
+	"BjAte0ANJGqFaFkwtO2FgM7xYrNlp4JAm2rH/K6h/01wJ6fyr/Gm/4xL8xlvbBugVNzZsJ9Z24LCnuRr",
+	"G1fK9VWPRwze2VTNcBvXHNlH46NOlXwE8lmxf0eT0SSl2gEqZ+RUnqWpSjrFTaI0Vs6MI9F/ttqEK/GI",
+	"Vqoo/1ctp/K79bz1AGVGDp4/Wb3IjQa55FY515o6nR3f+5zZrNQhOr7oaMtdlZgCpIncjRON08nkKAgC",
+	"5tv7TTAFr2gmSOGFMOxjCxReLbxo7JMwLJ4AeRQtOH9HgPmTewuX8cIG9kZDTnaGeeLFnGxwBdD58QF9",
+	"s7s6NemnUCxQdZBg/Pfeuqw/6UN8q21otYgdgQIWPGcf4xMFRKCkiGfrHOhR3Lqs8pMsv+jbr7G03yO9",
+	"xBfN/aBXeNrv29cBxUOAkAjG3P1/fIEv00M0XqiWQOnFNoAPT1yEsgnaDHbB/OG4LZe/AwAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

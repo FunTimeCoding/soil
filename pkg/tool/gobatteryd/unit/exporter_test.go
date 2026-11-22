@@ -46,6 +46,9 @@ battery_information{battery="alfa",manufacturer="Echo",model="Charlie \"Delta\" 
 # HELP battery_attached Whether the battery's driver serves its data, 1 or 0
 # TYPE battery_attached gauge
 battery_attached{battery="alfa",server="golf"} 1
+# HELP battery_driver_connected Whether the battery's driver is connected to upsd, stale or not, 1 or 0
+# TYPE battery_driver_connected gauge
+battery_driver_connected{battery="alfa",server="golf"} 1
 # HELP battery_server_reachable Whether an inventory server answered the last poll, 1 or 0
 # TYPE battery_server_reachable gauge
 battery_server_reachable{server="golf"} 1
@@ -57,6 +60,7 @@ battery_server_reachable{server="golf"} 1
 			constant.StatusMetric,
 			constant.InformationMetric,
 			constant.AttachedMetric,
+			constant.DriverMetric,
 			constant.ReachableMetric,
 		),
 	)
@@ -85,13 +89,48 @@ func TestStaleBatteryDetachedQuietly(t *testing.T) {
 # HELP battery_attached Whether the battery's driver serves its data, 1 or 0
 # TYPE battery_attached gauge
 battery_attached{battery="alfa",server="golf"} 0
+# HELP battery_driver_connected Whether the battery's driver is connected to upsd, stale or not, 1 or 0
+# TYPE battery_driver_connected gauge
+battery_driver_connected{battery="alfa",server="golf"} 1
 # HELP battery_server_reachable Whether an inventory server answered the last poll, 1 or 0
 # TYPE battery_server_reachable gauge
 battery_server_reachable{server="golf"} 1
 `,
 			),
 			constant.AttachedMetric,
+			constant.DriverMetric,
 			constant.ReachableMetric,
+		),
+	)
+	assert.Count(t, 0, b.Reporter.Events())
+}
+
+func TestDriverlessBatteryDriverDisconnected(t *testing.T) {
+	s := fixture.NewServer(
+		map[string]string{
+			nutConstant.ListBatteries: nutConstant.FixtureAlfaBattery,
+			"LIST VAR alfa":           nutConstant.FixtureNoDriver,
+		},
+	)
+	defer s.Close()
+	b := battery_tester.New(t, battery_tester.Instance("golf", s))
+	b.Poll()
+	assert.FatalOnError(
+		t,
+		testutil.GatherAndCompare(
+			b.Metric.Registry(),
+			strings.NewReader(
+				`
+# HELP battery_attached Whether the battery's driver serves its data, 1 or 0
+# TYPE battery_attached gauge
+battery_attached{battery="alfa",server="golf"} 0
+# HELP battery_driver_connected Whether the battery's driver is connected to upsd, stale or not, 1 or 0
+# TYPE battery_driver_connected gauge
+battery_driver_connected{battery="alfa",server="golf"} 0
+`,
+			),
+			constant.AttachedMetric,
+			constant.DriverMetric,
 		),
 	)
 	assert.Count(t, 0, b.Reporter.Events())

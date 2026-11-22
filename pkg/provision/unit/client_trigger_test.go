@@ -21,6 +21,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/unit/runner_tester"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -28,8 +29,7 @@ func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 	n := mock_runner.New()
 	s := runner_tester.Mount(t, n, memory.New())
 	c := provision.New(
-		webConstant.Localhost,
-		s.Port,
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -67,8 +67,7 @@ func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
 	n := mock_runner.New()
 	s := runner_tester.Mount(t, n, memory.New())
 	c := provision.New(
-		webConstant.Localhost,
-		s.Port,
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -104,7 +103,10 @@ func TestTriggerWithoutHostsFieldCarriesNoHosts(t *testing.T) {
 func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 	n := mock_runner.New()
 	s := runner_tester.Mount(t, n, memory.New())
-	c := provision.New(webConstant.Localhost, s.Port, "bravo")
+	c := provision.New(
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
+		"bravo",
+	)
 	defer c.Close()
 	e := c.PostTrigger(change.New([]string{"alfa"}, nil))
 	assert.True(t, unexpected.Is(e))
@@ -114,8 +116,7 @@ func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 
 func TestClientTriggerToNobodyIsConnectionFailure(t *testing.T) {
 	c := provision.New(
-		webConstant.Localhost,
-		1,
+		locator.New(webConstant.Localhost).Port(1).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -132,8 +133,7 @@ func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 		r,
 	)
 	c := provision.New(
-		webConstant.Localhost,
-		s.Port,
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -151,8 +151,7 @@ func TestClientTriggerOnStoppedRunnerIsUnavailable(t *testing.T) {
 		r,
 	)
 	c := provision.New(
-		webConstant.Localhost,
-		s.Port,
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
@@ -170,8 +169,7 @@ func TestClientTriggerFailureIsCaptured(t *testing.T) {
 		r,
 	)
 	c := provision.New(
-		webConstant.Localhost,
-		s.Port,
+		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()

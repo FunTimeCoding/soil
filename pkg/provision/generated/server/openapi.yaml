@@ -34,8 +34,78 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/host-command:
+    post:
+      operationId: postHostCommand
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HostCommandRequest"
+      responses:
+        "200":
+          description: The host command ran; its run says how it went.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HostCommandRun"
+        "400":
+          description: The host is outside the command's group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No host command has that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The host command could not run.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: The runner has stopped.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
+    HostCommandRequest:
+      type: object
+      required:
+      - command
+      - host
+      - source
+      properties:
+        command:
+          type: string
+        host:
+          type: string
+        source:
+          description: The caller, recorded as the run's trigger source.
+          type: string
+    HostCommandRun:
+      type: object
+      required:
+      - identifier
+      - status
+      - output
+      - error_output
+      properties:
+        identifier:
+          type: integer
+        status:
+          type: string
+        output:
+          type: string
+        error_output:
+          type: string
     TriggerRequest:
       type: object
       required:

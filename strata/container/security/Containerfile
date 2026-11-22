@@ -1,0 +1,4 @@
+FROM alpine:3.24.4
+COPY tmp/gosecurityd/linux-amd64/gosecurityd /usr/local/bin
+EXPOSE 8080
+ENTRYPOINT ["gosecurityd"]

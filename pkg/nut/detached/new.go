@@ -11,5 +11,6 @@ func New(
 ) *DetachedError {
 	return &DetachedError{
 		Message: fmt.Sprintf(constant.DetachedFormat, battery, code),
+		Code:    code,
 	}
 }

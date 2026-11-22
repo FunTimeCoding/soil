@@ -49,6 +49,23 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// HostCommandRequest defines model for HostCommandRequest.
+type HostCommandRequest struct {
+	Command string `json:"command"`
+	Host    string `json:"host"`
+
+	// Source The caller, recorded as the run's trigger source.
+	Source string `json:"source"`
+}
+
+// HostCommandRun defines model for HostCommandRun.
+type HostCommandRun struct {
+	ErrorOutput string `json:"error_output"`
+	Identifier  int    `json:"identifier"`
+	Output      string `json:"output"`
+	Status      string `json:"status"`
+}
+
 // HostEvent defines model for HostEvent.
 type HostEvent struct {
 	Action HostEventAction `json:"action"`
@@ -66,6 +83,9 @@ type TriggerRequest struct {
 	Hosts  *[]HostEvent `json:"hosts,omitempty"`
 	Update bool         `json:"update"`
 }
+
+// PostHostCommandJSONRequestBody defines body for PostHostCommand for application/json ContentType.
+type PostHostCommandJSONRequestBody = HostCommandRequest
 
 // PostTriggerJSONRequestBody defines body for PostTrigger for application/json ContentType.
 type PostTriggerJSONRequestBody = TriggerRequest
@@ -144,6 +164,14 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
+	// PostHostCommandWithBody performs a POST /api/host-command (the `PostHostCommand` operationId) request,
+	// with any type of body and a specified content type.
+	PostHostCommandWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostHostCommand performs a POST /api/host-command (the `PostHostCommand` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostHostCommand(ctx context.Context, body PostHostCommandJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// PostTriggerWithBody performs a POST /api/trigger (the `PostTrigger` operationId) request,
 	// with any type of body and a specified content type.
 	PostTriggerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -151,6 +179,34 @@ type ClientInterface interface {
 	// PostTrigger performs a POST /api/trigger (the `PostTrigger` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostTrigger(ctx context.Context, body PostTriggerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+// PostHostCommandWithBody performs a POST /api/host-command (the `PostHostCommand` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostHostCommandWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostHostCommandRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostHostCommand performs a POST /api/host-command (the `PostHostCommand` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostHostCommand(ctx context.Context, body PostHostCommandJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostHostCommandRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 // PostTriggerWithBody performs a POST /api/trigger (the `PostTrigger` operationId) request,
@@ -179,6 +235,46 @@ func (c *Client) PostTrigger(ctx context.Context, body PostTriggerJSONRequestBod
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewPostHostCommandRequest calls the generic PostHostCommand builder with application/json body
+func NewPostHostCommandRequest(server string, body PostHostCommandJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostHostCommandRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostHostCommandRequestWithBody constructs an http.Request for the PostHostCommand method, with any body, and a specified content type
+func NewPostHostCommandRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/host-command")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
 }
 
 // NewPostTriggerRequest calls the generic PostTrigger builder with application/json body
@@ -265,6 +361,16 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
+	// PostHostCommandWithBodyWithResponse performs a POST /api/host-command (the `PostHostCommand` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostHostCommandWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostHostCommandResponse, error)
+
+	// PostHostCommandWithResponse performs a POST /api/host-command (the `PostHostCommand` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostHostCommandWithResponse(ctx context.Context, body PostHostCommandJSONRequestBody, reqEditors ...RequestEditorFn) (*PostHostCommandResponse, error)
+
 	// PostTriggerWithBodyWithResponse performs a POST /api/trigger (the `PostTrigger` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -274,6 +380,75 @@ type ClientWithResponsesInterface interface {
 	// PostTriggerWithResponse performs a POST /api/trigger (the `PostTrigger` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostTriggerWithResponse(ctx context.Context, body PostTriggerJSONRequestBody, reqEditors ...RequestEditorFn) (*PostTriggerResponse, error)
+}
+
+type PostHostCommandResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *HostCommandRun
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostHostCommandResponse) GetJSON200() *HostCommandRun {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostHostCommandResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostHostCommandResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostHostCommandResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PostHostCommandResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r PostHostCommandResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostHostCommandResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostHostCommandResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostHostCommandResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 type PostTriggerResponse struct {
@@ -331,6 +506,28 @@ func (r PostTriggerResponse) ContentType() string {
 	return ""
 }
 
+// PostHostCommandWithBodyWithResponse performs a POST /api/host-command (the `PostHostCommand` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostHostCommandWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostHostCommandResponse, error) {
+	rsp, err := c.PostHostCommandWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostHostCommandResponse(rsp)
+}
+
+// PostHostCommandWithResponse performs a POST /api/host-command (the `PostHostCommand` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostHostCommandWithResponse(ctx context.Context, body PostHostCommandJSONRequestBody, reqEditors ...RequestEditorFn) (*PostHostCommandResponse, error) {
+	rsp, err := c.PostHostCommand(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostHostCommandResponse(rsp)
+}
+
 // PostTriggerWithBodyWithResponse performs a POST /api/trigger (the `PostTrigger` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -351,6 +548,60 @@ func (c *ClientWithResponses) PostTriggerWithResponse(ctx context.Context, body 
 		return nil, err
 	}
 	return ParsePostTriggerResponse(rsp)
+}
+
+// ParsePostHostCommandResponse parses an HTTP response from a PostHostCommandWithResponse call
+func ParsePostHostCommandResponse(rsp *http.Response) (*PostHostCommandResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostHostCommandResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest HostCommandRun
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParsePostTriggerResponse parses an HTTP response from a PostTriggerWithResponse call

@@ -6,6 +6,7 @@ import (
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/provision/types/update"
@@ -21,10 +22,16 @@ type Runner struct {
 		parameters map[string]any,
 		triggerSource string,
 	) any
-	initFunction    func()
-	setupFunction   func(context.Context) bool
-	cleanupFunction func()
-	changeFunction  func(value any) *change.Change
+	initFunction        func()
+	setupFunction       func(context.Context) bool
+	cleanupFunction     func()
+	changeFunction      func(value any) *change.Change
+	hostCommandFunction func(
+		command string,
+		host string,
+		source string,
+	) (*run.Run, error)
+	hostCommand     sync.Mutex
 	downstream      []face.Downstream
 	registry        soilFace.ProcessRegistry
 	logger          *logger.Logger

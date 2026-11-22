@@ -8,5 +8,6 @@ func (w *Worker) reset() {
 	w.status.Reset()
 	w.information.Reset()
 	w.attached.Reset()
+	w.driver.Reset()
 	w.reachable.Reset()
 }

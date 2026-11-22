@@ -27,6 +27,7 @@ func New(
 		setupFunction:   c.SetupFunction,
 		cleanupFunction: c.CleanupFunction,
 		changeFunction:  c.ChangeFunction,
+		hostCommandFunction: c.HostCommandFunction,
 		downstream:      c.Downstream,
 		registry:        c.Registry,
 		logger:          l,

@@ -55,6 +55,11 @@ func fixture(
 		[]byte(constant.FixtureScript),
 		0755,
 	)
+	system.WriteFile(
+		filepath.Join(binary, constant.HostCommandProgram),
+		[]byte(constant.FixtureAdHocScript),
+		0755,
+	)
 	t.Setenv(
 		"PATH",
 		join.Empty(binary, string(os.PathListSeparator), os.Getenv("PATH")),

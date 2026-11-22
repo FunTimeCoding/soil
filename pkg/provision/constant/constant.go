@@ -53,6 +53,8 @@ const (
 	RunnerStderr      = "stderr"
 	RunnerStopped     = "runner stopped"
 
+	HostCommandMissing = "this daemon runs no host commands"
+
 	SaltHostEnvironment           = "SALT_HOST"
 	SaltPortEnvironment           = "SALT_PORT"
 	SaltUserEnvironment           = "SALT_USER"
