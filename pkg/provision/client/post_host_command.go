@@ -13,10 +13,13 @@ func (c *Client) PostHostCommand(
 	host string,
 	source string,
 ) (client.HostCommandRun, error) {
-	response, e := c.client.PostHostCommandWithResponse(
-		x,
-		client.HostCommandRequest{Command: command, Host: host, Source: source},
-	)
+	request := client.HostCommandRequest{Command: command, Source: source}
+
+	if host != "" {
+		request.Host = &host
+	}
+
+	response, e := c.client.PostHostCommandWithResponse(x, request)
 
 	if e != nil {
 		if f := connection.Classify(e); f != nil {

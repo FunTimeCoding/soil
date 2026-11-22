@@ -54,6 +54,7 @@ const (
 	RunnerStopped     = "runner stopped"
 
 	HostCommandMissing = "this daemon runs no host commands"
+	HostUnreachable    = "unreachable"
 
 	SaltHostEnvironment           = "SALT_HOST"
 	SaltPortEnvironment           = "SALT_PORT"

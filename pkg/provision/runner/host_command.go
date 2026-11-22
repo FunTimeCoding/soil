@@ -4,14 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
-	"github.com/funtimecoding/soil/pkg/provision/model/run"
+	"github.com/funtimecoding/soil/pkg/provision/types/command_run"
 )
 
 func (r *Runner) HostCommand(
 	command string,
 	host string,
 	source string,
-) (*run.Run, error) {
+) (*command_run.Run, error) {
 	if r.hostCommandFunction == nil {
 		return nil, not_configured.Format(constant.HostCommandMissing)
 	}

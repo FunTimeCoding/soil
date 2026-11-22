@@ -4,8 +4,8 @@ import (
 	"context"
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/provision/face"
-	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
+	"github.com/funtimecoding/soil/pkg/provision/types/command_run"
 )
 
 type Option struct {
@@ -17,15 +17,15 @@ type Option struct {
 		parameters map[string]any,
 		triggerSource string,
 	) any
-	InitFunction    func()
-	SetupFunction   func(context.Context) bool
-	CleanupFunction func()
-	ChangeFunction  func(value any) *change.Change
+	InitFunction        func()
+	SetupFunction       func(context.Context) bool
+	CleanupFunction     func()
+	ChangeFunction      func(value any) *change.Change
 	HostCommandFunction func(
 		command string,
 		host string,
 		source string,
-	) (*run.Run, error)
-	Downstream      []face.Downstream
-	Registry        soilFace.ProcessRegistry
+	) (*command_run.Run, error)
+	Downstream []face.Downstream
+	Registry   soilFace.ProcessRegistry
 }

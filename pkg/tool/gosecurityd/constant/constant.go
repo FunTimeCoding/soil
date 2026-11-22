@@ -30,6 +30,15 @@ const (
 	NationalDatabasePeer = "national vulnerability database upstream"
 	SecurityTrackerPeer  = "debian security tracker upstream"
 	ExtendedTrackerPeer  = "freexian extended tracker upstream"
+	AnsiblePeer          = "goansibled"
+)
+
+const (
+	ProbeInterval    = 24 * time.Hour
+	ProbeHostCommand = "security_probe"
+	ProbeSource      = "gosecurityd"
+	ProbeSkipped     = "probe %s skipped: %s: %s"
+	ProbeFailed      = "probe %s: %w"
 )
 
 const (

@@ -78,8 +78,7 @@ func New(
 	c := score.New(st, n, ng, o.Clock)
 	y := system.New(st, d, c, o.Clock, o.StaleAfter, o.TrackerStaleAfter)
 	w := remediation.New(y, f)
-
-	return &Daemon{
+	result := &Daemon{
 		database:         m,
 		nationalDatabase: n,
 		nationalGuard:    ng,
@@ -97,4 +96,10 @@ func New(
 		clock:            worker.New(d.Refresh, l, r, constant.RefreshInterval),
 		scoreClock:       worker.New(c.Sync, l, r, constant.ScoreInterval),
 	}
+
+	if o.Ansible != nil {
+		result.withFeed(o.Ansible(), l, r)
+	}
+
+	return result
 }

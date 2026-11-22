@@ -52,18 +52,34 @@ type ErrorResponse struct {
 // HostCommandRequest defines model for HostCommandRequest.
 type HostCommandRequest struct {
 	Command string `json:"command"`
-	Host    string `json:"host"`
+
+	// Host One host of the command's group; absent runs it on the whole group.
+	Host *string `json:"host,omitempty"`
 
 	// Source The caller, recorded as the run's trigger source.
 	Source string `json:"source"`
 }
 
+// HostCommandResult defines model for HostCommandResult.
+type HostCommandResult struct {
+	Host       string `json:"host"`
+	ReturnCode int    `json:"return_code"`
+
+	// Status success, error or unreachable.
+	Status string `json:"status"`
+
+	// Stderr The command's error output, or why the host was unreachable.
+	Stderr string `json:"stderr"`
+	Stdout string `json:"stdout"`
+}
+
 // HostCommandRun defines model for HostCommandRun.
 type HostCommandRun struct {
-	ErrorOutput string `json:"error_output"`
-	Identifier  int    `json:"identifier"`
-	Output      string `json:"output"`
-	Status      string `json:"status"`
+	ErrorOutput string              `json:"error_output"`
+	Hosts       []HostCommandResult `json:"hosts"`
+	Identifier  int                 `json:"identifier"`
+	Output      string              `json:"output"`
+	Status      string              `json:"status"`
 }
 
 // HostEvent defines model for HostEvent.

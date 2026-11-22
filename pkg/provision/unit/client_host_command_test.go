@@ -17,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/unit/runner_tester"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/upstream_server"
 	"testing"
 )
 
@@ -32,16 +33,41 @@ func TestClientHostCommandReturnsRun(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Any(
 		t,
-		client.HostCommandRun{Identifier: 1, Status: "success"},
+		client.HostCommandRun{
+			Identifier: 1,
+			Status:     "success",
+			Hosts: []client.HostCommandResult{
+				{Host: "bravo", Status: "success"},
+			},
+		},
 		result,
 	)
 	assert.Any(
 		t,
 		[]server.HostCommandRequest{
-			{Command: "alfa", Host: "bravo", Source: "charlie"},
+			{Command: "alfa", Host: new("bravo"), Source: "charlie"},
 		},
 		n.HostCommands(),
 	)
+}
+
+func TestClientHostCommandWithoutHostSendsNone(t *testing.T) {
+	s := upstream_server.New(
+		t,
+		upstream_server.WithObject(),
+		upstream_server.WithAnswer(
+			`{"identifier":1,"status":"success","output":"","error_output":"","hosts":[]}`,
+		),
+	)
+	host, port := upstream_server.HostPort(t, s.URL)
+	c := provision.New(
+		locator.New(host).Port(port).Insecure(),
+		generativeConstant.ModelContextTestToken,
+	)
+	defer c.Close()
+	_, e := c.PostHostCommand(t.Context(), "alfa", "", "charlie")
+	assert.FatalOnError(t, e)
+	assert.String(t, `{"command":"alfa","source":"charlie"}`, s.LastBody())
 }
 
 func TestClientHostCommandUnknownNotFound(t *testing.T) {

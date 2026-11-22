@@ -1,6 +1,7 @@
 package option
 
 import (
+	provision "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/vulnerability/face"
 	"github.com/funtimecoding/soil/pkg/web/option"
 	"time"
@@ -17,4 +18,5 @@ type Security struct {
 	NationalDatabase  func() face.NationalDatabase
 	SecurityTracker   func() face.SecurityTracker
 	ExtendedTracker   func() face.SecurityTracker
+	Ansible           func() provision.Client
 }

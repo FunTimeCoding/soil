@@ -49,6 +49,11 @@ const (
 	HostCommandOutside   = "host %s is not in group %s"
 	ListHostsFailed      = "list hosts: %w: %s"
 	ListHostsFlag        = "--list-hosts"
-	ModuleFlag           = "-m"
-	ArgumentFlag         = "-a"
+
+	CallbackEnvironment     = "ANSIBLE_STDOUT_CALLBACK"
+	NotationCallback        = "ansible.posix.json"
+	LoadCallbackEnvironment = "ANSIBLE_LOAD_CALLBACK_PLUGINS"
+	LoadCallback            = "1"
+	ModuleFlag              = "-m"
+	ArgumentFlag            = "-a"
 )

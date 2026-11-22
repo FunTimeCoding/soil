@@ -14,6 +14,7 @@ type Client struct {
 	triggered         []*change.Change
 	hostCommands      []client.HostCommandRequest
 	hostCommandStatus string
+	hostResults       []client.HostCommandResult
 	failures          *failure.Failure
 	mutex             sync.Mutex
 }

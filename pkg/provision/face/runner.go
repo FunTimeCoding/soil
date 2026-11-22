@@ -1,7 +1,7 @@
 package face
 
 import (
-	"github.com/funtimecoding/soil/pkg/provision/model/run"
+	"github.com/funtimecoding/soil/pkg/provision/types/command_run"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 )
 
@@ -11,5 +11,5 @@ type Runner interface {
 		command string,
 		host string,
 		source string,
-	) (*run.Run, error)
+	) (*command_run.Run, error)
 }

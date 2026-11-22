@@ -80,12 +80,12 @@ components:
       type: object
       required:
       - command
-      - host
       - source
       properties:
         command:
           type: string
         host:
+          description: One host of the command's group; absent runs it on the whole group.
           type: string
         source:
           description: The caller, recorded as the run's trigger source.
@@ -97,6 +97,7 @@ components:
       - status
       - output
       - error_output
+      - hosts
       properties:
         identifier:
           type: integer
@@ -105,6 +106,31 @@ components:
         output:
           type: string
         error_output:
+          type: string
+        hosts:
+          type: array
+          items:
+            $ref: "#/components/schemas/HostCommandResult"
+    HostCommandResult:
+      type: object
+      required:
+      - host
+      - status
+      - return_code
+      - stdout
+      - stderr
+      properties:
+        host:
+          type: string
+        status:
+          description: success, error or unreachable.
+          type: string
+        return_code:
+          type: integer
+        stdout:
+          type: string
+        stderr:
+          description: The command's error output, or why the host was unreachable.
           type: string
     TriggerRequest:
       type: object

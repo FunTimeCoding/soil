@@ -19,13 +19,17 @@ func (c *Client) PostHostCommand(
 		return client.HostCommandRun{}, e
 	}
 
-	c.hostCommands = append(
-		c.hostCommands,
-		client.HostCommandRequest{Command: command, Host: host, Source: source},
-	)
+	request := client.HostCommandRequest{Command: command, Source: source}
+
+	if host != "" {
+		request.Host = &host
+	}
+
+	c.hostCommands = append(c.hostCommands, request)
 
 	return client.HostCommandRun{
 		Identifier: len(c.hostCommands),
 		Status:     c.hostCommandStatus,
+		Hosts:      append([]client.HostCommandResult{}, c.hostResults...),
 	}, nil
 }

@@ -6,8 +6,8 @@ import (
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/face"
-	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/provision/types/change"
+	"github.com/funtimecoding/soil/pkg/provision/types/command_run"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/provision/types/update"
 	"sync"
@@ -30,21 +30,21 @@ type Runner struct {
 		command string,
 		host string,
 		source string,
-	) (*run.Run, error)
-	hostCommand     sync.Mutex
-	downstream      []face.Downstream
-	registry        soilFace.ProcessRegistry
-	logger          *logger.Logger
-	reporter        soilFace.Reporter
-	recovery        *recovery.Recovery
-	syncFailures    int
-	trigger         chan trigger.Request
-	sync            chan update.Request
-	stop            chan struct{}
-	context         context.Context
-	cancel          context.CancelFunc
-	mutex           sync.Mutex
-	started         bool
-	closed          bool
-	finished        chan struct{}
+	) (*command_run.Run, error)
+	hostCommand  sync.Mutex
+	downstream   []face.Downstream
+	registry     soilFace.ProcessRegistry
+	logger       *logger.Logger
+	reporter     soilFace.Reporter
+	recovery     *recovery.Recovery
+	syncFailures int
+	trigger      chan trigger.Request
+	sync         chan update.Request
+	stop         chan struct{}
+	context      context.Context
+	cancel       context.CancelFunc
+	mutex        sync.Mutex
+	started      bool
+	closed       bool
+	finished     chan struct{}
 }

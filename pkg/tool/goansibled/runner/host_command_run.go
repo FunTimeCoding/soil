@@ -1,14 +1,11 @@
 package runner
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
-	"github.com/funtimecoding/soil/pkg/provision/model/run"
+	"github.com/funtimecoding/soil/pkg/provision/types/command_run"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"path/filepath"
-	"strings"
 	"time"
 )
 
@@ -16,7 +13,7 @@ func (r *Runner) hostCommandRun(
 	command string,
 	host string,
 	source string,
-) (*run.Run, error) {
+) (*command_run.Run, error) {
 	d, e := r.definition(command)
 
 	if e != nil {
@@ -34,21 +31,10 @@ func (r *Runner) hostCommandRun(
 	}
 
 	directory := filepath.Join(r.cloneDirectory, r.ansibleDirectory)
-	pattern := fmt.Sprintf(constant.HostCommandPattern, d.Group, host)
-	list := r.newRun().NoPanic()
-	list.Directory = directory
-	list.Start(adHoc(inventoryDirectory, pattern, constant.ListHostsFlag)...)
+	pattern, g := r.hostPattern(d, host, directory, inventoryDirectory)
 
-	if list.Error != nil {
-		return nil, fmt.Errorf(
-			constant.ListHostsFailed,
-			list.Error,
-			strings.TrimSpace(list.ErrorString),
-		)
-	}
-
-	if !listed(list.OutputString, host) {
-		return nil, validation.New(constant.HostCommandOutside, host, d.Group)
+	if g != nil {
+		return nil, g
 	}
 
 	record := r.store.NewRun()
@@ -60,6 +46,8 @@ func (r *Runner) hostCommandRun(
 	start := time.Now()
 	c := r.newRun().NoPanic()
 	c.Directory = directory
+	c.Environment(constant.CallbackEnvironment, constant.NotationCallback)
+	c.Environment(constant.LoadCallbackEnvironment, constant.LoadCallback)
 	c.Start(
 		adHoc(
 			inventoryDirectory,
@@ -81,5 +69,5 @@ func (r *Runner) hostCommandRun(
 
 	r.store.Update(record)
 
-	return record, nil
+	return command_run.New(record, report(c.OutputString)), nil
 }

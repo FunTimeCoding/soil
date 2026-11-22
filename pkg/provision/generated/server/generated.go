@@ -58,18 +58,34 @@ type ErrorResponse struct {
 // HostCommandRequest defines model for HostCommandRequest.
 type HostCommandRequest struct {
 	Command string `json:"command"`
-	Host    string `json:"host"`
+
+	// Host One host of the command's group; absent runs it on the whole group.
+	Host *string `json:"host,omitempty"`
 
 	// Source The caller, recorded as the run's trigger source.
 	Source string `json:"source"`
 }
 
+// HostCommandResult defines model for HostCommandResult.
+type HostCommandResult struct {
+	Host       string `json:"host"`
+	ReturnCode int    `json:"return_code"`
+
+	// Status success, error or unreachable.
+	Status string `json:"status"`
+
+	// Stderr The command's error output, or why the host was unreachable.
+	Stderr string `json:"stderr"`
+	Stdout string `json:"stdout"`
+}
+
 // HostCommandRun defines model for HostCommandRun.
 type HostCommandRun struct {
-	ErrorOutput string `json:"error_output"`
-	Identifier  int    `json:"identifier"`
-	Output      string `json:"output"`
-	Status      string `json:"status"`
+	ErrorOutput string              `json:"error_output"`
+	Hosts       []HostCommandResult `json:"hosts"`
+	Identifier  int                 `json:"identifier"`
+	Output      string              `json:"output"`
+	Status      string              `json:"status"`
 }
 
 // HostEvent defines model for HostEvent.
@@ -521,18 +537,21 @@ func (sh *strictHandler) PostTrigger(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"fwEAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -28,14 +28,14 @@ func New(
 	}
 	result.provision = runner.New(
 		runner_option.Option{
-			Repository:      o.Repository,
-			CloneDirectory:  o.CloneDirectory,
-			CopyModes:       o.CopyModes,
-			ToolPath:        o.AnsibleDirectory,
-			ApplyFunction:   result.apply,
+			Repository:          o.Repository,
+			CloneDirectory:      o.CloneDirectory,
+			CopyModes:           o.CopyModes,
+			ToolPath:            o.AnsibleDirectory,
+			ApplyFunction:       result.apply,
 			HostCommandFunction: result.hostCommandRun,
-			CleanupFunction: s.Cleanup,
-			Registry:        registry,
+			CleanupFunction:     s.Cleanup,
+			Registry:            registry,
 		},
 		l,
 		r,

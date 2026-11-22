@@ -2,7 +2,9 @@ package daemon
 
 import (
 	"github.com/funtimecoding/soil/pkg/peer"
+	provision "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/debian"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/feed"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/flag"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/remediation"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/service/score"
@@ -32,5 +34,9 @@ type Daemon struct {
 	web              *web.Server
 	clock            *worker.Worker
 	scoreClock       *worker.Worker
+	ansible          provision.Client
+	ansibleGuard     *peer.Guard
+	feed             *feed.Service
+	feedClock        *worker.Worker
 	closeOnce        sync.Once
 }

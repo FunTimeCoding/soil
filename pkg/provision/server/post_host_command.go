@@ -12,11 +12,13 @@ func (s *Server) PostHostCommand(
 	x context.Context,
 	r server.PostHostCommandRequestObject,
 ) (server.PostHostCommandResponseObject, error) {
-	result, e := s.runner.HostCommand(
-		r.Body.Command,
-		r.Body.Host,
-		r.Body.Source,
-	)
+	var host string
+
+	if r.Body.Host != nil {
+		host = *r.Body.Host
+	}
+
+	result, e := s.runner.HostCommand(r.Body.Command, host, r.Body.Source)
 
 	if validation.Is(e) {
 		return server.PostHostCommand400JSONResponse{Error: e.Error()}, nil
@@ -34,10 +36,5 @@ func (s *Server) PostHostCommand(
 		return server.PostHostCommand500JSONResponse(*s.answer(x, e)), nil
 	}
 
-	return server.PostHostCommand200JSONResponse{
-		Identifier:  int(result.Identifier),
-		Status:      result.Status,
-		Output:      result.Output,
-		ErrorOutput: result.ErrorOutput,
-	}, nil
+	return server.PostHostCommand200JSONResponse(hostCommandRun(result)), nil
 }

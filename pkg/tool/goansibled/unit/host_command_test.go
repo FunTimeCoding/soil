@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/provision/types/host_result"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/unit/service_tester"
 	"net/http"
@@ -21,9 +22,16 @@ func TestHostCommandRunsModuleOnGroupMember(t *testing.T) {
 	o.DefineHostCommand()
 	result, e := o.Service().HostCommand("alfa", "charlie", "delta")
 	assert.FatalOnError(t, e)
-	assert.String(t, "success", result.Status)
-	assert.String(t, "alfa", result.Scope)
-	assert.String(t, "delta", result.TriggerSource)
+	assert.String(t, "success", result.Record.Status)
+	assert.String(t, "alfa", result.Record.Scope)
+	assert.String(t, "delta", result.Record.TriggerSource)
+	assert.Any(
+		t,
+		[]*host_result.Result{
+			host_result.New("charlie", "success", 0, "echo restarted", ""),
+		},
+		result.Hosts,
+	)
 	arguments, okay := o.Captured(constant.FixtureAdHoc)
 	assert.True(t, okay)
 	assert.String(
@@ -31,9 +39,38 @@ func TestHostCommandRunsModuleOnGroupMember(t *testing.T) {
 		"bravo:&charlie\n-m\nansible.builtin.systemd_service\n-a\nname=echo state=restarted\n",
 		arguments,
 	)
-	stored, f := o.Service().Find(result.Identifier)
+	callback, found := o.Captured(constant.FixtureCallback)
+	assert.True(t, found)
+	assert.String(t, "ansible.posix.json 1\n", callback)
+	stored, f := o.Service().Find(result.Record.Identifier)
 	errors.PanicOnError(f)
 	assert.String(t, "success", stored.Status)
+}
+
+func TestHostCommandWithoutHostRunsWholeGroup(t *testing.T) {
+	o := service_tester.New(t, nil)
+	o.Service()
+	o.WaitForRun()
+	o.DefineHostCommand()
+	o.PlaceOutside()
+	result, e := o.Service().HostCommand("alfa", "", "delta")
+	assert.FatalOnError(t, e)
+	assert.String(t, "error", result.Record.Status)
+	assert.Any(
+		t,
+		[]*host_result.Result{
+			host_result.New("charlie", "success", 0, "echo restarted", ""),
+			host_result.New("delta", "unreachable", 0, "", "delta down"),
+		},
+		result.Hosts,
+	)
+	arguments, okay := o.Captured(constant.FixtureAdHoc)
+	assert.True(t, okay)
+	assert.String(
+		t,
+		"bravo\n-m\nansible.builtin.systemd_service\n-a\nname=echo state=restarted\n",
+		arguments,
+	)
 }
 
 func TestHostCommandRunsAgainstNetboxInventory(t *testing.T) {
@@ -54,7 +91,7 @@ func TestHostCommandRunsAgainstNetboxInventory(t *testing.T) {
 	o.DefineHostCommand()
 	result, e := o.Service().HostCommand("alfa", "charlie", "delta")
 	assert.FatalOnError(t, e)
-	assert.String(t, "success", result.Status)
+	assert.String(t, "success", result.Record.Status)
 	arguments, okay := o.Captured(constant.FixtureAdHoc)
 	assert.True(t, okay)
 	a := strings.Split(strings.TrimSpace(arguments), "\n")
@@ -127,7 +164,14 @@ func TestFailedHostCommandRecordedAsError(t *testing.T) {
 	o.FailHostCommand()
 	result, e := o.Service().HostCommand("alfa", "charlie", "delta")
 	assert.FatalOnError(t, e)
-	assert.String(t, "error", result.Status)
+	assert.String(t, "error", result.Record.Status)
+	assert.Any(
+		t,
+		[]*host_result.Result{
+			host_result.New("charlie", "error", 2, "", "echo failed"),
+		},
+		result.Hosts,
+	)
 }
 
 func TestHostCommandAfterStopUnavailable(t *testing.T) {
