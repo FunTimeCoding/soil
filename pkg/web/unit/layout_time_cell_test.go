@@ -39,6 +39,12 @@ func TestClampCellKeepsWholeTextInPage(t *testing.T) {
 	)
 }
 
+func TestWrapCellLeavesTextWrapping(t *testing.T) {
+	var b strings.Builder
+	assert.FatalOnError(t, layout.WrapCell("alfa bravo").Render(&b))
+	assert.String(t, `<td class="wrap-cell">alfa bravo</td>`, b.String())
+}
+
 func TestOptionalTimeCellWithoutWordStaysEmpty(t *testing.T) {
 	var b strings.Builder
 	assert.FatalOnError(t, layout.OptionalTimeCell(nil, "").Render(&b))

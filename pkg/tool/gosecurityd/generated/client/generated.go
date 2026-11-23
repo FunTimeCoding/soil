@@ -379,6 +379,9 @@ type Vulnerability struct {
 // Identifier defines model for Identifier.
 type Identifier = string
 
+// Label defines model for Label.
+type Label = []string
+
 // Name defines model for Name.
 type Name = string
 
@@ -387,6 +390,12 @@ type Release = string
 
 // Score defines model for Score.
 type Score = float64
+
+// Search defines model for Search.
+type Search = string
+
+// Show defines model for Show.
+type Show = string
 
 // Source defines model for Source.
 type Source = string
@@ -404,20 +413,50 @@ type ListFlagsParams struct {
 
 // ListRemediationParams defines parameters for ListRemediation.
 type ListRemediationParams struct {
+	// Show Coverage to narrow the systems to - supported, tracked or untracked; empty selects every coverage.
+	Show *Show `form:"show,omitempty" json:"show,omitempty"`
+
+	// Label A label the systems must carry, as key:value; repeat it for several keys.
+	Label *Label `form:"label,omitempty" json:"label,omitempty"`
+
+	// Search Part of the host name, ignoring case.
+	Search *Search `form:"search,omitempty" json:"search,omitempty"`
+
 	// Score The lowest score a finding needs to count; empty means 9.0 (critical).
 	Score *float64 `form:"score,omitempty" json:"score,omitempty"`
 }
 
 // ListSystemsParams defines parameters for ListSystems.
 type ListSystemsParams struct {
+	// Show Coverage to narrow the systems to - supported, tracked or untracked; empty selects every coverage.
+	Show *Show `form:"show,omitempty" json:"show,omitempty"`
+
+	// Label A label the systems must carry, as key:value; repeat it for several keys.
+	Label *Label `form:"label,omitempty" json:"label,omitempty"`
+
+	// Search Part of the host name, ignoring case.
+	Search *Search `form:"search,omitempty" json:"search,omitempty"`
+
 	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
 	Score *Score `form:"score,omitempty" json:"score,omitempty"`
 }
 
 // ListUpgradesParams defines parameters for ListUpgrades.
 type ListUpgradesParams struct {
-	// Show A release codename to narrow to, or kernel for the kernel packages; empty lists every release without the kernel.
-	Show *string `form:"show,omitempty" json:"show,omitempty"`
+	// Release A release codename to narrow to; empty lists every release.
+	Release *string `form:"release,omitempty" json:"release,omitempty"`
+
+	// Kernel True lists the kernel upgrades instead of the package upgrades.
+	Kernel *bool `form:"kernel,omitempty" json:"kernel,omitempty"`
+
+	// Show Coverage to narrow the systems to - supported, tracked or untracked; empty selects every coverage.
+	Show *Show `form:"show,omitempty" json:"show,omitempty"`
+
+	// Label A label the systems must carry, as key:value; repeat it for several keys.
+	Label *Label `form:"label,omitempty" json:"label,omitempty"`
+
+	// Search Part of the host name, ignoring case.
+	Search *Search `form:"search,omitempty" json:"search,omitempty"`
 
 	// Score The lowest score to list; narrows to what carries a vulnerability scored at least this. Empty or 0 lists everything.
 	Score *Score `form:"score,omitempty" json:"score,omitempty"`
@@ -1035,6 +1074,42 @@ func NewListRemediationRequest(server string, params *ListRemediationParams) (*h
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
+		if params.Show != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "show", *params.Show, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Label != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "label", *params.Label, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Search != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "search", *params.Search, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
 		if params.Score != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "score", *params.Score, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "number", Format: "double"}); err != nil {
@@ -1115,6 +1190,42 @@ func NewListSystemsRequest(server string, params *ListSystemsParams) (*http.Requ
 		// styled parameters, preserving literal commas as delimiters
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
+
+		if params.Show != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "show", *params.Show, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Label != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "label", *params.Label, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Search != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "search", *params.Search, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
 
 		if params.Score != nil {
 
@@ -1285,9 +1396,57 @@ func NewListUpgradesRequest(server string, params *ListUpgradesParams) (*http.Re
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
+		if params.Release != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "release", *params.Release, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Kernel != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "kernel", *params.Kernel, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
 		if params.Show != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "show", *params.Show, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Label != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "label", *params.Label, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Search != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "search", *params.Search, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
 				return nil, err
 			} else {
 				for _, qp := range strings.Split(queryFrag, "&") {

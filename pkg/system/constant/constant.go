@@ -44,6 +44,7 @@ const (
 	MarkdownPath                = "markdown"
 	MemoryPath                  = "memory"
 	NotationPath                = "notation"
+	SaltPath                    = "salt"
 	SearchPath                  = "search"
 	StoragePath                 = ".local/share"
 	VulnerabilityPath           = "vulnerability"

@@ -14,8 +14,8 @@ func flag(
 	t *terminal.Terminal,
 ) *cobra.Command {
 	result := &cobra.Command{
-		Use:   "flag <identifier>",
-		Short: "Flag a CVE as a concern to mitigate",
+		Use:   "flag <subject>",
+		Short: "Record a decision: flag a CVE or a remediation item (e.g. upgrade:bookworm:openssl) as a concern",
 		Args:  cobra.ExactArgs(1),
 		Run: func(
 			o *cobra.Command,

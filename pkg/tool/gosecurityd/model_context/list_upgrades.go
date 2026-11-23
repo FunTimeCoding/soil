@@ -13,10 +13,16 @@ func (s *Server) ListUpgrades(
 	_ mcp.CallToolRequest,
 	a argument.ListUpgrades,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.system.Upgrades(a.Show, a.Score)
+	selected, e := selection(a.Selection, a.Score)
 
 	if e != nil {
 		return s.answer(x, e)
+	}
+
+	result, f := s.system.Upgrades(selected, a.Release, a.Kernel)
+
+	if f != nil {
+		return s.answer(x, f)
 	}
 
 	return response.SuccessAny(convert.UpgradeList(result))

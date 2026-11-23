@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/web/selection_filter"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/web/upgrade_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -12,8 +13,7 @@ func (s *Server) upgrades(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	show := r.URL.Query().Get(constant.ShowField)
-	m, e := minimum(r, 0)
+	selected, e := selection(r, 0)
 
 	if e != nil {
 		s.view.Answer(w, r, s.reporter, e)
@@ -21,10 +21,26 @@ func (s *Server) upgrades(
 		return
 	}
 
-	u, f := s.system.Upgrades(show, m)
+	release, kernel, f := upgradeFilter(r)
 
 	if f != nil {
 		s.view.Answer(w, r, s.reporter, f)
+
+		return
+	}
+
+	u, g := s.system.Upgrades(selected, release, kernel)
+
+	if g != nil {
+		s.view.Answer(w, r, s.reporter, g)
+
+		return
+	}
+
+	c, h := s.system.Facets(selected)
+
+	if h != nil {
+		s.view.Answer(w, r, s.reporter, h)
 
 		return
 	}
@@ -35,7 +51,10 @@ func (s *Server) upgrades(
 		constant.UpgradesPath,
 		html.H1(gomponents.Text(constant.UpgradesTitle)),
 		upgrade_page.Tiles(u),
-		upgrade_page.Filter(show, u.Releases, m),
+		upgrade_page.Filter(selected, release, kernel, u.Releases),
+		selection_filter.New(constant.UpgradesPath, selected, c).
+			Keep(upgrade_page.Kept(release, kernel)).
+			Node(),
 		upgrade_page.Table(u.Groups),
 	)
 }

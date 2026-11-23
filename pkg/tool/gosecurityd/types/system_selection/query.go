@@ -9,14 +9,14 @@ import (
 	"strconv"
 )
 
-func (s *Selection) Query() url.Values {
+func (s *Selection) Query(fallback float64) url.Values {
 	result := url.Values{}
 
 	if s.Show != "" {
 		result.Set(constant.ShowField, s.Show)
 	}
 
-	if s.Minimum > 0 {
+	if s.Minimum != fallback {
 		result.Set(
 			constant.ScoreField,
 			strconv.FormatFloat(s.Minimum, 'f', -1, 64),

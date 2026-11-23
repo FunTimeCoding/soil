@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/upgrade_group"
 	"slices"
 	"strings"
@@ -13,13 +14,11 @@ func (s *Service) Upgrade(
 	release string,
 	source string,
 ) (*upgrade_group.Group, error) {
-	show := release
-
-	if kernel(strings.TrimSuffix(source, constant.BackportsLabel)) {
-		show = constant.KernelFilter
-	}
-
-	r, e := s.Upgrades(show, 0)
+	r, e := s.Upgrades(
+		system_selection.New(),
+		release,
+		kernel(strings.TrimSuffix(source, constant.BackportsLabel)),
+	)
 
 	if e != nil {
 		return nil, e

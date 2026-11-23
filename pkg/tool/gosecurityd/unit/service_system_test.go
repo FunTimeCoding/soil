@@ -211,10 +211,14 @@ func TestBoardCountsCoverageAndFilters(t *testing.T) {
 	assert.Integer(t, 1, tracked.Total)
 	assert.Integer(t, 1, tracked.Tracked)
 	assert.Integer(t, 0, tracked.Supported)
-	assert.Integer(t, 4, tracked.CoverageCounts[""])
-	assert.Integer(t, 2, tracked.CoverageCounts[constant.ShowSupported])
-	assert.Integer(t, 1, tracked.CoverageCounts[constant.ShowTracked])
-	assert.Integer(t, 1, tracked.CoverageCounts[constant.ShowUntracked])
+	c, h := o.System().Facets(
+		system_selection.New().WithCoverage(constant.ShowTracked),
+	)
+	assert.FatalOnError(t, h)
+	assert.Integer(t, 4, c.Coverage[""])
+	assert.Integer(t, 2, c.Coverage[constant.ShowSupported])
+	assert.Integer(t, 1, c.Coverage[constant.ShowTracked])
+	assert.Integer(t, 1, c.Coverage[constant.ShowUntracked])
 	_, g := o.System().Board(system_selection.New().WithCoverage("bogus"))
 	assert.True(t, validation.Is(g))
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurity/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/client"
-	"github.com/spf13/cobra"
 )
 
 func Main() {
@@ -15,15 +14,7 @@ func Main() {
 	t := terminal.New(s)
 	c := client.NewEnvironment()
 	defer c.Close()
-	o := &cobra.Command{
-		Use:   constant.Identity.Usage(),
-		Short: constant.Identity.Description(),
-	}
-	o.AddCommand(lookup(c, t))
-	o.AddCommand(debian(c, t))
-	o.AddCommand(flags(c, t))
-	o.AddCommand(flag(c, t))
-	o.AddCommand(mitigate(c, t))
+	o := New(c, t)
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)
 	argument.CobraExecute(o)

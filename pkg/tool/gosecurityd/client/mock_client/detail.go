@@ -22,6 +22,7 @@ func (c *Client) detail(name string) *client.SystemDetail {
 			Release:  s.Release,
 			Coverage: constant.CoverageUntracked,
 			Updated:  c.updated[name],
+			Labels:   s.Labels,
 		},
 		Findings: []*client.SystemFinding{},
 	}

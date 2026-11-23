@@ -3,6 +3,7 @@ package mock_client
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/generated/client"
 )
 
@@ -17,9 +18,19 @@ func (c *Client) ListRemediation(
 		return nil, c.failure
 	}
 
+	if p == nil {
+		p = &client.ListRemediationParams{}
+	}
+
+	s, e := convert.Selection(p.Show, p.Label, p.Search, nil, 0)
+
+	if e != nil {
+		return nil, e
+	}
+
 	lowest := constant.CriticalScore
 
-	if p != nil && p.Score != nil {
+	if p.Score != nil {
 		lowest = *p.Score
 	}
 
@@ -28,6 +39,22 @@ func (c *Client) ListRemediation(
 	for _, v := range c.remediation {
 		if v.TopScore < lowest && !v.Unknown {
 			continue
+		}
+
+		if narrows(s) {
+			kept := []string{}
+
+			for _, h := range v.Hosts {
+				if c.chosen(h, s) {
+					kept = append(kept, h)
+				}
+			}
+
+			if len(kept) == 0 {
+				continue
+			}
+
+			v.Hosts = kept
 		}
 
 		result.Items = append(result.Items, v)

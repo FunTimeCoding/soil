@@ -8,6 +8,7 @@ const (
 	LayoutStatusNotice       = "notice"
 	LayoutTimeCellClass      = "time-cell"
 	LayoutClampCellClass     = "clamp-cell"
+	LayoutWrapCellClass      = "wrap-cell"
 	LayoutFullWindowClass    = "full-window"
 
 	LayoutConnection             = "connection"

@@ -13,8 +13,8 @@ func mitigate(
 	t *terminal.Terminal,
 ) *cobra.Command {
 	result := &cobra.Command{
-		Use:   "mitigate <identifier>",
-		Short: "Mark a flagged CVE as mitigated",
+		Use:   "mitigate <subject>",
+		Short: "Close a decision: a mitigation or an accepted risk with its reason, for a flagged CVE or remediation item",
 		Args:  cobra.ExactArgs(1),
 		Run: func(
 			o *cobra.Command,

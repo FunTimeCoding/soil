@@ -66,10 +66,10 @@ func TestKernelWithoutRunningImageHasNoFinding(t *testing.T) {
 
 func TestKernelUpgradesListBackportsApart(t *testing.T) {
 	s := security_tester.New(t).KernelFleet().System()
-	plain, e := s.Upgrades("", 0)
+	plain, e := s.Upgrades(system_selection.New(), "", false)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, plain.Groups)
-	r, f := s.Upgrades(constant.KernelFilter, 0)
+	r, f := s.Upgrades(system_selection.New(), "", true)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, r.Groups)
 	bySource := map[string]int{}

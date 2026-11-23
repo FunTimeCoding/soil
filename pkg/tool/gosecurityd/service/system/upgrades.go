@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/minimum"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/upgrade_group"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/upgrade_host"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/upgrade_result"
@@ -13,30 +14,26 @@ import (
 )
 
 func (s *Service) Upgrades(
-	show string,
-	m float64,
+	selection *system_selection.Selection,
+	release string,
+	kernelOnly bool,
 ) (*upgrade_result.Result, error) {
+	if release != "" &&
+		!slices.Contains(constant.SupportedReleases, release) &&
+		!slices.Contains(constant.ExtendedReleases, release) {
+		return nil, validation.New("release unknown: %s", release)
+	}
+
+	m := selection.Minimum
+
 	if e := minimum.Check(m); e != nil {
 		return nil, e
 	}
 
-	kernelOnly := show == constant.KernelFilter
-	release := show
+	details, f := s.Selected(selection.WithMinimum(0))
 
-	if kernelOnly {
-		release = ""
-	}
-
-	if release != "" &&
-		!slices.Contains(constant.SupportedReleases, release) &&
-		!slices.Contains(constant.ExtendedReleases, release) {
-		return nil, validation.New("upgrade filter unknown: %s", show)
-	}
-
-	details, e := s.Details()
-
-	if e != nil {
-		return nil, e
+	if f != nil {
+		return nil, f
 	}
 
 	result := upgrade_result.New()

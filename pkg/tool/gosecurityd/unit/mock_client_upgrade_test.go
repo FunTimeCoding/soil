@@ -31,14 +31,21 @@ func TestMockListsSeededUpgradesLikeDaemon(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, all.Groups)
 	assert.Integer(t, 1, all.Hosts)
-	kernel := "kernel"
-	k, f := m.ListUpgrades(x, &client.ListUpgradesParams{Show: &kernel})
+	kernel := true
+	k, f := m.ListUpgrades(x, &client.ListUpgradesParams{Kernel: &kernel})
 	assert.FatalOnError(t, f)
 	assert.String(t, "linux", k.Groups[0].Source)
 	trixie := "trixie"
-	none, g := m.ListUpgrades(x, &client.ListUpgradesParams{Show: &trixie})
+	none, g := m.ListUpgrades(x, &client.ListUpgradesParams{Release: &trixie})
 	assert.FatalOnError(t, g)
 	assert.Count(t, 0, none.Groups)
+	elsewhere := "golf"
+	missed, j := m.ListUpgrades(
+		x,
+		&client.ListUpgradesParams{Search: &elsewhere},
+	)
+	assert.FatalOnError(t, j)
+	assert.Count(t, 0, missed.Groups)
 	one, h := m.GetUpgrade(x, "bookworm", "victor")
 	assert.FatalOnError(t, h)
 	assert.String(t, "foxtrot", one.Hosts[0].Name)

@@ -3,6 +3,7 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/unit/security_tester"
 	vulnerabilityConstant "github.com/funtimecoding/soil/pkg/vulnerability/constant"
 	"testing"
@@ -95,7 +96,7 @@ func TestFindingsCarryScoresAndFollowChanges(t *testing.T) {
 	}
 
 	assert.Float(t, 10.0, scored[vulnerabilityConstant.FixtureIdentifier])
-	u, g := s.Upgrades("", 0)
+	u, g := s.Upgrades(system_selection.New(), "", false)
 	assert.FatalOnError(t, g)
 	assert.Float(t, 10.0, u.Groups[0].TopScore)
 	a, h := s.Affected(vulnerabilityConstant.FixtureIdentifier)

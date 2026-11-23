@@ -4,13 +4,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/unit/security_tester"
 	"testing"
 )
 
 func TestUpgradesGroupByReleaseAndSource(t *testing.T) {
-	r, e := security_tester.New(t).UpgradeFleet().System().Upgrades("", 0)
+	r, e := security_tester.New(t).
+		UpgradeFleet().
+		System().
+		Upgrades(system_selection.New(), "", false)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, r.Groups)
 	first := r.Groups[0]
@@ -37,11 +40,11 @@ func TestUpgradesGroupByReleaseAndSource(t *testing.T) {
 
 func TestUpgradesFilterByRelease(t *testing.T) {
 	s := security_tester.New(t).UpgradeFleet().System()
-	r, e := s.Upgrades("bullseye", 0)
+	r, e := s.Upgrades(system_selection.New(), "bullseye", false)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, r.Groups)
 	assert.String(t, "charlie", r.Groups[0].Hosts[0].Name)
-	_, f := s.Upgrades("bogus", 0)
+	_, f := s.Upgrades(system_selection.New(), "bogus", false)
 	assert.True(t, validation.Is(f))
 }
 
@@ -49,7 +52,7 @@ func TestKernelSidePackagesCarryNoUpgrade(t *testing.T) {
 	r, e := security_tester.New(t).
 		UpgradeFleet().
 		System().
-		Upgrades(constant.KernelFilter, 0)
+		Upgrades(system_selection.New(), "", true)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, r.Groups)
 }

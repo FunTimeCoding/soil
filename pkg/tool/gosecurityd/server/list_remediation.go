@@ -12,20 +12,27 @@ func (s *Server) ListRemediation(
 	x context.Context,
 	r server.ListRemediationRequestObject,
 ) (server.ListRemediationResponseObject, error) {
-	m := constant.CriticalScore
+	p := r.Params
+	selected, e := convert.Selection(
+		p.Show,
+		p.Label,
+		p.Search,
+		p.Score,
+		constant.CriticalScore,
+	)
 
-	if r.Params.Score != nil {
-		m = *r.Params.Score
-	}
-
-	result, e := s.remediation.List(m)
-
-	if validation.Is(e) {
+	if e != nil {
 		return server.ListRemediation400JSONResponse{Error: e.Error()}, nil
 	}
 
-	if e != nil {
-		return server.ListRemediation500JSONResponse(*s.answer(x, e)), nil
+	result, f := s.remediation.List(selected)
+
+	if validation.Is(f) {
+		return server.ListRemediation400JSONResponse{Error: f.Error()}, nil
+	}
+
+	if f != nil {
+		return server.ListRemediation500JSONResponse(*s.answer(x, f)), nil
 	}
 
 	return server.ListRemediation200JSONResponse(

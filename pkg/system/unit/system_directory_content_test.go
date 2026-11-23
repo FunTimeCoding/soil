@@ -24,6 +24,7 @@ func TestDirectoryContent(t *testing.T) {
 			"markdown",
 			"memory",
 			"notation",
+			"salt",
 			"search",
 			"vulnerability",
 			"wiki",

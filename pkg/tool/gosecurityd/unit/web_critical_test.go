@@ -191,7 +191,7 @@ func TestScoreFilterOnPagesRestAndTools(t *testing.T) {
 	assert.StringContains(t, fmt.Sprintf(fixes, 1), narrowedUpgrades)
 	assert.StringContains(
 		t,
-		`href="/upgrades?score=9&amp;show=trixie"`,
+		`href="/upgrades?release=trixie&amp;score=9"`,
 		narrowedUpgrades,
 	)
 	assert.StringContains(

@@ -6,7 +6,7 @@ func (s *Server) registerResources() {
 	s.guide(
 		constant.MatchingGuideLocator,
 		"Matching: sources, coverage, clean, fix kinds, the kernel",
-		"How installed packages become findings: the National Vulnerability Database and the Debian and Freexian trackers, coverage and the clean rule, the fix kinds, kernel matching and states, the score filter.",
+		"How installed packages become findings: the National Vulnerability Database and the Debian and Freexian trackers, coverage and the clean rule, the fix kinds, kernel matching and states, the selection (coverage, labels, search, score).",
 		constant.MatchingGuide,
 	)
 	s.guide(

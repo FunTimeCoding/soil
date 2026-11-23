@@ -2,62 +2,64 @@ package upgrade_page
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/web/system_page"
 	"github.com/funtimecoding/soil/pkg/web/component/chip"
+	"maps"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
-	"net/url"
 )
 
 func Filter(
-	current string,
+	s *system_selection.Selection,
+	release string,
+	kernel bool,
 	releases []string,
-	minimum float64,
 ) gomponents.Node {
-	options := [][2]string{{"All", ""}}
+	link := func(r string, k bool) string {
+		q := s.Query(0)
+		maps.Copy(q, Kept(r, k))
 
-	for _, r := range releases {
-		options = append(options, [2]string{r, r})
+		return system_page.Query(constant.UpgradesPath, q)
 	}
+	options := append([]string{""}, releases...)
+	byRelease := make([]gomponents.Node, 0, len(options))
 
-	options = append(options, [2]string{"Kernel", constant.KernelFilter})
-	chips := make([]gomponents.Node, 0, len(options))
+	for _, r := range options {
+		label := r
 
-	for _, v := range options {
-		q := url.Values{}
-
-		if v[1] != "" {
-			q.Set(constant.ShowField, v[1])
+		if r == "" {
+			label = "All releases"
 		}
 
-		if minimum > 0 {
-			q.Set(constant.ScoreField, system_page.ScoreValue(minimum))
-		}
+		c := chip.New(label).Link(link(r, kernel))
 
-		c := chip.New(v[0]).Link(system_page.Query(constant.UpgradesPath, q))
-
-		if v[1] == current {
+		if r == release {
 			c.Current()
 		}
 
-		chips = append(chips, c.Node())
+		byRelease = append(byRelease, c.Node())
 	}
 
-	kept := url.Values{}
+	byKind := make([]gomponents.Node, 0, 2)
 
-	if current != "" {
-		kept.Set(constant.ShowField, current)
+	for _, k := range []bool{false, true} {
+		label := "Packages"
+
+		if k {
+			label = "Kernel"
+		}
+
+		c := chip.New(label).Link(link(release, k))
+
+		if k == kernel {
+			c.Current()
+		}
+
+		byKind = append(byKind, c.Node())
 	}
 
 	return gomponents.Group(
-		[]gomponents.Node{
-			html.Nav(chips...),
-			system_page.ScoreFilter(
-				constant.UpgradesPath,
-				kept,
-				minimum,
-				constant.CriticalChips,
-			),
-		},
+		[]gomponents.Node{html.Nav(byRelease...), html.Nav(byKind...)},
 	)
 }

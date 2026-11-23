@@ -14,7 +14,7 @@ a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 .time-cell { white-space: nowrap; }
 .clamp-cell { max-width: 0; width: 100%; }
-table:has(> tbody > tr > .clamp-cell) > tbody > tr > td:not(.clamp-cell, [colspan]) { white-space: nowrap; }
+table:has(> tbody > tr > .clamp-cell) > tbody > tr > td:not(.clamp-cell, .wrap-cell, [colspan]) { white-space: nowrap; }
 .clamp-cell > span[data-tooltip] { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-bottom: none; cursor: inherit; }
 body.full-window { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 body.full-window > main { flex: 1; min-height: 0; display: flex; flex-direction: column; }

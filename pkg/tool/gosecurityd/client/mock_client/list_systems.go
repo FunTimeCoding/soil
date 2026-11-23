@@ -19,10 +19,14 @@ func (c *Client) ListSystems(
 		return nil, c.failure
 	}
 
-	lowest := 0.0
+	if p == nil {
+		p = &client.ListSystemsParams{}
+	}
 
-	if p != nil {
-		lowest = convert.Minimum(p.Score)
+	s, e := convert.Selection(p.Show, p.Label, p.Search, p.Score, 0)
+
+	if e != nil {
+		return nil, e
 	}
 
 	names := slices.Collect(maps.Keys(c.snapshots))
@@ -37,8 +41,8 @@ func (c *Client) ListSystems(
 	result := []*client.SystemSummary{}
 
 	for _, name := range names {
-		if s := &c.detail(name).Summary; s.TopScore >= lowest {
-			result = append(result, s)
+		if c.chosen(name, s) {
+			result = append(result, &c.detail(name).Summary)
 		}
 	}
 

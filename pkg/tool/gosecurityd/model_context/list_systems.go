@@ -13,13 +13,19 @@ func (s *Server) ListSystems(
 	_ mcp.CallToolRequest,
 	a argument.ListSystems,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.system.Summaries(a.Score)
+	selected, e := selection(a.Selection, a.Score)
 
 	if e != nil {
 		return s.answer(x, e)
 	}
 
+	b, f := s.system.Board(selected)
+
+	if f != nil {
+		return s.answer(x, f)
+	}
+
 	return response.SuccessAny(
-		map[string]any{"systems": convert.SystemSummaries(result)},
+		map[string]any{"systems": convert.SystemSummaries(b.Rows)},
 	)
 }

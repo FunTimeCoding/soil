@@ -60,7 +60,11 @@ func TestEntryRowOpensClosesSavesAndDeletesInPlace(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, `hx-swap-oob="true"><td class="time-cell">`, saved)
-	assert.StringContains(t, `<td>cleared and documented</td>`, saved)
+	assert.StringContains(
+		t,
+		`<td class="wrap-cell">cleared and documented</td>`,
+		saved,
+	)
 	removed := s.PostBody(t, "/delete?id=1", nil)
 	assert.StringContains(
 		t,

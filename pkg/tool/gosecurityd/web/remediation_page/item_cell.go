@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/remediation_item"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/web/system_page"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/web/upgrade_page"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/url"
@@ -20,16 +21,10 @@ func itemCell(i *remediation_item.Item) gomponents.Node {
 
 	switch i.Kind {
 	case constant.RemediationUpgrade:
-		show := i.Release
-
-		if i.Kernel {
-			show = constant.KernelFilter
-		}
-
 		label = fmt.Sprintf("%s on %s", i.Source, i.Release)
 		link = system_page.Query(
 			constant.UpgradesPath,
-			url.Values{constant.ShowField: {show}},
+			upgrade_page.Kept(i.Release, i.Kernel),
 		)
 	case constant.RemediationRelease,
 		constant.RemediationReboot,

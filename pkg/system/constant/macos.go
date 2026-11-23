@@ -25,3 +25,10 @@ const (
 	SystemLaunchPrefix    = "/System/"
 	PropertyListExtension = ".plist"
 )
+
+const (
+	KeychainCommand      = "security"
+	KeychainFind         = "find-generic-password"
+	KeychainNotFoundExit = 44
+	KeychainUnsafe       = "\"\\\n"
+)

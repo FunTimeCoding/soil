@@ -10,13 +10,16 @@ func (s *Server) registerSystems() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListSystems,
-			mcp.WithDescription(
-				"List systems by priority: coverage, clean, package finding counts, critical (vulnerabilities at 9.0 or higher), top score and kernel state. Coverage, clean and kernel states: gosecurityd://guide/matching.",
-			),
-			mcp.WithNumber(
-				constant.ScoreField,
-				mcp.Description(constant.ScoreDescription),
-			),
+			append(
+				selectionOptions(),
+				mcp.WithDescription(
+					"List the selected systems by priority: coverage, clean, package finding counts, critical (vulnerabilities at 9.0 or higher), top score and kernel state. Coverage, clean, kernel states and the selection: gosecurityd://guide/matching.",
+				),
+				mcp.WithNumber(
+					constant.ScoreField,
+					mcp.Description(constant.ScoreDescription),
+				),
+			)...,
 		),
 		mcp.NewTypedToolHandler(s.ListSystems),
 	)

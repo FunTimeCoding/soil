@@ -1,0 +1,19 @@
+package gographd
+
+import (
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/tool/gographd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gographd/option"
+)
+
+func Main() {
+	s := instrument.New(constant.Identity)
+	defer func() { s.Flush(recover()) }()
+	a := argument.NewInstance(constant.Identity)
+	a.Web()
+	a.Parse()
+	o := option.New()
+	o.Read(a)
+	Run(o, s)
+}

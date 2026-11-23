@@ -1,6 +1,7 @@
 package keychain
 
 import (
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"strings"
 )
@@ -8,8 +9,8 @@ import (
 func Password(service string) string {
 	return strings.TrimSpace(
 		run.New().Start(
-			"security",
-			"find-generic-password",
+			constant.KeychainCommand,
+			constant.KeychainFind,
 			"-s",
 			service,
 			"-w",

@@ -8,18 +8,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/remediation_builder"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/remediation_item"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/remediation_result"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"slices"
 )
 
-func (s *Service) List(m float64) (*remediation_result.Result, error) {
+func (s *Service) List(
+	selection *system_selection.Selection,
+) (*remediation_result.Result, error) {
+	m := selection.Minimum
+
 	if e := minimum.Check(m); e != nil {
 		return nil, e
 	}
 
-	details, e := s.system.Details()
+	details, f := s.system.Selected(selection.WithMinimum(0))
 
-	if e != nil {
-		return nil, e
+	if f != nil {
+		return nil, f
 	}
 
 	b := remediation_builder.New()
@@ -48,10 +53,10 @@ func (s *Service) List(m float64) (*remediation_result.Result, error) {
 		}
 	}
 
-	flags, f := s.flag.Flags(true)
+	flags, g := s.flag.Flags(true)
 
-	if f != nil {
-		return nil, f
+	if g != nil {
+		return nil, g
 	}
 
 	result := b.Result(flags)

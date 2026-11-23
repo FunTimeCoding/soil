@@ -9,19 +9,28 @@ func (s *Server) registerUpgrades() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListUpgrades,
-			mcp.WithDescription(
-				"List the package upgrades that fix findings, by release and source package, with their hosts, versions, vulnerabilities and top score; the most hosts times vulnerabilities first, the kernel apart.",
-			),
-			mcp.WithString(
-				constant.ShowField,
-				mcp.Description(
-					"A release codename to narrow to, e.g. bookworm, or kernel for the kernel packages; empty lists every release without the kernel",
+			append(
+				selectionOptions(),
+				mcp.WithDescription(
+					"List the package upgrades that fix findings on the selected systems, by release and source package, with their hosts, versions, vulnerabilities and top score; the most hosts times vulnerabilities first, the kernel apart.",
 				),
-			),
-			mcp.WithNumber(
-				constant.ScoreField,
-				mcp.Description(constant.ScoreDescription),
-			),
+				mcp.WithString(
+					constant.ReleaseParameter,
+					mcp.Description(
+						"A release codename to narrow to, e.g. bookworm; empty lists every release",
+					),
+				),
+				mcp.WithBoolean(
+					constant.KernelParameter,
+					mcp.Description(
+						"True lists the kernel upgrades instead of the package upgrades",
+					),
+				),
+				mcp.WithNumber(
+					constant.ScoreField,
+					mcp.Description(constant.ScoreDescription),
+				),
+			)...,
 		),
 		mcp.NewTypedToolHandler(s.ListUpgrades),
 	)

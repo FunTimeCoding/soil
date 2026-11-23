@@ -8,13 +8,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/kernel_offer"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/store/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/remediation_item"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/types/system_selection"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/unit/security_tester"
 	"testing"
 )
 
 func TestRemediationSortsEachCriticalFindingIntoOneItem(t *testing.T) {
 	o := security_tester.New(t).RemediationFleet()
-	r, e := o.Remediation().List(9)
+	r, e := o.Remediation().List(system_selection.New().WithMinimum(9))
 	assert.FatalOnError(t, e)
 	assert.Strings(
 		t,
@@ -68,7 +69,7 @@ func TestRemediationSortsEachCriticalFindingIntoOneItem(t *testing.T) {
 
 func TestRemediationKernelItemsCarryReason(t *testing.T) {
 	o := security_tester.New(t).RemediationFleet()
-	r, e := o.Remediation().List(9)
+	r, e := o.Remediation().List(system_selection.New().WithMinimum(9))
 	assert.FatalOnError(t, e)
 	byKey := map[string]*remediation_item.Item{}
 
@@ -153,7 +154,7 @@ func TestMissingMetapackageNamesKernelReason(t *testing.T) {
 		"kernel metapackage not installed",
 		juliett.Summary.KernelReason,
 	)
-	r, g := o.Remediation().List(9)
+	r, g := o.Remediation().List(system_selection.New().WithMinimum(9))
 	assert.FatalOnError(t, g)
 
 	for _, i := range r.Items {
@@ -169,7 +170,7 @@ func TestMissingMetapackageNamesKernelReason(t *testing.T) {
 
 func TestRemediationRanksByHostsTimesVulnerabilities(t *testing.T) {
 	o := security_tester.New(t).RemediationFleet()
-	r, e := o.Remediation().List(7)
+	r, e := o.Remediation().List(system_selection.New().WithMinimum(7))
 	assert.FatalOnError(t, e)
 	assert.Strings(
 		t,
@@ -207,7 +208,7 @@ func TestRemediationJoinsDecisions(t *testing.T) {
 	assert.FatalOnError(t, f)
 	_, g := o.Flag().Mitigate("reboot:foxtrot", "accepted: replaced next week")
 	assert.FatalOnError(t, g)
-	r, h := o.Remediation().List(9)
+	r, h := o.Remediation().List(system_selection.New().WithMinimum(9))
 	assert.FatalOnError(t, h)
 	assert.Integer(t, 8, r.Open)
 	assert.Integer(t, 1, r.Addressed)
@@ -229,7 +230,7 @@ func TestRemediationItemLeavesWhenNoHostNeedsIt(t *testing.T) {
 	o := security_tester.New(t).RemediationFleet()
 	o.PutFixturePackage("delta", "trixie", "8.6.1-1", "")
 	o.PutFixturePackage("echo", "trixie", "8.6.1-1", "")
-	r, e := o.Remediation().List(9)
+	r, e := o.Remediation().List(system_selection.New().WithMinimum(9))
 	assert.FatalOnError(t, e)
 
 	for _, i := range r.Items {
@@ -238,7 +239,9 @@ func TestRemediationItemLeavesWhenNoHostNeedsIt(t *testing.T) {
 }
 
 func TestRemediationScoreOutsideRangeIsValidation(t *testing.T) {
-	_, e := security_tester.New(t).Remediation().List(11)
+	_, e := security_tester.New(t).
+		Remediation().
+		List(system_selection.New().WithMinimum(11))
 	assert.True(t, validation.Is(e))
 }
 

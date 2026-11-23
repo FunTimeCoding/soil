@@ -16,9 +16,9 @@ func opening(e *entry.Entry) *opening_row.OpeningRow {
 		fragment(constant.ClosePath, e.Identifier),
 	).Cells(
 		layout.TimeCell(e.Timestamp),
-		html.Td(gomponents.Text(e.Action)),
+		layout.WrapCell(e.Action),
 		html.Td(gomponents.Text(e.User)),
-		html.Td(gomponents.Text(e.System)),
+		layout.WrapCell(e.System),
 		html.Td(gomponents.Text(e.Service)),
 		layout.ClampCell(e.Description),
 	)

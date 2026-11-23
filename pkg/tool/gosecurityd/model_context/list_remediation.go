@@ -20,10 +20,16 @@ func (s *Server) ListRemediation(
 		m = *a.Score
 	}
 
-	result, e := s.remediation.List(m)
+	selected, e := selection(a.Selection, m)
 
 	if e != nil {
 		return s.answer(x, e)
+	}
+
+	result, f := s.remediation.List(selected)
+
+	if f != nil {
+		return s.answer(x, f)
 	}
 
 	return response.SuccessAny(convert.RemediationList(result))

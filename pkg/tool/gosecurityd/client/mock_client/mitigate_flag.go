@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/generated/client"
-	"github.com/funtimecoding/soil/pkg/vulnerability/identifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/subject"
 )
 
 func (c *Client) MitigateFlag(
@@ -21,7 +21,7 @@ func (c *Client) MitigateFlag(
 		return nil, c.failure
 	}
 
-	if e := identifier.Check(name); e != nil {
+	if e := subject.Check(name); e != nil {
 		return nil, e
 	}
 

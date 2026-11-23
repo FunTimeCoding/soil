@@ -1,6 +1,8 @@
 package argument
 
 type ListUpgrades struct {
-	Show  string  `json:"show"`
-	Score float64 `json:"score"`
+	Selection
+	Release string  `json:"release"`
+	Kernel  bool    `json:"kernel"`
+	Score   float64 `json:"score"`
 }

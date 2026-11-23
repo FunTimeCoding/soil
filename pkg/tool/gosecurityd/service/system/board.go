@@ -12,11 +12,7 @@ import (
 func (s *Service) Board(
 	selection *system_selection.Selection,
 ) (*board_result.Result, error) {
-	if e := selection.Check(); e != nil {
-		return nil, e
-	}
-
-	summaries, e := s.Summaries(0)
+	details, e := s.Selected(selection)
 
 	if e != nil {
 		return nil, e
@@ -24,13 +20,8 @@ func (s *Service) Board(
 
 	result := board_result.New()
 
-	for _, v := range summaries {
-		result.CountFacets(selection, v)
-
-		if !selection.Matches(v) {
-			continue
-		}
-
+	for _, d := range details {
+		v := d.Summary
 		result.Total++
 
 		switch v.Coverage {

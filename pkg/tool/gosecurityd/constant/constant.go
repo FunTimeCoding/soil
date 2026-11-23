@@ -112,6 +112,12 @@ const (
 	CriticalScore = 9.0
 	HighScore     = 7.0
 )
+
+var (
+	ScoreFloors       = []float64{0, HighScore, CriticalScore}
+	SystemFloors      = []float64{0, CriticalScore}
+	RemediationFloors = []float64{CriticalScore, HighScore, 0}
+)
 const SystemKind = "system"
 const (
 	CoverageSupported = "supported"
@@ -212,7 +218,7 @@ const (
 	UpgradeRowPrefix = "upgrade-"
 	UpgradeColumns   = 7
 	UpgradeKind      = "upgrade"
-	KernelFilter     = "kernel"
+	KernelParameter  = "kernel"
 	KernelSource     = "linux"
 	KernelPrefix     = "linux-"
 	AptUpgrade       = "apt-get install --only-upgrade"
@@ -227,6 +233,7 @@ const (
 )
 
 const (
+	LabelsArgument = "labels"
 	LabelField     = "label"
 	SearchField    = "search"
 	LabelSeparator = ":"

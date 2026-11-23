@@ -14,7 +14,7 @@ func flags(
 ) *cobra.Command {
 	result := &cobra.Command{
 		Use:   "flags",
-		Short: "List flagged CVEs, newest first; open ones unless --all",
+		Short: "List decisions, newest first; open ones unless --all",
 		Args:  cobra.NoArgs,
 		Run: func(
 			o *cobra.Command,

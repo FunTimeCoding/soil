@@ -67,9 +67,17 @@ backports source, package lists N days old, or what the sources offer),
 paid support only, or no kernel data.
 Package counts leave the kernel out.
 
-## The score filter
+## The selection
 
-score is the lowest score to list. It narrows list_systems (systems
-carrying a vulnerability at that score), list_upgrades (upgrades fixing
-one, counting only those) and list_findings. Critical means 9.0 or higher.
+list_systems, list_upgrades and list_remediation take one selection:
+show (coverage: supported, tracked or untracked), labels (an object, one
+value per key, e.g. {"exposure": "internet", "group": "red"}; the keys and
+values are whatever the systems report), search (part of the host name,
+ignoring case) and score. The first three pick the systems; score is the
+lowest score a finding needs. list_systems lists the picked systems that
+carry a finding at that score; list_upgrades and list_remediation build
+only from the picked systems' findings at or above it, counts included.
+list_remediation's score defaults to 9.0, the others' to 0. list_upgrades
+also takes release (a codename) and kernel (true for the kernel upgrades).
+list_findings takes the score alone. Critical means 9.0 or higher.
 `

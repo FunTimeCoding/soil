@@ -2,7 +2,6 @@ package mock_client
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gosecurityd/generated/client"
 )
@@ -18,17 +17,24 @@ func (c *Client) ListUpgrades(
 		return nil, c.failure
 	}
 
-	show := ""
-	lowest := 0.0
-
-	if p != nil && p.Show != nil {
-		show = *p.Show
+	if p == nil {
+		p = &client.ListUpgradesParams{}
 	}
 
-	if p != nil {
-		lowest = convert.Minimum(p.Score)
+	s, e := convert.Selection(p.Show, p.Label, p.Search, nil, 0)
+
+	if e != nil {
+		return nil, e
 	}
 
+	release := ""
+
+	if p.Release != nil {
+		release = *p.Release
+	}
+
+	kernel := p.Kernel != nil && *p.Kernel
+	lowest := convert.Minimum(p.Score)
 	result := &client.UpgradeList{
 		Groups:   []client.UpgradeGroup{},
 		Releases: []string{},
@@ -36,10 +42,26 @@ func (c *Client) ListUpgrades(
 	hosts := map[string]bool{}
 
 	for _, g := range c.upgrades {
-		if g.Kernel != (show == constant.KernelFilter) ||
-			(show != "" && show != constant.KernelFilter && g.Release != show) ||
+		if g.Kernel != kernel ||
+			(release != "" && g.Release != release) ||
 			g.TopScore < lowest {
 			continue
+		}
+
+		if narrows(s) {
+			kept := []client.UpgradeHost{}
+
+			for _, h := range g.Hosts {
+				if c.chosen(h.Name, s) {
+					kept = append(kept, h)
+				}
+			}
+
+			if len(kept) == 0 {
+				continue
+			}
+
+			g.Hosts = kept
 		}
 
 		result.Groups = append(result.Groups, g)
