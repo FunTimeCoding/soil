@@ -16,7 +16,7 @@ func Detail(e *entry.Entry) gomponents.Node {
 
 	return r.Detail(
 		constant.EntryColumns,
-		fields(e),
+		detailFields(e),
 		html.Div(
 			html.Class(webConstant.ActionRowClass),
 			load.New(fragment(constant.EditPath, e.Identifier), "Edit").

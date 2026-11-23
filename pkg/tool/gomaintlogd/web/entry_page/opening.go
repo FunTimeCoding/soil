@@ -19,7 +19,5 @@ func opening(e *entry.Entry) *opening_row.OpeningRow {
 		layout.WrapCell(e.Action),
 		html.Td(gomponents.Text(e.User)),
 		layout.WrapCell(e.System),
-		html.Td(gomponents.Text(e.Service)),
-		layout.ClampCell(e.Description),
 	)
 }

@@ -50,7 +50,7 @@ const (
 	AddFormMark  = "add-form"
 	RowPrefix    = "row-"
 	FilterFormat = "2006-01-02T15:04"
-	EntryColumns = 6
+	EntryColumns = 4
 
 	DetailContentClass = "detail-content"
 )

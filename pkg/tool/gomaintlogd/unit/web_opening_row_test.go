@@ -29,12 +29,23 @@ func TestEntryRowOpensClosesSavesAndDeletesInPlace(t *testing.T) {
 	opened := s.Body(t, "/detail?id=1")
 	assert.StringContains(
 		t,
-		`<tr id="row-1-detail" class="opening-detail"><td colspan="6">`,
+		`<tr id="row-1-detail" class="opening-detail"><td colspan="4">`,
 		opened,
 	)
 	assert.StringContains(
 		t,
+		`<tr><th scope="row">Service</th><td>nginx</td></tr>`,
+		opened,
+	)
+	assert.StringNotContains(t, `<th scope="row">Action</th>`, opened)
+	assert.StringContains(
+		t,
 		`<template><tr id="row-1" class="opening-row" aria-expanded="true" hx-get="/close?id=1"`,
+		opened,
+	)
+	assert.StringContains(
+		t,
+		`<td class="wrap-cell">worker1</td></tr></template>`,
 		opened,
 	)
 	closed := s.Body(t, "/close?id=1")
@@ -72,4 +83,19 @@ func TestEntryRowOpensClosesSavesAndDeletesInPlace(t *testing.T) {
 		removed,
 	)
 	assert.StringContains(t, "Deleted entry", removed)
+}
+
+func TestEntryRowDetailLeavesOutEmptyFields(t *testing.T) {
+	s := base.New(t)
+	s.PostBody(
+		t,
+		constant.AddEntryPath,
+		url.Values{
+			constant.Action: {"rotated the token"},
+			constant.User:   {"jdoe"},
+		},
+	)
+	opened := s.Body(t, "/detail?id=1")
+	assert.StringNotContains(t, `<th scope="row">Service</th>`, opened)
+	assert.StringNotContains(t, `<th scope="row">Description</th>`, opened)
 }

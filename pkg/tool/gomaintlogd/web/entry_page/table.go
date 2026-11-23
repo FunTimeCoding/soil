@@ -13,14 +13,7 @@ func Table(entries []entry.Entry) gomponents.Node {
 		rows = append(rows, opening(&e).Node())
 	}
 
-	return table.New(
-		"Timestamp",
-		"Action",
-		"User",
-		"System",
-		"Service",
-		"Description",
-	).
+	return table.New("Timestamp", "Action", "User", "System").
 		Rows(rows).
 		Empty("No entries found.").
 		Node()
