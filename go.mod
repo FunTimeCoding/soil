@@ -17,7 +17,7 @@ require (
 	github.com/andygrunwald/go-jira v1.17.0
 	github.com/anthropics/anthropic-sdk-go/v2 v2.13.0
 	github.com/apenella/go-ansible/v2 v2.5.0
-	github.com/bmatcuk/doublestar/v4 v4.10.4
+	github.com/bmatcuk/doublestar/v4 v4.10.7
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/chromedp/cdproto v0.160.8
 	github.com/chromedp/chromedp v0.24.0
@@ -110,7 +110,7 @@ require (
 	k8s.io/client-go v0.37.2
 	k8s.io/metrics v0.37.2
 	maragu.dev/gomponents v1.4.0
-	modernc.org/sqlite v1.62.0
+	modernc.org/sqlite v1.63.0
 	mvdan.cc/sh/v3 v3.14.1
 	sigs.k8s.io/yaml v1.6.0
 )
