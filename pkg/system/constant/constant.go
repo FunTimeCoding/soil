@@ -51,6 +51,7 @@ const (
 	QuerySocketPath             = ".osquery/shell.em"
 
 	Transmission = "tcp"
+	AnyPort      = "0"
 
 	UnknownHost = "unknown"
 
