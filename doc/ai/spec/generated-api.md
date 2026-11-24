@@ -307,7 +307,9 @@ ErrorResponse:
 ```
 
 `Error` carries an answer Sentry does not hear of, `ErrorResponse` a
-captured one with its event ID. Which status takes which schema is the
+captured one with its event ID. A spec with an operation that answers a
+`remediable` error adds an optional `remedy: {type: string}` to its `Error`,
+which the 409 fills. Which status takes which schema is the
 error's class, in the table in `error-handling/README.md` (Answering
 an error); building each answer is `error-handling/rest.md`.
 

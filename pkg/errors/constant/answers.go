@@ -18,6 +18,7 @@ const (
 	DroppedClass       = "dropped"
 	NotConfiguredClass = "not_configured"
 	ReportedClass      = "reported"
+	RemediableClass    = "remediable"
 )
 
 var Answers = map[string]*answer.Answer{
@@ -33,4 +34,5 @@ var Answers = map[string]*answer.Answer{
 	DroppedClass:       answer.NewCaptured(http.StatusServiceUnavailable),
 	NotConfiguredClass: answer.NewCaptured(http.StatusInternalServerError),
 	ReportedClass:      answer.NewUncaptured(http.StatusBadGateway),
+	RemediableClass:    answer.NewUncaptured(http.StatusConflict),
 }

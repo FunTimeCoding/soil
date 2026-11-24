@@ -122,6 +122,13 @@ a per-package sentinel for the same class:
   The message keeps the peer's reason and its event identifier,
   the handle to the one event. An empty identifier means nothing
   reached Sentry, and the caller still captures.
+- `remediable` - the call fails until a named fix is made, and the
+  peer is healthy: `Wrap(e, remedy, sentence)` at the lowest layer
+  that can name the fix, `Format(remedy, ...)` where there is no
+  single cause. `Remedy(e)` answers the fix's stable name. A peer
+  daemon answers it 409 with a `remedy` field, and `refusal.New`
+  rebuilds it from that field before the status table, as it does
+  `reported` (`README.md`, the remediable row).
 - `timeout` - waiting ran out. `timeout.Is` also matches
   `context.DeadlineExceeded`.
 - `dropped` - the answer broke off mid-way: an unexpected EOF, a

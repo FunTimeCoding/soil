@@ -2,6 +2,7 @@ package refusal
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/remediable"
 	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"net/http"
@@ -16,6 +17,10 @@ func New(
 
 	if event := Event(body); event != "" {
 		return reported.New(operation, reason, event)
+	}
+
+	if remedy := Remedy(body); remedy != "" {
+		return remediable.Format(remedy, "%s: %s", operation, reason)
 	}
 
 	if e := NewDaemonTable().Classify(

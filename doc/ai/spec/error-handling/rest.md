@@ -19,7 +19,9 @@ error); this leaf is how a handler builds each answer.
 The OpenAPI spec defines two error schemas (`generated-api.md`, Error
 schemas):
 
-- `Error` - just an `error` string, for an answer Sentry does not hear of
+- `Error` - an `error` string, for an answer Sentry does not hear of, and an
+  optional `remedy`, which a `remediable` answer fills with
+  `remediable.Remedy(e)` so the caller's `refusal.New` rebuilds it
 - `ErrorResponse` - `error` + `event_identifier`, for a captured one
 
 ## The 4xx answers

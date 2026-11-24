@@ -112,6 +112,7 @@ message does not depend on it:
 
 | Class | REST | MCP | Sentry |
 |-------|------|-----|--------|
+| `remediable` | 409 `Error` with `remedy` | tool failure | no - the remedy says who acts |
 | `validation`, `ambiguous`, `not_selected` | 400 `Error` | tool failure | no |
 | `not_found` | 404 `Error` | tool failure | no |
 | `conflict` | 409 `Error` | tool failure | no |
@@ -159,6 +160,19 @@ row above it - by a shared class from `pkg/errors` (`external-api.md`,
 Shared error classes), or for a one-off type by answering
 `Expected() true` (`classify/face.Expected`), which `classify.Reportable`
 honours - and only once it has been seen enough to know what it means.
+
+The first row is for a failure that names its fix while the peer behind it is
+healthy - a tab asleep until brought forward, an authorization expired until
+renewed. The lowest layer that can name the fix wraps the cause,
+`remediable.Wrap(e, remedy, sentence)`, and nothing above re-wraps or
+converts it: the cause stays reachable, and `classify.Class` tries
+`remediable` first, so the meaning wins over it. A remedy is a stable name a
+program acts on - `remediable.Remedy(e)` - beside the sentence a person reads.
+REST answers it as `Error` with `remedy`, `refusal.New` rebuilds it from that
+field, so it survives every hop, and a guard never counts it as an outage. A
+layer wraps only what it can name: a timeout it cannot explain stays a
+timeout. `Expected() true` remains for what is expected and has no remedy - a
+caller that left.
 
 ## An answer it cannot give
 

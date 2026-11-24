@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/errors/remediable"
 	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
@@ -18,6 +19,8 @@ import (
 
 func Class(e error) string {
 	switch {
+	case remediable.Is(e):
+		return constant.RemediableClass
 	case reported.Is(e):
 		return constant.ReportedClass
 	case unavailable.Is(e):

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/remediable"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"github.com/funtimecoding/soil/pkg/peer/outage_tracker/edge"
@@ -50,6 +51,20 @@ func TestTriageHandsBackWhatIsNotOutage(t *testing.T) {
 	assert.NotNil(t, up)
 	assert.False(t, up.Down)
 	assert.Nil(t, clean)
+}
+
+func TestTriageHandsBackRemediableOverItsConnectionCause(t *testing.T) {
+	r := outage_tracker.New(memory.New())
+	e := remediable.Wrap(
+		syscall.ECONNREFUSED,
+		"wake_tab",
+		"bring the tab forward",
+	)
+	none, back := r.Triage("sentry", e)
+	assert.Nil(t, none)
+	assert.True(t, back == error(e))
+	down, _ := r.Down("sentry")
+	assert.False(t, down)
 }
 
 func TestHandleLogsOutageOnceAndEachRefusalOncePerReason(t *testing.T) {

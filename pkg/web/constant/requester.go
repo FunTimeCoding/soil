@@ -9,6 +9,7 @@ const (
 	RetryAfter        = "Retry-After"
 	MaximumRefusal    = 64 << 10
 	EventField        = "event_identifier"
+	RemedyField       = "remedy"
 )
 
 var NestedFields = []string{"message", "title", "detail"}

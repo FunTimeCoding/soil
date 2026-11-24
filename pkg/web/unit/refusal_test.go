@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/remediable"
 	"github.com/funtimecoding/soil/pkg/errors/reported"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
@@ -54,6 +55,19 @@ func TestConflictRefusalIsConflict(t *testing.T) {
 	)
 	assert.True(t, conflict.Is(e))
 	assert.String(t, "unmute owner: owner not muted: alfa", e.Error())
+}
+
+func TestRemedyRefusalIsRemediable(t *testing.T) {
+	e := refusal.New(
+		"read post",
+		upstream_server.Answered(t, http.StatusConflict),
+		[]byte(`{"error":"no tab answers","remedy":"wake_tab"}`),
+	)
+	assert.True(t, remediable.Is(e))
+	assert.False(t, conflict.Is(e))
+	assert.String(t, "wake_tab", remediable.Remedy(e))
+	assert.String(t, "read post: no tab answers", e.Error())
+	assert.False(t, classify.Reportable(e))
 }
 
 func TestUnavailableRefusalIsUnavailable(t *testing.T) {
