@@ -4,6 +4,7 @@ package lifetime
 
 import (
 	"context"
+	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -13,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/integration/lifetime/lifetime_tester"
 	"github.com/funtimecoding/soil/pkg/chromium/protocol"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"runtime"
 	"testing"
@@ -243,10 +245,45 @@ func TestEvaluateTimeoutKeepsTabUsable(t *testing.T) {
 	var result any
 	hung := p.EvaluatePromise(constant.FixtureHungPromise, &result)
 	assert.True(t, timeout.Is(hung))
+	assert.True(t, connection.Classify(hung) == nil)
 	assert.StringContains(t, "browser tab: did not answer within", hung.Error())
 	s.AssertTabAlive(identifier)
 	var sum int
 	answered := p.Evaluate(constant.FixtureSum, &sum)
 	assert.FatalOnError(t, answered)
 	assert.Integer(t, 2, sum)
+}
+
+func TestResumePageRunsFrozenTimers(t *testing.T) {
+	s := base.New(t)
+	identifier := s.OpenTab(constant.FixtureQuietRoute)
+	x, e := s.Client.AcquireTarget(identifier)
+	assert.FatalOnError(t, e)
+	_, e = chromedp.Call(
+		x,
+		page.SetWebLifecycleState,
+		page.SetWebLifecycleStateParams{
+			State: page.SetWebLifecycleStateStateFrozen,
+		},
+	)
+	assert.FatalOnError(t, e)
+	p := protocol.NewIdentifier(
+		s.Client,
+		identifier,
+	).WithTimeout(constant.FixtureCallTimeout)
+	var stalled string
+	assert.True(
+		t,
+		timeout.Is(p.EvaluatePromise(constant.FixtureTimer, &stalled)),
+	)
+	assert.FatalOnError(t, p.ResumePage())
+	var fired string
+	assert.FatalOnError(
+		t,
+		p.WithTimeout(constant.FixtureEventTimeout).EvaluatePromise(
+			constant.FixtureTimer,
+			&fired,
+		),
+	)
+	assert.String(t, "timer", fired)
 }

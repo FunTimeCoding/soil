@@ -29,4 +29,5 @@ const (
 const (
 	FixtureHungPromise = "new Promise(() => {})"
 	FixtureSum         = "1 + 1"
+	FixtureTimer       = "new Promise(r => setTimeout(() => r('timer'), 10))"
 )

@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
-	"github.com/funtimecoding/soil/pkg/errors/connection"
-	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"time"
 )
 
@@ -39,10 +38,9 @@ func run[T any](
 	case <-time.After(p.timeout):
 		var zero T
 
-		return zero, connection.New(
-			errorsConstant.Timeout,
+		return zero, timeout.Format(
+			"%s: %s",
 			constant.BrowserTab,
-			"",
 			fmt.Sprintf(constant.Asleep, p.timeout),
 		)
 	}

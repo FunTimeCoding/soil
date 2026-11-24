@@ -64,6 +64,7 @@ type ProtocolClient interface {
 		attribute []string,
 	) error
 	Reload() error
+	ResumePage() error
 	Save(
 		locator string,
 		filename string,
