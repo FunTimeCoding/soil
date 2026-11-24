@@ -10,6 +10,10 @@ func Check(root string) []*concern.Concern {
 	var result []*concern.Concern
 
 	for _, b := range Outdated(root) {
+		if b.Meant != "" {
+			continue
+		}
+
 		if !semver.IsValid(b.Version) {
 			result = append(
 				result,

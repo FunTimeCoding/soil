@@ -6,4 +6,5 @@ type Binary struct {
 	Module    string
 	Version   string
 	Directory string
+	Meant     string
 }

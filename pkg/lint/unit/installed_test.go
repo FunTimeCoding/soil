@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/installed"
+	"github.com/funtimecoding/soil/pkg/lint/unit/installed_tester"
 	"github.com/funtimecoding/soil/pkg/stamp"
 	"os"
 	"testing"
@@ -48,4 +49,59 @@ func TestBinaryBuiltBeforeLatestTagIsStale(t *testing.T) {
 
 func TestRepositoryWithoutTagsLeavesNothingStale(t *testing.T) {
 	assert.False(t, installed.Stale("v0.11.170", ""))
+}
+
+func TestCommandInDownstreamCheckoutBelongsToDownstream(t *testing.T) {
+	o := installed_tester.New(t)
+	upstream := o.Checkout("upstream", "example.com/upstream", nil, "alfa")
+	o.Checkout(
+		"downstream",
+		"example.com/downstream",
+		[]string{"example.com/upstream"},
+		"alfa",
+	)
+	assert.String(
+		t,
+		"example.com/downstream",
+		installed.OwnerOf(upstream, "alfa"),
+	)
+}
+
+func TestCommandInOneCheckoutBelongsToIt(t *testing.T) {
+	o := installed_tester.New(t)
+	upstream := o.Checkout("upstream", "example.com/upstream", nil, "bravo")
+	o.Checkout(
+		"downstream",
+		"example.com/downstream",
+		[]string{"example.com/upstream"},
+	)
+	assert.String(
+		t,
+		"example.com/upstream",
+		installed.OwnerOf(upstream, "bravo"),
+	)
+}
+
+func TestCommandRepackagedDownstreamBelongsToUpstream(t *testing.T) {
+	o := installed_tester.New(t)
+	upstream := o.Checkout("upstream", "example.com/upstream", nil, "delta")
+	downstream := o.Checkout(
+		"downstream",
+		"example.com/downstream",
+		[]string{"example.com/upstream"},
+		"delta",
+	)
+	o.Main(downstream, "delta", "example.com/upstream/pkg/tool/delta")
+	assert.String(
+		t,
+		"example.com/upstream",
+		installed.OwnerOf(upstream, "delta"),
+	)
+}
+
+func TestCommandInUnrelatedCheckoutsBelongsToNone(t *testing.T) {
+	o := installed_tester.New(t)
+	first := o.Checkout("first", "example.com/first", nil, "charlie")
+	o.Checkout("second", "example.com/second", nil, "charlie")
+	assert.String(t, "", installed.OwnerOf(first, "charlie"))
 }

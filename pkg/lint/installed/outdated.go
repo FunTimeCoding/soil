@@ -18,6 +18,15 @@ func Outdated(root string) []*Binary {
 	var result []*Binary
 
 	for _, b := range PathBinaries(known) {
+		if meant := owner(sources, b.Name, names[b.Name]); meant != "" &&
+			meant != b.Module {
+			b.Meant = meant
+			b.Directory = sources[meant]
+			result = append(result, b)
+
+			continue
+		}
+
 		module := b.Module
 
 		if _, okay := sources[module]; !okay {
