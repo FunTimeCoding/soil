@@ -37,7 +37,7 @@ pkg/tool/go<tool>d/
 ├── constant/
 ├── option/
 ├── unit/
-│   └── guard_test.go      # Guard battery over Mount - see testing.md
+│   └── guard_test.go      # Guard battery over Mount - see testing/served.md
 ├── main.go
 ├── mount.go               # Mount(deps..., g *guard.Mux) - the served surface
 └── run.go
@@ -93,7 +93,7 @@ header.
 `server/server.go` - plain struct, no embedding, holding the services its
 operations call - `*service.Service` for a daemon with one set, one field
 per `<noun>.Service` for several - and never the daemon; no service has a
-face (`service-tool.md`, Services):
+face (`service-tool/daemon.md`, Services):
 ```go
 type Server struct {
     book     *book.Service
@@ -150,7 +150,7 @@ that talks to the daemon uses it: its own CLI, other daemons, and tests through
 consumed over OIDC - has none. A second shape - a CLI on the generated client, a
 wrapper that relays raw bodies - is a second client in waiting. The external API
 client a daemon uses toward its upstream is a different thing, at
-`pkg/<domain>/` (`service-tool.md`).
+`pkg/<domain>/` (`service-tool/client.md`).
 
 `client.Client` is the struct, the package's one receiver: it wraps the
 generated client on a pool it owns, which `Close` closes. `New(locator,
@@ -277,8 +277,8 @@ run.go builds its server with `server.New(constant.Identity, &o.Web, r, ...)`,
 which makes one `guard.Mux` from the service tokens `Main` read through
 `o.Read(a)`, with sign-on when the option carries it, and hands it to
 `d.Mount`
-(`service-tool.md`, Run Function). `Mount` is the production surface
-the guard battery starts (`testing.md`); a route registered in the
+(`service-tool/README.md`, Run Function). `Mount` is the production surface
+the guard battery starts (`testing/served.md`); a route registered in the
 run.go callback escapes both the guard and the battery.
 
 ## OpenAPI Spec Patterns

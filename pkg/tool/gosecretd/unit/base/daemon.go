@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/openbao/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/option"
-	"github.com/prometheus/client_golang/prometheus"
 )
 
 func (s *Server) Daemon() *daemon.Daemon {
@@ -17,12 +16,7 @@ func (s *Server) Daemon() *daemon.Daemon {
 
 	o := option.New()
 	o.Source = func() face.OpenbaoClient { return s.Source }
-	s.daemon = daemon.New(
-		o,
-		logger.New(s.t.Context()),
-		s.Reporter,
-		prometheus.NewRegistry(),
-	)
+	s.daemon = daemon.New(o, logger.New(s.t.Context()), s.Reporter, s.Registry)
 	s.t.Cleanup(s.daemon.Close)
 
 	return s.daemon

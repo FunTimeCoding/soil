@@ -16,7 +16,7 @@ Recovery makes the answer readable, not the panic fine: a recovered
 panic is still a captured anomaly, so the code that panics is a bug
 to fix at its cause. Every error a handler meets is translated to a
 tool result, and no client call a handler makes panics underneath
-it; the Must/non-Must pair in `service-tool.md` exists for this. A
+it; the Must/non-Must pair in `service-tool/client.md` exists for this. A
 step that can panic is checked before it runs. Do not add per-handler
 recover defers; the builder's is the one.
 

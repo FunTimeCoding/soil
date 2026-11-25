@@ -1,7 +1,7 @@
 # Test Placement Spec
 
 Where test files live. Testing patterns (mocks, lifecycle HTTP,
-stores) are in `testing.md`; fixture layout is in `fixture.md`.
+stores) are in `testing/`; fixture layout is in `fixture.md`.
 
 Every test file lives in a `<path>/unit/` or `<path>/integration/`
 directory. Source packages carry no `_test.go` files. Analyzer
@@ -91,7 +91,7 @@ A helper package is named for the role it plays in a test:
   `Server`, `New(t, ...)`, and accessors for what it received
   (`proxmox_server`, `issuer_server`, `upstream_server`)
 - `mock_<face>` implements a client's whole face, beside the face
-  (`testing.md`)
+  (`testing/double.md`)
 - `<behaviour>_<role>` is an in-process stand-in whose point is one
   behaviour (`failing_writer`, `refusing_source`, `held_peer`)
 - `base` builds the daemon stack

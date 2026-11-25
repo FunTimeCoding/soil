@@ -11,8 +11,8 @@ Design and coding specs live in `doc/ai/spec/`:
 - `naming.md` - banned identifier segments, replacement patterns, type/field
   naming rules
 - `entrypoint.md` - main, Main(), sentry setup (shared by all cmd/ programs)
-- `service-tool.md` - long-running service tool pattern (Run, lifecycle wiring,
-  routes)
+- `service-tool/` - long-running service tool pattern (Run, lifecycle wiring,
+  routes; the daemon, clients, the web package)
 - `check-tool.md` - CLI check tool pattern (fetch, filter, format, print)
 - `lifecycle.md` - lifecycle manager for servers and workers
 - `entity-wrapper.md` - entity wrapper pattern
@@ -21,7 +21,8 @@ Design and coding specs live in `doc/ai/spec/`:
   lite-as-default selection)
 - `http-client.md` - outbound HTTP (stall_client builder, pool views, who
   owns and closes a client, the named exceptions)
-- `testing.md` - integration testing patterns (mocks, lifecycle HTTP, store)
+- `testing/` - integration testing patterns (mocks, served surfaces, outages,
+  store)
 - `test-placement.md` - where test files live (unit/ and integration/ homes,
   the process-boundary line, black-box rule)
 - `build.md` - gobuild cross-compilation and the build information stamp

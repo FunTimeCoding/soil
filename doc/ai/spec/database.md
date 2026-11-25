@@ -161,7 +161,7 @@ second way to open a store. Whoever opens the mapper - the daemon - closes it
 with `relational.CloseMapper`; each store borrows it and has no `Close`. A
 daemon whose tables must commit together in some places and never in others has
 one store per consistency boundary, and a transaction never spans two
-(`service-tool.md`, Stores). Migration lives beside them, in the daemon's
+(`service-tool/daemon.md`, Stores). Migration lives beside them, in the daemon's
 `<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)` that the daemon calls
 before building its stores, so schema history - renames, drops, backfills -
 stays out of the store:
@@ -191,7 +191,7 @@ Never `First` or `Take`: they answer a miss with `gorm.ErrRecordNotFound`,
 which gorm's logger prints on every miss, and `First` orders by primary key
 unasked - a lookup whose condition can match several rows orders explicitly.
 
-Tests migrate and build the same way, in memory, as `testing.md` sets
+Tests migrate and build the same way, in memory, as `testing/README.md` sets
 out:
 
 ```go
@@ -231,6 +231,33 @@ payload column must also be listed in `DoUpdates`. A column missing
 there is written on the first insert and never again, while the rest of
 the row keeps refreshing around it. Test an upsert by saving twice with
 a changed value and asserting the second one wins.
+
+## Changing what a column means
+
+A column changing its meaning - a name becoming a session identifier, a
+boolean becoming a timestamp - type-checks while every producer still writes
+the old meaning, so it fails on the first write in production, or the first
+constraint. It goes expand and contract, three steps that each leave a
+runnable daemon:
+
+1. Add the new column beside the old, nullable, and backfill it. No
+   constraint, no producer changes. The backfill re-runs on every start while
+   any row is unconverted, so a database that sat on an older binary heals.
+2. Write both columns, and read either - the new key, falling back to the old
+   for a row the backfill did not reach. The dual write protects an older
+   binary reading new rows; the fallback protects the new binary reading old
+   ones, and is the half more easily forgotten, because a query returning no
+   rows looks like having none.
+3. Make it non-null, add the constraint, drop the old column.
+
+Where the old column gated an action - consumed, delivered, processed - the
+backfill is a prerequisite: an unbackfilled row reads as not yet done, and the
+action fires again. Each step gates on the column it expects
+(`lite.ColumnExists`) so a restart cannot re-run it, and the constraint step
+takes its own precondition rather than joining one that is all-or-nothing
+across other tables. This matters wherever operators upgrade on their own
+schedule: an intermediate binary against an intermediate schema is a state
+someone will be in.
 
 ## Deployment
 

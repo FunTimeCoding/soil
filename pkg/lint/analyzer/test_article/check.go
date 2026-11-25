@@ -42,7 +42,7 @@ func Check(
 				concern.NewPosition(
 					"test_article",
 					fmt.Sprintf(
-						"%s carries the article %q - a test name drops a, an and the (see doc/ai/spec/testing.md, Test names)",
+						"%s carries the article %q - a test name drops a, an and the (see doc/ai/spec/testing/README.md, Test names)",
 						f.Name.Name,
 						word,
 					),

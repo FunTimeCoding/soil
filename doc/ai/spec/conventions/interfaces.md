@@ -9,7 +9,7 @@
   import `pkg/face`, so putting the interface there would create an
   import cycle. Examples: `AlertSource` in
   `go:pkg/prometheus/face`, `GitLabClient` in `go:pkg/gitlab/face`,
-  and a daemon's client faces in `<path>/face/` (`service-tool.md`).
+  and a daemon's client faces in `<path>/face/` (`service-tool/daemon.md`).
 - **Upstream provider faces** - one `<domain>/face/` per domain, each
   interface named for its provider: `JiraClient` and `ConfluenceClient`
   in `go:pkg/atlassian/face`, `PostgresClient` in `go:pkg/postgres/face`. A

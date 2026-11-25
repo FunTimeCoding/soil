@@ -107,7 +107,7 @@ Three dispositions, in order of preference:
 - **The test makes several claims** - split it. One test per claim, each
   named for its own, and the comment dissolves.
 
-A test name carries the claim, chopped as `testing.md`'s Test names
+A test name carries the claim, chopped as `testing/README.md`'s Test names
 says. `TestSpacedRetriesReopenCircuitSooner` and
 `TestEvictionIsIndependentOfScanOrder` carry their claim in the name
 and need no comment; if a claim will not fit in a name, it is more

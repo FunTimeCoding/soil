@@ -63,7 +63,7 @@ func Run(o *option.Config, i face.Instrument) {
                 &o.Web,
                 r,
                 func(g *guard.Mux) {
-                    // domain deps first - see service-tool.md
+                    // domain deps first - see service-tool/
                     Mount(r, i.Recorder(), o.Version, g)
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),

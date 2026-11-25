@@ -9,9 +9,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/metric/metric_tester"
 	"github.com/funtimecoding/soil/pkg/openbao/status"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/watch"
+	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"github.com/prometheus/client_golang/prometheus"
+	"net/http"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -74,6 +78,30 @@ func TestWatchReportsUnreachableStore(t *testing.T) {
 		t,
 		0,
 		metric_tester.New(t).Sample(y, constant.ReachableGauge, nil),
+	)
+}
+
+func TestWatchReportsSealedStoreWhileGuardIsOpen(t *testing.T) {
+	s := base.New(t)
+	s.Source.Failure = outage_tester.RefusedDial()
+	answer, e := s.GeneratedClient().ListSecretsWithResponse(
+		t.Context(),
+		&client.ListSecretsParams{},
+	)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusServiceUnavailable, answer.StatusCode())
+	s.Source.Failure = nil
+	s.Source.Seal()
+	s.Watch().Poll()
+	assert.Float(
+		t,
+		1,
+		metric_tester.New(t).Sample(s.Registry, constant.SealedGauge, nil),
+	)
+	assert.Float(
+		t,
+		1,
+		metric_tester.New(t).Sample(s.Registry, constant.ReachableGauge, nil),
 	)
 }
 

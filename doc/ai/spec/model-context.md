@@ -146,7 +146,7 @@ type Server struct {
 ```
 
 The server takes the services its tools call, never the daemon, and
-closes none of them (`service-tool.md`, Services).
+closes none of them (`service-tool/daemon.md`, Services).
 
 `new.go` - create the MCPServer via the factory, register tools, return:
 ```go
@@ -251,6 +251,15 @@ func (s *Server) ListLinks(
 MCP numbers arrive as `float64`. Cast to `int32` or `int` at the
 call site. Tools without parameters use `struct{}` as the argument type.
 
+The mark server factory turns on mcp-go's input schema validation for every
+daemon, so a missing required argument or a wrong type is refused before the
+handler runs. A typed handler writes no required checks; it keeps only a guard
+against an explicitly empty string, which the schema does not reject. A number
+whose zero means something - "0 for all" - is a `*float64`, nil for absent;
+an identifier, where zero is invalid anyway, stays a plain `float64`. The
+framework is the validator - a hand-rolled schema validation package was
+built once and reverted.
+
 ## Legacy Request Accessors
 
 Older services use the untyped pattern with request
@@ -300,8 +309,8 @@ func (s *Server) getAlerts(
 
 ### Quick reference
 
-- Required params: `r.RequireString(...)` / `r.RequireFloat(...)` - return
-  `response.Fail(...)` on failure
+- Required params, in the older untyped pattern: `r.RequireString(...)` /
+  `r.RequireFloat(...)` - return `response.Fail(...)` on failure
 - Optional params: `r.GetString(constant.Key, "")` /
   `r.GetFloat(constant.Key, 0)` / `r.GetBool(constant.Key, false)`
 - JSON results: `response.SuccessAny(converted)` - serializes via

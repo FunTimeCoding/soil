@@ -18,7 +18,7 @@ loads, a marked fragment for HTMX requests, which the layout's global
 class's status. A quiet class carries its message alone and Sentry hears
 nothing; anything else is captured and the item carries the event ID.
 Validation errors that re-render a form are the form round-trip instead
-(`service-tool.md`, Form Errors).
+(`service-tool/web.md`, Form Errors).
 
 Panics stay the net for faults the handler does not expect. A web package
 exposes a `Recovery` delegate (wrapping `view.Recovery`) that renders a

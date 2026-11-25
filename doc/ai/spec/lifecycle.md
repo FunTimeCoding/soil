@@ -58,17 +58,16 @@ type Worker interface {
 }
 ```
 
-`Close` is the release, as for every other resource: it ends what the
-worker started - goroutines, tickers, stop channels - and whatever the
-worker built. A service or client the worker was given belongs to
-whoever built it, and the worker never closes it. `Close` must be safe
-on a worker that was never started - the lifecycle closes everything
-registered, and tests close workers they only call into - so anything
-`Close` uses is created in the constructor, not in `Start`. It must also
-be safe twice: a worker the daemon builds is closed by the lifecycle and
-again by the daemon (`service-tool.md`, Workers). A client's `Close` stops
-what it started - a WebSocket, a keep-alive, a reconnect loop - and,
-under the lock that loop takes, refuses work after it.
+`Close` is the release, as for every other resource: it ends what the worker
+started - goroutines, tickers, stop channels - and whatever the worker built. A
+service or client the worker was given belongs to whoever built it, and the
+worker never closes it. `Close` must be safe on a worker that was never
+started - the lifecycle closes everything registered, and tests close workers
+they only call into - so anything `Close` uses is created in the constructor,
+not in `Start`. It must also be safe twice: a worker the daemon builds is closed
+by the lifecycle and again by the daemon (`service-tool/daemon.md`, Workers). A
+client's `Close` stops what it started - a WebSocket, a keep-alive, a reconnect
+loop - and, under the lock that loop takes, refuses work after it.
 
 ## Draining Workers
 
@@ -167,8 +166,7 @@ Close happens in reverse: the server shuts down before the worker closes.
 - **App-specific setup** - database connections and client construction
   happen in the daemon, configuration parsing in `Main`. `Run` builds the
   daemon before `lifecycle.New()`, registers the workers it hands over -
-  guards first, then clocks - and defers its `Close` (`service-tool.md`,
-  The daemon).
+  guards first, then clocks - and defers its `Close` (`service-tool/daemon.md`).
 
 ## Usage Pattern
 

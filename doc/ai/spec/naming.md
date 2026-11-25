@@ -144,8 +144,8 @@ places they count are `pkg/lint/constant/preposition.go`: `with`, like
 particles (`up`, `out`, `off`, `down`) are not prepositions here. Outside the
 first:
 
-- interface implementations, and test functions (named as `testing.md`, Test
-  names);
+- interface implementations, and test functions (named as `testing/README.md`,
+  Test names);
 - yes/no states: a bool field, a bool answer taking no argument, and `In`
   opening a bool question (`InStock(name)`);
 - moments: a field, parameter or local ending in `At` or holding a time; a

@@ -68,7 +68,7 @@ never closes it.
   `*http.Client` from its caller instead, so the caller owns it.
 - A daemon's outermost owner is its service: it builds the clients from
   factories on the option, and `Run` builds it and defers its `Close()`
-  (`service-tool.md`, Service). A CLI's `main` builds its clients itself
+  (`service-tool/daemon.md`). A CLI's `main` builds its clients itself
   and defers their `Close()`. A one-shot function owns a local pool for
   the length of its call.
 
@@ -95,4 +95,4 @@ value handed to a function that only borrows it - the fixtures in
 - A test that needs a transport the builder cannot express - a failing
   dialer - marks its literal `goanalyze:ignore restricted_literal`.
 
-Test servers own their client too; `testing.md` covers that side.
+Test servers own their client too; `testing/served.md` covers that side.

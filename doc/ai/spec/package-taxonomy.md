@@ -1,6 +1,6 @@
 # Package Taxonomy
 
-When a service tool outgrows the base tree (see `service-tool.md`), additional
+When a service tool outgrows the base tree (see `service-tool/`), additional
 packages emerge to separate concerns. This spec covers their roles, dependency
 direction, and the criteria for introducing them.
 

@@ -47,7 +47,3 @@ func TestDaemonHandsOutOpenbaoGuardFirst(t *testing.T) {
 	_, okay := base.New(t).Daemon().Workers()[0].(*peer.Guard)
 	assert.True(t, okay)
 }
-
-func TestWaitAnswersOnceOpenbaoAnswers(t *testing.T) {
-	assert.FatalOnError(t, base.New(t).Daemon().Wait(t.Context()))
-}

@@ -35,7 +35,7 @@ shapes depending on whether the tool uses flat flags or subcommands.
 single-purpose tools. Daemons should always use flat flags - a
 config path, maybe `--port`, nothing more. Whether a daemon takes
 `--port` at all depends on its deployment target - see
-`service-tool.md`. Standalone tools that do one thing also use
+`service-tool/`. Standalone tools that do one thing also use
 flat flags.
 
 **Subcommands** (cobra + identity): tools with multiple distinct

@@ -25,6 +25,6 @@ func New(
 		client:  c,
 		guard:   g,
 		service: v,
-		watch:   watch.New(v.Status, y, l, r),
+		watch:   watch.New(c.Health, y, l, r),
 	}
 }

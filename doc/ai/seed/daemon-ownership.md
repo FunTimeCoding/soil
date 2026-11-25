@@ -1,12 +1,11 @@
 # Daemon ownership
 
-What is still open in bringing every daemon to the shape the specs set:
-one owner per daemon (`service-tool.md`, The daemon, Services, Stores,
-Workers; `lifecycle.md`), answers by class (`error-handling/`), guarded
-peers (`error-handling/infrastructure.md`, The guard), one daemon client
-with a full face and mock (`generated-api.md`, The Daemon Client), and the
-tests that hold them (`testing.md`). How the work is done is
-`../runbook/refactor.md`. A consuming repository keeps its own daemons'
+What is still open in bringing every daemon to the shape the specs set: one
+owner per daemon (`service-tool/daemon.md`; `lifecycle.md`), answers by class
+(`error-handling/`), guarded peers (`error-handling/infrastructure.md`, The
+guard), one daemon client with a full face and mock (`generated-api.md`, The
+Daemon Client), and the tests that hold them (`testing/`). How the work is
+done is `../runbook/refactor.md`. A consuming repository keeps its own daemons'
 open work in a seed of its own. An item leaves this seed when it is done.
 
 ## Order

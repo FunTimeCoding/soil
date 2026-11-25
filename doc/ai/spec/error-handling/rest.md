@@ -7,7 +7,7 @@ past explicit error handling.
 Handler bodies split by service class: external API services call
 non-Must client methods and answer failures explicitly; local store
 services may keep `Must*`/`PanicOnError` and lean on the recovery net.
-The Must/non-Must pair convention lives in `service-tool.md`.
+The Must/non-Must pair convention lives in `service-tool/client.md`.
 
 Services using oapi-codegen's strict server mode return typed error
 responses. Which status, which schema and whether Sentry hears of it

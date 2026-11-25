@@ -15,7 +15,7 @@ mechanically; these leaves carry the judgment the tooling cannot.
 - `interfaces.md` - generic vs domain interfaces, mocks
 
 Sibling specs at the parent level: `../naming.md` for identifier
-rules, `../comments.md` for comment discipline, `../testing.md` for
+rules, `../comments.md` for comment discipline, `../testing/` for
 testing philosophy and patterns, `../error-handling/` for the
 PanicOnError strategy, `../stdlib-wrappers.md` for the wrapper
 tables, `../package-design.md` for when a type earns its own package.
