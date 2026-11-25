@@ -2,7 +2,6 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/identity"
-	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"time"
 )
 
@@ -44,12 +43,7 @@ const (
 	LatestReply       = "latest"
 	LatestReplyError  = "latest_error"
 
-	ExcerptLength    = 200
-	DigestLimit      = goclaudedConstant.DeliveryEntryLimit
-	EnumerateLimit   = 4
-	TruncationMarker = "…+more"
-	DigestIndent     = "    "
-	LabelPrefix      = 8
+	LabelPrefix = 8
 
 	MattermostPeer    = "mattermost upstream"
 	RosterPeer        = "goclauded"

@@ -18,10 +18,17 @@ import (
 
 // Address defines model for Address.
 type Address struct {
-	Address    string  `json:"address"`
-	Identifier int32   `json:"identifier"`
-	Name       *string `json:"name,omitempty"`
-	ObjectType *string `json:"objectType,omitempty"`
+	Address        string  `json:"address"`
+	Description    *string `json:"description,omitempty"`
+	Device         *string `json:"device,omitempty"`
+	DomainName     *string `json:"domainName,omitempty"`
+	Identifier     int32   `json:"identifier"`
+	Interface      *string `json:"interface,omitempty"`
+	Name           *string `json:"name,omitempty"`
+	ObjectType     *string `json:"objectType,omitempty"`
+	Role           *string `json:"role,omitempty"`
+	Status         *string `json:"status,omitempty"`
+	VirtualMachine *string `json:"virtualMachine,omitempty"`
 }
 
 // AddressRange defines model for AddressRange.
@@ -268,7 +275,7 @@ type CreatePrefixRequest struct {
 	// Description Description (optional).
 	Description *string `json:"description,omitempty"`
 
-	// Prefix CIDR notation (e.g. 192.168.178.0/24).
+	// Prefix CIDR notation (e.g. 192.0.2.0/24).
 	Prefix string `json:"prefix"`
 
 	// Site Site name (optional).
@@ -690,6 +697,12 @@ type WirelessNetwork struct {
 	Name       string `json:"name"`
 }
 
+// ListPrefixAddressesParams defines parameters for ListPrefixAddresses.
+type ListPrefixAddressesParams struct {
+	// Prefix Network in CIDR notation, e.g. 192.0.2.0/24.
+	Prefix string `form:"prefix" json:"prefix"`
+}
+
 // ListDevicesParams defines parameters for ListDevices.
 type ListDevicesParams struct {
 	// Query Filter devices by name (case-insensitive contains). Omit for all.
@@ -939,6 +952,9 @@ type ClientInterface interface {
 	// CreateAddressRange performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateAddressRange(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListPrefixAddresses performs a GET /api/addresses (the `ListPrefixAddresses` operationId) request.
+	ListPrefixAddresses(ctx context.Context, params *ListPrefixAddressesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteAddress performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1466,6 +1482,19 @@ func (c *Client) CreateAddressRangeWithBody(ctx context.Context, contentType str
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateAddressRange(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateAddressRangeRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListPrefixAddresses performs a GET /api/addresses (the `ListPrefixAddresses` operationId) request.
+func (c *Client) ListPrefixAddresses(ctx context.Context, params *ListPrefixAddressesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListPrefixAddressesRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -3393,6 +3422,56 @@ func NewCreateAddressRangeRequestWithBody(server string, contentType string, bod
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListPrefixAddressesRequest constructs an http.Request for the ListPrefixAddresses method
+func NewListPrefixAddressesRequest(server string, params *ListPrefixAddressesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/addresses")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "prefix", params.Prefix, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -7090,6 +7169,11 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateAddressRangeWithResponse(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error)
 
+	// ListPrefixAddressesWithResponse performs a GET /api/addresses (the `ListPrefixAddresses` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListPrefixAddressesWithResponse(ctx context.Context, params *ListPrefixAddressesParams, reqEditors ...RequestEditorFn) (*ListPrefixAddressesResponse, error)
+
 	// DeleteAddressWithResponse performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -7882,6 +7966,68 @@ func (r CreateAddressRangeResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateAddressRangeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListPrefixAddressesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*Address
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *Error
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListPrefixAddressesResponse) GetJSON200() *[]*Address {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ListPrefixAddressesResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListPrefixAddressesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r ListPrefixAddressesResponse) GetJSON503() *Error {
+	return r.JSON503
+}
+
+// GetBody returns the raw response body bytes
+func (r ListPrefixAddressesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListPrefixAddressesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListPrefixAddressesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListPrefixAddressesResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -13771,6 +13917,17 @@ func (c *ClientWithResponses) CreateAddressRangeWithResponse(ctx context.Context
 	return ParseCreateAddressRangeResponse(rsp)
 }
 
+// ListPrefixAddressesWithResponse performs a GET /api/addresses (the `ListPrefixAddresses` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListPrefixAddressesWithResponse(ctx context.Context, params *ListPrefixAddressesParams, reqEditors ...RequestEditorFn) (*ListPrefixAddressesResponse, error) {
+	rsp, err := c.ListPrefixAddresses(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListPrefixAddressesResponse(rsp)
+}
+
 // DeleteAddressWithResponse performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -15327,6 +15484,53 @@ func ParseCreateAddressRangeResponse(rsp *http.Response) (*CreateAddressRangeRes
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListPrefixAddressesResponse parses an HTTP response from a ListPrefixAddressesWithResponse call
+func ParseListPrefixAddressesResponse(rsp *http.Response) (*ListPrefixAddressesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListPrefixAddressesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Address
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		var dest Error

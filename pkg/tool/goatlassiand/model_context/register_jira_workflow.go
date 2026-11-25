@@ -16,7 +16,7 @@ func (s *Server) registerJiraWorkflow() {
 			mcp.WithString(
 				generativeConstant.ParameterKey,
 				mcp.Required(),
-				mcp.Description("Issue key (e.g. INF-123)"),
+				mcp.Description("Issue key (e.g. PROJ-123)"),
 			),
 			mcp.WithString(
 				constant.Summary,

@@ -59,6 +59,10 @@ type Client interface {
 		x context.Context,
 		params *client.GetResolveParams,
 	) (*client.ResolveResponse, []client.ResolveMatch, error)
+	GetRoster(
+		x context.Context,
+		params *client.GetRosterParams,
+	) (*client.RosterResponse, error)
 	GetSessionCruise(
 		x context.Context,
 		identifier string,

@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service/pending_digest"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
+	"github.com/funtimecoding/soil/pkg/watch/pending_digest"
 	"time"
 )
 

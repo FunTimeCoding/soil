@@ -6,11 +6,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/inventory/pool"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
+	gitlabWorker "github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
+	"github.com/funtimecoding/soil/pkg/worker"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -27,15 +32,16 @@ func New(
 		errors.PanicOnError(e)
 	}
 
+	d := relational.Open(l, o.PostgresLocator, o.LitePath)
+	migrate.AutoMigrate(d)
 	s := service.New(p, o.Inventory)
-
-	return &Daemon{
+	result := &Daemon{
 		inventory: o.Inventory,
 		pool:      p,
 		selection: selection.New(),
 		service:   s,
 		web:       web.New(s, o.Inventory, r),
-		worker: worker.New(
+		worker: gitlabWorker.New(
 			s.Refresh,
 			s.Entries,
 			constant.PollInterval,
@@ -43,5 +49,19 @@ func New(
 			l,
 			r,
 		),
+		database: d,
 	}
+
+	if c := o.Connector(); c != nil {
+		result.connector = c
+		result.rosterGuard = peer.New(constant.RosterPeer, c.Address(), c, l, r)
+		s.WithWatches(store.New(d), c, result.rosterGuard, l, r)
+		result.clocks = append(
+			result.clocks,
+			worker.New(s.PollWatches, l, r, o.WatchInterval),
+			worker.New(s.SweepRoster, l, r, o.SweepInterval),
+		)
+	}
+
+	return result
 }

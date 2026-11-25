@@ -12,5 +12,12 @@ type Address struct {
 	Network          *net.IPNet
 	ObjectType       string
 	ObjectIdentifier int64
+	Interface        string
+	Device           string
+	VirtualMachine   string
+	Role             string
+	Status           string
+	DomainName       string
+	Description      string
 	Raw              *netbox.IPAddress
 }

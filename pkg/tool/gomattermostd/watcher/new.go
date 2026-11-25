@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/peer/hold"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
+	"github.com/funtimecoding/soil/pkg/watch/digest/event"
 	"time"
 )
 

@@ -49,6 +49,8 @@ var Scopes = []string{
 	"Channel.ReadBasic.All",
 	"Chat.Read",
 	"ChannelMessage.Read.All",
+	"ChatMessage.Send",
+	"Chat.Create",
 }
 
 const TeamsMessageKind = "message"

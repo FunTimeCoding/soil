@@ -7,10 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/peer/outage_tracker"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service/pending_digest"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
+	"github.com/funtimecoding/soil/pkg/watch/notifier"
+	"github.com/funtimecoding/soil/pkg/watch/pending_digest"
 	"time"
 )
 

@@ -7,10 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
+	"github.com/funtimecoding/soil/pkg/watch/notifier"
 	"testing"
 	"time"
 )

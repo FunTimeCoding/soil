@@ -2,8 +2,10 @@ package watcher
 
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	watchConstant "github.com/funtimecoding/soil/pkg/watch/constant"
+	"github.com/funtimecoding/soil/pkg/watch/digest"
+	"github.com/funtimecoding/soil/pkg/watch/digest/event"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )
@@ -26,12 +28,13 @@ func (w *Watcher) recordPost(v *model.WebSocketEvent) {
 	}
 
 	w.remember(p.Id, root)
+	author := w.author(p.UserId)
 	w.Record(
 		root,
 		event.New(
-			constant.MessageEvent,
-			w.author(p.UserId),
-			p.Message,
+			watchConstant.MessageNoun,
+			author,
+			join.Empty(author, ": ", digest.Excerpt(p.Message)),
 			time.UnixMilli(p.CreateAt),
 		),
 	)

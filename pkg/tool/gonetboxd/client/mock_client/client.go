@@ -6,6 +6,7 @@ type Client struct {
 	DeviceList          []*client.Device
 	VirtualMachineList  []*client.VirtualMachine
 	PhysicalAddressList []client.PhysicalAddressOwner
+	AddressList         []*client.Address
 	PowerOutletList     []*client.PowerOutlet
 	EthernetPower       *client.EthernetPowerRequest
 	Failure             error

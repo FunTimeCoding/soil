@@ -3,6 +3,7 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/chat/teams/chat"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	microsoftConstant "github.com/funtimecoding/soil/pkg/microsoft/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gographd/constant"
@@ -10,6 +11,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
 	"testing"
 )
+
+func TestChatMessageToolAnswersSentMessage(t *testing.T) {
+	s := base.New(t)
+	s.Source.AddChat(chat.New("19:alpha@thread.v2", "group"))
+	assert.StringContains(
+		t,
+		`"text": "on it"`,
+		s.Tools().MustCallTool(
+			constant.SendChatMessage,
+			map[string]any{"chat": "19:alpha@thread.v2", "text": "on it"},
+		),
+	)
+}
 
 func TestUnknownTeamAnsweredQuietly(t *testing.T) {
 	s := base.New(t)

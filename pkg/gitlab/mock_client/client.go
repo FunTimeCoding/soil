@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"github.com/funtimecoding/soil/pkg/gitlab/types/recorded_commit"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 type Client struct {
@@ -25,8 +26,12 @@ type Client struct {
 	deletedPipelines  []int64
 	jobs              []*job.Job
 	traces            map[int64]string
+	requests          []*merge_request.Request
 	assignedRequests  []*merge_request.Request
 	reviewingRequests []*merge_request.Request
+	details           []*gitlab.MergeRequest
+	notes             []*gitlab.Note
+	approvals         map[[2]int64][]string
 	registries        []*registry_repository.Repository
 	failure           error
 }

@@ -299,6 +299,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/roster:
+    get:
+      operationId: getRoster
+      description: Callsigns whose session was seen within the window, and whether each is on the roster now.
+      parameters:
+      - name: seen_within
+        in: query
+        required: false
+        description: A duration such as 24h or 7d; defaults to the roster window.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Callsigns seen within the window.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RosterResponse"
+        "400":
+          description: Unreadable duration.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/resolve:
     get:
       operationId: getResolve
@@ -1136,6 +1166,27 @@ components:
         last_updated:
           type: string
           format: date-time
+    RosterResponse:
+      type: object
+      required: [entries]
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/RosterEntry"
+    RosterEntry:
+      type: object
+      required: [callsign, identifier, last_seen, on_roster]
+      properties:
+        callsign:
+          type: string
+        identifier:
+          type: string
+        last_seen:
+          type: string
+          format: date-time
+        on_roster:
+          type: boolean
     ResolveResponse:
       type: object
       required: [identifier]

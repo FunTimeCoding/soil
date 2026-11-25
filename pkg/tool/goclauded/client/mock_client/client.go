@@ -14,6 +14,7 @@ type Client struct {
 	notes          []*notify_call.Call
 	Pulses         []*pulse_call.Call
 	Resolved       map[string]string
+	Roster         []client.RosterEntry
 	Matches        []client.ResolveMatch
 	Messages       []client.SessionMessage
 	ToolContext    []client.ToolContextResult

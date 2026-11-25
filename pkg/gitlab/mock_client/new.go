@@ -8,8 +8,9 @@ import (
 func New(t *testing.T) *Client {
 	t.Helper()
 	result := &Client{
-		files:  make(map[string]*file.File),
-		traces: make(map[int64]string),
+		files:     make(map[string]*file.File),
+		traces:    make(map[int64]string),
+		approvals: make(map[[2]int64][]string),
 	}
 	t.Cleanup(result.Close)
 

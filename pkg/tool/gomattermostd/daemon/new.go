@@ -8,11 +8,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
+	"github.com/funtimecoding/soil/pkg/watch/notifier"
 	"github.com/funtimecoding/soil/pkg/worker"
 )
 

@@ -3,6 +3,7 @@ package graph_server
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"io"
 	"net/http"
 )
 
@@ -11,6 +12,8 @@ func (s *Server) serve(
 	r *http.Request,
 ) {
 	errors.PanicOnError(r.ParseForm())
+	body, e := io.ReadAll(r.Body)
+	errors.PanicOnError(e)
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	s.exchanges = append(
@@ -20,6 +23,7 @@ func (s *Server) serve(
 			Path:          r.URL.Path,
 			Query:         r.URL.Query(),
 			Form:          r.PostForm,
+			Body:          string(body),
 			Authorization: r.Header.Get(webConstant.Authorization),
 		},
 	)
@@ -39,6 +43,6 @@ func (s *Server) serve(
 
 	w.Header().Set(webConstant.ContentType, webConstant.Object)
 	w.WriteHeader(a.Status)
-	_, e := w.Write([]byte(a.Body))
-	errors.PanicOnError(e)
+	_, f := w.Write([]byte(a.Body))
+	errors.PanicOnError(f)
 }

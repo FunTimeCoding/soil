@@ -2,7 +2,7 @@ package service
 
 import (
 	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest"
+	"github.com/funtimecoding/soil/pkg/watch/digest"
 	"time"
 )
 

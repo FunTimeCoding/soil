@@ -35,4 +35,23 @@ func (s *Server) registerChats() {
 		),
 		mcp.NewTypedToolHandler(s.GetChatHistory),
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.SendChatMessage,
+			mcp.WithDescription(
+				"Send a message to a chat as the signed-in user; line breaks are kept",
+			),
+			mcp.WithString(
+				"chat",
+				mcp.Required(),
+				mcp.Description("Chat identifier from my_chats"),
+			),
+			mcp.WithString(
+				"text",
+				mcp.Required(),
+				mcp.Description("Message text, plain"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.SendChatMessage),
+	)
 }

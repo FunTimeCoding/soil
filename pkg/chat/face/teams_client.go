@@ -28,5 +28,9 @@ type TeamsClient interface {
 		identifier string,
 		limit int,
 	) ([]*message.Message, error)
+	SendChatMessage(
+		chat string,
+		text string,
+	) (*message.Message, error)
 	Teams() ([]*team.Team, error)
 }

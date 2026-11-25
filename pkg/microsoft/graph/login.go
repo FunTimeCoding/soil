@@ -32,5 +32,7 @@ func (c *Client) Login(
 		return fmt.Errorf("save graph token: %w", f)
 	}
 
+	c.stored = t.RefreshToken
+
 	return nil
 }

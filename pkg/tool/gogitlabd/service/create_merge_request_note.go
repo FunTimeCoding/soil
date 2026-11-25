@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/note"
+	"time"
 )
 
 func (s *Service) CreateMergeRequestNote(
@@ -12,8 +13,9 @@ func (s *Service) CreateMergeRequestNote(
 	project int64,
 	identifier int64,
 	body string,
+	callsign string,
 ) (*note.Note, error) {
-	return guarded(
+	result, e := guarded(
 		x,
 		s,
 		instance,
@@ -24,4 +26,12 @@ func (s *Service) CreateMergeRequestNote(
 			return c.CreateMergeRequestNote(y, project, identifier, body)
 		},
 	)
+
+	if e != nil {
+		return nil, e
+	}
+
+	s.writers.Remember(result.Identifier, callsign, time.Now())
+
+	return result, nil
 }

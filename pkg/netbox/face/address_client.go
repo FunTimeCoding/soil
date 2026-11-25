@@ -56,6 +56,7 @@ type AddressClient interface {
 	MustPrefixes() []*prefix.Prefix
 	MustServiceTemplates() []*service_template.Template
 	MustServices() []*service.Service
+	PrefixAddresses(prefix string) ([]*internet_address.Address, error)
 	PrefixByDescription(d string) (*prefix.Prefix, error)
 	PrefixByName(n string) (*prefix.Prefix, error)
 	Reservations() ([]*reservation.Reservation, error)

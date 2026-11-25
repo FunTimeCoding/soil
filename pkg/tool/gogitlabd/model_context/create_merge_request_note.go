@@ -36,6 +36,7 @@ func (s *Server) CreateMergeRequestNote(
 		project,
 		a.MergeRequest,
 		a.Body,
+		a.Callsign,
 	)
 
 	if e != nil {

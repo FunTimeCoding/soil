@@ -15,7 +15,7 @@ func (s *Store) SaveToken(t *oauth2.Token) error {
 	}
 
 	saved := *t
-	s.token = &saved
+	s.token = &oauth2.Token{RefreshToken: t.RefreshToken}
 	s.saved = append(s.saved, &saved)
 
 	return nil

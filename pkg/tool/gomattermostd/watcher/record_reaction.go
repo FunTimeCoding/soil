@@ -1,10 +1,11 @@
 package watcher
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/reaction"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
+	watchConstant "github.com/funtimecoding/soil/pkg/watch/constant"
+	"github.com/funtimecoding/soil/pkg/watch/digest/event"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )
@@ -25,12 +26,19 @@ func (w *Watcher) recordReaction(
 		return
 	}
 
+	verb := "reacted"
+
+	if kind == constant.ReactionRemovedEvent {
+		verb = "removed"
+	}
+
+	author := w.author(r.UserId)
 	w.Record(
 		root,
 		event.New(
-			kind,
-			w.author(r.UserId),
-			join.Empty(":", r.EmojiName, ":"),
+			watchConstant.ReactionNoun,
+			author,
+			fmt.Sprintf("%s %s :%s:", author, verb, r.EmojiName),
 			time.Now(),
 		),
 	)

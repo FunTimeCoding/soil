@@ -40,6 +40,10 @@ type AddressClient interface {
 	ListPhysicalAddresses(
 		x context.Context,
 	) ([]client.PhysicalAddressOwner, error)
+	ListPrefixAddresses(
+		x context.Context,
+		prefix string,
+	) ([]*client.Address, error)
 	ListPrefixes(
 		x context.Context,
 	) ([]*client.Prefix, error)

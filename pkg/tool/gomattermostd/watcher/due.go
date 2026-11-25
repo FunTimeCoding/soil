@@ -1,7 +1,7 @@
 package watcher
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
+	"github.com/funtimecoding/soil/pkg/watch/digest/event"
 	"time"
 )
 

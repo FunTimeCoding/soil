@@ -32,6 +32,19 @@ func New(a *netbox.IPAddress) *Address {
 		object = a.GetAssignedObjectId()
 	}
 
+	face, device, machine := holder(a.AssignedObject)
+	var role string
+
+	if r := a.GetRole(); r.Value != nil {
+		role = string(*r.Value)
+	}
+
+	var status string
+
+	if s := a.GetStatus(); s.Value != nil {
+		status = string(*s.Value)
+	}
+
 	return &Address{
 		Identifier:       a.GetId(),
 		Name:             a.GetDisplay(),
@@ -39,6 +52,13 @@ func New(a *netbox.IPAddress) *Address {
 		Network:          network,
 		ObjectType:       objectType,
 		ObjectIdentifier: object,
+		Interface:        face,
+		Device:           device,
+		VirtualMachine:   machine,
+		Role:             role,
+		Status:           status,
+		DomainName:       a.GetDnsName(),
+		Description:      a.GetDescription(),
 		Raw:              a,
 	}
 }

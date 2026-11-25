@@ -10,7 +10,9 @@ func (s *Server) registerMergeRequests() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListMergeRequests,
-			mcp.WithDescription("List merge requests for a GitLab project"),
+			mcp.WithDescription(
+				"List a GitLab project's merge requests, most recently updated first",
+			),
 			mcp.WithString(
 				argumentConstant.Project,
 				mcp.Required(),
@@ -18,7 +20,40 @@ func (s *Server) registerMergeRequests() {
 			),
 			mcp.WithString(
 				"state",
-				mcp.Description("Filter by state (opened, closed, merged, all)"),
+				mcp.Description("opened (default), closed, merged or all"),
+			),
+			mcp.WithNumber(
+				"limit",
+				mcp.Description("Maximum merge requests, 1 to 100 (default 10)"),
+			),
+			mcp.WithNumber(
+				"offset",
+				mcp.Description("Merge requests to skip (default 0)"),
+			),
+			mcp.WithString(
+				"order_by",
+				mcp.Description(
+					"updated_at (default) or created_at, newest first",
+				),
+			),
+			mcp.WithString(
+				"updated_after",
+				mcp.Description(
+					"Only merge requests updated since: a duration (7d, 36h) or RFC3339",
+				),
+			),
+			mcp.WithString("author", mcp.Description("Author username")),
+			mcp.WithString("reviewer", mcp.Description("Reviewer username")),
+			mcp.WithString("assignee", mcp.Description("Assignee username")),
+			mcp.WithString("source_branch", mcp.Description("Source branch")),
+			mcp.WithString("target_branch", mcp.Description("Target branch")),
+			mcp.WithString(
+				"search",
+				mcp.Description("Text in title or description"),
+			),
+			mcp.WithBoolean(
+				"draft",
+				mcp.Description("Only drafts (true) or only ready ones (false)"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ListMergeRequests),
@@ -92,6 +127,12 @@ func (s *Server) registerMergeRequests() {
 				"body",
 				mcp.Required(),
 				mcp.Description("Comment body"),
+			),
+			mcp.WithString(
+				constant.ParameterCallsign,
+				mcp.Description(
+					"Your session callsign. Your own watch on this merge request then leaves the comment out, and other watching sessions see it under your callsign",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.CreateMergeRequestNote),

@@ -6,18 +6,17 @@ import (
 )
 
 func Address(a *internet_address.Address) *server.Address {
-	result := &server.Address{
-		Identifier: a.Identifier,
-		Address:    a.Address.String(),
+	return &server.Address{
+		Identifier:     a.Identifier,
+		Address:        a.Address.String(),
+		Name:           filled(a.Name),
+		ObjectType:     filled(a.ObjectType),
+		Interface:      filled(a.Interface),
+		Device:         filled(a.Device),
+		VirtualMachine: filled(a.VirtualMachine),
+		Role:           filled(a.Role),
+		Status:         filled(a.Status),
+		DomainName:     filled(a.DomainName),
+		Description:    filled(a.Description),
 	}
-
-	if a.Name != "" {
-		result.Name = &a.Name
-	}
-
-	if a.ObjectType != "" {
-		result.ObjectType = &a.ObjectType
-	}
-
-	return result
 }

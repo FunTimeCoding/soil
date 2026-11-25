@@ -1,22 +1,15 @@
 package keychain_store
 
 import (
-	"encoding/base64"
-	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/system/keychain"
 	"golang.org/x/oauth2"
 )
 
 func (s *Store) SaveToken(t *oauth2.Token) error {
-	b, e := json.Marshal(t)
-
-	if e != nil {
-		return e
+	if t.RefreshToken == "" {
+		return validation.New("graph token carries no refresh token")
 	}
 
-	return keychain.Save(
-		s.service,
-		s.account,
-		base64.StdEncoding.EncodeToString(b),
-	)
+	return keychain.Save(s.service, s.account, t.RefreshToken)
 }

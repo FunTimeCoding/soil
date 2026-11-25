@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/outage_server"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/outage_tester"
@@ -15,7 +16,9 @@ func TestToolsOnGitLabOutage(t *testing.T) {
 			return outage_server.New(t, r)
 		},
 		webConstant.OutageReaches,
-		nil,
+		map[string]webConstant.OutageReach{
+			constant.ListSubscriptions: webConstant.OutageElsewhere,
+		},
 		nil,
 	)
 }

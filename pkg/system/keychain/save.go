@@ -24,15 +24,24 @@ func Save(
 		)
 	}
 
-	r := run.New().NoPanic()
-	r.Input = strings.NewReader(
-		fmt.Sprintf(
-			"add-generic-password -U -s \"%s\" -a \"%s\" -w \"%s\"\n",
-			service,
-			account,
-			secret,
-		),
+	command := fmt.Sprintf(
+		"add-generic-password -U -s \"%s\" -a \"%s\" -w \"%s\"",
+		service,
+		account,
+		secret,
 	)
+
+	if len(command) > constant.KeychainLineLimit {
+		return validation.New(
+			"keychain entry for %s is %d bytes, security -i reads %d",
+			service,
+			len(command),
+			constant.KeychainLineLimit,
+		)
+	}
+
+	r := run.New().NoPanic()
+	r.Input = strings.NewReader(join.Empty(command, "\n"))
 	r.Start(constant.KeychainCommand, "-i")
 
 	return r.Error

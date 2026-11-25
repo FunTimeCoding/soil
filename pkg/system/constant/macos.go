@@ -31,4 +31,5 @@ const (
 	KeychainFind         = "find-generic-password"
 	KeychainNotFoundExit = 44
 	KeychainUnsafe       = "\"\\\n"
+	KeychainLineLimit    = 4096
 )

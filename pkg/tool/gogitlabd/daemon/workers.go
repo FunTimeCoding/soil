@@ -14,5 +14,15 @@ func (d *Daemon) Workers() []face.Worker {
 		result = append(result, p.Guard())
 	}
 
-	return append(result, d.worker)
+	result = append(result, d.worker)
+
+	if d.rosterGuard != nil {
+		result = append(result, d.rosterGuard)
+	}
+
+	for _, c := range d.clocks {
+		result = append(result, c)
+	}
+
+	return result
 }

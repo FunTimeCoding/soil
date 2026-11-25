@@ -22,7 +22,7 @@ func TestOperationsOnNetBoxOutage(t *testing.T) {
 		spec,
 		webConstant.OutageReaches,
 		nil,
-		nil,
+		map[string]string{"prefix": "192.0.2.0/24"},
 		map[string]string{
 			"SetInterfacePhysicalAddress":        address,
 			"SetVirtualInterfacePhysicalAddress": address,
@@ -38,7 +38,8 @@ func TestToolsOnNetBoxOutage(t *testing.T) {
 		webConstant.OutageReaches,
 		nil,
 		map[string]map[string]any{
-			"update_journal_entry": {"comments": "alfa"},
+			"update_journal_entry":  {"comments": "alfa"},
+			"list_prefix_addresses": {"prefix": "192.0.2.0/24"},
 			"set_interface_physical_address": {
 				"address": "00:00:5e:00:53:01",
 			},

@@ -7,5 +7,6 @@ type Exchange struct {
 	Path          string
 	Query         url.Values
 	Form          url.Values
+	Body          string
 	Authorization string
 }

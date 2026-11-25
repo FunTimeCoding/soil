@@ -14,6 +14,39 @@ const (
 
 const InstancePeer = "gitlab"
 const (
+	WatchInterval     = time.Minute
+	SweepInterval     = time.Hour
+	RosterWindow      = 24 * time.Hour
+	WriterWindow      = time.Hour
+	PendingRetryLimit = 15 * time.Minute
+	RosterPeer        = "goclauded"
+	CommitPrefix      = 8
+)
+
+const (
+	ParameterCallsign = "callsign"
+	ParameterAlias    = "alias"
+	ParameterDelivery = "delivery"
+)
+
+const (
+	CommentNoun      = "comment"
+	ApprovalNoun     = "approval"
+	PipelineNoun     = "pipeline"
+	PushNoun         = "push"
+	StateNoun        = "state change"
+	DraftNoun        = "draft change"
+	MergeabilityNoun = "mergeability change"
+)
+
+var TransientMergeStatus = []string{
+	"checking",
+	"unchecked",
+	"preparing",
+	"approvals_syncing",
+}
+
+const (
 	BoardTitle   = "Pipelines"
 	BoardPath    = "/"
 	PipelinePath = "/pipeline"
@@ -83,6 +116,9 @@ const (
 	GetMergeRequestDiffs    = "get_merge_request_diffs"
 	MergeRequestDiscussions = "mr_discussions"
 	CreateMergeRequestNote  = "create_merge_request_note"
+	SubscribeMergeRequest   = "subscribe_merge_request"
+	UnsubscribeMergeRequest = "unsubscribe_merge_request"
+	ListSubscriptions       = "list_subscriptions"
 
 	ListCommits   = "list_commits"
 	GetCommit     = "get_commit"
@@ -100,4 +136,7 @@ const (
 
 	FixtureInstance      = "alfa"
 	FixtureOtherInstance = "bravo"
+	FixtureProject       = 7
+	FixtureRequest       = 3
+	FixtureReference     = "group/app!3"
 )

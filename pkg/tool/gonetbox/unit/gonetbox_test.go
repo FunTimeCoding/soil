@@ -43,6 +43,26 @@ func TestFailedRemovalExitsWithItsMessage(t *testing.T) {
 	}
 }
 
+func TestListPrefixAddressesEmitsHoldersInsidePrefix(t *testing.T) {
+	c := mock_client.New(t)
+	alfa := "alfa"
+	bravo := "bravo"
+	c.AddressList = []*client.Address{
+		{Address: "192.0.2.5", Device: &alfa},
+		{Address: "198.51.100.1", Device: &bravo},
+	}
+	output, _, code := command_tester.New(t).Run(
+		c,
+		"list-prefix-addresses",
+		"192.0.2.0/24",
+	)
+	assert.Integer(t, 0, code)
+	var a []client.Address
+	notation.MustDecode(output, &a, false)
+	assert.Count(t, 1, a)
+	assert.String(t, "alfa", *a[0].Device)
+}
+
 func TestListDevicesEmitsDevices(t *testing.T) {
 	c := mock_client.New(t)
 	c.DeviceList = []*client.Device{{Identifier: 7, Name: "alfa"}}

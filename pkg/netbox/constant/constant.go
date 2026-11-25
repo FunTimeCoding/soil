@@ -26,8 +26,9 @@ const (
 	PageLimit int32 = 1000
 
 	ObjectLinkField  = "url"
-	DeviceField      = "device"
-	NameField        = "name"
+	DeviceField         = "device"
+	VirtualMachineField = "virtual_machine"
+	NameField           = "name"
 	SiteField        = "site"
 	InterfaceSegment = "/api/"
 

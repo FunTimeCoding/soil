@@ -44,9 +44,9 @@ func TestChannelMessagesKeepUserMessagesOnly(t *testing.T) {
 		path,
 		http.StatusOK,
 		`{"value":[
-			{"id":"1","messageType":"message","createdDateTime":"2026-11-23T10:00:00Z","from":{"user":{"displayName":"Norbert"}},"body":{"contentType":"html","content":"<p>patched?</p><p>all hosts</p>"},
+			{"id":"1","messageType":"message","createdDateTime":"2026-11-23T10:00:00Z","from":{"user":{"displayName":"November"}},"body":{"contentType":"html","content":"<p>patched?</p><p>all hosts</p>"},
 			 "replies":[
-				{"id":"2","messageType":"message","from":{"user":{"displayName":"Alexander"}},"body":{"contentType":"text","content":"yes"}},
+				{"id":"2","messageType":"message","from":{"user":{"displayName":"Juliett"}},"body":{"contentType":"text","content":"yes"}},
 				{"id":"3","messageType":"systemEventMessage","body":{"contentType":"html","content":"<systemEventMessage/>"}}
 			 ]},
 			{"id":"4","messageType":"systemEventMessage","body":{"contentType":"html","content":"<systemEventMessage/>"}},
@@ -61,7 +61,7 @@ func TestChannelMessagesKeepUserMessagesOnly(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, result)
 	assert.String(t, "1", result[0].Identifier)
-	assert.String(t, "Norbert", result[0].Author)
+	assert.String(t, "November", result[0].Author)
 	assert.String(t, "patched?\nall hosts", result[0].Text)
 	assert.Integer(t, 1, result[0].Replies)
 	x := s.Exchanges(path)
@@ -107,6 +107,30 @@ func TestChatMessagesPageSizeCapped(t *testing.T) {
 	assert.String(t, "createdDateTime desc", x[0].Query.Get("$orderby"))
 }
 
+func TestChatMessageSentAsHypertextWithLineBreaks(t *testing.T) {
+	path := fmt.Sprintf(constant.TeamsChatMessagesPath, "19:a@thread.v2")
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusCreated,
+		`{"id":"9","messageType":"message","from":{"user":{"displayName":"Juliett"}},"body":{"contentType":"html","content":"<p>alfa &lt;b&gt;</p>"}}`,
+	)
+	result, e := teams_tester.New(t, s).SendChatMessage(
+		"19:a@thread.v2",
+		"alfa <b>\nbravo",
+	)
+	assert.FatalOnError(t, e)
+	assert.String(t, "9", result.Identifier)
+	assert.String(t, "Juliett", result.Author)
+	x := s.Exchanges(path)
+	assert.Count(t, 1, x)
+	assert.String(t, http.MethodPost, x[0].Method)
+	assert.String(
+		t,
+		`{"body":{"contentType":"html","content":"alfa &lt;b&gt;<br>bravo"}}`,
+		x[0].Body,
+	)
+}
+
 func TestChannelsAndRepliesMapped(t *testing.T) {
 	s := graph_server.New(t).
 		Route(
@@ -122,7 +146,7 @@ func TestChannelsAndRepliesMapped(t *testing.T) {
 				"100",
 			),
 			http.StatusOK,
-			`{"value":[{"id":"101","messageType":"message","from":{"user":{"displayName":"Knut"}},"body":{"contentType":"text","content":"ok"}}]}`,
+			`{"value":[{"id":"101","messageType":"message","from":{"user":{"displayName":"Kilo"}},"body":{"contentType":"text","content":"ok"}}]}`,
 		)
 	c := teams_tester.New(t, s)
 	channels, e := c.Channels("team-1")
@@ -134,5 +158,5 @@ func TestChannelsAndRepliesMapped(t *testing.T) {
 	replies, f := c.Replies("team-1", "19:c@thread.tacv2", "100", 0)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 1, replies)
-	assert.String(t, "Knut", replies[0].Author)
+	assert.String(t, "Kilo", replies[0].Author)
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/microsoft/graph_server"
 	"github.com/funtimecoding/soil/pkg/microsoft/graph_tester"
 	"github.com/funtimecoding/soil/pkg/microsoft/mock_token_store"
+	"golang.org/x/oauth2"
 	"net/http"
 	"testing"
 )
@@ -53,6 +54,44 @@ func TestExpiredTokenRefreshedAndSaved(t *testing.T) {
 	saved := store.Saved()
 	assert.Count(t, 1, saved)
 	assert.String(t, "fresh-refresh", saved[0].RefreshToken)
+}
+
+func TestRefreshedTokenServesNextCall(t *testing.T) {
+	s := graph_server.New(t).
+		Route(constant.ProfilePath, http.StatusOK, graph_tester.Profile()).
+		Route(graph_tester.TokenPath(), http.StatusOK, graph_tester.Refreshed())
+	c := graph_tester.New(t).Client(
+		s,
+		mock_token_store.New(t, graph_tester.Expired()),
+	)
+	assert.FatalOnError(t, c.Reachable(t.Context()))
+	assert.FatalOnError(t, c.Reachable(t.Context()))
+	assert.Count(t, 1, s.Exchanges(graph_tester.TokenPath()))
+	x := s.Exchanges(constant.ProfilePath)
+	assert.Count(t, 2, x)
+	assert.String(t, "Bearer fresh-access", x[1].Authorization)
+}
+
+func TestNewerSignInInStoreReplacesTokenInMemory(t *testing.T) {
+	s := graph_server.New(t).
+		Route(constant.ProfilePath, http.StatusOK, graph_tester.Profile()).
+		Route(constant.ProfilePath, http.StatusOK, graph_tester.Profile()).
+		Route(graph_tester.TokenPath(), http.StatusOK, graph_tester.Refreshed())
+	store := mock_token_store.New(t, graph_tester.Valid())
+	c := graph_tester.New(t).Client(s, store)
+	assert.FatalOnError(t, c.Reachable(t.Context()))
+	assert.FatalOnError(
+		t,
+		store.SaveToken(&oauth2.Token{RefreshToken: "login-refresh"}),
+	)
+	assert.FatalOnError(t, c.Reachable(t.Context()))
+	refresh := s.Exchanges(graph_tester.TokenPath())
+	assert.Count(t, 1, refresh)
+	assert.String(t, "login-refresh", refresh[0].Form.Get("refresh_token"))
+	x := s.Exchanges(constant.ProfilePath)
+	assert.Count(t, 2, x)
+	assert.String(t, "Bearer stored-access", x[0].Authorization)
+	assert.String(t, "Bearer fresh-access", x[1].Authorization)
 }
 
 func TestMissingTokenNotConfigured(t *testing.T) {

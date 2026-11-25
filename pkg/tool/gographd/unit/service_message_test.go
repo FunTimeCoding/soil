@@ -49,7 +49,7 @@ func TestChatHistoryByIdentifier(t *testing.T) {
 	messages, e := o.Service().ChatHistory("19:alpha@thread.v2", 0)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, messages)
-	assert.String(t, "Knut", messages[0].Author)
+	assert.String(t, "Kilo", messages[0].Author)
 }
 
 func TestChatWithPathStepInvalid(t *testing.T) {
@@ -61,6 +61,31 @@ func TestChatWithPathStepInvalid(t *testing.T) {
 	assert.True(t, validation.Is(f))
 	_, g := o.Service().ChatHistory("19:alpha@thread.v2?top=1", 0)
 	assert.True(t, validation.Is(g))
+}
+
+func TestChatMessageSent(t *testing.T) {
+	o := service_tester.New(t)
+	o.Seed()
+	sent, e := o.Service().SendChatMessage("19:alpha@thread.v2", "on it")
+	assert.FatalOnError(t, e)
+	assert.String(t, "on it", sent.Text)
+	messages, f := o.Service().ChatHistory("19:alpha@thread.v2", 0)
+	assert.FatalOnError(t, f)
+	assert.Count(t, 2, messages)
+}
+
+func TestEmptyChatMessageInvalid(t *testing.T) {
+	o := service_tester.New(t)
+	o.Seed()
+	_, e := o.Service().SendChatMessage("19:alpha@thread.v2", " \n")
+	assert.True(t, validation.Is(e))
+}
+
+func TestChatMessageToPathStepInvalid(t *testing.T) {
+	o := service_tester.New(t)
+	o.Seed()
+	_, e := o.Service().SendChatMessage("19:alpha@thread.v2/../x", "on it")
+	assert.True(t, validation.Is(e))
 }
 
 func TestChatsLimited(t *testing.T) {

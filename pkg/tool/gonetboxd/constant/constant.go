@@ -64,6 +64,7 @@ const (
 	ListInterfaces                 = "list_interfaces"
 	ListManufacturers              = "list_manufacturers"
 	ListPrefixes                   = "list_prefixes"
+	ListPrefixAddresses            = "list_prefix_addresses"
 	ListSites                      = "list_sites"
 	ListTags                       = "list_tags"
 	ListTenants                    = "list_tenants"

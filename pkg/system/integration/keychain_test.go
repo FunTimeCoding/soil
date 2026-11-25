@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/system/integration/keychain_tester"
 	"github.com/funtimecoding/soil/pkg/system/keychain"
+	"strings"
 	"testing"
 )
 
@@ -24,6 +25,22 @@ func TestKeychainSaveRefusesQuote(t *testing.T) {
 	e := keychain.Save("gographd", "client", "s3\"cret")
 	assert.True(t, validation.Is(e))
 	assert.String(t, "", k.Arguments())
+}
+
+func TestKeychainSaveRefusesLineSecurityCuts(t *testing.T) {
+	k := keychain_tester.New(t, "")
+	e := keychain.Save("gographd", "client", strings.Repeat("a", 4042))
+	assert.True(t, validation.Is(e))
+	assert.String(t, "", k.Arguments())
+}
+
+func TestKeychainSaveTakesLongestLineSecurityReads(t *testing.T) {
+	k := keychain_tester.New(t, "")
+	assert.FatalOnError(
+		t,
+		keychain.Save("gographd", "client", strings.Repeat("a", 4041)),
+	)
+	assert.String(t, "-i\n", k.Arguments())
 }
 
 func TestKeychainFindReadsSecret(t *testing.T) {

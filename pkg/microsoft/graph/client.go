@@ -15,4 +15,5 @@ type Client struct {
 	store         face.TokenStore
 	lock          sync.Mutex
 	token         *oauth2.Token
+	stored        string
 }

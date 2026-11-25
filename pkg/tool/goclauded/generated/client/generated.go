@@ -436,6 +436,19 @@ type ResolveResponse struct {
 	Identifier string `json:"identifier"`
 }
 
+// RosterEntry defines model for RosterEntry.
+type RosterEntry struct {
+	Callsign   string    `json:"callsign"`
+	Identifier string    `json:"identifier"`
+	LastSeen   time.Time `json:"last_seen"`
+	OnRoster   bool      `json:"on_roster"`
+}
+
+// RosterResponse defines model for RosterResponse.
+type RosterResponse struct {
+	Entries []RosterEntry `json:"entries"`
+}
+
 // SearchConversation defines model for SearchConversation.
 type SearchConversation struct {
 	Count   int         `json:"count"`
@@ -669,6 +682,12 @@ type GetResolveParams struct {
 	Query string `form:"query" json:"query"`
 }
 
+// GetRosterParams defines parameters for GetRoster.
+type GetRosterParams struct {
+	// SeenWithin A duration such as 24h or 7d; defaults to the roster window.
+	SeenWithin *string `form:"seen_within,omitempty" json:"seen_within,omitempty"`
+}
+
 // GetSessionsParams defines parameters for GetSessions.
 type GetSessionsParams struct {
 	Peek    *bool `form:"peek,omitempty" json:"peek,omitempty"`
@@ -897,6 +916,11 @@ type ClientInterface interface {
 
 	// GetResolve performs a GET /api/resolve (the `GetResolve` operationId) request.
 	GetResolve(ctx context.Context, params *GetResolveParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRoster performs a GET /api/roster (the `GetRoster` operationId) request.
+	//
+	// Callsigns whose session was seen within the window, and whether each is on the roster now.
+	GetRoster(ctx context.Context, params *GetRosterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostSendWithBody performs a POST /api/send (the `PostSend` operationId) request,
 	// with any type of body and a specified content type.
@@ -1273,6 +1297,21 @@ func (c *Client) PostRelease(ctx context.Context, body PostReleaseJSONRequestBod
 // GetResolve performs a GET /api/resolve (the `GetResolve` operationId) request.
 func (c *Client) GetResolve(ctx context.Context, params *GetResolveParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetResolveRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetRoster performs a GET /api/roster (the `GetRoster` operationId) request.
+//
+// Callsigns whose session was seen within the window, and whether each is on the roster now.
+func (c *Client) GetRoster(ctx context.Context, params *GetRosterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRosterRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2427,6 +2466,60 @@ func NewGetResolveRequest(server string, params *GetResolveParams) (*http.Reques
 			for _, qp := range strings.Split(queryFrag, "&") {
 				rawQueryFragments = append(rawQueryFragments, qp)
 			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetRosterRequest constructs an http.Request for the GetRoster method
+func NewGetRosterRequest(server string, params *GetRosterParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/roster")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.SeenWithin != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "seen_within", *params.SeenWithin, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
 		}
 
 		if encoded := queryValues.Encode(); encoded != "" {
@@ -3882,6 +3975,13 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetResolveWithResponse(ctx context.Context, params *GetResolveParams, reqEditors ...RequestEditorFn) (*GetResolveResponse, error)
 
+	// GetRosterWithResponse performs a GET /api/roster (the `GetRoster` operationId) request.
+	//
+	// Callsigns whose session was seen within the window, and whether each is on the roster now.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetRosterWithResponse(ctx context.Context, params *GetRosterParams, reqEditors ...RequestEditorFn) (*GetRosterResponse, error)
+
 	// PostSendWithBodyWithResponse performs a POST /api/send (the `PostSend` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -4762,6 +4862,61 @@ func (r GetResolveResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetResolveResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetRosterResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *RosterResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetRosterResponse) GetJSON200() *RosterResponse {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetRosterResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetRosterResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetRosterResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRosterResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRosterResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetRosterResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -6404,6 +6559,19 @@ func (c *ClientWithResponses) GetResolveWithResponse(ctx context.Context, params
 	return ParseGetResolveResponse(rsp)
 }
 
+// GetRosterWithResponse performs a GET /api/roster (the `GetRoster` operationId) request.
+//
+// Callsigns whose session was seen within the window, and whether each is on the roster now.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetRosterWithResponse(ctx context.Context, params *GetRosterParams, reqEditors ...RequestEditorFn) (*GetRosterResponse, error) {
+	rsp, err := c.GetRoster(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRosterResponse(rsp)
+}
+
 // PostSendWithBodyWithResponse performs a POST /api/send (the `PostSend` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -7300,6 +7468,46 @@ func ParseGetResolveResponse(rsp *http.Response) (*GetResolveResponse, error) {
 			return nil, err
 		}
 		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRosterResponse parses an HTTP response from a GetRosterWithResponse call
+func ParseGetRosterResponse(rsp *http.Response) (*GetRosterResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRosterResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest RosterResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

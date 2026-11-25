@@ -19,6 +19,7 @@ func addNetworkCommands(
 	o.AddCommand(createDeviceTunnelTermination(c, t))
 	o.AddCommand(createVirtualTunnelTermination(c, t))
 	o.AddCommand(listPrefixes(c, t))
+	o.AddCommand(listPrefixAddresses(c, t))
 	o.AddCommand(createPrefix(c, t))
 	o.AddCommand(listCables(c, t))
 	o.AddCommand(listPhysicalAddresses(c, t))

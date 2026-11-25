@@ -3,22 +3,15 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/chat/teams/message"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/peer"
-	"github.com/funtimecoding/soil/pkg/tool/gographd/constant"
-	"strings"
 )
 
 func (s *Service) ChatHistory(
 	chat string,
 	limit int,
 ) ([]*message.Message, error) {
-	if !constant.ChatPattern.MatchString(chat) ||
-		strings.Contains(chat, constant.ParentStep) {
-		return nil, validation.New(
-			"chat identifier has an unexpected shape: %s",
-			chat,
-		)
+	if e := checkChat(chat); e != nil {
+		return nil, e
 	}
 
 	return peer.Guarded(

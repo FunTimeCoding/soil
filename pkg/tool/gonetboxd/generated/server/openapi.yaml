@@ -2179,6 +2179,45 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /api/addresses:
+    get:
+      operationId: listPrefixAddresses
+      parameters:
+      - name: prefix
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Network in CIDR notation, e.g. 192.0.2.0/24.
+      responses:
+        "200":
+          description: The IP addresses inside the prefix, with what holds each.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Address"
+        "400":
+          description: The prefix is not in CIDR notation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to list addresses.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: NetBox is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /api/address-ranges:
     get:
       operationId: listAddressRanges
@@ -3701,6 +3740,20 @@ components:
           type: string
         objectType:
           type: string
+        interface:
+          type: string
+        device:
+          type: string
+        virtualMachine:
+          type: string
+        role:
+          type: string
+        status:
+          type: string
+        domainName:
+          type: string
+        description:
+          type: string
     Site:
       type: object
       required:
@@ -3885,7 +3938,7 @@ components:
       properties:
         prefix:
           type: string
-          description: CIDR notation (e.g. 192.168.178.0/24).
+          description: CIDR notation (e.g. 192.0.2.0/24).
         site:
           type: string
           description: Site name (optional).

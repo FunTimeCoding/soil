@@ -31,7 +31,8 @@ func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
 	events := o.Watcher.Drain()["alfa"]
 	assert.Count(t, 1, events)
 	assert.String(t, "Foxtrot", events[0].Author)
-	assert.String(t, "first message", events[0].Text)
+	assert.String(t, "message", events[0].Noun)
+	assert.String(t, "Foxtrot: first message", events[0].Line)
 	assert.True(t, events[0].At.Equal(dispatch_tester.At()))
 }
 
@@ -89,9 +90,52 @@ func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
 	)
 	events := o.Watcher.Drain()["alfa"]
 	assert.Count(t, 1, events)
-	assert.True(t, events[0].Kind == constant.ReactionAddedEvent)
+	assert.String(t, "reaction", events[0].Noun)
 	assert.String(t, "Golf", events[0].Author)
-	assert.String(t, ":eyes:", events[0].Text)
+	assert.String(t, "Golf reacted :eyes:", events[0].Line)
+}
+
+func TestWatcherDispatchFlattensMessageLine(t *testing.T) {
+	o := worker_tester.New(t).DispatchWatcher()
+	o.Client.AddPost("alfa")
+	o.Client.AddUser("foxtrot", "Foxtrot")
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.PostEvent(
+			&model.Post{
+				Id:      "reply",
+				RootId:  "alfa",
+				UserId:  "foxtrot",
+				Message: "one\n  two\n\nthree",
+			},
+		),
+	)
+	events := o.Watcher.Drain()["alfa"]
+	assert.Count(t, 1, events)
+	assert.String(t, "Foxtrot: one two three", events[0].Line)
+}
+
+func TestWatcherDispatchRemovedReactionLine(t *testing.T) {
+	o := worker_tester.New(t).DispatchWatcher()
+	o.Client.AddPost("alfa")
+	o.Client.AddReply("alfa", "reply")
+	o.Client.AddUser("golf", "Golf")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.ReactionEvent(
+			model.WebsocketEventReactionRemoved,
+			&model.Reaction{
+				UserId:    "golf",
+				PostId:    "reply",
+				EmojiName: "eyes",
+			},
+		),
+	)
+	events := o.Watcher.Drain()["alfa"]
+	assert.Count(t, 1, events)
+	assert.String(t, "reaction", events[0].Noun)
+	assert.String(t, "Golf removed :eyes:", events[0].Line)
 }
 
 func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
@@ -187,9 +231,13 @@ func TestWatcherDueCoalescesRootsEvents(t *testing.T) {
 	var texts []string
 
 	for _, e := range due["alfa"] {
-		texts = append(texts, e.Text)
+		texts = append(texts, e.Line)
 	}
 
-	assert.Strings(t, []string{"first", "second", "third"}, texts)
+	assert.Strings(
+		t,
+		[]string{"Foxtrot: first", "Foxtrot: second", "Foxtrot: third"},
+		texts,
+	)
 	assert.Count(t, 0, o.Watcher.Drain())
 }

@@ -7,10 +7,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/discussion"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request_detail"
+	"github.com/funtimecoding/soil/pkg/gitlab/merge_request_filter"
 	"github.com/funtimecoding/soil/pkg/gitlab/note"
 )
 
 type MergeRequestForge interface {
+	MergeRequests(
+		x context.Context,
+		f *merge_request_filter.Filter,
+	) ([]*merge_request.Request, error)
 	ProjectMergeRequests(
 		x context.Context,
 		project int64,
@@ -39,6 +44,17 @@ type MergeRequestForge interface {
 		project int64,
 		identifier int64,
 	) ([]*discussion.Discussion, error)
+	MergeRequestApprovals(
+		x context.Context,
+		project int64,
+		identifier int64,
+	) ([]string, error)
+	MergeRequestNotes(
+		x context.Context,
+		project int64,
+		identifier int64,
+		after int64,
+	) ([]*note.Note, error)
 	CreateMergeRequestNote(
 		x context.Context,
 		project int64,

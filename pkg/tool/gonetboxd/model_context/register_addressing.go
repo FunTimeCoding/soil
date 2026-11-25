@@ -21,6 +21,20 @@ func (s *Server) registerAddressing() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.ListPrefixAddresses,
+			mcp.WithDescription(
+				"List the IP addresses NetBox holds inside a prefix, each with what holds it: device or virtual machine and interface, role, status, DNS name and description; an address on no interface has neither",
+			),
+			mcp.WithString(
+				constant.Prefix,
+				mcp.Required(),
+				mcp.Description("Network in CIDR notation (e.g. 192.0.2.0/24)"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.ListPrefixAddresses),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.CreateAddress,
 			mcp.WithDescription("Assign an IP address to a device interface"),
 			mcp.WithString(
@@ -37,7 +51,7 @@ func (s *Server) registerAddressing() {
 				constant.Address,
 				mcp.Required(),
 				mcp.Description(
-					"IP address in CIDR notation (e.g. 144.76.220.60/32)",
+					"IP address in CIDR notation (e.g. 203.0.113.60/32)",
 				),
 			),
 			mcp.WithString(
@@ -63,7 +77,7 @@ func (s *Server) registerAddressing() {
 			mcp.WithString(
 				constant.Prefix,
 				mcp.Required(),
-				mcp.Description("CIDR notation (e.g. 192.168.178.0/24)"),
+				mcp.Description("CIDR notation (e.g. 192.0.2.0/24)"),
 			),
 			mcp.WithString(
 				constant.Site,

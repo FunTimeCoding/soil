@@ -7,6 +7,7 @@ func (s *Server) register() {
 	s.registerPipelines()
 	s.registerJobs()
 	s.registerMergeRequests()
+	s.registerSubscription()
 	s.registerCommits()
 	s.registerVariables()
 	s.registerVariableChanges()

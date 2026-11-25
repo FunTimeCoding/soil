@@ -1,6 +1,6 @@
 package watcher
 
-import "github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
+import "github.com/funtimecoding/soil/pkg/watch/digest/event"
 
 func (w *Watcher) Drain() map[string][]*event.Event {
 	w.mutex.Lock()

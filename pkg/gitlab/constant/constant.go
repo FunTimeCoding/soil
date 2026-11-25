@@ -15,6 +15,23 @@ const (
 
 var RequestStates = []string{OpenedState, MergedState, ClosedState}
 
+const AllState = "all"
+const (
+	UpdatedOrder = "updated_at"
+	CreatedOrder = "created_at"
+)
+
+const (
+	RequestLimit        = 10
+	RequestLimitMaximum = 100
+)
+
+const (
+	NotePageSize  = 100
+	NotePageLimit = 5
+)
+
+const MockUser = "mockuser"
 const Identifier = "id"
 const (
 	Ascending  = "asc"

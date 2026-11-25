@@ -16,7 +16,11 @@ func New(
 	r *memory.Memory,
 ) (*model_context_server.Server, func() error) {
 	t.Helper()
-	s := base.New(t, service_tester.WithReporter(r))
+	s := base.New(
+		t,
+		service_tester.WithReporter(r),
+		service_tester.WithWatches(),
+	)
 	s.Alfa().Fail(outage_tester.RefusedDial())
 
 	return s.Served(), outage_tester.New(t).Guard(
