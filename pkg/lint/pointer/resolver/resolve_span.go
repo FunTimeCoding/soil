@@ -27,6 +27,8 @@ func (r *Resolver) resolveSpan(
 		return resolveSystem(c.Span)
 	case constant.PointerClassPath:
 		return pointer.NewUnchecked(constant.ReasonSystem)
+	case constant.PointerClassMedia:
+		return resolveMedia(c.Span)
 	case constant.PointerClassImport:
 		return pointer.NewUnchecked(constant.ReasonImport)
 	case constant.PointerClassPattern:

@@ -22,6 +22,9 @@ const (
 	FragmentTargetKey  = "fragment_target"
 	FragmentTargetText = "Fragment on a non-markdown target - only markdown headings can be referenced"
 
+	UnregisteredMediaKey  = "unregistered_media"
+	UnregisteredMediaText = "Not a registered media type - the top-level type must be one IANA registers, the subtype a restricted name (RFC 6838)"
+
 	FragmentSeparator    = "#"
 	LocatorSeparator     = "://"
 	HintSeparator        = " - "
@@ -29,12 +32,14 @@ const (
 	NearestPrefix        = "nearest: "
 	NearestFormat        = "#%s (%q)"
 	NearestLimit         = 3
+	MediaHintPrefix      = "if a media type, write "
 
 	PluginRootPrefix = "${CLAUDE_PLUGIN_ROOT}/"
 
 	SchemeGo    = "go:"
 	SchemePath  = "path:"
 	SchemeRoute = "route:"
+	SchemeMedia = "media:"
 
 	BaseKey = "base"
 
@@ -57,16 +62,34 @@ const (
 
 var (
 	PointerTexts = map[string]string{
-		DeadPointerKey:     DeadPointerText,
-		AbsolutePointerKey: AbsolutePointerText,
-		ConventionWordKey:  ConventionWordText,
-		BareSlashKey:       BareSlashText,
-		UndeclaredHostKey:  UndeclaredHostText,
-		DeadHeadingKey:     DeadHeadingText,
-		FragmentTargetKey:  FragmentTargetText,
+		DeadPointerKey:       DeadPointerText,
+		AbsolutePointerKey:   AbsolutePointerText,
+		ConventionWordKey:    ConventionWordText,
+		BareSlashKey:         BareSlashText,
+		UndeclaredHostKey:    UndeclaredHostText,
+		DeadHeadingKey:       DeadHeadingText,
+		FragmentTargetKey:    FragmentTargetText,
+		UnregisteredMediaKey: UnregisteredMediaText,
 	}
 
 	ImplicitHosts = []string{webConstant.Localhost, webConstant.Loopback}
+
+	MediaTopLevelTypes = []string{
+		"application",
+		"audio",
+		"example",
+		"font",
+		"haptics",
+		"image",
+		"message",
+		"model",
+		"multipart",
+		"text",
+		"video",
+	}
+	MediaSubtype = regexp.MustCompile(
+		`^[A-Za-z0-9][A-Za-z0-9!#$&^_.+-]{0,126}$`,
+	)
 
 	BareNameExtensions = []string{
 		soil.MarkdownExtension,

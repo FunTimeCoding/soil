@@ -801,6 +801,77 @@ func TestPointersImageLive(t *testing.T) {
 	lint_tester.New(t).Report("Alfa", false, nil, "", l)
 }
 
+func TestPointersMediaLive(t *testing.T) {
+	l := pointer_tester.Checker()(
+		stringsConstant.UpperAlfa,
+		strings.NewReader(
+			"Serves `media:text/html`, `media:application/vnd.api+json` and `media:haptics/ivs`.\n",
+		),
+	)
+	lint_tester.New(t).Report("Alfa", false, nil, "", l)
+}
+
+func TestPointersMediaUnregistered(t *testing.T) {
+	line := "Serves `media:txt/html`, `media:text/` and `media:text/html/full`."
+	l := pointer_tester.Checker()(
+		stringsConstant.UpperAlfa,
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	lint_tester.New(t).Report(
+		"Alfa",
+		true,
+		pointer_tester.UnregisteredMedia("Alfa", line, 3),
+		"",
+		l,
+	)
+}
+
+func TestPointersMediaShapedShortHinted(t *testing.T) {
+	line := "The stale path served empty `text/html` today."
+	l := pointer_tester.Implicit(
+		[]string{constant.PackageDirectory},
+		constant.PackageDirectory,
+		"pkg/text",
+	)(
+		stringsConstant.UpperAlfa,
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	lint_tester.New(t).Report(
+		"Alfa",
+		true,
+		pointer_tester.DeadHinted(
+			"Alfa",
+			1,
+			line,
+			"Referenced path does not exist - if a media type, write media:text/html",
+		),
+		"",
+		l,
+	)
+}
+
+func TestPointersMediaShapedShortHintedUnderBase(t *testing.T) {
+	line := "The stale path served empty `text/html` today."
+	l := pointer_tester.Checker("pkg/tool/alfa", "pkg/tool/alfa/text")(
+		stringsConstant.UpperAlfa,
+		strings.NewReader(
+			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
+		),
+	)
+	lint_tester.New(t).Report(
+		"Alfa",
+		true,
+		pointer_tester.DeadHinted(
+			"Alfa",
+			4,
+			line,
+			"Referenced path does not exist - if a media type, write media:text/html",
+		),
+		"",
+		l,
+	)
+}
+
 func TestPointersBareSlashDead(t *testing.T) {
 	line := "Lists at `/api/alerts` and `/api/alerts/{name}`."
 	l := pointer_tester.Checker()(

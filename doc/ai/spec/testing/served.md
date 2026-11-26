@@ -65,8 +65,8 @@ is never passed - mocks exist so nothing downstream needs a nil check. The
 constructor; a genuinely optional dependency is set by a `With…` method. Daemons
 with a test base run the guard test through it, over the real service with the
 mock clients inside. Every web surface asserts its favicon with `VerifyFavicon`,
-a 200 carrying `image/png` - `VerifyOpen` only shows a route needs no sign-on,
-and a missing route passes it. Session (SSO) surfaces assert their dashboard
-with `VerifySession`; a page whose handler reaches an external client the
-battery cannot serve, or a live stream that holds its headers, is not worth the
-wait. Tests pass `constant.DefaultVersion` where a mount takes a version.
+a 200 carrying `media:image/png` - `VerifyOpen` only shows a route needs no
+sign-on, and a missing route passes it. Session (SSO) surfaces assert their
+dashboard with `VerifySession`; a page whose handler reaches an external client
+the battery cannot serve, or a live stream that holds its headers, is not worth
+the wait. Tests pass `constant.DefaultVersion` where a mount takes a version.

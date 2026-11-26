@@ -75,6 +75,11 @@ func TestClassifyPath(t *testing.T) {
 	assert.String(t, "path", lint_tester.Classify("path:/bin/true"))
 }
 
+func TestClassifyMedia(t *testing.T) {
+	assert.String(t, "media", lint_tester.Classify("media:text/html"))
+	assert.String(t, "media", lint_tester.Classify("media:txt/html"))
+}
+
 func TestClassifyImport(t *testing.T) {
 	assert.String(t, "import", lint_tester.Classify("\"example.org/module\""))
 }
@@ -105,6 +110,11 @@ func TestClassifyPlaceholder(t *testing.T) {
 	)
 	assert.String(t, "placeholder", lint_tester.Classify("pkg/tool/*.go"))
 	assert.String(t, "placeholder", lint_tester.Classify("$HOME/notes.md"))
+	assert.String(
+		t,
+		"placeholder",
+		lint_tester.Classify("media:<type>/<subtype>"),
+	)
 	assert.String(
 		t,
 		"placeholder",

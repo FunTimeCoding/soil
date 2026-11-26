@@ -6,6 +6,7 @@ const (
 	PointerClassSymbol      PointerClass = "symbol"
 	PointerClassRoute       PointerClass = "route"
 	PointerClassPath        PointerClass = "path"
+	PointerClassMedia       PointerClass = "media"
 	PointerClassImport      PointerClass = "import"
 	PointerClassPattern     PointerClass = "pattern"
 	PointerClassCommand     PointerClass = "command"

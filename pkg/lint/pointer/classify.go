@@ -33,6 +33,10 @@ func Classify(
 		return constant.PointerClassPath
 	}
 
+	if strings.HasPrefix(trimmed, constant.SchemeMedia) {
+		return constant.PointerClassMedia
+	}
+
 	if len(trimmed) > 1 &&
 		strings.HasPrefix(trimmed, constant.Quote) &&
 		strings.HasSuffix(trimmed, constant.Quote) {

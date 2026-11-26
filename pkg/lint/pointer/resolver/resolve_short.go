@@ -18,7 +18,7 @@ func (r *Resolver) resolveShort(
 			return pointer.NewLive(full)
 		}
 
-		return pointer.NewConcern(constant.DeadPointerKey)
+		return deadShort(candidate)
 	}
 
 	if relative, inside := pointer.Relative(path, candidate); inside &&
@@ -68,7 +68,7 @@ func (r *Resolver) resolveShort(
 			return pointer.NewLive(full)
 		}
 
-		return pointer.NewConcern(constant.DeadPointerKey)
+		return deadShort(candidate)
 	}
 
 	if len(bases) > 0 {
