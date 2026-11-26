@@ -4,7 +4,7 @@ go 1.27.4
 
 require (
 	charm.land/bubbles/v2 v2.2.2
-	charm.land/bubbletea/v2 v2.1.2
+	charm.land/bubbletea/v2 v2.2.0
 	charm.land/lipgloss/v2 v2.1.1
 	github.com/JohannesKaufmann/html-to-markdown/v2 v2.5.2
 	github.com/MrGunflame/gw2api v1.0.5
@@ -15,11 +15,11 @@ require (
 	github.com/andybalholm/cascadia v1.3.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go/v2 v2.13.0
+	github.com/anthropics/anthropic-sdk-go/v2 v2.15.0
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.7
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.160.8
+	github.com/chromedp/cdproto v0.160.11
 	github.com/chromedp/chromedp v0.24.0
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
@@ -53,9 +53,9 @@ require (
 	github.com/hetznercloud/hcloud-go/v2 v2.53.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgx/v5 v5.13.0
-	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.4
+	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.5
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
-	github.com/luthermonson/go-proxmox v0.10.0
+	github.com/luthermonson/go-proxmox v0.12.0
 	github.com/mark3labs/mcp-go v1.6.0
 	github.com/mattermost/mattermost/server/public v0.6.1
 	github.com/mattn/go-isatty v0.0.24
@@ -64,19 +64,19 @@ require (
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nwaples/rardecode/v2 v2.4.6
 	github.com/oapi-codegen/runtime v1.9.1
-	github.com/ollama/ollama v0.40.17
-	github.com/openai/openai-go/v3 v3.105.0
+	github.com/ollama/ollama v0.40.18
+	github.com/openai/openai-go/v3 v3.108.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/ory/fosite v0.49.0
-	github.com/pkg/sftp v1.13.12
-	github.com/prometheus/alertmanager v0.35.0
+	github.com/pkg/sftp v1.13.13
+	github.com/prometheus/alertmanager v0.35.1
 	github.com/prometheus/client_golang v1.25.0
 	github.com/prometheus/common v0.74.0
 	github.com/refraction-networking/utls v1.8.2
-	github.com/sashabaranov/go-openai v1.43.0
+	github.com/sashabaranov/go-openai v1.44.0
 	github.com/sergi/go-diff v1.4.5
 	github.com/shirou/gopsutil/v4 v4.26.10
 	github.com/sirupsen/logrus v1.10.2
@@ -89,7 +89,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.16
-	gitlab.com/gitlab-org/api/client-go/v3 v3.55.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.57.0
 	go.uber.org/goleak v1.3.0
 	go.yaml.in/yaml/v4 v4.0.0
 	golang.org/x/crypto v0.59.0
@@ -100,15 +100,15 @@ require (
 	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.53.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.316.0
+	google.golang.org/api v0.317.0
 	google.golang.org/protobuf v1.36.12
 	gorm.io/driver/postgres v1.6.3
 	gorm.io/gorm v1.31.2
 	gotest.tools/v3 v3.5.2
-	k8s.io/api v0.37.2
-	k8s.io/apimachinery v0.37.2
-	k8s.io/client-go v0.37.2
-	k8s.io/metrics v0.37.2
+	k8s.io/api v0.37.3
+	k8s.io/apimachinery v0.37.3
+	k8s.io/client-go v0.37.3
+	k8s.io/metrics v0.37.3
 	maragu.dev/gomponents v1.4.0
 	modernc.org/sqlite v1.63.0
 	mvdan.cc/sh/v3 v3.14.1
@@ -140,7 +140,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
 	github.com/charmbracelet/ultraviolet v0.0.0-20261008173134-6b8d4baf91b4 // indirect
-	github.com/charmbracelet/x/ansi v0.11.9 // indirect
+	github.com/charmbracelet/x/ansi v0.12.0 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
@@ -342,7 +342,7 @@ require (
 	golang.org/x/term v0.48.0 // indirect
 	golang.org/x/text v0.44.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20261012220534-4341edf3f941 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20261104224025-d1e00e9f33ab // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20261118221215-c8830f628b3f // indirect
 	google.golang.org/grpc v1.85.0 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
@@ -354,7 +354,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
 	k8s.io/kube-openapi v0.0.0-20260721132016-d427ff9ee9ad // indirect
-	k8s.io/streaming v0.37.2 // indirect
+	k8s.io/streaming v0.37.3 // indirect
 	k8s.io/utils v0.0.0-20260626114624-be93311217bd // indirect
 	modernc.org/libc v1.80.1 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
