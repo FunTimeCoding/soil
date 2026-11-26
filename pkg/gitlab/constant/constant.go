@@ -32,6 +32,10 @@ const (
 )
 
 const MockUser = "mockuser"
+const (
+	DiscussionPattern = "^[0-9a-f]{40}$"
+	FixtureDiscussion = "0123456789abcdef0123456789abcdef01234567"
+)
 const Identifier = "id"
 const (
 	Ascending  = "asc"

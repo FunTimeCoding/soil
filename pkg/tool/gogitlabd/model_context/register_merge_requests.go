@@ -137,4 +137,47 @@ func (s *Server) registerMergeRequests() {
 		),
 		mcp.NewTypedToolHandler(s.CreateMergeRequestNote),
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ReplyToDiscussion,
+			mcp.WithDescription(
+				"Reply inside an existing merge request discussion thread, as mr_discussions lists them, instead of a new top-level comment",
+			),
+			mcp.WithString(
+				argumentConstant.Project,
+				mcp.Required(),
+				mcp.Description("Project path (owner/repo) or ID"),
+			),
+			mcp.WithNumber(
+				"merge_request",
+				mcp.Required(),
+				mcp.Description("Merge request IID"),
+			),
+			mcp.WithString(
+				"discussion",
+				mcp.Required(),
+				mcp.Description(
+					"Discussion ID from mr_discussions, 40 hex characters",
+				),
+			),
+			mcp.WithString(
+				"body",
+				mcp.Required(),
+				mcp.Description("Reply body"),
+			),
+			mcp.WithString(
+				constant.ParameterCallsign,
+				mcp.Description(
+					"Your session callsign. Your own watch on this merge request then leaves the reply out, and other watching sessions see it under your callsign",
+				),
+			),
+			mcp.WithBoolean(
+				"resolve",
+				mcp.Description(
+					"Also mark the discussion resolved after replying (default false)",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.ReplyToMergeRequestDiscussion),
+	)
 }

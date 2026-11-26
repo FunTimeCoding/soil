@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/log/log_tester"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
 	"github.com/netbox-community/go-netbox/v4"
@@ -47,11 +48,40 @@ func TestInternetAddressReadsMachineHolder(t *testing.T) {
 	assert.String(t, "", a.Role)
 }
 
-func TestInternetAddressWithoutHolderStaysEmpty(t *testing.T) {
+func TestInternetAddressWithoutHolderStaysEmptyAndQuiet(t *testing.T) {
+	logged := log_tester.Capture(t)
 	v := netbox.NewIPAddressWithDefaults()
 	v.SetDisplay("192.0.2.1/32")
+	v.SetAssignedObjectTypeNil()
+	v.SetAssignedObjectIdNil()
 	a := internet_address.New(v)
+	assert.String(t, "", logged.String())
+	assert.String(t, "", a.ObjectType)
 	assert.String(t, "", a.Interface)
 	assert.String(t, "", a.Device)
 	assert.String(t, "", a.VirtualMachine)
+}
+
+func TestInternetAddressWithEmptyObjectTypeWarns(t *testing.T) {
+	logged := log_tester.Capture(t)
+	v := netbox.NewIPAddressWithDefaults()
+	v.SetDisplay("192.0.2.7/32")
+	v.SetAssignedObjectType("")
+	a := internet_address.New(v)
+	assert.StringContains(
+		t,
+		"warning: empty object type for internet address 192.0.2.7/32",
+		logged.String(),
+	)
+	assert.String(t, "", a.ObjectType)
+}
+
+func TestInternetAddressWithKnownObjectTypeValidatesQuietly(t *testing.T) {
+	logged := log_tester.Capture(t)
+	v := netbox.NewIPAddressWithDefaults()
+	v.SetDisplay("192.0.2.8/32")
+	v.SetAssignedObjectType(constant.InterfaceAddress)
+	a := internet_address.New(v)
+	assert.String(t, "", logged.String())
+	assert.String(t, "dcim.interface", a.ObjectType)
 }

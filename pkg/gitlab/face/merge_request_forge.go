@@ -44,6 +44,19 @@ type MergeRequestForge interface {
 		project int64,
 		identifier int64,
 	) ([]*discussion.Discussion, error)
+	ReplyToDiscussion(
+		x context.Context,
+		project int64,
+		identifier int64,
+		thread string,
+		body string,
+	) (*note.Note, error)
+	ResolveDiscussion(
+		x context.Context,
+		project int64,
+		identifier int64,
+		thread string,
+	) error
 	MergeRequestApprovals(
 		x context.Context,
 		project int64,

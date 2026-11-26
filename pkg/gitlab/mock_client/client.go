@@ -32,6 +32,8 @@ type Client struct {
 	details           []*gitlab.MergeRequest
 	notes             []*gitlab.Note
 	approvals         map[[2]int64][]string
+	threads           map[string][]*gitlab.Note
+	resolved          map[string]bool
 	registries        []*registry_repository.Repository
 	failure           error
 }

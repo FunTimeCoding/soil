@@ -11,8 +11,8 @@ func New(a *netbox.IPAddress) *Address {
 	errors.FatalOnError(e)
 	var objectType string
 
-	if a.AssignedObjectType.IsSet() {
-		objectType = a.GetAssignedObjectType()
+	if t := a.AssignedObjectType.Get(); t != nil {
+		objectType = *t
 
 		if objectType != "" {
 			validateObjectType(objectType)
@@ -22,8 +22,6 @@ func New(a *netbox.IPAddress) *Address {
 				a.Display,
 			)
 		}
-	} else {
-		objectType = ""
 	}
 
 	var object int64

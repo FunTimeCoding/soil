@@ -116,6 +116,7 @@ const (
 	GetMergeRequestDiffs    = "get_merge_request_diffs"
 	MergeRequestDiscussions = "mr_discussions"
 	CreateMergeRequestNote  = "create_merge_request_note"
+	ReplyToDiscussion       = "reply_to_merge_request_discussion"
 	SubscribeMergeRequest   = "subscribe_merge_request"
 	UnsubscribeMergeRequest = "unsubscribe_merge_request"
 	ListSubscriptions       = "list_subscriptions"
