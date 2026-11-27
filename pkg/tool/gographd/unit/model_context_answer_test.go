@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/teams/chat"
+	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	microsoftConstant "github.com/funtimecoding/soil/pkg/microsoft/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gographd/constant"
@@ -15,14 +16,23 @@ import (
 func TestChatMessageToolAnswersSentMessage(t *testing.T) {
 	s := base.New(t)
 	s.Source.AddChat(chat.New("19:alpha@thread.v2", "group"))
+	s.Source.AddChatMember(
+		"19:alpha@thread.v2",
+		member.New("Juliett", "user-9"),
+	)
 	assert.StringContains(
 		t,
-		`"text": "on it"`,
+		`"text": "@Juliett on it"`,
 		s.Tools().MustCallTool(
 			constant.SendChatMessage,
-			map[string]any{"chat": "19:alpha@thread.v2", "text": "on it"},
+			map[string]any{
+				"chat":    "19:alpha@thread.v2",
+				"text":    "@Juliett on it",
+				"mention": []string{"Juliett"},
+			},
 		),
 	)
+	assert.Count(t, 1, s.Source.Mentioned)
 }
 
 func TestUnknownTeamAnsweredQuietly(t *testing.T) {

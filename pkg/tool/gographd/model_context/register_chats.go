@@ -49,7 +49,15 @@ func (s *Server) registerChats() {
 			mcp.WithString(
 				"text",
 				mcp.Required(),
-				mcp.Description("Message text, plain"),
+				mcp.Description(
+					"Message text, plain; write @Name where a mentioned member should be tagged",
+				),
+			),
+			mcp.WithArray(
+				"mention",
+				mcp.Description(
+					"Display names of chat members to tag; each must appear as @Name in the text",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.SendChatMessage),

@@ -2,6 +2,7 @@ package mock_client
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/message"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
@@ -9,6 +10,7 @@ import (
 func (c *Client) SendChatMessage(
 	chat string,
 	text string,
+	mentioned []*member.Member,
 ) (*message.Message, error) {
 	if c.Failure != nil {
 		return nil, c.Failure
@@ -22,6 +24,7 @@ func (c *Client) SendChatMessage(
 				text,
 			)
 			c.chatMessages[chat] = append(c.chatMessages[chat], result)
+			c.Mentioned = append(c.Mentioned, mentioned...)
 
 			return result, nil
 		}

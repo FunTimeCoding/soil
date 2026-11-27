@@ -12,7 +12,7 @@ func (s *Server) SendChatMessage(
 	_ mcp.CallToolRequest,
 	a argument.SendChatMessage,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.service.SendChatMessage(a.Chat, a.Text)
+	result, e := s.service.SendChatMessage(a.Chat, a.Text, a.Mention)
 
 	if e != nil {
 		return s.answer(x, e)

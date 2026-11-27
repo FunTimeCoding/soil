@@ -5,8 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/face"
+	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/mock_client"
 	"github.com/funtimecoding/soil/pkg/chat/unit/teams_tester"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/microsoft/graph_server"
 	"net/http"
 	"testing"
@@ -117,6 +119,7 @@ func TestChatMessageSentAsHypertextWithLineBreaks(t *testing.T) {
 	result, e := teams_tester.New(t, s).SendChatMessage(
 		"19:a@thread.v2",
 		"alfa <b>\nbravo",
+		nil,
 	)
 	assert.FatalOnError(t, e)
 	assert.String(t, "9", result.Identifier)
@@ -128,6 +131,57 @@ func TestChatMessageSentAsHypertextWithLineBreaks(t *testing.T) {
 		t,
 		`{"body":{"contentType":"html","content":"alfa &lt;b&gt;<br>bravo"}}`,
 		x[0].Body,
+	)
+}
+
+func TestChatMembersMapped(t *testing.T) {
+	path := fmt.Sprintf(constant.TeamsChatMembersPath, "19:a@thread.v2")
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusOK,
+		`{"value":[{"id":"membership-1","displayName":"Juliett","userId":"user-9"}]}`,
+	)
+	result, e := teams_tester.New(t, s).ChatMembers("19:a@thread.v2")
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, result)
+	assert.String(t, "Juliett", result[0].Name)
+	assert.String(t, "user-9", result[0].User)
+}
+
+func TestChatMessageTagsMentionedMember(t *testing.T) {
+	path := fmt.Sprintf(constant.TeamsChatMessagesPath, "19:a@thread.v2")
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusCreated,
+		`{"id":"9","messageType":"message","body":{"contentType":"html","content":"<at id=\"0\">Juliett</at> busy?"}}`,
+	)
+	_, e := teams_tester.New(t, s).SendChatMessage(
+		"19:a@thread.v2",
+		"@Juliett busy?",
+		[]*member.Member{member.New("Juliett", "user-9")},
+	)
+	assert.FatalOnError(t, e)
+	assert.String(
+		t,
+		`{"body":{"contentType":"html","content":"<at id=\"0\">Juliett</at> busy?"},"mentions":[{"id":0,"mentionText":"Juliett","mentioned":{"user":{"id":"user-9","displayName":"Juliett","userIdentityType":"aadUser"}}}]}`,
+		s.Exchanges(path)[0].Body,
+	)
+}
+
+func TestChatMessageWithoutNamedMentionInvalid(t *testing.T) {
+	s := graph_server.New(t)
+	_, e := teams_tester.New(t, s).SendChatMessage(
+		"19:a@thread.v2",
+		"busy?",
+		[]*member.Member{member.New("Juliett", "user-9")},
+	)
+	assert.True(t, validation.Is(e))
+	assert.Count(
+		t,
+		0,
+		s.Exchanges(
+			fmt.Sprintf(constant.TeamsChatMessagesPath, "19:a@thread.v2"),
+		),
 	)
 }
 

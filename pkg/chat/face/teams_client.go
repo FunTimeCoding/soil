@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/chat/teams/channel"
 	"github.com/funtimecoding/soil/pkg/chat/teams/chat"
+	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/message"
 	"github.com/funtimecoding/soil/pkg/chat/teams/team"
 )
@@ -15,6 +16,7 @@ type TeamsClient interface {
 		limit int,
 	) ([]*message.Message, error)
 	Channels(team string) ([]*channel.Channel, error)
+	ChatMembers(chat string) ([]*member.Member, error)
 	ChatMessages(
 		chat string,
 		limit int,
@@ -31,6 +33,7 @@ type TeamsClient interface {
 	SendChatMessage(
 		chat string,
 		text string,
+		mentioned []*member.Member,
 	) (*message.Message, error)
 	Teams() ([]*team.Team, error)
 }
