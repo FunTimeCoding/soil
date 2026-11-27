@@ -2,7 +2,7 @@ package bidi_server
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 )
 
 func (s *Server) Refuse(
@@ -11,7 +11,7 @@ func (s *Server) Refuse(
 	text string,
 ) {
 	r := message.NewReply()
-	r.Type = constant.ErrorType
+	r.Type = constant.LadybirdErrorType
 	r.Error = code
 	r.Message = text
 	s.mutex.Lock()

@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 

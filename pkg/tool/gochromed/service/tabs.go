@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/peer"
 )
 

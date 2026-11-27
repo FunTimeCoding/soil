@@ -2,15 +2,15 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/chromium/face"
-	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/snapshot"
+	"github.com/funtimecoding/soil/pkg/browser/face"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/view"
 )
 
 func (s *Service) observe(
 	identifier string,
-	p face.ProtocolClient,
+	p face.ChromiumProtocolClient,
 ) (*view.View, error) {
 	nodes, e := peer.Guarded(
 		context.Background(),

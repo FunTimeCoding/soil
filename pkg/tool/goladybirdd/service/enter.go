@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 	"github.com/funtimecoding/soil/pkg/tool/goladybirdd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goladybirdd/types/fill"
 )

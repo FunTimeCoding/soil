@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"

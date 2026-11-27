@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/browser/chromium"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/browser"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/face"
 )

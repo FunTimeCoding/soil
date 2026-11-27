@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/saved"
 	"os"
 	"path/filepath"

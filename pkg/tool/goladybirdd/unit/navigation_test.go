@@ -15,11 +15,15 @@ func TestClickWaitsForNavigationLoad(t *testing.T) {
 	o.Client.NavigateOn(
 		constant.ClickScript,
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"alfa",
 			"https://alfa.example/next",
 		),
-		o.Event(browserConstant.LoadEvent, "alfa", "https://alfa.example/next"),
+		o.Event(
+			browserConstant.LadybirdLoadEvent,
+			"alfa",
+			"https://alfa.example/next",
+		),
 	)
 	v, e := o.Service().Click("", "e1", true)
 	assert.FatalOnError(t, e)
@@ -39,7 +43,7 @@ func TestClickNavigationStillOpenLoading(t *testing.T) {
 	o.Client.NavigateOn(
 		constant.ClickScript,
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"alfa",
 			"https://alfa.example/slow",
 		),
@@ -54,7 +58,7 @@ func TestClickHistoryUpdateLanded(t *testing.T) {
 	o.Client.NavigateOn(
 		constant.ClickScript,
 		o.Event(
-			browserConstant.HistoryUpdatedEvent,
+			browserConstant.LadybirdHistoryUpdatedEvent,
 			"alfa",
 			"https://alfa.example/routed",
 		),
@@ -70,12 +74,12 @@ func TestClickFailedNavigationSettled(t *testing.T) {
 	o.Client.NavigateOn(
 		constant.ClickScript,
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"alfa",
 			"https://alfa.example/gone",
 		),
 		o.Event(
-			browserConstant.NavigationFailedEvent,
+			browserConstant.LadybirdNavigationFailedEvent,
 			"alfa",
 			"https://alfa.example/gone",
 		),
@@ -89,7 +93,7 @@ func TestSnapshotWaitsOutOpenNavigation(t *testing.T) {
 	o := service_tester.New(t).Clickable()
 	o.Client.Emit(
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"alfa",
 			"https://alfa.example/slow",
 		),
@@ -103,7 +107,7 @@ func TestScreenshotWaitsOutOpenNavigation(t *testing.T) {
 	o := service_tester.New(t).Clickable()
 	o.Client.Emit(
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"alfa",
 			"https://alfa.example/slow",
 		),
@@ -118,7 +122,7 @@ func TestEvaluateWaitsOutOpenNavigation(t *testing.T) {
 	o := service_tester.New(t).Clickable()
 	o.Client.Emit(
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"alfa",
 			"https://alfa.example/slow",
 		),
@@ -135,7 +139,7 @@ func TestWatcherKeepsTabsApart(t *testing.T) {
 	mark := w.Mark("alfa")
 	w.Observe(
 		o.Event(
-			browserConstant.NavigationStartedEvent,
+			browserConstant.LadybirdNavigationStartedEvent,
 			"bravo",
 			"https://bravo.example/",
 		),
@@ -152,7 +156,7 @@ func TestWatcherWakesOnLateStart(t *testing.T) {
 		time.Sleep(20 * time.Millisecond)
 		w.Observe(
 			o.Event(
-				browserConstant.NavigationStartedEvent,
+				browserConstant.LadybirdNavigationStartedEvent,
 				"alfa",
 				"https://alfa.example/",
 			),

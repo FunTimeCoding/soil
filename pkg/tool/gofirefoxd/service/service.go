@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/firefox/face"
+import "github.com/funtimecoding/soil/pkg/browser/face"
 
 type Service struct {
 	client            face.FirefoxClient

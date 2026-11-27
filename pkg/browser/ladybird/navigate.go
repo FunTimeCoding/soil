@@ -2,7 +2,7 @@ package ladybird
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 )
 
 func (c *Client) Navigate(
@@ -10,7 +10,7 @@ func (c *Client) Navigate(
 	locator string,
 ) error {
 	_, e := c.send(
-		constant.NavigateMethod,
+		constant.LadybirdNavigateMethod,
 		request.NewNavigate(context, locator),
 	)
 

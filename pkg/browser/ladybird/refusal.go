@@ -12,9 +12,9 @@ func refusal(
 	text string,
 ) error {
 	switch code {
-	case constant.NoSuchNode, constant.NoSuchFrame:
+	case constant.LadybirdNoSuchNode, constant.LadybirdNoSuchFrame:
 		return not_found.Format("%s: %s", code, text)
-	case constant.InvalidArgument:
+	case constant.LadybirdInvalidArgument:
 		return validation.New("%s: %s", code, text)
 	}
 

@@ -1,7 +1,7 @@
 package site
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium/session"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/session"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/site/reader"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 )

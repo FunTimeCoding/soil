@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
 	"github.com/funtimecoding/soil/pkg/peer"
 )
 
@@ -21,7 +21,7 @@ func (s *Service) frames(identifier string) []*tab.Tab {
 	var result []*tab.Tab
 
 	for _, t := range tabs {
-		if t.Type == chromiumConstant.IframeTabType &&
+		if t.Type == browserConstant.ChromiumIframeTabType &&
 			t.ParentIdentifier == identifier {
 			result = append(result, t)
 		}

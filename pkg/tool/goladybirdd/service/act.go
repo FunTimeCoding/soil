@@ -2,7 +2,7 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 

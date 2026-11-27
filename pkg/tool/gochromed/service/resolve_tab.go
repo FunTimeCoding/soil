@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	chromiumConstant "github.com/funtimecoding/soil/pkg/chromium/constant"
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
@@ -58,7 +58,7 @@ func (s *Service) resolveTab(v *selector.Selector) (*tab.Tab, error) {
 	}
 
 	for _, t := range tabs {
-		if t.Type == chromiumConstant.PageTabType {
+		if t.Type == browserConstant.ChromiumPageTabType {
 			return t, nil
 		}
 	}

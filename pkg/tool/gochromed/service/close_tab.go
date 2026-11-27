@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/types/selector"
 )
 

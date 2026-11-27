@@ -5,7 +5,7 @@ import (
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 )
 
 func (c *Client) readLoop(connection *websocket.Conn) {
@@ -16,7 +16,7 @@ func (c *Client) readLoop(connection *websocket.Conn) {
 			return
 		}
 
-		if r.Type == constant.EventType {
+		if r.Type == constant.LadybirdEventType {
 			c.event(r)
 
 			continue

@@ -3,8 +3,8 @@ package goffrelay
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goffrelay/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goffrelay/relay"
 	"github.com/funtimecoding/soil/pkg/tool/goffrelay/relay/option"
@@ -16,7 +16,7 @@ func Main() {
 	a := argument.NewInstance(constant.Identity)
 	a.String(
 		argumentConstant.Host,
-		firefoxConstant.DefaultHost,
+		browserConstant.FirefoxDefaultHost,
 		"Bridge address of gofirefoxd",
 	)
 	a.String(

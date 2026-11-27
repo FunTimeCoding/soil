@@ -3,7 +3,7 @@ package ladybird
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 )
 
 func (c *Client) CallFunction(
@@ -13,7 +13,7 @@ func (c *Client) CallFunction(
 ) (json.RawMessage, error) {
 	return scriptResult(
 		c.send(
-			constant.CallMethod,
+			constant.LadybirdCallMethod,
 			request.NewCall(context, declaration, arguments),
 		),
 	)

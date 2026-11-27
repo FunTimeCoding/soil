@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/chromium/snapshot"
+import "github.com/funtimecoding/soil/pkg/browser/chromium/snapshot"
 
 func (s *Service) cacheSnapshot(
 	tabIdentifier string,

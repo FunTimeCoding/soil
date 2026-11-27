@@ -2,7 +2,7 @@ package ladybird
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 )
 
 func (c *Client) Type(
@@ -10,13 +10,13 @@ func (c *Client) Type(
 	text string,
 ) error {
 	if _, e := c.send(
-		constant.ActionsMethod,
+		constant.LadybirdActionsMethod,
 		request.NewTyping(context, text),
 	); e != nil {
 		return e
 	}
 
-	_, e := c.send(constant.ReleaseMethod, request.NewTarget(context))
+	_, e := c.send(constant.LadybirdReleaseMethod, request.NewTarget(context))
 
 	return e
 }

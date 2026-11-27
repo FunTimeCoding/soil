@@ -1,0 +1,45 @@
+package example
+
+import (
+	"github.com/funtimecoding/soil/pkg/browser/chromium"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/protocol"
+	"github.com/funtimecoding/soil/pkg/browser/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/join"
+	"strings"
+)
+
+func Tabs() {
+	c := chromium.NewEnvironment()
+	defer c.Close()
+
+	for _, t := range c.MustTabs() {
+		if t.Type != constant.ChromiumPageTabType {
+			continue
+		}
+
+		if !strings.HasSuffix(t.Locator, soil.GraphicExtension) {
+			continue
+		}
+
+		name, _ := key_value.Space(t.Title)
+		console.Format("%s %s\n", name, t.Locator)
+		p := join.Absolute(system.Home(), systemConstant.DownloadsPath, name)
+
+		if !system.FileExists(p) {
+			page := protocol.NewIdentifier(c, t.Identifier)
+
+			if page.NeedReload(t.Locator) {
+				c.Activate(t.Identifier)
+			}
+
+			page.MustSave(t.Locator, p)
+		} else {
+			console.Line("  Exists")
+		}
+	}
+}

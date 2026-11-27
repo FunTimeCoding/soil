@@ -13,17 +13,17 @@ func (s *Server) ServeHTTP(
 	q *http.Request,
 ) {
 	session := join.Slash(
-		[]string{constant.SessionRoute, constant.FixtureSession},
+		[]string{constant.LadybirdSessionRoute, constant.LadybirdFixtureSession},
 	)
 
 	switch {
-	case q.URL.Path == constant.StatusRoute:
+	case q.URL.Path == constant.LadybirdStatusRoute:
 		writer.Print(w, "%s", `{"value":{"ready":true}}`)
-	case q.URL.Path == constant.SessionRoute && q.Method == http.MethodPost:
+	case q.URL.Path == constant.LadybirdSessionRoute && q.Method == http.MethodPost:
 		writer.Print(
 			w,
 			`{"value":{"sessionId":%q,"capabilities":{"webSocketUrl":%q}}}`,
-			constant.FixtureSession,
+			constant.LadybirdFixtureSession,
 			fmt.Sprintf("ws://%s%s", q.Host, session),
 		)
 	case q.URL.Path == session && q.Method == http.MethodDelete:

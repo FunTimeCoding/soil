@@ -1,9 +1,9 @@
 package service
 
 import (
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
+	"github.com/funtimecoding/soil/pkg/browser/firefox/element"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
-	"github.com/funtimecoding/soil/pkg/firefox/element"
 )
 
 func (s *Service) Fill(
@@ -13,7 +13,7 @@ func (s *Service) Fill(
 	direct bool,
 ) (*element.Element, error) {
 	if selector == "" {
-		return nil, validation.New(firefoxConstant.SelectorRequired)
+		return nil, validation.New(browserConstant.FirefoxSelectorRequired)
 	}
 
 	return s.client.Fill(identifier, selector, value, direct)

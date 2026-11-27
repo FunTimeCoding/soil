@@ -1,0 +1,16 @@
+package firefox
+
+import (
+	"github.com/coder/websocket"
+	"github.com/funtimecoding/soil/pkg/browser/firefox/types/message"
+	"sync"
+	"sync/atomic"
+)
+
+type Client struct {
+	connection *websocket.Conn
+	mutex      sync.Mutex
+	pending    map[int]chan *message.Reply
+	identifier atomic.Int64
+	closed     bool
+}

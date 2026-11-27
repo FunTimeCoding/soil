@@ -2,7 +2,7 @@ package face
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/browser/types/response"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/response"
 	"github.com/funtimecoding/soil/pkg/face"
 )
 

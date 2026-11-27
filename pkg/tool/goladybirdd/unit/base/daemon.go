@@ -2,7 +2,7 @@ package base
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/face"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goladybirdd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/goladybirdd/option"

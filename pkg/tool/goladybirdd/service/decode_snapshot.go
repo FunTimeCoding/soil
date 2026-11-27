@@ -3,7 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/browser/types/response"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/response"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goladybirdd/types/page_tree"

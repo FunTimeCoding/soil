@@ -1,7 +1,7 @@
 package tool_case
 
 import (
-	"github.com/funtimecoding/soil/pkg/firefox/mock_client"
+	"github.com/funtimecoding/soil/pkg/browser/firefox/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
 )
 

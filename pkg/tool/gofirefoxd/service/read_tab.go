@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/firefox/content"
+import "github.com/funtimecoding/soil/pkg/browser/firefox/content"
 
 func (s *Service) ReadTab(
 	identifier int,

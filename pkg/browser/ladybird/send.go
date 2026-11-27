@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/coder/websocket/wsjson"
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"time"
@@ -21,7 +21,7 @@ func (c *Client) send(
 	c.mutex.Unlock()
 
 	if connection == nil {
-		return nil, unavailable.Format(constant.NotConnected)
+		return nil, unavailable.Format(constant.LadybirdNotConnected)
 	}
 
 	identifier := int(c.identifier.Add(1))
@@ -44,7 +44,7 @@ func (c *Client) send(
 	select {
 	case r := <-channel:
 		return reply(method, r)
-	case <-time.After(constant.SendTimeout):
+	case <-time.After(constant.LadybirdSendTimeout):
 		return nil, timeout.Format("%s: no reply", method)
 	}
 }

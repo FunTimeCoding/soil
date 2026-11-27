@@ -2,10 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/browser/face"
+	"github.com/funtimecoding/soil/pkg/browser/firefox"
+	"github.com/funtimecoding/soil/pkg/browser/unit/extension_peer"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
-	"github.com/funtimecoding/soil/pkg/firefox"
-	"github.com/funtimecoding/soil/pkg/firefox/face"
-	"github.com/funtimecoding/soil/pkg/firefox/unit/extension_peer"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/daemon"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/base"

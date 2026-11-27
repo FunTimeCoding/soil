@@ -1,8 +1,8 @@
 package service
 
 import (
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
 )
 
 func (s *Service) Navigate(
@@ -10,7 +10,7 @@ func (s *Service) Navigate(
 	l string,
 ) error {
 	if l == "" {
-		return validation.New(firefoxConstant.LocatorRequired)
+		return validation.New(browserConstant.FirefoxLocatorRequired)
 	}
 
 	return s.client.Navigate(identifier, l)

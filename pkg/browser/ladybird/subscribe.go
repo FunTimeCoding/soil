@@ -2,11 +2,14 @@ package ladybird
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 )
 
 func (c *Client) Subscribe(events ...string) error {
-	_, e := c.send(constant.SubscribeMethod, request.NewSubscribe(events))
+	_, e := c.send(
+		constant.LadybirdSubscribeMethod,
+		request.NewSubscribe(events),
+	)
 
 	return e
 }

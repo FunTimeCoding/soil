@@ -20,7 +20,7 @@ func (c *Client) Open() {
 		&websocket.DialOptions{HTTPClient: c.pool.Client()},
 	)
 	errors.PanicOnError(e)
-	connection.SetReadLimit(constant.ReadLimit)
+	connection.SetReadLimit(constant.LadybirdReadLimit)
 	c.mutex.Lock()
 	c.session = s.Value.SessionIdentifier
 	c.connection = connection

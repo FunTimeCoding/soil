@@ -2,7 +2,7 @@ package daemon
 
 import (
 	"database/sql"
-	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/browser/chromium"
 	"github.com/funtimecoding/soil/pkg/face"
 	generative "github.com/funtimecoding/soil/pkg/generative/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"

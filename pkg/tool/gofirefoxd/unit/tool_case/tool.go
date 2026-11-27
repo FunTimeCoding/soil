@@ -1,6 +1,6 @@
 package tool_case
 
-import "github.com/funtimecoding/soil/pkg/firefox/mock_client"
+import "github.com/funtimecoding/soil/pkg/browser/firefox/mock_client"
 
 type Tool struct {
 	Name      string

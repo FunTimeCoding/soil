@@ -10,7 +10,9 @@ import (
 
 func (c *Client) endSession(session string) error {
 	q := web.NewDelete(
-		c.driverLocator(join.Slash([]string{constant.SessionRoute, session})),
+		c.driverLocator(
+			join.Slash([]string{constant.LadybirdSessionRoute, session}),
+		),
 	)
 	q.Close = true
 	r, e := c.pool.Client().Do(q)

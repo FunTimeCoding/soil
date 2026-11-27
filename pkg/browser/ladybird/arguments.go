@@ -9,18 +9,18 @@ import (
 func (c *Client) arguments(port int) []string {
 	result := []string{
 		c.option.DriverPath,
-		constant.ListenFlag,
+		constant.LadybirdListenFlag,
 		webConstant.Loopback,
-		constant.PortFlag,
+		constant.LadybirdPortFlag,
 		strconv.Itoa(port),
 	}
 
 	if c.option.Profile != "" {
-		result = append(result, constant.ProfileFlag, c.option.Profile)
+		result = append(result, constant.LadybirdProfileFlag, c.option.Profile)
 	}
 
 	if c.option.Headless {
-		result = append(result, constant.HeadlessFlag)
+		result = append(result, constant.LadybirdHeadlessFlag)
 	}
 
 	return result

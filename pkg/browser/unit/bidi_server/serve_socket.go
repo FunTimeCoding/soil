@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package bidi_server
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 )
 
 func (s *Server) reply(command *message.Request) *message.Reply {
@@ -14,8 +14,8 @@ func (s *Server) reply(command *message.Request) *message.Reply {
 	if answer, okay := s.answers[command.Method]; okay {
 		*result = *answer
 	} else {
-		result.Type = constant.ErrorType
-		result.Error = constant.UnknownCommand
+		result.Type = constant.LadybirdErrorType
+		result.Error = constant.LadybirdUnknownCommand
 		result.Message = "Command is not supported"
 	}
 

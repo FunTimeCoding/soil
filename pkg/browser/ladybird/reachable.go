@@ -11,7 +11,7 @@ func (c *Client) Reachable(x context.Context) error {
 	q, e := http.NewRequestWithContext(
 		x,
 		http.MethodGet,
-		c.driverLocator(constant.StatusRoute),
+		c.driverLocator(constant.LadybirdStatusRoute),
 		nil,
 	)
 

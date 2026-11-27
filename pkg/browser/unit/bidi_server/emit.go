@@ -3,7 +3,7 @@ package bidi_server
 import (
 	"context"
 	"github.com/coder/websocket/wsjson"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 )
 
 func (s *Server) Emit(

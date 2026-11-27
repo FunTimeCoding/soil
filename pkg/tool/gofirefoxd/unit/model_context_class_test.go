@@ -2,10 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/unit/tool_case"
 	"testing"
@@ -20,7 +20,7 @@ func TestMissingExtensionIsAnsweredNotReported(t *testing.T) {
 		s := base.New(t)
 		s.Source.Fail(
 			c.Method(s.Source),
-			unavailable.Format(firefoxConstant.NotConnected),
+			unavailable.Format(browserConstant.FirefoxNotConnected),
 		)
 		assert.StringContains(
 			t,

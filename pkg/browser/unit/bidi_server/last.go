@@ -1,6 +1,6 @@
 package bidi_server
 
-import "github.com/funtimecoding/soil/pkg/browser/types/message"
+import "github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 
 func (s *Server) Last() *message.Request {
 	s.t.Helper()

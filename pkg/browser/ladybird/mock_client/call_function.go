@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/browser/types/call"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/call"
 )
 
 func (c *Client) CallFunction(

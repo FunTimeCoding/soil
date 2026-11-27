@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/soil/pkg/firefox/face"
+	"github.com/funtimecoding/soil/pkg/browser/face"
 	"github.com/funtimecoding/soil/pkg/web/option"
 )
 

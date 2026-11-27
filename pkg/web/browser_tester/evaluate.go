@@ -2,7 +2,7 @@ package browser_tester
 
 import (
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/browser/chromium"
 	"github.com/funtimecoding/soil/pkg/errors"
 )
 

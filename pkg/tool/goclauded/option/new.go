@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/browser/chromium"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"

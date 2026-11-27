@@ -1,9 +1,9 @@
 package service
 
 import (
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
+	"github.com/funtimecoding/soil/pkg/browser/firefox/evaluation"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
-	"github.com/funtimecoding/soil/pkg/firefox/evaluation"
 )
 
 func (s *Service) Evaluate(
@@ -11,7 +11,7 @@ func (s *Service) Evaluate(
 	expression string,
 ) (*evaluation.Evaluation, error) {
 	if expression == "" {
-		return nil, validation.New(firefoxConstant.ExpressionRequired)
+		return nil, validation.New(browserConstant.FirefoxExpressionRequired)
 	}
 
 	return s.client.Evaluate(identifier, expression)

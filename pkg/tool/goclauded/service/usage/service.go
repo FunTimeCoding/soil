@@ -1,7 +1,7 @@
 package usage
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/browser/chromium"
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/credential"
 	"github.com/funtimecoding/soil/pkg/generative/face"

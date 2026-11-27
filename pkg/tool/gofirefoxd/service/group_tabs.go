@@ -1,8 +1,8 @@
 package service
 
 import (
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
 )
 
 func (s *Service) GroupTabs(
@@ -12,7 +12,7 @@ func (s *Service) GroupTabs(
 	color string,
 ) (int, error) {
 	if len(tabIdentifiers) == 0 {
-		return 0, validation.New(firefoxConstant.TabsRequired)
+		return 0, validation.New(browserConstant.FirefoxTabsRequired)
 	}
 
 	return s.client.GroupTabs(tabIdentifiers, groupIdentifier, title, color)

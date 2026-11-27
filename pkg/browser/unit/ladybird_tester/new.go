@@ -2,8 +2,8 @@ package ladybird_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/browser/ladybird"
-	"github.com/funtimecoding/soil/pkg/browser/types/ladybird_option"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/ladybird_option"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 	"github.com/funtimecoding/soil/pkg/browser/unit/bidi_server"
 	"testing"
 )

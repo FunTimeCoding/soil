@@ -3,7 +3,7 @@ package ladybird
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/response"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/response"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 )
 
@@ -17,7 +17,7 @@ func scriptResult(
 		return nil, f
 	}
 
-	if v.Type == constant.ExceptionResult {
+	if v.Type == constant.LadybirdExceptionResult {
 		return nil, validation.New("script exception: %s", v.Exception.Text)
 	}
 

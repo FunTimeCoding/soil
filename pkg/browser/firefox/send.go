@@ -1,0 +1,62 @@
+package firefox
+
+import (
+	"context"
+	"fmt"
+	"github.com/coder/websocket/wsjson"
+	"github.com/funtimecoding/soil/pkg/browser/constant"
+	"github.com/funtimecoding/soil/pkg/browser/firefox/types/message"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
+	"time"
+)
+
+func (c *Client) send(
+	method string,
+	parameters any,
+) (*message.Reply, error) {
+	c.mutex.Lock()
+	connection := c.connection
+	c.mutex.Unlock()
+
+	if connection == nil {
+		return message.NewReply(), unavailable.Format(
+			constant.FirefoxNotConnected,
+		)
+	}
+
+	identifier := int(c.identifier.Add(1))
+	channel := make(chan *message.Reply, 1)
+	c.mutex.Lock()
+	c.pending[identifier] = channel
+	c.mutex.Unlock()
+
+	defer func() {
+		c.mutex.Lock()
+		delete(c.pending, identifier)
+		c.mutex.Unlock()
+	}()
+	e := wsjson.Write(
+		context.Background(),
+		connection,
+		message.NewRequest(method, parameters, identifier),
+	)
+
+	if e != nil {
+		return message.NewReply(), fmt.Errorf("%s: %w", method, e)
+	}
+
+	select {
+	case r := <-channel:
+		if r.Error != "" {
+			return message.NewReply(), refusal(r.Error)
+		}
+
+		return r, nil
+	case <-time.After(constant.FirefoxSendTimeout):
+		return message.NewReply(), timeout.Format(
+			"%s: timeout waiting for reply",
+			method,
+		)
+	}
+}

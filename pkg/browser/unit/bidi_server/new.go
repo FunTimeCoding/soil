@@ -1,7 +1,7 @@
 package bidi_server
 
 import (
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
 	"net/http/httptest"
 	"testing"
 )

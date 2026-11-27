@@ -1,7 +1,7 @@
 package daemon
 
 import (
-	"github.com/funtimecoding/soil/pkg/firefox/face"
+	"github.com/funtimecoding/soil/pkg/browser/face"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/service"
 	"sync"
 )

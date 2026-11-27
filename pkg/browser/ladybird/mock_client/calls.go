@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/browser/types/call"
+import "github.com/funtimecoding/soil/pkg/browser/ladybird/types/call"
 
 func (c *Client) Calls() []*call.Call {
 	c.mutex.Lock()

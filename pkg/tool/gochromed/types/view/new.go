@@ -1,8 +1,8 @@
 package view
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
-	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/snapshot"
+	"github.com/funtimecoding/soil/pkg/browser/chromium/tab"
 )
 
 func New(

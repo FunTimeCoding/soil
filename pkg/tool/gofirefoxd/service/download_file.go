@@ -1,9 +1,9 @@
 package service
 
 import (
+	browserConstant "github.com/funtimecoding/soil/pkg/browser/constant"
+	"github.com/funtimecoding/soil/pkg/browser/firefox/download"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	firefoxConstant "github.com/funtimecoding/soil/pkg/firefox/constant"
-	"github.com/funtimecoding/soil/pkg/firefox/download"
 )
 
 func (s *Service) DownloadFile(
@@ -11,7 +11,7 @@ func (s *Service) DownloadFile(
 	path string,
 ) (*download.Download, error) {
 	if l == "" {
-		return nil, validation.New(firefoxConstant.LocatorRequired)
+		return nil, validation.New(browserConstant.FirefoxLocatorRequired)
 	}
 
 	return s.client.DownloadFile(l, path)

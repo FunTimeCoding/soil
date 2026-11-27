@@ -4,13 +4,13 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
-	"github.com/funtimecoding/soil/pkg/browser/types/response"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/response"
 )
 
 func (c *Client) Screenshot(context string) ([]byte, error) {
 	v, e := decodeResult[response.Capture](
-		c.send(constant.CaptureMethod, request.NewTarget(context)),
+		c.send(constant.LadybirdCaptureMethod, request.NewTarget(context)),
 	)
 
 	if e != nil {

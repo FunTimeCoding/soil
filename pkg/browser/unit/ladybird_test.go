@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/browser/face"
 	"github.com/funtimecoding/soil/pkg/browser/ladybird"
 	"github.com/funtimecoding/soil/pkg/browser/ladybird/mock_client"
-	"github.com/funtimecoding/soil/pkg/browser/types/ladybird_option"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/ladybird_option"
 	"github.com/funtimecoding/soil/pkg/browser/unit/ladybird_tester"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unavailable"
@@ -26,7 +26,7 @@ func TestLadybirdClientAndMockMatchFace(t *testing.T) {
 func TestLadybirdTreeDecodesContexts(t *testing.T) {
 	l := ladybird_tester.New(t)
 	l.Server.Answer(
-		constant.TreeMethod,
+		constant.LadybirdTreeMethod,
 		`{"contexts":[{"context":"c1","url":"about:blank","children":[]}]}`,
 	)
 	contexts, e := l.Client.Tree()
@@ -40,8 +40,8 @@ func TestLadybirdTreeDecodesContexts(t *testing.T) {
 func TestLadybirdMissingFrameNotFound(t *testing.T) {
 	l := ladybird_tester.New(t)
 	l.Server.Refuse(
-		constant.NavigateMethod,
-		constant.NoSuchFrame,
+		constant.LadybirdNavigateMethod,
+		constant.LadybirdNoSuchFrame,
 		"Frame not found",
 	)
 	e := l.Client.Navigate("c1", "https://example.com/")
@@ -56,11 +56,11 @@ func TestLadybirdMissingFrameNotFound(t *testing.T) {
 func TestLadybirdInvalidArgumentValidation(t *testing.T) {
 	l := ladybird_tester.New(t)
 	l.Server.Refuse(
-		constant.NavigateMethod,
-		constant.InvalidArgument,
+		constant.LadybirdNavigateMethod,
+		constant.LadybirdInvalidArgument,
 		"bad url",
 	)
-	assert.True(t, validation.Is(l.Client.Navigate("c1", "nowhere")))
+	assert.True(t, validation.Is(l.Client.Navigate("c1", "not a locator")))
 }
 
 func TestLadybirdUnknownCommandUnexpected(t *testing.T) {
@@ -72,7 +72,7 @@ func TestLadybirdUnknownCommandUnexpected(t *testing.T) {
 func TestLadybirdScriptExceptionValidation(t *testing.T) {
 	l := ladybird_tester.New(t)
 	l.Server.Answer(
-		constant.EvaluateMethod,
+		constant.LadybirdEvaluateMethod,
 		`{"type":"exception","exceptionDetails":{"text":"ReferenceError: x"}}`,
 	)
 	_, e := l.Client.Evaluate("c1", "x")
@@ -83,7 +83,7 @@ func TestLadybirdScriptExceptionValidation(t *testing.T) {
 func TestLadybirdEvaluateReturnsResult(t *testing.T) {
 	l := ladybird_tester.New(t)
 	l.Server.Answer(
-		constant.EvaluateMethod,
+		constant.LadybirdEvaluateMethod,
 		`{"type":"success","result":{"type":"number","value":3}}`,
 	)
 	result, e := l.Client.Evaluate("c1", "1+2")
@@ -93,7 +93,7 @@ func TestLadybirdEvaluateReturnsResult(t *testing.T) {
 
 func TestLadybirdScreenshotDecodesImage(t *testing.T) {
 	l := ladybird_tester.New(t)
-	l.Server.Answer(constant.CaptureMethod, `{"data":"cG5n"}`)
+	l.Server.Answer(constant.LadybirdCaptureMethod, `{"data":"cG5n"}`)
 	image, e := l.Client.Screenshot("c1")
 	assert.FatalOnError(t, e)
 	assert.String(t, "png", string(image))
@@ -101,7 +101,7 @@ func TestLadybirdScreenshotDecodesImage(t *testing.T) {
 
 func TestLadybirdEventReachesCallback(t *testing.T) {
 	l := ladybird_tester.New(t)
-	l.Server.Answer(constant.SubscribeMethod, `{}`)
+	l.Server.Answer(constant.LadybirdSubscribeMethod, `{}`)
 	assert.FatalOnError(t, l.Client.Subscribe("log.entryAdded"))
 	l.Server.Emit("log.entryAdded", `{"level":"info","text":"hello"}`)
 	r := l.Event()

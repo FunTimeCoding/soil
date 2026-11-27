@@ -3,7 +3,7 @@ package ladybird
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/browser/constant"
-	"github.com/funtimecoding/soil/pkg/browser/types/request"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/request"
 )
 
 func (c *Client) Evaluate(
@@ -12,7 +12,7 @@ func (c *Client) Evaluate(
 ) (json.RawMessage, error) {
 	return scriptResult(
 		c.send(
-			constant.EvaluateMethod,
+			constant.LadybirdEvaluateMethod,
 			request.NewEvaluate(context, expression),
 		),
 	)

@@ -10,8 +10,8 @@ import (
 func (c *Client) waitDriver() {
 	_, e := retry.Until(
 		context.Background(),
-		constant.DriverWait,
-		constant.DriverPoll,
+		constant.LadybirdDriverWait,
+		constant.LadybirdDriverPoll,
 		c.Reachable,
 	)
 	errors.PanicOnError(e)

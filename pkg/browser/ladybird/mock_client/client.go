@@ -2,9 +2,9 @@ package mock_client
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/browser/types/call"
-	"github.com/funtimecoding/soil/pkg/browser/types/message"
-	"github.com/funtimecoding/soil/pkg/browser/types/response"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/call"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/message"
+	"github.com/funtimecoding/soil/pkg/browser/ladybird/types/response"
 	"sync"
 	"sync/atomic"
 )

@@ -1,6 +1,6 @@
 package base
 
-import "github.com/funtimecoding/soil/pkg/firefox/tab"
+import "github.com/funtimecoding/soil/pkg/browser/firefox/tab"
 
 func (s *Server) SeedTab() {
 	b := tab.New()
