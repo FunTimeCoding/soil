@@ -1,19 +1,13 @@
 package teams
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/chat/constant"
+	"github.com/funtimecoding/soil/pkg/chat/teams/destination"
 	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/response"
-	"net/url"
 )
 
-func (c *Client) ChatMembers(chat string) ([]*member.Member, error) {
-	items, e := c.graph.Items(
-		fmt.Sprintf(constant.TeamsChatMembersPath, url.PathEscape(chat)),
-		nil,
-		0,
-	)
+func (c *Client) Members(d *destination.Destination) ([]*member.Member, error) {
+	items, e := c.graph.Items(d.MembersPath(), nil, 0)
 
 	if e != nil {
 		return nil, e

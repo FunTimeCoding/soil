@@ -3,8 +3,11 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/chat/teams/channel"
 	"github.com/funtimecoding/soil/pkg/chat/teams/chat"
 	"github.com/funtimecoding/soil/pkg/chat/teams/member"
+	"github.com/funtimecoding/soil/pkg/chat/teams/message"
+	"github.com/funtimecoding/soil/pkg/chat/teams/team"
 	"github.com/funtimecoding/soil/pkg/chat/teams/user"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	microsoftConstant "github.com/funtimecoding/soil/pkg/microsoft/constant"
@@ -51,6 +54,30 @@ func TestDirectMessageToolOpensChatAndSends(t *testing.T) {
 	chats, e := s.Source.Chats(0)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, chats)
+}
+
+func TestThreadReplyToolAnswersSentMessage(t *testing.T) {
+	s := base.New(t)
+	s.Source.AddTeam(team.New("team-1", "Kitchen"))
+	s.Source.AddChannel("team-1", channel.New("channel-2", "Lunch"))
+	s.Source.AddMessage(
+		"team-1",
+		"channel-2",
+		message.New("100", "November", "lunch at noon?"),
+	)
+	assert.StringContains(
+		t,
+		`"text": "done"`,
+		s.Tools().MustCallTool(
+			constant.ReplyToThread,
+			map[string]any{
+				"team":    "Kitchen",
+				"channel": "Lunch",
+				"message": "100",
+				"text":    "done",
+			},
+		),
+	)
 }
 
 func TestUnknownTeamAnsweredQuietly(t *testing.T) {

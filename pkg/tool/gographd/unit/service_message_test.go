@@ -14,16 +14,16 @@ import (
 func TestChannelHistoryByNames(t *testing.T) {
 	o := service_tester.New(t)
 	o.Seed()
-	messages, e := o.Service().ChannelHistory("Security", "cve-2026-1", 0)
+	messages, e := o.Service().ChannelHistory("Kitchen", "lunch", 0)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, messages)
-	assert.String(t, "patched?", messages[0].Text)
+	assert.String(t, "lunch at noon?", messages[0].Text)
 }
 
 func TestUnknownChannelNotFound(t *testing.T) {
 	o := service_tester.New(t)
 	o.Seed()
-	_, e := o.Service().ChannelHistory("Security", "Random", 0)
+	_, e := o.Service().ChannelHistory("Kitchen", "Random", 0)
 	assert.True(t, not_found.Is(e))
 	assert.String(t, "channel not found: Random", e.Error())
 }

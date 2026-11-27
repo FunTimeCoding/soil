@@ -8,6 +8,7 @@ const (
 	TeamsChatsPath           = "/v1.0/me/chats"
 	TeamsChatMessagesPath    = "/v1.0/chats/%s/messages"
 	TeamsChatMembersPath     = "/v1.0/chats/%s/members"
+	TeamsChannelMembersPath  = "/v1.0/teams/%s/channels/%s/members"
 	TeamsCreateChatPath      = "/v1.0/chats"
 	TeamsUsersPath           = "/v1.0/users"
 	TeamsUserPath            = "/v1.0/users/%s"

@@ -73,16 +73,16 @@ func TestDirectMessageTagsMemberOfNewChat(t *testing.T) {
 func TestGroupChatWithTopic(t *testing.T) {
 	o := service_tester.New(t)
 	o.SeedPeople()
-	h, e := o.Service().CreateChat([]string{"Juliett", "Kilo"}, "LVS")
+	h, e := o.Service().CreateChat([]string{"Juliett", "Kilo"}, "Lunch")
 	assert.FatalOnError(t, e)
 	assert.String(t, "group", h.Kind)
-	assert.String(t, "LVS", h.Topic)
+	assert.String(t, "Lunch", h.Topic)
 }
 
 func TestDirectChatWithTopicInvalid(t *testing.T) {
 	o := service_tester.New(t)
 	o.SeedPeople()
-	_, e := o.Service().CreateChat([]string{"Kilo"}, "LVS")
+	_, e := o.Service().CreateChat([]string{"Kilo"}, "Lunch")
 	assert.True(t, validation.Is(e))
 }
 

@@ -13,7 +13,7 @@ import (
 func TestChannelsByTeamNameIgnoreCase(t *testing.T) {
 	o := service_tester.New(t)
 	o.Seed()
-	channels, e := o.Service().Channels("security")
+	channels, e := o.Service().Channels("kitchen")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, channels)
 	assert.String(t, "channel-1", channels[0].Identifier)
@@ -43,7 +43,7 @@ func TestEmptyTeamInvalid(t *testing.T) {
 func TestSharedTeamNameAmbiguous(t *testing.T) {
 	o := service_tester.New(t)
 	o.Seed()
-	o.Source.AddTeam(team.New("team-3", "Security"))
-	_, e := o.Service().Channels("Security")
+	o.Source.AddTeam(team.New("team-3", "Kitchen"))
+	_, e := o.Service().Channels("Kitchen")
 	assert.True(t, ambiguous.Is(e))
 }

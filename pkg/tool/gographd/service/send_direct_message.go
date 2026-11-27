@@ -12,7 +12,7 @@ func (s *Service) SendDirectMessage(
 	mention []string,
 ) (*message.Message, error) {
 	if strings.TrimSpace(text) == "" {
-		return nil, validation.New("chat message is empty")
+		return nil, validation.New("message is empty")
 	}
 
 	h, e := s.CreateChat([]string{user}, "")

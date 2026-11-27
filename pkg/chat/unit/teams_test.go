@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/face"
+	"github.com/funtimecoding/soil/pkg/chat/teams/destination"
 	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/mock_client"
 	"github.com/funtimecoding/soil/pkg/chat/unit/teams_tester"
@@ -26,14 +27,14 @@ func TestJoinedTeamsMapped(t *testing.T) {
 	s := graph_server.New(t).Route(
 		constant.TeamsPath,
 		http.StatusOK,
-		`{"value":[{"id":"team-1","displayName":"Security","description":"CVE work"}]}`,
+		`{"value":[{"id":"team-1","displayName":"Kitchen","description":"Lunch planning"}]}`,
 	)
 	result, e := teams_tester.New(t, s).Teams()
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, result)
 	assert.String(t, "team-1", result[0].Identifier)
-	assert.String(t, "Security", result[0].Name)
-	assert.String(t, "CVE work", result[0].Description)
+	assert.String(t, "Kitchen", result[0].Name)
+	assert.String(t, "Lunch planning", result[0].Description)
 }
 
 func TestChannelMessagesKeepUserMessagesOnly(t *testing.T) {
@@ -46,7 +47,7 @@ func TestChannelMessagesKeepUserMessagesOnly(t *testing.T) {
 		path,
 		http.StatusOK,
 		`{"value":[
-			{"id":"1","messageType":"message","createdDateTime":"2026-11-23T10:00:00Z","from":{"user":{"displayName":"November"}},"body":{"contentType":"html","content":"<p>patched?</p><p>all hosts</p>"},
+			{"id":"1","messageType":"message","createdDateTime":"2026-11-23T10:00:00Z","from":{"user":{"displayName":"November"}},"body":{"contentType":"html","content":"<p>lunch at noon?</p><p>at the usual place</p>"},
 			 "replies":[
 				{"id":"2","messageType":"message","from":{"user":{"displayName":"Juliett"}},"body":{"contentType":"text","content":"yes"}},
 				{"id":"3","messageType":"systemEventMessage","body":{"contentType":"html","content":"<systemEventMessage/>"}}
@@ -64,7 +65,7 @@ func TestChannelMessagesKeepUserMessagesOnly(t *testing.T) {
 	assert.Count(t, 1, result)
 	assert.String(t, "1", result[0].Identifier)
 	assert.String(t, "November", result[0].Author)
-	assert.String(t, "patched?\nall hosts", result[0].Text)
+	assert.String(t, "lunch at noon?\nat the usual place", result[0].Text)
 	assert.Integer(t, 1, result[0].Replies)
 	x := s.Exchanges(path)
 	assert.Count(t, 1, x)
@@ -76,12 +77,12 @@ func TestChatsNewestFirstWithPageSize(t *testing.T) {
 	s := graph_server.New(t).Route(
 		constant.TeamsChatsPath,
 		http.StatusOK,
-		`{"value":[{"id":"19:a@thread.v2","topic":"Squad","chatType":"group","lastUpdatedDateTime":"2026-11-23T10:00:00Z"},{"id":"19:b@thread.v2","chatType":"oneOnOne"}]}`,
+		`{"value":[{"id":"19:a@thread.v2","topic":"Book club","chatType":"group","lastUpdatedDateTime":"2026-11-23T10:00:00Z"},{"id":"19:b@thread.v2","chatType":"oneOnOne"}]}`,
 	)
 	result, e := teams_tester.New(t, s).Chats(1)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, result)
-	assert.String(t, "Squad", result[0].Topic)
+	assert.String(t, "Book club", result[0].Topic)
 	assert.String(t, "group", result[0].Kind)
 	x := s.Exchanges(constant.TeamsChatsPath)
 	assert.String(t, "1", x[0].Query.Get("$top"))
@@ -116,8 +117,8 @@ func TestChatMessageSentAsHypertextWithLineBreaks(t *testing.T) {
 		http.StatusCreated,
 		`{"id":"9","messageType":"message","from":{"user":{"displayName":"Juliett"}},"body":{"contentType":"html","content":"<p>alfa &lt;b&gt;</p>"}}`,
 	)
-	result, e := teams_tester.New(t, s).SendChatMessage(
-		"19:a@thread.v2",
+	result, e := teams_tester.New(t, s).Post(
+		destination.Chat("19:a@thread.v2"),
 		"alfa <b>\nbravo",
 		nil,
 	)
@@ -141,7 +142,9 @@ func TestChatMembersMapped(t *testing.T) {
 		http.StatusOK,
 		`{"value":[{"id":"membership-1","displayName":"Juliett","userId":"user-9"}]}`,
 	)
-	result, e := teams_tester.New(t, s).ChatMembers("19:a@thread.v2")
+	result, e := teams_tester.New(t, s).Members(
+		destination.Chat("19:a@thread.v2"),
+	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, result)
 	assert.String(t, "Juliett", result[0].Name)
@@ -155,8 +158,8 @@ func TestChatMessageTagsMentionedMember(t *testing.T) {
 		http.StatusCreated,
 		`{"id":"9","messageType":"message","body":{"contentType":"html","content":"<at id=\"0\">Juliett</at> busy?"}}`,
 	)
-	_, e := teams_tester.New(t, s).SendChatMessage(
-		"19:a@thread.v2",
+	_, e := teams_tester.New(t, s).Post(
+		destination.Chat("19:a@thread.v2"),
 		"@Juliett busy?",
 		[]*member.Member{member.New("Juliett", "user-9")},
 	)
@@ -170,8 +173,8 @@ func TestChatMessageTagsMentionedMember(t *testing.T) {
 
 func TestChatMessageWithoutNamedMentionInvalid(t *testing.T) {
 	s := graph_server.New(t)
-	_, e := teams_tester.New(t, s).SendChatMessage(
-		"19:a@thread.v2",
+	_, e := teams_tester.New(t, s).Post(
+		destination.Chat("19:a@thread.v2"),
 		"busy?",
 		[]*member.Member{member.New("Juliett", "user-9")},
 	)
@@ -185,11 +188,74 @@ func TestChatMessageWithoutNamedMentionInvalid(t *testing.T) {
 	)
 }
 
+func TestChannelPostGoesToChannelMessages(t *testing.T) {
+	path := fmt.Sprintf(
+		constant.TeamsChannelMessagesPath,
+		"team-1",
+		"19:channel@thread.tacv2",
+	)
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusCreated,
+		`{"id":"10","messageType":"message","body":{"contentType":"html","content":"status"}}`,
+	)
+	result, e := teams_tester.New(t, s).Post(
+		destination.Channel("team-1", "19:channel@thread.tacv2"),
+		"status",
+		nil,
+	)
+	assert.FatalOnError(t, e)
+	assert.String(t, "10", result.Identifier)
+	assert.Count(t, 1, s.Exchanges(path))
+	assert.String(t, http.MethodPost, s.Exchanges(path)[0].Method)
+}
+
+func TestThreadReplyGoesToReplies(t *testing.T) {
+	path := fmt.Sprintf(
+		constant.TeamsRepliesPath,
+		"team-1",
+		"19:channel@thread.tacv2",
+		"100",
+	)
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusCreated,
+		`{"id":"11","messageType":"message","body":{"contentType":"html","content":"done"}}`,
+	)
+	result, e := teams_tester.New(t, s).Post(
+		destination.Thread("team-1", "19:channel@thread.tacv2", "100"),
+		"done",
+		nil,
+	)
+	assert.FatalOnError(t, e)
+	assert.String(t, "11", result.Identifier)
+	assert.Count(t, 1, s.Exchanges(path))
+}
+
+func TestThreadMembersAreChannelMembers(t *testing.T) {
+	path := fmt.Sprintf(
+		constant.TeamsChannelMembersPath,
+		"team-1",
+		"19:channel@thread.tacv2",
+	)
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusOK,
+		`{"value":[{"id":"membership-2","displayName":"Kilo","userId":"user-7"}]}`,
+	)
+	result, e := teams_tester.New(t, s).Members(
+		destination.Thread("team-1", "19:channel@thread.tacv2", "100"),
+	)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, result)
+	assert.String(t, "user-7", result[0].User)
+}
+
 func TestUsersSearchedByStartOfNameOrMail(t *testing.T) {
 	s := graph_server.New(t).Route(
 		constant.TeamsUsersPath,
 		http.StatusOK,
-		`{"value":[{"id":"user-9","displayName":"O'Brien","mail":"obrien@example.com","userPrincipalName":"obrien@example.com","jobTitle":"NOC"}]}`,
+		`{"value":[{"id":"user-9","displayName":"O'Brien","mail":"obrien@example.com","userPrincipalName":"obrien@example.com","jobTitle":"Cook"}]}`,
 	)
 	result, e := teams_tester.New(t, s).Users("o'b", 5)
 	assert.FatalOnError(t, e)
@@ -197,7 +263,7 @@ func TestUsersSearchedByStartOfNameOrMail(t *testing.T) {
 	assert.String(t, "user-9", result[0].Identifier)
 	assert.String(t, "O'Brien", result[0].Name)
 	assert.String(t, "obrien@example.com", result[0].Mail)
-	assert.String(t, "NOC", result[0].Title)
+	assert.String(t, "Cook", result[0].Title)
 	x := s.Exchanges(constant.TeamsUsersPath)
 	assert.Count(t, 1, x)
 	assert.String(
