@@ -62,4 +62,46 @@ func (s *Server) registerChats() {
 		),
 		mcp.NewTypedToolHandler(s.SendChatMessage),
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.SendDirectMessage,
+			mcp.WithDescription(
+				"Send a direct message to a person, opening the one-on-one chat if there is none yet",
+			),
+			mcp.WithString(
+				"user",
+				mcp.Required(),
+				mcp.Description("Display name, email address or identifier"),
+			),
+			mcp.WithString(
+				"text",
+				mcp.Required(),
+				mcp.Description(
+					"Message text, plain; write @Name where a mentioned member should be tagged",
+				),
+			),
+			mcp.WithArray(
+				"mention",
+				mcp.Description(
+					"Display names to tag; each must appear as @Name in the text",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.SendDirectMessage),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.CreateChat,
+			mcp.WithDescription(
+				"Open a chat with the signed-in user and the given people: one person makes a one-on-one chat, more make a group chat",
+			),
+			mcp.WithArray(
+				"members",
+				mcp.Required(),
+				mcp.Description("Display names, email addresses or identifiers"),
+			),
+			mcp.WithString("topic", mcp.Description("Topic of a group chat")),
+		),
+		mcp.NewTypedToolHandler(s.CreateChat),
+	)
 }

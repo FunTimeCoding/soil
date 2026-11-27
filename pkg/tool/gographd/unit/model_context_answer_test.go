@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/teams/chat"
 	"github.com/funtimecoding/soil/pkg/chat/teams/member"
+	"github.com/funtimecoding/soil/pkg/chat/teams/user"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	microsoftConstant "github.com/funtimecoding/soil/pkg/microsoft/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gographd/constant"
@@ -33,6 +34,23 @@ func TestChatMessageToolAnswersSentMessage(t *testing.T) {
 		),
 	)
 	assert.Count(t, 1, s.Source.Mentioned)
+}
+
+func TestDirectMessageToolOpensChatAndSends(t *testing.T) {
+	s := base.New(t)
+	s.Source.SetMe(user.New("me-1", "Alfa", "alfa@example.com"))
+	s.Source.AddUser(user.New("user-7", "Kilo", "kilo@example.com"))
+	assert.StringContains(
+		t,
+		`"text": "hi"`,
+		s.Tools().MustCallTool(
+			constant.SendDirectMessage,
+			map[string]any{"user": "Kilo", "text": "hi"},
+		),
+	)
+	chats, e := s.Source.Chats(0)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, chats)
 }
 
 func TestUnknownTeamAnsweredQuietly(t *testing.T) {

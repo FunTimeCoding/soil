@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/message"
 	"github.com/funtimecoding/soil/pkg/chat/teams/team"
+	"github.com/funtimecoding/soil/pkg/chat/teams/user"
 )
 
 type TeamsClient interface {
@@ -23,6 +24,12 @@ type TeamsClient interface {
 	) ([]*message.Message, error)
 	Chats(limit int) ([]*chat.Chat, error)
 	Close()
+	CreateChat(
+		kind string,
+		users []string,
+		topic string,
+	) (*chat.Chat, error)
+	Me() (*user.User, error)
 	Reachable(x context.Context) error
 	Replies(
 		team string,
@@ -36,4 +43,9 @@ type TeamsClient interface {
 		mentioned []*member.Member,
 	) (*message.Message, error)
 	Teams() ([]*team.Team, error)
+	User(identifier string) (*user.User, error)
+	Users(
+		query string,
+		limit int,
+	) ([]*user.User, error)
 }

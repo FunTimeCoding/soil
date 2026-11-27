@@ -185,6 +185,78 @@ func TestChatMessageWithoutNamedMentionInvalid(t *testing.T) {
 	)
 }
 
+func TestUsersSearchedByStartOfNameOrMail(t *testing.T) {
+	s := graph_server.New(t).Route(
+		constant.TeamsUsersPath,
+		http.StatusOK,
+		`{"value":[{"id":"user-9","displayName":"O'Brien","mail":"obrien@example.com","userPrincipalName":"obrien@example.com","jobTitle":"NOC"}]}`,
+	)
+	result, e := teams_tester.New(t, s).Users("o'b", 5)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, result)
+	assert.String(t, "user-9", result[0].Identifier)
+	assert.String(t, "O'Brien", result[0].Name)
+	assert.String(t, "obrien@example.com", result[0].Mail)
+	assert.String(t, "NOC", result[0].Title)
+	x := s.Exchanges(constant.TeamsUsersPath)
+	assert.Count(t, 1, x)
+	assert.String(
+		t,
+		"startswith(displayName,'o''b') or startswith(mail,'o''b') or startswith(userPrincipalName,'o''b')",
+		x[0].Query.Get("$filter"),
+	)
+	assert.String(t, "5", x[0].Query.Get("$top"))
+}
+
+func TestUserReadByMail(t *testing.T) {
+	path := fmt.Sprintf(constant.TeamsUserPath, "juliett@example.com")
+	s := graph_server.New(t).Route(
+		path,
+		http.StatusOK,
+		`{"id":"user-9","displayName":"Juliett","mail":"juliett@example.com"}`,
+	)
+	result, e := teams_tester.New(t, s).User("juliett@example.com")
+	assert.FatalOnError(t, e)
+	assert.String(t, "user-9", result.Identifier)
+	assert.String(t, "Juliett", result.Name)
+}
+
+func TestMeMapped(t *testing.T) {
+	s := graph_server.New(t).Route(
+		"/v1.0/me",
+		http.StatusOK,
+		`{"id":"me-1","displayName":"Alfa","mail":"alfa@example.com"}`,
+	)
+	result, e := teams_tester.New(t, s).Me()
+	assert.FatalOnError(t, e)
+	assert.String(t, "me-1", result.Identifier)
+	assert.String(t, "Alfa", result.Name)
+}
+
+func TestDirectChatCreatedWithBothMembers(t *testing.T) {
+	s := graph_server.New(t).Route(
+		constant.TeamsCreateChatPath,
+		http.StatusCreated,
+		`{"id":"19:new@thread.v2","chatType":"oneOnOne"}`,
+	)
+	result, e := teams_tester.New(t, s).CreateChat(
+		constant.TeamsDirectChat,
+		[]string{"me-1", "user-9"},
+		"",
+	)
+	assert.FatalOnError(t, e)
+	assert.String(t, "19:new@thread.v2", result.Identifier)
+	assert.String(t, "oneOnOne", result.Kind)
+	x := s.Exchanges(constant.TeamsCreateChatPath)
+	assert.Count(t, 1, x)
+	assert.String(t, http.MethodPost, x[0].Method)
+	assert.String(
+		t,
+		`{"chatType":"oneOnOne","members":[{"@odata.type":"#microsoft.graph.aadUserConversationMember","roles":["owner"],"user@odata.bind":"https://graph.microsoft.com/v1.0/users('me-1')"},{"@odata.type":"#microsoft.graph.aadUserConversationMember","roles":["owner"],"user@odata.bind":"https://graph.microsoft.com/v1.0/users('user-9')"}]}`,
+		x[0].Body,
+	)
+}
+
 func TestChannelsAndRepliesMapped(t *testing.T) {
 	s := graph_server.New(t).
 		Route(

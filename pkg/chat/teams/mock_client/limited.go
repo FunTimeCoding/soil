@@ -1,17 +1,14 @@
 package mock_client
 
-import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
-	"github.com/funtimecoding/soil/pkg/chat/teams/message"
-)
+import "github.com/funtimecoding/soil/pkg/chat/constant"
 
-func limited(
-	v []*message.Message,
+func limited[T any](
+	v []T,
 	limit int,
-) []*message.Message {
+) []T {
 	if limit <= 0 {
 		limit = constant.TeamsDefaultLimit
 	}
 
-	return append([]*message.Message{}, v[:min(limit, len(v))]...)
+	return append([]T{}, v[:min(limit, len(v))]...)
 }

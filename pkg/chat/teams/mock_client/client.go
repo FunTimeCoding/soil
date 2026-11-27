@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/teams/member"
 	"github.com/funtimecoding/soil/pkg/chat/teams/message"
 	"github.com/funtimecoding/soil/pkg/chat/teams/team"
+	"github.com/funtimecoding/soil/pkg/chat/teams/user"
 )
 
 type Client struct {
@@ -19,4 +20,6 @@ type Client struct {
 	chats        []*chat.Chat
 	chatMessages map[string][]*message.Message
 	chatMembers  map[string][]*member.Member
+	me           *user.User
+	users        []*user.User
 }

@@ -21,6 +21,7 @@ const (
 	TopFilter    = "$top"
 	OrderFilter  = "$orderby"
 	ExpandFilter = "$expand"
+	MatchFilter  = "$filter"
 	PageMaximum  = 50
 )
 
@@ -51,6 +52,7 @@ var Scopes = []string{
 	"ChannelMessage.Read.All",
 	"ChatMessage.Send",
 	"Chat.Create",
+	"User.ReadBasic.All",
 }
 
 const TeamsMessageKind = "message"
